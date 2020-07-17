@@ -10,10 +10,11 @@ import { cmpFilterDocumentTypeIdByName } from "../support/commands/company/comma
 const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
-let currentEmployee;
+let multipleCompanies;
+let secondEmployee;
 let componentSpecificationDocumentType;
 let group;
-const documentRevisionName = "New document for testing CR";
+const documentRevisionName = "New document for testing AR";
 const approvalRequestTitle = "Approval request from newly created form";
 const approvalRequestFormName = "New Approval request form template";
 
@@ -29,28 +30,28 @@ context(`Test: ${path.basename(__filename)}`, () => {
         cy.cmpCreateCompany({
           payload: {
             companyAcronym: `T1${runId}`,
-            companyAdminEmail: "zoran.kovacevic+admin@codecons.com",
+            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: `zoran.kovacevic+importer${runId}@codecons.com`,
+            importerEmail: "enlil.testmail+cy5@gmail.com",
             maxRevisionStages: 3,
             name: `Test Company ${runId}`,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [{
-              name: "Zoran 1",
-              email: `zoran.kovacevic+1_${runId}@codecons.com`,
-            }, {
-              name: "Zoran 2",
-              email: `zoran.kovacevic+2_${runId}@codecons.com`,
-            }, {
-              name: "Zoran 3",
-              email: `zoran.kovacevic+3_${runId}@codecons.com`,
-            }, {
-              name: "Zoran 4",
-              email: `zoran.kovacevic+4_${runId}@codecons.com`,
-            }],
+            users: [
+              {
+                name: "Second Tester",
+                email: "enlil.testmail+cy2@gmail.com",
+              },
+              {
+                name: "Third Tester",
+                email: "enlil.testmail+cy3@gmail.com",
+              },
+              {
+                name: "Fourth Tester",
+                email: "enlil.testmail+cy4@gmail.com",
+              }],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
@@ -64,17 +65,28 @@ context(`Test: ${path.basename(__filename)}`, () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          currentEmployee = createdCompany.employees[0];
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.name === "Second Tester");
           componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           done();
         });
       });
     });
 
+    it("API login second tester", (done: any) => {
+      cy.authApiLogin({
+        email: "enlil.testmail+cy2@gmail.com",
+        password: "Tester1!",
+      }).then((response) => {
+        loginResponse = response;
+        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
+        done();
+      });
+    });
+
     it("Gets group by name", () => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
-        employeeId: currentEmployee.id,
+        employeeId: secondEmployee.id,
         groupName: "Everyone",
       }).then((response) => group = response);
     });
@@ -106,7 +118,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
           revisionStage: 1,
 
         },
-        employeeId: currentEmployee.id as unknown as string,
+        employeeId: secondEmployee.id as unknown as string,
         sessionId: loginResponse.sessionId as unknown as string,
       }).then((response) => {
         done();
@@ -115,13 +127,13 @@ context(`Test: ${path.basename(__filename)}`, () => {
 
     it("Logs user in", () => {
       cy.authLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
+        email: "enlil.testmail+cy2@gmail.com",
         password: "Tester1!",
       });
     });
 
     it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name });
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
   });
 
@@ -189,7 +201,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Add first approver to approval request on approver list", () => {
-      cy.arAddFirstApproverOnApprovalRequestApproverList();
+      cy.arAddApproverOnApproverList({ approver: "enlil.testmail+cy2@gmail.com" });
     });
 
     it("Add date", () => {

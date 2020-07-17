@@ -13,7 +13,7 @@ declare global {
       arEnterDescriptionAddDocumentsDialog( params: { description: string }): Chainable<Subject>;
       arEnterJustificationAddDocumentsDialog( params: { justification: string }): Chainable<Subject>;
       arClickAddBtnOnAddDocumentsDialog(): Chainable<Subject>;
-      arAddFirstApproverOnApprovalRequestApproverList(): Chainable<Subject>;
+      arAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       arClickCreateApprovalRequestAfterCompletingForm(): Chainable<Subject>;
       arClickSendToReview(): Chainable<Subject>;
       arAddEffectiveDate(): Chainable<Subject>;
@@ -60,9 +60,9 @@ Cypress.Commands.add("arClickAddBtnOnAddDocumentsDialog", () => {
   cy.get("[role=dialog]>div>div>div>button").click();
 });
 
-Cypress.Commands.add("arAddFirstApproverOnApprovalRequestApproverList", () => {
+Cypress.Commands.add("arAddApproverOnApproverList", (params: {approver: string }) => {
   cy.get("[name=approvers]").click();
-  cy.get("[role=listbox]>li:nth-child(1)").click();
+  cy.get("[role=listbox]>li").contains(params.approver).click();
 });
 
 Cypress.Commands.add("arClickCreateApprovalRequestAfterCompletingForm", () => {
@@ -88,6 +88,7 @@ Cypress.Commands.add("arClickOnFirstAddedDocument", () => {
 });
 
 Cypress.Commands.add("arFilterARListByNameAndStatus", (params: {title: string; status: string }) => {
+  cy.get("#clearFilter").click();
   cy.get("#title").type(params.title);
   cy.get("[id=\"mui-component-select-state\"]").click();
   cy.get("li[data-value]").contains(params.status).click().wait(300);

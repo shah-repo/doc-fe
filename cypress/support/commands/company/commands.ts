@@ -10,7 +10,7 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       cmpCreateCompany(params: {payload: Company; sessionId: string}): Chainable<Subject>;
-      cmpSelectCompany( params: {name: string }): Chainable<Subject>;
+      cmpSelectCompany( params: {name: string; multiple: boolean }): Chainable<Subject>;
       cmpNavigateToDocumentList(): Chainable<Subject>;
       cmpClickCreateNewDocument(): Chainable<Subject>;
       cmpNavigateToApprovalRequestList(): Chainable<Subject>;
@@ -30,8 +30,11 @@ Cypress.Commands.add("cmpCreateCompany", (params: {payload: Company; sessionId: 
   }).then((response) => response.body);
 });
 
-Cypress.Commands.add("cmpSelectCompany", (params: {name: string }) => {
-  cy.get("#root").contains(params.name).click();
+Cypress.Commands.add("cmpSelectCompany", (params: {name: string; multiple: boolean }) => {
+  if ( params.multiple )
+  {
+    cy.get("#root").contains(params.name).click();
+  }
 });
 
 Cypress.Commands.add("cmpNavigateToDocumentList", () => {

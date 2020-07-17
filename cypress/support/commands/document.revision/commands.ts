@@ -87,7 +87,8 @@ Cypress.Commands.add("drCheckIfDocumentIdIsGenerated", () => {
 });
 
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: {title: string; status: string }) => {
-  cy.get("#name").type(params.title);
+  cy.get("#clearFilter").click();
+  cy.get("#name").type(params.title).wait(300);
   cy.get("[id=\"mui-component-select-status[]\"]").click();
   cy.get("li[data-value]").contains(params.status).click().wait(300);
   cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
