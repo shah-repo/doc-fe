@@ -30,7 +30,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
   toggleChildren,
 }) => {
   const classes = styles({ iconLink: icon });
-  const cypressIdentity = label.toLowerCase().split(' ').join('_');
+  const cypressIdentity = label.toLowerCase().split(' ').join('.');
 
   return (
     <>
