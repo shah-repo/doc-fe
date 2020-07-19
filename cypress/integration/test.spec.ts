@@ -10,7 +10,7 @@ const runId = new Date().valueOf();
 let createdCompany;
 
 context(`Test: ${path.basename(__filename)}`, () => {
-  it("Creates company", (done: any) => {
+  /* it("Creates company", (done: any) => {
     cy.apiLogin({
       email: "zoran.kovacevic+admin@codecons.com",
       password: "Tester1!",
@@ -50,7 +50,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
         done();
       });
     });
-  });
+  }); */
 
   it("Logs user in", () => {
     cy.login({
@@ -60,7 +60,8 @@ context(`Test: ${path.basename(__filename)}`, () => {
   });
 
   it("Selects company", () => {
-    cy.selectCompany({ name: createdCompany.name });
+    // cy.selectCompany({ name: createdCompany.name });
+    cy.selectCompany({ name: 'Test Company 1594952860030' });
   });
 
   it("Opens document list", () => {
