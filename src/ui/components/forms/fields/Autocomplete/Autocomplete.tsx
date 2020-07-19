@@ -46,8 +46,8 @@ export const MultiValueRemove = (props) => (
 );
 
 type AutocompletePropsWithFormik = AutocompleteOwnProps &
-FormikFieldProps &
-Partial<TypographyProps>;
+  FormikFieldProps &
+  Partial<TypographyProps>;
 
 const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   autocompleteProps,
@@ -104,11 +104,11 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
 };
 
 type AutocompleteFieldProps = AutocompleteOwnProps &
-FieldConfig &
-Partial<TypographyProps>;
+  FieldConfig &
+  Partial<TypographyProps>;
 
 const AutocompleteField: React.FunctionComponent<
-AutocompleteFieldProps
+  AutocompleteFieldProps
 > = (props) => <FormikField component={Autocomplete} {...props} />;
 
 export default AutocompleteField;

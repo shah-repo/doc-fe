@@ -16,6 +16,7 @@ declare global {
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
       login(params: { email: string; password: string }): Chainable<Subject>;
       selectCompany(params: { name: string }): Chainable<Subject>;
+      myCompanies(token: string): Chainable<Subject>;
     }
   }
 }
@@ -116,6 +117,17 @@ Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstra
   }).then((response) => response.body);
 });
 
+Cypress.Commands.add("myCompanies", (token: string) => {
+  cy.request({
+    method: "GET",
+    url: `${CONFIG.BE_URL}/api/v1/company/mine`,
+    headers: {
+      Authorization: `bearer ${token}`,
+    },
+    timeout: 10 * 1000
+  }).then((response) => response.body)
+})
+
 Cypress.Commands.add("apiLogin", (params: { email: string; password: string }) => {
   cy.request({
     method: "POST",
@@ -123,7 +135,7 @@ Cypress.Commands.add("apiLogin", (params: { email: string; password: string }) =
     timeout: 10 * 1000,
     body: params,
   }).then((response) =>
-    response.body.sessionId
+    response.body
   );
 });
 
