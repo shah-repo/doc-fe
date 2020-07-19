@@ -71,7 +71,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         key={documentRevision.id}
         className={classes.linkBody}
       >
-        <SummaryInfo label={isDocumentPO ? undefined : "common.docId"} value={docId} />
+        <SummaryInfo dataCy={"common.docId"} label={isDocumentPO ? undefined : "common.docId"} value={docId} />
         <SummaryInfo
           label="common.title"
           value={documentRevision.name}
