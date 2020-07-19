@@ -10,11 +10,11 @@ const runId = new Date().valueOf();
 let createdCompany;
 
 context(`Test: ${path.basename(__filename)}`, () => {
-  /* it("Creates company", (done: any) => {
+  it("Creates company", (done: any) => {
     cy.apiLogin({
       email: "zoran.kovacevic+admin@codecons.com",
       password: "Tester1!",
-    }).then((sessionId) => {
+    }).then((response: any) => {
       cy.createCompany({
         payload: {
           companyAcronym: `T1${runId}`,
@@ -44,13 +44,13 @@ context(`Test: ${path.basename(__filename)}`, () => {
           addresses: ["Address 1"],
           whiteLabeling: null,
           documentTypes: [],
-        }, sessionId: sessionId as unknown as string,
+        }, sessionId: response.sessionId,
       }).then((response) => {
         createdCompany = response;
         done();
       });
     });
-  }); */
+  });
 
   it("Logs user in", () => {
     cy.login({
@@ -60,19 +60,18 @@ context(`Test: ${path.basename(__filename)}`, () => {
   });
 
   it("Selects company", () => {
-    // cy.selectCompany({ name: createdCompany.name });
-    cy.selectCompany({ name: 'Test Company 1594952860030' });
+    cy.selectCompany({ name: createdCompany.name });
   });
 
   it("Opens document list", () => {
-    cy.get("[data-cy=\"document_list\"]", { timeout: 10 * 1000 }).click();
+    cy.get("[data-cy=\"document.list\"]", { timeout: 10 * 1000 }).click();
   });
 
   it("Check error is shown for no records", () => {
 
     cy.get('.ReactVirtualized__Grid', { timeout: 1000 }).then($container => {
       if (!$container.html().includes('ReactVirtualized__Grid__innerScrollContainer')) {
-        cy.get('.ReactVirtualized__Grid .MuiBox-root').contains('No results found');
+        cy.get("[data-cy=\"no.results.found\"]").contains('No results found');
       }
     })
   });
@@ -82,31 +81,12 @@ context(`Test: ${path.basename(__filename)}`, () => {
   });
 
   it("Opens approval request list", () => {
-    cy.get("[data-cy=\"approval_request_list\"]", { timeout: 1000 }).click();
+    cy.get("[data-cy=\"approval.request.list\"]", { timeout: 1000 }).click();
   });
 
   it("Open create approval request dialogue", () => {
-    cy.get("#ChangeRequest-create").click();
+    cy.get("[data-cy=\"change.request.create\"]").click();
   });
-
-  // it("fills in description", () => {
-  //   cy.get("[data-cy=\"RichTextEditor.description\"]", { timeout: 10000 }).type("Desription");
-  // });
-  // it("fills in document type", () => {
-  //   cy.get("[data-cy=\"select.document.documentType.id\"]").click();
-  //   cy.get("[data-cy=\"selectItem.document.documentType.id.Dynamic Form\"]").click();
-  // });
-
-  // it("fills in revision stage", () => {
-  //   cy.get("[data-cy=\"select.revisionStage\"]").click();
-  //   cy.get("[data-cy=\"selectItem.revisionStage.common.Alpha\"]").click();
-  // });
-  // it("adds attachment", () => {
-  //   cy.get("[data-cy=\"AttachmentFieldPresenter-field\"] > input[type=file]").attachFile("image.jpg");
-  //   cy.get("#AttachmentIconPresenter-fileTitle").then(($div) => {
-  //     expect($div).to.have.text("image.jpg");
-  //   });
-  // });
 });
 
 // for TS error "All files must be modules when the '--isolatedModules' flag is provided" uncomment line below
