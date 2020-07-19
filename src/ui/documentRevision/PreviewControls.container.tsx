@@ -58,7 +58,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
     if (formDocumentId) {
       dispatch(documentRevisionsActions.loadDocument(formDocumentId));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formDocumentId]);
 
   const async = useAsync({
@@ -100,6 +100,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
           variant="outlined"
           onClick={cloneOutputDocument}
           id="PreviewControlsContainer-createNew"
+          data-cy="PreviewControlsContainer-createNew"
         >
           <Text translation={isAR ? "changeRequest.create" : "common.create.new"} />
         </Button>

@@ -12,6 +12,7 @@ declare global {
        * @example cy.dataCy('greeting')
       */
       unClick(): Chainable<Subject>;
+      myCompanies(token: string): Chainable<Subject>;
     }
   }
 }

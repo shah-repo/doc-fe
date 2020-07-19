@@ -21,8 +21,8 @@ interface AutocompleteOwnProps extends FieldOwnProps {
 }
 
 type CreatablePropsWithFormik = AutocompleteOwnProps &
-FormikFieldProps &
-Partial<TypographyProps>;
+  FormikFieldProps &
+  Partial<TypographyProps>;
 
 const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   creatableProps,
@@ -34,7 +34,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   const value = React.useMemo(() => ({ value: formikValue, label: formikValue }), [formikValue]);
   React.useEffect(() => {
     setInputValue(formikValue);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formikValue]);
   const [inputValue, setInputValue] = useState(formikValue);
   const { submitForm } = useFormContext();
@@ -115,11 +115,11 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
 };
 
 type AutocompleteFieldProps = AutocompleteOwnProps &
-FieldConfig &
-Partial<TypographyProps>;
+  FieldConfig &
+  Partial<TypographyProps>;
 
 const CreatableField: React.FunctionComponent<
-AutocompleteFieldProps
+  AutocompleteFieldProps
 > = (props) => <FormikField component={Creatable} {...props} />;
 
 export default CreatableField;
