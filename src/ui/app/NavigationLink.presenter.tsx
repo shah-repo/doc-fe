@@ -44,7 +44,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
         to={type === "CATEGORY" ? `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}` : path}
       >
         {
-          type === "LINK" &&
+          (type === "LINK" || type === "CATEGORY") &&
           <ListItemIcon className={classes.itemIcon} onClick={toggleChildren}>
             <div
               className={classNames(

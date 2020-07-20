@@ -102,6 +102,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const [docTypeForm, toggleDocTypeForm] = React.useState(false);
 
   const [isVisible, label] = useCreateDocumentByTypeButton(documentTypeId);
+  const buttonLabel = isByCategory ? labelName : label;
 
   useEffect(() => {
     setErrorMessage(undefined);
@@ -181,7 +182,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
           id="DocumentByTypeListPresenter-openDocRev"
         >
           <Text
-            message={label}
+            message={buttonLabel}
             values={{ name: labelName }}
           />
         </Button>
