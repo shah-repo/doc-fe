@@ -1,4 +1,4 @@
-import { cloneDeep, filter, findLast, isEmpty, isUndefined, sortBy } from "lodash";
+import { cloneDeep, filter, findLast, groupBy, isEmpty, isUndefined, sortBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import moment from "moment";
@@ -61,21 +61,32 @@ export const withFBApproval = <T extends FBApprovalProps>(
       (reviseDisabled && workspaceState?.isRevised)
     );
 
+    function getGroup(id: string): GroupRequestBody | undefined {
+      return FBAutocompleteAsyncStore.get<GroupRequestBody>(FBAutocompleteAsyncOption.groups, id);
+    }
+
+    function getRole(id: string): FBInlineApprovalRole | undefined {
+      return FBAutocompleteAsyncStore.get<FBInlineApprovalRole>(FBAutocompleteAsyncOption.approvalRoles, id);
+    }
+
     function isGroup(id?: string): boolean {
       if(!id) {return false;}
-      const group = FBAutocompleteAsyncStore.get<Employee>(FBAutocompleteAsyncOption.groups, id);
-      return !isUndefined(group);
+      return !isUndefined(getGroup(id));
     }
 
     function isApprovalRole(id?: string): boolean {
       if(!id) {return false;}
-      const approvalRole = FBAutocompleteAsyncStore.get<Employee>(FBAutocompleteAsyncOption.approvalRoles, id);
-      return !isUndefined(approvalRole);
+      return !isUndefined(getRole(id));
     }
 
     function groupCheck(id: string): boolean {
       const filteredGroup = filter(currentUser?.groups, { id });
       return !isEmpty(filteredGroup);
+    }
+
+    function roleCheck(id: string): boolean {
+      const roles = groupBy(getRole(id)?.joinedEmployees || [], "id");
+      return !isUndefined(roles[currentUser?.employeeId || ""])
     }
 
     function approverStatus(id: string): string {
@@ -128,7 +139,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
     }
 
     function canApprove(id: string): boolean {
-      return id === currentUser?.employeeId || groupCheck(id);
+      return id === currentUser?.employeeId || groupCheck(id) || roleCheck(id);
     }
 
     onApprove = (approver?: FBInlineApproverType) => () => {

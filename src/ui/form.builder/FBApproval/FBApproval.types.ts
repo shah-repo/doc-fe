@@ -81,6 +81,7 @@ export interface FBApprovalConstructor {
 export interface FBInlineApprovalRole {
   id: string;
   name: string;
+  joinedEmployees?: Employee[];
 }
 
 export type FBInlineApproverType = Employee | GroupRequestBody | FBInlineApprovalRole;
