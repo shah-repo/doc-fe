@@ -3,7 +3,7 @@
 Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
 });
-import path from "path";
+
 import { RevisionChangeType } from "../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../support/commands/company/commands";
 import { SystemRequirement } from "../utils/context/systemRequirement";
@@ -19,9 +19,9 @@ const documentRevisionName = "New document for testing AR";
 const approvalRequestTitle = "Approval request from newly created form";
 const approvalRequestFormName = "New Approval request form template";
 
-context(`Test: ${path.basename(__filename)}`, () => {
-  context("Create company and log in it", () => {
-    it("Creates company", (done: any) => {
+context("Approval request form", () => {
+  context("[API]Prepare company", () => {
+    it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
         email: "zoran.kovacevic+admin@codecons.com",
         password: "Tester1!",
@@ -73,7 +73,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
       });
     });
 
-    it("API login second tester", (done: any) => {
+    it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: "enlil.testmail+cy2@gmail.com",
         password: "Tester1!",
@@ -84,48 +84,48 @@ context(`Test: ${path.basename(__filename)}`, () => {
       });
     });
 
-    it("Gets group by name", () => {
+    it("[API]Creates document revision for approval", (done: any) => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
         employeeId: secondEmployee.id,
         groupName: "Everyone",
-      }).then((response) => group = response);
-    });
-
-    it("Creates document revision", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>Test Doc Rev Description</p>",
-          document: {
-            docId: "CS-00004",
-            documentType: {
-              id: componentSpecificationDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: documentRevisionName,
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-
-        },
-        employeeId: secondEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
       }).then((response) => {
-        done();
+        group = response;
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Test Doc Rev Description</p>",
+            document: {
+              docId: "CS-00004",
+              documentType: {
+                id: componentSpecificationDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: documentRevisionName,
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+
+          },
+          employeeId: secondEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then(() => {
+          done();
+        });
       });
     });
-
+  });
+  context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: "enlil.testmail+cy2@gmail.com",
