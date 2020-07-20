@@ -60,6 +60,7 @@
   "environment.DEMO_THEME": "DEMO",
   "changeRequest.title": "Document - Approval Request",
   "changeRequest.state": "Status",
+  "changeRequest.create": "Create AR",
   "changeRequest.assessmentsDescription": "Assessments description",
   "changeRequest.assessmentForm.addTask": "Add Task",
   "changeRequest.assessmentForm.trainingRequired": "Training Required",
