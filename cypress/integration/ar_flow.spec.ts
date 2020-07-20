@@ -6,6 +6,7 @@ Cypress.Screenshot.defaults({
 import path from "path";
 import { RevisionChangeType } from "../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../support/commands/company/commands";
+import { SystemRequirement } from "../utils/context/systemRequirement";
 
 const runId = new Date().valueOf();
 let createdCompany;
@@ -173,6 +174,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
 
   context("Create approval request with newly created form", () => {
     it("Navigate to approval request list", () => {
+      SystemRequirement("REQ-0680");
       cy.cmpNavigateToApprovalRequestList();
     });
 
@@ -181,6 +183,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Choose newly AR Form template", () => {
+      SystemRequirement("REQ-0690", "REQ-0700");
       cy.arSelectARForm({ formTitle: approvalRequestFormName });
     });
 
@@ -209,6 +212,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Click Create Approval Request", () => {
+      SystemRequirement("REQ-0730");
       cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
 
@@ -217,6 +221,8 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Verify AR status", () => {
+      SystemRequirement("REQ-0730");
+      SystemRequirement("REQ-0740");
       cy.arVerifyStatus({ status: "In Review" });
     });
   });
@@ -245,10 +251,12 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Approve AR", () => {
+      SystemRequirement("REQ-0920");
       cy.arApproveAR();
     });
 
     it("Check approval request status is approved", () => {
+      SystemRequirement("REQ-0730");
       cy.arVerifyStatus({ status: "Approved" });
     });
   });
