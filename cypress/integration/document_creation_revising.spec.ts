@@ -105,39 +105,74 @@ context("Document Creation Flow", () => {
       cy.drCheckIfDocumentIdIsGenerated();
     });
 
-    it("Upload multiple attachments when creating document", () => {
-      cy.atchUploadAttachment({ fileName: "test.docx" });
-      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    context("Uploads attachments", () => {
+      it("Uploads text.docx", () => {
+        cy.atchUploadAttachment({ fileName: "test.docx" });
+      });
+      it("Displays one attachment on the list: test.docx", () => {
+        cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx" ] });
+      });
+      it("Uploads image.docx", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" }).wait(5000);
+      });
+      it("Displays two attachment on the list: test.docx and image.docx", () => {
+        cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx", "image.jpg" ] });
+      });
     });
 
-    it("Selected Groups should default to 'Everyone' when creating new document", () => {
-      cy.get("[data-cy=\"field-securityGroups\"]").contains("Everyone");
+    context("Check permission groups", () => {
+      it("Selected Groups set to 'Everyone' by default", () => {
+        cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
+          .should("have.text", "Enter the name of users to access the document");
+        cy.get("[data-cy=\"field-securityGroups\"]").contains("Everyone");
+      });
     });
+  });
 
+  context("Creates document", () => {
     it("Click create document after filling document", () => {
       cy.drClickCreateDocument();
     });
+  });
 
+  context("Document in Draft", () => {
     it("Check if document status is DRAFT after creating a document", () => {
       cy.drCheckDocumentStatus({ status: "Draft" });
     });
 
-    it("Upload multiple attachments when document is in DRAFT", () => {
-      cy.atchUploadAttachment({ fileName: "test_image.jpg" });
-      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    context("Uploads attachments", () => {
+      it("Uploads test_image.jpg", () => {
+        cy.atchUploadAttachment({ fileName: "test_image.jpg" }).wait(5000);
+      });
+      it("Displays three attachment on the list: test_image.jpg test.docx image.jpg", () => {
+        cy.atchCheckDisplayedAttachments({ fileNames: [ "test_image.jpg", "test.docx", "image.jpg" ] });
+      });
+      it("Uploads image.jpg", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" }).wait(5000);
+      });
+      it("Displays four attachment on the list: test_image.jpg and image.docx, test_image.jpg, test.docx, image.jpg",
+        () => {
+          cy.atchCheckDisplayedAttachments({ fileNames: [ "test_image.jpg", "image.jpg", "test.docx", "image.jpg" ] });
+        });
     });
 
-    it("Set attachment as primary", () => {
-      cy.atchSetPrimaryAttachment({ fileName: "test_image.jpg" });
-    });
+    context("Check primary attachment function", () => {
+      it("Set attachment as primary", () => {
+        cy.atchSetPrimaryAttachment({ fileName: "test_image.jpg" });
+      });
 
-    it("Allow user to only set single attachment to be primary", () => {
-      cy.atchSetPrimaryAttachment({ fileName: "test.docx" });
-      cy.atchCheckForSinglePrimaryAttachment();
-    });
+      it("Allow user to only set single attachment to be primary", () => {
+        cy.atchSetPrimaryAttachment({ fileName: "test.docx" });
+        cy.atchCheckForSinglePrimaryAttachment();
+      });
 
-    it("Remove last attachment", () => {
-      cy.atchRemoveLastAttachment();
+      it("Remove attachment test_image.jpg", () => {
+        cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
+      });
+
+      it("Displays three attachment on the list: test_image.jpg test.docx image.jpg", () => {
+        cy.atchCheckDisplayedAttachments({ fileNames: [ "image.jpg", "test.docx", "image.jpg" ] });
+      });
     });
   });
 });
