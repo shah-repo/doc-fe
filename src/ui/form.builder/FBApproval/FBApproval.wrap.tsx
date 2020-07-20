@@ -3,13 +3,12 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import moment from "moment";
 import React from "react";
-import { FBApprovalConfig, FBApprovalProps, FBApprovalState, FBApprovalStatus, FBApprovalValue } from ".";
+import { FBApprovalConfig, FBApprovalProps, FBApprovalState, FBApprovalStatus, FBApprovalValue, FBInlineApprovalRole, FBInlineApproverType } from ".";
 import { FB, FBAutocompleteAsyncOption } from "..";
 import { TIME_ZONE } from "../../../common/utils/date";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import { FBApprovalRoles } from "./FBApproval.types";
 
 export const withFBApproval = <T extends FBApprovalProps>(
   Component: React.FunctionComponent<T>
@@ -102,11 +101,11 @@ export const withFBApproval = <T extends FBApprovalProps>(
       );
     }
 
-    function approverName(approver?: Employee | GroupRequestBody | FBApprovalRoles): string {
+    function approverName(approver?: FBInlineApproverType): string {
       return (
         (approver as Employee)?.user?.email || 
         (approver as GroupRequestBody)?.name || 
-        (approver as FBApprovalRoles)?.name ||
+        (approver as FBInlineApprovalRole)?.name ||
         ""
       );
     }
@@ -132,7 +131,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       return id === currentUser?.employeeId || groupCheck(id);
     }
 
-    onApprove = (approver?: Employee | GroupRequestBody) => () => {
+    onApprove = (approver?: FBInlineApproverType) => () => {
       if (!approver) {
         return;
       }
@@ -154,7 +153,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       approvalFieldState?.postApi.post();
     };
 
-    approvalConfig = (approver?: Employee | GroupRequestBody | FBApprovalRoles): FBApprovalConfig | undefined => {
+    approvalConfig = (approver?: FBInlineApproverType): FBApprovalConfig | undefined => {
       if (!approver) {
         return;
       }
@@ -170,7 +169,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
     useObserver(() => {
       approvers = approvalFieldState?.approvers as unknown as Employee[];
       approverGroups = approvalFieldState?.groups as unknown as GroupRequestBody[];
-      approvalRoles = approvalFieldState?.approvalRoles as unknown as FBApprovalRoles[];
+      approvalRoles = approvalFieldState?.approvalRoles as unknown as FBInlineApprovalRole[];
       hasApproved = approvalFieldState?.hasApproved;
       loading = (
         approvalFieldState?.approversApi.loading || 

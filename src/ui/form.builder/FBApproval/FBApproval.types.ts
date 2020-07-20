@@ -23,8 +23,8 @@ export type FBApprovalProps =
 | "approveIsBlocking"
 | "reviseDisabled"
 > & {
-  onApprove?: (approver?: Employee | GroupRequestBody) => () => void;
-  approvalConfig?: (approver?: Employee | GroupRequestBody) => FBApprovalConfig | undefined;
+  onApprove?: (approver?: FBInlineApproverType) => () => void;
+  approvalConfig?: (approver?: FBInlineApproverType) => FBApprovalConfig | undefined;
   approvalFieldState?: FBApprovalState;
   hasApproved?: FBApprovalValue[];
   isApproved?: boolean;
@@ -61,6 +61,7 @@ export type FBApprovalFieldProps<T> =
 export interface FBApprovalData {
   approvers?: Employee[];
   approverGroups?: GroupRequestBody[];
+  approvalRoles?: FBInlineApprovalRole;
 }
 
 export interface FBApprovalSocketMsg {
@@ -77,7 +78,9 @@ export interface FBApprovalConstructor {
   approvalRolesValue?: string[];
 }
 
-export interface FBApprovalRoles {
+export interface FBInlineApprovalRole {
   id: string;
   name: string;
 }
+
+export type FBInlineApproverType = Employee | GroupRequestBody | FBInlineApprovalRole;

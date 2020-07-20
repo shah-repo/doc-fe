@@ -144,6 +144,7 @@
     "root": ""
   },
   {
+    "id": "18",
     "path": "/document_revisions",
     "label": "Document revisions (all versions)",
     "valueKey": "id",

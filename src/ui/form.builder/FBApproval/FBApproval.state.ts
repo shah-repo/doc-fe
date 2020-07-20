@@ -1,14 +1,12 @@
 import { isEmpty, union } from "lodash";
 import { action, computed, observable, set } from "mobx";
-import { FBApprovalApi, FBApprovalConstructor, FBApprovalValue } from ".";
-import { FBAutocompleteAsyncOption } from "..";
+import { FBApprovalApi, FBApprovalConstructor, FBApprovalValue, FBAutocompleteAsyncOption, FBInlineApprovalRole } from "..";
 import { Audit } from "../../../state/ducks/audit";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { FBAutocompleteAsyncState } from "../FBAutocompleteAsync/FBAutocompleteAsync.state";
-import { FBApprovalRoles } from "./FBApproval.types";
 
 export class FBApprovalState {
   @observable public hasApproved: FBApprovalValue[] = [];
@@ -37,12 +35,7 @@ export class FBApprovalState {
     this.approvalRolesValue = approvalRolesValue;
     if (!documentId) { return; }
     this.hasApproved = value;
-    // post approval
     this.postApi.setTemplateUrl(FBEndpoint.PostInlineApprove, { documentId });
-  }
-
-  public get approvalRolesId(): string {
-    return FBAutocompleteAsyncOption.approvalRoles;
   }
 
   @computed public get isApproved(): boolean {
@@ -57,7 +50,7 @@ export class FBApprovalState {
     return this.groupsApi.sliceValue(this.groupsValue);
   }
 
-  @computed public get approvalRoles(): FBApprovalRoles[] | undefined {
+  @computed public get approvalRoles(): FBInlineApprovalRole[] | undefined {
     return this.approvalRolesApi.sliceValue(this.approvalRolesValue);
   }
 

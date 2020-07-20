@@ -1,10 +1,8 @@
 import { Box, CircularProgress } from "@material-ui/core";
 import React from "react";
-import { FBApprovalFieldProps, FBApprovalRoles, FBButton, FBMapWrapper } from "..";
-import { Employee } from "../../../state/ducks/company";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement";
+import { FBApprovalFieldProps, FBButton, FBInlineApproverType, FBMapWrapper } from "..";
 
-const FBApprovalField = <T extends Employee | GroupRequestBody | FBApprovalRoles>({
+const FBApprovalField = <T extends FBInlineApproverType>({
   approvalConfig,
   onApprove,
   collection,

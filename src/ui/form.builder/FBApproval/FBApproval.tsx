@@ -2,10 +2,9 @@ import { Box } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import React from "react";
-import { FBApprovalAudit, FBApprovalField, FBApprovalProps, FBApprovalRoles, FBApprovalSocket, FBText } from "..";
+import { FBApprovalAudit, FBApprovalField, FBApprovalProps, FBApprovalSocket, FBInlineApprovalRole, FBText } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
-import Text from "../../components/Text";
 import { withFBApproval } from "./FBApproval.wrap";
 
 const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
@@ -39,7 +38,7 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
         {isApproved && <CheckCircleIcon style={{ color: "#b1d439" }} />}
         {!isApproved && <ErrorIcon style={{ color: "#e9424a" }} />}
         <Box ml={1} display="flex" mt={0.3}>
-          {isApproved && <Text message="form.builder.approved" />}
+          {isApproved && <FBText locale="form.builder.approved" />}
           {!isApproved && (
             <FBText boxProps={{ flexGrow: 1 }} locale="form.builder.approval.waiting" />
           )}
@@ -63,10 +62,10 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
       />
     )}
     {approvalRoles && (
-      <FBApprovalField<FBApprovalRoles>
+      <FBApprovalField<FBInlineApprovalRole>
         {...props}
         mb={2}
-        collection={approvalRoles as FBApprovalRoles[]}
+        collection={approvalRoles as FBInlineApprovalRole[]}
         {...{ disabled }}
       />
     )}
