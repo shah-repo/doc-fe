@@ -1,4 +1,4 @@
-import _, { isEmpty } from "lodash";
+import { isEmpty } from "lodash";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
@@ -31,6 +31,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const isByCategory = match.path.includes(DOCUMENT_BY_CATEGORY_LIST_URL);
 
   const documentType = useSelector(documentTypeSelectors.byId)?.[docTypeId];
+  const categoryExists = useSelector(documentRevisionsSelectors.categoryExists);
   const categoryColumns = useSelector(documentRevisionsSelectors.getCategoryColumns);
   const categoryButtonLabel = useSelector(documentRevisionsSelectors.getCategoryButtonLabel);
 
@@ -96,7 +97,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         cellHref: cellHrefRenderer,
         omitSearch,
         columnOptions: {
-          cellDataGetter: ({ rowData }) => _.get(rowData, column.valuePath),
+          cellDataGetter: ({ rowData }) => rowData.column.valuePath,
         },
         searchOptions,
       };
@@ -112,7 +113,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     canEdit,
   );
 
-  if (!documentType || (isByCategory && !categoryColumns.length)) {
+  if (!documentType && !categoryExists) {
     return <Redirect to={HOME_URL} />;
   }
 

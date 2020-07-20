@@ -1,4 +1,4 @@
-import _, { isString } from "lodash";
+import { isString } from "lodash";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -101,7 +101,7 @@ export const getStaticColumns = (
     cellType: (rowData) => (canEdit(rowData) ? "LINK" : "BASE"),
     searchOptions: {
       dataKey: "status[]",
-      defaultValue: _.isString(tableCriteria.queryDict["status[]"])
+      defaultValue: isString(tableCriteria.queryDict["status[]"])
         ? tableCriteria.queryDict["status[]"]
         : undefined,
       searchType: "select",

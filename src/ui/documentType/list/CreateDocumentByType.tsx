@@ -144,9 +144,10 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     setErrorMessage(undefined);
     if (isByCategory) {
       categoryAsync.start(getDocTypesByCategory, { category: documentCategory }, categoryAsync);
-    } else {
-      idAsync.start(getDocRevByIds, documentTypeId, idAsync);
+      return;
     }
+    idAsync.start(getDocRevByIds, documentTypeId, idAsync);
+    return;
   };
 
   const handleFormSelection = (docRevId) => {

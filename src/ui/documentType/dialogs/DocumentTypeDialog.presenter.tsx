@@ -2,11 +2,12 @@ import { Button, CircularProgress, Dialog, DialogContent, DialogTitle, FormContr
 import React, { useEffect, useState } from "react";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType";
 import Text from "../../components/Text";
+import { DialogHandler } from "../../hooks/useDialog";
 import { styles } from "./FormListDialog/FormListDialog.styles";
 
 export interface DocumentTypeDialogProps {
   documentTypes: DocumentType[];
-  dialog: { isOpen: boolean; close: () => void };
+  dialog: DialogHandler;
   handleSelection: (id: string) => void;
 }
 export const DocumentTypeDialog: React.FunctionComponent<DocumentTypeDialogProps> = ({
