@@ -5,6 +5,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { toastInfo } from "../components/notifications";
@@ -88,6 +89,10 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   };
 
   const renderOutputButton = () => {
+    const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
+    && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
+      .find((type) => type.documentTypeName === "Approval Request");
+
     if (hasAccess && canCreateOutput(documentRevision)) {
       return (
         <Button
@@ -96,7 +101,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
           onClick={cloneOutputDocument}
           id="PreviewControlsContainer-createNew"
         >
-          <Text translation="common.create.new" />
+          <Text translation={isAR ? "changeRequest.create" : "common.create.new"} />
         </Button>
       );
     }

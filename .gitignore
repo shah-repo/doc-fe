@@ -27,3 +27,7 @@ test-results/*
 jest-config/*
 .env
 *.code-workspace
+
+
+cypress/requirements/cache/*
+!cypress/requirements/cache/readme.txt

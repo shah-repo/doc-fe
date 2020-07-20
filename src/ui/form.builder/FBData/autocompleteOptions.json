@@ -1,4 +1,5 @@
-[{
+[
+  {
     "id": "1",
     "path": "/document_revisions",
     "label": "Document revisions",
@@ -118,8 +119,8 @@
   },
   {
     "id": "15",
-    "path": "/document_revisions?status%5B%5D=DRAFT",
-    "label": "Document Revisions In Draft",
+    "path": "/document_revisions?docTypeGroups%5B%5D=WO_PARTS",
+    "label": "Part Number in WO",
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
@@ -127,8 +128,8 @@
   },
   {
     "id": "16",
-    "path": "/document_revisions?docTypeGroups%5B%5D=WO_PARTS",
-    "label": "Part Number in WO",
+    "path": "/document_revisions?status%5B%5D=DRAFT",
+    "label": "Document Revisions In Draft",
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",

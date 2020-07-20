@@ -6,13 +6,20 @@ if [[ -z "${CI_BUILD_ID}" ]]; then
   exit
 fi
 
+
+if [[ -z "${REPORT_TITLE}" ]]; then
+  echo "REPORT_TITLE not set, exiting"
+  exit
+fi
+
+
 ./scripts/cypress/make_results_dir.sh
 
-MOCHAWESOME_FILES=($(find results/$CI_BUILD_ID/json -name 'mochawesome*'))
+MOCHAWESOME_FILES=($(find results/$CI_BUILD_ID/json -name "$REPORT_TITLE*"))
 
 for i in "${MOCHAWESOME_FILES[@]}"
 do
-  FILES=($(cat $i | jq '.results | map(select(.suites[] | .failures[]| length)) | .[] | .fullFile' | uniq | sort -u))
+  FILES=($(cat $i | jq 'select(.stats.failures != 0) | .results | .[] | .fullFile' | uniq | sort -u))
   # echo "File $i output '$WITH_FAILING_SPECS'"
   echo " "
   if [[ -z "${FILES}" ]]; then
@@ -38,5 +45,6 @@ do
     done
 
     echo "--| deleting  $i"
+    rm $i
   fi
 done
