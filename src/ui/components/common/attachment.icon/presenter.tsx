@@ -84,16 +84,13 @@ AttachmentIconProps
   );
 
   return (
-<<<<<<< Updated upstream
-    <div className={classes.attachmentContainer} data-cy="attachment">
-      <div className={classes.iconContainer} >
-        {primaryBadgeRender}
-        {deleteButtonRenderer}
-=======
-    <div className={classes.attachmentContainer}     onMouseEnter={() => setMouseInside?.(!disabled)}
-      onMouseLeave={() => setMouseInside?.(false)}>
+    <div
+      className={classes.attachmentContainer}
+      data-cy="attachment"
+      onMouseEnter={() => setMouseInside?.(!disabled)}
+      onMouseLeave={() => setMouseInside?.(false)}
+    >
       <div className={classes.iconContainer}>
->>>>>>> Stashed changes
         <Tooltip title={`${file.name}.${file.type}`}>
           <ButtonBase
             onContextMenu={handleContextMenu?.(file)}
