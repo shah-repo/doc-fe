@@ -113,14 +113,33 @@ context("Document Creation Flow", () => {
       it("Uploads text.docx", () => {
         cy.atchUploadAttachment({ fileName: "test.docx" });
       });
-      it("Displays one attachment on the list: test.docx", () => {
+
+      it("Check one attachment is displayed: test.docx", () => {
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx" ] });
       });
-      it("Uploads image.docx", () => {
+
+      it("Check test.docx attachment atributes", () => {
+        cy.atchCheckAtributes({ fileName: "test.docx", attributes: "11.00 B Microsoft Word File" });
+      });
+
+      it("Uploads image.jpg", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" }).wait(5000);
       });
-      it("Displays two attachment on the list: test.docx and image.docx", () => {
+
+      it("Check image.jpg attachment atributes", () => {
+        cy.atchCheckAtributes({ fileName: "image.jpg", attributes: "329.33 kB JPG File" });
+      });
+
+      it("Check two attachment are displayed: test.docx, image.jpg", () => {
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx", "image.jpg" ] });
+      });
+
+      it("Remove attachment image.jpg", () => {
+        cy.atchRemoveAttachment({ fileName: "image.jpg" });
+      });
+
+      it("Check one attachment is displayed: test.docx", () => {
+        cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx" ] });
       });
     });
 
@@ -150,15 +169,26 @@ context("Document Creation Flow", () => {
       it("Uploads test_image.jpg", () => {
         cy.atchUploadAttachment({ fileName: "test_image.jpg" }).wait(5000);
       });
-      it("Displays three attachment on the list: test_image.jpg test.docx image.jpg", () => {
-        cy.atchCheckDisplayedAttachments({ fileNames: [ "test_image.jpg", "test.docx", "image.jpg" ] });
+
+      it("Check test.docx attachment atributes", () => {
+        cy.atchCheckAtributes({ fileName: "test_image.jpg", attributes: "373.56 kB JPG File" });
       });
+
+      it("Check two attachments are displayed: test.docx, test_image.jpg", () => {
+        cy.atchCheckDisplayedAttachments({ fileNames: [ "test_image.jpg", "test.docx" ] });
+      });
+
       it("Uploads image.jpg", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" }).wait(5000);
       });
-      it("Displays four attachment on the list: test_image.jpg, image.jpg, test.docx and image.jpg", () => {
+
+      it("Check test.docx attachment atributes", () => {
+        cy.atchCheckAtributes({ fileName: "image.jpg", attributes: "329.33 kB JPG File" });
+      });
+
+      it("Check three attachments are displayed: test.docx, image.jpg, test_image.jpg", () => {
         SystemRequirement("REQ-0200", "REQ-2010");
-        cy.atchCheckDisplayedAttachments({ fileNames: [ "test_image.jpg", "image.jpg", "test.docx", "image.jpg" ] });
+        cy.atchCheckDisplayedAttachments({ fileNames: [ "test_image.jpg", "image.jpg", "test.docx" ] });
       });
     });
 
@@ -178,8 +208,8 @@ context("Document Creation Flow", () => {
         cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
       });
 
-      it("Displays three attachment on the list: test_image.jpg test.docx image.jpg", () => {
-        cy.atchCheckDisplayedAttachments({ fileNames: [ "image.jpg", "test.docx", "image.jpg" ] });
+      it("Check two attachments are displayed: test.docx, image.jpg", () => {
+        cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx", "image.jpg" ] });
       });
     });
   });

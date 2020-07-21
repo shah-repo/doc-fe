@@ -13,6 +13,7 @@ declare global {
       atchCheckForSinglePrimaryAttachment(): Chainable<Subject>;
       atchCheckDisplayedAttachments(params: {fileNames: string[] }): Chainable<Subject>;
       atchRemoveAttachment(params: {fileName: string }): Chainable<Subject>;
+      atchCheckAtributes(params: {fileName: string; attributes: string }): Chainable<Subject>;
     }
   }
 }
@@ -52,4 +53,8 @@ Cypress.Commands.add("atchCheckDisplayedAttachments", (params: {fileNames: strin
 Cypress.Commands.add("atchRemoveAttachment", (params: {fileName: string }) => {
   cy.xpath(`//button[@title=\"${params.fileName}\"]/../div/button`)
     .click();
+});
+
+Cypress.Commands.add("atchCheckAtributes", (params: {fileName: string; attributes: string}) => {
+  cy.xpath(`//span[@title=\"${params.fileName}\"]/../span[2]`).should("have.text", params.attributes);
 });

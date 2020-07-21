@@ -1,4 +1,4 @@
-import { SystemRequirement } from "../../utils/context/systemRequirement";
+import { SystemRequirement } from "../../../cypress/utils/context/systemRequirement";
 
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />

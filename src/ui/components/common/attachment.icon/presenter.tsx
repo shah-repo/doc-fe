@@ -74,8 +74,8 @@ AttachmentIconProps
     </div>
   );
   return (
-    <div className={classes.attachmentContainer}>
-      <div className={classes.iconContainer} data-cy={"attachment"}>
+    <div className={classes.attachmentContainer} data-cy="attachment">
+      <div className={classes.iconContainer} >
         {primaryBadgeRender}
         {deleteButtonRenderer}
         <Tooltip title={`${file.name}.${file.type}`}>
