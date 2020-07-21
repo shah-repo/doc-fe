@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash";
+import { get, isEmpty } from "lodash";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
@@ -71,6 +71,10 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     if (isByCategory) {
       dispatch(pageDetailsActions.categoryPageDetails(documentCategory));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentCategory]);
+
+  useEffect(() => {
     dispatch(documentRevisionsActions.loadList());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -97,7 +101,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         cellHref: cellHrefRenderer,
         omitSearch,
         columnOptions: {
-          cellDataGetter: ({ rowData }) => rowData.column.valuePath,
+          cellDataGetter: ({ rowData }) => get(rowData, column.valuePath),
         },
         searchOptions,
       };
