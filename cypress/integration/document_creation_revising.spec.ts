@@ -1,5 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
+
+import { SystemRequirement } from "../utils/context/systemRequirement";
+
 Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
 });
@@ -79,6 +82,7 @@ context("Document Creation Flow", () => {
 
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
+      SystemRequirement("REQ-0140");
       cy.cmpNavigateToDocumentList();
     });
 
@@ -101,6 +105,7 @@ context("Document Creation Flow", () => {
     });
 
     it("Checks if document type id is 'CS-00003'", () => {
+      SystemRequirement("REQ-0320");
       cy.drCheckIfDocumentIdMatches({ docId: "CS-00003" });
     });
 
@@ -121,6 +126,7 @@ context("Document Creation Flow", () => {
 
     context("Check permission groups", () => {
       it("Check if Selected Groups are set to 'Everyone' by default", () => {
+        SystemRequirement("REQ-0300");
         cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
           .should("have.text", "Enter the name of users to access the document");
         cy.get("[data-cy=\"field-securityGroups\"]").contains("Everyone");
@@ -136,6 +142,7 @@ context("Document Creation Flow", () => {
 
   context("Document in Draft", () => {
     it("Check if document status is DRAFT after creating a document", () => {
+      SystemRequirement("REQ-0330");
       cy.drCheckDocumentStatus({ status: "Draft" });
     });
 
@@ -150,6 +157,7 @@ context("Document Creation Flow", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" }).wait(5000);
       });
       it("Displays four attachment on the list: test_image.jpg, image.jpg, test.docx and image.jpg", () => {
+        SystemRequirement("REQ-0200", "REQ-2010");
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test_image.jpg", "image.jpg", "test.docx", "image.jpg" ] });
       });
     });
@@ -160,11 +168,13 @@ context("Document Creation Flow", () => {
       });
 
       it("Allow user to only set single attachment to be primary", () => {
+        SystemRequirement("REQ-0250");
         cy.atchSetPrimaryAttachment({ fileName: "test.docx" });
         cy.atchCheckForSinglePrimaryAttachment();
       });
 
       it("Remove attachment test_image.jpg", () => {
+        SystemRequirement("REQ-0240");
         cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
       });
 
