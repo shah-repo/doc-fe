@@ -96,7 +96,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   SetFile = React.createContext(setSelectedAttachment);
 
 
-  const docRevStatusRequiresPassword = () => {
+  const redLineRequiresPassword = (attachment: Attachment) => {
     const hasPasswordRequiredStatusFromDocList = (
       documentRevisionStatusFromDocList === DocumentRevisionStatus.Released ||
       documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated ||
@@ -106,7 +106,21 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated ||
       documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete);
 
-    return hasPasswordRequiredStatusFromCR || hasPasswordRequiredStatusFromDocList;
+    return  (attachment.lineType === LINE_TYPES.RED_LINE)
+    && (hasPasswordRequiredStatusFromCR || hasPasswordRequiredStatusFromDocList);
+  };
+
+  const cleanCopyRequiresPassword = (attachment: Attachment) => {
+    const hasPasswordRequiredStatusFromDocList = (
+      documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated ||
+      documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete);
+
+    const hasPasswordRequiredStatusFromCR = (
+      documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated ||
+        documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete);
+
+    return (attachment.lineType === LINE_TYPES.CLEAN_COPY)
+    && (hasPasswordRequiredStatusFromCR || hasPasswordRequiredStatusFromDocList);
   };
 
   const handleDownload = (attachment: Attachment, type?: AttachmentType, password?: string) => {
@@ -159,23 +173,18 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   };
 
   const handleWatermarkRequest = (attachment: Attachment, attachmentType: AttachmentType) => {
-
-    const cleanCopyRequiresPassword = (
-      documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete ||
-      documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated ||
-      documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete ||
-      documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated
-    );
     setNewWatermarkError("");
     setNewWatermarkRequest(null);
-    if (cleanCopyRequiresPassword && attachment.lineType === LINE_TYPES.RED_LINE) {
+    if (cleanCopyRequiresPassword(attachment)) {
       setdownloadType(attachmentType);
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_WATER_MARK);
       openWarningDialog();
       closeContextMenu();
-    } else {
+    }
+    else {
       startWaterMarkRequest(attachment, attachmentType);
     }
+
   };
 
   const passwordSubmit = (values: Password) => {
@@ -265,14 +274,17 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
   const handleClick = (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
-    if (
-      docRevStatusRequiresPassword() &&
-      attachment.lineType === LINE_TYPES.RED_LINE) {
+    if (redLineRequiresPassword(attachment) ) {
+      setSelectedAttachment(attachment);
       needPasswordHandler(attachment);
-    } else {
+    } else if (cleanCopyRequiresPassword(attachment)) {
+      setSelectedAttachment(attachment);
+      needPasswordHandler(attachment);
+    }
+    else {
+      setSelectedAttachment(attachment);
       noNeedPasswordHandler(attachment);
     }
-    setSelectedAttachment(attachment);
   };
 
   const closeContextMenu = () => setAnchorEl(null);
@@ -359,7 +371,8 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         openWarningDialog = {openWarningDialog}
         setPasswordSubmitAction = {setPasswordSubmitAction}
         handleWatermarkRequest={handleWatermarkRequest}
-        docRevStatusRequiresPassword = {docRevStatusRequiresPassword}
+        cleanCopyRequiresPassword = {cleanCopyRequiresPassword}
+        redLineRequiresPassword = {redLineRequiresPassword}
       />
       {attachmentsRenderer}
     </div>
