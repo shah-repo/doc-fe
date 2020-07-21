@@ -2,7 +2,7 @@ import { Chip, Grid, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
 import { ChangeRequestStatus } from "../../../../state/ducks/changeRequest";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevisionStatus, DocumentRevisionStatusAlias } from "../../../../state/ducks/documentRevisions";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
 import Text from "../../Text";
 import { styles } from "./HeaderInfo.styles";
@@ -20,6 +20,9 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   id,
   documentTypeId,
 }) => {
+  if (status === DocumentRevisionStatus.Draft) {
+    status = DocumentRevisionStatusAlias.Draft
+  }
   const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
   const [isTitleVisible] = useTitle(documentTypeId);
   const classes = styles();
