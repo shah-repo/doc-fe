@@ -11,6 +11,8 @@ declare global {
       atchSetPrimaryAttachment(params: {fileName: string }): Chainable<Subject>;
       atchRemoveLastAttachment(): Chainable<Subject>;
       atchCheckForSinglePrimaryAttachment(): Chainable<Subject>;
+      atchCheckDisplayedAttachments(params: {fileNames: string[] }): Chainable<Subject>;
+      atchRemoveAttachment(params: {fileName: string }): Chainable<Subject>;
     }
   }
 }
@@ -38,4 +40,16 @@ Cypress.Commands.add("atchRemoveLastAttachment", () => {
 
 Cypress.Commands.add("atchCheckForSinglePrimaryAttachment", () => {
   cy.get("[data-cy=\"primary.attachment.icon\"]").should("have.length", 1);
+});
+
+Cypress.Commands.add("atchCheckDisplayedAttachments", (params: {fileNames: string[] }) => {
+  cy.get("[data-cy=\"attachment.title\"]").should("have.length", params.fileNames.length);
+  params.fileNames.forEach((fileName) => {
+    cy.get("[data-cy=\"attachment.title\"]").contains(fileName);
+  });
+});
+
+Cypress.Commands.add("atchRemoveAttachment", (params: {fileName: string }) => {
+  cy.xpath(`//button[@title=\"${params.fileName}\"]/../div/button`)
+    .click();
 });
