@@ -1,12 +1,13 @@
-import { Box, ButtonBase, CircularProgress, IconButton, Tooltip, Typography } from "@material-ui/core";
-import { CancelOutlined } from "@material-ui/icons";
-import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
+import { Box, Button, ButtonBase, CircularProgress, Tooltip, Typography } from "@material-ui/core";
 import classNames from "classnames";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useIntl } from "react-intl";
+import { ReactComponent as RemoveDocumentActive } from "../../../../assets/images/circle-delete-second.svg";
+import { ReactComponent as RemoveDocument } from "../../../../assets/images/circle-delete.svg";
 import { Attachment } from "../../../../state/ducks/attachments";
 import Text from "../../../components/Text";
 import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
+import Colors from "../../../layout/theme/utils/colors";
 import FileIcon from "./icon";
 import { styles } from "./utils/styles";
 import { AttachmentIconProps } from "./utils/types";
@@ -27,6 +28,9 @@ AttachmentIconProps
   ...other
 }) => {
   const file = attachment || {} as Attachment;
+  const [isMouseInside, setMouseInside] = useState(false);
+  const [removeHover, setRemoveHover] = useState(false);
+
   const classes = styles({
     size: size || "md",
     disabled,
@@ -55,29 +59,41 @@ AttachmentIconProps
     </Box>
   );
 
-  const primaryBadgeRender = isPrimary &&
-    <StarsRoundedIcon
-      data-cy={"primary.attachment.icon"}
-      color="primary"
-      fontSize="small"
-      className={classes.primaryBadge}
-    />;
   const deleteButtonRenderer = canDeleteFile && (
-    <div className={classes.closeRoot}>
-      <IconButton
-        className={classes.closeIconButton}
+    <Box
+      marginLeft="auto"
+      marginRight="10px"
+      visibility={isMouseInside ? "visible" : "hidden"}
+      borderRadius={4}
+      bgcolor={Colors.light_red}
+      onMouseEnter={() => setRemoveHover?.(!disabled)}
+      onMouseLeave={() => setRemoveHover?.(false)}
+    >
+      <Button
+        className={classes.removeButton}
         onClick={handleRemove && handleRemove(file)}
         id="AttachmentIconPresenter-handleRemove"
       >
-        <CancelOutlined className={classes.closeIcon} />
-      </IconButton>
-    </div>
+        {removeHover ?
+          <Tooltip title={<Text translation={"common.delete"} />}>
+            <RemoveDocumentActive />
+          </Tooltip> :
+          <RemoveDocument />}
+      </Button>
+    </Box>
   );
+
   return (
+<<<<<<< Updated upstream
     <div className={classes.attachmentContainer} data-cy="attachment">
       <div className={classes.iconContainer} >
         {primaryBadgeRender}
         {deleteButtonRenderer}
+=======
+    <div className={classes.attachmentContainer}     onMouseEnter={() => setMouseInside?.(!disabled)}
+      onMouseLeave={() => setMouseInside?.(false)}>
+      <div className={classes.iconContainer}>
+>>>>>>> Stashed changes
         <Tooltip title={`${file.name}.${file.type}`}>
           <ButtonBase
             onContextMenu={handleContextMenu?.(file)}
@@ -86,10 +102,17 @@ AttachmentIconProps
             id="AttachmentIconPresenter-handleIconClick"
           >
             {isLoading && <CircularProgress className={classes.progress} />}
-            {!isLoading && <FileIcon {...other} extension={file.type} isUploading={isUploading} />}
+            {!isLoading &&
+              <FileIcon
+                {...other}
+                extension={file.type}
+                isUploading={isUploading}
+                isRedLine={isRedLine}
+                isPrimary={isPrimary}
+              />
+            }
           </ButtonBase>
         </Tooltip>
-        {isRedLine && <hr className={classes.underLine}/>}
       </div>
       <div
         className={classes.fileNameContainer}
@@ -118,6 +141,7 @@ AttachmentIconProps
           {`${fileSize} ${fileTypeDescription}`}
         </Typography>
       </div>
+      {deleteButtonRenderer}
       {isUploading && isUploadingRenderer()}
     </div>
   );
