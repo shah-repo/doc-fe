@@ -19,7 +19,10 @@ declare global {
       drClickCreateDocument(): Chainable<Subject>;
       drCheckDocumentStatus(params: {status: string }): Chainable<Subject>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
+      drCheckIfDocumentIdMatches(params: {docId: string }): Chainable<Subject>;
       drFilterDocListByNameAndStatus(params: {title: string; status: string}): Chainable<Subject>;
+      drChangeOwner(params: {employee: string }): Chainable<Subject>;
+      drChangeOwnerFromMenu(params: {employee: string }): Chainable<Subject>;
     }
   }
 }
@@ -86,10 +89,26 @@ Cypress.Commands.add("drCheckIfDocumentIdIsGenerated", () => {
   cy.get("[id=\"document.docId\"]").invoke("val").should("not.be.empty");
 });
 
+Cypress.Commands.add("drCheckIfDocumentIdMatches", (params: {docId: string }) => {
+  cy.get("[id=\"document.docId\"]").should("have.value", params.docId);
+});
+
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: {title: string; status: string }) => {
   cy.get("#clearFilter").click();
   cy.get("#name").type(params.title).wait(300);
   cy.get("[id=\"mui-component-select-status[]\"]").click();
   cy.get("li[data-value]").contains(params.status).click().wait(300);
   cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
+});
+
+Cypress.Commands.add("drChangeOwnerFromMenu", (params: {employee: string}) => {
+  cy.get("#HeaderMenuButton").click();
+  cy.drChangeOwner({ employee: params.employee });
+});
+
+Cypress.Commands.add("drChangeOwner", (params: {employee: string}) => {
+  cy.get("#OwnerChangerPresenter-changeOwner").click();
+  cy.get("#employee").click();
+  cy.get(`[data-cy=\"selectItem.employee.${params.employee}\"]`).click();
+  cy.get("#OwnerChangerPresenter-submitButton").click();
 });

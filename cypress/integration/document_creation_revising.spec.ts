@@ -64,7 +64,6 @@ context("Document Creation Flow", () => {
     });
   });
 
-
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
@@ -79,30 +78,30 @@ context("Document Creation Flow", () => {
   });
 
   context("Start document creation flow", () => {
-    it("Navigate to document list", () => {
+    it("Navigates to document list", () => {
       cy.cmpNavigateToDocumentList();
     });
 
-    it("Click on 'create a document'", () => {
+    it("Clicks on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
     });
   });
 
   context("Fill in document attributes", () => {
-    it("Enter title 'New Document Revision'", () => {
+    it("Enters title 'New Document Revision'", () => {
       cy.drEnterDocumentTitle({ name: "New Document Revision" });
     });
 
-    it("Enter description 'New Document Revision description'", () => {
+    it("Enters description 'New Document Revision description'", () => {
       cy.drEnterDocumentDescription({ description: "New Document Revision description" });
     });
 
-    it("Click on 'Component Specification' document type", () => {
+    it("Selects 'Component Specification' document type from dropdown", () => {
       cy.drSelectDocumentType({ documentType: "Component Specification" });
     });
 
-    it("Check if document type id is generated", () => {
-      cy.drCheckIfDocumentIdIsGenerated();
+    it("Checks if document type id is 'CS-00003'", () => {
+      cy.drCheckIfDocumentIdMatches({ docId: "CS-00003" });
     });
 
     context("Uploads attachments", () => {
@@ -121,7 +120,7 @@ context("Document Creation Flow", () => {
     });
 
     context("Check permission groups", () => {
-      it("Selected Groups set to 'Everyone' by default", () => {
+      it("Check if Selected Groups are set to 'Everyone' by default", () => {
         cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
           .should("have.text", "Enter the name of users to access the document");
         cy.get("[data-cy=\"field-securityGroups\"]").contains("Everyone");
@@ -150,10 +149,9 @@ context("Document Creation Flow", () => {
       it("Uploads image.jpg", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" }).wait(5000);
       });
-      it("Displays four attachment on the list: test_image.jpg and image.docx, test_image.jpg, test.docx, image.jpg",
-        () => {
-          cy.atchCheckDisplayedAttachments({ fileNames: [ "test_image.jpg", "image.jpg", "test.docx", "image.jpg" ] });
-        });
+      it("Displays four attachment on the list: test_image.jpg, image.jpg, test.docx and image.jpg", () => {
+        cy.atchCheckDisplayedAttachments({ fileNames: [ "test_image.jpg", "image.jpg", "test.docx", "image.jpg" ] });
+      });
     });
 
     context("Check primary attachment function", () => {
