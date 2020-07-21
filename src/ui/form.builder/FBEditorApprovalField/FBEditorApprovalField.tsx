@@ -1,8 +1,9 @@
 import React from "react";
-import { FBAutocompleteAsync, FBEditor, FBEditorApprovalFieldProps } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBEditor, FBEditorApprovalFieldProps } from "..";
 
 const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps> = ({
   approverGroups,
+  approvalRoles,
   approvers,
   includeLabel = true,
   children,
@@ -12,16 +13,13 @@ const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps>
   ...props
 }) => (
   <FBEditor {...props} {...{ inputProps }}>
-    {/* {includeLabel && (
-      <FBEditorLabel {...props} {...{ inputProps, includeDefaultValue }} standalone={true} />
-    )} */}
     <FBAutocompleteAsync
       label="common.approvers"
       optionId="3"
       name="approvers"
       multiple={true}
       defaultValue={approvers}
-      rules="required_without:approverGroups"
+      rules="required_without_all:approverGroups,approvalRoles"
     />
     <FBAutocompleteAsync
       label="form.builder.approver.groups"
@@ -29,7 +27,15 @@ const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps>
       name="approverGroups"
       multiple={true}
       defaultValue={approverGroups}
-      rules="required_without:approvers"
+      rules="required_without_all:approvers,approvalRoles"
+    />
+    <FBAutocompleteAsync
+      label="form.builder.approval.roles"
+      optionId={FBAutocompleteAsyncOption.approvalRoles}
+      name="approvalRoles"
+      multiple={true}
+      defaultValue={approvalRoles}
+      rules="required_without_all:approvers,approverGroups"
     />
     {children}
   </FBEditor>

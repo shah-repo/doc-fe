@@ -137,6 +137,15 @@
   },
   {
     "id": "17",
+    "path": "/groups/approval_roles",
+    "label": "Approval Roles",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "",
+    "root": ""
+  },
+  {
+    "id": "18",
     "path": "/document_revisions",
     "label": "Document revisions (all versions)",
     "valueKey": "id",

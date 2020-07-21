@@ -20,6 +20,7 @@ export class FBDialogState {
   };
 
   @action public closeDialog = () => {
+    this.reset();
     this.setDialog(false);
   };
 
