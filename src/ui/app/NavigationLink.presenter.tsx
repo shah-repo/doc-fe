@@ -2,6 +2,7 @@ import { ListItemIcon } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import classNames from "classnames";
+import { camelCase } from "lodash";
 import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { NavigationItem } from "../../state/ducks/company";
@@ -41,6 +42,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
             [classes.menu]: type === "MENU",
           })}
         activeClassName={classes.activeLink}
+        data-cy={`navigation.${camelCase(label)}`}
         to={type === "CATEGORY" ? `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}` : path}
       >
         {

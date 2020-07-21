@@ -48,7 +48,7 @@ const MenuItemSetPrimary: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <MenuItem onClick={handleClick}>
+    <MenuItem data-cy={"set.attachment.as.primary"} onClick={handleClick}>
       <StarsRoundedIcon color="primary" fontSize="small" style={{ marginRight: 5 }} />
       <Text translation="attachment.set.as.primary" />
     </MenuItem>

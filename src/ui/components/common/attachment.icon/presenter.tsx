@@ -56,7 +56,12 @@ AttachmentIconProps
   );
 
   const primaryBadgeRender = isPrimary &&
-    <StarsRoundedIcon color="primary" fontSize="small" className={classes.primaryBadge} />;
+    <StarsRoundedIcon
+      data-cy={"primary.attachment.icon"}
+      color="primary"
+      fontSize="small"
+      className={classes.primaryBadge}
+    />;
   const deleteButtonRenderer = canDeleteFile && (
     <div className={classes.closeRoot}>
       <IconButton
@@ -69,8 +74,8 @@ AttachmentIconProps
     </div>
   );
   return (
-    <div className={classes.attachmentContainer}>
-      <div className={classes.iconContainer}>
+    <div className={classes.attachmentContainer} data-cy="attachment">
+      <div className={classes.iconContainer} >
         {primaryBadgeRender}
         {deleteButtonRenderer}
         <Tooltip title={`${file.name}.${file.type}`}>
@@ -100,6 +105,7 @@ AttachmentIconProps
           align="left"
           title={`${file.name}.${file.type}`}
           id="AttachmentIconPresenter-fileTitle"
+          data-cy="attachment.title"
         >
           {`${file.name}.${file.type}`}
         </Typography>
