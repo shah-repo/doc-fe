@@ -10,6 +10,7 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       cmpCreateCompany(params: {payload: Company; sessionId: string}): Chainable<Subject>;
+      cmpUpdateCompany(params: {payload: Company; sessionId: string}): Chainable<Subject>;
       cmpSelectCompany( params: {name: string; multiple: boolean }): Chainable<Subject>;
       cmpNavigateToDocumentList(): Chainable<Subject>;
       cmpClickCreateNewDocument(): Chainable<Subject>;
@@ -26,6 +27,17 @@ Cypress.Commands.add("cmpCreateCompany", (params: {payload: Company; sessionId: 
     body: params.payload,
     headers: {
       Authorization: `bearer_admin ${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("cmpUpdateCompany", (params: {payload: Company; sessionId: string; employeeId: string}) => {
+  cy.request({
+    method: "PATCH",
+    url: `${CONFIG.BE_URL}/api/v1/company/mine`,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
     },
   }).then((response) => response.body);
 });
