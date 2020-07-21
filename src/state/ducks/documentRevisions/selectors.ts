@@ -144,6 +144,10 @@ const getLoadDocumentAsyncState = (state: ApplicationState): AsyncState =>
 const getLoadAuditAsyncState = (state: ApplicationState): AsyncState =>
   state.documentRevisions.loadAuditAsyncInfo;
 
+const categoryExists = (state: ApplicationState) => !!state.documentRevisions.pageDetails;
+const getCategoryColumns = (state: ApplicationState) => state.documentRevisions.pageDetails.columns;
+const getCategoryButtonLabel = (state: ApplicationState) => state.documentRevisions.pageDetails.addNewBtnLabel;
+
 export default {
   byId,
   getDocumentRevisionsList,
@@ -160,4 +164,7 @@ export default {
   makeGetAudit,
   makeGetDisableCreateNewVersion,
   getDocId,
+  getCategoryColumns,
+  getCategoryButtonLabel,
+  categoryExists,
 };

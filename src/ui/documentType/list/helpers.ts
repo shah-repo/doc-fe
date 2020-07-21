@@ -1,9 +1,12 @@
 import { isString } from "lodash";
 import { GroupTag } from "../../../state/ducks/auth/types";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { TableColumnProps } from "../../components/table/column/types";
 import { TableSearchFieldProps } from "../../components/table/search/types";
 import { TablePanelStateProps } from "../../components/table/types";
 import { documentRevisionStatusOption } from "../../document.revision/utils/helpers";
+import { Translation } from "../../translations/types";
 
 export const shouldShowStaticColumns = (documentTypeName) => documentTypeName !== "Purchase Order";
 
@@ -49,3 +52,74 @@ export const filterSecurityGroupsForQms = (isQms = false, groupOptions) => {
     return acc;
   }, [] as OptionType[]);
 };
+
+export const getStaticColumns = (
+  isByCategory,
+  documentCategory,
+  documentType,
+  cellHrefRenderer,
+  tableCriteria,
+  canEdit,
+): TableColumnProps<DocumentRevision>[] => [
+  {
+    key: "docId",
+    label: `${isByCategory ? documentCategory : documentType?.documentTypeName} ID` as Translation,
+    cellHref: cellHrefRenderer,
+    sortable: true,
+    columnOptions: {
+      cellDataGetter: ({ rowData }) => rowData.document.docId,
+      width: 150,
+    },
+    searchOptions: {
+      defaultValue: tableCriteria.queryDict.docId,
+    },
+  },
+  {
+    key: "name",
+    label: "document.title",
+    tooltipKey: "name",
+    cellHref: cellHrefRenderer,
+    searchOptions: {
+      defaultValue: tableCriteria.queryDict.name,
+    },
+  },
+  {
+    key: "owner",
+    label: "common.owner",
+    cellHref: cellHrefRenderer,
+    columnOptions: {
+      cellDataGetter: ({ rowData }) => rowData.owner.user.name,
+    },
+    searchOptions: {
+      defaultValue: tableCriteria.queryDict.owner,
+    },
+  },
+  {
+    key: "status",
+    label: "common.state",
+    columnOptions: { width: 160 },
+    cellType: (rowData) => (canEdit(rowData) ? "LINK" : "BASE"),
+    searchOptions: {
+      dataKey: "status[]",
+      defaultValue: isString(tableCriteria.queryDict["status[]"])
+        ? tableCriteria.queryDict["status[]"]
+        : undefined,
+      searchType: "select",
+      selectOptions: documentRevisionStatusOption(),
+    },
+  },
+  {
+    key: "changeRequest",
+    label: "common.approval.id",
+    searchOptions: {
+      dataKey: "crId",
+      defaultValue: tableCriteria.queryDict.crId,
+    },
+    cellHref: cellHrefRenderer,
+    columnOptions: {
+      cellDataGetter: ({ rowData }) =>
+        rowData.changeRequest && rowData.changeRequest.crId,
+      width: 100,
+    },
+  },
+];
