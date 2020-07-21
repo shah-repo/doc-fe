@@ -7,6 +7,7 @@ import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { NavigationItem } from "../../state/ducks/company";
 import Text from "../components/Text";
+import { DOCUMENT_BY_CATEGORY_ROOT_URL } from "../constants/urls";
 import styles from "./NavigationLink.styles";
 
 interface NavigationLinkPresenterProps extends
@@ -19,6 +20,7 @@ interface NavigationLinkPresenterProps extends
 
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
   path,
+  category,
   label,
   type,
   icon,
@@ -31,7 +33,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
   return (
     <>
       <ListItem
-        component={path ? NavLink : null}
+        component={path || category ? NavLink : null}
         button
         exact
         className={
@@ -40,11 +42,11 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
             [classes.menu]: type === "MENU",
           })}
         activeClassName={classes.activeLink}
-        to={path}
         data-cy={`navigation.${camelCase(label)}`}
+        to={type === "CATEGORY" ? `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}` : path}
       >
         {
-          type === "LINK" &&
+          (type === "LINK" || type === "CATEGORY") &&
           <ListItemIcon className={classes.itemIcon} onClick={toggleChildren}>
             <div
               className={classNames(

@@ -79,6 +79,8 @@ const docRevTypeById = (state: ApplicationState) => state.documentType.docRevTyp
 
 const formIds = (state: ApplicationState) => state.documentType.docRevTypeId.forms;
 
+const getDocumentTypesByCategory = (state: ApplicationState) => state.documentType.docTypesByCategory;
+
 const getDocTypeName = createSelector(
   byId,
   (state, docTypeId) => docTypeId,
@@ -106,4 +108,5 @@ export default {
   getDocTypeName,
   formIds,
   makeGetDocTypeByAcronym,
+  getDocumentTypesByCategory,
 };

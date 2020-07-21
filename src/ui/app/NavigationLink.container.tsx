@@ -4,6 +4,7 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { NavigationItem } from "../../state/ducks/company";
+import { DOCUMENT_BY_CATEGORY_ROOT_URL } from "../constants/urls";
 import NavigationLinkPresenter from "./NavigationLink.presenter";
 
 export interface NavigationLinkContainerProps extends NavigationItem {
@@ -42,6 +43,9 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
     </Collapse>
   );
 
+  const isLinkActive = (type === "LINK" && currentPath === rest.path)
+  || (type === "CATEGORY" && currentPath === `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${rest.category}`);
+
   return (
     <React.Fragment>
       <NavigationLinkPresenter
@@ -49,7 +53,7 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
         {...rest}
         ActionIcon={menu?.length ? actionIcon : ""}
         toggleChildren={type === "MENU" ? toggleChildren : undefined}
-        isActive={currentPath === rest.path}
+        isActive={isLinkActive}
       />
       {childrenList}
     </React.Fragment>
