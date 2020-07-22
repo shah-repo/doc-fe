@@ -117,7 +117,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     canEdit,
   );
 
-  if (!documentType && !categoryExists) {
+  if ((!isByCategory && !documentType) || (isByCategory && !categoryExists)) {
     return <Redirect to={HOME_URL} />;
   }
 
