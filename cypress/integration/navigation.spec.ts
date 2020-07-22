@@ -6,6 +6,7 @@ Cypress.Screenshot.defaults({
 });
 
 import path from "path";
+import { GroupTag } from "../../src/state/ducks/auth/types";
 
 const runId = new Date().valueOf();
 let createdCompany;
@@ -82,19 +83,19 @@ context(`Test: ${path.basename(__filename)}`, () => {
               {
                 documentTypeName: "Testing docType",
                 documentTypeAcronym: "TDT",
-                isQms: true
+                isQms: true,
               },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.name === "Company Admin");
-          createdCompany.documentTypes.forEach((item: { documentTypeName: string; id: any; }) => {
-            if(item.documentTypeName == "Testing docType")
+          createdCompany.documentTypes.forEach((item: { documentTypeName: string; id: any }) => {
+            if (item.documentTypeName === "Testing docType")
             {
               docTypeId = item.id;
             }
-          })       
+          });
           done();
         });
       });
@@ -123,7 +124,13 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Check navigation to see if admin navigation is shown", () => {
-      cy.navigListExistsCheck(["dashboard", "documentList", "approvalRequestList", "userManagement", "groupManagement"]);
+      cy.navigListExistsCheck([
+        "dashboard",
+        "documentList",
+        "approvalRequestList",
+        "userManagement",
+        "groupManagement",
+      ]);
     });
   });
 
@@ -136,7 +143,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
         loginResponse = response;
 
         cy.cmpUpdateCompany({
-          employeeId: adminEmployee.id,    
+          employeeId: adminEmployee.id,
           sessionId: loginResponse.sessionId as unknown as string,
           payload: {
             navigation:
@@ -144,45 +151,46 @@ context(`Test: ${path.basename(__filename)}`, () => {
               {
                 label: "Dashboard",
                 path: "/",
-                type: "LINK"
+                type: "LINK",
               },
               {
                 label: "Document List",
                 path: "/document_revision",
-                type: "LINK"
+                type: "LINK",
               },
               {
                 label: "Approval Request List",
                 path: "/change_request",
-                type: "LINK"
+                type: "LINK",
               },
               {
                 label: "User Management",
                 path: "/user_management",
-                restrictedToUsersWithTags:[
-                  "USER_MANAGEMENT"
+                restrictedToUsersWithTags: [
+                  GroupTag.USER_MANAGEMENT,
                 ],
-                type: "LINK"
+                type: "LINK",
               },
               {
                 label: "Group Management",
                 path: "/group_management",
-                restrictedToUsersWithTags:[
-                  "GROUP_MANAGEMENT"
+                restrictedToUsersWithTags: [
+                  GroupTag.GROUP_MANAGEMENT,
                 ],
-                type: "LINK"
+                type: "LINK",
               },
               {
                 label: "Testing Navigation Item",
                 path: "/document_by_type/" + docTypeId,
                 type: "LINK",
-              }
-            ],   
-          }).then(() => {
+              },
+            ],
+          },
+        }).then(() => {
           done();
+        });
       });
     });
-  });
 
     it("[API] API login with company admin", (done: any) => {
       cy.authApiLogin({
@@ -207,7 +215,14 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Check navigation to see if new item is shown", () => {
-      cy.navigListExistsCheck(["dashboard", "documentList", "userManagement", "groupManagement", "approvalRequestList", "testingNavigationItem"]);
+      cy.navigListExistsCheck([
+        "dashboard",
+        "documentList",
+        "userManagement",
+        "groupManagement",
+        "approvalRequestList",
+        "testingNavigationItem",
+      ]);
     });
 
     it("Logs out with admin", () => {
