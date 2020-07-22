@@ -28,24 +28,17 @@ export class FBDocumentRevisionsState {
       justificationOfChange: item,
     };
 
-    const docRevsJustification = [
-      ...this.documentRevisions as FBDocumentRevisionItem[],
-      {
-        ...newObjectJustificationChanges,
-      },
-    ];
-    const docRevsDescription = [
-      ...this.documentRevisions as FBDocumentRevisionItem[],
-      {
-        ...newObjectDescriptionChanges,
-      },
-    ];
+    const updateDocumentRevision = this.documentRevisions?.map((e, indexOfDoc) => {
+      if ( indexOfDoc === index) {
+        if (type === "description") {
+          return e[index] = newObjectDescriptionChanges;
+        }
+        return e[index] = newObjectJustificationChanges;
+      }
+      return e[index];
+    });
 
-    if (type === "description") {
-      set(this, "documentRevisions", docRevsDescription );
-      return;
-    }
-    set(this, "documentRevisions", docRevsJustification );
+    set(this, "documentRevisions", updateDocumentRevision );
   };
 
   public addDocRevItem = (item: FBDocumentRevisionItem) => {
