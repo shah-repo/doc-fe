@@ -214,7 +214,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
       cy.authLogout();
     });
 
-    it("Logs in with user without group management and user management permissions", () => {
+    it("Logs in with user without group management and user management tags", () => {
       cy.authLogin({
         email: "enlil.testmail+cy2@gmail.com",
         password: "Tester1!",
