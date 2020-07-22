@@ -16,6 +16,7 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
   index = 0,
   isMouseInside,
   disabled = false,
+  handleEdit,
   id,
 }) => (
   <Box
@@ -64,13 +65,15 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
     <FBTextField
       label="common.description"
       defaultValue={description}
-      disabled={true}
+      disabled={disabled}
+      onChange={(e) => handleEdit ? handleEdit(e, index, "description") : null}
       rows={3}
     />
     <FBTextField
       label="cr.justification"
       defaultValue={justification}
-      disabled={true}
+      onChange={(e) => handleEdit ? handleEdit(e, index, "justification") : null}
+      disabled={disabled}
       rows={3}
     />
   </Box>

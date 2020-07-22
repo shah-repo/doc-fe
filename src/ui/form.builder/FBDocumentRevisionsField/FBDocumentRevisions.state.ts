@@ -1,6 +1,7 @@
 import { filter, union } from "lodash";
-import { action, observable, set } from "mobx";
+import { action, get, observable, set } from "mobx";
 import * as generateUuid from "uuid/v4";
+import { FBSchemaProps } from "..";
 import { FBDocumentRevisionItem } from "./FBDocumentRevisions.types";
 
 export class FBDocumentRevisionsState {
@@ -13,6 +14,38 @@ export class FBDocumentRevisionsState {
 
   @action public setDocumentRevisions = (items?: FBDocumentRevisionItem[]) => {
     set(this, "documentRevisions", items);
+  };
+  @action public getSchema = (): FBSchemaProps[] => get(this, "schema");
+
+  @action public editTextFields = (item: string, index: number, type: string) => {
+    const newObjectDescriptionChanges = {
+      ...this.documentRevisions?.[index],
+      descriptionOfChange: item,
+    };
+
+    const newObjectJustificationChanges = {
+      ...this.documentRevisions?.[index],
+      justificationOfChange: item,
+    };
+
+    const docRevsJustification = [
+      ...this.documentRevisions as FBDocumentRevisionItem[],
+      {
+        ...newObjectJustificationChanges,
+      },
+    ];
+    const docRevsDescription = [
+      ...this.documentRevisions as FBDocumentRevisionItem[],
+      {
+        ...newObjectDescriptionChanges,
+      },
+    ];
+
+    if (type === "description") {
+      set(this, "documentRevisions", docRevsDescription );
+      return;
+    }
+    set(this, "documentRevisions", docRevsJustification );
   };
 
   public addDocRevItem = (item: FBDocumentRevisionItem) => {
