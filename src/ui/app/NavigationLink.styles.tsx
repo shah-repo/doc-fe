@@ -16,7 +16,7 @@ export default makeStyles((theme: Theme) =>
       },
     },
     childLink: {
-      paddingLeft: theme.spacing(3),
+      paddingLeft: theme.spacing(6),
     },
     activeLink: {
       "backgroundColor": theme.palette.secondary.contrastText,
