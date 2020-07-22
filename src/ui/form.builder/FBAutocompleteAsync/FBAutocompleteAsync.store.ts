@@ -1,3 +1,4 @@
+import { map } from "lodash";
 import { action, observable } from "mobx";
 
 export class FBAutocompleteAsyncStore {
@@ -11,9 +12,18 @@ export class FBAutocompleteAsyncStore {
     ));
   };
 
-  public get = <T>(optionId: string, id: string): T | undefined => {
+  public getValue = <T>(optionId?: string, by?: string): T | undefined => {
+    if (!optionId || !by) { return; }
     const list = this.data.get(optionId);
-    return list.get(id) as T;
+    if (!list) { return; }
+    return list.get(by) as T;
+  }
+
+  public getValues = <T>(optionId?: string, by?: string[]): T[] | undefined => {
+    if (!optionId || !by) { return; }
+    const list = this.data.get(optionId);
+    if (!list) { return; }
+    return Array.from(map(by, (i) => list.get(i))) as T[];
   }
 }
 
