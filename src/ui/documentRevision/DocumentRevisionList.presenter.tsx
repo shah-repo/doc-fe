@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Nullable } from "../../state/ducks/common";
-import { DocumentRevision } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import SummaryInfo from "../common/summary/SummaryInfo";
 import Date from "../components/Date";
 import Text from "../components/Text";
@@ -42,6 +42,10 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isSelected = selectedDocumentRevision === documentRevision.id;
   const { status } = documentRevision;
   const [isStatusVisible, statusLabel] = useDocumentVersion(documentTypeId, status);
+  let verPrefix = "common.work.in.progress";
+  if (status === DocumentRevisionStatus.Released) {
+    verPrefix = "common.revision";
+  }
   return (
     <div
       key={documentRevision.id}
@@ -55,7 +59,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         activeClassName={classes.activeLinkTitle}
       >
         <div>
-          <Text translation="common.version" />
+          <Text message={verPrefix} />
           &nbsp;
           {versionNumber}
           {
