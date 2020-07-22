@@ -45,18 +45,15 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
         data-cy={`navigation.${camelCase(label)}`}
         to={type === "CATEGORY" ? `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}` : path}
       >
-        {
-          (type === "LINK" || type === "CATEGORY") &&
-          <ListItemIcon className={classes.itemIcon} onClick={toggleChildren}>
-            <div
-              className={classNames(
-                classes.icon, {
-                  [classes.iconActive]: isActive,
-                }
-              )}
-            />
-          </ListItemIcon>
-        }
+        <ListItemIcon className={classes.itemIcon} onClick={toggleChildren}>
+          <div
+            className={classNames(
+              classes.icon, {
+                [classes.iconActive]: isActive,
+              }
+            )}
+          />
+        </ListItemIcon>
         <ListItemText
           primary={<Text message={label} />}
           classes={{

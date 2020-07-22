@@ -45,7 +45,6 @@ export default makeStyles((theme: Theme) =>
       paddingTop: 4,
       paddingBottom: 4,
       marginTop: 5,
-      textTransform: "uppercase",
       fontSize: "11px",
     },
     icon: ({ iconLink }) => ({

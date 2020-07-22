@@ -26,23 +26,23 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     icon: "/navigation_icons/dashboard.svg",
   },
   {
-    label: "Document List",
-    type: "LINK",
-    path: DOCUMENT_REVISION_LIST_URL,
-    icon: "/navigation_icons/document.svg",
-  },
-  {
-    label: "Approval Request List",
-    type: "LINK",
-    path: CHANGE_REQUEST_LIST_URL,
-    icon: "/navigation_icons/cr.svg",
-  },
-  {
-    restrictedToUsersWithTags: [GroupTag.USER_MANAGEMENT],
-    label: "User Management",
-    type: "LINK",
-    path: USER_MANAGEMENT_ROOT_URL,
-    icon: "/navigation_icons/user-management.svg",
+    label: "Document Control",
+    type: "MENU",
+    icon: "/navigation_icons/document-menu.svg",
+    menu: [
+      {
+        label: "Document List",
+        type: "LINK",
+        icon: "/navigation_icons/document.svg",
+        path: DOCUMENT_REVISION_LIST_URL,
+      },
+      {
+        label: "Approval Requests",
+        type: "LINK",
+        path: CHANGE_REQUEST_LIST_URL,
+        icon: "/navigation_icons/cr.svg",
+      },
+    ],
   },
   {
     restrictedToUsersWithTags: [GroupTag.GROUP_MANAGEMENT],
@@ -50,5 +50,12 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     type: "LINK",
     path: GROUP_MANAGEMENT_ROOT_URL,
     icon: "/navigation_icons/group-management.svg",
+  },
+  {
+    restrictedToUsersWithTags: [GroupTag.USER_MANAGEMENT],
+    label: "User Management",
+    type: "LINK",
+    path: USER_MANAGEMENT_ROOT_URL,
+    icon: "/navigation_icons/user-management.svg",
   },
 ];
