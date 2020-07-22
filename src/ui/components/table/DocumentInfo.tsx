@@ -17,6 +17,7 @@ export const DocumentInfo: React.FunctionComponent<Props> = ({
     <span
       data-testid="numberOfRecords"
       style={{ fontWeight: "bold" }}
+      data-cy="numberOfDocuments"
     >
       {numberOfRecords}
     </span>

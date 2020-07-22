@@ -15,6 +15,7 @@ declare global {
       cmpClickCreateNewDocument(): Chainable<Subject>;
       cmpNavigateToApprovalRequestList(): Chainable<Subject>;
       cmpClickCreateApprovalRequest(): Chainable<Subject>;
+      cmpNavigateToDashboard(): Chainable<Subject>;
     }
   }
 }
@@ -43,6 +44,10 @@ Cypress.Commands.add("cmpNavigateToDocumentList", () => {
 
 Cypress.Commands.add("cmpNavigateToApprovalRequestList", () => {
   cy.get("[data-cy=\"navigation.approvalRequestList\"]").click();
+});
+
+Cypress.Commands.add("cmpNavigateToDashboard", () => {
+  cy.get("[data-cy=\"navigation.dashboard\"]").click();
 });
 
 Cypress.Commands.add("cmpClickCreateNewDocument", () => {
