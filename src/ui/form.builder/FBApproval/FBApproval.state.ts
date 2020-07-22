@@ -7,6 +7,7 @@ import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { FBAutocompleteAsyncState } from "../FBAutocompleteAsync/FBAutocompleteAsync.state";
+import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export class FBApprovalState {
   @observable public hasApproved: FBApprovalValue[] = [];
@@ -17,9 +18,9 @@ export class FBApprovalState {
   public approvalRolesValue: string[] = [];
 
   public postApi: FBRequest<any, FBApprovalApi> = new FBRequest();
-  public approversApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.availableApprovers);
-  public groupsApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.groups);
-  public approvalRolesApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.approvalRoles);
+  public approversApi = new FBAutocompleteAsyncState(this.approversId);
+  public groupsApi = new FBAutocompleteAsyncState(this.groupsId);
+  public approvalRolesApi = new FBAutocompleteAsyncState(this.approvalRolesId);
   public auditApi = new FBRequest<Audit[], null>();
 
   public constructor({ 
@@ -38,20 +39,41 @@ export class FBApprovalState {
     this.postApi.setTemplateUrl(FBEndpoint.PostInlineApprove, { documentId });
   }
 
+  public get approversId(): string {
+    return FBAutocompleteAsyncOption.availableApprovers;
+  }
+
+  public get groupsId(): string {
+    return FBAutocompleteAsyncOption.groups;
+  }
+
+  public get approvalRolesId(): string {
+    return FBAutocompleteAsyncOption.approvalRoles;
+  }
+
   @computed public get isApproved(): boolean {
     return !isEmpty(this.hasApproved);
   }
 
   @computed public get approvers(): Employee[] | undefined {
-    return this.approversApi.sliceValue(this.approversValue);
+    return FBAutocompleteAsyncStore.getValues<Employee>(
+      this.approversId,
+      this.approversValue
+    );
   }
 
   @computed public get groups(): GroupRequestBody[] | undefined {
-    return this.groupsApi.sliceValue(this.groupsValue);
+    return FBAutocompleteAsyncStore.getValues<GroupRequestBody>(
+      this.groupsId,
+      this.groupsValue
+    );
   }
 
   @computed public get approvalRoles(): FBInlineApprovalRole[] | undefined {
-    return this.approvalRolesApi.sliceValue(this.approvalRolesValue);
+    return FBAutocompleteAsyncStore.getValues<FBInlineApprovalRole>(
+      this.approvalRolesId,
+      this.approvalRolesValue
+    );
   }
 
   @action public setAuditData(data: Audit[]) {
