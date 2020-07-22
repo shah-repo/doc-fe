@@ -37,6 +37,13 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
         path: DOCUMENT_REVISION_LIST_URL,
       },
       {
+        label: "Parts List",
+        type: "CATEGORY",
+        icon: "/navigation_icons/puzzle-09.svg",
+        category: "Parts",
+        restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
+      },
+      {
         label: "Approval Requests",
         type: "LINK",
         path: CHANGE_REQUEST_LIST_URL,
@@ -45,17 +52,60 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     ],
   },
   {
-    restrictedToUsersWithTags: [GroupTag.GROUP_MANAGEMENT],
+    label: "Purchase Orders",
+    type: "CATEGORY",
+    icon: "/navigation_icons/receipt_list.svg",
+    category: "Purchase Order",
+    restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
+  },
+  {
+    label: "Suppliers",
+    type: "CATEGORY",
+    icon: "/navigation_icons/delivery.svg",
+    category: "Supplier",
+    restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
+  },
+  {
+    label: "Receiving",
+    type: "CATEGORY",
+    icon: "/navigation_icons/cart-simple-in.svg",
+    category: "Receive",
+    restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
+  },
+  {
+    label: "Manufacturing",
+    type: "MENU",
+    icon: "/navigation_icons/tools.svg",
+    menu: [
+      {
+        label: "Work Orders",
+        type: "CATEGORY",
+        icon: "", // not in the designs
+        category: "Work Order",
+        restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
+      },
+      {
+        label: "Lots",
+        type: "CATEGORY",
+        icon: "", // not in the designs
+        category: "Lot",
+        restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
+      },
+    ],
+    restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
+  },
+  {
     label: "Group Management",
     type: "LINK",
     path: GROUP_MANAGEMENT_ROOT_URL,
     icon: "/navigation_icons/group-management.svg",
+    restrictedToUsersWithTags: [GroupTag.GROUP_MANAGEMENT],
   },
   {
-    restrictedToUsersWithTags: [GroupTag.USER_MANAGEMENT],
     label: "User Management",
     type: "LINK",
     path: USER_MANAGEMENT_ROOT_URL,
     icon: "/navigation_icons/user-management.svg",
+    restrictedToUsersWithTags: [GroupTag.USER_MANAGEMENT],
   },
 ];
