@@ -20,6 +20,10 @@ export enum DocumentRevisionStatus {
   Canceled = "CANCELED",
 }
 
+export enum DocumentRevisionStatusAlias {
+  Draft = "WIP",
+}
+
 export enum RevisionChangeType {
   NextRevision = "NEXT_REVISION",
   NextRevisionStage = "NEXT_REVISION_STAGE",

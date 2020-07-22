@@ -2,8 +2,8 @@ import { APPROVAL_MATRIX_URL, PO_APPROVAL_MATRIX_URL } from "../../../../ui/form
 import { ApprovalMatrix } from "../../../../ui/form.builder/FBApprovalMatrix/FBApprovalMatrix.types";
 import { apiAction, apiActionWithCallbacks } from "../../../factories";
 import { ApiAction, Handlers } from "../../../types";
-import { DOCUMENT_TYPE_BY_GROUP_ASYNC, DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_BY_ID_ASYNC, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, DOCUMENT_TYPE_ROOT_URL } from "./constants";
-import { DocumentType, DocumentTypeById, DocumentTypeByIdAction, DocumentTypeListAction } from "./types";
+import { DOCUMENT_TYPE_BY_CATEGORY_ASYNC, DOCUMENT_TYPE_BY_GROUP_ASYNC, DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_BY_ID_ASYNC, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, DOCUMENT_TYPE_ROOT_URL, SET_DOCUMENT_TYPES_BY_CATEGORY } from "./constants";
+import { DocumentType, DocumentTypeByCategoryAction, DocumentTypeById, DocumentTypeByIdAction, DocumentTypeListAction } from "./types";
 
 const documentTypesList = (documentTypes: DocumentType[]): DocumentTypeListAction => ({
   type: DOCUMENT_TYPE_LIST,
@@ -32,6 +32,26 @@ const getDocTypeIds = (id: string, handlers: Handlers): ApiAction<DocumentTypeBy
     dispatch(docTypeIds(documentTypes));
   },
   handlers,
+});
+
+const getDocTypesByCategory = (
+  params: { category: string},
+  handlers: Handlers,
+): ApiAction<DocumentType[]> =>
+  apiActionWithCallbacks({
+    url: DOCUMENT_TYPE_ROOT_URL,
+    asyncType: DOCUMENT_TYPE_BY_CATEGORY_ASYNC,
+    method: "get",
+    params,
+    handlers,
+    onSuccess: (documentTypes, dispatch) => {
+      dispatch(setDocTypesByCategory(documentTypes));
+    },
+  });
+
+const setDocTypesByCategory = (documentTypes: DocumentType[]): DocumentTypeByCategoryAction => ({
+  type: SET_DOCUMENT_TYPES_BY_CATEGORY,
+  payload: documentTypes,
 });
 
 const getDocTypeByGroup = (
@@ -64,4 +84,5 @@ export default {
   getApprovalMatrix,
   getPOApprovalMatrix,
   getDocTypeByGroup,
+  getDocTypesByCategory,
 };

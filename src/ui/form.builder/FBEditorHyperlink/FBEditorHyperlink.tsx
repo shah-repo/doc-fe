@@ -8,12 +8,13 @@ const FBEditorHyperlink: React.FunctionComponent<FBEditorProps> = ({
   ...props
 }) => (
   <FBEditor {...props} {...{ inputProps }}>
-    <FBTextField label="form.builder.label" name="label" rules="required"/>
+    <FBTextField label="form.builder.label" name="label" rules="required" />
     <FBTextField
       type="url"
       label="URL"
       name="linkUrl"
       key={`fb-editor-${type}-${index}`}
+      rules="required"
     />
     {children}
   </FBEditor>

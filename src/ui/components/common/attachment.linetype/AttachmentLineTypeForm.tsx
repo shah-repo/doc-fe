@@ -48,7 +48,7 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
           id={`${name}-button-file-create-clean-copy`}
           multiple={multiple}
           type="file"
-          onChange={onChange(LINE_TYPES.CLEAN_COPY, true)}
+          onChange={onChange(LINE_TYPES.RED_LINE, true)}
           className = {classes.input}
           disabled={disabled}
         />

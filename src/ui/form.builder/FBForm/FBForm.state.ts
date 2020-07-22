@@ -37,9 +37,6 @@ export class FBFormState extends FBSchemaState {
   };
 
   @action public getValues = () => this.values;
-  // TODO: Remove if works
-  //   unflatten(this.values, { overwrite: true })
-  // ;
 
   @action public getFieldValue = (
     fieldName: string | undefined, defaultValue: any = undefined): any => {
@@ -118,8 +115,7 @@ export class FBFormState extends FBSchemaState {
     }
 
     const rules = this.getRules();
-    // const values = flatten(this.getValues(), { safe: true });
-    const values = this.getValues();
+    const values = _.omitBy(this.values, (v) => _.isString(v) && _.isEmpty(v));
     // *TODO: unify validators format
     let validator: any;
     try {
