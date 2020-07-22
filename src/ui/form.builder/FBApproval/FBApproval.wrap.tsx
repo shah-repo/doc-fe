@@ -4,7 +4,7 @@ import { useObserver } from "mobx-react";
 import moment from "moment";
 import React from "react";
 import { FBApprovalConfig, FBApprovalProps, FBApprovalState, FBApprovalStatus, FBApprovalValue, FBInlineApprovalRole, FBInlineApproverType } from ".";
-import { FB, FBAutocompleteAsyncOption } from "..";
+import { FB } from "..";
 import { TIME_ZONE } from "../../../common/utils/date";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
@@ -62,11 +62,11 @@ export const withFBApproval = <T extends FBApprovalProps>(
     );
 
     function getGroup(id: string): GroupRequestBody | undefined {
-      return FBAutocompleteAsyncStore.get<GroupRequestBody>(FBAutocompleteAsyncOption.groups, id);
+      return FBAutocompleteAsyncStore.getValue<GroupRequestBody>(approvalFieldState?.groupsId, id);
     }
 
     function getRole(id: string): FBInlineApprovalRole | undefined {
-      return FBAutocompleteAsyncStore.get<FBInlineApprovalRole>(FBAutocompleteAsyncOption.approvalRoles, id);
+      return FBAutocompleteAsyncStore.getValue<FBInlineApprovalRole>(approvalFieldState?.approvalRolesId, id);
     }
 
     function isGroup(id?: string): boolean {
@@ -128,7 +128,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
         if (!approvedAt) { return ""; }
         let approver = "";
         if (userId && (groupId || approvalRoleId)) {
-          const approverObj = FBAutocompleteAsyncStore.get<Employee>(FBAutocompleteAsyncOption.availableApprovers, userId);
+          const approverObj = FBAutocompleteAsyncStore.getValue<Employee>(approvalFieldState?.approversId, userId);
           approver = `${approverName(approverObj)},`;
         }
 
