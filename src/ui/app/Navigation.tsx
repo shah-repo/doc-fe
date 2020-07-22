@@ -31,13 +31,15 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
 
   const navigationItems = useSelector(companySelectors.getNavigationItems)
     .reduce<NavigationItem[]>((acc, item) => {
-    if (item.type === "MENU" && itemAllowedForUser(item, userTags)) {
-      acc.push({
-        ...item,
-        menu: (item.menu || []).filter((menuItem) => itemAllowedForUser(menuItem, userTags)),
-      });
-    } else if (itemAllowedForUser(item, userTags)) {
-      acc.push(item);
+    if (itemAllowedForUser(item, userTags)) {
+      if (item.type === "MENU") {
+        acc.push({
+          ...item,
+          menu: (item.menu || []).filter((menuItem) => itemAllowedForUser(menuItem, userTags)),
+        });
+      } else  {
+        acc.push(item);
+      }
     }
     return acc;
   }, []);
