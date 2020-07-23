@@ -14,7 +14,7 @@ declare global {
       drEnterDocumentTitle( params: {name: string }): Chainable<Subject>;
       drEnterDocumentDescription( params: {description: string }): Chainable<Subject>;
       drSelectDocumentType(params: {documentType: string }): Chainable<Subject>;
-      drSelectApprovalRequestOutputDocType(): Chainable<Subject>;
+      drSelectOutputDocType(params: {documentType: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drClickCreateDocument(): Chainable<Subject>;
       drCheckDocumentStatus(params: {status: string }): Chainable<Subject>;
@@ -23,6 +23,10 @@ declare global {
       drFilterDocListByNameAndStatus(params: {title: string; status: string}): Chainable<Subject>;
       drChangeOwner(params: {employee: string }): Chainable<Subject>;
       drChangeOwnerFromMenu(params: {employee: string }): Chainable<Subject>;
+      drClickReviseDocument(): Chainable<Subject>;
+      drClickTrainingRequired(): Chainable<Subject>;
+      drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
+      drChooseTypeOfRevisionChangeOption(params: {option: string }): Chainable<Subject>;
     }
   }
 }
@@ -65,9 +69,9 @@ Cypress.Commands.add("drSelectDocumentType", (params: {documentType: string }) =
   cy.get(`[data-cy=\"selectItem.document.documentType.id.${params.documentType}\"]`).click();
 });
 
-Cypress.Commands.add("drSelectApprovalRequestOutputDocType", () => {
-  cy.get("[id=\"formTemplate.outputDocumentTypes").click();
-  cy.get("[id=\"react-select-6-option-0").click();
+Cypress.Commands.add("drSelectOutputDocType", (params: {documentType: string }) => {
+  cy.get("[id=\"formTemplate.outputDocumentTypes\"]").click();
+  cy.get("[id^=\"react-select-6-option\"]").contains(params.documentType).click();
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
@@ -82,6 +86,7 @@ Cypress.Commands.add("drClickCreateDocument", () => {
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: {status: string }) => {
+  cy.wait(5000);
   cy.get("[id=HeaderInfo-status]").should("have.text", params.status);
 });
 
@@ -94,10 +99,10 @@ Cypress.Commands.add("drCheckIfDocumentIdMatches", (params: {docId: string }) =>
 });
 
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: {title: string; status: string }) => {
-  cy.get("#clearFilter").click();
-  cy.get("#name").type(params.title).wait(300);
-  cy.get("[id=\"mui-component-select-status[]\"]").click();
-  cy.get("li[data-value]").contains(params.status).click().wait(300);
+  cy.get("#clearFilter").click().wait(500);
+  cy.get("#name").type(params.title).wait(500);
+  cy.get("[id=\"mui-component-select-status[]\"]").click().wait(300);
+  cy.get("li[data-value]").contains(params.status).click().wait(500);
   cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
 });
 
@@ -111,4 +116,25 @@ Cypress.Commands.add("drChangeOwner", (params: {employee: string}) => {
   cy.get("#employee").click();
   cy.get(`[data-cy=\"selectItem.employee.${params.employee}\"]`).click();
   cy.get("#OwnerChangerPresenter-submitButton").click();
+});
+
+Cypress.Commands.add("drClickReviseDocument", () => {
+  cy.get("#PreviewControlsContainer-revise").click();
+});
+
+Cypress.Commands.add("drClickTrainingRequired", () => {
+  cy.get("input[type=checkbox]").click();
+});
+
+Cypress.Commands.add("drCheckTypeOfRevisionChangeOptions", () => {
+  cy.get("[data-cy=\"field-revisionChangeType\"]");
+  cy.get("#RevisionTypeChange-nextRevision").contains("Next Revision");
+  cy.get("#RevisionTypeChange-nextRevisionStage").contains("Upgrade to Next Revision Level");
+  cy.get("#RevisionTypeChange-obsolete").contains("Obsolete");
+  cy.get("#RevisionTypeChange-administrativeChange").contains("Administrative Change");
+});
+
+Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: {option: string}) => {
+  cy.get("[data-cy=\"field-revisionChangeType\"]");
+  cy.get("label").contains(params.option).click();
 });

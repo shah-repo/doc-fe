@@ -4,9 +4,9 @@ Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
 });
 
-import { RevisionChangeType } from "../../src/state/ducks/documentRevisions/types";
-import { cmpFilterDocumentTypeIdByName } from "../support/commands/company/commands";
-import { SystemRequirement } from "../utils/context/systemRequirement";
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const runId = new Date().valueOf();
 let createdCompany;
