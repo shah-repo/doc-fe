@@ -35,7 +35,7 @@ context("Validators tests", () => {
       cy.apiLogin({
         email: "zoran.kovacevic+admin@codecons.com",
         password: "Tester1!",
-      }).then((response: any) => {
+      }).then((sessionId: string) => {
 
         cy.createCompany({
           payload: {
@@ -65,7 +65,7 @@ context("Validators tests", () => {
             addresses: ["Address 1"],
             whiteLabeling: null,
             documentTypes: [],
-          }, sessionId: response.sessionId,
+          }, sessionId: sessionId,
         }).then((response) => {
           company = response;
           done();
@@ -87,7 +87,7 @@ context("Validators tests", () => {
     });
 
     it("Opens create document page", () => {
-      cy.get("[data-cy=\"document.list\"]", { timeout: 10 * 1000 }).click();
+      cy.get("[data-cy=\"navigation.documentList\"]", { timeout: 10 * 1000 }).click();
       cy.get("[data-cy=\"document.revision.create\"]").click();
     });
   })
@@ -567,15 +567,6 @@ context("Validators tests", () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
     })
   })
-
-  /*
-
-  it("Approve and Release", () => {
-    cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 1000 }).click();
-    cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
-    cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
-    cy.get("[data-cy=\"document.list\"]", { timeout: 10 * 1000 }).click();
-  }); */
 });
 
 // for TS error "All files must be modules when the '--isolatedModules' flag is provided" uncomment line below
