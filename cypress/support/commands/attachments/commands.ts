@@ -26,7 +26,7 @@ Cypress.Commands.add("atchUploadAttachment", (params: {fileName: string }) => {
       fileName: params.fileName,
       mimeType: "*",
       filePath: `fixtures/${params.fileName}`,
-    });
+    }).wait(5000);
   });
 });
 
@@ -40,7 +40,7 @@ Cypress.Commands.add("atchRemoveLastAttachment", () => {
 });
 
 Cypress.Commands.add("atchCheckForSinglePrimaryAttachment", () => {
-  cy.get("[data-cy=\"primary.attachment.icon\"]").should("have.length", 1);
+  cy.get("[data-cy=\"attachment.icon.primary\"]").should("have.length", 1);
 });
 
 Cypress.Commands.add("atchCheckDisplayedAttachments", (params: {fileNames: string[] }) => {
@@ -51,8 +51,8 @@ Cypress.Commands.add("atchCheckDisplayedAttachments", (params: {fileNames: strin
 });
 
 Cypress.Commands.add("atchRemoveAttachment", (params: {fileName: string }) => {
-  cy.xpath(`//button[@title=\"${params.fileName}\"]/../div/button`)
-    .click();
+  cy.xpath(`//span[@title=\"${params.fileName}\"]`).trigger("mouseover");
+  cy.xpath(`//span[@title=\"${params.fileName}\"]/../../div[3]`).click();
 });
 
 Cypress.Commands.add("atchCheckAtributes", (params: {fileName: string; attributes: string}) => {
