@@ -82,6 +82,7 @@ Cypress.Commands.add("drClickCreateDocument", () => {
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: {status: string }) => {
+  cy.wait(5000);
   cy.get("[id=HeaderInfo-status]").should("have.text", params.status);
 });
 
@@ -94,10 +95,10 @@ Cypress.Commands.add("drCheckIfDocumentIdMatches", (params: {docId: string }) =>
 });
 
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: {title: string; status: string }) => {
-  cy.get("#clearFilter").click();
-  cy.get("#name").type(params.title).wait(300);
-  cy.get("[id=\"mui-component-select-status[]\"]").click();
-  cy.get("li[data-value]").contains(params.status).click().wait(300);
+  cy.get("#clearFilter").click().wait(500);
+  cy.get("#name").type(params.title).wait(500);
+  cy.get("[id=\"mui-component-select-status[]\"]").click().wait(300);
+  cy.get("li[data-value]").contains(params.status).click().wait(500);
   cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
 });
 

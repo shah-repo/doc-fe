@@ -160,7 +160,7 @@ context("Approval request form", () => {
     });
 
     it("Click on 'Approval request' outputdocument type", () => {
-      cy.drSelectOutputDocType({ documentType: "Approval request" });
+      cy.drSelectOutputDocType({ documentType: "Approval Request" });
     });
 
     it("Click create document after filling document", () => {
@@ -246,7 +246,7 @@ context("Approval request form", () => {
       cy.cmpNavigateToApprovalRequestList();
     });
 
-    it("Filter document by name and status, and select it", () => {
+    it("Filter approval by name and status, and select it", () => {
       cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "In Review" });
     });
 
