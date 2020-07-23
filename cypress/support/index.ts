@@ -27,3 +27,15 @@ import "./commands/group.management/commands";
 import "./commands/navigation/commands";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+  const socketIsClosingError = 
+    err.message.includes("The following error originated from your application code, not from Cypress") &&
+    err.message.includes("Socket is closing");
+
+  if(socketIsClosingError) {
+    console.log("Ignoring 'Socket is closing' error");
+    return false;
+  }
+  return true;
+})
