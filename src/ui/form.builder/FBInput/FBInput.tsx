@@ -21,32 +21,32 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   hidden,
   name,
 }) => (
-  <>
-    {!hidden && (
-      <Box mb={gutter ? 5 : 0}>
-        <FormControl fullWidth {...{ error }}>
-          {!_.includes(FBInputState.omitLabel, type) && label && (
-            <FBLabel {...{ error, label, labelValues, loading }} />
+    <>
+      {!hidden && (
+        <Box mb={gutter ? 5 : 0}>
+          <FormControl fullWidth {...{ error }}>
+            {!_.includes(FBInputState.omitLabel, type) && label && (
+              <FBLabel {...{ error, label, labelValues, loading }} />
+            )}
+            {children}
+          </FormControl>
+          {!_.isEmpty(helperText) && showErrorMsg && (
+            <FormHelperText {...{ error }}>
+              <Text message={helperText as string} />
+            </FormHelperText>
           )}
-          {children}
-        </FormControl>
-        {!_.isEmpty(helperText) && showErrorMsg && (
-          <FormHelperText {...{ error }}>
-            <Text message={helperText as string} />
-          </FormHelperText>
-        )}
-        {includeContext && (
-          <Box mt={type === "select" ? 3 : 0.5}>
-            <FBTextField
-              label="form.builder.note"
-              {...{ disabled }}
-              name={`${FBFieldName.Context}-${name}`}
-            />
-          </Box>
-        )}
-      </Box>
-    )}
-  </>
-);
+          {includeContext && (
+            <Box mt={type === "select" ? 3 : 0.5}>
+              <FBTextField
+                label="form.builder.note"
+                {...{ disabled }}
+                name={`${FBFieldName.Context}-${name}`}
+              />
+            </Box>
+          )}
+        </Box>
+      )}
+    </>
+  );
 
 export default withFBInput(FBInput);

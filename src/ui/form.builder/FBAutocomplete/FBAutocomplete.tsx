@@ -22,8 +22,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   freeSolo = false,
   filterSelectedOptions = false,
   ...props
-}) =>  (
-  <>
+}) => {
+  return <>
     {includeQRScan && (
       <Box display="flex" flexDirection="row-reverse" mb={-3}>
         <Typography variant="button" display="block" color="primary">
@@ -54,6 +54,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   ...params.InputProps,
                   ...(refresh) && { style: { paddingRight: "33px" } },
                 }}
+                data-cy={props.name}
                 inputProps={{
                   ...params.inputProps,
                   style: { padding: "10.5px 0" },
@@ -85,6 +86,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       />
     </FBInput>
   </>
-);
+};
 
 export default withFBAutocomplete(FBAutocomplete);

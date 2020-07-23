@@ -148,7 +148,7 @@ Cypress.Commands.add("login", (params: { email: string; password: string }) => {
 });
 
 Cypress.Commands.add("selectCompany", (params: { name: string }) => {
-  cy.get("#root", { timeout: 10 * 1000 }).contains(params.name).click();
+  cy.get("#root", { timeout: 20 * 1000 }).contains(params.name).click();
 });
 
 Cypress.Commands.add("unClick", () => {

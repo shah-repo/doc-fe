@@ -4,45 +4,62 @@ Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
 });
 
-import path from "path";
-
 const runId = new Date().valueOf();
 let company;
 let docId;
 
-context(`Validators Test: ${path.basename(__filename)}`, () => {
-  it("Company exists", (done: any) => {
-    cy.apiLogin({
-      email: "zoran.kovacevic+admin@codecons.com",
-      password: "Tester1!",
-    }).then((response: any) => {
+const requiredFieldLabel = "Name";
+const requiredFieldSelector = `${requiredFieldLabel.toLowerCase().split(' ').join('-')}-`;
 
-      if ((response.employees || []).length <= 1) {
-        // create company
+const requiredIfFieldLabel = "Last Name";
+const requiredIfFieldSelector = `${requiredIfFieldLabel.toLowerCase().split(' ').join('-')}-`// "last-name-";
+const requiredIfFieldValue = "Alex";
+
+const requiredIfInFieldLabel = "Country";
+const requiredIfInFieldSelector = `${requiredIfInFieldLabel.toLowerCase().split(' ').join('-')}-`;// "country-";
+const requiredIfInFieldValues = "Alpha,Bravo";
+
+const requiredWithFieldLabel = "State";
+const requiredWithFieldSelector = `${requiredWithFieldLabel.toLowerCase().split(' ').join('-')}-`;
+
+const requiredWithoutFieldLabel = "Address";
+const requiredWithoutFieldSelector = `${requiredWithoutFieldLabel.toLowerCase().split(' ').join('-')}-`;
+
+const requiredDocStatusFieldLabel = "Document Status";
+const requiredDocTypeFieldLabel = "Document Type";
+
+context("Validators tests", () => {
+
+  context("[API] Prepare company", () => {
+    it("[API] Creates company", (done: any) => {
+      cy.apiLogin({
+        email: "zoran.kovacevic+admin@codecons.com",
+        password: "Tester1!",
+      }).then((response: any) => {
+
         cy.createCompany({
           payload: {
             companyAcronym: `T1${runId}`,
             companyAdminEmail: "zoran.kovacevic+admin@codecons.com",
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: `zoran.kovacevic+importer${runId}@codecons.com`,
+            importerEmail: `enlil.testmail+cy5@gmail.com`,
             maxRevisionStages: 3,
             name: `Test Company ${runId}`,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
             users: [{
-              name: "Zoran 1",
-              email: `zoran.kovacevic+1_${runId}@codecons.com`,
-            }, {
-              name: "Zoran 2",
-              email: `zoran.kovacevic+2_${runId}@codecons.com`,
-            }, {
-              name: "Zoran 3",
-              email: `zoran.kovacevic+3_${runId}@codecons.com`,
-            }, {
-              name: "Zoran 4",
-              email: `zoran.kovacevic+4_${runId}@codecons.com`,
+              name: "Second Tester",
+              email: "enlil.testmail+cy2@gmail.com",
+            },
+            {
+              name: "Third Tester",
+              email: "enlil.testmail+cy3@gmail.com",
+            },
+            {
+              name: "Fourth Tester",
+              email: "enlil.testmail+cy4@gmail.com",
             }],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
@@ -53,77 +70,512 @@ context(`Validators Test: ${path.basename(__filename)}`, () => {
           company = response;
           done();
         });
-      }
-      else {
-        // use existing company
-        company = response.employees[1].company;
-        done();
-      }
+      });
+    });
+  })
+
+  context("Log in user, select company and open 'Create Document'", () => {
+    it("Logs user in", () => {
+      cy.login({
+        email: "zoran.kovacevic+admin@codecons.com",
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.selectCompany({ name: company.name });
+    });
+
+    it("Opens create document page", () => {
+      cy.get("[data-cy=\"document.list\"]", { timeout: 10 * 1000 }).click();
+      cy.get("[data-cy=\"document.revision.create\"]").click();
+    });
+  })
+
+  context("Tries to submit empty form", () => {
+
+    it("clicks on 'Save' button", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    })
+
+    it("shows error 'required’ below title field", () => {
+      cy.get("[data-cy=\"field-name\"] .MuiFormHelperText-root.Mui-error").should("have.text", "Required");
+    })
+
+    it("shows error 'required’ below description field", () => {
+      cy.get("[data-cy=\"field-description\"] .MuiFormHelperText-root.Mui-error").should("have.text", "Required");
+    })
+
+    it("shows error 'required’ below 'document type' field", () => {
+      cy.get("[data-cy=\"field-document.documentType.id\"] .MuiFormHelperText-root.Mui-error").should("have.text", "Required");
+    })
+
+    it("shows error 'required’ below 'document ID' field", () => {
+      cy.get("[data-cy=\"field-document.docId\"] .MuiFormHelperText-root.Mui-error").should("have.text", "Required");
+    })
+
+  });
+
+  context("fills in Title, Description and Document Type", () => {
+    it("type a title", () => {
+      cy.get("#Title-field", { timeout: 10000 }).type("Test Form Title{enter}");
+    });
+
+    it("type a description", () => {
+      cy.get("[data-cy=\"RichTextEditor.description\"]", { timeout: 10000 }).type("Test Form Desription");
+    });
+
+    it("fill in document type as Form", () => {
+      cy.get("[data-cy=\"select.document.documentType.id\"]").click();
+      cy.get("[data-cy=\"selectItem.document.documentType.id.Form\"]").click();
     });
   });
 
-  it("Logs user in", () => {
-    cy.login({
-      email: "zoran.kovacevic+admin@codecons.com",
-      password: "Tester1!",
+  context("Tries to submit partially filled in form", () => {
+
+    it("click on 'Save' button", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]", { timeout: 5 * 1000 }).click();
+    })
+
+    it("shows error 'at least one required' below 'Output Document Type' field", () => {
+      cy.get("[data-cy=\"field-outputDocumentTypes\"] .MuiFormHelperText-root.Mui-error").should("have.text", "At least one input required");
+    })
+
+  });
+
+  context("Adds Output Document Type", () => {
+    it("fill in output document type as Component Specification", () => {
+      cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
+      cy.get("[data-cy=\"field-outputDocumentTypes\"]").type("Component Specification{enter}");
+    });
+  })
+
+  context("Add 'Required' validation on 'Text Field'", () => {
+    it("open add field dialogue", () => {
+      cy.get("[data-cy=\"form.builder.add.field\"]").click();
+    })
+
+    it("create 'Text Field'", () => {
+      cy.get("[data-cy=\"form.builder.textfield\"]").click();
+    })
+
+    it(`give label to 'Text Field' as '${requiredFieldLabel}'`, () => {
+      cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(requiredFieldLabel);
+    })
+
+    it("open validations", () => {
+      cy.get("[data-cy=\"fb-editor-mode-validation-1\"]").click();
+    })
+
+    it(`Make '${requiredFieldLabel}' field required`, () => {
+      cy.get("[data-cy=\"fb-control-required\"]").click();
+    })
+
+    it("Add text field", () => {
+      cy.get("[data-cy=\"fb-editor-actions-add\"]").click();
+    })
+
+  })
+
+  context("Add 'Required If' validation on 'Text Field'", () => {
+
+    it("open add field dialogue", () => {
+      cy.get("[data-cy=\"fb-control-btn\"]").click({ force: true });
+    })
+
+    it("create 'Text Field'", () => {
+      cy.get("[data-cy=\"form.builder.textfield\"]").click();
+    })
+
+    it(`give label to 'Text Field' as '${requiredIfFieldLabel}'`, () => {
+      cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(requiredIfFieldLabel);
+    })
+
+    it("open validations", () => {
+      cy.get("[data-cy=\"fb-editor-mode-validation-1\"]").click();
+    })
+
+    it("Mark as 'Required If'", () => {
+      cy.get("[data-cy=\"fb-control-required_if:anotherfield,value\"]").click();
+    })
+
+    it(`select '${requiredFieldLabel}' field`, () => {
+      cy.get("[data-cy=\"validators.required_if.name\"]").type(`${requiredFieldLabel}{downarrow}{enter}`);
+    })
+
+    it(`type value as '${requiredIfFieldValue}'`, () => {
+      cy.get("[data-cy=\"validators.required_if.value\"]").type(requiredIfFieldValue);
+    })
+
+    it(`Make '${requiredIfFieldLabel}' field required, if '${requiredFieldLabel}' field text equals '${requiredIfFieldValue}': Add text field`, () => {
+      cy.get("[data-cy=\"fb-editor-actions-add\"]").click();
+    })
+
+  })
+
+  context("Add 'Required If In' validation on 'Text Field'", () => {
+
+    it("open add field dialogue", () => {
+      cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+    })
+
+    it("create 'Text Field'", () => {
+      cy.get("[data-cy=\"form.builder.textfield\"]").click();
+    })
+
+    it(`give label to 'Text Field' as '${requiredIfInFieldLabel}'`, () => {
+      cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(requiredIfInFieldLabel);
+    })
+
+    it("open validations", () => {
+      cy.get("[data-cy=\"fb-editor-mode-validation-1\"]").click();
+    })
+
+    it("Mark as 'Required If In'", () => {
+      cy.get("[data-cy=\"fb-control-required_if_in:anotherfield,[value]\"]").click();
+    })
+
+    it(`select '${requiredIfFieldLabel}' field`, () => {
+      cy.get("[data-cy=\"validators.required_if_in.name\"]").type(`${requiredIfFieldLabel}{downarrow}{enter}`);
+    })
+
+    it(`type value as '${requiredIfInFieldValues}'`, () => {
+      cy.get("[data-cy=\"validators.required_if_in.value\"]").type(requiredIfInFieldValues);
+    })
+
+    it(`Make '${requiredIfInFieldLabel}' field required, if '${requiredIfFieldLabel}' field text includes '${requiredIfInFieldValues.split(',').join(' or ')}': Add text field`, () => {
+      cy.get("[data-cy=\"fb-editor-actions-add\"]").click();
+    })
+
+  })
+
+  context("Add 'Required With' validation on 'Text Field'", () => {
+
+    it("open add field dialogue", () => {
+      cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+    })
+
+    it("create 'Text Field'", () => {
+      cy.get("[data-cy=\"form.builder.textfield\"]").click();
+    })
+
+    it(`give label to 'Text Field' as '${requiredWithFieldLabel}'`, () => {
+      cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(requiredWithFieldLabel);
+    })
+
+    it("open validations", () => {
+      cy.get("[data-cy=\"fb-editor-mode-validation-1\"]").click();
+    })
+
+    it("Mark as 'Required With'", () => {
+      cy.get("[data-cy=\"fb-control-required_with:foo,bar,...\"]").click();
+    })
+
+    it(`select '${requiredIfInFieldLabel}' field`, () => {
+      cy.get("[data-cy=\"validators.required_with.name\"]").type(`${requiredIfInFieldLabel}{downarrow}{enter}`);
+    })
+
+    it(`Make '${requiredWithFieldLabel}' field required, if '${requiredIfInFieldLabel}' field is not empty': Add text field`, () => {
+      cy.get("[data-cy=\"fb-editor-actions-add\"]").click();
+    })
+
+  })
+
+  context("Add 'Required Without' validation on 'Text Field'", () => {
+
+    it("open add field dialogue", () => {
+      cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+    })
+
+    it("create 'Text Field'", () => {
+      cy.get("[data-cy=\"form.builder.textfield\"]").click();
+    })
+
+    it(`give label to 'Text Field' as '${requiredWithoutFieldLabel}'`, () => {
+      cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(requiredWithoutFieldLabel);
+    })
+
+    it("open validations", () => {
+      cy.get("[data-cy=\"fb-editor-mode-validation-1\"]").click();
+    })
+
+    it("Mark as 'Required Without'", () => {
+      cy.get("[data-cy=\"fb-control-required_without:foo,bar,...\"]").click();
+    })
+
+    it(`select '${requiredWithFieldLabel}' field`, () => {
+      cy.get("[data-cy=\"validators.required_without.name\"]").type(`{downarrow}{downarrow}{downarrow}{downarrow}{enter}`);
+    })
+
+    it(`Make '${requiredWithoutFieldLabel}' field required, if '${requiredWithFieldLabel}' field is empty: Add text field`, () => {
+      cy.get("[data-cy=\"fb-editor-actions-add\"]").click();
+    })
+
+  })
+
+  context("Add 'Required Document Status' validation on 'Text Field'", () => {
+
+    it("open add field dialogue", () => {
+      cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+    })
+
+    it("create 'Text Field'", () => {
+      cy.get("[data-cy=\"form.builder.textfield\"]").click();
+    })
+
+    it(`give label to 'Text Field' as '${requiredDocStatusFieldLabel}'`, () => {
+      cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(requiredDocStatusFieldLabel);
+    })
+
+    it("open validations", () => {
+      cy.get("[data-cy=\"fb-editor-mode-validation-1\"]").click();
+    })
+
+    it("Mark as 'Required Document Status'", () => {
+      cy.get("[data-cy=\"fb-control-required_document_status:value\"]").click();
+    })
+
+    it(`select Released status`, () => {
+      cy.get("[data-cy=\"validators.required_document_status.name\"]").type(`Released{downarrow}{enter}`);
+    })
+
+    it(`Add text field`, () => {
+      cy.get("[data-cy=\"fb-editor-actions-add\"]").click();
+    })
+
+  })
+
+  context("Add 'Required Document Type' validation on 'Text Field'", () => {
+
+    it("open add field dialogue", () => {
+      cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+    })
+
+    it("create 'Text Field'", () => {
+      cy.get("[data-cy=\"form.builder.textfield\"]").click();
+    })
+
+    it(`give label to 'Text Field' as '${requiredDocTypeFieldLabel}'`, () => {
+      cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(requiredDocTypeFieldLabel);
+    })
+
+    it("open validations", () => {
+      cy.get("[data-cy=\"fb-editor-mode-validation-1\"]").click();
+    })
+
+    it("Mark as 'Required Document Type'", () => {
+      cy.get("[data-cy=\"fb-control-required_document_type:value\"]").click();
+    })
+
+    it(`select Component Specification`, () => {
+      cy.get("[data-cy=\"validators.required_document_type.name\"]").type(`Component Specification{downarrow}{enter}`);
+    })
+
+    it(`Add text field`, () => {
+      cy.get("[data-cy=\"fb-editor-actions-add\"]").click();
+    })
+
+  })
+
+  context("Store DocId, Save document And 'Approve & Release Document", () => {
+
+    it("clicks on 'Save' button", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    })
+
+    it("Store Document Id", () => {
+      cy.get("[data-cy=\"common.docId\"]").then((element) => {
+        const text = element.text();
+        docId = text.split(":")[1].trim();
+        cy.log(docId);
+      });
+    });
+
+    it("Approve and Release", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 1000 }).click();
+      cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+    });
+
+  });
+
+  context("Create New Document out of the Form", () => {
+    it("open new document", () => {
+      cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]", { timeout: 50 * 1000 }).click();
+    })
+  });
+
+  context("Tries to submit empty form", () => {
+
+    it("clicks on 'Save' button", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    })
+
+    it("shows error 'required’ below title field", () => {
+      cy.get("[data-cy=\"field-name\"] .MuiFormHelperText-root.Mui-error").should("have.text", "Required");
+    })
+
+    it("shows error 'required’ below description field", () => {
+      cy.get("[data-cy=\"field-description\"] .MuiFormHelperText-root.Mui-error").should("have.text", "Required");
+    })
+
+  });
+
+  context("fills in Title and Description", () => {
+    it("type a title", () => {
+      cy.get("#Title-field", { timeout: 10000 }).type("Test Doc Title{enter}");
+    });
+
+    it("type a description", () => {
+      cy.get("[data-cy=\"RichTextEditor.description\"]", { timeout: 10000 }).type("Test Doc Desription");
     });
   });
 
-  it("Selects company", () => {
-    cy.selectCompany({ name: company.name });
-  });
+  context("Validation errors on custom fields should not prevent from saving document", () => {
+    it("saving the document", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    })
+  })
 
-  it("Opens create document page", () => {
-    cy.get("[data-cy=\"document.list\"]", { timeout: 10 * 1000 }).click();
-    cy.get("[data-cy=\"document.revision.create\"]").click();
-  });
+  context("Validation errors should prevent from releasing document", () => {
+    it("'Approve and Release' the document", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 1000 }).click();
+      cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+    })
 
-  it("Empty form shows errors", () => {
-    cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
-    cy.get(".MuiFormHelperText-root.Mui-error").its("length")
-      .then((length) => length === 4)
-  });
+    it("Cancel release of document", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").click();
+    })
+  })
 
-  it("type a title", () => {
-    cy.get("#Title-field", { timeout: 10000 }).type("Test Title{enter}");
-  });
+  context(`Test ${requiredFieldLabel} (required) Field`, () => {
+    it("fill in 'required' custom text field", () => {
+      cy.get(`[data-cy^='${requiredFieldSelector}']`).type("abc");
+    })
 
-  it("type a description", () => {
-    cy.get("[data-cy=\"RichTextEditor.description\"]", { timeout: 10000 }).type("Test Desription");
-  });
+    it("remove text", () => {
+      cy.get(`[data-cy^='${requiredFieldSelector}'] input`).clear();
+    })
 
-  it("fill in document type as Form", () => {
-    cy.get("[data-cy=\"select.document.documentType.id\"]").click();
-    cy.get("[data-cy=\"selectItem.document.documentType.id.Form\"]").click();
-  });
+    it("should show error for 'required' field", () => {
+      cy.get(`[data-cy^='${requiredFieldSelector}']`).then($elem => {
+        const errorBlock = $elem.offsetParent().siblings('p');
 
-  it("create document must give error for Output Document type", () => {
-    cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
-    cy.get(".MuiFormHelperText-root.Mui-error").its("length")
-      .then((length) => length === 1)
-  });
+        cy.wrap(errorBlock).should("have.text", `The ${requiredFieldLabel} field is required.`);
+      });
+    })
 
-  it("fill in output document type", () => {
-    cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
-    cy.get("[data-cy=\"field-outputDocumentTypes\"]").type("Document Approval Matrix{enter}");
-  });
+    it("fill in 'required' custom text field", () => {
+      cy.get(`[data-cy^='${requiredFieldSelector}']`).type("Required field added.");
+    })
+  })
 
-  it("Store Document Id", () => {
-    cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
-    cy.get("[data-cy=\"common.docId\"]").then((element) => {
-      const text = element.text();
-      cy.log(text);
-      docId = text.split(":")[1].trim();
-      cy.log(docId);
-    });
-  });
+  context(`Test ${requiredIfFieldLabel} (required if) Field`, () => {
+    it(`remove text from ${requiredFieldLabel}`, () => {
+      cy.get(`[data-cy^='${requiredFieldSelector}'] input`).clear();
+    })
+
+    it(`type '${requiredIfFieldValue}' in '${requiredFieldLabel}' field`, () => {
+      cy.get(`[data-cy^='${requiredFieldSelector}']`).type(requiredIfFieldValue);
+    })
+
+    it("should show error for 'required if' field", () => {
+      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).then($elem => {
+        const errorBlock = $elem.offsetParent().siblings('p');
+
+        cy.wrap(errorBlock).should("have.text", `The ${requiredIfFieldLabel} field is required when ${requiredFieldLabel} is ${requiredIfFieldValue}.`);
+      });
+    })
+
+    it("fill in 'required' custom text field", () => {
+      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).type("Required If field added.");
+    })
+  })
+
+  context(`Test ${requiredIfInFieldLabel} (required if in) Field`, () => {
+    it(`remove text from ${requiredIfFieldLabel}`, () => {
+      cy.get(`[data-cy^='${requiredIfFieldSelector}'] input`).clear();
+    })
+
+    it(`type '${requiredIfInFieldValues.split(',').join(' or ')}' in '${requiredIfFieldLabel}' field`, () => {
+      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).type(requiredIfInFieldValues.split(',')[0]);
+    })
+
+    it("should show error for 'required if in' field", () => {
+      cy.get(`[data-cy^='${requiredIfInFieldSelector}']`).then($elem => {
+        const errorBlock = $elem.offsetParent().siblings('p');
+
+        cy.wrap(errorBlock).should("have.text", `The ${requiredIfInFieldLabel} field is required when ${requiredIfFieldLabel} includes , .`);
+      });
+    })
+
+    it("fill in text field", () => {
+      cy.get(`[data-cy^='${requiredIfInFieldSelector}']`).type("Required If In field added.");
+    })
+  })
+
+  context(`Test ${requiredWithFieldLabel} (required with) Field`, () => {
+    it(`remove text from ${requiredIfInFieldLabel}`, () => {
+      cy.get(`[data-cy^='${requiredIfInFieldSelector}'] input`).clear();
+    })
+
+    it(`type anything in '${requiredIfInFieldLabel}' field`, () => {
+      cy.get(`[data-cy^='${requiredIfInFieldSelector}']`).type("USA");
+    })
+
+    it("should show error for 'required with' field", () => {
+      cy.get(`[data-cy^='${requiredWithFieldSelector}']`).then($elem => {
+        const errorBlock = $elem.offsetParent().siblings('p');
+
+        cy.wrap(errorBlock).should("have.text", `The ${requiredWithFieldLabel} field is required when ${requiredIfInFieldLabel} is not empty.`);
+      });
+    })
+
+    it("fill in 'required with' custom text field", () => {
+      cy.get(`[data-cy^='${requiredWithFieldSelector}']`).type("California");
+    })
+  })
+
+  context(`Test ${requiredWithoutFieldLabel} (required without) Field`, () => {
+    it(`remove text from ${requiredWithFieldLabel}`, () => {
+      cy.get(`[data-cy^='${requiredWithFieldSelector}'] input`).clear();
+    })
+
+    it("should show error for 'required without' field", () => {
+      cy.get(`[data-cy^='${requiredWithoutFieldSelector}']`).then($elem => {
+        const errorBlock = $elem.offsetParent().siblings('p');
+
+        cy.wrap(errorBlock).should("have.text", `The ${requiredWithoutFieldLabel} field is required when ${requiredWithFieldLabel} is empty.`);
+      });
+    })
+
+    it(`fill in '${requiredWithFieldLabel}' field only`, () => {
+      cy.get(`[data-cy^='${requiredWithFieldSelector}']`).type("California");
+    })
+  })
+
+  context("Release document", () => {
+
+    it("clicks on 'Save' button", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    })
+
+    it("'Approve and Release' the document", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 1000 }).click();
+      cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+    })
+  })
+
+  /*
 
   it("Approve and Release", () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 1000 }).click();
     cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
     cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
     cy.get("[data-cy=\"document.list\"]", { timeout: 10 * 1000 }).click();
-  });
+  }); */
 });
 
 // for TS error "All files must be modules when the '--isolatedModules' flag is provided" uncomment line below

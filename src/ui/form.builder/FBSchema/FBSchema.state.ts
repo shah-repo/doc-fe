@@ -145,7 +145,7 @@ export class FBSchemaState {
 
   @action public setSchemaItemAt = (schemaItem: FBSchemaProps | FBInputProps, index = 0) => {
     const schemaAt = this.getSchemaItemAt(index);
-    if (schemaAt && schemaItem.name ===  schemaAt.name) {
+    if (schemaAt && schemaItem.name === schemaAt.name) {
       return this.updateSchemaItem(schemaItem, index);
     }
     const newSchema = this.schema?.slice(0) || [];
