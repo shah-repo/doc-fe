@@ -1,7 +1,7 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { DocumentType } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType, PageDetails } from "../../../state/ducks/documentRevisions/documentType";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
@@ -20,8 +20,7 @@ export interface Props {
   queryUrl: string;
   columns: TableColumnProps<DocumentRevision>[];
   isByCategory: boolean;
-  categoryButtonLabel: string;
-  documentCategory: string;
+  documentCategory: PageDetails;
 }
 
 export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
@@ -32,7 +31,6 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   queryUrl,
   columns,
   isByCategory,
-  categoryButtonLabel,
   documentCategory,
 }) => {
   const classes = styles();
@@ -46,7 +44,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   };
 
   const createDocumentProps = isByCategory ? {
-    documentCategory,
+    categoryName: documentCategory.category,
   } : {
     documentTypeId: documentType.id,
   };
@@ -60,7 +58,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       <CreateDocumentByType
         {...createDocumentProps}
         isByCategory={isByCategory}
-        labelName={isByCategory ? categoryButtonLabel : documentType.documentTypeName}
+        labelName={isByCategory ? documentCategory.addNewBtnLabel : documentType.documentTypeName}
       />
       <Grid item={true} className={classes.item}>
         <TablePanel<DocumentRevision>
