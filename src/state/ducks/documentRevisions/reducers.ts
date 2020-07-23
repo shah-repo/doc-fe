@@ -114,7 +114,7 @@ export const pageDetails = (
 ): PageDetailsState => {
   switch (action.type) {
     case PAGE_DETAILS_SET:
-      return action.payload[0];
+      return action.payload[0] || null;
     default:
       return state;
   }

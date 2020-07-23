@@ -30,6 +30,13 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   /** If true, documents are filtered by category. If false, documents are filtered by type. */
   const isByCategory = match.path.includes(DOCUMENT_BY_CATEGORY_LIST_URL);
 
+  useEffect(() => {
+    if (isByCategory) {
+      dispatch(pageDetailsActions.categoryPageDetails(documentCategory));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentCategory]);
+
   const documentType = useSelector(documentTypeSelectors.byId)?.[docTypeId];
   const categoryExists = useSelector(documentRevisionsSelectors.categoryExists);
   const categoryColumns = useSelector(documentRevisionsSelectors.getCategoryColumns);
@@ -66,13 +73,6 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docTypeId]);
-
-  useEffect(() => {
-    if (isByCategory) {
-      dispatch(pageDetailsActions.categoryPageDetails(documentCategory));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentCategory]);
 
   useEffect(() => {
     dispatch(documentRevisionsActions.loadList());
