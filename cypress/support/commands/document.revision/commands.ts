@@ -23,6 +23,10 @@ declare global {
       drFilterDocListByNameAndStatus(params: {title: string; status: string}): Chainable<Subject>;
       drChangeOwner(params: {employee: string }): Chainable<Subject>;
       drChangeOwnerFromMenu(params: {employee: string }): Chainable<Subject>;
+      drClickReviseDocument(): Chainable<Subject>;
+      drClickTrainingRequired(): Chainable<Subject>;
+      drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
+      drChooseTypeOfRevisionChangeOption(params: {option: string }): Chainable<Subject>;
     }
   }
 }
@@ -112,4 +116,25 @@ Cypress.Commands.add("drChangeOwner", (params: {employee: string}) => {
   cy.get("#employee").click();
   cy.get(`[data-cy=\"selectItem.employee.${params.employee}\"]`).click();
   cy.get("#OwnerChangerPresenter-submitButton").click();
+});
+
+Cypress.Commands.add("drClickReviseDocument", () => {
+  cy.get("#PreviewControlsContainer-revise").click();
+});
+
+Cypress.Commands.add("drClickTrainingRequired", () => {
+  cy.get("input[type=checkbox]").click();
+});
+
+Cypress.Commands.add("drCheckTypeOfRevisionChangeOptions", () => {
+  cy.get("[data-cy=\"field-revisionChangeType\"]");
+  cy.get("#RevisionTypeChange-nextRevision").contains("Next Revision");
+  cy.get("#RevisionTypeChange-nextRevisionStage").contains("Upgrade to Next Revision Level");
+  cy.get("#RevisionTypeChange-obsolete").contains("Obsolete");
+  cy.get("#RevisionTypeChange-administrativeChange").contains("Administrative Change");
+});
+
+Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: {option: string}) => {
+  cy.get("[data-cy=\"field-revisionChangeType\"]");
+  cy.get("label").contains(params.option).click();
 });
