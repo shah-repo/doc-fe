@@ -160,7 +160,7 @@ context("Approval request form", () => {
     });
 
     it("Click on 'Approval request' outputdocument type", () => {
-      cy.drSelectApprovalRequestOutputDocType();
+      cy.drSelectOutputDocType({ documentType: "Approval request" });
     });
 
     it("Click create document after filling document", () => {
