@@ -115,7 +115,7 @@ export class FBFormState extends FBSchemaState {
     }
 
     const rules = this.getRules();
-    const values = _.omitBy(this.values, _.isEmpty);
+    const values = _.omitBy(this.values, (v) => _.isString(v) && _.isEmpty(v));
     // *TODO: unify validators format
     let validator: any;
     try {

@@ -18,7 +18,7 @@ const FormHeaderPresenter: React.FunctionComponent = () => {
         name={documentRevision.name}
         documentTypeId={documentRevision?.document?.documentType.id}
       />}
-      <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12} justify="flex-end">
+      <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12}>
         <Grid container={true} alignItems="flex-end" justify="flex-end">
           <DocRevActions/>
         </Grid>

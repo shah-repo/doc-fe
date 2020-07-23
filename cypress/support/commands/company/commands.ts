@@ -5,11 +5,41 @@ import { CONFIG } from "../../config";
 /* eslint-disable @typescript-eslint/no-namespace */
 
 export { };
+// We need this interfaces for Company Bootstrap, do not remove
+interface IUser {
+  email: string;
+  name: string;
+}
+//
+interface IdocumentTypeDto {
+  documentTypeName: string;
+  documentTypeAcronym: string;
+  isQms?: boolean;
+}
+
+export interface ICreateCompanyBootstrap {
+  name: string;
+  companyAcronym: string;
+  companyAdminEmail: string;
+  importerEmail: string;
+  slackIntegrationEnabled: boolean;
+  helloSignIntegrationEnabled: boolean;
+  helloSignTestMode: boolean;
+  maxRevisionStages: number;
+  numOfDocDigits: number;
+  users: IUser[];
+  documentTypes: IdocumentTypeDto[];
+  whiteLabeling?: any;
+  addresses?: string[];
+  remoteValidatorBundleName: string;
+  acctCodes?: string[];
+}
 
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      cmpCreateCompany(params: {payload: Company; sessionId: string}): Chainable<Subject>;
+      cmpCreateCompany(params: {payload: ICreateCompanyBootstrap; sessionId: string}): Chainable<Subject>;
+      cmpUpdateCompany(params: {employeeId: string; sessionId: string; payload: Partial<Company>}): Chainable<Subject>;
       cmpSelectCompany( params: {name: string; multiple: boolean }): Chainable<Subject>;
       cmpNavigateToDocumentList(): Chainable<Subject>;
       cmpClickCreateNewDocument(): Chainable<Subject>;
@@ -20,13 +50,29 @@ declare global {
   }
 }
 
-Cypress.Commands.add("cmpCreateCompany", (params: {payload: Company; sessionId: string}) => {
+Cypress.Commands.add("cmpCreateCompany", (params: {payload: ICreateCompanyBootstrap; sessionId: string}) => {
   cy.request({
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/company/bootstrap`,
     body: params.payload,
     headers: {
       Authorization: `bearer_admin ${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("cmpUpdateCompany", (
+  params: {
+    employeeId: string;
+    sessionId: string;
+    payload: Partial<Company>;
+  }) => {
+  cy.request({
+    method: "PATCH",
+    url: `${CONFIG.BE_URL}/api/v1/company/mine`,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
     },
   }).then((response) => response.body);
 });

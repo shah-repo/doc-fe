@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import Colors from "../../../../layout/theme/utils/colors";
 import { AttachmentIconStyleProp } from "./types";
 
 export const styles = makeStyles((theme) => ({
@@ -6,15 +7,6 @@ export const styles = makeStyles((theme) => ({
     display: "grid",
     width: size === "lg" ? "90px" : size === "md" ? "70px" : "50px",
     height: size === "lg" ? "90px" : size === "md" ? "70px" : "50px",
-  }),
-  closeRoot: ({ disabled }: AttachmentIconStyleProp) => ({
-    padding: "0",
-    margin: "0",
-    right: -5,
-    top: -6,
-    display: disabled ? "none" : "inherit",
-    position: "absolute" as "absolute",
-    zIndex: 2,
   }),
   progress: ({ size }: AttachmentIconStyleProp) => ({
     "color": theme.palette.secondary.main,
@@ -27,16 +19,27 @@ export const styles = makeStyles((theme) => ({
     },
   }),
   attachmentContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: "1.5rem",
-    marginBottom: "1rem",
+    "display": "flex",
+    "width": "50%",
+    "alignItems": "center",
+    "marginBottom": "1rem",
+    "&:hover": {
+      backgroundColor: "white",
+      borderRadius: "8px",
+    },
   },
   iconContainer: {
-    width: "min-content",
-    position: "relative",
-    marginRight: "0.8rem",
+    maxHeight: "48px",
+    margin: "0.8rem",
+  },
+  removeButton: {
+    "margin": 0,
+    "minWidth": 40,
+    "borderRadius": "inherit",
+    "min-width": "auto",
+    "&:hover": {
+      backgroundColor: Colors.red,
+    },
   },
   fileNameContainer: {
     width: 170,
@@ -52,14 +55,6 @@ export const styles = makeStyles((theme) => ({
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
     fontWeight: "bold",
-  },
-  closeIcon: {
-    fontSize: "inherit",
-    color: theme.palette.primary.main,
-  },
-  closeIconButton: {
-    fontSize: "1.2rem",
-    padding: 0,
   },
   fileIcon: {
     width: "100%",
