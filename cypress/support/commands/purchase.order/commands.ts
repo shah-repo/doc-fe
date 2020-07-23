@@ -21,6 +21,9 @@ declare global {
       poSelectCurrency(): Chainable<Subject>;
       poCheckAmount(params: {number: string}): Chainable<Subject>;
       poSelectTaxCheckbox(): Chainable<Subject>;
+      poSelectOption(params: {optionName: string}): Chainable<Subject>;
+      poEnterServiceID(params: {serviceId: string}): Chainable<Subject>;
+      poEnterDescription(params: {description: string}): Chainable<Subject>;
     }
   }
 }
@@ -90,5 +93,17 @@ Cypress.Commands.add("poSelectTaxCheckbox", () => {
 
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
   cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains(params.number).should("exist");
+});
+
+Cypress.Commands.add("poSelectOption", (params: {optionName: string}) => {
+  cy.get("input[value=" + params.optionName + "]").click();
+});
+
+Cypress.Commands.add("poEnterServiceID", (params: {serviceId: string}) => {
+  cy.get("[name=\"serviceId\"]").click().type(params.serviceId);
+});
+
+Cypress.Commands.add("poEnterDescription", (params: {description: string}) => {
+  cy.get("[name=\"description\"]").click().type(params.description);
 });
 

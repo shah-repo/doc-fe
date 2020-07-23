@@ -184,8 +184,8 @@ context("Create company via API and create Purchase Order Form document", () => 
     cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
   });
 
-  it("Fill label field with 'New Purchase Order'", () => {
-    cy.fbEnterPOLabelName({ name: "New Purchase Order" });
+  it("Fill label field with 'New Purchase Order with Product item'", () => {
+    cy.fbEnterPOLabelName({ name: "New Purchase Order with Product item" });
   });
 
   it("Click 'Add' to finish adding new field", () => {
@@ -227,7 +227,7 @@ context("Create Part document for PO", () => {
   });
 });
 
-context("Create Purchase Order document from Form document", () => {
+context("Create Purchase Order document with Product option from Form document", () => {
   it("Click on 'Purchase Order' on sidebar", () => {
     cy.cmpNavigateToPurchaseOrder();
   });
@@ -310,6 +310,91 @@ context("Create Purchase Order document from Form document", () => {
   it("Enter description 'New Purchase Order'", () => {
     SystemRequirement("REQ-1290");
     cy.poEnterDocumentDescription({ description: "New Purchase Order" });
+  });
+
+  it("Approve and release document", () => {
+    cy.drApproveAndReleaseDocument();
+  });
+});
+
+context("Create Purchase Order document with Service option from Form document", () => {
+  it("Click on 'Purchase Order' on sidebar", () => {
+    cy.wait(2000).cmpNavigateToPurchaseOrder();
+  });
+
+  it("Click on 'Create PO' button", () => {
+    cy.poCreateNew();
+  });
+
+  it("Click on 'Add item' button", () => {
+    cy.poAddNewFieldItem();
+  });
+
+  it("Click on 'Service' select option", () => {
+    SystemRequirement("REQ-1420");
+   cy.poSelectOption({ optionName: "service" });
+  });
+
+  it("Enter ServiceID", () => {
+    SystemRequirement("REQ-1420");
+    cy.poEnterServiceID({ serviceId: "SRV123" });
+  });
+
+  it("Enter Description", () => {
+    SystemRequirement("REQ-1420");
+    cy.poEnterDescription({ description: "Description for SRV123" });
+  });
+
+  it("Enter Quantity Ordered", () => {
+    SystemRequirement("REQ-1420");
+    cy.poEnterQuantityOrdered({ quantity: "5" });
+  });
+
+  it("Select Units", () => {
+    SystemRequirement("REQ-1420");
+    cy.poSelectUnits();
+  });
+
+  it("Select GL code", () => {
+    SystemRequirement("REQ-1420");
+    cy.poSelectGLCode();
+  });
+
+  it("Enter number of Units", () => {
+    SystemRequirement("REQ-1420");
+    cy.poNumberOfUnits({ number: "2" });
+  });
+
+  it("Add Required Date", () => {
+    SystemRequirement("REQ-1420");
+    cy.poAddDateRequired();
+  });
+
+  it("Click on 'Add' inside PO dialog box", () => {
+    cy.poAddPOButtonClick();
+  });
+
+  it("Select Currency 'USD'", () => {
+    cy.poSelectCurrency();
+  });
+
+  it("Enter Shipping Cost", () => {
+    cy.poShippingCost({ number: "2" });
+  });
+
+  it("Check Subtotal value", () => {
+    SystemRequirement("REQ-1430");
+    cy.poCheckAmount({ number: "\$10.00" });
+  });
+
+  it("Check Total value", () => {
+    SystemRequirement("REQ-1440");
+    cy.poCheckAmount({ number: "\$12.00" });
+  });
+
+  it("Enter description 'New Purchase Order with Service item'", () => {
+    SystemRequirement("REQ-1290");
+    cy.poEnterDocumentDescription({ description: "New Purchase Order with Service item" });
   });
 
   it("Approve and release document", () => {
