@@ -80,14 +80,14 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
       {
         label: "Work Orders",
         type: "CATEGORY",
-        icon: "", // not in the designs
+        icon: "/navigation_icons/todo.svg",
         category: "Work Order",
         restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
       },
       {
         label: "Lots",
         type: "CATEGORY",
-        icon: "", // not in the designs
+        icon: "/navigation_icons/tag-check.svg",
         category: "Lot",
         restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
       },
