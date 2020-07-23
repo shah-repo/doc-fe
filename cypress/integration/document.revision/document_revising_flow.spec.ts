@@ -169,7 +169,7 @@ context("Document Revising Flow", () => {
       cy.drClickTrainingRequired();
     });
 
-    /* context("Edit attachments", () => {
+    context("Edit attachments", () => {
       it("Uploads text.docx", () => {
         cy.atchUploadAttachment({ fileName: "test.docx" });
       });
@@ -201,8 +201,10 @@ context("Document Revising Flow", () => {
       it("Check one attachment is displayed: test.docx", () => {
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx" ] });
       });
-    }); */
+    });
+  });
 
+  context("Save document", () => {
     it("Checks Type of Revision Changes Options", () => {
       SystemRequirement("REQ-0370");
       cy.drCheckTypeOfRevisionChangeOptions();

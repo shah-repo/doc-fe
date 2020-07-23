@@ -25,5 +25,5 @@ if [[ -z "${ENLIL_CYPRESS_CACHE_PATH}" ]]; then
   echo "ENLIL_CYPRESS_CACHE_PATH not defined, exiting"
   exit
 fi
-ENLIL_CYPRESS_CACHE_PATH="/home/maja/.cache/Cypress/4.9.0/Cypress/resources/app/packages/server/config/app.yml"
+
 sed -i -e "s|api_url:.*$|api_url: \"http://localhost:$ENLIL_COMPOSE_EXPOSE_DIRECTOR_PORT\"|g" $ENLIL_CYPRESS_CACHE_PATH
