@@ -23,7 +23,21 @@ import "./commands/auth/commands";
 import "./commands/change.request/commands";
 import "./commands/company/commands";
 import "./commands/document.revision/commands";
+import "./commands/form.builder/commands";
 import "./commands/group.management/commands";
 import "./commands/navigation/commands";
+import "./commands/purchase.order/commands";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+  const socketIsClosingError = 
+    err.message.includes("The following error originated from your application code, not from Cypress") &&
+    err.message.includes("Socket is closing");
+
+  if(socketIsClosingError) {
+    console.log("Ignoring 'Socket is closing' error");
+    return false;
+  }
+  return true;
+})

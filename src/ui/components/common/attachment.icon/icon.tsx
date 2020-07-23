@@ -19,6 +19,7 @@ export const AttachmentIcon: React.FunctionComponent<AttachmentIconProps> = ({
 
   return (
     <Box
+      data-cy={isPrimary ? "attachment.icon.primary" : isRedLine ? "attachment.icon.redline" : "attachment.icon"}
       className={classNames(classes.root,
         {
           [classes.isUploading]: isUploading,
