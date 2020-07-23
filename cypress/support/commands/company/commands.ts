@@ -15,6 +15,7 @@ interface IdocumentTypeDto {
   documentTypeName: string;
   documentTypeAcronym: string;
   isQms?: boolean;
+  group: string;
 }
 
 export interface ICreateCompanyBootstrap {

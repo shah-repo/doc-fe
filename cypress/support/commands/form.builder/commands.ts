@@ -6,26 +6,26 @@ export { };
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      addNewFieldOption(): Chainable<Subject>;
-      selectItemFromNewFieldList(params: {field: string}): Chainable<Subject>;
-      enterPOLabelName(params: {name: string}): Chainable<Subject>;
-      addNewFieldButton(): Chainable<Subject>;
+      fbAddNewFieldOption(): Chainable<Subject>;
+      fbSelectItemFromNewFieldList(params: {field: string}): Chainable<Subject>;
+      fbEnterPOLabelName(params: {name: string}): Chainable<Subject>;
+      fbAddNewFieldButton(): Chainable<Subject>;
     }
   }
 }
 
-Cypress.Commands.add("addNewFieldOption", () => {
+Cypress.Commands.add("fbAddNewFieldOption", () => {
   cy.contains("Add a Field").click();
 });
 
-Cypress.Commands.add("selectItemFromNewFieldList", (params: {field: string}) => {
+Cypress.Commands.add("fbSelectItemFromNewFieldList", (params: {field: string}) => {
   cy.get("[class=\"MuiButton-label\"]").contains(new RegExp(params.field, "g")).click();
 });
 
-Cypress.Commands.add("enterPOLabelName", (params: {name: string}) => {
+Cypress.Commands.add("fbEnterPOLabelName", (params: {name: string}) => {
   cy.get("[class=\"MuiInputBase-root MuiOutlinedInput-root MuiInputBase-formControl\"]").type(params.name).click();
 });
 
-Cypress.Commands.add("addNewFieldButton", (params: {name: string}) => {
+Cypress.Commands.add("fbAddNewFieldButton", (params: {name: string}) => {
   cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary\"]").contains("Add").click();
 });
