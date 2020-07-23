@@ -1,6 +1,7 @@
 import { Datacenter, datadogRum } from "@datadog/browser-rum";
 import React from "react";
 import ReactDOM from "react-dom";
+import Config from "./config";
 import * as serviceWorker from "./serviceWorker";
 import AppContainer from "./ui/app/App.container";
 
