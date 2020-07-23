@@ -10,6 +10,8 @@ declare global {
     interface Chainable<Subject> {
       authApiLogin( params: {email: string; password: string }): Chainable<Subject>;
       authLogin( params: {email: string; password: string }): Chainable<Subject>;
+      authApiLogout(): Chainable<Subject>;
+      authLogout(): Chainable<Subject>;
     }
   }
 }
@@ -22,10 +24,22 @@ Cypress.Commands.add("authApiLogin", (params: {email: string; password: string }
   }).then((response) => response.body);
 });
 
+Cypress.Commands.add("authApiLogout", () => {
+  cy.request({
+    method: "DELETE",
+    url: `${CONFIG.BE_URL}/api/v1/auth/logout`,
+  }).then((response) => response.body);
+});
+
 Cypress.Commands.add("authLogin", (params: {email: string; password: string }) => {
   cy.visit(CONFIG.FE_URL);
   cy.get("#LoginFormPresenter-email").type(params.email);
   cy.get("#LoginFormPresenter-password").type(params.password);
   cy.get("#LoginFormPresenter-submit").click();
+});
+
+Cypress.Commands.add("authLogout", () => {
+  cy.get("[id=\"UserMenuButton\"]").click();
+  cy.contains("Logout").click();
 });
 
