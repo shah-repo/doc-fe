@@ -159,10 +159,10 @@ context("Document Creation Flow", () => {
     });
   });
 
-  context("Document in Draft", () => {
-    it("Check if document status is DRAFT after creating a document", () => {
+  context("Document in WIP", () => {
+    it("Check if document status is WIP after creating a document", () => {
       SystemRequirement("REQ-0330");
-      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.drCheckDocumentStatus({ status: "WIP" });
     });
 
     context("Uploads attachments", () => {

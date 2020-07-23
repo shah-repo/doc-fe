@@ -88,16 +88,15 @@ Cypress.Commands.add("arClickOnFirstAddedDocument", () => {
 });
 
 Cypress.Commands.add("arFilterARListByNameAndStatus", (params: {title: string; status: string }) => {
-  cy.get("#clearFilter").click();
+  cy.get("#clearFilter").click().wait(1000);
   cy.get("#title").type(params.title);
-  cy.get("[id=\"mui-component-select-state\"]").click();
-  cy.get("li[data-value]").contains(params.status).click().wait(300);
+  cy.get("[id=\"mui-component-select-state\"]").click().wait(300);
+  cy.get("li[data-value]").contains(params.status).click().wait(1000);
   cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
 });
 
 Cypress.Commands.add("arApproveAR", () => {
-  cy.get("#HeaderMenuButton").click();
-  cy.get("ul[role=menu]>li").contains("Approve submission").click();
+  cy.get("button[aria-label=approve]").click().wait(300);
   cy.get("input[type=password]").type("Tester1!");
   cy.get("#passwordConfirm").click().wait(8000);
 });
