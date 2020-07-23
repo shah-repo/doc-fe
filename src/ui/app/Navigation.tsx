@@ -18,6 +18,11 @@ import NavigationLinkContainer from "./NavigationLink.container";
 
 type NavigationProps = WithStyles<typeof styles> & RouteComponentProps;
 
+function  itemAllowedForUser(item: NavigationItem, userTags: GroupTag[]): boolean {
+  return !item.restrictedToUsersWithTags?.length ||
+        item.restrictedToUsersWithTags.some((tag) => userTags.includes(tag));
+}
+
 const Navigation: React.FunctionComponent<NavigationProps> = ({
   classes,
   location,
@@ -25,10 +30,15 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   const userTags = useSelector(getCurrentUserTags());
 
   const navigationItems = useSelector(companySelectors.getNavigationItems)
-    .filter((item: NavigationItem) =>
-      !item.restrictedToUsersWithTags
-      || item.restrictedToUsersWithTags.filter((tag: GroupTag) => userTags.includes(tag)).length
-    );
+    .reduce<NavigationItem[]>((acc, item) => {
+    if (itemAllowedForUser(item, userTags)) {
+      if (item.type === "MENU") {
+        item.menu = (item.menu || []).filter((menuItem) => itemAllowedForUser(menuItem, userTags));
+      }
+      acc.push(item);
+    }
+    return acc;
+  }, []);
 
   return (
     <Drawer

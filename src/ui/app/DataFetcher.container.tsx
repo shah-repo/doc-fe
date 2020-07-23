@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authActions, authSelectors } from "../../state/ducks/auth";
 import { changeRequestsActions } from "../../state/ducks/changeRequest";
 import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
+import { pageDetailsActions } from "../../state/ducks/pageDetails";
 import { userManagementActions } from "../../state/ducks/userManagement";
 
 const DataFetcherContainer: React.FunctionComponent = () => {
@@ -10,6 +11,7 @@ const DataFetcherContainer: React.FunctionComponent = () => {
   const employeeId = useSelector(authSelectors.currentEmployeeId);
 
   useEffect(() => {
+    dispatch(pageDetailsActions.allPageDetails());
     dispatch(documentTypeActions.loadList());
     dispatch(authActions.getSessionDetails(employeeId));
     dispatch(authActions.loadUserGroups());

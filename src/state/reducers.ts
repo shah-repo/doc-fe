@@ -11,6 +11,7 @@ import documentRevisions from "./ducks/documentRevisions";
 import documentType from "./ducks/documentRevisions/documentType";
 import documents from "./ducks/documents";
 import formBuilderState from "./ducks/formBuilder";
+import pageDetails from "./ducks/pageDetails";
 import supplierSurvey from "./ducks/supplierSurvey";
 import tableSearch from "./ducks/tableSearch";
 import userManagement from "./ducks/userManagement";
@@ -55,6 +56,7 @@ const appReducer = combineReducers({
   tableSearch: persistReducer(tableSearchPersistConfig, tableSearch),
   supplierSurvey,
   userManagement,
+  pageDetails,
 });
 
 const rootReducer = (state: any, action: any) => {
