@@ -1,7 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import { SystemRequirement } from "../utils/context/systemRequirement";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
