@@ -15,6 +15,10 @@ export ENLIL_COMPOSE_EXPOSE_FE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+2))"
 export CYPRESS_BE_URL="http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_PORT"
 export CYPRESS_FE_URL="http://localhost:$ENLIL_COMPOSE_EXPOSE_FE_PORT"
 export CYPRESS_KONFIG_ENV="development"
+export CYPRESS_SCREENSHOT_OF_RUN_FAILURE="true"
+export CYPRESS_SCREENSHOTS_FOLDER="cypress/cache/testRunner/screenshots"
+
+mkdir -p $CYPRESS_SCREENSHOTS_FOLDER
 
 yarn install --frozen-lockfile
 

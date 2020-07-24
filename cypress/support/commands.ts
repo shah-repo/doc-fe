@@ -45,3 +45,37 @@ Cypress.Commands.add("unClick", () => {
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+
+// function withParentTitle(item: any) {
+//   const nameParts: any = [];
+//   if(item.parent) {
+//     nameParts.unshift(item.parent.title)
+//     nameParts.unshift(...withParentTitle(item.parent))
+//   }
+//   return nameParts;
+// }
+
+// Cypress.on('test:after:run', (test, runnable) => {
+//   console.log({"test.state": test.state})
+//   if (test.state === 'failed') {
+//     let item: any = runnable
+//     const nameParts = [runnable.title]
+//     nameParts.unshift(...withParentTitle(item.parent))
+
+//     const fullTestName = nameParts
+//             .filter(Boolean)
+//             .join(' -- ')           // this is how cypress joins the test title fragments
+
+//     const imageUrl = `${fullTestName} (failed) kova.png`
+//     console.log({fullTestName, imageUrl})
+//     cy.screenshot()
+//     // cy.screenshot(imageUrl, {
+//     //   capture: "viewport",
+//     // }).then(() => {
+//     // console.log(4)
+//     //   addTestContext({ test }, { title: "Screenshot", value: imageUrl });
+//     // })
+
+//   }
+// })

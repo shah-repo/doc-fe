@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { plainToClass } from "class-transformer";
-import { IsDefined, IsString, validateSync } from "class-validator";
-console.log({ x: process.env });
+import { IsBoolean, IsDefined, IsString, validateSync } from "class-validator";
 
 // const envFromCypressEnv = () => ({
 //   BE_URL: Cypress.env("BE_URL"),
@@ -22,8 +21,9 @@ export class ConfigEnv {
       BE_URL: Cypress.env("BE_URL"),
       FE_URL: Cypress.env("FE_URL"),
       KONFIG_ENV: Cypress.env("KONFIG_ENV"),
+      SCREENSHOT_OF_RUN_FAILURE: Cypress.env("SCREENSHOT_OF_RUN_FAILURE"),
     });
-    console.log({ configEnv });
+
     const errors = validateSync(configEnv, {
       whitelist: true,
       forbidUnknownValues: false,
@@ -31,7 +31,7 @@ export class ConfigEnv {
     if (errors.length) {
       throw new Error(`Config validation errors: ${errors}`);
     }
-
+    console.log(JSON.stringify({configEnv}, null, 2))
     return configEnv;
   }
 
@@ -47,6 +47,10 @@ export class ConfigEnv {
   @IsDefined()
   @IsString()
   KONFIG_ENV!: string;
+
+  @IsDefined()
+  @IsBoolean()
+  SCREENSHOT_OF_RUN_FAILURE!: boolean;
 }
 
 

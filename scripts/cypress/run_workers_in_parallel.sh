@@ -3,6 +3,7 @@ set -e
 
 export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START:-5600}
 export ENLIL_COMPOSE_EXPOSE_DIRECTOR_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+6))"
+export CYPRESS_SCREENSHOT_OF_RUN_FAILURE="true"
 
 # calculate CI build number, has to be unique
 # export CI_BUILD_ID=$(date -R)
@@ -31,7 +32,7 @@ for((i=1; i <= $NUMBER_OF_WORKERS; i+=1))
 do
   echo "Started worker: $i"
   # ./scripts/cypress/run_node.sh  2>/dev/null || true  &
-  ./scripts/cypress/run_node.sh | grep "Spec Ran" 2>/dev/null || true  &
+  ./scripts/cypress/run_node.sh 2>/dev/null || true  &
   pids[${i}]=$!
 done
 
