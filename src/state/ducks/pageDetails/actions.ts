@@ -1,24 +1,21 @@
 import { apiAction } from "../../factories";
 import { ApiAction } from "../../types";
 import { PageDetails } from "../documentRevisions/documentType/types";
-import { PAGE_DETAILS_ROOT_URL, PAGE_DETAILS_SET } from "./constants";
+import { ALL_PAGE_DETAILS_FETCHED, PAGE_DETAILS_ROOT_URL } from "./constants";
 
-const pageDetailsSet = (pageDetails: PageDetails[]) => ({
-  type: PAGE_DETAILS_SET,
+const allPageDetailsFetched = (pageDetails: PageDetails[]) => ({
+  type: ALL_PAGE_DETAILS_FETCHED,
   payload: pageDetails,
 });
 
-const categoryPageDetails = (category: string): ApiAction<PageDetails[]> => apiAction({
+const allPageDetails = (): ApiAction<PageDetails[]> => apiAction({
   url: PAGE_DETAILS_ROOT_URL,
   method: "get",
-  params: {
-    category,
-  },
   onSuccess: (pageDetails, dispatch) => {
-    dispatch(pageDetailsSet(pageDetails));
+    dispatch(allPageDetailsFetched(pageDetails));
   },
 });
 
 export default {
-  categoryPageDetails,
+  allPageDetails,
 };
