@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { documentTypeSelectors, PageDetailsColumn } from "../../../state/ducks/documentRevisions/documentType";
-import { pageDetailsActions } from "../../../state/ducks/pageDetails";
+import { pageDetailsSelectors } from "../../../state/ducks/pageDetails";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
@@ -23,7 +23,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   match,
 }) => {
   const dispatch = useDispatch();
-  const { documentCategory, docTypeId } = match.params;
+  const { categoryName, docTypeId } = match.params;
   const currentUsersName = useSelector(authSelectors.currentUserName);
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
 
@@ -31,16 +31,14 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const isByCategory = match.path.includes(DOCUMENT_BY_CATEGORY_LIST_URL);
 
   const documentType = useSelector(documentTypeSelectors.byId)?.[docTypeId];
-  const categoryExists = useSelector(documentRevisionsSelectors.categoryExists);
-  const categoryColumns = useSelector(documentRevisionsSelectors.getCategoryColumns);
-  const categoryButtonLabel = useSelector(documentRevisionsSelectors.getCategoryButtonLabel);
+  const documentCategory = useSelector(pageDetailsSelectors.byCategory)?.[categoryName];
 
   const TABLE_NAME = isByCategory
-    ? `documentsByCategoryList-${documentCategory}`
+    ? `documentsByCategoryList-${categoryName}`
     : `documentsByTypeList-${documentType?.documentTypeAcronym}`;
 
   const queryUrl = DOCUMENT_REVISION_ROOT_URL + (isByCategory
-    ? `?documentTypeCategory=${documentCategory}`
+    ? `?documentTypeCategory=${categoryName}`
     : `?documentTypeId=${documentType?.id}`);
 
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
@@ -67,17 +65,9 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docTypeId]);
 
-  useEffect(() => {
-    if (isByCategory) {
-      dispatch(pageDetailsActions.categoryPageDetails(documentCategory));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentCategory]);
-
-  useEffect(() => {
-    dispatch(documentRevisionsActions.loadList());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  if ((!isByCategory && !documentType) || (isByCategory && !documentCategory)) {
+    return <Redirect to={HOME_URL} />;
+  }
 
   const clearFilter = () =>
     dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
@@ -89,7 +79,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     return documentPreviewPath(rowData.id, rowData.document.id);
   };
 
-  const pageDetailColumns = (isByCategory ? categoryColumns : documentType?.pageDetails?.columns) || [];
+  const pageDetailColumns = (isByCategory ? documentCategory.columns : documentType?.pageDetails?.columns) || [];
 
   const columns: TableColumnProps<DocumentRevision>[] = pageDetailColumns.map(
     (column: PageDetailsColumn) => {
@@ -110,16 +100,12 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
 
   const staticColumns: TableColumnProps<DocumentRevision>[] = getStaticColumns(
     isByCategory,
-    documentCategory,
+    categoryName,
     documentType,
     cellHrefRenderer,
     tableCriteria,
     canEdit,
   );
-
-  if ((!isByCategory && !documentType) || (isByCategory && !categoryExists)) {
-    return <Redirect to={HOME_URL} />;
-  }
 
   return (
     <div style={{ height: "100%" }}>
@@ -128,12 +114,11 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         tableCriteria={tableCriteria}
         tableData={tableData}
         clearFilter={clearFilter}
-        documentType={documentType}
         queryUrl={queryUrl}
         columns={columns.length ? columns : staticColumns}
         isByCategory={isByCategory}
         documentCategory={documentCategory}
-        categoryButtonLabel={categoryButtonLabel}
+        documentType={documentType}
       />
     </div>
   );

@@ -2,8 +2,6 @@ import _ from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { AuditByCRIdState } from "../audit/types";
-import { PAGE_DETAILS_SET } from "../pageDetails/constants";
-import { PageDetailsAction, PageDetailsState } from "../pageDetails/types";
 import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
 import { AllIdsState, DocumentByIdState, DocumentRevisionAuditSetAction, DocumentRevisionsAllIdsState, DocumentRevisionsByIdState, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentSetAction } from "./types";
 
@@ -102,24 +100,6 @@ export const auditsAllId = (
   }
 };
 
-const PAGE_DETAILS_DEFAULT_STATE: PageDetailsState = {
-  columns: [],
-  category: "",
-  addNewBtnLabel: "",
-};
-
-export const pageDetails = (
-  state: PageDetailsState = PAGE_DETAILS_DEFAULT_STATE,
-  action: PageDetailsAction,
-): PageDetailsState => {
-  switch (action.type) {
-    case PAGE_DETAILS_SET:
-      return action.payload[0];
-    default:
-      return state;
-  }
-};
-
 export default combineReducers({
   loadListAsyncInfo: asyncReducer(DOCUMENT_REVISION_LIST_ASYNC),
   loadAsyncInfo: asyncReducer(DOCUMENT_REVISION_GET_ASYNC),
@@ -130,5 +110,4 @@ export default combineReducers({
   documentsById,
   auditsByCRId,
   auditsAllId,
-  pageDetails,
 });

@@ -1,11 +1,11 @@
 import { PageDetails } from "../documentRevisions/documentType/types";
-import { PAGE_DETAILS_SET } from "./constants";
+import { ALL_PAGE_DETAILS_FETCHED } from "./constants";
 
-export type PageDetailsState = PageDetails;
+export interface PageDetailsState {
+  [key: string]: PageDetails;
+}
 
 export interface PageDetailsAction {
-  type: typeof PAGE_DETAILS_SET;
-  payload: {
-    pageDetails: PageDetails;
-  };
+  type: typeof ALL_PAGE_DETAILS_FETCHED;
+  payload: PageDetails[];
 }
