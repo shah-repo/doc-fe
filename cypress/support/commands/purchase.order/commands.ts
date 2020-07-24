@@ -18,18 +18,23 @@ declare global {
       poNumberOfUnits(params: {number: string}): Chainable<Subject>;
       poAddDateRequired(): Chainable<Subject>;
       poShippingCost(params: {number: string}): Chainable<Subject>;
-      poSelectCurrency(): Chainable<Subject>;
+      poCheckCurrency(): Chainable<Subject>;
       poCheckAmount(params: {number: string}): Chainable<Subject>;
       poSelectTaxCheckbox(): Chainable<Subject>;
       poSelectOption(params: {optionName: string}): Chainable<Subject>;
       poEnterServiceID(params: {serviceId: string}): Chainable<Subject>;
       poEnterDescription(params: {description: string}): Chainable<Subject>;
+      poSelectCurrency(params: { currencyValue: string }): Chainable<Subject>;
+      poCheckMessageForConversionSite(): Chainable<Subject>;
+      poCheckStatus(...list: string[]): Chainable<Subject>;
+      poClickOnSpecificPOFromList(params: {item: string}): Chainable<Subject>;
+      poConvertedToDollarsMessage(): Chainable<Subject>;
     }
   }
 }
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
-  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-fullWidth\"]").contains("Add item").click();
+  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-fullWidth\"]").contains("Add item").click().wait(300);
 });
 
 Cypress.Commands.add("poAddPOButtonClick", () => {
@@ -46,7 +51,7 @@ Cypress.Commands.add("poEnterDocumentDescription", (params: {description: string
 });
 
 Cypress.Commands.add("poSelectPartNumber", () => {
-  cy.get("[name=\"partNumber\"]").click();
+  cy.get("[name=\"partNumber\"]").click().wait(300);
   cy.get("ul[role=listbox] > li").contains("PRT-00004 - 1").click();
 });
 
@@ -79,12 +84,20 @@ Cypress.Commands.add("poAddDateRequired", () => {
 });
 
 Cypress.Commands.add("poShippingCost", (params: {number: string}) => {
-  cy.get("[name*=\"shippingCost\"]").click().wait(2000).type("{leftarrow}{leftarrow}{leftarrow}" + params.number);
+  cy.get("[name*=\"shippingCost\"]").click().wait(1000).type("{leftarrow}{leftarrow}{leftarrow}" + params.number);
 });
 
-Cypress.Commands.add("poSelectCurrency", () => {
+Cypress.Commands.add("poCheckCurrency", () => {
   cy.get("[id*=\"currency\"]").click();
-  cy.get("ul[role=listbox] > li").contains("USD").click();
+  cy.get("ul[role=listbox] > li").contains("USD").should("exist");
+  cy.get("ul[role=listbox] > li").contains("EUR").should("exist");
+  cy.get("ul[role=listbox] > li").contains("GBP").should("exist");
+  cy.get("ul[role=listbox] > li").contains("AU").should("exist");
+  cy.get("ul[role=listbox] > li").contains("C").should("exist");
+});
+
+Cypress.Commands.add("poSelectCurrency", (params: { currencyValue: string }) => {
+  cy.get("ul[role=listbox] > li").contains(params.currencyValue).click();
 });
 
 Cypress.Commands.add("poSelectTaxCheckbox", () => {
@@ -107,3 +120,22 @@ Cypress.Commands.add("poEnterDescription", (params: {description: string}) => {
   cy.get("[name=\"description\"]").click().type(params.description);
 });
 
+Cypress.Commands.add("poClickOnSpecificPOFromList", (params: {item: string}) => {
+  cy.get("[class*=\"ReactVirtualized__Table__row\"]").contains(params.item).click();
+});
+
+Cypress.Commands.add("poCheckMessageForConversionSite", () => {
+  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains("Exchange rate according to ").should("exist");
+  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains("fixer.io").should("exist");
+  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains("as of").should("exist");
+});
+
+Cypress.Commands.add("poConvertedToDollarsMessage", () => {
+  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains("Total in US dollars:").should("exist");
+});
+
+Cypress.Commands.add("poCheckStatus", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get("[class=\"MuiList-root MuiList-padding\"] > div > a > div").contains(item).should("exist");
+  });
+});

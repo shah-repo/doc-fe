@@ -172,7 +172,7 @@ context("Document list test", () => {
 
   context("Check document list defaults to Released documents at start of session", () => {
     it("Navigate to document list", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Verify default filter status", () => {
@@ -192,7 +192,7 @@ context("Document list test", () => {
     });
 
     it("Navigate to document list", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Clear filters", () => {
@@ -430,11 +430,11 @@ context("Document list test", () => {
       });
 
       it("Navigate to dashboard", () => {
-        cy.cmpNavigateToDashboard();
+        cy.navigToDashboard();
       });
 
       it("Navigate back to document list", () => {
-        cy.cmpNavigateToDocumentList();
+        cy.navigToDocumentList();
       });
 
       it("Verify filter by status", () => {

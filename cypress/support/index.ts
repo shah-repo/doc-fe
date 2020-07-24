@@ -18,6 +18,7 @@ import "cypress-file-upload";
 import "cypress-promise/register";
 import "cypress-xpath";
 import "./commands";
+import "./commands/approver.request.list/commands";
 import "./commands/attachments/commands";
 import "./commands/auth/commands";
 import "./commands/change.request/commands";
@@ -31,14 +32,14 @@ import "./commands/purchase.order/commands";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-Cypress.on('uncaught:exception', (err, runnable) => {
-  const socketIsClosingError = 
+Cypress.on("uncaught:exception", (err, runnable) => {
+  const socketIsClosingError =
     err.message.includes("The following error originated from your application code, not from Cypress") &&
     err.message.includes("Socket is closing");
 
-  if(socketIsClosingError) {
+  if (socketIsClosingError) {
     console.log("Ignoring 'Socket is closing' error");
     return false;
   }
   return true;
-})
+});

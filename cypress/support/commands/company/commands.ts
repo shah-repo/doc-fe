@@ -46,7 +46,6 @@ declare global {
       cmpClickCreateNewDocument(): Chainable<Subject>;
       cmpNavigateToApprovalRequestList(): Chainable<Subject>;
       cmpClickCreateApprovalRequest(): Chainable<Subject>;
-      cmpNavigateToDashboard(): Chainable<Subject>;
       cmpNavigateToPurchaseOrder(): Chainable<Subject>;
     }
   }
@@ -91,11 +90,7 @@ Cypress.Commands.add("cmpNavigateToDocumentList", () => {
 });
 
 Cypress.Commands.add("cmpNavigateToApprovalRequestList", () => {
-  cy.get("[data-cy=\"navigation.approvalRequestList\"]").click();
-});
-
-Cypress.Commands.add("cmpNavigateToDashboard", () => {
-  cy.get("[data-cy=\"navigation.dashboard\"]").click();
+  cy.get("[data-cy=\"navigation.approvalRequests\"]").click();
 });
 
 Cypress.Commands.add("cmpClickCreateNewDocument", () => {
@@ -107,7 +102,7 @@ Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
 });
 
 Cypress.Commands.add("cmpNavigateToPurchaseOrder", () => {
-  cy.get("[data-cy=\"navigation.purchaseOrder\"]").click();
+  cy.get("[data-cy=\"navigation.purchaseOrder\"]").click().wait(500);
 });
 
 export function cmpFilterDocumentTypeIdByName(companyResponse: Company, documentTypeName: string) {
