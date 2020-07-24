@@ -24,7 +24,7 @@ interface Props {
   isByCategory: boolean;
   labelName: string;
   documentTypeId?: string;
-  documentCategory?: string;
+  categoryName?: string;
 }
 
 export const useHandleCreateDoc = () => {
@@ -82,7 +82,7 @@ let selectedTypeLabel = "";
 const CreateDocumentByType: React.FunctionComponent<Props> = ({
   labelName,
   documentTypeId,
-  documentCategory,
+  categoryName,
   isByCategory,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();
@@ -144,7 +144,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const handleAddButtonClick = () => {
     setErrorMessage(undefined);
     if (isByCategory) {
-      categoryAsync.start(getDocTypesByCategory, { category: documentCategory }, categoryAsync);
+      categoryAsync.start(getDocTypesByCategory, { category: categoryName }, categoryAsync);
       return;
     }
     idAsync.start(getDocRevByIds, documentTypeId, idAsync);

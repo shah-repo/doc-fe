@@ -46,7 +46,7 @@ export interface PageDetailsAddNew {
 export interface PageDetails {
   addNewBtnLabel: string;
   columns: PageDetailsColumn[];
-  category?: string;
+  category: string;
 }
 export interface DocumentType {
   id: string;
