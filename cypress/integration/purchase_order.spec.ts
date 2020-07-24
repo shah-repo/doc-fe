@@ -233,7 +233,21 @@ context("Create Purchase Order document with Product option from Form document",
   });
 
   it("Click on 'Create PO' button", () => {
-    cy.poCreateNew();
+    cy.poCreateNew().wait(500);
+  });
+
+  it("Click on 'Purchase Order' on sidebar", () => {
+    cy.cmpNavigateToPurchaseOrder();
+  });
+
+  it("Click on existing PO that was created before", () => {
+    SystemRequirement("REQ-1370")
+    cy.poClickOnSpecificPOFromList({ item:"PO-00001" });
+  });
+
+  it("Check status of PO - should be WIP - Draft", () => {
+    SystemRequirement("REQ-1280")
+    cy.poCheckStatus( "Work In Progress" , "Draft" );
   });
 
   it("Click on 'Add item' button", () => {
@@ -284,8 +298,13 @@ context("Create Purchase Order document with Product option from Form document",
     cy.poAddPOButtonClick();
   });
 
+  it("Check currency options dropdown", () => {
+    SystemRequirement("REQ-1320");
+    cy.poCheckCurrency();
+  });
+
   it("Select Currency 'USD'", () => {
-    cy.poSelectCurrency();
+    cy.poSelectCurrency({ currencyValue: "USD" });
   });
 
   it("Enter Shipping Cost", () => {
@@ -324,6 +343,11 @@ context("Create Purchase Order document with Service option from Form document",
 
   it("Click on 'Create PO' button", () => {
     cy.poCreateNew();
+  });
+
+  it("Check status of PO - should be WIP - Draft", () => {
+    SystemRequirement("REQ-1280")
+    cy.poCheckStatus( "Work In Progress" , "Draft" );
   });
 
   it("Click on 'Add item' button", () => {
@@ -374,8 +398,18 @@ context("Create Purchase Order document with Service option from Form document",
     cy.poAddPOButtonClick();
   });
 
-  it("Select Currency 'USD'", () => {
-    cy.poSelectCurrency();
+  it("Check currency options dropdown", () => {
+    SystemRequirement("REQ-1320");
+    cy.poCheckCurrency();
+  });
+  
+  it("Select Currency 'EUR'", () => {
+    cy.poSelectCurrency({ currencyValue: "EUR" });
+  });
+
+  it("Check for conversion message", () => {
+    SystemRequirement("REQ-1330");
+    cy.poCheckMessageForConversionSite();
   });
 
   it("Enter Shipping Cost", () => {
@@ -384,14 +418,19 @@ context("Create Purchase Order document with Service option from Form document",
 
   it("Check Subtotal value", () => {
     SystemRequirement("REQ-1430");
-    cy.poCheckAmount({ number: "\$10.00" });
+    cy.poCheckAmount({ number: "\€10.00" });
   });
 
   it("Check Total value", () => {
     SystemRequirement("REQ-1440");
-    cy.poCheckAmount({ number: "\$12.00" });
+    cy.poCheckAmount({ number: "\€12.00" });
   });
 
+  it("Check if total converted to dollars is shown", () => {
+    SystemRequirement("REQ-1460");
+    cy.poConvertedToDollarsMessage();
+  });
+  
   it("Enter description 'New Purchase Order with Service item'", () => {
     SystemRequirement("REQ-1290");
     cy.poEnterDocumentDescription({ description: "New Purchase Order with Service item" });
