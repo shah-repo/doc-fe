@@ -25,6 +25,7 @@ export interface AttachmentIconFactoryProps extends FormikHybridFieldProps {
   value?: Attachment[];
   handleIconClick?: (attachment: Attachment) => any;
   canDeleteFile?: boolean;
+  isNewVersion?: boolean;
 }
 
 export interface AttachmentIconProps extends AttachmentIconFactoryProps {
@@ -32,6 +33,7 @@ export interface AttachmentIconProps extends AttachmentIconFactoryProps {
   isLoading?: boolean;
   isRedLine?: boolean;
   isPrimary?: boolean;
+  isTransffered?: boolean;
   handleIconClick?: (attachment: Attachment) => any;
 }
 

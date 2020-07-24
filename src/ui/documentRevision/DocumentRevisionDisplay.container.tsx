@@ -124,6 +124,7 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
           documentRevision={documentRevision}
           documentId={documentId}
           canChangeOwnerShip={canChangeOwnerShip}
+          isNewVersion={isNewVersion as boolean}
         />
       )}
       {canPreview && (
@@ -134,10 +135,10 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
         />
       )}
       {isNewVersion && (
-        <CloneContainer documentRevision={documentRevision} type="newVersion" />
+        <CloneContainer documentRevision={documentRevision} type="newVersion" isNewVersion={isNewVersion} />
       )}
       {isNewOutput && (
-        <CloneContainer documentRevision={documentRevision} type="newOutput" />
+        <CloneContainer documentRevision={documentRevision} type="newOutput" isNewVersion={isNewVersion as unknown as boolean} />
       )}
     </AsyncGate>
   );

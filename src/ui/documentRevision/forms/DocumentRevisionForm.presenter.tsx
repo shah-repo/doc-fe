@@ -56,6 +56,7 @@ export interface Props
   handleFBContainerRef?: (instance: HTMLDivElement | null) => any;
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
   bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
+  isNewVersion?: boolean;
 }
 
 interface FormHeaderContext {
@@ -95,6 +96,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   type,
   FBContainer,
   bannerPortal,
+  isNewVersion,
 }) => {
 
   useScrollIntoView();
@@ -246,7 +248,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isDisabled={isDisabledInput}
           documentTypeId={documentTypeId}
         />
-        <AttachmentsField isDisabled={isDisabledInput} />
+        <AttachmentsField isDisabled={isDisabledInput} isNewVersion={isNewVersion || false} />
         {showRevisionTypeChange && <RevisionTypeChange {...{ documentTypeId }} isDisabled={isDisabledInput} />}
         {
           (!values.status || type === "newOutput") &&

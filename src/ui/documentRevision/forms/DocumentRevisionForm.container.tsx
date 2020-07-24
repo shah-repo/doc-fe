@@ -49,6 +49,7 @@ interface OwnProps {
   loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
   canChangeOwnerShip?: boolean;
   type?: DocumentCloneType;
+  isNewVersion?: boolean;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
@@ -91,6 +92,7 @@ DocumentRevisionFormContainerProps
   document,
   canChangeOwnerShip = false,
   type,
+  isNewVersion,
 }) => {
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
@@ -213,6 +215,7 @@ DocumentRevisionFormContainerProps
         documentTypesById={documentTypesById}
         canChangeOwnerShip={canChangeOwnerShip}
         type={type}
+        isNewVersion={isNewVersion}
         {...{ FBContainer, bannerPortal }}
       />
     </FBWorkspace>
