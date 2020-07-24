@@ -206,3 +206,19 @@ export enum GroupType{
   REVISION_APPROVAL = "REVISION_APPROVAL",
   PURCHASE_APPROVAL = "PURCHASE_APPROVAL",
 }
+
+export enum NavigationItems{
+  DASHBOARD = "dashboard",
+  DOCUMENT_LIST = "documentList",
+  APPROVAL_REQUEST = "approvalRequests",
+  DOCUMENT_CONTROL = "documentControl",
+  USER_MANAGEMENT = "userManagement",
+  GROUP_MANAGEMENT = "groupManagement",
+  TESTING_NAVIG_ITEM = "testingNavigationItem",
+  PURCHASE_ORDERS = "purchaseOrders",
+  SUPPLIERS = "suppliers",
+  RECEIVING = "receiving",
+  MANUFACTURING = "manufacturing",
+  WORK_ORDERS = "workOrders",
+  LOTS = "lots",
+}
