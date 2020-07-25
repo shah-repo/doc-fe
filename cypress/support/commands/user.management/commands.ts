@@ -21,7 +21,7 @@ Cypress.Commands.add("usrNavigateToUserManagement", () => {
 });
 
 Cypress.Commands.add("usrClickAddEmployee", () => {
-  cy.get("[data-cy=\"user.management.add.employee\"]").click();
+  cy.get("#AddEmployeePresenter-openDialog").click();
 });
 
 Cypress.Commands.add("usrEnterEmail", (params: {email: string }) => {
