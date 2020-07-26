@@ -34,6 +34,7 @@ export const FormListActions: React.FunctionComponent<Props> = ({ dialog, chosen
           className={classes.submitButton}
           fullWidth
           id="FormList-continueButton"
+          data-cy="create.approval.request.continue"
           onClick={() => history.push(`/change_request/${chosenFormId}/create/${chosenTypeId}`)}
         >
           <Text translation="common.continue" />
@@ -41,6 +42,7 @@ export const FormListActions: React.FunctionComponent<Props> = ({ dialog, chosen
       </Grid>
     </Grid>
 
-  ); };
+  );
+};
 
 export default FormListActions;

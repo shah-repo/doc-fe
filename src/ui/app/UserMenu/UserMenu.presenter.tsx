@@ -30,7 +30,7 @@ export const UserMenuPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <IconButton id="UserMenuButton">
+      <IconButton id="UserMenuButton" data-cy="UserMenuButton">
         <ArrowDropDownIcon fontSize="small" />
       </IconButton>
       <Menu
@@ -47,7 +47,7 @@ export const UserMenuPresenter: React.FunctionComponent<Props> = ({
       >
         <MenuItem onClick={openUserProfile}>
           <ListItemIcon>
-            <PersonOutlineOutlinedIcon fontSize="small"/>
+            <PersonOutlineOutlinedIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>
             <Text translation="header.menu.my.profile" />
@@ -56,16 +56,16 @@ export const UserMenuPresenter: React.FunctionComponent<Props> = ({
         {hasMultipleCompanies &&
           <MenuItem>
             <ListItemIcon>
-              <SyncAltOutlinedIcon fontSize="small"/>
+              <SyncAltOutlinedIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText>
-              <SwitchCompanyButtonContainer location={location}/>
+              <SwitchCompanyButtonContainer location={location} />
             </ListItemText>
           </MenuItem>
         }
-        <MenuItem onClick={handleLogout} style={{ borderTop: `1px solid ${Colors.medium_gray}` }}>
+        <MenuItem data-cy="header.logout" onClick={handleLogout} style={{ borderTop: `1px solid ${Colors.medium_gray}` }}>
           <ListItemIcon>
-            <ExitToAppOutlinedIcon fontSize="small"/>
+            <ExitToAppOutlinedIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>
             <Text translation="header.logout" />
@@ -73,6 +73,7 @@ export const UserMenuPresenter: React.FunctionComponent<Props> = ({
         </MenuItem>
       </Menu>
     </>
-  ); };
+  );
+};
 
 export default UserMenuPresenter;

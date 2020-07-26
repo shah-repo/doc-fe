@@ -12,7 +12,7 @@ import CancelButton from "./CancelButton";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
-  const  {
+  const {
     documentRevision,
     values,
     docInfo,
@@ -30,7 +30,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       case "design":
         formik.setFieldValue("formTemplate", {
           outputDocumentTypes: (values.outputDocumentTypes || [])
-            .map((outputDoc) => ({ id: outputDoc.value }) ),
+            .map((outputDoc) => ({ id: outputDoc.value })),
           schema: workspaceState?.getSchema(),
         });
         break;
@@ -62,6 +62,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         }
         onClick={onFormClick}
         id="DocumentRevisionForm-submit"
+        dataCy="DocumentRevisionForm-submit"
       />
       <ApproveAndRelease
         id={values.id}

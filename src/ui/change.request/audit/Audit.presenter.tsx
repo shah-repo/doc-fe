@@ -18,14 +18,14 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const classes = styles();
 
   const renderAuditGroup = () =>
-    Object.keys(audit).map((groupId) => {
+    Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
 
       return (
         <Box key={groupId} className={classes.changeContainer}>
-          <div className={classes.dateContainer}>
-            <div className={classes.owner}>{change.owner?.user.name}</div>
-            <DateTime value={change.timestamp} />
+          <div className={classes.dateContainer} data-cy={`audit-${key}`}>
+            <div data-cy={`audit-owner-${key}`} className={classes.owner}>{change.owner?.user.name}</div>
+            <DateTime data-cy={`audit-time-${key}`} value={change.timestamp} />
           </div>
 
           {renderChanges(audit[groupId])}
