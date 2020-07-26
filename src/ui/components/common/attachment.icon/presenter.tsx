@@ -9,6 +9,7 @@ import { Attachment } from "../../../../state/ducks/attachments";
 import { Document, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../../state/reducers";
 import Text from "../../../components/Text";
+import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
 import Colors from "../../../layout/theme/utils/colors";
 import FileIcon from "./icon";
@@ -63,7 +64,7 @@ AttachmentIconProps
       <Text translation="common.uploading" />
     </Box>
   );
-
+  const documentRevisionStatusFromDocList = React.useContext(documentRevisionStatusContextFromDocList);
 
   const formDocumentId = documentRevision?.document.id || "";
   const formDocuments: Document = useSelector((state: ApplicationState) =>
@@ -78,13 +79,14 @@ AttachmentIconProps
     if ((!lastReleasedDocRevId || docRevById[lastReleasedDocRevId].attachments)) {
       return;
     }
-
     dispatch(documentRevisionsActions.load(lastReleasedDocRevId));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const isTransffered = isNewVersion || lastReleasedDocRevId !== formDocuments?.documentRevisions[formDocuments?.documentRevisions.length - 1].id  ? docRevById[lastReleasedDocRevId]?.attachments?.some((e) => e.id === attachment?.id) : false;
-  console.log(documentRevision?.id);
+  const isTransffered = isNewVersion ||
+  lastReleasedDocRevId !== formDocuments?.documentRevisions[formDocuments?.documentRevisions.length - 1].id  ?
+  docRevById[lastReleasedDocRevId]?.attachments?.some((e) => e.id === attachment?.id) : false;
+
   const deleteButtonRenderer = canDeleteFile && (
     <Box
       marginLeft="auto"
@@ -133,7 +135,8 @@ AttachmentIconProps
                 isUploading={isUploading}
                 isRedLine={isRedLine}
                 isPrimary={isPrimary}
-                isTransffered={isTransffered}
+                isTransffered={(documentRevisionStatusFromDocList === DocumentRevisionStatus.Draft ||
+                  documentRevisionStatusFromDocList === DocumentRevisionStatus.PendingChange)  ? isTransffered : false}
               />
             }
           </ButtonBase>
