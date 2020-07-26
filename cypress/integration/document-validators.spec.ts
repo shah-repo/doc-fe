@@ -32,12 +32,12 @@ context("Validators tests", () => {
 
   context("[API] Prepare company", () => {
     it("[API] Creates company", (done: any) => {
-      cy.apiLogin({
+      cy.authApiLogin({
         email: "zoran.kovacevic+admin@codecons.com",
         password: "Tester1!",
-      }).then((sessionId: string) => {
+      }).then((response: any) => {
 
-        cy.createCompany({
+        cy.cmpCreateCompany({
           payload: {
             companyAcronym: `T1${runId}`,
             companyAdminEmail: "zoran.kovacevic+admin@codecons.com",
@@ -65,7 +65,7 @@ context("Validators tests", () => {
             addresses: ["Address 1"],
             whiteLabeling: null,
             documentTypes: [],
-          }, sessionId: sessionId,
+          }, sessionId: response.sessionId,
         }).then((response) => {
           company = response;
           done();
@@ -76,27 +76,26 @@ context("Validators tests", () => {
 
   context("Log in user, select company and open 'Create Document'", () => {
     it("Logs user in", () => {
-      cy.login({
+      cy.authLogin({
         email: "zoran.kovacevic+admin@codecons.com",
         password: "Tester1!",
       });
     });
 
     it("Selects company", () => {
-      cy.selectCompany({ name: company.name });
+      cy.cmpSelectCompany({ name: company.name, multiple: true });
     });
 
-    it("Opens create document page", () => {
-      cy.get("[data-cy=\"navigation.documentList\"]", { timeout: 10 * 1000 }).click();
-      cy.get("[data-cy=\"document.revision.create\"]").click();
+    context("Open 'Create Document'", () => {
+      it("Navigate to document list", () => cy.cmpNavigateToDocumentList());
+
+      it("Click on 'create a document'", () => cy.cmpClickCreateNewDocument());
     });
   })
 
   context("Tries to submit empty form", () => {
 
-    it("clicks on 'Save' button", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
-    })
+    it("clicks on 'Save' button", () => cy.drClickCreateDocument());
 
     it("shows error 'required’ below title field", () => {
       cy.get("[data-cy=\"field-name\"] .MuiFormHelperText-root.Mui-error").should("have.text", "Required");
@@ -117,25 +116,16 @@ context("Validators tests", () => {
   });
 
   context("fills in Title, Description and Document Type", () => {
-    it("type a title", () => {
-      cy.get("#Title-field", { timeout: 10000 }).type("Test Form Title{enter}");
-    });
+    it("type a title", () => cy.drEnterDocumentTitle({ name: "Test Form Title{enter}" }));
 
-    it("type a description", () => {
-      cy.get("[data-cy=\"RichTextEditor.description\"]", { timeout: 10000 }).type("Test Form Desription");
-    });
+    it("type a description", () => cy.drEnterDocumentDescription({ description: "Test Form Desription" }));
 
-    it("fill in document type as Form", () => {
-      cy.get("[data-cy=\"select.document.documentType.id\"]").click();
-      cy.get("[data-cy=\"selectItem.document.documentType.id.Form\"]").click();
-    });
+    it("fill in document type as Form", () => cy.drSelectDocumentType({ documentType: "Form" }));
   });
 
   context("Tries to submit partially filled in form", () => {
 
-    it("click on 'Save' button", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]", { timeout: 5 * 1000 }).click();
-    })
+    it("click on 'Save' button", () => cy.drClickCreateDocument().click());
 
     it("shows error 'at least one required' below 'Output Document Type' field", () => {
       cy.get("[data-cy=\"field-outputDocumentTypes\"] .MuiFormHelperText-root.Mui-error").should("have.text", "At least one input required");
@@ -313,18 +303,22 @@ context("Validators tests", () => {
 
   })
 
-  context("Add 'Required Document Status' validation on 'Text Field'", () => {
+  context("Add 'Required Document Status' validation on 'Autocomplete'", () => {
 
     it("open add field dialogue", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
     })
 
-    it("create 'Text Field'", () => {
-      cy.get("[data-cy=\"form.builder.textfield\"]").click();
+    it("create 'Autocomplete'", () => {
+      cy.get("[data-cy=\"form.builder.autocomplete\"]").click();
     })
 
-    it(`give label to 'Text Field' as '${requiredDocStatusFieldLabel}'`, () => {
-      cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(requiredDocStatusFieldLabel);
+    it(`give label to 'Autocomplete' as '${requiredDocStatusFieldLabel}'`, () => {
+      cy.get("[data-cy=\"label\"]").type(requiredDocStatusFieldLabel);
+    })
+
+    it("Select 'Document revision' as options", () => {
+      cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
     })
 
     it("open validations", () => {
@@ -339,24 +333,28 @@ context("Validators tests", () => {
       cy.get("[data-cy=\"validators.required_document_status.name\"]").type(`Released{downarrow}{enter}`);
     })
 
-    it(`Add text field`, () => {
+    it(`Add autocomplete`, () => {
       cy.get("[data-cy=\"fb-editor-actions-add\"]").click();
     })
 
   })
 
-  context("Add 'Required Document Type' validation on 'Text Field'", () => {
+  context("Add 'Required Document Type' validation on 'Autocomplete'", () => {
 
     it("open add field dialogue", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
     })
 
-    it("create 'Text Field'", () => {
-      cy.get("[data-cy=\"form.builder.textfield\"]").click();
+    it("create 'Autocomplete'", () => {
+      cy.get("[data-cy=\"form.builder.autocomplete\"]").click();
     })
 
-    it(`give label to 'Text Field' as '${requiredDocTypeFieldLabel}'`, () => {
-      cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(requiredDocTypeFieldLabel);
+    it(`give label to 'Autocomplete' as '${requiredDocTypeFieldLabel}'`, () => {
+      cy.get("[data-cy=\"label\"]").type(requiredDocTypeFieldLabel);
+    })
+
+    it("Select 'Document revision' as options", () => {
+      cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
     })
 
     it("open validations", () => {
@@ -371,7 +369,7 @@ context("Validators tests", () => {
       cy.get("[data-cy=\"validators.required_document_type.name\"]").type(`Component Specification{downarrow}{enter}`);
     })
 
-    it(`Add text field`, () => {
+    it(`Add autocomplete`, () => {
       cy.get("[data-cy=\"fb-editor-actions-add\"]").click();
     })
 
@@ -441,7 +439,11 @@ context("Validators tests", () => {
     it("'Approve and Release' the document", () => {
       cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 1000 }).click();
       cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
-      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click().wait(3000);
+    })
+
+    it("Check returned errors are not empty", () => {
+      cy.checkToastMessage({ exists: true });
     })
 
     it("Cancel release of document", () => {
@@ -459,6 +461,7 @@ context("Validators tests", () => {
     })
 
     it("should show error for 'required' field", () => {
+      cy.wait(1000);
       cy.get(`[data-cy^='${requiredFieldSelector}']`).then($elem => {
         const errorBlock = $elem.offsetParent().siblings('p');
 
@@ -481,6 +484,7 @@ context("Validators tests", () => {
     })
 
     it("should show error for 'required if' field", () => {
+      cy.wait(1000);
       cy.get(`[data-cy^='${requiredIfFieldSelector}']`).then($elem => {
         const errorBlock = $elem.offsetParent().siblings('p');
 
@@ -503,6 +507,7 @@ context("Validators tests", () => {
     })
 
     it("should show error for 'required if in' field", () => {
+      cy.wait(1000);
       cy.get(`[data-cy^='${requiredIfInFieldSelector}']`).then($elem => {
         const errorBlock = $elem.offsetParent().siblings('p');
 
@@ -525,6 +530,7 @@ context("Validators tests", () => {
     })
 
     it("should show error for 'required with' field", () => {
+      cy.wait(1000);
       cy.get(`[data-cy^='${requiredWithFieldSelector}']`).then($elem => {
         const errorBlock = $elem.offsetParent().siblings('p');
 
@@ -543,6 +549,7 @@ context("Validators tests", () => {
     })
 
     it("should show error for 'required without' field", () => {
+      cy.wait(1000);
       cy.get(`[data-cy^='${requiredWithoutFieldSelector}']`).then($elem => {
         const errorBlock = $elem.offsetParent().siblings('p');
 

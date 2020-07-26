@@ -39,9 +39,9 @@ export interface ICreateCompanyBootstrap {
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      cmpCreateCompany(params: {payload: ICreateCompanyBootstrap; sessionId: string}): Chainable<Subject>;
-      cmpUpdateCompany(params: {employeeId: string; sessionId: string; payload: Partial<Company>}): Chainable<Subject>;
-      cmpSelectCompany( params: {name: string; multiple: boolean }): Chainable<Subject>;
+      cmpCreateCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
+      cmpUpdateCompany(params: { employeeId: string; sessionId: string; payload: Partial<Company> }): Chainable<Subject>;
+      cmpSelectCompany(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpNavigateToDocumentList(): Chainable<Subject>;
       cmpClickCreateNewDocument(): Chainable<Subject>;
       cmpNavigateToApprovalRequestList(): Chainable<Subject>;
@@ -51,7 +51,7 @@ declare global {
   }
 }
 
-Cypress.Commands.add("cmpCreateCompany", (params: {payload: ICreateCompanyBootstrap; sessionId: string}) => {
+Cypress.Commands.add("cmpCreateCompany", (params: { payload: ICreateCompanyBootstrap; sessionId: string }) => {
   cy.request({
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/company/bootstrap`,
@@ -78,14 +78,14 @@ Cypress.Commands.add("cmpUpdateCompany", (
   }).then((response) => response.body);
 });
 
-Cypress.Commands.add("cmpSelectCompany", (params: {name: string; multiple: boolean }) => {
-  if ( params.multiple )
-  {
+Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: boolean }) => {
+  if (params.multiple) {
     cy.get("#root").contains(params.name).click();
   }
 });
 
 Cypress.Commands.add("cmpNavigateToDocumentList", () => {
+  cy.get("[data-cy=\"navigation.documentControl\"]").click();
   cy.get("[data-cy=\"navigation.documentList\"]").click();
 });
 
