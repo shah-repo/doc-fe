@@ -85,7 +85,7 @@ Cypress.Commands.add("drApproveAndReleaseDocument", () => {
 });
 
 Cypress.Commands.add("drClickCreateDocument", () => {
-  cy.get("#DocumentRevisionForm-submit").click();
+  cy.get("#DocumentRevisionForm-submit", { timeout: 5 * 1000 }).click();
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
@@ -148,7 +148,7 @@ Cypress.Commands.add("drDocumentFieldError", (params: { field: string, message: 
 });
 
 Cypress.Commands.add('checkToastMessage', (params: { exists: boolean }) => {
-  cy.get('.Toastify__toast').should((params.exists ? "not" : "") + "be.empty");
+  cy.get('.Toastify__toast-container').should((params.exists ? "not." : "") + "be.empty");
 });
 
 Cypress.Commands.add('closeAllAlertMessages', () => {
