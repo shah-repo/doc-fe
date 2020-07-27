@@ -136,7 +136,7 @@ context("Document Revising Flow", () => {
 
   context("Start document revision flow", () => {
     it("Navigates to document list", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Filters document by name and status, and select it", () => {
