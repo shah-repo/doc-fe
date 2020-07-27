@@ -116,8 +116,6 @@ context("User and Group Creation Flow", () => {
     });
 
     it("Selects company", () => {
-      SystemRequirement("REQ-2490");
-      SystemRequirement("REQ-2490");
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
