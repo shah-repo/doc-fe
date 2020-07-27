@@ -237,7 +237,7 @@ context("Create Purchase Order document with Product option from Form document",
   });
 
   it("Check for PO ID uniqueness - ID should be PO-00001", () => {
-    SystemRequirement("REQ-1360")
+    SystemRequirement("REQ-1270")
     cy.poCheckStatus( "PO-00001" );
   });
 
@@ -351,7 +351,7 @@ context("Create Purchase Order document with Service option from Form document",
   });
 
   it("Check for PO ID uniqueness - ID should be PO-00002", () => {
-    SystemRequirement("REQ-1360")
+    SystemRequirement("REQ-1270")
     cy.poCheckStatus( "PO-00002" );
   });
 
