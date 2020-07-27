@@ -11,7 +11,10 @@ declare global {
       navigListExistsCheck(...list: NavigationItems[]): Chainable<Subject>;
       navigListNotExistsCheck(...list: NavigationItems[]): Chainable<Subject>;
       navigClickOnExpandButtons(params: { navigItem: string }): Chainable<Subject>;
-      clickDashboard(params: { navigItem: string }): Chainable<Subject>;
+      navigToDashboard(): Chainable<Subject>;
+      navigToDocumentList(): Chainable<Subject>;
+      navigToApprovalRequestList(): Chainable<Subject>;
+      navigToPurchaseOrder(): Chainable<Subject>;
     }
   }
 }
@@ -32,6 +35,22 @@ Cypress.Commands.add("navigClickOnExpandButtons", (params: { navigItem: string }
   cy.get("[data-cy=\"navigation." + params.navigItem + "\"] > svg").click();
 });
 
-Cypress.Commands.add("clickDashboard", (params: { navigItem: string }) => {
-  cy.get("[data-cy=\"navigation." + params.navigItem + "\"]").click();
+Cypress.Commands.add("navigToDashboard", (params: { navigItem: string }) => {
+  cy.get("[data-cy=\"navigation.dashboard\"]").click();
+});
+
+Cypress.Commands.add("navigToDocumentList", () => {
+  cy.navigToDashboard();
+  cy.wait(200).navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+  cy.get("[data-cy=\"navigation.documentList\"]").click();
+});
+
+Cypress.Commands.add("navigToApprovalRequestList", () => {
+  cy.navigToDashboard();
+  cy.wait(200).navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+  cy.get("[data-cy=\"navigation.approvalRequests\"]").click();
+});
+
+Cypress.Commands.add("navigToPurchaseOrder", () => {
+  cy.get("[data-cy=\"navigation.purchaseOrder\"]").click();
 });
