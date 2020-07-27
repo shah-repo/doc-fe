@@ -26,6 +26,7 @@ export const ClearFilters: React.FunctionComponent<Props> = ({
       className={classes.clearButton}
       onClick={clearFilter}
       id="clearFilter"
+      data-cy="clearFilter"
     >
       <Text translation="common.clear.filters" />
     </Button>

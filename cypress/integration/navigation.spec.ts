@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
@@ -6,7 +7,8 @@ Cypress.Screenshot.defaults({
 });
 
 import path from "path";
-import { GroupTag } from "../../src/state/ducks/auth/types";
+import { GroupTag, NavigationItems } from "../../src/state/ducks/auth/types";
+
 
 const runId = new Date().valueOf();
 let createdCompany;
@@ -35,12 +37,17 @@ context(`Test: ${path.basename(__filename)}`, () => {
       });
     });
 
+    it("Click to expand Document Control", () => {
+      cy.navigToDashboard(); // Should be fixed so that we can click menu item expand without clicking on dashboard
+      cy.wait(200).navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+    });
+
     it("Check navigation to see if default is shown", () => {
-      cy.navigListExistsCheck(["dashboard", "documentList", "approvalRequestList"]);
+      cy.navigListExistsCheck( NavigationItems.DASHBOARD, NavigationItems.DOCUMENT_LIST, NavigationItems.APPROVAL_REQUEST );
     });
 
     it("Check navigation to see if user management and group management are not shown in default navigation", () => {
-      cy.navigListNotExistsCheck(["userManagement", "groupManagement"]);
+      cy.navigListNotExistsCheck( NavigationItems.USER_MANAGEMENT, NavigationItems.GROUP_MANAGEMENT );
     });
   });
 
@@ -84,6 +91,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
                 documentTypeName: "Testing docType",
                 documentTypeAcronym: "TDT",
                 isQms: true,
+                group: "OTHER",
               },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -123,14 +131,25 @@ context(`Test: ${path.basename(__filename)}`, () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
+    it("Click to expand Document Control", () => {
+      cy.navigToDashboard(); // Should be fixed so that we can click menu item expand without clicking on dashboard
+      cy.wait(200).navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+      cy.wait(200).navigClickOnExpandButtons({ navigItem: NavigationItems.MANUFACTURING });
+    });
+
     it("Check navigation to see if admin navigation is shown", () => {
-      cy.navigListExistsCheck([
-        "dashboard",
-        "documentList",
-        "approvalRequestList",
-        "userManagement",
-        "groupManagement",
-      ]);
+      cy.navigListExistsCheck(
+        NavigationItems.DASHBOARD,
+        NavigationItems.DOCUMENT_LIST,
+        NavigationItems.APPROVAL_REQUEST,
+        NavigationItems.USER_MANAGEMENT,
+        NavigationItems.GROUP_MANAGEMENT,
+        NavigationItems.PURCHASE_ORDERS,
+        NavigationItems.SUPPLIERS,
+        NavigationItems.RECEIVING,
+        NavigationItems.WORK_ORDERS,
+        NavigationItems.LOTS,
+      );
     });
   });
 
@@ -159,7 +178,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
                 type: "LINK",
               },
               {
-                label: "Approval Request List",
+                label: "Approval Requests",
                 path: "/change_request",
                 type: "LINK",
               },
@@ -215,14 +234,14 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Check navigation to see if new item is shown", () => {
-      cy.navigListExistsCheck([
-        "dashboard",
-        "documentList",
-        "userManagement",
-        "groupManagement",
-        "approvalRequestList",
-        "testingNavigationItem",
-      ]);
+      cy.navigListExistsCheck(
+        NavigationItems.DASHBOARD,
+        NavigationItems.DOCUMENT_LIST,
+        NavigationItems.APPROVAL_REQUEST,
+        NavigationItems.USER_MANAGEMENT,
+        NavigationItems.GROUP_MANAGEMENT,
+        NavigationItems.TESTING_NAVIG_ITEM
+      );
     });
 
     it("Logs out with admin", () => {
@@ -241,11 +260,11 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Check navigation to see if all expected items are shown", () => {
-      cy.navigListExistsCheck(["dashboard", "documentList", "approvalRequestList", "testingNavigationItem"]);
+      cy.navigListExistsCheck( NavigationItems.DASHBOARD, NavigationItems.DOCUMENT_LIST, NavigationItems.APPROVAL_REQUEST, NavigationItems.TESTING_NAVIG_ITEM);
     });
 
     it("Check navigation to see if user management and group management are not shown", () => {
-      cy.navigListNotExistsCheck(["userManagement", "groupManagement"]);
+      cy.navigListNotExistsCheck( NavigationItems.USER_MANAGEMENT, NavigationItems.GROUP_MANAGEMENT);
     });
   });
 });
