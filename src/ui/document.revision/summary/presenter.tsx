@@ -82,7 +82,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   );
 
   const contentRenderer = () => (
-    <Box>
+    <Box className={classes.boxContainer}>
       <SummaryHeader
         documentRevision={dataProp}
         canChangeOwnerShip={canChangeOwnerShip}
