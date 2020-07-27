@@ -6,7 +6,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 
-context("User and Group Creation Flow", () => {
+context("User Creation Flow", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
