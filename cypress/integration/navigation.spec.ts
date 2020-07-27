@@ -38,7 +38,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Click to expand Document Control", () => {
-      cy.clickDashboard({ navigItem: NavigationItems.DASHBOARD }); // Should be fixed so that we can click menu item expand without clicking on dashboard
+      cy.navigToDashboard(); // Should be fixed so that we can click menu item expand without clicking on dashboard
       cy.wait(200).navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
     });
 
@@ -132,7 +132,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Click to expand Document Control", () => {
-      cy.clickDashboard({ navigItem: NavigationItems.DASHBOARD }); // Should be fixed so that we can click menu item expand without clicking on dashboard
+      cy.navigToDashboard(); // Should be fixed so that we can click menu item expand without clicking on dashboard
       cy.wait(200).navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
       cy.wait(200).navigClickOnExpandButtons({ navigItem: NavigationItems.MANUFACTURING });
     });

@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable max-len */
+import { ChangeRequestEditRequestBody } from "../../../../src/state/ducks/changeRequest/types";
+import { CONFIG } from "../../config";
 export { };
 
 declare global {
@@ -21,9 +23,43 @@ declare global {
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus( params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
+      arCreateApprovalRequest(params: {payload: ChangeRequestEditRequestBody; employeeId: string; sessionId: string}): Chainable<Subject>;
+      arGetArDocumentByName(params: {employeeId: string; sessionId: string; name: string}): Chainable<Subject>;
     }
   }
 }
+
+Cypress.Commands.add("arCreateApprovalRequest", (params: {
+  payload: ChangeRequestEditRequestBody;
+  employeeId: string;
+  sessionId: string;
+}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/change_requests`,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("arGetArDocumentByName", (params: {
+  employeeId: string;
+  sessionId: string;
+  name: string;
+}) => {
+  cy.request({
+    method: "GET",
+    url: `${CONFIG.BE_URL}/api/v1/document_revisions`,
+    qs: {
+      name: params.name,
+    },
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
 
 Cypress.Commands.add("arEnterApprovalRequestTitle", (params: {title: string }) => {
   cy.get("[data-cy=\"field-title\"]").type(params.title);

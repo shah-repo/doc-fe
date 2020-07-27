@@ -90,7 +90,7 @@ Cypress.Commands.add("cmpNavigateToDocumentList", () => {
 });
 
 Cypress.Commands.add("cmpNavigateToApprovalRequestList", () => {
-  cy.get("[data-cy=\"navigation.approvalRequestList\"]").click();
+  cy.get("[data-cy=\"navigation.approvalRequests\"]").click();
 });
 
 Cypress.Commands.add("cmpClickCreateNewDocument", () => {
@@ -102,7 +102,7 @@ Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
 });
 
 Cypress.Commands.add("cmpNavigateToPurchaseOrder", () => {
-  cy.get("[data-cy=\"navigation.purchaseOrder\"]").click();
+  cy.get("[data-cy=\"navigation.purchaseOrder\"]").click().wait(500);
 });
 
 export function cmpFilterDocumentTypeIdByName(companyResponse: Company, documentTypeName: string) {
