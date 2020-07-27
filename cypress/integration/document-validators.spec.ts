@@ -437,7 +437,7 @@ context("Validators tests", () => {
     })
 
     it("Cancel release of document", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").click();
+      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]", { timeout: 20 * 1000 }).click();
     })
   })
 
@@ -583,12 +583,12 @@ context("Validators tests", () => {
     })
   })
 
-  /* context("No validation error, submission is successful", () => {
+  context("No validation error, submission is successful", () => {
 
     it("Check returned errors are empty", () => {
       cy.checkToastMessage({ exists: false });
     })
-  }) */
+  })
 });
 
 // for TS error "All files must be modules when the '--isolatedModules' flag is provided" uncomment line below
