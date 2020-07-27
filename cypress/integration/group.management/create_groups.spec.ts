@@ -94,7 +94,7 @@ context("Group Creation Flow", () => {
 
     it("Assigns user to the group", () => {
       SystemRequirement("REQ-2510");
-      cy.grpAssignUser({ name: "Tenth Tester" });
+      cy.grpAssignUser({ name: "Second Tester" });
     });
   });
 
@@ -135,7 +135,7 @@ context("Group Creation Flow", () => {
 
     it("Assigns user to the group", () => {
       SystemRequirement("REQ-2560");
-      cy.grpAssignUser({ name: "Tenth Tester" });
+      cy.grpAssignUser({ name: "Second Tester" });
     });
   });
 
