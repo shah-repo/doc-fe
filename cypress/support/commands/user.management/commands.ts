@@ -11,7 +11,7 @@ declare global {
       usrEnterName(params: {name: string}): Chainable;
       usrClickSaveButton(): Chainable;
       usrClickCloseDialogButton(): Chainable;
-      usrFilterUsersByEmail(params: {email: string}): Chainable;
+      usrCheckIfUserIsCreated(params: {email: string}): Chainable;
     }
   }
 }
@@ -40,7 +40,8 @@ Cypress.Commands.add("usrClickCloseDialogButton", () => {
   cy.get("#AddEmployeeDialogPresenter-closeDialog").click();
 });
 
-Cypress.Commands.add("usrFilterUsersByEmail", (params: {email: string}) => {
+Cypress.Commands.add("usrCheckIfUserIsCreated", (params: {email: string}) => {
   cy.get("#clearFilter").click();
   cy.get("#email").type(params.email).wait(300);
+  cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(2)>div>div>div").should("contain.text", params.email);
 });
