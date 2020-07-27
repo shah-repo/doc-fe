@@ -138,7 +138,7 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
         <CloneContainer documentRevision={documentRevision} type="newVersion" isNewVersion={isNewVersion} />
       )}
       {isNewOutput && (
-        <CloneContainer documentRevision={documentRevision} type="newOutput" isNewVersion={isNewVersion as unknown as boolean} />
+        <CloneContainer documentRevision={documentRevision} type="newOutput" isNewVersion={isNewVersion as boolean} />
       )}
     </AsyncGate>
   );

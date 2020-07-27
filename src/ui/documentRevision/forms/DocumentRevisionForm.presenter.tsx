@@ -96,7 +96,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   type,
   FBContainer,
   bannerPortal,
-  isNewVersion,
+  isNewVersion = false,
 }) => {
 
   useScrollIntoView();
@@ -248,7 +248,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isDisabled={isDisabledInput}
           documentTypeId={documentTypeId}
         />
-        <AttachmentsField isDisabled={isDisabledInput} isNewVersion={isNewVersion || false} />
+        <AttachmentsField isDisabled={isDisabledInput} isNewVersion={isNewVersion} />
         {showRevisionTypeChange && <RevisionTypeChange {...{ documentTypeId }} isDisabled={isDisabledInput} />}
         {
           (!values.status || type === "newOutput") &&
