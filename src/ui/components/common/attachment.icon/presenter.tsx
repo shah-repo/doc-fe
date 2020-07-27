@@ -83,7 +83,7 @@ AttachmentIconProps
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const isTransffered = isNewVersion ||
+  const isTransferred = isNewVersion ||
   lastReleasedDocRevId !== formDocuments?.documentRevisions[formDocuments?.documentRevisions.length - 1].id  ?
   docRevById[lastReleasedDocRevId]?.attachments?.some((e) => e.id === attachment?.id) : false;
 
@@ -135,8 +135,8 @@ AttachmentIconProps
                 isUploading={isUploading}
                 isRedLine={isRedLine}
                 isPrimary={isPrimary}
-                isTransffered={(documentRevisionStatusFromDocList === DocumentRevisionStatus.Draft ||
-                  documentRevisionStatusFromDocList === DocumentRevisionStatus.PendingChange)  ? isTransffered : false}
+                isTransferred={(documentRevisionStatusFromDocList === DocumentRevisionStatus.Draft ||
+                  documentRevisionStatusFromDocList === DocumentRevisionStatus.PendingChange)  ? isTransferred : false}
               />
             }
           </ButtonBase>

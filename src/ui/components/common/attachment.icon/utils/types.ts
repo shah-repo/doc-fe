@@ -33,7 +33,7 @@ export interface AttachmentIconProps extends AttachmentIconFactoryProps {
   isLoading?: boolean;
   isRedLine?: boolean;
   isPrimary?: boolean;
-  isTransffered?: boolean;
+  isTransferred?: boolean;
   handleIconClick?: (attachment: Attachment) => any;
 }
 

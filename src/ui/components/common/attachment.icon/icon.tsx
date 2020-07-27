@@ -12,7 +12,7 @@ export const AttachmentIcon: React.FunctionComponent<AttachmentIconProps> = ({
   isUploading,
   isRedLine,
   isPrimary,
-  isTransffered,
+  isTransferred,
 }) => {
   const classes = styles({ size: size || "md", disabled: false });
   const name = extension?.toUpperCase();
@@ -26,10 +26,10 @@ export const AttachmentIcon: React.FunctionComponent<AttachmentIconProps> = ({
       )}
     >
       {isRedLine && renderRedLineAttachment(color, name)}
-      {isTransffered && isPrimary && !isRedLine  && renderCOAPrimaryAttachment(color, name)}
-      {isPrimary && !isTransffered && !isRedLine && renderPrimaryAttachment(color, name)}
-      {isTransffered && !isPrimary && !isRedLine && renderCOADefaultAttachment(color, name)}
-      {!isPrimary && !isRedLine && !isTransffered &&  renderDefaultAttachment(color, name)}
+      {isTransferred && isPrimary && !isRedLine  && renderCOAPrimaryAttachment(color, name)}
+      {isPrimary && !isTransferred && !isRedLine && renderPrimaryAttachment(color, name)}
+      {isTransferred && !isPrimary && !isRedLine && renderCOADefaultAttachment(color, name)}
+      {!isPrimary && !isRedLine && !isTransferred &&  renderDefaultAttachment(color, name)}
     </Box>
   );
 };
