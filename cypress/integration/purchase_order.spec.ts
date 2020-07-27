@@ -233,7 +233,12 @@ context("Create Purchase Order document with Product option from Form document",
   });
 
   it("Click on 'Create PO' button", () => {
-    cy.poCreateNew().wait(500);
+    cy.poCreateNew().wait(1000);
+  });
+
+  it("Check for PO ID uniqueness - ID should be PO-00001", () => {
+    SystemRequirement("REQ-1360")
+    cy.poCheckStatus( "PO-00001" );
   });
 
   it("Click on 'Purchase Order' on sidebar", () => {
@@ -345,6 +350,11 @@ context("Create Purchase Order document with Service option from Form document",
     cy.poCreateNew();
   });
 
+  it("Check for PO ID uniqueness - ID should be PO-00002", () => {
+    SystemRequirement("REQ-1360")
+    cy.poCheckStatus( "PO-00002" );
+  });
+
   it("Check status of PO - should be WIP - Draft", () => {
     SystemRequirement("REQ-1280")
     cy.poCheckStatus( "Work In Progress" , "Draft" );
@@ -438,6 +448,69 @@ context("Create Purchase Order document with Service option from Form document",
 
   it("Approve and release document", () => {
     cy.drApproveAndReleaseDocument();
+  });
+});
+
+context("Creates second PO form document and checks if both documents are available when creating new PO", () => {
+  it("Navigate to document list", () => {
+    cy.cmpNavigateToDocumentList();
+  });
+
+  it("Click on 'Create a document'", () => {
+    cy.cmpClickCreateNewDocument();
+  });
+
+  it("Enter title 'New Purchase Order Form 2'", () => {
+    cy.drEnterDocumentTitle({ name: "New Purchase Order Form 2" });
+  });
+
+  it("Enter description 'New Purchase Order Form description 2'", () => {
+    cy.drEnterDocumentDescription({ description: "New Purchase Order Form description 2" });
+  });
+
+  it("Click on 'Form' document type", () => {
+    cy.drSelectDocumentType({ documentType: "Form" });
+  });
+
+  it("Click on 'Purchase Order' outputdocument type", () => {
+    cy.drSelectOutputDocTypeSecondTime({ documentType: "Purchase Order" });
+  });
+
+  it("Click 'Add New Field'", () => {
+    cy.fbAddNewFieldOption();
+  });
+
+  it("Select 'Purchase Order' from list", () => {
+    cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
+  });
+
+  it("Fill label field with 'New Purchase Order with Product item'", () => {
+    cy.fbEnterPOLabelName({ name: "New Purchase Order with Product item" });
+  });
+
+  it("Click 'Add' to finish adding new field", () => {
+    cy.fbAddNewFieldButton();
+  });
+
+  it("Click create document after filling document", () => {
+    cy.drClickCreateDocument();
+  });
+
+  it("Approve and release document", () => {
+    cy.drApproveAndReleaseDocument();
+  });
+
+  it("Click on 'Purchase Order' on sidebar", () => {
+    cy.wait(2000).cmpNavigateToPurchaseOrder();
+  });
+
+  it("Click on 'Create PO' button", () => {
+    cy.poCreateNew();
+  });
+
+  it("Check if two options are available when two forms with PO exist", () => {
+    SystemRequirement("REQ-1260");
+    cy.poCheckIfFormPopUpIsActive("New Purchase Order Form", "New Purchase Order Form 2");
   });
 });
 

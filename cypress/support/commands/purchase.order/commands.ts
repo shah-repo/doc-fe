@@ -29,6 +29,7 @@ declare global {
       poCheckStatus(...list: string[]): Chainable<Subject>;
       poClickOnSpecificPOFromList(params: {item: string}): Chainable<Subject>;
       poConvertedToDollarsMessage(): Chainable<Subject>;
+      poCheckIfFormPopUpIsActive(...list: string[]): Chainable<Subject>;
     }
   }
 }
@@ -137,5 +138,11 @@ Cypress.Commands.add("poConvertedToDollarsMessage", () => {
 Cypress.Commands.add("poCheckStatus", (...list: string[]) => {
   list.forEach((item) => {
     cy.get("[class=\"MuiList-root MuiList-padding\"] > div > a > div").contains(item).should("exist");
+  });
+});
+
+Cypress.Commands.add("poCheckIfFormPopUpIsActive", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get("[id=\"FormListDialog-selectForm\"]").contains(item).should("exist");
   });
 });
