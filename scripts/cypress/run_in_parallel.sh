@@ -15,8 +15,8 @@ secs_to_human() {
 start=$(date +%s)
 
 DATE_ISO_DEFAULT=$(date --iso-8601=seconds)
-export CI_BUILD_ID="Test_report3" #${CI_BUILD_ID:-$DATE_ISO_DEFAULT}
-export NUMBER_OF_WORKERS=1 #${NUMBER_OF_WORKERS:-4}
+export CI_BUILD_ID=${CI_BUILD_ID:-$DATE_ISO_DEFAULT}
+export NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-4}
 export REPORT_TITLE=${REPORT_TITLE:-generated_specs}
 export CYPRESS_INTEGRATION_FOLDER="cypress/integration/test"
 

@@ -17,7 +17,7 @@
 import "cypress-file-upload";
 import "cypress-promise/register";
 import "cypress-xpath";
-import addContext from "mochawesome/addContext";
+import { addScreenshotToContext } from "../utils/context/screenshotsToContext";
 import "./commands";
 import "./commands/approver.request.list/commands";
 import "./commands/attachments/commands";
@@ -30,7 +30,6 @@ import "./commands/form.builder/commands";
 import "./commands/group.management/commands";
 import "./commands/navigation/commands";
 import "./commands/purchase.order/commands";
-import { CONFIG } from "./config";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
@@ -56,7 +55,7 @@ Cypress.Screenshot.defaults({
   capture: 'viewport',
   scale: false,
   disableTimersAndAnimations: true,
-  screenshotOnRunFailure: CONFIG.SCREENSHOT_OF_RUN_FAILURE,
+  screenshotOnRunFailure: true,
   // screenshotOnRunFailure: false,
   onBeforeScreenshot () {
     console.log("onBeforeScreenshot")
@@ -69,44 +68,11 @@ Cypress.Screenshot.defaults({
 
 Cypress.on('test:after:run', (test, runnable: any ) => {
   if (test.state === 'failed') {
+    cy.screenshot();
+    cy.log("SCREENSHOT2")
+    console.log("SCREENSHOT2")
     addScreenshotToContext(test, runnable);
-    // let item: any = runnable
-    // const nameParts = [runnable.title]
-    // while (item.parent) {
-    //   nameParts.unshift(item.parent.title)
-    //   item = item.parent
-    // }
-    // if(runnable.hookName) {
-    //   nameParts.push(`${runnable.hookName} hook`)
-    //   }
-    // const fullTestName = nameParts.filter(Boolean).join(' -- ').replace(allowedCharacters, "")
-    // const screenshotPath = `screenshots/${Cypress.spec.name}/${fullTestName} (failed).png`.replace("  "," ")
-  
-    // // addContext({ test }, screenshotPath)
-    // // addTestContext({ test }, { title: "Screenshot", value: "foo" });
-
-    // // addContext({ test }, { title: "log", value: JSON.stringify({name: Cypress.spec.name, abs: Cypress.spec.absolute, rel: Cypress.spec.relative}) });
-    // addContext({ test }, { title: "Screenshot", value: encodeURI(screenshotPath) });
   }
-  })
+})
 
 
-  export function addScreenshotToContext(test, runnable: any) {
-    const allowedCharacters = /[^a-zA-Z0-9.;\[\]{}()!@#$%^&_\-=+,. ']/g;
-
-    let item: any = runnable
-    const nameParts = [runnable.title]
-    while (item.parent) {
-      nameParts.unshift(item.parent.title)
-      item = item.parent
-    }
-    if(runnable.hookName) {
-      nameParts.push(`${runnable.hookName} hook`)
-      }
-    const fullTestName = nameParts.filter(Boolean).join(' -- ').replace(allowedCharacters, "")
-    const screenshotPath = 
-      `screenshots/${fullTestName}${((test.state === 'failed') ? " (failed).png" : ".png")}`
-      .replace("  "," ");
- 
-    addContext({ test }, { title: "Screenshot", value: encodeURI(screenshotPath) });
-  }

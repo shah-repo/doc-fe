@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import path from "path";
+import { Screenshot } from "../../../utils/context/screenshot";
 
 // const runId = new Date().valueOf();
 // let createdCompany;
@@ -54,9 +55,10 @@ context(`Test: ${path.basename(__filename)}`, () => {
       email: "zoran.kovacevic+admin@codecons.com",
       password: "Tester1!",
     });
-    cy.screenshot()
+    Screenshot()
   });
   it("the one which fails", () => {
+    Screenshot()
     expect(true).to.eql(false)
   });
   // it("Selects company", () => {
