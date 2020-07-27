@@ -7,7 +7,8 @@ export type FBEditorPropertiesType =
 | "includeContext"
 | "includeQRScan"
 | "reviseDisabled"
-| "approveIsBlocking";
+| "approveIsBlocking"
+| "approvalNonVersioned";
 
 export type FBEditorPropertiesProps = Pick<FBInputProps, "type" | "options" | "onChange">;
 

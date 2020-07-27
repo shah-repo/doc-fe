@@ -705,6 +705,7 @@
   "form.builder.justification.of.change": "Justification of change",
   "form.builder.enter.text": "Enter text",
   "form.builder.closing.note.title": "Implementation Task Closing Note",
+  "form.builder.approval.non.versioned": "Non-versioned",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",
