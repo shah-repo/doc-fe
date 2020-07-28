@@ -7,6 +7,7 @@ import SummaryInfo from "../common/summary/SummaryInfo";
 import Date from "../components/Date";
 import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import { FBDocTypeGroup } from "../form.builder";
 import { useDocumentVersion } from "../hooks/docCustomization/useCustomization";
 import { styles } from "./DocumentRevisionList.container.styles";
 import { generateVersionNumber } from "./helpers";
@@ -42,9 +43,22 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isSelected = selectedDocumentRevision === documentRevision.id;
   const { status } = documentRevision;
   const [isStatusVisible, statusLabel] = useDocumentVersion(documentTypeId, status);
-  let verPrefix = "common.work.in.progress";
+  const isInlineApproval = documentRevision.formDocument?.formTemplate?.schema.some((e) =>
+    (e.type === "approval" || e.type === "inlineapproval" as string));
+  let verPrefix = "common.version";
+  let statLabel = statusLabel;
+
+
+  if (documentRevision.revision === 1 &&
+    documentRevision.document?.documentType.groupOptions?.includes(FBDocTypeGroup.RECORD) && isInlineApproval) {
+    verPrefix = "common.work.in.progress";
+  }
   if (status === DocumentRevisionStatus.Released) {
     verPrefix = "common.revision";
+  }
+  if ((status === DocumentRevisionStatus.Released || status === DocumentRevisionStatus.Deprecated) &&
+  isInlineApproval) {
+    statLabel = "common.archived";
   }
   return (
     <div
@@ -65,7 +79,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           {
             isStatusVisible &&
             <>
-              &nbsp; - <Text message={statusLabel} />
+              &nbsp; - <Text message={statLabel} />
             </>
           }
         </div>

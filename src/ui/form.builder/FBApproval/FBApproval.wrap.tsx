@@ -8,6 +8,7 @@ import { FB } from "..";
 import { TIME_ZONE } from "../../../common/utils/date";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
+import { store } from "../../../state/store";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBApproval = <T extends FBApprovalProps>(
@@ -33,11 +34,11 @@ export const withFBApproval = <T extends FBApprovalProps>(
   }: T) => {
 
     const { workspaceState, formState } = FB.useStores();
+    const currentUser = store.getState().auth.user;
     const {
       id: documentId,
       isOutput,
       isReleased,
-      currentUser,
       document: { released = new Date() } = { },
     } = workspaceState || {};
 

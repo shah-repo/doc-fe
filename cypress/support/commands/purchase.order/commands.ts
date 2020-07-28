@@ -28,8 +28,10 @@ declare global {
       poCheckMessageForConversionSite(): Chainable<Subject>;
       poCheckStatus(...list: string[]): Chainable<Subject>;
       poClickOnSpecificPOFromList(params: {item: string}): Chainable<Subject>;
+      poCheckForSpecificPOItemValue(params: {itemValue: string}): Chainable<Subject>;
       poConvertedToDollarsMessage(): Chainable<Subject>;
       poCheckIfFormPopUpIsActive(...list: string[]): Chainable<Subject>;
+      poCloseFormPopUpOnLandingPage(): Chainable<Subject>;
     }
   }
 }
@@ -122,7 +124,11 @@ Cypress.Commands.add("poEnterDescription", (params: {description: string}) => {
 });
 
 Cypress.Commands.add("poClickOnSpecificPOFromList", (params: {item: string}) => {
-  cy.get("[class*=\"ReactVirtualized__Table__row\"]").contains(params.item).click();
+  cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).click();
+});
+
+Cypress.Commands.add("poCheckForSpecificPOItemValue", (params: {itemValue: string}) => {
+  cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.itemValue).should("exist");
 });
 
 Cypress.Commands.add("poCheckMessageForConversionSite", () => {
@@ -145,4 +151,8 @@ Cypress.Commands.add("poCheckIfFormPopUpIsActive", (...list: string[]) => {
   list.forEach((item) => {
     cy.get("[id=\"FormListDialog-selectForm\"]").contains(item).should("exist");
   });
+});
+
+Cypress.Commands.add("poCloseFormPopUpOnLandingPage", () => {
+  cy.get("[id=\"FormListDialog-cancelButton\"]").click();
 });
