@@ -366,6 +366,7 @@ context("Create Purchase Order document with Service option from Form document",
   });
 
   it("Click on 'Service' select option", () => {
+    SystemRequirement("REQ-1390");
     SystemRequirement("REQ-1420");
    cy.poSelectOption({ optionName: "service" });
   });
@@ -441,7 +442,25 @@ context("Create Purchase Order document with Service option from Form document",
     SystemRequirement("REQ-1460");
     cy.poConvertedToDollarsMessage();
   });
-  
+});
+
+context("Creates second line item and checks ID and if all line item details are optional", () => {
+  it("Click on 'Add item' button to add another Product line item", () => {
+    SystemRequirement("REQ-1390");
+    cy.poAddNewFieldItem();
+  });
+
+  it("Click on 'Add' inside PO dialog box to check if all line item details are optional", () => {
+    SystemRequirement("REQ-1400");
+    cy.poAddPOButtonClick();
+  });
+
+  it("Check line item IDs if they are unique, should be '1' and '2'", () => {
+    SystemRequirement("REQ-1360");
+    SystemRequirement("REQ-1380");
+    cy.poCheckForLineItemsAndTheirID({ firstId: "1", secondId: "2" });
+  });   
+
   it("Enter description 'New Purchase Order with Service item'", () => {
     SystemRequirement("REQ-1290");
     cy.poEnterDocumentDescription({ description: "New Purchase Order with Service item" });

@@ -32,6 +32,7 @@ declare global {
       poConvertedToDollarsMessage(): Chainable<Subject>;
       poCheckIfFormPopUpIsActive(...list: string[]): Chainable<Subject>;
       poCloseFormPopUpOnLandingPage(): Chainable<Subject>;
+      poCheckForLineItemsAndTheirID(params: {firstId: string; secondId: string}): Chainable<Subject>;
     }
   }
 }
@@ -155,4 +156,9 @@ Cypress.Commands.add("poCheckIfFormPopUpIsActive", (...list: string[]) => {
 
 Cypress.Commands.add("poCloseFormPopUpOnLandingPage", () => {
   cy.get("[id=\"FormListDialog-cancelButton\"]").click();
+});
+
+Cypress.Commands.add("poCheckForLineItemsAndTheirID", (params: {firstId: string; secondId: string}) => {
+  cy.get("[class=\"MuiTableRow-root\"]").eq(1).contains(params.firstId).should("exist");
+  cy.get("[class=\"MuiTableRow-root\"]").eq(2).contains(params.secondId).should("exist");
 });
