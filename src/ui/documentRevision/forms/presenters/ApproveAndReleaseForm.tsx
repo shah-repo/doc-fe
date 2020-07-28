@@ -75,8 +75,8 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
       if (valid) { return; }
       setSelectedInvalid(true);
     });
-  }
-  
+  };
+
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
