@@ -233,7 +233,12 @@ context("Create Purchase Order document with Product option from Form document",
   });
 
   it("Click on 'Create PO' button", () => {
-    cy.poCreateNew().wait(500);
+    cy.poCreateNew().wait(1000);
+  });
+
+  it("Check for PO ID uniqueness - ID should be PO-00001", () => {
+    SystemRequirement("REQ-1270")
+    cy.poCheckStatus( "PO-00001" );
   });
 
   it("Click on 'Purchase Order' on sidebar", () => {
@@ -242,6 +247,7 @@ context("Create Purchase Order document with Product option from Form document",
 
   it("Click on existing PO that was created before", () => {
     SystemRequirement("REQ-1370")
+    SystemRequirement("REQ-1210") 
     cy.poClickOnSpecificPOFromList({ item:"PO-00001" });
   });
 
@@ -345,6 +351,11 @@ context("Create Purchase Order document with Service option from Form document",
     cy.poCreateNew();
   });
 
+  it("Check for PO ID uniqueness - ID should be PO-00002", () => {
+    SystemRequirement("REQ-1270")
+    cy.poCheckStatus( "PO-00002" );
+  });
+
   it("Check status of PO - should be WIP - Draft", () => {
     SystemRequirement("REQ-1280")
     cy.poCheckStatus( "Work In Progress" , "Draft" );
@@ -441,5 +452,128 @@ context("Create Purchase Order document with Service option from Form document",
   });
 });
 
+context("Creates second PO form document and checks if both documents are available when creating new PO", () => {
+  it("Navigate to document list", () => {
+    cy.cmpNavigateToDocumentList();
+  });
+
+  it("Click on 'Create a document'", () => {
+    cy.cmpClickCreateNewDocument();
+  });
+
+  it("Enter title 'New Purchase Order Form 2'", () => {
+    cy.drEnterDocumentTitle({ name: "New Purchase Order Form 2" });
+  });
+
+  it("Enter description 'New Purchase Order Form description 2'", () => {
+    cy.drEnterDocumentDescription({ description: "New Purchase Order Form description 2" });
+  });
+
+  it("Click on 'Form' document type", () => {
+    cy.drSelectDocumentType({ documentType: "Form" });
+  });
+
+  it("Click on 'Purchase Order' outputdocument type", () => {
+    cy.drSelectOutputDocTypeSecondTime({ documentType: "Purchase Order" });
+  });
+
+  it("Click 'Add New Field'", () => {
+    cy.fbAddNewFieldOption();
+  });
+
+  it("Select 'Purchase Order' from list", () => {
+    cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
+  });
+
+  it("Fill label field with 'New Purchase Order with Product item'", () => {
+    cy.fbEnterPOLabelName({ name: "New Purchase Order with Product item" });
+  });
+
+  it("Click 'Add' to finish adding new field", () => {
+    cy.fbAddNewFieldButton();
+  });
+
+  it("Click create document after filling document", () => {
+    cy.drClickCreateDocument();
+  });
+
+  it("Approve and release document", () => {
+    cy.drApproveAndReleaseDocument();
+  });
+
+  it("Click on 'Purchase Order' on sidebar", () => {
+    cy.wait(2000).cmpNavigateToPurchaseOrder();
+  });
+
+  it("Click on 'Create PO' button", () => {
+    cy.poCreateNew();
+  });
+
+  it("Check if two options are available when two forms with PO exist", () => {
+    SystemRequirement("REQ-1260");
+    cy.poCheckIfFormPopUpIsActive("New Purchase Order Form", "New Purchase Order Form 2");
+  });
+
+  it("Close dialog box", () => {
+    cy.poCloseFormPopUpOnLandingPage();
+  });
+});
+
+context("Check for Landing page columns and values", () => {
+  it("Check if most recent added item is fist on list", () => {
+    SystemRequirement("REQ-1180");
+    cy.filterGetFirstValueFromList({ value: "PO-00002" });
+  });
+
+  it("Check for Landing page default columns", () => {
+    SystemRequirement("REQ-1120");
+    cy.filterCheckHeaderValues("PO #", "Version", "PO Status", "Supplier", "Part Number", "Amount", "Requestor", "Issue Date");
+  });
+});
+
+context("Test the filter inside PO", () => {
+  it("Enter version number '1' inside filter", () => {
+    cy.filterPOVersion({ version: "1" });
+  });
+  
+  it("Check if item with right version is displayed", () => {
+    cy.poCheckForSpecificPOItemValue({ itemValue: "1" });
+  });
+
+  it("Check if number of displayed filtered items is '2", () => {
+    SystemRequirement("REQ-1200")
+    cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "2" });
+  });
+
+  it("Clear filter", () => {
+    SystemRequirement("REQ-1190");
+    cy.filterClear();
+  });
+
+  it("Enter all fields to check if all filter fields are working", () => {
+    SystemRequirement("REQ-1150");
+    cy.filterPO({ docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
+    partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020" }).wait(2000);
+  });
+
+  it("Navigate to Document List", () => {
+    cy.wait(1000).cmpNavigateToDocumentList();
+  });
+
+  it("Navigate to Purchase Order", () => {
+    cy.cmpNavigateToPurchaseOrder();
+  });
+
+  it("Check if all filter values persist after changing landing page", () => {
+    SystemRequirement("REQ-1170");
+    cy.filterCheckIfPOFilterPersists({ docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
+    partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020" });
+  });
+
+  it("Clear filter", () => {
+    SystemRequirement("REQ-1190");
+    cy.filterClear();
+  });
+});
 
 export { };
