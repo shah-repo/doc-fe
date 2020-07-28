@@ -4,9 +4,9 @@ Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
 });
 
-import { RevisionChangeType } from "../../src/state/ducks/documentRevisions/types";
-import { cmpFilterDocumentTypeIdByName } from "../support/commands/company/commands";
-import { SystemRequirement } from "../utils/context/systemRequirement";
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const runId = new Date().valueOf();
 let createdCompany;
@@ -140,7 +140,7 @@ context("Approval request form", () => {
 
   context("Create new AR form", () => {
     it("Navigate to document list", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Click on 'create a document'", () => {
@@ -175,7 +175,7 @@ context("Approval request form", () => {
   context("Create approval request with newly created form", () => {
     it("Navigate to approval request list", () => {
       SystemRequirement("REQ-0680");
-      cy.cmpNavigateToApprovalRequestList();
+      cy.navigToApprovalRequestList();
     });
 
     it("Click Create a Approval Request button", () => {
@@ -229,7 +229,7 @@ context("Approval request form", () => {
 
   context("Check document revision is in review", () => {
     it("Navigate to added document in AR", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Filter document by name and status, and select it", () => {
@@ -243,7 +243,7 @@ context("Approval request form", () => {
 
   context("Approve created AR", () => {
     it("Navigate to added document in AR", () => {
-      cy.cmpNavigateToApprovalRequestList();
+      cy.navigToApprovalRequestList();
     });
 
     it("Filter approval by name and status, and select it", () => {
@@ -263,7 +263,7 @@ context("Approval request form", () => {
 
   context("Check document revision is Released", () => {
     it("Navigate to added document in AR", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Filter document by name and status, and select it", () => {

@@ -34,7 +34,7 @@ declare global {
 }
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
-  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-fullWidth\"]").contains("Add item").click();
+  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-fullWidth\"]").contains("Add item").click().wait(300);
 });
 
 Cypress.Commands.add("poAddPOButtonClick", () => {
@@ -46,12 +46,12 @@ Cypress.Commands.add("poCreateNew", () => {
 });
 
 Cypress.Commands.add("poEnterDocumentDescription", (params: {description: string }) => {
-  cy.get("[data-cy=\"field-description\"]").click().type(params.description, { delay: 100 });
-  cy.get("[id=\"DocumentRevisionForm-submit\"]").wait(2000).click();
+  cy.get("[data-cy=\"field-description\"]").click().type(params.description);
+  cy.get("[id=\"DocumentRevisionForm-submit\"]").wait(3000).click();
 });
 
 Cypress.Commands.add("poSelectPartNumber", () => {
-  cy.get("[name=\"partNumber\"]").click();
+  cy.get("[name=\"partNumber\"]").click().wait(300);
   cy.get("ul[role=listbox] > li").contains("PRT-00004 - 1").click();
 });
 

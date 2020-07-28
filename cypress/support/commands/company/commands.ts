@@ -103,7 +103,7 @@ Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
 });
 
 Cypress.Commands.add("cmpNavigateToPurchaseOrder", () => {
-  cy.get("[data-cy=\"navigation.purchaseOrder\"]").click();
+  cy.get("[data-cy=\"navigation.purchaseOrder\"]").click().wait(500);
 });
 
 export function cmpFilterDocumentTypeIdByName(companyResponse: Company, documentTypeName: string) {
