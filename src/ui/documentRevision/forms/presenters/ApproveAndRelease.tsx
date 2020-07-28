@@ -134,7 +134,10 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       id: values.formDocument.value,
     },
     formInput: {
-      approvers: values.approvals.map((approval) => ({ id: approval.value })),
+      approvers: values.approvals
+        .map((approval) => approval.value)
+        .concat(owner?.id).filter(id => id)
+        .map((id) => ({ id })),
       documentRevisions: [{
         descriptionOfChange: values.formDocument.label,
         id: FB.uniqid,
