@@ -125,25 +125,28 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   });
 
   const initialValuesAR = (values: any): any => ({
-    title: documentRevision.name,
-    description: documentRevision.name,
-    documentType: {
-      id: values.formDocument.documentType,
-    },
-    formDocument: {
-      id: values.formDocument.value,
-    },
-    formInput: {
-      approvers: values.approvals.map((approval) => ({ id: approval.value })),
-      documentRevisions: [{
-        descriptionOfChange: values.formDocument.label,
-        id: FB.uniqid,
-        justificationOfChange: values.formDocument.label,
-        proposedDocumentRevision: { id: docRevId },
-      }],
-      effectiveDate: values.effectiveDate,
-    },
-  });
+      title: documentRevision.name,
+      description: documentRevision.name,
+      documentType: {
+        id: values.formDocument.documentType,
+      },
+      formDocument: {
+        id: values.formDocument.value,
+      },
+      formInput: {
+        approvers: Array
+          .from(new Set(values.approvals.map((approval) => approval.value).concat(owner?.id)))
+          .filter(id => id)
+          .map((id) => ({ id })),
+        documentRevisions: [{
+          descriptionOfChange: values.formDocument.label,
+          id: FB.uniqid,
+          justificationOfChange: values.formDocument.label,
+          proposedDocumentRevision: { id: docRevId },
+        }],
+        effectiveDate: values.effectiveDate,
+      },
+    });
 
   const onSubmit = (values: any) => {
     if (selectedInvalid) {
