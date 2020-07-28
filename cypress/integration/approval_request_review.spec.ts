@@ -109,7 +109,7 @@ context("Approval request form scenario", () => {
     it("Click on 'Form' document type", () => cy.drSelectDocumentType({ documentType: "Form" }));
 
     it("Click on 'Approval request' outputdocument type",
-      () => cy.drSelectOutputDocType({ documentType: "Approval Request" }));
+      () => cy.drSelectOutputDocumentType({ documentType: "Approval Request" }));
 
     it("Click create document", () => cy.drClickCreateDocument());
 
@@ -137,7 +137,7 @@ context("Approval request form scenario", () => {
     it("Click on 'Form' document type", () => cy.drSelectDocumentType({ documentType: "Form" }));
 
     it("Click on 'Component Specification' outputdocument type", () =>
-      cy.drSelectOutputDocType({ documentType: "Component Specification" }));
+      cy.drSelectOutputDocumentType({ documentType: "Component Specification" }));
 
     it("Click create document", () => cy.drClickCreateDocument());
   });

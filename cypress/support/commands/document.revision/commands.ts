@@ -14,6 +14,7 @@ declare global {
       drEnterDocumentTitle(params: { name: string }): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
+      drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocType(params: { documentType: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drClickCreateDocument(): Chainable<Subject>;
@@ -26,8 +27,8 @@ declare global {
       drClickReviseDocument(): Chainable<Subject>;
       drClickTrainingRequired(): Chainable<Subject>;
       drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
-      drChooseTypeOfRevisionChangeOption(params: {option: string }): Chainable<Subject>;
-      drSelectOutputDocTypeSecondTime(params: {documentType: string }): Chainable<Subject>;
+      drChooseTypeOfRevisionChangeOption(params: { option: string }): Chainable<Subject>;
+      drSelectOutputDocTypeSecondTime(params: { documentType: string }): Chainable<Subject>;
     }
   }
 }
@@ -70,19 +71,19 @@ Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) 
   cy.get(`[data-cy=\"selectItem.document.documentType.id.${params.documentType}\"]`).click();
 });
 
-Cypress.Commands.add("drSelectOutputDocType", (params: { documentType: string }) => {
+Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`);
 });
 
 // TODO: Remove Hardcoded select number option and make this unique method for all output doc types
-Cypress.Commands.add("drSelectOutputDocType", (params: {documentType: string }) => {
+Cypress.Commands.add("drSelectOutputDocType", (params: { documentType: string }) => {
   cy.get("[id=\"formTemplate.outputDocumentTypes\"]").click();
   cy.get("[id^=\"react-select-6-option\"]").contains(params.documentType).click();
 });
 
 // TODO: Remove Hardcoded select number option and make this unique method for all output doc types
-Cypress.Commands.add("drSelectOutputDocTypeSecondTime", (params: {documentType: string }) => {
+Cypress.Commands.add("drSelectOutputDocTypeSecondTime", (params: { documentType: string }) => {
   cy.get("[id=\"formTemplate.outputDocumentTypes\"]").click();
   cy.get("[id^=\"react-select-27-option\"]").contains(params.documentType).click();
 });
