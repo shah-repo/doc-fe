@@ -6,7 +6,6 @@ Cypress.Screenshot.defaults({
 
 const runId = new Date().valueOf();
 let company;
-let docId;
 
 const groupOne = "Group One";
 const groupTwo = "Group Two";
@@ -19,27 +18,6 @@ const memberFourth = "Fourth";
 
 const FormTitle = "New Form";
 const DAMTitle = "My DAM";
-
-const requiredIfFieldLabel = "Last Name";
-const requiredIfFieldSelector = `${requiredIfFieldLabel.toLowerCase().split(' ').join('-')}-`// "last-name-";
-const requiredIfFieldValue = "Alex";
-
-const requiredIfInFieldLabel = "Country";
-const requiredIfInFieldSelector = `${requiredIfInFieldLabel.toLowerCase().split(' ').join('-')}-`;// "country-";
-const requiredIfInFieldValues = "Alpha,Bravo";
-
-const requiredWithFieldLabel = "State";
-const requiredWithFieldSelector = `${requiredWithFieldLabel.toLowerCase().split(' ').join('-')}-`;
-
-const requiredWithoutFieldLabel = "Address";
-const requiredWithoutFieldSelector = `${requiredWithoutFieldLabel.toLowerCase().split(' ').join('-')}-`;
-
-const requiredDocStatusFieldLabel = "Document Status";
-
-const requiredDocTypeFieldLabel = "Document Type";
-const requiredDocTypeFieldSelector = `${requiredDocTypeFieldLabel.toLowerCase().split(' ').join('-')}-`;
-
-const csDocTitle = "My CS Doc";
 
 context("Document Approval Matrix Flow", () => {
 
@@ -98,14 +76,14 @@ context("Document Approval Matrix Flow", () => {
     it("Selects company", () => cy.cmpSelectCompany({ name: company.name, multiple: true }));
 
     context("Open 'Group Management'", () => {
-      it("Navigate to group management", () => cy.grpNavigate());
+      it("Navigate to group management", () => cy.grpNavigateToGroupManagement());
     });
   })
 
   context("Add Group One", () => {
-    it("Open 'Add Group' dialog", () => cy.grpAddGroupBtn());
+    it("Open 'Add Group' dialog", () => cy.grpClickAddGroup());
 
-    it("Create official group", () => cy.grpOfficialGroupType({ isOfficial: true }));
+    it("Create official group", () => cy.grpSelectGroupType({ isOfficial: true }));
 
     it(`Fill group name: ${groupOne}`, () => cy.grpTypeGroupName({ name: groupOne }));
 
@@ -119,9 +97,9 @@ context("Document Approval Matrix Flow", () => {
   })
 
   context("Add Group Two", () => {
-    it("Open 'Add Group' dialog", () => cy.grpAddGroupBtn());
+    it("Open 'Add Group' dialog", () => cy.grpClickAddGroup());
 
-    it("Create official group", () => cy.grpOfficialGroupType({ isOfficial: true }));
+    it("Create official group", () => cy.grpSelectGroupType({ isOfficial: true }));
 
     it(`Fill group name: ${groupTwo}`, () => cy.grpTypeGroupName({ name: groupTwo }));
 
@@ -135,9 +113,9 @@ context("Document Approval Matrix Flow", () => {
   })
 
   context("Add Group Three", () => {
-    it("Open 'Add Group' dialog", () => cy.grpAddGroupBtn());
+    it("Open 'Add Group' dialog", () => cy.grpClickAddGroup());
 
-    it("Create official group", () => cy.grpOfficialGroupType({ isOfficial: true }));
+    it("Create official group", () => cy.grpSelectGroupType({ isOfficial: true }));
 
     it(`Fill group name: ${groupThree}`, () => cy.grpTypeGroupName({ name: groupThree }));
 

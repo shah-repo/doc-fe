@@ -58,7 +58,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
     if (formDocumentId) {
       dispatch(documentRevisionsActions.loadDocument(formDocumentId));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formDocumentId]);
 
   const async = useAsync({
@@ -90,8 +90,8 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
 
   const renderOutputButton = () => {
     const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
-    && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
-      .find((type) => type.documentTypeName === "Approval Request");
+      && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
+        .find((type) => type.documentTypeName === "Approval Request");
 
     if (hasAccess && canCreateOutput(documentRevision)) {
       return (
@@ -100,6 +100,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
           variant="outlined"
           onClick={cloneOutputDocument}
           id="PreviewControlsContainer-createNew"
+          data-cy="PreviewControlsContainer-createNew"
         >
           <Text translation={isAR ? "changeRequest.create" : "common.create.new"} />
         </Button>

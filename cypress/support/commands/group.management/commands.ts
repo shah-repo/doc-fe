@@ -35,6 +35,12 @@ declare global {
       grpSelectGroup(params: { name: string }): Chainable;
       grpCloseDialog(): Chainable;
       grpSelectUnofficial(): Chainable;
+      grpSelectGroupType(params: { isOfficial: boolean }): Chainable<Subject>;
+      grpTypeGroupName(params: { name: string }): Chainable<Subject>;
+      grpTypeMembers(...names: string[]): Chainable<Subject>;
+      grpAddParentGroups(...groups: string[]): Chainable<Subject>;
+      grpCloseGroupBtn(): Chainable<Subject>;
+      grpAddGroup(): Chainable<Subject>;
     }
   }
 }
@@ -153,9 +159,7 @@ Cypress.Commands.add("grpCheckIfGroupTypeExists", (params: { type: string }) => 
   cy.get("#menu-isOfficial>div>ul>li>span").should("contain.text", params.type);
   cy.get("#menu-isOfficial>div>ul>li>span").contains(params.type).click();
 });
-Cypress.Commands.add("grpClickAddGroup", () => {
-  cy.get("#Group-openDialog").click();
-});
+Cypress.Commands.add("grpClickAddGroup", () => cy.get("[data-cy=\"Group-openDialog\"]").click());
 
 Cypress.Commands.add("grpSelectOfficial", () => {
   cy.get("#Group-officialOption").click();
@@ -189,3 +193,21 @@ Cypress.Commands.add("grpCloseDialog", () => {
 Cypress.Commands.add("grpSelectUnofficial", () => {
   cy.get("#Group-unofficialOption").click();
 });
+
+Cypress.Commands.add("grpSelectGroupType", (params: { isOfficial: boolean }) =>
+  cy.get(`[data-cy=\"Group-${params.isOfficial ? 'official' : 'unofficial'}Option\"]`).click());
+
+Cypress.Commands.add("grpTypeGroupName", (params: { name: string }) =>
+  cy.get(`[data-cy=\"Group-groupName\"]`).type(params.name));
+
+Cypress.Commands.add("grpTypeMembers", (...names: string[]) => {
+  names.forEach(name => cy.get(`#Group-members`).type(`${name}{enter}`));
+})
+
+Cypress.Commands.add("grpAddParentGroups", (...groups: string[]) => {
+  groups.forEach(name => cy.get(`#Group-addParentGroups`).type(`${name}{enter}`));
+})
+
+Cypress.Commands.add("grpCloseGroupBtn", () => cy.get("[data-cy=\"DialogContent-close\"]").click());
+
+Cypress.Commands.add("grpAddGroup", () => cy.get("[data-cy=\"Group-createGroup\"]").click());
