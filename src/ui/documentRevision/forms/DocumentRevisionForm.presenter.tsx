@@ -116,7 +116,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
-  const isDisabledInput =  values.id !== undefined && isCurrentUserOperator && !isOwner;
+  const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
   isOwnerContext = React.createContext(isOwner);
   documentTypeContext = React.createContext(documentType);
@@ -146,7 +146,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const hasOutput = useMemo(() => {
     const documentType = documentTypesById[values.document?.documentType?.id || ""];
     return documentType?.groupOptions?.includes("HAVE_OUTPUT");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentTypesById, values.document?.documentType?.id]);
 
   useEffect(() => {
@@ -185,7 +185,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         formDocumentStatus={documentRevision?.formDocument?.status}
         bannerPortal={bannerPortal}
       />
-      <FormHeader/>
+      <FormHeader />
       <FormWrapper
         dirty={dirty}
         initialValues={initialValues}
