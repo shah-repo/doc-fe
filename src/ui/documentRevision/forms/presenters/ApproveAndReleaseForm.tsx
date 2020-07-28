@@ -107,7 +107,6 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
 
     formState.rules = (rules as Dictionary<any>);
     formState.setValues(generatedValues);
-    console.log({rules, generatedValues})
     formState?.validate((valid) => {
       if (valid) { return; }
       setSelectedInvalid(true);
