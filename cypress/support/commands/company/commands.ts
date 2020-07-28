@@ -85,7 +85,7 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
 });
 
 Cypress.Commands.add("cmpNavigateToDocumentList", () => {
-  cy.get("[data-cy=\"navigation.documentControl\"]", { timeout: 10 * 1000 }).click();
+  cy.get("[data-cy=\"navigation.documentControl\"]").click();
   cy.get("[data-cy=\"navigation.documentList\"]").click();
 });
 

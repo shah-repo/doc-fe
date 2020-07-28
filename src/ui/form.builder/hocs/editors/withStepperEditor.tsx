@@ -31,10 +31,10 @@ export const withStepperEditor = <T extends FBEditorStepperProps>(
                 <BottomNavigationAction label="Validators" />
                 <BottomNavigationAction label="Custom Validators" />
               </BottomNavigation>
-                <Box mt={1} py={2}>
-                  {value === 0 && <FBValidatorForm />}
-                  {value === 1 && <FBValidatorCustom />}
-                </Box>
+              <Box mt={1} py={2}>
+                {value === 0 && <FBValidatorForm />}
+                {value === 1 && <FBValidatorCustom />}
+              </Box>
             </Box>
           );
         default:

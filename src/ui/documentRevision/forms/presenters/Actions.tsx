@@ -62,7 +62,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         }
         onClick={onFormClick}
         id="DocumentRevisionForm-submit"
-        dataCy="DocumentRevisionForm-submit"
+        data-cy={"DocumentRevisionForm-submit"}
       />
       <ApproveAndRelease
         id={values.id}

@@ -23,7 +23,7 @@ export const FormListPresenter: React.FunctionComponent<Props> = ({
           variant="contained"
           color="primary"
           id="ChangeRequest-create"
-          data-cy="change.request.create"
+          data-cy={"change.request.create"}
           onClick={dialog.open}
           className={classes.createButton}
         >

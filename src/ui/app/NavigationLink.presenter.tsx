@@ -25,7 +25,6 @@ interface NavigationLinkPresenterProps extends
   ) => boolean;
 }
 
-
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
   path,
   category,
