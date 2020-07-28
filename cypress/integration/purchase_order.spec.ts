@@ -247,6 +247,7 @@ context("Create Purchase Order document with Product option from Form document",
 
   it("Click on existing PO that was created before", () => {
     SystemRequirement("REQ-1370")
+    SystemRequirement("REQ-1210") 
     cy.poClickOnSpecificPOFromList({ item:"PO-00001" });
   });
 
@@ -512,7 +513,67 @@ context("Creates second PO form document and checks if both documents are availa
     SystemRequirement("REQ-1260");
     cy.poCheckIfFormPopUpIsActive("New Purchase Order Form", "New Purchase Order Form 2");
   });
+
+  it("Close dialog box", () => {
+    cy.poCloseFormPopUpOnLandingPage();
+  });
 });
 
+context("Check for Landing page columns and values", () => {
+  it("Check if most recent added item is fist on list", () => {
+    SystemRequirement("REQ-1180");
+    cy.filterGetFirstValueFromList({ value: "PO-00002" });
+  });
+
+  it("Check for Landing page default columns", () => {
+    SystemRequirement("REQ-1120");
+    cy.filterCheckHeaderValues("PO #", "Version", "PO Status", "Supplier", "Part Number", "Amount", "Requestor", "Issue Date");
+  });
+});
+
+context("Test the filter inside PO", () => {
+  it("Enter version number '1' inside filter", () => {
+    cy.filterPOVersion({ version: "1" });
+  });
+  
+  it("Check if item with right version is displayed", () => {
+    cy.poCheckForSpecificPOItemValue({ itemValue: "1" });
+  });
+
+  it("Check if number of displayed filtered items is '2", () => {
+    SystemRequirement("REQ-1200")
+    cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "2" });
+  });
+
+  it("Clear filter", () => {
+    SystemRequirement("REQ-1190");
+    cy.filterClear();
+  });
+
+  it("Enter all fields to check if all filter fields are working", () => {
+    SystemRequirement("REQ-1150");
+    cy.filterPO({ docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
+    partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020" }).wait(2000);
+  });
+
+  it("Navigate to Document List", () => {
+    cy.wait(1000).cmpNavigateToDocumentList();
+  });
+
+  it("Navigate to Purchase Order", () => {
+    cy.cmpNavigateToPurchaseOrder();
+  });
+
+  it("Check if all filter values persist after changing landing page", () => {
+    SystemRequirement("REQ-1170");
+    cy.filterCheckIfPOFilterPersists({ docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
+    partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020" });
+  });
+
+  it("Clear filter", () => {
+    SystemRequirement("REQ-1190");
+    cy.filterClear();
+  });
+});
 
 export { };
