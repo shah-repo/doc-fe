@@ -23,6 +23,7 @@ export const FormListPresenter: React.FunctionComponent<Props> = ({
           variant="contained"
           color="primary"
           id="ChangeRequest-create"
+          data-cy={"change.request.create"}
           onClick={dialog.open}
           className={classes.createButton}
         >
@@ -34,8 +35,8 @@ export const FormListPresenter: React.FunctionComponent<Props> = ({
         onClose={dialog.close}
         classes={{ paper: classes.dialogPaper }}
       >
-        <FormListHeader {...{ dialog }}/>
-        <FormListContent {...{ dialog, templateOptions }}/>
+        <FormListHeader {...{ dialog }} />
+        <FormListContent {...{ dialog, templateOptions }} />
       </Dialog>
     </>
   );

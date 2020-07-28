@@ -155,6 +155,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
         disabled={asyncState.status === AsyncStatus.Active}
         onClick={cancel}
         id="ApproveAndRelease-cancelButton"
+        data-cy="ApproveAndRelease-cancelButton"
       >
         <Text translation="transition.action.cancel" />
       </Button>

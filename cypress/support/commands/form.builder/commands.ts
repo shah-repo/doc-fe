@@ -12,6 +12,9 @@ declare global {
       fbAddNewFieldButton(): Chainable<Subject>;
       fbAddNewField(): Chainable<Subject>;
       fbSelectApprovalMatrix(): Chainable<Subject>;
+      fbSelectTextField(): Chainable<Subject>;
+      fbSelectAutoComplete(): Chainable<Subject>;
+      fbOpenValidation(): Chainable<Subject>;
       fbAddField(): Chainable<Subject>;
     }
   }
@@ -36,5 +39,10 @@ Cypress.Commands.add("fbAddNewFieldButton", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("fbSelectApprovalMatrix", () => cy.get("[data-cy=\"form.builder.approvalMatrix\"]").click());
+Cypress.Commands.add("fbSelectTextField", () => cy.get("[data-cy=\"form.builder.textfield\"]").click());
+
+Cypress.Commands.add("fbSelectAutoComplete", () => cy.get("[data-cy=\"form.builder.autocomplete\"]").click());
+
+Cypress.Commands.add("fbOpenValidation", () => cy.get("[data-cy=\"fb-editor-mode-validation-1\"]").click());
 
 Cypress.Commands.add("fbAddField", () => cy.get("[data-cy=\"fb-editor-actions-add\"]").click());

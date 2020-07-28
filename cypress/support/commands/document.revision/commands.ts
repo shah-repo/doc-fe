@@ -26,10 +26,13 @@ declare global {
       drClickReviseDocument(): Chainable<Subject>;
       drClickTrainingRequired(): Chainable<Subject>;
       drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
-      drChooseTypeOfRevisionChangeOption(params: { option: string }): Chainable<Subject>;
-      drSelectOutputDocTypeSecondTime(params: { documentType: string }): Chainable<Subject>;
       drAddOutputDocType(params: { documentType: string }): Chainable<Subject>;
       drReleaseDocument(params: { template: string }): Chainable<Subject>;
+      drSelectOutputDocTypeSecondTime(params: { documentType: string }): Chainable<Subject>;
+      drChooseTypeOfRevisionChangeOption(params: { option: string }): Chainable<Subject>;
+      drDocumentFieldError(params: { field: string, message: string }): Chainable<Subject>;
+      closeAllAlertMessages(): Chainable<Subject>;
+      checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
     }
   }
 }
@@ -103,7 +106,7 @@ Cypress.Commands.add("drReleaseDocument", (params: { template: string }) => {
 });
 
 Cypress.Commands.add("drClickCreateDocument", () => {
-  cy.get("#DocumentRevisionForm-submit").click();
+  cy.get("#DocumentRevisionForm-submit", { timeout: 5 * 1000 }).click();
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
@@ -158,4 +161,17 @@ Cypress.Commands.add("drCheckTypeOfRevisionChangeOptions", () => {
 Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: { option: string }) => {
   cy.get("[data-cy=\"field-revisionChangeType\"]");
   cy.get("label").contains(params.option).click();
+});
+
+Cypress.Commands.add("drDocumentFieldError", (params: { field: string, message: string }) => {
+  cy.log("here");
+  cy.get(`[data-cy=\"${params.field}\"] .MuiFormHelperText-root.Mui-error`).should("have.text", params.message);
+});
+
+Cypress.Commands.add('checkToastMessage', (params: { exists: boolean }) => {
+  cy.get('.Toastify__toast-container').should((params.exists ? "not." : "") + "be.empty");
+});
+
+Cypress.Commands.add('closeAllAlertMessages', () => {
+  cy.get('.Toastify__close-button').click({ multiple: true, force: true });
 });
