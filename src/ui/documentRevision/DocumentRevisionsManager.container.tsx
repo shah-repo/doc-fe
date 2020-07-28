@@ -112,7 +112,7 @@ DocumentRevisionManagerContainerProps
           documentRevisionId={documentRevisionId}
           documentId={documentId}
           canAccess={canAccess}
-          documentTypeId={document.documentType.id}
+          documentTypeId={document.documentType?.id}
           withoutCurrentUser={true}
         /> : null,
       },

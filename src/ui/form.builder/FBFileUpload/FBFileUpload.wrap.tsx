@@ -12,11 +12,12 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
     filePresenters,
     disabled,
     name,
+    defaultValue,
     ...props
   }: T) => {
 
     const { formState } = FB.useStores();
-    const formValue = formState?.getFieldValue(name);
+    const formValue = formState?.getFieldValue(name) || defaultValue;
     fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState, formValue);
 
 

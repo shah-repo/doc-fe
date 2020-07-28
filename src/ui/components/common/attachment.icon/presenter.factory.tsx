@@ -14,6 +14,7 @@ AttachmentIconFactoryProps
   handleContextMenu,
   disabled = false,
   handleIconClick,
+  isNewVersion,
   canDeleteFile = true,
   ...other
 }) => {
@@ -31,13 +32,14 @@ AttachmentIconFactoryProps
     isRedLine,
     handleRemove,
     canDeleteFile,
+    isNewVersion,
     ...other,
   };
   let props: AttachmentIconProps = {
     ...defaultProps,
     handleIconClick,
     handleContextMenu,
-
+    isNewVersion,
   };
 
 

@@ -6,15 +6,16 @@ import HeaderField from "../../components/common/header.field/field";
 
 interface Props {
   isDisabled: boolean;
+  isNewVersion: boolean;
 }
 
-const Attachments: React.FunctionComponent<Props> = ({ isDisabled = false }) => (
+const Attachments: React.FunctionComponent<Props> = ({ isDisabled = false, isNewVersion }) => (
   <Box marginBottom="33px">
     <HeaderField
       dataProp="common.attachments"
     />
     <AttachmentField name="attachments" component="field" disabled={isDisabled}/>
-    {<AttachmentIconField name="attachments" />}
+    {<AttachmentIconField name="attachments" isNewVersion={isNewVersion} />}
   </Box>
 );
 
