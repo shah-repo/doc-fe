@@ -16,23 +16,24 @@ export const AddGroupPresenter: React.FunctionComponent<Props> = ({
   openDialog,
   closeDialog,
 }) => (
-  <Box>
-    <Button
-      color="primary"
-      variant="contained"
-      onClick={openDialog}
-      id="Group-openDialog"
-      style={{ margin: 0 }}
-    >
-      <Text message="group.management.add.group" />
-    </Button>
-    <AddGroup
-      isOpen={isOpen}
-      closeDialog={closeDialog}
-      title={"group.management.create.group"}
-      isCreateMode={true}
-    />
-  </Box>
-);
+    <Box>
+      <Button
+        color="primary"
+        variant="contained"
+        onClick={openDialog}
+        id="Group-openDialog"
+        data-cy="Group-openDialog"
+        style={{ margin: 0 }}
+      >
+        <Text message="group.management.add.group" />
+      </Button>
+      <AddGroup
+        isOpen={isOpen}
+        closeDialog={closeDialog}
+        title={"group.management.create.group"}
+        isCreateMode={true}
+      />
+    </Box>
+  );
 
 export default AddGroupPresenter;

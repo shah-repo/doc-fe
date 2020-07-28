@@ -15,7 +15,7 @@ import Text from "../../../components/Text";
 import { ApproveAndReleaseFormValues } from "../types";
 import { styles } from "./ApproveAndRelease.styles";
 
-interface Props extends FormikProps<ApproveAndReleaseFormValues>{
+interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   asyncState: AsyncState;
   cancel: () => void;
   isQms: boolean;
@@ -76,6 +76,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
         fullWidth={false}
         className={classes.submitButton}
         id="ApproveAndRelease-submit"
+        data-cy="ApproveAndRelease-submit"
       />
       <Button
         variant="text"

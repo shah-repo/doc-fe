@@ -84,7 +84,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       docRevId,
       asyncGroups,
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docRevId]);
 
   const openDialog = () => {
@@ -130,7 +130,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     async.start(
       releaseAction,
       id,
-      { approvers, effectiveDate, documentType: { id: documentType },  formDocument: { id: formDocument } },
+      { approvers, effectiveDate, documentType: { id: documentType }, formDocument: { id: formDocument } },
       async,
     );
   };
@@ -175,6 +175,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
         variant="outlined"
         onClick={openDialog}
         id="ApproveAndRelease-button"
+        data-cy="ApproveAndRelease-button"
       >
         <Text message={label} />
       </Button>
