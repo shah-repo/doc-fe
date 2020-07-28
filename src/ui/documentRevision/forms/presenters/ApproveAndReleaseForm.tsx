@@ -2,6 +2,7 @@ import { Box, Button } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
 import _, { Dictionary } from "lodash";
 import * as React from "react";
+import * as generateUuid from "uuid/v4";
 import { Group } from "../../../../state/ducks/auth/types";
 import { Owner } from "../../../../state/ducks/common/types";
 import { AsyncState, AsyncStatus } from "../../../../state/types";
@@ -60,7 +61,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   );
 
   const validateSelectedForm = (option: any) => {
-    const { schema, values = {} } = option || {};
+    const { schema } = option || {};
     if (!schema) { return; }
     const formState = new FBFormState({});
     const rules = (schema as FBSchemaProps[]).reduce((acc, item) => {
@@ -69,8 +70,44 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
       }
       return acc;
     }, {});
+
+    const generatedValues =
+      (schema as FBSchemaProps[]).reduce<object>((acc, item) => {
+        // fields effectiveDate,  documentRevisions and approvers are required in all CR forms
+        // they will be automatically set by backend.
+        switch(item.name) {
+          case "effectiveDate": {
+            return {
+              ...acc,
+              [item.name]: new Date().toISOString(),
+            };
+          }
+          case "documentRevisions": {
+            return {
+              ...acc,
+              [item.name]: [{
+                id: generateUuid(),
+                justificationOfChange: `string`,
+                descriptionOfChange: `string`,
+                proposedDocumentRevision: { id:generateUuid() },
+              }],
+            };
+          }
+          case "approvers": {
+            return {
+              ...acc,
+              [item.name]: [{ id: generateUuid() }],
+            };
+          }
+          default: {
+            return acc;
+          }
+        }
+      }, {});
+
     formState.rules = (rules as Dictionary<any>);
-    formState.setValues(values);
+    formState.setValues(generatedValues);
+    console.log({rules, generatedValues})
     formState?.validate((valid) => {
       if (valid) { return; }
       setSelectedInvalid(true);
