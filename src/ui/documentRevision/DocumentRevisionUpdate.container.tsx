@@ -1,5 +1,5 @@
 import { debounce, isEmpty } from "lodash";
-import React, { useMemo, useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { DocumentRevision, DocumentRevisionEditRequestBody, documentRevisionsActions, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
@@ -30,6 +30,7 @@ interface OwnProps {
   documentRevision: DocumentRevision;
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip?: boolean;
+  isNewVersion?: boolean;
 }
 
 export type DocumentRevisionUpdateContainerProps = OwnProps &
@@ -52,6 +53,7 @@ DocumentRevisionUpdateContainerProps
   onDirtyFlagChange,
   documentId,
   canChangeOwnerShip,
+  isNewVersion,
 }) => {
 
   const initialValues = useMemo(() => toDocumentRevisionFormValues(documentRevision), [documentRevision]);
@@ -118,6 +120,7 @@ DocumentRevisionUpdateContainerProps
         documentRevision={documentRevision}
         canChangeOwnerShip={canChangeOwnerShip}
         showRevisionTypeChange
+        isNewVersion={isNewVersion}
       />
     </FormContext.Provider>
   );

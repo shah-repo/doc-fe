@@ -139,7 +139,6 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
           gutter={false}
           readonly={true}
           disabled={true}
-          name="attachments"
           defaultValue={get(task, "closingNoteInput.attachments", [])}
         />
       </Box>
