@@ -1,6 +1,6 @@
-import { Button } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import * as React from "react";
 import { Group } from "../../../../state/ducks/auth/types";
 import { Owner } from "../../../../state/ducks/common/types";
@@ -12,6 +12,8 @@ import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import Text from "../../../components/Text";
+import { FBFormState, FBSchemaProps } from "../../../form.builder";
+import Colors from "../../../layout/theme/utils/colors";
 import { ApproveAndReleaseFormValues } from "../types";
 import { styles } from "./ApproveAndRelease.styles";
 
@@ -22,8 +24,11 @@ interface Props extends FormikProps<ApproveAndReleaseFormValues>{
   documentTypeGroups: Group[];
   owner: Owner;
   templateOptions: any[];
+  selectedInvalid: boolean;
   setFormDocument: (value: string) => void;
   setDocumentType: (value: string) => void;
+  setSelectedInvalid: (value: boolean) => void;
+  closeDialog: () => void;
 }
 
 const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
@@ -36,6 +41,9 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   templateOptions,
   setFormDocument,
   setDocumentType,
+  setSelectedInvalid,
+  closeDialog,
+  selectedInvalid,
 }) => {
   const classes = styles();
 
@@ -43,11 +51,31 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
     templateOptions.map((template) =>
       template.forms.map((form) => ({
         documentType: template.documentType.id,
+        schema: form.formTemplate?.schema || form.formDocument?.formDocument?.formTemplate,
+        formInput: form.formInput,
         label: form.name,
         value: form.id,
       }))
     )
   );
+
+  const validateSelectedForm = (option: any) => {
+    const { schema, values = {} } = option || {};
+    if (!schema) { return; }
+    const formState = new FBFormState({});
+    const rules = (schema as FBSchemaProps[]).reduce((acc, item) => {
+      if (item.rules) {
+        acc[item.name || ""] = item.rules;
+      }
+      return acc;
+    }, {});
+    formState.rules = (rules as Dictionary<any>);
+    formState.setValues(values);
+    formState?.validate((valid) => {
+      if (valid) { return; }
+      setSelectedInvalid(true);
+    });
+  };
 
   return (
     <Form className={classes.form}>
@@ -63,8 +91,14 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
         onClick={(option) => {
           setFormDocument(option.value);
           setDocumentType(option.documentType);
+          validateSelectedForm(option);
         }}
       />
+      {selectedInvalid && (
+        <Box mt={-3} mb={3} color={Colors.medium_blue}>
+          <Text translation="document.revision.tpl.invalid" />
+        </Box>
+      )}
       <DatePickerField
         label="transition.action.effective.date"
         name="effectiveDate"

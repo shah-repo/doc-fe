@@ -1,16 +1,21 @@
 import { Box, Button, ButtonBase, CircularProgress, Tooltip, Typography } from "@material-ui/core";
 import classNames from "classnames";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as RemoveDocumentActive } from "../../../../assets/images/circle-delete-second.svg";
 import { ReactComponent as RemoveDocument } from "../../../../assets/images/circle-delete.svg";
 import { Attachment } from "../../../../state/ducks/attachments";
+import { Document, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { ApplicationState } from "../../../../state/reducers";
 import Text from "../../../components/Text";
+import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
 import Colors from "../../../layout/theme/utils/colors";
 import FileIcon from "./icon";
 import { styles } from "./utils/styles";
 import { AttachmentIconProps } from "./utils/types";
+
 
 export const AttachmentIconPresenter: React.FunctionComponent<
 AttachmentIconProps
@@ -25,6 +30,7 @@ AttachmentIconProps
   isRedLine,
   handleIconClick,
   canDeleteFile,
+  isNewVersion,
   ...other
 }) => {
   const file = attachment || {} as Attachment;
@@ -58,6 +64,28 @@ AttachmentIconProps
       <Text translation="common.uploading" />
     </Box>
   );
+  const documentRevisionStatusFromDocList = React.useContext(documentRevisionStatusContextFromDocList);
+
+  const formDocumentId = documentRevision?.document.id || "";
+  const formDocuments: Document = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocument(state, formDocumentId)
+  );
+  const releasedVersions = formDocuments?.documentRevisions.filter((e) => e.status === DocumentRevisionStatus.Released);
+  const lastReleasedDocRevId = releasedVersions?.[releasedVersions.length - 1]?.id;
+  const docRevById = useSelector(documentRevisionsSelectors.byId);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if ((!lastReleasedDocRevId || docRevById[lastReleasedDocRevId].attachments)) {
+      return;
+    }
+    dispatch(documentRevisionsActions.load(lastReleasedDocRevId));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const isTransferred = isNewVersion ||
+  lastReleasedDocRevId !== formDocuments?.documentRevisions[formDocuments?.documentRevisions.length - 1].id  ?
+  docRevById[lastReleasedDocRevId]?.attachments?.some((e) => e.id === attachment?.id) : false;
 
   const deleteButtonRenderer = canDeleteFile && (
     <Box
@@ -102,10 +130,13 @@ AttachmentIconProps
             {!isLoading &&
               <FileIcon
                 {...other}
+                attachment={attachment}
                 extension={file.type}
                 isUploading={isUploading}
                 isRedLine={isRedLine}
                 isPrimary={isPrimary}
+                isTransferred={(documentRevisionStatusFromDocList === DocumentRevisionStatus.Draft ||
+                  documentRevisionStatusFromDocList === DocumentRevisionStatus.PendingChange)  ? isTransferred : false}
               />
             }
           </ButtonBase>
