@@ -7,7 +7,7 @@ import { Screenshot } from "../../../utils/context/screenshot";
 // const runId = new Date().valueOf();
 // let createdCompany;
 
-context(`Test: ${path.basename(__filename)}`, () => {
+context(`Test: foo ${path.basename(__filename)}`, () => {
   // it("Creates company", (done: any) => {
   //   cy.apiLogin({
   //     email: "zoran.kovacevic+admin@codecons.com",

@@ -68,8 +68,8 @@ Cypress.Screenshot.defaults({
 
 Cypress.on('test:after:run', (test, runnable: any ) => {
   if (test.state === 'failed') {
-    cy.screenshot();
-    cy.log("SCREENSHOT2")
+    // cy.screenshot();
+    // cy.log("SCREENSHOT2")
     console.log("SCREENSHOT2")
     addScreenshotToContext(test, runnable);
   }
