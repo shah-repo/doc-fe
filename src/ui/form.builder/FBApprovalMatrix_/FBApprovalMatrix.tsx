@@ -14,45 +14,46 @@ const FBApprovalMatrix: React.FunctionComponent<FBApprovalMatrixProps> = ({
   name,
   mode,
   workspaceMode,
-}) =>  (
-  <FBProvider {...{ dialogState }}>
-    <FBDialog onClose={handleFullScreen} />
-    {!dialogState?.open && (
-      <>
-        <FBApprovalMatrixSection
-          {...{ handleEdit, handleFullScreen, disabled, mode, workspaceMode }}
-        />
-        <FBApprovalMatrixTable {...{ name, mode }} />
-        <Box mt={2}>
-          {mode === "add" && (
-            <Box display="flex" flexDirection="row-reverse">
-              <FBSubmitButton
-                variant="outlined"
-                label="common.save"
-                onClick={handleSave}
-                autoFocus
-              />
+}) => (
+    <FBProvider {...{ dialogState }}>
+      <FBDialog onClose={handleFullScreen} />
+      {!dialogState?.open && (
+        <>
+          <FBApprovalMatrixSection
+            {...{ handleEdit, handleFullScreen, disabled, mode, workspaceMode }}
+          />
+          <FBApprovalMatrixTable {...{ name, mode }} />
+          <Box mt={2}>
+            {mode === "add" && (
+              <Box display="flex" flexDirection="row-reverse">
+                <FBSubmitButton
+                  variant="outlined"
+                  label="common.save"
+                  onClick={handleSave}
+                  autoFocus
+                />
+                <FBButton
+                  variant="outlined"
+                  label="common.cancel"
+                  onClick={handleCancel}
+                />
+              </Box>
+            )}
+            {mode !== "add" && (
               <FBButton
+                fullWidth={true}
+                label="form.builder.add.item"
+                dataCy="form.builder.add.item"
                 variant="outlined"
-                label="common.cancel"
-                onClick={handleCancel}
+                style={{ margin: 0 }}
+                onClick={handleAdd}
+                {...{ disabled }}
               />
-            </Box>
-          )}
-          {mode !== "add" && (
-            <FBButton
-              fullWidth={true}
-              label="form.builder.add.item"
-              variant="outlined"
-              style={{ margin: 0 }}
-              onClick={handleAdd}
-              {...{ disabled }}
-            />
-          )}
-        </Box>
-      </>
-    )}
-  </FBProvider>
-);
+            )}
+          </Box>
+        </>
+      )}
+    </FBProvider>
+  );
 
 export default withFBApprovalMatrix(FBApprovalMatrix);

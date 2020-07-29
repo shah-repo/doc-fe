@@ -33,6 +33,22 @@ declare global {
       drDocumentFieldError(params: { field: string, message: string }): Chainable<Subject>;
       closeAllAlertMessages(): Chainable<Subject>;
       checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
+
+      /* Document Approval Matrix */
+
+      drAddAnotherRoleBtn(): Chainable<Subject>;
+      drEnterApprovalRole(params: { name: string }): Chainable<Subject>;
+      drEnterApprovingGroups(...groups: string[]): Chainable<Subject>;
+      drEnterApprovingUsers(...employees: string[]): Chainable<Subject>;
+      drAddApprovalRole(): Chainable<Subject>;
+      drAddApprovalMatrixItem(): Chainable<Subject>;
+      drAddAMItemValue(params: { identity: string, value: string }): Chainable<Subject>;
+      drAMInternalType(params: { value: string }): Chainable<Subject>;
+      drAMCheckValue(params: { identity: string }): Chainable<Subject>;
+      drAMCheckRole(params: { stage: string, index: number }): Chainable<Subject>;
+      drUpgradeRevisionLevel(): Chainable<Subject>;
+
+      /* Document Approval Matrix End */
     }
   }
 }
@@ -106,7 +122,7 @@ Cypress.Commands.add("drReleaseDocument", (params: { template: string }) => {
 });
 
 Cypress.Commands.add("drClickCreateDocument", () => {
-  cy.get("#DocumentRevisionForm-submit", { timeout: 5 * 1000 }).click();
+  cy.get("[data-cy=\"DocumentRevisionForm-submit\"]", { timeout: 5 * 1000 }).click();
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
@@ -143,7 +159,7 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
 });
 
 Cypress.Commands.add("drClickReviseDocument", () => {
-  cy.get("#PreviewControlsContainer-revise").click();
+  cy.get("[data-cy=\"PreviewControlsContainer-revise\"]").click();
 });
 
 Cypress.Commands.add("drClickTrainingRequired", () => {
@@ -169,9 +185,48 @@ Cypress.Commands.add("drDocumentFieldError", (params: { field: string, message: 
 });
 
 Cypress.Commands.add('checkToastMessage', (params: { exists: boolean }) => {
-  cy.get('.Toastify__toast-container').should((params.exists ? "not." : "") + "be.empty");
+  cy.get('.Toastify').should((params.exists ? "not." : "") + "be.empty");
 });
 
 Cypress.Commands.add('closeAllAlertMessages', () => {
   cy.get('.Toastify__close-button').click({ multiple: true, force: true });
 });
+
+Cypress.Commands.add("drAddAnotherRoleBtn", () => cy.get("[data-cy=\"form.builder.add.another.role\"]").click());
+
+Cypress.Commands.add("drEnterApprovalRole", (params: { name: string }) => cy.get("[data-cy=\"name\"]").type(params.name));
+
+Cypress.Commands.add("drEnterApprovingGroups", (...groups: string[]) => {
+  groups.forEach(group => {
+    cy.get("[data-cy=\"groups\"]").click();
+    cy.get(".MuiAutocomplete-popper").contains(group).click();
+  });
+});
+
+Cypress.Commands.add("drEnterApprovingUsers", (...employees: string[]) => {
+  employees.forEach(employee => {
+    cy.get("[data-cy=\"employees\"]").click();
+    cy.get(".MuiAutocomplete-popper").contains(employee).click();
+  })
+});
+
+Cypress.Commands.add("drAddApprovalRole", () => cy.get("[data-cy=\"common.add\"]").click());
+
+Cypress.Commands.add("drAddApprovalMatrixItem", () => cy.get("[data-cy=\"form.builder.add.item\"]").click({ force: true }));
+
+Cypress.Commands.add("drAddAMItemValue", (params: { identity: string, value: string }) => cy.get(`[data-cy=\"${params.identity}\"] input`).type(params.value, { force: true }));
+
+Cypress.Commands.add("drAMInternalType", (params: { value: string }) => {
+  // TODO: Add a better identifier to get internal type dropdown
+  cy.get(`.MuiTableCell-root .MuiSelect-select`).click();
+  cy.get(`.MuiButtonBase-root.MuiListItem-root`).contains(params.value).click();
+});
+
+Cypress.Commands.add("drAMCheckRole", (params: { stage: string, index: number }) => {
+  // We are spotting approvalMatrix.approvalRoles.stage1.0
+  cy.get(`[data-cy=\"approvalMatrix.approvalRoles.${params.stage}.${params.index}\"]`).click({ force: true });
+});
+
+Cypress.Commands.add("drAMCheckValue", (params: { identity: string }) => cy.get(`[data-cy=\"${params.identity}\"]`).click({ force: true }));
+
+Cypress.Commands.add("drUpgradeRevisionLevel", () => cy.get(`[data-cy=\"upgradeNextRevisionStage\"]`).click({ force: true }));

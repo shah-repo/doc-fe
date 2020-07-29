@@ -27,105 +27,111 @@ const FBApprovalMatrixFieldUI: React.FunctionComponent<FBApprovalMatrixFieldUIPr
   handleSaveChanges,
   cancelAddMode,
 }) => (
-  <Box mt={3}>
-    <ApprovalRoles
-      {...{
-        approvalRoles,
-        addAnotherRole,
-        handleEditRoleDetails,
-        handleSaveRole,
-        handleCancelDialogRole,
-        errorMessage,
-        disabled,
-      }}
-    />
-    <ApprovalMatrixSectionBox
-      openDialog={() => dialog.open()}
-      closeDialog={() => dialog.close()}
-      {...{ toggleEditMode, editMode, addMode, disabled }}
-    />
-    <FBApprovalMatrixTable
-      {...{
-        addMode,
-        data,
-        columns,
-        editMode,
-        readInputValue,
-        readSelectValue,
-      }}
-    />
-    {!addMode &&
-      <FBButton
-        fullWidth={true}
-        onClick={handleAdd}
-        label="form.builder.add.item"
-        variant="outlined"
-        style={{ margin: "8px 0" }}
-        disabled={editMode || disabled}
-      />}
-    {errorMessage && <Typography variant="subtitle2" color="error" style={{ marginTop: 10 }} ><Text message={errorMessage} /></Typography>}
-    {addMode &&
-      <Box display="flex" flexDirection="row-reverse">
+    <Box mt={3}>
+      <ApprovalRoles
+        {...{
+          approvalRoles,
+          addAnotherRole,
+          handleEditRoleDetails,
+          handleSaveRole,
+          handleCancelDialogRole,
+          errorMessage,
+          disabled,
+        }}
+      />
+      <ApprovalMatrixSectionBox
+        openDialog={() => dialog.open()}
+        closeDialog={() => dialog.close()}
+        {...{ toggleEditMode, editMode, addMode, disabled }}
+      />
+      <FBApprovalMatrixTable
+        {...{
+          addMode,
+          data,
+          columns,
+          editMode,
+          readInputValue,
+          readSelectValue,
+        }}
+      />
+      {!addMode &&
         <FBButton
-          onClick={handleSaveChanges}
-          label="Save changes"
-          variant="contained"
-          color="primary"
-          style={{ margin: "8px" }}
-        />
-        <FBButton
-          onClick={cancelAddMode}
-          label="Cancel"
+          fullWidth={true}
+          onClick={handleAdd}
+          label="form.builder.add.item"
+          dataCy="form.builder.add.item"
           variant="outlined"
-          color="primary"
-          style={{ margin: "8px" }}
-        />
-      </Box>}
-    <Dialog fullScreen={true} open={dialog.isOpen}>
-      <DialogContent>
-        <ApprovalMatrixSectionBox
-          openDialog={() => dialog.open()}
-          closeDialog={() => dialog.close()}
-          alreadyOpened={true}
-          {...{ toggleEditMode, editMode, addMode, disabled }}
-        />
-        <FBApprovalMatrixTable
-          addMode={addMode}
-          fullscreenMode={true}
-          {...{ addMode, data, columns, editMode, readInputValue, readSelectValue }}
-        />
-        {!addMode &&
+          style={{ margin: "8px 0" }}
+          disabled={editMode || disabled}
+        />}
+      {errorMessage && <Typography variant="subtitle2" color="error" style={{ marginTop: 10 }} ><Text message={errorMessage} /></Typography>}
+      {addMode &&
+        <Box display="flex" flexDirection="row-reverse">
+          <FBButton
+            onClick={handleSaveChanges}
+            label="Save changes"
+            dataCy="form.builder.save.item"
+            variant="contained"
+            color="primary"
+            style={{ margin: "8px" }}
+          />
+          <FBButton
+            onClick={cancelAddMode}
+            label="Cancel"
+            dataCy="form.builder.cancel.item"
+            variant="outlined"
+            color="primary"
+            style={{ margin: "8px" }}
+          />
+        </Box>}
+      <Dialog fullScreen={true} open={dialog.isOpen}>
+        <DialogContent>
+          <ApprovalMatrixSectionBox
+            openDialog={() => dialog.open()}
+            closeDialog={() => dialog.close()}
+            alreadyOpened={true}
+            {...{ toggleEditMode, editMode, addMode, disabled }}
+          />
+          <FBApprovalMatrixTable
+            addMode={addMode}
+            fullscreenMode={true}
+            {...{ addMode, data, columns, editMode, readInputValue, readSelectValue }}
+          />
+          {!addMode &&
             <FBButton
               fullWidth={true}
               onClick={handleAdd}
               label="form.builder.add.item"
+              dataCy="form.builder.add.item"
               variant="outlined"
               style={{ margin: "8px 0" }}
               disabled={editMode || disabled}
             />}
-        {errorMessage && <Typography variant="subtitle2" color="error" style={{ marginTop: 10 }}>
-          <Text message={errorMessage} /></Typography>
-        }
-        {addMode &&
-          <Box display="flex" flexDirection="row-reverse">
-            <FBButton
-              onClick={handleSaveChanges}
-              label="Save"
-              variant="contained"
-              color="primary"
-              style={{ margin: "8px" }}
-            />
-            <FBButton
-              onClick={cancelAddMode}
-              label="Cancel"
-              variant="outlined"
-              color="primary"
-              style={{ margin: "8px" }}
-            />
-          </Box>}
-      </DialogContent>
-    </Dialog>
-  </Box>
-);
+          {errorMessage && <Typography variant="subtitle2" color="error" style={{ marginTop: 10 }}>
+            <Text message={errorMessage} /></Typography>
+          }
+          {addMode &&
+            <Box display="flex" flexDirection="row-reverse">
+              <FBButton
+                onClick={handleSaveChanges}
+                label="Save"
+                dataCy="form.builder.add.item"
+                variant="contained"
+                color="primary"
+                style={{ margin: "8px" }}
+              />
+              <FBButton
+                onClick={cancelAddMode}
+                label="Cancel"
+                dataCy="form.builder.cancel.item"
+                variant="outlined"
+                color="primary"
+                style={{ margin: "8px" }}
+              />
+            </Box>}
+        </DialogContent>
+      </Dialog>
+    </Box>
+  );
 
 export default FBApprovalMatrixFieldUI;

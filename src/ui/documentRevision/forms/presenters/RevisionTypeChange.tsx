@@ -49,6 +49,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
             label={
               <Text message={nextRevisionStageLabel} />
             }
+            data-cy="upgradeNextRevisionStage"
             value={RevisionChangeType.NextRevisionStage}
             id="RevisionTypeChange-nextRevisionStage"
             disabled={isDisabled}

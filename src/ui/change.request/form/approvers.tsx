@@ -36,9 +36,9 @@ export const Approvers: React.FunctionComponent<Props> = ({
   values,
   owner,
 }) => {
-// We should check if we need all of this
-// Now that approvers are moved to the FB
-// This is now only used for Approve&Release
+  // We should check if we need all of this
+  // Now that approvers are moved to the FB
+  // This is now only used for Approve&Release
   const joinedEmployees = (groups: Group[]) => groups.map((group) => group.joinedEmployees.map((employee) =>
     ({ group: group.name, id: employee.id, name: employee.user?.name })
   ));
@@ -69,16 +69,16 @@ export const Approvers: React.FunctionComponent<Props> = ({
     return (
       <Box display="flex" flexWrap="wrap">
         {
-          uniqGroups.map((group) =>
+          uniqGroups.map((group, index) =>
             <Box marginRight={6} marginBottom={4} key={group.id} display="inline-flex">
               {
                 group
                   .joinedEmployees
                   .some((employee) => (
                     selectedEmployees?.includes(employee.id)) || owner?.id === employee.id) ?
-                  <CheckedMark /> : <UncheckedMark />
+                  <CheckedMark data-cy={"checked-" + index} /> : <UncheckedMark data-cy={"unchecked"} />
               }
-              <Box paddingLeft={1} display="initial">
+              <Box paddingLeft={1} display="initial" data-cy={"group-" + index}>
                 <Text message={group.name} />
               </Box></Box>
           )
@@ -103,7 +103,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
   };
 
   const MultiValueLabel = ({ props, data }) => (<components.MultiValueLabel {...props}>
-    <Box marginLeft={1}><Text message={data.label}/></Box>
+    <Box marginLeft={1}><Text message={data.label} /></Box>
   </components.MultiValueLabel>);
 
   return (
