@@ -235,7 +235,7 @@ context("Approval request landing page test", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Verify default filter status is draft or in review", () => {
+    it.skip("Verify default filter status is draft or in review", () => {
       SystemRequirement("REQ-0780");
       cy.alVerifyStartingFilter();
     });

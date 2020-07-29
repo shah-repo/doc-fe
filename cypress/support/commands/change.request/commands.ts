@@ -13,7 +13,7 @@ declare global {
       arEnterApprovalRequestTitle(params: { title: string }): Chainable<Subject>;
       arEnterApprovalRequestDescription(params: { description: string }): Chainable<Subject>;
       arClickAddDocument(): Chainable<Subject>;
-      arChoseProposedDocument(): Chainable<Subject>;
+      arChoseProposedDocument(params: {name: string}): Chainable<Subject>;
       arChoseSpecificProposedDocument(name: string): Chainable<Subject>;
       arEnterDescriptionAddDocumentsDialog(params: { description: string }): Chainable<Subject>;
       arEnterJustificationAddDocumentsDialog(params: { justification: string }): Chainable<Subject>;
@@ -88,12 +88,12 @@ Cypress.Commands.add("arClickAddDocument", () => {
   cy.get("[data-cy=\"fb.add.document\"]").click().wait(200);
 });
 
-Cypress.Commands.add("arChoseProposedDocument", () => {
+Cypress.Commands.add("arChoseProposedDocument", ({ name }) => {
   cy.get("[role=dialog]>div:nth-child(2)>div>div>div>div>div>div>div>input").click();
-  cy.get("[role=listbox]>li:nth-child(1)").click();
+  cy.get("[role=listbox]>li").contains(name).click();
 });
 
-Cypress.Commands.add("arChoseSpecificProposedDocument", ({ name: string }) => {
+Cypress.Commands.add("arChoseSpecificProposedDocument", ({ name }) => {
   cy.get("[data-cy=\"proposedDocumentRevision\"]").type(`${name}{downarrow}{enter}`);
 });
 
@@ -172,4 +172,4 @@ Cypress.Commands.add("arRejectComfirmationAR", () => {
 
 Cypress.Commands.add("arSelectFirstDocument", () => {
   cy.get(".MuiTableCell-root a:nth-child(1)").first().click().wait(3000);
-})
+});
