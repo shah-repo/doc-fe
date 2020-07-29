@@ -69,7 +69,7 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
       onChange={(e) => handleEdit ? handleEdit(e, index, "description") : null}
       rows={3}
       rules="required"
-      name="description"
+      name={`description-${index}`}
     />
     <FBTextField
       label="cr.justification"
@@ -78,7 +78,7 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
       disabled={disabled}
       rows={3}
       rules="required"
-      name="justification"
+      name={`justification-${index}`}
     />
   </Box>
 );
