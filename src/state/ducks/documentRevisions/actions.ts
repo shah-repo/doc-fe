@@ -229,6 +229,14 @@ const cancelDraft = (id: string): ApiAction<DocumentRevision> => apiAction({
   },
 });
 
+const voidDocument = (id: string): ApiAction<DocumentRevision> => apiAction({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/void/${id}`,
+  method: "patch",
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionSet(documentRevision));
+  },
+});
+
 const setPrimaryAttachment = (
   docRevId: string,
   attachmentId: string,
@@ -266,4 +274,5 @@ export default {
   cancelDraft,
   reload,
   setPrimaryAttachment,
+  voidDocument,
 };
