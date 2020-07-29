@@ -85,22 +85,27 @@ context("Create company via API and create Purchase Order Form document", () => 
         employeeId: adminEmployee.id,
         sessionId: loginResponse.sessionId as unknown as string,
         payload: {
-          navigation:
-          [
+          navigation: [
             {
               label: "Dashboard",
               path: "/",
               type: "LINK"
             },
             {
-              label: "Document List",
-              path: "/document_revision",
-              type: "LINK"
-            },
-            {
-              label: "Approval Request List",
-              path: "/change_request",
-              type: "LINK"
+              label: "Document Control",
+              type: "MENU",
+              menu: [
+                {
+                  label: "Document List",
+                  path: "/document_revision",
+                  type: "LINK"
+                },
+                {
+                  label: "Approval Request List",
+                  path: "/change_request",
+                  type: "LINK"
+                },
+              ],
             },
             {
               label: "User Management",
@@ -123,8 +128,8 @@ context("Create company via API and create Purchase Order Form document", () => 
               path: "/document_by_type/" + docTypeId,
               type: "LINK",
             }
-          ],
-        }).then(() => {
+          ]}
+        ).then(() => {
         done();
       });
     });
@@ -596,3 +601,4 @@ context("Test the filter inside PO", () => {
 });
 
 export { };
+
