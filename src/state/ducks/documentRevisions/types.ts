@@ -18,6 +18,7 @@ export enum DocumentRevisionStatus {
   Deprecated = "DEPRECATED",
   Obsolete = "OBSOLETE",
   Canceled = "CANCELED",
+  Voided = "VOIDED",
 }
 
 export enum DocumentRevisionStatusAlias {
