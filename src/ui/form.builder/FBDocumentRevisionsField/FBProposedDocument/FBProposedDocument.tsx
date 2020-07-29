@@ -19,69 +19,69 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
   handleEdit,
   id,
 }) => (
-  <Box
-    onMouseEnter={() => setMouseInside?.(!disabled)}
-    onMouseLeave={() => setMouseInside?.(false)}
-  >
-    <FBSection label="common.document" stepIndex={index + 1} >
-      <Box
-        display="flex"
-        flexDirection="row-reverse"
-        mt={-3.5}
-        visibility={isMouseInside ? "visible" : "hidden"}
-      >
-        <Button
-          style={{ background: Colors.white, margin: 0, minWidth: 40 }}
-          onClick={() => removeDocument?.(id)}
+    <Box
+      onMouseEnter={() => setMouseInside?.(!disabled)}
+      onMouseLeave={() => setMouseInside?.(false)}
+    >
+      <FBSection label="common.document" stepIndex={index + 1} >
+        <Box
+          display="flex"
+          flexDirection="row-reverse"
+          mt={-3.5}
+          visibility={isMouseInside ? "visible" : "hidden"}
         >
-          <RemoveDocument />
-        </Button>
+          <Button
+            style={{ background: Colors.white, margin: 0, minWidth: 40 }}
+            onClick={() => removeDocument?.(id)}
+          >
+            <RemoveDocument />
+          </Button>
+        </Box>
+      </FBSection>
+      <Box display="flex" alignItems="flex-end" mb={5} >
+        <Box flexGrow={1}>
+          <FBAutocompleteAsync
+            optionId={FBAutocompleteAsyncOption.documentRevisions}
+            label="form.builder.proposed.document.revision"
+            gutter={false}
+            disabled={true}
+            defaultValue={id}
+            freeSolo={true}
+          />
+        </Box>
+        <Box
+          bgcolor={Colors.medium_blue}
+          borderRadius={3}
+          color="white"
+          height="80%"
+          ml={1}
+          mb={0.3}
+        >
+          <IconButton color="inherit" onClick={handleOpen} >
+            <VisibilityIcon />
+          </IconButton>
+        </Box>
       </Box>
-    </FBSection>
-    <Box display="flex" alignItems="flex-end" mb={5} >
-      <Box flexGrow={1}>
-        <FBAutocompleteAsync
-          optionId={FBAutocompleteAsyncOption.documentRevisions}
-          label="form.builder.proposed.document.revision"
-          gutter={false}
-          disabled={true}
-          defaultValue={id}
-          freeSolo={true}
-        />
-      </Box>
-      <Box
-        bgcolor={Colors.medium_blue}
-        borderRadius={3}
-        color="white"
-        height="80%"
-        ml={1}
-        mb={0.3}
-      >
-        <IconButton color="inherit" onClick={handleOpen} >
-          <VisibilityIcon />
-        </IconButton>
-      </Box>
-    </Box>
-    <FBTextField
-      label="common.description"
-      defaultValue={description}
-      disabled={disabled}
-      onChange={(e) => handleEdit ? handleEdit(e, index, "description") : null}
-      rows={3}
+      <FBTextField
+        label="common.description"
+        dataCy="common.description"
+        defaultValue={description}
+        disabled={disabled}
+        onChange={(e) => handleEdit ? handleEdit(e, index, "description") : null}
+        rows={3}
       rules="required"
-      name="description"
-    />
-    <FBTextField
-      label="cr.justification"
-      defaultValue={justification}
-      onChange={(e) => handleEdit ? handleEdit(e, index, "justification") : null}
-      disabled={disabled}
-      rows={3}
-      rules="required"
+      name="description"/>
+      <FBTextField
+        label="cr.justification"
+        dataCy="cr.justification"
+        defaultValue={justification}
+        onChange={(e) => handleEdit ? handleEdit(e, index, "justification") : null}
+        disabled={disabled}
+        rows={3}rules="required"
       name="justification"
-    />
-  </Box>
-);
+      />
+    </Box>
+  );
 
 
 export default withFBProposedDocument(FBProposedDocument);

@@ -43,6 +43,8 @@ const DocRevActions: React.FunctionComponent<Props> = ({
     formik.submitForm();
   };
 
+  const label = changeRequest ? "common.save" : "navigation.createChangeRequest";
+
   return (
     <Grid
       container={true}
@@ -54,13 +56,11 @@ const DocRevActions: React.FunctionComponent<Props> = ({
         id="submit"
         asyncState={asyncState}
         onClick={onFormClick}
-        label={
-          changeRequest
-            ? "common.save"
-            : "navigation.createChangeRequest"
-        }/>
+        dataCy={label}
+        label={label} />
       <AssessmentFormControlsContainer changeRequest={changeRequest} />
     </Grid>
-  ); };
+  );
+};
 
 export default withRouter(DocRevActions);

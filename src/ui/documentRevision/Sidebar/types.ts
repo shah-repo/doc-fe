@@ -7,4 +7,5 @@ export interface Sidebar {
 export interface SidebarDetails {
   title: string;
   component: JSX.Element | null;
+  dataCy?: string;
 }

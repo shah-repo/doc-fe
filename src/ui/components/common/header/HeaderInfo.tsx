@@ -41,7 +41,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
     <div className={classNames(classes.statusIconDefault, {
       [classes.statusIconReleased]: isStatusReleased,
       [classes.statusIconCanceled]: isStatusCanceled,
-    })}/>;
+    })} />;
 
   return (
     <Grid container={true} xs={6} alignItems="center">
@@ -50,6 +50,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
         <Chip
           label={<Text message={statusLabel} />}
           id="HeaderInfo-status"
+          data-cy="HeaderInfo-status"
           className={classNames(classes.statusDefault)}
           icon={statusIcon}
         />
@@ -64,6 +65,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
         </Typography>
       }
     </Grid>
-  ); };
+  );
+};
 
 export default HeaderInfo;

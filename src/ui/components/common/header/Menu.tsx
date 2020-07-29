@@ -25,7 +25,7 @@ export const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
 
   return (
     <>
-      <IconButton onClick={handleClick} id="HeaderMenuButton">
+      <IconButton onClick={handleClick} data-cy="HeaderMenuButton" id="HeaderMenuButton">
         <MoreVertIcon />
       </IconButton>
       <Menu

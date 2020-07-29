@@ -14,6 +14,7 @@ declare global {
       drEnterDocumentTitle(params: { name: string }): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
+      drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocType(params: { documentType: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drClickCreateDocument(): Chainable<Subject>;
@@ -26,7 +27,7 @@ declare global {
       drClickReviseDocument(): Chainable<Subject>;
       drClickTrainingRequired(): Chainable<Subject>;
       drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
-      drSelectOutputDocTypeSecondTime(params: {documentType: string }): Chainable<Subject>;
+      drSelectOutputDocTypeSecondTime(params: { documentType: string }): Chainable<Subject>;
       drChooseTypeOfRevisionChangeOption(params: { option: string }): Chainable<Subject>;
       drDocumentFieldError(params: { field: string, message: string }): Chainable<Subject>;
       closeAllAlertMessages(): Chainable<Subject>;
@@ -73,6 +74,11 @@ Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) 
   cy.get(`[data-cy=\"selectItem.document.documentType.id.${params.documentType}\"]`).click();
 });
 
+Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
+  cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
+  cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`);
+});
+
 // TODO: Remove Hardcoded select number option and make this unique method for all output doc types
 Cypress.Commands.add("drSelectOutputDocType", (params: { documentType: string }) => {
   cy.get("[id=\"formTemplate.outputDocumentTypes\"]").click();
@@ -80,20 +86,19 @@ Cypress.Commands.add("drSelectOutputDocType", (params: { documentType: string })
 });
 
 // TODO: Remove Hardcoded select number option and make this unique method for all output doc types
-Cypress.Commands.add("drSelectOutputDocTypeSecondTime", (params: {documentType: string }) => {
+Cypress.Commands.add("drSelectOutputDocTypeSecondTime", (params: { documentType: string }) => {
   cy.get("[id=\"formTemplate.outputDocumentTypes\"]").click();
   cy.get("[id^=\"react-select-27-option\"]").contains(params.documentType).click();
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
-  cy.get("#ApproveAndRelease-button").click();
-  cy.get("#FormList-selectForm").click();
-  cy.get("#FormList-selectForm>div:nth-child(3)>div>div:nth-child(1)").click();
-  cy.get("#ApproveAndRelease-submit").click();
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 5 * 1000 }).click();
+  cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
+  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
 });
 
 Cypress.Commands.add("drClickCreateDocument", () => {
-  cy.get("#DocumentRevisionForm-submit", { timeout: 5 * 1000 }).click();
+  cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click().wait(2000);
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {

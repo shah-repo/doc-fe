@@ -32,7 +32,7 @@ export let changeRequestFormOnScreenContext = React.createContext<boolean>(false
 type ChangeRequestFormContainerProps = OwnProps;
 
 export const ChangeRequestFormContainer: React.FunctionComponent<
-ChangeRequestFormContainerProps
+  ChangeRequestFormContainerProps
 > = ({
   onSubmit,
   asyncState,
@@ -41,78 +41,80 @@ ChangeRequestFormContainerProps
   doNotPrompt,
   chosenForm,
 }) => {
-  const FBContainer = React.useRef(null);
+    const FBContainer = React.useRef(null);
 
-  useEffect(() => () => {
-    changeRequestFormOnScreenContext = React.createContext<boolean>(false);
-  }, []);
+    useEffect(() => () => {
+      changeRequestFormOnScreenContext = React.createContext<boolean>(false);
+    }, []);
 
-  const intl = useIntl();
-  const url = useLocation();
-  const [isDrawerOpen, setOpen] = React.useState(true);
-  const classes = styles({ isDrawerOpen });
-  const schemaData = changeRequest
-    ? changeRequest.formDocument?.formTemplate?.schema
-    : chosenForm?.formTemplate?.schema;
+    const intl = useIntl();
+    const url = useLocation();
+    const [isDrawerOpen, setOpen] = React.useState(true);
+    const classes = styles({ isDrawerOpen });
+    const schemaData = changeRequest
+      ? changeRequest.formDocument?.formTemplate?.schema
+      : chosenForm?.formTemplate?.schema;
 
-  const render = (props: FormikProps<ChangeRequestFormValues>) => (
-    <FBWorkspace
-      portalContainer={FBContainer}
-      initialValues={cloneDeep(changeRequest?.formInput)}
-      changeRequest={cloneDeep(changeRequest)}
-      autosave={true}
-      schema={schemaData}
-      mode="form"
-    >
-      <AssessmentFormPresenter
-        asyncState={asyncState}
-        changeRequest={changeRequest}
-        doNotPrompt={doNotPrompt}
-        {...props}
-        {...{ FBContainer }}
-      />
-      <DocumentRevisionOutputInfo formDocument={chosenForm || changeRequest?.formDocument}/>
-    </FBWorkspace>
+    const render = (props: FormikProps<ChangeRequestFormValues>) => (
+      <FBWorkspace
+        portalContainer={FBContainer}
+        initialValues={cloneDeep(changeRequest?.formInput)}
+        changeRequest={cloneDeep(changeRequest)}
+        autosave={true}
+        schema={schemaData}
+        mode="form"
+      >
+        <AssessmentFormPresenter
+          asyncState={asyncState}
+          changeRequest={changeRequest}
+          doNotPrompt={doNotPrompt}
+          {...props}
+          {...{ FBContainer }}
+        />
+        <DocumentRevisionOutputInfo formDocument={chosenForm || changeRequest?.formDocument} />
+      </FBWorkspace>
 
-  );
+    );
 
-  const sidebarList = [
-    {
-      icon: <TimelineIcon />,
-      details: {
-        title: intl.formatMessage({
-          id: "document.revision.history",
-        }),
-        component: changeRequest ? <ChangeRequestAuditContainer changeRequestId={changeRequest.id} />
-          : null,
+    const sidebarList = [
+      {
+        icon: <TimelineIcon />,
+        details: {
+          dataCy: "timeline-icon",
+          title: intl.formatMessage({
+            id: "document.revision.history",
+          }),
+          component: changeRequest ? <ChangeRequestAuditContainer changeRequestId={changeRequest.id} />
+            : null,
+        },
       },
-    },
-    {
-      icon: <BookmarkIcon />,
-      details: {
-        title: intl.formatMessage({
-          id: "document.revision.bookmarks",
-        }),
-        component: <Bookmarks location={url} schema={schemaData} />,
+      {
+        icon: <BookmarkIcon />,
+        details: {
+          dataCy: "bookmark-icon",
+          title: intl.formatMessage({
+            id: "document.revision.bookmarks",
+          }),
+          component: <Bookmarks location={url} schema={schemaData} />,
+        },
       },
-    },
-  ];
+    ];
 
-  return (
-    <div className={classes.root}>
-      <div className={classes.appFrame}>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          enableReinitialize={true}
-        >
-          {render}
-        </Formik>
+    return (
+      <div className={classes.root}>
+        <div className={classes.appFrame}>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+            enableReinitialize={true}
+          >
+            {render}
+          </Formik>
+        </div>
+
+        {changeRequest && <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />}
       </div>
-
-      {changeRequest && <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }}/>}
-    </div>
-  );
-};
+    );
+  };
 
 export default ChangeRequestFormContainer;
