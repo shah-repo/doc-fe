@@ -6,6 +6,7 @@ import RadioGroup from "../../../components/forms/fields/RadioGroup";
 import { required, validator } from "../../../components/forms/fields/validators";
 import Text from "../../../components/Text";
 import { useAdministrativeChange, useNextRevision, useNextRevisionStage, useObsolete, useRevisionSelect } from "../../../hooks/docCustomization/useCustomization";
+import { styles } from "./RevisionTypeChange.styles";
 
 interface Props {
   documentTypeId?: string;
@@ -16,6 +17,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
   documentTypeId = "",
   isDisabled,
 }) => {
+  const classes = styles();
   const [showRevisionSelect, revisionSelectLabel] = useRevisionSelect(documentTypeId);
   const [showNextRevisionLevel, nextRevisionLevelLabel] = useNextRevision(documentTypeId);
   const [showNextRevisionStage, nextRevisionStageLabel] = useNextRevisionStage(documentTypeId);
@@ -41,6 +43,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
             value={RevisionChangeType.NextRevision}
             id="RevisionTypeChange-nextRevision"
             disabled={isDisabled}
+            className={classes.label}
           />
         }
         {
@@ -52,6 +55,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
             value={RevisionChangeType.NextRevisionStage}
             id="RevisionTypeChange-nextRevisionStage"
             disabled={isDisabled}
+            className={classes.label}
           />
         }
         {
@@ -61,6 +65,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
             value={RevisionChangeType.Obsolete}
             id="RevisionTypeChange-obsolete"
             disabled={isDisabled}
+            className={classes.label}
           />
         }
         {
@@ -70,6 +75,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
             value={RevisionChangeType.AdministrativeChange}
             id="RevisionTypeChange-administrativeChange"
             disabled={isDisabled}
+            className={classes.label}
           />
         }
       </RadioGroup>
