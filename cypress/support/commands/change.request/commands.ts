@@ -45,7 +45,7 @@ Cypress.Commands.add("arClickAddDocument", () => {
 
 Cypress.Commands.add("arChoseProposedDocument", () => {
   cy.get("[role=dialog]>div:nth-child(2)>div>div>div>div>div>div>div>input").click();
-  cy.get("[role=listbox]>li:nth-child(1)").click();
+  cy.get("[role=listbox]>li:nth-child(2)").click();
 });
 
 Cypress.Commands.add("arEnterDescriptionAddDocumentsDialog", (params: {description: string }) => {
@@ -96,8 +96,7 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: {title: string; s
 });
 
 Cypress.Commands.add("arApproveAR", () => {
-  cy.get("#HeaderMenuButton").click();
-  cy.get("ul[role=menu]>li").contains("Approve submission").click();
+  cy.get("[aria-label=\"approve\"]").contains("Approve submission").click();
   cy.get("input[type=password]").type("Tester1!");
-  cy.get("#passwordConfirm").click().wait(8000);
+  cy.get("#passwordConfirm").click().wait(5000);
 });
