@@ -14,6 +14,7 @@ declare global {
       drEnterDocumentTitle(params: { name: string }): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
+      drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocType(params: { documentType: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drClickCreateDocument(): Chainable<Subject>;
@@ -91,6 +92,11 @@ Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) 
   cy.get(`[data-cy=\"selectItem.document.documentType.id.${params.documentType}\"]`).click();
 });
 
+Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
+  cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
+  cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`);
+});
+
 // TODO: Remove Hardcoded select number option and make this unique method for all output doc types
 Cypress.Commands.add("drSelectOutputDocType", (params: { documentType: string }) => {
   cy.get("[id=\"formTemplate.outputDocumentTypes\"]").click();
@@ -109,10 +115,9 @@ Cypress.Commands.add("drAddOutputDocType", (params: { documentType: string }) =>
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
-  cy.get("#ApproveAndRelease-button").click();
-  cy.get("#FormList-selectForm").click();
-  cy.get("#FormList-selectForm>div:nth-child(3)>div>div:nth-child(1)").click();
-  cy.get("#ApproveAndRelease-submit").click();
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 5 * 1000 }).click();
+  cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
+  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
 });
 
 Cypress.Commands.add("drReleaseDocument", (params: { template: string }) => {

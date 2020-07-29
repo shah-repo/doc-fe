@@ -63,7 +63,7 @@ export const UserMenuPresenter: React.FunctionComponent<Props> = ({
             </ListItemText>
           </MenuItem>
         }
-        <MenuItem onClick={handleLogout} style={{ borderTop: `1px solid ${Colors.medium_gray}` }}>
+        <MenuItem data-cy="header.logout" onClick={handleLogout} style={{ borderTop: `1px solid ${Colors.medium_gray}` }}>
           <ListItemIcon>
             <ExitToAppOutlinedIcon fontSize="small" />
           </ListItemIcon>

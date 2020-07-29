@@ -40,6 +40,6 @@ Cypress.Commands.add("authLogin", (params: { email: string; password: string }) 
 
 Cypress.Commands.add("authLogout", () => {
   cy.get("[data-cy=\"UserMenuButton\"]").click();
-  cy.contains("Logout").click();
+  cy.get("[data-cy=\"header.logout\"]").click();
 });
 

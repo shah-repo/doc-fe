@@ -44,7 +44,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
 
-  const isPO = documentType?.group === "PO";
+  const isPO = documentType?.group === "PO" || documentCategory?.category === "Purchase Order";
 
   useEffect(() => {
     if (isEmpty(tableCriteria.queryDict) || isPO) {

@@ -90,6 +90,7 @@ Cypress.Commands.add("cmpNavigateToDocumentList", () => {
 });
 
 Cypress.Commands.add("cmpNavigateToApprovalRequestList", () => {
+  cy.get("[data-cy=\"navigation.documentControl\"]", { timeout: 10 * 1000 }).click();
   cy.get("[data-cy=\"navigation.approvalRequests\"]").click();
 });
 
@@ -98,7 +99,7 @@ Cypress.Commands.add("cmpClickCreateNewDocument", () => {
 });
 
 Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
-  cy.get("#ChangeRequest-create").click();
+  cy.get("[data-cy=\"change.request.create\"]").click();
 });
 
 Cypress.Commands.add("cmpNavigateToPurchaseOrder", () => {

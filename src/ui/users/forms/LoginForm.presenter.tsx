@@ -86,6 +86,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
           className={classes.submit}
           data-cy={"LoginFormPresenter-submit"}
           id="LoginFormPresenter-submit"
+          dataCy="LoginFormPresenter-submit"
         />
         <Typography component="h1" variant="h5" className={classes.navigationText}>
           <Text translation={signMessage} />

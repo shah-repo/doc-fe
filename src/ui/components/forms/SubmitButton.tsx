@@ -10,11 +10,13 @@ export interface SubmitButtonProps extends ButtonProps {
   asyncState: AsyncState;
   label: string;
   errors?: FormikErrors<any>;
+  dataCy?: string;
 }
 
 const SubmitButton: React.FunctionComponent<SubmitButtonProps> = ({
   asyncState,
   label,
+  dataCy,
   errors,
   ...buttonProps
 }) => {
@@ -25,6 +27,7 @@ const SubmitButton: React.FunctionComponent<SubmitButtonProps> = ({
       type="submit"
       variant="contained"
       color="secondary"
+      data-cy={dataCy}
       disabled={hasErrors || isActive}
       {...buttonProps}
     >

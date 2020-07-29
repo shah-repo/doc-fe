@@ -18,6 +18,7 @@ export enum DocumentRevisionStatus {
   Deprecated = "DEPRECATED",
   Obsolete = "OBSOLETE",
   Canceled = "CANCELED",
+  Voided = "VOIDED",
 }
 
 export enum DocumentRevisionStatusAlias {
@@ -29,6 +30,7 @@ export enum RevisionChangeType {
   NextRevisionStage = "NEXT_REVISION_STAGE",
   Obsolete = "OBSOLETE",
   AdministrativeChange = "ADMINISTRATIVE_CHANGE",
+  Void = "VOID",
 }
 
 export interface DocumentRevisionDocument {

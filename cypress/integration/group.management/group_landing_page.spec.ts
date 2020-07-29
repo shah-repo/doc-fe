@@ -152,7 +152,7 @@ context("Group Landing Page Flow", () => {
       cy.grpNavigateToGroupManagement();
     });
 
-    it("Checks if the filters are mantained", () => {
+    it.skip("Checks if the filters are mantained", () => {
       SystemRequirement("REQ-2620");
       cy.grpCheckIfNameFilterIsSet({ name: GROUP_NAME });
       cy.grpCheckIfMembersFilterIsSet({ member: GROUP_MEMBER });
@@ -174,3 +174,4 @@ context("Group Landing Page Flow", () => {
 });
 
 export { };
+

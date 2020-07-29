@@ -64,21 +64,22 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
     </Box>
     <FBTextField
       label="common.description"
+      dataCy="common.description"
       defaultValue={description}
       disabled={disabled}
       onChange={(e) => handleEdit ? handleEdit(e, index, "description") : null}
       rows={3}
       rules="required"
-      name="description"
+      name={`description-${index}`}
     />
     <FBTextField
       label="cr.justification"
+      dataCy="cr.justification"
       defaultValue={justification}
       onChange={(e) => handleEdit ? handleEdit(e, index, "justification") : null}
       disabled={disabled}
-      rows={3}
-      rules="required"
-      name="justification"
+      rows={3}rules="required"
+      name={`justification-${index}`}
     />
   </Box>
 );
