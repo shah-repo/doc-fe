@@ -148,7 +148,7 @@ export function TablePanel<T extends any>({
 
       requestConfig.headers.Authorization = `bearer ${
         store.getState().auth.user.employeeId
-        }:${store.getState().auth.user.sessionId}`;
+      }:${store.getState().auth.user.sessionId}`;
 
       setIsLoading(true);
       dispatch(
