@@ -38,11 +38,15 @@ Cypress.Commands.add("cmpSelectCompany", (params: {name: string; multiple: boole
 });
 
 Cypress.Commands.add("cmpNavigateToDocumentList", () => {
+  cy.get("[data-cy=\"navigation.dashboard\"]").click();
+  cy.wait(300).get("[data-cy=\"navigation.documentControl\"]").click();
   cy.get("[data-cy=\"navigation.documentList\"]").click();
 });
 
 Cypress.Commands.add("cmpNavigateToApprovalRequestList", () => {
-  cy.get("[data-cy=\"navigation.approvalRequestList\"]").click();
+  cy.get("[data-cy=\"navigation.dashboard\"]").click();
+  cy.wait(300).get("[data-cy=\"navigation.documentControl\"]").click();
+  cy.get("[data-cy=\"navigation.approvalRequests\"]").click();
 });
 
 Cypress.Commands.add("cmpClickCreateNewDocument", () => {
