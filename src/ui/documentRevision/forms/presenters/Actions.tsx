@@ -1,15 +1,17 @@
 import { useFormikContext } from "formik";
 import * as React from "react";
+import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
-import { FormHeaderContext } from "../DocumentRevisionForm.presenter";
+import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.presenter";
 import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./ApproveAndRelease";
 import CancelButton from "./CancelButton";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
+import VoidButton from "./VoidButton";
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const  {
@@ -24,7 +26,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const formik = useFormikContext();
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
-
+  const isUserDocumentOwner = React.useContext(isOwnerContext);
+  const showVoidButton = documentRevision?.status === DocumentRevisionStatus.Draft && documentRevision?.version === 1;
   function setFBValue() {
     switch (workspaceState?.getMode()) {
       case "design":
@@ -88,6 +91,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           setShouldDisplay={props.setUpgradeToLastestDisplay}
           type="button"
         />
+        {isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}
       </HeaderMenu>
     </div>
   );
