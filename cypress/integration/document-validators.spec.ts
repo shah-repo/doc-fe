@@ -81,7 +81,7 @@ context("Validators tests", () => {
 
     it("[API] Login user", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy15@gmail.com",
+        email: "enlil.testmail+cy1@gmail.com",
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -94,7 +94,7 @@ context("Validators tests", () => {
   context("Log in user, select company and open 'Create Document'", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy15@gmail.com",
+        email: "enlil.testmail+cy1@gmail.com",
         password: "Tester1!",
       });
     });
