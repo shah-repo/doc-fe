@@ -19,6 +19,13 @@ fi
 # make folders for results
 source ./scripts/cypress/make_results_dir.sh
 
+if [[ -z "${DIR_REPORTS}" ]]; then
+  echo "DIR_REPORTS not set, exiting"
+  exit
+fi
+
+export ENLIL_WORKER_LOG_FILE="$DIR_REPORTS/worker.log"
+
 ./scripts/cypress/patch_director_port_in_cache.sh
 ./scripts/cypress/generate_requirements_json_file.sh
 
@@ -31,7 +38,7 @@ for((i=1; i <= $NUMBER_OF_WORKERS; i+=1))
 do
   echo "Started worker: $i"
   # ./scripts/cypress/run_node.sh  2>/dev/null || true  &
-  ./scripts/cypress/run_node.sh | grep "Spec Ran" 2>/dev/null || true  &
+  ./scripts/cypress/run_node.sh 2>/dev/null | xargs -I {} echo "Worker $i | " {} | tee -a $ENLIL_WORKER_LOG_FILE || true  &
   pids[${i}]=$!
 done
 
