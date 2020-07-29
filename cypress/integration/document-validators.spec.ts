@@ -7,6 +7,8 @@ Cypress.Screenshot.defaults({
 const runId = new Date().valueOf();
 let company;
 let docId;
+let loginResponse;
+let multipleCompanies;
 
 const requiredFieldLabel = "Name";
 const requiredFieldSelector = `${requiredFieldLabel.toLowerCase().split(" ").join("-")}-`;
@@ -44,7 +46,7 @@ context("Validators tests", () => {
         cy.cmpCreateCompany({
           payload: {
             companyAcronym: `T1${runId}`,
-            companyAdminEmail: "enlil.testmail+cy15@gmail.com",
+            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: "enlil.testmail+cy5@gmail.com",
@@ -76,6 +78,17 @@ context("Validators tests", () => {
         });
       });
     });
+
+    it("[API] Login user", (done: any) => {
+      cy.authApiLogin({
+        email: "enlil.testmail+cy15@gmail.com",
+        password: "Tester1!",
+      }).then((response) => {
+        loginResponse = response;
+        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
+        done();
+      });
+    });
   });
 
   context("Log in user, select company and open 'Create Document'", () => {
@@ -87,7 +100,7 @@ context("Validators tests", () => {
     });
 
     it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: true });
+      cy.cmpSelectCompany({ name: company.name, multiple: multipleCompanies });
     });
 
     context("Open 'Create Document'", () => {
@@ -120,10 +133,8 @@ context("Validators tests", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 1000 }).click();
-      cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
-      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
-      cy.wait(3000);
+      cy.drApproveAndReleaseDocument();
+      cy.wait(8000);
     });
   });
 
@@ -451,9 +462,8 @@ context("Validators tests", () => {
     });
 
     it("Approve and Release", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 1000 }).click();
-      cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
-      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+      cy.drApproveAndReleaseDocument();
+      cy.wait(8000);
     });
 
   });
@@ -500,9 +510,8 @@ context("Validators tests", () => {
 
   context("Validation errors should prevent from releasing document", () => {
     it("'Approve and Release' the document", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 1000 }).click();
-      cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
-      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click().wait(3000);
+      cy.drApproveAndReleaseDocument();
+      cy.wait(8000);
     });
 
     it("Check returned errors are not empty", () => {

@@ -93,7 +93,7 @@ Cypress.Commands.add("arChoseProposedDocument", ({ name }) => {
   cy.get("[role=listbox]>li").contains(name).click();
 });
 
-Cypress.Commands.add("arChoseSpecificProposedDocument", ({ name }) => {
+Cypress.Commands.add("arChoseSpecificProposedDocument", (name: string) => {
   cy.get("[data-cy=\"proposedDocumentRevision\"]").type(`${name}{downarrow}{enter}`);
 });
 
