@@ -88,17 +88,17 @@ export const Container: React.FunctionComponent<Props> = ({
   const summaryPresenterRenderer = (
     props: FormikProps<ChangeRequestFormValues>,
   ) => (
-      <Form>
-        <Presenter
-          dataProp={dataProp}
-          asyncState={async.asyncState}
-          canEdit={canEdit}
-          canChangeOwnerShip={canChangeOwnerShip}
-          {...props}
-          {...{ FBContainer }}
-        />
-      </Form>
-    );
+    <Form>
+      <Presenter
+        dataProp={dataProp}
+        asyncState={async.asyncState}
+        canEdit={canEdit}
+        canChangeOwnerShip={canChangeOwnerShip}
+        {...props}
+        {...{ FBContainer }}
+      />
+    </Form>
+  );
 
   const summaryFormikRenderer = () => (
     <FormContext.Provider value={{ submitOnChange: false }}>
