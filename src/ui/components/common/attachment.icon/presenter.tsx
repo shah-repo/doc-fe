@@ -71,7 +71,7 @@ AttachmentIconProps
     documentRevisionsSelectors.getDocument(state, formDocumentId)
   );
   const releasedVersions = formDocuments?.documentRevisions.filter((e) => e.status === DocumentRevisionStatus.Released);
-  const lastReleasedDocRevId = releasedVersions?.[releasedVersions.length - 1].id;
+  const lastReleasedDocRevId = releasedVersions?.[releasedVersions.length - 1]?.id;
   const docRevById = useSelector(documentRevisionsSelectors.byId);
   const dispatch = useDispatch();
 

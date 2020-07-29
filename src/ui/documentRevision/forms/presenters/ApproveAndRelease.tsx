@@ -67,7 +67,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const [selectedInvalid, setSelectedInvalid] = useState<boolean>(false);
   const create = useActionCreator(changeRequestsActions.create);
   const documentRevision = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, docRevId as string));
+    documentRevisionsSelectors.getDocumentRevision(state, docRevId));
   const history = useHistory();
 
   const asyncGroups = useAsync({
@@ -128,28 +128,32 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     title: documentRevision.name,
     description: documentRevision.name,
     documentType: {
-      id: values.formDocument.documentType
+      id: values.formDocument.documentType,
     },
     formDocument: {
-      id: values.formDocument.value
+      id: values.formDocument.value,
     },
     formInput: {
+      approvers: values.approvals
+        .map((approval) => approval.value)
+        .concat(owner?.id).filter(id => id)
+        .map((id) => ({ id })),
       documentRevisions: [{
         descriptionOfChange: values.formDocument.label,
         id: FB.uniqid,
         justificationOfChange: values.formDocument.label,
-        proposedDocumentRevision: { id: docRevId }
-      }], 
-      effectiveDate: values.effectiveDate
-    }
+        proposedDocumentRevision: { id: docRevId },
+      }],
+      effectiveDate: values.effectiveDate,
+    },
   });
 
   const onSubmit = (values: any) => {
     if (selectedInvalid) {
       asyncAR.start(create, toChangeRequestEditRequestBody(initialValuesAR(values)), asyncAR);
-      return; 
+      return;
     }
-    
+
     const approvers = !values.approvals || values.approvals.length === 0 ?
       undefined :
       values.approvals.map((approver) => ({ id: approver.value }));
