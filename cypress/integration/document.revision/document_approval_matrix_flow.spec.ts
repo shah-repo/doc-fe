@@ -231,6 +231,7 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save Approval Matrix Item", () => {
       SystemRequirement("REQ-0630");
+      SystemRequirement("REQ-0650");
       cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
     });
   });
@@ -355,6 +356,7 @@ context("Document Approval Matrix Flow", () => {
   context("No validation error, submission is successful", () => {
 
     it("Check returned errors are empty", () => {
+      SystemRequirement("REQ-0010");
       cy.checkToastMessage({ exists: false });
     })
   });
