@@ -32,6 +32,7 @@ import "./commands/group.management/commands";
 import "./commands/navigation/commands";
 import "./commands/purchase.order/commands";
 import "./commands/user.management/commands";
+import { CONFIG } from "./config";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
@@ -41,40 +42,27 @@ Cypress.on("uncaught:exception", (err, runnable) => {
     err.message.includes("Socket is closing");
 
   if (socketIsClosingError) {
+    // eslint-disable-next-line no-console
     console.log("Ignoring 'Socket is closing' error");
     return false;
   }
   return true;
-})
-
-
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
+});
 
 
 // console.log({"CONFIG.SCREENSHOT_OF_RUN_FAILURE": CONFIG.SCREENSHOT_OF_RUN_FAILURE})
 Cypress.Screenshot.defaults({
-  capture: 'viewport',
+  capture: "viewport",
   scale: false,
   disableTimersAndAnimations: true,
-  screenshotOnRunFailure: true,
-  // screenshotOnRunFailure: false,
-  onBeforeScreenshot () {
-    console.log("onBeforeScreenshot")
-   },
-  onAfterScreenshot () {
-    console.log("onAfterScreenshot")
-   },
+  screenshotOnRunFailure: CONFIG.SCREENSHOT_OF_RUN_FAILURE,
 });
 
 
-Cypress.on('test:after:run', (test, runnable: any ) => {
-  if (test.state === 'failed') {
-    // cy.screenshot();
-    // cy.log("SCREENSHOT2")
-    console.log("SCREENSHOT2")
+Cypress.on("test:after:run", (test, runnable: any ) => {
+  if (CONFIG.SCREENSHOT_OF_RUN_FAILURE && test.state === "failed") {
     addScreenshotToContext(test, runnable);
   }
-})
+});
 
 

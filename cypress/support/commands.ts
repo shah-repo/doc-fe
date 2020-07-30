@@ -22,55 +22,6 @@ declare global {
   }
 }
 
-
-// class DocumentTypeDto {
-//   constructor(props: Partial<DocumentTypeDto>) {
-//     Object.assign(this, props);
-//   }
-//   documentTypeName: string;
-//   documentTypeAcronym: string;
-//   group: string;
-//   privateNumberPool: boolean;
-//   startingNumber?: number;
-//   pageDetails?: PageDetails;
-//   isQms?: boolean;
-//   needsSignature?: boolean;
-//   defaultTraining?: boolean;
-//   schema?: ISchemaItem[];
-// }
-
-// class User {
-//   constructor(props: Partial<User>) {
-//     Object.assign(this, props);
-//   }
-//   email =  "test@test.com";
-//   name = "User";
-// }
-
-// class CreateCompanyBootstrap {
-//   constructor(props: Required<{
-//     remoteValidatorBundleName: string;
-//   }> & Partial<CreateCompanyBootstrap>) {
-//     Object.assign(this, props);
-//     this.remoteValidatorBundleName = props.remoteValidatorBundleName;
-//   }
-//   name = "CompanyName";
-//   companyAcronym= "CN";
-//   companyAdminEmail = "companyadminemail@test.com";
-//   importerEmail = "companyimporteremail@test.com";
-//   slackIntegrationEnabled = false;
-//   helloSignIntegrationEnabled = false;
-//   helloSignTestMode = false;
-//   maxRevisionStages = 3;
-//   numOfDocDigits = 3;
-//   users: User[] =  [];
-//   documentTypes: DocumentTypeDto[] = [];
-//   whiteLabeling?: WhiteLabeling;
-//   addresses?: string[] = [];
-//   remoteValidatorBundleName: string;
-//   acctCodes?: string[] = [];
-// }
-
 interface IUser {
   email: string;
   name: string;
@@ -125,9 +76,9 @@ Cypress.Commands.add("myCompanies", (token: string) => {
     headers: {
       Authorization: `bearer ${token}`,
     },
-    timeout: 10 * 1000
-  }).then((response) => response.body)
-})
+    timeout: 10 * 1000,
+  }).then((response) => response.body);
+});
 
 Cypress.Commands.add("apiLogin", (params: { email: string; password: string }) => {
   cy.request({
@@ -154,63 +105,3 @@ Cypress.Commands.add("selectCompany", (params: { name: string }) => {
 Cypress.Commands.add("unClick", () => {
   cy.get("#root>div>div>header").click();
 });
-
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-
-
-// function withParentTitle(item: any) {
-//   const nameParts: any = [];
-//   if(item.parent) {
-//     nameParts.unshift(item.parent.title)
-//     nameParts.unshift(...withParentTitle(item.parent))
-//   }
-//   return nameParts;
-// }
-
-// Cypress.on('test:after:run', (test, runnable) => {
-//   console.log({"test.state": test.state})
-//   if (test.state === 'failed') {
-//     let item: any = runnable
-//     const nameParts = [runnable.title]
-//     nameParts.unshift(...withParentTitle(item.parent))
-
-//     const fullTestName = nameParts
-//             .filter(Boolean)
-//             .join(' -- ')           // this is how cypress joins the test title fragments
-
-//     const imageUrl = `${fullTestName} (failed) kova.png`
-//     console.log({fullTestName, imageUrl})
-//     cy.screenshot()
-//     // cy.screenshot(imageUrl, {
-//     //   capture: "viewport",
-//     // }).then(() => {
-//     // console.log(4)
-//     //   addTestContext({ test }, { title: "Screenshot", value: imageUrl });
-//     // })
-
-//   }
-// })
