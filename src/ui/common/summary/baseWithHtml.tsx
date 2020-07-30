@@ -27,7 +27,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
           </Typography>
         </Grid>
       )}
-      <Grid item={true} xs={12} id="BaseWithhtml-editor">
+      <Grid item={true} xs={12} id="BaseWithhtml-editor" data-cy="BaseWithhtml-editor">
         <Editor
           readOnly={true}
           editorState={editor}

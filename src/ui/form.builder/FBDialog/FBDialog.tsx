@@ -21,52 +21,52 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
   actions,
   maxWidth,
 }) => (
-  <Dialog
-    fullWidth={true}
-    fullScreen={useMediaQuery(useTheme().breakpoints.down(maxWidth || "sm"))}
-    {...{ open, maxWidth }}
-  >
-    <DialogTitle>
-      <Box display="flex" flexDirection="row-reverse">
-        <CloseIcon fontSize="large" onClick={handleClose} />
-      </Box>
-      {_.isString(title) && (
-        <Box
-          fontWeight="fontWeightBold"
-          textAlign="left"
-          border={1}
-          // MUI border color issue
-          borderTop={0}
-          borderLeft={0}
-          borderRight={0}
-          borderColor={Colors.hint_gray}
-          mt={-2}
-          mb={2}
-        >
-          <Text message={title} />
+    <Dialog
+      fullWidth={true}
+      fullScreen={useMediaQuery(useTheme().breakpoints.down(maxWidth || "sm"))}
+      {...{ open, maxWidth }}
+    >
+      <DialogTitle>
+        <Box display="flex" flexDirection="row-reverse">
+          <CloseIcon fontSize="large" data-cy="dialog-close" onClick={handleClose} />
         </Box>
-      )}
-      <div ref={handleTitleRef} />
-    </DialogTitle>
-    <DialogContent>
-      {content && portalTitle && portalAction && (
-        <content.type {...content.props}>
-          {content.props.children}
-          {!_.isString(title) && (
-            <Portal container={portalTitle}>
-              {title}
+        {_.isString(title) && (
+          <Box
+            fontWeight="fontWeightBold"
+            textAlign="left"
+            border={1}
+            // MUI border color issue
+            borderTop={0}
+            borderLeft={0}
+            borderRight={0}
+            borderColor={Colors.hint_gray}
+            mt={-2}
+            mb={2}
+          >
+            <Text message={title} />
+          </Box>
+        )}
+        <div ref={handleTitleRef} />
+      </DialogTitle>
+      <DialogContent>
+        {content && portalTitle && portalAction && (
+          <content.type {...content.props}>
+            {content.props.children}
+            {!_.isString(title) && (
+              <Portal container={portalTitle}>
+                {title}
+              </Portal>
+            )}
+            <Portal container={portalAction}>
+              {actions}
             </Portal>
-          )}
-          <Portal container={portalAction}>
-            {actions}
-          </Portal>
-        </content.type>
-      )}
-    </DialogContent>
-    <DialogActions style={{ margin: 0 }}>
-      <div ref={handleActionsRef} />
-    </DialogActions>
-  </ Dialog>
-);
+          </content.type>
+        )}
+      </DialogContent>
+      <DialogActions style={{ margin: 0 }}>
+        <div ref={handleActionsRef} />
+      </DialogActions>
+    </ Dialog>
+  );
 
 export default withFBDialog(FBDialog);

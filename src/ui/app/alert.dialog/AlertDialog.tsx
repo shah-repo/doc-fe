@@ -32,7 +32,7 @@ const AlertDialog: React.FunctionComponent<Props> = ({
             <Box textAlign="center" marginBottom="20px" whiteSpace="pre-line">
               <Box textAlign="center">
                 <span className={classes.iconContainer}>
-                  <ReportProblemOutlinedIcon color="error"  />
+                  <ReportProblemOutlinedIcon color="error" />
                 </span>
                 <Typography variant="h6" style={{ marginTop: 20, marginBottom: 5 }}>
                   <Text translation="common.alert" />
@@ -59,6 +59,7 @@ const AlertDialog: React.FunctionComponent<Props> = ({
               variant="contained"
               className={classes.submitButton}
               id="AlertDialog-continueButton"
+              data-cy="AlertDialog-continueButton"
               onClick={action}
             >
               <Text translation="common.yes.im.sure" />
