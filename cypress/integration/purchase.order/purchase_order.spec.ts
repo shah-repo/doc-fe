@@ -2,8 +2,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import { GroupTag } from "../../src/state/ducks/auth/types";
-import { SystemRequirement } from "../utils/context/systemRequirement";
+import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
@@ -153,7 +153,7 @@ context("Create company via API and create Purchase Order Form document", () => 
   });
 
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.cmpNavigateToDocumentListWithoutDocControl();
   });
 
   it("Click on 'Create a document'", () => {
@@ -173,7 +173,7 @@ context("Create company via API and create Purchase Order Form document", () => 
   });
 
   it("Click on 'Purchase Order' outputdocument type", () => {
-    cy.drSelectOutputDocType({ documentType: "Purchase Order" });
+    cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
   });
 
   it("Click 'Add New Field'", () => {
@@ -203,7 +203,7 @@ context("Create company via API and create Purchase Order Form document", () => 
 
 context("Create Part document for PO", () => {
   it("Navigates to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.cmpNavigateToDocumentListWithoutDocControl();
   });
 
   it("Clicks on 'create a document' button", () => {
@@ -251,9 +251,9 @@ context("Create Purchase Order document with Product option from Form document",
     cy.poClickOnSpecificPOFromList({ item:"PO-00001" });
   });
 
-  it("Check status of PO - should be WIP - Draft", () => {
+  it("Check status of PO should be Draft", () => {
     SystemRequirement("REQ-1280")
-    cy.poCheckStatus( "Work In Progress" , "Draft" );
+    cy.poCheckStatus("Draft" );
   });
 
   it("Click on 'Add item' button", () => {
@@ -329,7 +329,7 @@ context("Create Purchase Order document with Product option from Form document",
 
   it("Check Total value", () => {
     SystemRequirement("REQ-1440");
-    cy.poCheckAmount({ number: "\$12.65" });
+    cy.poCheckAmount({ number: "\$30.65" });
   });
 
   it("Enter description 'New Purchase Order'", () => {
@@ -356,9 +356,9 @@ context("Create Purchase Order document with Service option from Form document",
     cy.poCheckStatus( "PO-00002" );
   });
 
-  it("Check status of PO - should be WIP - Draft", () => {
+  it("Check status of PO should be Draft", () => {
     SystemRequirement("REQ-1280")
-    cy.poCheckStatus( "Work In Progress" , "Draft" );
+    cy.poCheckStatus( "Draft" );
   });
 
   it("Click on 'Add item' button", () => {
@@ -435,7 +435,7 @@ context("Create Purchase Order document with Service option from Form document",
 
   it("Check Total value", () => {
     SystemRequirement("REQ-1440");
-    cy.poCheckAmount({ number: "\€12.00" });
+    cy.poCheckAmount({ number: "\€30.00" });
   });
 
   it("Check if total converted to dollars is shown", () => {
@@ -473,7 +473,7 @@ context("Creates second line item and checks ID and if all line item details are
 
 context("Creates second PO form document and checks if both documents are available when creating new PO", () => {
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.cmpNavigateToDocumentListWithoutDocControl();
   });
 
   it("Click on 'Create a document'", () => {
@@ -493,7 +493,7 @@ context("Creates second PO form document and checks if both documents are availa
   });
 
   it("Click on 'Purchase Order' outputdocument type", () => {
-    cy.drSelectOutputDocTypeSecondTime({ documentType: "Purchase Order" });
+    cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
   });
 
   it("Click 'Add New Field'", () => {
@@ -576,7 +576,7 @@ context("Test the filter inside PO", () => {
   });
 
   it("Navigate to Document List", () => {
-    cy.wait(1000).cmpNavigateToDocumentList();
+    cy.wait(1000).cmpNavigateToDocumentListWithoutDocControl();
   });
 
   it("Navigate to Purchase Order", () => {

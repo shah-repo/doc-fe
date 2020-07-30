@@ -160,7 +160,7 @@ context("Approval request form", () => {
     });
 
     it("Click on 'Approval request' outputdocument type", () => {
-      cy.drSelectOutputDocType({ documentType: "Approval Request" });
+      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
     it("Click create document after filling document", () => {
@@ -197,7 +197,7 @@ context("Approval request form", () => {
 
     it("Add created document revision", () => {
       cy.arClickAddDocument();
-      cy.arChoseProposedDocument();
+      cy.arChoseSpecificProposedDocument({ name: "CS-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();

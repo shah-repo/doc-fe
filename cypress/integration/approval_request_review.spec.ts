@@ -60,7 +60,7 @@ context("Approval request form scenario", () => {
                 isQms: true,
               },
             ],
-          }, sessionId
+          }, sessionId,
         }).then((response) => {
           createdCompany = response;
           done();
@@ -152,7 +152,7 @@ context("Approval request form scenario", () => {
       cy.wait(5000);
     });
 
-    it(`Enter Approval Request title`, () => cy.arEnterApprovalRequestTitle({ title: approvalRequestDocumentTitle }));
+    it("Enter Approval Request title", () => cy.arEnterApprovalRequestTitle({ title: approvalRequestDocumentTitle }));
 
     it("Enter description ", () => cy.arEnterApprovalRequestDescription({ description: "Description" }));
 
@@ -194,7 +194,7 @@ context("Approval request form scenario", () => {
 
     it("Check 'Add Document' button is disbaled", () => cy.get("[data-cy=\"fb.add.document\"]").should("be.disabled"));
 
-    it("Check 'Effective Date' is disabled", () => cy.xpath("//input[@name]/ ../div/button").should("be.disabled"))
+    it("Check 'Effective Date' is disabled", () => cy.xpath("//input[@name]/ ../div/button").should("be.disabled"));
 
     it("Check 'Approvers' are disbaled", () => cy.get("[data-cy=\"approvers\"] input").should("be.disabled"));
   });
@@ -243,7 +243,7 @@ context("Approval request form scenario", () => {
     it("Accept Approval Request with password prompt", () => {
       cy.arApproveAR();
       cy.wait(6000);
-    })
+    });
   });
 
   context("Record the date and time stamp for approval and rejections", () => {
@@ -258,7 +258,7 @@ context("Approval request form scenario", () => {
     it("Capture Audit date", () => cy.get("[data-cy=\"audit-time-0\"]").should("not.be.empty"));
 
     it("Capture Audit timestamp", () => {
-      cy.get("[data-cy=\"audit-time-0\"]").should('have.attr', 'datetime').then($time => {
+      cy.get("[data-cy=\"audit-time-0\"]").should("have.attr", "datetime").then(($time) => {
         cy.wrap($time).should("not.be.empty");
       });
 

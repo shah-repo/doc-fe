@@ -7,7 +7,7 @@ Cypress.Screenshot.defaults({
 });
 
 import path from "path";
-import { GroupTag, NavigationItems } from "../../src/state/ducks/auth/types";
+import { GroupTag, NavigationItems } from "../../../src/state/ducks/auth/types";
 
 
 const runId = new Date().valueOf();
