@@ -9,7 +9,7 @@ declare global {
       arEnterApprovalRequestTitle( params: { title: string }): Chainable<Subject>;
       arEnterApprovalRequestDescription( params: { description: string }): Chainable<Subject>;
       arClickAddDocument(): Chainable<Subject>;
-      arChoseProposedDocument(): Chainable<Subject>;
+      arChoseProposedDocument(params: {name: string}): Chainable<Subject>;
       arEnterDescriptionAddDocumentsDialog( params: { description: string }): Chainable<Subject>;
       arEnterJustificationAddDocumentsDialog( params: { justification: string }): Chainable<Subject>;
       arClickAddBtnOnAddDocumentsDialog(): Chainable<Subject>;
@@ -43,9 +43,9 @@ Cypress.Commands.add("arClickAddDocument", () => {
   cy.get("[data-cy=\"fb.add.document\"]").click().wait(200);
 });
 
-Cypress.Commands.add("arChoseProposedDocument", () => {
+Cypress.Commands.add("arChoseProposedDocument", ({ name }) => {
   cy.get("[role=dialog]>div:nth-child(2)>div>div>div>div>div>div>div>input").click();
-  cy.get("[role=listbox]>li:nth-child(2)").click();
+  cy.get("[role=listbox]>li").contains(name).click();
 });
 
 Cypress.Commands.add("arEnterDescriptionAddDocumentsDialog", (params: {description: string }) => {
