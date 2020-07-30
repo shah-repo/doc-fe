@@ -49,8 +49,6 @@ Cypress.on("uncaught:exception", (err, runnable) => {
   return true;
 });
 
-
-// console.log({"CONFIG.SCREENSHOT_OF_RUN_FAILURE": CONFIG.SCREENSHOT_OF_RUN_FAILURE})
 Cypress.Screenshot.defaults({
   capture: "viewport",
   scale: false,
@@ -58,11 +56,9 @@ Cypress.Screenshot.defaults({
   screenshotOnRunFailure: CONFIG.SCREENSHOT_OF_RUN_FAILURE,
 });
 
-
 Cypress.on("test:after:run", (test, runnable: any ) => {
   if (CONFIG.SCREENSHOT_OF_RUN_FAILURE && test.state === "failed") {
-    addScreenshotToContext(test, runnable);
+    addScreenshotToContext(test, runnable, "Screenshot On Failure");
   }
 });
-
 

@@ -2,12 +2,11 @@
 /// <reference types="Cypress" />
 
 import path from "path";
-import { Screenshot } from "../../../utils/context/screenshot";
 
 // const runId = new Date().valueOf();
 // let createdCompany;
 
-context(`Test: foo ${path.basename(__filename)}`, () => {
+context(`Test: ${path.basename(__filename)}`, () => {
   // it("Creates company", (done: any) => {
   //   cy.apiLogin({
   //     email: "zoran.kovacevic+admin@codecons.com",
@@ -55,10 +54,8 @@ context(`Test: foo ${path.basename(__filename)}`, () => {
       email: "zoran.kovacevic+admin@codecons.com",
       password: "Tester1!",
     });
-    Screenshot()
   });
   it("the one which fails", () => {
-    Screenshot()
     expect(true).to.eql(false)
   });
   // it("Selects company", () => {
@@ -90,6 +87,11 @@ context(`Test: foo ${path.basename(__filename)}`, () => {
   //   });
   // });
 });
+context("another", () => {
+  it("the one which fails", () => {
+    expect(true).to.eql(false)
+  });
+})
 
 // for TS error "All files must be modules when the '--isolatedModules' flag is provided" uncomment line below
 export { };

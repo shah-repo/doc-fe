@@ -2,13 +2,8 @@
 /* eslint-disable max-classes-per-file */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
-
 import path from "path";
 import { GroupTag, NavigationItems } from "../../src/state/ducks/auth/types";
-
 
 const runId = new Date().valueOf();
 let createdCompany;
@@ -270,3 +265,4 @@ context(`Test: ${path.basename(__filename)}`, () => {
 });
 
 export { };
+

@@ -2,7 +2,7 @@
 import addContext from "mochawesome/addContext";
 import { allowedCharacters } from "./constants";
 
-export function addScreenshotToContext(test, runnable: any) {
+export function addScreenshotToContext(test, runnable: any, title: string) {
 
   let item: any = runnable;
   const nameParts = [runnable.title];
@@ -18,5 +18,5 @@ export function addScreenshotToContext(test, runnable: any) {
     `screenshots/${Cypress.spec.name}/${fullTestName}${((test.state === "failed") ? " (failed).png" : ".png")}`
       .replace(/[ ]+/g, " ");
 
-  addContext({ test }, { title: "Screenshot", value: encodeURI(screenshotPath) });
+  addContext({ test }, { title, value: encodeURI(screenshotPath) });
 }

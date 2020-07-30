@@ -10,5 +10,5 @@
   "projectId": "9v9it2",
   "recordKey": "9e6e4a3d-c43a-4e60-8984-fa2ae0a90a76",
   "defaultCommandTimeout": 8000,
-  "trashAssetsBeforeRuns": true
+  "trashAssetsBeforeRuns": false
 }

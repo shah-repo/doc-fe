@@ -3,11 +3,6 @@
 
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
-
-
 const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
@@ -216,3 +211,4 @@ context("Document Creation Flow", () => {
 });
 
 export { };
+
