@@ -167,14 +167,16 @@ context("Document Approval Matrix Flow", () => {
   });
 
   context("Add Role One", () => {
-    SystemRequirement("REQ-0590");
     it("Open 'Add Role' dialog", () => cy.drAddAnotherRoleBtn());
 
     it(`Fill role name: ${roleOne}`, () => cy.drEnterApprovalRole({ name: roleOne }));
 
     it(`Add approving groups: ${groupOne}`, () => cy.drEnterApprovingGroups(groupOne));
 
-    it("Save role", () => cy.drAddApprovalRole());
+    it("Save role", () => {
+      SystemRequirement("REQ-0590");
+      cy.drAddApprovalRole();
+    });
   });
 
   context("Add Role Two", () => {
@@ -188,18 +190,19 @@ context("Document Approval Matrix Flow", () => {
   });
 
   context("Add Individual Role", () => {
-    SystemRequirement("REQ-0600");
     it("Open 'Add Role' dialog", () => cy.drAddAnotherRoleBtn());
 
     it(`Fill role name: ${individualRole}`, () => cy.drEnterApprovalRole({ name: individualRole }));
 
     it(`Add approving users: ${individualMember}`, () => cy.drEnterApprovingUsers(individualMember));
 
-    it("Save role", () => cy.drAddApprovalRole());
+    it("Save role", () => {
+      SystemRequirement("REQ-0600");
+      cy.drAddApprovalRole();
+    });
   });
 
   context("Add Approval Matrix Item", () => {
-    SystemRequirement("REQ-0630");
     it("Click on 'Add Item' button", () => cy.drAddApprovalMatrixItem());
 
     it("Add prefix", () => cy.drAddAMItemValue({ identity: "prefix", value: "DD" }));
@@ -226,7 +229,10 @@ context("Document Approval Matrix Flow", () => {
 
     it(`Mark 'Approvals Administrative' for ${individualRole}`, () => cy.drAMCheckRole({ stage: 'admStage', index: 2 }));
 
-    it("Save Approval Matrix Item", () => cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click());
+    it("Save Approval Matrix Item", () => {
+      SystemRequirement("REQ-0630");
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+    });
   });
 
   context("'Approve & Release Document", () => {
