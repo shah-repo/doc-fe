@@ -26,7 +26,7 @@ Cypress.Commands.add("atchUploadAttachment", (params: {fileName: string }) => {
       fileName: params.fileName,
       mimeType: "*",
       filePath: `fixtures/${params.fileName}`,
-    });
+    }).wait(5000);
   });
 });
 

@@ -1,7 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import { SystemRequirement } from "../utils/context/systemRequirement";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
@@ -83,7 +83,7 @@ context("Document Creation Flow", () => {
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
       SystemRequirement("REQ-0140");
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Clicks on 'create a document' button", () => {
@@ -123,7 +123,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Uploads image.jpg", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" }).wait(5000);
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
       it("Check image.jpg attachment atributes", () => {
@@ -159,15 +159,15 @@ context("Document Creation Flow", () => {
     });
   });
 
-  context("Document in Draft", () => {
-    it("Check if document status is DRAFT after creating a document", () => {
+  context("Document in WIP", () => {
+    it("Check if document status is WIP after creating a document", () => {
       SystemRequirement("REQ-0330");
-      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.drCheckDocumentStatus({ status: "WIP" });
     });
 
     context("Uploads attachments", () => {
       it("Uploads test_image.jpg", () => {
-        cy.atchUploadAttachment({ fileName: "test_image.jpg" }).wait(5000);
+        cy.atchUploadAttachment({ fileName: "test_image.jpg" });
       });
 
       it("Check test.docx attachment atributes", () => {
@@ -179,7 +179,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Uploads image.jpg", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" }).wait(5000);
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
       it("Check test.docx attachment atributes", () => {

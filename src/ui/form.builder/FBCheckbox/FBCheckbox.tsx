@@ -12,19 +12,20 @@ const FBCheckbox: React.FunctionComponent<FBInputProps> = ({
   defaultChecked,
   fontSize = "default",
   ...props
-}) =>  (
-  <FBInput {...props} {...{ disabled, label, defaultChecked }} type="checkbox">
-    <FormControlLabel
-      control={(
-        <Checkbox
-          icon={<CheckBoxOutlineBlankIcon fontSize={fontSize as SvgIconProps["fontSize"]} />}
-          checkedIcon={<CheckBoxIcon fontSize={fontSize as SvgIconProps["fontSize"]} />}
-          {...{ disabled, defaultChecked }} />
-      )}
-      label=""
-      {...label && { label: <Text message={label as string} /> }}
-    />
-  </FBInput>
-);
+}) => (
+    <FBInput {...props} {...{ disabled, label, defaultChecked }} type="checkbox">
+      <FormControlLabel
+        control={(
+          <Checkbox
+            data-cy={`fb-control-${label}`}
+            icon={<CheckBoxOutlineBlankIcon fontSize={fontSize as SvgIconProps["fontSize"]} />}
+            checkedIcon={<CheckBoxIcon fontSize={fontSize as SvgIconProps["fontSize"]} />}
+            {...{ disabled, defaultChecked }} />
+        )}
+        label=""
+        {...label && { label: <Text message={label as string} /> }}
+      />
+    </FBInput>
+  );
 
 export default withFBCheckbox(FBCheckbox);

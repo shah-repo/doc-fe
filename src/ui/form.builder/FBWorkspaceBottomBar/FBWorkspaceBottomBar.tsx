@@ -14,41 +14,42 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
   includeTransport,
   previewDisabled,
 }) => (
-  <Box display="flex" flexDirection="row-reverse" p={1} mt={2} bgcolor={Colors.light_gray}>
-    <input
-      hidden={true}
-      id="fb-import-schema"
-      type="file"
-      accept=".json"
-      onChange={importSchema}
-    />
-    <IconButton
-      size="small"
-      disabled={!includeTransport}
-      onClick={exportSchema}
-    >
-      <FBTooltip title="form.builder.export.template">
-        <VerticalAlignTopIcon />
-      </FBTooltip>
-    </IconButton>
-    <IconButton size="small" disabled={!includeTransport}>
-      <FBTooltip title="form.builder.import.template">
-        <label htmlFor="fb-import-schema">
-          <VerticalAlignBottomIcon />
-        </label>
-      </FBTooltip>
-    </IconButton>
-    <IconButton
-      size="small"
-      id="FBWorkspace-clickView"
-      disabled={previewDisabled}
-      onClick={handleFormPreview}
-    >
-      <FBTooltip title="form.builder.form.preview">
-        <VisibilityIcon />
-      </FBTooltip>
-    </IconButton>
-  </Box>
-);
+    <Box display="flex" flexDirection="row-reverse" p={1} mt={2} bgcolor={Colors.light_gray}>
+      <input
+        hidden={true}
+        id="fb-import-schema"
+        type="file"
+        accept=".json"
+        onChange={importSchema}
+      />
+      <IconButton
+        size="small"
+        disabled={!includeTransport}
+        onClick={exportSchema}
+      >
+        <FBTooltip title="form.builder.export.template">
+          <VerticalAlignTopIcon />
+        </FBTooltip>
+      </IconButton>
+      <IconButton size="small" disabled={!includeTransport}>
+        <FBTooltip title="form.builder.import.template">
+          <label htmlFor="fb-import-schema">
+            <VerticalAlignBottomIcon />
+          </label>
+        </FBTooltip>
+      </IconButton>
+      <IconButton
+        size="small"
+        id="FBWorkspace-clickView"
+        data-cy="FBWorkspace-clickView"
+        disabled={previewDisabled}
+        onClick={handleFormPreview}
+      >
+        <FBTooltip title="form.builder.form.preview">
+          <VisibilityIcon />
+        </FBTooltip>
+      </IconButton>
+    </Box>
+  );
 
 export default withFBWorkspaceBottomBar(FBWorkspaceBottomBar);

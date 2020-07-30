@@ -18,7 +18,7 @@ import Colors from "../../../layout/theme/utils/colors";
 import { ApproveAndReleaseFormValues } from "../types";
 import { styles } from "./ApproveAndRelease.styles";
 
-interface Props extends FormikProps<ApproveAndReleaseFormValues>{
+interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   asyncState: AsyncState;
   cancel: () => void;
   isQms: boolean;
@@ -146,6 +146,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
         fullWidth={false}
         className={classes.submitButton}
         id="ApproveAndRelease-submit"
+        data-cy="ApproveAndRelease-submit"
       />
       <Button
         variant="text"
@@ -154,6 +155,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
         disabled={asyncState.status === AsyncStatus.Active}
         onClick={cancel}
         id="ApproveAndRelease-cancelButton"
+        data-cy="ApproveAndRelease-cancelButton"
       >
         <Text translation="transition.action.cancel" />
       </Button>

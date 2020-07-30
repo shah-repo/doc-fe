@@ -21,12 +21,14 @@ const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ cancel, clas
     <InputField
       name="password"
       label="transition.action.password"
+      dataCy="transition.action.password"
       inputProps={{ type: "password" }}
       validate={validator(required)}
     />
     <FormProgress asyncState={asyncState} />
     <SubmitButton
       id="passwordConfirm"
+      dataCy="passwordConfirm"
       asyncState={asyncState}
       label="transition.action.confirm"
       fullWidth={false}
@@ -35,6 +37,7 @@ const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ cancel, clas
     <Button
       variant="text"
       color="secondary"
+      data-cy="reject.request"
       className={classes.cancelButton}
       disabled={asyncState.status === AsyncStatus.Active}
       onClick={cancel}
