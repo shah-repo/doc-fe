@@ -13,16 +13,10 @@ declare global {
       arEnterApprovalRequestTitle(params: { title: string }): Chainable<Subject>;
       arEnterApprovalRequestDescription(params: { description: string }): Chainable<Subject>;
       arClickAddDocument(): Chainable<Subject>;
-<<<<<<< HEAD
-      arChoseProposedDocument(params: {name: string}): Chainable<Subject>;
-      arEnterDescriptionAddDocumentsDialog( params: { description: string }): Chainable<Subject>;
-      arEnterJustificationAddDocumentsDialog( params: { justification: string }): Chainable<Subject>;
-=======
       arChoseProposedDocument(): Chainable<Subject>;
       arChoseSpecificProposedDocument(name: string): Chainable<Subject>;
       arEnterDescriptionAddDocumentsDialog(params: { description: string }): Chainable<Subject>;
       arEnterJustificationAddDocumentsDialog(params: { justification: string }): Chainable<Subject>;
->>>>>>> develop
       arClickAddBtnOnAddDocumentsDialog(): Chainable<Subject>;
       arAddApproverOnApproverList(params: { approver: string }): Chainable<Subject>;
       arClickCreateApprovalRequestAfterCompletingForm(): Chainable<Subject>;
@@ -178,4 +172,4 @@ Cypress.Commands.add("arRejectComfirmationAR", () => {
 
 Cypress.Commands.add("arSelectFirstDocument", () => {
   cy.get(".MuiTableCell-root a:nth-child(1)").first().click().wait(3000);
-})
+});
