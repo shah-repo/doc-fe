@@ -187,7 +187,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Check three attachments are displayed: test.docx, image.jpg, test_image.jpg", () => {
-        SystemRequirement("REQ-0200", "REQ-2010");
+        SystemRequirement("REQ-0200", "REQ-0210");
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test_image.jpg", "image.jpg", "test.docx" ] });
       });
     });
