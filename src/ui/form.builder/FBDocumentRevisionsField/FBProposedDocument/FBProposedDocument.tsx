@@ -62,6 +62,7 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
         </IconButton>
       </Box>
     </Box>
+
     <FBTextField
       label="common.description"
       dataCy="common.description"

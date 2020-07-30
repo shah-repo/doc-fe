@@ -192,7 +192,7 @@ context("Document Creation Flow", () => {
         cy.atchSetPrimaryAttachment({ fileName: "test_image.jpg" });
       });
 
-      it("Allow user to only set single attachment to be primary", () => {
+      it.skip("Allow user to only set single attachment to be primary", () => {
         SystemRequirement("REQ-0250");
         cy.atchSetPrimaryAttachment({ fileName: "test.docx" });
         cy.atchCheckForSinglePrimaryAttachment();
