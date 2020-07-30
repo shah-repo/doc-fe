@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import _, { cloneDeep, get } from "lodash";
+import _, { cloneDeep, filter, get } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
@@ -49,6 +49,7 @@ interface OwnProps {
   loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
   canChangeOwnerShip?: boolean;
   type?: DocumentCloneType;
+  isNewVersion?: boolean;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
@@ -91,6 +92,7 @@ DocumentRevisionFormContainerProps
   document,
   canChangeOwnerShip = false,
   type,
+  isNewVersion,
 }) => {
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
@@ -99,6 +101,7 @@ DocumentRevisionFormContainerProps
 
   const cleanInitialValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
+    const { outputRevision } = initialValues;
     const securityGroups: any[] = [];
     if (initialValues.document?.documentType?.isQms) {
       groupOptions.forEach((group) => {
@@ -112,8 +115,13 @@ DocumentRevisionFormContainerProps
       initialValues.retrain :
       initialValues.document?.documentType?.defaultTraining || false;
 
+    const attachments = outputRevision
+      ? filter(initialValues.attachments, (file) => file.lineType !== "RED_LINE")
+      : initialValues.attachments;
+
     return {
       ...initialValues,
+      attachments,
       document: {
         ...(initialValues.document || {}),
         // NOTE: workaround. DocId is set before groupOptions are loaded
@@ -207,6 +215,7 @@ DocumentRevisionFormContainerProps
         documentTypesById={documentTypesById}
         canChangeOwnerShip={canChangeOwnerShip}
         type={type}
+        isNewVersion={isNewVersion}
         {...{ FBContainer, bannerPortal }}
       />
     </FBWorkspace>

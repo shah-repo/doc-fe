@@ -10,7 +10,7 @@ const FBTaskFormDescription: React.FunctionComponent<FBTaskFormProps> = ({
   <FBForm {...{ formState }} >
     <FBSchema schema={FBData.taskSchema} />
     <FBAutocompleteAsync
-      optionId={FBAutocompleteAsyncOption.approver}
+      optionId={FBAutocompleteAsyncOption.availableApprovers}
       optionValueType="id"
       label="form.builder.assigned.to"
       name="assigned"

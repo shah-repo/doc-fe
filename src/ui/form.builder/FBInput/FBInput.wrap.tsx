@@ -105,7 +105,6 @@ export const withFBInput = <T extends FBInputProps>(
         onBlur,
         value,
         ...(type === "textfield" && { error }),
-        ...(type === "select" && !defaultValue && placeholder && { value: "" }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
       });
     }

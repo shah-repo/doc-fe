@@ -23,6 +23,7 @@ export type FBProposedDocumentProps =
   isMouseInside?: boolean;
   justification: string;
   description: string;
+  handleEdit?: (e: React.ChangeEvent<any>, index: number, type: string) => void;
 };
 
 export interface FBDocumentRevisions {

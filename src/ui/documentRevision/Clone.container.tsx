@@ -12,6 +12,7 @@ export type DocumentCloneType = "none" | "newVersion" | "newOutput";
 export interface OwnProps {
   documentRevision: DocumentRevision;
   type: DocumentCloneType;
+  isNewVersion: boolean;
 }
 
 interface StateProps {
@@ -28,6 +29,7 @@ export const CloneContainer: React.FunctionComponent<CloneContainerProps> = ({
   documentRevision,
   disableCreateNewVersion,
   type,
+  isNewVersion,
 }) => {
   const redirect = (
     ((type === "newVersion") && !canCreateNewVersion(documentRevision, disableCreateNewVersion, true)) ||
@@ -39,7 +41,7 @@ export const CloneContainer: React.FunctionComponent<CloneContainerProps> = ({
   }
 
   return (
-    <DocumentRevisionCreateContainer documentRevision={documentRevision} type={type} />
+    <DocumentRevisionCreateContainer documentRevision={documentRevision} type={type} isNewVersion={isNewVersion} />
   );
 };
 

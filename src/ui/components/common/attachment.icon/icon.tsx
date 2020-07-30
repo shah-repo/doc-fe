@@ -1,7 +1,8 @@
 import { Box } from "@material-ui/core";
-import { InsertDriveFile } from "@material-ui/icons";
 import classNames from "classnames";
 import React from "react";
+import { attachmentColorByType } from "./attachmentColorByType";
+import { renderCOADefaultAttachment, renderCOAPrimaryAttachment, renderDefaultAttachment, renderPrimaryAttachment, renderRedLineAttachment } from "./attachmentIcons";
 import { styles } from "./utils/styles";
 import { AttachmentIconProps } from "./utils/types";
 
@@ -9,8 +10,13 @@ export const AttachmentIcon: React.FunctionComponent<AttachmentIconProps> = ({
   extension,
   size,
   isUploading,
+  isRedLine,
+  isPrimary,
+  isTransferred,
 }) => {
   const classes = styles({ size: size || "md", disabled: false });
+  const name = extension?.toUpperCase();
+  const color = attachmentColorByType[extension?.toUpperCase() as string];
   return (
     <Box
       className={classNames(classes.root,
@@ -19,14 +25,11 @@ export const AttachmentIcon: React.FunctionComponent<AttachmentIconProps> = ({
         },
       )}
     >
-      <InsertDriveFile className={classes.fileIcon} />
-      <Box className={classes.ribbonWrapper}>
-        <Box className={`${classes.ribbonFront} ${classes.ribbonFrontSize}`}>
-          {extension && extension.toUpperCase()}
-        </Box>
-        <Box className={`${classes.ribbonEdgeTopleft} ${classes.ribbonEdgeTopleftBorder}`} />
-        <Box className={`${classes.ribbonEdgeTopright} ${classes.ribbonEdgeToprightBorder}`} />
-      </Box>
+      {isRedLine && renderRedLineAttachment(color, name)}
+      {isTransferred && isPrimary && !isRedLine  && renderCOAPrimaryAttachment(color, name)}
+      {isPrimary && !isTransferred && !isRedLine && renderPrimaryAttachment(color, name)}
+      {isTransferred && !isPrimary && !isRedLine && renderCOADefaultAttachment(color, name)}
+      {!isPrimary && !isRedLine && !isTransferred &&  renderDefaultAttachment(color, name)}
     </Box>
   );
 };

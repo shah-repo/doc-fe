@@ -1,5 +1,5 @@
 import { BoxProps } from "@material-ui/core";
-import { FBApprovalState, FBDialogState, FBInputProps } from "..";
+import { FBApprovalState, FBInputProps } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 
@@ -18,19 +18,19 @@ export type FBApprovalProps =
 | "index"
 | "approvers"
 | "approverGroups"
+| "approvalRoles"
 | "disabled"
 | "approveIsBlocking"
 | "reviseDisabled"
 > & {
-  onApprove?: (approver?: Employee | GroupRequestBody) => () => void;
-  approvalConfig?: (approver?: Employee | GroupRequestBody) => FBApprovalConfig | undefined;
+  onApprove?: (approver?: FBInlineApproverType) => () => void;
+  approvalConfig?: (approver?: FBInlineApproverType) => FBApprovalConfig | undefined;
   approvalFieldState?: FBApprovalState;
   hasApproved?: FBApprovalValue[];
   isApproved?: boolean;
   isDefined?: boolean;
   loading?: boolean;
   approveLoading?: boolean;
-  dialogState?: FBDialogState;
 };
 
 export enum FBApprovalStatus {
@@ -42,6 +42,7 @@ export interface FBApprovalValue {
   id: string;
   userId?: string;
   groupId?: string;
+  approvalRoleId?: string;
   approvedAt: string;
 }
 
@@ -52,7 +53,7 @@ export interface FBApprovalApi {
 
 export type FBApprovalFieldProps<T> =
 & FBApprovalProps
-& Pick<BoxProps, "mt">
+& Pick<BoxProps, "mb">
 & {
   collection: T[];
 };
@@ -60,6 +61,7 @@ export type FBApprovalFieldProps<T> =
 export interface FBApprovalData {
   approvers?: Employee[];
   approverGroups?: GroupRequestBody[];
+  approvalRoles?: FBInlineApprovalRole;
 }
 
 export interface FBApprovalSocketMsg {
@@ -70,6 +72,16 @@ export interface FBApprovalSocketMsg {
 
 export interface FBApprovalConstructor {
   documentId?: string;
-  name?: string;
   value?: FBApprovalValue[];
+  approversValue?: string[];
+  groupsValue?: string[];
+  approvalRolesValue?: string[];
 }
+
+export interface FBInlineApprovalRole {
+  id: string;
+  name: string;
+  joinedEmployees?: Employee[];
+}
+
+export type FBInlineApproverType = Employee | GroupRequestBody | FBInlineApprovalRole;

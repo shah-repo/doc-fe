@@ -19,10 +19,13 @@ export BROWSER="none"
 export PORT="4212"
 export REACT_APP_THEME="DEV_THEME"
 export NODE_ENV="production"
+export REACT_APP_DATADOG_APPLICATION_ID="fake"
+export REACT_APP_DATADOG_CLIENT_TOKEN="fake"
 
 docker build \
   -f docker/cypress_web.Dockerfile \
   -t enlil/cypress_web:${FE_GIT_COMMIT_HASH}_${ENLIL_COMPOSE_PORT_RANGE_START} \
+  --build-arg FE_GIT_COMMIT_HASH \
   --build-arg REACT_APP_API_ENDPOINT \
   --build-arg REACT_APP_REFRESH_TOKEN_VALIDITY_DAYS \
   --build-arg REACT_APP_AWS_COGNITO_CLIENT_ID \
@@ -32,4 +35,6 @@ docker build \
   --build-arg PORT \
   --build-arg REACT_APP_THEME \
   --build-arg NODE_ENV \
+  --build-arg REACT_APP_DATADOG_APPLICATION_ID \
+  --build-arg REACT_APP_DATADOG_CLIENT_TOKEN \
    .

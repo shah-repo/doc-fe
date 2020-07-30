@@ -1,14 +1,33 @@
 import { Collapse, List } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
-import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { NavigationItem } from "../../state/ducks/company";
+import { NavigationItem, NavigationItemType } from "../../state/ducks/company";
+import { DOCUMENT_BY_CATEGORY_ROOT_URL } from "../constants/urls";
 import NavigationLinkPresenter from "./NavigationLink.presenter";
 
 export interface NavigationLinkContainerProps extends NavigationItem {
   currentPath: string;
 }
+
+const checkIfItemIsActive = (
+  type: NavigationItemType,
+  currentPath: string,
+  path?: string,
+  category?: string,
+  menu?: NavigationItem[],
+): boolean => {
+  switch (type) {
+    case "LINK":
+      return currentPath === path;
+    case "CATEGORY":
+      return currentPath === `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}`;
+    case "MENU":
+      return menu?.some((item) => checkIfItemIsActive(item.type, currentPath, item.path, item.category)) || false;
+    default:
+      return false;
+  }
+};
 
 const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerProps> = ({
   type,
@@ -16,11 +35,13 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
   menu,
   ...rest
 }) => {
+
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const isChildActive = _.includes(menu?.map((link) => link.path), currentPath);
-    setIsOpen(isChildActive);
+    const isItemActive = checkIfItemIsActive(type, currentPath, rest.path, rest.category, menu);
+    setIsOpen(isItemActive);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPath, menu]);
 
   const toggleChildren = (event: React.MouseEvent) => {
@@ -35,13 +56,18 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
     <Collapse in={isOpen} timeout="auto" unmountOnExit={true}>
       <List disablePadding>
         {menu?.map((ld) => (
-          ld.type === "LINK" &&
-          <NavigationLinkPresenter {...ld} key={ld.path} isChild={true} isActive={currentPath === ld.path} />
+          ld.type !== "MENU" &&
+          <NavigationLinkPresenter
+            {...ld}
+            key={ld.path || ld.category}
+            isChild={true}
+            currentPath={currentPath}
+            checkIfItemIsActive={checkIfItemIsActive}
+          />
         ))}
       </List>
     </Collapse>
   );
-
   return (
     <React.Fragment>
       <NavigationLinkPresenter
@@ -49,7 +75,8 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
         {...rest}
         ActionIcon={menu?.length ? actionIcon : ""}
         toggleChildren={type === "MENU" ? toggleChildren : undefined}
-        isActive={currentPath === rest.path}
+        currentPath={currentPath}
+        checkIfItemIsActive={checkIfItemIsActive}
       />
       {childrenList}
     </React.Fragment>

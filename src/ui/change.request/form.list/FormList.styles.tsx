@@ -22,6 +22,10 @@ export const styles = makeStyles((theme: Theme) =>
     dialogContent: {
       overflowY: "unset",
     },
+    createButton: {
+      margin: "0px",
+      boxShadow: "none",
+    },
     templateRadioGroup: {
       maxHeight: "500px",
       overflowY: "auto",

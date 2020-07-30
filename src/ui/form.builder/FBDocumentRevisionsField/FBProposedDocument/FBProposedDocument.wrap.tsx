@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, { useState } from "react";
 import { FB } from "../..";
 import { FBAutocompleteAsyncOption } from "../../FBAutocompleteAsync";
@@ -11,6 +12,7 @@ export const withFBProposedDocument = <T extends FBProposedDocumentProps>(
     handleOpen,
     proposedDocumentRevision,
     disabled,
+    handleEdit,
     id,
     ...props
   }: T) => {
@@ -18,8 +20,13 @@ export const withFBProposedDocument = <T extends FBProposedDocumentProps>(
     const { docRevState } = FB.useStores();
     const [isMouseInside, setMouseInside] = useState<boolean>(false);
 
+    handleEdit = (e: React.ChangeEvent<any>, index: number, type: string) => {
+      const value = _.get(e.target, "value");
+      docRevState?.editTextFields(value, index, type);
+    };
+
     handleOpen = () => {
-      const options = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.allVersionRevisions);
+      const options = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.documentRevisions);
       if (options) {
         proposedDocumentRevision = options.get(id);
       }
@@ -41,6 +48,7 @@ export const withFBProposedDocument = <T extends FBProposedDocumentProps>(
       removeDocument,
       isMouseInside,
       disabled,
+      handleEdit,
       id,
     });
   };

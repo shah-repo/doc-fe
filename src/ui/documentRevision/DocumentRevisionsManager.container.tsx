@@ -1,5 +1,4 @@
-import { Grid } from "@material-ui/core";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { connect, useSelector } from "react-redux";
 import { Redirect, useLocation } from "react-router-dom";
@@ -62,10 +61,10 @@ DocumentRevisionManagerContainerProps
   docId,
 }) => {
   useDocumentTitle(docId);
-  const classes = styles();
+  const [isDrawerOpen, setOpen] = React.useState(true);
+  const classes = styles({ isDrawerOpen });
   const intl = useIntl();
   const url = useLocation();
-  const [sidebar, openSidebar] = useState<boolean>(true);
 
   const docRevsWithoutCanceled = useMemo(() => documentRevisions.filter((docrev) =>
     docrev.status !== DocumentRevisionStatus.Canceled), [documentRevisions]);
@@ -76,6 +75,10 @@ DocumentRevisionManagerContainerProps
   const schema = selectedDocument?.formTemplate?.schema || selectedDocument?.formDocument?.formTemplate?.schema || [];
   const { documentTypeAcronym: acronym } = document?.documentType || {};
 
+  const isInlineApproval = !!docRevsWithoutCanceled.find((e) => e.formDocument?.formTemplate?.schema.some((e) =>
+    (e.type === "approval" || e.type === "inlineapproval" as string))) || !!selectedDocument?.formDocument?.formTemplate?.schema.some((e) =>
+      (e.type === "approval" || e.type === "inlineapproval" as string));
+
   const sidebarList = [
     {
       icon: <NoteIcon />,
@@ -85,6 +88,7 @@ DocumentRevisionManagerContainerProps
         }),
         component: <DocumentRevisionListContainer
           documentRevisions={docRevsWithoutCanceled}
+          isInlineApproval={isInlineApproval}
           documentId={documentId}
           docId={docId}
           selectedDocumentRevision={documentRevisionId}
@@ -146,27 +150,26 @@ DocumentRevisionManagerContainerProps
   }
 
   return (
-    <Grid container={true} className={classes.whiteContainer} style={{ width: sidebar ? "100%" : "104%" }}>
-      {documentRevisionId && !isNewOutput && (
-        <Grid item={true} xs={sidebar ? 9 : 11} className={classes.backColor}>
+    <div className={classes.root}>
+      <div className={classes.appFrame}>
+        {documentRevisionId && !isNewOutput && (
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewVersion={isNewVersion}
             documentId={documentId}
           />
-        </Grid>
-      )}
-      {documentRevisionId && isNewOutput && (
-        <Grid item={true} xs={sidebar ? 9 : 11} className={classes.backColor}>
+        )}
+        {documentRevisionId && isNewOutput && (
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewOutput={isNewOutput}
             documentId={documentId}
           />
-        </Grid>
-      )}
-      <SidebarContainer {...{ sidebar, openSidebar, sidebarList }}/>
-    </Grid>
+        )}
+      </div>
+      <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }}/>
+
+    </div>
   );
 };
 

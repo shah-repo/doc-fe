@@ -20,21 +20,22 @@ export interface FBAutocompleteAsyncConfig  {
 }
 
 export enum FBAutocompleteAsyncOption {
-  revision = "1",
-  request = "2",
-  approver = "3",
-  type = "4",
-  supplier = "5",
-  tl = "6",
-  csl = "7",
-  address = "8",
-  gl = "9",
-  group = "10",
-  part = "11",
-  po = "12",
+  activeDocumentRevisions = "1",
+  changeRequests = "2",
+  availableApprovers = "3",
+  documentTypes = "4",
+  suppliers = "5",
+  TLList = "6",
+  CSLList = "7",
+  companyAddresses = "8",
+  GLCodes = "9",
+  groups = "10",
+  parts = "11",
+  POList = "12",
   employees = "13",
   officialGroups = "14",
-  docRevsDraft = "15",
-  woParts = "16",
-  allVersionRevisions = "17"
+  WOParts = "15",
+  DRAFTdocumentRevisions = "16",
+  approvalRoles = "17",
+  documentRevisions = "18"
 }

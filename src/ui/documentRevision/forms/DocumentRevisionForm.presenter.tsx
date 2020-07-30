@@ -56,6 +56,7 @@ export interface Props
   handleFBContainerRef?: (instance: HTMLDivElement | null) => any;
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
   bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
+  isNewVersion?: boolean;
 }
 
 interface FormHeaderContext {
@@ -95,12 +96,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   type,
   FBContainer,
   bannerPortal,
+  isNewVersion = false,
 }) => {
 
   useScrollIntoView();
   const { workspaceState } = FB.useStores();
   const isDisabled: boolean = initialValues.id !== undefined;
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
+  const showObsoleteRevisionChange = documentRevision?.status === DocumentRevisionStatus.Draft && documentRevision?.version === 1;
 
   FormHeaderContext = React.createContext<FormHeaderContext | undefined>({
     documentRevision,
@@ -246,8 +249,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isDisabled={isDisabledInput}
           documentTypeId={documentTypeId}
         />
-        <AttachmentsField isDisabled={isDisabledInput} />
-        {showRevisionTypeChange && <RevisionTypeChange {...{ documentTypeId }} isDisabled={isDisabledInput} />}
+        <AttachmentsField isDisabled={isDisabledInput} isNewVersion={isNewVersion} />
+        {showRevisionTypeChange && <RevisionTypeChange {...{ documentTypeId, showObsoleteRevisionChange }} isDisabled={isDisabledInput} />}
         {
           (!values.status || type === "newOutput") &&
           <DocumentSecurity documentTypeId={documentTypeId as string} />

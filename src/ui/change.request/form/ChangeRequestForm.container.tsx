@@ -1,7 +1,6 @@
-import { Grid } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import { cloneDeep } from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { useLocation } from "react-router-dom";
 import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
@@ -50,9 +49,11 @@ ChangeRequestFormContainerProps
 
   const intl = useIntl();
   const url = useLocation();
-  const [sidebar, openSidebar] = useState<boolean>(true);
-  const classes = styles({ sidebar });
-  const schemaData = changeRequest ? changeRequest.formDocument?.formTemplate?.schema : chosenForm?.formTemplate?.schema;
+  const [isDrawerOpen, setOpen] = React.useState(true);
+  const classes = styles({ isDrawerOpen });
+  const schemaData = changeRequest
+    ? changeRequest.formDocument?.formTemplate?.schema
+    : chosenForm?.formTemplate?.schema;
 
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
     <FBWorkspace
@@ -98,8 +99,8 @@ ChangeRequestFormContainerProps
   ];
 
   return (
-    <Grid container={true} className={classes.whiteContainer}>
-      <Grid item={true} xs={changeRequest ? (sidebar ? 9 : 11) : 12} className={classes.backColor}>
+    <div className={classes.root}>
+      <div className={classes.appFrame}>
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
@@ -107,9 +108,10 @@ ChangeRequestFormContainerProps
         >
           {render}
         </Formik>
-      </Grid>
-      {changeRequest && <SidebarContainer {...{ sidebar, openSidebar, sidebarList }}/>}
-    </Grid>
+      </div>
+
+      {changeRequest && <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }}/>}
+    </div>
   );
 };
 

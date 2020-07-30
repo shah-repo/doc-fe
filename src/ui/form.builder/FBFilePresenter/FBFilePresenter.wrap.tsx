@@ -29,9 +29,6 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     };
 
     handleDownload = () => {
-      if (disabled) {
-        return;
-      }
       filePresenterState?.download();
     };
 

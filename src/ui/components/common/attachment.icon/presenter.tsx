@@ -1,15 +1,21 @@
-import { Box, ButtonBase, CircularProgress, IconButton, Tooltip, Typography } from "@material-ui/core";
-import { CancelOutlined } from "@material-ui/icons";
-import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
+import { Box, Button, ButtonBase, CircularProgress, Tooltip, Typography } from "@material-ui/core";
 import classNames from "classnames";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
+import { ReactComponent as RemoveDocumentActive } from "../../../../assets/images/circle-delete-second.svg";
+import { ReactComponent as RemoveDocument } from "../../../../assets/images/circle-delete.svg";
 import { Attachment } from "../../../../state/ducks/attachments";
+import { Document, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { ApplicationState } from "../../../../state/reducers";
 import Text from "../../../components/Text";
+import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
+import Colors from "../../../layout/theme/utils/colors";
 import FileIcon from "./icon";
 import { styles } from "./utils/styles";
 import { AttachmentIconProps } from "./utils/types";
+
 
 export const AttachmentIconPresenter: React.FunctionComponent<
 AttachmentIconProps
@@ -24,9 +30,13 @@ AttachmentIconProps
   isRedLine,
   handleIconClick,
   canDeleteFile,
+  isNewVersion,
   ...other
 }) => {
   const file = attachment || {} as Attachment;
+  const [isMouseInside, setMouseInside] = useState(false);
+  const [removeHover, setRemoveHover] = useState(false);
+
   const classes = styles({
     size: size || "md",
     disabled,
@@ -54,25 +64,61 @@ AttachmentIconProps
       <Text translation="common.uploading" />
     </Box>
   );
+  const documentRevisionStatusFromDocList = React.useContext(documentRevisionStatusContextFromDocList);
 
-  const primaryBadgeRender = isPrimary &&
-    <StarsRoundedIcon color="primary" fontSize="small" className={classes.primaryBadge} />;
+  const formDocumentId = documentRevision?.document.id || "";
+  const formDocuments: Document = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocument(state, formDocumentId)
+  );
+  const releasedVersions = formDocuments?.documentRevisions.filter((e) => e.status === DocumentRevisionStatus.Released);
+  const lastReleasedDocRevId = releasedVersions?.[releasedVersions.length - 1]?.id;
+  const docRevById = useSelector(documentRevisionsSelectors.byId);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if ((!lastReleasedDocRevId || docRevById[lastReleasedDocRevId].attachments)) {
+      return;
+    }
+    dispatch(documentRevisionsActions.load(lastReleasedDocRevId));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const isTransferred = isNewVersion ||
+  lastReleasedDocRevId !== formDocuments?.documentRevisions[formDocuments?.documentRevisions.length - 1].id  ?
+  docRevById[lastReleasedDocRevId]?.attachments?.some((e) => e.id === attachment?.id) : false;
+
   const deleteButtonRenderer = canDeleteFile && (
-    <div className={classes.closeRoot}>
-      <IconButton
-        className={classes.closeIconButton}
+    <Box
+      marginLeft="auto"
+      marginRight="10px"
+      visibility={isMouseInside ? "visible" : "hidden"}
+      borderRadius={4}
+      bgcolor={Colors.light_red}
+      onMouseEnter={() => setRemoveHover?.(!disabled)}
+      onMouseLeave={() => setRemoveHover?.(false)}
+    >
+      <Button
+        className={classes.removeButton}
         onClick={handleRemove && handleRemove(file)}
         id="AttachmentIconPresenter-handleRemove"
       >
-        <CancelOutlined className={classes.closeIcon} />
-      </IconButton>
-    </div>
+        {removeHover ?
+          <Tooltip title={<Text translation={"common.delete"} />}>
+            <RemoveDocumentActive />
+          </Tooltip> :
+          <RemoveDocument />}
+      </Button>
+    </Box>
   );
+
   return (
-    <div className={classes.attachmentContainer}>
+    <div
+      className={classes.attachmentContainer}
+      data-cy="attachment"
+      onMouseEnter={() => setMouseInside?.(!disabled)}
+      onMouseLeave={() => setMouseInside?.(false)}
+    >
       <div className={classes.iconContainer}>
-        {primaryBadgeRender}
-        {deleteButtonRenderer}
         <Tooltip title={`${file.name}.${file.type}`}>
           <ButtonBase
             onContextMenu={handleContextMenu?.(file)}
@@ -81,10 +127,20 @@ AttachmentIconProps
             id="AttachmentIconPresenter-handleIconClick"
           >
             {isLoading && <CircularProgress className={classes.progress} />}
-            {!isLoading && <FileIcon {...other} extension={file.type} isUploading={isUploading} />}
+            {!isLoading &&
+              <FileIcon
+                {...other}
+                attachment={attachment}
+                extension={file.type}
+                isUploading={isUploading}
+                isRedLine={isRedLine}
+                isPrimary={isPrimary}
+                isTransferred={(documentRevisionStatusFromDocList === DocumentRevisionStatus.Draft ||
+                  documentRevisionStatusFromDocList === DocumentRevisionStatus.PendingChange)  ? isTransferred : false}
+              />
+            }
           </ButtonBase>
         </Tooltip>
-        {isRedLine && <hr className={classes.underLine}/>}
       </div>
       <div
         className={classes.fileNameContainer}
@@ -100,6 +156,7 @@ AttachmentIconProps
           align="left"
           title={`${file.name}.${file.type}`}
           id="AttachmentIconPresenter-fileTitle"
+          data-cy="attachment.title"
         >
           {`${file.name}.${file.type}`}
         </Typography>
@@ -112,6 +169,7 @@ AttachmentIconProps
           {`${fileSize} ${fileTypeDescription}`}
         </Typography>
       </div>
+      {deleteButtonRenderer}
       {isUploading && isUploadingRenderer()}
     </div>
   );

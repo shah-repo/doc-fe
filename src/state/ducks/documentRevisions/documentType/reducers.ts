@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../../reducers/asyncReducer";
-import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC } from "./constants";
-import { DocRevByIdState, DocumentType, DocumentTypeAllIdsState, DocumentTypeByIdAction, DocumentTypeByIdState, DocumentTypeListAction } from "./types";
+import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, SET_DOCUMENT_TYPES_BY_CATEGORY } from "./constants";
+import { DocRevByIdState, DocumentType, DocumentTypeAllIdsState, DocumentTypeByCategoryAction, DocumentTypeByCategoryState, DocumentTypeByIdAction, DocumentTypeByIdState, DocumentTypeListAction } from "./types";
 
 type DocumentTypeActions =  DocumentTypeListAction;
 
@@ -53,9 +53,22 @@ export const docRevTypeId = (state: DocRevByIdState = DOC_REV_BY_ID_DEFAULT_STAT
   }
 };
 
+export const docTypesByCategory = (
+  state: DocumentTypeByCategoryState = [],
+  action: DocumentTypeByCategoryAction,
+): DocumentTypeByCategoryState => {
+  switch (action.type) {
+    case SET_DOCUMENT_TYPES_BY_CATEGORY:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   loadListAsyncInfo: asyncReducer(DOCUMENT_TYPE_LIST_ASYNC),
   byId,
   allIds,
   docRevTypeId,
+  docTypesByCategory,
 });

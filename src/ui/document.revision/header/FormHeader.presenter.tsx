@@ -13,12 +13,15 @@ const FormHeaderPresenter: React.FunctionComponent = () => {
     <Header>
       {documentRevision &&
       <HeaderInfo
+        revision={documentRevision.revision}
+        groupOptions={documentRevision.document.documentType.groupOptions}
+        isInlineApproval={documentRevision.formDocument?.formTemplate?.schema.some((e) => (e.type === "approval" || e.type === "inlineapproval" as string))}
         status={documentRevision.status}
         id={documentRevision.document.docId}
         name={documentRevision.name}
         documentTypeId={documentRevision?.document?.documentType.id}
       />}
-      <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12} justify="flex-end">
+      <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12}>
         <Grid container={true} alignItems="flex-end" justify="flex-end">
           <DocRevActions/>
         </Grid>

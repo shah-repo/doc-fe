@@ -16,6 +16,8 @@ const DEFAULTS = {
   HELLOSIGN_TEST_MODE: "",
   HELLOSIGN_CLIENT_ID: "",
   ENV_NAME: "",
+  DATADOG_APPLICATION_ID: "",
+  DATADOG_CLIENT_TOKEN: "",
 };
 
 
@@ -80,6 +82,14 @@ class Config {
 
   public static get HelloSignClientId(): string {
     return this.get("HELLOSIGN_CLIENT_ID");
+  }
+
+  public static get DatadogApplicationId(): string {
+    return this.get("DATADOG_APPLICATION_ID");
+  }
+
+  public static get DatadogClientToken(): string {
+    return this.get("DATADOG_CLIENT_TOKEN");
   }
 
   public static get EnvironmentName(): string {

@@ -18,6 +18,8 @@ export CYPRESS_KONFIG_ENV="development"
 
 yarn install --frozen-lockfile
 
-sed -i -e "s|api_url:.*$|api_url: \"http://localhost:$ENLIL_COMPOSE_EXPOSE_DIRECTOR_PORT\"|g" ~/.cache/Cypress/*/Cypress/resources/app/packages/server/config/app.yml
+./scripts/cypress/delete_cache.sh
+./scripts/cypress/patch_director_port_in_cache.sh
+./scripts/cypress/generate_requirements_json_file.sh
 
 yarn cypress open

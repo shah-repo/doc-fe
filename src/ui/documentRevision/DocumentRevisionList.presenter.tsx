@@ -2,11 +2,12 @@ import classNames from "classnames";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Nullable } from "../../state/ducks/common";
-import { DocumentRevision } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import SummaryInfo from "../common/summary/SummaryInfo";
 import Date from "../components/Date";
 import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import { FBDocTypeGroup } from "../form.builder";
 import { useDocumentVersion } from "../hooks/docCustomization/useCustomization";
 import { styles } from "./DocumentRevisionList.container.styles";
 import { generateVersionNumber } from "./helpers";
@@ -18,6 +19,7 @@ interface Props {
   docId: string;
   documentTypeId?: string;
   isDocumentPO: boolean;
+  isInlineApproval: boolean;
 }
 
 export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
@@ -27,6 +29,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   docId,
   documentTypeId,
   isDocumentPO,
+  isInlineApproval,
 }) => {
   const classes = styles();
   const link = documentVersionPath(
@@ -42,6 +45,21 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isSelected = selectedDocumentRevision === documentRevision.id;
   const { status } = documentRevision;
   const [isStatusVisible, statusLabel] = useDocumentVersion(documentTypeId, status);
+  let verPrefix = "common.version";
+  let statLabel = statusLabel;
+
+
+  if (documentRevision.revision === 1 &&
+    documentRevision.document?.documentType.groupOptions?.includes(FBDocTypeGroup.RECORD) && isInlineApproval) {
+    verPrefix = "common.work.in.progress";
+  }
+  if (status === DocumentRevisionStatus.Released) {
+    verPrefix = "common.revision";
+  }
+  if ((status === DocumentRevisionStatus.Released || status === DocumentRevisionStatus.Deprecated) &&
+  isInlineApproval) {
+    statLabel = "common.archived";
+  }
   return (
     <div
       key={documentRevision.id}
@@ -55,13 +73,13 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         activeClassName={classes.activeLinkTitle}
       >
         <div>
-          <Text translation="common.version" />
+          <Text message={verPrefix} />
           &nbsp;
           {versionNumber}
           {
             isStatusVisible &&
             <>
-              &nbsp; - <Text message={statusLabel} />
+              &nbsp; - <Text message={statLabel} />
             </>
           }
         </div>

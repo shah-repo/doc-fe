@@ -1,6 +1,5 @@
-import { Grid } from "@material-ui/core";
 import { Form, Formik, FormikProps } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { Redirect, useLocation } from "react-router-dom";
@@ -40,9 +39,10 @@ export const Container: React.FunctionComponent<Props> = ({
   const FBContainer = React.useRef(null);
 
   /*   const [summaryDocumentTypeGroups, setSummaryDocTypeGroups] = useState<any[]>([]);
- */  const [sidebar, openSidebar] = useState<boolean>(true);
+ */
+  const [isDrawerOpen, setOpen] = React.useState(true);
   const url = useLocation();
-  const classes = styles({ sidebar });
+  const classes = styles({ isDrawerOpen });
   useDocumentTitle(dataProp.crId);
   const intl = useIntl();
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
@@ -143,13 +143,13 @@ export const Container: React.FunctionComponent<Props> = ({
   ];
 
   return (
-    <Grid container={true} className={classes.whiteContainer}>
+    <div className={classes.root}>
       <ChangeRequestSummarySockets crId={dataProp.crId} />
-      <Grid item={true} xs={sidebar ? 9 : 11} className={classes.backColor}>
+      <div className={classes.appFrame}>
         {summaryFormikRenderer()}
-      </Grid>
-      <SidebarContainer {...{ sidebar, openSidebar, sidebarList }}/>
-    </Grid>
+      </div>
+      <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }}/>
+    </div>
   );
 };
 

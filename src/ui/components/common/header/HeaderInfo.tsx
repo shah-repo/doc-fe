@@ -2,7 +2,9 @@ import { Chip, Grid, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
 import { ChangeRequestStatus } from "../../../../state/ducks/changeRequest";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevisionStatus, DocumentRevisionStatusAlias } from "../../../../state/ducks/documentRevisions";
+import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType";
+import { FBDocTypeGroup } from "../../../form.builder";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
 import Text from "../../Text";
 import { styles } from "./HeaderInfo.styles";
@@ -12,6 +14,9 @@ export interface Props {
   id: string;
   name: string;
   documentTypeId?: string;
+  revision?: number;
+  groupOptions?: DocumentGroupOptionsType[];
+  isInlineApproval?: boolean;
 }
 
 export const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -19,7 +24,14 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   name,
   id,
   documentTypeId,
+  revision,
+  groupOptions,
+  isInlineApproval,
 }) => {
+  // we should rename enum for document types, it is not only for FB
+  if (revision === 1 && groupOptions?.includes(FBDocTypeGroup.RECORD) && isInlineApproval) {
+    status = DocumentRevisionStatusAlias.Draft;
+  }
   const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
   const [isTitleVisible] = useTitle(documentTypeId);
   const classes = styles();

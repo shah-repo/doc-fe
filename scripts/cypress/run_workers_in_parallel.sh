@@ -19,7 +19,8 @@ fi
 # make folders for results
 source ./scripts/cypress/make_results_dir.sh
 
-sed -i -e "s|api_url:.*$|api_url: \"http://localhost:$ENLIL_COMPOSE_EXPOSE_DIRECTOR_PORT\"|g" ~/.cache/Cypress/*/Cypress/resources/app/packages/server/config/app.yml
+./scripts/cypress/patch_director_port_in_cache.sh
+./scripts/cypress/generate_requirements_json_file.sh
 
 echo "NUMBER_OF_WORKERS: $NUMBER_OF_WORKERS"
 echo "ENLIL_COMPOSE_PORT_RANGE_START: $ENLIL_COMPOSE_PORT_RANGE_START"

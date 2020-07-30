@@ -20,8 +20,13 @@ ARG BROWSER
 ARG PORT
 ARG REACT_APP_THEME
 ARG NODE_ENV
+ARG REACT_APP_DATADOG_APPLICATION_ID
+ARG REACT_APP_DATADOG_CLIENT_TOKEN
 
 RUN yarn react-scripts --max_old_space_size=4096 build
+RUN yarn cache clean
 COPY scripts/cypress_docker_run_web.sh /opt/app/scripts/
+
+LABEL enlil_cypress=$FE_GIT_COMMIT_HASH
 
 CMD ["bash","./scripts/cypress_docker_run_web.sh"]

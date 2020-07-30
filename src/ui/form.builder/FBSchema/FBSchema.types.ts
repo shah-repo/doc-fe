@@ -32,6 +32,7 @@ export type FBSchemaProps = Pick<FBInputProps,
 | "defaultValue"
 | "approvers"
 | "approverGroups"
+| "approvalRoles"
 | "approveIsBlocking"
 | "applicableOn"
 | "actions"

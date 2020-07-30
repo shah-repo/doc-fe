@@ -1,4 +1,5 @@
-[{
+[
+  {
     "id": "1",
     "path": "/document_revisions",
     "label": "Document revisions",
@@ -10,7 +11,7 @@
   {
     "id": "2",
     "path": "/change_requests",
-    "label": "Change requests",
+    "label": "Approval requests",
     "valueKey": "id",
     "labelKey": "title",
     "labelPrefixRoot": "crId",
@@ -118,15 +119,6 @@
   },
   {
     "id": "15",
-    "path": "/document_revisions?status%5B%5D=DRAFT",
-    "label": "Document Revisions In Draft",
-    "valueKey": "id",
-    "labelKey": "name",
-    "labelPrefixRoot": "document.docId",
-    "root": ""
-  },
-  {
-    "id": "16",
     "path": "/document_revisions?docTypeGroups%5B%5D=WO_PARTS",
     "label": "Part Number in WO",
     "valueKey": "id",
@@ -135,7 +127,25 @@
     "root": ""
   },
   {
+    "id": "16",
+    "path": "/document_revisions?status%5B%5D=DRAFT",
+    "label": "Document Revisions In Draft",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
     "id": "17",
+    "path": "/groups/approval_roles",
+    "label": "Approval Roles",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "",
+    "root": ""
+  },
+  {
+    "id": "18",
     "path": "/document_revisions",
     "label": "Document revisions (all versions)",
     "valueKey": "id",

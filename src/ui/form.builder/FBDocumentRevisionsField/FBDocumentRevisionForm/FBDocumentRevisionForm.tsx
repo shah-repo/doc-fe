@@ -1,5 +1,5 @@
 import React from "react";
-import { FBAutocompleteAsync, FBTextField } from "../..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBTextField } from "../..";
 import { FormContext } from "../../../components/forms/FormContext";
 import { FBDocumentRevisionFormProps } from "../FBDocumentRevisions.types";
 import { withFBDocumentRevisionForm } from "./FBDocumentRevisionForm.wrap";
@@ -10,7 +10,7 @@ const FBDocumentRevisionForm: React.FunctionComponent<FBDocumentRevisionFormProp
   <FormContext.Provider value={{ submitOnChange: false }}>
     <FBAutocompleteAsync
       label="Proposed document revision"
-      optionId="15"
+      optionId={FBAutocompleteAsyncOption.DRAFTdocumentRevisions}
       name="proposedDocumentRevision"
       placeholder="Select"
       optionValueType="id"

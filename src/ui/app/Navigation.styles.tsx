@@ -11,6 +11,7 @@ export default (theme: Theme) =>
     drawerPaper: {
       width: DRAWER_WIDTH,
       background: theme.palette.secondary.main,
+      zIndex: theme.zIndex.drawer + 2,
     },
     toolbar: {
       backgroundColor: theme.palette.secondary.main,

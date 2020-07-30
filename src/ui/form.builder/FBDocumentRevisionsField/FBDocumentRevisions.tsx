@@ -18,7 +18,7 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionProps> = ({
       {(docRev: FBDocumentRevisionItem, index) => (
         <FBProposedDocument
           key={`fb-document-revision-${docRev.id}-${index}`}
-          id={docRev.proposedDocumentRevision.id}
+          id={docRev.proposedDocumentRevision?.id}
           justification={docRev.justificationOfChange}
           description={docRev.descriptionOfChange}
           {...{ index, disabled }}
@@ -32,6 +32,7 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionProps> = ({
       style={{ margin: "0px 0px 32px 0px" }}
       onClick={handleAdd}
       disabled={disabled}
+      data-cy={"fb.add.document"}
     />
   </Provider>
 );

@@ -64,12 +64,12 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     }
     // TODO: refactore autocomplete list to reuse doc rev list (check with mobile)
     switch (this.optionId) {
-      case FBAutocompleteAsyncOption.revision:
-      case FBAutocompleteAsyncOption.supplier:
-      case FBAutocompleteAsyncOption.tl:
-      case FBAutocompleteAsyncOption.csl:
-      case FBAutocompleteAsyncOption.part:
-      case FBAutocompleteAsyncOption.po:
+      case FBAutocompleteAsyncOption.activeDocumentRevisions:
+      case FBAutocompleteAsyncOption.TLList:
+      case FBAutocompleteAsyncOption.CSLList:
+      case FBAutocompleteAsyncOption.parts:
+      case FBAutocompleteAsyncOption.POList:
+      case FBAutocompleteAsyncOption.suppliers:
         return _.map(
           _.groupBy(data, "document.docId"), (recs) => _.last(_.sortBy(recs, "version"))
         );

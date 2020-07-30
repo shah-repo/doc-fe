@@ -68,5 +68,6 @@ export interface NavigationItem {
   path?: string;
   menu?: NavigationItem[];
   icon?: string;
+  category?: string;
   restrictedToUsersWithTags?: GroupTag[];
 }
