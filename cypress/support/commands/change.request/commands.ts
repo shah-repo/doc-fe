@@ -152,11 +152,6 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
 });
 
 Cypress.Commands.add("arApproveAR", () => {
-<<<<<<< HEAD
-  cy.get("[aria-label=\"approve\"]").contains("Approve submission").click();
-  cy.get("input[type=password]").type("Tester1!");
-  cy.get("#passwordConfirm").click().wait(5000);
-=======
   cy.get("button[aria-label=approve]").first().click().wait(300);
   cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
   cy.get("[data-cy=\"passwordConfirm\"]").click().wait(2000);
@@ -164,7 +159,6 @@ Cypress.Commands.add("arApproveAR", () => {
 
 Cypress.Commands.add("arCheckTitleInEditableAndMatches", (params: { name: string }) => {
   cy.get("[data-cy=\"SummaryBaseProps-values\"]").should("have.text", params.name);
->>>>>>> develop
 });
 
 Cypress.Commands.add("arWithdrawSubmission", () => {
