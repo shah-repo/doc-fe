@@ -4,9 +4,7 @@ import { SystemRequirement } from "../../../cypress/utils/context/systemRequirem
 /// <reference types="Cypress" />
 console.log("1")
 
-// .;[]{}()!@#$%^&_-=+,.'
-
-context("Example specs for requirements linking.:;[]{}()!@#$%^&*_-=+/?,<.>/?'\\", () => {
+context("Example specs for requirements linking:", () => {
   context("when specs are passing", () => {
     it("with one requirements mentioned", () => {
       SystemRequirement("REQ-0010");

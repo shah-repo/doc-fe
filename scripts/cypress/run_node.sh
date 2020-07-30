@@ -27,7 +27,6 @@ export ENLIL_COMPOSE_EXPOSE_FE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+2))"
 export CYPRESS_BE_URL="http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_PORT"
 export CYPRESS_FE_URL="http://localhost:$ENLIL_COMPOSE_EXPOSE_FE_PORT"
 export CYPRESS_KONFIG_ENV="development"
-# screenshotOnRunFailure
 
 yarn cypress run \
   --parallel --record --key 9e6e4a3d-c43a-4e60-8984-fa2ae0a90a76 \
