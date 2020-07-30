@@ -10,11 +10,11 @@ export const withFBContextMenu = <T extends FBContextMenuProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    contextMenuState,
-    open = false,
-    anchorPosition,
     onContextMenu,
     onClose,
+    contextMenuState,
+    anchorPosition,
+    open = false,
     menuItems,
     menuEls,
     ...props
@@ -41,16 +41,22 @@ export const withFBContextMenu = <T extends FBContextMenuProps>(
       );
     };
 
-    onClose = () => contextMenuState?.setPosition();
+    onClose = () => {
+      contextMenuState?.setPosition()
+    };
 
-    return useObserver(() => Component({
+    useObserver(() => {
+      anchorPosition = contextMenuState?.anchorPosition;
+    })
+
+    return Component({
       ...(props as T),
-      open,
       onContextMenu,
       onClose,
-      anchorPosition: contextMenuState?.anchorPosition,
+      anchorPosition,
+      open,
       menuEls,
-    }));
+    });
   };
 
   return (props: T) => Comp(props);
