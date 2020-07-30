@@ -30,14 +30,10 @@ export default (on, config) => {
     const newName = (path[0]).replace(allowedCharacters, "").replace(/[ ]+/g, " ");
     path[0] = newName;
     const newPath = path.reverse().join("/");
-    console.log({ details, newPath, path, newName }); // print all details to terminal
-    console.log({ pathAfter: newPath });
-
     return new Promise((resolve, reject) => {
       rename(details.path, newPath, (err) => {
         if (err) { return reject(err); }
 
-        console.log({ pathChanged: newPath });
         resolve({ path: newPath });
       });
     });

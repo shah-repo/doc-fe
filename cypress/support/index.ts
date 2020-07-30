@@ -61,4 +61,3 @@ Cypress.on("test:after:run", (test, runnable: any ) => {
     addScreenshotToContext(test, runnable, "Screenshot On Failure");
   }
 });
-

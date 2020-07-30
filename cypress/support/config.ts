@@ -2,11 +2,6 @@
 import { plainToClass } from "class-transformer";
 import { IsBoolean, IsDefined, IsString, validateSync } from "class-validator";
 
-// const envFromCypressEnv = () => ({
-//   BE_URL: Cypress.env("BE_URL"),
-//   BASE_URL: Cypress.env("BASE_URL"),
-// });
-
 export class ConfigEnv {
   private static instance: ConfigEnv;
   static getInstance(): ConfigEnv {
@@ -31,7 +26,6 @@ export class ConfigEnv {
     if (errors.length) {
       throw new Error(`Config validation errors: ${errors}`);
     }
-    console.log(JSON.stringify({configEnv}, null, 2))
     return configEnv;
   }
 
