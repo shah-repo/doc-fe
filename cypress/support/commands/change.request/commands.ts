@@ -87,6 +87,11 @@ Cypress.Commands.add("arClickAddDocument", () => {
   cy.get("[data-cy=\"fb.add.document\"]").click().wait(200);
 });
 
+Cypress.Commands.add("arChoseProposedDocument", ({ name }) => {
+  cy.get("[role=dialog]>div:nth-child(2)>div>div>div>div>div>div>div>input").click();
+  cy.get("[role=listbox]>li").contains(name).click();
+});
+
 Cypress.Commands.add("arChoseSpecificProposedDocument", (params: { name: string }) => {
   cy.get("[data-cy=\"proposedDocumentRevision\"]").type(params.name + "{downarrow}{enter}");
 });
@@ -146,7 +151,7 @@ Cypress.Commands.add("arApproveAR", () => {
 });
 
 Cypress.Commands.add("arCheckTitleInEditableAndMatches", (params: { name: string }) => {
-  cy.get("[data-cy=\"SummaryBaseProps-values\"]").should("have.text", params.name);
+  cy.get("[id=\"HeaderInfo-name\"]").should("have.text", params.name);
 });
 
 Cypress.Commands.add("arWithdrawSubmission", () => {

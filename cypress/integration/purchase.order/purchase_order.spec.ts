@@ -85,22 +85,27 @@ context("Create company via API and create Purchase Order Form document", () => 
         employeeId: adminEmployee.id,
         sessionId: loginResponse.sessionId as unknown as string,
         payload: {
-          navigation:
-          [
+          navigation: [
             {
               label: "Dashboard",
               path: "/",
               type: "LINK"
             },
             {
-              label: "Document List",
-              path: "/document_revision",
-              type: "LINK"
-            },
-            {
-              label: "Approval Request List",
-              path: "/change_request",
-              type: "LINK"
+              label: "Document Control",
+              type: "MENU",
+              menu: [
+                {
+                  label: "Document List",
+                  path: "/document_revision",
+                  type: "LINK"
+                },
+                {
+                  label: "Approval Request List",
+                  path: "/change_request",
+                  type: "LINK"
+                },
+              ],
             },
             {
               label: "User Management",
@@ -123,8 +128,8 @@ context("Create company via API and create Purchase Order Form document", () => 
               path: "/document_by_type/" + docTypeId,
               type: "LINK",
             }
-          ],
-        }).then(() => {
+          ]}
+        ).then(() => {
         done();
       });
     });
@@ -153,7 +158,7 @@ context("Create company via API and create Purchase Order Form document", () => 
   });
 
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentListWithoutDocControl();
+    cy.cmpNavigateToDocumentList();
   });
 
   it("Click on 'Create a document'", () => {
@@ -203,7 +208,7 @@ context("Create company via API and create Purchase Order Form document", () => 
 
 context("Create Part document for PO", () => {
   it("Navigates to document list", () => {
-    cy.cmpNavigateToDocumentListWithoutDocControl();
+    cy.cmpNavigateToDocumentList();
   });
 
   it("Clicks on 'create a document' button", () => {
@@ -304,7 +309,7 @@ context("Create Purchase Order document with Product option from Form document",
     cy.poAddPOButtonClick();
   });
 
-  it("Check currency options dropdown", () => {
+  it.skip("Check currency options dropdown", () => {
     SystemRequirement("REQ-1320");
     cy.poCheckCurrency();
   });
@@ -410,7 +415,7 @@ context("Create Purchase Order document with Service option from Form document",
     cy.poAddPOButtonClick();
   });
 
-  it("Check currency options dropdown", () => {
+  it.skip("Check currency options dropdown", () => {
     SystemRequirement("REQ-1320");
     cy.poCheckCurrency();
   });
@@ -473,7 +478,7 @@ context("Creates second line item and checks ID and if all line item details are
 
 context("Creates second PO form document and checks if both documents are available when creating new PO", () => {
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentListWithoutDocControl();
+    cy.cmpNavigateToDocumentList();
   });
 
   it("Click on 'Create a document'", () => {
@@ -576,14 +581,14 @@ context("Test the filter inside PO", () => {
   });
 
   it("Navigate to Document List", () => {
-    cy.wait(1000).cmpNavigateToDocumentListWithoutDocControl();
+    cy.wait(1000).cmpNavigateToDocumentList();
   });
 
   it("Navigate to Purchase Order", () => {
     cy.cmpNavigateToPurchaseOrder();
   });
 
-  it("Check if all filter values persist after changing landing page", () => {
+  it.skip("Check if all filter values persist after changing landing page", () => {
     SystemRequirement("REQ-1170");
     cy.filterCheckIfPOFilterPersists({ docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
     partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020" });
@@ -596,3 +601,4 @@ context("Test the filter inside PO", () => {
 });
 
 export { };
+

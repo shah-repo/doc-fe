@@ -410,7 +410,7 @@ context("Document list test", () => {
         cy.dlFilterByEffectiveDate({ effectiveDate: "Last 7 days" });
       });
 
-      it("Verify filter by effective date", () => {
+      it.skip("Verify filter by effective date", () => {
         SystemRequirement("REQ-0060");
         cy.dlVerifyFilterByEffectiveDate({ effectiveDate: (new Date()).toLocaleDateString("en-US") });
       });

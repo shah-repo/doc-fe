@@ -10,11 +10,13 @@ import { useAdministrativeChange, useNextRevision, useNextRevisionStage, useObso
 interface Props {
   documentTypeId?: string;
   isDisabled: boolean;
+  showObsoleteRevisionChange: boolean;
 }
 
 export const RevisionTypeChange: React.FunctionComponent<Props> = ({
   documentTypeId = "",
   isDisabled,
+  showObsoleteRevisionChange,
 }) => {
   const [showRevisionSelect, revisionSelectLabel] = useRevisionSelect(documentTypeId);
   const [showNextRevisionLevel, nextRevisionLevelLabel] = useNextRevision(documentTypeId);
@@ -55,7 +57,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
           />
         }
         {
-          showObsolete &&
+          showObsolete && !showObsoleteRevisionChange &&
           <RadioButton
             label={<Text message={obsoleteLabel} />}
             value={RevisionChangeType.Obsolete}

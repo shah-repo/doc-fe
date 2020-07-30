@@ -93,14 +93,20 @@ context("Create company via API and create Purchase Order Form document", () => 
               type: "LINK"
             },
             {
-              label: "Document List",
-              path: "/document_revision",
-              type: "LINK"
-            },
-            {
-              label: "Approval Request List",
-              path: "/change_request",
-              type: "LINK"
+              label: "Document Control",
+              type: "MENU",
+              menu: [
+                {
+                  label: "Document List",
+                  path: "/document_revision",
+                  type: "LINK"
+                },
+                {
+                  label: "Approval Request List",
+                  path: "/change_request",
+                  type: "LINK"
+                },
+              ],
             },
             {
               label: "User Management",
@@ -153,7 +159,7 @@ context("Create company via API and create Purchase Order Form document", () => 
   });
 
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentListWithoutDocControl();
+    cy.cmpNavigateToDocumentList();
   });
 
   it("Click on 'Create a document'", () => {
@@ -203,7 +209,7 @@ context("Create company via API and create Purchase Order Form document", () => 
 
 context("Create Purchase Order Approval Matrix document with from Form document", () => {
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentListWithoutDocControl();
+    cy.cmpNavigateToDocumentList();
   });
 
   it("Click on 'Create a document'", () => {
