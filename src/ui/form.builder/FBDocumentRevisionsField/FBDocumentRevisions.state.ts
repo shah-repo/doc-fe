@@ -31,14 +31,13 @@ export class FBDocumentRevisionsState {
     const updateDocumentRevision = this.documentRevisions?.map((e, indexOfDoc) => {
       if ( indexOfDoc === index) {
         if (type === "description") {
-          return e[index] = newObjectDescriptionChanges;
+          return e[indexOfDoc] = newObjectDescriptionChanges;
         }
-        return e[index] = newObjectJustificationChanges;
+        return e[indexOfDoc] = newObjectJustificationChanges;
       }
-      return e[index];
+      return this.documentRevisions?.[indexOfDoc];
     });
-
-    set(this, "documentRevisions", updateDocumentRevision );
+    this.setDocumentRevisions(updateDocumentRevision as FBDocumentRevisionItem[]);
   };
 
   public addDocRevItem = (item: FBDocumentRevisionItem) => {
