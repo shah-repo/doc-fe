@@ -75,6 +75,10 @@ DocumentRevisionManagerContainerProps
   const schema = selectedDocument?.formTemplate?.schema || selectedDocument?.formDocument?.formTemplate?.schema || [];
   const { documentTypeAcronym: acronym } = document?.documentType || {};
 
+  const isInlineApproval = !!docRevsWithoutCanceled.find((e) => e.formDocument?.formTemplate?.schema.some((e) =>
+    (e.type === "approval" || e.type === "inlineapproval" as string))) || !!selectedDocument?.formDocument?.formTemplate?.schema.some((e) =>
+      (e.type === "approval" || e.type === "inlineapproval" as string));
+
   const sidebarList = [
     {
       icon: <NoteIcon />,
@@ -84,6 +88,7 @@ DocumentRevisionManagerContainerProps
         }),
         component: <DocumentRevisionListContainer
           documentRevisions={docRevsWithoutCanceled}
+          isInlineApproval={isInlineApproval}
           documentId={documentId}
           docId={docId}
           selectedDocumentRevision={documentRevisionId}
