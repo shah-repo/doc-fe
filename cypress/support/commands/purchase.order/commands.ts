@@ -42,6 +42,10 @@ declare global {
       poAMCheckApprovalIconIfItsGray(): Chainable<Subject>;
       poAMSelectApprover(...list: string[]): Chainable<Subject>;
       poAMApproveButton(): Chainable<Subject>;
+      poAMCheckIfApproverHasApprovalSign(): Chainable<Subject>;
+      poAMCheckForAlertMessage(): Chainable<Subject>;
+      poRejectAR(params: {password: string}): Chainable<Subject>;
+      poVerifyStatus(params: {status: string}): Chainable<Subject>;
     }
   }
 }
@@ -213,6 +217,24 @@ Cypress.Commands.add("poAMApproveButton", () => {
   cy.get("#FormList-selectForm").click();
   cy.get("#FormList-selectForm>div:nth-child(3)>div>div:nth-child(1)").click();
   cy.get("#ApproveAndRelease-submit").click();
+});
+
+Cypress.Commands.add("poAMCheckIfApproverHasApprovalSign", () => {
+  cy.get("[id=\"approvals\"]").contains("PO Approval sig").should("exist");
+});
+
+Cypress.Commands.add("poAMCheckForAlertMessage", () => {
+  cy.get("[class=\"Toastify__toast-body\"]").contains("at least one approver from group").contains("has to be selected").should("exist");
+});
+
+Cypress.Commands.add("poRejectAR", (params: {password: string}) => {
+  cy.get("button[aria-label=reject]").first().click().wait(300);
+  cy.get("[data-cy=\"transition.action.password\"]").click().type(params.password);
+  cy.wait(300).get("[data-cy=\"passwordConfirm\"]").click();
+});
+
+Cypress.Commands.add("poVerifyStatus", (params: { status: string }) => {
+  cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
 });
 
 

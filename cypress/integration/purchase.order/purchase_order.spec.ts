@@ -101,7 +101,7 @@ context("Create company via API and create Purchase Order Form document", () => 
                   type: "LINK"
                 },
                 {
-                  label: "Approval Request List",
+                  label: "Approval Requests",
                   path: "/change_request",
                   type: "LINK"
                 },
