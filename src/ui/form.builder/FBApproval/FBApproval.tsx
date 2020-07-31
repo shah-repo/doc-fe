@@ -24,7 +24,6 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
   index,
   ...props
 }) => (
-  // 
   <FBInput {...{ name, disabled, autosave }} type="approval" gutter={false}>
     <Box mb={3}>
       <FBApprovalSocket />
