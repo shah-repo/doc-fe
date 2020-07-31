@@ -33,7 +33,7 @@ interface OwnProps {
 }
 
 export type DocumentRevisionManagerContainerProps = OwnProps &
-  StateProps;
+StateProps;
 
 // TO-DO Move To Context Folder
 export let documentRevisionStatusContext = React.createContext<DocumentRevisionStatus>(DocumentRevisionStatus.Draft);
@@ -50,7 +50,7 @@ const mapStateToProps = (
 });
 
 export const DocumentRevisionManagerContainer: React.FunctionComponent<
-  DocumentRevisionManagerContainerProps
+DocumentRevisionManagerContainerProps
 > = ({
   isNewVersion,
   isNewOutput,
@@ -60,115 +60,120 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
   deprecatedAt,
   docId,
 }) => {
-    useDocumentTitle(docId);
-    const [isDrawerOpen, setOpen] = React.useState(true);
-    const classes = styles({ isDrawerOpen });
-    const intl = useIntl();
-    const url = useLocation();
+  useDocumentTitle(docId);
+  const [isDrawerOpen, setOpen] = React.useState(true);
+  const classes = styles({ isDrawerOpen });
+  const intl = useIntl();
+  const url = useLocation();
 
-    const docRevsWithoutCanceled = useMemo(() => documentRevisions.filter((docrev) =>
-      docrev.status !== DocumentRevisionStatus.Canceled), [documentRevisions]);
-    const selectedDocument = useSelector((state: ApplicationState) =>
-      documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
-    const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
-    const canAccess = selectedDocument?.document.canAccess;
-    const schema = selectedDocument?.formTemplate?.schema || selectedDocument?.formDocument?.formTemplate?.schema || [];
-    const { documentTypeAcronym: acronym } = document?.documentType || {};
+  const docRevsWithoutCanceled = useMemo(() => documentRevisions.filter((docrev) =>
+    docrev.status !== DocumentRevisionStatus.Canceled), [documentRevisions]);
+  const selectedDocument = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
+  const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
+  const canAccess = selectedDocument?.document.canAccess;
+  const schema = selectedDocument?.formTemplate?.schema || selectedDocument?.formDocument?.formTemplate?.schema || [];
+  const { documentTypeAcronym: acronym } = document?.documentType || {};
 
-    const sidebarList = [
-      {
-        icon: <NoteIcon />,
-        details: {
-          title: intl.formatMessage({
-            id: `document.revision.docVersion.${acronym}`,
-          }),
-          component: <DocumentRevisionListContainer
-            documentRevisions={docRevsWithoutCanceled}
-            documentId={documentId}
-            docId={docId}
-            selectedDocumentRevision={documentRevisionId}
-            documentRevisionId={documentRevisionId}
-          />,
-        },
+  const isInlineApproval = !!docRevsWithoutCanceled.find((e) => e.formDocument?.formTemplate?.schema.some((e) =>
+    (e.type === "approval" || e.type === "inlineapproval" as string))) || !!selectedDocument?.formDocument?.formTemplate?.schema.some((e) =>
+      (e.type === "approval" || e.type === "inlineapproval" as string));
+
+  const sidebarList = [
+    {
+      icon: <NoteIcon />,
+      details: {
+        title: intl.formatMessage({
+          id: `document.revision.docVersion.${acronym}`,
+        }),
+        component: <DocumentRevisionListContainer
+          documentRevisions={docRevsWithoutCanceled}
+          isInlineApproval={isInlineApproval}
+          documentId={documentId}
+          docId={docId}
+          selectedDocumentRevision={documentRevisionId}
+          documentRevisionId={documentRevisionId}
+        />,
       },
-      {
-        icon: <TimelineIcon />,
-        details: {
-          dataCy: "timeline-icon",
-          title: intl.formatMessage({
-            id: "document.revision.history",
-          }),
-          component: documentRevisionId ? <DocumentRevisionAuditContainer
-            documentRevisionId={documentRevisionId}
-          /> : null,
-        },
+    },
+    {
+      icon: <TimelineIcon />,
+      details: {
+        dataCy: "timeline-icon",
+        title: intl.formatMessage({
+          id: "document.revision.history",
+        }),
+        component: documentRevisionId ? <DocumentRevisionAuditContainer
+          documentRevisionId={documentRevisionId}
+        /> : null,
       },
-      {
-        icon: <BadgeIcon />,
-        details: {
-          dataCy: "permission-icon",
-          title: intl.formatMessage({
-            id: "document.access.permissions",
-          }),
-          component: documentRevisionId && canAccess && !isNewOutput ? <AccessPermissionsContainer
-            documentRevisionId={documentRevisionId}
-            documentId={documentId}
-            canAccess={canAccess}
-            documentTypeId={document.documentType?.id}
-            withoutCurrentUser={true}
-          /> : null,
-        },
+    },
+    {
+      icon: <BadgeIcon />,
+      details: {
+        dataCy: "permission-icon",
+        title: intl.formatMessage({
+          id: "document.access.permissions",
+        }),
+        component: documentRevisionId && canAccess && !isNewOutput ? <AccessPermissionsContainer
+          documentRevisionId={documentRevisionId}
+          documentId={documentId}
+          canAccess={canAccess}
+          documentTypeId={document.documentType?.id}
+          withoutCurrentUser={true}
+        /> : null,
       },
-      {
-        icon: <BookmarkIcon />,
-        details: {
-          dataCy: "bookmark-icon",
-          title: intl.formatMessage({
-            id: "document.revision.bookmarks",
-          }),
-          component: <Bookmarks location={url} schema={schema} />,
-        },
+    },
+    {
+      icon: <BookmarkIcon />,
+      details: {
+        dataCy: "bookmark-icon",
+        title: intl.formatMessage({
+          id: "document.revision.bookmarks",
+        }),
+        component: <Bookmarks location={url} schema={schema} />,
       },
-    ];
+    },
+  ];
 
-    documentRevisionStatusContext = React.createContext(selectedDocument?.status);
-    const status = selectedDocument ? selectedDocument.status : undefined;
-    documentRevisionStatusContextFromDocList = React.createContext(status);
-    documentRevisionVersionContext = React.createContext(selectedDocument?.version);
+  documentRevisionStatusContext = React.createContext(selectedDocument?.status);
+  const status = selectedDocument ? selectedDocument.status : undefined;
+  documentRevisionStatusContextFromDocList = React.createContext(status);
+  documentRevisionVersionContext = React.createContext(selectedDocument?.version);
 
-    useEffect(() => () => {
-      documentRevisionStatusContextFromDocList = React.createContext<undefined | DocumentRevisionStatus>(undefined);
-    }, []);
+  useEffect(() => () => {
+    documentRevisionStatusContextFromDocList = React.createContext<undefined | DocumentRevisionStatus>(undefined);
+  }, []);
 
-    if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
-      const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
-      return (
-        <Redirect to={documentVersionPath(docRevIdToRedirect, documentId)} />
-      );
-    }
-
+  if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
+    const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
     return (
-      <div className={classes.root}>
-        <div className={classes.appFrame}>
-          {documentRevisionId && !isNewOutput && (
-            <DocumentRevisionDisplayContainer
-              documentRevisionId={documentRevisionId}
-              isNewVersion={isNewVersion}
-              documentId={documentId}
-            />
-          )}
-          {documentRevisionId && isNewOutput && (
-            <DocumentRevisionDisplayContainer
-              documentRevisionId={documentRevisionId}
-              isNewOutput={isNewOutput}
-              documentId={documentId}
-            />
-          )}
-        </div>
-        <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />
-
-      </div>
+      <Redirect to={documentVersionPath(docRevIdToRedirect, documentId)} />
     );
-  };
+  }
+
+  return (
+    <div className={classes.root}>
+      <div className={classes.appFrame}>
+        {documentRevisionId && !isNewOutput && (
+          <DocumentRevisionDisplayContainer
+            documentRevisionId={documentRevisionId}
+            isNewVersion={isNewVersion}
+            documentId={documentId}
+          />
+        )}
+        {documentRevisionId && isNewOutput && (
+          <DocumentRevisionDisplayContainer
+            documentRevisionId={documentRevisionId}
+            isNewOutput={isNewOutput}
+            documentId={documentId}
+          />
+        )}
+      </div>
+      <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />
+
+    </div>
+  );
+};
 
 export default connect<StateProps, {}, OwnProps, ApplicationState>(mapStateToProps)(DocumentRevisionManagerContainer);

@@ -19,6 +19,7 @@ interface Props {
   docId: string;
   documentTypeId?: string;
   isDocumentPO: boolean;
+  isInlineApproval: boolean;
 }
 
 export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
@@ -28,6 +29,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   docId,
   documentTypeId,
   isDocumentPO,
+  isInlineApproval,
 }) => {
   const classes = styles();
   const link = documentVersionPath(
@@ -43,8 +45,6 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isSelected = selectedDocumentRevision === documentRevision.id;
   const { status } = documentRevision;
   const [isStatusVisible, statusLabel] = useDocumentVersion(documentTypeId, status);
-  const isInlineApproval = documentRevision.formDocument?.formTemplate?.schema.some((e) =>
-    (e.type === "approval" || e.type === "inlineapproval" as string));
   let verPrefix = "common.version";
   let statLabel = statusLabel;
 
