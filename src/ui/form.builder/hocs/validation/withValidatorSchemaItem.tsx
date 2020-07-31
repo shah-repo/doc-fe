@@ -5,13 +5,11 @@ import { FBValidatorSchemaItemProps } from "../../types/validation/validatorSche
 
 export const withValidatorSchemaItem = <T extends FBValidatorSchemaItemProps>(
   Component: React.FunctionComponent<T>,
-) => {
-  return observer((props: T) => {
-      const InputType = props.type && FBFieldComponent[props.type];
-      return Component({
-        ...props,
-        InputType,
-      });
-    },
-  );
-};
+) => observer((props: T) => {
+  const InputType = props.type && FBFieldComponent[props.type];
+  return Component({
+    ...props,
+    InputType,
+  });
+},
+);

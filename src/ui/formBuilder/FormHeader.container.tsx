@@ -19,14 +19,12 @@ const FormHeaderContainer: React.FunctionComponent<StateProps> = ({
   formNumber,
   status,
   title,
-}) => {
-  return (
-    <FormHeaderPresenter
-      formNumber={formNumber}
-      status={status}
-      title={title}
-    />
-  );
-};
+}) => (
+  <FormHeaderPresenter
+    formNumber={formNumber}
+    status={status}
+    title={title}
+  />
+);
 
 export default connect(mapStateToProps)(FormHeaderContainer);

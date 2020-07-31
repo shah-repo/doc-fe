@@ -7,7 +7,7 @@ export function withDialogActions<T extends FBDialogProps>(
   Component: React.ComponentType<T>,
 ) {
 
-  return (props: T) => {
+  return function theOnewithDialogActions(props: T) {
 
     const onActionClick = (action: FBDialogAction) => () => {
       if (props.onActionClick) {

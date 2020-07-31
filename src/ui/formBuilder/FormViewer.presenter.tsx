@@ -18,21 +18,19 @@ const FormViewer: React.FunctionComponent<FormViewerProps> = ({
   elements,
   UPDATE_FIELD_VALUE,
 }) => {
-  const Fields = elements.map((elem: any, i: any) => {
-    return (
-      <FormFieldViewer
-        closed={elem.closed}
-        diff={elem.diff}
-        key={i}
-        order={i}
-        type={elem.type}
-        config={elem.config}
-        editMode={false}
-        values={elem.values}
-        updateValue={UPDATE_FIELD_VALUE}
-      />
-    );
-  });
+  const Fields = elements.map((elem: any, i: any) => (
+    <FormFieldViewer
+      closed={elem.closed}
+      diff={elem.diff}
+      key={i}
+      order={i}
+      type={elem.type}
+      config={elem.config}
+      editMode={false}
+      values={elem.values}
+      updateValue={UPDATE_FIELD_VALUE}
+    />
+  ));
   return <div className={styles.formEditorContainer}> {Fields} </div>;
 };
 

@@ -7,7 +7,7 @@ export class FBSortableStore {
 
   @action public setMode = (type: FBSortableType) => {
     this.mode = type;
-  }
+  };
 
   @computed get isSortable() {
     return FBStore.mode !== "form";

@@ -13,17 +13,17 @@ const FBFieldTopBar: React.FunctionComponent<FBFieldTopBarProps> = ({
   removeSchemaItem,
   markDownSchemaItem,
 }) => (
-    <Box display="flex" flexDirection="row-reverse" {...{ visibility, mb }}>
-      <Box zIndex="tooltip">
-        <RemoveCircleOutlineIcon color="error" data-cy={"remove-schema-item"} onClick={removeSchemaItem} />
-      </Box>
-      <Box pr={2} zIndex="tooltip">
-        <BorderColorIcon color="primary" onClick={editSchemaItem} />
-      </Box>
-      <Box pr={2} zIndex="tooltip">
-        <CodeIcon color="primary" onClick={markDownSchemaItem} />
-      </Box>
+  <Box display="flex" flexDirection="row-reverse" {...{ visibility, mb }}>
+    <Box zIndex="tooltip">
+      <RemoveCircleOutlineIcon color="error" data-cy={"remove-schema-item"} onClick={removeSchemaItem} />
     </Box>
-  );
+    <Box pr={2} zIndex="tooltip">
+      <BorderColorIcon color="primary" onClick={editSchemaItem} />
+    </Box>
+    <Box pr={2} zIndex="tooltip">
+      <CodeIcon color="primary" onClick={markDownSchemaItem} />
+    </Box>
+  </Box>
+);
 
 export default withFBFieldTopBar(FBFieldTopBar);

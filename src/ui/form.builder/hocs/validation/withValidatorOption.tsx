@@ -34,8 +34,8 @@ export const withValidatorOption = <T extends FBValidatorOptionProps>(
       FBValidatorStore.indicatorValues = _.omit(indicatorValues, name);
     };
 
-    const indicatorElements = (): React.ReactNode[] | undefined => {
-      return _.map(indicators, (
+    const indicatorElements = (): React.ReactNode[] | undefined =>
+      _.map(indicators, (
         { type, ...props }: Partial<FBTemplateSchema>,
         index,
       ) => {
@@ -50,28 +50,28 @@ export const withValidatorOption = <T extends FBValidatorOptionProps>(
             // fieldName={field.name}
           />
         );
-      });
+      })
 
-      // return (indicators || []).map(
-      //   ({ type, ...props }: Partial<FBTemplateSchema>, index) => {
-      //     if (!type) {
-      //       return;
-      //     }
-      //     // const uuidv4 = require("uuid/v4");
-      //     const name = `${field.name}${props}${index}`;
-      //     const InputType = FBFieldComponent[type];
-      //     return (
-      //       <InputType
-      //         key={`indicator-${index}-${type}`}
-      //         name={name}
-      //         {...props}
-      //         onChange={optionOnChange(props, name)}
-      //         fieldName={field.name}
-      //       />
-      //     );
-      //   },
-      // );
-    };
+    // return (indicators || []).map(
+    //   ({ type, ...props }: Partial<FBTemplateSchema>, index) => {
+    //     if (!type) {
+    //       return;
+    //     }
+    //     // const uuidv4 = require("uuid/v4");
+    //     const name = `${field.name}${props}${index}`;
+    //     const InputType = FBFieldComponent[type];
+    //     return (
+    //       <InputType
+    //         key={`indicator-${index}-${type}`}
+    //         name={name}
+    //         {...props}
+    //         onChange={optionOnChange(props, name)}
+    //         fieldName={field.name}
+    //       />
+    //     );
+    //   },
+    // );
+    ;
 
     function doRenderIndicators(): boolean {
       if (_.isUndefined(form)) {
@@ -80,7 +80,7 @@ export const withValidatorOption = <T extends FBValidatorOptionProps>(
       if (_.isUndefined(field)) {
         return false;
       }
-      return form!.values[field!.name] === field!.name;
+      return form.values[field.name] === field.name;
     }
 
     return Component({
@@ -100,17 +100,17 @@ export const withValidatorOption = <T extends FBValidatorOptionProps>(
 //     const [checked, setChecked] = React.useState(false);
 //     const { indicators, form, field } = props;
 
-    // const onChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    //   const { name } = field;
-    //   const { indicatorValues } = FBValidatorStore;
-    //   const value = ev.target.checked;
+// const onChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+//   const { name } = field;
+//   const { indicatorValues } = FBValidatorStore;
+//   const value = ev.target.checked;
 
-    //   setChecked(value);
-      // if (value) {
-      //   return FBValidatorStore.indicatorValues[name] = {};
-      // }
-      // FBValidatorStore.indicatorValues = _.omit(indicatorValues, name);
-    // };
+//   setChecked(value);
+// if (value) {
+//   return FBValidatorStore.indicatorValues[name] = {};
+// }
+// FBValidatorStore.indicatorValues = _.omit(indicatorValues, name);
+// };
 
 //     function isEvent(
 //       value: React.ChangeEvent<HTMLInputElement>,
@@ -125,10 +125,10 @@ export const withValidatorOption = <T extends FBValidatorOptionProps>(
 //       name: string,
 //     ) => (trigger: any) => {
 //       let value: any;
-      // const delimiter = indicator.validatorDelimiter;
-      // if (!delimiter) {
-      //   return alert("Indicator must have delimiter defined");
-      // }
+// const delimiter = indicator.validatorDelimiter;
+// if (!delimiter) {
+//   return alert("Indicator must have delimiter defined");
+// }
 //       switch (true) {
 //         case trigger && isEvent(trigger):
 //           const target = (trigger as React.ChangeEvent<HTMLInputElement>)
@@ -139,33 +139,33 @@ export const withValidatorOption = <T extends FBValidatorOptionProps>(
 //           value = trigger;
 //       }
 //       form.setFieldValue(name, value);
-      // if (indicator.autocompleteId === "4") {
-      //   value = value.documentTypeAcronym;
-      // }
-      // FBValidatorStore.indicatorValues[field.name][`${delimiter}`] = value;
+// if (indicator.autocompleteId === "4") {
+//   value = value.documentTypeAcronym;
+// }
+// FBValidatorStore.indicatorValues[field.name][`${delimiter}`] = value;
 //     };
 
-    // const indicatorRenderer = (): React.ReactNode[] | undefined => {
-    //   return (indicators || []).map(
-    //     ({ type, ...props }: Partial<FBTemplateSchema>, index) => {
-    //       if (!type) {
-    //         return;
-    //       }
-    //       // const uuidv4 = require("uuid/v4");
-    //       const name = `${field.name}${props}${index}`;
-    //       const InputType = FBFieldComponent[type];
-    //       return (
-    //         <InputType
-    //           key={`indicator-${index}-${type}`}
-    //           name={name}
-    //           {...props}
-    //           onChange={optionOnChange(props, name)}
-    //           fieldName={field.name}
-    //         />
-    //       );
-    //     },
-    //   );
-    // };
+// const indicatorRenderer = (): React.ReactNode[] | undefined => {
+//   return (indicators || []).map(
+//     ({ type, ...props }: Partial<FBTemplateSchema>, index) => {
+//       if (!type) {
+//         return;
+//       }
+//       // const uuidv4 = require("uuid/v4");
+//       const name = `${field.name}${props}${index}`;
+//       const InputType = FBFieldComponent[type];
+//       return (
+//         <InputType
+//           key={`indicator-${index}-${type}`}
+//           name={name}
+//           {...props}
+//           onChange={optionOnChange(props, name)}
+//           fieldName={field.name}
+//         />
+//       );
+//     },
+//   );
+// };
 
 //     return Component({
 //       ...props,

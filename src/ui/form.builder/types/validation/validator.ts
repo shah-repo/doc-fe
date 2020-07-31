@@ -5,10 +5,10 @@ export type FBValidatorProps =
   & Partial<FBValidatorModel>
   & Pick<FBInputProps, "afterChange">
   & {
-  index: number;
-  indicatorElements?: React.ReactNode[];
+    index: number;
+    indicatorElements?: React.ReactNode[];
   // indicator: FBValidatorIndicatorProps;
-};
+  };
 
 export type FBValidatorDelimiter = ":" | ",";
 
@@ -21,7 +21,7 @@ export enum FBValidatorTrigger {
 export type FBValidatorIndicatorProps =
   & FBInputProps
   & {
-    validatorDelimiter: FBValidatorDelimiter,
+    validatorDelimiter: FBValidatorDelimiter;
     hasSchemaItem: boolean;
     requiredDocId?: boolean;
   };

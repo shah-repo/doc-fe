@@ -3,7 +3,7 @@ import { SelectOption } from "../../../../components/forms/fields/Select";
 import { FBValidatorModel } from "../models/FBValidatorModel";
 
 export class FBValidatorCollection extends Collection<FBValidatorModel> {
-  public data(): Array<Partial<FBValidatorModel>> {
+  public data(): Partial<FBValidatorModel>[] {
     return (window as any).EnlilRemoteValidators.availableRules;
     // return validatorData as FBValidatorModel[];
   }

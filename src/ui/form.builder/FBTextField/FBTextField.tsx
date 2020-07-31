@@ -17,14 +17,14 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   dataCy,
   ...props
 }) => (
-    <FBInput {...props} {...{ error }} type={inputType as FBInputType}>
-      <TextField
-        data-cy={dataCy ? dataCy : props.name}
-        label=""
-        variant="outlined"
-        {...{ type, rows, error, multiline, inputProps, InputProps, style, onBlur, placeholder }}
-      />
-    </FBInput>
-  );
+  <FBInput {...props} {...{ error }} type={inputType as FBInputType}>
+    <TextField
+      data-cy={dataCy ? dataCy : props.name}
+      label=""
+      variant="outlined"
+      {...{ type, rows, error, multiline, inputProps, InputProps, style, onBlur, placeholder }}
+    />
+  </FBInput>
+);
 
 export default withFBTextField(FBTextField);

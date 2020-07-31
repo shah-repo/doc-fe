@@ -26,7 +26,7 @@ const FBTabs: React.FunctionComponent<FBTabsProps> = ({
         {tabs}
       </Tabs>
     </Box>
-  {content}
+    {content}
   </Box>
 );
 

@@ -15,42 +15,42 @@ export const SidebarContainer: React.FunctionComponent<
   isDrawerOpen,
   setOpen,
 }) => {
-    const [indexNumber, setIndex] = useState(0);
-    const inputRef = useRef(null);
+  const [indexNumber, setIndex] = useState(0);
+  const inputRef = useRef(null);
 
-    const onDrawerToggle = () => {
-      setOpen(!isDrawerOpen);
-      if (isDrawerOpen) {
-        setIndex(0);
-      }
-      if (inputRef && !isDrawerOpen) {
-        const input = inputRef.current as any;
-        input.focus();
-        input.click();
-      }
-    };
-    const handleMenuIconClick = (index: number) => {
-      if (!isDrawerOpen) {
-        setOpen(!isDrawerOpen);
-        setIndex(index);
-        return;
-      }
-      setIndex(index);
-    };
-
-    return (
-      <SidebarPresenter
-        {...{
-          isDrawerOpen,
-          indexNumber,
-          sidebarList,
-          inputRef,
-          setIndex,
-          handleMenuIconClick,
-          onDrawerToggle,
-        }}
-      />
-    );
+  const onDrawerToggle = () => {
+    setOpen(!isDrawerOpen);
+    if (isDrawerOpen) {
+      setIndex(0);
+    }
+    if (inputRef && !isDrawerOpen) {
+      const input = inputRef.current as any;
+      input.focus();
+      input.click();
+    }
   };
+  const handleMenuIconClick = (index: number) => {
+    if (!isDrawerOpen) {
+      setOpen(!isDrawerOpen);
+      setIndex(index);
+      return;
+    }
+    setIndex(index);
+  };
+
+  return (
+    <SidebarPresenter
+      {...{
+        isDrawerOpen,
+        indexNumber,
+        sidebarList,
+        inputRef,
+        setIndex,
+        handleMenuIconClick,
+        onDrawerToggle,
+      }}
+    />
+  );
+};
 
 export default SidebarContainer;

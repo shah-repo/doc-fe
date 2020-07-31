@@ -3,7 +3,7 @@ import Validator from "validatorjs";
 import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
 
-export const FBValidate = (forRelease: boolean = false) => {
+export const FBValidate = (forRelease = false) => {
   if (FBStore.mode !== "form") {
     return;
   }
@@ -13,8 +13,8 @@ export const FBValidate = (forRelease: boolean = false) => {
   }
 
   const validator = new Validator(
-      FBStore.getValues(),
-      rules,
+    FBStore.getValues(),
+    rules,
   );
 
   validator.setAttributeNames(

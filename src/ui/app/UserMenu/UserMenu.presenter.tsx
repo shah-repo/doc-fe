@@ -27,6 +27,7 @@ export const UserMenuPresenter: React.FunctionComponent<Props> = ({
     handleLogout,
     hasMultipleCompanies,
   } = React.useContext(UserMenuContext)!;
+  // TODO Maja to fix
 
   return (
     <>
@@ -63,7 +64,11 @@ export const UserMenuPresenter: React.FunctionComponent<Props> = ({
             </ListItemText>
           </MenuItem>
         }
-        <MenuItem data-cy="header.logout" onClick={handleLogout} style={{ borderTop: `1px solid ${Colors.medium_gray}` }}>
+        <MenuItem
+          data-cy="header.logout"
+          onClick={handleLogout}
+          style={{ borderTop: `1px solid ${Colors.medium_gray}` }}
+        >
           <ListItemIcon>
             <ExitToAppOutlinedIcon fontSize="small" />
           </ListItemIcon>

@@ -53,7 +53,7 @@ export enum APPLICABLE_FOR_ACTION {
   ON_SUBMIT = "ON_SUBMIT",
   ON_CHANGE = "ON_CHANGE",
   ON_STATE_TO_IN_REVIEW = "ON_STATE_TO_IN_REVIEW",
- }
+}
 
 export interface IRemoteValidatorsHelper {
   getDocumentRevById: (id: string) => Promise<any>;
@@ -84,9 +84,9 @@ export interface IDocRev {
   document: {
     docId: string;
     documentType: {
-      documentTypeAcronym: string,
-    }
+      documentTypeAcronym: string;
+    };
   };
 }
 
-export interface FormInput { [key: string]: any; }
+export interface FormInput { [key: string]: any }

@@ -17,14 +17,14 @@ export class FBAutocompleteAsyncStore {
     const list = this.data.get(optionId);
     if (!list) { return; }
     return list.get(by) as T;
-  }
+  };
 
   public getValues = <T>(optionId?: string, by?: string[]): T[] | undefined => {
     if (!optionId || !by) { return; }
     const list = this.data.get(optionId);
     if (!list) { return; }
     return Array.from(map(by, (i) => list.get(i))) as T[];
-  }
+  };
 }
 
 export default new FBAutocompleteAsyncStore();

@@ -48,7 +48,7 @@ export class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, 
     this.downloadType = type;
     if (this.file?.url) { return; }
     this.download();
-  }
+  };
 
   public download = () => {
     if (isUndefined(this.file)) { return; }

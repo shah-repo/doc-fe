@@ -9,7 +9,7 @@ import { useFormContext } from "../FormContext";
 import Field, { FieldOwnProps } from "./Field";
 
 type DatePickerPropsWithFormik = FieldOwnProps & FormikFieldProps &
-  Partial<TypographyProps>;
+Partial<TypographyProps>;
 
 const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
   label,
@@ -48,7 +48,7 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
 };
 
 type DatePickerFieldProps = FieldOwnProps & FieldConfig &
-  Partial<TypographyProps>;
+Partial<TypographyProps>;
 
 const DatePickerField: React.FunctionComponent<
   DatePickerFieldProps

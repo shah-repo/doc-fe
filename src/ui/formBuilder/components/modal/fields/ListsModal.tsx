@@ -57,7 +57,7 @@ const ListsModal: React.FunctionComponent<ListsModalProps> = ({
       />
       <span>
         {" "}
-        One option per line. Type [other] with brackets to add "other" option
+        One option per line. Type [other] with brackets to add &quot;other&quot; option
       </span>
       <button type="button" onClick={submitForm()}>{currentConfig ? "Save" : "Add"}</button>
     </div>

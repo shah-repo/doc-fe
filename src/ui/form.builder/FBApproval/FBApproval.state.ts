@@ -23,12 +23,12 @@ export class FBApprovalState {
   public approvalRolesApi = new FBAutocompleteAsyncState(this.approvalRolesId);
   public auditApi = new FBRequest<Audit[], null>();
 
-  public constructor({ 
-    documentId, 
-    value = [], 
-    approversValue = [], 
-    groupsValue = [], 
-    approvalRolesValue = [] 
+  public constructor({
+    documentId,
+    value = [],
+    approversValue = [],
+    groupsValue = [],
+    approvalRolesValue = [],
   }: FBApprovalConstructor) {
 
     this.approversValue = approversValue;
