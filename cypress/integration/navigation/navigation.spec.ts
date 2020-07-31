@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
@@ -260,7 +259,11 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Check navigation to see if all expected items are shown", () => {
-      cy.navigListExistsCheck( NavigationItems.DASHBOARD, NavigationItems.DOCUMENT_LIST, NavigationItems.APPROVAL_REQUEST, NavigationItems.TESTING_NAVIG_ITEM);
+      cy.navigListExistsCheck(
+        NavigationItems.DASHBOARD,
+        NavigationItems.DOCUMENT_LIST,
+        NavigationItems.APPROVAL_REQUEST,
+        NavigationItems.TESTING_NAVIG_ITEM);
     });
 
     it("Check navigation to see if user management and group management are not shown", () => {
