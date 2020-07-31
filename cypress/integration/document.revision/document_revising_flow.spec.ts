@@ -5,10 +5,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
-
 const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
@@ -222,3 +218,4 @@ context("Document Revising Flow", () => {
 });
 
 export { };
+

@@ -2,6 +2,7 @@ import { SystemRequirement } from "../../../cypress/utils/context/systemRequirem
 
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
+console.log("1")
 
 context("Example specs for requirements linking:", () => {
   context("when specs are passing", () => {
@@ -12,7 +13,7 @@ context("Example specs for requirements linking:", () => {
 
     it("with multiple requirements mentioned", () => {
       SystemRequirement("REQ-0020", "REQ-0030");
-      expect(true).to.eql(true);
+      expect(true).to.eq(true);
     });
 
     it("with no requirements mentioned", () => {

@@ -1,8 +1,5 @@
 /* eslint-disable max-classes-per-file */
 // / <reference types="Cypress" />
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
 
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";

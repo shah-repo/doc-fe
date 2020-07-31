@@ -29,5 +29,5 @@ jest-config/*
 *.code-workspace
 
 
-cypress/requirements/cache/*
-!cypress/requirements/cache/readme.txt
+cypress/cache/*
+!cypress/cache/readme.txt
