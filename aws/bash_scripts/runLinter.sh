@@ -12,4 +12,4 @@ yarn install --frozen-lockfile
 echo "-------- Executing Lint Tests --------"
 
 mkdir -p ${TEST_RESULTS_DIR}
-CI=true yarn lint --format junit -o ${TEST_RESULTS_DIR}/eslint-results.xml
+CI=true yarn lint --format codeframe -o ${TEST_RESULTS_DIR}/eslint-results.txt
