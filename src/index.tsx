@@ -1,18 +1,18 @@
-import { Datacenter, datadogRum } from "@datadog/browser-rum";
+// import { Datacenter, datadogRum } from "@datadog/browser-rum";
 import React from "react";
 import ReactDOM from "react-dom";
-import Config from "./config";
+// import Config from "./config";
 import * as serviceWorker from "./serviceWorker";
 import AppContainer from "./ui/app/App.container";
 
-const dataDogConf = {
-  applicationId: Config.DatadogApplicationId,
-  clientToken: Config.DatadogClientToken,
-  datacenter: Datacenter.US,
-  sampleRate: 100,
-  trackInteractions: true,
-};
-datadogRum.init(dataDogConf);
+// const dataDogConf = {
+//   applicationId: Config.DatadogApplicationId,
+//   clientToken: Config.DatadogClientToken,
+//   datacenter: Datacenter.US,
+//   sampleRate: 100,
+//   trackInteractions: true,
+// };
+// datadogRum.init(dataDogConf);
 
 ReactDOM.render(<AppContainer />, document.getElementById("root"));
 

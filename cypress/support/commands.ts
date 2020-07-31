@@ -1,4 +1,5 @@
 import { CONFIG } from "./config";
+import { CyRoutes, CyWaitOptions, routes } from "./routes";
 
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
@@ -18,6 +19,7 @@ declare global {
       selectCompany(params: { name: string }): Chainable<Subject>;
       unClick(): Chainable<Subject>;
       myCompanies(token: string): Chainable<Subject>;
+      wrapWithWaitOnApiCall(name: CyRoutes, callback: () => void, options?: Partial<CyWaitOptions>): Chainable<Subject>;
     }
   }
 }
@@ -105,3 +107,15 @@ Cypress.Commands.add("selectCompany", (params: { name: string }) => {
 Cypress.Commands.add("unClick", () => {
   cy.get("#root>div>div>header").click();
 });
+
+Cypress.Commands.add(
+  "wrapWithWaitOnApiCall",
+  (name: CyRoutes, callback: () => void, options?: Partial<CyWaitOptions>) => {
+    const { requestConfig, callConfig } = routes[name];
+    cy.server();
+    cy.route(requestConfig).as(name);
+
+    callback();
+
+    cy.wait(`@${name}`, Object.assign({}, callConfig, options));
+  });

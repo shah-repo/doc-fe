@@ -32,16 +32,21 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Click to expand Document Control", () => {
-      cy.navigToDashboard(); // Should be fixed so that we can click menu item expand without clicking on dashboard
-      cy.wait(200).navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+      cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
     });
 
     it("Check navigation to see if default is shown", () => {
-      cy.navigListExistsCheck( NavigationItems.DASHBOARD, NavigationItems.DOCUMENT_LIST, NavigationItems.APPROVAL_REQUEST );
+      cy.navigListExistsCheck(
+        NavigationItems.DASHBOARD,
+        NavigationItems.DOCUMENT_LIST,
+        NavigationItems.APPROVAL_REQUEST );
     });
 
     it("Check navigation to see if user management and group management are not shown in default navigation", () => {
-      cy.navigListNotExistsCheck( NavigationItems.USER_MANAGEMENT, NavigationItems.GROUP_MANAGEMENT );
+      cy.navigListNotExistsCheck(
+        NavigationItems.USER_MANAGEMENT,
+        NavigationItems.GROUP_MANAGEMENT
+      );
     });
   });
 
@@ -126,9 +131,8 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Click to expand Document Control", () => {
-      cy.navigToDashboard(); // Should be fixed so that we can click menu item expand without clicking on dashboard
-      cy.wait(200).navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
-      cy.wait(200).navigClickOnExpandButtons({ navigItem: NavigationItems.MANUFACTURING });
+      cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+      cy.navigClickOnExpandButtons({ navigItem: NavigationItems.MANUFACTURING });
     });
 
     it("Check navigation to see if admin navigation is shown", () => {

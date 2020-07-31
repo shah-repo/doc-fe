@@ -426,9 +426,9 @@ context("Document list test", () => {
         cy.dlFilterByDocTitle({ docTitle: secondDocumentRevName });
       });
 
-      it("Navigate to dashboard", () => {
-        cy.navigToDashboard();
-      });
+      // it("Navigate to dashboard", () => {
+      //   cy.navigToDashboard();
+      // });
 
       it("Navigate back to document list", () => {
         cy.navigToDocumentList();
