@@ -14,7 +14,15 @@ export const FormListHeader: React.FunctionComponent<Props> = ({ dialog }) => (
   <DialogTitle style={{ boxShadow: `0px 1px ${Colors.medium_gray}` }}>
     <Grid container>
       <Grid item xs={2} style={{ alignSelf: "center" }}>
-        <Box bgcolor={Colors.light_blue} borderRadius={4} width={38} height={38} display="flex" alignItems="center" justifyContent="center">
+        <Box
+          bgcolor={Colors.light_blue}
+          borderRadius={4}
+          width={38}
+          height={38}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
           <WindowParagraph/>
         </Box>
       </Grid>

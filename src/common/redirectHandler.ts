@@ -1,6 +1,4 @@
-export const redirectTo = (url: string): (() => any) => {
-  return () => {
-    window.location.href = url;
-    return null;
-  };
+export const redirectTo = (url: string): (() => any) => () => {
+  window.location.href = url;
+  return null;
 };

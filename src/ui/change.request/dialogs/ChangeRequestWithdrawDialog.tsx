@@ -35,9 +35,10 @@ export const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
   return (
     <>
       <Button
-        color= "secondary"
-        variant= "outlined"
+        color="secondary"
+        variant="outlined"
         onClick={dialog.open}
+        data-cy="change.request.withdraw.alert"
         {...buttonProps}
       >
         <Text message={label} />

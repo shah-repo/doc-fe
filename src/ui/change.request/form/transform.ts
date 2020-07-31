@@ -39,9 +39,13 @@ export const toUniqGroupOptions = (approvers) => {
 
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
   let changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
-    ...pick(values, ["formDocument", "formInput" ]),
+    ...pick(values, ["formDocument"]),
     title: values.title,
     description: values.description,
+    formInput: {
+      ...values.formInput,
+      effectiveDate: values.formInput?.effectiveDate === "" ? null : values.formInput?.effectiveDate,
+    },
   };
   if (!values.id) {
     changeRequestEditRequestBody = { ...changeRequestEditRequestBody, documentType: values.documentType };

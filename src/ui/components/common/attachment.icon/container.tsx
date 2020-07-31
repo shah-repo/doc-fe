@@ -39,6 +39,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   form,
   field,
   value,
+  isNewVersion,
   ...other
 }) => {
   const dialogHandler = useDialog();
@@ -328,6 +329,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
           handleContextMenu,
           handleIconClick: handleClick,
           canDeleteFile,
+          isNewVersion,
         }}
       />
     );

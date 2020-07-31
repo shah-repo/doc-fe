@@ -1,8 +1,5 @@
 /* eslint-disable max-classes-per-file */
 // / <reference types="Cypress" />
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
 
 import faker from "faker";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
@@ -235,7 +232,7 @@ context("Approval request landing page test", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Verify default filter status is draft or in review", () => {
+    it.skip("Verify default filter status is draft or in review", () => {
       SystemRequirement("REQ-0780");
       cy.alVerifyStartingFilter();
     });

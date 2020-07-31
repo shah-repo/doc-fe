@@ -14,6 +14,7 @@ export const withValidatorCustom = <T extends FBValidatorDynamicProps>(
     dynamicValidatorStore,
     ...props
   }: T) => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const uniqid = require("uniqid");
 
     const scope = {
@@ -25,26 +26,26 @@ export const withValidatorCustom = <T extends FBValidatorDynamicProps>(
       if (!_.isUndefined(dynamicValidatorStore?.dynamicValidator)) {
         return;
       }
-      dynamicValidatorStore!.setValidatorName(`validator_${uniqid()}`);
-    }, []);
+      dynamicValidatorStore?.setValidatorName(`validator_${uniqid()}`);
+    }, [dynamicValidatorStore, uniqid]);
 
     const clear = () =>
-      dynamicValidatorStore!.clearLiveCode();
+      dynamicValidatorStore?.clearLiveCode();
 
     const transformCode = (code: string) => {
-      dynamicValidatorStore!.setLiveCode(code);
+      dynamicValidatorStore?.setLiveCode(code);
       return code;
     };
 
     const onMessageChange = (ev: React.ChangeEvent) => {
       const value = _.get(ev.target, "value");
-      dynamicValidatorStore!.setErrorMessage(value);
+      dynamicValidatorStore?.setErrorMessage(value);
     };
 
     return Component({
       ...(props as T),
-      errorMessage: dynamicValidatorStore!.errorMessage,
-      code: dynamicValidatorStore!.liveCode,
+      errorMessage: dynamicValidatorStore?.errorMessage,
+      code: dynamicValidatorStore?.liveCode,
       scope,
       transformCode,
       onMessageChange,
@@ -54,8 +55,8 @@ export const withValidatorCustom = <T extends FBValidatorDynamicProps>(
 
   return (
     observer(
-    withFBStores(
-      (props: T) => Comp(props)),
+      withFBStores(
+        (props: T) => Comp(props)),
     )
   );
 };

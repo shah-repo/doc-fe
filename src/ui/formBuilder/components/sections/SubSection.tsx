@@ -9,13 +9,11 @@ interface SubSectionProps {
 const SubSection: React.FunctionComponent<SubSectionProps> = ({
   title,
   closed,
-}) => {
-  return (
-    <div className={styles.subSection}>
-      {" "}
-      <h3>{title}</h3>{" "}
-    </div>
-  );
-};
+}) => (
+  <div className={styles.subSection}>
+    {" "}
+    <h3>{title}</h3>{" "}
+  </div>
+);
 
 export default SubSection;

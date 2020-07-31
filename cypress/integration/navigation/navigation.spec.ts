@@ -1,14 +1,8 @@
-/* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
-
 import path from "path";
-import { GroupTag, NavigationItems } from "../../src/state/ducks/auth/types";
-
+import { GroupTag, NavigationItems } from "../../../src/state/ducks/auth/types";
 
 const runId = new Date().valueOf();
 let createdCompany;
@@ -260,7 +254,11 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Check navigation to see if all expected items are shown", () => {
-      cy.navigListExistsCheck( NavigationItems.DASHBOARD, NavigationItems.DOCUMENT_LIST, NavigationItems.APPROVAL_REQUEST, NavigationItems.TESTING_NAVIG_ITEM);
+      cy.navigListExistsCheck(
+        NavigationItems.DASHBOARD,
+        NavigationItems.DOCUMENT_LIST,
+        NavigationItems.APPROVAL_REQUEST,
+        NavigationItems.TESTING_NAVIG_ITEM);
     });
 
     it("Check navigation to see if user management and group management are not shown", () => {
@@ -270,3 +268,4 @@ context(`Test: ${path.basename(__filename)}`, () => {
 });
 
 export { };
+

@@ -67,7 +67,14 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
 & Pick<SelectProps, "renderValue">
 // & Pick<FBValidatorProps, "rules" | "applicableOn">
 & Pick<FBActionContainerProps, "actions">
-& Pick<FBOptionProps, "optionId" | "options" | "optionValueKey" | "optionLabelKey" | "optionObjectKeys" | "optionValueType">
+& Pick<FBOptionProps,
+| "optionId"
+| "options"
+| "optionValueKey"
+| "optionLabelKey"
+| "optionObjectKeys"
+| "optionValueType"
+ >
 & Pick<BaseTextFieldProps,
 | "children"
 | "value"

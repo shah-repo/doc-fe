@@ -28,24 +28,22 @@ export const withValidator = <T extends FBValidatorProps>(
       FBValidatorStore.formValues[fieldName] = value;
     };
 
-    const indicatorElements = (): React.ReactNode[] | undefined => {
-      return _.map(indicators, (
-        { type, ...indicatorProps }: Partial<FBValidatorIndicatorProps>,
-        index,
-      ) => {
-        const name = `${props.name}${index}`;
-        const InputType = FBFieldComponent[type || ""];
-        return (
-          <InputType
-            key={`indicator-${index}-${type}`}
-            name={name}
-            {...indicatorProps}
-            afterChange={indicatorAfterChange}
-            validatorFieldName={props.name}
-          />
-        );
-      });
-    };
+    const indicatorElements = (): React.ReactNode[] | undefined => _.map(indicators, (
+      { type, ...indicatorProps }: Partial<FBValidatorIndicatorProps>,
+      index,
+    ) => {
+      const name = `${props.name}${index}`;
+      const InputType = FBFieldComponent[type || ""];
+      return (
+        <InputType
+          key={`indicator-${index}-${type}`}
+          name={name}
+          {...indicatorProps}
+          afterChange={indicatorAfterChange}
+          validatorFieldName={props.name}
+        />
+      );
+    });
 
     function doRenderIndicators(): boolean {
       if (!props.name) {

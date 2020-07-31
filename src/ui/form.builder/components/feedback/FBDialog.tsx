@@ -12,25 +12,25 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
   content,
   ...props
 }) => (
-    <Dialog fullWidth={true} {...props} open={props.open || false}>
-      <DialogTitle>
-        <CloseIcon fontSize="large" onClick={setDialogClose} id="FBDialog-closeDialog" />
-        <Box
-          mt={-3}
-          textAlign="center"
-          fontWeight="fontWeightBold"
-          fontSize="h6.fontSize"
-          width={1}
-        >
-          {title && <Text message={title as string} />}
-        </Box>
-      </DialogTitle>
-      <DialogContent>
-        <Box px={4} pb={2} pt={title ? 0 : 2} id="FBDialog-content" >
-          {content || props.children}
-        </Box>
-      </DialogContent>
-    </Dialog>
-  );
+  <Dialog fullWidth={true} {...props} open={props.open || false}>
+    <DialogTitle>
+      <CloseIcon fontSize="large" onClick={setDialogClose} id="FBDialog-closeDialog" />
+      <Box
+        mt={-3}
+        textAlign="center"
+        fontWeight="fontWeightBold"
+        fontSize="h6.fontSize"
+        width={1}
+      >
+        {title && <Text message={title} />}
+      </Box>
+    </DialogTitle>
+    <DialogContent>
+      <Box px={4} pb={2} pt={title ? 0 : 2} id="FBDialog-content" >
+        {content || props.children}
+      </Box>
+    </DialogContent>
+  </Dialog>
+);
 
 export default withDialogActions(withDialogDefaults(FBDialog));

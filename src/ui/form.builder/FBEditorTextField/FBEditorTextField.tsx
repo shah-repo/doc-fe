@@ -8,7 +8,13 @@ const FBEditorTextField: React.FunctionComponent<FBEditorProps> = ({
   ...props
 }) => (
   <FBEditor {...props} {...{ inputProps }}>
-    <FBTextField label="form.builder.label" name="label" rules="required"/>
+    <FBTextField
+      key={`fb-editor-field-${type}`}
+      dataCy={`fb-editor-field-${type}`}
+      label="form.builder.label"
+      name="label"
+      rules="required"
+    />
     <FBEditorPlaceholder key={`fb-editor-placeholder-${type}`} />
     <FBTextField
       type="number"

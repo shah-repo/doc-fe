@@ -48,7 +48,9 @@ export const withFBEditorValidation = <T extends FBEditorValidationProps>(
       formState?.setFieldValue("customValidator", customValidator);
       let rules = formState?.getFieldValue("rules") || "";
       const customValidatorRule = customValidator && customValidator.name;
-      customValidatorRule && !_.includes(rules, customValidatorRule) && (rules += `${!_.isEmpty(rules) ? "|" : ""}${customValidatorRule}`);
+      if (customValidatorRule && !_.includes(rules, customValidatorRule)) {
+        rules += `${!_.isEmpty(rules) ? "|" : ""}${customValidatorRule}`;
+      }
       formState?.setFieldValue("rules", rules);
       dialogState?.closeDialog();
     };

@@ -20,6 +20,7 @@ export const withEditorRenderer =
   (props: FormikProps<Partial<FBTemplateSchema>>) => {
     const { type, index, mode } = other;
     const InputType = FBFieldEditorComponent[type as string];
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const uniqid = require("uniqid");
     const intl = useIntl();
     FBValidatorStore.setActiveValidatorType(type);

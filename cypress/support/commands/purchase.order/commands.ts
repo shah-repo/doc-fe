@@ -28,8 +28,24 @@ declare global {
       poCheckMessageForConversionSite(): Chainable<Subject>;
       poCheckStatus(...list: string[]): Chainable<Subject>;
       poClickOnSpecificPOFromList(params: {item: string}): Chainable<Subject>;
+      poCheckForSpecificPOItemValue(params: {itemValue: string}): Chainable<Subject>;
       poConvertedToDollarsMessage(): Chainable<Subject>;
       poCheckIfFormPopUpIsActive(...list: string[]): Chainable<Subject>;
+      poCloseFormPopUpOnLandingPage(): Chainable<Subject>;
+      poCheckForLineItemsAndTheirID(params: {firstId: string; secondId: string}): Chainable<Subject>;
+      poAMEnterLevelName(params: {name: string}): Chainable<Subject>;
+      poAMEnterLimit(params: {limit: string}): Chainable<Subject>;
+      poAMSelectUsers(...list: string[]): Chainable<Subject>;
+      poAMCheckForApproval(): Chainable<Subject>;
+      poSaveDocument(): Chainable<Subject>;
+      poAMCheckApprovalIconIfItsGreen(): Chainable<Subject>;
+      poAMCheckApprovalIconIfItsGray(): Chainable<Subject>;
+      poAMSelectApprover(...list: string[]): Chainable<Subject>;
+      poAMApproveButton(): Chainable<Subject>;
+      poAMCheckIfApproverHasApprovalSign(): Chainable<Subject>;
+      poAMCheckForAlertMessage(): Chainable<Subject>;
+      poRejectAR(params: {password: string}): Chainable<Subject>;
+      poVerifyStatus(params: {status: string}): Chainable<Subject>;
     }
   }
 }
@@ -85,7 +101,7 @@ Cypress.Commands.add("poAddDateRequired", () => {
 });
 
 Cypress.Commands.add("poShippingCost", (params: {number: string}) => {
-  cy.get("[name*=\"shippingCost\"]").click().wait(1000).type("{leftarrow}{leftarrow}{leftarrow}" + params.number);
+  cy.get("[name*=\"shippingCost\"]").click().wait(1000).type("{leftarrow}{leftarrow}{leftarrow}{leftarrow}" + params.number);
 });
 
 Cypress.Commands.add("poCheckCurrency", () => {
@@ -98,6 +114,7 @@ Cypress.Commands.add("poCheckCurrency", () => {
 });
 
 Cypress.Commands.add("poSelectCurrency", (params: { currencyValue: string }) => {
+  cy.get("[id*=\"currency\"]").click();
   cy.get("ul[role=listbox] > li").contains(params.currencyValue).click();
 });
 
@@ -122,7 +139,11 @@ Cypress.Commands.add("poEnterDescription", (params: {description: string}) => {
 });
 
 Cypress.Commands.add("poClickOnSpecificPOFromList", (params: {item: string}) => {
-  cy.get("[class*=\"ReactVirtualized__Table__row\"]").contains(params.item).click();
+  cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).click();
+});
+
+Cypress.Commands.add("poCheckForSpecificPOItemValue", (params: {itemValue: string}) => {
+  cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.itemValue).should("exist");
 });
 
 Cypress.Commands.add("poCheckMessageForConversionSite", () => {
@@ -146,3 +167,74 @@ Cypress.Commands.add("poCheckIfFormPopUpIsActive", (...list: string[]) => {
     cy.get("[id=\"FormListDialog-selectForm\"]").contains(item).should("exist");
   });
 });
+
+Cypress.Commands.add("poCloseFormPopUpOnLandingPage", () => {
+  cy.get("[id=\"FormListDialog-cancelButton\"]").click();
+});
+
+Cypress.Commands.add("poCheckForLineItemsAndTheirID", (params: {firstId: string; secondId: string}) => {
+  cy.get("[class=\"MuiTableRow-root\"]").eq(1).contains(params.firstId).should("exist");
+  cy.get("[class=\"MuiTableRow-root\"]").eq(2).contains(params.secondId).should("exist");
+});
+
+Cypress.Commands.add("poAMEnterLevelName", (params: {name: string}) => {
+  cy.get("[name=\"name\"]").type(params.name);
+});
+
+Cypress.Commands.add("poAMEnterLimit", (params: {limit: string}) => {
+  cy.get("[name=\"limit\"]").type(params.limit);
+});
+
+Cypress.Commands.add("poAMSelectUsers", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get("[name=\"signatures.0.employees\"]").type(item + "{downarrow}{enter}");
+  });
+});
+
+Cypress.Commands.add("poAMSelectApprover", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get("[id=\"approvals\"]").type(item + "{downarrow}{enter}");
+  });
+});
+
+Cypress.Commands.add("poSaveDocument", () => {
+  cy.get("[id=\"DocumentRevisionForm-submit\"]").wait(3000).click();
+});
+
+Cypress.Commands.add("poAMCheckForApproval", () => {
+  cy.get("#ApproveAndRelease-button").click();
+});
+
+Cypress.Commands.add("poAMCheckApprovalIconIfItsGreen", () => {
+  cy.get("[fill=\"#B4DE5A\"]").should("exist");
+});
+
+Cypress.Commands.add("poAMCheckApprovalIconIfItsGray", () => {
+  cy.get("[fill=\"#D8D9D6\"]").should("exist");
+});
+
+Cypress.Commands.add("poAMApproveButton", () => {
+  cy.get("#FormList-selectForm").click();
+  cy.get("#FormList-selectForm>div:nth-child(3)>div>div:nth-child(1)").click();
+  cy.get("#ApproveAndRelease-submit").click();
+});
+
+Cypress.Commands.add("poAMCheckIfApproverHasApprovalSign", () => {
+  cy.get("[id=\"approvals\"]").contains("PO Approval sig").should("exist");
+});
+
+Cypress.Commands.add("poAMCheckForAlertMessage", () => {
+  cy.get("[class=\"Toastify__toast-body\"]").contains("at least one approver from group").contains("has to be selected").should("exist");
+});
+
+Cypress.Commands.add("poRejectAR", (params: {password: string}) => {
+  cy.get("button[aria-label=reject]").first().click().wait(300);
+  cy.get("[data-cy=\"transition.action.password\"]").click().type(params.password);
+  cy.wait(300).get("[data-cy=\"passwordConfirm\"]").click();
+});
+
+Cypress.Commands.add("poVerifyStatus", (params: { status: string }) => {
+  cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
+});
+
+

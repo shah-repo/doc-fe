@@ -2,12 +2,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import { GroupTag } from "../../src/state/ducks/auth/types";
-import { SystemRequirement } from "../utils/context/systemRequirement";
-
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
+import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const runId = new Date().valueOf();
 let createdCompany;
@@ -85,22 +81,27 @@ context("Create company via API and create Purchase Order Form document", () => 
         employeeId: adminEmployee.id,
         sessionId: loginResponse.sessionId as unknown as string,
         payload: {
-          navigation:
-          [
+          navigation: [
             {
               label: "Dashboard",
               path: "/",
               type: "LINK"
             },
             {
-              label: "Document List",
-              path: "/document_revision",
-              type: "LINK"
-            },
-            {
-              label: "Approval Request List",
-              path: "/change_request",
-              type: "LINK"
+              label: "Document Control",
+              type: "MENU",
+              menu: [
+                {
+                  label: "Document List",
+                  path: "/document_revision",
+                  type: "LINK"
+                },
+                {
+                  label: "Approval Requests",
+                  path: "/change_request",
+                  type: "LINK"
+                },
+              ],
             },
             {
               label: "User Management",
@@ -123,8 +124,8 @@ context("Create company via API and create Purchase Order Form document", () => 
               path: "/document_by_type/" + docTypeId,
               type: "LINK",
             }
-          ],
-        }).then(() => {
+          ]}
+        ).then(() => {
         done();
       });
     });
@@ -173,7 +174,7 @@ context("Create company via API and create Purchase Order Form document", () => 
   });
 
   it("Click on 'Purchase Order' outputdocument type", () => {
-    cy.drSelectOutputDocType({ documentType: "Purchase Order" });
+    cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
   });
 
   it("Click 'Add New Field'", () => {
@@ -247,12 +248,13 @@ context("Create Purchase Order document with Product option from Form document",
 
   it("Click on existing PO that was created before", () => {
     SystemRequirement("REQ-1370")
+    SystemRequirement("REQ-1210") 
     cy.poClickOnSpecificPOFromList({ item:"PO-00001" });
   });
 
-  it("Check status of PO - should be WIP - Draft", () => {
+  it("Check status of PO should be Draft", () => {
     SystemRequirement("REQ-1280")
-    cy.poCheckStatus( "Work In Progress" , "Draft" );
+    cy.poCheckStatus("Draft" );
   });
 
   it("Click on 'Add item' button", () => {
@@ -303,7 +305,7 @@ context("Create Purchase Order document with Product option from Form document",
     cy.poAddPOButtonClick();
   });
 
-  it("Check currency options dropdown", () => {
+  it.skip("Check currency options dropdown", () => {
     SystemRequirement("REQ-1320");
     cy.poCheckCurrency();
   });
@@ -328,7 +330,7 @@ context("Create Purchase Order document with Product option from Form document",
 
   it("Check Total value", () => {
     SystemRequirement("REQ-1440");
-    cy.poCheckAmount({ number: "\$12.65" });
+    cy.poCheckAmount({ number: "\$30.65" });
   });
 
   it("Enter description 'New Purchase Order'", () => {
@@ -355,9 +357,9 @@ context("Create Purchase Order document with Service option from Form document",
     cy.poCheckStatus( "PO-00002" );
   });
 
-  it("Check status of PO - should be WIP - Draft", () => {
+  it("Check status of PO should be Draft", () => {
     SystemRequirement("REQ-1280")
-    cy.poCheckStatus( "Work In Progress" , "Draft" );
+    cy.poCheckStatus( "Draft" );
   });
 
   it("Click on 'Add item' button", () => {
@@ -365,6 +367,7 @@ context("Create Purchase Order document with Service option from Form document",
   });
 
   it("Click on 'Service' select option", () => {
+    SystemRequirement("REQ-1390");
     SystemRequirement("REQ-1420");
    cy.poSelectOption({ optionName: "service" });
   });
@@ -408,7 +411,7 @@ context("Create Purchase Order document with Service option from Form document",
     cy.poAddPOButtonClick();
   });
 
-  it("Check currency options dropdown", () => {
+  it.skip("Check currency options dropdown", () => {
     SystemRequirement("REQ-1320");
     cy.poCheckCurrency();
   });
@@ -433,14 +436,32 @@ context("Create Purchase Order document with Service option from Form document",
 
   it("Check Total value", () => {
     SystemRequirement("REQ-1440");
-    cy.poCheckAmount({ number: "\€12.00" });
+    cy.poCheckAmount({ number: "\€30.00" });
   });
 
   it("Check if total converted to dollars is shown", () => {
     SystemRequirement("REQ-1460");
     cy.poConvertedToDollarsMessage();
   });
-  
+});
+
+context("Creates second line item and checks ID and if all line item details are optional", () => {
+  it("Click on 'Add item' button to add another Product line item", () => {
+    SystemRequirement("REQ-1390");
+    cy.poAddNewFieldItem();
+  });
+
+  it("Click on 'Add' inside PO dialog box to check if all line item details are optional", () => {
+    SystemRequirement("REQ-1400");
+    cy.poAddPOButtonClick();
+  });
+
+  it("Check line item IDs if they are unique, should be '1' and '2'", () => {
+    SystemRequirement("REQ-1360");
+    SystemRequirement("REQ-1380");
+    cy.poCheckForLineItemsAndTheirID({ firstId: "1", secondId: "2" });
+  });   
+
   it("Enter description 'New Purchase Order with Service item'", () => {
     SystemRequirement("REQ-1290");
     cy.poEnterDocumentDescription({ description: "New Purchase Order with Service item" });
@@ -473,7 +494,7 @@ context("Creates second PO form document and checks if both documents are availa
   });
 
   it("Click on 'Purchase Order' outputdocument type", () => {
-    cy.drSelectOutputDocTypeSecondTime({ documentType: "Purchase Order" });
+    cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
   });
 
   it("Click 'Add New Field'", () => {
@@ -512,7 +533,68 @@ context("Creates second PO form document and checks if both documents are availa
     SystemRequirement("REQ-1260");
     cy.poCheckIfFormPopUpIsActive("New Purchase Order Form", "New Purchase Order Form 2");
   });
+
+  it("Close dialog box", () => {
+    cy.poCloseFormPopUpOnLandingPage();
+  });
 });
 
+context("Check for Landing page columns and values", () => {
+  it("Check if most recent added item is fist on list", () => {
+    SystemRequirement("REQ-1180");
+    cy.filterGetFirstValueFromList({ value: "PO-00002" });
+  });
+
+  it("Check for Landing page default columns", () => {
+    SystemRequirement("REQ-1120");
+    cy.filterCheckHeaderValues("PO #", "Version", "PO Status", "Supplier", "Part Number", "Amount", "Requestor", "Issue Date");
+  });
+});
+
+context("Test the filter inside PO", () => {
+  it("Enter version number '1' inside filter", () => {
+    cy.filterPOVersion({ version: "1" });
+  });
+  
+  it("Check if item with right version is displayed", () => {
+    cy.poCheckForSpecificPOItemValue({ itemValue: "1" });
+  });
+
+  it("Check if number of displayed filtered items is '2", () => {
+    SystemRequirement("REQ-1200")
+    cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "2" });
+  });
+
+  it("Clear filter", () => {
+    SystemRequirement("REQ-1190");
+    cy.filterClear();
+  });
+
+  it("Enter all fields to check if all filter fields are working", () => {
+    SystemRequirement("REQ-1150");
+    cy.filterPO({ docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
+    partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020" }).wait(2000);
+  });
+
+  it("Navigate to Document List", () => {
+    cy.wait(1000).cmpNavigateToDocumentList();
+  });
+
+  it("Navigate to Purchase Order", () => {
+    cy.cmpNavigateToPurchaseOrder();
+  });
+
+  it.skip("Check if all filter values persist after changing landing page", () => {
+    SystemRequirement("REQ-1170");
+    cy.filterCheckIfPOFilterPersists({ docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
+    partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020" });
+  });
+
+  it("Clear filter", () => {
+    SystemRequirement("REQ-1190");
+    cy.filterClear();
+  });
+});
 
 export { };
+

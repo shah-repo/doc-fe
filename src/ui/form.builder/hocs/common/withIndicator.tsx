@@ -6,15 +6,12 @@ export const withIndicator = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const component = ({
-      field,
+    field,
     ...props
-  }: T) => {
-
-    return Component({
-      ...(props as T),
-      field,
-    });
-  };
+  }: T) => Component({
+    ...(props as T),
+    field,
+  });
 
   return withFormik((props: T) => component(props));
 };

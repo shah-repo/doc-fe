@@ -1,5 +1,5 @@
 import { render as rtlRender } from "@testing-library/react";
-// tslint:disable-next-line: no-implicit-dependencies
+// eslint-disable-next-line: no-implicit-dependencies
 import { createMemoryHistory, MemoryHistory } from "history";
 import React from "react";
 import { IntlProvider } from "react-intl";

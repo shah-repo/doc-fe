@@ -46,7 +46,7 @@ const Lists: React.FunctionComponent<ListsProps> = ({
     <option
       key={i}
       value={choice}
-      // tslint:disable-next-line: jsx-alignment
+      // eslint-disable-next-line: jsx-alignment
       selected={choice === (values ? values.selected : "")}
     >
       {choice}
@@ -86,7 +86,7 @@ const Lists: React.FunctionComponent<ListsProps> = ({
       <select
         name="selected"
         onChange={handeSelectChange}
-        // tslint:disable-next-line: jsx-alignment
+        // eslint-disable-next-line: jsx-alignment
         defaultValue={values ? values.selected : ""}
       >
         <option>Please select from {stringTitle}</option>

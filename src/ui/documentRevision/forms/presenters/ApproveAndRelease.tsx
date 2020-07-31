@@ -2,13 +2,19 @@ import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } 
 import { Formik, FormikProps } from "formik";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { getHasPermission } from "../../../../common/utils/selectors";
 import { Group, Permission } from "../../../../state/ducks/auth/types";
+import { ChangeRequest, changeRequestsActions } from "../../../../state/ducks/changeRequest";
 import { Owner } from "../../../../state/ducks/common/types";
-import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { documentTypeActions } from "../../../../state/ducks/documentRevisions/documentType";
+import { ApplicationState } from "../../../../state/reducers";
+import { toChangeRequestEditRequestBody } from "../../../change.request/form/transform";
+import { changeRequestEditPath } from "../../../change.request/utils/paths";
 import { FormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
+import { FB } from "../../../form.builder";
 import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -58,6 +64,11 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const [templateOptions, setTemplateOptions] = useState<DocumentType[]>([]);
   const [formDocument, setFormDocument] = useState<string>("");
   const [documentType, setDocumentType] = useState<string>("");
+  const [selectedInvalid, setSelectedInvalid] = useState<boolean>(false);
+  const create = useActionCreator(changeRequestsActions.create);
+  const documentRevision = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocumentRevision(state, docRevId));
+  const history = useHistory();
 
   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
@@ -84,7 +95,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       docRevId,
       asyncGroups,
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docRevId]);
 
   const openDialog = () => {
@@ -107,7 +118,42 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     dialog.close();
   };
 
+  const asyncAR = useAsync<ChangeRequest>({
+    onSuccess: (createdChangeRequest?) => {
+      createdChangeRequest && history.push(changeRequestEditPath(createdChangeRequest.id));
+    },
+  });
+
+  const initialValuesAR = (values: any): any => ({
+    title: documentRevision.name,
+    description: documentRevision.name,
+    documentType: {
+      id: values.formDocument.documentType,
+    },
+    formDocument: {
+      id: values.formDocument.value,
+    },
+    formInput: {
+      approvers: values.approvals
+        .map((approval) => approval.value)
+        .concat(owner?.id).filter((id) => id)
+        .map((id) => ({ id })),
+      documentRevisions: [{
+        descriptionOfChange: values.formDocument.label,
+        id: FB.uniqid,
+        justificationOfChange: values.formDocument.label,
+        proposedDocumentRevision: { id: docRevId },
+      }],
+      effectiveDate: values.effectiveDate,
+    },
+  });
+
   const onSubmit = (values: any) => {
+    if (selectedInvalid) {
+      asyncAR.start(create, toChangeRequestEditRequestBody(initialValuesAR(values)), asyncAR);
+      return;
+    }
+
     const approvers = !values.approvals || values.approvals.length === 0 ?
       undefined :
       values.approvals.map((approver) => ({ id: approver.value }));
@@ -130,7 +176,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     async.start(
       releaseAction,
       id,
-      { approvers, effectiveDate, documentType: { id: documentType },  formDocument: { id: formDocument } },
+      { approvers, effectiveDate, documentType: { id: documentType }, formDocument: { id: formDocument } },
       async,
     );
   };
@@ -153,7 +199,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const renderForm = (props: FormikProps<ApproveAndReleaseFormValues>) => (
     <ApproveAndReleaseForm
       {...props}
-      asyncState={async.asyncState}
+      asyncState={selectedInvalid ? asyncAR.asyncState : async.asyncState}
       cancel={closeDialog}
       isQms={isQms}
       documentTypeGroups={transformedDocTypeGroups}
@@ -161,6 +207,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       templateOptions={templateOptions}
       setFormDocument={setFormDocument}
       setDocumentType={setDocumentType}
+      {...{ closeDialog, setSelectedInvalid, selectedInvalid }}
     />
   );
 
@@ -175,6 +222,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
         variant="outlined"
         onClick={openDialog}
         id="ApproveAndRelease-button"
+        data-cy="ApproveAndRelease-button"
       >
         <Text message={label} />
       </Button>

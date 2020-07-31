@@ -8,14 +8,12 @@ import { withFBFieldMarkDown } from "./FBFieldMarkDown.wrap";
 const FBFormMarkDown: React.FunctionComponent<FBFieldMarkDownProps> = ({
   source = "",
   mt,
-}) => {
-  return (
-    <Box {...{mt}}>
-      <SyntaxHighlighter language="javascript" style={docco}>
-        {source}
-      </SyntaxHighlighter>
-    </Box>
-  );
-};
+}) => (
+  <Box {...{ mt }}>
+    <SyntaxHighlighter language="javascript" style={docco}>
+      {source}
+    </SyntaxHighlighter>
+  </Box>
+);
 
 export default withFBFieldMarkDown(FBFormMarkDown);

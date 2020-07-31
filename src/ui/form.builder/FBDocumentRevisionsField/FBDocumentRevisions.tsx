@@ -11,7 +11,7 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionProps> = ({
   docRevState,
   disabled,
   documentRevisions = [],
-}) =>   (
+}) => (
   <Provider {...{ dialogState, docRevState }}>
     <FBDialog />
     <FBMapWrapper<FBDocumentRevisionItem[]> collection={documentRevisions}>
@@ -32,7 +32,7 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionProps> = ({
       style={{ margin: "0px 0px 32px 0px" }}
       onClick={handleAdd}
       disabled={disabled}
-      data-cy={"fb.add.document"}
+      dataCy={"fb.add.document"}
     />
   </Provider>
 );

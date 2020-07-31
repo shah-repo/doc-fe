@@ -21,6 +21,7 @@ interface DispatchProps {
 interface OwnProps {
   documentRevision: DocumentRevision;
   type?: DocumentCloneType;
+  isNewVersion: boolean;
 }
 
 interface StateProps {
@@ -63,6 +64,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   loadDocumentProposedId,
   proposedDocId,
   loadDocument,
+  isNewVersion,
 }) => {
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const initialValues = useMemo(() => {
@@ -110,6 +112,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
       loadDocumentProposedId={loadDocumentProposedId}
       proposedDocId={proposedDocId}
       type={type}
+      isNewVersion={isNewVersion}
     />
   );
 };

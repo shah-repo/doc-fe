@@ -31,9 +31,9 @@ export const withFBOnChange = <T extends FBInputProps>(
       // In case we want to update transform type
       switch (transform) {
         case "upper":
-          return _.upperCase(value);
+          return value.toUpperCase();
         default:
-          return _.lowerCase(value);
+          return value.toLowerCase();
       }
     };
 

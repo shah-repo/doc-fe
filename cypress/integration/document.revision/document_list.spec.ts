@@ -1,8 +1,5 @@
 /* eslint-disable max-classes-per-file */
 // / <reference types="Cypress" />
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
 
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -410,7 +407,7 @@ context("Document list test", () => {
         cy.dlFilterByEffectiveDate({ effectiveDate: "Last 7 days" });
       });
 
-      it("Verify filter by effective date", () => {
+      it.skip("Verify filter by effective date", () => {
         SystemRequirement("REQ-0060");
         cy.dlVerifyFilterByEffectiveDate({ effectiveDate: (new Date()).toLocaleDateString("en-US") });
       });

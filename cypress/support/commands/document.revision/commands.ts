@@ -9,25 +9,28 @@ export { };
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      drCreateDocumentRevision(params: {payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string}): Chainable<Subject>;
-      drGetDocumentType(params: {employeeId: string; sessionId: string}): Chainable<Subject>;
-      drEnterDocumentTitle( params: {name: string }): Chainable<Subject>;
-      drEnterDocumentDescription( params: {description: string }): Chainable<Subject>;
-      drSelectDocumentType(params: {documentType: string }): Chainable<Subject>;
-      drSelectOutputDocType(params: {documentType: string }): Chainable<Subject>;
+      drCreateDocumentRevision(params: { payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
+      drGetDocumentType(params: { employeeId: string; sessionId: string }): Chainable<Subject>;
+      drEnterDocumentTitle(params: { name: string }): Chainable<Subject>;
+      drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
+      drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
+      drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drClickCreateDocument(): Chainable<Subject>;
-      drCheckDocumentStatus(params: {status: string }): Chainable<Subject>;
+      drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
-      drCheckIfDocumentIdMatches(params: {docId: string }): Chainable<Subject>;
-      drFilterDocListByNameAndStatus(params: {title: string; status: string}): Chainable<Subject>;
-      drChangeOwner(params: {employee: string }): Chainable<Subject>;
-      drChangeOwnerFromMenu(params: {employee: string }): Chainable<Subject>;
+      drCheckIfDocumentIdMatches(params: { docId: string }): Chainable<Subject>;
+      drFilterDocListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
+      drChangeOwner(params: { employee: string }): Chainable<Subject>;
+      drChangeOwnerFromMenu(params: { employee: string }): Chainable<Subject>;
       drClickReviseDocument(): Chainable<Subject>;
       drClickTrainingRequired(): Chainable<Subject>;
       drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
-      drChooseTypeOfRevisionChangeOption(params: {option: string }): Chainable<Subject>;
-      drSelectOutputDocTypeSecondTime(params: {documentType: string }): Chainable<Subject>;
+      drChooseTypeOfRevisionChangeOption(params: { option: string }): Chainable<Subject>;
+      drDocumentFieldError(params: { field: string; message: string }): Chainable<Subject>;
+      closeAllAlertMessages(): Chainable<Subject>;
+      checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
+      drCreateNewDocumentFromForm(): Chainable<Subject>;
     }
   }
 }
@@ -47,7 +50,7 @@ Cypress.Commands.add("drCreateDocumentRevision", (params: {
   }).then((response) => response.body);
 });
 
-Cypress.Commands.add("drGetDocumentType", (params: {employeeId: string; sessionId: string}) => {
+Cypress.Commands.add("drGetDocumentType", (params: { employeeId: string; sessionId: string }) => {
   cy.request({
     method: "GET",
     url: `${CONFIG.BE_URL}/api/v1/document_type`,
@@ -57,43 +60,35 @@ Cypress.Commands.add("drGetDocumentType", (params: {employeeId: string; sessionI
   }).then((response) => response);
 });
 
-Cypress.Commands.add("drEnterDocumentTitle", (params: {name: string }) => {
+Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
   cy.get("[data-cy=\"field-name\"]").type(params.name);
 });
 
-Cypress.Commands.add("drEnterDocumentDescription", (params: {description: string }) => {
+Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
   cy.get("[data-cy=\"field-description\"]").click().type(params.description);
 });
 
-Cypress.Commands.add("drSelectDocumentType", (params: {documentType: string }) => {
+Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) => {
   cy.get("[data-cy=\"select.document.documentType.id\"]").click();
   cy.get(`[data-cy=\"selectItem.document.documentType.id.${params.documentType}\"]`).click();
 });
 
-// TODO: Remove Hardcoded select number option and make this unique method for all output doc types
-Cypress.Commands.add("drSelectOutputDocType", (params: {documentType: string }) => {
-  cy.get("[id=\"formTemplate.outputDocumentTypes\"]").click();
-  cy.get("[id^=\"react-select-6-option\"]").contains(params.documentType).click();
-});
-
-// TODO: Remove Hardcoded select number option and make this unique method for all output doc types
-Cypress.Commands.add("drSelectOutputDocTypeSecondTime", (params: {documentType: string }) => {
-  cy.get("[id=\"formTemplate.outputDocumentTypes\"]").click();
-  cy.get("[id^=\"react-select-27-option\"]").contains(params.documentType).click();
+Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
+  cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
+  cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`);
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
-  cy.get("#ApproveAndRelease-button").click();
-  cy.get("#FormList-selectForm").click();
-  cy.get("#FormList-selectForm>div:nth-child(3)>div>div:nth-child(1)").click();
-  cy.get("#ApproveAndRelease-submit").click();
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 5 * 1000 }).click();
+  cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
+  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
 });
 
 Cypress.Commands.add("drClickCreateDocument", () => {
-  cy.get("#DocumentRevisionForm-submit").click();
+  cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click().wait(2000);
 });
 
-Cypress.Commands.add("drCheckDocumentStatus", (params: {status: string }) => {
+Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
   cy.wait(5000);
   cy.get("[id=HeaderInfo-status]").should("have.text", params.status);
 });
@@ -102,11 +97,11 @@ Cypress.Commands.add("drCheckIfDocumentIdIsGenerated", () => {
   cy.get("[id=\"document.docId\"]").invoke("val").should("not.be.empty");
 });
 
-Cypress.Commands.add("drCheckIfDocumentIdMatches", (params: {docId: string }) => {
+Cypress.Commands.add("drCheckIfDocumentIdMatches", (params: { docId: string }) => {
   cy.get("[id=\"document.docId\"]").should("have.value", params.docId);
 });
 
-Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: {title: string; status: string }) => {
+Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.get("#clearFilter").click().wait(500);
   cy.get("#name").type(params.title).wait(500);
   cy.get("[id=\"mui-component-select-status[]\"]").click().wait(300);
@@ -114,12 +109,12 @@ Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: {title: string; 
   cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
 });
 
-Cypress.Commands.add("drChangeOwnerFromMenu", (params: {employee: string}) => {
+Cypress.Commands.add("drChangeOwnerFromMenu", (params: { employee: string }) => {
   cy.get("#HeaderMenuButton").click();
   cy.drChangeOwner({ employee: params.employee });
 });
 
-Cypress.Commands.add("drChangeOwner", (params: {employee: string}) => {
+Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
   cy.get("#OwnerChangerPresenter-changeOwner").click();
   cy.get("#employee").click();
   cy.get(`[data-cy=\"selectItem.employee.${params.employee}\"]`).click();
@@ -142,7 +137,24 @@ Cypress.Commands.add("drCheckTypeOfRevisionChangeOptions", () => {
   cy.get("#RevisionTypeChange-administrativeChange").contains("Administrative Change");
 });
 
-Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: {option: string}) => {
+Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: { option: string }) => {
   cy.get("[data-cy=\"field-revisionChangeType\"]");
   cy.get("label").contains(params.option).click();
+});
+
+Cypress.Commands.add("drDocumentFieldError", (params: { field: string; message: string }) => {
+  cy.log("here");
+  cy.get(`[data-cy=\"${params.field}\"] .MuiFormHelperText-root.Mui-error`).should("have.text", params.message);
+});
+
+Cypress.Commands.add("checkToastMessage", (params: { exists: boolean }) => {
+  cy.get(".Toastify__toast-container").should((params.exists ? "not." : "") + "be.empty");
+});
+
+Cypress.Commands.add("closeAllAlertMessages", () => {
+  cy.get(".Toastify__close-button").click({ multiple: true, force: true });
+});
+
+Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
+  cy.get("[id=\"PreviewControlsContainer-createNew\"]").click();
 });

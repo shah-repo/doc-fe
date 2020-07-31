@@ -43,13 +43,13 @@ export const withFBTabs = <T extends FBTabsProps>(
     )));
 
     return useObserver(() => Component({
-        ...(props as T),
-        value: state?.active,
-        content: state?.content,
-        onChange,
-        state,
-        tabs,
-      }),
+      ...(props as T),
+      value: state?.active,
+      content: state?.content,
+      onChange,
+      state,
+      tabs,
+    }),
     );
   };
 

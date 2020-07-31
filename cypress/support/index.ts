@@ -17,6 +17,7 @@
 import "cypress-file-upload";
 import "cypress-promise/register";
 import "cypress-xpath";
+import { addScreenshotToContext } from "../utils/context/screenshotsToContext";
 import "./commands";
 import "./commands/approver.request.list/commands";
 import "./commands/attachments/commands";
@@ -25,10 +26,13 @@ import "./commands/change.request/commands";
 import "./commands/company/commands";
 import "./commands/document.list/commands";
 import "./commands/document.revision/commands";
+import "./commands/filters/commands";
 import "./commands/form.builder/commands";
 import "./commands/group.management/commands";
 import "./commands/navigation/commands";
 import "./commands/purchase.order/commands";
+import "./commands/user.management/commands";
+import { CONFIG } from "./config";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
@@ -38,8 +42,22 @@ Cypress.on("uncaught:exception", (err, runnable) => {
     err.message.includes("Socket is closing");
 
   if (socketIsClosingError) {
+    // eslint-disable-next-line no-console
     console.log("Ignoring 'Socket is closing' error");
     return false;
   }
   return true;
+});
+
+Cypress.Screenshot.defaults({
+  capture: "viewport",
+  scale: false,
+  disableTimersAndAnimations: true,
+  screenshotOnRunFailure: CONFIG.SCREENSHOT_OF_RUN_FAILURE,
+});
+
+Cypress.on("test:after:run", (test, runnable: any ) => {
+  if (CONFIG.SCREENSHOT_OF_RUN_FAILURE && test.state === "failed") {
+    addScreenshotToContext(test, runnable, "Screenshot On Failure");
+  }
 });

@@ -7,7 +7,7 @@ export class FBActionModel extends Model {
   public description?: string;
   public requestUrl?: string;
   public requestMethod?: string;
-  public indicators?: Array<Partial<FBValidatorIndicatorProps>>;
+  public indicators?: Partial<FBValidatorIndicatorProps>[];
   public docIdRequired?: boolean;
   public payload?: any;
 }

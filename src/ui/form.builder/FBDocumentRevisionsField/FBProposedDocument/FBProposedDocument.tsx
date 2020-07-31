@@ -1,6 +1,7 @@
 import { Box, Button, IconButton } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import React from "react";
+import * as generateUuid from "uuid/v4";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBSection, FBTextField } from "../..";
 import { ReactComponent as RemoveDocument } from "../../../../assets/images/circle-delete.svg";
 import Colors from "../../../layout/theme/utils/colors";
@@ -42,7 +43,7 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
       <Box flexGrow={1}>
         <FBAutocompleteAsync
           optionId={FBAutocompleteAsyncOption.documentRevisions}
-          label="form.builder.proposed.document.revision"
+          label="common.document"
           gutter={false}
           disabled={true}
           defaultValue={id}
@@ -62,19 +63,26 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
         </IconButton>
       </Box>
     </Box>
+
     <FBTextField
       label="common.description"
+      dataCy="common.description"
       defaultValue={description}
       disabled={disabled}
       onChange={(e) => handleEdit ? handleEdit(e, index, "description") : null}
       rows={3}
+      rules="required"
+      name={`description-${generateUuid()}`}
     />
     <FBTextField
       label="cr.justification"
+      dataCy="cr.justification"
       defaultValue={justification}
       onChange={(e) => handleEdit ? handleEdit(e, index, "justification") : null}
       disabled={disabled}
       rows={3}
+      rules="required"
+      name={`justification-${generateUuid()}`}
     />
   </Box>
 );

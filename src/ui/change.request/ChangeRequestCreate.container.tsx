@@ -30,7 +30,10 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
     const [templateOptions, setTemplateOptions] = useState<DocumentTypeById[]>([]);
     const [doNotPrompt, setDoNotPrompt] = React.useState(false);
     const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
-    const chosenForm = templateOptions.find((template) => template.documentType.id === documentTypeId)?.forms.find((form) => form.id === formId);
+    const chosenForm = templateOptions
+      .find((template) => template.documentType.id === documentTypeId)
+      ?.forms
+      .find((form) => form.id === formId);
 
     const asyncGetDocTypeByGroup = useAsync({
       onSuccess: (data: DocumentTypeById[] = []) => {

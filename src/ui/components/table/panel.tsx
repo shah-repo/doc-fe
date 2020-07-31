@@ -221,7 +221,7 @@ export function TablePanel<T extends any>({
       <CircularProgress />
     </Box>
     :
-    <Box className={classes.emptyMsg}>
+    <Box className={classes.emptyMsg} data-cy={"no.results.found"}>
       <Text translation={noRowsTranslation} />
     </Box>;
 

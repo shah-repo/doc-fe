@@ -179,9 +179,13 @@ const FBApprovalMatrixTable: React.FunctionComponent<Props> = ({
         <div className="header">
           {headerGroups.map((headerGroup, index) => (
             <div key={index} {...headerGroup.getHeaderGroupProps()} className="tr">
-              {headerGroup.headers.map((column, key) => (<div key={key} {...column.getHeaderProps()} className={column.depth === 1 ? "secondRowTh" : "th"}>
-                {column.render("Header")}
-              </div>))}
+              {headerGroup.headers.map(
+                (column, key) => (<div
+                  key={key}
+                  {...column.getHeaderProps()} className={column.depth === 1 ? "secondRowTh" : "th"}
+                >
+                  {column.render("Header")}
+                </div>))}
             </div>
           ))}
         </div>

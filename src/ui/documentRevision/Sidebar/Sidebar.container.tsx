@@ -9,7 +9,7 @@ interface SidebarContainerProps {
 }
 
 export const SidebarContainer: React.FunctionComponent<
-SidebarContainerProps
+  SidebarContainerProps
 > = ({
   sidebarList,
   isDrawerOpen,

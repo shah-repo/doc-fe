@@ -15,9 +15,10 @@ secs_to_human() {
 start=$(date +%s)
 
 DATE_ISO_DEFAULT=$(date --iso-8601=seconds)
-export CI_BUILD_ID="Test_report3" #${CI_BUILD_ID:-$DATE_ISO_DEFAULT}
-export NUMBER_OF_WORKERS=1 #${NUMBER_OF_WORKERS:-4}
+export CI_BUILD_ID=${CI_BUILD_ID:-$DATE_ISO_DEFAULT}
+export NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-4}
 export REPORT_TITLE=${REPORT_TITLE:-generated_specs}
+export CYPRESS_INTEGRATION_FOLDER="cypress/integration"
 
 if [[ -z "${CI_BUILD_ID}" ]]; then
   echo "CI_BUILD_ID not set, exiting"
@@ -25,7 +26,8 @@ if [[ -z "${CI_BUILD_ID}" ]]; then
 fi
 
 ./scripts/cypress/delete_cache.sh
-./scripts/cypress/make_results_dir.sh
+source ./scripts/cypress/make_results_dir.sh
+export CYPRESS_SCREENSHOTS_FOLDER=$DIR_SCREENSHOTS_REPORT
 ./scripts/cypress/delete_failed_specs.sh
 ./scripts/cypress/run_workers_in_parallel.sh
 ./scripts/cypress/run_generate_requirements_report.sh

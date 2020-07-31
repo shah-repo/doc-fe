@@ -13,6 +13,7 @@ const FBEditorTitle: React.FunctionComponent<FBEditorTitleProps> = ({
       {(config, index) => (
         <FBButton
           key={`fb-editor-mode-${config.mode}-${index}`}
+          dataCy={`fb-editor-mode-${config.mode}-${index}`}
           style={{
             ...(config.mode === mode) && { backgroundColor: "rgba(0, 102, 255, 0.2)" },
           }}

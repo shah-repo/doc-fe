@@ -28,7 +28,7 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
   >
     <DialogTitle>
       <Box display="flex" flexDirection="row-reverse">
-        <CloseIcon fontSize="large" onClick={handleClose} />
+        <CloseIcon fontSize="large" data-cy="dialog-close" onClick={handleClose} />
       </Box>
       {_.isString(title) && (
         <Box
