@@ -12,6 +12,15 @@ if [[ -z "${REPORT_TITLE}" ]]; then
   exit
 fi
 
+if [[ -z "${CYPRESS_INTEGRATION_FOLDER}" ]]; then
+  echo "CYPRESS_INTEGRATION_FOLDER not set, exiting"
+  exit
+fi
+
+if [[ -z "${CYPRESS_SCREENSHOTS_FOLDER}" ]]; then
+  echo "CYPRESS_SCREENSHOTS_FOLDER not set, exiting"
+  exit
+fi
 
 ./scripts/cypress/make_results_dir.sh
 
@@ -42,9 +51,17 @@ do
         db.getCollection('instances').deleteOne({runId: run[0].runId, spec: specFile});"
       
     echo $SCRIPT | docker exec -i enlil_cypress_dashboard_mongo bash -c mongo  1> /dev/null
+    screenshotDir=${x/$CYPRESS_INTEGRATION_FOLDER/$CYPRESS_SCREENSHOTS_FOLDER}
+
+    screenshotDir=${screenshotDir%\"}
+    screenshotDir=${screenshotDir#\"}
+    screenshotDir="${screenshotDir}/"
+    rm -rf $screenshotDir
+    echo "--| deleting screenshots in $screenshotDir"
     done
 
     echo "--| deleting  $i"
+
     rm $i
   fi
 done
