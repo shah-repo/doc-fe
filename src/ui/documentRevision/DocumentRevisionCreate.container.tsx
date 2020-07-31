@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
@@ -17,6 +17,7 @@ interface DispatchProps {
   setDocId: typeof documentsActions.setDocumentProposedId;
   loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
   loadDocument: typeof documentRevisionsActions.loadDocument;
+  loadDocTypes: typeof documentTypeActions.loadList;
 }
 
 interface OwnProps {
@@ -66,6 +67,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   proposedDocId,
   loadDocument,
   isNewVersion,
+  loadDocTypes,
 }) => {
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const initialValues = useMemo(() => {
@@ -101,11 +103,10 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
 
   const showRevisionTypeChange = type === "newVersion" && !!documentRevision;
 
-  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(documentTypeActions.loadList());
+    loadDocTypes();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, []);
 
   return (
     <DocumentRevisionForm
@@ -131,4 +132,5 @@ export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(ma
   setDocId: documentsActions.setDocumentProposedId,
   loadDocumentProposedId: documentsActions.loadDocumentProposedId,
   loadDocument: documentRevisionsActions.loadDocument,
+  loadDocTypes: documentTypeActions.loadList,
 })(DocumentRevisionCreateContainerWithRouter);
