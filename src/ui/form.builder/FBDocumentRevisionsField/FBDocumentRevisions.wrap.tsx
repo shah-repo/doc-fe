@@ -30,7 +30,7 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionProps>(
     handleAdd = () => {
       dialogState?.config({
         open: true,
-        title: "Add Document Revision",
+        title: "changeRequest.documentControl.addDocument",
         content: (
           <FBForm>
             <FBDocumentRevisionForm />
