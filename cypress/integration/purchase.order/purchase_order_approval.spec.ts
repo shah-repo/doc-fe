@@ -102,7 +102,7 @@ context("Create company via API and create Purchase Order Form document", () => 
                   type: "LINK"
                 },
                 {
-                  label: "Approval Request List",
+                  label: "Approval Requests",
                   path: "/change_request",
                   type: "LINK"
                 },
@@ -347,8 +347,22 @@ context("Test the POAM when approving Purchase Order", () => {
     cy.wait(2000).poAMCheckApprovalIconIfItsGray();
   });
 
+  it("Try to approve document without approver when it contains POAM", () => {
+    cy.poAMApproveButton();
+  });
+
+  it("Check if error message says that approver must be added", () => {
+    SystemRequirement("REQ-1500");
+    cy.poAMCheckForAlertMessage();
+  });
+
   it("Select 'Thrid Tester' as approver", () => {
     cy.poAMSelectApprover("Third Tester");
+  });
+
+  it("Check if selected approver has approval signature right by his name", () => {
+    SystemRequirement("REQ-1510");
+    cy.poAMCheckIfApproverHasApprovalSign();
   });
 
   it("Check approval icon if it's green", () => {
@@ -357,7 +371,89 @@ context("Test the POAM when approving Purchase Order", () => {
 
   it("Create document in 'Pending for approval' state", () => {
     cy.poAMApproveButton();
-  });  
+  });
+
+  it("Navigate to AR List", () => {
+    cy.navigToApprovalRequestList();
+  });
+
+  it("Select last created AR from list", () => {
+    cy.poClickOnSpecificPOFromList({ item: "AR00004" });
+  });
+
+  it("Withdraw PO that's set for approval", () => {
+    SystemRequirement("REQ-1530");
+    cy.arWithdrawSubmission();
+  });
+
+  it("Click on 'Purchase Order' on sidebar", () => {
+    cy.cmpNavigateToPurchaseOrder();
+  });
+
+  it("Click on 'Create PO' button", () => {
+    cy.poCreateNew().wait(1000);
+  });
+
+  it("Enter description 'POAM test", () => {
+    SystemRequirement("REQ-1290");
+    cy.poEnterDocumentDescription({ description: "POAM test" });
+  });
+  
+  it("Enter Shipping Cost '210'", () => {
+    cy.poShippingCost({ number: "21" });
+  });
+
+  it("Save document", () => {
+    cy.poSaveDocument();
+  });
+
+  it("Click on 'Add Approver'", () => {
+    cy.poAMCheckForApproval();
+  });
+
+  it("Select 'Thrid Tester' as approver", () => {
+    cy.poAMSelectApprover("Third Tester");
+  });
+
+  it("Create document in 'Pending for approval' state", () => {
+    cy.poAMApproveButton();
+  });
+
+  it("Log out with 'Second Tester'", () => {
+    cy.authLogout();
+  });
+
+  it("Log in with 'Third Tester'", () => {
+    cy.authLogin({ 
+      email: "enlil.testmail+cy3@gmail.com", 
+      password: "Tester1!" });
+  });
+
+  it("Selects company", () => {
+    cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+  });
+
+  it("Click on 'Reject' AR and enter confirmation password", () => {
+    SystemRequirement("REQ-1570");
+    cy.poRejectAR({ password: "Tester1!" });
+  });
+  
+  it("Click on 'Purchase Order' on sidebar", () => {
+    cy.cmpNavigateToPurchaseOrder();
+  });
+
+  it("Clear filters", () => {
+    cy.filterClear();
+  });
+
+  it("Select rejected PO from list", () => {
+    cy.poClickOnSpecificPOFromList({ item: "PO-00002" });
+  });
+
+  it("Verify rejected PO status, should be 'Draft'", () => {
+    SystemRequirement("REQ-1570");
+    cy.poVerifyStatus({ status: "Draft"});
+  });
 });
 
 export { };
