@@ -1,7 +1,8 @@
-import React, { useMemo } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useMemo } from "react";
+import { connect, useDispatch } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../state/ducks/documentRevisions";
+import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
 import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
@@ -99,6 +100,12 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   };
 
   const showRevisionTypeChange = type === "newVersion" && !!documentRevision;
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(documentTypeActions.loadList());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   return (
     <DocumentRevisionForm
