@@ -188,7 +188,7 @@ context("Approval request form scenario", () => {
 
     it("Add sample document one", () => {
       cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument(sampleDocOneTitle);
+      cy.arChoseSpecificProposedDocument({ name: sampleDocOneTitle });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "Justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
@@ -285,7 +285,7 @@ context("Approval request form scenario", () => {
     it("Document One already used, it must not be added again.", () => {
       SystemRequirement("REQ-0860");
       cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument(sampleDocOneTitle);
+      cy.arChoseSpecificProposedDocument({ name: sampleDocOneTitle });
       cy.arIsProposedDocumentEmpty();
       cy.get("[data-cy=\"FBButton-label\"]").click().wait(1000);
     });

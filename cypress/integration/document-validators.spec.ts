@@ -268,7 +268,8 @@ context("Validators tests", () => {
       cy.get("[data-cy=\"validators.required_if.value\"]").type(requiredIfFieldValue);
     });
 
-    it(`Make '${requiredIfFieldLabel}' field required, if '${requiredFieldLabel}' field text equals '${requiredIfFieldValue}': Add text field`, () => {
+    it(`Make '${requiredIfFieldLabel}' field required, if '${requiredFieldLabel}' 
+    field text equals '${requiredIfFieldValue}': Add text field`, () => {
       cy.fbAddField();
     });
 
@@ -304,7 +305,8 @@ context("Validators tests", () => {
       cy.get("[data-cy=\"validators.required_if_in.value\"]").type(requiredIfInFieldValues);
     });
 
-    it(`Make '${requiredIfInFieldLabel}' field required, if '${requiredIfFieldLabel}' field text includes '${requiredIfInFieldValues.split(",").join(" or ")}': Add text field`, () => {
+    it(`Make '${requiredIfInFieldLabel}' field required, if '${requiredIfFieldLabel}' 
+    field text includes '${requiredIfInFieldValues.split(",").join(" or ")}': Add text field`, () => {
       cy.fbAddField();
     });
 
@@ -336,7 +338,8 @@ context("Validators tests", () => {
       cy.get("[data-cy=\"validators.required_with.name\"]").type(`${requiredIfInFieldLabel}{downarrow}{enter}`);
     });
 
-    it(`Make '${requiredWithFieldLabel}' field required, if '${requiredIfInFieldLabel}' field is not empty': Add text field`, () => {
+    it(`Make '${requiredWithFieldLabel}' field required, if '${requiredIfInFieldLabel}' 
+    field is not empty': Add text field`, () => {
       cy.fbAddField();
     });
 
@@ -369,7 +372,8 @@ context("Validators tests", () => {
         .type("{downarrow}{downarrow}{downarrow}{downarrow}{enter}");
     });
 
-    it(`Make '${requiredWithoutFieldLabel}' field required, if '${requiredWithFieldLabel}' field is empty: Add text field`, () => {
+    it(`Make '${requiredWithoutFieldLabel}' field required, if '${requiredWithFieldLabel}' 
+    field is empty: Add text field`, () => {
       cy.fbAddField();
     });
 
@@ -562,7 +566,8 @@ context("Validators tests", () => {
         const errorBlock = $elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredIfFieldLabel} field is required when ${requiredFieldLabel} is ${requiredIfFieldValue}.`);
+          .should("have.text", `The ${requiredIfFieldLabel} 
+          field is required when ${requiredFieldLabel} is ${requiredIfFieldValue}.`);
       });
     });
 
@@ -586,7 +591,8 @@ context("Validators tests", () => {
         const errorBlock = $elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredIfInFieldLabel} field is required when ${requiredIfFieldLabel} includes , .`);
+          .should("have.text", `The ${requiredIfInFieldLabel} 
+          field is required when ${requiredIfFieldLabel} includes , .`);
       });
     });
 
@@ -610,7 +616,8 @@ context("Validators tests", () => {
         const errorBlock = $elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredWithFieldLabel} field is required when ${requiredIfInFieldLabel} is not empty.`);
+          .should("have.text", `The ${requiredWithFieldLabel} 
+          field is required when ${requiredIfInFieldLabel} is not empty.`);
       });
     });
 
@@ -630,7 +637,8 @@ context("Validators tests", () => {
         const errorBlock = $elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredWithoutFieldLabel} field is required when ${requiredWithFieldLabel} is empty.`);
+          .should("have.text", `The ${requiredWithoutFieldLabel} 
+          field is required when ${requiredWithFieldLabel} is empty.`);
       });
     });
 

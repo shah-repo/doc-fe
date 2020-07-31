@@ -15,7 +15,6 @@ declare global {
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
-      drSelectOutputDocType(params: { documentType: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drClickCreateDocument(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
@@ -27,11 +26,11 @@ declare global {
       drClickReviseDocument(): Chainable<Subject>;
       drClickTrainingRequired(): Chainable<Subject>;
       drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
-      drSelectOutputDocTypeSecondTime(params: { documentType: string }): Chainable<Subject>;
       drChooseTypeOfRevisionChangeOption(params: { option: string }): Chainable<Subject>;
-      drDocumentFieldError(params: { field: string, message: string }): Chainable<Subject>;
+      drDocumentFieldError(params: { field: string; message: string }): Chainable<Subject>;
       closeAllAlertMessages(): Chainable<Subject>;
       checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
+      drCreateNewDocumentFromForm(): Chainable<Subject>;
     }
   }
 }
@@ -77,18 +76,6 @@ Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`);
-});
-
-// TODO: Remove Hardcoded select number option and make this unique method for all output doc types
-Cypress.Commands.add("drSelectOutputDocType", (params: { documentType: string }) => {
-  cy.get("[id=\"formTemplate.outputDocumentTypes\"]").click();
-  cy.get("[id^=\"react-select-6-option\"]").contains(params.documentType).click();
-});
-
-// TODO: Remove Hardcoded select number option and make this unique method for all output doc types
-Cypress.Commands.add("drSelectOutputDocTypeSecondTime", (params: { documentType: string }) => {
-  cy.get("[id=\"formTemplate.outputDocumentTypes\"]").click();
-  cy.get("[id^=\"react-select-27-option\"]").contains(params.documentType).click();
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
@@ -155,15 +142,19 @@ Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: { option: st
   cy.get("label").contains(params.option).click();
 });
 
-Cypress.Commands.add("drDocumentFieldError", (params: { field: string, message: string }) => {
+Cypress.Commands.add("drDocumentFieldError", (params: { field: string; message: string }) => {
   cy.log("here");
   cy.get(`[data-cy=\"${params.field}\"] .MuiFormHelperText-root.Mui-error`).should("have.text", params.message);
 });
 
-Cypress.Commands.add('checkToastMessage', (params: { exists: boolean }) => {
-  cy.get('.Toastify__toast-container').should((params.exists ? "not." : "") + "be.empty");
+Cypress.Commands.add("checkToastMessage", (params: { exists: boolean }) => {
+  cy.get(".Toastify__toast-container").should((params.exists ? "not." : "") + "be.empty");
 });
 
-Cypress.Commands.add('closeAllAlertMessages', () => {
-  cy.get('.Toastify__close-button').click({ multiple: true, force: true });
+Cypress.Commands.add("closeAllAlertMessages", () => {
+  cy.get(".Toastify__close-button").click({ multiple: true, force: true });
+});
+
+Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
+  cy.get("[id=\"PreviewControlsContainer-createNew\"]").click();
 });
