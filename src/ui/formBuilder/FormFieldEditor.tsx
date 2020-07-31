@@ -281,7 +281,7 @@ const FormFieldEditor: React.FunctionComponent<FormFieldProps> = ({
       draggable={true}
       onDragEnd={onDragEnd}
       onDragStart={onDragStart}
-      // tslint:disable-next-line: jsx-alignment
+      // eslint-disable-next-line: jsx-alignment
       className={containerStyle}
     >
       {hideTopControls ? null : topControls}

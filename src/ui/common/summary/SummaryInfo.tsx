@@ -11,16 +11,16 @@ interface OwnProps {
 export type Props = OwnProps;
 
 export const SummaryInfo: React.FunctionComponent<Props> = ({
-  label, value, dataCy
+  label, value, dataCy,
 }) => (
-    <div data-cy={dataCy}>
-      {label &&
+  <div data-cy={dataCy}>
+    {label &&
         <>
           <Text translation={label} />:{" "}
         </>
-      }
-      {value}
-    </div>
-  );
+    }
+    {value}
+  </div>
+);
 
 export default SummaryInfo;

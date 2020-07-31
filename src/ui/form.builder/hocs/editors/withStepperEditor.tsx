@@ -7,62 +7,60 @@ import { FBEditorStepperProps } from "../../types/editors/stepper";
 
 export const withStepperEditor = <T extends FBEditorStepperProps>(
   Component: React.FunctionComponent<T>,
-) => {
-  return (props: T) => {
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [value, setValue] = React.useState(0);
-    const stepLabels = ["Field config", "Validation"];
-    const getStepContent = (step: number): React.ReactNode => {
-      switch (step) {
-        case 0:
-          editorStore.maxWidth = "sm";
-          return props.children;
-        case 1:
-          editorStore.maxWidth = "lg";
-          return (
-            <Box>
-              <BottomNavigation
-                value={value}
-                onChange={(event, newValue) => {
-                  setValue(newValue);
-                }}
-                showLabels
-              >
-                <BottomNavigationAction label="Validators" />
-                <BottomNavigationAction label="Custom Validators" />
-              </BottomNavigation>
-              <Box mt={1} py={2}>
-                {value === 0 && <FBValidatorForm />}
-                {value === 1 && <FBValidatorCustom />}
-              </Box>
+) => (props: T) => {
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [value, setValue] = React.useState(0);
+  const stepLabels = ["Field config", "Validation"];
+  const getStepContent = (step: number): React.ReactNode => {
+    switch (step) {
+      case 0:
+        editorStore.maxWidth = "sm";
+        return props.children;
+      case 1:
+        editorStore.maxWidth = "lg";
+        return (
+          <Box>
+            <BottomNavigation
+              value={value}
+              onChange={(event, newValue) => {
+                setValue(newValue);
+              }}
+              showLabels
+            >
+              <BottomNavigationAction label="Validators" />
+              <BottomNavigationAction label="Custom Validators" />
+            </BottomNavigation>
+            <Box mt={1} py={2}>
+              {value === 0 && <FBValidatorForm />}
+              {value === 1 && <FBValidatorCustom />}
             </Box>
-          );
-        default:
-          return "";
-      }
-    };
-
-    const handleStep = (step: number) => () => {
-      setActiveStep(step);
-    };
-
-    const steps = (): React.ReactNode[] =>
-      stepLabels.map((label, index) => (
-        <Step
-          key={`step-${index}-${label}`}
-          style={{ padding: 0 }}
-        >
-          <StepButton onClick={handleStep(index)}>
-            {label}
-          </StepButton>
-        </Step>
-      ));
-
-    return Component({
-      ...props,
-      getStepContent,
-      stepContent: getStepContent(activeStep),
-      steps: steps(),
-    });
+          </Box>
+        );
+      default:
+        return "";
+    }
   };
+
+  const handleStep = (step: number) => () => {
+    setActiveStep(step);
+  };
+
+  const steps = (): React.ReactNode[] =>
+    stepLabels.map((label, index) => (
+      <Step
+        key={`step-${index}-${label}`}
+        style={{ padding: 0 }}
+      >
+        <StepButton onClick={handleStep(index)}>
+          {label}
+        </StepButton>
+      </Step>
+    ));
+
+  return Component({
+    ...props,
+    getStepContent,
+    stepContent: getStepContent(activeStep),
+    steps: steps(),
+  });
 };

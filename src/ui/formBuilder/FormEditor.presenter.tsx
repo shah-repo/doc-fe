@@ -77,21 +77,19 @@ const FormEditorPresenter: React.FunctionComponent<
     }
   };
 
-  const Forms = fields.map((elem: any, i: number) => {
-    return (
-      <FormFieldEditor
-        onDragStart={dragStart}
-        onDragEnd={dragEnd}
-        closed={elem.closed}
-        diff={elem.diff}
-        key={i}
-        order={i}
-        type={elem.type}
-        config={elem.config}
-        editMode={true}
-      />
-    );
-  });
+  const Forms = fields.map((elem: any, i: number) => (
+    <FormFieldEditor
+      onDragStart={dragStart}
+      onDragEnd={dragEnd}
+      closed={elem.closed}
+      diff={elem.diff}
+      key={i}
+      order={i}
+      type={elem.type}
+      config={elem.config}
+      editMode={true}
+    />
+  ));
 
   return (
     <div className={styles.formEditorContainer} onDragOver={dragOver}>

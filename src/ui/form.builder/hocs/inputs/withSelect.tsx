@@ -8,37 +8,35 @@ import { withOptions } from "../common/withOptions";
 
 export const withSelect = <T extends FBSelectProps>(
   Component: React.FunctionComponent<T>,
-) => {
-  return withOptions(({
-      options,
-      optionLabelKey,
-      optionValueKey,
-      multiple,
-      ...props
-    }: T) => {
+) => withOptions(({
+  options,
+  optionLabelKey,
+  optionValueKey,
+  multiple,
+  ...props
+}: T) => {
 
-    const menuItems = _.map(options, (option, index) => (
-      <MenuItem
-        key={`${option[optionValueKey || ""]}-${index}`}
-        value={option[optionValueKey || ""]}
-      >
-        <Text message={option[optionLabelKey || ""]} tagName="em" />
-      </MenuItem>
-    ));
+  const menuItems = _.map(options, (option, index) => (
+    <MenuItem
+      key={`${option[optionValueKey || ""]}-${index}`}
+      value={option[optionValueKey || ""]}
+    >
+      <Text message={option[optionLabelKey || ""]} tagName="em" />
+    </MenuItem>
+  ));
 
-    const renderValue = (selected: string[]) => multiple && (
-      <div>
-        {(selected as string[]).map((value) => (
-          <Chip key={value} label={value} />
-        ))}
-      </div>
-    );
+  const renderValue = (selected: string[]) => multiple && (
+    <div>
+      {(selected).map((value) => (
+        <Chip key={value} label={value} />
+      ))}
+    </div>
+  );
 
-    return Component({
-      ...(props as T),
-      menuItems,
-      renderValue,
-      multiple,
-    });
+  return Component({
+    ...(props as T),
+    menuItems,
+    renderValue,
+    multiple,
   });
-};
+});

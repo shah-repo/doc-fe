@@ -9,31 +9,29 @@ import { FBActionContainerProps } from "../../types/actions/action";
 
 export const withActionContainer = <T extends FBActionContainerProps>(
   Component: React.FunctionComponent<T>,
-) => {
-  return ({
-      actions,
-      state,
-      ...props
-  }: T) => {
+) => ({
+  actions,
+  state,
+  ...props
+}: T) => {
 
-    state = FB.useRef<FBActionContainerState>(FBActionContainerState);
-    function doRenderActions(): boolean {
-        return Boolean(actions && _.isString(_.first(actions)));
-    }
+  state = FB.useRef<FBActionContainerState>(FBActionContainerState);
+  function doRenderActions(): boolean {
+    return Boolean(actions && _.isString(_.first(actions)));
+  }
 
-    return useObserver(() => {
+  return useObserver(() => {
 
-      doRenderActions() && (actions =
+    doRenderActions() && (actions =
         (actions || []).map((actionName, index) => {
           const action = _.find(state?.data, (d: FBActionModel) => d.name === actionName);
-          return (action && <FBAction key={`${actionName}-${index}`} {...{action}} />);
+          return (action && <FBAction key={`${actionName}-${index}`} {...{ action }} />);
         })
-      );
+    );
 
-      return Component({
-        ...(props as T),
-        actions,
-      });
+    return Component({
+      ...(props as T),
+      actions,
     });
-  };
+  });
 };

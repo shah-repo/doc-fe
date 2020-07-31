@@ -24,7 +24,7 @@ Props<T>
     }
   };
 
-  // tslint:disable-next-line: no-shadowed-variable
+  // eslint-disable-next-line: no-shadowed-variable
   const handleClick = ({ rowData, actionType }: TableSelectionProps<T>) => (
     e: React.MouseEvent,
   ) => {

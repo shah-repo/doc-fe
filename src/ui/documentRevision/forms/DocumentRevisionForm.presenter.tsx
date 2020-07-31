@@ -103,7 +103,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const { workspaceState } = FB.useStores();
   const isDisabled: boolean = initialValues.id !== undefined;
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
-  const showObsoleteRevisionChange = documentRevision?.status === DocumentRevisionStatus.Draft && documentRevision?.version === 1;
+  const showObsoleteRevisionChange =
+    documentRevision?.status === DocumentRevisionStatus.Draft &&
+    documentRevision?.version === 1;
 
   FormHeaderContext = React.createContext<FormHeaderContext | undefined>({
     documentRevision,
@@ -250,7 +252,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           documentTypeId={documentTypeId}
         />
         <AttachmentsField isDisabled={isDisabledInput} isNewVersion={isNewVersion} />
-        {showRevisionTypeChange && <RevisionTypeChange {...{ documentTypeId, showObsoleteRevisionChange }} isDisabled={isDisabledInput} />}
+        {
+          showRevisionTypeChange &&
+            <RevisionTypeChange
+              {...{ documentTypeId, showObsoleteRevisionChange }}
+              isDisabled={isDisabledInput}
+            />
+        }
         {
           (!values.status || type === "newOutput") &&
           <DocumentSecurity documentTypeId={documentTypeId as string} />

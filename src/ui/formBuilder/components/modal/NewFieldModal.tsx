@@ -38,56 +38,48 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
   };
 
   const sections: BigObject<string> = FieldConstants.sections;
-  const sectionButtons = Object.keys(sections).map((value) => {
-    return (
-      <button
-        className={styles[value]}
-        onClick={() => handleClick(value)}
-        key={value}
-      >
-        {sections[value]}
-      </button>
-    );
-  });
+  const sectionButtons = Object.keys(sections).map((value) => (
+    <button
+      className={styles[value]}
+      onClick={() => handleClick(value)}
+      key={value}
+    >
+      {sections[value]}
+    </button>
+  ));
 
   const basicFields: BigObject<string> = FieldConstants.basicFields;
-  const basicFieldButtons = Object.keys(basicFields).map((value) => {
-    return (
-      <button
-        className={styles[value]}
-        onClick={() => handleClick(value)}
-        key={value}
-      >
-        {basicFields[value]}
-      </button>
-    );
-  });
+  const basicFieldButtons = Object.keys(basicFields).map((value) => (
+    <button
+      className={styles[value]}
+      onClick={() => handleClick(value)}
+      key={value}
+    >
+      {basicFields[value]}
+    </button>
+  ));
 
   const approvals: BigObject<string> = FieldConstants.approvals;
-  const approvalButtons = Object.keys(approvals).map((value) => {
-    return (
-      <button
-        className={styles[value]}
-        onClick={() => handleClick(value)}
-        key={value}
-      >
-        {approvals[value]}
-      </button>
-    );
-  });
+  const approvalButtons = Object.keys(approvals).map((value) => (
+    <button
+      className={styles[value]}
+      onClick={() => handleClick(value)}
+      key={value}
+    >
+      {approvals[value]}
+    </button>
+  ));
 
   const lists: BigObject<string> = FieldConstants.lists;
-  const listButtons = Object.keys(lists).map((value) => {
-    return (
-      <button
-        className={styles[value]}
-        onClick={() => handleClick(value)}
-        key={value}
-      >
-        {lists[value]}
-      </button>
-    );
-  });
+  const listButtons = Object.keys(lists).map((value) => (
+    <button
+      className={styles[value]}
+      onClick={() => handleClick(value)}
+      key={value}
+    >
+      {lists[value]}
+    </button>
+  ));
 
   const buttonGroup = (title: string, buttons: JSX.Element[]) => (
     <div className={styles.buttonGroup}>

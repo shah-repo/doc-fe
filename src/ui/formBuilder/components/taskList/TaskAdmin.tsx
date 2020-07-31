@@ -13,7 +13,7 @@ interface LocalProps {
     title: string;
     description: string;
     assignee: string;
-    due_date: string;
+    dueDate: string;
     status: string;
   };
   id: any;
@@ -24,12 +24,10 @@ interface DispatchProps {
   deleteTask: any;
 }
 
-const mapDispatchToProps = (dispatch: any): DispatchProps => {
-  return {
-    editTask: (task: any, id: any) => dispatch({ type: "EDIT_TASK", task, id }),
-    deleteTask: (id: any) => dispatch({ type: "DELETE_TASK", id }),
-  };
-};
+const mapDispatchToProps = (dispatch: any): DispatchProps => ({
+  editTask: (task: any, id: any) => dispatch({ type: "EDIT_TASK", task, id }),
+  deleteTask: (id: any) => dispatch({ type: "DELETE_TASK", id }),
+});
 
 export type TaskProps = DispatchProps & LocalProps;
 
@@ -83,7 +81,7 @@ const Task: React.FunctionComponent<TaskProps> = ({
         </span>
         <span>
           <strong>Due Date: </strong>
-          {currentTask.due_date}{" "}
+          {currentTask.dueDate}{" "}
         </span>
         <span>
           <strong>Status: </strong>

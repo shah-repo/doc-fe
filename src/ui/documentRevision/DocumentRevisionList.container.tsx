@@ -51,7 +51,15 @@ DocumentRevisionListContainerProps
           documentRevisions.map((documentRevision) => (
             <DocumentRevisionListPresenter
               key={documentRevision.id}
-              {...{ documentRevision, docId, isInlineApproval, documentId, selectedDocumentRevision, documentTypeId, isDocumentPO }}
+              {...{
+                documentRevision,
+                docId,
+                isInlineApproval,
+                documentId,
+                selectedDocumentRevision,
+                documentTypeId,
+                isDocumentPO,
+              }}
             />
           )
           )

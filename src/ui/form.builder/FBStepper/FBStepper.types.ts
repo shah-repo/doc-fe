@@ -8,8 +8,8 @@ export enum FBStepperWidth {
 export type FBStepperProps =
   & FBSwitchPanelProps
   & {
-  steps?: React.ReactNode[];
-  width?: FBStepperWidth;
-  activeStep?: number;
-  beforeStepChange?: (step: number) => any;
-};
+    steps?: React.ReactNode[];
+    width?: FBStepperWidth;
+    activeStep?: number;
+    beforeStepChange?: (step: number) => any;
+  };

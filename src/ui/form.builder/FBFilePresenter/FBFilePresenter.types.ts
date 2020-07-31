@@ -5,7 +5,7 @@ export type FBFilePresenterDownloadType = "download" | "view";
 
 export type FBAttachment = Attachment & {
   url?: string;
-}
+};
 
 export type FBFilePresenterProps =
 & Pick<FBInputProps, "name" | "disabled">

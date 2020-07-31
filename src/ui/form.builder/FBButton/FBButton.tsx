@@ -13,18 +13,18 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
   dataCy,
   ...props
 }) => (
-    <Button
-      {...{ color, variant }}
-      {...props}
-      type="button"
-      data-cy={dataCy ? dataCy : 'fb-control-btn'}
-      style={{
-        ...style,
-        ...hidden && { display: "none" },
-      }}
-    >
-      {label && <Text message={label} />}
-    </Button>
-  );
+  <Button
+    {...{ color, variant }}
+    {...props}
+    type="button"
+    data-cy={dataCy ? dataCy : "fb-control-btn"}
+    style={{
+      ...style,
+      ...hidden && { display: "none" },
+    }}
+  >
+    {label && <Text message={label} />}
+  </Button>
+);
 
 export default FBButton;

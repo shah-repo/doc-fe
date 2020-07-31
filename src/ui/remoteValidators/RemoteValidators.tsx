@@ -34,7 +34,7 @@ export const getRemoteValidatorBundle: () => Promise<CompanyValidators> = async 
   return (window as any).EnlilRemoteValidators;
 };
 
-const RemoteValidatorsLoader: React.FunctionComponent<{}> = ({}) => {
+const RemoteValidatorsLoader: React.FunctionComponent<{}> = () => {
   useEffect(() => {
     fetchRemoteValidators();
   }, []);

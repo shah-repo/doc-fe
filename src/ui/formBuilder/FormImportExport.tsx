@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import { ReactComponent as ExportIcon } from "../../assets/images/formBuilder/icon_export.svg";
