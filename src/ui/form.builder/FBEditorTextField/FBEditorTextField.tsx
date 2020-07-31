@@ -17,7 +17,7 @@ const FBEditorTextField: React.FunctionComponent<FBEditorProps> = ({
     />
     <FBEditorPlaceholder key={`fb-editor-placeholder-${type}`} />
     <FBTextField
-        type="number"
+      type="number"
       label="form.builder.rowNumber"
       defaultValue={1}
       name="rows"
