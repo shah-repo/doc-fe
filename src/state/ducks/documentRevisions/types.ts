@@ -226,4 +226,20 @@ export interface FBOutputDocumentType {
   groupOptions?: DocumentGroupOptionsType;
 }
 
+export interface HeaderTableType {
+  label: string;
+  key: string;
+}
+
+export interface DataTable {
+  docId: string;
+  revision: number;
+  documentTitle: string;
+  type: string | undefined;
+  owner: string;
+  arId: string | undefined;
+  status: string;
+  effectiveDate: Date | undefined;
+}
+
 
