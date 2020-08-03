@@ -8,7 +8,6 @@ import { Owner } from "../../../../state/ducks/common/types";
 import { AsyncState, AsyncStatus } from "../../../../state/types";
 import Approvers from "../../../change.request/form/approvers";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
-import DatePickerField from "../../../components/forms/fields/DatePickerField";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import SubmitButton from "../../../components/forms/SubmitButton";
@@ -135,10 +134,6 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           <Text translation="document.revision.tpl.invalid" />
         </Box>
       )}
-      <DatePickerField
-        label="transition.action.effective.date"
-        name="effectiveDate"
-      />
       <FormProgress asyncState={asyncState} />
       <SubmitButton
         asyncState={asyncState}
