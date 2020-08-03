@@ -98,7 +98,7 @@ DocumentRevisionFormContainerProps
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const bannerPortal = React.useRef(null);
-
+  const { status, revisionStage } = documentRevision || {};
   const cleanInitialValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
     const { outputRevision } = initialValues;
@@ -169,6 +169,7 @@ DocumentRevisionFormContainerProps
   } else if (outputGroup) {
     mode = "form";
   }
+  const showOnlyAdministrativeChange = isOutput && status === DocumentRevisionStatus.Draft && revisionStage === 3;
 
   const GetScheme = (props: FormikProps<DocumentRevisionFormValues>): FBSchemaProps[] => {
     const { id: documentTypeId = "" } = props.values.document?.documentType || {};
@@ -216,7 +217,7 @@ DocumentRevisionFormContainerProps
         canChangeOwnerShip={canChangeOwnerShip}
         type={type}
         isNewVersion={isNewVersion}
-        {...{ FBContainer, bannerPortal }}
+        {...{ FBContainer, bannerPortal, showOnlyAdministrativeChange }}
       />
     </FBWorkspace>
   );
