@@ -2,6 +2,7 @@ import { Box, Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import _ from "lodash";
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
 import { stripTags } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -201,7 +202,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     documentTitle: e.name,
     type: e.document.documentType.documentTypeAcronym,
     owner: e.owner.user.name,
-    arId: e.changeRequest?.crId,
+    crId: e.changeRequest?.crId,
     status: e.status,
     effectiveDate: e.effectiveDate,
   }));
@@ -217,16 +218,16 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     { label: `DOCUMENT TITLE: ${tableCriteria.queryDict.name  || ""}`, key: "documentTitle" },
     { label: `TYPE: ${documentTypeSearchName || ""}`, key: "type" },
     { label: `OWNER: ${tableCriteria.queryDict.owner || ""}`, key: "owner" },
-    { label: `AR ID: ${tableCriteria.queryDict.crId || ""}`, key: "arId" },
+    { label: `AR ID: ${tableCriteria.queryDict.crId || ""}`, key: "crId" },
     { label: `STATUS: ${tableCriteria.queryDict["status[]"] || ""}`, key: "status" },
     { label: `EFFECTIVE DATE: ${effectiveDateSearch || ""}`, key: "effectiveDate" },
   ];
 
   const dialog = useDialog();
-  const [name, saveName] = useState("");
+  const [fileName, saveFileName] = useState("");
   const handleOpen = () => {
     dialog.open();
-    saveName("");
+    saveFileName("");
   };
 
   return (
@@ -246,15 +247,12 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           onClick={handleOpen}
         >
           <Box marginRight={1}>
-            <svg id="data-upload" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
-              <path id="Path_2633" data-name="Path 2633" d="M10,7v3H2V7H0v4a1,1,0,0,0,1,1H11a1,1,0,0,0,1-1V7Z" className={classes.iconSvg} />
-              <path id="Path_2634" data-name="Path 2634" d="M5,8H7V4H9.5L6,0,2.5,4H5Z" className={classes.iconSvg}/>
-            </svg>
+            <ExportIcon className={classes.iconSvg} />
           </Box>
           <Text translation="document.revision.export.list" />
         </Button>
         <ExportListDialog
-          {...{ dialog, headers, data, name, saveName }}
+          {...{ dialog, headers, data, fileName, saveFileName }}
         />
         <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
           <Button

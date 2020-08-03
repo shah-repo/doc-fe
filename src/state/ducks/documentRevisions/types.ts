@@ -237,7 +237,7 @@ export interface DataTable {
   documentTitle: string;
   type: string | undefined;
   owner: string;
-  arId: string | undefined;
+  crId: string | undefined;
   status: string;
   effectiveDate: Date | undefined;
 }

@@ -1,5 +1,4 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, TextField, Typography } from "@material-ui/core";
-import _ from "lodash";
 import React, { useRef } from "react";
 import { CSVLink } from "react-csv";
 import { ReactComponent as ExportIcon } from "../../../../assets/images/icon_export_data.svg";
@@ -12,22 +11,22 @@ interface Props {
   dialog: DialogHandler;
   headers: HeaderTableType[];
   data: DataTable[];
-  name: string;
-  saveName: (value: string) => void;
+  fileName: string;
+  saveFileName: (value: string) => void;
 }
 
 const ExportListDialog: React.FunctionComponent<Props> = ({
   dialog,
   headers,
   data,
-  name,
-  saveName,
+  fileName,
+  saveFileName,
 }) => {
   const classes = styles();
-  const cvsRef: any = useRef(null);
-  const handleName = (ev: React.ChangeEvent) => {
-    const value = _.get(ev.target, "value");
-    saveName(value);
+  const csvRef: any = useRef(null);
+  const handleFileName = (ev: React.ChangeEvent<any>) => {
+    const { value } = ev.target;
+    saveFileName(value);
   };
   return (
     <>
@@ -43,23 +42,23 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
             <Box textAlign="center" marginBottom="20px" whiteSpace="pre-line">
               <Box textAlign="center">
                 <span className={classes.iconContainer}>
-                  <ExportIcon style={{ marginLeft: 6, marginTop: 7 }}/>
+                  <ExportIcon style={{ marginLeft: 6, marginTop: 7 }} />
                 </span>
-                <Typography variant="h6" style={{ marginTop: 20, marginBottom: 5 }}>
+                <Typography variant="h6" className={classes.title}>
                   <Text translation="document.revision.export.list" />
                 </Typography>
               </Box>
               <DialogContentText>
                 <Box className={classes.dialogContent}>
-                  <Typography variant="subtitle1" style={{ marginTop: 20, marginBottom: 5, textAlign: "start" }}>
+                  <Typography variant="subtitle1" className={classes.subtitle}>
                     <Text translation="document.revision.enter.file.name" />
                   </Typography>
                   <TextField
-                    error={name === ""}
+                    error={fileName === ""}
                     variant="outlined"
                     id="ExportListDialog-fileName"
                     style={{ width: 400 }}
-                    onChange={handleName}
+                    onChange={handleFileName}
                   />
                 </Box>
               </DialogContentText>
@@ -81,15 +80,15 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
               id="ExportListDialog-downloadButton"
               data-cy="ExportListDialog-downloadButton"
               onClick={dialog.close}
-              disabled={name === ""}
+              disabled={fileName === ""}
             >
               <CSVLink
                 data={data}
                 headers={headers}
-                filename={name + ".csv"}
+                filename={fileName + ".csv"}
                 style={{ textDecoration: "none" }}
                 target="_blank"
-                ref={cvsRef}
+                ref={csvRef}
               >
                 <Text translation="common.download" />
               </CSVLink>

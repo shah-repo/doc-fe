@@ -7,7 +7,7 @@ export const styles = makeStyles((theme: Theme) =>
       "background": Colors.medium_blue,
       "color": Colors.white,
       "boxShadow": "none",
-      "margin": "0 10px 0 5px",
+      "margin": theme.spacing(0, 2, 0, 1),
       "flexGrow": 1,
       "&:hover": {
         background: Colors.medium_blue,
@@ -17,7 +17,7 @@ export const styles = makeStyles((theme: Theme) =>
       "background": Colors.light_blue,
       "color": Colors.medium_blue,
       "boxShadow": "none",
-      "margin": "0 5px 0 10px",
+      "margin": theme.spacing(0, 1, 0, 2),
       "flexGrow": 0.6,
       "&:hover": {
         background: Colors.light_blue,
@@ -42,6 +42,15 @@ export const styles = makeStyles((theme: Theme) =>
         transform: "translate(-10px, -6px)",
         borderRadius: 11,
       },
+    },
+    title: {
+      marginTop: 20,
+      marginBottom: 5,
+    },
+    subtitle: {
+      marginTop: 20,
+      marginBottom: 5,
+      textAlign: "start",
     },
   }),
 );
