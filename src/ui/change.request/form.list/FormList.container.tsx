@@ -40,9 +40,8 @@ export const FromListContainer: React.FunctionComponent<{}> = () => {
   const handleCreateButton = () => {
     if (templateOptions.length === 1) {
       history.push(`/change_request/${templateOptions[0].value}/create/${templateOptions[0].docTypeId}`);
-    } else {
-      dialog.open();
     }
+    dialog.open();
   };
 
   return (
