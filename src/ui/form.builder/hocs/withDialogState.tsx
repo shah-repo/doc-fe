@@ -26,7 +26,7 @@ export const withDialogState = <T extends FBDialogProps>(
     };
 
     return Component({
-      ...(props as T),
+      ...(props),
       setDialogOpen,
       setDialogClose,
       setDialogContent,

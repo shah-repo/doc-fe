@@ -6,13 +6,11 @@ import { FBActionProps } from "../../types/actions/action";
 const FBAction: React.FunctionComponent<FBActionProps> = ({
   indicators,
   actionButton,
-}) => {
-  return (
-    <Box borderBottom={1} pb={2} mb={4}>
-      {indicators}
-      {actionButton}
-    </Box>
-  );
-};
+}) => (
+  <Box borderBottom={1} pb={2} mb={4}>
+    {indicators}
+    {actionButton}
+  </Box>
+);
 
 export default withAction(FBAction);

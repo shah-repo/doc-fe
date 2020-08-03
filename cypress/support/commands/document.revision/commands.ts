@@ -15,7 +15,6 @@ declare global {
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
-      drSelectOutputDocType(params: { documentType: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drClickCreateDocument(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
@@ -27,13 +26,17 @@ declare global {
       drClickReviseDocument(): Chainable<Subject>;
       drClickTrainingRequired(): Chainable<Subject>;
       drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
+<<<<<<< HEAD
       drAddOutputDocType(params: { documentType: string }): Chainable<Subject>;
       drReleaseDocument(params: { template: string }): Chainable<Subject>;
       drSelectOutputDocTypeSecondTime(params: { documentType: string }): Chainable<Subject>;
+=======
+>>>>>>> 00d457481972c64b0300fc2211133a75040e2321
       drChooseTypeOfRevisionChangeOption(params: { option: string }): Chainable<Subject>;
-      drDocumentFieldError(params: { field: string, message: string }): Chainable<Subject>;
+      drDocumentFieldError(params: { field: string; message: string }): Chainable<Subject>;
       closeAllAlertMessages(): Chainable<Subject>;
       checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
+<<<<<<< HEAD
 
       /* Document Approval Matrix */
 
@@ -50,6 +53,9 @@ declare global {
       drUpgradeRevisionLevel(): Chainable<Subject>;
 
       /* Document Approval Matrix End */
+=======
+      drCreateNewDocumentFromForm(): Chainable<Subject>;
+>>>>>>> 00d457481972c64b0300fc2211133a75040e2321
     }
   }
 }
@@ -97,6 +103,7 @@ Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: stri
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`);
 });
 
+<<<<<<< HEAD
 // TODO: Remove Hardcoded select number option and make this unique method for all output doc types
 Cypress.Commands.add("drSelectOutputDocType", (params: { documentType: string }) => {
   cy.get("[id=\"formTemplate.outputDocumentTypes\"]").click();
@@ -114,6 +121,8 @@ Cypress.Commands.add("drAddOutputDocType", (params: { documentType: string }) =>
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`);
 });
 
+=======
+>>>>>>> 00d457481972c64b0300fc2211133a75040e2321
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
   cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 5 * 1000 }).click();
   cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
@@ -184,17 +193,26 @@ Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: { option: st
   cy.get("label").contains(params.option).click();
 });
 
-Cypress.Commands.add("drDocumentFieldError", (params: { field: string, message: string }) => {
+Cypress.Commands.add("drDocumentFieldError", (params: { field: string; message: string }) => {
   cy.log("here");
   cy.get(`[data-cy=\"${params.field}\"] .MuiFormHelperText-root.Mui-error`).should("have.text", params.message);
 });
 
+<<<<<<< HEAD
 Cypress.Commands.add('checkToastMessage', (params: { exists: boolean }) => {
   cy.get('.Toastify').should((params.exists ? "not." : "") + "be.empty");
+=======
+Cypress.Commands.add("checkToastMessage", (params: { exists: boolean }) => {
+  cy.get(".Toastify__toast-container").should((params.exists ? "not." : "") + "be.empty");
 });
 
-Cypress.Commands.add('closeAllAlertMessages', () => {
-  cy.get('.Toastify__close-button').click({ multiple: true, force: true });
+Cypress.Commands.add("closeAllAlertMessages", () => {
+  cy.get(".Toastify__close-button").click({ multiple: true, force: true });
+>>>>>>> 00d457481972c64b0300fc2211133a75040e2321
+});
+
+Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
+  cy.get("[id=\"PreviewControlsContainer-createNew\"]").click();
 });
 
 Cypress.Commands.add("drAddAnotherRoleBtn", () => cy.get("[data-cy=\"form.builder.add.another.role\"]").click());

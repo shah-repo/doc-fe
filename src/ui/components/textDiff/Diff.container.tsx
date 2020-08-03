@@ -1,4 +1,4 @@
-// tslint:disable-next-line: no-implicit-dependencies
+// eslint-disable-next-line: no-implicit-dependencies
 import { DeltaStatic } from "quill";
 import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";

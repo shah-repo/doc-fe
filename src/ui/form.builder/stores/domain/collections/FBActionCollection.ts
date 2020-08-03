@@ -5,7 +5,7 @@ import { FBValidatorIndicatorProps } from "../../../types/validation/validator";
 import { FBActionModel } from "../models/FBActionModel";
 
 export class FBActionCollection extends Collection<FBActionModel> {
-  public data(): Array<Partial<FBActionModel>> {
+  public data(): Partial<FBActionModel>[] {
     // return actionData;
     return _.get(window, "EnlilRemoteValidators.avaliableActions");
   }
@@ -21,13 +21,11 @@ export class FBActionCollection extends Collection<FBActionModel> {
   public getAction = (name: string): Partial<FBActionModel> | undefined => {
     const filtered = _.filter(this.data(), (action) => action.name === name);
     return _.first(filtered);
-  }
+  };
 
   public getIndicators = (
     name: string,
-  ): Array<Partial<FBValidatorIndicatorProps>> | undefined => {
-    return (this.getAction(name) || {}).indicators;
-  }
+  ): Partial<FBValidatorIndicatorProps>[] | undefined => (this.getAction(name) || {}).indicators;
 }
 
 const actionCollection = new FBActionCollection();

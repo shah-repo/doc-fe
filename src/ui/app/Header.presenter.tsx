@@ -34,54 +34,54 @@ const Header: React.FunctionComponent<Props> = ({
   handleCloseMenu,
   anchorEl,
 }) => (
-    <AppBar position="fixed" color="primary" className={classes.appBar}>
-      <Toolbar className={classes.toolbar}>
-        <Grid
-          container={true}
-          alignItems="flex-end"
-          justify="flex-end"
-        >
-          <Grid item={true} xs={6}>
-            <Grid container={true} justify="flex-end" alignItems="center">
-              <ClickAwayListener onClickAway={handleCloseMenu} mouseEvent="onClick">
-                <Button
-                  disableFocusRipple={true}
-                  disableRipple={true}
-                  onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleOpenMenu(event)}
-                  classes={{ root: classes.headerButton }}
-                >
-                  <UserAvatar avatar={avatar} />
-                  <Typography
-                    id="Header-welcomeText"
-                    variant="caption"
-                    className={classes.welcomeText}
-                    noWrap={true}
+  <AppBar position="fixed" color="primary" className={classes.appBar}>
+    <Toolbar className={classes.toolbar}>
+      <Grid
+        container={true}
+        alignItems="flex-end"
+        justify="flex-end"
+      >
+        <Grid item={true} xs={6}>
+          <Grid container={true} justify="flex-end" alignItems="center">
+            <ClickAwayListener onClickAway={handleCloseMenu} mouseEvent="onClick">
+              <Button
+                disableFocusRipple={true}
+                disableRipple={true}
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleOpenMenu(event)}
+                classes={{ root: classes.headerButton }}
+              >
+                <UserAvatar avatar={avatar} />
+                <Typography
+                  id="Header-welcomeText"
+                  variant="caption"
+                  className={classes.welcomeText}
+                  noWrap={true}
 
-                  >
-                    <Text translation="header.welcome" />,
+                >
+                  <Text translation="header.welcome" />,
                 </Typography>
                   &nbsp;
                 <Typography
-                    id="Header-userName"
-                    variant="caption"
-                    className={classes.name}
-                    noWrap={true}
-                  >
-                    {name}
-                  </Typography>
-                  <UserMenu {...{ handleCloseMenu, anchorEl }} />
-                  <UserProfileContainer
-                    closeUserProfile={closeUserProfile}
-                    showUserProfile={showUserProfile}
-                  />
-                </Button>
-              </ClickAwayListener>
+                  id="Header-userName"
+                  variant="caption"
+                  className={classes.name}
+                  noWrap={true}
+                >
+                  {name}
+                </Typography>
+                <UserMenu {...{ handleCloseMenu, anchorEl }} />
+                <UserProfileContainer
+                  closeUserProfile={closeUserProfile}
+                  showUserProfile={showUserProfile}
+                />
+              </Button>
+            </ClickAwayListener>
 
-            </Grid>
           </Grid>
         </Grid>
-      </Toolbar>
-    </AppBar>
-  );
+      </Grid>
+    </Toolbar>
+  </AppBar>
+);
 
 export default withStyles(styles)(Header);

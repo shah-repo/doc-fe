@@ -19,7 +19,7 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({
   const docId = formDocument?.document?.docId;
 
   return (
-    <Box textAlign="center" mb={8}>
+    <Box textAlign="center" mb={8} mt={8}>
       <Box style={{ fontWeight: "bold" }} component="span">
         <Text message="output.info" />:
       </Box>

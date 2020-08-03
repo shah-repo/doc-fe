@@ -3,11 +3,6 @@
 
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
-
-
 const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
@@ -159,10 +154,10 @@ context("Document Creation Flow", () => {
     });
   });
 
-  context("Document in WIP", () => {
-    it("Check if document status is WIP after creating a document", () => {
+  context("Document in Draft", () => {
+    it("Check if document status is Draft after creating a document", () => {
       SystemRequirement("REQ-0330");
-      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.drCheckDocumentStatus({ status: "Draft" });
     });
 
     context("Uploads attachments", () => {
@@ -187,7 +182,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Check three attachments are displayed: test.docx, image.jpg, test_image.jpg", () => {
-        SystemRequirement("REQ-0200", "REQ-2010");
+        SystemRequirement("REQ-0200", "REQ-0210");
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test_image.jpg", "image.jpg", "test.docx" ] });
       });
     });
@@ -197,7 +192,7 @@ context("Document Creation Flow", () => {
         cy.atchSetPrimaryAttachment({ fileName: "test_image.jpg" });
       });
 
-      it("Allow user to only set single attachment to be primary", () => {
+      it.skip("Allow user to only set single attachment to be primary", () => {
         SystemRequirement("REQ-0250");
         cy.atchSetPrimaryAttachment({ fileName: "test.docx" });
         cy.atchCheckForSinglePrimaryAttachment();
@@ -216,3 +211,4 @@ context("Document Creation Flow", () => {
 });
 
 export { };
+

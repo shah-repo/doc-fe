@@ -81,8 +81,7 @@ context("Document Creation Flow", () => {
 
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
-      cy.get("[data-cy=\"navigation.documentControl\"]").click();
-      cy.get("[data-cy=\"navigation.documentList\"]").click();
+      cy.cmpNavigateToDocumentList();
     });
 
     it("Clicks on 'create a document' button", () => {

@@ -75,7 +75,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
       (schema as FBSchemaProps[]).reduce<object>((acc, item) => {
         // fields effectiveDate,  documentRevisions and approvers are required in all CR forms
         // they will be automatically set by backend.
-        switch(item.name) {
+        switch (item.name) {
           case "effectiveDate": {
             return {
               ...acc,
@@ -89,7 +89,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
                 id: generateUuid(),
                 justificationOfChange: `string`,
                 descriptionOfChange: `string`,
-                proposedDocumentRevision: { id:generateUuid() },
+                proposedDocumentRevision: { id: generateUuid() },
               }],
             };
           }

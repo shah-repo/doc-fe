@@ -27,7 +27,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     const { fileName, fileShortName, fileType } = filePresenterState;
 
     function handleLoaded() {
-      switch(filePresenterState?.downloadType) {
+      switch (filePresenterState?.downloadType) {
         case "view":
           dialogState?.config({
             open: true,
@@ -51,8 +51,8 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
       filePresenterState?.setDownloadType(type);
       if (!file.url) { return; }
       handleLoaded();
-    }
-      
+    };
+
 
     useObserver(() => {
       loading = filePresenterState?.loading;

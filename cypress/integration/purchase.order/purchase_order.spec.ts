@@ -2,12 +2,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import { GroupTag } from "../../src/state/ducks/auth/types";
-import { SystemRequirement } from "../utils/context/systemRequirement";
-
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
+import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const runId = new Date().valueOf();
 let createdCompany;
@@ -101,7 +97,7 @@ context("Create company via API and create Purchase Order Form document", () => 
                   type: "LINK"
                 },
                 {
-                  label: "Approval Request List",
+                  label: "Approval Requests",
                   path: "/change_request",
                   type: "LINK"
                 },
@@ -178,7 +174,7 @@ context("Create company via API and create Purchase Order Form document", () => 
   });
 
   it("Click on 'Purchase Order' outputdocument type", () => {
-    cy.drSelectOutputDocType({ documentType: "Purchase Order" });
+    cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
   });
 
   it("Click 'Add New Field'", () => {
@@ -256,9 +252,9 @@ context("Create Purchase Order document with Product option from Form document",
     cy.poClickOnSpecificPOFromList({ item:"PO-00001" });
   });
 
-  it("Check status of PO - should be WIP - Draft", () => {
+  it("Check status of PO should be Draft", () => {
     SystemRequirement("REQ-1280")
-    cy.poCheckStatus( "Work In Progress" , "Draft" );
+    cy.poCheckStatus("Draft" );
   });
 
   it("Click on 'Add item' button", () => {
@@ -309,7 +305,7 @@ context("Create Purchase Order document with Product option from Form document",
     cy.poAddPOButtonClick();
   });
 
-  it("Check currency options dropdown", () => {
+  it.skip("Check currency options dropdown", () => {
     SystemRequirement("REQ-1320");
     cy.poCheckCurrency();
   });
@@ -334,7 +330,7 @@ context("Create Purchase Order document with Product option from Form document",
 
   it("Check Total value", () => {
     SystemRequirement("REQ-1440");
-    cy.poCheckAmount({ number: "\$12.65" });
+    cy.poCheckAmount({ number: "\$30.65" });
   });
 
   it("Enter description 'New Purchase Order'", () => {
@@ -361,9 +357,9 @@ context("Create Purchase Order document with Service option from Form document",
     cy.poCheckStatus( "PO-00002" );
   });
 
-  it("Check status of PO - should be WIP - Draft", () => {
+  it("Check status of PO should be Draft", () => {
     SystemRequirement("REQ-1280")
-    cy.poCheckStatus( "Work In Progress" , "Draft" );
+    cy.poCheckStatus( "Draft" );
   });
 
   it("Click on 'Add item' button", () => {
@@ -415,7 +411,7 @@ context("Create Purchase Order document with Service option from Form document",
     cy.poAddPOButtonClick();
   });
 
-  it("Check currency options dropdown", () => {
+  it.skip("Check currency options dropdown", () => {
     SystemRequirement("REQ-1320");
     cy.poCheckCurrency();
   });
@@ -440,7 +436,7 @@ context("Create Purchase Order document with Service option from Form document",
 
   it("Check Total value", () => {
     SystemRequirement("REQ-1440");
-    cy.poCheckAmount({ number: "\€12.00" });
+    cy.poCheckAmount({ number: "\€30.00" });
   });
 
   it("Check if total converted to dollars is shown", () => {
@@ -498,7 +494,7 @@ context("Creates second PO form document and checks if both documents are availa
   });
 
   it("Click on 'Purchase Order' outputdocument type", () => {
-    cy.drSelectOutputDocTypeSecondTime({ documentType: "Purchase Order" });
+    cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
   });
 
   it("Click 'Add New Field'", () => {
@@ -588,7 +584,7 @@ context("Test the filter inside PO", () => {
     cy.cmpNavigateToPurchaseOrder();
   });
 
-  it("Check if all filter values persist after changing landing page", () => {
+  it.skip("Check if all filter values persist after changing landing page", () => {
     SystemRequirement("REQ-1170");
     cy.filterCheckIfPOFilterPersists({ docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
     partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020" });

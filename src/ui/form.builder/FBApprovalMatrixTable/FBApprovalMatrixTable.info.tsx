@@ -1,5 +1,5 @@
 import { Box, Table, TableBody, TableHead, TableRow } from "@material-ui/core";
-import _ from "lodash";
+import { keys, map, values } from "lodash";
 import React from "react";
 import * as generateUuid from "uuid/v4";
 import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableInfoHead, FBApprovalMatrixTableProps, FBCheckbox, FBDocTypeGroup, FBMapWrapper, FBSelect, FBTableCell, FBTextField } from "..";
@@ -13,7 +13,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
     <Table className={classes?.tableInfo}>
       <TableHead>
         <TableRow>
-          <FBMapWrapper<string[]> collection={_.values(FBApprovalMatrixTableInfoHead)}>
+          <FBMapWrapper<string[]> collection={values(FBApprovalMatrixTableInfoHead)}>
             {(head: string, index) => (
               <FBTableCell
                 key={`fb-approval-matrix-column-${head}-${index}`}
@@ -83,7 +83,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
               defaultValue={generateUuid()}
               hidden={true}
             />
-            <FBMapWrapper<string[]> collection={_.keys(FBApprovalMatrixTableInfoHead)}>
+            <FBMapWrapper<string[]> collection={keys(FBApprovalMatrixTableInfoHead)}>
               {(key: keyof typeof FBApprovalMatrixTableInfoHead, index) => (
                 <>
                   {key === "trainingReq" && (
@@ -119,7 +119,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                           rules="required"
                           showErrorMsg={false}
                           // TODO: define options as static
-                          options={_.map(_.keys(FBDocTypeGroup), (k) =>
+                          options={map(keys(FBDocTypeGroup), (k) =>
                             ({ text: FBDocTypeGroup[k as keyof typeof FBDocTypeGroup], value: k })
                           )}
                           gutter={false}

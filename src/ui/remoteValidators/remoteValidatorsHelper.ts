@@ -4,31 +4,29 @@ import { VALIDATORS_HELPER_REMOTE_URL_URL } from "../../state/ducks/auth/constan
 import { store } from "../../state/store";
 import { IRemoteValidatorsHelper } from "./interfaces";
 
-const doApiRequest = (name: string, args: any[]) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const requestConfig: AxiosRequestConfig = {
-        method: "post",
-        url: VALIDATORS_HELPER_REMOTE_URL_URL,
-        data: {
-          name,
-          args,
-        },
-        headers: {
-          Authorization: `bearer ${store.getState().auth.user.employeeId}:${
-            store.getState().auth.user.sessionId
-          }`,
-        },
-      };
+const doApiRequest = async (name: string, args: any[]) => {
+  try {
+    const requestConfig: AxiosRequestConfig = {
+      method: "post",
+      url: VALIDATORS_HELPER_REMOTE_URL_URL,
+      data: {
+        name,
+        args,
+      },
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${
+          store.getState().auth.user.sessionId
+        }`,
+      },
+    };
 
-      const { data } = await apiClient.request(requestConfig);
-      // tslint:disable-next-line: no-console
-      console.log("doApiRequest response", data);
-      resolve(data);
-    } catch (error) {
-      reject(new Error("HTTP REQUEST FOR VALIDATORS FAILED"));
-    }
-  });
+    const { data } = await apiClient.request(requestConfig);
+    // eslint-disable-next-line no-console
+    console.log("doApiRequest response", data);
+    return data;
+  } catch (error) {
+    throw new Error("HTTP REQUEST FOR VALIDATORS FAILED");
+  }
 };
 
 export const RemoteValidatorHelper = new Proxy(

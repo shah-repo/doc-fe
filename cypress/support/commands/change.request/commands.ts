@@ -13,8 +13,7 @@ declare global {
       arEnterApprovalRequestTitle(params: { title: string }): Chainable<Subject>;
       arEnterApprovalRequestDescription(params: { description: string }): Chainable<Subject>;
       arClickAddDocument(): Chainable<Subject>;
-      arChoseProposedDocument(params: {name: string}): Chainable<Subject>;
-      arChoseSpecificProposedDocument(name: string): Chainable<Subject>;
+      arChoseSpecificProposedDocument(params: { name: string }): Chainable<Subject>;
       arEnterDescriptionAddDocumentsDialog(params: { description: string }): Chainable<Subject>;
       arEnterJustificationAddDocumentsDialog(params: { justification: string }): Chainable<Subject>;
       arClickAddBtnOnAddDocumentsDialog(): Chainable<Subject>;
@@ -93,8 +92,8 @@ Cypress.Commands.add("arChoseProposedDocument", ({ name }) => {
   cy.get("[role=listbox]>li").contains(name).click();
 });
 
-Cypress.Commands.add("arChoseSpecificProposedDocument", (name: string) => {
-  cy.get("[data-cy=\"proposedDocumentRevision\"]").type(`${name}{downarrow}{enter}`);
+Cypress.Commands.add("arChoseSpecificProposedDocument", (params: { name: string }) => {
+  cy.get("[data-cy=\"proposedDocumentRevision\"]").type(params.name + "{downarrow}{enter}");
 });
 
 Cypress.Commands.add("arEnterDescriptionAddDocumentsDialog", (params: { description: string }) => {
@@ -152,7 +151,7 @@ Cypress.Commands.add("arApproveAR", () => {
 });
 
 Cypress.Commands.add("arCheckTitleInEditableAndMatches", (params: { name: string }) => {
-  cy.get("[data-cy=\"SummaryBaseProps-values\"]").should("have.text", params.name);
+  cy.get("[id=\"HeaderInfo-name\"]").should("have.text", params.name);
 });
 
 Cypress.Commands.add("arWithdrawSubmission", () => {

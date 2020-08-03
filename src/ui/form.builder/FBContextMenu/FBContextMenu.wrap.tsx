@@ -42,12 +42,12 @@ export const withFBContextMenu = <T extends FBContextMenuProps>(
     };
 
     onClose = () => {
-      contextMenuState?.setPosition()
+      contextMenuState?.setPosition();
     };
 
     useObserver(() => {
       anchorPosition = contextMenuState?.anchorPosition;
-    })
+    });
 
     return Component({
       ...(props as T),

@@ -71,12 +71,12 @@ export const withFBApproval = <T extends FBApprovalProps>(
     }
 
     function isGroup(id?: string): boolean {
-      if(!id) {return false;}
+      if (!id) { return false; }
       return !isUndefined(getGroup(id));
     }
 
     function isApprovalRole(id?: string): boolean {
-      if(!id) {return false;}
+      if (!id) { return false; }
       return !isUndefined(getRole(id));
     }
 
@@ -87,7 +87,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
 
     function roleCheck(id: string): boolean {
       const roles = groupBy(getRole(id)?.joinedEmployees || [], "id");
-      return !isUndefined(roles[currentUser?.employeeId || ""])
+      return !isUndefined(roles[currentUser?.employeeId || ""]);
     }
 
     function approverStatus(id: string): string {
@@ -115,8 +115,8 @@ export const withFBApproval = <T extends FBApprovalProps>(
 
     function approverName(approver?: FBInlineApproverType): string {
       return (
-        (approver as Employee)?.user?.email || 
-        (approver as GroupRequestBody)?.name || 
+        (approver as Employee)?.user?.email ||
+        (approver as GroupRequestBody)?.name ||
         (approver as FBInlineApprovalRole)?.name ||
         ""
       );
@@ -184,7 +184,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       approvalRoles = approvalFieldState?.approvalRoles as unknown as FBInlineApprovalRole[];
       hasApproved = approvalFieldState?.hasApproved;
       loading = (
-        approvalFieldState?.approversApi.loading || 
+        approvalFieldState?.approversApi.loading ||
         approvalFieldState?.groupsApi.loading ||
         approvalFieldState?.approvalRolesApi.loading
       );
