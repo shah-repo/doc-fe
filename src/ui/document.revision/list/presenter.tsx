@@ -1,7 +1,8 @@
-import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
+import { Box, Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import _ from "lodash";
-import React from "react";
+import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
 import { stripTags } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -15,10 +16,13 @@ import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
+import useDialog from "../../hooks/useDialog";
 import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionQueryStatus, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
+import ExportListDialog from "./ExportListDialog./ExportListDialog";
 import styles from "./styles";
+
 
 export type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
@@ -192,6 +196,40 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       return docRev;
     });
 
+  const data = tableData.map((e) => ({
+    docId: e.document.docId,
+    revision: e.revision,
+    documentTitle: e.name,
+    type: e.document.documentType.documentTypeAcronym,
+    owner: e.owner.user.name,
+    crId: e.changeRequest?.crId,
+    status: e.status,
+    effectiveDate: e.effectiveDate,
+  }));
+
+  const documentTypeSearchName = documentTypeOptions.find((e) =>
+    e.value === tableCriteria.queryDict.documentTypeId)?.text;
+  const effectiveDateSearch = documentRevisionEffectiveDateOption().find((e) =>
+    e.value === tableCriteria.queryDict.effectiveDate)?.text;
+
+  const headers = [
+    { label: `DOC ID: ${tableCriteria.queryDict.docId  || ""}`, key: "docId" },
+    { label: `REVISION: ${tableCriteria.queryDict.revision  || ""}`, key: "revision" },
+    { label: `DOCUMENT TITLE: ${tableCriteria.queryDict.name  || ""}`, key: "documentTitle" },
+    { label: `TYPE: ${documentTypeSearchName || ""}`, key: "type" },
+    { label: `OWNER: ${tableCriteria.queryDict.owner || ""}`, key: "owner" },
+    { label: `AR ID: ${tableCriteria.queryDict.crId || ""}`, key: "crId" },
+    { label: `STATUS: ${tableCriteria.queryDict["status[]"] || ""}`, key: "status" },
+    { label: `EFFECTIVE DATE: ${effectiveDateSearch || ""}`, key: "effectiveDate" },
+  ];
+
+  const dialog = useDialog();
+  const [fileName, saveFileName] = useState("");
+  const handleOpen = () => {
+    dialog.open();
+    saveFileName("");
+  };
+
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
@@ -199,6 +237,23 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
       <Grid item={true} xs={6} style={{ textAlign: "right", marginBottom: "16px" }}>
+        <Button
+          variant="outlined"
+          color="primary"
+          className={classes.button}
+          style={{ marginRight: 5 }}
+          id="ListPresenter-export-list"
+          data-cy="document.revision.export.list"
+          onClick={handleOpen}
+        >
+          <Box marginRight={1}>
+            <ExportIcon className={classes.iconSvg} />
+          </Box>
+          <Text translation="document.revision.export.list" />
+        </Button>
+        <ExportListDialog
+          {...{ dialog, headers, data, fileName, saveFileName }}
+        />
         <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
           <Button
             variant="contained"
