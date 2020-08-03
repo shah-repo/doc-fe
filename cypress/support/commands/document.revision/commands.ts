@@ -2,6 +2,7 @@
 /* eslint-disable max-len */
 import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { CONFIG } from "../../config";
+import { CyRoutes } from "../../routes";
 
 
 export { };
@@ -26,17 +27,12 @@ declare global {
       drClickReviseDocument(): Chainable<Subject>;
       drClickTrainingRequired(): Chainable<Subject>;
       drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
-<<<<<<< HEAD
       drAddOutputDocType(params: { documentType: string }): Chainable<Subject>;
-      drReleaseDocument(params: { template: string }): Chainable<Subject>;
       drSelectOutputDocTypeSecondTime(params: { documentType: string }): Chainable<Subject>;
-=======
->>>>>>> 00d457481972c64b0300fc2211133a75040e2321
       drChooseTypeOfRevisionChangeOption(params: { option: string }): Chainable<Subject>;
       drDocumentFieldError(params: { field: string; message: string }): Chainable<Subject>;
       closeAllAlertMessages(): Chainable<Subject>;
       checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
-<<<<<<< HEAD
 
       /* Document Approval Matrix */
 
@@ -46,16 +42,17 @@ declare global {
       drEnterApprovingUsers(...employees: string[]): Chainable<Subject>;
       drAddApprovalRole(): Chainable<Subject>;
       drAddApprovalMatrixItem(): Chainable<Subject>;
-      drAddAMItemValue(params: { identity: string, value: string }): Chainable<Subject>;
+      drAddAMItemValue(params: { identity: string; value: string }): Chainable<Subject>;
       drAMInternalType(params: { value: string }): Chainable<Subject>;
       drAMCheckValue(params: { identity: string }): Chainable<Subject>;
-      drAMCheckRole(params: { stage: string, index: number }): Chainable<Subject>;
+      drAMCheckRole(params: { stage: string; index: number }): Chainable<Subject>;
       drUpgradeRevisionLevel(): Chainable<Subject>;
+      drRoleExistsAndChecked(params: { group: number; role: string }): Chainable<Subject>;
 
       /* Document Approval Matrix End */
-=======
       drCreateNewDocumentFromForm(): Chainable<Subject>;
->>>>>>> 00d457481972c64b0300fc2211133a75040e2321
+      drApproveAndReleaseDialog(): Chainable<Subject>;
+      drSelectTemplateReleaseDocument(params: { template: string }): Chainable<Subject>;
     }
   }
 }
@@ -95,7 +92,7 @@ Cypress.Commands.add("drEnterDocumentDescription", (params: { description: strin
 
 Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) => {
   cy.get("[data-cy=\"select.document.documentType.id\"]").click();
-  cy.get(`[data-cy=\"selectItem.document.documentType.id.${params.documentType}\"]`).click();
+  cy.get(`[data-cy="selectItem.document.documentType.id.${params.documentType}"]`).click();
 });
 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
@@ -103,36 +100,20 @@ Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: stri
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`);
 });
 
-<<<<<<< HEAD
-// TODO: Remove Hardcoded select number option and make this unique method for all output doc types
-Cypress.Commands.add("drSelectOutputDocType", (params: { documentType: string }) => {
-  cy.get("[id=\"formTemplate.outputDocumentTypes\"]").click();
-  cy.get("[id^=\"react-select-6-option\"]").contains(params.documentType).click();
-});
-
-// TODO: Remove Hardcoded select number option and make this unique method for all output doc types
-Cypress.Commands.add("drSelectOutputDocTypeSecondTime", (params: { documentType: string }) => {
-  cy.get("[id=\"formTemplate.outputDocumentTypes\"]").click();
-  cy.get("[id^=\"react-select-27-option\"]").contains(params.documentType).click();
-});
-
 Cypress.Commands.add("drAddOutputDocType", (params: { documentType: string }) => {
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`);
 });
 
-=======
->>>>>>> 00d457481972c64b0300fc2211133a75040e2321
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
-  cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 5 * 1000 }).click();
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
-  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
-});
 
-Cypress.Commands.add("drReleaseDocument", (params: { template: string }) => {
-  cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 5 * 1000 }).click();
-  cy.get("#FormList-selectForm").type(`${params.template}{enter}`);
-  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.ReleaseDocRev,
+    () => {
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+    });
 });
 
 Cypress.Commands.add("drClickCreateDocument", () => {
@@ -168,7 +149,7 @@ Cypress.Commands.add("drChangeOwnerFromMenu", (params: { employee: string }) => 
 Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
   cy.get("#OwnerChangerPresenter-changeOwner").click();
   cy.get("#employee").click();
-  cy.get(`[data-cy=\"selectItem.employee.${params.employee}\"]`).click();
+  cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
   cy.get("#OwnerChangerPresenter-submitButton").click();
 });
 
@@ -195,24 +176,19 @@ Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: { option: st
 
 Cypress.Commands.add("drDocumentFieldError", (params: { field: string; message: string }) => {
   cy.log("here");
-  cy.get(`[data-cy=\"${params.field}\"] .MuiFormHelperText-root.Mui-error`).should("have.text", params.message);
+  cy.get(`[data-cy="${params.field}"] .MuiFormHelperText-root.Mui-error`).should("have.text", params.message);
 });
 
-<<<<<<< HEAD
-Cypress.Commands.add('checkToastMessage', (params: { exists: boolean }) => {
-  cy.get('.Toastify').should((params.exists ? "not." : "") + "be.empty");
-=======
 Cypress.Commands.add("checkToastMessage", (params: { exists: boolean }) => {
-  cy.get(".Toastify__toast-container").should((params.exists ? "not." : "") + "be.empty");
+  cy.get(".Toastify").should((params.exists ? "not." : "") + "be.empty");
 });
 
 Cypress.Commands.add("closeAllAlertMessages", () => {
   cy.get(".Toastify__close-button").click({ multiple: true, force: true });
->>>>>>> 00d457481972c64b0300fc2211133a75040e2321
 });
 
 Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
-  cy.get("[id=\"PreviewControlsContainer-createNew\"]").click();
+  cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]", { timeout: 50 * 1000 }).click();
 });
 
 Cypress.Commands.add("drAddAnotherRoleBtn", () => cy.get("[data-cy=\"form.builder.add.another.role\"]").click());
@@ -220,24 +196,24 @@ Cypress.Commands.add("drAddAnotherRoleBtn", () => cy.get("[data-cy=\"form.builde
 Cypress.Commands.add("drEnterApprovalRole", (params: { name: string }) => cy.get("[data-cy=\"name\"]").type(params.name));
 
 Cypress.Commands.add("drEnterApprovingGroups", (...groups: string[]) => {
-  groups.forEach(group => {
+  groups.forEach((group) => {
     cy.get("[data-cy=\"groups\"]").click();
     cy.get(".MuiAutocomplete-popper").contains(group).click();
   });
 });
 
 Cypress.Commands.add("drEnterApprovingUsers", (...employees: string[]) => {
-  employees.forEach(employee => {
+  employees.forEach((employee) => {
     cy.get("[data-cy=\"employees\"]").click();
     cy.get(".MuiAutocomplete-popper").contains(employee).click();
-  })
+  });
 });
 
 Cypress.Commands.add("drAddApprovalRole", () => cy.get("[data-cy=\"common.add\"]").click());
 
 Cypress.Commands.add("drAddApprovalMatrixItem", () => cy.get("[data-cy=\"form.builder.add.item\"]").click({ force: true }));
 
-Cypress.Commands.add("drAddAMItemValue", (params: { identity: string, value: string }) => cy.get(`[data-cy=\"${params.identity}\"] input`).type(params.value, { force: true }));
+Cypress.Commands.add("drAddAMItemValue", (params: { identity: string; value: string }) => cy.get(`[data-cy="${params.identity}"] input`).type(params.value, { force: true }));
 
 Cypress.Commands.add("drAMInternalType", (params: { value: string }) => {
   // TODO: Add a better identifier to get internal type dropdown
@@ -245,11 +221,25 @@ Cypress.Commands.add("drAMInternalType", (params: { value: string }) => {
   cy.get(`.MuiButtonBase-root.MuiListItem-root`).contains(params.value).click();
 });
 
-Cypress.Commands.add("drAMCheckRole", (params: { stage: string, index: number }) => {
+Cypress.Commands.add("drAMCheckRole", (params: { stage: string; index: number }) => {
   // We are spotting approvalMatrix.approvalRoles.stage1.0
-  cy.get(`[data-cy=\"approvalMatrix.approvalRoles.${params.stage}.${params.index}\"]`).click({ force: true });
+  cy.get(`[data-cy="approvalMatrix.approvalRoles.${params.stage}.${params.index}"]`).click({ force: true });
 });
 
-Cypress.Commands.add("drAMCheckValue", (params: { identity: string }) => cy.get(`[data-cy=\"${params.identity}\"]`).click({ force: true }));
+Cypress.Commands.add("drAMCheckValue", (params: { identity: string }) => cy.get(`[data-cy="${params.identity}"]`).click({ force: true }));
 
-Cypress.Commands.add("drUpgradeRevisionLevel", () => cy.get(`[data-cy=\"upgradeNextRevisionStage\"]`).click({ force: true }));
+Cypress.Commands.add("drUpgradeRevisionLevel", () => cy.get(`[data-cy="upgradeNextRevisionStage"]`).click({ force: true }));
+
+Cypress.Commands.add("drRoleExistsAndChecked", (params: { group: number; role: string }) => {
+  cy.get(`[data-cy="group-${params.group}"]`).contains(params.role);
+  cy.get(`[data-cy="checked-${params.group}"]`).should("be.visible");
+});
+
+Cypress.Commands.add("drApproveAndReleaseDialog", () => {
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 5 * 1000 }).click();
+});
+
+Cypress.Commands.add("drSelectTemplateReleaseDocument", (params: { template: string }) => {
+  cy.get("#FormList-selectForm").type(`${params.template}{enter}`);
+  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+});

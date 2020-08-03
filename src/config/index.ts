@@ -95,6 +95,10 @@ class Config {
     return this.get("DATADOG_CLIENT_TOKEN");
   }
 
+  public static get DatadogEnabled(): boolean {
+    return ![this.DatadogApplicationId, this.DatadogClientToken].includes("fake");
+  }
+
   public static get EnvironmentName(): string {
     return this.get("ENV_NAME");
   }

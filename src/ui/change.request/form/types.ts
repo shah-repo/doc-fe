@@ -49,3 +49,9 @@ export interface EffectiveDateFormValues {
 export interface SelectTemplateFormValues {
   chosenFormId: string;
 }
+
+export interface TemplateOption {
+  label: string;
+  value: string;
+  docTypeId: string;
+}
