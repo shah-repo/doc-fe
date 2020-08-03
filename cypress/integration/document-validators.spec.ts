@@ -134,7 +134,6 @@ context("Validators tests", () => {
 
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocument();
-      cy.wait(8000);
     });
   });
 
@@ -467,7 +466,6 @@ context("Validators tests", () => {
 
     it("Approve and Release", () => {
       cy.drApproveAndReleaseDocument();
-      cy.wait(8000);
     });
 
   });
@@ -515,7 +513,6 @@ context("Validators tests", () => {
   context("Validation errors should prevent from releasing document", () => {
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocument();
-      cy.wait(8000);
     });
 
     it("Check returned errors are not empty", () => {
