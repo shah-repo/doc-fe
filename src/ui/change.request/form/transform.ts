@@ -53,3 +53,18 @@ export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues):
   return changeRequestEditRequestBody;
 };
 
+
+export const toChangeRequestUpdateRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
+  let changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
+    title: values.title,
+    description: values.description,
+    formInput: {
+      ...values.formInput,
+      effectiveDate: values.formInput?.effectiveDate === "" ? null : values.formInput?.effectiveDate,
+    },
+  };
+  if (!values.id) {
+    changeRequestEditRequestBody = { ...changeRequestEditRequestBody, documentType: values.documentType };
+  }
+  return changeRequestEditRequestBody;
+};
