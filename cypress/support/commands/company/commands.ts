@@ -1,5 +1,6 @@
 import { Company } from "../../../../src/state/ducks/company/types";
 import { CONFIG } from "../../config";
+import { CyRoutes } from "../../routes";
 
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
@@ -82,7 +83,12 @@ Cypress.Commands.add("cmpUpdateCompany", (
 
 Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: boolean }) => {
   if (params.multiple) {
-    cy.get("#root").contains(params.name).click();
+    cy.wrapWithWaitOnApiCalls([
+      CyRoutes.IOTCredentials,
+      CyRoutes.CompanyMine,
+    ], () => {
+      cy.get("#root").contains(params.name).click();
+    });
   }
 });
 

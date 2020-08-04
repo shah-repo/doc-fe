@@ -32,7 +32,7 @@ Cypress.Commands.add("navigListNotExistsCheck", (...list: NavigationItems[]) => 
 });
 
 Cypress.Commands.add("navigClickOnExpandButtons", (params: { navigItem: string }) => {
-  cy.wait(100).get("[data-cy=\"navigation." + params.navigItem + "\"]").wait(100).click();
+  cy.get("[data-cy=\"navigation." + params.navigItem + "\"]").should("be.visible").click();
 });
 
 Cypress.Commands.add("navigToDashboard", () => {

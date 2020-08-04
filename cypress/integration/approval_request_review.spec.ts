@@ -94,7 +94,6 @@ context("Approval request form scenario", () => {
 
   context("Open 'Create Document'", () => {
     it("Navigate to document list", () => {
-      cy.navigToDashboard(); // Should be fixed so that we can click menu item expand without clicking on dashboard
       cy.cmpNavigateToDocumentList();
     });
 

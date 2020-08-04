@@ -38,8 +38,16 @@ context(`Test: ${path.basename(__filename)}`, () => {
     it("Check navigation to see if default is shown", () => {
       cy.navigListExistsCheck(
         NavigationItems.DASHBOARD,
-        NavigationItems.DOCUMENT_LIST,
-        NavigationItems.APPROVAL_REQUEST );
+        NavigationItems.DOCUMENT_CONTROL);
+    });
+
+    it("Expand Document control and check navigation to see if default is shown", () => {
+      cy.navigClickOnExpandButtons({
+        navigItem: NavigationItems.DOCUMENT_CONTROL,
+      });
+      cy.navigListExistsCheck(
+        NavigationItems.APPROVAL_REQUEST,
+        NavigationItems.DOCUMENT_LIST);
     });
 
     it("Check navigation to see if user management and group management are not shown in default navigation", () => {
