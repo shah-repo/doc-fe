@@ -83,7 +83,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.navigToDocumentList();
   });
 
   it("Click on 'Create a document'", () => {
@@ -215,3 +215,4 @@ context("Create company via API and create Suppliers document", () => {
 });
 
 export { };
+

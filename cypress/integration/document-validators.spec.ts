@@ -563,8 +563,7 @@ context("Validators tests", () => {
         const errorBlock = $elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredIfFieldLabel} 
-          field is required when ${requiredFieldLabel} is ${requiredIfFieldValue}.`);
+          .should("have.text", `The ${requiredIfFieldLabel} field is required when ${requiredFieldLabel} is ${requiredIfFieldValue}.`);
       });
     });
 
@@ -588,8 +587,7 @@ context("Validators tests", () => {
         const errorBlock = $elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredIfInFieldLabel} 
-          field is required when ${requiredIfFieldLabel} includes , .`);
+          .should("have.text", `The ${requiredIfInFieldLabel} field is required when ${requiredIfFieldLabel} includes , .`);
       });
     });
 
@@ -613,8 +611,7 @@ context("Validators tests", () => {
         const errorBlock = $elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredWithFieldLabel} 
-          field is required when ${requiredIfInFieldLabel} is not empty.`);
+          .should("have.text", `The ${requiredWithFieldLabel} field is required when ${requiredIfInFieldLabel} is not empty.`);
       });
     });
 
@@ -634,8 +631,7 @@ context("Validators tests", () => {
         const errorBlock = $elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredWithoutFieldLabel} 
-          field is required when ${requiredWithFieldLabel} is empty.`);
+          .should("have.text", `The ${requiredWithoutFieldLabel} field is required when ${requiredWithFieldLabel} is empty.`);
       });
     });
 
