@@ -5,7 +5,7 @@ import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeByIdState, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
@@ -98,7 +98,7 @@ DocumentRevisionFormContainerProps
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const bannerPortal = React.useRef(null);
-  const { status, revisionStage } = documentRevision || {};
+  const { revisionStage } = documentRevision || {};
   const cleanInitialValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
     const { outputRevision } = initialValues;
@@ -169,7 +169,9 @@ DocumentRevisionFormContainerProps
   } else if (outputGroup) {
     mode = "form";
   }
-  const showOnlyAdministrativeChange = isOutput && status === DocumentRevisionStatus.Draft && revisionStage === 3;
+  const showOnlyAdministrativeChange = isOutput &&
+  revisionStage === 3 &&
+  (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
 
   const GetScheme = (props: FormikProps<DocumentRevisionFormValues>): FBSchemaProps[] => {
     const { id: documentTypeId = "" } = props.values.document?.documentType || {};
