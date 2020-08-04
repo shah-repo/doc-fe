@@ -22,5 +22,8 @@
   },
   "approveIsBlocking": {
     "text": "form.builder.blocking"
+  },
+  "approvalNonVersioned": {
+    "text": "form.builder.approval.non.versioned"
   }
 }
