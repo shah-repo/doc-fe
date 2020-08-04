@@ -37,7 +37,7 @@ export const FormListContent: React.FunctionComponent<Props> = ({
   );
 
   const setFormValues = (option) => {
-    setchosenTypeId(option.documentType);
+    setchosenTypeId(option.docTypeId);
     setChosenFormId(option.value);
   };
 
