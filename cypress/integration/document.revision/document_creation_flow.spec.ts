@@ -203,8 +203,8 @@ context("Document Creation Flow", () => {
         cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
       });
 
-      it("Check one attachment is displayed: test.docx", () => {
-        cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx" ] });
+      it("Check two attachments are displayed: test.docx, image.jpg", () => {
+        cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx", "image.jpg" ] });
       });
     });
   });

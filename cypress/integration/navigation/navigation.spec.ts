@@ -32,7 +32,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Click to expand Document Control", () => {
-      cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+      cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
     });
 
     it("Check navigation to see if default is shown", () => {
@@ -42,7 +42,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Expand Document control and check navigation to see if default is shown", () => {
-      cy.navigClickOnExpandButtons({
+      cy.navigClickOnItem({
         navigItem: NavigationItems.DOCUMENT_CONTROL,
       });
       cy.navigListExistsCheck(
@@ -139,8 +139,8 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Click to expand Document Control", () => {
-      cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
-      cy.navigClickOnExpandButtons({ navigItem: NavigationItems.MANUFACTURING });
+      cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+      cy.navigClickOnItem({ navigItem: NavigationItems.MANUFACTURING });
     });
 
     it("Check navigation to see if admin navigation is shown", () => {

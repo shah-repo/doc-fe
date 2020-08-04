@@ -105,7 +105,7 @@ context("Validators tests", () => {
 
     context("Open 'Create Document'", () => {
       it("Navigate to document list", () => {
-        cy.cmpNavigateToDocumentList();
+        cy.navigToDocumentList();
       });
 
       it("Click on 'create a document'", () => {
@@ -139,7 +139,7 @@ context("Validators tests", () => {
 
   context("Open 'Create Document'", () => {
     it("Navigate to document list", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Click on 'create a document'", () => {

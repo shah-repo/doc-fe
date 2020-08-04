@@ -154,7 +154,7 @@ context("Create company via API and create Purchase Order Form document", () => 
   });
 
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.navigToDocumentList();
   });
 
   it("Click on 'Create a document'", () => {
@@ -204,7 +204,7 @@ context("Create company via API and create Purchase Order Form document", () => 
 
 context("Create Part document for PO", () => {
   it("Navigates to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.navigToDocumentList();
   });
 
   it("Clicks on 'create a document' button", () => {
@@ -474,7 +474,7 @@ context("Creates second line item and checks ID and if all line item details are
 
 context("Creates second PO form document and checks if both documents are available when creating new PO", () => {
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.navigToDocumentList();
   });
 
   it("Click on 'Create a document'", () => {
@@ -577,7 +577,7 @@ context("Test the filter inside PO", () => {
   });
 
   it("Navigate to Document List", () => {
-    cy.wait(1000).cmpNavigateToDocumentList();
+    cy.wait(1000).navigToDocumentList();
   });
 
   it("Navigate to Purchase Order", () => {

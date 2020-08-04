@@ -10,11 +10,10 @@ declare global {
     interface Chainable<Subject> {
       navigListExistsCheck(...list: NavigationItems[]): Chainable<Subject>;
       navigListNotExistsCheck(...list: NavigationItems[]): Chainable<Subject>;
-      navigClickOnExpandButtons(params: { navigItem: NavigationItems }): Chainable<Subject>;
+      navigClickOnItem(params: { navigItem: NavigationItems }): Chainable<Subject>;
       navigToDashboard(): Chainable<Subject>;
       navigToDocumentList(): Chainable<Subject>;
       navigToApprovalRequestList(): Chainable<Subject>;
-      navigToPurchaseOrder(): Chainable<Subject>;
     }
   }
 }
@@ -31,25 +30,24 @@ Cypress.Commands.add("navigListNotExistsCheck", (...list: NavigationItems[]) => 
   });
 });
 
-Cypress.Commands.add("navigClickOnExpandButtons", (params: { navigItem: string }) => {
-  cy.get("[data-cy=\"navigation." + params.navigItem + "\"]").should("be.visible");
-  cy.get("[data-cy=\"navigation." + params.navigItem + "\"]").click();
+Cypress.Commands.add("navigClickOnItem", (params: { navigItem: string }) => {
+  // cy.wait(200).get("[data-cy=\"navigation." + params.navigItem + "\"]").should("be.visible");
+  cy.get("[data-cy=\"navigation." + params.navigItem + "\"]").click({ force: true });
 });
 
 Cypress.Commands.add("navigToDashboard", () => {
-  cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DASHBOARD });
+  cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
 });
 
 Cypress.Commands.add("navigToDocumentList", () => {
-  cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
-  cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_LIST });
+  cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
+  cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+  cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_LIST });
 });
 
 Cypress.Commands.add("navigToApprovalRequestList", () => {
-  cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
-  cy.navigClickOnExpandButtons({ navigItem: NavigationItems.APPROVAL_REQUEST });
+  cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
+  cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+  cy.navigClickOnItem({ navigItem: NavigationItems.APPROVAL_REQUEST });
 });
 
-Cypress.Commands.add("navigToPurchaseOrder", () => {
-  cy.get("[data-cy=\"navigation.purchaseOrder\"]").click();
-});

@@ -81,7 +81,7 @@ context("Document Creation Flow", () => {
 
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Clicks on 'create a document' button", () => {
@@ -136,3 +136,4 @@ context("Document Creation Flow", () => {
 });
 
 export { };
+

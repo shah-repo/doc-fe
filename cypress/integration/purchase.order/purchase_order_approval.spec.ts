@@ -159,7 +159,7 @@ context("Create company via API and create Purchase Order Form document", () => 
   });
 
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.navigToDocumentList();
   });
 
   it("Click on 'Create a document'", () => {
@@ -209,7 +209,7 @@ context("Create company via API and create Purchase Order Form document", () => 
 
 context("Create Purchase Order Approval Matrix document with from Form document", () => {
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.navigToDocumentList();
   });
 
   it("Click on 'Create a document'", () => {
@@ -457,3 +457,4 @@ context("Test the POAM when approving Purchase Order", () => {
 });
 
 export { };
+

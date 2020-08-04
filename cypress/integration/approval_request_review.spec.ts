@@ -94,7 +94,7 @@ context("Approval request form scenario", () => {
 
   context("Open 'Create Document'", () => {
     it("Navigate to document list", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Click on 'create a document'", () => {
@@ -131,7 +131,7 @@ context("Approval request form scenario", () => {
 
   context("Open 'Create Document'", () => {
     it("Navigate to document list", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Click on 'create a document'", () => {
@@ -164,7 +164,7 @@ context("Approval request form scenario", () => {
 
   context("Create approval request with newly created form", () => {
     it("Navigate to approval request list", () => {
-      cy.cmpNavigateToApprovalRequestList();
+      cy.navigToApprovalRequestList();
     });
 
     it("Click Create a Approval Request button", () => {
@@ -267,7 +267,7 @@ context("Approval request form scenario", () => {
   context("Prevent the addition of documents that are already included on another approval request", () => {
     it("Navigate to approval request list", () => {
       SystemRequirement("REQ-0860");
-      cy.cmpNavigateToApprovalRequestList();
+      cy.navigToApprovalRequestList();
     });
 
     it("Click Create a Approval Request button", () => {
@@ -319,7 +319,7 @@ context("Approval request form scenario", () => {
 
   context("Record the date and time stamp for approval and rejections", () => {
     it("Navigate to approval request list", () => {
-      cy.cmpNavigateToApprovalRequestList();
+      cy.navigToApprovalRequestList();
     });
 
     it("Select first document", () => {
