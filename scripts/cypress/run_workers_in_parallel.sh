@@ -37,15 +37,20 @@ echo "CI_BUILD_ID: $CI_BUILD_ID"
 echo " "
 
 function prepend() { while read line; do echo "${1}${line}"; done; }
+function runNode() { 
+  ./scripts/cypress/run_node.sh 2>&1 | prepend "Worker ${1} | " | tee -a $ENLIL_WORKER_LOG_FILE
+ }
 
 for((i=1; i <= $NUMBER_OF_WORKERS; i+=1))
 do
   echo "Started worker: $i"
   # ./scripts/cypress/run_node.sh  2>/dev/null || true  &
-  ./scripts/cypress/run_node.sh 2>&1 | prepend "Worker $i | " | tee -a $ENLIL_WORKER_LOG_FILE || true  &
+  runNode $i || true  &
   pids[${i}]=$!
 done
 
 for pid in ${pids[*]}; do
     wait $pid
 done
+
+echo "Workers finished"
