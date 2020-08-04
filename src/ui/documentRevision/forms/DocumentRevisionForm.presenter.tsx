@@ -57,6 +57,7 @@ export interface Props
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
   bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
   isNewVersion?: boolean;
+  showOnlyAdministrativeChange: boolean;
 }
 
 interface FormHeaderContext {
@@ -97,6 +98,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   FBContainer,
   bannerPortal,
   isNewVersion = false,
+  showOnlyAdministrativeChange,
 }) => {
 
   useScrollIntoView();
@@ -255,7 +257,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         {
           showRevisionTypeChange &&
             <RevisionTypeChange
-              {...{ documentTypeId, showObsoleteRevisionChange }}
+              {...{ documentTypeId, showObsoleteRevisionChange, showOnlyAdministrativeChange }}
               isDisabled={isDisabledInput}
             />
         }
