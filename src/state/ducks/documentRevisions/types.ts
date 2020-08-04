@@ -239,7 +239,7 @@ export interface DataTable {
   owner: string;
   crId: string | undefined;
   status: string;
-  effectiveDate: Date | undefined;
+  effectiveDate: string | undefined;
 }
 
 
