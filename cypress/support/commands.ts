@@ -20,6 +20,7 @@ declare global {
       unClick(): Chainable<Subject>;
       myCompanies(token: string): Chainable<Subject>;
       wrapWithWaitOnApiCall(name: CyRoutes, callback: () => void, options?: Partial<CyWaitOptions>): Chainable<Subject>;
+      wrapWithWaitOnApiCalls(names: CyRoutes[], callback: () => void, options?: Partial<CyWaitOptions>): Chainable<Subject>;
     }
   }
 }
@@ -108,14 +109,28 @@ Cypress.Commands.add("unClick", () => {
   cy.get("#root>div>div>header").click();
 });
 
+
 Cypress.Commands.add(
-  "wrapWithWaitOnApiCall",
-  (name: CyRoutes, callback: () => void, options?: Partial<CyWaitOptions>) => {
-    const { requestConfig, callConfig } = routes[name];
+  "wrapWithWaitOnApiCalls",
+  (names: CyRoutes[], callback: () => void, options?: Partial<CyWaitOptions>) => {
     cy.server();
-    cy.route(requestConfig).as(name);
+    names.forEach((name) => {
+      const { requestConfig } = routes[name];
+      cy.route(requestConfig).as(name);
+
+    });
 
     callback();
 
-    cy.wait(`@${name}`, Object.assign({}, callConfig, options));
+    names.forEach((name) => {
+      const {  callConfig } = routes[name];
+      cy.wait(`@${name}`, Object.assign({}, callConfig, options));
+    });
   });
+
+Cypress.Commands.add(
+  "wrapWithWaitOnApiCall",
+  (name: CyRoutes, callback: () => void, options?: Partial<CyWaitOptions>) => {
+    cy.wrapWithWaitOnApiCalls([name], callback, options);
+  });
+
