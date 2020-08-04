@@ -15,7 +15,6 @@ declare global {
       */
       createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
-      login(params: { email: string; password: string }): Chainable<Subject>;
       selectCompany(params: { name: string }): Chainable<Subject>;
       unClick(): Chainable<Subject>;
       myCompanies(token: string): Chainable<Subject>;
@@ -92,13 +91,6 @@ Cypress.Commands.add("apiLogin", (params: { email: string; password: string }) =
   }).then((response) =>
     response.body.sessionId
   );
-});
-
-Cypress.Commands.add("login", (params: { email: string; password: string }) => {
-  cy.visit(CONFIG.FE_URL);
-  cy.get("[data-cy=\"LoginFormPresenter-email\"]", { timeout: 10 * 1000 }).type(params.email)
-    .get("[data-cy=\"LoginFormPresenter-password\"]").type(params.password)
-    .get("[data-cy=\"LoginFormPresenter-submit\"]").click();
 });
 
 Cypress.Commands.add("selectCompany", (params: { name: string }) => {

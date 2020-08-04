@@ -1,3 +1,4 @@
+import { CyRoutes } from "../../routes";
 
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
@@ -20,23 +21,29 @@ declare global {
 
 Cypress.Commands.add("atchUploadAttachment", (params: {fileName: string }) => {
   cy.fixture(params.fileName).then((fileContent) => {
-    cy.get("#AttachmentFieldPresenter-linkButton").click();
-    cy.get("#attachments-button-file-clean-copy").attachFile({
-      fileContent: fileContent.toString(),
-      fileName: params.fileName,
-      mimeType: "*",
-      filePath: `fixtures/${params.fileName}`,
-    }).wait(5000);
+    cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
+      cy.get("#AttachmentFieldPresenter-linkButton").click();
+      cy.get("#attachments-button-file-clean-copy").attachFile({
+        fileContent: fileContent.toString(),
+        fileName: params.fileName,
+        mimeType: "*",
+        filePath: `fixtures/${params.fileName}`,
+      });
+    });
   });
 });
 
 Cypress.Commands.add("atchSetPrimaryAttachment", (params: {fileName: string }) => {
-  cy.get(`button[title=\"${params.fileName}\"]`).rightclick();
-  cy.get("[data-cy=\"set.attachment.as.primary\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.SetPrimaryAttachment, () => {
+    cy.get(`button[title="${params.fileName}"]`).rightclick();
+    cy.get("[data-cy=\"set.attachment.as.primary\"]", { timeout: 1000 }).click();
+  });
 });
 
 Cypress.Commands.add("atchRemoveLastAttachment", () => {
-  cy.get("[id=AttachmentIconPresenter-handleRemove]").last().click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+    cy.get("[id=AttachmentIconPresenter-handleRemove]").last().click();
+  });
 });
 
 Cypress.Commands.add("atchCheckForSinglePrimaryAttachment", () => {
