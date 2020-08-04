@@ -41,11 +41,13 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       cmpCreateCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
-      cmpUpdateCompany(params: { employeeId: string; sessionId: string; payload: Partial<Company> }): Chainable<Subject>;
+      cmpUpdateCompany(params: { employeeId: string; sessionId: string;
+        payload: Partial<Company>;}): Chainable<Subject>;
       cmpSelectCompany(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpClickCreateNewDocument(): Chainable<Subject>;
       cmpClickCreateApprovalRequest(): Chainable<Subject>;
       cmpNavigateToPurchaseOrder(): Chainable<Subject>;
+      cmpNavigateToSuppliers(): Chainable<Subject>;
     }
   }
 }
@@ -98,6 +100,10 @@ Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
 
 Cypress.Commands.add("cmpNavigateToPurchaseOrder", () => {
   cy.get("[data-cy=\"navigation.purchaseOrder\"]").click({ force: true });
+});
+
+Cypress.Commands.add("cmpNavigateToSuppliers", () => {
+  cy.get("[data-cy=\"navigation.suppliers\"]").click().wait(500);
 });
 
 export function cmpFilterDocumentTypeIdByName(companyResponse: Company, documentTypeName: string) {

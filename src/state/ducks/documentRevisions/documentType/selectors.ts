@@ -1,9 +1,9 @@
 import _ from "lodash";
 import { createSelector } from "reselect";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../../../ui/common/utils/helpers";
+import { FBDocTypeGroup } from "../../../../ui/form.builder/FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 import { ApplicationState } from "../../../reducers";
 import { AsyncState } from "../../../types";
-import { RECORD_GROUP_TYPES } from "./constants";
 import { DocumentType } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentType.allIds;
@@ -51,13 +51,13 @@ const getDocumentTypeOptions = createSelector(
       , ["text"], ["asc"]),
 );
 
-const getDocumentTypeOptionsWithoutRecords = createSelector(
+const getDocumentTypeOptionsForDocumentList = createSelector(
   allIds, byId,
   (ids, documentTypes) =>
     _.orderBy(
       ids
-        .filter((id) => !RECORD_GROUP_TYPES.includes(documentTypes[id].group)
-        ).map((id) => ({
+        .filter((id) => documentTypes[id].group === FBDocTypeGroup.OTHER)
+        .map((id) => ({
           value: documentTypes[id].id,
           text: removeLastCharacterIfNotAlphaNumeric(documentTypes[id].documentTypeAcronym),
         }))
@@ -99,7 +99,7 @@ export default {
   getDocumentTypeList,
   getDocumentTypeFormOptions,
   getDocumentTypeOptions,
-  getDocumentTypeOptionsWithoutRecords,
+  getDocumentTypeOptionsForDocumentList,
   getLoadListAsyncState,
   getDocumentTypeById,
   getDocumentTypesWithPageDetails,

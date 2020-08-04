@@ -16,3 +16,33 @@ export const SET_DOCUMENT_TYPES_BY_CATEGORY = "documentType/SET_CATEGORY";
 
 export const RECORD_GROUP_TYPES: DocumentGroupType[] = ["PO", "SUPPLIER", "RECORD"];
 export const DOCUMENT_GROUP_TYPES: DocumentGroupType[] = ["DAM", "DYNAMIC_FORM", "FORM", "MPI", "OTHER", "PART", "POAM", "WORK_ORDER"];
+
+export const DOCUMENT_LIST_TYPE_NAMES = [
+  "Clinical Document",
+  "Clinical Protocol",
+  "Clinical Report",
+  "Indications for Use",
+  "Product User Needs Document",
+  "Requirements Document",
+  "Design Document",
+  "Risk Management Documents",
+  "Method",
+  "Protocol or plan",
+  "Report",
+  "Labeling",
+  "Quality Specification",
+  "Equipment Specification",
+  "Non-product Software",
+  "Supply Item",
+  "Marketing",
+  "Model / Catalog Number",
+  "Administrative",
+  "Quality Manual",
+  "Quality Plan",
+  "Standard Operating Procedure",
+  "General Quality Document",
+  "Work Instruction",
+  "Training Curriculum",
+  "Legal Document",
+  "Business Document",
+];
