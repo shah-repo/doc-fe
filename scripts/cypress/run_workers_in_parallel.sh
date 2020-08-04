@@ -38,7 +38,7 @@ echo " "
 
 function prepend() { while read line; do echo "${1}${line}"; done; }
 function runNode() { 
-  ./scripts/cypress/run_node.sh 2>&1 | prepend "Worker ${1} | " | tee -a $ENLIL_WORKER_LOG_FILE
+  ./scripts/cypress/run_node.sh 2>/dev/null | prepend "Worker ${1} | " | tee -a $ENLIL_WORKER_LOG_FILE
  }
 
 for((i=1; i <= $NUMBER_OF_WORKERS; i+=1))
