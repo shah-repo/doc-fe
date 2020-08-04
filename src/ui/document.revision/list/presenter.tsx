@@ -1,8 +1,10 @@
 import { Box, Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { isString, set } from "lodash";
+import moment from "moment";
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
+import { TIME_ZONE } from "../../../common/utils/date";
 import { stripTags } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -212,7 +214,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     owner: e.owner.user.name,
     crId: e.changeRequest?.crId,
     status: e.status,
-    effectiveDate: e.effectiveDate,
+    effectiveDate: e.effectiveDate ? moment(e.effectiveDate).tz(TIME_ZONE, true).format("M/D/YYYY") : "",
   }));
 
   const documentTypeSearchName = documentTypeOptions.find((e) =>
