@@ -70,6 +70,7 @@ export interface DocumentTypeByIdForm {
   name: string;
   id: string;
   document: DocumentForms;
+  formInput?: Record<string, any>;
   formTemplate?: FBFormTemplateProps;
 }
 

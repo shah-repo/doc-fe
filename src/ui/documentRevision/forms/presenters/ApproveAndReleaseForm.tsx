@@ -1,12 +1,13 @@
 import { Box, Button } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
-import _, { Dictionary } from "lodash";
+import { Dictionary } from "lodash";
 import * as React from "react";
 import * as generateUuid from "uuid/v4";
 import { Group } from "../../../../state/ducks/auth/types";
 import { Owner } from "../../../../state/ducks/common/types";
 import { AsyncState, AsyncStatus } from "../../../../state/types";
 import Approvers from "../../../change.request/form/approvers";
+import { TemplateOption } from "../../../change.request/form/types";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
@@ -23,7 +24,7 @@ interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   isQms: boolean;
   documentTypeGroups: Group[];
   owner: Owner;
-  templateOptions: any[];
+  templateOptions: TemplateOption[];
   selectedInvalid: boolean;
   setFormDocument: (value: string) => void;
   setDocumentType: (value: string) => void;
@@ -46,18 +47,6 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   selectedInvalid,
 }) => {
   const classes = styles();
-
-  const formTemplateOptions = _.flatten(
-    templateOptions.map((template) =>
-      template.forms.map((form) => ({
-        documentType: template.documentType.id,
-        schema: form.formTemplate?.schema || form.formDocument?.formDocument?.formTemplate,
-        formInput: form.formInput,
-        label: form.name,
-        value: form.id,
-      }))
-    )
-  );
 
   const validateSelectedForm = (option: any) => {
     const { schema } = option || {};
@@ -112,23 +101,32 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
     });
   };
 
+
+  if (templateOptions.length === 1) {
+    setFormDocument(templateOptions[0].value);
+    setDocumentType(templateOptions[0].docTypeId);
+    validateSelectedForm(templateOptions[0]);
+  }
+
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
       {isQms && <Approvers owner={owner} withoutCurrentUser={true} values={values}
         documentTypeGroups={documentTypeGroups} />}
-      <AutocompleteField
-        name="formDocument"
-        size="sm"
-        label="common.approve.and.release.template"
-        autocompleteProps={{ id: "FormList-selectForm" }}
-        options={formTemplateOptions}
-        onClick={(option) => {
-          setFormDocument(option.value);
-          setDocumentType(option.documentType);
-          validateSelectedForm(option);
-        }}
-      />
+      {templateOptions.length > 1 && (
+        <AutocompleteField
+          name="formDocument"
+          size="sm"
+          label="common.approve.and.release.template"
+          autocompleteProps={{ id: "FormList-selectForm" }}
+          options={templateOptions}
+          onClick={(option) => {
+            setFormDocument(option.value);
+            setDocumentType(option.docTypeId);
+            validateSelectedForm(option);
+          }}
+        />
+      )}
       {selectedInvalid && (
         <Box mt={-3} mb={3} color={Colors.medium_blue}>
           <Text translation="document.revision.tpl.invalid" />
