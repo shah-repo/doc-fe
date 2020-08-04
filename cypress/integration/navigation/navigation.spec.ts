@@ -146,13 +146,24 @@ context(`Test: ${path.basename(__filename)}`, () => {
     it("Check navigation to see if admin navigation is shown", () => {
       cy.navigListExistsCheck(
         NavigationItems.DASHBOARD,
-        NavigationItems.DOCUMENT_LIST,
-        NavigationItems.APPROVAL_REQUEST,
         NavigationItems.USER_MANAGEMENT,
         NavigationItems.GROUP_MANAGEMENT,
         NavigationItems.PURCHASE_ORDERS,
         NavigationItems.SUPPLIERS,
         NavigationItems.RECEIVING,
+      );
+
+      cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+
+      cy.navigListExistsCheck(
+        NavigationItems.DOCUMENT_LIST,
+        NavigationItems.APPROVAL_REQUEST,
+      );
+
+
+      cy.navigClickOnItem({ navigItem: NavigationItems.MANUFACTURING });
+
+      cy.navigListExistsCheck(
         NavigationItems.WORK_ORDERS,
         NavigationItems.LOTS,
       );

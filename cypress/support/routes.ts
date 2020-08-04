@@ -36,7 +36,7 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/release/*",
     },
     callConfig: {
-      responseTimeout: 25 * 1000,
+      responseTimeout: 45 * 1000,
     },
   },
   ARtoReview: {

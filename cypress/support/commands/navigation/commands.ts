@@ -11,6 +11,7 @@ declare global {
       navigListExistsCheck(...list: NavigationItems[]): Chainable<Subject>;
       navigListNotExistsCheck(...list: NavigationItems[]): Chainable<Subject>;
       navigClickOnItem(params: { navigItem: NavigationItems }): Chainable<Subject>;
+      navigToNestedItem(params: {navigItems: NavigationItems[]}): Chainable<Subject>;
       navigToDashboard(): Chainable<Subject>;
       navigToDocumentList(): Chainable<Subject>;
       navigToApprovalRequestList(): Chainable<Subject>;
@@ -39,14 +40,37 @@ Cypress.Commands.add("navigToDashboard", () => {
 });
 
 Cypress.Commands.add("navigToDocumentList", () => {
-  cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
-  cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
-  cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_LIST });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DOCUMENT_CONTROL,
+      NavigationItems.DOCUMENT_LIST,
+    ],
+  });
 });
 
 Cypress.Commands.add("navigToApprovalRequestList", () => {
-  cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
-  cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
-  cy.navigClickOnItem({ navigItem: NavigationItems.APPROVAL_REQUEST });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DOCUMENT_CONTROL,
+      NavigationItems.APPROVAL_REQUEST,
+    ],
+  });
 });
 
+
+Cypress.Commands.add("navigToNestedItem", (params: {navigItems: NavigationItems[]}) => {
+  if (params.navigItems.length === 1) {
+    cy.navigClickOnItem({ navigItem: params.navigItems[0] });
+  } else {
+    const [first, second, ...other] = params.navigItems;
+    cy.get("body").then(($body) => {
+      if ($body.find("[data-cy=\"navigation." + second + "\"]").length === 0) {
+
+        cy.navigClickOnItem({ navigItem: first });
+        cy.navigToNestedItem({ navigItems: [second, ...other] });
+      } else {
+        cy.navigToNestedItem({ navigItems: [second, ...other] });
+      }
+    });
+  }
+});
