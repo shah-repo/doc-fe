@@ -1,5 +1,5 @@
 import { Box, Button, Grid, WithStyles, withStyles } from "@material-ui/core";
-import _ from "lodash";
+import { isString, set } from "lodash";
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
@@ -7,6 +7,7 @@ import { stripTags } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { DOCUMENT_LIST_TYPE_NAMES } from "../../../state/ducks/documentRevisions/documentType/constants";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../common/utils/helpers";
 import Date from "../../components/Date";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -144,7 +145,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         editDocumentRevision(rowData.id, rowData.document.id),
       searchOptions: {
         dataKey: "status[]",
-        defaultValue: _.isString(tableCriteria.queryDict["status[]"])
+        defaultValue: isString(tableCriteria.queryDict["status[]"])
           ? tableCriteria.queryDict["status[]"]
           : undefined,
         searchType: "select",
@@ -185,16 +186,23 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     // },
   ];
 
-  const customDataSet = (data: DocumentRevision[]) =>
-    data.map((docRev) => {
-      _.set(docRev, "description", stripTags(docRev.description));
-      _.set(
-        docRev,
-        "document.documentType.documentTypeAcronym",
-        removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
-      );
-      return docRev;
-    });
+  const customDataSet = (data: DocumentRevision[]) => {
+    const customData = data
+      .reduce<DocumentRevision[]>((acc, docRev) => {
+        if (docRev.document.documentType.documentTypeName
+        && DOCUMENT_LIST_TYPE_NAMES.includes(docRev.document.documentType.documentTypeName)) {
+          set(docRev, "description", stripTags(docRev.description));
+          set(
+            docRev,
+            "document.documentType.documentTypeAcronym",
+            removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
+          );
+          acc.push(docRev);
+        }
+        return acc;
+      }, []);
+    return customData;
+  };
 
   const data = tableData.map((e) => ({
     docId: e.document.docId,

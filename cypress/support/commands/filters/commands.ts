@@ -15,6 +15,7 @@ declare global {
         supplier: string; partNumber: string; amount: string; owner: string; issueDate: string; }): Chainable<Subject>;
       filterCheckNumberOfDisplayedRecords(params: { numberOfRecords: string }): Chainable<Subject>;
       filterGetFirstValueFromList(params: { value: string }): Chainable<Subject>;
+      filterSupplierTitle(params: {name: string}): Chainable<Subject>;
     }
   }
 }
@@ -63,4 +64,8 @@ Cypress.Commands.add("filterCheckHeaderValues", (...list: string[]) => {
 
 Cypress.Commands.add("filterGetFirstValueFromList", (params: { value: string }) => {
   cy.get("[class*=\"ReactVirtualized__Table__row\"]").first().contains(params.value).should("exist");
+});
+
+Cypress.Commands.add("filterSupplierTitle", (params: {name: string}) => {
+  cy.get("[id=\"name\"]").click().type(params.name);
 });

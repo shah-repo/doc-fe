@@ -408,6 +408,7 @@ context("Test the POAM when approving Purchase Order", () => {
   });
 
   it("Click on 'Add Approver'", () => {
+    SystemRequirement("REQ-1490");
     cy.poAMCheckForApproval();
   });
 
@@ -416,6 +417,7 @@ context("Test the POAM when approving Purchase Order", () => {
   });
 
   it("Create document in 'Pending for approval' state", () => {
+    SystemRequirement("REQ-1490");
     cy.poAMApproveButton();
   });
 

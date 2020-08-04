@@ -1,5 +1,6 @@
 import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
+import { flatten } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -8,9 +9,10 @@ import { Group, Permission } from "../../../../state/ducks/auth/types";
 import { ChangeRequest, changeRequestsActions } from "../../../../state/ducks/changeRequest";
 import { Owner } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
-import { documentTypeActions } from "../../../../state/ducks/documentRevisions/documentType";
+import { documentTypeActions, DocumentTypeById } from "../../../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../../../state/reducers";
 import { toChangeRequestEditRequestBody } from "../../../change.request/form/transform";
+import { TemplateOption } from "../../../change.request/form/types";
 import { changeRequestEditPath } from "../../../change.request/utils/paths";
 import { FormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
@@ -61,7 +63,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const [documentTypeGroups, setDocTypeGroups] = useState<any[]>([]);
   const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
-  const [templateOptions, setTemplateOptions] = useState<DocumentType[]>([]);
+  const [templateOptions, setTemplateOptions] = useState<TemplateOption[]>([]);
   const [formDocument, setFormDocument] = useState<string>("");
   const [documentType, setDocumentType] = useState<string>("");
   const [selectedInvalid, setSelectedInvalid] = useState<boolean>(false);
@@ -81,8 +83,19 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
 
   const asyncGetDocTypeByGroup = useAsync({
-    onSuccess: (data: DocumentType[] = []) => {
-      setTemplateOptions(data);
+    onSuccess: (data: DocumentTypeById[] = []) => {
+      const options = flatten(
+        data.map((template) =>
+          template.forms.map((form) => ({
+            label: form.name,
+            value: form.id,
+            docTypeId: template.documentType.id,
+            schema: form.formTemplate?.schema,
+            formInput: form.formInput,
+          }))
+        )
+      );
+      setTemplateOptions(options);
     },
   });
 
