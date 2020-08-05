@@ -55,4 +55,7 @@ export const DOCUMENT_LIST_TYPE_NAMES = [
   "Supplier Forms",
   "Supply Item",
   "Training Curriculum",
-  "Work Instruction"];
+  "Work Instruction",
+  "Document Approval Matrix",
+  "PO Approval Matrix",
+  "eForm"];
