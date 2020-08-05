@@ -2,6 +2,7 @@
 /* eslint-disable max-len */
 import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { CONFIG } from "../../config";
+import { CyRoutes } from "../../routes";
 
 
 export { };
@@ -79,9 +80,14 @@ Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: stri
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
-  cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 5 * 1000 }).click();
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
-  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.ReleaseDocRev,
+    () => {
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+    });
 });
 
 Cypress.Commands.add("drClickCreateDocument", () => {

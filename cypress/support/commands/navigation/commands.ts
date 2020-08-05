@@ -10,7 +10,7 @@ declare global {
     interface Chainable<Subject> {
       navigListExistsCheck(...list: NavigationItems[]): Chainable<Subject>;
       navigListNotExistsCheck(...list: NavigationItems[]): Chainable<Subject>;
-      navigClickOnExpandButtons(params: { navigItem: string }): Chainable<Subject>;
+      navigClickOnExpandButtons(params: { navigItem: NavigationItems }): Chainable<Subject>;
       navigToDashboard(): Chainable<Subject>;
       navigToDocumentList(): Chainable<Subject>;
       navigToApprovalRequestList(): Chainable<Subject>;
@@ -32,23 +32,22 @@ Cypress.Commands.add("navigListNotExistsCheck", (...list: NavigationItems[]) => 
 });
 
 Cypress.Commands.add("navigClickOnExpandButtons", (params: { navigItem: string }) => {
-  cy.get("[data-cy=\"navigation." + params.navigItem + "\"] > svg").click();
+  cy.get("[data-cy=\"navigation." + params.navigItem + "\"]").should("be.visible");
+  cy.get("[data-cy=\"navigation." + params.navigItem + "\"]").click();
 });
 
-Cypress.Commands.add("navigToDashboard", (params: { navigItem: string }) => {
-  cy.get("[data-cy=\"navigation.dashboard\"]").click();
+Cypress.Commands.add("navigToDashboard", () => {
+  cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DASHBOARD });
 });
 
 Cypress.Commands.add("navigToDocumentList", () => {
-  cy.navigToDashboard();
-  cy.wait(200).navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
-  cy.get("[data-cy=\"navigation.documentList\"]").click();
+  cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+  cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_LIST });
 });
 
 Cypress.Commands.add("navigToApprovalRequestList", () => {
-  cy.navigToDashboard();
-  cy.wait(200).navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
-  cy.get("[data-cy=\"navigation.approvalRequests\"]").click();
+  cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+  cy.navigClickOnExpandButtons({ navigItem: NavigationItems.APPROVAL_REQUEST });
 });
 
 Cypress.Commands.add("navigToPurchaseOrder", () => {

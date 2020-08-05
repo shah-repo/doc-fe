@@ -4,6 +4,7 @@
 /* eslint-disable max-len */
 import { ChangeRequestEditRequestBody } from "../../../../src/state/ducks/changeRequest/types";
 import { CONFIG } from "../../config";
+import { CyRoutes } from "../../routes";
 export { };
 
 declare global {
@@ -124,7 +125,11 @@ Cypress.Commands.add("arAddEffectiveDate", () => {
 });
 
 Cypress.Commands.add("arClickSendToReview", () => {
-  cy.get("[data-cy=\"transitionButton\"]").click().wait(3000);
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.ARtoReview,
+    () => {
+      cy.get("[data-cy=\"transitionButton\"]").click();
+    });
 });
 
 Cypress.Commands.add("arVerifyStatus", (params: { status: string }) => {

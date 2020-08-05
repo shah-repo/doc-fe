@@ -12,12 +12,14 @@ interface Props {
   documentTypeId?: string;
   isDisabled: boolean;
   showObsoleteRevisionChange: boolean;
+  showOnlyAdministrativeChange: boolean;
 }
 
 export const RevisionTypeChange: React.FunctionComponent<Props> = ({
   documentTypeId = "",
   isDisabled,
   showObsoleteRevisionChange,
+  showOnlyAdministrativeChange,
 }) => {
   const classes = styles();
   const [showRevisionSelect, revisionSelectLabel] = useRevisionSelect(documentTypeId);
@@ -39,7 +41,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
       </Typography>
       <RadioGroup name="revisionChangeType" validate={validator(required)}>
         {
-          showNextRevisionLevel &&
+          showNextRevisionLevel && !showOnlyAdministrativeChange &&
           <RadioButton
             label={<Text message={nextRevisionLevelLabel} />}
             value={RevisionChangeType.NextRevision}
@@ -49,7 +51,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
           />
         }
         {
-          showNextRevisionStage &&
+          showNextRevisionStage && !showOnlyAdministrativeChange &&
           <RadioButton
             label={
               <Text message={nextRevisionStageLabel} />
@@ -61,7 +63,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
           />
         }
         {
-          showObsolete && !showObsoleteRevisionChange &&
+          showObsolete && !showObsoleteRevisionChange && !showOnlyAdministrativeChange &&
           <RadioButton
             label={<Text message={obsoleteLabel} />}
             value={RevisionChangeType.Obsolete}

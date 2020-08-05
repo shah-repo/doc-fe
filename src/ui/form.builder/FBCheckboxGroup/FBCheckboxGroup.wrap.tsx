@@ -13,18 +13,19 @@ export const withFBCheckboxGroup = <T extends FBCheckboxGroupProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    onChange,
     options,
     optionValueKey = "",
     optionLabelKey = "",
+    defaultValue = [],
     controls,
-    onChange,
     disabled,
     name = "",
     ...props
   }: T) => {
 
     const { formState } = FB.useStores();
-    const formValue = formState?.getFieldValue(name, []);
+    const formValue = formState?.getFieldValue(name, defaultValue);
     const intl = useIntl();
 
     controls = _.map(options as FBOption[], (option, index) => {
