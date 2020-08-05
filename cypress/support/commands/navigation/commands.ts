@@ -15,6 +15,8 @@ declare global {
       navigToDashboard(): Chainable<Subject>;
       navigToDocumentList(): Chainable<Subject>;
       navigToApprovalRequestList(): Chainable<Subject>;
+      navigToPurchaseOrder(): Chainable<Subject>;
+      navigToSuppliers(): Chainable<Subject>;
     }
   }
 }
@@ -55,6 +57,14 @@ Cypress.Commands.add("navigToApprovalRequestList", () => {
       NavigationItems.APPROVAL_REQUEST,
     ],
   });
+});
+
+Cypress.Commands.add("navigToPurchaseOrder", () => {
+  cy.get("[data-cy=\"navigation.purchaseOrder\"]").click({ force: true });
+});
+
+Cypress.Commands.add("navigToSuppliers", () => {
+  cy.navigClickOnItem({ navigItem: NavigationItems.SUPPLIERS });
 });
 
 

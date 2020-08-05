@@ -5,7 +5,6 @@
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
@@ -22,13 +21,11 @@ context("Create company via API and create Purchase Order Form document", () => 
 
       cy.cmpCreateCompany({
         payload: {
-          companyAcronym: `T1${runId}`,
           companyAdminEmail: "enlil.testmail+cy1@gmail.com",
           helloSignIntegrationEnabled: false,
           helloSignTestMode: false,
           importerEmail: "enlil.testmail+cy5@gmail.com",
           maxRevisionStages: 3,
-          name: `Test Company ${runId}`,
           numOfDocDigits: 5,
           remoteValidatorBundleName: "default",
           slackIntegrationEnabled: false,
@@ -230,7 +227,7 @@ context("Create Part document for PO", () => {
 
 context("Create Purchase Order document with Product option from Form document", () => {
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.cmpNavigateToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it("Click on 'Create PO' button", () => {
@@ -243,7 +240,7 @@ context("Create Purchase Order document with Product option from Form document",
   });
 
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.cmpNavigateToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it("Click on existing PO that was created before", () => {
@@ -345,7 +342,7 @@ context("Create Purchase Order document with Product option from Form document",
 
 context("Create Purchase Order document with Service option from Form document", () => {
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.wait(2000).cmpNavigateToPurchaseOrder();
+    cy.wait(2000).navigToPurchaseOrder();
   });
 
   it("Click on 'Create PO' button", () => {
@@ -522,7 +519,7 @@ context("Creates second PO form document and checks if both documents are availa
   });
 
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.wait(2000).cmpNavigateToPurchaseOrder();
+    cy.wait(2000).navigToPurchaseOrder();
   });
 
   it("Click on 'Create PO' button", () => {
@@ -577,11 +574,12 @@ context("Test the filter inside PO", () => {
   });
 
   it("Navigate to Document List", () => {
+    throw new Error();
     cy.wait(1000).navigToDocumentList();
   });
 
   it("Navigate to Purchase Order", () => {
-    cy.cmpNavigateToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it.skip("Check if all filter values persist after changing landing page", () => {

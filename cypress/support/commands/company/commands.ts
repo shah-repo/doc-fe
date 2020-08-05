@@ -1,9 +1,11 @@
+import faker from "faker";
 import { Company } from "../../../../src/state/ducks/company/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
+const capitalize = (text) => text.charAt(0).toUpperCase() + text.slice(1);
 
 export { };
 // We need this interfaces for Company Bootstrap, do not remove
@@ -40,23 +42,30 @@ export interface ICreateCompanyBootstrap {
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      cmpCreateCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
+      cmpCreateCompany(params: { payload: Partial<ICreateCompanyBootstrap>; sessionId: string }): Chainable<Subject>;
       cmpUpdateCompany(params: { employeeId: string; sessionId: string;
         payload: Partial<Company>;}): Chainable<Subject>;
       cmpSelectCompany(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpClickCreateNewDocument(): Chainable<Subject>;
       cmpClickCreateApprovalRequest(): Chainable<Subject>;
-      cmpNavigateToPurchaseOrder(): Chainable<Subject>;
-      cmpNavigateToSuppliers(): Chainable<Subject>;
     }
   }
 }
 
 Cypress.Commands.add("cmpCreateCompany", (params: { payload: ICreateCompanyBootstrap; sessionId: string }) => {
+  const companyNumber = Math.round(Math.random() * 1000);
+  const bodyDefaults = {
+    name: `${capitalize(faker.commerce.color())} ${faker.company.companyName()} ${companyNumber}`,
+    companyAcronym: `TC${companyNumber}`,
+  };
+  const body: ICreateCompanyBootstrap = {
+    ...params.payload,
+    ...bodyDefaults,
+  };
   cy.request({
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/company/bootstrap`,
-    body: params.payload,
+    body,
     headers: {
       Authorization: `bearer_admin ${params.sessionId}`,
     },
@@ -96,14 +105,6 @@ Cypress.Commands.add("cmpClickCreateNewDocument", () => {
 
 Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
   cy.get("[data-cy=\"change.request.create\"]").click();
-});
-
-Cypress.Commands.add("cmpNavigateToPurchaseOrder", () => {
-  cy.get("[data-cy=\"navigation.purchaseOrder\"]").click({ force: true });
-});
-
-Cypress.Commands.add("cmpNavigateToSuppliers", () => {
-  cy.get("[data-cy=\"navigation.suppliers\"]").click().wait(500);
 });
 
 export function cmpFilterDocumentTypeIdByName(companyResponse: Company, documentTypeName: string) {

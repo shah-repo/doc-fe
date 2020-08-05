@@ -17,7 +17,8 @@ export enum CyRoutes {
   CompanyMine = "CompanyMine",
   SetPrimaryAttachment = "SetPrimaryAttachment",
   UploadAttachment = "UploadAttachment",
-  PatchDocRev = "PatchDocRev"
+  PatchDocRev = "PatchDocRev",
+  Login = "Login"
 }
 
 export const routes: ICyRoutes =   {
@@ -54,7 +55,7 @@ export const routes: ICyRoutes =   {
       url: "api/v1/auth/credentials/iot",
     },
     callConfig: {
-      responseTimeout: 5 * 1000,
+      responseTimeout: 10 * 1000,
     },
   },
   CompanyMine: {
@@ -73,6 +74,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/attachments/upload",
+    },
+  },
+  Login: {
+    requestConfig: {
+      method: "POST",
+      url: `/api/v1/auth/login`,
     },
   },
 };

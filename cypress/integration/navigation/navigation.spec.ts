@@ -4,7 +4,6 @@
 import path from "path";
 import { GroupTag, NavigationItems } from "../../../src/state/ducks/auth/types";
 
-const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
@@ -68,13 +67,11 @@ context(`Test: ${path.basename(__filename)}`, () => {
 
         cy.cmpCreateCompany({
           payload: {
-            companyAcronym: `T1${runId}`,
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: "enlil.testmail+cy5@gmail.com",
             maxRevisionStages: 3,
-            name: `Test Company ${runId}`,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,

@@ -4,7 +4,6 @@ Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
 });
 
-const runId = new Date().valueOf();
 let company;
 let docId;
 let loginResponse;
@@ -45,13 +44,11 @@ context("Validators tests", () => {
 
         cy.cmpCreateCompany({
           payload: {
-            companyAcronym: `T1${runId}`,
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: "enlil.testmail+cy5@gmail.com",
             maxRevisionStages: 3,
-            name: `Test Company ${runId}`,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,

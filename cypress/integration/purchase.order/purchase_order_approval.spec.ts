@@ -9,7 +9,6 @@ Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
 });
 
-const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
@@ -26,13 +25,11 @@ context("Create company via API and create Purchase Order Form document", () => 
 
       cy.cmpCreateCompany({
         payload: {
-          companyAcronym: `T1${runId}`,
           companyAdminEmail: "enlil.testmail+cy1@gmail.com",
           helloSignIntegrationEnabled: false,
           helloSignTestMode: false,
           importerEmail: "enlil.testmail+cy5@gmail.com",
           maxRevisionStages: 3,
-          name: `Test Company ${runId}`,
           numOfDocDigits: 5,
           remoteValidatorBundleName: "default",
           slackIntegrationEnabled: false,
@@ -319,7 +316,7 @@ context("Create Purchase Order Approval Matrix document with from Form document"
 
 context("Test the POAM when approving Purchase Order", () => {
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.cmpNavigateToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it("Click on 'Create PO' button", () => {
@@ -387,7 +384,7 @@ context("Test the POAM when approving Purchase Order", () => {
   });
 
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.cmpNavigateToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it("Click on 'Create PO' button", () => {
@@ -441,7 +438,7 @@ context("Test the POAM when approving Purchase Order", () => {
   });
   
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.cmpNavigateToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it("Clear filters", () => {

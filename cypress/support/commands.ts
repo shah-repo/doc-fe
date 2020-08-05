@@ -116,7 +116,10 @@ Cypress.Commands.add(
 
     names.forEach((name) => {
       const {  callConfig } = routes[name];
-      cy.wait(`@${name}`, Object.assign({}, callConfig, options));
+      cy.wait(`@${name}`, Object.assign({}, callConfig, options))
+        .then(function resp(...args) {
+          console.log({ args });
+        });
     });
   });
 
