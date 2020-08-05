@@ -67,14 +67,12 @@ const downloadAllAttachmentsPassword = (
   docRevId: string,
   handlers: Handlers<AttachmentDownloadResponse>,
   password?: string
-) => {
-  return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
-    url: `${ATTACHMENT_ROOT_URL}/${docRevId}/download_all_with_red_line`,
-    method: "get",
-    password,
-    handlers,
-  });
-};
+) => apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+  url: `${ATTACHMENT_ROOT_URL}/${docRevId}/download_all_with_red_line`,
+  method: "get",
+  password,
+  handlers,
+});
 
 
 const requestWatermarkedFile = (

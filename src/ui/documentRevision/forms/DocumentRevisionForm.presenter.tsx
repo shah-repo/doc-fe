@@ -265,7 +265,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           docRevStatus = {documentRevision?.status}
         />
         {showRevisionTypeChange &&
-        <RevisionTypeChange {...{ documentTypeId, showObsoleteRevisionChange ,showOnlyAdministrativeChange}} isDisabled={isDisabledInput} />}
+        <RevisionTypeChange {...{
+          documentTypeId,
+          showObsoleteRevisionChange,
+          showOnlyAdministrativeChange,
+        }}
+        isDisabled={isDisabledInput} />}
         {
           (!values.status || type === "newOutput") &&
           <DocumentSecurity documentTypeId={documentTypeId as string} />

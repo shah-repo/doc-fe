@@ -35,7 +35,7 @@ const Attachments: React.FunctionComponent<Props> = ({
   docRevStatus,
 }) => (
   <Box marginBottom="33px">
-    <Box style = {classes.attachmentHeaderConatainer}>
+    <Box style = {classes.attachmentHeaderConatainer} id="attachmentHeader">
       <Typography variant="h6" style = {classes.attachmentHeadText}>
         <Text message="common.attachments"/>
       </Typography>
