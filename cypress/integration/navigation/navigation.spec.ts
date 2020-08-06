@@ -4,7 +4,6 @@
 import path from "path";
 import { GroupTag, NavigationItems } from "../../../src/state/ducks/auth/types";
 
-const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
@@ -32,7 +31,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Click to expand Document Control", () => {
-      cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+      cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
     });
 
     it("Check navigation to see if default is shown", () => {
@@ -42,7 +41,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Expand Document control and check navigation to see if default is shown", () => {
-      cy.navigClickOnExpandButtons({
+      cy.navigClickOnItem({
         navigItem: NavigationItems.DOCUMENT_CONTROL,
       });
       cy.navigListExistsCheck(
@@ -68,13 +67,11 @@ context(`Test: ${path.basename(__filename)}`, () => {
 
         cy.cmpCreateCompany({
           payload: {
-            companyAcronym: `T1${runId}`,
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: "enlil.testmail+cy5@gmail.com",
             maxRevisionStages: 3,
-            name: `Test Company ${runId}`,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -139,20 +136,31 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Click to expand Document Control", () => {
-      cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
-      cy.navigClickOnExpandButtons({ navigItem: NavigationItems.MANUFACTURING });
+      cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+      cy.navigClickOnItem({ navigItem: NavigationItems.MANUFACTURING });
     });
 
     it("Check navigation to see if admin navigation is shown", () => {
       cy.navigListExistsCheck(
         NavigationItems.DASHBOARD,
-        NavigationItems.DOCUMENT_LIST,
-        NavigationItems.APPROVAL_REQUEST,
         NavigationItems.USER_MANAGEMENT,
         NavigationItems.GROUP_MANAGEMENT,
         NavigationItems.PURCHASE_ORDERS,
         NavigationItems.SUPPLIERS,
         NavigationItems.RECEIVING,
+      );
+
+      cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+
+      cy.navigListExistsCheck(
+        NavigationItems.DOCUMENT_LIST,
+        NavigationItems.APPROVAL_REQUEST,
+      );
+
+
+      cy.navigClickOnItem({ navigItem: NavigationItems.MANUFACTURING });
+
+      cy.navigListExistsCheck(
         NavigationItems.WORK_ORDERS,
         NavigationItems.LOTS,
       );
