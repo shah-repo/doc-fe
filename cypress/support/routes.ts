@@ -15,16 +15,29 @@ export enum CyRoutes {
   ARtoReview = "ARtoReview",
   IOTCredentials = "IOTCredentials",
   CompanyMine = "CompanyMine",
+  SetPrimaryAttachment = "SetPrimaryAttachment",
+  UploadAttachment = "UploadAttachment",
+  PatchDocRev = "PatchDocRev",
+  Login = "Login"
 }
 
 export const routes: ICyRoutes =   {
+  PatchDocRev: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/document_revisions/*",
+    },
+    callConfig: {
+      responseTimeout: 25 * 1000,
+    },
+  },
   ReleaseDocRev: {
     requestConfig: {
       method: "POST",
       url: "/api/v1/document_revisions/release/*",
     },
     callConfig: {
-      responseTimeout: 25 * 1000,
+      responseTimeout: 45 * 1000,
     },
   },
   ARtoReview: {
@@ -38,17 +51,35 @@ export const routes: ICyRoutes =   {
   },
   IOTCredentials: {
     requestConfig: {
-      url: "api/v1/auth/credentials/iot",
       method: "GET",
+      url: "api/v1/auth/credentials/iot",
     },
     callConfig: {
-      responseTimeout: 5 * 1000,
+      responseTimeout: 10 * 1000,
     },
   },
   CompanyMine: {
     requestConfig: {
-      url: "api/v1/company/mine",
       method: "GET",
+      url: "api/v1/company/mine",
+    },
+  },
+  SetPrimaryAttachment: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/document_revisions/*/set_primary/*",
+    },
+  },
+  UploadAttachment: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/attachments/upload",
+    },
+  },
+  Login: {
+    requestConfig: {
+      method: "POST",
+      url: `/api/v1/auth/login`,
     },
   },
 };

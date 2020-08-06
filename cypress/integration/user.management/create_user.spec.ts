@@ -1,7 +1,5 @@
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-const runId = new Date().valueOf();
-
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
@@ -16,13 +14,11 @@ context("User Creation Flow", () => {
         loginResponse = response;
         cy.cmpCreateCompany({
           payload: {
-            companyAcronym: `T1${runId}`,
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: "enlil.testmail+cy5@gmail.com",
             maxRevisionStages: 3,
-            name: `Test Company ${runId}`,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -111,3 +107,4 @@ context("User Creation Flow", () => {
 });
 
 export { };
+
