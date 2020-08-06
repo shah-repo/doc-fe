@@ -1,9 +1,5 @@
 /* eslint-disable max-classes-per-file */
 // / <reference types="Cypress" />
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
-
 import { SystemRequirement } from "../utils/context/systemRequirement";
 
 let createdCompany;
@@ -25,6 +21,7 @@ context("Approval request form scenario", () => {
         multipleCompanies = response.employees.length > 0;
 
         cy.cmpCreateCompany({
+          specFilePath: __filename,
           payload: {
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,

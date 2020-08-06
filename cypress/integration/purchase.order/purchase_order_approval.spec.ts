@@ -1,13 +1,5 @@
-/* eslint-disable max-classes-per-file */
-// eslint-disable-next-line spaced-comment
-/// <reference types="Cypress" />
-
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
-
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
 
 let createdCompany;
 let loginResponse;
@@ -24,6 +16,7 @@ context("Create company via API and create Purchase Order Form document", () => 
       loginResponse = response;
 
       cy.cmpCreateCompany({
+        specFilePath: __filename,
         payload: {
           companyAdminEmail: "enlil.testmail+cy1@gmail.com",
           helloSignIntegrationEnabled: false,
@@ -46,14 +39,14 @@ context("Create company via API and create Purchase Order Form document", () => 
               name: "Fourth Tester",
               email: "enlil.testmail+cy4@gmail.com",
             }],
-            documentTypes: [
-              {
-                documentTypeName: "PO Part",
-                documentTypeAcronym: "PRT-",
-                group: "PART",
-                isQms: true,
-              },
-            ],
+          documentTypes: [
+            {
+              documentTypeName: "PO Part",
+              documentTypeAcronym: "PRT-",
+              group: "PART",
+              isQms: true,
+            },
+          ],
           acctCodes: ["code 1"],
           addresses: ["Address 1"],
         }, sessionId: loginResponse.sessionId as unknown as string,
@@ -87,7 +80,7 @@ context("Create company via API and create Purchase Order Form document", () => 
             {
               label: "Dashboard",
               path: "/",
-              type: "LINK"
+              type: "LINK",
             },
             {
               label: "Document Control",
@@ -96,38 +89,39 @@ context("Create company via API and create Purchase Order Form document", () => 
                 {
                   label: "Document List",
                   path: "/document_revision",
-                  type: "LINK"
+                  type: "LINK",
                 },
                 {
                   label: "Approval Requests",
                   path: "/change_request",
-                  type: "LINK"
+                  type: "LINK",
                 },
               ],
             },
             {
               label: "User Management",
               path: "/user_management",
-              restrictedToUsersWithTags:[
-                GroupTag.USER_MANAGEMENT
+              restrictedToUsersWithTags: [
+                GroupTag.USER_MANAGEMENT,
               ],
-              type: "LINK"
+              type: "LINK",
             },
             {
               label: "Group Management",
               path: "/group_management",
-              restrictedToUsersWithTags:[
+              restrictedToUsersWithTags: [
                 GroupTag.GROUP_MANAGEMENT,
               ],
-              type: "LINK"
+              type: "LINK",
             },
             {
               label: "Purchase Order",
               path: "/document_by_type/" + docTypeId,
               type: "LINK",
-            }
+            },
           ],
-        }).then(() => {
+        },
+      }).then(() => {
         done();
       });
     });
@@ -284,7 +278,7 @@ context("Create Purchase Order Approval Matrix document with from Form document"
   it("Add first POAM level", () => {
     cy.poAddPOButtonClick();
   });
-    
+
   it("Click on 'Add Item'", () => {
     cy.poAddNewFieldItem();
   });
@@ -327,7 +321,7 @@ context("Test the POAM when approving Purchase Order", () => {
     SystemRequirement("REQ-1290");
     cy.poEnterDocumentDescription({ description: "POAM test" });
   });
-  
+
   it("Enter Shipping Cost '210'", () => {
     cy.poShippingCost({ number: "21" });
   });
@@ -395,7 +389,7 @@ context("Test the POAM when approving Purchase Order", () => {
     SystemRequirement("REQ-1290");
     cy.poEnterDocumentDescription({ description: "POAM test" });
   });
-  
+
   it("Enter Shipping Cost '210'", () => {
     cy.poShippingCost({ number: "21" });
   });
@@ -423,9 +417,10 @@ context("Test the POAM when approving Purchase Order", () => {
   });
 
   it("Log in with 'Third Tester'", () => {
-    cy.authLogin({ 
-      email: "enlil.testmail+cy3@gmail.com", 
-      password: "Tester1!" });
+    cy.authLogin({
+      email: "enlil.testmail+cy3@gmail.com",
+      password: "Tester1!",
+    });
   });
 
   it("Selects company", () => {
@@ -436,7 +431,7 @@ context("Test the POAM when approving Purchase Order", () => {
     SystemRequirement("REQ-1570");
     cy.poRejectAR({ password: "Tester1!" });
   });
-  
+
   it("Click on 'Purchase Order' on sidebar", () => {
     cy.navigToPurchaseOrder();
   });
@@ -451,7 +446,7 @@ context("Test the POAM when approving Purchase Order", () => {
 
   it("Verify rejected PO status, should be 'Draft'", () => {
     SystemRequirement("REQ-1570");
-    cy.poVerifyStatus({ status: "Draft"});
+    cy.poVerifyStatus({ status: "Draft" });
   });
 });
 

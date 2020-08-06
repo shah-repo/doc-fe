@@ -1,6 +1,3 @@
-// eslint-disable-next-line spaced-comment
-/// <reference types="Cypress" />
-
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -16,6 +13,7 @@ context("Document Creation Flow", () => {
       }).then((response) => {
         loginResponse = response;
         cy.cmpCreateCompany({
+          specFilePath: __filename,
           payload: {
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,

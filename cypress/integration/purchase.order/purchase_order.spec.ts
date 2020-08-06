@@ -1,7 +1,3 @@
-/* eslint-disable max-classes-per-file */
-// eslint-disable-next-line spaced-comment
-/// <reference types="Cypress" />
-
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -20,6 +16,7 @@ context("Create company via API and create Purchase Order Form document", () => 
       loginResponse = response;
 
       cy.cmpCreateCompany({
+        specFilePath: __filename,
         payload: {
           companyAdminEmail: "enlil.testmail+cy1@gmail.com",
           helloSignIntegrationEnabled: false,

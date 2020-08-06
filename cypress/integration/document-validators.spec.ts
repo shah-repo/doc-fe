@@ -1,9 +1,3 @@
-// eslint-disable-next-line spaced-comment
-/// <reference types="Cypress" />
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
-
 let company;
 let docId;
 let loginResponse;
@@ -43,6 +37,7 @@ context("Validators tests", () => {
       }).then((response: any) => {
 
         cy.cmpCreateCompany({
+          specFilePath: __filename,
           payload: {
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,
