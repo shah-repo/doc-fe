@@ -341,7 +341,7 @@ context("Test the POAM when approving Purchase Order", () => {
   });
 
   it("Check approval icon if it's gray", () => {
-    cy.wait(2000).poAMCheckApprovalIconIfItsGray();
+    cy.poAMCheckApprovalIconIfItsGray();
   });
 
   it("Try to approve document without approver when it contains POAM", () => {

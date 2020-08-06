@@ -141,7 +141,6 @@ context("Group Landing Page Flow", () => {
     });
 
     it("Navigates to dashboard", () => {
-      throw new Error();
       cy.grpNavigateToDashboard();
     });
 

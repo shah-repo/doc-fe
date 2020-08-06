@@ -342,7 +342,7 @@ context("Create Purchase Order document with Product option from Form document",
 
 context("Create Purchase Order document with Service option from Form document", () => {
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.wait(2000).navigToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it("Click on 'Create PO' button", () => {
@@ -519,7 +519,7 @@ context("Creates second PO form document and checks if both documents are availa
   });
 
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.wait(2000).navigToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it("Click on 'Create PO' button", () => {
@@ -574,7 +574,6 @@ context("Test the filter inside PO", () => {
   });
 
   it("Navigate to Document List", () => {
-    throw new Error();
     cy.wait(1000).navigToDocumentList();
   });
 
