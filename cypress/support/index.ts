@@ -57,23 +57,11 @@ Cypress.Screenshot.defaults({
   screenshotOnRunFailure: CONFIG.SCREENSHOT_OF_RUN_FAILURE,
 });
 
-let someTestFailed = false;
-
 Cypress.on("test:after:run", (test, runnable: any ) => {
   if (
     CONFIG.SCREENSHOT_OF_RUN_FAILURE &&
-    !CONFIG.BAIL_ON_FAILURE &&
     test.state === "failed"
   ) {
     addScreenshotToContext(test, runnable, "Screenshot On Failure");
-  }
-  if (test.state === "failed") {
-    someTestFailed = true;
-  }
-});
-
-Cypress.on("test:before:run", () => {
-  if (CONFIG.BAIL_ON_FAILURE && someTestFailed) {
-    throw new Error("Previous step failed, failing.");
   }
 });
