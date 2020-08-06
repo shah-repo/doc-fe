@@ -13,7 +13,7 @@ const FormHeaderPresenter: React.FunctionComponent = () => {
     <Header>
       {documentRevision &&
       <HeaderInfo
-        revision={documentRevision.revision}
+        revisionStage={documentRevision.revisionStage}
         groupOptions={documentRevision.document.documentType.groupOptions}
         isInlineApproval={
           documentRevision.formDocument?.formTemplate?.schema

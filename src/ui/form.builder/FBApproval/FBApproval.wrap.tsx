@@ -7,7 +7,6 @@ import { FBApprovalConfig, FBApprovalProps, FBApprovalState, FBApprovalStatus, F
 import { FB } from "..";
 import { TIME_ZONE } from "../../../common/utils/date";
 import { Employee } from "../../../state/ducks/company";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { store } from "../../../state/store";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
@@ -44,7 +43,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       id: documentId,
       isOutput,
       isReleased,
-      document: { released = new Date(), revisionStage = "", status = "" } = { },
+      document: { released = new Date(), revisionStage = "" } = { },
     } = workspaceState || {};
 
     const isRecord = workspaceState?.document?.document?.documentType?.groupOptions?.includes("RECORD") || false;
@@ -66,7 +65,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       !isOutput ||
       (isOutput && !documentId) ||
       (reviseDisabled && workspaceState?.isRevised) ||
-      (revisionStage === 3 && status === DocumentRevisionStatus.Draft && isRecord)
+      (revisionStage === 3 && isRecord)
     );
 
     function getGroup(id: string): GroupRequestBody | undefined {

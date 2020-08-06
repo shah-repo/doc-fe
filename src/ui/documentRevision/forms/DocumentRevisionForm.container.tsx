@@ -160,6 +160,7 @@ DocumentRevisionFormContainerProps
   const { schema: originScheme = [] } =
   cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
   const isOutput =  Boolean(outputGroup && !_.isEmpty(outputGroup));
+  const isRecord = (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
   const formInput = useMemo(() =>
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
   , [cleanInitialValues]);
@@ -169,9 +170,9 @@ DocumentRevisionFormContainerProps
   } else if (outputGroup) {
     mode = "form";
   }
-  const showOnlyAdministrativeChange = isOutput &&
+  const showAdministrativeAndVoidChange = isOutput &&
   revisionStage === 3 &&
-  (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
+  isRecord;
 
   const GetScheme = (props: FormikProps<DocumentRevisionFormValues>): FBSchemaProps[] => {
     const { id: documentTypeId = "" } = props.values.document?.documentType || {};
@@ -219,11 +220,10 @@ DocumentRevisionFormContainerProps
         canChangeOwnerShip={canChangeOwnerShip}
         type={type}
         isNewVersion={isNewVersion}
-        {...{ FBContainer, bannerPortal, showOnlyAdministrativeChange }}
+        {...{ FBContainer, bannerPortal, showAdministrativeAndVoidChange }}
       />
     </FBWorkspace>
   );
-
   // TODO: check why are we loading all document revisions
   // if it's really necessary maybe it can be loaded through the DataFetcherContainer
   // it will be loaded only once instead every time this component is mounted
