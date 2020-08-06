@@ -56,7 +56,11 @@ const getDocumentTypeOptionsForDocumentList = createSelector(
   (ids, documentTypes) =>
     _.orderBy(
       ids
-        .filter((id) => documentTypes[id].group === FBDocTypeGroup.OTHER || FBDocTypeGroup.POAM || FBDocTypeGroup.DAM || FBDocTypeGroup.FORM )
+        .filter((id) => documentTypes[id].group ===
+        FBDocTypeGroup.OTHER ||
+        FBDocTypeGroup.POAM ||
+        FBDocTypeGroup.DAM ||
+        FBDocTypeGroup.FORM )
         .map((id) => ({
           value: documentTypes[id].id,
           text: removeLastCharacterIfNotAlphaNumeric(documentTypes[id].documentTypeAcronym),
