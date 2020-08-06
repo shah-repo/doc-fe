@@ -1,6 +1,3 @@
-// eslint-disable-next-line spaced-comment
-/// <reference types="Cypress" />
-
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -22,6 +19,7 @@ context("Document Revising Flow", () => {
       }).then((response) => {
         loginResponse = response;
         cy.cmpCreateCompany({
+          specFilePath: __filename,
           payload: {
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,
