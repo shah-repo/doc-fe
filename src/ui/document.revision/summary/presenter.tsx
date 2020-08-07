@@ -5,7 +5,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
-import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
@@ -69,6 +69,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const [isTitleVisible, titleLabel] = useTitle(docTypeId);
   const [isCRLinkVisible] = useCRLink(docTypeId);
   const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
+  const isRecord = (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
@@ -112,7 +113,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           <SummaryField label={titleLabel} value={name} />
         }
         {
-          isTrainingVisible &&
+          isTrainingVisible && !isRecord &&
           <SummaryField
             label="document.revision.trainingRequired"
             value={<Text translation={`common.${retrain}` as Translation} />}

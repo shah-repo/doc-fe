@@ -77,6 +77,9 @@ export const generateVersionNumber = (
   if (revisionChangeType === RevisionChangeType.Obsolete) {
     return "Void";
   }
+  if (revisionChangeType === RevisionChangeType.AdministrativeChange) {
+    return `${getAlphabetFromNumber(revision)}.${subRevision}`;
+  }
   switch (revisionStage) {
     case 1: {
       const subRev = (subRevision && subRevision > 0) ? `.${subRevision}` : "";

@@ -5508,6 +5508,11 @@ cypress-file-upload@^4.0.7:
   dependencies:
     mime "^2.4.4"
 
+cypress-localstorage-commands@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/cypress-localstorage-commands/-/cypress-localstorage-commands-1.2.1.tgz#61de23cba2ac7c45dcc5e2144d57b1819455d428"
+  integrity sha512-wWGElZS5fHAQDonZM8xtOA1tM+bTBUdwEMm6XrshLMKjq8Nxw4+Ysbl9/Yc+gZyv66EQe4hPNDLWANnp/zPkcA==
+
 cypress-promise@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/cypress-promise/-/cypress-promise-1.1.0.tgz#f2d66965945fe198431aaf692d5157cea9d47b25"
