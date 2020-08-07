@@ -165,6 +165,11 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         id: attachment.id,
       },
       type: attachmentType,
+      documentRevision: {
+        status: (
+          documentRevisionStatusFromDocList || documentRevisionStatusFromCR
+        ) as DocumentRevisionStatus,
+      },
     };
     requestWatermarkAsync.start(
       requestWatermarkAction,

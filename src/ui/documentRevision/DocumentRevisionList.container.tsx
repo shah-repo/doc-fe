@@ -28,7 +28,6 @@ DocumentRevisionListContainerProps
   documentId,
   docId,
   selectedDocumentRevision,
-  documentRevisionId,
   documentTypeId,
   isInlineApproval,
   isRecord,

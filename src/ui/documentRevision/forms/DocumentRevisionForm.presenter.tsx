@@ -143,6 +143,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     isdocRevStatusDraft &&
     !showAdministrativeAndVoidChange);
 
+  const docRevId = documentRevision?.id;
+  const isAttachmentEmpty = !documentRevision?.attachments.length;
   isOwnerContext = React.createContext(isOwner);
   documentTypeContext = React.createContext(documentType);
 
@@ -265,14 +267,21 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isDisabled={isDisabledInput}
           {...{ documentTypeId, isRecord }}
         />
-        <AttachmentsField isDisabled={isDisabledInput} isNewVersion={isNewVersion} />
-        {
-          showRevisionTypeChange && !isRevisionChangeHidden &&
-            <RevisionTypeChange
-              {...{ documentTypeId, showObsoleteRevisionChange, showAdministrativeAndVoidChange }}
-              isDisabled={isDisabledInput}
-            />
-        }
+        <AttachmentsField
+          isDisabled={isDisabledInput}
+          isNewVersion={isNewVersion}
+          docRevId = {docRevId}
+          isAttachmentEmpty = {isAttachmentEmpty}
+          containsRedline = {false}
+          docRevStatus = {documentRevision?.status}
+        />
+        {showRevisionTypeChange && !isRevisionChangeHidden &&
+        <RevisionTypeChange {...{
+          documentTypeId,
+          showObsoleteRevisionChange,
+          showAdministrativeAndVoidChange,
+        }}
+        isDisabled={isDisabledInput} />}
         {
           (!values.status || type === "newOutput") &&
           <DocumentSecurity documentTypeId={documentTypeId as string} />

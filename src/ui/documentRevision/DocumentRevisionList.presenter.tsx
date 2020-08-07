@@ -46,8 +46,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
 
   const { status } = documentRevision;
   const [isStatusVisible, statusLabel] = useDocumentVersion(documentTypeId, status);
-
-  let verPrefix = "common.version";
+  let verPrefix = "common.revision";
   let statLabel = statusLabel;
 
   const isSelected = selectedDocumentRevision === documentRevision.id;
@@ -67,7 +66,6 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     statLabel = "common.archived";
   }
   if ((isDeprecated || isReleased) && isInlineApproval && isNumericRelease) {
-    verPrefix = "common.version";
     statLabel = "common.archived";
   }
 

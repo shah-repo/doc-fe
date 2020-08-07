@@ -544,7 +544,7 @@ context("Check for Landing page columns and values", () => {
 
   it("Check for Landing page default columns", () => {
     SystemRequirement("REQ-1120");
-    cy.filterCheckHeaderValues("PO #", "Version", "PO Status", "Supplier", "Part Number", "Amount", "Requestor", "Issue Date");
+    cy.filterCheckHeaderValues("PO #", "Revision", "PO Status", "Supplier", "Part Number", "Amount", "Requestor", "Issue Date");
   });
 });
 
