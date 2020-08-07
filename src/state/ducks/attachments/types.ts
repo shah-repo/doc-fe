@@ -1,5 +1,5 @@
 import { Id, Nullable, User } from "../common";
-import { DocumentRevision } from "../documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../documentRevisions";
 import { ADD_WATERMARK, REMOVE_WATERMARK } from "./constants";
 
 export interface Attachment {
@@ -49,12 +49,14 @@ export interface WatermarkRequest {
   attachment: Attachment;
   requestedBy: WatermarkRequester;
   presignedUrl?: string;
-  documentRevision: Nullable<DocumentRevision>;
 }
 
 export interface WatermarkRequestBody {
   attachment: Id;
   type: AttachmentType;
+  documentRevision: {
+    status: DocumentRevisionStatus;
+  };
 }
 
 export interface AddWatermarkAction {
