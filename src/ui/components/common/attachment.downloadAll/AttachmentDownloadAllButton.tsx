@@ -1,4 +1,4 @@
-import { Link, CircularProgress } from "@material-ui/core";
+import { Link, CircularProgress, createStyles, makeStyles, Theme } from "@material-ui/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import React, { useState } from "react";
 import { AttachmentDownloadResponse, attachmentsActions } from "../../../../state/ducks/attachments";
@@ -20,6 +20,24 @@ export interface Props {
   containsRedline: boolean;
   docRevStatus: DocumentRevisionStatus;
 }
+
+export const styles = makeStyles((theme: Theme) =>
+createStyles({
+  downloadLabel: ({isAttachmentEmpty})=> ({
+    flex: "0 0 50%",
+    display: isAttachmentEmpty ? "none" : "flex",
+    justifyContent: "flex-end",
+    paddingRight: "25px",
+  }),
+  icon: {
+    verticalAlign: "middle",
+    maxHeight: "20px",
+    maxWidth: "20px",
+  },
+  link: {
+    cursor: "pointer",
+  },
+}));
 
 const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   isAttachmentEmpty,
@@ -44,6 +62,8 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   const passwordDialogHandler = useDialog();
   const redlineWarningDialogHandler = useDialog();
 
+  const classes = styles({isAttachmentEmpty});
+
 
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
@@ -56,29 +76,8 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
       alert(message);
     },
   });
-  const classes = {
-    downloadLabel: {
-      flex: "0 0 50%",
-      display: isAttachmentEmpty ? "none" : "flex",
-      justifyContent: "flex-end",
-      paddingRight: "25px",
-    },
-    icon: {
-      verticalAlign: "middle",
-      maxHeight: "20px",
-      maxWidth: "20px",
-    },
-    link: {
-      cursor: "pointer",
-    },
-  };
 
-  const iconRender = () => {
-    if (isDownloading) {
-      return (<CircularProgress style = {classes.icon}/>);
-    }
-    return (<GetAppIcon style = {classes.icon}/>);
-  };
+
 
   const passwordSubmit = (values: Password) => {
     async.start(downloadAllAttachmentsPassword, docRevId, async, values.password);
@@ -101,7 +100,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
 
   const warningSubmit = () => {
     redlineWarningDialogHandler.close();
-    openPasswordDialog();
+    passwordDialogHandler.open();
   };
 
   const handleAllDownload = (documentRevisionId: string, password: string|undefined) => ()  => {
@@ -113,12 +112,9 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
       async.start(downloadAllAttachments, documentRevisionId, async);
     } else {
       setIsDownloading(true);
-      openWarningDialog();
+      redlineWarningDialogHandler.open();
     }
   };
-
-  const openPasswordDialog = () => passwordDialogHandler.open();
-  const openWarningDialog = () => redlineWarningDialogHandler.open();
 
   return (
     <>
@@ -138,10 +134,10 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
       />
       <label
         htmlFor={"button-file"}
-        style = {classes.downloadLabel}
+        className = {classes.downloadLabel}
         onClick = {handleAllDownload(docRevId, undefined)}>
-        <Link style = {classes.link} component="span" variant="button" id="AttachmentFieldPresenter-linkButton" >
-          {iconRender()}
+        <Link className = {classes.link} component="span" variant="button" id="AttachmentFieldPresenter-linkButton" >
+          {isDownloading ? <CircularProgress className = {classes.icon}/> : <GetAppIcon className = {classes.icon}/>}
           <Text translation="common.download.all.files" />
         </Link>
       </label>

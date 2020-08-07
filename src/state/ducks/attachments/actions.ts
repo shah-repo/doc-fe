@@ -55,8 +55,7 @@ const downloadRedLine = (
 
 const downloadAllAttachments = (
   docRevId: string,
-  handlers: Handlers<AttachmentDownloadResponse>,
-  type?: AttachmentType,
+  handlers: Handlers<AttachmentDownloadResponse>
 ): ApiAction => apiActionWithCallbacks<AttachmentDownloadResponse, string>({
   url: `${ATTACHMENT_ROOT_URL}/${docRevId}/download_all`,
   method: "get",
