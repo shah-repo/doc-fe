@@ -243,9 +243,9 @@ context("Approval request form scenario", () => {
       cy.xpath("//input[@name]/ ../div/button").should("be.disabled");
     });
 
-    it("Check 'Approvers' are disbaled", () => {
+    it("Check 'Approvers' are disabled", () => {
       SystemRequirement("REQ-0850");
-      cy.get("[data-cy=\"approvers\"] input").should("be.disabled");
+      cy.get("[data-cy=\"approvers\"] input").should("not.be.disabled");
     });
   });
 
