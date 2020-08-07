@@ -191,10 +191,6 @@ context("Approval request form scenario", () => {
         cy.arAddApproverOnApproverList({ approver: "enlil.testmail+cy1@gmail.com" });
       });
 
-    it("Add date", () => {
-      cy.arAddEffectiveDate();
-    });
-
     it("Click Create Approval Request", () => {
       cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
@@ -235,12 +231,8 @@ context("Approval request form scenario", () => {
       cy.get("[data-cy=\"fb.add.document\"]").should("be.disabled");
     });
 
-    it("Check 'Effective Date' is disabled", () => {
-      SystemRequirement("REQ-0850");
-      cy.xpath("//input[@name]/ ../div/button").should("be.disabled");
-    });
-
-    it("Check 'Approvers' are disbaled", () => {
+    //  approvers 'In_review' should be enabled now 'ENC-4797'
+    it.skip("Check 'Approvers' are disbaled", () => {
       SystemRequirement("REQ-0850");
       cy.get("[data-cy=\"approvers\"] input").should("be.disabled");
     });
