@@ -17,6 +17,7 @@ declare global {
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
+      drCloseApproveAndReleaseDialog(): Chainable<Subject>;
       drClickCreateDocument(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
@@ -88,6 +89,10 @@ Cypress.Commands.add("drApproveAndReleaseDocument", () => {
     () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
     });
+});
+
+Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
+  cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").click();
 });
 
 Cypress.Commands.add("drClickCreateDocument", () => {

@@ -77,6 +77,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
       className={classNames(classes.linkContainer, {
         [classes.selected]: isSelected,
       })}
+      data-cy={"DocumentRevisionList-item"}
     >
       <NavLink
         to={link}
