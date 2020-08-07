@@ -138,7 +138,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   }, [documentTypesById, values.document?.documentType?.id]);
   const isInlineApproval = documentRevision?.formDocument?.formTemplate?.schema.some((e) =>
     (e.type === "approval" || e.type === "inlineapproval" as string));
-  const isRevisionChangeHidden = isRecord && isInlineApproval && isdocRevStatusDraft && !showAdministrativeAndVoidChange;
+  const isRevisionChangeHidden = (isRecord &&
+    isInlineApproval &&
+    isdocRevStatusDraft &&
+    !showAdministrativeAndVoidChange);
 
   isOwnerContext = React.createContext(isOwner);
   documentTypeContext = React.createContext(documentType);

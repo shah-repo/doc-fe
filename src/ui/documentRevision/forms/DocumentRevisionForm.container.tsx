@@ -4,7 +4,7 @@ import _, { cloneDeep, filter, get } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -99,6 +99,9 @@ DocumentRevisionFormContainerProps
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const bannerPortal = React.useRef(null);
   const { revisionStage } = documentRevision || {};
+  const isAlphaReleased = revisionStage === 3;
+  const isRecord = (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
+
   const cleanInitialValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
     const { outputRevision } = initialValues;
@@ -118,7 +121,8 @@ DocumentRevisionFormContainerProps
     const attachments = outputRevision
       ? filter(initialValues.attachments, (file) => file.lineType !== "RED_LINE")
       : initialValues.attachments;
-
+    const docId = initialValues.formDocument?.document?.docId;
+    const isAdministrativeDefault = Boolean(docId && !_.isEmpty(docId)) && isAlphaReleased && isRecord;
     return {
       ...initialValues,
       attachments,
@@ -132,6 +136,9 @@ DocumentRevisionFormContainerProps
       renderHTML,
       securityGroups,
       outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
+      revisionChangeType: isAdministrativeDefault ?
+        RevisionChangeType.AdministrativeChange :
+        RevisionChangeType.NextRevision,
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canUpdateHTML, initialValues, groupOptions]);
@@ -160,7 +167,6 @@ DocumentRevisionFormContainerProps
   const { schema: originScheme = [] } =
   cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
   const isOutput =  Boolean(outputGroup && !_.isEmpty(outputGroup));
-  const isRecord = (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
   const formInput = useMemo(() =>
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
   , [cleanInitialValues]);
