@@ -24,6 +24,7 @@ import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
 import TrainingControl from "./training.control";
+import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
@@ -80,6 +81,14 @@ export const Presenter: React.FunctionComponent<Props> = ({
       documentRevisionId={id}
     />
   );
+  const containsRedline = (): boolean => {
+    for (const attachment of attachments) {
+      if (attachment.lineType === LINE_TYPES.RED_LINE) {
+        return true;
+      }
+    }
+    return false;
+  };
 
   const contentRenderer = () => (
     <Box className={classes.boxContainer}>
@@ -129,7 +138,11 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {document.referencedBy && (
           <ReferencedByContainer dataProp={document.referencedBy} />
         )}
-        {attachments && <Attachment isAttachmentEmpty={!attachments.length}/>}
+        {attachments && <Attachment
+          isAttachmentEmpty={!attachments.length}
+          docRevId = {id}
+          containsRedline = {containsRedline()}
+          docRevStatus={status}/>}{/* Need to put actual check here*/}
         {renderTrainingControl}
       </Grid>
 
