@@ -1,17 +1,17 @@
-import { Link, CircularProgress, createStyles, makeStyles, Theme } from "@material-ui/core";
+import { CircularProgress, createStyles, Link, makeStyles, Theme } from "@material-ui/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import React, { useState } from "react";
 import { AttachmentDownloadResponse, attachmentsActions } from "../../../../state/ducks/attachments";
+import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { AsyncStatus } from "../../../../state/types";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import useDialog from "../../../hooks/useDialog";
-import AttachmentRedLineWarningDialog from "../attachment.redline.warning/dialog";
+import { Translation } from "../../../translations/types";
 import PasswordDialog from "../../password/dialog";
 import { Password } from "../../password/types";
-import { Translation } from "../../../translations/types";
-import { AsyncStatus } from "../../../../state/types";
+import AttachmentRedLineWarningDialog from "../attachment.redline.warning/dialog";
 
 
 export interface Props {
@@ -22,22 +22,22 @@ export interface Props {
 }
 
 export const styles = makeStyles((theme: Theme) =>
-createStyles({
-  downloadLabel: ({isAttachmentEmpty})=> ({
-    flex: "0 0 50%",
-    display: isAttachmentEmpty ? "none" : "flex",
-    justifyContent: "flex-end",
-    paddingRight: "25px",
-  }),
-  icon: {
-    verticalAlign: "middle",
-    maxHeight: "20px",
-    maxWidth: "20px",
-  },
-  link: {
-    cursor: "pointer",
-  },
-}));
+  createStyles({
+    downloadLabel: ({ isAttachmentEmpty }) => ({
+      flex: "0 0 50%",
+      display: isAttachmentEmpty ? "none" : "flex",
+      justifyContent: "flex-end",
+      paddingRight: "25px",
+    }),
+    icon: {
+      verticalAlign: "middle",
+      maxHeight: "20px",
+      maxWidth: "20px",
+    },
+    link: {
+      cursor: "pointer",
+    },
+  }));
 
 const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   isAttachmentEmpty,
@@ -62,7 +62,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   const passwordDialogHandler = useDialog();
   const redlineWarningDialogHandler = useDialog();
 
-  const classes = styles({isAttachmentEmpty});
+  const classes = styles({ isAttachmentEmpty });
 
 
   const async = useAsync<AttachmentDownloadResponse>({
@@ -76,7 +76,6 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
       alert(message);
     },
   });
-
 
 
   const passwordSubmit = (values: Password) => {
