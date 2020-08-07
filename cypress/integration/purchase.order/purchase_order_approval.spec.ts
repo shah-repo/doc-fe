@@ -24,6 +24,7 @@ context("Create company via API and create Purchase Order Form document", () => 
       loginResponse = response;
 
       cy.cmpCreateCompany({
+        specFilePath: __filename,
         payload: {
           companyAdminEmail: "enlil.testmail+cy1@gmail.com",
           helloSignIntegrationEnabled: false,
@@ -370,6 +371,10 @@ context("Test the POAM when approving Purchase Order", () => {
     cy.poAMApproveButton();
   });
 
+  it("Navigate to Doc List", () => {
+    cy.navigToDocumentList().wait(2000);
+  });
+
   it("Navigate to AR List", () => {
     cy.navigToApprovalRequestList();
   });
@@ -435,6 +440,10 @@ context("Test the POAM when approving Purchase Order", () => {
   it("Click on 'Reject' AR and enter confirmation password", () => {
     SystemRequirement("REQ-1570");
     cy.poRejectAR({ password: "Tester1!" });
+  });
+
+  it("Navigate to Doc List", () => {
+    cy.navigToDocumentList().wait(2000);
   });
   
   it("Click on 'Purchase Order' on sidebar", () => {

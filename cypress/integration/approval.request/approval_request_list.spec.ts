@@ -1,6 +1,3 @@
-/* eslint-disable max-classes-per-file */
-// / <reference types="Cypress" />
-
 import faker from "faker";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -31,6 +28,7 @@ context("Approval request landing page test", () => {
         loginResponse = response;
 
         cy.cmpCreateCompany({
+          specFilePath: __filename,
           payload: {
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,

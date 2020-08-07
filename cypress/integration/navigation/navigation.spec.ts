@@ -1,6 +1,3 @@
-/* eslint-disable max-classes-per-file */
-// eslint-disable-next-line spaced-comment
-/// <reference types="Cypress" />
 import path from "path";
 import { GroupTag, NavigationItems } from "../../../src/state/ducks/auth/types";
 
@@ -66,6 +63,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
         loginResponse = response;
 
         cy.cmpCreateCompany({
+          specFilePath: __filename,
           payload: {
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,

@@ -13,6 +13,7 @@ context("Group Creation Flow", () => {
       }).then((response) => {
         loginResponse = response;
         cy.cmpCreateCompany({
+          specFilePath: __filename,
           payload: {
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,

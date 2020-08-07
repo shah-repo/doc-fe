@@ -1,9 +1,5 @@
 /* eslint-disable max-classes-per-file */
 // / <reference types="Cypress" />
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
-
 import { SystemRequirement } from "../utils/context/systemRequirement";
 
 let createdCompany;
@@ -25,6 +21,7 @@ context("Approval request form scenario", () => {
         multipleCompanies = response.employees.length > 0;
 
         cy.cmpCreateCompany({
+          specFilePath: __filename,
           payload: {
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,
@@ -194,10 +191,6 @@ context("Approval request form scenario", () => {
         cy.arAddApproverOnApproverList({ approver: "enlil.testmail+cy1@gmail.com" });
       });
 
-    it("Add date", () => {
-      cy.arAddEffectiveDate();
-    });
-
     it("Click Create Approval Request", () => {
       cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
@@ -238,12 +231,8 @@ context("Approval request form scenario", () => {
       cy.get("[data-cy=\"fb.add.document\"]").should("be.disabled");
     });
 
-    it("Check 'Effective Date' is disabled", () => {
-      SystemRequirement("REQ-0850");
-      cy.xpath("//input[@name]/ ../div/button").should("be.disabled");
-    });
-
-    it("Check 'Approvers' are disabled", () => {
+    //  approvers 'In_review' should be enabled now 'ENC-4797'
+    it.skip("Check 'Approvers' are not disabled", () => {
       SystemRequirement("REQ-0850");
       cy.get("[data-cy=\"approvers\"] input").should("not.be.disabled");
     });

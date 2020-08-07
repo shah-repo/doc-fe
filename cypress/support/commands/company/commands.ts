@@ -1,3 +1,4 @@
+import * as CRC32 from "crc-32";
 import faker from "faker";
 import { Company } from "../../../../src/state/ducks/company/types";
 import { CONFIG } from "../../config";
@@ -42,7 +43,11 @@ export interface ICreateCompanyBootstrap {
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      cmpCreateCompany(params: { payload: Partial<ICreateCompanyBootstrap>; sessionId: string }): Chainable<Subject>;
+      cmpCreateCompany(params: {
+        payload: Partial<ICreateCompanyBootstrap>;
+        sessionId: string;
+        specFilePath: string;
+      }): Chainable<Subject>;
       cmpUpdateCompany(params: { employeeId: string; sessionId: string;
         payload: Partial<Company>;}): Chainable<Subject>;
       cmpSelectCompany(params: { name: string; multiple: boolean }): Chainable<Subject>;
@@ -52,14 +57,21 @@ declare global {
   }
 }
 
-Cypress.Commands.add("cmpCreateCompany", (params: { payload: ICreateCompanyBootstrap; sessionId: string }) => {
-  const companyNumber = Math.round(Math.random() * 1000);
+Cypress.Commands.add("cmpCreateCompany", (params: {
+  payload: ICreateCompanyBootstrap;
+  sessionId: string;
+  specFilePath: string;
+}) => {
+  const { payload, sessionId, specFilePath } = params;
+
+  const companyNumber = (Math.abs(CRC32.str(specFilePath)) + Math.round(Math.random() * 100000)) % 100000;
+
   const bodyDefaults = {
     name: `${capitalize(faker.commerce.color())} ${faker.company.companyName()} ${companyNumber}`,
     companyAcronym: `TC${companyNumber}`,
   };
   const body: ICreateCompanyBootstrap = {
-    ...params.payload,
+    ...payload,
     ...bodyDefaults,
   };
   cy.request({
@@ -67,7 +79,7 @@ Cypress.Commands.add("cmpCreateCompany", (params: { payload: ICreateCompanyBoots
     url: `${CONFIG.BE_URL}/api/v1/company/bootstrap`,
     body,
     headers: {
-      Authorization: `bearer_admin ${params.sessionId}`,
+      Authorization: `bearer_admin ${sessionId}`,
     },
   }).then((response) => response.body);
 });
