@@ -232,9 +232,9 @@ context("Approval request form scenario", () => {
     });
 
     //  approvers 'In_review' should be enabled now 'ENC-4797'
-    it.skip("Check 'Approvers' are disbaled", () => {
+    it.skip("Check 'Approvers' are not disabled", () => {
       SystemRequirement("REQ-0850");
-      cy.get("[data-cy=\"approvers\"] input").should("be.disabled");
+      cy.get("[data-cy=\"approvers\"] input").should("not.be.disabled");
     });
   });
 
