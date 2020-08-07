@@ -25,7 +25,7 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({
       </Box>
       <Box component="span" >
         {` ${docId}, `}
-        <Text message="common.version" />
+        <Text message="common.revision" />
         {` ${version}, `}
         <Date value={releasedAt} />
       </Box>

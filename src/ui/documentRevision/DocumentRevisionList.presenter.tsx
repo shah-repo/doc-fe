@@ -45,16 +45,13 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isSelected = selectedDocumentRevision === documentRevision.id;
   const { status } = documentRevision;
   const [isStatusVisible, statusLabel] = useDocumentVersion(documentTypeId, status);
-  let verPrefix = "common.version";
+  let verPrefix = "common.revision";
   let statLabel = statusLabel;
 
 
   if (documentRevision.revision === 1 &&
     documentRevision.document?.documentType.groupOptions?.includes(FBDocTypeGroup.RECORD) && isInlineApproval) {
     verPrefix = "common.work.in.progress";
-  }
-  if (status === DocumentRevisionStatus.Released) {
-    verPrefix = "common.revision";
   }
   if ((status === DocumentRevisionStatus.Released || status === DocumentRevisionStatus.Deprecated) &&
   isInlineApproval) {
