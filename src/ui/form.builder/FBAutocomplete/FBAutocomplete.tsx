@@ -1,10 +1,11 @@
 import { Box, Chip, IconButton, TextField, Typography } from "@material-ui/core";
 import CachedIcon from "@material-ui/icons/Cached";
-import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
+import Autocomplete, { createFilterOptions, RenderInputParams } from "@material-ui/lab/Autocomplete";
 import _ from "lodash";
 import React from "react";
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
 import { ApprovalStatus } from "../../../state/ducks/documents";
+import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
 import { withFBAutocomplete } from "./FBAutocomplete.wrap";
 
@@ -25,6 +26,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
+  const stringify = (option: OptionType) => (getOptionLabel && getOptionLabel(option)) || "";
+  const filterOptions = createFilterOptions({ ignoreAccents: false, stringify });
   return (
     <>
       {includeQRScan && (
@@ -49,6 +52,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             getOptionDisabled,
             freeSolo,
             filterSelectedOptions,
+            filterOptions,
           }}
           renderInput={(params: RenderInputParams) => (
             <Box display="flex">
