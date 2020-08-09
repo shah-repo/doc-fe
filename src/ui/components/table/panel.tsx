@@ -115,7 +115,7 @@ export function TablePanel<T extends any>({
 
   const formatParams = () => {
     const params: any = {};
-    if(!tableCriteria.queryDict){
+    if (!tableCriteria.queryDict) {
       return;
     }
     Object.entries(tableCriteria.queryDict)
