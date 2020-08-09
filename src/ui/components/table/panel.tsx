@@ -155,6 +155,7 @@ export function TablePanel<T extends any>({
         tableName,
       ),
     );
+
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
@@ -206,6 +207,7 @@ export function TablePanel<T extends any>({
         dispatch(
           tableSearchActions.setSearchCriteria(
             {
+              queryDict: {},
               apiError: "Error: " + errorMessage,
               forceUpdate: false,
             },
@@ -213,6 +215,8 @@ export function TablePanel<T extends any>({
           ),
         );
       });
+
+
   };
 
   const noRowsRenderer = () => isLoading ?
