@@ -115,6 +115,9 @@ export function TablePanel<T extends any>({
 
   const formatParams = () => {
     const params: any = {};
+    if (!tableCriteria.queryDict) {
+      return;
+    }
     Object.entries(tableCriteria.queryDict)
       .forEach(([key, value]) => {
         if (key.startsWith("dynamicParams")) {
