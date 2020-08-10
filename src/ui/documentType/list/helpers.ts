@@ -71,7 +71,7 @@ export const getStaticColumns = (
       width: 150,
     },
     searchOptions: {
-      defaultValue: tableCriteria.queryDict.docId,
+      defaultValue: tableCriteria.queryDict?.docId,
     },
   },
   {
