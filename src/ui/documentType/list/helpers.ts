@@ -25,7 +25,7 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
     omitSearch = false;
     searchOptions.dataKey = "owner";
   }
-  searchOptions.defaultValue = tableCriteria.queryDict[searchOptions.dataKey as string];
+  searchOptions.defaultValue = tableCriteria.queryDict?.[searchOptions.dataKey as string];
 
   if (valuePath === "status") {
     omitSearch = false;
@@ -80,7 +80,7 @@ export const getStaticColumns = (
     tooltipKey: "name",
     cellHref: cellHrefRenderer,
     searchOptions: {
-      defaultValue: tableCriteria.queryDict.name,
+      defaultValue: tableCriteria.queryDict?.name,
     },
   },
   {
@@ -91,7 +91,7 @@ export const getStaticColumns = (
       cellDataGetter: ({ rowData }) => rowData.owner.user.name,
     },
     searchOptions: {
-      defaultValue: tableCriteria.queryDict.owner,
+      defaultValue: tableCriteria.queryDict?.owner,
     },
   },
   {
@@ -101,8 +101,8 @@ export const getStaticColumns = (
     cellType: (rowData) => (canEdit(rowData) ? "LINK" : "BASE"),
     searchOptions: {
       dataKey: "status[]",
-      defaultValue: isString(tableCriteria.queryDict["status[]"])
-        ? tableCriteria.queryDict["status[]"]
+      defaultValue: isString(tableCriteria.queryDict?.["status[]"])
+        ? tableCriteria.queryDict?.["status[]"]
         : undefined,
       searchType: "select",
       selectOptions: documentRevisionStatusOption(),
@@ -113,7 +113,7 @@ export const getStaticColumns = (
     label: "common.approval.id",
     searchOptions: {
       dataKey: "crId",
-      defaultValue: tableCriteria.queryDict.crId,
+      defaultValue: tableCriteria.queryDict?.crId,
     },
     cellHref: cellHrefRenderer,
     columnOptions: {
