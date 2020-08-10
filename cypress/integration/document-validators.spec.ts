@@ -1,10 +1,3 @@
-// eslint-disable-next-line spaced-comment
-/// <reference types="Cypress" />
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
-
-const runId = new Date().valueOf();
 let company;
 let docId;
 let loginResponse;
@@ -44,14 +37,13 @@ context("Validators tests", () => {
       }).then((response: any) => {
 
         cy.cmpCreateCompany({
+          specFilePath: __filename,
           payload: {
-            companyAcronym: `T1${runId}`,
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: "enlil.testmail+cy5@gmail.com",
             maxRevisionStages: 3,
-            name: `Test Company ${runId}`,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -105,7 +97,7 @@ context("Validators tests", () => {
 
     context("Open 'Create Document'", () => {
       it("Navigate to document list", () => {
-        cy.cmpNavigateToDocumentList();
+        cy.navigToDocumentList();
       });
 
       it("Click on 'create a document'", () => {
@@ -139,7 +131,7 @@ context("Validators tests", () => {
 
   context("Open 'Create Document'", () => {
     it("Navigate to document list", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Click on 'create a document'", () => {
@@ -563,8 +555,7 @@ context("Validators tests", () => {
         const errorBlock = $elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredIfFieldLabel} 
-          field is required when ${requiredFieldLabel} is ${requiredIfFieldValue}.`);
+          .should("have.text", `The ${requiredIfFieldLabel} field is required when ${requiredFieldLabel} is ${requiredIfFieldValue}.`);
       });
     });
 
@@ -588,8 +579,7 @@ context("Validators tests", () => {
         const errorBlock = $elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredIfInFieldLabel} 
-          field is required when ${requiredIfFieldLabel} includes , .`);
+          .should("have.text", `The ${requiredIfInFieldLabel} field is required when ${requiredIfFieldLabel} includes , .`);
       });
     });
 
@@ -613,8 +603,7 @@ context("Validators tests", () => {
         const errorBlock = $elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredWithFieldLabel} 
-          field is required when ${requiredIfInFieldLabel} is not empty.`);
+          .should("have.text", `The ${requiredWithFieldLabel} field is required when ${requiredIfInFieldLabel} is not empty.`);
       });
     });
 
@@ -634,8 +623,7 @@ context("Validators tests", () => {
         const errorBlock = $elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredWithoutFieldLabel} 
-          field is required when ${requiredWithFieldLabel} is empty.`);
+          .should("have.text", `The ${requiredWithoutFieldLabel} field is required when ${requiredWithFieldLabel} is empty.`);
       });
     });
 

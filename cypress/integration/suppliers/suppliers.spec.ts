@@ -1,10 +1,6 @@
-/* eslint-disable max-classes-per-file */
-// eslint-disable-next-line spaced-comment
-/// <reference types="Cypress" />
 
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
@@ -18,14 +14,13 @@ context("Create company via API and create Suppliers document", () => {
       loginResponse = response;
 
       cy.cmpCreateCompany({
+        specFilePath: __filename,
         payload: {
-          companyAcronym: `T1${runId}`,
           companyAdminEmail: "enlil.testmail+cy1@gmail.com",
           helloSignIntegrationEnabled: false,
           helloSignTestMode: false,
           importerEmail: "enlil.testmail+cy5@gmail.com",
           maxRevisionStages: 3,
-          name: `Test Company ${runId}`,
           numOfDocDigits: 5,
           remoteValidatorBundleName: "default",
           slackIntegrationEnabled: false,
@@ -83,7 +78,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.navigToDocumentList();
   });
 
   it("Click on 'Create a document'", () => {
@@ -116,7 +111,7 @@ context("Create company via API and create Suppliers document", () => {
 
   it("Navigate to supplier list", () => {
     SystemRequirement("REQ-2230");
-    cy.cmpNavigateToSuppliers();
+    cy.navigToSuppliers();
   });
 
   it("Create supplier from Form document", () => {
@@ -144,7 +139,7 @@ context("Create company via API and create Suppliers document", () => {
 
   it("Navigate to supplier list", () => {
     SystemRequirement("REQ-2230");
-    cy.cmpNavigateToSuppliers();
+    cy.navigToSuppliers();
   });
 
   it("Filter supplier Title/Name", () => {
@@ -167,7 +162,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.navigToDocumentList();
   });
 
   it("Click on 'Create a document'", () => {
@@ -200,7 +195,7 @@ context("Create company via API and create Suppliers document", () => {
 
   it("Navigate to supplier list", () => {
     SystemRequirement("REQ-2230");
-    cy.cmpNavigateToSuppliers();
+    cy.navigToSuppliers();
   });
 
   it("Click on create supplier to prompt option of which supplier form we should use", () => {
@@ -215,3 +210,4 @@ context("Create company via API and create Suppliers document", () => {
 });
 
 export { };
+
