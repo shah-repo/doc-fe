@@ -56,7 +56,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
 
   const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
   && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
-    .find((type) => type.documentTypeName === "Approval Request");
+    .find((type) => type.documentTypeName === "Approval Request" || type.documentTypeName === "Change Request");
 
   useEffect(() => {
     if (formDocumentId) {
