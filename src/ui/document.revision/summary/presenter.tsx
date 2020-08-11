@@ -140,7 +140,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           <ReferencedByContainer dataProp={document.referencedBy} />
         )}
         {attachments && <Attachment
-          isAttachmentEmpty={!attachments.length}
+          isAttachmentEmpty={!(attachments.length > 1)}
           docRevId = {id}
           containsRedline = {containsRedline()}
           docRevStatus={status}/>}{/* Need to put actual check here*/}

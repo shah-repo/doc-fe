@@ -144,7 +144,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     !showAdministrativeAndVoidChange);
 
   const docRevId = documentRevision?.id;
-  const isAttachmentEmpty = !documentRevision?.attachments.length;
+  const isAttachmentEmpty = !(documentRevision?.attachments.length > 1);
   isOwnerContext = React.createContext(isOwner);
   documentTypeContext = React.createContext(documentType);
 
