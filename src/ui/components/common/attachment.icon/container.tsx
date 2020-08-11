@@ -195,7 +195,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     documentRevisionId?: string) => {
     setNewWatermarkError("");
     setNewWatermarkRequest(null);
-    
+
     if (documentRevisionId) {
       setWatermark(true);
     }
