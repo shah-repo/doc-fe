@@ -38,6 +38,7 @@ export const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
           message: {
             translation: translation as Translation,
             values: {
+              fileType: watermarkRequest.hasWatermarks ? "watermark.file" as Translation : "file" as Translation,
               name: watermarkRequest.attachment.name,
               type: watermarkRequest.attachment.type,
             },

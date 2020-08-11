@@ -9,5 +9,6 @@ export const getAttachment = (attachment: Partial<Attachment> = {}): Attachment 
   lineType: "CLEAN_COPY",
   fileSizeS3Link: faker.random.number(),
   fileSizeS3LinkCleanCopy: faker.random.number(),
+  hasWatermarks: false,
   ...attachment,
 });

@@ -2,6 +2,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import React, { useMemo } from "react";
 import { Attachment, AttachmentType } from "../../../../state/ducks/attachments";
+import { FormHeaderSummaryContext } from "../../../document.revision/header/SummaryHeader";
 import Text from "../../Text";
 import { WATERMARK_FILES } from "../view.file/utils/constants";
 import { checkIfFileIsViewable } from "../view.file/utils/helpers";
@@ -11,7 +12,7 @@ import { AttachmentMenuProps, PasswordSubmitActionType } from "./utils/types";
 interface OwnProps {
   redLineRequiresPassword: (attachment: Attachment) => boolean;
   cleanCopyRequiresPassword: (attachment: Attachment) => boolean;
-  handleWatermarkRequest?: (attachment: Attachment, attachmentType: AttachmentType) => void;
+  handleWatermarkRequest?: (attachment: Attachment, attachmentType: AttachmentType, documentRevisionId: string) => void;
   setSelectedAttachment: (attachment: Attachment) => void;
   handleIconClick?: (attachment: Attachment) => any;
 }
@@ -33,7 +34,8 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
 }) => {
   const file = useMemo(() => (attachment || {} as Attachment), [attachment]);
   const isFileViewable =  useMemo(() => checkIfFileIsViewable(file.type), [file.type]);
-  const canWatermark = useMemo(() => WATERMARK_FILES.includes(file.type), [file.type]);
+  const canWatermark = useMemo(() => WATERMARK_FILES.includes(file.type) || file.hasWatermarks, [file.type, file.hasWatermarks]);
+  const { documentRevisionSummary } = React.useContext(FormHeaderSummaryContext) || {};
 
   const {
     name: fileName,
@@ -46,7 +48,7 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
   };
   const handleWatermarkClick = (attachmentType: AttachmentType) => () => {
     handleClose && handleClose();
-    handleWatermarkRequest && handleWatermarkRequest(file, attachmentType);
+    handleWatermarkRequest && handleWatermarkRequest(file, attachmentType, documentRevisionSummary?.id as string);
   };
   const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {
     setSelectedAttachment(attachment);

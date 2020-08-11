@@ -38,7 +38,7 @@ export const WatermarkFooterPresenter: React.FunctionComponent<Props> = ({
   const renderIcon = result.success ?
     <SuccessIcon /> :
     <WarningIcon />;
-
+  console.log(result.message);
   return (
     <Grid
       container={true}

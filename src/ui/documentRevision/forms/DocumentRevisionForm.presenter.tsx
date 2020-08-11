@@ -60,7 +60,7 @@ export interface Props
   showAdministrativeAndVoidChange: boolean;
 }
 
-interface FormHeaderContext {
+export interface FormHeaderContext {
   documentRevision: DocumentRevision;
   canChangeOwnerShip: boolean;
   values: DocumentRevisionFormValues;
