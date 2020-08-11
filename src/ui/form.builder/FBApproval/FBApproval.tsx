@@ -52,7 +52,7 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
       <FBApprovalField<Employee>
         {...props}
         {...{ disabled }}
-        collection={approvers as Employee[]} 
+        collection={approvers as Employee[]}
       />
     )}
     {!isEmpty(approverGroups) && (
