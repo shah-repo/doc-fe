@@ -1,6 +1,8 @@
 /* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
+import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
+import { CONFIG } from "../../config";
 export { };
 
 declare global {
@@ -46,6 +48,7 @@ declare global {
       poAMCheckForAlertMessage(): Chainable<Subject>;
       poRejectAR(params: {password: string}): Chainable<Subject>;
       poVerifyStatus(params: {status: string}): Chainable<Subject>;
+      poAPICreatePO(params: {payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
     }
   }
 }
@@ -237,4 +240,18 @@ Cypress.Commands.add("poVerifyStatus", (params: { status: string }) => {
   cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
 });
 
+Cypress.Commands.add("poAPICreatePO", (params: {
+  payload: DocumentRevisionEditRequestBody;
+  employeeId: string;
+  sessionId: string;
+}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/document_revisions`,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
 

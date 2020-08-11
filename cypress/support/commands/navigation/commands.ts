@@ -17,6 +17,7 @@ declare global {
       navigToApprovalRequestList(): Chainable<Subject>;
       navigToPurchaseOrder(): Chainable<Subject>;
       navigToSuppliers(): Chainable<Subject>;
+      navigToReceivableList(): Chainable<Subject>;
     }
   }
 }
@@ -39,6 +40,10 @@ Cypress.Commands.add("navigClickOnItem", (params: { navigItem: string }) => {
 
 Cypress.Commands.add("navigToDashboard", () => {
   cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
+});
+
+Cypress.Commands.add("navigToReceivableList", () => {
+  cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
 });
 
 Cypress.Commands.add("navigToDocumentList", () => {
