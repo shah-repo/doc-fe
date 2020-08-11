@@ -48,7 +48,7 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
         cellDataGetter: ({ rowData }) => rowData.name,
       },
       searchOptions: {
-        defaultValue: tableCriteria.queryDict.groupName,
+        defaultValue: tableCriteria.queryDict?.groupName,
       },
     },
     {
@@ -59,7 +59,7 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
         cellDataGetter: ({ rowData }) => handleMembers(rowData.employees),
       },
       searchOptions: {
-        defaultValue: tableCriteria.queryDict.userName,
+        defaultValue: tableCriteria.queryDict?.userName,
       },
     },
     {
@@ -72,7 +72,7 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
           { text: "Official", value: "true" },
           { text: "Unofficial", value: "false" },
         ],
-        defaultValue: tableCriteria.queryDict.isOfficial,
+        defaultValue: tableCriteria.queryDict?.isOfficial,
       },
       columnOptions: {
         cellDataGetter: ({ rowData }) =>

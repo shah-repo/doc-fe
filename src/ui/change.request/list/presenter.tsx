@@ -42,7 +42,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: { width: 100 },
       sortable: true,
       searchOptions: {
-        defaultValue: tableCriteria.queryDict.crId,
+        defaultValue: tableCriteria.queryDict?.crId,
       },
     },
     {
@@ -52,7 +52,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: { flexGrow: 2 },
       tooltipKey: "description",
       searchOptions: {
-        defaultValue: tableCriteria.queryDict.title,
+        defaultValue: tableCriteria.queryDict?.title,
       },
     },
     {
@@ -64,7 +64,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         flexGrow: 1,
       },
       searchOptions: {
-        defaultValue: tableCriteria.queryDict.owner,
+        defaultValue: tableCriteria.queryDict?.owner,
       },
     },
     {
@@ -77,7 +77,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       searchOptions: {
         searchType: "select",
         selectOptions: changeRequestStatusOption(),
-        defaultValue: tableCriteria.queryDict.state,
+        defaultValue: tableCriteria.queryDict?.state,
       },
     },
   ];

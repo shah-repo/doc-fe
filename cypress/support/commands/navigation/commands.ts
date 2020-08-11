@@ -44,6 +44,7 @@ Cypress.Commands.add("navigToDashboard", () => {
 Cypress.Commands.add("navigToDocumentList", () => {
   cy.navigToNestedItem({
     navigItems: [
+      NavigationItems.DASHBOARD,
       NavigationItems.DOCUMENT_CONTROL,
       NavigationItems.DOCUMENT_LIST,
     ],
@@ -53,6 +54,7 @@ Cypress.Commands.add("navigToDocumentList", () => {
 Cypress.Commands.add("navigToApprovalRequestList", () => {
   cy.navigToNestedItem({
     navigItems: [
+      NavigationItems.DASHBOARD,
       NavigationItems.DOCUMENT_CONTROL,
       NavigationItems.APPROVAL_REQUEST,
     ],

@@ -74,8 +74,14 @@ export const generateVersionNumber = (
   if (!revision || !revisionStage) {
     return "";
   }
-  if (revisionChangeType === RevisionChangeType.Obsolete) {
+  if (revisionChangeType === RevisionChangeType.Void) {
     return "Void";
+  }
+  if (revisionChangeType === RevisionChangeType.Obsolete) {
+    return "OBS";
+  }
+  if (revisionChangeType === RevisionChangeType.AdministrativeChange) {
+    return `${getAlphabetFromNumber(revision)}.${subRevision}`;
   }
   switch (revisionStage) {
     case 1: {

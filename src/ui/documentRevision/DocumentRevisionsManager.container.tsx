@@ -9,6 +9,7 @@ import { ReactComponent as NoteIcon } from "../../assets/images/note.svg";
 import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import { FBDocTypeGroup } from "../form.builder/FBApprovalMatrixTable";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.container";
 import DocumentRevisionAuditContainer from "./audit/Audit.container";
@@ -83,6 +84,11 @@ DocumentRevisionManagerContainerProps
     !!selectedDocument?.formDocument?.formTemplate?.schema.some((e) =>
       (e.type === "approval" || e.type === "inlineapproval" as string));
 
+  const isRecord =
+    !!docRevsWithoutCanceled.find(
+      (e) => (e.document?.documentType?.groupOptions || []).includes(FBDocTypeGroup.RECORD)) ||
+    (!!selectedDocument?.document?.documentType?.groupOptions?.includes(FBDocTypeGroup.RECORD) || false);
+
   const sidebarList = [
     {
       icon: <NoteIcon />,
@@ -93,6 +99,7 @@ DocumentRevisionManagerContainerProps
         component: <DocumentRevisionListContainer
           documentRevisions={docRevsWithoutCanceled}
           isInlineApproval={isInlineApproval}
+          isRecord={isRecord}
           documentId={documentId}
           docId={docId}
           selectedDocumentRevision={documentRevisionId}
@@ -175,7 +182,6 @@ DocumentRevisionManagerContainerProps
         )}
       </div>
       <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />
-
     </div>
   );
 };

@@ -199,10 +199,6 @@ context("Approval request form", () => {
       cy.arAddApproverOnApproverList({ approver: "enlil.testmail+cy2@gmail.com" });
     });
 
-    it("Add date", () => {
-      cy.arAddEffectiveDate();
-    });
-
     it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
       cy.arClickCreateApprovalRequestAfterCompletingForm();
