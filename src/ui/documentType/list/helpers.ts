@@ -52,7 +52,6 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
   return [omitSearch, searchOptions];
 };
 
-
 export const filterSecurityGroupsForQms = (isQms = false, groupOptions) => {
   if (!isQms) {
     return [];

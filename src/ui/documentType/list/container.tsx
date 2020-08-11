@@ -1,4 +1,5 @@
 import { get, isEmpty } from "lodash";
+import moment from "moment";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
@@ -9,6 +10,7 @@ import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisio
 import { documentTypeSelectors, PageDetailsColumn } from "../../../state/ducks/documentRevisions/documentType";
 import { pageDetailsSelectors } from "../../../state/ducks/pageDetails";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
+import Date from "../../components/Date";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
 import { canEditDocumentRevision, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
@@ -18,6 +20,11 @@ import { columnSearchConfiguration, getStaticColumns } from "./helpers";
 import DocumentByTypeListPresenter from "./presenter";
 
 type Props = RouteComponentProps<RouteParams>;
+
+const getFormattedRowValue = (value: string) => {
+  const isDate = moment(value, "YYYY-MM-DDTHH:mm:ss.SSSZ", true).isValid();
+  return isDate ? <Date value={value} /> : value;
+};
 
 export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   match,
@@ -91,7 +98,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         cellHref: cellHrefRenderer,
         omitSearch,
         columnOptions: {
-          cellDataGetter: ({ rowData }) => get(rowData, column.valuePath),
+          cellDataGetter: ({ rowData }) => getFormattedRowValue(get(rowData, column.valuePath)),
         },
         searchOptions,
       };
