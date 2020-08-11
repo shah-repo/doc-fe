@@ -1,4 +1,3 @@
-import { BoxProps } from "@material-ui/core";
 import { FBApprovalState, FBInputProps } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
@@ -24,6 +23,7 @@ export type FBApprovalProps =
 | "reviseDisabled"
 | "editorProperties"
 | "autosave"
+| "gutter"
 > & {
   onApprove?: (approver?: FBInlineApproverType) => () => void;
   approvalConfig?: (approver?: FBInlineApproverType) => FBApprovalConfig | undefined;
@@ -53,10 +53,7 @@ export interface FBApprovalApi {
   fieldValue: FBApprovalValue[];
 }
 
-export type FBApprovalFieldProps<T> =
-& FBApprovalProps
-& Pick<BoxProps, "mb">
-& {
+export type FBApprovalFieldProps<T> = FBApprovalProps & {
   collection: T[];
 };
 
