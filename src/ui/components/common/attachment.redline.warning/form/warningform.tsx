@@ -16,7 +16,7 @@ interface RedlineWarningFormProps extends WithStyles<typeof styles> {
 }
 
 const RedlineWarningForm: React.FunctionComponent<RedlineWarningFormProps> = ({
-  cancel, classes, asyncState, translationText,translationButtonText
+  cancel, classes, asyncState, translationText, translationButtonText,
 }) => (
   <Form className={classes.form}>
     <Box className = {classes.Box}>

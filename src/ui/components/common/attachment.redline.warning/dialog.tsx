@@ -26,12 +26,12 @@ export const AttachmentRedLineWarningDialog: React.FunctionComponent<Props> = ({
 }) => {
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const renderForm = (props: FormikProps<any>) => (
-    <RedlineWarningForm 
-    {...props} 
-    asyncState={asyncState} 
-    cancel={closeDialog} 
-    translationText = {translationText} 
-    translationButtonText = {translationButtonText}/>
+    <RedlineWarningForm
+      {...props}
+      asyncState={asyncState}
+      cancel={closeDialog}
+      translationText = {translationText}
+      translationButtonText = {translationButtonText}/>
   );
 
   return (
