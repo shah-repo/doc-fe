@@ -53,6 +53,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const [password, setPassword] = useState<Password | undefined>();
   const [downloadType, setdownloadType] = useState<AttachmentType>();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isWatermarking, setWatermark] = useState<boolean>(false);
   const [PasswordSubmitAction, setPasswordSubmitAction] = useState<PasswordSubmitActionType>();
   const { submitForm } = useFormContext();
   const isCurrentUserOperator = React.useContext(isOperator);
@@ -195,6 +196,9 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     documentRevisionId?: string) => {
     setNewWatermarkError("");
     setNewWatermarkRequest(null);
+    if (documentRevisionId) {
+      setWatermark(true);
+    }
     if (cleanCopyRequiresPassword(attachment)) {
       setdownloadType(attachmentType);
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_WATER_MARK);
@@ -227,8 +231,9 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
       case PasswordSubmitActionType.DOWNLOAD_WATER_MARK:
         if (selectedAttachment && downloadType) {
-          const id = newWatermarkRequest?.hasWatermarks ? documentRevisionSummary?.id : undefined;
+          const id = isWatermarking ? documentRevisionSummary?.id : undefined;
           startWaterMarkRequest(selectedAttachment, downloadType, id);
+          setWatermark(false);
         }
         break;
       case PasswordSubmitActionType.DOWNLOAD_CLEAN_COPY_FILE:

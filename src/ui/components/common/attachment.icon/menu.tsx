@@ -53,11 +53,13 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
     handleClose && handleClose();
     handleDownload && handleDownload(file, type)();
   };
+
   const handleWatermarkClick = (attachmentType: AttachmentType, isWatermarkRequest?: boolean) => () => {
     const id = isWatermarkRequest ? documentRevisionSummary?.id as string : undefined;
     handleClose && handleClose();
     handleWatermarkRequest && handleWatermarkRequest(file, attachmentType, id);
   };
+
   const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {
     setSelectedAttachment(attachment);
     if (redLineRequiresPassword(attachment)
