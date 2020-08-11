@@ -34,6 +34,9 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
       defaultValue: tableCriteria.queryDict.effectiveDate,
     };
   }
+  if (valuePath === "name") {
+    omitSearch = false;
+  }
   searchOptions.defaultValue = tableCriteria.queryDict[searchOptions.dataKey as string];
 
   if (valuePath === "status") {
