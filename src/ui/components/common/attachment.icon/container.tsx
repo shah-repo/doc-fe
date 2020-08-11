@@ -4,11 +4,10 @@ import { connect, useSelector } from "react-redux";
 import { Attachment, AttachmentDownloadResponse, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 import { authSelectors } from "../../../../state/ducks/auth";
-import { Nullable } from "../../../../state/ducks/common";
+import { Id, Nullable } from "../../../../state/ducks/common";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../../state/reducers";
 import { AsyncStatus } from "../../../../state/types";
-import { FormHeaderSummaryContext } from "../../../document.revision/header/SummaryHeader";
 import { isOperator } from "../../../documentRevision/DocumentRevisionDisplay.container";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import { documentRevisionStatusContextFromCR } from "../../../documentRevision/DocumentRevisionUpdate.container";
@@ -65,7 +64,6 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const downloadAttachmentPassword = useActionCreator(attachmentsActions.downloadRedLine);
   const requestWatermarkAction = useActionCreator(attachmentsActions.requestWatermarkedFile);
   const { documentRevision } = React.useContext(FormHeaderContext) || {};
-  const { documentRevisionSummary } = React.useContext(FormHeaderSummaryContext) || {};
 
   const passwordState =  {
     status: AsyncStatus.Idle,
@@ -161,24 +159,23 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     setAnchorEl(evt.currentTarget);
   };
 
-  const startWaterMarkRequest  = (attachment: Attachment, attachmentType: AttachmentType, documentRevisionId: string) => {
-    const watermarkBody: WatermarkRequestBody = {
+  const startWaterMarkRequest  = (attachment: Attachment, attachmentType: AttachmentType, documentRevisionId?: string) => {
+    const pdfBody: WatermarkRequestBody = {
       attachment: {
         id: attachment.id,
       },
       type: attachmentType,
     };
-    const docRevBody: WatermarkRequestBody = {
+    const watermarkBody: WatermarkRequestBody = {
       attachment: {
         id: attachment.id,
       },
       type: attachmentType,
       documentRevision: {
         id: documentRevisionId,
-      },
+      } as Id,
     };
-    const body = documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete || documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated ?
-      docRevBody : watermarkBody;
+    const body = documentRevisionId ? watermarkBody : pdfBody;
     requestWatermarkAsync.start(
       requestWatermarkAction,
       body,
@@ -186,7 +183,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     );
   };
 
-  const handleWatermarkRequest = (attachment: Attachment, attachmentType: AttachmentType, documentRevisionId: string) => {
+  const handleWatermarkRequest = (attachment: Attachment, attachmentType: AttachmentType, documentRevisionId?: string) => {
     setNewWatermarkError("");
     setNewWatermarkRequest(null);
     if (cleanCopyRequiresPassword(attachment)) {
@@ -221,7 +218,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
       case PasswordSubmitActionType.DOWNLOAD_WATER_MARK:
         if (selectedAttachment && downloadType) {
-          startWaterMarkRequest(selectedAttachment, downloadType, documentRevisionSummary?.id as string);
+          startWaterMarkRequest(selectedAttachment, downloadType);
         }
         break;
       case PasswordSubmitActionType.DOWNLOAD_CLEAN_COPY_FILE:

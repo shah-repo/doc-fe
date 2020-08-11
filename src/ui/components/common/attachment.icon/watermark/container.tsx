@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { attachmentsActions, WatermarkRequest } from "../../../../../state/ducks/attachments";
 import { Nullable } from "../../../../../state/ducks/common";
@@ -17,6 +18,7 @@ export const WatermarkContainer: React.FunctionComponent<Props> = ({
   newWatermarkRequest,
   newWatermarkError,
 }) => {
+  const intl = useIntl();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState({});
   const [requestedWatermarks, setRequestedWatermarks] = useState<WatermarkRequest[]>([]);
@@ -35,6 +37,11 @@ export const WatermarkContainer: React.FunctionComponent<Props> = ({
     setContent({
       translation: "watermark.successfully.requested",
       values: {
+        fileType: newWatermarkRequest.hasWatermarks ? intl.formatMessage({
+          id: "watermark.file",
+        }) : intl.formatMessage({
+          id: "pdf.file",
+        }),
         file: newWatermarkRequest.attachment.name,
         type: newWatermarkRequest.attachment.type,
       },
