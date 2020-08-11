@@ -14,7 +14,10 @@ import { AttachmentMenuProps, PasswordSubmitActionType } from "./utils/types";
 interface OwnProps {
   redLineRequiresPassword: (attachment: Attachment) => boolean;
   cleanCopyRequiresPassword: (attachment: Attachment) => boolean;
-  handleWatermarkRequest?: (attachment: Attachment, attachmentType: AttachmentType, documentRevisionId?: string) => void;
+  handleWatermarkRequest?: (
+    attachment: Attachment,
+    attachmentType: AttachmentType,
+    documentRevisionId?: string) => void;
   setSelectedAttachment: (attachment: Attachment) => void;
   handleIconClick?: (attachment: Attachment) => any;
 }
@@ -96,7 +99,8 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
     <MenuItem onClick={handleWatermarkClick(AttachmentType.Attached)}>
       <Text translation="attachment.download.pdf" />
     </MenuItem>;
-  const renderWatermarkFile = (documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete || documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated) &&
+  const renderWatermarkFile = (documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete ||
+    documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated) && canWatermark &&
     <MenuItem onClick={handleWatermarkClick(AttachmentType.Attached, true)}>
       <Text translation="attachment.download.watermark" />
     </MenuItem>;
