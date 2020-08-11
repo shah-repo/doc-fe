@@ -8,6 +8,7 @@ export interface TextProps extends Props {
   translation?: Translation;
   /** id of the translation or string to display */
   message?: Translation | string;
+  textAlign?: string;
 }
 
 const Text: React.FunctionComponent<TextProps> = ({

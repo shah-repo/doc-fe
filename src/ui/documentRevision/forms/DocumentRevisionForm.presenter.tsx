@@ -124,7 +124,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
   const docRevId = documentRevision?.id;
-  const isAttachmentEmpty = !documentRevision?.attachments.length;
+  const isAttachmentEmpty = !(documentRevision?.attachments.length > 1);
   isOwnerContext = React.createContext(isOwner);
   documentTypeContext = React.createContext(documentType);
 

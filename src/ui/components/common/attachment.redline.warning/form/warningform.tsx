@@ -12,10 +12,11 @@ interface RedlineWarningFormProps extends WithStyles<typeof styles> {
   asyncState: AsyncState;
   cancel: () => void;
   translationText: Translation;
+  translationButtonText: string;
 }
 
 const RedlineWarningForm: React.FunctionComponent<RedlineWarningFormProps> = ({
-  cancel, classes, asyncState, translationText,
+  cancel, classes, asyncState, translationText,translationButtonText
 }) => (
   <Form className={classes.form}>
     <Box className = {classes.Box}>
@@ -26,7 +27,7 @@ const RedlineWarningForm: React.FunctionComponent<RedlineWarningFormProps> = ({
         <SubmitButton
           id="passwordConfirm"
           asyncState={asyncState}
-          label="common.attachment.redline.warning.download.label"
+          label= {translationButtonText}
           fullWidth={false}
           className={classes.submitButton}
         />

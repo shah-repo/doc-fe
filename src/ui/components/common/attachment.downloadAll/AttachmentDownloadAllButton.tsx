@@ -93,7 +93,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
       return "common.attachment.redline.warning.download.deprecated";
     }
 
-    return "common.attachment.redline.warning.download.redline";
+    return "common.attachment.redline.warning.download.redlineAll";
   };
 
 
@@ -123,6 +123,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
         closeDialog = {redlineWarningDialogHandler.close}
         asyncState = {warningState}
         translationText = {warningPasswordText()}
+        translationButtonText = "common.attachment.redline.warning.download.labelAll"
       />
 
       <PasswordDialog
