@@ -175,19 +175,15 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const handleWatermarkRequest = (attachment: Attachment, attachmentType: AttachmentType) => {
     setNewWatermarkError("");
     setNewWatermarkRequest(null);
-    if (redLineRequiresPassword(attachment)) {
+    if (cleanCopyRequiresPassword(attachment) || redLineRequiresPassword(attachment)) {
       setdownloadType(attachmentType);
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_WATER_MARK);
       openWarningDialog();
       closeContextMenu();
-    }
-    else if (cleanCopyRequiresPassword(attachment)) {
-      setdownloadType(attachmentType);
-      setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_WATER_MARK);
-      openWarningDialog();
-      closeContextMenu();
+      return;
     } else {
       startWaterMarkRequest(attachment, attachmentType);
+      return;
     }
 
   };
