@@ -75,7 +75,6 @@ export const generateVersionNumber = (
   if (!revision || !revisionStage) {
     return "";
   }
-  console.log(revisionChangeType);
   if (revisionChangeType === RevisionChangeType.Void) {
     return "Void";
   }
