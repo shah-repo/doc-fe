@@ -194,10 +194,9 @@ DocumentRevisionFormContainerProps
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
     <FBWorkspace
       portalContainer={FBContainer}
-      // TODO: check if merging both objects would satisfy all our needs
       document={{
+        ...props.values as unknown as DocumentRevision,
         ...documentRevision as unknown as DocumentRevision,
-        outputRevision: props.values.outputRevision,
       }}
       initialValues={formInput}
       autosave={true}
