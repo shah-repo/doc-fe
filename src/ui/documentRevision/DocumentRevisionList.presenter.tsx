@@ -42,7 +42,6 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     documentRevision.revisionStage,
     documentRevision.subRevision,
     documentRevision.revisionChangeType,
-    documentRevision.status,
   );
 
   const { status } = documentRevision;

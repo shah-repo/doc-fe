@@ -82,9 +82,12 @@ export const generateVersionNumber = (
     return "OBS";
   }
 
-  const suffix = revisionStatus === DocumentRevisionStatus.Released || !subRevision || subRevision === 0
-    ? ""
-    : `.${subRevision}`;
+  /** Subrevision should only be displayed in the doc revision table if a document is in draft.
+   * If revisionStatus parameter is not passed to this function, status condition will be ignored. */
+  const isInDraft = revisionStatus === DocumentRevisionStatus.Draft;
+  const suffix = (isInDraft || !revisionStatus) && subRevision && subRevision > 0
+    ? `.${subRevision}`
+    : "";
 
   switch (revisionStage) {
     case 1: {
