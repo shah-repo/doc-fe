@@ -1,5 +1,7 @@
+import { fail } from "assert";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -15,7 +17,6 @@ let createdPOFormDocument;
 let createdPODocument;
 let createdRecivableFormDocument;
 let createdReceivable1;
-let createdReceivable2;
 
 context("Approval request landing page test", () => {
   context("[API]Prepare company", () => {
@@ -338,8 +339,7 @@ context("Approval request landing page test", () => {
                             },
                             employeeId: adminEmployee.id,
                             sessionId: loginResponse.sessionId,
-                          }).then((response) => {
-                            createdReceivable2 = response;
+                          }).then(() => {
                             done();
                           });
                         });
@@ -368,9 +368,196 @@ context("Approval request landing page test", () => {
     });
   });
 
-  context("Check for default columns", () => {
+  context("Check for default receivable filter", () => {
     it("Navigate to receivable list", () => {
       cy.navigToReceivableList();
     });
+
+    it.skip("Verify receivable list defaults to show receivables in DRAFT status", () => {
+      SystemRequirement("REQ-1720");
+      cy.recVerifyStartingFilter();
+    });
   });
+
+  context("Check for displaying default columns", () => {
+    it("Verify receivable id is present", () => {
+      SystemRequirement("REQ-1680");
+      cy.recVerifyFilterByReceivableId({ recId: "RC-00006" });
+    });
+
+    it.skip("Verify supplier name is present", () => {
+      SystemRequirement("REQ-1680");
+      fail;
+    });
+
+    it("Verify owner is present", () => {
+      SystemRequirement("REQ-1680");
+      cy.recVerifyFilterByOwner({ owner: "Company Admin" });
+    });
+
+    it("Verify record state is present", () => {
+      SystemRequirement("REQ-1680");
+      cy.recVerifyFilterByState({ state: "DRAFT" });
+    });
+
+    it.skip("Verify approval date is present", () => {
+      SystemRequirement("REQ-1680");
+      cy.recVerifyFilterByState({ state: "DRAFT" });
+      fail;
+    });
+  });
+
+  context("Edit receivable", () => {
+    it("Filter receivable list by id", () => {
+      cy.recFilterByReceivableId({ id: "RC-00005" });
+    });
+
+    it("Enter first receivable on list", () => {
+      SystemRequirement("REQ-1780");
+      cy.recClickOnFirstReceivableOnList();
+    });
+
+    it("Click on update record", () => {
+      cy.recClickUpdateRecord();
+    });
+
+    it("Click on save record", () => {
+      cy.recClickSaveBtn();
+    });
+
+    it("Approve and release", () => {
+      cy.drApproveAndReleaseDocument();
+    });
+  });
+
+  context("Verify last edited receivable is first on list", () => {
+    it("Navigate to receivable list", () => {
+      cy.navigToReceivableList();
+    });
+
+    it("Verify last edited receivable is first on list", () => {
+      SystemRequirement("REQ-1740");
+      cy.dlClearFilters();
+      cy.recVerifyFilterByReceivableId({ recId: "RC-00005" });
+    });
+  });
+
+  context("Check for filters", () => {
+    context("Verify filter by receivable id", () => {
+      it("Clear filter", () => {
+        cy.dlClearFilters();
+      });
+
+      it("Filter list by id 'RC-00006'", () => {
+        cy.recFilterByReceivableId({ id: "RC-00006" });
+      });
+
+      it("Verify filter by receivable id", () => {
+        SystemRequirement("REQ-1710");
+        cy.recVerifyFilterByReceivableId({ recId: "RC-00006" });
+      });
+
+      it("Verify receivable counter on document list", () => {
+        SystemRequirement("REQ-1760");
+        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      });
+    });
+
+    context("Verify filter by owner", () => {
+      it("Clear filter", () => {
+        cy.dlClearFilters();
+      });
+
+      it("Filter list by owner 'Company Admin'", () => {
+        cy.recFilterByOwner({ owner: "Company Admin" });
+      });
+
+      it("Verify filter by owner", () => {
+        SystemRequirement("REQ-1710");
+        cy.recVerifyFilterByOwner({ owner: "Company Admin" });
+      });
+
+      it("Verify receivable counter on document list", () => {
+        SystemRequirement("REQ-1760");
+        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+      });
+    });
+
+    context("Verify filter by state", () => {
+      it("Clear filter", () => {
+        cy.dlClearFilters();
+      });
+
+      it("Filter list by state 'DRAFT'", () => {
+        cy.recFilterByState({ state: "Draft" });
+      });
+
+      it("Verify filter by state", () => {
+        SystemRequirement("REQ-1710");
+        cy.recVerifyFilterByState({ state: "DRAFT" });
+      });
+
+      it("Verify receivable counter on document list", () => {
+        SystemRequirement("REQ-1760");
+        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      });
+    });
+
+    context("Verify filter by approval id", () => {
+      it("Clear filter", () => {
+        cy.dlClearFilters();
+      });
+
+      it("Filter list by approval id 'AR00005'", () => {
+        cy.recFilterByARId({ arId: "AR00005" });
+      });
+
+      it("Verify filter by approval id", () => {
+        SystemRequirement("REQ-1710");
+        cy.recVerifyFilterByARId({ arId: "AR00005" });
+      });
+
+      it("Verify receivable counter on document list", () => {
+        SystemRequirement("REQ-1760");
+        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+      });
+    });
+
+    context("Verify clear filter option", () => {
+      it("Clear filter", () => {
+        cy.dlClearFilters();
+      });
+
+      it("Verify filter clear", () => {
+        SystemRequirement("REQ-1750");
+        cy.recVerifyFilterClear();
+      });
+    });
+
+    context("Verify filter settings are maintained after navigating away", () => {
+      it("Filter list", () => {
+        cy.recFilterByOwner({ owner: "Company Admin" });
+        cy.recFilterByReceivableId({ id: "RC-00006" });
+      });
+
+      it("Navigate to dashboard", () => {
+        cy.navigToDashboard();
+      });
+
+      it("Navigate back to receivables list", () => {
+        cy.navigToReceivableList();
+      });
+
+      it("Verify filter by owner", () => {
+        SystemRequirement("REQ-1730");
+        cy.recVerifyFilterByOwner({ owner: "Company Admin" });
+      });
+
+      it("Verify filter by receivable id", () => {
+        SystemRequirement("REQ-1730");
+        cy.recVerifyFilterByReceivableId({ recId: "RC-00006" });
+      });
+    });
+  });
+
 });
