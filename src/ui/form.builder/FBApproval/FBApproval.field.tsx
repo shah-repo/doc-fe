@@ -8,9 +8,8 @@ const FBApprovalField = <T extends FBInlineApproverType>({
   collection,
   disabled,
   approveLoading,
-  mb,
 }: FBApprovalFieldProps<T>) => (
-  <Box {...{ mb }}>
+  <Box mt={2}>
     <FBMapWrapper<T> {...{ collection }}>
       {(approver, index) => {
         const config = approvalConfig?.(approver);
