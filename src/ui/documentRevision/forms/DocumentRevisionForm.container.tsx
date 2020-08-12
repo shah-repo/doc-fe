@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import _, { cloneDeep, filter, get } from "lodash";
+import _, { cloneDeep, filter, get, map } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
@@ -176,7 +176,11 @@ DocumentRevisionFormContainerProps
   const GetScheme = (props: FormikProps<DocumentRevisionFormValues>): FBSchemaProps[] => {
     const { id: documentTypeId = "" } = props.values.document?.documentType || {};
     const { outputDocumentTypes } = props.values || {};
-    const { schema: docScheme = [] } = documentTypesById?.[documentTypeId] || {};
+    let { schema: docScheme = [] } = documentTypesById?.[documentTypeId] || {};
+    docScheme = map(docScheme, ((schemaItem) => ({
+      ...schemaItem,
+      deleteDisabled: true,
+    })));
     const outputScheme =  useMemo(() => outputDocumentTypes?.reduce((scheme, value: OptionType) => {
       const { schema: outputScheme = [] } = documentTypesById[value.value] || {};
       if (!_.isEmpty(outputScheme)) {
