@@ -1,5 +1,5 @@
 import { Box, Table, TableBody, TableHead, TableRow } from "@material-ui/core";
-import { keys, map, sortBy, values } from "lodash";
+import { keys, map, values } from "lodash";
 import React from "react";
 import * as generateUuid from "uuid/v4";
 import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableInfoHead, FBApprovalMatrixTableProps, FBCheckbox, FBDocTypeGroup, FBMapWrapper, FBSelect, FBTableCell, FBTextField } from "..";
@@ -27,7 +27,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
     </TableHead>
     <TableBody>
       <FBMapWrapper<FBApprovalMatrixItem[]>
-        collection={sortBy(approvalMatrix, (row) => row.docType.name.toLowerCase())}
+        collection={approvalMatrix}
       >
         {(am: FBApprovalMatrixItem, index) => (
           <TableRow key={`fb-approval-matrix-am-${am.id}-${index}`}>
