@@ -1,5 +1,5 @@
 import { COMPANY_MINE_URL } from "../../../ui/constants/urls";
-import { apiAction, apiActionWithCallbacks } from "../../factories";
+import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { SELECT_COMPANY, SET_COMPANY_MINE } from "./constants";
 import { Company, CompanyMineAction, CompanyMineRequest, SelectCompanyAction } from "./types";
@@ -14,13 +14,14 @@ const setCompanyMine = (company: Company): CompanyMineAction => ({
   payload: company,
 });
 
-const getCompanyMine = () =>
-  apiAction({
+const getCompanyMine = (handlers: Handlers) =>
+  apiActionWithCallbacks({
     url: COMPANY_MINE_URL,
     method: "get",
     onSuccess: (data: any, dispatch) => {
       dispatch(setCompanyMine(data));
     },
+    handlers,
   });
 
 const updateCompanyMine = (body: CompanyMineRequest, handlers: Handlers):
