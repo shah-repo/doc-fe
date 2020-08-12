@@ -70,6 +70,7 @@ export const generateVersionNumber = (
   revisionStage?: number,
   subRevision?: number,
   revisionChangeType?: RevisionChangeType,
+  revisionStatus?: DocumentRevisionStatus,
 ) => {
   if (!revision || !revisionStage) {
     return "";
@@ -80,13 +81,17 @@ export const generateVersionNumber = (
   if (revisionChangeType === RevisionChangeType.Obsolete) {
     return "OBS";
   }
+
+  const suffix = revisionStatus === DocumentRevisionStatus.Released || !subRevision || subRevision === 0
+    ? ""
+    : `.${subRevision}`;
+
   if (revisionChangeType === RevisionChangeType.AdministrativeChange) {
-    return `${getAlphabetFromNumber(revision)}.${subRevision}`;
+    return `${getAlphabetFromNumber(revision)}${suffix}`;
   }
   switch (revisionStage) {
     case 1: {
-      const subRev = (subRevision && subRevision > 0) ? `.${subRevision}` : "";
-      return `${revision}${subRev}`;
+      return `${revision}${suffix}`;
     }
     case 2:
       return `1${getAlphabetFromNumber(revision)}`;
