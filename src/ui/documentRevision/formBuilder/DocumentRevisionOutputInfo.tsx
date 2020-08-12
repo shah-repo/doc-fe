@@ -13,8 +13,8 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({
   formDocument = {},
 }) => {
 
-  const { revision, subRevision, revisionStage, revisionChangeType, releasedAt } = formDocument || {};
-  const version = generateVersionNumber(revision, revisionStage, subRevision, revisionChangeType);
+  const { revision, subRevision, revisionStage, revisionChangeType, releasedAt, status } = formDocument || {};
+  const version = generateVersionNumber(revision, revisionStage, subRevision, revisionChangeType, status);
 
   const docId = formDocument?.document?.docId;
 

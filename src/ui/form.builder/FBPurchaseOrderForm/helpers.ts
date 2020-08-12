@@ -10,6 +10,6 @@ export const generateDocIdLabel = (docRev?: DocumentRevision) => {
 };
 
 export const docIdVersion = (docRev: DocumentRevision) => {
-  const { revision, subRevision, revisionStage, revisionChangeType } = docRev;
-  return generateVersionNumber(revision, revisionStage, subRevision, revisionChangeType);
+  const { revision, subRevision, revisionStage, revisionChangeType, status } = docRev;
+  return generateVersionNumber(revision, revisionStage, subRevision, revisionChangeType, status);
 };

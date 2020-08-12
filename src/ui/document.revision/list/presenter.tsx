@@ -90,6 +90,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           rowData.revisionStage,
           rowData.subRevision,
           rowData.revisionChangeType,
+          rowData.status,
         ),
         width: 80,
         flexShrink: 1,
