@@ -7,15 +7,20 @@ import { FBFieldTopBarProps } from ".";
 import { withFBFieldTopBar } from "./FBFieldTopBar.wrap";
 
 const FBFieldTopBar: React.FunctionComponent<FBFieldTopBarProps> = ({
-  visibility,
-  mb,
   editSchemaItem,
   removeSchemaItem,
   markDownSchemaItem,
+  inputProps: { deleteDisabled } = {},
+  visibility,
+  mb,
 }) => (
   <Box display="flex" flexDirection="row-reverse" {...{ visibility, mb }}>
     <Box zIndex="tooltip">
-      <RemoveCircleOutlineIcon color="error" data-cy={"remove-schema-item"} onClick={removeSchemaItem} />
+      <RemoveCircleOutlineIcon
+        color={deleteDisabled ? "disabled" : "error"} 
+        data-cy={"remove-schema-item"}
+        {...!deleteDisabled && { onClick: removeSchemaItem}}
+      />
     </Box>
     <Box pr={2} zIndex="tooltip">
       <BorderColorIcon color="primary" onClick={editSchemaItem} />

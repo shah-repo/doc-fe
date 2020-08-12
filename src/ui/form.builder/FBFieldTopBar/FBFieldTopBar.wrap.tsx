@@ -25,11 +25,13 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
     };
     const markDownSchemaItem = () =>
       fieldWrapperState?.setMarkDownActive(!fieldWrapperState.markDownVisible);
-    return useObserver(() => Component({
+    
+      return useObserver(() => Component({
       ...(props as T),
       editSchemaItem,
       removeSchemaItem,
       markDownSchemaItem,
+      inputProps,
     }));
   };
 
