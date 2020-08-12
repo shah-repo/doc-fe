@@ -177,12 +177,10 @@ DocumentRevisionFormContainerProps
     const { id: documentTypeId = "" } = props.values.document?.documentType || {};
     const { outputDocumentTypes } = props.values || {};
     let { schema: docScheme = [] } = documentTypesById?.[documentTypeId] || {};
-    docScheme = map(docScheme, ((schemaItem) => {
-      return {
-        ...schemaItem,
-        deleteDisabled: true,
-      };
-    }));
+    docScheme = map(docScheme, ((schemaItem) => ({
+      ...schemaItem,
+      deleteDisabled: true,
+    })));
     const outputScheme =  useMemo(() => outputDocumentTypes?.reduce((scheme, value: OptionType) => {
       const { schema: outputScheme = [] } = documentTypesById[value.value] || {};
       if (!_.isEmpty(outputScheme)) {

@@ -1,4 +1,3 @@
-import { useObserver } from "mobx-react";
 import React from "react";
 import { FBFieldTopBarProps } from ".";
 import { FB } from "..";
@@ -23,16 +22,17 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
     const removeSchemaItem = () => {
       workspaceState?.removeSchemaItem(inputProps);
     };
+
     const markDownSchemaItem = () =>
       fieldWrapperState?.setMarkDownActive(!fieldWrapperState.markDownVisible);
-    
-      return useObserver(() => Component({
+
+    return Component({
       ...(props as T),
       editSchemaItem,
       removeSchemaItem,
       markDownSchemaItem,
       inputProps,
-    }));
+    });
   };
 
   return withFBEditorHelper((props: T) => Comp(props));
