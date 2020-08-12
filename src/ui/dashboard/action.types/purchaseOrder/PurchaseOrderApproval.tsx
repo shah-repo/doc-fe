@@ -24,7 +24,6 @@ export const PurchaseOrderApproval: React.FunctionComponent<Props> = ({
     documentRevision.revisionStage,
     documentRevision.subRevision,
     documentRevision.revisionChangeType,
-    documentRevision.status,
   ));
   const [title] = useState(intl.formatMessage(
     { id: "dashboard.title.purchase.order" },
