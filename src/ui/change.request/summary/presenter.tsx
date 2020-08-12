@@ -10,6 +10,7 @@ import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { ChangeRequestFormValues } from "../form/types";
+import Approvers from "./approvers";
 import SummaryHeader from "./SummaryHeader";
 
 const styles = makeStyles((theme: Theme) =>
@@ -59,6 +60,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           value={dataProp.description}
         />
         <div className={classes.fbContainer} ref={FBContainer}/>
+        <Approvers dataProp={dataProp.approvals}/>
         <DocumentRevisionOutputInfo formDocument={dataProp.formDocument}/>
       </Grid>
     </Box>

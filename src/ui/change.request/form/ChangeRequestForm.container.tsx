@@ -32,7 +32,7 @@ export let changeRequestFormOnScreenContext = React.createContext<boolean>(false
 type ChangeRequestFormContainerProps = OwnProps;
 
 export const ChangeRequestFormContainer: React.FunctionComponent<
-ChangeRequestFormContainerProps
+  ChangeRequestFormContainerProps
 > = ({
   onSubmit,
   asyncState,
@@ -71,7 +71,7 @@ ChangeRequestFormContainerProps
         {...props}
         {...{ FBContainer }}
       />
-      <DocumentRevisionOutputInfo formDocument={chosenForm || changeRequest?.formDocument}/>
+      <DocumentRevisionOutputInfo formDocument={chosenForm || changeRequest?.formDocument} />
     </FBWorkspace>
 
   );
@@ -80,6 +80,7 @@ ChangeRequestFormContainerProps
     {
       icon: <TimelineIcon />,
       details: {
+        dataCy: "timeline-icon",
         title: intl.formatMessage({
           id: "document.revision.history",
         }),
@@ -90,6 +91,7 @@ ChangeRequestFormContainerProps
     {
       icon: <BookmarkIcon />,
       details: {
+        dataCy: "bookmark-icon",
         title: intl.formatMessage({
           id: "document.revision.bookmarks",
         }),
@@ -110,7 +112,7 @@ ChangeRequestFormContainerProps
         </Formik>
       </div>
 
-      {changeRequest && <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }}/>}
+      {changeRequest && <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />}
     </div>
   );
 };

@@ -57,7 +57,7 @@ export const withTransport = <T extends FBTransportSchemaProps>(
     };
 
     return Component({
-      ...(props as T),
+      ...(props),
       importSchema,
       exportSchema,
       setSchemaName,

@@ -12,7 +12,7 @@ export type FBActionContainerProps =
 export type FBActionProps =
     & Omit<FBFormikFieldProps, "name">
     & {
-    indicators?: React.ReactNode[];
-    actionButton?: React.ReactNode;
-    action: Partial<FBActionModel>;
-};
+      indicators?: React.ReactNode[];
+      actionButton?: React.ReactNode;
+      action: Partial<FBActionModel>;
+    };

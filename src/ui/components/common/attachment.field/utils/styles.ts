@@ -1,8 +1,8 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Theme } from "@material-ui/core";
 import Colors from "../../../../layout/theme/utils/colors";
 import { AttachmentStyleProps } from "./types";
 
-export const styles = makeStyles((theme) => ({
+export const styles = makeStyles((theme: Theme) => ({
   root: ({ isField }: AttachmentStyleProps) => ({
     padding: isField ? theme.spacing(2, 1) : 0,
     backgroundColor: isField ? Colors.white : "transparent",

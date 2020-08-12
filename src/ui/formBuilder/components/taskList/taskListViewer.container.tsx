@@ -32,23 +32,21 @@ const TaskListViewer: React.FunctionComponent<TaskListPresenterProps> = ({
 
   const taskList = newTasks.map(
     (
-      { title, description, assignee, due_date, status, attachments }: any,
+      { title, description, assignee, dueDate, status, attachments }: any,
       i: any,
-    ) => {
-      return (
-        <TaskUser
-          title={title}
-          description={description}
-          assignee={assignee}
-          due_date={due_date}
-          status={status}
-          attachments={attachments}
-          id={i}
-          key={i}
-          currentUser={currentUser}
-        />
-      );
-    },
+    ) => (
+      <TaskUser
+        title={title}
+        description={description}
+        assignee={assignee}
+        dueDate={dueDate}
+        status={status}
+        attachments={attachments}
+        id={i}
+        key={i}
+        currentUser={currentUser}
+      />
+    ),
   );
 
   return (

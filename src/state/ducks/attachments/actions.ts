@@ -53,6 +53,27 @@ const downloadRedLine = (
   });
 };
 
+const downloadAllAttachments = (
+  docRevId: string,
+  handlers: Handlers<AttachmentDownloadResponse>
+): ApiAction => apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+  url: `${ATTACHMENT_ROOT_URL}/${docRevId}/download_all`,
+  method: "get",
+  handlers,
+});
+
+const downloadAllAttachmentsPassword = (
+  docRevId: string,
+  handlers: Handlers<AttachmentDownloadResponse>,
+  password?: string
+) => apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+  url: `${ATTACHMENT_ROOT_URL}/${docRevId}/download_all_with_red_line`,
+  method: "get",
+  password,
+  handlers,
+});
+
+
 const requestWatermarkedFile = (
   data: WatermarkRequestBody,
   handlers: Handlers,
@@ -144,6 +165,8 @@ export default {
   upload,
   download,
   downloadRedLine,
+  downloadAllAttachments,
+  downloadAllAttachmentsPassword,
   requestWatermarkedFile,
   checkWatermarkStatus,
   addWatermark,

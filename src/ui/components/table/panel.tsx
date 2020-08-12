@@ -94,9 +94,7 @@ export function TablePanel<T extends any>({
       return;
     }
 
-    if (call) {
-      call.cancel();
-    }
+    call?.cancel();
 
     let dict = { ...tableCriteria.queryDict };
     value === "" ? delete dict[key] : (dict[key] = value);
@@ -108,7 +106,7 @@ export function TablePanel<T extends any>({
     debounced(() => {
       dispatch(
         tableSearchActions.setSearchCriteria(
-          { ...tableCriteria, queryDict: dict, sortDirection },
+          { queryDict: dict, sortDirection },
           tableName,
         ),
       );
@@ -117,6 +115,9 @@ export function TablePanel<T extends any>({
 
   const formatParams = () => {
     const params: any = {};
+    if (!tableCriteria.queryDict) {
+      return;
+    }
     Object.entries(tableCriteria.queryDict)
       .forEach(([key, value]) => {
         if (key.startsWith("dynamicParams")) {
@@ -129,91 +130,93 @@ export function TablePanel<T extends any>({
     return params;
   };
 
-  const queryApi = async () => {
-    try {
-      if (call) {
-        call.cancel();
-      }
+  const queryApi = () => {
+    call?.cancel();
 
-      call = axios.CancelToken.source();
+    call = axios.CancelToken.source();
 
-      const requestConfig: AxiosRequestConfig = {
-        method: "get",
-        url: queryUrl,
-        params: formatParams(),
-        paramsSerializer: (params) => qs.stringify(params),
-        headers: {},
-        cancelToken: call.token,
-      };
+    const requestConfig: AxiosRequestConfig = {
+      method: "get",
+      url: queryUrl,
+      params: formatParams(),
+      paramsSerializer: (params) => qs.stringify(params),
+      headers: {},
+      cancelToken: call.token,
+    };
 
-      requestConfig.headers.Authorization = `bearer ${
-        store.getState().auth.user.employeeId
-      }:${store.getState().auth.user.sessionId}`;
+    requestConfig.headers.Authorization = `bearer ${
+      store.getState().auth.user.employeeId
+    }:${store.getState().auth.user.sessionId}`;
 
-      setIsLoading(true);
-      dispatch(
-        tableSearchActions.setData(
-          [],
-          tableName,
-        ),
-      );
+    setIsLoading(true);
+    dispatch(
+      tableSearchActions.setData(
+        [],
+        tableName,
+      ),
+    );
 
-      let { data } = await apiClient.request(requestConfig);
-      if (customDataSet) {
-        data = customDataSet(data);
-      }
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          apiError: "",
+          scrollToIndex: 0,
+          forceUpdate: false,
+        },
+        tableName,
+      ),
+    );
 
-      dispatch(
-        tableSearchActions.setSearchCriteria(
-          {
-            ...tableCriteria,
-            apiError: "",
-            scrollToIndex: 0,
-            forceUpdate: false,
-          },
-          tableName,
-        ),
-      );
-      dispatch(
-        tableSearchActions.setData(
-          data,
-          tableName,
-        ),
-      );
-      setIsLoading(false);
-    } catch (exception) {
-      setIsLoading(false);
-      if (axios.isCancel(exception)) {
-        return;
-      }
-      let responseMessage = "";
-      const isUnauthorizedRequest = exception.response.status === 401;
+    apiClient
+      .request(requestConfig)
+      .then(({ data }) => {
+        if (customDataSet) {
+          data = customDataSet(data);
+        }
 
-      if (isUnauthorizedRequest) {
-        dispatch(authActions.logoutUser());
-        return;
-      }
+        dispatch(
+          tableSearchActions.setData(
+            data,
+            tableName,
+          ),
+        );
+        setIsLoading(false);
+      })
+      .catch((exception) => {
+        if (axios.isCancel(exception)) {
+          return;
+        }
+        setIsLoading(false);
+        let responseMessage = "";
+        const isUnauthorizedRequest = exception.response.status === 401;
 
-      if (exception.response) {
-        const {
-          data: { message },
-        } = exception.response as AsyncActionErrorResponse;
-        responseMessage = Array.isArray(message) ? message.join("; ") : message;
-      }
+        if (isUnauthorizedRequest) {
+          dispatch(authActions.logoutUser());
+          return;
+        }
 
-      const errorMessage: string = responseMessage || exception.message;
+        if (exception.response) {
+          const {
+            data: { message },
+          } = exception.response as AsyncActionErrorResponse;
+          responseMessage = Array.isArray(message) ? message.join("; ") : message;
+        }
 
-      dispatch(
-        tableSearchActions.setSearchCriteria(
-          {
-            ...tableCriteria,
-            apiError: "Error: " + errorMessage,
-            forceUpdate: false,
-          },
-          tableName,
-        ),
-      );
-    }
+        const errorMessage: string = responseMessage || exception.message;
+
+        dispatch(
+          tableSearchActions.setSearchCriteria(
+            {
+              queryDict: {},
+              apiError: "Error: " + errorMessage,
+              forceUpdate: false,
+            },
+            tableName,
+          ),
+        );
+      });
+
+
   };
 
   const noRowsRenderer = () => isLoading ?
@@ -221,7 +224,7 @@ export function TablePanel<T extends any>({
       <CircularProgress />
     </Box>
     :
-    <Box className={classes.emptyMsg}>
+    <Box className={classes.emptyMsg} data-cy={"no.results.found"}>
       <Text translation={noRowsTranslation} />
     </Box>;
 

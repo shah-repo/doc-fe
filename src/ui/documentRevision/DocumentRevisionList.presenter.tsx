@@ -7,7 +7,6 @@ import SummaryInfo from "../common/summary/SummaryInfo";
 import Date from "../components/Date";
 import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
-import { FBDocTypeGroup } from "../form.builder";
 import { useDocumentVersion } from "../hooks/docCustomization/useCustomization";
 import { styles } from "./DocumentRevisionList.container.styles";
 import { generateVersionNumber } from "./helpers";
@@ -20,6 +19,7 @@ interface Props {
   documentTypeId?: string;
   isDocumentPO: boolean;
   isInlineApproval: boolean;
+  isRecord: boolean;
 }
 
 export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
@@ -30,6 +30,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   documentTypeId,
   isDocumentPO,
   isInlineApproval,
+  isRecord,
 }) => {
   const classes = styles();
   const link = documentVersionPath(
@@ -42,30 +43,39 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     documentRevision.subRevision,
     documentRevision.revisionChangeType,
   );
-  const isSelected = selectedDocumentRevision === documentRevision.id;
+
   const { status } = documentRevision;
   const [isStatusVisible, statusLabel] = useDocumentVersion(documentTypeId, status);
-  let verPrefix = "common.version";
+  let verPrefix = "common.revision";
   let statLabel = statusLabel;
 
+  const isSelected = selectedDocumentRevision === documentRevision.id;
+  const isDraft = status === DocumentRevisionStatus.Draft;
+  const isReleased = status === DocumentRevisionStatus.Released;
+  const isDeprecated = status === DocumentRevisionStatus.Deprecated;
+  const isAlphaReleased = documentRevision.revisionStage === 3;
+  const isNumericRelease = documentRevision.revisionStage === 1;
 
-  if (documentRevision.revision === 1 &&
-    documentRevision.document?.documentType.groupOptions?.includes(FBDocTypeGroup.RECORD) && isInlineApproval) {
+  if (isDraft && isRecord && isInlineApproval && !isAlphaReleased) {
     verPrefix = "common.work.in.progress";
   }
-  if (status === DocumentRevisionStatus.Released) {
+  if (isReleased || ((isDeprecated || isDraft) && isInlineApproval && isRecord && isAlphaReleased)) {
     verPrefix = "common.revision";
   }
-  if ((status === DocumentRevisionStatus.Released || status === DocumentRevisionStatus.Deprecated) &&
-  isInlineApproval) {
+  if (isDeprecated && isInlineApproval && isRecord && isAlphaReleased) {
     statLabel = "common.archived";
   }
+  if ((isDeprecated || isReleased) && isInlineApproval && isNumericRelease) {
+    statLabel = "common.archived";
+  }
+
   return (
     <div
       key={documentRevision.id}
       className={classNames(classes.linkContainer, {
         [classes.selected]: isSelected,
       })}
+      data-cy={"DocumentRevisionList-item"}
     >
       <NavLink
         to={link}
@@ -89,7 +99,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         key={documentRevision.id}
         className={classes.linkBody}
       >
-        <SummaryInfo label={isDocumentPO ? undefined : "common.docId"} value={docId} />
+        <SummaryInfo dataCy={"common.docId"} label={isDocumentPO ? undefined : "common.docId"} value={docId} />
         <SummaryInfo
           label="common.title"
           value={documentRevision.name}

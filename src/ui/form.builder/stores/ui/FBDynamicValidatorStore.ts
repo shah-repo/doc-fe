@@ -127,7 +127,7 @@ export class FormBuilderDynamicValidatorStore {
     });
     const validator = new this.Validator(values, rules);
 
-    function passes() {}
+    function passes() { return null; }
     function fails() {
       const errors = validator.errors.all();
       FBDynamicValidatorStore.setHelperText(errors);
@@ -157,9 +157,10 @@ export class FormBuilderDynamicValidatorStore {
       if (!_.isUndefined(customValidator)) {
         // const tpl = _.template(`<% ${Base64.atob(customValidator.fn)} %>`);
 
+        // eslint-disable-next-line @typescript-eslint/require-await
         let customValFn = async (...args) => true;
         try {
-          // tslint:disable-next-line: no-eval
+          // eslint-disable-next-line no-eval
           customValFn = eval(Base64.atob(customValidator.fn));
         } catch (error) {
           alert("An error occurred in validator function body: " + error);

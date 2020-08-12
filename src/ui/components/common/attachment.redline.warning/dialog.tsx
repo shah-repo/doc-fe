@@ -13,6 +13,7 @@ interface Props {
   asyncState: AsyncState;
   dialogTitle?: Translation;
   translationText: Translation;
+  translationButtonText?: string;
 }
 
 export const AttachmentRedLineWarningDialog: React.FunctionComponent<Props> = ({
@@ -21,10 +22,16 @@ export const AttachmentRedLineWarningDialog: React.FunctionComponent<Props> = ({
   isDialogOpen,
   onSubmit,
   translationText,
+  translationButtonText = "common.attachment.redline.warning.download.label",
 }) => {
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const renderForm = (props: FormikProps<any>) => (
-    <RedlineWarningForm {...props} asyncState={asyncState} cancel={closeDialog} translationText = {translationText}/>
+    <RedlineWarningForm
+      {...props}
+      asyncState={asyncState}
+      cancel={closeDialog}
+      translationText = {translationText}
+      translationButtonText = {translationButtonText}/>
   );
 
   return (

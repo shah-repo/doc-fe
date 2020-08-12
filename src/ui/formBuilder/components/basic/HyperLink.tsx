@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-target-blank */
 import React, { Fragment } from "react";
 import styles from "./BasicFields.module.css";
 

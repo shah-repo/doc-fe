@@ -44,7 +44,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
 
-  const isPO = documentType?.group === "PO";
+  const isPO = documentType?.group === "PO" || documentCategory?.category === "Purchase Order";
 
   useEffect(() => {
     if (isEmpty(tableCriteria.queryDict) || isPO) {
@@ -84,10 +84,10 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const columns: TableColumnProps<DocumentRevision>[] = pageDetailColumns.map(
     (column: PageDetailsColumn) => {
       const [omitSearch, searchOptions] = columnSearchConfiguration(column.valuePath, tableCriteria);
-
       return {
         key: column.valuePath as keyof DocumentRevision,
-        label: column.label,
+        // version is a hack need to insert inside configuration 20.19
+        label: column.label === "Version" as string ? "common.revision" : column.label,
         cellHref: cellHrefRenderer,
         omitSearch,
         columnOptions: {

@@ -6,7 +6,7 @@ import React from "react";
 import { FBInput, FBInputProps } from "..";
 
 const FBDatePicker: React.FunctionComponent<FBInputProps> = ({
-  onChange = () => {},
+  onChange = () => null,
   value,
   ...props
 }) => (

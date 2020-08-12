@@ -102,6 +102,7 @@ export class FormBuilderValidatorStored {
     rules: Dictionary<any>,
     attributes?: Validator.AttributeNames,
   ): Validator.ValidationErrors => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const flatten = require("flat");
     Validator.register(
       "",

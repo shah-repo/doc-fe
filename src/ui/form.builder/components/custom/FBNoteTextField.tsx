@@ -6,7 +6,7 @@ const FBNoteTextField: React.FunctionComponent<FBFormDefaultProps> = ({
   name,
   ...props
 }) => (
-    <FBTextField {...props} name={`${name}_optionNote_field`} />
-  );
+  <FBTextField {...props} name={`${name}_optionNote_field`} />
+);
 
 export default FBNoteTextField;

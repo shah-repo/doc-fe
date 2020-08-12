@@ -14,7 +14,7 @@ import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.contai
 import VoidButton from "./VoidButton";
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
-  const  {
+  const {
     documentRevision,
     values,
     docInfo,
@@ -23,6 +23,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   } = React.useContext(FormHeaderContext)!;
 
   const { workspaceState, formState } = FB.useStores();
+  const { revisionStage } = documentRevision || {};
   const formik = useFormikContext();
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
@@ -33,7 +34,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       case "design":
         formik.setFieldValue("formTemplate", {
           outputDocumentTypes: (values.outputDocumentTypes || [])
-            .map((outputDoc) => ({ id: outputDoc.value }) ),
+            .map((outputDoc) => ({ id: outputDoc.value })),
           schema: workspaceState?.getSchema(),
         });
         break;
@@ -65,6 +66,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         }
         onClick={onFormClick}
         id="DocumentRevisionForm-submit"
+        data-cy={"DocumentRevisionForm-submit"}
       />
       <ApproveAndRelease
         id={values.id}
@@ -74,6 +76,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         docRevId={values.id as string}
         owner={documentRevision?.owner}
         documentTypeId={documentTypeId}
+        revisionStage={revisionStage}
       />
       <HeaderMenu>
         <CancelButton

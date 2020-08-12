@@ -46,11 +46,11 @@ const Header: React.FunctionComponent<Props> = ({
             <ClickAwayListener onClickAway={handleCloseMenu} mouseEvent="onClick">
               <Button
                 disableFocusRipple={true}
-                disableRipple= {true}
+                disableRipple={true}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleOpenMenu(event)}
                 classes={{ root: classes.headerButton }}
               >
-                <UserAvatar avatar={avatar}/>
+                <UserAvatar avatar={avatar} />
                 <Typography
                   id="Header-welcomeText"
                   variant="caption"
@@ -69,7 +69,7 @@ const Header: React.FunctionComponent<Props> = ({
                 >
                   {name}
                 </Typography>
-                <UserMenu {...{ handleCloseMenu, anchorEl }}/>
+                <UserMenu {...{ handleCloseMenu, anchorEl }} />
                 <UserProfileContainer
                   closeUserProfile={closeUserProfile}
                   showUserProfile={showUserProfile}

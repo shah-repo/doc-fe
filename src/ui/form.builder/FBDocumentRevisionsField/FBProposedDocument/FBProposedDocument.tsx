@@ -43,7 +43,7 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
       <Box flexGrow={1}>
         <FBAutocompleteAsync
           optionId={FBAutocompleteAsyncOption.documentRevisions}
-          label="form.builder.proposed.document.revision"
+          label="common.document"
           gutter={false}
           disabled={true}
           defaultValue={id}
@@ -63,8 +63,10 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
         </IconButton>
       </Box>
     </Box>
+
     <FBTextField
       label="common.description"
+      dataCy="common.description"
       defaultValue={description}
       disabled={disabled}
       onChange={(e) => handleEdit ? handleEdit(e, index, "description") : null}
@@ -74,6 +76,7 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
     />
     <FBTextField
       label="cr.justification"
+      dataCy="cr.justification"
       defaultValue={justification}
       onChange={(e) => handleEdit ? handleEdit(e, index, "justification") : null}
       disabled={disabled}

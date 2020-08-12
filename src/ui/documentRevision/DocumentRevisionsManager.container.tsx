@@ -9,6 +9,7 @@ import { ReactComponent as NoteIcon } from "../../assets/images/note.svg";
 import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import { FBDocTypeGroup } from "../form.builder/FBApprovalMatrixTable";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.container";
 import DocumentRevisionAuditContainer from "./audit/Audit.container";
@@ -37,7 +38,7 @@ StateProps;
 
 // TO-DO Move To Context Folder
 export let documentRevisionStatusContext = React.createContext<DocumentRevisionStatus>(DocumentRevisionStatus.Draft);
-export let documentRevisionStatusContextFromDocList = React.createContext< undefined | DocumentRevisionStatus >(undefined);
+export let documentRevisionStatusContextFromDocList = React.createContext<undefined | DocumentRevisionStatus>(undefined);
 export let documentRevisionVersionContext = React.createContext<number>(1);
 
 const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
@@ -75,9 +76,18 @@ DocumentRevisionManagerContainerProps
   const schema = selectedDocument?.formTemplate?.schema || selectedDocument?.formDocument?.formTemplate?.schema || [];
   const { documentTypeAcronym: acronym } = document?.documentType || {};
 
-  const isInlineApproval = !!docRevsWithoutCanceled.find((e) => e.formDocument?.formTemplate?.schema.some((e) =>
-    (e.type === "approval" || e.type === "inlineapproval" as string))) || !!selectedDocument?.formDocument?.formTemplate?.schema.some((e) =>
+  const isInlineApproval =
+    !!docRevsWithoutCanceled.find(
+      (e) => e.formDocument?.formTemplate?.schema.some((e) =>
+        (e.type === "approval" || e.type === "inlineapproval" as string))
+    ) ||
+    !!selectedDocument?.formDocument?.formTemplate?.schema.some((e) =>
       (e.type === "approval" || e.type === "inlineapproval" as string));
+
+  const isRecord =
+    !!docRevsWithoutCanceled.find(
+      (e) => (e.document?.documentType?.groupOptions || []).includes(FBDocTypeGroup.RECORD)) ||
+    (!!selectedDocument?.document?.documentType?.groupOptions?.includes(FBDocTypeGroup.RECORD) || false);
 
   const sidebarList = [
     {
@@ -89,6 +99,7 @@ DocumentRevisionManagerContainerProps
         component: <DocumentRevisionListContainer
           documentRevisions={docRevsWithoutCanceled}
           isInlineApproval={isInlineApproval}
+          isRecord={isRecord}
           documentId={documentId}
           docId={docId}
           selectedDocumentRevision={documentRevisionId}
@@ -99,6 +110,7 @@ DocumentRevisionManagerContainerProps
     {
       icon: <TimelineIcon />,
       details: {
+        dataCy: "timeline-icon",
         title: intl.formatMessage({
           id: "document.revision.history",
         }),
@@ -110,6 +122,7 @@ DocumentRevisionManagerContainerProps
     {
       icon: <BadgeIcon />,
       details: {
+        dataCy: "permission-icon",
         title: intl.formatMessage({
           id: "document.access.permissions",
         }),
@@ -125,6 +138,7 @@ DocumentRevisionManagerContainerProps
     {
       icon: <BookmarkIcon />,
       details: {
+        dataCy: "bookmark-icon",
         title: intl.formatMessage({
           id: "document.revision.bookmarks",
         }),
@@ -167,8 +181,7 @@ DocumentRevisionManagerContainerProps
           />
         )}
       </div>
-      <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }}/>
-
+      <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />
     </div>
   );
 };

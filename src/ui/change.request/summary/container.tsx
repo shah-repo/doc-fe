@@ -18,7 +18,7 @@ import useAsync from "../../hooks/useAsync";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useGetHasTag from "../../hooks/useGetHasTag";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
-import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "../form/transform";
+import { toChangeRequestFormValues, toChangeRequestUpdateRequestBody } from "../form/transform";
 import { ChangeRequestFormValues } from "../form/types";
 import { canChangeCROwner, canEditApprovers, canEditChangeRequest } from "../utils/helpers";
 import { changeRequestEditPath } from "../utils/paths";
@@ -80,7 +80,7 @@ export const Container: React.FunctionComponent<Props> = ({
     async.start(
       save,
       dataProp.id,
-      toChangeRequestEditRequestBody(values),
+      toChangeRequestUpdateRequestBody(values),
       async,
     );
   };
@@ -125,6 +125,7 @@ export const Container: React.FunctionComponent<Props> = ({
     {
       icon: <TimelineIcon />,
       details: {
+        dataCy: "timeline-icon",
         title: intl.formatMessage({
           id: "document.revision.history",
         }),
@@ -134,6 +135,7 @@ export const Container: React.FunctionComponent<Props> = ({
     }, {
       icon: <BookmarkIcon />,
       details: {
+        dataCy: "bookmark-icon",
         title: intl.formatMessage({
           id: "document.revision.bookmarks",
         }),
@@ -148,7 +150,7 @@ export const Container: React.FunctionComponent<Props> = ({
       <div className={classes.appFrame}>
         {summaryFormikRenderer()}
       </div>
-      <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }}/>
+      <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />
     </div>
   );
 };

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-
 import { formReducerType } from "../../../../state/ducks/formBuilder/reducer";
 import TaskAdmin from "./TaskAdmin";
 import styles from "./Tasks.module.css";
+
 
 interface LocalProps {
   currentUser: string;
@@ -23,11 +23,9 @@ const mapStateToProps = ({
   tasks: formBuilderState.tasks,
 });
 
-const mapDispatchToProps = (dispatch: any): DispatchProps => {
-  return {
-    addTask: (task: any) => dispatch({ type: "ADD_TASK", payload: task }),
-  };
-};
+const mapDispatchToProps = (dispatch: any): DispatchProps => ({
+  addTask: (task: any) => dispatch({ type: "ADD_TASK", payload: task }),
+});
 
 export type TaskListPresenterProps = LocalProps & StateProps & DispatchProps;
 
@@ -106,7 +104,7 @@ const TaskListPresenter: React.FunctionComponent<TaskListPresenterProps> = ({
               name="status"
               onChange={handleChange}
               defaultValue={""}
-              // tslint:disable-next-line: jsx-alignment
+              // eslint-disable-next-line: jsx-alignment
               required={true}
             >
               <option value="" disabled={true}>
@@ -128,7 +126,7 @@ const TaskListPresenter: React.FunctionComponent<TaskListPresenterProps> = ({
     </div>
   );
 
-  // tslint:disable-next-line: no-shadowed-variable
+  // eslint-disable-next-line: no-shadowed-variable
   const taskList = tasks.map((task: any, i: any) => (
     <TaskAdmin key={i} id={i} task={task} />
   ));

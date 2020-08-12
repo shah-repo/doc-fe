@@ -4,6 +4,7 @@ import React from "react";
 import { ChangeRequestStatus } from "../../../../state/ducks/changeRequest";
 import { DocumentRevisionStatus, DocumentRevisionStatusAlias } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType";
+import { DocumentStatus } from "../../../../state/ducks/documents";
 import { FBDocTypeGroup } from "../../../form.builder";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
 import Text from "../../Text";
@@ -14,7 +15,7 @@ export interface Props {
   id: string;
   name: string;
   documentTypeId?: string;
-  revision?: number;
+  revisionStage?: number;
   groupOptions?: DocumentGroupOptionsType[];
   isInlineApproval?: boolean;
 }
@@ -24,12 +25,16 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   name,
   id,
   documentTypeId,
-  revision,
+  revisionStage,
   groupOptions,
   isInlineApproval,
 }) => {
+  const isDraft = status === DocumentStatus.Draft;
+  const isAlphaReleased = revisionStage === 3;
+  const isRecord = groupOptions?.includes(FBDocTypeGroup.RECORD);
+
   // we should rename enum for document types, it is not only for FB
-  if (revision === 1 && groupOptions?.includes(FBDocTypeGroup.RECORD) && isInlineApproval) {
+  if ( isRecord && isInlineApproval && isDraft && !isAlphaReleased) {
     status = DocumentRevisionStatusAlias.Draft;
   }
   const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
@@ -41,7 +46,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
     <div className={classNames(classes.statusIconDefault, {
       [classes.statusIconReleased]: isStatusReleased,
       [classes.statusIconCanceled]: isStatusCanceled,
-    })}/>;
+    })} />;
 
   return (
     <Grid container={true} xs={6} alignItems="center">
@@ -50,6 +55,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
         <Chip
           label={<Text message={statusLabel} />}
           id="HeaderInfo-status"
+          data-cy="HeaderInfo-status"
           className={classNames(classes.statusDefault)}
           icon={statusIcon}
         />
@@ -64,6 +70,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
         </Typography>
       }
     </Grid>
-  ); };
+  );
+};
 
 export default HeaderInfo;

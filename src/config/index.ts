@@ -56,8 +56,11 @@ class Config {
 
   public static get SignUpUrl(): string {
     const params = queryString.stringify({
+      // eslint-disable-next-line @typescript-eslint/camelcase
       response_type: "code",
+      // eslint-disable-next-line @typescript-eslint/camelcase
       client_id: this.AwsCognitoClientId,
+      // eslint-disable-next-line @typescript-eslint/camelcase
       redirect_uri: `${this.FrontendUrl}${LOGIN_WITH_CODE_URL}`,
     });
 
@@ -90,6 +93,10 @@ class Config {
 
   public static get DatadogClientToken(): string {
     return this.get("DATADOG_CLIENT_TOKEN");
+  }
+
+  public static get DatadogEnabled(): boolean {
+    return ![this.DatadogApplicationId, this.DatadogClientToken].includes("fake");
   }
 
   public static get EnvironmentName(): string {

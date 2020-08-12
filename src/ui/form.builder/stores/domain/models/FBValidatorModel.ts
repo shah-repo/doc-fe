@@ -6,5 +6,5 @@ export class FBValidatorModel extends Model {
   public pattern?: string;
   public description?: string = "";
   public applicableIn?: string[];
-  public indicators?: Array<Partial<FBValidatorIndicatorProps>>;
+  public indicators?: Partial<FBValidatorIndicatorProps>[];
 }

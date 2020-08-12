@@ -17,6 +17,7 @@ export class FB {
   }
 
   public static get uniqid(): string {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const uniqid = require("uniqid");
     return uniqid();
   }

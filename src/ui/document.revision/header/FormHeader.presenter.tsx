@@ -8,14 +8,18 @@ import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevision
 import DocRevActions from "../../documentRevision/forms/presenters/Actions";
 
 const FormHeaderPresenter: React.FunctionComponent = () => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const  { documentRevision, isDisabled, asyncState, type } = React.useContext(FormHeaderContext)!;
   return (
     <Header>
       {documentRevision &&
       <HeaderInfo
-        revision={documentRevision.revision}
+        revisionStage={documentRevision.revisionStage}
         groupOptions={documentRevision.document.documentType.groupOptions}
-        isInlineApproval={documentRevision.formDocument?.formTemplate?.schema.some((e) => (e.type === "approval" || e.type === "inlineapproval" as string))}
+        isInlineApproval={
+          documentRevision.formDocument?.formTemplate?.schema
+            .some((e) => (e.type === "approval" || e.type === "inlineapproval" as string))
+        }
         status={documentRevision.status}
         id={documentRevision.document.docId}
         name={documentRevision.name}

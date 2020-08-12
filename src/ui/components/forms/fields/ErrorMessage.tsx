@@ -2,7 +2,7 @@ import { FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
 import Text from "../../Text";
 
-// tslint:disable-next-line: no-empty-interface
+// eslint-disable-next-line: no-empty-interface
 type ErrorMessageOwnProps = FormikFieldProps;
 
 type ErrorMessageProps = ErrorMessageOwnProps;

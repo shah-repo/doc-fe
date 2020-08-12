@@ -1,14 +1,14 @@
 import { Box, Button } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
-import _, { Dictionary } from "lodash";
+import { Dictionary } from "lodash";
 import * as React from "react";
 import * as generateUuid from "uuid/v4";
 import { Group } from "../../../../state/ducks/auth/types";
 import { Owner } from "../../../../state/ducks/common/types";
 import { AsyncState, AsyncStatus } from "../../../../state/types";
 import Approvers from "../../../change.request/form/approvers";
+import { TemplateOption } from "../../../change.request/form/types";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
-import DatePickerField from "../../../components/forms/fields/DatePickerField";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import SubmitButton from "../../../components/forms/SubmitButton";
@@ -18,13 +18,13 @@ import Colors from "../../../layout/theme/utils/colors";
 import { ApproveAndReleaseFormValues } from "../types";
 import { styles } from "./ApproveAndRelease.styles";
 
-interface Props extends FormikProps<ApproveAndReleaseFormValues>{
+interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   asyncState: AsyncState;
   cancel: () => void;
   isQms: boolean;
   documentTypeGroups: Group[];
   owner: Owner;
-  templateOptions: any[];
+  templateOptions: TemplateOption[];
   selectedInvalid: boolean;
   setFormDocument: (value: string) => void;
   setDocumentType: (value: string) => void;
@@ -48,18 +48,6 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
 
-  const formTemplateOptions = _.flatten(
-    templateOptions.map((template) =>
-      template.forms.map((form) => ({
-        documentType: template.documentType.id,
-        schema: form.formTemplate?.schema || form.formDocument?.formDocument?.formTemplate,
-        formInput: form.formInput,
-        label: form.name,
-        value: form.id,
-      }))
-    )
-  );
-
   const validateSelectedForm = (option: any) => {
     const { schema } = option || {};
     if (!schema) { return; }
@@ -75,7 +63,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
       (schema as FBSchemaProps[]).reduce<object>((acc, item) => {
         // fields effectiveDate,  documentRevisions and approvers are required in all CR forms
         // they will be automatically set by backend.
-        switch(item.name) {
+        switch (item.name) {
           case "effectiveDate": {
             return {
               ...acc,
@@ -89,7 +77,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
                 id: generateUuid(),
                 justificationOfChange: `string`,
                 descriptionOfChange: `string`,
-                proposedDocumentRevision: { id:generateUuid() },
+                proposedDocumentRevision: { id: generateUuid() },
               }],
             };
           }
@@ -113,32 +101,37 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
     });
   };
 
+
+  if (templateOptions.length === 1) {
+    setFormDocument(templateOptions[0].value);
+    setDocumentType(templateOptions[0].docTypeId);
+    validateSelectedForm(templateOptions[0]);
+  }
+
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
       {isQms && <Approvers owner={owner} withoutCurrentUser={true} values={values}
         documentTypeGroups={documentTypeGroups} />}
-      <AutocompleteField
-        name="formDocument"
-        size="sm"
-        label="common.approve.and.release.template"
-        autocompleteProps={{ id: "FormList-selectForm" }}
-        options={formTemplateOptions}
-        onClick={(option) => {
-          setFormDocument(option.value);
-          setDocumentType(option.documentType);
-          validateSelectedForm(option);
-        }}
-      />
+      {templateOptions.length > 1 && (
+        <AutocompleteField
+          name="formDocument"
+          size="sm"
+          label="common.approve.and.release.template"
+          autocompleteProps={{ id: "FormList-selectForm" }}
+          options={templateOptions}
+          onClick={(option) => {
+            setFormDocument(option.value);
+            setDocumentType(option.docTypeId);
+            validateSelectedForm(option);
+          }}
+        />
+      )}
       {selectedInvalid && (
         <Box mt={-3} mb={3} color={Colors.medium_blue}>
           <Text translation="document.revision.tpl.invalid" />
         </Box>
       )}
-      <DatePickerField
-        label="transition.action.effective.date"
-        name="effectiveDate"
-      />
       <FormProgress asyncState={asyncState} />
       <SubmitButton
         asyncState={asyncState}
@@ -146,6 +139,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
         fullWidth={false}
         className={classes.submitButton}
         id="ApproveAndRelease-submit"
+        data-cy="ApproveAndRelease-submit"
       />
       <Button
         variant="text"
@@ -154,6 +148,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
         disabled={asyncState.status === AsyncStatus.Active}
         onClick={cancel}
         id="ApproveAndRelease-cancelButton"
+        data-cy="ApproveAndRelease-cancelButton"
       >
         <Text translation="transition.action.cancel" />
       </Button>

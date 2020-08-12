@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import SidebarPresenter from "./Sidebar.presenter";
 import { Sidebar } from "./types";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 
 interface SidebarContainerProps {
   sidebarList: Sidebar[];
@@ -9,7 +10,7 @@ interface SidebarContainerProps {
 }
 
 export const SidebarContainer: React.FunctionComponent<
-SidebarContainerProps
+  SidebarContainerProps
 > = ({
   sidebarList,
   isDrawerOpen,
@@ -17,7 +18,7 @@ SidebarContainerProps
 }) => {
   const [indexNumber, setIndex] = useState(0);
   const inputRef = useRef(null);
-
+  useScrollIntoView();
   const onDrawerToggle = () => {
     setOpen(!isDrawerOpen);
     if (isDrawerOpen) {

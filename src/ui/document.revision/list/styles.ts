@@ -16,4 +16,7 @@ export default (theme: Theme) => createStyles({
     margin: "0px",
     boxShadow: "none",
   },
+  iconSvg: {
+    fill: theme.palette.primary.main,
+  },
 });

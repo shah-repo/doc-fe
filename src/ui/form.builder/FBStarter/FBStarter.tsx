@@ -14,6 +14,7 @@ const FBStarter: React.FunctionComponent<FBStarterProps> = ({
   >
     <FBButton
       label="form.builder.add.field"
+      dataCy="form.builder.add.field"
       color="primary"
       size="medium"
       variant="text"

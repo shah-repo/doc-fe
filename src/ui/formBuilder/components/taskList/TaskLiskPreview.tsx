@@ -17,7 +17,7 @@ const TaskListPresenter: React.FunctionComponent = () => {
       <select
         onChange={selectUserHandler}
         defaultValue="1"
-        // tslint:disable-next-line: jsx-alignment
+        // eslint-disable-next-line: jsx-alignment
         style={{ marginBottom: "50px" }}
       >
         <option value="1" disabled={true}>

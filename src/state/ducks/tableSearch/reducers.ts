@@ -35,7 +35,10 @@ export const criteria = (
     case TABLE_SEARCH_SET:
       return {
         ...state,
-        [action.tableName]: action.payload,
+        [action.tableName]: {
+          ...(state[action.tableName] || {}),
+          ...action.payload,
+        },
       };
     case TABLE_SEARCH_CLEAR:
       return {

@@ -108,7 +108,7 @@ FieldConfig &
 Partial<TypographyProps>;
 
 const AutocompleteField: React.FunctionComponent<
-AutocompleteFieldProps
+  AutocompleteFieldProps
 > = (props) => <FormikField component={Autocomplete} {...props} />;
 
 export default AutocompleteField;

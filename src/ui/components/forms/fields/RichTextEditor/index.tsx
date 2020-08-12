@@ -101,7 +101,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   }, [debouncedToggle]);
 
   const handleBlur = () => {
-    const  { name } = field;
+    const { name } = field;
     const { touched, setFieldTouched } = form;
 
     if (toggleToolbar) {

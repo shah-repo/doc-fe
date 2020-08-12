@@ -48,7 +48,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       workspaceState.document = document;
       workspaceState.changeRequest = changeRequest;
       workspaceState.externalState = store.getState();
-      if (!props.schema) { return; }
+      if (!props.schema?.length) { return; }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       workspaceState.schema = props.schema!;
     }, [workspaceState, props.schema, document, changeRequest]);

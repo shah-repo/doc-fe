@@ -25,7 +25,6 @@ interface NavigationLinkPresenterProps extends
   ) => boolean;
 }
 
-
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
   path,
   category,
@@ -51,7 +50,6 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
             [classes.menu]: type === "MENU",
           })}
         activeClassName={classes.activeLink}
-        data-cy={`navigation.${camelCase(label)}`}
         to={type === "CATEGORY" ? `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}` : path}
       >
         <ListItemIcon className={classes.itemIcon} onClick={toggleChildren}>
@@ -68,6 +66,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
           classes={{
             primary: classes.itemText,
           }}
+          data-cy={`navigation.${camelCase(label)}`}
           onClick={toggleChildren}
         />
         {ActionIcon}

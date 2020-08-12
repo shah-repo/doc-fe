@@ -8,7 +8,7 @@ export function withDialogDefaults<T extends FBDialogProps>(
   Component: React.ComponentType<T>,
 ) {
 
-  return (props: T) => {
+  return function theOnewithDialogDefaults(props: T) {
     const FullScreen = (maxWidth: Breakpoint = "sm") => {
       const theme = useTheme();
       const fullScreen = useMediaQuery(theme.breakpoints.down(maxWidth));

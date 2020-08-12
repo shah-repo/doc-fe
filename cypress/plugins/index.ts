@@ -1,3 +1,6 @@
+import { rename } from "fs";
+import { allowedCharacters } from "../utils/context/constants";
+
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //
@@ -20,6 +23,20 @@ export default (on, config) => {
   // `config` is the resolved Cypress config
   on("task", {
     test: () => 1,
+  });
+  on("after:screenshot", (details) => {
+
+    const path = details.path.split("/").reverse();
+    const newName = (path[0]).replace(allowedCharacters, "").replace(/[ ]+/g, " ");
+    path[0] = newName;
+    const newPath = path.reverse().join("/");
+    return new Promise((resolve, reject) => {
+      rename(details.path, newPath, (err) => {
+        if (err) { return reject(err); }
+
+        resolve({ path: newPath });
+      });
+    });
   });
 };
 

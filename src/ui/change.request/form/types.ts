@@ -2,6 +2,7 @@ import { Attachment as AttachmentInterface } from "../../../state/ducks/attachme
 import { Id } from "../../../state/ducks/common";
 import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { FBSchemaProps } from "../../form.builder";
 
 export type Attachment = AttachmentInterface;
 
@@ -48,4 +49,12 @@ export interface EffectiveDateFormValues {
 
 export interface SelectTemplateFormValues {
   chosenFormId: string;
+}
+
+export interface TemplateOption {
+  label: string;
+  value: string;
+  docTypeId: string;
+  schema?: FBSchemaProps[];
+  formInput?: Record<string, any>;
 }

@@ -4,7 +4,7 @@ import { withActionContainer } from "../../hocs/actions/withActionContainer";
 import { FBActionContainerProps } from "../../types/actions/action";
 
 const FBActionContainer: React.FunctionComponent<FBActionContainerProps> = ({
-    actions,
+  actions,
 }) => (
   <Box>
     {actions}

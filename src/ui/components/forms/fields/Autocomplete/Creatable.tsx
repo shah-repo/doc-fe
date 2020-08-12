@@ -34,7 +34,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   const value = React.useMemo(() => ({ value: formikValue, label: formikValue }), [formikValue]);
   React.useEffect(() => {
     setInputValue(formikValue);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formikValue]);
   const [inputValue, setInputValue] = useState(formikValue);
   const { submitForm } = useFormContext();
@@ -119,7 +119,7 @@ FieldConfig &
 Partial<TypographyProps>;
 
 const CreatableField: React.FunctionComponent<
-AutocompleteFieldProps
+  AutocompleteFieldProps
 > = (props) => <FormikField component={Creatable} {...props} />;
 
 export default CreatableField;

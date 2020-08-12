@@ -1,14 +1,5 @@
-// eslint-disable-next-line spaced-comment
-/// <reference types="Cypress" />
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-import { SystemRequirement } from "../utils/context/systemRequirement";
-
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
-
-
-const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
@@ -22,14 +13,13 @@ context("Document Creation Flow", () => {
       }).then((response) => {
         loginResponse = response;
         cy.cmpCreateCompany({
+          specFilePath: __filename,
           payload: {
-            companyAcronym: `T1${runId}`,
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: "enlil.testmail+cy5@gmail.com",
             maxRevisionStages: 3,
-            name: `Test Company ${runId}`,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -83,7 +73,7 @@ context("Document Creation Flow", () => {
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
       SystemRequirement("REQ-0140");
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Clicks on 'create a document' button", () => {
@@ -123,7 +113,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Uploads image.jpg", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" }).wait(5000);
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
       it("Check image.jpg attachment atributes", () => {
@@ -160,14 +150,14 @@ context("Document Creation Flow", () => {
   });
 
   context("Document in Draft", () => {
-    it("Check if document status is DRAFT after creating a document", () => {
+    it("Check if document status is Draft after creating a document", () => {
       SystemRequirement("REQ-0330");
       cy.drCheckDocumentStatus({ status: "Draft" });
     });
 
     context("Uploads attachments", () => {
       it("Uploads test_image.jpg", () => {
-        cy.atchUploadAttachment({ fileName: "test_image.jpg" }).wait(5000);
+        cy.atchUploadAttachment({ fileName: "test_image.jpg" });
       });
 
       it("Check test.docx attachment atributes", () => {
@@ -179,7 +169,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Uploads image.jpg", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" }).wait(5000);
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
       it("Check test.docx attachment atributes", () => {
@@ -187,7 +177,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Check three attachments are displayed: test.docx, image.jpg, test_image.jpg", () => {
-        SystemRequirement("REQ-0200", "REQ-2010");
+        SystemRequirement("REQ-0200", "REQ-0210");
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test_image.jpg", "image.jpg", "test.docx" ] });
       });
     });
@@ -203,6 +193,10 @@ context("Document Creation Flow", () => {
         cy.atchCheckForSinglePrimaryAttachment();
       });
 
+      it("Save document after setting primary attachment", () => {
+        cy.drClickCreateDocument();
+      });
+
       it("Remove attachment test_image.jpg", () => {
         SystemRequirement("REQ-0240");
         cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
@@ -216,3 +210,4 @@ context("Document Creation Flow", () => {
 });
 
 export { };
+
