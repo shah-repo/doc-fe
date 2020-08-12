@@ -86,17 +86,14 @@ export const generateVersionNumber = (
     ? ""
     : `.${subRevision}`;
 
-  if (revisionChangeType === RevisionChangeType.AdministrativeChange) {
-    return `${getAlphabetFromNumber(revision)}${suffix}`;
-  }
   switch (revisionStage) {
     case 1: {
       return `${revision}${suffix}`;
     }
     case 2:
-      return `1${getAlphabetFromNumber(revision)}`;
+      return `1${getAlphabetFromNumber(revision)}${suffix}`;
     case 3:
-      return `${getAlphabetFromNumber(revision)}`;
+      return `${getAlphabetFromNumber(revision)}${suffix}`;
     default:
       return "N/A";
   }
