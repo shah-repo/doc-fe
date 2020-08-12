@@ -46,7 +46,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   docRevStatus,
 }) => {
 
-  const passwordState =  {
+  const passwordState = {
     status: AsyncStatus.Idle,
     message: "",
   };
@@ -86,11 +86,11 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   const warningPasswordText = (): Translation => {
 
     if (docRevStatus === DocumentRevisionStatus.Obsolete) {
-      return "common.attachment.redline.warning.download.obsoleted";
+      return "common.attachment.redline.warning.download.obsoletedAll";
     }
 
     if (docRevStatus === DocumentRevisionStatus.Deprecated) {
-      return "common.attachment.redline.warning.download.deprecated";
+      return "common.attachment.redline.warning.download.deprecatedAll";
     }
 
     return "common.attachment.redline.warning.download.redlineAll";
@@ -102,11 +102,11 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
     passwordDialogHandler.open();
   };
 
-  const handleAllDownload = (documentRevisionId: string, password: string|undefined) => ()  => {
+  const handleAllDownload = (documentRevisionId: string, password: string | undefined) => () => {
     if (docRevStatus === DocumentRevisionStatus.Draft) {
       setIsDownloading(true);
       async.start(downloadAllAttachments, documentRevisionId, async);
-    } else if ( !containsRedline && docRevStatus === DocumentRevisionStatus.Released) {
+    } else if (!containsRedline && docRevStatus === DocumentRevisionStatus.Released) {
       setIsDownloading(true);
       async.start(downloadAllAttachments, documentRevisionId, async);
     } else {
@@ -118,26 +118,26 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   return (
     <>
       <AttachmentRedLineWarningDialog
-        isDialogOpen = {redlineWarningDialogHandler.isOpen}
-        onSubmit = {warningSubmit}
-        closeDialog = {redlineWarningDialogHandler.close}
-        asyncState = {warningState}
-        translationText = {warningPasswordText()}
-        translationButtonText = "common.attachment.redline.warning.download.labelAll"
+        isDialogOpen={redlineWarningDialogHandler.isOpen}
+        onSubmit={warningSubmit}
+        closeDialog={redlineWarningDialogHandler.close}
+        asyncState={warningState}
+        translationText={warningPasswordText()}
+        translationButtonText="common.attachment.redline.warning.download.labelAll"
       />
 
       <PasswordDialog
-        isDialogOpen = {passwordDialogHandler.isOpen}
-        onSubmit = {passwordSubmit}
-        closeDialog = {passwordDialogHandler.close}
-        asyncState = {passwordState}
+        isDialogOpen={passwordDialogHandler.isOpen}
+        onSubmit={passwordSubmit}
+        closeDialog={passwordDialogHandler.close}
+        asyncState={passwordState}
       />
       <label
         htmlFor={"button-file"}
-        className = {classes.downloadLabel}
-        onClick = {handleAllDownload(docRevId, undefined)}>
-        <Link className = {classes.link} component="span" variant="button" id="AttachmentFieldPresenter-linkButton" >
-          {isDownloading ? <CircularProgress className = {classes.icon}/> : <GetAppIcon className = {classes.icon}/>}
+        className={classes.downloadLabel}
+        onClick={handleAllDownload(docRevId, undefined)}>
+        <Link className={classes.link} component="span" variant="button" id="AttachmentFieldPresenter-linkButton" >
+          {isDownloading ? <CircularProgress className={classes.icon} /> : <GetAppIcon className={classes.icon} />}
           <Text translation="common.download.all.files" />
         </Link>
       </label>
