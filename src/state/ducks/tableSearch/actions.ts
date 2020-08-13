@@ -17,7 +17,7 @@ import {
 } from "./types";
 
 const setSearchCriteria = (
-  searchCriteria: TablePanelStateProps,
+  searchCriteria: Partial<TablePanelStateProps>,
   tableName: string,
 ): TableSearchSetAction => ({
   type: TABLE_SEARCH_SET,

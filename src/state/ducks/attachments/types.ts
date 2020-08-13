@@ -14,6 +14,7 @@ export interface Attachment {
   documentRevision?: DocumentRevision;
   fileSizeS3Link: number;
   fileSizeS3LinkCleanCopy: number;
+  hasWatermarks: boolean;
 }
 
 export interface AttachmentDownloadResponse {
@@ -49,12 +50,13 @@ export interface WatermarkRequest {
   attachment: Attachment;
   requestedBy: WatermarkRequester;
   presignedUrl?: string;
-  documentRevision: Nullable<DocumentRevision>;
+  hasWatermarks: boolean;
 }
 
 export interface WatermarkRequestBody {
   attachment: Id;
   type: AttachmentType;
+  documentRevision?: Id;
 }
 
 export interface AddWatermarkAction {

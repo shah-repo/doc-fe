@@ -20,7 +20,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
 }) => (
   <Header>
     <HeaderInfo
-      revision={documentRevision.revision}
+      revisionStage={documentRevision.revisionStage}
       groupOptions={documentRevision.document.documentType.groupOptions}
       isInlineApproval={
         documentRevision.formDocument?.formTemplate?.schema

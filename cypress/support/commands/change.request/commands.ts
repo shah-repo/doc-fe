@@ -21,7 +21,6 @@ declare global {
       arAddApproverOnApproverList(params: { approver: string }): Chainable<Subject>;
       arClickCreateApprovalRequestAfterCompletingForm(): Chainable<Subject>;
       arClickSendToReview(): Chainable<Subject>;
-      arAddEffectiveDate(): Chainable<Subject>;
       arVerifyStatus(params: { status: string }): Chainable<Subject>;
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
@@ -116,12 +115,6 @@ Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string 
 
 Cypress.Commands.add("arClickCreateApprovalRequestAfterCompletingForm", () => {
   cy.get("[data-cy=\"navigation.createChangeRequest\"]").click().wait(3000);
-});
-
-Cypress.Commands.add("arAddEffectiveDate", () => {
-  cy.xpath("//input[@name]/ ../div/button").click().wait(200);
-  cy.xpath("//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]").last()
-    .click().wait(300);
 });
 
 Cypress.Commands.add("arClickSendToReview", () => {

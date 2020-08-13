@@ -10,5 +10,4 @@ export function initializeDataDog() {
     trackInteractions: true,
   };
   datadogRum.init(dataDogConf);
-
 }

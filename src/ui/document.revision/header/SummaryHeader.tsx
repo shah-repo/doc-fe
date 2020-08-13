@@ -7,20 +7,29 @@ interface Props {
   canChangeOwnerShip?: boolean;
   canShowCreateVersionButton?: boolean;
 }
+export interface FormHeaderSummaryContext {
+  documentRevisionSummary: DocumentRevision;
+}
+export let FormHeaderSummaryContext = React.createContext<FormHeaderSummaryContext | undefined>(undefined);
 
 const SummaryHeader: React.FunctionComponent<Props> = ({
   documentRevision,
   canChangeOwnerShip,
   canShowCreateVersionButton,
-}) => (
-  <SummaryHeaderPresenter
-    {...{
-      documentRevision,
-      canChangeOwnerShip,
-      canShowCreateVersionButton,
-    }}
-  />
+}) => {
+  FormHeaderSummaryContext = React.createContext<FormHeaderSummaryContext | undefined>({
+    documentRevisionSummary: documentRevision,
+  });
+  return (
+    <SummaryHeaderPresenter
+      {...{
+        documentRevision,
+        canChangeOwnerShip,
+        canShowCreateVersionButton,
+      }}
+    />
 
-);
+  );
+};
 
 export default SummaryHeader;
