@@ -1,11 +1,13 @@
-import { Button, CircularProgress, Dialog, DialogContent, DialogTitle, FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
+import { Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@material-ui/core";
+import { FormikProps } from "formik";
 import React, { useEffect, useState } from "react";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType";
+import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import Text from "../../components/Text";
 import { DialogHandler } from "../../hooks/useDialog";
 import { styles } from "./FormListDialog/FormListDialog.styles";
 
-export interface DocumentTypeDialogProps {
+export interface DocumentTypeDialogProps extends FormikProps<any> {
   documentTypes: DocumentType[];
   dialog: DialogHandler;
   handleSelection: (id: string) => void;
@@ -18,8 +20,7 @@ export const DocumentTypeDialog: React.FunctionComponent<DocumentTypeDialogProps
   const [selectedDocumentTypeId, setSelectedDocumentTypeId] = useState<string>("");
   const classes = styles();
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
-  const handleSelect = (evt) => {
-    const id = evt.target.value;
+  const handleSelect = (id: string) => {
     setSelectedDocumentTypeId(id);
     handleSelection(id);
   };
@@ -45,31 +46,23 @@ export const DocumentTypeDialog: React.FunctionComponent<DocumentTypeDialogProps
             <CircularProgress size={45} />
           </div>
         }
-        <RadioGroup
-          aria-label="selectForm"
+        <AutocompleteField
           name="select-form"
-          onChange={handleSelect}
-          value={selectedDocumentTypeId}
-          id="FormListDialog-selectForm"
-          style={{ visibility: selectedDocumentTypeId ? "hidden" : "visible" }}
-        >
-          {
-            documentTypes.map((type) => (
-              <FormControlLabel
-                key={type.id}
-                value={type.id}
-                control={<Radio color="primary" />}
-                label={type.documentTypeName}
-              />
-            ))
-          }
-        </RadioGroup>
+          size="sm"
+          autocompleteProps={{ id: "DocTypeListDialog-selectForm" }}
+          options={documentTypes.map((docType) => ({
+            label: docType.documentTypeName,
+            value: docType.id,
+          }))}
+          onClick={(option) => handleSelect(option.value)}
+          label="supplier.select.type"
+        />
         <Button
           variant="text"
           color="secondary"
           className={classes.cancelButton}
           onClick={dialog.close}
-          id="FormListDialog-cancelButton"
+          id="DocTypeListDialog-cancelButton"
         >
           <Text translation="transition.action.cancel" />
         </Button>
