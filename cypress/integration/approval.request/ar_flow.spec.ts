@@ -211,6 +211,7 @@ context("Approval request form", () => {
     it("Verify AR status", () => {
       SystemRequirement("REQ-0730");
       SystemRequirement("REQ-0740");
+      SystemRequirement("REQ-0020");
       cy.arVerifyStatus({ status: "In Review" });
     });
   });
@@ -245,6 +246,7 @@ context("Approval request form", () => {
 
     it("Check approval request status is approved", () => {
       SystemRequirement("REQ-0730");
+      SystemRequirement("REQ-0020");
       cy.arVerifyStatus({ status: "Approved" });
     });
   });

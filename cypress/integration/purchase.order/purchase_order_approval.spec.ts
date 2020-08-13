@@ -460,7 +460,8 @@ context("Test the POAM when approving Purchase Order", () => {
 
   it("Verify rejected PO status, should be 'Draft'", () => {
     SystemRequirement("REQ-1570");
-    cy.poVerifyStatus({ status: "Draft"});
+    SystemRequirement("REQ-0020");
+    cy.poVerifyStatus({ status: "Draft" });
   });
 });
 

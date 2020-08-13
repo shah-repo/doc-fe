@@ -638,21 +638,21 @@ context("Validators tests", () => {
 
   context(`Test ${requiredDocTypeFieldLabel} (required document type) Field`, () => {
     it("Add incorrect document", () => {
-      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}'] input`).type("initial AR Form{downarrow}{enter}");
+      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type("initial AR Form{downarrow}{enter}");
     });
 
-    it("should show error for 'required document type' field", () => {
+    it("should show error for 'Incorrect document type' field", () => {
       cy.wait(1000);
-      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).then((elem) => {
+      cy.get(`[name^='${requiredDocTypeFieldSelector}']`).then((elem) => {
         const errorBlock = elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", "Incorrect document type.");
+          .should("have.text", `Incorrect document type.`);
       });
     });
 
     it(`fill in '${requiredDocTypeFieldLabel}' with our CS Document`, () => {
-      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}'] input`).clear();
+      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).clear();
       cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type(`${csDocTitle}{downarrow}{enter}`);
     });
   });

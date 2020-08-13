@@ -1,3 +1,9 @@
+/* eslint-disable max-classes-per-file */
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
+import { SystemRequirement } from "../../utils/context/systemRequirement";
+
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
@@ -100,6 +106,7 @@ context("Document Creation Flow", () => {
 
   context("Document in DRAFT", () => {
     it("Checks if document status is DRAFT after creating a document", () => {
+      SystemRequirement("REQ-0020");
       cy.drCheckDocumentStatus({ status: "Draft" });
     });
 
@@ -119,6 +126,7 @@ context("Document Creation Flow", () => {
 
   context("Document in VOIDED", () => {
     it("Checks if document status is VOIDED after voiding a document", () => {
+      SystemRequirement("REQ-0020");
       cy.drCheckDocumentStatus({ status: "Voided" });
     });
   });
