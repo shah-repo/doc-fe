@@ -193,6 +193,10 @@ context("Document Creation Flow", () => {
         cy.atchCheckForSinglePrimaryAttachment();
       });
 
+      it("Save document after setting primary attachment", () => {
+        cy.drClickCreateDocument();
+      });
+
       it("Remove attachment test_image.jpg", () => {
         SystemRequirement("REQ-0240");
         cy.atchRemoveAttachment({ fileName: "test_image.jpg" });

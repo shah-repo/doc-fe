@@ -23,6 +23,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   } = React.useContext(FormHeaderContext)!;
 
   const { workspaceState, formState } = FB.useStores();
+  const { revisionStage } = documentRevision || {};
   const formik = useFormikContext();
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
@@ -75,6 +76,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         docRevId={values.id as string}
         owner={documentRevision?.owner}
         documentTypeId={documentTypeId}
+        revisionStage={revisionStage}
       />
       <HeaderMenu>
         <CancelButton

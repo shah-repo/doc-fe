@@ -91,10 +91,10 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const columns: TableColumnProps<DocumentRevision>[] = pageDetailColumns.map(
     (column: PageDetailsColumn) => {
       const [omitSearch, searchOptions] = columnSearchConfiguration(column.valuePath, tableCriteria);
-
       return {
         key: column.valuePath as keyof DocumentRevision,
-        label: column.label,
+        // version is a hack need to insert inside configuration 20.19
+        label: column.label === "Version" as string ? "common.revision" : column.label,
         cellHref: cellHrefRenderer,
         omitSearch,
         columnOptions: {

@@ -32,6 +32,7 @@ interface Props {
   docRevId: string;
   owner?: Owner;
   documentTypeId?: string;
+  revisionStage?: number;
 }
 
 const styles = makeStyles(() =>
@@ -53,6 +54,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   docRevId,
   owner,
   documentTypeId,
+  revisionStage,
 }) => {
   const [isVisible, label] = useApproveAndRelease(documentTypeId);
   const classes = styles();
@@ -194,7 +196,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     );
   };
 
-  if (!id || status !== DocumentRevisionStatus.Draft || !canApprove) {
+  if (!id || status !== DocumentRevisionStatus.Draft || !canApprove || revisionStage !== 1) {
     return null;
   }
 

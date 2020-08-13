@@ -527,8 +527,8 @@ context("Validators tests", () => {
 
     it("should show error for 'required' field", () => {
       cy.wait(1000);
-      cy.get(`[data-cy^='${requiredFieldSelector}']`).then(($elem) => {
-        const errorBlock = $elem.offsetParent().siblings("p");
+      cy.get(`[data-cy^='${requiredFieldSelector}']`).then((elem) => {
+        const errorBlock = elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
           .should("have.text", `The ${requiredFieldLabel} field is required.`);
@@ -551,11 +551,12 @@ context("Validators tests", () => {
 
     it("should show error for 'required if' field", () => {
       cy.wait(1000);
-      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).then(($elem) => {
-        const errorBlock = $elem.offsetParent().siblings("p");
+      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).then((elem) => {
+        const errorBlock = elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredIfFieldLabel} field is required when ${requiredFieldLabel} is ${requiredIfFieldValue}.`);
+          .should("have.text",
+            `The ${requiredIfFieldLabel} field is required when ${requiredFieldLabel} is ${requiredIfFieldValue}.`);
       });
     });
 
@@ -575,11 +576,12 @@ context("Validators tests", () => {
 
     it("should show error for 'required if in' field", () => {
       cy.wait(1000);
-      cy.get(`[data-cy^='${requiredIfInFieldSelector}']`).then(($elem) => {
-        const errorBlock = $elem.offsetParent().siblings("p");
+      cy.get(`[data-cy^='${requiredIfInFieldSelector}']`).then((elem) => {
+        const errorBlock = elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredIfInFieldLabel} field is required when ${requiredIfFieldLabel} includes , .`);
+          .should("have.text",
+            `The ${requiredIfInFieldLabel} field is required when ${requiredIfFieldLabel} includes , .`);
       });
     });
 
@@ -599,11 +601,12 @@ context("Validators tests", () => {
 
     it("should show error for 'required with' field", () => {
       cy.wait(1000);
-      cy.get(`[data-cy^='${requiredWithFieldSelector}']`).then(($elem) => {
-        const errorBlock = $elem.offsetParent().siblings("p");
+      cy.get(`[data-cy^='${requiredWithFieldSelector}']`).then((elem) => {
+        const errorBlock = elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredWithFieldLabel} field is required when ${requiredIfInFieldLabel} is not empty.`);
+          .should("have.text",
+            `The ${requiredWithFieldLabel} field is required when ${requiredIfInFieldLabel} is not empty.`);
       });
     });
 
@@ -619,11 +622,12 @@ context("Validators tests", () => {
 
     it("should show error for 'required without' field", () => {
       cy.wait(1000);
-      cy.get(`[data-cy^='${requiredWithoutFieldSelector}']`).then(($elem) => {
-        const errorBlock = $elem.offsetParent().siblings("p");
+      cy.get(`[data-cy^='${requiredWithoutFieldSelector}']`).then((elem) => {
+        const errorBlock = elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredWithoutFieldLabel} field is required when ${requiredWithFieldLabel} is empty.`);
+          .should("have.text",
+            `The ${requiredWithoutFieldLabel} field is required when ${requiredWithFieldLabel} is empty.`);
       });
     });
 
@@ -639,8 +643,8 @@ context("Validators tests", () => {
 
     it("should show error for 'required document type' field", () => {
       cy.wait(1000);
-      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).then(($elem) => {
-        const errorBlock = $elem.offsetParent().siblings("p");
+      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).then((elem) => {
+        const errorBlock = elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
           .should("have.text", "Incorrect document type.");

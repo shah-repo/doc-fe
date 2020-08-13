@@ -15,6 +15,7 @@ interface OwnProps {
   documentRevisionId: Nullable<string>;
   documentTypeId?: string;
   isInlineApproval: boolean;
+  isRecord: boolean;
 }
 
 export type DocumentRevisionListContainerProps = OwnProps;
@@ -27,9 +28,9 @@ DocumentRevisionListContainerProps
   documentId,
   docId,
   selectedDocumentRevision,
-  documentRevisionId,
   documentTypeId,
   isInlineApproval,
+  isRecord,
 }) => {
   const classes = styles();
   const dispatch = useDispatch();
@@ -59,6 +60,7 @@ DocumentRevisionListContainerProps
                 selectedDocumentRevision,
                 documentTypeId,
                 isDocumentPO,
+                isRecord,
               }}
             />
           )
