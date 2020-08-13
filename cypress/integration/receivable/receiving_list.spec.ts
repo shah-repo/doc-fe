@@ -1,4 +1,5 @@
 import { fail } from "assert";
+import { GroupTag, NavigationItems } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -7,6 +8,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 let adminEmployee;
+let secondEmployee;
 let purchaseOrderDocumentType;
 let formDocumentType;
 let receivableDocumentType;
@@ -65,6 +67,7 @@ context("Approval request landing page test", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.name === "Company Admin");
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.name === "Second Tester");
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
           receivableDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
@@ -355,16 +358,61 @@ context("Approval request landing page test", () => {
     });
   });
 
-  context("Login admin user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: "enlil.testmail+cy1@gmail.com",
-        password: "Tester1!",
+  context("Login user", () => {
+    context("Login user when he doesn't have privileges", () => {
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: "enlil.testmail+cy2@gmail.com",
+          password: "Tester1!",
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
       });
     });
 
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    context("Check for access to receivable list", () => {
+      it("Verify user can't access receivable list", () => {
+        SystemRequirement("REQ-1700");
+        cy.navigListNotExistsCheck( NavigationItems.RECEIVING );
+      });
+    });
+
+    context("Create group with privilages to restricted doc types", () => {
+      it("Create group with permission to access receivable list", () => {
+        SystemRequirement("REQ-1700");
+        cy.grpAPICreateNewGroup({
+          payload: {
+            name: "Group with access to restricted doc types",
+            tags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
+            permissions: [],
+            employees: [{ id: secondEmployee.id }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        });
+      });
+    });
+
+    context("Login user when he does have privileges", () => {
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: "enlil.testmail+cy2@gmail.com",
+          password: "Tester1!",
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
+    });
+
+    context("Check for access to receivable list", () => {
+      it("Verify user can access receivable list", () => {
+        SystemRequirement("REQ-1700");
+        cy.navigListExistsCheck( NavigationItems.RECEIVING );
+      });
     });
   });
 
@@ -479,7 +527,7 @@ context("Approval request landing page test", () => {
 
       it("Verify receivable counter on document list", () => {
         SystemRequirement("REQ-1760");
-        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       });
     });
 
