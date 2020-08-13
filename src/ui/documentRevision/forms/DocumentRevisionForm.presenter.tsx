@@ -19,7 +19,6 @@ import ScrollToError from "../../components/forms/ScrollToError";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import FormHeader from "../../document.revision/header/FormHeader";
-import { documentDetailsPath } from "../../document.revision/utils/paths";
 import { FB } from "../../form.builder";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
@@ -164,9 +163,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   }, [values.document, setFieldValue]);
 
-  const openReference = (documentId: string) => {
-    window.open(documentDetailsPath(documentId), "_blank");
-  };
+  // const openReference = (documentId: string) => {
+  //   window.open(documentDetailsPath(documentId), "_blank");
+  // };
 
   useEffect(() => {
     if (isdocRevStatusDraft) {
@@ -258,7 +257,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             closeMenuOnSelect: false,
           }}
           options={availableReferences}
-          onClick={openReference}
+          // onClick={openReference}
           isDisabled={isDisabledInput}
         />
         <References document={initialValues.document} />

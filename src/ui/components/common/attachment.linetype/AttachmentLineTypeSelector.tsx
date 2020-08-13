@@ -1,18 +1,18 @@
-import { Button, Dialog, DialogContent, makeStyles, Box, Link } from "@material-ui/core";
+import { Box, Button, Dialog, DialogContent, Link, makeStyles } from "@material-ui/core";
+import { AttachFile } from "@material-ui/icons";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import { FieldInputProps, Formik, FormikProps } from "formik";
 import React from "react";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
+import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
+import { changeRequestFormOnScreenContext } from "../../../change.request/form/ChangeRequestForm.container";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import { FormContext, useFormContext } from "../../forms/FormContext";
-import AttachmentLineTypeForm from "./AttachmentLineTypeForm";
-import { changeRequestFormOnScreenContext } from "../../../change.request/form/ChangeRequestForm.container";
-import Text from "../../Text";
-import { AttachFile } from "@material-ui/icons";
-import { AttachmentStyleProps } from "../attachment.field/utils/types";
 import Colors from "../../../layout/theme/utils/colors";
-import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
+import { FormContext, useFormContext } from "../../forms/FormContext";
+import Text from "../../Text";
+import { AttachmentStyleProps } from "../attachment.field/utils/types";
+import AttachmentLineTypeForm from "./AttachmentLineTypeForm";
 
 
 interface Props {
@@ -106,7 +106,12 @@ export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
              disabled={disabled}
            />
            <label htmlFor={`${name}-button-file`}>
-             <Link component="span" variant="button" className={classes.link} id="AttachmentFieldPresenter-linkButton" >
+             <Link
+               component="span"
+               variant="button"
+               className={classes.link}
+               id="AttachmentFieldPresenter-downloadAllButton"
+             >
                <AttachFile className={classes.icon} />
                <Text translation="common.upload.files" />
              </Link>

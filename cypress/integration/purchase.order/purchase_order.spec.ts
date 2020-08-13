@@ -232,7 +232,7 @@ context("Create Purchase Order document with Product option from Form document",
   });
 
   it("Check for PO ID uniqueness - ID should be PO-00001", () => {
-    SystemRequirement("REQ-1270")
+    SystemRequirement("REQ-1270");
     cy.poCheckStatus( "PO-00001" );
   });
 
@@ -241,13 +241,14 @@ context("Create Purchase Order document with Product option from Form document",
   });
 
   it("Click on existing PO that was created before", () => {
-    SystemRequirement("REQ-1370")
-    SystemRequirement("REQ-1210") 
+    SystemRequirement("REQ-1370");
+    SystemRequirement("REQ-1210");
     cy.poClickOnSpecificPOFromList({ item:"PO-00001" });
   });
 
   it("Check status of PO should be Draft", () => {
-    SystemRequirement("REQ-1280")
+    SystemRequirement("REQ-1280");
+    SystemRequirement("REQ-0020");
     cy.poCheckStatus("Draft" );
   });
 
@@ -347,12 +348,13 @@ context("Create Purchase Order document with Service option from Form document",
   });
 
   it("Check for PO ID uniqueness - ID should be PO-00002", () => {
-    SystemRequirement("REQ-1270")
+    SystemRequirement("REQ-1270");
     cy.poCheckStatus( "PO-00002" );
   });
 
   it("Check status of PO should be Draft", () => {
-    SystemRequirement("REQ-1280")
+    SystemRequirement("REQ-1280");
+    SystemRequirement("REQ-0020");
     cy.poCheckStatus( "Draft" );
   });
 

@@ -136,7 +136,12 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
         htmlFor={"button-file"}
         className={classes.downloadLabel}
         onClick={handleAllDownload(docRevId, undefined)}>
-        <Link className={classes.link} component="span" variant="button" id="AttachmentFieldPresenter-linkButton" >
+        <Link
+          className={classes.link}
+          component="span"
+          variant="button"
+          id="AttachmentFieldPresenter-downloadAllButton"
+        >
           {isDownloading ? <CircularProgress className={classes.icon} /> : <GetAppIcon className={classes.icon} />}
           <Text translation="common.download.all.files" />
         </Link>

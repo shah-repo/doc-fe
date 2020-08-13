@@ -200,6 +200,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Verify AR status", () => {
+      SystemRequirement("REQ-0020");
       cy.arVerifyStatus({ status: "In Review" });
     });
   });
