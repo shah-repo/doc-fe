@@ -98,4 +98,7 @@ export const DOCUMENT_TABLE_LIST_NAMES = [
   "Business Form",
   "Legal Document",
   "Supplier Forms",
+  "Document Approval Matrix",
+  "PO Approval Matrix",
+  "eForm",
 ];
