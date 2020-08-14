@@ -48,7 +48,7 @@ export const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
         <AutocompleteField
           name="select-form"
           size="sm"
-          autocompleteProps={{ id: "DocTypeListDialog-selectForm" }}
+          autocompleteProps={{ id: "FormListDialog-selectForm" }}
           options={formIds.map((form) => ({
             label: form.name,
             value: form.id,

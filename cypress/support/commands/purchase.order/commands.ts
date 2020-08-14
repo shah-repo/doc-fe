@@ -163,12 +163,14 @@ Cypress.Commands.add("poCheckStatus", (...list: string[]) => {
 });
 
 Cypress.Commands.add("poCheckIfFormPopUpIsActive", (...list: string[]) => {
+  cy.get("[id=\"FormListDialog-selectForm\"]").click();
   list.forEach((item) => {
-    cy.get("[id=\"FormListDialog-selectForm\"]").contains(item).should("exist");
+    cy.get("[id=\"FormListDialog-selectForm\"] > div > div > div").contains(item).should("exist");
   });
 });
 
 Cypress.Commands.add("poCloseFormPopUpOnLandingPage", () => {
+  cy.get("[id=\"FormListDialog-selectForm\"]").click();
   cy.get("[id=\"FormListDialog-cancelButton\"]").click();
 });
 

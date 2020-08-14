@@ -49,7 +49,7 @@ export const DocumentTypeDialog: React.FunctionComponent<DocumentTypeDialogProps
         <AutocompleteField
           name="select-form"
           size="sm"
-          autocompleteProps={{ id: "DocTypeListDialog-selectForm" }}
+          autocompleteProps={{ id: "DocTypeListDialog-selectDocType" }}
           options={documentTypes.map((docType) => ({
             label: docType.documentTypeName,
             value: docType.id,
