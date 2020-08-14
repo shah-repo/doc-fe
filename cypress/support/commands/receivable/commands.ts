@@ -2,6 +2,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
 
+import { integer } from "aws-sdk/clients/cloudfront";
 import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { CONFIG } from "../../config";
 export { };
@@ -23,6 +24,8 @@ declare global {
       recFilterByARId(params: {arId: string}): Chainable<Subject>;
       recVerifyFilterByARId(params: {arId: string}): Chainable<Subject>;
       recVerifyFilterClear(): Chainable<Subject>;
+      recCheckNumberOfAvailablePo(params: {numberOfOpenPOs: integer}): Chainable<Subject>;
+      recSelectPo(params: {poTitle: string}): Chainable<Subject>;
     }
   }
 }
@@ -116,4 +119,15 @@ Cypress.Commands.add("recVerifyFilterClear", () => {
   cy.get("input[name=crId]").should("have.attr", "value", "");
   cy.get("input[name=\"status[]\"").should("have.attr", "value", "");
 });
+
+Cypress.Commands.add("recCheckNumberOfAvailablePo", (params: {numberOfOpenPOs: integer}) => {
+  cy.get("[data-cy^=receivable]").scrollIntoView().wait(300);
+  cy.get("[data-cy^=receivable]").click();
+  cy.get("ul[role=listbox]>li").should("have.length", params.numberOfOpenPOs);
+});
+
+Cypress.Commands.add("recSelectPo", (params: {poTitle: string}) => {
+  cy.get("[data-cy^=receivable]").type(params.poTitle + "{downarrow}{enter}");
+});
+
 
