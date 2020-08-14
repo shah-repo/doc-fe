@@ -93,6 +93,7 @@ export type FBInputProps =
   isTemplate?: boolean;
   includeQRScan?: boolean;
   designDisabled?: boolean;
+  deleteDisabled?: boolean;
   instructionsDocument?: string;
   reviseDisabled?: boolean;
   outputDisabled?: boolean;
@@ -111,4 +112,4 @@ export type FBInputProps =
   transform?: FBInputTransform;
 };
 
-export const OmitInputClones: FBInputType[] = ["fileupload"];
+export const OmitInputClones: FBInputType[] = ["fileupload", "approval", "requestapproval"];

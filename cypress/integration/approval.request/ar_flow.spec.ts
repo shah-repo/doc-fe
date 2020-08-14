@@ -199,10 +199,6 @@ context("Approval request form", () => {
       cy.arAddApproverOnApproverList({ approver: "enlil.testmail+cy2@gmail.com" });
     });
 
-    it("Add date", () => {
-      cy.arAddEffectiveDate();
-    });
-
     it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
       cy.arClickCreateApprovalRequestAfterCompletingForm();
@@ -215,6 +211,7 @@ context("Approval request form", () => {
     it("Verify AR status", () => {
       SystemRequirement("REQ-0730");
       SystemRequirement("REQ-0740");
+      SystemRequirement("REQ-0020");
       cy.arVerifyStatus({ status: "In Review" });
     });
   });
@@ -249,6 +246,7 @@ context("Approval request form", () => {
 
     it("Check approval request status is approved", () => {
       SystemRequirement("REQ-0730");
+      SystemRequirement("REQ-0020");
       cy.arVerifyStatus({ status: "Approved" });
     });
   });

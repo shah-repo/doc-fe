@@ -70,22 +70,33 @@ export const generateVersionNumber = (
   revisionStage?: number,
   subRevision?: number,
   revisionChangeType?: RevisionChangeType,
+  revisionStatus?: DocumentRevisionStatus,
 ) => {
   if (!revision || !revisionStage) {
     return "";
   }
-  if (revisionChangeType === RevisionChangeType.Obsolete) {
+  if (revisionChangeType === RevisionChangeType.Void) {
     return "Void";
   }
+  if (revisionChangeType === RevisionChangeType.Obsolete) {
+    return "OBS";
+  }
+
+  /** Subrevision should only be displayed in the doc revision table if a document is in draft.
+   * If revisionStatus parameter is not passed to this function, status condition will be ignored. */
+  const isInDraft = revisionStatus === DocumentRevisionStatus.Draft;
+  const suffix = (isInDraft || !revisionStatus) && subRevision && subRevision > 0
+    ? `.${subRevision}`
+    : "";
+
   switch (revisionStage) {
     case 1: {
-      const subRev = (subRevision && subRevision > 0) ? `.${subRevision}` : "";
-      return `${revision}${subRev}`;
+      return `${revision}${suffix}`;
     }
     case 2:
-      return `1${getAlphabetFromNumber(revision)}`;
+      return `1${getAlphabetFromNumber(revision)}${suffix}`;
     case 3:
-      return `${getAlphabetFromNumber(revision)}`;
+      return `${getAlphabetFromNumber(revision)}${suffix}`;
     default:
       return "N/A";
   }

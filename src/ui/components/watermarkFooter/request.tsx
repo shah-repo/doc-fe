@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { IotService } from "../../../common/utils/iot/mqttClient";
 import { attachmentsActions, WatermarkRequest, WatermarkRequestStatus } from "../../../state/ducks/attachments";
@@ -21,6 +22,7 @@ export const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
   addRequestResult,
   removeWatermark,
 }) => {
+  const intl = useIntl();
   const asyncAction = useActionCreator(attachmentsActions.checkWatermarkStatus);
   const async = useAsync<WatermarkRequest>({
     onSuccess: (watermarkRequest = {} as WatermarkRequest) => {
@@ -38,6 +40,11 @@ export const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
           message: {
             translation: translation as Translation,
             values: {
+              fileType: watermarkRequest.hasWatermarks ? intl.formatMessage({
+                id: "watermark.file",
+              }) : intl.formatMessage({
+                id: "pdf.file",
+              }),
               name: watermarkRequest.attachment.name,
               type: watermarkRequest.attachment.type,
             },

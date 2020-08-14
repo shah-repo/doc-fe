@@ -14,5 +14,19 @@ export const styles = makeStyles((theme: Theme) =>
       margin: "0px 16px 0px 0px",
       backgroundColor: theme.palette.common.white,
     },
+    remainderButton: {
+      padding: theme.spacing(0, 1.5),
+      margin: theme.spacing(0, 1),
+      borderRadius: "10px",
+      minWidth: "unset",
+      fontSize: "0.65rem",
+    },
+    triangleDown: {
+      "width": "0.65rem",
+      "marginLeft": "2px",
+      "&.expanded": {
+        transform: "rotate(180deg)",
+      },
+    },
   }),
 );

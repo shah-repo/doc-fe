@@ -13,9 +13,9 @@ export class FBApprovalState {
   @observable public hasApproved: FBApprovalValue[] = [];
   @observable public auditData?: Audit[];
 
-  public approversValue: string[] = [];
-  public groupsValue: string[] = [];
-  public approvalRolesValue: string[] = [];
+  public approversValue?: string[];
+  public groupsValue?: string[];
+  public approvalRolesValue?: string[];
 
   public postApi: FBRequest<any, FBApprovalApi> = new FBRequest();
   public approversApi = new FBAutocompleteAsyncState(this.approversId);
