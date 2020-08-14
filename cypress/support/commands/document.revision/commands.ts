@@ -37,6 +37,7 @@ declare global {
       drSetDocTypeId(params: { docId: string }): Chainable<Subject>;
       drSelectReferences(...list: string[]): Chainable<Subject>;
       drRemoveReferences(...list: int[]): Chainable<Subject>;
+      drSelectReleasedVersionOfDocument(params: { docVersion: int }): Chainable<Subject>;
     }
   }
 }
@@ -70,6 +71,11 @@ Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
   list.forEach((item) => {
     cy.get("[id=\"referenceTo\"]").click().type(item + "{downarrow}{enter}");
   });
+});
+
+
+Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion: int }) => {
+  cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(params.docVersion).click().wait(2000);
 });
 
 Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
