@@ -138,7 +138,7 @@ DocumentRevisionFormContainerProps
       outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
       revisionChangeType: isAdministrativeDefault ?
         RevisionChangeType.AdministrativeChange :
-        RevisionChangeType.NextRevision,
+        initialValues.revisionChangeType,
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canUpdateHTML, initialValues, groupOptions]);
