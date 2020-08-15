@@ -14,7 +14,6 @@ interface Props {
   dialogTitle?: Translation;
   translationText: Translation;
   translationButtonText?: string;
-  setIsDownloading?: (boolean) => void;
 }
 
 export const AttachmentRedLineWarningDialog: React.FunctionComponent<Props> = ({
