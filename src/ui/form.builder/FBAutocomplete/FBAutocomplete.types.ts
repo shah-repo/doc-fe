@@ -11,4 +11,5 @@ export type FBAutocompleteProps =
  | "filterSelectedOptions"
  > & {
    refresh?: () => any;
+   disabledOptions?: string[];
  };

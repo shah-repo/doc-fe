@@ -9,7 +9,7 @@ import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
 import { FBButton } from "../FBButton";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
-import { FBDocumentRevisions } from "../FBDocumentRevisionsField";
+import { FBDocumentRevisions } from "../FBDocumentRevisions";
 import { FBFileUpload } from "../FBFileUpload";
 import { FBHelloSign } from "../FBHelloSign";
 import { FBHyperlink } from "../FBHyperlink";

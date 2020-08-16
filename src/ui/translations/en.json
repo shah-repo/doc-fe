@@ -716,6 +716,8 @@
   "form.builder.enter.text": "Enter text",
   "form.builder.closing.note.title": "Implementation Task Closing Note",
   "form.builder.approval.non.versioned": "Non-versioned",
+  "form.builder.add.document": "Add a Document",
+  "form.builder.select.document": "Select a document",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.pdf": "Download PDF file",

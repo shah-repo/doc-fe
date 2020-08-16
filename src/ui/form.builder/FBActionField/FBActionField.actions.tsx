@@ -15,7 +15,7 @@ const FBActionFieldActions: React.FunctionComponent<FBActionFieldActionsProps> =
     />
     <FBButton
       variant="outlined"
-      label="common.cancel"
+      label="form.builder.cancel"
       onClick={handleCancel}
     />
   </Box>

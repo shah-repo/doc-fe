@@ -32,6 +32,15 @@ export class FBFormState extends FBSchemaState {
     return _.get(window, "EnlilRemoteValidators.validator");
   }
 
+  public reset = () => {
+    this.initialValues = {};
+    this.values = {};
+    this.rules = {};
+    this.validationAttributeNames = {};
+    this.inputState.clear();
+    this.validate();
+  };
+
   @action public setValues = (values: Dictionary<any>) => {
     this.values = values;
   };
@@ -119,7 +128,7 @@ export class FBFormState extends FBSchemaState {
       return;
     }
 
-    const rules = this.getRules();
+    const rules = flatten(this.getRules());
     const values = _.omitBy(this.values, (v) => _.isString(v) && _.isEmpty(v));
     // *TODO: unify validators format
     let validator: any;

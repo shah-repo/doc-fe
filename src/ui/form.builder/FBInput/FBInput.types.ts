@@ -111,4 +111,7 @@ export type FBInputProps =
   transform?: FBInputTransform;
 };
 
-export const OmitInputClones: FBInputType[] = ["fileupload"];
+export const OmitInputClones: FBInputType[] = [
+  "fileupload",
+  "documentRevisions",
+];

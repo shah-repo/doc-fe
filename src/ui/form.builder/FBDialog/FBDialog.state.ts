@@ -9,7 +9,6 @@ export class FBDialogState {
   @observable public content?: React.ReactElement;
   @observable public title?: React.ReactNode | string;
   @observable public actions?: React.ReactNode;
-  @observable public portalAction2?: React.MutableRefObject<null>;
 
   @action public setDialog = (open: boolean) => {
     set(this, "open", open);
