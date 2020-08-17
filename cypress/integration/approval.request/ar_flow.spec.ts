@@ -156,7 +156,7 @@ context("Approval request form", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Approve and release document", () => {

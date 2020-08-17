@@ -116,7 +116,7 @@ context("Document Attachment Flow", () => {
       });
 
       it("Clicks Save button", () => {
-        cy.drClickCreateDocument();
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Approves and releases document", () => {
@@ -141,7 +141,7 @@ context("Document Attachment Flow", () => {
       });
 
       it("Clicks Save button", () => {
-        cy.drClickCreateDocument();
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Approves and releases document", () => {
@@ -153,7 +153,7 @@ context("Document Attachment Flow", () => {
       });
 
       it("Clicks Save button", () => {
-        cy.drClickCreateDocument();
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Approves and releases document", () => {

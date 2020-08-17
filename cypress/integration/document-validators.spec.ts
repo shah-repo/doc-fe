@@ -120,8 +120,7 @@ context("Validators tests", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocument();
-      cy.wait(3000);
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("'Approve and Release' the document", () => {
@@ -142,8 +141,7 @@ context("Validators tests", () => {
   context("Tries to submit empty form", () => {
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocument();
-      cy.wait(3000);
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("shows error 'required’ below title field", () => {
@@ -185,7 +183,7 @@ context("Validators tests", () => {
   context("Tries to submit partially filled in form", () => {
 
     it("click on 'Save' button", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("shows error 'at least one required' below 'Output Document Type' field", () => {
@@ -445,7 +443,7 @@ context("Validators tests", () => {
   context("Store DocId, Save document And 'Approve & Release Document", () => {
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Store Document Id", () => {
@@ -471,7 +469,7 @@ context("Validators tests", () => {
   context("Tries to submit empty form", () => {
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("shows error 'required’ below title field", () => {
@@ -498,7 +496,7 @@ context("Validators tests", () => {
 
   context("Validation errors on custom fields should not prevent from saving document", () => {
     it("saving the document", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -658,11 +656,6 @@ context("Validators tests", () => {
   });
 
   context("Release document", () => {
-
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocument();
-    });
-
     it("'Approve and Release' the document", () => {
       cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 1000 }).click();
       cy.get("#FormList-selectForm").type("Initial AR Form{enter}");

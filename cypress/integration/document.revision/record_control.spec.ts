@@ -150,7 +150,7 @@ context("Record Control Flow", () => {
 
       context("Creates document", () => {
         it("Click create document after filling document", () => {
-          cy.drClickCreateDocument();
+          cy.drClickCreateDocumentWithApiCall();
         });
       });
     });
@@ -175,7 +175,7 @@ context("Record Control Flow", () => {
       });
 
       it("Saves Document", () => {
-        cy.drClickCreateDocument();
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
 
@@ -234,3 +234,4 @@ context("Record Control Flow", () => {
 });
 
 export { };
+

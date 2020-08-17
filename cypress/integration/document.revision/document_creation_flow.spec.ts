@@ -160,7 +160,7 @@ context("Document Creation Flow", () => {
 
   context("Creates document", () => {
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
@@ -210,7 +210,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Save document after setting primary attachment", () => {
-        cy.drClickCreateDocument();
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Remove attachment test_image.jpg", () => {
