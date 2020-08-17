@@ -1,5 +1,6 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { PurchaseOrderItem } from "../../support/commands/purchase.order/commands";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -258,14 +259,32 @@ context("Approval request landing page test", () => {
                             totalAmount: "200.00",
                             formatedDate: (new Date()).toLocaleDateString("en-US"),
                             index: 0,
+                          },
+                          {
+                            id: "kdpr51z8",
+                            type: "service",
+                            date: (new Date()).toISOString(),
+                            tax: false,
+                            capitalEquipment: false,
+                            isTraceabilityRequired: false,
+                            description: "office cleaning",
+                            serviceId: "cleaning",
+                            units: "hours",
+                            order: 6,
+                            glCode: "code 1",
+                            unitPrice: 30,
+                            received: 0,
+                            totalAmount: "180.00",
+                            formatedDate: (new Date()).toLocaleDateString("en-US"),
+                            index: 1,
                           }],
                           tax: "0.00",
-                          subtotal: "200.00",
-                          totalAmount: "200.00",
+                          subtotal: "380.00",
+                          totalAmount: "380.00",
                           shippingCost: "0.00",
                           currency: "USD",
                           exchangeRate: 1,
-                          totalInUSD: "200.00",
+                          totalInUSD: "380.00",
                           dateOfExchange: "",
                         },
                       },
@@ -389,6 +408,42 @@ context("Create receivable", () => {
       it("Search for API PO document and select it", () => {
         SystemRequirement("REQ-1800");
         cy.recSelectPo({ poTitle: "API PO document" });
+      });
+    });
+
+    context("Check selected PO is loaded and displayed in receivable", () => {
+      it("Verify PO 'API PO document 2' is displayed", () => {
+        SystemRequirement("REQ-1810");
+        const poItems: PurchaseOrderItem[] = [{
+          index: 1,
+          partNumber: "",
+          descritpion: "",
+          ordered: 5,
+          received: 0,
+          units: "hours",
+          dateRequired: "",
+          unitPrice: "$40.00",
+          totalPrice: "$200.00",
+        },
+        {
+          index: 2,
+          partNumber: "",
+          descritpion: "",
+          ordered: 6,
+          received: 0,
+          units: "hours",
+          dateRequired: "",
+          unitPrice: "$30.00",
+          totalPrice: "$180.00",
+        }];
+        cy.recVerifyPOIsDisplayed({ loadedPoItems: poItems });
+      });
+    });
+
+    context("Create receivable", () => {
+      it("Click create", () => {
+        SystemRequirement("REQ-1770");
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
   });

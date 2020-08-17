@@ -5,6 +5,7 @@
 import { integer } from "aws-sdk/clients/cloudfront";
 import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { CONFIG } from "../../config";
+import { PurchaseOrderItem } from "../purchase.order/commands";
 export { };
 
 declare global {
@@ -26,6 +27,7 @@ declare global {
       recVerifyFilterClear(): Chainable<Subject>;
       recCheckNumberOfAvailablePo(params: {numberOfOpenPOs: integer}): Chainable<Subject>;
       recSelectPo(params: {poTitle: string}): Chainable<Subject>;
+      recVerifyPOIsDisplayed(params: {loadedPoItems: PurchaseOrderItem[]}): Chainable<Subject>;
     }
   }
 }
@@ -128,6 +130,25 @@ Cypress.Commands.add("recCheckNumberOfAvailablePo", (params: {numberOfOpenPOs: i
 
 Cypress.Commands.add("recSelectPo", (params: {poTitle: string}) => {
   cy.get("[data-cy^=receivable]").type(params.poTitle + "{downarrow}{enter}");
+});
+
+Cypress.Commands.add("recVerifyPOIsDisplayed", (params: {loadedPoItems: PurchaseOrderItem[]}) => {
+  params.loadedPoItems.forEach((loadedItem) => {
+    cy.get("[data-cy=poItems]")
+      .contains("[data-cy=poItemIndex]", loadedItem.index.toString())
+      .siblings("[data-cy=order]")
+      .should("have.text", loadedItem.ordered.toString());
+    cy.get("[data-cy=poItems]")
+      .contains("[data-cy=poItemIndex]", loadedItem.index.toString())
+      .siblings("[data-cy=units]")
+      .should("have.text", loadedItem.units);
+    cy.get("[data-cy=poItems]")
+      .contains("[data-cy=poItemIndex]", loadedItem.index.toString())
+      .siblings("[data-cy=unitPrice]")
+      .should("have.text", loadedItem.unitPrice);
+    cy.get("[data-cy=poSum]").eq(loadedItem.index - 1)
+      .should("have.text", loadedItem.totalPrice);
+  });
 });
 
 

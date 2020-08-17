@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
+import { integer } from "aws-sdk/clients/cloudfront";
 import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { CONFIG } from "../../config";
 export { };
@@ -51,6 +52,18 @@ declare global {
       poAPICreatePO(params: {payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
     }
   }
+}
+
+export interface PurchaseOrderItem {
+  index: integer;
+  partNumber?: string;
+  descritpion?: string;
+  ordered: integer;
+  received: integer;
+  units?: string;
+  dateRequired?: string;
+  unitPrice: string;
+  totalPrice?: string;
 }
 
 Cypress.Commands.add("poAddNewFieldItem", () => {

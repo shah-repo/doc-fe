@@ -43,6 +43,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
               <TableRow
                 key={`fb-po-item-${item.id}-${index}`}
                 onClick={() => handleItem && handleItem(item)}
+                data-cy="poItems"
               >
                 <FBTableCell align="right">
                   {mode === "form" && (
@@ -59,6 +60,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                   {(key, index) => {
                     let label = item[key];
                     let tooltipTitle: string | undefined;
+                    const dataCy = key;
                     if (key === "description") {
                       key = "partNumberTitle";
                       label = _.truncate(item[key], { length: 35, omission: " ..." });
@@ -69,9 +71,10 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                     }
                     return (
                       <React.Fragment  key={`fb-po-item-${key}-${index}`}>
-                        {index === 0 && <TableCell>{item.index + 1}</TableCell>}
+                        {index === 0 && <TableCell data-cy = "poItemIndex" >{item.index + 1}</TableCell>}
                         {index > 0 && (
                           <FBTableCell
+                            data-cy = {dataCy}
                             align={(index > 2) ? "right" : "left"}
                             loading={key === "received" ? loading : false}
                             {...{ label, tooltipTitle }}

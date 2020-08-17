@@ -33,7 +33,7 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
               {item.tax && <CheckBoxIcon className="FBIcon-root" fontSize="small" />}
               {!item.tax && <CheckBoxOutlineBlankIcon className="FBIcon-root" fontSize="small" />}
             </FBTableCell>
-            <FBTableCell align="right" >
+            <FBTableCell align="right" data-cy="poSum" >
               <FormattedNumber
                 value={Number(item.totalAmount)}
                 style="currency"
