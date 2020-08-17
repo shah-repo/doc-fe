@@ -2,6 +2,7 @@ import _ from "lodash";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
+import { getIsAdministrativeDefault } from "../helpers";
 import { DocumentRevisionFormValues } from "./types";
 
 export const toDocumentRevisionFormValues = (
@@ -107,7 +108,11 @@ export const toDocumentRevisionFormValuesWithRevisionChange = (
   const values: DocumentRevisionFormValues = toDocumentRevisionFormValues(
     documentRevision,
   );
-  values.revisionChangeType = RevisionChangeType.NextRevision;
+  const isAdministrativeDefault = getIsAdministrativeDefault(documentRevision);
+
+  values.revisionChangeType = isAdministrativeDefault ?
+    RevisionChangeType.AdministrativeChange :
+    RevisionChangeType.NextRevision;
   values.outputRevision = true;
   FBDRStore.setValues({
     ...values,
