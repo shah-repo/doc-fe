@@ -58,7 +58,7 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     }
   };
 
-  @action public dataFilter = (data: any[]): any[] | undefined => {
+  @action public prepareData = (data: any[]): any[] | undefined => {
     if (!this.optionId) {
       return;
     }
