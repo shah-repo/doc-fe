@@ -32,6 +32,7 @@ import "./commands/form.builder/commands";
 import "./commands/group.management/commands";
 import "./commands/navigation/commands";
 import "./commands/purchase.order/commands";
+import "./commands/receivable/commands";
 import "./commands/suppliers/commands";
 import "./commands/user.management/commands";
 import { CONFIG } from "./config";

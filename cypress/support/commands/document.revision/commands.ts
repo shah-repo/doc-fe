@@ -35,6 +35,7 @@ declare global {
       closeAllAlertMessages(): Chainable<Subject>;
       checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
       drCreateNewDocumentFromForm(): Chainable<Subject>;
+      drAPIApproveAndRelease(params: { documentId: string; payload: IApproveAndReleasePayload; employeeId: string; sessionId: string }): Chainable<Subject>;
       drSetDocTypeId(params: { docId: string }): Chainable<Subject>;
       drSelectReferences(...list: string[]): Chainable<Subject>;
       drRemoveReferences(...list: int[]): Chainable<Subject>;
@@ -204,3 +205,26 @@ Cypress.Commands.add("closeAllAlertMessages", () => {
 Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
   cy.get("[id=\"PreviewControlsContainer-createNew\"]").click();
 });
+
+export interface IApproveAndReleasePayload{
+  effectiveDate: string;
+  documentType: { id: string };
+  formDocument: { id: string };
+}
+
+Cypress.Commands.add("drAPIApproveAndRelease", (params: {
+  documentId: string;
+  payload: IApproveAndReleasePayload;
+  employeeId: string;
+  sessionId: string;
+}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/document_revisions/release/` + params.documentId,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
