@@ -107,6 +107,8 @@ Example
 NUMBER_OF_WORKERS=4 CI_BUILD_ID=2020-07-03T14:07:48+02:00 ./scripts/cypress/run_in_parallel.sh
 ```
 
+## Toolkit
+
 ### Adding requirements
 Download Google spreadsheet as CSV file in *cypress/requirements/list.csv*
 
@@ -163,6 +165,54 @@ context("Example specs for requirements linking:", () => {
     it.skip("with no requirements mentioned", () => {
       expect(true).to.eql(true);
     });
+  });
+});
+```
+
+</p>
+</details>
+
+
+### Adding Screenshot
+
+<details>
+<summary>Example of a spec with Screenshot</summary>
+<p>
+
+```typescript
+context("Example of a spec with Screenshot", () => {
+  it("test case", () => {
+    Screenshot();
+    expect(true).to.eql(true);
+  });
+});
+```
+
+</p>
+</details>
+
+
+### Preventing failed test case to trigger skipping of all subsiquent test cases
+
+<details>
+<summary>Preventing failed test case to trigger skipping of all subsiquent test cases</summary>
+<p>
+
+```typescript
+context("Example", () => {
+  it("like this", function() {
+    PreventSkipOnFailure.call(this);
+    expect(true).to.eql(false);
+  });
+
+  it("not like this, cannot use arrow function", () => {
+    PreventSkipOnFailure.call(this);
+    expect(true).to.eql(false);
+  });
+
+  it("not like this, need to bind scope", function() {
+    PreventSkipOnFailure();
+    expect(true).to.eql(false);
   });
 });
 ```
