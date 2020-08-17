@@ -9,12 +9,15 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       atchUploadAttachment(params: {fileName: string }): Chainable<Subject>;
+      atchUploadRedlineAttachment(params: {fileName: string }): Chainable<Subject>;
       atchSetPrimaryAttachment(params: {fileName: string }): Chainable<Subject>;
       atchRemoveLastAttachment(): Chainable<Subject>;
       atchCheckForSinglePrimaryAttachment(): Chainable<Subject>;
       atchCheckDisplayedAttachments(params: {fileNames: string[] }): Chainable<Subject>;
       atchRemoveAttachment(params: {fileName: string }): Chainable<Subject>;
       atchCheckAtributes(params: {fileName: string; attributes: string }): Chainable<Subject>;
+      atchDownloadAllAttachments(): Chainable<Subject>;
+      atchEnterConfirmationPassword(params: {password: string }): Chainable<Subject>;
     }
   }
 }
@@ -28,9 +31,35 @@ Cypress.Commands.add("atchUploadAttachment", (params: {fileName: string }) => {
         fileName: params.fileName,
         mimeType: "*",
         filePath: `fixtures/${params.fileName}`,
-      });
+      }).wait(5000);
     });
   });
+});
+
+Cypress.Commands.add("atchUploadRedlineAttachment", (params: {fileName: string }) => {
+  cy.fixture(params.fileName).then((fileContent) => {
+    cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
+      cy.get("#AttachmentFieldPresenter-linkButton").click();
+      cy.get("#attachments-button-file-red-line").attachFile({
+        fileContent: fileContent.toString(),
+        fileName: params.fileName,
+        mimeType: "*",
+        filePath: `fixtures/${params.fileName}`,
+      }).wait(5000);
+    });
+  });
+});
+
+Cypress.Commands.add("atchEnterConfirmationPassword", (params: {password: string }) => {
+  cy.get("[data-cy=\"reject.request\"]").click().wait(1000);
+  // dowload document part is not working in cypress, cypress freezes so we just cancel password confirm
+  // cy.get("[data-cy=\"transition.action.password\"]").type(params.password);
+  // cy.get("[data-cy=\"passwordConfirm\"]").click().wait(10000);
+});
+
+Cypress.Commands.add("atchDownloadAllAttachments", () => {
+  cy.get("[id=\"AttachmentFieldPresenter-downloadAllButton\"]").click();
+  cy.get("[id=\"passwordConfirm\"]").click();
 });
 
 Cypress.Commands.add("atchSetPrimaryAttachment", (params: {fileName: string }) => {

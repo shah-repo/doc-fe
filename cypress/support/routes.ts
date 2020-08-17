@@ -18,6 +18,7 @@ export enum CyRoutes {
   SetPrimaryAttachment = "SetPrimaryAttachment",
   UploadAttachment = "UploadAttachment",
   PatchDocRev = "PatchDocRev",
+  PostOrPatchDocRev = "PostOrPatchDocRev",
   Login = "Login"
 }
 
@@ -25,6 +26,14 @@ export const routes: ICyRoutes =   {
   PatchDocRev: {
     requestConfig: {
       method: "PATCH",
+      url: "/api/v1/document_revisions/*",
+    },
+    callConfig: {
+      responseTimeout: 25 * 1000,
+    },
+  },
+  PostOrPatchDocRev: {
+    requestConfig: {
       url: "/api/v1/document_revisions/*",
     },
     callConfig: {

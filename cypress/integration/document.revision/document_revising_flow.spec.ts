@@ -174,7 +174,7 @@ context("Document Revising Flow", () => {
       });
 
       it("Uploads image.jpg", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" }).wait(5000);
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
       it("Check image.jpg attachment atributes", () => {
@@ -207,7 +207,7 @@ context("Document Revising Flow", () => {
     });
 
     it("Clicks Save button", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 });

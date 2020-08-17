@@ -160,7 +160,7 @@ context("Document Creation Flow", () => {
 
   context("Creates document", () => {
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
@@ -173,7 +173,7 @@ context("Document Creation Flow", () => {
 
     context("Uploads attachments", () => {
       it("Uploads test_image.jpg", () => {
-        cy.atchUploadAttachment({ fileName: "test_image.jpg" }).wait(5000);
+        cy.atchUploadAttachment({ fileName: "test_image.jpg" });
       });
 
       it("Check test.docx attachment atributes", () => {
@@ -185,7 +185,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Uploads image.jpg", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" }).wait(5000);
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
       it("Check test.docx attachment atributes", () => {
@@ -210,7 +210,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Save document after setting primary attachment", () => {
-        cy.drClickCreateDocument();
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Remove attachment test_image.jpg", () => {

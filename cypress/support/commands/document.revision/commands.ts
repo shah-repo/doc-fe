@@ -19,7 +19,8 @@ declare global {
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drCloseApproveAndReleaseDialog(): Chainable<Subject>;
-      drClickCreateDocument(): Chainable<Subject>;
+      drClickCreateDocumentWithApiCall(): Chainable<Subject>;
+      drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
       drCheckIfDocumentIdMatches(params: { docId: string }): Chainable<Subject>;
@@ -58,6 +59,7 @@ declare global {
       drSetDocTypeId(params: { docId: string }): Chainable<Subject>;
       drSelectReferences(...list: string[]): Chainable<Subject>;
       drRemoveReferences(...list: int[]): Chainable<Subject>;
+      drSelectReleasedVersionOfDocument(params: { docVersion: int }): Chainable<Subject>;
     }
   }
 }
@@ -91,6 +93,11 @@ Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
   list.forEach((item) => {
     cy.get("[id=\"referenceTo\"]").click().type(item + "{downarrow}{enter}");
   });
+});
+
+
+Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion: int }) => {
+  cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(params.docVersion).click().wait(2000);
 });
 
 Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
@@ -139,6 +146,16 @@ Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
 
 Cypress.Commands.add("drClickCreateDocument", () => {
   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]", { timeout: 5 * 1000 }).click();
+Cypress.Commands.add("drClickCreateDocumentWithApiCall", () => {
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.PostOrPatchDocRev,
+    () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    });
+});
+
+Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
+  cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {

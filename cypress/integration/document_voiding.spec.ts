@@ -96,7 +96,7 @@ context("Document Creation Flow", () => {
 
   context("Creates document", () => {
     it("Clicks create document after filling document", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
