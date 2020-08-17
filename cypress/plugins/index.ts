@@ -17,13 +17,22 @@ import { allowedCharacters } from "../utils/context/constants";
 /**
  * @type {Cypress.PluginConfig}
  */
-
+let shouldSkip = false;
 export default (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
   on("task", {
     test: () => 1,
+    resetShouldSkipFlag() {
+      shouldSkip = false;
+      return null;
+    },
+    shouldSkip(value) {
+      if (value != null) { shouldSkip = value; }
+      return shouldSkip;
+    },
   });
+
   on("after:screenshot", (details) => {
 
     const path = details.path.split("/").reverse();
