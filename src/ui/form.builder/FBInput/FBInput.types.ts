@@ -93,6 +93,7 @@ export type FBInputProps =
     isTemplate?: boolean;
     includeQRScan?: boolean;
     designDisabled?: boolean;
+    deleteDisabled?: boolean;
     instructionsDocument?: string;
     reviseDisabled?: boolean;
     outputDisabled?: boolean;
