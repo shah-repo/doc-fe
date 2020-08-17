@@ -102,7 +102,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Click create document after filling document", () => {
-    cy.drClickCreateDocument();
+    cy.drClickCreateDocumentWithApiCall();
   });
 
   it("Approve and release document", () => {
@@ -130,7 +130,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Click create document after filling document", () => {
-    cy.drClickCreateDocument();
+    cy.drClickCreateDocumentWithApiCall();
   });
 
   it("Approve and release document", () => {
@@ -186,7 +186,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Click create document after filling document", () => {
-    cy.drClickCreateDocument();
+    cy.drClickCreateDocumentWithApiCall();
   });
 
   it("Approve and release document", () => {

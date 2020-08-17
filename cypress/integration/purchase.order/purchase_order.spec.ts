@@ -188,7 +188,7 @@ context("Create company via API and create Purchase Order Form document", () => 
   });
 
   it("Click create document after filling document", () => {
-    cy.drClickCreateDocument();
+    cy.drClickCreateDocumentWithApiCall();
   });
 
   it("Approve and release document", () => {
@@ -218,7 +218,7 @@ context("Create Part document for PO", () => {
   });
 
   it("Click create document after filling document", () => {
-    cy.drClickCreateDocument();
+    cy.drClickCreateDocumentWithApiCall();
   });
 });
 
@@ -510,7 +510,7 @@ context("Creates second PO form document and checks if both documents are availa
   });
 
   it("Click create document after filling document", () => {
-    cy.drClickCreateDocument();
+    cy.drClickCreateDocumentWithApiCall();
   });
 
   it("Approve and release document", () => {

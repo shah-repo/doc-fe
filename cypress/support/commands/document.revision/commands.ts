@@ -19,7 +19,8 @@ declare global {
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drCloseApproveAndReleaseDialog(): Chainable<Subject>;
-      drClickCreateDocument(): Chainable<Subject>;
+      drClickCreateDocumentWithApiCall(): Chainable<Subject>;
+      drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
       drCheckIfDocumentIdMatches(params: { docId: string }): Chainable<Subject>;
@@ -117,8 +118,16 @@ Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
   cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").click();
 });
 
-Cypress.Commands.add("drClickCreateDocument", () => {
-  cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click().wait(2000);
+Cypress.Commands.add("drClickCreateDocumentWithApiCall", () => {
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.PostOrPatchDocRev,
+    () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    });
+});
+
+Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
+  cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {

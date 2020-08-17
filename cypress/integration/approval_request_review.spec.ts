@@ -115,7 +115,7 @@ context("Approval request form scenario", () => {
       });
 
     it("Click create document", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Approve and release document", () => {
@@ -152,7 +152,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
