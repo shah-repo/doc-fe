@@ -33,7 +33,7 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
 
     React.useEffect(() => reaction( // Form sync
       () => docRevState?.value,
-      (data) => parentFormState?.setFieldValue(name, cloneDeep(data))
+      (data) => parentFormState?.setFieldValue(name, cloneDeep(data), true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
