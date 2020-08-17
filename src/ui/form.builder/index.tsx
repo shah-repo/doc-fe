@@ -30,6 +30,9 @@ export * from "./FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 export { default as FBApprovalMatrix } from "./FBApprovalMatrix_/FBApprovalMatrix";
 export { default as FBApprovalMatrixSection } from "./FBApprovalMatrix_/FBApprovalMatrix.section";
 export * from "./FBApprovalMatrix_/FBApprovalMatrix.types";
+export { default as FBApprovers } from "./FBApprovers/FBApprovers";
+export { default as FBApproversState } from "./FBApprovers/FBApprovers.state";
+export * from "./FBApprovers/FBApprovers.types";
 export { default as FBAutocomplete } from "./FBAutocomplete/FBAutocomplete";
 export * from "./FBAutocomplete/FBAutocomplete.types";
 export { default as FBAutocompleteAsync } from "./FBAutocompleteAsync/FBAutocompleteAsync";
@@ -247,4 +250,5 @@ export { default as FBWorkspaceTplActions } from "./FBWorkspaceTplActions/FBWork
 export * from "./FBWorkspaceTplActions/FBWorkspaceTplActions.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
+
 

@@ -12,6 +12,7 @@ import { withFBAutocomplete } from "./FBAutocomplete.wrap";
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   getOptionDisabled,
   getOptionLabel,
+  renderOption,
   refresh,
   filterSelectedOptions = false,
   freeSolo = false,
@@ -47,6 +48,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           {...{
             getOptionDisabled,
             getOptionLabel,
+            renderOption,
             filterSelectedOptions,
             options,
             multiple,

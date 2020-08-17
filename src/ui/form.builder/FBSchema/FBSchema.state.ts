@@ -6,6 +6,7 @@ import { FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBIn
 import { FBActionField } from "../FBActionField";
 import { FBApproval } from "../FBApproval";
 import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
+import { FBApprovers } from "../FBApprovers";
 import { FBButton } from "../FBButton";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
@@ -84,6 +85,7 @@ export class FBSchemaState {
     approvalMatrix: FBApprovalMatrixField,
     poApprovalMatrix: FBPOApprovalMatrix,
     task: FBTask,
+    approvers: FBApprovers,
   };
 
   @observable public schema?: FBSchemaProps[];

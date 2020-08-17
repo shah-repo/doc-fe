@@ -34,6 +34,7 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     React.useEffect(() => reaction( // Form sync
       () => docRevState?.value,
       (data) => parentFormState?.setFieldValue(name, cloneDeep(data))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     function disabledOptions(): string[] | undefined {

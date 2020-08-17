@@ -53,7 +53,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       workspaceState.schema = props.schema!;
     }, [workspaceState, props.schema, document, changeRequest]);
 
-
     useObserver(() => {
       isStarter = workspaceState?.isStarter;
       active = workspaceState?.active;

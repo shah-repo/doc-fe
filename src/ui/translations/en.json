@@ -718,6 +718,7 @@
   "form.builder.approval.non.versioned": "Non-versioned",
   "form.builder.add.document": "Add a Document",
   "form.builder.select.document": "Select a document",
+  "form.builder.start.typing.list": "Start typing to see the list...",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.pdf": "Download PDF file",
