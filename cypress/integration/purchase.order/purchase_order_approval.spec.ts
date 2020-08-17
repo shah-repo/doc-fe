@@ -9,7 +9,6 @@ Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
 });
 
-const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
@@ -25,14 +24,13 @@ context("Create company via API and create Purchase Order Form document", () => 
       loginResponse = response;
 
       cy.cmpCreateCompany({
+        specFilePath: __filename,
         payload: {
-          companyAcronym: `T1${runId}`,
           companyAdminEmail: "enlil.testmail+cy1@gmail.com",
           helloSignIntegrationEnabled: false,
           helloSignTestMode: false,
           importerEmail: "enlil.testmail+cy5@gmail.com",
           maxRevisionStages: 3,
-          name: `Test Company ${runId}`,
           numOfDocDigits: 5,
           remoteValidatorBundleName: "default",
           slackIntegrationEnabled: false,
@@ -159,7 +157,7 @@ context("Create company via API and create Purchase Order Form document", () => 
   });
 
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.navigToDocumentList();
   });
 
   it("Click on 'Create a document'", () => {
@@ -209,7 +207,7 @@ context("Create company via API and create Purchase Order Form document", () => 
 
 context("Create Purchase Order Approval Matrix document with from Form document", () => {
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.navigToDocumentList();
   });
 
   it("Click on 'Create a document'", () => {
@@ -319,7 +317,7 @@ context("Create Purchase Order Approval Matrix document with from Form document"
 
 context("Test the POAM when approving Purchase Order", () => {
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.cmpNavigateToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it("Click on 'Create PO' button", () => {
@@ -344,7 +342,7 @@ context("Test the POAM when approving Purchase Order", () => {
   });
 
   it("Check approval icon if it's gray", () => {
-    cy.wait(2000).poAMCheckApprovalIconIfItsGray();
+    cy.poAMCheckApprovalIconIfItsGray();
   });
 
   it("Try to approve document without approver when it contains POAM", () => {
@@ -373,6 +371,10 @@ context("Test the POAM when approving Purchase Order", () => {
     cy.poAMApproveButton();
   });
 
+  it("Navigate to Doc List", () => {
+    cy.navigToDocumentList().wait(2000);
+  });
+
   it("Navigate to AR List", () => {
     cy.navigToApprovalRequestList();
   });
@@ -387,7 +389,7 @@ context("Test the POAM when approving Purchase Order", () => {
   });
 
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.cmpNavigateToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it("Click on 'Create PO' button", () => {
@@ -408,6 +410,7 @@ context("Test the POAM when approving Purchase Order", () => {
   });
 
   it("Click on 'Add Approver'", () => {
+    SystemRequirement("REQ-1490");
     cy.poAMCheckForApproval();
   });
 
@@ -416,6 +419,7 @@ context("Test the POAM when approving Purchase Order", () => {
   });
 
   it("Create document in 'Pending for approval' state", () => {
+    SystemRequirement("REQ-1490");
     cy.poAMApproveButton();
   });
 
@@ -437,9 +441,13 @@ context("Test the POAM when approving Purchase Order", () => {
     SystemRequirement("REQ-1570");
     cy.poRejectAR({ password: "Tester1!" });
   });
+
+  it("Navigate to Doc List", () => {
+    cy.navigToDocumentList().wait(2000);
+  });
   
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.cmpNavigateToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it("Clear filters", () => {
@@ -452,8 +460,10 @@ context("Test the POAM when approving Purchase Order", () => {
 
   it("Verify rejected PO status, should be 'Draft'", () => {
     SystemRequirement("REQ-1570");
-    cy.poVerifyStatus({ status: "Draft"});
+    SystemRequirement("REQ-0020");
+    cy.poVerifyStatus({ status: "Draft" });
   });
 });
 
 export { };
+

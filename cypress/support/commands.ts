@@ -15,11 +15,11 @@ declare global {
       */
       createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
-      login(params: { email: string; password: string }): Chainable<Subject>;
       selectCompany(params: { name: string }): Chainable<Subject>;
       unClick(): Chainable<Subject>;
       myCompanies(token: string): Chainable<Subject>;
       wrapWithWaitOnApiCall(name: CyRoutes, callback: () => void, options?: Partial<CyWaitOptions>): Chainable<Subject>;
+      wrapWithWaitOnApiCalls(names: CyRoutes[], callback: () => void, options?: Partial<CyWaitOptions>): Chainable<Subject>;
     }
   }
 }
@@ -93,13 +93,6 @@ Cypress.Commands.add("apiLogin", (params: { email: string; password: string }) =
   );
 });
 
-Cypress.Commands.add("login", (params: { email: string; password: string }) => {
-  cy.visit(CONFIG.FE_URL);
-  cy.get("[data-cy=\"LoginFormPresenter-email\"]", { timeout: 10 * 1000 }).type(params.email)
-    .get("[data-cy=\"LoginFormPresenter-password\"]").type(params.password)
-    .get("[data-cy=\"LoginFormPresenter-submit\"]").click();
-});
-
 Cypress.Commands.add("selectCompany", (params: { name: string }) => {
   cy.get("#root", { timeout: 20 * 1000 }).contains(params.name).click();
 });
@@ -108,14 +101,28 @@ Cypress.Commands.add("unClick", () => {
   cy.get("#root>div>div>header").click();
 });
 
+
 Cypress.Commands.add(
-  "wrapWithWaitOnApiCall",
-  (name: CyRoutes, callback: () => void, options?: Partial<CyWaitOptions>) => {
-    const { requestConfig, callConfig } = routes[name];
+  "wrapWithWaitOnApiCalls",
+  (names: CyRoutes[], callback: () => void, options?: Partial<CyWaitOptions>) => {
     cy.server();
-    cy.route(requestConfig).as(name);
+    names.forEach((name) => {
+      const { requestConfig } = routes[name];
+      cy.route(requestConfig).as(name);
+
+    });
 
     callback();
 
-    cy.wait(`@${name}`, Object.assign({}, callConfig, options));
+    names.forEach((name) => {
+      const {  callConfig } = routes[name];
+      cy.wait(`@${name}`, Object.assign({}, callConfig, options));
+    });
   });
+
+Cypress.Commands.add(
+  "wrapWithWaitOnApiCall",
+  (name: CyRoutes, callback: () => void, options?: Partial<CyWaitOptions>) => {
+    cy.wrapWithWaitOnApiCalls([name], callback, options);
+  });
+

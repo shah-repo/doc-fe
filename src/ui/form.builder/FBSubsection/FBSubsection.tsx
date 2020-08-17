@@ -5,7 +5,7 @@ import Text from "../../components/Text";
 
 const FBSubsection: React.FunctionComponent<FBSectionProps> = ({
   label,
-  gutter,
+  gutter = true,
 }) => (
   <Box
     py={1.5}

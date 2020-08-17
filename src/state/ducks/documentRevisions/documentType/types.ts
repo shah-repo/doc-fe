@@ -33,6 +33,25 @@ export type DocumentGroupOptionsType =
   "WO_PARTS" |
   "CHANGE_REQUEST" |
   "BE_OUTPUT";
+
+export enum DOC_TYPE_GROUP_OPTION {
+  FORM = "FORM",
+  DAM = "DAM", // this can only go to DAM group
+  CAN_BE_OUTPUT = "CAN_BE_OUTPUT",
+  MUST_BE_OUTPUT = "MUST_BE_OUTPUT",
+  HAVE_OUTPUT = "HAVE_OUTPUT",
+  RECORD = "RECORD",
+  CHANGE_REQUEST = "CHANGE_REQUEST",
+  ONE_ITEM = "ONE_ITEM",
+  DYNAMIC_FORM = "DYNAMIC_FORM",
+  POAM = "POAM",
+  PO = "PO",
+  WORK_ORDER = "WORK_ORDER",
+  WO_PARTS = "WO_PARTS",
+  PART = "PART",
+  SUPPLIER = "SUPPLIER",
+  RECEIVABLE = "RECEIVABLE",
+}
 export interface PageDetailsColumn {
   label: Translation;
   sourcePath: string;
@@ -70,6 +89,7 @@ export interface DocumentTypeByIdForm {
   name: string;
   id: string;
   document: DocumentForms;
+  formInput?: Record<string, any>;
   formTemplate?: FBFormTemplateProps;
 }
 

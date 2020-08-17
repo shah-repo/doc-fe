@@ -54,6 +54,10 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
     return formDocuments && getIsLastVersionObsolete(formDocuments);
   };
 
+  const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
+  && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
+    .find((type) => type.documentTypeName === "Approval Request" || type.documentTypeName === "Change Request");
+
   useEffect(() => {
     if (formDocumentId) {
       dispatch(documentRevisionsActions.loadDocument(formDocumentId));
@@ -73,6 +77,11 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
 
   const cloneOutputDocument = () => {
+    if (isAR) {
+      const revisionId = documentRevision.id;
+      const templateId = isAR.id;
+      history.push(`/change_request/${revisionId}/create/${templateId}`);
+    }
     handleCreateDocument(documentRevision);
   };
 
@@ -81,7 +90,8 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const renderCloneButton = () => {
     if (hasAccess && canCreate() && showRevise) {
       return (
-        <Button color="secondary" variant="outlined" onClick={cloneDocument} data-cy="PreviewControlsContainer-revise" id="PreviewControlsContainer-revise" >
+        <Button color="secondary" variant="outlined" onClick={cloneDocument}
+          data-cy="PreviewControlsContainer-revise" id="PreviewControlsContainer-revise" >
           <Text message={reviseLabel} />
         </Button>
       );

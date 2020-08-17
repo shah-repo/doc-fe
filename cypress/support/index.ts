@@ -15,6 +15,7 @@
 
 // Import commands.js using ES2015 syntax:
 import "cypress-file-upload";
+import "cypress-localstorage-commands";
 import "cypress-promise/register";
 import "cypress-xpath";
 import { addScreenshotToContext } from "../utils/context/screenshotsToContext";
@@ -31,6 +32,7 @@ import "./commands/form.builder/commands";
 import "./commands/group.management/commands";
 import "./commands/navigation/commands";
 import "./commands/purchase.order/commands";
+import "./commands/suppliers/commands";
 import "./commands/user.management/commands";
 import { CONFIG } from "./config";
 // Alternatively you can use CommonJS syntax:
@@ -39,11 +41,11 @@ import { CONFIG } from "./config";
 Cypress.on("uncaught:exception", (err, runnable) => {
   const socketIsClosingError =
     err.message.includes("The following error originated from your application code, not from Cypress") &&
-    err.message.includes("Socket is closing");
+    err.message.includes("Socket is clos");
 
   if (socketIsClosingError) {
     // eslint-disable-next-line no-console
-    console.log("Ignoring 'Socket is closing' error");
+    console.log("Ignoring 'Socket is closed' or 'Socket is closing' error");
     return false;
   }
   return true;
@@ -57,7 +59,10 @@ Cypress.Screenshot.defaults({
 });
 
 Cypress.on("test:after:run", (test, runnable: any ) => {
-  if (CONFIG.SCREENSHOT_OF_RUN_FAILURE && test.state === "failed") {
+  if (
+    CONFIG.SCREENSHOT_OF_RUN_FAILURE &&
+    test.state === "failed"
+  ) {
     addScreenshotToContext(test, runnable, "Screenshot On Failure");
   }
 });

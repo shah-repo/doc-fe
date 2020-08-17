@@ -10,11 +10,13 @@ declare global {
     interface Chainable<Subject> {
       navigListExistsCheck(...list: NavigationItems[]): Chainable<Subject>;
       navigListNotExistsCheck(...list: NavigationItems[]): Chainable<Subject>;
-      navigClickOnExpandButtons(params: { navigItem: NavigationItems }): Chainable<Subject>;
+      navigClickOnItem(params: { navigItem: NavigationItems }): Chainable<Subject>;
+      navigToNestedItem(params: {navigItems: NavigationItems[]}): Chainable<Subject>;
       navigToDashboard(): Chainable<Subject>;
       navigToDocumentList(): Chainable<Subject>;
       navigToApprovalRequestList(): Chainable<Subject>;
       navigToPurchaseOrder(): Chainable<Subject>;
+      navigToSuppliers(): Chainable<Subject>;
     }
   }
 }
@@ -31,24 +33,56 @@ Cypress.Commands.add("navigListNotExistsCheck", (...list: NavigationItems[]) => 
   });
 });
 
-Cypress.Commands.add("navigClickOnExpandButtons", (params: { navigItem: string }) => {
-  cy.wait(100).get("[data-cy=\"navigation." + params.navigItem + "\"]").wait(100).click();
+Cypress.Commands.add("navigClickOnItem", (params: { navigItem: string }) => {
+  cy.wait(200).get("[data-cy=\"navigation." + params.navigItem + "\"]").click({ force: true });
 });
 
 Cypress.Commands.add("navigToDashboard", () => {
-  cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DASHBOARD });
+  cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
 });
 
 Cypress.Commands.add("navigToDocumentList", () => {
-  cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
-  cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_LIST });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.DOCUMENT_CONTROL,
+      NavigationItems.DOCUMENT_LIST,
+    ],
+  });
 });
 
 Cypress.Commands.add("navigToApprovalRequestList", () => {
-  cy.navigClickOnExpandButtons({ navigItem: NavigationItems.DOCUMENT_CONTROL });
-  cy.navigClickOnExpandButtons({ navigItem: NavigationItems.APPROVAL_REQUEST });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.DOCUMENT_CONTROL,
+      NavigationItems.APPROVAL_REQUEST,
+    ],
+  });
 });
 
 Cypress.Commands.add("navigToPurchaseOrder", () => {
-  cy.get("[data-cy=\"navigation.purchaseOrder\"]").click();
+  cy.get("[data-cy=\"navigation.purchaseOrder\"]").click({ force: true });
+});
+
+Cypress.Commands.add("navigToSuppliers", () => {
+  cy.navigClickOnItem({ navigItem: NavigationItems.SUPPLIERS });
+});
+
+
+Cypress.Commands.add("navigToNestedItem", (params: {navigItems: NavigationItems[]}) => {
+  if (params.navigItems.length === 1) {
+    cy.navigClickOnItem({ navigItem: params.navigItems[0] });
+  } else {
+    const [first, second, ...other] = params.navigItems;
+    cy.get("body").then(($body) => {
+      if ($body.find("[data-cy=\"navigation." + second + "\"]").length === 0) {
+
+        cy.navigClickOnItem({ navigItem: first });
+        cy.navigToNestedItem({ navigItems: [second, ...other] });
+      } else {
+        cy.navigToNestedItem({ navigItems: [second, ...other] });
+      }
+    });
+  }
 });

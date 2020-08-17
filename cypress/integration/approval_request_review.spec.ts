@@ -1,12 +1,7 @@
 /* eslint-disable max-classes-per-file */
 // / <reference types="Cypress" />
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
-
 import { SystemRequirement } from "../utils/context/systemRequirement";
 
-const runId = new Date().valueOf();
 let createdCompany;
 let sessionId;
 let multipleCompanies;
@@ -26,14 +21,13 @@ context("Approval request form scenario", () => {
         multipleCompanies = response.employees.length > 0;
 
         cy.cmpCreateCompany({
+          specFilePath: __filename,
           payload: {
-            companyAcronym: `T1${runId}`,
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: "enlil.testmail+cy5@gmail.com",
             maxRevisionStages: 3,
-            name: `Test Company ${runId}`,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -94,8 +88,7 @@ context("Approval request form scenario", () => {
 
   context("Open 'Create Document'", () => {
     it("Navigate to document list", () => {
-      cy.navigToDashboard(); // Should be fixed so that we can click menu item expand without clicking on dashboard
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Click on 'create a document'", () => {
@@ -132,7 +125,7 @@ context("Approval request form scenario", () => {
 
   context("Open 'Create Document'", () => {
     it("Navigate to document list", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Click on 'create a document'", () => {
@@ -165,7 +158,7 @@ context("Approval request form scenario", () => {
 
   context("Create approval request with newly created form", () => {
     it("Navigate to approval request list", () => {
-      cy.cmpNavigateToApprovalRequestList();
+      cy.navigToApprovalRequestList();
     });
 
     it("Click Create a Approval Request button", () => {
@@ -198,10 +191,6 @@ context("Approval request form scenario", () => {
         cy.arAddApproverOnApproverList({ approver: "enlil.testmail+cy1@gmail.com" });
       });
 
-    it("Add date", () => {
-      cy.arAddEffectiveDate();
-    });
-
     it("Click Create Approval Request", () => {
       cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
@@ -211,6 +200,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Verify AR status", () => {
+      SystemRequirement("REQ-0020");
       cy.arVerifyStatus({ status: "In Review" });
     });
   });
@@ -242,14 +232,10 @@ context("Approval request form scenario", () => {
       cy.get("[data-cy=\"fb.add.document\"]").should("be.disabled");
     });
 
-    it("Check 'Effective Date' is disabled", () => {
+    //  approvers 'In_review' should be enabled now 'ENC-4797'
+    it.skip("Check 'Approvers' are not disabled", () => {
       SystemRequirement("REQ-0850");
-      cy.xpath("//input[@name]/ ../div/button").should("be.disabled");
-    });
-
-    it("Check 'Approvers' are disbaled", () => {
-      SystemRequirement("REQ-0850");
-      cy.get("[data-cy=\"approvers\"] input").should("be.disabled");
+      cy.get("[data-cy=\"approvers\"] input").should("not.be.disabled");
     });
   });
 
@@ -268,7 +254,7 @@ context("Approval request form scenario", () => {
   context("Prevent the addition of documents that are already included on another approval request", () => {
     it("Navigate to approval request list", () => {
       SystemRequirement("REQ-0860");
-      cy.cmpNavigateToApprovalRequestList();
+      cy.navigToApprovalRequestList();
     });
 
     it("Click Create a Approval Request button", () => {
@@ -320,7 +306,7 @@ context("Approval request form scenario", () => {
 
   context("Record the date and time stamp for approval and rejections", () => {
     it("Navigate to approval request list", () => {
-      cy.cmpNavigateToApprovalRequestList();
+      cy.navigToApprovalRequestList();
     });
 
     it("Select first document", () => {

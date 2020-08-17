@@ -1,11 +1,6 @@
-/* eslint-disable max-classes-per-file */
-// eslint-disable-next-line spaced-comment
-/// <reference types="Cypress" />
-
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
@@ -21,14 +16,13 @@ context("Create company via API and create Purchase Order Form document", () => 
       loginResponse = response;
 
       cy.cmpCreateCompany({
+        specFilePath: __filename,
         payload: {
-          companyAcronym: `T1${runId}`,
           companyAdminEmail: "enlil.testmail+cy1@gmail.com",
           helloSignIntegrationEnabled: false,
           helloSignTestMode: false,
           importerEmail: "enlil.testmail+cy5@gmail.com",
           maxRevisionStages: 3,
-          name: `Test Company ${runId}`,
           numOfDocDigits: 5,
           remoteValidatorBundleName: "default",
           slackIntegrationEnabled: false,
@@ -154,7 +148,7 @@ context("Create company via API and create Purchase Order Form document", () => 
   });
 
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.navigToDocumentList();
   });
 
   it("Click on 'Create a document'", () => {
@@ -204,7 +198,7 @@ context("Create company via API and create Purchase Order Form document", () => 
 
 context("Create Part document for PO", () => {
   it("Navigates to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.navigToDocumentList();
   });
 
   it("Clicks on 'create a document' button", () => {
@@ -230,7 +224,7 @@ context("Create Part document for PO", () => {
 
 context("Create Purchase Order document with Product option from Form document", () => {
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.cmpNavigateToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it("Click on 'Create PO' button", () => {
@@ -238,22 +232,23 @@ context("Create Purchase Order document with Product option from Form document",
   });
 
   it("Check for PO ID uniqueness - ID should be PO-00001", () => {
-    SystemRequirement("REQ-1270")
+    SystemRequirement("REQ-1270");
     cy.poCheckStatus( "PO-00001" );
   });
 
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.cmpNavigateToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it("Click on existing PO that was created before", () => {
-    SystemRequirement("REQ-1370")
-    SystemRequirement("REQ-1210") 
+    SystemRequirement("REQ-1370");
+    SystemRequirement("REQ-1210");
     cy.poClickOnSpecificPOFromList({ item:"PO-00001" });
   });
 
   it("Check status of PO should be Draft", () => {
-    SystemRequirement("REQ-1280")
+    SystemRequirement("REQ-1280");
+    SystemRequirement("REQ-0020");
     cy.poCheckStatus("Draft" );
   });
 
@@ -345,7 +340,7 @@ context("Create Purchase Order document with Product option from Form document",
 
 context("Create Purchase Order document with Service option from Form document", () => {
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.wait(2000).cmpNavigateToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it("Click on 'Create PO' button", () => {
@@ -353,12 +348,13 @@ context("Create Purchase Order document with Service option from Form document",
   });
 
   it("Check for PO ID uniqueness - ID should be PO-00002", () => {
-    SystemRequirement("REQ-1270")
+    SystemRequirement("REQ-1270");
     cy.poCheckStatus( "PO-00002" );
   });
 
   it("Check status of PO should be Draft", () => {
-    SystemRequirement("REQ-1280")
+    SystemRequirement("REQ-1280");
+    SystemRequirement("REQ-0020");
     cy.poCheckStatus( "Draft" );
   });
 
@@ -474,7 +470,7 @@ context("Creates second line item and checks ID and if all line item details are
 
 context("Creates second PO form document and checks if both documents are available when creating new PO", () => {
   it("Navigate to document list", () => {
-    cy.cmpNavigateToDocumentList();
+    cy.navigToDocumentList();
   });
 
   it("Click on 'Create a document'", () => {
@@ -522,7 +518,7 @@ context("Creates second PO form document and checks if both documents are availa
   });
 
   it("Click on 'Purchase Order' on sidebar", () => {
-    cy.wait(2000).cmpNavigateToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it("Click on 'Create PO' button", () => {
@@ -547,7 +543,7 @@ context("Check for Landing page columns and values", () => {
 
   it("Check for Landing page default columns", () => {
     SystemRequirement("REQ-1120");
-    cy.filterCheckHeaderValues("PO #", "Version", "PO Status", "Supplier", "Part Number", "Amount", "Requestor", "Issue Date");
+    cy.filterCheckHeaderValues("PO #", "Revision", "PO Status", "Supplier", "Part Number", "Amount", "Requestor", "Issue Date");
   });
 });
 
@@ -577,11 +573,11 @@ context("Test the filter inside PO", () => {
   });
 
   it("Navigate to Document List", () => {
-    cy.wait(1000).cmpNavigateToDocumentList();
+    cy.wait(1000).navigToDocumentList();
   });
 
   it("Navigate to Purchase Order", () => {
-    cy.cmpNavigateToPurchaseOrder();
+    cy.navigToPurchaseOrder();
   });
 
   it.skip("Check if all filter values persist after changing landing page", () => {

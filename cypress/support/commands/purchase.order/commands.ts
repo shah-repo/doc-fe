@@ -59,7 +59,7 @@ Cypress.Commands.add("poAddPOButtonClick", () => {
 });
 
 Cypress.Commands.add("poCreateNew", () => {
-  cy.get("[id=DocumentByTypeListPresenter-openDocRev").click();
+  cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
 });
 
 Cypress.Commands.add("poEnterDocumentDescription", (params: {description: string }) => {

@@ -1,12 +1,15 @@
 import { Box, Button, Grid, WithStyles, withStyles } from "@material-ui/core";
-import _ from "lodash";
+import { isString, set } from "lodash";
+import moment from "moment";
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
+import { TIME_ZONE } from "../../../common/utils/date";
 import { stripTags } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { DOCUMENT_LIST_TYPE_NAMES } from "../../../state/ducks/documentRevisions/documentType/constants";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../common/utils/helpers";
 import Date from "../../components/Date";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -16,6 +19,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
+import { generateVersionNumber } from "../../documentRevision/helpers";
 import useDialog from "../../hooks/useDialog";
 import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionQueryStatus, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
@@ -81,7 +85,13 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       cellOptions: { align: "center" },
       cellHref: cellHrefRenderer,
       columnOptions: {
-        cellDataGetter: ({ rowData }) => rowData.revision,
+        cellDataGetter: ({ rowData }) => generateVersionNumber(
+          rowData.revision,
+          rowData.revisionStage,
+          rowData.subRevision,
+          rowData.revisionChangeType,
+          rowData.status,
+        ),
         width: 80,
         flexShrink: 1,
       },
@@ -144,7 +154,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         editDocumentRevision(rowData.id, rowData.document.id),
       searchOptions: {
         dataKey: "status[]",
-        defaultValue: _.isString(tableCriteria.queryDict["status[]"])
+        defaultValue: isString(tableCriteria.queryDict["status[]"])
           ? tableCriteria.queryDict["status[]"]
           : undefined,
         searchType: "select",
@@ -185,16 +195,23 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     // },
   ];
 
-  const customDataSet = (data: DocumentRevision[]) =>
-    data.map((docRev) => {
-      _.set(docRev, "description", stripTags(docRev.description));
-      _.set(
-        docRev,
-        "document.documentType.documentTypeAcronym",
-        removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
-      );
-      return docRev;
-    });
+  const customDataSet = (data: DocumentRevision[]) => {
+    const customData = data
+      .reduce<DocumentRevision[]>((acc, docRev) => {
+        if (docRev.document.documentType.documentTypeName
+        && DOCUMENT_LIST_TYPE_NAMES.includes(docRev.document.documentType.documentTypeName)) {
+          set(docRev, "description", stripTags(docRev.description));
+          set(
+            docRev,
+            "document.documentType.documentTypeAcronym",
+            removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
+          );
+          acc.push(docRev);
+        }
+        return acc;
+      }, []);
+    return customData;
+  };
 
   const data = tableData.map((e) => ({
     docId: e.document.docId,
@@ -204,7 +221,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     owner: e.owner.user.name,
     crId: e.changeRequest?.crId,
     status: e.status,
-    effectiveDate: e.effectiveDate,
+    effectiveDate: e.effectiveDate ? moment(e.effectiveDate).tz(TIME_ZONE, true).format("M/D/YYYY") : "",
   }));
 
   const documentTypeSearchName = documentTypeOptions.find((e) =>

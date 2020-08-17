@@ -32,7 +32,7 @@ Cypress.Commands.add("authApiLogout", () => {
 });
 
 Cypress.Commands.add("authLogin", (params: { email: string; password: string }) => {
-  cy.visit(CONFIG.FE_URL, { timeout: 10 * 1000 });
+  cy.visit(CONFIG.FE_URL, { timeout: 20 * 1000 });
   cy.get("[data-cy=\"LoginFormPresenter-email\"]").type(params.email)
     .get("[data-cy=\"LoginFormPresenter-password\"]").type(params.password)
     .get("[data-cy=\"LoginFormPresenter-submit\"]").click();

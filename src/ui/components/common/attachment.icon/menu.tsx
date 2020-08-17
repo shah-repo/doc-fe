@@ -2,6 +2,9 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import React, { useMemo } from "react";
 import { Attachment, AttachmentType } from "../../../../state/ducks/attachments";
+import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { FormHeaderSummaryContext } from "../../../document.revision/header/SummaryHeader";
+import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import Text from "../../Text";
 import { WATERMARK_FILES } from "../view.file/utils/constants";
 import { checkIfFileIsViewable } from "../view.file/utils/helpers";
@@ -11,7 +14,10 @@ import { AttachmentMenuProps, PasswordSubmitActionType } from "./utils/types";
 interface OwnProps {
   redLineRequiresPassword: (attachment: Attachment) => boolean;
   cleanCopyRequiresPassword: (attachment: Attachment) => boolean;
-  handleWatermarkRequest?: (attachment: Attachment, attachmentType: AttachmentType) => void;
+  handleWatermarkRequest?: (
+    attachment: Attachment,
+    attachmentType: AttachmentType,
+    documentRevisionId?: string) => void;
   setSelectedAttachment: (attachment: Attachment) => void;
   handleIconClick?: (attachment: Attachment) => any;
 }
@@ -34,6 +40,9 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
   const file = useMemo(() => (attachment || {} as Attachment), [attachment]);
   const isFileViewable =  useMemo(() => checkIfFileIsViewable(file.type), [file.type]);
   const canWatermark = useMemo(() => WATERMARK_FILES.includes(file.type), [file.type]);
+  const { documentRevisionSummary } = React.useContext(FormHeaderSummaryContext) || {};
+  const documentRevisionStatusFromDocList = React.useContext(documentRevisionStatusContextFromDocList);
+
 
   const {
     name: fileName,
@@ -44,10 +53,13 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
     handleClose && handleClose();
     handleDownload && handleDownload(file, type)();
   };
-  const handleWatermarkClick = (attachmentType: AttachmentType) => () => {
+
+  const handleWatermarkClick = (attachmentType: AttachmentType, isWatermarkRequest?: boolean) => () => {
+    const id = isWatermarkRequest ? documentRevisionSummary?.id as string : undefined;
     handleClose && handleClose();
-    handleWatermarkRequest && handleWatermarkRequest(file, attachmentType);
+    handleWatermarkRequest && handleWatermarkRequest(file, attachmentType, id);
   };
+
   const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {
     setSelectedAttachment(attachment);
     if (redLineRequiresPassword(attachment)
@@ -85,8 +97,13 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
     <MenuItem onClick={handleClick(AttachmentType.CleanCopy)}>
       <Text translation="attachment.download.clean.copy" values={{ fileName, fileType }} />
     </MenuItem>;
-  const renderWatermarkFile = canWatermark &&
+  const renderPDFFile = canWatermark &&
     <MenuItem onClick={handleWatermarkClick(AttachmentType.Attached)}>
+      <Text translation="attachment.download.pdf" />
+    </MenuItem>;
+  const renderWatermarkFile = (documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete ||
+    documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated) && canWatermark &&
+    <MenuItem onClick={handleWatermarkClick(AttachmentType.Attached, true)}>
       <Text translation="attachment.download.watermark" />
     </MenuItem>;
   const renderWatermarkCleanCopy = canWatermark && s3linkCleanCopy &&
@@ -108,6 +125,7 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
     >
       {renderDownloadFile}
       {renderDownloadCleanCopy}
+      {renderPDFFile}
       {renderWatermarkFile}
       {renderWatermarkCleanCopy}
       {renderPreviewFile}

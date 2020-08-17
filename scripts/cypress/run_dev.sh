@@ -18,6 +18,7 @@ export CYPRESS_KONFIG_ENV="development"
 export CYPRESS_SCREENSHOT_OF_RUN_FAILURE=${CYPRESS_SCREENSHOT_OF_RUN_FAILURE:-false}
 export CYPRESS_SCREENSHOTS_FOLDER="cypress/cache/testRunner/screenshots"
 
+
 mkdir -p $CYPRESS_SCREENSHOTS_FOLDER
 
 yarn install --frozen-lockfile

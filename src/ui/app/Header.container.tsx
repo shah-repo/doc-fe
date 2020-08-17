@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { authActions, authSelectors } from "../../state/ducks/auth";
-import { companyActions } from "../../state/ducks/company";
 import FBStore from "../form.builder/stores/ui/FBStore";
 import HeaderPresenter from "./Header.presenter";
 
@@ -42,10 +41,6 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   };
 
   const closeUserProfile = () => setUserProfile(false);
-  useEffect(() => {
-    dispatch(companyActions.getCompanyMine());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const hasMultipleCompanies = useSelector(authSelectors.hasMultipleCompanies);
   const avatar = useSelector(authSelectors.currentEmployeeAvatar);

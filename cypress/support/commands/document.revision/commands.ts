@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable max-len */
+import { int } from "aws-sdk/clients/datapipeline";
 import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
@@ -17,6 +18,7 @@ declare global {
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
+      drCloseApproveAndReleaseDialog(): Chainable<Subject>;
       drClickCreateDocument(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
@@ -53,6 +55,9 @@ declare global {
       drCreateNewDocumentFromForm(): Chainable<Subject>;
       drApproveAndReleaseDialog(): Chainable<Subject>;
       drSelectTemplateReleaseDocument(params: { template: string }): Chainable<Subject>;
+      drSetDocTypeId(params: { docId: string }): Chainable<Subject>;
+      drSelectReferences(...list: string[]): Chainable<Subject>;
+      drRemoveReferences(...list: int[]): Chainable<Subject>;
     }
   }
 }
@@ -80,6 +85,18 @@ Cypress.Commands.add("drGetDocumentType", (params: { employeeId: string; session
       Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
     },
   }).then((response) => response);
+});
+
+Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get("[id=\"referenceTo\"]").click().type(item + "{downarrow}{enter}");
+  });
+});
+
+Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
+  list.forEach((item) => {
+    cy.get("[class=\"circle_remove\"]").eq(item).click({ force: true });
+  });
 });
 
 Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
@@ -116,6 +133,10 @@ Cypress.Commands.add("drApproveAndReleaseDocument", () => {
     });
 });
 
+Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
+  cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").click();
+});
+
 Cypress.Commands.add("drClickCreateDocument", () => {
   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]", { timeout: 5 * 1000 }).click();
 });
@@ -131,6 +152,10 @@ Cypress.Commands.add("drCheckIfDocumentIdIsGenerated", () => {
 
 Cypress.Commands.add("drCheckIfDocumentIdMatches", (params: { docId: string }) => {
   cy.get("[id=\"document.docId\"]").should("have.value", params.docId);
+});
+
+Cypress.Commands.add("drSetDocTypeId", (params: { docId: string }) => {
+  cy.get("[id=\"document.docId\"]").type("{backspace}{backspace}{backspace}{backspace}{backspace}" + params.docId);
 });
 
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {

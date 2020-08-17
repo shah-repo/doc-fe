@@ -37,17 +37,16 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
         path: DOCUMENT_REVISION_LIST_URL,
       },
       {
-        label: "Parts List",
-        type: "CATEGORY",
-        icon: "/navigation_icons/puzzle-09.svg",
-        category: "Parts",
-        restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
-      },
-      {
         label: "Approval Requests",
         type: "LINK",
         path: CHANGE_REQUEST_LIST_URL,
         icon: "/navigation_icons/cr.svg",
+      },
+      {
+        label: "Records",
+        type: "CATEGORY",
+        category: "Record",
+        icon: "/navigation_icons/text-paper.svg",
       },
     ],
   },

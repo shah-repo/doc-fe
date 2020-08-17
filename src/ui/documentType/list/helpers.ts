@@ -5,14 +5,14 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TableSearchFieldProps } from "../../components/table/search/types";
 import { TablePanelStateProps } from "../../components/table/types";
-import { documentRevisionStatusOption } from "../../document.revision/utils/helpers";
+import { documentRevisionEffectiveDateOption, documentRevisionStatusOption } from "../../document.revision/utils/helpers";
 import { Translation } from "../../translations/types";
 
 export const shouldShowStaticColumns = (documentTypeName) => documentTypeName !== "Purchase Order";
 
 export const columnSearchConfiguration = (valuePath: string, tableCriteria: TablePanelStateProps): [boolean, Partial<TableSearchFieldProps>] => {
   let omitSearch = true;
-  const searchOptions: Partial<TableSearchFieldProps> = { dataKey: valuePath };
+  let searchOptions: Partial<TableSearchFieldProps> = { dataKey: valuePath };
   if (valuePath.startsWith("precalc") || valuePath.startsWith("formInput")) {
     omitSearch = false;
     searchOptions.dataKey = `dynamicParams.${valuePath}`;
@@ -25,7 +25,19 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
     omitSearch = false;
     searchOptions.dataKey = "owner";
   }
-  searchOptions.defaultValue = tableCriteria.queryDict[searchOptions.dataKey as string];
+  if (valuePath === "effectiveDate") {
+    omitSearch = false;
+    searchOptions = {
+      dataKey: "effectiveDate",
+      searchType: "select",
+      selectOptions: documentRevisionEffectiveDateOption(),
+      defaultValue: tableCriteria.queryDict.effectiveDate,
+    };
+  }
+  if (valuePath === "name") {
+    omitSearch = false;
+  }
+  searchOptions.defaultValue = tableCriteria.queryDict?.[searchOptions.dataKey as string];
 
   if (valuePath === "status") {
     omitSearch = false;
@@ -39,7 +51,6 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
 
   return [omitSearch, searchOptions];
 };
-
 
 export const filterSecurityGroupsForQms = (isQms = false, groupOptions) => {
   if (!isQms) {
@@ -71,7 +82,7 @@ export const getStaticColumns = (
       width: 150,
     },
     searchOptions: {
-      defaultValue: tableCriteria.queryDict.docId,
+      defaultValue: tableCriteria.queryDict?.docId,
     },
   },
   {
@@ -80,7 +91,7 @@ export const getStaticColumns = (
     tooltipKey: "name",
     cellHref: cellHrefRenderer,
     searchOptions: {
-      defaultValue: tableCriteria.queryDict.name,
+      defaultValue: tableCriteria.queryDict?.name,
     },
   },
   {
@@ -91,7 +102,7 @@ export const getStaticColumns = (
       cellDataGetter: ({ rowData }) => rowData.owner.user.name,
     },
     searchOptions: {
-      defaultValue: tableCriteria.queryDict.owner,
+      defaultValue: tableCriteria.queryDict?.owner,
     },
   },
   {
@@ -101,8 +112,8 @@ export const getStaticColumns = (
     cellType: (rowData) => (canEdit(rowData) ? "LINK" : "BASE"),
     searchOptions: {
       dataKey: "status[]",
-      defaultValue: isString(tableCriteria.queryDict["status[]"])
-        ? tableCriteria.queryDict["status[]"]
+      defaultValue: isString(tableCriteria.queryDict?.["status[]"])
+        ? tableCriteria.queryDict?.["status[]"]
         : undefined,
       searchType: "select",
       selectOptions: documentRevisionStatusOption(),
@@ -113,7 +124,7 @@ export const getStaticColumns = (
     label: "common.approval.id",
     searchOptions: {
       dataKey: "crId",
-      defaultValue: tableCriteria.queryDict.crId,
+      defaultValue: tableCriteria.queryDict?.crId,
     },
     cellHref: cellHrefRenderer,
     columnOptions: {

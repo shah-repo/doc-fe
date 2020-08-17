@@ -26,7 +26,9 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
       </TableRow>
     </TableHead>
     <TableBody>
-      <FBMapWrapper<FBApprovalMatrixItem[]> collection={approvalMatrix}>
+      <FBMapWrapper<FBApprovalMatrixItem[]>
+        collection={approvalMatrix}
+      >
         {(am: FBApprovalMatrixItem, index) => (
           <TableRow key={`fb-approval-matrix-am-${am.id}-${index}`}>
             <FBTableCell

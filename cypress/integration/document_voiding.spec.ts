@@ -1,13 +1,5 @@
-// eslint-disable-next-line spaced-comment
-/// <reference types="Cypress" />
+import { SystemRequirement } from "../utils/context/systemRequirement";
 
-
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
-
-
-const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
@@ -21,14 +13,13 @@ context("Document Creation Flow", () => {
       }).then((response) => {
         loginResponse = response;
         cy.cmpCreateCompany({
+          specFilePath: __filename,
           payload: {
-            companyAcronym: `T1${runId}`,
             companyAdminEmail: "enlil.testmail+cy1@gmail.com",
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: "enlil.testmail+cy5@gmail.com",
             maxRevisionStages: 3,
-            name: `Test Company ${runId}`,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -81,7 +72,7 @@ context("Document Creation Flow", () => {
 
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Clicks on 'create a document' button", () => {
@@ -111,6 +102,7 @@ context("Document Creation Flow", () => {
 
   context("Document in DRAFT", () => {
     it("Checks if document status is DRAFT after creating a document", () => {
+      SystemRequirement("REQ-0020");
       cy.drCheckDocumentStatus({ status: "Draft" });
     });
 
@@ -130,9 +122,11 @@ context("Document Creation Flow", () => {
 
   context("Document in VOIDED", () => {
     it("Checks if document status is VOIDED after voiding a document", () => {
+      SystemRequirement("REQ-0020");
       cy.drCheckDocumentStatus({ status: "Voided" });
     });
   });
 });
 
 export { };
+

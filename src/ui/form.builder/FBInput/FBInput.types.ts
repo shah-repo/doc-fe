@@ -112,4 +112,4 @@ export type FBInputProps =
     dataCy?: string;
   };
 
-export const OmitInputClones: FBInputType[] = ["fileupload"];
+export const OmitInputClones: FBInputType[] = ["fileupload", "approval", "requestapproval"];
