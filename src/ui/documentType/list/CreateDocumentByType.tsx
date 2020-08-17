@@ -1,5 +1,6 @@
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import { Formik, FormikProps } from "formik";
 import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -8,6 +9,7 @@ import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks
 import { DocumentType, documentTypeActions, DocumentTypeById, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedId, documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
@@ -167,6 +169,24 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     idAsync.start(getDocRevByIds, docTypeId, idAsync);
   };
 
+  const renderDocumentTypeDialog = (props: FormikProps<any>) => (
+    <DocumentTypeDialog
+      {...props}
+      dialog={docTypeDialog}
+      handleSelection={handleDocTypeSelection}
+      documentTypes={documentTypes}
+    />
+  );
+
+  const renderFormListDialog = (props: FormikProps<any>) => (
+    <FormListDialog
+      {...props}
+      dialog={formDialog}
+      handleSelection={handleFormSelection}
+      formIds={formIds}
+    />
+  );
+
   if (!isVisible) {
     return null;
   }
@@ -198,18 +218,22 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         )
       }
       {
-        docTypeForm && <DocumentTypeDialog
-          dialog={docTypeDialog}
-          handleSelection={handleDocTypeSelection}
-          documentTypes={documentTypes}
-        />
+        docTypeForm && (
+          <FormContext.Provider value={{ submitOnChange: false }}>
+            <Formik initialValues={{}} onSubmit={handleDocTypeSelection}>
+              {renderDocumentTypeDialog}
+            </Formik>
+          </FormContext.Provider>
+        )
       }
       {
-        multipleForm && <FormListDialog
-          dialog={formDialog}
-          handleSelection={handleFormSelection}
-          formIds={formIds}
-        />
+        multipleForm && (
+          <FormContext.Provider value={{ submitOnChange: false }}>
+            <Formik initialValues={{}} onSubmit={handleFormSelection}>
+              {renderFormListDialog}
+            </Formik>
+          </FormContext.Provider>
+        )
       }
     </>
   );
