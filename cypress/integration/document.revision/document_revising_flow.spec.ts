@@ -207,7 +207,7 @@ context("Document Revising Flow", () => {
     });
 
     it("Clicks Save button", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 });
