@@ -1,6 +1,7 @@
 import _ from "lodash";
 import moment from "moment";
 import { Document, DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../state/ducks/documentRevisions";
+import { DOC_TYPE_GROUP_OPTION } from "../../state/ducks/documentRevisions/documentType";
 
 export const canEditDocumentRevision = (
   documentRevision: DocumentRevision,
@@ -145,3 +146,10 @@ export const canChangeDocumentOwner = (status: DocumentRevisionStatus, currentEm
     (isCompanyAdmin || ownerId === currentEmployeeId);
 
 export const getIsLastVersionObsolete = (formDocuments: Document) => _.some(formDocuments.documentRevisions, ["status", DocumentRevisionStatus.Obsolete ]);
+
+export const getIsAdministrativeDefault = (documentRevision: DocumentRevision) => {
+  const docId = documentRevision.formDocument?.document?.docId;
+  const isAlphaReleased = documentRevision.revisionStage === 3;
+  const isRecord = (documentRevision.document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
+  return Boolean(docId && !_.isEmpty(docId)) && isAlphaReleased && isRecord;
+};

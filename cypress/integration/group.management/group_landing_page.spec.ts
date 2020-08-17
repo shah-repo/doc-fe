@@ -96,7 +96,7 @@ context("Group Landing Page Flow", () => {
   });
 
 
-  context("Check if all groups are displayed", () => {
+  context("Check if all groups are displayed and have maximum 15 members displayed", () => {
     it("Verifies that group name filter is empty", () => {
       SystemRequirement("REQ-2610");
       cy.grpCheckIfNameFilterIsEmpty();
@@ -110,6 +110,11 @@ context("Group Landing Page Flow", () => {
     it("Verifies that group type filter is empty", () => {
       SystemRequirement("REQ-2610");
       cy.grpCheckIfTypeFilterIsEmpty();
+    });
+
+    it("Verifies that 'Group members' column displays no more than 15 members", () => {
+      SystemRequirement("REQ-2590");
+      cy.grpCheckForNumberOfGroupMembersDisplayed();
     });
   });
 

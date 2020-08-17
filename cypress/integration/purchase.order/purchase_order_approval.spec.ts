@@ -197,7 +197,7 @@ context("Create company via API and create Purchase Order Form document", () => 
   });
 
   it("Click create document after filling document", () => {
-    cy.drClickCreateDocument();
+    cy.drClickCreateDocumentWithApiCall();
   });
 
   it("Approve and release document", () => {
@@ -247,7 +247,7 @@ context("Create Purchase Order Approval Matrix document with from Form document"
   });
 
   it("Click create document after filling document", () => {
-    cy.drClickCreateDocument();
+    cy.drClickCreateDocumentWithApiCall();
   });
 
   it("Approve and release document", () => {

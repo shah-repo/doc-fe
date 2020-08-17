@@ -30,10 +30,16 @@ export ENLIL_WORKER_LOG_FILE="$DIR_REPORTS/worker.log"
 ./scripts/cypress/patch_director_port_in_cache.sh
 ./scripts/cypress/generate_requirements_json_file.sh
 
-echo "NUMBER_OF_WORKERS: $NUMBER_OF_WORKERS"
-echo "ENLIL_COMPOSE_PORT_RANGE_START: $ENLIL_COMPOSE_PORT_RANGE_START"
-echo "CI_BUILD_ID: $CI_BUILD_ID"
+echo "--| CI_BUILD_ID: $CI_BUILD_ID"
+echo "--| CYPRESS_SKIP_ON_RUN_FAILURE: $CYPRESS_SKIP_ON_RUN_FAILURE"
+echo "--| CYPRESS_INTEGRATION_FOLDER: $CYPRESS_INTEGRATION_FOLDER"
+echo "--| CYPRESS_SCREENSHOT_OF_RUN_FAILURE: $CYPRESS_SCREENSHOT_OF_RUN_FAILURE"
+echo "--| ENLIL_COMPOSE_PORT_RANGE_START: $ENLIL_COMPOSE_PORT_RANGE_START"
+echo "--| NUMBER_OF_WORKERS: $NUMBER_OF_WORKERS"
 echo " "
+
+
+export CYPRESS_SKIP_ON_RUN_FAILURE=${CYPRESS_SKIP_ON_RUN_FAILURE:-true}
 
 function prepend() { while read line; do echo "${1}${line}"; done; }
 function runNode() { 

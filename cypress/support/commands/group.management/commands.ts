@@ -38,6 +38,7 @@ declare global {
       grpCloseDialog(): Chainable;
       grpSelectUnofficial(): Chainable;
       grpAPICreateNewGroup(params: {payload: Group; employeeId: string;  sessionId: string}): Chainable<Subject>;
+      grpCheckForNumberOfGroupMembersDisplayed(): Chainable;
     }
   }
 }
@@ -220,4 +221,12 @@ Cypress.Commands.add("grpAPICreateNewGroup", (params: {
       Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
     },
   }).then((response) => response.body);
+});
+
+Cypress.Commands.add("grpCheckForNumberOfGroupMembersDisplayed", () => {
+  const hasFifteenOrLess = new RegExp("^([^,]+,){0,14}[^,]+$");
+  const hasZero = new RegExp("");
+  cy.get(".ReactVirtualized__Table__row > div:nth-child(2) > div > div > div").each((element) => {
+    expect(element.text()).to.match(hasFifteenOrLess || hasZero);
+  });
 });
