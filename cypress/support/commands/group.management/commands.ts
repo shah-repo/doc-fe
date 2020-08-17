@@ -196,17 +196,21 @@ Cypress.Commands.add("grpSelectUnofficial", () => {
 });
 
 Cypress.Commands.add("grpSelectGroupType", (params: { isOfficial: boolean }) =>
-  cy.get(`[data-cy=\"Group-${params.isOfficial ? "official" : "unofficial"}Option\"]`).click());
+  cy.get(`[data-cy="Group-${params.isOfficial ? "official" : "unofficial"}Option"]`).click());
 
 Cypress.Commands.add("grpTypeGroupName", (params: { name: string }) =>
-  cy.get(`[data-cy=\"Group-groupName\"]`).type(params.name));
+  cy.get(`[data-cy="Group-groupName"]`).type(params.name));
 
 Cypress.Commands.add("grpTypeMembers", (...names: string[]) => {
-  names.forEach((name) => cy.get(`#Group-members`).type(`${name}{enter}`));
+  names.forEach((name) => {
+    cy.get(`#Group-members`).type(`${name}{enter}`);
+  });
 });
 
 Cypress.Commands.add("grpAddParentGroups", (...groups: string[]) => {
-  groups.forEach((name) => cy.get(`#Group-addParentGroups`).type(`${name}{enter}`));
+  groups.forEach((name) => {
+    cy.get(`#Group-addParentGroups`).type(`${name}{enter}`);
+  });
 });
 
 Cypress.Commands.add("grpCloseGroupBtn", () => cy.get("[data-cy=\"DialogContent-close\"]").click());

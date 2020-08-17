@@ -146,6 +146,8 @@ Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
 
 Cypress.Commands.add("drClickCreateDocument", () => {
   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]", { timeout: 5 * 1000 }).click();
+});
+
 Cypress.Commands.add("drClickCreateDocumentWithApiCall", () => {
   cy.wrapWithWaitOnApiCall(
     CyRoutes.PostOrPatchDocRev,
@@ -233,9 +235,13 @@ Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
   cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]", { timeout: 50 * 1000 }).click();
 });
 
-Cypress.Commands.add("drAddAnotherRoleBtn", () => cy.get("[data-cy=\"form.builder.add.another.role\"]").click());
+Cypress.Commands.add("drAddAnotherRoleBtn", () => {
+  cy.get("[data-cy=\"form.builder.add.another.role\"]").click();
+});
 
-Cypress.Commands.add("drEnterApprovalRole", (params: { name: string }) => cy.get("[data-cy=\"name\"]").type(params.name));
+Cypress.Commands.add("drEnterApprovalRole", (params: { name: string }) => {
+  cy.get("[data-cy=\"name\"]").type(params.name);
+});
 
 Cypress.Commands.add("drEnterApprovingGroups", (...groups: string[]) => {
   groups.forEach((group) => {
