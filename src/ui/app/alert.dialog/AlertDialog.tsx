@@ -7,15 +7,29 @@ import { Translation } from "../../translations/types";
 import { styles } from "./AlertDialog.styles";
 
 interface Props {
-  action: () => void;
+  confirmAction: () => void;
+  cancelAction?: () => void;
   message: Translation;
   dialog: DialogHandler;
+  confirmLabel?: Translation;
+  cancelLabel?: Translation;
 }
 
+/** Dialog with Confirm and Cancel buttons.
+ * @param dialog Dialog handler.
+ * @param message Text shown in the dialog body.
+ * @param confirmAction Function executed on Confirm button click.
+ * @param cancelAction Function executed on Cancel button click (optional).
+ * @param confirmLabel Confirm button text (optional).
+ * @param cancelLabel Cancel button text (optional).
+ */
 const AlertDialog: React.FunctionComponent<Props> = ({
-  action,
-  message,
   dialog,
+  message,
+  confirmAction,
+  cancelAction = dialog.close,
+  confirmLabel = "common.yes.im.sure",
+  cancelLabel = "common.cancel",
 }) => {
   const classes = styles();
   return (
@@ -49,10 +63,10 @@ const AlertDialog: React.FunctionComponent<Props> = ({
             <Button
               variant="contained"
               className={classes.cancelButton}
-              onClick={dialog.close}
+              onClick={cancelAction}
               id="AlertDialog-cancelButton"
             >
-              <Text translation="common.cancel" />
+              <Text translation={cancelLabel} />
             </Button>
             <Button
               type="submit"
@@ -60,9 +74,9 @@ const AlertDialog: React.FunctionComponent<Props> = ({
               className={classes.submitButton}
               id="AlertDialog-continueButton"
               data-cy="AlertDialog-continueButton"
-              onClick={action}
+              onClick={confirmAction}
             >
-              <Text translation="common.yes.im.sure" />
+              <Text translation={confirmLabel} />
             </Button>
           </Box>
         </Dialog>
