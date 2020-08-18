@@ -1,3 +1,5 @@
+import { USERS } from "../utils/constants/users";
+
 let company;
 let docId;
 let loginResponse;
@@ -39,26 +41,15 @@ context("Validators tests", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+            companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: "enlil.testmail+cy5@gmail.com",
+            importerEmail: USERS[5].email,
             maxRevisionStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [{
-              name: "Second Tester",
-              email: "enlil.testmail+cy2@gmail.com",
-            },
-            {
-              name: "Third Tester",
-              email: "enlil.testmail+cy3@gmail.com",
-            },
-            {
-              name: "Fourth Tester",
-              email: "enlil.testmail+cy4@gmail.com",
-            }],
+            users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             whiteLabeling: null,
@@ -73,7 +64,7 @@ context("Validators tests", () => {
 
     it("[API] Login user", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: USERS[1].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -86,7 +77,7 @@ context("Validators tests", () => {
   context("Log in user, select company and open 'Create Document'", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
