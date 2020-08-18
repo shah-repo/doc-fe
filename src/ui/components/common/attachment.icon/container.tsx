@@ -12,7 +12,7 @@ import { FormHeaderSummaryContext } from "../../../document.revision/header/Summ
 import { isOperator } from "../../../documentRevision/DocumentRevisionDisplay.container";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import { documentRevisionStatusContextFromCR } from "../../../documentRevision/DocumentRevisionUpdate.container";
-import { documentTypeContext, FormHeaderContext, isOwnerContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
+import { documentTypeContext, isOwnerContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -41,6 +41,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   field,
   value,
   isNewVersion,
+  documentRevision,
   ...other
 }) => {
   const dialogHandler = useDialog();
@@ -65,7 +66,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const downloadAttachment = useActionCreator(attachmentsActions.download);
   const downloadAttachmentPassword = useActionCreator(attachmentsActions.downloadRedLine);
   const requestWatermarkAction = useActionCreator(attachmentsActions.requestWatermarkedFile);
-  const { documentRevision } = React.useContext(FormHeaderContext) || {};
+  // const { documentRevision } = React.useContext(FormHeaderContext) || {};
   const { documentRevisionSummary } = React.useContext(FormHeaderSummaryContext) || {};
 
   const passwordState = {
@@ -391,17 +392,20 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       />
       <Menu
         handleIconClick={handleClick}
-        setSelectedAttachment={setSelectedAttachment}
         handleClose={closeContextMenu}
-        anchorEl={anchorEl}
         attachment={selectedAttachment}
-        openFileView={openFileView}
         download={handleDownload}
-        openWarningDialog={openWarningDialog}
-        setPasswordSubmitAction={setPasswordSubmitAction}
-        handleWatermarkRequest={handleWatermarkRequest}
-        cleanCopyRequiresPassword={cleanCopyRequiresPassword}
-        redLineRequiresPassword={redLineRequiresPassword}
+        {...{
+          setSelectedAttachment,
+          anchorEl,
+          openFileView,
+          openWarningDialog,
+          setPasswordSubmitAction,
+          handleWatermarkRequest,
+          cleanCopyRequiresPassword,
+          redLineRequiresPassword,
+          documentRevision,
+        }}
       />
       {attachmentsRenderer}
     </div>

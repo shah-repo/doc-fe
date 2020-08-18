@@ -2,7 +2,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import React, { useMemo } from "react";
 import { Attachment, AttachmentType } from "../../../../state/ducks/attachments";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { FormHeaderSummaryContext } from "../../../document.revision/header/SummaryHeader";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import Text from "../../Text";
@@ -20,6 +20,7 @@ interface OwnProps {
     documentRevisionId?: string) => void;
   setSelectedAttachment: (attachment: Attachment) => void;
   handleIconClick?: (attachment: Attachment) => any;
+  documentRevision?: DocumentRevision;
 }
 
 type Props = AttachmentMenuProps & OwnProps;
@@ -36,6 +37,7 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
   download,
   redLineRequiresPassword,
   cleanCopyRequiresPassword,
+  documentRevision,
 }) => {
   const file = useMemo(() => (attachment || {} as Attachment), [attachment]);
   const isFileViewable =  useMemo(() => checkIfFileIsViewable(file.type), [file.type]);
@@ -129,7 +131,7 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
       {renderWatermarkFile}
       {renderWatermarkCleanCopy}
       {renderPreviewFile}
-      <MenuItemSetPrimary attachment={attachment} handleClose={handleClose} />
+      <MenuItemSetPrimary {...{ attachment, handleClose, documentRevision }} />
     </Menu>
   );
 };
