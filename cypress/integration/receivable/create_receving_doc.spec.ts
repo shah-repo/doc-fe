@@ -84,7 +84,7 @@ context("Approval request landing page test", () => {
       });
     });
 
-    it("[API]Create receivables", (done: any) => {
+    it("[API]Create PO-s", (done: any) => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
@@ -337,6 +337,18 @@ context("Approval request landing page test", () => {
                               label: "Receivable",
                               name: "receivable-kdptzei2",
                               applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+                            },
+                            {
+                              index: 1,
+                              type: "textfield",
+                              name: "text-field-ke04ztn7",
+                              rows: 1,
+                              editorProperties: [],
+                              label: "Text field",
+                              placeholder: "Enter text",
+                              applicableOn: [
+                                "ON_STATE_TO_IN_REVIEW",
+                              ],
                             }],
                           },
                         },
@@ -440,9 +452,44 @@ context("Create receivable", () => {
       });
     });
 
-    context("Create receivable", () => {
-      it("Click create", () => {
+    context("Verify receivable creation", () => {
+      it("Verify adding attachments", () => {
+        SystemRequirement("REQ-1980");
+        cy.atchUploadAttachment({ fileName: "test.docx" });
+      });
+
+      it("Fill custom text field added in receivable form", () => {
+        SystemRequirement("REQ-1880");
+        cy.get("input[type=textfield]").type("Custom field");
+      });
+
+      it("Click 'Create document' ", () => {
         SystemRequirement("REQ-1770");
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Verify receivable status is 'Draft'", () => {
+        SystemRequirement("REQ-1870");
+        cy.drCheckDocumentStatus({ status: "Draft" });
+      });
+
+      it("Verify owner change", () => {
+        SystemRequirement("REQ-1990");
+        cy.drChangeOwnerFromMenu({ employee: "Second Tester" });
+      });
+    });
+
+    context("Verify receivable can be created without selecting PO document", () => {
+      it("Navigate to receiving", () => {
+        cy.navigToReceivableList();
+      });
+
+      it("Click 'Add new receiving'", () => {
+        cy.poCreateNew();
+      });
+
+      it("Click 'Create document' on empty receivable form", () => {
+        SystemRequirement("REQ-1860");
         cy.drClickCreateDocumentWithApiCall();
       });
     });
