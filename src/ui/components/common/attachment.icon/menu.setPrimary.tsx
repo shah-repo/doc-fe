@@ -2,7 +2,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
 import React from "react";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
-import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -12,18 +12,19 @@ import Text from "../../Text";
 export interface Props {
   handleClose?: any;
   attachment: any;
+  documentRevision?: DocumentRevision;
 }
 
 const MenuItemSetPrimary: React.FunctionComponent<Props> = ({
   handleClose,
   attachment = {},
+  documentRevision,
 }) => {
   const setAsPrimaryAction = useActionCreator(documentRevisionsActions.setPrimaryAttachment);
   const setAsPrimaryAsync = useAsync({
     onError: (error) => toastError(error as string),
   });
   const isDocumentPage = Boolean(React.useContext(FormHeaderContext));
-  const { documentRevision } = React.useContext(FormHeaderContext) || {};
 
   if (!isDocumentPage) {
     return null;
