@@ -3,5 +3,5 @@ export enum FBFieldName {
   EditorProps = "editorProperties",
   RequestApproval = "fb-request-",
   TemplateName = "fb-template-name",
-  ApproveReasoning = "-reasoning"
+  ApproveReasoning = "-reasoning",
 }
