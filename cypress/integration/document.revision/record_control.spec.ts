@@ -164,7 +164,7 @@ context("Record Control Flow", () => {
       });
 
       it("Saves Document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 

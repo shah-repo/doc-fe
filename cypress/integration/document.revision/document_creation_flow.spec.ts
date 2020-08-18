@@ -166,7 +166,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Check test.docx attachment atributes", () => {
-        cy.atchCheckAtributes({ fileName: "test_image.jpg", attributes: "373.56 kB JPG File" });
+        cy.atchCheckAtributes({ fileName: "test_image.jpg", attributes: "79.54 kB JPG File" });
       });
 
       it("Check two attachments are displayed: test.docx, test_image.jpg", () => {
@@ -199,7 +199,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Save document after setting primary attachment", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Remove attachment test_image.jpg", () => {

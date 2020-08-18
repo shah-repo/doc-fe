@@ -207,7 +207,7 @@ context("Create Part document for PO", () => {
   });
 
   it("Click create document after filling document", () => {
-    cy.drClickCreateDocumentWithApiCall();
+    cy.drClickCreateDocumentWithoutApiCall();
   });
 });
 
