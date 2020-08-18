@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
+import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
 import { getIsAdministrativeDefault } from "../helpers";
@@ -123,6 +124,7 @@ export const toDocumentRevisionFormValuesWithRevisionChange = (
 
 export const toDocumentRevisionFormValuesForOutput = (
   documentRevision: DocumentRevision,
+  selectedDocumentType?: DocumentType,
 ): DocumentRevisionFormValues => {
   const values = {
     ...((DEFAULT_INITIAL_VALUES() as unknown) as DocumentRevision),
@@ -130,7 +132,7 @@ export const toDocumentRevisionFormValuesForOutput = (
     formTemplate: undefined,
     status: DocumentRevisionStatus.Draft,
     document: {
-      documentType: documentRevision.formTemplate?.outputDocumentTypes[0],
+      documentType: selectedDocumentType || documentRevision.formTemplate?.outputDocumentTypes[0],
     },
     formDocument: {
       ...documentRevision,
