@@ -66,7 +66,6 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const downloadAttachment = useActionCreator(attachmentsActions.download);
   const downloadAttachmentPassword = useActionCreator(attachmentsActions.downloadRedLine);
   const requestWatermarkAction = useActionCreator(attachmentsActions.requestWatermarkedFile);
-  // const { documentRevision } = React.useContext(FormHeaderContext) || {};
   const { documentRevisionSummary } = React.useContext(FormHeaderSummaryContext) || {};
 
   const passwordState = {
