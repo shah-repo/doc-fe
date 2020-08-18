@@ -160,7 +160,7 @@ context("Record Control Flow", () => {
       });
 
       it("Enters description 'Record Document Revision description'", () => {
-        cy.drEnterDocumentDescription({ description: "Record Document Revision description" }).wait(1000);
+        cy.drEnterDocumentDescription({ description: "Record Document Revision description" });
       });
 
       it("Saves Document", () => {

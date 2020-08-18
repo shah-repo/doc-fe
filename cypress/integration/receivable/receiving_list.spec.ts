@@ -387,7 +387,7 @@ context("Approval request landing page test", () => {
     context("Login user when he does have privileges", () => {
       it("Logs user in", () => {
         cy.authLogin({
-          email: USERS[2].email,
+          email: USERS[1].email,
           password: "Tester1!",
         });
       });
