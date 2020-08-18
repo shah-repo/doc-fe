@@ -238,6 +238,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
           employeeGroups={employeeGroups}
           employeeId={employeeId}
           callbackUpdateGroups={callbackUpdateGroups}
+          fromUserProfile= {true}
         />
         {canUpdateCompany && <HelloSignAccess helloSignStatus={helloSignIntegrationEnabled}/>}
         {slackIntegrationEnabled && slackTeamId && !slackUserId && (
