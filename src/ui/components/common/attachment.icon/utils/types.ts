@@ -1,5 +1,6 @@
 import { Attachment, attachmentsActions, AttachmentType } from "../../../../../state/ducks/attachments";
 import { RenderSize } from "../../../../../state/ducks/common";
+import { DocumentRevision } from "../../../../../state/ducks/documentRevisions";
 import { FormikHybridFieldProps } from "../../../hoc/utils/types";
 
 export enum PasswordSubmitActionType {
@@ -26,6 +27,7 @@ export interface AttachmentIconFactoryProps extends FormikHybridFieldProps {
   handleIconClick?: (attachment: Attachment) => any;
   canDeleteFile?: boolean;
   isNewVersion?: boolean;
+  documentRevision?: DocumentRevision;
 }
 
 export interface AttachmentIconProps extends AttachmentIconFactoryProps {

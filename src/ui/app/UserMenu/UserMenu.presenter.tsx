@@ -26,8 +26,9 @@ export const UserMenuPresenter: React.FunctionComponent<Props> = ({
     openUserProfile,
     handleLogout,
     hasMultipleCompanies,
+    handleSwitchCompany,
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   } = React.useContext(UserMenuContext)!;
-  // TODO Maja to fix
 
   return (
     <>
@@ -55,7 +56,7 @@ export const UserMenuPresenter: React.FunctionComponent<Props> = ({
           </ListItemText>
         </MenuItem>
         {hasMultipleCompanies &&
-          <MenuItem>
+          <MenuItem onClick={handleSwitchCompany}>
             <ListItemIcon>
               <SyncAltOutlinedIcon fontSize="small" />
             </ListItemIcon>
