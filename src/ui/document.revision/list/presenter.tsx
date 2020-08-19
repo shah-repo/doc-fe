@@ -9,6 +9,7 @@ import { stripTags } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { DOCUMENT_LIST_TYPE_NAMES } from "../../../state/ducks/documentRevisions/documentType/constants";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../common/utils/helpers";
 import Date from "../../components/Date";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -198,7 +199,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     const customData = data
       .reduce<DocumentRevision[]>((acc, docRev) => {
         if (docRev.document.documentType.documentTypeName
-        /* && DOCUMENT_LIST_TYPE_NAMES.includes(docRev.document.documentType.documentTypeName) */) {
+         && DOCUMENT_LIST_TYPE_NAMES.includes(docRev.document.documentType.documentTypeName)) {
           set(docRev, "description", stripTags(docRev.description));
           set(
             docRev,

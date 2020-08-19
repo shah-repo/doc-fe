@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import { DOCUMENT_TABLE_LIST_NAMES } from "../../../state/ducks/documentRevisions/documentType/constants";
 import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { documentRevisionQueryStatus } from "../utils/helpers";
@@ -32,7 +33,7 @@ export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
           ...tableCriteria,
           queryDict: {
             "status[]": status,
-            // "documentTypeNames[]": DOCUMENT_TABLE_LIST_NAMES,
+            "documentTypeNames[]": DOCUMENT_TABLE_LIST_NAMES,
           },
         },
         TABLE_NAME,
