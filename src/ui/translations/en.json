@@ -416,6 +416,7 @@
   "transition.action.withdraw": "Withdraw",
   "transition.action.pending_submission": "Pending submission",
   "transition.action.close.date": "Select effective date",
+  "transition.action.effective.date.message": "Would you like the Effective date to be the same as the Approved date?",
   "document.revision.list.docId": "DOC ID",
   "document.revision.list.revision": "Revision",
   "document.revision.list.description": "Description",
