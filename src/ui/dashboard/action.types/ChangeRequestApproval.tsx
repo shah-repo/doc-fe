@@ -21,8 +21,9 @@ export const ChangeRequestApproval: React.FunctionComponent<Props> = ({
 
   return (
     <DashboardCRBase
-      changeRequest={changeRequest}
+      crId={changeRequest.id}
       crTitle={crTitle}
+      title={changeRequest.title}
       url={changeRequestEditPath(changeRequest.id)}
     />
   );

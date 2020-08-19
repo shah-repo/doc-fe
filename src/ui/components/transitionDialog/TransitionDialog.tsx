@@ -1,10 +1,14 @@
 import { Button, Dialog, DialogContent, DialogTitle, withStyles, WithStyles } from "@material-ui/core";
 import { ButtonProps } from "@material-ui/core/Button";
 import { Formik, FormikProps } from "formik";
-import React from "react";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { TIME_ZONE } from "../../../common/utils/date";
 import { AsyncState } from "../../../state/types";
+import AlertDialog from "../../app/alert.dialog/AlertDialog";
 import { EffectiveDateFormValues } from "../../change.request/form/types";
 import Text from "../../components/Text";
+import useDialog from "../../hooks/useDialog";
 import EffectiveDateForm from "../effectiveDate/form/EffectiveDateForm";
 import { FormContext } from "../forms/FormContext";
 import PasswordForm from "../password/form/PasswordForm";
@@ -30,12 +34,38 @@ const TransitionDialog: React.FunctionComponent<Props> =
       <PasswordForm {...props} asyncState={asyncState} cancel={closeDialog} />
     );
 
+    const effectiveDateDialog = useDialog();
+    const [isDatepickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
+
+    useEffect(() => {
+      effectiveDateDialog.open();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const cancelClose = () => {
+      effectiveDateDialog.open();
+      closeDialog();
+      setIsDatePickerOpen(false);
+    };
+
     const renderCloseForm = (props: FormikProps<any>) => (
-      <EffectiveDateForm {...props} asyncState={asyncState} cancel={closeDialog} />
+      <>
+        <AlertDialog
+          dialog={effectiveDateDialog}
+          confirmAction={() => onSubmit({ effectiveDate: moment().tz(TIME_ZONE, true).toISOString() })}
+          cancelAction={() => {
+            effectiveDateDialog.close();
+            setIsDatePickerOpen(true);
+          }}
+          message={"transition.action.effective.date.message"}
+          confirmLabel={"common.true"}
+          cancelLabel={"common.false"}
+        />
+        {isDatepickerOpen && <EffectiveDateForm {...props} asyncState={asyncState} cancel={cancelClose} />}
+      </>
     );
 
     const preventPropagation = (event: React.FormEvent) =>  event.stopPropagation();
-
     return (
       <div className={classes.container}>
         <Button

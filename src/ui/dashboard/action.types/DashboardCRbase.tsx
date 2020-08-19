@@ -1,19 +1,20 @@
 import { Box, Grid } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import ChangeRequestTransitionDialogContainer from "../../change.request/dialogs/ChangeRequestTransitionDialog.container";
 
 interface Props {
+  title: string;
   crTitle: string;
   url: string;
-  changeRequest: ChangeRequest;
+  crId: string;
 }
 
 export const DashboardCRBase: React.FunctionComponent<Props> = ({
+  title,
   crTitle,
   url,
-  changeRequest,
+  crId,
 }) => (
   <Grid
     container={true}
@@ -37,7 +38,7 @@ export const DashboardCRBase: React.FunctionComponent<Props> = ({
             {crTitle}
           </Box>
           <Box>
-            {changeRequest.title}
+            {title}
           </Box>
         </Box>
       </Link>
@@ -51,12 +52,12 @@ export const DashboardCRBase: React.FunctionComponent<Props> = ({
       <Grid item={true}>
         <ChangeRequestTransitionDialogContainer
           transition="reject"
-          changeRequest={changeRequest}
+          changeRequestId={crId}
           label="transition.action.reject"
         />
         <ChangeRequestTransitionDialogContainer
           transition="approve"
-          changeRequest={changeRequest}
+          changeRequestId={crId}
           label="transition.action.approve"
         />
       </Grid>

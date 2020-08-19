@@ -60,7 +60,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
   ) => showButton &&
         <ChangeRequestTransitionDialogContainer
           transition={transition}
-          changeRequest={changeRequest}
+          changeRequestId={changeRequest.id}
           buttonProps={buttonProps}
           label={`changeRequest.transition.${transition}`}
         />;
