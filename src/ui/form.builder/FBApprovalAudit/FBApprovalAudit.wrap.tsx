@@ -16,6 +16,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
 ) => {
   const Comp = ({
     approvalAuditState,
+    approvalNonVersioned,
     audits,
     loading,
     index,
@@ -30,7 +31,10 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
       isOutput,
       document: { releasedAt = null, createdAt = (new Date()).toISOString() } = {},
     } = workspaceState || {};
-    approvalAuditState = FB.useRef(FBApprovalAuditState, { documentId, isOutput });
+    approvalAuditState = FB.useRef(FBApprovalAuditState, {
+      documentId,
+      isOutput: isOutput,
+    });
 
     function underApproval(): string[] | undefined {
       if (!name) { return; }
@@ -284,6 +288,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
     return Component({
       ...(props as T),
       approvalAuditState,
+      approvalNonVersioned,
       audits,
       loading,
       index,

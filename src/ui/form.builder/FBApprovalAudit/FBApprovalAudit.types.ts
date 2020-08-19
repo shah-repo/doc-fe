@@ -1,4 +1,4 @@
-import { FBApprovalAuditState, FBInputProps, FBSchemaProps } from "..";
+import { FBApprovalAuditState, FBApprovalProps, FBInputProps, FBSchemaProps } from "..";
 
 export type FBAuditType =
 | "STRING_NEW"
@@ -42,7 +42,10 @@ export interface FBApprovalAuditConstructor {
   isOutput?: boolean;
 }
 
-export type FBApprovalAuditProps = Pick<FBInputProps, "name" | "type" | "index"> & {
+export type FBApprovalAuditProps =
+& Pick<FBInputProps, "name" | "type" | "index">
+& Pick<FBApprovalProps, "approvalNonVersioned">
+& {
   approvalAuditState?: FBApprovalAuditState;
   audits?: FBAuditData[];
   loading?: boolean;
