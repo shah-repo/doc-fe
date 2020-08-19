@@ -67,7 +67,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       workspaceState.externalState = store.getState();
     }, [workspaceState, changeRequest]);
 
-
     useObserver(() => {
       isStarter = workspaceState?.isStarter;
       active = workspaceState?.active;

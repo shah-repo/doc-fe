@@ -115,12 +115,17 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
     }
   };
 
+  const closeDialog = () => {
+    redlineWarningDialogHandler.close();
+    setIsDownloading(false);
+  };
+
   return (
     <>
       <AttachmentRedLineWarningDialog
         isDialogOpen={redlineWarningDialogHandler.isOpen}
         onSubmit={warningSubmit}
-        closeDialog={redlineWarningDialogHandler.close}
+        closeDialog={closeDialog}
         asyncState={warningState}
         translationText={warningPasswordText()}
         translationButtonText="common.attachment.redline.warning.download.labelAll"

@@ -117,6 +117,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     asyncState,
     type,
   });
+
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
@@ -273,6 +274,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isAttachmentEmpty = {isAttachmentEmpty}
           containsRedline = {false}
           docRevStatus = {documentRevision?.status}
+          documentRevision={documentRevision}
         />
         {showRevisionTypeChange && !isRevisionChangeHidden &&
         <RevisionTypeChange {...{

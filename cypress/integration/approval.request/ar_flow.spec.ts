@@ -1,5 +1,6 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -24,27 +25,15 @@ context("Approval request form", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+            companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: "enlil.testmail+cy5@gmail.com",
+            importerEmail: USERS[5].email,
             maxRevisionStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [
-              {
-                name: "Second Tester",
-                email: "enlil.testmail+cy2@gmail.com",
-              },
-              {
-                name: "Third Tester",
-                email: "enlil.testmail+cy3@gmail.com",
-              },
-              {
-                name: "Fourth Tester",
-                email: "enlil.testmail+cy4@gmail.com",
-              }],
+            users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
@@ -58,7 +47,7 @@ context("Approval request form", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.name === "Second Tester");
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           done();
         });
@@ -67,7 +56,7 @@ context("Approval request form", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -120,7 +109,7 @@ context("Approval request form", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       });
     });
@@ -196,7 +185,7 @@ context("Approval request form", () => {
     });
 
     it("Add first approver to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: "enlil.testmail+cy2@gmail.com" });
+      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
     });
 
     it("Click Create Approval Request", () => {

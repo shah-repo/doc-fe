@@ -1,6 +1,7 @@
 import faker from "faker";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -30,27 +31,15 @@ context("Approval request landing page test", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+            companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: "enlil.testmail+cy5@gmail.com",
+            importerEmail: USERS[5].email,
             maxRevisionStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [
-              {
-                name: "Second Tester",
-                email: "enlil.testmail+cy2@gmail.com",
-              },
-              {
-                name: "Third Tester",
-                email: "enlil.testmail+cy3@gmail.com",
-              },
-              {
-                name: "Fourth Tester",
-                email: "enlil.testmail+cy4@gmail.com",
-              }],
+            users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
@@ -64,7 +53,7 @@ context("Approval request landing page test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.name === "Second Tester");
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
@@ -74,7 +63,7 @@ context("Approval request landing page test", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -212,7 +201,7 @@ context("Approval request landing page test", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       });
     });
@@ -317,12 +306,12 @@ context("Approval request landing page test", () => {
       });
 
       it("Filter list by OWNER", () => {
-        cy.alFilterByOwner({ owner: "Second Tester" });
+        cy.alFilterByOwner({ owner: USERS[2].name });
       });
 
       it("Verify filter by OWNER", () => {
         SystemRequirement("REQ-0770", "REQ-0750");
-        cy.alVerifyFilterByOwner({ owner: "Second Tester" });
+        cy.alVerifyFilterByOwner({ owner: USERS[2].name });
       });
 
       it("Verify approval counter on document list", () => {

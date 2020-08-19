@@ -2,6 +2,7 @@ import { fail } from "assert";
 import { GroupTag, NavigationItems } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -32,27 +33,15 @@ context("Approval request landing page test", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+            companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: "enlil.testmail+cy5@gmail.com",
+            importerEmail: USERS[5].email,
             maxRevisionStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [
-              {
-                name: "Second Tester",
-                email: "enlil.testmail+cy2@gmail.com",
-              },
-              {
-                name: "Third Tester",
-                email: "enlil.testmail+cy3@gmail.com",
-              },
-              {
-                name: "Fourth Tester",
-                email: "enlil.testmail+cy4@gmail.com",
-              }],
+            users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
@@ -66,8 +55,8 @@ context("Approval request landing page test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.name === "Company Admin");
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.name === "Second Tester");
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
           receivableDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
@@ -79,7 +68,7 @@ context("Approval request landing page test", () => {
 
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: USERS[1].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -362,7 +351,7 @@ context("Approval request landing page test", () => {
     context("Login user when he doesn't have privileges", () => {
       it("Logs user in", () => {
         cy.authLogin({
-          email: "enlil.testmail+cy2@gmail.com",
+          email: USERS[2].email,
           password: "Tester1!",
         });
       });
@@ -398,7 +387,7 @@ context("Approval request landing page test", () => {
     context("Login user when he does have privileges", () => {
       it("Logs user in", () => {
         cy.authLogin({
-          email: "enlil.testmail+cy2@gmail.com",
+          email: USERS[1].email,
           password: "Tester1!",
         });
       });
@@ -440,7 +429,7 @@ context("Approval request landing page test", () => {
 
     it("Verify owner is present", () => {
       SystemRequirement("REQ-1680");
-      cy.recVerifyFilterByOwner({ owner: "Company Admin" });
+      cy.recVerifyFilterByOwner({ owner: USERS[1].name });
     });
 
     it("Verify record state is present", () => {
@@ -516,13 +505,13 @@ context("Approval request landing page test", () => {
         cy.dlClearFilters();
       });
 
-      it("Filter list by owner 'Company Admin'", () => {
-        cy.recFilterByOwner({ owner: "Company Admin" });
+      it(`Filter list by owner '${"USERS[1].name"}'`, () => {
+        cy.recFilterByOwner({ owner: USERS[1].name });
       });
 
       it("Verify filter by owner", () => {
         SystemRequirement("REQ-1710");
-        cy.recVerifyFilterByOwner({ owner: "Company Admin" });
+        cy.recVerifyFilterByOwner({ owner: USERS[1].name });
       });
 
       it("Verify receivable counter on document list", () => {
@@ -584,7 +573,7 @@ context("Approval request landing page test", () => {
 
     context("Verify filter settings are maintained after navigating away", () => {
       it("Filter list", () => {
-        cy.recFilterByOwner({ owner: "Company Admin" });
+        cy.recFilterByOwner({ owner: USERS[1].name });
         cy.recFilterByReceivableId({ id: "RC-00006" });
       });
 
@@ -598,7 +587,7 @@ context("Approval request landing page test", () => {
 
       it("Verify filter by owner", () => {
         SystemRequirement("REQ-1730");
-        cy.recVerifyFilterByOwner({ owner: "Company Admin" });
+        cy.recVerifyFilterByOwner({ owner: USERS[1].name });
       });
 
       it("Verify filter by receivable id", () => {

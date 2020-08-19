@@ -1,3 +1,4 @@
+import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -15,27 +16,15 @@ context("User Creation Flow", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+            companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: "enlil.testmail+cy5@gmail.com",
+            importerEmail: USERS[5].email,
             maxRevisionStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [
-              {
-                name: "Second Tester",
-                email: "enlil.testmail+cy2@gmail.com",
-              },
-              {
-                name: "Third Tester",
-                email: "enlil.testmail+cy3@gmail.com",
-              },
-              {
-                name: "Fourth Tester",
-                email: "enlil.testmail+cy4@gmail.com",
-              }],
+            users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -47,7 +36,7 @@ context("User Creation Flow", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -60,7 +49,7 @@ context("User Creation Flow", () => {
   context("Login company admin", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
@@ -82,11 +71,11 @@ context("User Creation Flow", () => {
 
   context("Fill in user attributes", () => {
     it("Enters e-mail", () => {
-      cy.usrEnterEmail({ email: "enlil.testmail+cy10@gmail.com" });
+      cy.usrEnterEmail({ email: USERS[10].email });
     });
 
     it("Enters name", () => {
-      cy.usrEnterName({ name: "Tenth Tester" });
+      cy.usrEnterName({ name: USERS[10].name });
     });
   });
 
@@ -102,7 +91,7 @@ context("User Creation Flow", () => {
     });
     it("Checks if user is in the table", () => {
       SystemRequirement("REQ-2490");
-      cy.usrCheckIfUserIsCreated({ email: "enlil.testmail+cy10@gmail.com" });
+      cy.usrCheckIfUserIsCreated({ email: USERS[10].email });
     });
   });
 });

@@ -19,7 +19,7 @@ export class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldD
     this.data = formValue;
   }
 
-  @action public dataSort = (data: FBApprovalMatrixFieldData): FBApprovalMatrixFieldData | undefined => this.data = {
+  @action public prepareData = (data: FBApprovalMatrixFieldData): FBApprovalMatrixFieldData | undefined => this.data = {
     approvalRoles: data?.approvalRoles || [],
     approvalMatrix: sortBy(data?.approvalMatrix, (row) => row.docType.name.toLowerCase()) || [],
   };

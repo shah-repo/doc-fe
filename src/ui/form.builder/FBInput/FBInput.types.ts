@@ -54,7 +54,8 @@ export type FBInputType =
   | "hellosign"
   | "customcontrol"
   | "poApprovalMatrix"
-  | "task";
+  | "task"
+  | "approvers";
 
 export type FBInputProps =
 & FBLabelProps
@@ -110,6 +111,11 @@ export type FBInputProps =
   forceDefault?: boolean;
   autosave?: boolean;
   transform?: FBInputTransform;
+  withState?: boolean;
 };
 
-export const OmitInputClones: FBInputType[] = ["fileupload", "approval", "requestapproval"];
+export const OmitInputClones: FBInputType[] = [
+  "fileupload",
+  "documentRevisions",
+  "approvers",
+];

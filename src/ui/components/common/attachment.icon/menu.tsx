@@ -2,7 +2,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import React, { useMemo } from "react";
 import { Attachment, AttachmentType } from "../../../../state/ducks/attachments";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { FormHeaderSummaryContext } from "../../../document.revision/header/SummaryHeader";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import Text from "../../Text";
@@ -20,6 +20,7 @@ interface OwnProps {
     documentRevisionId?: string) => void;
   setSelectedAttachment: (attachment: Attachment) => void;
   handleIconClick?: (attachment: Attachment) => any;
+  documentRevision?: DocumentRevision;
 }
 
 type Props = AttachmentMenuProps & OwnProps;
@@ -36,12 +37,15 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
   download,
   redLineRequiresPassword,
   cleanCopyRequiresPassword,
+  documentRevision,
 }) => {
   const file = useMemo(() => (attachment || {} as Attachment), [attachment]);
   const isFileViewable =  useMemo(() => checkIfFileIsViewable(file.type), [file.type]);
   const canWatermark = useMemo(() => WATERMARK_FILES.includes(file.type), [file.type]);
   const { documentRevisionSummary } = React.useContext(FormHeaderSummaryContext) || {};
   const documentRevisionStatusFromDocList = React.useContext(documentRevisionStatusContextFromDocList);
+  const isDocObsoleteOrDeprecated = documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete ||
+  documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated;
 
 
   const {
@@ -98,14 +102,14 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
       <Text translation="attachment.download.clean.copy" values={{ fileName, fileType }} />
     </MenuItem>;
   const renderPDFFile = canWatermark &&
-    <MenuItem onClick={handleWatermarkClick(AttachmentType.Attached)}>
+    <MenuItem onClick={handleWatermarkClick(AttachmentType.Attached, isDocObsoleteOrDeprecated)}>
       <Text translation="attachment.download.pdf" />
     </MenuItem>;
-  const renderWatermarkFile = (documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete ||
-    documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated) && canWatermark &&
-    <MenuItem onClick={handleWatermarkClick(AttachmentType.Attached, true)}>
-      <Text translation="attachment.download.watermark" />
-    </MenuItem>;
+  // const renderWatermarkFile = (documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete ||
+  //   documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated) && canWatermark &&
+  //   <MenuItem onClick={handleWatermarkClick(AttachmentType.Attached, true)}>
+  //     <Text translation="attachment.download.watermark" />
+  //   </MenuItem>;
   const renderWatermarkCleanCopy = canWatermark && s3linkCleanCopy &&
     <MenuItem onClick={handleWatermarkClick(AttachmentType.CleanCopy)}>
       <Text translation="attachment.download.watermark.clean.copy" />
@@ -126,10 +130,9 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
       {renderDownloadFile}
       {renderDownloadCleanCopy}
       {renderPDFFile}
-      {renderWatermarkFile}
       {renderWatermarkCleanCopy}
       {renderPreviewFile}
-      <MenuItemSetPrimary attachment={attachment} handleClose={handleClose} />
+      <MenuItemSetPrimary {...{ attachment, handleClose, documentRevision }} />
     </Menu>
   );
 };
