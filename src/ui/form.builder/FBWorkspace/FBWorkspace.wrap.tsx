@@ -1,5 +1,5 @@
 
-import { union, uniqBy } from "lodash";
+import { isEqual, union, uniqBy } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
@@ -53,7 +53,10 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       if (originType !== workspaceType) {
         workspaceState.schema = props.schema || [];
       } else {
-        workspaceState.schema = uniqBy(union(workspaceState.schema, props.schema || []), "name");
+        const newScheme = uniqBy(union(workspaceState.schema, props.schema || []), "name");
+        if (!isEqual(workspaceState.schema, newScheme)) {
+          workspaceState.schema = newScheme;
+        }
       }
       workspaceState.document = document;
     }

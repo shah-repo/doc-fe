@@ -53,10 +53,10 @@ export class FBApprovalState {
   }
 
   public getDocument = (id?: string) => {
-    if (!id) { return }
+    if (!id) { return; }
     this.getDocumentApi.setTemplateUrl(FBEndpoint.Document, { id });
     this.getDocumentApi.fetch();
-  }
+  };
 
   @computed public get isApproved(): boolean {
     return !isEmpty(this.hasApproved);

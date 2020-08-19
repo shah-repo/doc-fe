@@ -23,13 +23,14 @@ const FBApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = ({
     if (!documentRevision) { return; }
     window.location.href = documentVersionPath(documentRevision.id, documentId);
   });
-  
+
   const subscribe = () => {
     iotService.subscribeToTopic(
       `+/document_revisions/${id}/updated`,
       notify
     );
   };
+
   const unsubscribe = () => {
     iotService.unsubscribeFromTopic(
       `+/document_revisions/${id}/updated`,

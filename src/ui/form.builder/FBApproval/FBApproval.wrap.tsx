@@ -50,7 +50,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
     const formValue = sortBy(formState?.getFieldValue(name), "approvedAt")
       .filter((value) => new Date(value.approvedAt) <= new Date(released));
 
-      approvalState = FB.useRef<FBApprovalState>(FBApprovalState, {
+    approvalState = FB.useRef<FBApprovalState>(FBApprovalState, {
       value: formValue,
       approversValue: approvers,
       groupsValue: approverGroups,
