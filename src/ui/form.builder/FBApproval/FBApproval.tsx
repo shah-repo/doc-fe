@@ -28,8 +28,8 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
   ...props
 }) => (
   <FBProvider {...{ [`${FBFieldName.ApprovalState}-${name}`]: approvalState }}>
+    <FBApprovalSocket {...{ name }} />
     <FBInput {...{ name, disabled, autosave, gutter }} type="approval">
-      <FBApprovalSocket {...{ name }} />
       {approveIsBlocking && (
         <Box
           py={1}
