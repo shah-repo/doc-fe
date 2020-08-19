@@ -57,7 +57,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isNumericRelease = documentRevision.revisionStage === 1;
 
   if (isDraft && isRecord && isInlineApproval && !isAlphaReleased) {
-    verPrefix = "common.work.in.progress";
+    statLabel = "common.wip";
   }
   if (isReleased || ((isDeprecated || isDraft) && isInlineApproval && isRecord && isAlphaReleased)) {
     verPrefix = "common.revision";
@@ -67,6 +67,9 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   }
   if ((isDeprecated || isReleased) && isInlineApproval && isNumericRelease) {
     statLabel = "common.archived";
+  }
+  if (isReleased && isInlineApproval && isNumericRelease) {
+    statLabel = "common.last.signed";
   }
 
   return (
