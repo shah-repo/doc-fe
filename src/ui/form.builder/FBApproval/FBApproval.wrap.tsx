@@ -18,7 +18,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
   const Comp = ({
     onApprove,
     approvalConfig,
-    approvalFieldState,
+    approvalState,
     name = "",
     hasApproved,
     disabled,
@@ -51,7 +51,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
     const formValue = sortBy(formState?.getFieldValue(name), "approvedAt")
       .filter((value) => new Date(value.approvedAt) <= new Date(released));
 
-    approvalFieldState = FB.useRef<FBApprovalState>(FBApprovalState, {
+    approvalState = FB.useRef<FBApprovalState>(FBApprovalState, {
       value: formValue,
       approversValue: approvers,
       groupsValue: approverGroups,
@@ -59,7 +59,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       documentId,
     });
 
-    isApproved = approvalFieldState.isApproved;
+    isApproved = approvalState.isApproved;
     isDefined = !isEmpty(approvers) || !isEmpty(approverGroups);
 
     if (documentId && approvalNonVersioned) {
@@ -75,11 +75,11 @@ export const withFBApproval = <T extends FBApprovalProps>(
     }
 
     function getGroup(id: string): GroupRequestBody | undefined {
-      return FBAutocompleteAsyncStore.getValue<GroupRequestBody>(approvalFieldState?.groupsId, id);
+      return FBAutocompleteAsyncStore.getValue<GroupRequestBody>(approvalState?.groupsId, id);
     }
 
     function getRole(id: string): FBInlineApprovalRole | undefined {
-      return FBAutocompleteAsyncStore.getValue<FBInlineApprovalRole>(approvalFieldState?.approvalRolesId, id);
+      return FBAutocompleteAsyncStore.getValue<FBInlineApprovalRole>(approvalState?.approvalRolesId, id);
     }
 
     function isGroup(id?: string): boolean {
@@ -141,7 +141,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
         if (!approvedAt) { return ""; }
         let approver = "";
         if (userId && (groupId || approvalRoleId)) {
-          const approverObj = FBAutocompleteAsyncStore.getValue<Employee>(approvalFieldState?.approversId, userId);
+          const approverObj = FBAutocompleteAsyncStore.getValue<Employee>(approvalState?.approversId, userId);
           approver = approverName(approverObj) + ",";
         }
 
@@ -159,7 +159,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       if (!approver) {
         return;
       }
-      approvalFieldState?.addApprover({
+      approvalState?.addApprover({
         id: FB.uniqid,
         userId: currentUser?.employeeId,
         ...isGroup(approver.id) && { groupId: approver?.id },
@@ -170,11 +170,11 @@ export const withFBApproval = <T extends FBApprovalProps>(
       // API post
       if (approvalNonVersioned) { return; }
 
-      approvalFieldState?.postApi.setBody({
+      approvalState?.postApi.setBody({
         fieldName: name,
-        fieldValue: approvalFieldState?.hasApproved,
+        fieldValue: approvalState?.hasApproved,
       });
-      approvalFieldState?.postApi.post();
+      approvalState?.postApi.post();
     };
 
     approvalConfig = (approver?: FBInlineApproverType): FBApprovalConfig | undefined => {
@@ -191,21 +191,21 @@ export const withFBApproval = <T extends FBApprovalProps>(
     };
 
     useObserver(() => {
-      approvers = approvalFieldState?.approvers as unknown as Employee[];
-      approverGroups = approvalFieldState?.groups as unknown as GroupRequestBody[];
-      approvalRoles = approvalFieldState?.approvalRoles as unknown as FBInlineApprovalRole[];
-      hasApproved = approvalFieldState?.hasApproved;
+      approvers = approvalState?.approvers as unknown as Employee[];
+      approverGroups = approvalState?.groups as unknown as GroupRequestBody[];
+      approvalRoles = approvalState?.approvalRoles as unknown as FBInlineApprovalRole[];
+      hasApproved = approvalState?.hasApproved;
       loading = (
-        approvalFieldState?.approversApi.loading ||
-        approvalFieldState?.groupsApi.loading ||
-        approvalFieldState?.approvalRolesApi.loading
+        approvalState?.approversApi.loading ||
+        approvalState?.groupsApi.loading ||
+        approvalState?.approvalRolesApi.loading
       );
-      approveLoading = approvalFieldState?.postApi.loading;
+      approveLoading = approvalState?.postApi.loading;
     });
 
     React.useEffect(() => {
       reaction( // Form sync & autosave
-        () => approvalFieldState?.hasApproved,
+        () => approvalState?.hasApproved,
         (data) => {
           formState?.setFieldValue(name, cloneDeep(data));
           if (!approvalNonVersioned) { return; }
@@ -219,6 +219,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       ...(props as T),
       onApprove,
       approvalConfig,
+      approvalState,
       approvers,
       approverGroups,
       approvalRoles,

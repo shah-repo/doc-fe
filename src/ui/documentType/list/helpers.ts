@@ -44,7 +44,7 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
     searchOptions.dataKey = "status[]";
     searchOptions.searchType = "select";
     searchOptions.selectOptions = documentRevisionStatusOption();
-    searchOptions.defaultValue = isString(tableCriteria.queryDict["status[]"])
+    searchOptions.defaultValue = tableCriteria?.queryDict && isString(tableCriteria.queryDict["status[]"])
       ? tableCriteria.queryDict["status[]"]
       : undefined;
   }

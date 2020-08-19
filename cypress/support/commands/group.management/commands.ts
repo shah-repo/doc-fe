@@ -2,6 +2,7 @@ import { GroupTag, GroupType, Permission } from "../../../../src/state/ducks/aut
 import { Id } from "../../../../src/state/ducks/common/types";
 import { Employee } from "../../../../src/state/ducks/company/types";
 import { CONFIG } from "../../config";
+import { CyRoutes } from "../../routes";
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
 
@@ -194,8 +195,12 @@ Cypress.Commands.add("grpSaveGroup", () => {
 });
 
 Cypress.Commands.add("grpSelectGroup", (params: {name: string}) => {
-  cy.get("#clearFilter").click();
-  cy.get("#groupName").type(params.name);
+  cy.wrapWithWaitOnApiCall(CyRoutes.GroupsGet, () => {
+    cy.get("#clearFilter").click();
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.GroupsGet, () => {
+    cy.get("#groupName").type(params.name);
+  });
   cy.get(".ReactVirtualized__Table__rowColumn").contains(params.name).click();
   cy.grpCloseDialog();
 });

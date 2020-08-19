@@ -23,5 +23,7 @@ export enum FBEndpoint {
   Tasks = "/tasks",
   Task = "/tasks/${id}",
   TaskAbandon = "/tasks/${id}/abandon",
-  TaskDone = "/tasks/${id}/done"
+  TaskDone = "/tasks/${id}/done",
+  Document = "/documents/${id}",
+  RequiredApprovers = "/document_revisions/required_approvers",
 }

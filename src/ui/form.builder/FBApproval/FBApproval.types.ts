@@ -27,7 +27,7 @@ export type FBApprovalProps =
 > & {
   onApprove?: (approver?: FBInlineApproverType) => () => void;
   approvalConfig?: (approver?: FBInlineApproverType) => FBApprovalConfig | undefined;
-  approvalFieldState?: FBApprovalState;
+  approvalState?: FBApprovalState;
   hasApproved?: FBApprovalValue[];
   isApproved?: boolean;
   isDefined?: boolean;
@@ -85,3 +85,4 @@ export interface FBInlineApprovalRole {
 }
 
 export type FBInlineApproverType = Employee | GroupRequestBody | FBInlineApprovalRole;
+export type FBApprovalSocketProps = Pick<FBApprovalProps, "name">;
