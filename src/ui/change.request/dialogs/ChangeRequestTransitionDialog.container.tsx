@@ -1,9 +1,10 @@
 import { ButtonProps } from "@material-ui/core/Button";
 import moment from "moment";
 import React from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { TIME_ZONE } from "../../../common/utils/date";
-import { changeRequestsActions, ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../state/ducks/changeRequest";
+import { authSelectors } from "../../../state/ducks/auth";
+import { ChangeRequest, changeRequestsActions, ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../state/reducers";
 import AlertDialog from "../../app/alert.dialog/AlertDialog";
 import TransitionDialog from "../../components/transitionDialog/TransitionDialog";
@@ -13,7 +14,7 @@ import { EffectiveDateFormValues, PasswordFormValues } from "../form/types";
 import ChangeRequestEffectiveDatePickerDialog from "./ChangeRequestEffectiveDatePickerDialog";
 
 interface OwnProps {
-  changeRequestId: string;
+  changeRequest: ChangeRequest;
   transition: ChangeRequestTransition;
   buttonProps?: ButtonProps;
   label: string;
@@ -30,7 +31,7 @@ export type TransitionDialogContainerProps = OwnProps & DispatchProps;
 let password = "";
 
 export const TransitionDialogContainer: React.FunctionComponent<TransitionDialogContainerProps> = ({
-  changeRequestId,
+  changeRequest,
   applyTransition,
   transition,
   buttonProps,
@@ -49,6 +50,10 @@ export const TransitionDialogContainer: React.FunctionComponent<TransitionDialog
 
   const effectiveDatePickerAsync = useAsync();
 
+  const isCurrentEmployeeOwner = useSelector(authSelectors.currentEmployeeId) === changeRequest?.owner.id;
+  const isDocNumeric = changeRequest?.documentRevisions && changeRequest?.documentRevisions[0]?.revisionStage === 1;
+  const isDocEffectiveDateEligible = isDocNumeric || changeRequest?.approvals?.length > 1;
+
   /** Opens the transition dialog (approve submission). */
   const openTransitionDialog = () => {
     async.reset();
@@ -59,8 +64,13 @@ export const TransitionDialogContainer: React.FunctionComponent<TransitionDialog
    * @param values Approver's password.
    */
   const onTransitionDialogSubmit = (values: PasswordFormValues | EffectiveDateFormValues) => {
-    effectiveDateDialog.open();
-    password = (values as PasswordFormValues).password;
+    if (isCurrentEmployeeOwner && isDocEffectiveDateEligible) {
+      effectiveDateDialog.open();
+      transitionDialog.close();
+      password = (values as PasswordFormValues).password;
+    } else {
+      submitRequest(values);
+    }
   };
 
   /** Sets the Effective date to be the same as Approved date. */
@@ -75,6 +85,7 @@ export const TransitionDialogContainer: React.FunctionComponent<TransitionDialog
   /** Opens the DatePicker dialog for the effective date selection. */
   const openEffectiveDatePickerDialog = () => {
     effectiveDatePickerDialog.open();
+    effectiveDateDialog.close();
   };
 
   /** Starts the POST change_request request.
@@ -83,7 +94,7 @@ export const TransitionDialogContainer: React.FunctionComponent<TransitionDialog
   const submitRequest = (values: PasswordFormValues | EffectiveDateFormValues) => {
     async.start(
       applyTransition,
-      changeRequestId,
+      changeRequest.id,
       values,
       transition,
       async,

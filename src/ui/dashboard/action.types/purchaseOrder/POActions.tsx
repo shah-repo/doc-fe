@@ -11,7 +11,7 @@ interface Props {
 export const POActions: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
-  const { changeRequest: { id: changeRequestId = "" } = {} } = documentRevision;
+  const { changeRequest } = documentRevision;
 
   return (
     <Box display="flex">
@@ -22,7 +22,8 @@ export const POActions: React.FunctionComponent<Props> = ({
       />
       {
         documentRevision.changeRequest &&
-        <POApproveOrReject changeRequestId={changeRequestId} />
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        <POApproveOrReject changeRequest={changeRequest!} />
       }
     </Box>
   );

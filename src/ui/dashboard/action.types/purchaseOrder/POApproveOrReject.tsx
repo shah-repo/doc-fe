@@ -1,16 +1,17 @@
 import { Box } from "@material-ui/core";
 import React, { useContext } from "react";
 import { useDispatch } from "react-redux";
+import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
 import { dashboardActions } from "../../../../state/ducks/dashboard";
 import ChangeRequestTransitionDialogContainer from "../../../change.request/dialogs/ChangeRequestTransitionDialog.container";
 import { IndexContetxt } from "./PurchaseOrderApproval";
 
 interface Props {
-  changeRequestId: string;
+  changeRequest: ChangeRequest;
 }
 
 export const POApproveOrReject: React.FunctionComponent<Props> = ({
-  changeRequestId,
+  changeRequest,
 }) => {
   const index = useContext(IndexContetxt);
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ export const POApproveOrReject: React.FunctionComponent<Props> = ({
     <Box>
       <ChangeRequestTransitionDialogContainer
         transition="reject"
-        changeRequestId={changeRequestId}
+        changeRequest={changeRequest}
         buttonProps={{
           color: "secondary",
           variant: "outlined",
@@ -32,7 +33,7 @@ export const POApproveOrReject: React.FunctionComponent<Props> = ({
       />
       <ChangeRequestTransitionDialogContainer
         transition="approve"
-        changeRequestId={changeRequestId}
+        changeRequest={changeRequest}
         buttonProps={{
           color: "secondary",
         }}
