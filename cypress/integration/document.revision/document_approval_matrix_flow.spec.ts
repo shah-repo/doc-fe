@@ -375,6 +375,10 @@ context("Document Approval Matrix Flow", () => {
   });
 
   context("Approve & Release Document", () => {
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocument();
     });
@@ -735,10 +739,8 @@ context("Document Approval Matrix Flow", () => {
   });
 
   context("Check edited document type exists", () => {
-    context("Fill in document attributes", () => {
-      it("fill in document type: Develop Document", () => {
-        cy.drSelectDocumentType({ documentType: "Develop Document" });
-      });
+    it("fill in document type: Develop Document", () => {
+      cy.drSelectDocumentType({ documentType: "Develop Document" });
     });
   });
 
