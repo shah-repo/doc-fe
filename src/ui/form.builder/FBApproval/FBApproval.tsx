@@ -18,6 +18,7 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
   isApproved,
   isDefined,
   approveIsBlocking,
+  approvalNonVersioned,
   autosave,
   loading,
   label,
