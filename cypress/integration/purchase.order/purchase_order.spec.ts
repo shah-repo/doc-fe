@@ -305,17 +305,17 @@ context("Create Purchase Order document with Product option from Form document",
 
   it("Check Subtotal value", () => {
     SystemRequirement("REQ-1430");
-    cy.poCheckAmount({ number: "\$10.00" });
+    cy.poCheckAmount({ number: "$10.00" });
   });
 
   it("Check Tax value", () => {
     SystemRequirement("REQ-1450");
-    cy.poCheckAmount({ number: "\$0.65" });
+    cy.poCheckAmount({ number: "$0.65" });
   });
 
   it("Check Total value", () => {
     SystemRequirement("REQ-1440");
-    cy.poCheckAmount({ number: "\$30.65" });
+    cy.poCheckAmount({ number: "$30.65" });
   });
 
   it("Enter description 'New Purchase Order'", () => {
@@ -417,12 +417,12 @@ context("Create Purchase Order document with Service option from Form document",
 
   it("Check Subtotal value", () => {
     SystemRequirement("REQ-1430");
-    cy.poCheckAmount({ number: "\€10.00" });
+    cy.poCheckAmount({ number: "€10.00" });
   });
 
   it("Check Total value", () => {
     SystemRequirement("REQ-1440");
-    cy.poCheckAmount({ number: "\€30.00" });
+    cy.poCheckAmount({ number: "€30.00" });
   });
 
   it("Check if total converted to dollars is shown", () => {
@@ -533,7 +533,12 @@ context("Check for Landing page columns and values", () => {
 
   it("Check for Landing page default columns", () => {
     SystemRequirement("REQ-1120");
-    cy.filterCheckHeaderValues("PO #", "Revision", "PO Status", "Supplier", "Part Number", "Amount", "Requestor", "Issue Date");
+    cy.filterCheckHeaderValues("PO #",
+      "Revision", "PO Status",
+      "Supplier",
+      "Part Number",
+      "Amount", "Requestor",
+      "Issue Date");
   });
 });
 

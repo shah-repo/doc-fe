@@ -51,7 +51,7 @@ context("Create company via API and create Purchase Order Form document", () => 
         createdCompany = response;
         adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
         createdCompany.documentTypes.forEach((item: { documentTypeName: string; id: any }) => {
-          if (item.documentTypeName == "Purchase Order")
+          if (item.documentTypeName === "Purchase Order")
           {
             docTypeId = item.id;
           }

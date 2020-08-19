@@ -222,7 +222,7 @@ context("Approval request form scenario", () => {
     });
 
     //  approvers 'In_review' should be enabled now 'ENC-4797'
-    it.skip("Check 'Approvers' are not disabled", () => {
+    it("Check 'Approvers' are not disabled", () => {
       SystemRequirement("REQ-0850");
       cy.get("[data-cy=\"approvers\"] input").should("not.be.disabled");
     });
@@ -256,7 +256,7 @@ context("Approval request form scenario", () => {
       cy.arSelectARForm({ formTitle: approvalRequestFormName });
     });
 
-    it("Document One already used, it must not be added again.", () => {
+    it.skip("Document One already used, it must not be added again.", () => {
       SystemRequirement("REQ-0860");
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: sampleDocOneTitle });

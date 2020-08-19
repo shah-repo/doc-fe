@@ -423,7 +423,6 @@ context("Approval request landing page test", () => {
     });
 
     it.skip("Verify supplier name is present", () => {
-      SystemRequirement("REQ-1680");
       fail;
     });
 
