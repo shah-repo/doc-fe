@@ -4,7 +4,7 @@ import _, { cloneDeep, filter, get, map } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -122,6 +122,9 @@ DocumentRevisionFormContainerProps
       ? filter(initialValues.attachments, (file) => file.lineType !== "RED_LINE")
       : initialValues.attachments;
 
+    const docId = initialValues.formDocument?.document?.docId;
+    const isAdministrativeDefault = Boolean(docId && !_.isEmpty(docId)) && isAlphaReleased && isRecord;
+
     return {
       ...initialValues,
       attachments,
@@ -135,6 +138,9 @@ DocumentRevisionFormContainerProps
       renderHTML,
       securityGroups,
       outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
+      revisionChangeType: isAdministrativeDefault ?
+        RevisionChangeType.AdministrativeChange :
+        initialValues.revisionChangeType,
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canUpdateHTML, initialValues, groupOptions]);

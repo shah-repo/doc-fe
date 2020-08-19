@@ -10,19 +10,20 @@ import Text from "../../components/Text";
 import { withFBAutocomplete } from "./FBAutocomplete.wrap";
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
+  getOptionDisabled,
+  getOptionLabel,
+  renderOption,
+  refresh,
+  filterSelectedOptions = false,
+  freeSolo = false,
   multiple = false,
   options = [],
-  getOptionLabel,
   defaultValue,
   includeQRScan,
   optionLabelKey = "",
   placeholder,
   disabled,
-  refresh,
-  getOptionDisabled,
   loading,
-  freeSolo = false,
-  filterSelectedOptions = false,
   ...props
 }) => {
   const { workspaceState } = FB.useStores();
@@ -45,13 +46,14 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       >
         <Autocomplete
           {...{
+            getOptionDisabled,
+            getOptionLabel,
+            renderOption,
+            filterSelectedOptions,
             options,
             multiple,
-            getOptionLabel,
             defaultValue,
-            getOptionDisabled,
             freeSolo,
-            filterSelectedOptions,
             filterOptions,
           }}
           renderInput={(params: RenderInputParams) => (

@@ -14,6 +14,7 @@ export const withFBOnChange = <T extends FBInputProps>(
     forceDefault,
     inputState,
     transform,
+    withState,
     ...props
   }: T) => {
 
@@ -37,10 +38,11 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
     };
 
-    function setValue(formValue: any, withState = false, forceDefault = false) {
+    function setValue(formValue: any, state = false, forceDefault = false) {
       if (!name) { return; }
       _.isString(formValue) && transform && (formValue = setTranform?.(formValue));
-      formState?.setFieldValue(name, formValue, withState, forceDefault);
+      // TODO: refactor with state opt
+      formState?.setFieldValue(name, formValue, state || withState, forceDefault);
       if (type && !FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);
       }
@@ -161,6 +163,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       forceDefault,
       inputState,
       transform,
+      withState,
       type,
       name,
     }));

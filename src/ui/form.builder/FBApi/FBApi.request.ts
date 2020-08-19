@@ -47,8 +47,7 @@ export default class FBRequest<Data, Body> {
   @action public patch = () => this.start("patch");
   @action public delete = () => this.start("delete");
 
-  @action public dataFilter = (data: Data): Data | undefined => data;
-  @action public dataSort = (data: Data): Data | undefined => data;
+  @action public prepareData = (data: Data): Data | undefined => data;
 
   protected onSuccess() {
     this.setLoading(false);
@@ -95,8 +94,7 @@ export default class FBRequest<Data, Body> {
     promise
       .then((data) => {
         !_.isEmpty(this.root) && (data = _.get(data as Data, this.root));
-        data = this.dataFilter(data);
-        data = this.dataSort(data);
+        data = this.prepareData(data);
         this.setData(data as Data);
         this.onSuccess();
       })
