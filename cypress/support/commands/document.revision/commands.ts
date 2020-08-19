@@ -5,7 +5,6 @@ import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/doc
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
-
 export { };
 
 declare global {
@@ -60,6 +59,9 @@ declare global {
       drSelectReferences(...list: string[]): Chainable<Subject>;
       drRemoveReferences(...list: int[]): Chainable<Subject>;
       drSelectReleasedVersionOfDocument(params: { docVersion: int }): Chainable<Subject>;
+      drAdministrativeRevisionLevel(): Chainable<Subject>;
+      drAddApprover(params: { name: string }): Chainable<Subject>;
+      drUpdateDocumentTypeName(params: { employeeId: string; sessionId: string; payload: any; id: string }): Chainable<Subject>;
     }
   }
 }
@@ -80,14 +82,28 @@ Cypress.Commands.add("drCreateDocumentRevision", (params: {
 });
 
 Cypress.Commands.add("drGetDocumentType", (params: { employeeId: string; sessionId: string }) => {
+  const auth = params.employeeId === "" ? `bearer_admin ${params.sessionId}` : `bearer ${params.employeeId}:${params.sessionId}`;
   cy.request({
     method: "GET",
     url: `${CONFIG.BE_URL}/api/v1/document_type`,
     headers: {
+      Authorization: auth,
+    },
+  }).then((response) => response ? response.body : []);
+});
+
+Cypress.Commands.add("drUpdateDocumentTypeName", (params: { employeeId: string; sessionId: string; payload: any; id: string }) => {
+  cy.request({
+    method: "PATCH",
+    url: `${CONFIG.BE_URL}/api/v1/document_type/${params.id}`,
+    headers: {
       Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
     },
-  }).then((response) => response);
+    body: params.payload,
+  }).then((response) => response ? response.body : {})
+    .then((response) => JSON.stringify(response));
 });
+
 
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
   list.forEach((item) => {
@@ -219,7 +235,6 @@ Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: { option: st
 });
 
 Cypress.Commands.add("drDocumentFieldError", (params: { field: string; message: string }) => {
-  cy.log("here");
   cy.get(`[data-cy="${params.field}"] .MuiFormHelperText-root.Mui-error`).should("have.text", params.message);
 });
 
@@ -289,5 +304,17 @@ Cypress.Commands.add("drApproveAndReleaseDialog", () => {
 
 Cypress.Commands.add("drSelectTemplateReleaseDocument", (params: { template: string }) => {
   cy.get("#FormList-selectForm").type(`${params.template}{enter}`);
-  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.ReleaseDocRev,
+    () => {
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+    });
+});
+
+Cypress.Commands.add("drAdministrativeRevisionLevel", () => {
+  cy.get(`[data-cy="RevisionTypeChange-administrativeChange"]`).click({ force: true });
+});
+
+Cypress.Commands.add("drAddApprover", (params: {name: string}) => {
+  cy.get(`[data-cy="field-approvals"]`).type(`${params.name}{enter}`);
 });

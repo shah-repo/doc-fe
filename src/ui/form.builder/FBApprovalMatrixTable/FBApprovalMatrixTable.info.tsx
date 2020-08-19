@@ -41,6 +41,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
             />
             <FBTableCell
               label={am.docType.name}
+              dataCy={`documentTypeApprovalMatrix`}
               align="center"
             />
             {mode !== "edit" && (

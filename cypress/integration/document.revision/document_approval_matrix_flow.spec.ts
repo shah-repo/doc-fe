@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { NavigationItems } from "../../../src/state/ducks/auth/types";
+import { CyRoutes } from "../../support/routes";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 Cypress.Screenshot.defaults({
@@ -11,11 +13,14 @@ const runId = new Date().valueOf();
 let company;
 let loginResponse;
 let multipleCompanies = false;
+let employee;
+let docTypes: any[];
+const DAMDocumentTypes: string[] = [];
 
 const groupOne = "Group One";
 const groupTwo = "Group Two";
 
-const memberAdmin = "Zoran";
+const memberAdmin = "Admin";
 const memberSecond = "Second";
 const memberThird = "Third";
 const individualMember = "Importer Admin";
@@ -23,6 +28,7 @@ const individualMember = "Importer Admin";
 const FormTitle = "New Form";
 const DAMTitle = "My DAM";
 const DDTitle = "Test DD";
+// const DevDTitle = "Test Dev Document";
 
 const roleOne = "Role One";
 const roleTwo = "Role Two";
@@ -38,6 +44,7 @@ context("Document Approval Matrix Flow", () => {
       }).then((response) => {
         loginResponse = response;
         cy.cmpCreateCompany({
+          specFilePath: __filename,
           payload: {
             companyAcronym: `T1${runId}`,
             companyAdminEmail: "zoran.kovacevic+admin@codecons.com",
@@ -66,6 +73,8 @@ context("Document Approval Matrix Flow", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           company = response;
+          employee = company.employees.find((employee) => employee.user.name === "Admin");
+          docTypes = company.documentTypes || [];
           done();
         });
       });
@@ -83,7 +92,7 @@ context("Document Approval Matrix Flow", () => {
     });
   });
 
-  context("Log in user, select company and open 'Group Management'", () => {
+  context("Log in user, select company and open group management", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: "zoran.kovacevic+admin@codecons.com",
@@ -95,10 +104,8 @@ context("Document Approval Matrix Flow", () => {
       cy.cmpSelectCompany({ name: company.name, multiple: multipleCompanies });
     });
 
-    context("Open 'Group Management'", () => {
-      it("Navigate to group management", () => {
-        cy.grpNavigateToGroupManagement();
-      });
+    it("Open Group Management", () => {
+      cy.navigClickOnItem({ navigItem: NavigationItems.GROUP_MANAGEMENT });
     });
   });
 
@@ -115,7 +122,7 @@ context("Document Approval Matrix Flow", () => {
       cy.grpTypeGroupName({ name: groupOne });
     });
 
-    it("Select members: Zoran & Second", () => {
+    it("Select members: Admin & Second", () => {
       cy.grpTypeMembers(memberAdmin, memberSecond);
     });
 
@@ -164,7 +171,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Open 'Create Document'", () => {
     it("Navigate to document list", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Click on 'create a document'", () => {
@@ -178,7 +185,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("type a description", () => {
-      cy.drEnterDocumentDescription({ description: "Desription" });
+      cy.drEnterDocumentDescription({ description: "Description" });
     });
 
     it("fill in document type: Form", () => {
@@ -204,13 +211,13 @@ context("Document Approval Matrix Flow", () => {
     });
   });
 
-  context("Save document And 'Approve & Release Document", () => {
+  context("Save DAM And Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocument().wait(3000);
+      cy.drApproveAndReleaseDocument();
     });
   });
 
@@ -220,13 +227,32 @@ context("Document Approval Matrix Flow", () => {
     });
   });
 
+  context("Document Types are present in DAM", () => {
+    it("Approval Matrix document types", () => {
+      cy.get(`[data-cy="documentTypeApprovalMatrix"]`).each(($el) => {
+        DAMDocumentTypes.push($el.get(0).innerText);
+      });
+    });
+
+    it("Check Document types", () => {
+      let exists = true;
+      docTypes = docTypes || [];
+      docTypes.forEach((type) => {
+        if (!DAMDocumentTypes.includes(type.documentTypeName)) {
+          exists = false;
+        }
+      });
+      cy.wrap(exists).should("eq", true);
+    });
+  });
+
   context("fills in Title and Description", () => {
     it(`type a title: ${DAMTitle}`, () => {
       cy.drEnterDocumentTitle({ name: `${DAMTitle}{enter}` });
     });
 
     it("type a description", () => {
-      cy.drEnterDocumentDescription({ description: "Desription" });
+      cy.drEnterDocumentDescription({ description: "Description" });
     });
   });
 
@@ -288,7 +314,7 @@ context("Document Approval Matrix Flow", () => {
     });
   });
 
-  context("Add Approval Matrix Item", () => {
+  context("Add New Document Type", () => {
     it("Click on 'Add Item' button", () => {
       cy.drAddApprovalMatrixItem();
     });
@@ -348,33 +374,42 @@ context("Document Approval Matrix Flow", () => {
     });
   });
 
-  context("'Approve & Release Document", () => {
+  context("Approve & Release Document", () => {
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocument().wait(5000);
-    });
-
-    // This is mandatory to see Design Document Type, it needs to be fixed to eradicate this step
-    it("Logout the user", () => {
-      cy.authLogout();
+      cy.drApproveAndReleaseDocument();
     });
   });
 
-  context("Log in user and select company", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+  context("Check All Doc Types", () => {
+    let newDocTypes: string[] = [];
+
+    it("[API]Fetch Document Types", (done: any) => {
+      cy.drGetDocumentType({
+        sessionId: loginResponse.sessionId as unknown as string,
+        employeeId: employee.id,
+      }).then((response: any) => {
+        const types = response || [];
+        newDocTypes = types.map((t) => t.documentTypeName);
+        done();
       });
     });
 
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: true });
+    it("Check Document types", () => {
+      let exists = true;
+      docTypes = docTypes || [];
+      docTypes.push({ documentTypeName: "Design Document" });
+      docTypes.forEach((type) => {
+        if (!newDocTypes.includes(type.documentTypeName)) {
+          exists = false;
+        }
+      });
+      cy.wrap(exists).should("eq", true);
     });
   });
 
   context("Open 'Create Document'", () => {
     it("Navigate to document list", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Click on 'create a document'", () => {
@@ -388,7 +423,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("type a description", () => {
-      cy.drEnterDocumentDescription({ description: "Desription" });
+      cy.drEnterDocumentDescription({ description: "Description" });
     });
 
     it("fill in document type: Design Document", () => {
@@ -396,9 +431,9 @@ context("Document Approval Matrix Flow", () => {
     });
   });
 
-  context("Save document And 'Approve & Release' Document", () => {
-    it("clicks on 'Create Document' button", () => {
-      cy.drClickCreateDocument();
+  context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("click on 'Approve and Release' button", () => {
@@ -410,48 +445,178 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drSelectTemplateReleaseDocument({ template: "Initial AR Form" }).wait(3000);
+      cy.drSelectTemplateReleaseDocument({ template: "Initial AR Form" });
+    });
+  });
+  /*
+ // BUG: Only first Document type is shown in document listing. Shall be uncommented once this bug is fixed.
+  context(`Open '${DAMTitle}' Document and Revise Document`, () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it(`select '${DAMTitle}'`, () => {
+      cy.get("#root").contains(DAMTitle).click();
+    });
+
+    it("Revise document", () => {
+      cy.drClickReviseDocument();
     });
   });
 
-  context("'Login second user now", () => {
-    it("Logout the user", () => {
-      cy.authLogout();
+  context("Add New Document Type", () => {
+    it("Click on 'Add Item' button", () => {
+      cy.wait(1000);
+      cy.drAddApprovalMatrixItem();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: "enlil.testmail+cy2@gmail.com",
-        password: "Tester1!",
+    it("Add prefix", () => {
+      cy.drAddAMItemValue({ identity: "prefix", value: "DED" });
+    });
+
+    it("Add internalType", () => {
+      cy.drAMInternalType({ value: "OTHER" });
+    });
+
+    it("Add document type", () => {
+      cy.drAddAMItemValue({ identity: "documentType", value: "Develop Document" });
+    });
+
+    it("Mark needs signature", () => {
+      cy.drAMCheckValue({ identity: "needsSignature" });
+    });
+
+    it("Add Category", () => {
+      cy.drAddAMItemValue({ identity: "category", value: "Test" });
+    });
+
+    it(`Mark 'Approvals Numeric' for ${roleOne}`, () => {
+      cy.drAMCheckRole({ stage: "stage1", index: 2 });
+    });
+
+    it(`Mark 'Approvals Numeric Alpha' for ${roleOne}`, () => {
+      cy.drAMCheckRole({ stage: "stage2", index: 2 });
+    });
+
+    it(`Mark 'Approvals Numeric Alpha' for ${roleTwo}`, () => {
+      cy.drAMCheckRole({ stage: "stage2", index: 0 });
+    });
+
+    it(`Mark 'Approvals Alpha' for ${roleOne}`, () => {
+      cy.drAMCheckRole({ stage: "stage3", index: 2 });
+    });
+
+    it(`Mark 'Approvals Alpha' for ${roleTwo}`, () => {
+      cy.drAMCheckRole({ stage: "stage3", index: 0 });
+    });
+
+    it(`Mark 'Approvals Alpha' for ${individualRole}`, () => {
+      cy.drAMCheckRole({ stage: "stage3", index: 1 });
+    });
+
+    it(`Mark 'Approvals Administrative' for ${individualRole}`, () => {
+      cy.drAMCheckRole({ stage: "admStage", index: 1 });
+    });
+
+    it("Save Approval Matrix Item", () => {
+      SystemRequirement("REQ-0630", "REQ-0650");
+
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+    });
+  });
+
+  context("'Approve & Release' Document", () => {
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and Release the document", () => {
+      cy.drApproveAndReleaseDocument();
+    });
+  });
+
+  context("Check All Doc Types", () => {
+    let newDocTypes: string[] = [];
+
+    it("[API]Fetch Document Types", (done: any) => {
+      cy.drGetDocumentType({
+        sessionId: loginResponse.sessionId as unknown as string,
+        employeeId: employee.id,
+      }).then((response: any) => {
+        const types = response || [];
+        newDocTypes = types.map((t) => t.documentTypeName);
+        done();
       });
     });
 
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: true });
+    it("Check Document types", () => {
+      let exists = true;
+      docTypes = docTypes || [];
+      docTypes.push({ documentTypeName: "Develop Document" });
+      docTypes.forEach((type) => {
+        if (!newDocTypes.includes(type.documentTypeName)) {
+          exists = false;
+        }
+      });
+      cy.wrap(exists).should("eq", true);
     });
   });
 
-  context(`Open '${DDTitle}' Document`, () => {
+  context("Create New Document of newly created Type, open 'Create Document'", () => {
     it("Navigate to document list", () => {
-      cy.cmpNavigateToDocumentList();
+      cy.navigToDocumentList();
     });
 
-    it(`select '${DDTitle}'`, () => {
-      cy.get("#root").contains(DDTitle).click();
+    it("Click on 'create a document'", () => {
+      cy.cmpClickCreateNewDocument();
     });
   });
 
-  context("Upgrade to next revision level", () => {
+  context("Fill in document attributes", () => {
+    it("type a title", () => {
+      cy.drEnterDocumentTitle({ name: `${DevDTitle}{enter}` });
+    });
+
+    it("type a description", () => {
+      cy.drEnterDocumentDescription({ description: "Description" });
+    });
+
+    it("fill in document type: Develop Document", () => {
+      cy.drSelectDocumentType({ documentType: "Develop Document" });
+    });
+  });
+
+  context("Save document, Check Roles are enforced", () => {
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("click on 'Approve and Release' button", () => {
+      cy.drApproveAndReleaseDialog();
+    });
+
+    it(`Check ${roleOne} exists and is checkeded`, () => {
+      cy.drRoleExistsAndChecked({ group: 0, role: roleOne });
+    });
+  });
+
+  context("'Approve & Release' Document and Revise Document", () => {
+    it("'Approve and Release' the document", () => {
+      cy.drSelectTemplateReleaseDocument({ template: "Initial AR Form" });
+    });
+  }); */
+
+  context("Change to Administrative Change", () => {
     it("Revise document", () => {
       cy.drClickReviseDocument();
     });
 
-    it("Upgrade to next revision level", () => {
-      cy.drUpgradeRevisionLevel();
+    it("Upgrade to administrative change", () => {
+      cy.drAdministrativeRevisionLevel();
     });
 
-    it("Save document", () => {
-      cy.drClickCreateDocument();
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
@@ -460,12 +625,8 @@ context("Document Approval Matrix Flow", () => {
       cy.drApproveAndReleaseDialog();
     });
 
-    it(`Check ${roleOne} exists and is checked`, () => {
-      cy.drRoleExistsAndChecked({ group: 1, role: roleOne });
-    });
-
-    it(`Check ${roleTwo} exists and is checked`, () => {
-      cy.drRoleExistsAndChecked({ group: 0, role: roleTwo });
+    it(`Add ${individualMember} to approvers`, () => {
+      cy.drAddApprover({ name: individualMember });
     });
 
     it("'Approve and Release' the document", () => {
@@ -478,6 +639,106 @@ context("Document Approval Matrix Flow", () => {
       SystemRequirement("REQ-0010");
 
       cy.checkToastMessage({ exists: false });
+    });
+  });
+
+  context("Login importer admin user now", () => {
+    it("Logout the user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: "enlil.testmail+cy5@gmail.com",
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: company.name, multiple: true });
+    });
+  });
+
+  context("Approve document in review", () => {
+    it(`approve document`, () => {
+      cy.get("#root").contains("Approve").click();
+    });
+
+    it("Confirm password", () => {
+      cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
+      cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
+        () => {
+          cy.get(`[data-cy="passwordConfirm"]`).click();
+        });
+    });
+  });
+
+  context("Rename document type", () => {
+    let newDocTypes: any[] = [];
+
+    it("[API]Fetch Document Types", (done: any) => {
+      cy.drGetDocumentType({
+        sessionId: loginResponse.sessionId as unknown as string,
+        employeeId: employee.id,
+      }).then((response: any) => {
+        newDocTypes = response || [];
+        done();
+      });
+    });
+
+    it("change name 'Design Document' to 'Develop Document'", () => {
+      let payload: any = newDocTypes.find((el) => el.documentTypeName === "Design Document");
+      const documentId = payload.id;
+      payload = JSON.parse(JSON.stringify(payload));
+
+      delete payload.createdAt;
+      delete payload.updatedAt;
+      delete payload.id;
+      delete payload.pageDetails;
+      delete payload.groupOptions;
+
+      payload.documentTypeName = "Develop Document";
+      cy.drUpdateDocumentTypeName({
+        sessionId: loginResponse.sessionId as unknown as string,
+        employeeId: employee.id,
+        id: documentId,
+        payload,
+      });
+    });
+  });
+
+  context("Login admin user now", () => {
+    it("Logout the user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: "zoran.kovacevic+admin@codecons.com",
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: company.name, multiple: true });
+    });
+  });
+
+  context(`Create Document`, () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on 'create a document'", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+  });
+
+  context("Check edited document type exists", () => {
+    context("Fill in document attributes", () => {
+      it("fill in document type: Develop Document", () => {
+        cy.drSelectDocumentType({ documentType: "Develop Document" });
+      });
     });
   });
 
