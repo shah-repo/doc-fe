@@ -29,7 +29,11 @@ interface Props {
   categoryName?: string;
 }
 
+let selectedTypeLabel = "";
+let selectedDocumentTypeId: string;
+
 export const useHandleCreateDoc = () => {
+  const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const history = useHistory();
   const [form, setForm] = useState<DocumentRevision>();
@@ -47,7 +51,7 @@ export const useHandleCreateDoc = () => {
     }, onError: (msg) => redirect(),
   });
   const createDoc = (docId: string) => {
-    const formValues = toDocumentRevisionFormValuesForOutput(form as DocumentRevision);
+    const formValues = toDocumentRevisionFormValuesForOutput(form as DocumentRevision, selectedDocumentType);
     const outputDocumentTypes = form?.formTemplate?.outputDocumentTypes || [];
     const isQms = (outputDocumentTypes[0] as unknown as DocumentType)?.isQms;
     formValues.securityGroups = filterSecurityGroupsForQms(isQms, groupOptions);
@@ -69,17 +73,14 @@ export const useHandleCreateDoc = () => {
   };
 
   return (selectedForm: DocumentRevision) => {
-    const outputDocumentTypes = selectedForm?.formTemplate?.outputDocumentTypes || [];
-    if (outputDocumentTypes.length === 1 && !(outputDocumentTypes[0] as any)?.documentTypeAcronym?.startsWith("RC")) {
-      fetchDocIdAsync.start(fetchDocIdAction, (outputDocumentTypes[0] as any)?.id, fetchDocIdAsync);
+    if (selectedDocumentTypeId) {
+      fetchDocIdAsync.start(fetchDocIdAction, selectedDocumentTypeId, fetchDocIdAsync);
       setForm(selectedForm);
       return;
     }
     redirect(selectedForm);
   };
 };
-
-let selectedTypeLabel = "";
 
 const CreateDocumentByType: React.FunctionComponent<Props> = ({
   labelName,
@@ -106,6 +107,10 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const [isVisible, label] = useCreateDocumentByTypeButton(documentTypeId);
   const buttonLabel = isByCategory ? labelName : label;
 
+  if (!isByCategory && documentTypeId) {
+    selectedDocumentTypeId = documentTypeId;
+  }
+
   useEffect(() => {
     setErrorMessage(undefined);
   }, [documentTypeId]);
@@ -130,6 +135,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const categoryAsync = useAsync<DocumentType[]>({
     onSuccess: () => {
       if (documentTypes.length === 1) {
+        selectedDocumentTypeId = documentTypes[0].id;
         idAsync.start(getDocRevByIds, documentTypes[0].id, idAsync);
         return;
       }
@@ -165,6 +171,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     if (!docTypeId) {
       return;
     }
+    selectedDocumentTypeId = docTypeId;
     selectedTypeLabel = documentTypes.find((type) => type.id === docTypeId)?.documentTypeName || "";
     idAsync.start(getDocRevByIds, docTypeId, idAsync);
   };

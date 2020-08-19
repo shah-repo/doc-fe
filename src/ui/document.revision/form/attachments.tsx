@@ -1,10 +1,10 @@
 import { Box, Typography } from "@material-ui/core";
 import React from "react";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import AttachmentDownloadAllButton from "../../components/common/attachment.downloadAll/AttachmentDownloadAllButton";
 import AttachmentField from "../../components/common/attachment.field/container";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
 import Text from "../../components/Text";
-import AttachmentDownloadAllButton from "../../components/common/attachment.downloadAll/AttachmentDownloadAllButton";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 
 interface Props {
   isDisabled: boolean;
@@ -13,6 +13,7 @@ interface Props {
   docRevId: string;
   containsRedline: boolean;
   docRevStatus: DocumentRevisionStatus;
+  documentRevision: DocumentRevision;
 }
 
 const classes = {
@@ -33,6 +34,7 @@ const Attachments: React.FunctionComponent<Props> = ({
   docRevId,
   containsRedline,
   docRevStatus,
+  documentRevision,
 }) => (
   <Box marginBottom="33px">
     <Box style = {classes.attachmentHeaderConatainer} id="attachmentHeader">
@@ -46,7 +48,7 @@ const Attachments: React.FunctionComponent<Props> = ({
         docRevStatus = {docRevStatus}/>
     </Box>
     <AttachmentField name="attachments" component="field" disabled={isDisabled}/>
-    {<AttachmentIconField name="attachments" isNewVersion={isNewVersion} />}
+    <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision }}/>
   </Box>
 );
 
