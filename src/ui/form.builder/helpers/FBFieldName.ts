@@ -4,4 +4,5 @@ export enum FBFieldName {
   RequestApproval = "fb-request-",
   TemplateName = "fb-template-name",
   ApproveReasoning = "-reasoning",
+  ApprovalState = "approvalFieldState-",
 }
