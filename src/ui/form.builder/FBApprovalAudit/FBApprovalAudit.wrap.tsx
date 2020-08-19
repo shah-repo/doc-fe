@@ -33,7 +33,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
     } = workspaceState || {};
     approvalAuditState = FB.useRef(FBApprovalAuditState, {
       documentId,
-      isOutput: isOutput,
+      isOutput,
     });
 
     function underApproval(): string[] | undefined {
