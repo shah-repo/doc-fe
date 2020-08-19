@@ -44,7 +44,7 @@ export const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
         <Text message={label} />
       </Button>
       <AlertDialog
-        action={withdrawAction}
+        confirmAction={withdrawAction}
         message={"change.request.withdraw.alert"}
         {...{ dialog }}
       />
