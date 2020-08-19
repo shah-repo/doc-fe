@@ -18,8 +18,16 @@ declare global {
       selectCompany(params: { name: string }): Chainable<Subject>;
       unClick(): Chainable<Subject>;
       myCompanies(token: string): Chainable<Subject>;
-      wrapWithWaitOnApiCall(name: CyRoutes, callback: () => void, options?: Partial<CyWaitOptions>): Chainable<Subject>;
-      wrapWithWaitOnApiCalls(names: CyRoutes[], callback: () => void, options?: Partial<CyWaitOptions>): Chainable<Subject>;
+      wrapWithWaitOnApiCall(
+        name: CyRoutes,
+        callback: () => void,
+        options?: Partial<CyWaitOptions>
+      ): Chainable<Subject>;
+      wrapWithWaitOnApiCalls(
+        names: CyRoutes[],
+        callback: () => void,
+        options?: Partial<CyWaitOptions>
+      ): Chainable<Subject>;
     }
   }
 }
