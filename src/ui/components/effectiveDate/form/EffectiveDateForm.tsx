@@ -1,6 +1,8 @@
 import { Button, withStyles, WithStyles } from "@material-ui/core";
 import { Form } from "formik";
+import moment from "moment";
 import * as React from "react";
+import { TIME_ZONE, toStartOfDay } from "../../../../common/utils/date";
 import { AsyncState, AsyncStatus } from "../../../../state/types";
 import DatePickerField from "../../forms/fields/DatePickerField";
 import FormMessage from "../../forms/FormMessage";
@@ -20,6 +22,8 @@ const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps> = ({ ca
     <DatePickerField
       label="transition.action.effective.date"
       name="effectiveDate"
+      minDate={toStartOfDay(moment().tz(TIME_ZONE, true).toISOString())}
+      value={toStartOfDay(moment().tz(TIME_ZONE, true).toISOString())}
     />
     <FormProgress asyncState={asyncState} />
     <SubmitButton

@@ -42,7 +42,7 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
     const isItemActive = checkIfItemIsActive(type, currentPath, rest.path, rest.category, menu);
     setIsOpen(isItemActive);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPath, menu]);
+  }, [currentPath]);
 
   const toggleChildren = (event: React.MouseEvent) => {
     event.preventDefault();

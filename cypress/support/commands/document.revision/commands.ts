@@ -55,6 +55,7 @@ declare global {
       drCreateNewDocumentFromForm(): Chainable<Subject>;
       drApproveAndReleaseDialog(): Chainable<Subject>;
       drSelectTemplateReleaseDocument(params: { template: string }): Chainable<Subject>;
+      drAPIApproveAndRelease(params: { documentId: string; payload: IApproveAndReleasePayload; employeeId: string; sessionId: string }): Chainable<Subject>;
       drSetDocTypeId(params: { docId: string }): Chainable<Subject>;
       drSelectReferences(...list: string[]): Chainable<Subject>;
       drRemoveReferences(...list: int[]): Chainable<Subject>;
@@ -127,7 +128,7 @@ Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
-  cy.get("[data-cy=\"RichTextEditor.description\"]").click().type(params.description);
+  cy.get("[data-cy=\"field-description\"]").type(params.description);
 });
 
 Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) => {
@@ -214,7 +215,7 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
 });
 
 Cypress.Commands.add("drClickReviseDocument", () => {
-  cy.get("[data-cy=\"PreviewControlsContainer-revise\"]").click();
+  cy.get("[data-cy=\"updateRecord\"]").click();
 });
 
 Cypress.Commands.add("drClickTrainingRequired", () => {
@@ -318,3 +319,26 @@ Cypress.Commands.add("drAdministrativeRevisionLevel", () => {
 Cypress.Commands.add("drAddApprover", (params: {name: string}) => {
   cy.get(`[data-cy="field-approvals"]`).type(`${params.name}{enter}`);
 });
+
+export interface IApproveAndReleasePayload{
+  effectiveDate: string;
+  documentType: { id: string };
+  formDocument: { id: string };
+}
+
+Cypress.Commands.add("drAPIApproveAndRelease", (params: {
+  documentId: string;
+  payload: IApproveAndReleasePayload;
+  employeeId: string;
+  sessionId: string;
+}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/document_revisions/release/` + params.documentId,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+

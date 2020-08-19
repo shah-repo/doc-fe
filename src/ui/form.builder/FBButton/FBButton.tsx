@@ -4,20 +4,20 @@ import { FBButtonProps } from ".";
 import Text from "../../components/Text";
 
 const FBButton: React.FunctionComponent<FBButtonProps> = ({
-  label = "",
+  label,
   color = "secondary",
   variant = "contained",
+  dataCy = "fb-control-btn",
   gutter,
   hidden,
   style,
-  dataCy,
   ...props
 }) => (
   <Button
     {...{ color, variant }}
     {...props}
     type="button"
-    data-cy={dataCy ? dataCy : "fb-control-btn"}
+    data-cy={dataCy}
     style={{
       ...style,
       ...hidden && { display: "none" },
