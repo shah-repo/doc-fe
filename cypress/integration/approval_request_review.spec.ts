@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 // / <reference types="Cypress" />
+import { CONFIG } from "../support/config";
 import { USERS } from "../utils/constants/users";
 import { SystemRequirement } from "../utils/context/systemRequirement";
 
@@ -15,8 +16,8 @@ context("Approval request form scenario", () => {
 
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response: any) => {
         sessionId = response.sessionId as unknown as string;
         multipleCompanies = response.employees.length > 0;

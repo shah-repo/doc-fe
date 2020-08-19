@@ -23,14 +23,16 @@ fi
 
 export ENLIL_COMPOSE_EXPOSE_BE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+1))"
 export ENLIL_COMPOSE_EXPOSE_FE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+2))"
+export CYPRESS_BE_URL=${CYPRESS_BE_URL:-"http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_PORT"}
+export CYPRESS_FE_URL=${CYPRESS_FE_URL:-"http://localhost:$ENLIL_COMPOSE_EXPOSE_FE_PORT"}
+export CYPRESS_BASE_URL=$CYPRESS_FE_URL
 
-export CYPRESS_BE_URL="http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_PORT"
-export CYPRESS_FE_URL="http://localhost:$ENLIL_COMPOSE_EXPOSE_FE_PORT"
 export CYPRESS_KONFIG_ENV="development"
+
 
 yarn cypress run \
   --parallel --record --key 9e6e4a3d-c43a-4e60-8984-fa2ae0a90a76 \
   --reporter mochawesome --reporter-options "reportDir=$DIR_JSON,overwrite=false,html=false,json=true,reportFilename=$REPORT_TITLE" \
-  --browser chrome \
+  --browser chromium \
   --headless \
   --ci-build-id "$CI_BUILD_ID"

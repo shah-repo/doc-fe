@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -19,8 +20,8 @@ let docTypeId;
 context("Create company via API and create Purchase Order Form document", () => {
   it("[API] Creates company", (done: any) => {
     cy.authApiLogin({
-      email: "zoran.kovacevic+admin@codecons.com",
-      password: "Tester1!",
+      email: CONFIG.SUPERADMIN_EMAIL,
+      password: CONFIG.SUPERADMIN_PASSWORD,
     }).then((response) => {
       loginResponse = response;
 
@@ -36,14 +37,14 @@ context("Create company via API and create Purchase Order Form document", () => 
           remoteValidatorBundleName: "default",
           slackIntegrationEnabled: false,
           users: [USERS[2], USERS[3], USERS[4]],
-            documentTypes: [
-              {
-                documentTypeName: "PO Part",
-                documentTypeAcronym: "PRT-",
-                group: "PART",
-                isQms: true,
-              },
-            ],
+          documentTypes: [
+            {
+              documentTypeName: "PO Part",
+              documentTypeAcronym: "PRT-",
+              group: "PART",
+              isQms: true,
+            },
+          ],
           acctCodes: ["code 1"],
           addresses: ["Address 1"],
         }, sessionId: loginResponse.sessionId as unknown as string,
@@ -51,7 +52,7 @@ context("Create company via API and create Purchase Order Form document", () => 
         createdCompany = response;
         adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
         createdCompany.documentTypes.forEach((item: { documentTypeName: string; id: any }) => {
-          if (item.documentTypeName == "Purchase Order")
+          if (item.documentTypeName === "Purchase Order")
           {
             docTypeId = item.id;
           }
@@ -77,7 +78,7 @@ context("Create company via API and create Purchase Order Form document", () => 
             {
               label: "Dashboard",
               path: "/",
-              type: "LINK"
+              type: "LINK",
             },
             {
               label: "Document Control",
@@ -86,38 +87,39 @@ context("Create company via API and create Purchase Order Form document", () => 
                 {
                   label: "Document List",
                   path: "/document_revision",
-                  type: "LINK"
+                  type: "LINK",
                 },
                 {
                   label: "Approval Requests",
                   path: "/change_request",
-                  type: "LINK"
+                  type: "LINK",
                 },
               ],
             },
             {
               label: "User Management",
               path: "/user_management",
-              restrictedToUsersWithTags:[
-                GroupTag.USER_MANAGEMENT
+              restrictedToUsersWithTags: [
+                GroupTag.USER_MANAGEMENT,
               ],
-              type: "LINK"
+              type: "LINK",
             },
             {
               label: "Group Management",
               path: "/group_management",
-              restrictedToUsersWithTags:[
+              restrictedToUsersWithTags: [
                 GroupTag.GROUP_MANAGEMENT,
               ],
-              type: "LINK"
+              type: "LINK",
             },
             {
               label: "Purchase Order",
               path: "/document_by_type/" + docTypeId,
               type: "LINK",
-            }
+            },
           ],
-        }).then(() => {
+        },
+      }).then(() => {
         done();
       });
     });
@@ -274,7 +276,7 @@ context("Create Purchase Order Approval Matrix document with from Form document"
   it("Add first POAM level", () => {
     cy.poAddPOButtonClick();
   });
-    
+
   it("Click on 'Add Item'", () => {
     cy.poAddNewFieldItem();
   });
@@ -317,7 +319,7 @@ context("Test the POAM when approving Purchase Order", () => {
     SystemRequirement("REQ-1290");
     cy.poEnterDocumentDescription({ description: "POAM test" });
   });
-  
+
   it("Enter Shipping Cost '210'", () => {
     cy.poShippingCost({ number: "21" });
   });
@@ -389,7 +391,7 @@ context("Test the POAM when approving Purchase Order", () => {
     SystemRequirement("REQ-1290");
     cy.poEnterDocumentDescription({ description: "POAM test" });
   });
-  
+
   it("Enter Shipping Cost '210'", () => {
     cy.poShippingCost({ number: "21" });
   });
@@ -417,9 +419,10 @@ context("Test the POAM when approving Purchase Order", () => {
   });
 
   it(`Log in with '${USERS[3].name}'`, () => {
-    cy.authLogin({ 
-      email: USERS[3].email, 
-      password: "Tester1!" });
+    cy.authLogin({
+      email: USERS[3].email,
+      password: "Tester1!",
+    });
   });
 
   it("Selects company", () => {
@@ -434,7 +437,7 @@ context("Test the POAM when approving Purchase Order", () => {
   it("Navigate to Doc List", () => {
     cy.navigToDocumentList().wait(2000);
   });
-  
+
   it("Click on 'Purchase Order' on sidebar", () => {
     cy.navigToPurchaseOrder();
   });
