@@ -91,7 +91,7 @@ Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
-  cy.get("[data-cy=\"field-description\"]").type(params.description);
+  cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").type(params.description);
 });
 
 Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) => {

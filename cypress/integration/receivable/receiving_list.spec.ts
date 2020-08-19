@@ -516,7 +516,7 @@ context("Approval request landing page test", () => {
 
       it("Verify receivable counter on document list", () => {
         SystemRequirement("REQ-1760");
-        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
       });
     });
 

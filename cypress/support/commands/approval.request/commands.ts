@@ -78,8 +78,7 @@ Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description
 
 Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
   cy.get("div[data-cy=\"field-select-form\"]>#FormList-selectForm").click();
-  cy.get("div[data-cy=\"field-select-form\"]>#FormList-selectForm").type(`${params.formTitle}{downarrow}{enter}`);
-  // cy.get("#FormList-selectForm>div>div>div[id^=react-select]").type(`${params.formTitle}{downarrow}{enter}`).click();
+  cy.get("div[id^=react-select]").contains(params.formTitle).click();
   cy.get("[data-cy=\"create.approval.request.continue\"]").click();
 });
 
@@ -105,7 +104,7 @@ Cypress.Commands.add("arEnterJustificationAddDocumentsDialog", (params: { justif
 });
 
 Cypress.Commands.add("arClickAddBtnOnAddDocumentsDialog", () => {
-  cy.get("[data-cy=\"fb-control-btn\"]").click();
+  cy.get("[data-cy=\"arAddDocumentDialogAddBtn\"]").click();
 });
 
 Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string }) => {
