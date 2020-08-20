@@ -15,6 +15,7 @@ declare global {
       drGetDocumentType(params: { employeeId: string; sessionId: string }): Chainable<Subject>;
       drEnterDocumentTitle(params: { name: string }): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
+      drEnterDocumentDescriptionWithWait(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
@@ -91,17 +92,26 @@ Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
+  cy.clock();
   cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").type(params.description);
+  cy.get("[data-cy=field-description]>label").click().tick(200);
+});
+
+Cypress.Commands.add("drEnterDocumentDescriptionWithWait", (params: { description: string }) => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+    cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").type(params.description);
+    cy.get("[data-cy=field-description]>label").click();
+  });
 });
 
 Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) => {
   cy.get("[data-cy=\"select.document.documentType.id\"]").click();
-  cy.get(`[data-cy=\"selectItem.document.documentType.id.${params.documentType}\"]`).click();
+  cy.get(`[data-cy="selectItem.document.documentType.id.${params.documentType}"]`).click();
 });
 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
-  cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`);
+  cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`).wait(500);
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
@@ -164,7 +174,7 @@ Cypress.Commands.add("drChangeOwnerFromMenu", (params: { employee: string }) => 
 Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
   cy.get("#OwnerChangerPresenter-changeOwner").click();
   cy.get("#employee").click();
-  cy.get(`[data-cy=\"selectItem.employee.${params.employee}\"]`).click();
+  cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
   cy.get("#OwnerChangerPresenter-submitButton").click();
 });
 
@@ -191,7 +201,7 @@ Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: { option: st
 
 Cypress.Commands.add("drDocumentFieldError", (params: { field: string; message: string }) => {
   cy.log("here");
-  cy.get(`[data-cy=\"${params.field}\"] .MuiFormHelperText-root.Mui-error`).should("have.text", params.message);
+  cy.get(`[data-cy="${params.field}"] .MuiFormHelperText-root.Mui-error`).should("have.text", params.message);
 });
 
 Cypress.Commands.add("checkToastMessage", (params: { exists: boolean }) => {

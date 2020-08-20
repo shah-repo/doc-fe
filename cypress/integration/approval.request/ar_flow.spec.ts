@@ -177,7 +177,7 @@ context("Approval request form", () => {
     });
 
     it("Add created document revision", () => {
-      cy.arClickAddDocument();
+      cy.arClickAddDocument().wait(500);
       cy.arChoseSpecificProposedDocument({ name: "CS-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });

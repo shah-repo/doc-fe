@@ -118,7 +118,7 @@ Cypress.Commands.add("poCheckCurrency", () => {
 
 Cypress.Commands.add("poSelectCurrency", (params: { currencyValue: string }) => {
   cy.get("[id*=\"currency\"]").click();
-  cy.get("ul[role=listbox] > li").contains(params.currencyValue).click();
+  cy.get("ul[role=listbox] > li").contains(params.currencyValue).click().wait(500);
 });
 
 Cypress.Commands.add("poSelectTaxCheckbox", () => {

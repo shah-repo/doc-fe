@@ -22,6 +22,9 @@ export enum CyRoutes {
   PatchDocRev = "PatchDocRev",
   PostOrPatchDocRev = "PostOrPatchDocRev",
   Login = "Login",
+  ARPreview = "ARPreview",
+  GroupsPost = "GroupsPost",
+  DocPreview = "DocPreview",
   DocRevGet = "DocRevGet"
 }
 
@@ -36,6 +39,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/groups*",
+    },
+  },
+  GroupsPost: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/groups",
     },
   },
   PatchDocRev: {
@@ -110,6 +119,18 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions*",
+    },
+  },
+  ARPreview: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/change_requests/*",
+    },
+  },
+  DocPreview: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/documents/*",
     },
   },
 };

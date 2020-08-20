@@ -320,7 +320,7 @@ context("Create Purchase Order document with Product option from Form document",
 
   it("Enter description 'New Purchase Order'", () => {
     SystemRequirement("REQ-1290");
-    cy.poEnterDocumentDescription({ description: "New Purchase Order" });
+    cy.drEnterDocumentDescription({ description: "New Purchase Order" });
   });
 
   it("Approve and release document", () => {

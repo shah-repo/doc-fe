@@ -83,7 +83,7 @@ Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
 });
 
 Cypress.Commands.add("arClickAddDocument", () => {
-  cy.get("[data-cy=\"fb.add.document\"]").click().wait(200);
+  cy.get("[data-cy=\"fb.add.document\"]").click().wait(500);
 });
 
 Cypress.Commands.add("arChoseProposedDocument", ({ name }) => {

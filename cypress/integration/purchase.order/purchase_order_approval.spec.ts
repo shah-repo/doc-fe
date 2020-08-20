@@ -316,7 +316,7 @@ context("Test the POAM when approving Purchase Order", () => {
 
   it("Enter description 'POAM test", () => {
     SystemRequirement("REQ-1290");
-    cy.poEnterDocumentDescription({ description: "POAM test" });
+    cy.drEnterDocumentDescription({ description: "POAM test" });
   });
 
   it("Enter Shipping Cost '210'", () => {
@@ -370,7 +370,7 @@ context("Test the POAM when approving Purchase Order", () => {
   });
 
   it("Select last created AR from list", () => {
-    cy.poClickOnSpecificPOFromList({ item: "AR00004" });
+    cy.alFilterByArId({ arId: "AR00004" });
   });
 
   it("Withdraw PO that's set for approval", () => {
@@ -388,7 +388,7 @@ context("Test the POAM when approving Purchase Order", () => {
 
   it("Enter description 'POAM test", () => {
     SystemRequirement("REQ-1290");
-    cy.poEnterDocumentDescription({ description: "POAM test" });
+    cy.drEnterDocumentDescription({ description: "POAM test" });
   });
 
   it("Enter Shipping Cost '210'", () => {
