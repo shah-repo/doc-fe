@@ -27,34 +27,34 @@ const FBApprovalMatrixFieldUI: React.FunctionComponent<FBApprovalMatrixFieldUIPr
   handleSaveChanges,
   cancelAddMode,
 }) => (
-    <Box mt={3}>
-      <ApprovalRoles
-        {...{
-          approvalRoles,
-          addAnotherRole,
-          handleEditRoleDetails,
-          handleSaveRole,
-          handleCancelDialogRole,
-          errorMessage,
-          disabled,
-        }}
-      />
-      <ApprovalMatrixSectionBox
-        openDialog={() => dialog.open()}
-        closeDialog={() => dialog.close()}
-        {...{ toggleEditMode, editMode, addMode, disabled }}
-      />
-      <FBApprovalMatrixTable
-        {...{
-          addMode,
-          data,
-          columns,
-          editMode,
-          readInputValue,
-          readSelectValue,
-        }}
-      />
-      {!addMode &&
+  <Box mt={3}>
+    <ApprovalRoles
+      {...{
+        approvalRoles,
+        addAnotherRole,
+        handleEditRoleDetails,
+        handleSaveRole,
+        handleCancelDialogRole,
+        errorMessage,
+        disabled,
+      }}
+    />
+    <ApprovalMatrixSectionBox
+      openDialog={() => dialog.open()}
+      closeDialog={() => dialog.close()}
+      {...{ toggleEditMode, editMode, addMode, disabled }}
+    />
+    <FBApprovalMatrixTable
+      {...{
+        addMode,
+        data,
+        columns,
+        editMode,
+        readInputValue,
+        readSelectValue,
+      }}
+    />
+    {!addMode &&
         <FBButton
           fullWidth={true}
           onClick={handleAdd}
@@ -64,8 +64,10 @@ const FBApprovalMatrixFieldUI: React.FunctionComponent<FBApprovalMatrixFieldUIPr
           style={{ margin: "8px 0" }}
           disabled={editMode || disabled}
         />}
-      {errorMessage && <Typography variant="subtitle2" color="error" style={{ marginTop: 10 }} ><Text message={errorMessage} /></Typography>}
-      {addMode &&
+    {errorMessage &&
+    <Typography variant="subtitle2" color="error" style={{ marginTop: 10 }} >
+      <Text message={errorMessage} /></Typography>}
+    {addMode &&
         <Box display="flex" flexDirection="row-reverse">
           <FBButton
             onClick={handleSaveChanges}
@@ -84,20 +86,20 @@ const FBApprovalMatrixFieldUI: React.FunctionComponent<FBApprovalMatrixFieldUIPr
             style={{ margin: "8px" }}
           />
         </Box>}
-      <Dialog fullScreen={true} open={dialog.isOpen}>
-        <DialogContent>
-          <ApprovalMatrixSectionBox
-            openDialog={() => dialog.open()}
-            closeDialog={() => dialog.close()}
-            alreadyOpened={true}
-            {...{ toggleEditMode, editMode, addMode, disabled }}
-          />
-          <FBApprovalMatrixTable
-            addMode={addMode}
-            fullscreenMode={true}
-            {...{ addMode, data, columns, editMode, readInputValue, readSelectValue }}
-          />
-          {!addMode &&
+    <Dialog fullScreen={true} open={dialog.isOpen}>
+      <DialogContent>
+        <ApprovalMatrixSectionBox
+          openDialog={() => dialog.open()}
+          closeDialog={() => dialog.close()}
+          alreadyOpened={true}
+          {...{ toggleEditMode, editMode, addMode, disabled }}
+        />
+        <FBApprovalMatrixTable
+          addMode={addMode}
+          fullscreenMode={true}
+          {...{ addMode, data, columns, editMode, readInputValue, readSelectValue }}
+        />
+        {!addMode &&
             <FBButton
               fullWidth={true}
               onClick={handleAdd}
@@ -107,10 +109,10 @@ const FBApprovalMatrixFieldUI: React.FunctionComponent<FBApprovalMatrixFieldUIPr
               style={{ margin: "8px 0" }}
               disabled={editMode || disabled}
             />}
-          {errorMessage && <Typography variant="subtitle2" color="error" style={{ marginTop: 10 }}>
-            <Text message={errorMessage} /></Typography>
-          }
-          {addMode &&
+        {errorMessage && <Typography variant="subtitle2" color="error" style={{ marginTop: 10 }}>
+          <Text message={errorMessage} /></Typography>
+        }
+        {addMode &&
             <Box display="flex" flexDirection="row-reverse">
               <FBButton
                 onClick={handleSaveChanges}
@@ -129,9 +131,9 @@ const FBApprovalMatrixFieldUI: React.FunctionComponent<FBApprovalMatrixFieldUIPr
                 style={{ margin: "8px" }}
               />
             </Box>}
-        </DialogContent>
-      </Dialog>
-    </Box>
-  );
+      </DialogContent>
+    </Dialog>
+  </Box>
+);
 
 export default FBApprovalMatrixFieldUI;
