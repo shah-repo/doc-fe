@@ -36,6 +36,7 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
             <FBTableCell align="right" >
               <FormattedNumber
                 value={Number(item.totalAmount)}
+                // eslint-disable-next-line react/style-prop-object
                 style="currency"
                 currency={calculation?.currency}
               />

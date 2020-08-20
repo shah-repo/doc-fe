@@ -43,6 +43,7 @@ export class FBApprovalMatrixState {
       row.approvalRoles.stage1.push(false);
       row.approvalRoles.stage2.push(false);
       row.approvalRoles.stage3.push(false);
+      return row;
     });
   };
 

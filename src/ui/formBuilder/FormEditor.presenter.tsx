@@ -47,7 +47,7 @@ const FormEditorPresenter: React.FunctionComponent<
       dragged.style.display = "block";
     }
     if (container && container.className.includes("dragContainer")) {
-      container.parentNode!.removeChild(placeholder);
+      container.parentNode?.removeChild(placeholder);
       const from = Number(dragged.dataset.id);
       let to = Number(container.dataset.id);
       if (from < to) {
@@ -73,7 +73,7 @@ const FormEditorPresenter: React.FunctionComponent<
       e.currentTarget.className.includes("dragContainer")
     ) {
       container = e.currentTarget;
-      container.parentNode!.insertBefore(placeholder, container);
+      container.parentNode?.insertBefore(placeholder, container);
     }
   };
 
