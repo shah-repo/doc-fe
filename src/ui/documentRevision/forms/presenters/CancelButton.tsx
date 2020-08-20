@@ -42,7 +42,7 @@ const CancelButton: React.FunctionComponent<Props> = ({
         </Button>
       }
       <AlertDialog
-        action={handleCancelDraft}
+        confirmAction={handleCancelDraft}
         message={"document.revision.cancel.draft.alert"}
         {...{ dialog }}
       />

@@ -27,6 +27,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
     approvers,
     approverGroups,
     approvalRoles,
+    approvalNonVersioned,
     editorProperties = [],
     reviseDisabled,
     approveLoading,
@@ -36,7 +37,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
   }: T) => {
 
     const { workspaceState, formState } = FB.useStores();
-    const approvalNonVersioned = includes(editorProperties, "approvalNonVersioned");
+    approvalNonVersioned = includes(editorProperties, "approvalNonVersioned");
     autosave = approvalNonVersioned;
     const currentUser = store.getState().auth.user;
     const {
@@ -60,13 +61,18 @@ export const withFBApproval = <T extends FBApprovalProps>(
 
     isApproved = approvalState.isApproved;
     isDefined = !isEmpty(approvers) || !isEmpty(approverGroups);
-    disabled = (
-      isReleased ||
-      !isOutput ||
-      (isOutput && !documentId) ||
-      (reviseDisabled && workspaceState?.isRevised) ||
-      (revisionStage === 3 && isRecord)
-    );
+
+    if (documentId && approvalNonVersioned) {
+      disabled = false;
+    } else {
+      disabled = (
+        isReleased ||
+        !isOutput ||
+        (isOutput && !documentId) ||
+        (reviseDisabled && workspaceState?.isRevised) ||
+        (revisionStage === 3 && isRecord)
+      );
+    }
 
     function getGroup(id: string): GroupRequestBody | undefined {
       return FBAutocompleteAsyncStore.getValue<GroupRequestBody>(approvalState?.groupsId, id);
@@ -217,6 +223,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       approvers,
       approverGroups,
       approvalRoles,
+      approvalNonVersioned,
       reviseDisabled,
       hasApproved,
       isApproved,

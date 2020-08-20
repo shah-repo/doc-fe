@@ -33,6 +33,7 @@ export type FBApprovalProps =
   isDefined?: boolean;
   loading?: boolean;
   approveLoading?: boolean;
+  approvalNonVersioned?: boolean;
 };
 
 export enum FBApprovalStatus {

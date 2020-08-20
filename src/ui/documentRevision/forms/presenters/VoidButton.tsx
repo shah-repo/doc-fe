@@ -44,7 +44,7 @@ const VoidButton: React.FunctionComponent<Props> = ({
         <Text translation="common.void" />
       </Button>
       <AlertDialog
-        action={voidDocument}
+        confirmAction={voidDocument}
         message={"documentRevision.void.alert"}
         {...{ dialog }}
       />
