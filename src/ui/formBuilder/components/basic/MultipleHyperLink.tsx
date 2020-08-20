@@ -25,6 +25,7 @@ const MultipleHyperLink: React.FunctionComponent<MultipleHyperLinkProps> = ({
 
   useEffect(() => {
     if (!editMode) { updateValue(currentIndex, "hyperLinks", hyperLinks); }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hyperLinks]);
 
   const hyperLinkList =

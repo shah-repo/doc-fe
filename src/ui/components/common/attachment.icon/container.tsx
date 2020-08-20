@@ -246,7 +246,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
             values.password,
           );
         }
-
+        break;
       default:
         break;
     }

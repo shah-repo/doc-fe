@@ -26,9 +26,10 @@ export const withIndicatorOnChange = <T extends FBValidatorOptionProps>(
       if (!delimiter) {
         return alert("Indicator must have delimiter defined");
       }
-      if (indicator!.optionId === "4") {
+      if (indicator?.optionId === "4") {
         value = value.documentTypeAcronym;
       }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       FBValidatorStore.indicatorValues[field!.name][`${delimiter}`] = value;
     };
 

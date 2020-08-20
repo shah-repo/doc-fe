@@ -11,14 +11,17 @@ const FBApprovalMatrixSection: React.FunctionComponent<FBApprovalMatrixProps> = 
   disabled,
   mode,
   workspaceMode,
-}) =>  (
+  dialogState,
+}) => (
   <FBSection label="form.builder.approvalMatrix" key="ddd">
     <Box display="flex" flexDirection="row-reverse" mt={-3.5}>
-      <IconButton color="inherit" size="small" disabled={workspaceMode === "design"} onClick={handleFullScreen} >
-        <FBTooltip title='form.builder.fullscreen.mode'>
-          <FullscreenOutlinedIcon />
-        </FBTooltip>
-      </IconButton>
+      {!dialogState?.open && (
+        <IconButton color="inherit" size="small" disabled={workspaceMode === "design"} onClick={handleFullScreen} >
+          <FBTooltip title='form.builder.fullscreen.mode'>
+            <FullscreenOutlinedIcon />
+          </FBTooltip>
+        </IconButton>
+      )}
       <IconButton color="inherit" size="small" {...{ disabled }} onClick={handleEdit} >
         {mode !== "edit" && (
           <FBTooltip title='form.builder.edit.matrix'>

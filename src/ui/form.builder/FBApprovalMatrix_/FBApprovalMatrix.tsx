@@ -20,7 +20,7 @@ const FBApprovalMatrix: React.FunctionComponent<FBApprovalMatrixProps> = ({
     {!dialogState?.open && (
       <>
         <FBApprovalMatrixSection
-          {...{ handleEdit, handleFullScreen, disabled, mode, workspaceMode }}
+          {...{ handleEdit, handleFullScreen, disabled, mode, workspaceMode, dialogState }}
         />
         <FBApprovalMatrixTable {...{ name, mode }} />
         <Box mt={2}>

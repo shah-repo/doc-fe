@@ -47,7 +47,9 @@ export class IotService {
 
   private constructor(
     private mqttClientInstance: AwsMqttClient,
-  ) {}
+  ) {
+    this.mqttClientInstance = mqttClientInstance;
+  }
 
   public async updateMqttClient(endpointRedux: any): Promise<any> {
     credentialsMqtt = endpointRedux;

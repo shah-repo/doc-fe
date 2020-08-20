@@ -18,6 +18,7 @@ const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProp
       <Text translation="form.builder.total" />
       <FormattedNumber
         value={totalPrice}
+        // eslint-disable-next-line react/style-prop-object
         style="currency"
         currency={currency}
       />
