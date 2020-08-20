@@ -21,7 +21,8 @@ export enum CyRoutes {
   UploadAttachment = "UploadAttachment",
   PatchDocRev = "PatchDocRev",
   PostOrPatchDocRev = "PostOrPatchDocRev",
-  Login = "Login"
+  Login = "Login",
+  DocRevGet = "DocRevGet"
 }
 
 export const routes: ICyRoutes =   {
@@ -103,6 +104,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: `/api/v1/auth/login`,
+    },
+  },
+  DocRevGet: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions*",
     },
   },
 };

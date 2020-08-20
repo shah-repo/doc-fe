@@ -1,5 +1,8 @@
 /* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
+
+import { CyRoutes } from "../../routes";
+
 /* eslint-disable @typescript-eslint/no-namespace */
 export { };
 
@@ -22,13 +25,27 @@ declare global {
 
 Cypress.Commands.add("filterPO", (params: {docId: string; version: string; poStatus: string;
   supplier: string; partNumber: string; amount: string; owner: string; issueDate: string; }) => {
-  cy.get("[id=\"docId\"]").type(params.docId);
-  cy.get("[id=\"dynamicParams.precalc.version\"]").type(params.version);
-  cy.get("[id=\"dynamicParams.precalc.po_status\"]").type(params.poStatus);
-  cy.get("[id=\"dynamicParams.precalc.supplier\"]").type(params.supplier);
-  cy.get("[id=\"dynamicParams.precalc.po_partNumber\"]").type(params.partNumber);
-  cy.get("[id=\"dynamicParams.precalc.po_amount\"]").type(params.amount);
-  cy.get("[id=\"owner\"]").type(params.owner);
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"docId\"]").type(params.docId);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"dynamicParams.precalc.version\"]").type(params.version);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"dynamicParams.precalc.po_status\"]").type(params.poStatus);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"dynamicParams.precalc.supplier\"]").type(params.supplier);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"dynamicParams.precalc.po_partNumber\"]").type(params.partNumber);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"dynamicParams.precalc.po_amount\"]").type(params.amount);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"owner\"]").type(params.owner);
+  });
   cy.get("[id=\"dynamicParams.precalc.issueDate\"]").type(params.issueDate);
 });
 
