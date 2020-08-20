@@ -49,6 +49,7 @@ export const withValidator = <T extends FBValidatorProps>(
       if (!props.name) {
         return false;
       }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return !_.isUndefined(_.get(FBValidatorStore.indicatorValues, props.name!));
     }
 
