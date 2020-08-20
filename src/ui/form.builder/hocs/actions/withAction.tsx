@@ -16,7 +16,7 @@ export const withAction = <T extends FBActionProps>(
     const onClick = () => {
       let values = _.get(form, `values.${action.name || ""}`);
       const addition: Dictionary<string> = {};
-      _.map(form!.values, (v, k) => {
+      _.map(form?.values, (v, k) => {
         if (!_.isUndefined(k.split(".")[1])) {
           addition[k.split(".")[1]] = v;
         }
@@ -67,7 +67,7 @@ export const withAction = <T extends FBActionProps>(
       const InputType = FBFieldComponent[indicator.type || ""];
       const docId = _.get(form, `values.${action.name}.${indicator.name}`);
       if (indicator.requiredDocId && _.isUndefined(docId)) {
-        form!.setFieldValue(`${action.name}.${indicator.name}`, FBStore.docId);
+        form?.setFieldValue(`${action.name}.${indicator.name}`, FBStore.docId);
       }
       return (
         <InputType
