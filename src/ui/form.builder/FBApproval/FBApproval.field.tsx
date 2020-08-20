@@ -16,7 +16,7 @@ const FBApprovalField = <T extends FBInlineApproverType>({
         return (
           <Box
             mb={config?.canApprove ? 1 : 2}
-            key={`fb-approver-${index}`}
+            key={`fb-approver-${approver.id}-${index}`}
             display="flex"
             alignItems="center"
             fontSize="default"
