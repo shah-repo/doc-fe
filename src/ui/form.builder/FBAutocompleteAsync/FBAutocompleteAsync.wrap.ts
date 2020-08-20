@@ -21,7 +21,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     refresh,
     name,
     value,
-    shouldReloadOnInit,
+    shouldReloadOnInit = false,
     ...props
   }: T) => {
 
