@@ -2,7 +2,7 @@ import { cloneDeep, filter, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBDialogState, FBDocumentRevisionsActions, FBDocumentRevisionsForm, FBDocumentRevisionsProps, FBDocumentRevisionsState, FBDocumentRevisionsValue, FBFormState } from "..";
+import { FB, FBAutocompleteAsyncOption, FBDialogState, FBDocumentRevisionsActions, FBDocumentRevisionsForm, FBDocumentRevisionsProps, FBDocumentRevisionsState, FBDocumentRevisionsValue, FBFormState } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
@@ -27,11 +27,6 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     const { formState: parentFormState } = FB.useStores();
     const parentFormValue = parentFormState?.getFieldValue(name);
 
-    const autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(
-      FBAutocompleteAsyncState,
-      FBAutocompleteAsyncOption.DRAFTdocumentRevisions,
-    );
-
     docRevState = FB.useRef(FBDocumentRevisionsState, parentFormValue);
     dialogState = FB.useRef(FBDialogState);
     formState = FB.useRef(FBFormState, {});
@@ -51,7 +46,6 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     }
 
     handleForm = () => {
-      autocompleteAsyncState?.load(true);
       formState?.reset();
       dialogState?.config({
         open: true,
