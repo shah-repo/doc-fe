@@ -1,6 +1,6 @@
 import { ButtonProps } from "@material-ui/core/Button";
 import { FormikErrors } from "formik";
-import _ from "lodash";
+import { isEmpty } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
@@ -78,7 +78,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
         />;
 
 
-  const formHasErrors = !_.isEmpty(errors);
+  const formHasErrors = !isEmpty(errors);
   const isCurrentUserOwner = changeRequest.owner.user.email === currentUserEmail;
   const canWithdraw =
     isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.InReview;

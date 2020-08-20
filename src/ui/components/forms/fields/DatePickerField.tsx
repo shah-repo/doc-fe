@@ -13,6 +13,7 @@ Partial<TypographyProps>;
 
 const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
   label,
+  minDate,
   ...fieldProps
 }) => {
   const { submitForm } = useFormContext();
@@ -41,6 +42,7 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
             "aria-label": "change date",
           }}
           TextFieldComponent={(props) => <TextField {...props} disabled={true} />}
+          minDate={minDate}
         />
       </MuiPickersUtilsProvider>
     </Field>
