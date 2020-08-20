@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { FBAutocompleteAsyncProps, FBAutocompleteAsyncState } from ".";
 import { FB, FBOptionValueType } from "..";
 import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
@@ -21,6 +21,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     refresh,
     name,
     value,
+    shouldReloadOnInit,
     ...props
   }: T) => {
 
@@ -60,6 +61,13 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
           : slicedOptions;
       }
     });
+
+    useEffect(() => {
+      if (shouldReloadOnInit) {
+        autocompleteAsyncState?.load(true);
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     (optionId && options && formValue && !_.isEmpty(formValue)) && (defaultValue = getDefault());
 

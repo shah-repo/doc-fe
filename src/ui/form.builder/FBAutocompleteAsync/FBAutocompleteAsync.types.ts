@@ -7,6 +7,7 @@ export type FBAutocompleteAsyncProps =
 & {
   autocompleteAsyncState?: FBAutocompleteAsyncState;
   selectedOptions?: string[];
+  shouldReloadOnInit?: boolean;
 };
 
 export interface FBAutocompleteAsyncConfig  {

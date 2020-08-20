@@ -6,6 +6,7 @@ import { withFBAutocompleteAsync } from "./FBAutocompleteAsync.wrap";
 const FBAutocompleteAsync: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
   options,
   defaultValue,
+  shouldReloadOnInit = false,
   ...props
 }) =>  (
   <>
