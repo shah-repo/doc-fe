@@ -49,7 +49,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
     })} />;
 
   return (
-    <Grid container={true} xs={6} alignItems="center">
+    <Grid item xs={6} className={classes.itemWrap} >
       {
         isStatusVisible &&
         <Chip
@@ -60,12 +60,12 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
           icon={statusIcon}
         />
       }
-      <Typography variant="h6" id="HeaderInfo-docId" className={classes.id} >
+      <Typography variant="h6" id="HeaderInfo-docId" className={classes.id} component="span">
         {id}
       </Typography>
       {
         isTitleVisible &&
-        <Typography variant="h6" id="HeaderInfo-name">
+        <Typography variant="h6" id="HeaderInfo-name" component="span">
           {name}
         </Typography>
       }
