@@ -65,6 +65,7 @@ export const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ loca
         </Link>
       );
     }
+    return null;
   });
   return (
     <Box>{links}</Box>

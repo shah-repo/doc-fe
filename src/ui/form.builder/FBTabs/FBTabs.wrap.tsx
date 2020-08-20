@@ -30,6 +30,7 @@ export const withFBTabs = <T extends FBTabsProps>(
 
     React.useEffect(() => {
       stateConfig(activeTab);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onChange = (event: React.ChangeEvent<{}>, newValue: number) =>

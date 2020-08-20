@@ -18,6 +18,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
     let state: Pick<FBValidatorTreeProps, "expanded"> = {};
 
     React.useEffect(() => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       state = observable({
         expanded: [],
       });
@@ -37,9 +38,9 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
 
     const afterChange = (fieldName: string, value: boolean) => {
       if (_.isUndefined(value) || !value) {
-        return dynamicValidatorStore!.removeVariable(fieldName);
+        return dynamicValidatorStore?.removeVariable(fieldName);
       }
-      dynamicValidatorStore!.setVariable(fieldName);
+      dynamicValidatorStore?.setVariable(fieldName);
     };
 
     const optionsNode = (options: string[], name: string, type: string) => {
@@ -125,13 +126,13 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
 
       !_.isUndefined(options) &&
         (options = _.split((schemaItem.options || "") as string, "\n"));
-      includeNodeField && (treeLabel = labelNode(name!, label));
+      includeNodeField && (treeLabel = labelNode(name || "", label));
 
       return (
         <Tooltip title={tooltip} placement="bottom-start">
-          <TreeItem nodeId={`tree-node-${name!}`} label={treeLabel}>
-            {optionsNode(options || [], name!, type as string)}
-            {contextNode(name!, contextLabel, includeContext)}
+          <TreeItem nodeId={`tree-node-${name}`} label={treeLabel}>
+            {optionsNode(options || [], name || "", type as string)}
+            {contextNode(name || "", contextLabel, includeContext)}
           </TreeItem>
         </Tooltip>
       );
@@ -151,7 +152,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
         case "select":
           return parentNode(schemaItem, true);
         default:
-          return regularNode(name!, label);
+          return regularNode(name || "", label);
       }
     });
 

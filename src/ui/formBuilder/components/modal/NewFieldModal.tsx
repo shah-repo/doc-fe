@@ -30,6 +30,7 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
       }
       addField(field);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [chosenField],
   );
 
