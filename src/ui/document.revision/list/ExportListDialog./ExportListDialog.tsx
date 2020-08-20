@@ -19,7 +19,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   dialog,
   headers,
   data,
-  fileName="DocumentList",
+  fileName = "DocumentList",
   saveFileName,
 }) => {
   const classes = styles();
@@ -74,32 +74,32 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
               <Text translation="common.cancel" />
             </Button>
             <div
-            style = {{
-              flexGrow:1
-            }}
-            >
-            <CSVLink
-              data={data}
-              headers={headers}
-              filename={fileName + ".csv"}
-              style={{textDecoration: "none", display:"flex"}}
-              asyncOnClick={true}
-              onClick={(event, done) => {
-                dialog.close();
+              style = {{
+                flexGrow: 1,
               }}
-              ref={csvRef}
             >
-              <Button
-                type="submit"
-                variant="contained"
-                className={classes.submitButton}
-                id="ExportListDialog-downloadButton"
-                data-cy="ExportListDialog-downloadButton"
-                onClick={() => csvRef.current.handleClick()}
+              <CSVLink
+                data={data}
+                headers={headers}
+                filename={fileName + ".csv"}
+                style={{ textDecoration: "none", display: "flex" }}
+                asyncOnClick={true}
+                onClick={(event, done) => {
+                  dialog.close();
+                }}
+                ref={csvRef}
               >
-                <Text translation="common.download" />
-              </Button>
-            </CSVLink>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  className={classes.submitButton}
+                  id="ExportListDialog-downloadButton"
+                  data-cy="ExportListDialog-downloadButton"
+                  onClick={() => csvRef.current.handleClick()}
+                >
+                  <Text translation="common.download" />
+                </Button>
+              </CSVLink>
             </div>
           </Box>
         </Dialog>
