@@ -26,6 +26,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   loading,
   ...props
 }) => {
+
   const { workspaceState } = FB.useStores();
   const stringify = (option: OptionType) => (getOptionLabel && getOptionLabel(option)) || "";
   const filterOptions = createFilterOptions({ ignoreAccents: false, stringify });
