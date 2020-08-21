@@ -127,7 +127,7 @@ context("Group Creation Flow", () => {
     });
   });
 
-  context("Create official group", () => {
+  context("Create unofficial group", () => {
     it("Saves the group", () => {
       cy.grpSaveGroup();
     });

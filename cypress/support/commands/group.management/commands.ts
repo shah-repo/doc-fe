@@ -97,21 +97,33 @@ Cypress.Commands.add("grpVerifyGroupTypeIsPresentOnFirstGroup", () => {
 });
 
 Cypress.Commands.add("grpSetNameFilter", (params: {name: string}) => {
-  cy.get("#groupName").type(params.name);
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.GroupsGet,
+    () => {
+      cy.get("#groupName").type(params.name);
+    });
 });
 
 Cypress.Commands.add("grpSetMembersFilter", (params: {member: string}) => {
-  cy.get("#userName").type(params.member);
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.GroupsGet,
+    () => {
+      cy.get("#userName").type(params.member);
+    });
 });
 
 Cypress.Commands.add("grpSetTypeFilter", (params: {type: string}) => {
-  cy.get("#mui-component-select-isOfficial").click();
-  cy.get("#menu-isOfficial>div>ul>li>span").contains(params.type).click();
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.GroupsGet,
+    () => {
+      cy.get("#mui-component-select-isOfficial").click();
+      cy.get("#menu-isOfficial>div>ul>li>span").contains(params.type).click();
+    });
 });
 
 Cypress.Commands.add("grpFilterByName", (params: {name: string}) => {
   cy.get("#clearFilter").click();
-  cy.grpSetNameFilter(params).wait(300);
+  cy.grpSetNameFilter(params);
   cy.get("div[aria-rowindex=1]")
     .within(() => {
       cy.get("div.ReactVirtualized__Table__rowColumn:first-child>div>div>div")
@@ -121,7 +133,7 @@ Cypress.Commands.add("grpFilterByName", (params: {name: string}) => {
 
 Cypress.Commands.add("grpFilterByMembers", (params: {member: string}) => {
   cy.get("#clearFilter").click();
-  cy.grpSetMembersFilter(params).wait(300);
+  cy.grpSetMembersFilter(params);
   cy.get("div[aria-rowindex=1]")
     .within(() => {
       cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(2)>div>div>div")
@@ -190,7 +202,9 @@ Cypress.Commands.add("grpAssignUser", (params: {name: string}) => {
 });
 
 Cypress.Commands.add("grpSaveGroup", () => {
-  cy.get("#Group-createGroup").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPost, () => {
+    cy.get("#Group-createGroup").click();
+  });
   cy.get("#DialogContent-close").click();
 });
 
