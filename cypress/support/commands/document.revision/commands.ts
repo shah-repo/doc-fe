@@ -64,6 +64,8 @@ declare global {
       drAdministrativeRevisionLevel(): Chainable<Subject>;
       drAddApprover(params: { name: string }): Chainable<Subject>;
       drUpdateDocumentTypeName(params: { employeeId: string; sessionId: string; payload: any; id: string }): Chainable<Subject>;
+      drClickOnSpecificDocFromList(params: { item: string }): Chainable<Subject>;
+      drCancelDraftButton(): Chainable<Subject>;
     }
   }
 }
@@ -106,6 +108,10 @@ Cypress.Commands.add("drUpdateDocumentTypeName", (params: { employeeId: string; 
     .then((response) => JSON.stringify(response));
 });
 
+Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) => {
+  cy.get("#clearFilter").click().wait(500);
+  cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).click();
+});
 
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
   list.forEach((item) => {
@@ -113,6 +119,11 @@ Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
   });
 });
 
+Cypress.Commands.add("drCancelDraftButton", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").click();
+  cy.get("[data-cy=\"cancelDraftButton\"]").click();
+  cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+});
 
 Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion: int }) => {
   cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(params.docVersion).click().wait(2000);
@@ -217,10 +228,11 @@ Cypress.Commands.add("drChangeOwnerFromMenu", (params: { employee: string }) => 
 });
 
 Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
-  cy.get("#OwnerChangerPresenter-changeOwner").click();
+  cy.get("#HeaderMenuButton").click();
+  cy.get("[data-cy=\"changeOwner\"]").click();
   cy.get("#employee").click();
-  cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
-  cy.get("#OwnerChangerPresenter-submitButton").click();
+  cy.get(`[data-cy=\"selectItem.employee.${params.employee}\"]`).click();
+  cy.get("[data-cy=\"changeOwner-submit\"]").click();
 });
 
 Cypress.Commands.add("drClickReviseDocument", () => {
