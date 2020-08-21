@@ -25,6 +25,7 @@ const MultiplePackaging: React.FunctionComponent<MultiplePackagingProps> = ({
 
   useEffect(() => {
     if (!editMode) { updateValue(currentIndex, "packagings", packagings); }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [packagings]);
 
   const removePackage = (e: any) => {

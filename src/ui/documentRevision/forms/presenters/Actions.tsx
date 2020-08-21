@@ -20,6 +20,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     docInfo,
     asyncState,
     canChangeOwnerShip,
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   } = React.useContext(FormHeaderContext)!;
 
   const { workspaceState, formState } = FB.useStores();

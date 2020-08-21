@@ -202,7 +202,9 @@ Cypress.Commands.add("grpAssignUser", (params: {name: string}) => {
 });
 
 Cypress.Commands.add("grpSaveGroup", () => {
-  cy.get("#Group-createGroup").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPost, () => {
+    cy.get("#Group-createGroup").click();
+  });
   cy.get("#DialogContent-close").click();
 });
 

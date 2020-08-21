@@ -50,6 +50,7 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
 
     React.useEffect(() => {
       initialIncludedSchemaItem();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     onChange = (_ev: React.ChangeEvent<any> | any, value: FBSchemaProps) => {

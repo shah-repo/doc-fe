@@ -27,5 +27,8 @@ export const styles = makeStyles((theme: Theme) =>
       fontWeight: "bold",
       marginRight: theme.spacing(2),
     },
+    itemWrap: {
+      alignSelf: "center",
+    },
   },
   ));

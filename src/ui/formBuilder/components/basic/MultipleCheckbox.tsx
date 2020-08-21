@@ -29,6 +29,7 @@ const MultipleCheckbox: React.FunctionComponent<MultipleCheckboxProps> = ({
     if (!editMode) {
       updateValue(currentIndex, title, chosenOptions);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chosenOptions]);
 
   const chosenHandler = (e: any) => {

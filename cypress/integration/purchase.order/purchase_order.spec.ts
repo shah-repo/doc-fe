@@ -218,7 +218,7 @@ context("Create Purchase Order document with Product option from Form document",
   });
 
   it("Click on 'Create PO' button", () => {
-    cy.poCreateNew().wait(1000);
+    cy.poCreateNew();
   });
 
   it("Check for PO ID uniqueness - ID should be PO-00001", () => {
@@ -320,7 +320,7 @@ context("Create Purchase Order document with Product option from Form document",
 
   it("Enter description 'New Purchase Order'", () => {
     SystemRequirement("REQ-1290");
-    cy.poEnterDocumentDescription({ description: "New Purchase Order" });
+    cy.drEnterDocumentDescription({ description: "New Purchase Order" });
   });
 
   it("Approve and release document", () => {
@@ -512,7 +512,7 @@ context("Creates second PO form document and checks if both documents are availa
   });
 
   it("Click on 'Create PO' button", () => {
-    cy.poCreateNew();
+    cy.poClickCreatePO();
   });
 
   it("Check if two options are available when two forms with PO exist", () => {

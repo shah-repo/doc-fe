@@ -27,6 +27,7 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
       if (_.isUndefined(mediaAlbumState?.activeMedia)) {
         mediaAlbumState?.setActiveMedia(0);
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     handleNext = () => {
