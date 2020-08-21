@@ -21,9 +21,9 @@ const groupOne = "Group One";
 const groupTwo = "Group Two";
 
 const memberAdmin = "Admin";
-const memberSecond = "Second";
-const memberThird = "Third";
-const individualMember = "Importer Admin";
+let memberSecond = "Second";
+let memberThird = "Third";
+let individualMember = "Importer Admin";
 
 const FormTitle = "New Form";
 const DAMTitle = "My DAM";
@@ -73,7 +73,10 @@ context("Document Approval Matrix Flow", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           company = response;
-          employee = company.employees.find((employee) => employee.user.name === "Admin");
+          employee = company.employees.find((employee) => employee.user.name === memberAdmin);
+          memberSecond = company.employees.find((employee) => employee.user.email === "enlil.testmail+cy2@gmail.com").user.name;
+          memberThird = company.employees.find((employee) => employee.user.email === "enlil.testmail+cy3@gmail.com").user.name;
+          individualMember = company.employees.find((employee) => employee.user.email === "enlil.testmail+cy4@gmail.com").user.name;
           docTypes = company.documentTypes || [];
           done();
         });
@@ -169,7 +172,7 @@ context("Document Approval Matrix Flow", () => {
     });
   });
 
-  context("Open 'Create Document'", () => {
+  context("Open 'Create Document': Create DAM", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -227,7 +230,7 @@ context("Document Approval Matrix Flow", () => {
     });
   });
 
-  context("Document Types are present in DAM", () => {
+  context("Check Document Types are present in DAM", () => {
     it("Approval Matrix document types", () => {
       cy.get(`[data-cy="documentTypeApprovalMatrix"]`).each(($el) => {
         DAMDocumentTypes.push($el.get(0).innerText);
@@ -653,7 +656,7 @@ context("Document Approval Matrix Flow", () => {
 
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy5@gmail.com",
+        email: "enlil.testmail+cy4@gmail.com",
         password: "Tester1!",
       });
     });
