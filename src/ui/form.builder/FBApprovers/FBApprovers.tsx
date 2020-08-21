@@ -22,6 +22,7 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
       optionValueType="id"
       multiple={true}
       withState={true}
+      gutter={false}
       {...{ loading, renderOption, name }}
     />
     <Box display="flex" flexWrap="wrap">
