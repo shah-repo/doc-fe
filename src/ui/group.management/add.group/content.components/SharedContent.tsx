@@ -43,6 +43,7 @@ export const SharedContent: React.FunctionComponent<Props> = ({
       <TextField
         variant="outlined"
         id="Group-groupName"
+        data-cy="Group-groupName"
         value={group.name}
         onChange={(event: any) =>
           setGroup({ ...group, name: event.target.value })

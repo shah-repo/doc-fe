@@ -23,6 +23,8 @@ export enum CyRoutes {
   PatchDocRev = "PatchDocRev",
   PostOrPatchDocRev = "PostOrPatchDocRev",
   Login = "Login",
+  GetDocumentTypes = "GetDocumentTypes",
+  ChangeRequestApprove = "ChangeRequestApprove",
   ARPreview = "ARPreview",
   GroupsPost = "GroupsPost",
   DocPreview = "DocPreview",
@@ -128,6 +130,24 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: `/api/v1/auth/login`,
+    },
+  },
+  GetDocumentTypes: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_type",
+    },
+    callConfig: {
+      responseTimeout: 10 * 1000,
+    },
+  },
+  ChangeRequestApprove: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/change_requests/*/approve",
+    },
+    callConfig: {
+      responseTimeout: 25 * 1000,
     },
   },
   DocRevGet: {
