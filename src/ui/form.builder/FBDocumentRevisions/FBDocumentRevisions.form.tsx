@@ -15,6 +15,7 @@ const FBDocumentRevisionsForm: React.FunctionComponent<FBDocumentRevisionsFormPr
       optionValueType="id"
       rules="required"
       {...{ disabledOptions }}
+      shouldReloadOnInit
     />
     <FBTextField
       name="descriptionOfChange"

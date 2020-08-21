@@ -14,4 +14,5 @@ export type FBTableCellProps =
   label?: string | Translation;
   loading?: boolean;
   tooltipTitle?: string;
+  dataCy?: string;
 };

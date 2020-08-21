@@ -25,6 +25,8 @@ let createdReceivable1;
 context("Approval request landing page test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
+      SystemRequirement("REQ-0400");
+      SystemRequirement("REQ-0440");
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
@@ -424,7 +426,6 @@ context("Approval request landing page test", () => {
     });
 
     it.skip("Verify supplier name is present", () => {
-      SystemRequirement("REQ-1680");
       fail;
     });
 
@@ -517,7 +518,7 @@ context("Approval request landing page test", () => {
 
       it("Verify receivable counter on document list", () => {
         SystemRequirement("REQ-1760");
-        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
       });
     });
 

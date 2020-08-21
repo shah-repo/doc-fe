@@ -144,7 +144,7 @@ context("Group Landing Page Flow", () => {
       cy.grpNavigateToGroupManagement();
     });
 
-    it.skip("Checks if the filters are mantained", () => {
+    it("Checks if the filters are mantained", () => {
       SystemRequirement("REQ-2620");
       cy.grpCheckIfNameFilterIsSet({ name: GROUP_NAME });
       cy.grpCheckIfMembersFilterIsSet({ member: GROUP_MEMBER });

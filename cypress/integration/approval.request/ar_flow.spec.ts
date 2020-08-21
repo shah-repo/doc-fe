@@ -17,6 +17,8 @@ const approvalRequestFormName = "New Approval request form template";
 context("Approval request form", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
+      SystemRequirement("REQ-0400");
+      SystemRequirement("REQ-0440");
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
@@ -178,7 +180,7 @@ context("Approval request form", () => {
     });
 
     it("Add created document revision", () => {
-      cy.arClickAddDocument();
+      cy.arClickAddDocument().wait(500);
       cy.arChoseSpecificProposedDocument({ name: "CS-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });

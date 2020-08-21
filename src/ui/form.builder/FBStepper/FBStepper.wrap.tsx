@@ -34,6 +34,7 @@ export const withFBStepper = <T extends FBStepperProps>(
 
     React.useEffect(() => {
       stateConfig(activeStep);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleStep = (step: number) => () => {

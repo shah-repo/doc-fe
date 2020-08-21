@@ -12,6 +12,7 @@ type ICyRoutes = {[key in keyof typeof CyRoutes]: {
 
 export enum CyRoutes {
   EmployeesGet = "EmployeesGet",
+  EmployeesPost = "EmployeesPost",
   GroupsGet = "GroupsGet",
   ReleaseDocRev = "ReleaseDocRev",
   ARtoReview = "ARtoReview",
@@ -21,7 +22,15 @@ export enum CyRoutes {
   UploadAttachment = "UploadAttachment",
   PatchDocRev = "PatchDocRev",
   PostOrPatchDocRev = "PostOrPatchDocRev",
-  Login = "Login"
+  Login = "Login",
+  GetDocumentTypes = "GetDocumentTypes",
+  ChangeRequestApprove = "ChangeRequestApprove",
+  ARPreview = "ARPreview",
+  GroupsPost = "GroupsPost",
+  DocPreview = "DocPreview",
+  DocRevGet = "DocRevGet",
+  LotQuantity = "LotQuantity",
+  DocRevPreview = "DocRevPreview",
 }
 
 export const routes: ICyRoutes =   {
@@ -31,10 +40,28 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/employees*",
     },
   },
+  EmployeesPost: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/employees",
+    },
+  },
+  LotQuantity: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/documents/lot_quantity/*",
+    },
+  },
   GroupsGet: {
     requestConfig: {
       method: "GET",
       url: "/api/v1/groups*",
+    },
+  },
+  GroupsPost: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/groups",
     },
   },
   PatchDocRev: {
@@ -103,6 +130,48 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: `/api/v1/auth/login`,
+    },
+  },
+  GetDocumentTypes: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_type",
+    },
+    callConfig: {
+      responseTimeout: 10 * 1000,
+    },
+  },
+  ChangeRequestApprove: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/change_requests/*/approve",
+    },
+    callConfig: {
+      responseTimeout: 25 * 1000,
+    },
+  },
+  DocRevGet: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions*",
+    },
+  },
+  ARPreview: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/change_requests/*",
+    },
+  },
+  DocPreview: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/documents/*",
+    },
+  },
+  DocRevPreview: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions/*",
     },
   },
 };

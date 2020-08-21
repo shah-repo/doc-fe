@@ -95,6 +95,7 @@ DocumentRevisionManagerContainerProps
       details: {
         title: intl.formatMessage({
           id: `document.revision.docVersion.${acronym}`,
+          defaultMessage: "document.revision.docVersion",
         }),
         component: <DocumentRevisionListContainer
           documentRevisions={docRevsWithoutCanceled}

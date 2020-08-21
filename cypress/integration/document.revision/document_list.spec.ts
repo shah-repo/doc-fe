@@ -19,6 +19,8 @@ const secondDocumentRevName = "Second document for testing";
 context("Document list test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
+      SystemRequirement("REQ-0400");
+      SystemRequirement("REQ-0440");
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
@@ -395,7 +397,7 @@ context("Document list test", () => {
         cy.dlFilterByEffectiveDate({ effectiveDate: "Last 7 days" });
       });
 
-      it.skip("Verify filter by effective date", () => {
+      it("Verify filter by effective date", () => {
         SystemRequirement("REQ-0060");
         cy.dlVerifyFilterByEffectiveDate({ effectiveDate: (new Date()).toLocaleDateString("en-US") });
       });
