@@ -41,6 +41,8 @@ declare global {
       drSelectReferences(...list: string[]): Chainable<Subject>;
       drRemoveReferences(...list: int[]): Chainable<Subject>;
       drSelectReleasedVersionOfDocument(params: { docVersion: int }): Chainable<Subject>;
+      drClickOnSpecificDocFromList(params: { item: string }): Chainable<Subject>;
+      drCancelDraftButton(): Chainable<Subject>;
     }
   }
 }
@@ -70,12 +72,22 @@ Cypress.Commands.add("drGetDocumentType", (params: { employeeId: string; session
   }).then((response) => response);
 });
 
+Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) => {
+  cy.get("#clearFilter").click().wait(500);
+  cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).click();
+});
+
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
   list.forEach((item) => {
     cy.get("[id=\"referenceTo\"]").click().type(item + "{downarrow}{enter}");
   });
 });
 
+Cypress.Commands.add("drCancelDraftButton", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").click();
+  cy.get("[data-cy=\"cancelDraftButton\"]").click();
+  cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+});
 
 Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion: int }) => {
   cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(params.docVersion).click().wait(2000);
@@ -171,10 +183,11 @@ Cypress.Commands.add("drChangeOwnerFromMenu", (params: { employee: string }) => 
 });
 
 Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
-  cy.get("#OwnerChangerPresenter-changeOwner").click();
+  cy.get("#HeaderMenuButton").click();
+  cy.get("[data-cy=\"changeOwner\"]").click();
   cy.get("#employee").click();
-  cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
-  cy.get("#OwnerChangerPresenter-submitButton").click();
+  cy.get(`[data-cy=\"selectItem.employee.${params.employee}\"]`).click();
+  cy.get("[data-cy=\"changeOwner-submit\"]").click();
 });
 
 Cypress.Commands.add("drClickReviseDocument", () => {
