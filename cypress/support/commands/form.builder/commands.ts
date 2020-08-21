@@ -35,7 +35,7 @@ Cypress.Commands.add("fbEnterPOLabelName", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("fbAddNewFieldButton", (params: { name: string }) => {
-  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary\"]").contains("Add").click();
+  cy.get("[data-cy=\"fb-editor-actions-add\"]").contains("Add").click();
 });
 
 Cypress.Commands.add("fbSelectApprovalMatrix", () => cy.get("[data-cy=\"form.builder.approvalMatrix\"]").click());

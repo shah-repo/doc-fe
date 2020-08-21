@@ -105,12 +105,12 @@ context("Create company via API and create Suppliers document", () => {
 
   it("Create supplier from Form document", () => {
     SystemRequirement("REQ-2330");
-    cy.supCreateNew().wait(1000);
+    cy.supCreateNew();
   });
 
   it("Enter 'Supplier Address/Phone'", () => {
     SystemRequirement("REQ-2360");
-    cy.supEnterSuppAddressPhone({ address: "Test Supplier address" });
+    cy.drEnterDocumentDescription({ description: "Test Supplier address" });
   });
 
   it("Enter 'Supplier Name'", () => {
@@ -189,7 +189,7 @@ context("Create company via API and create Suppliers document", () => {
 
   it("Click on create supplier to prompt option of which supplier form we should use", () => {
     SystemRequirement("REQ-2350");
-    cy.supCreateNew().wait(1000);
+    cy.supCreateNew();
   });
 
   it("Check if forms are suggested on creating new supplier", () => {
