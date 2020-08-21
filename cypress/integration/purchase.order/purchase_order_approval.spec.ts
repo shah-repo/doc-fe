@@ -297,7 +297,7 @@ context("Create Purchase Order Approval Matrix document with from Form document"
   });
 
   it("Click 'Save' document", () => {
-    cy.poSaveDocument();
+    cy.drClickCreateDocumentWithApiCall();
   });
 
   it("Approve and release document", () => {
@@ -311,12 +311,12 @@ context("Test the POAM when approving Purchase Order", () => {
   });
 
   it("Click on 'Create PO' button", () => {
-    cy.poCreateNew().wait(1000);
+    cy.poCreateNew();
   });
 
   it("Enter description 'POAM test", () => {
     SystemRequirement("REQ-1290");
-    cy.drEnterDocumentDescription({ description: "POAM test" });
+    cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
   });
 
   it("Enter Shipping Cost '210'", () => {
@@ -371,6 +371,7 @@ context("Test the POAM when approving Purchase Order", () => {
 
   it("Select last created AR from list", () => {
     cy.alFilterByArId({ arId: "AR00004" });
+    cy.arSelectFirstDocument();
   });
 
   it("Withdraw PO that's set for approval", () => {
@@ -383,12 +384,12 @@ context("Test the POAM when approving Purchase Order", () => {
   });
 
   it("Click on 'Create PO' button", () => {
-    cy.poCreateNew().wait(1000);
+    cy.poCreateNew();
   });
 
   it("Enter description 'POAM test", () => {
     SystemRequirement("REQ-1290");
-    cy.drEnterDocumentDescription({ description: "POAM test" });
+    cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
   });
 
   it("Enter Shipping Cost '210'", () => {

@@ -92,9 +92,8 @@ Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
-  cy.clock();
   cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").type(params.description);
-  cy.get("[data-cy=field-description]>label").click().tick(200);
+  cy.get("[data-cy=field-description]>label").click().wait(1000);
 });
 
 Cypress.Commands.add("drEnterDocumentDescriptionWithWait", (params: { description: string }) => {
