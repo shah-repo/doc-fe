@@ -38,8 +38,6 @@ declare global {
       grpSelectGroup(params: { name: string }): Chainable;
       grpCloseDialog(): Chainable;
       grpSelectUnofficial(): Chainable;
-      grpSelectGroupType(params: { isOfficial: boolean }): Chainable<Subject>;
-      grpTypeGroupName(params: { name: string }): Chainable<Subject>;
       grpTypeMembers(...names: string[]): Chainable<Subject>;
       grpAddParentGroups(...groups: string[]): Chainable<Subject>;
       grpCloseGroupBtn(): Chainable<Subject>;
@@ -185,7 +183,7 @@ Cypress.Commands.add("grpSelectOfficial", () => {
 });
 
 Cypress.Commands.add("grpEnterGroupName", (params: { name: string }) => {
-  cy.get("#Group-groupName").type(params.name);
+  cy.get(`[data-cy="Group-groupName"]`).type(params.name);
 });
 
 Cypress.Commands.add("grpAssignUser", (params: { name: string }) => {
@@ -216,12 +214,6 @@ Cypress.Commands.add("grpCloseDialog", () => {
 Cypress.Commands.add("grpSelectUnofficial", () => {
   cy.get("#Group-unofficialOption").click();
 });
-
-Cypress.Commands.add("grpSelectGroupType", (params: { isOfficial: boolean }) =>
-  cy.get(`[data-cy="Group-${params.isOfficial ? "official" : "unofficial"}Option"]`).click());
-
-Cypress.Commands.add("grpTypeGroupName", (params: { name: string }) =>
-  cy.get(`[data-cy="Group-groupName"]`).type(params.name));
 
 Cypress.Commands.add("grpTypeMembers", (...names: string[]) => {
   names.forEach((name) => {

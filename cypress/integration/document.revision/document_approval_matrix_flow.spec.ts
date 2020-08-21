@@ -3,27 +3,29 @@
 
 import { NavigationItems } from "../../../src/state/ducks/auth/types";
 import { CyRoutes } from "../../support/routes";
+import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
 });
 
-const runId = new Date().valueOf();
 let company;
-let loginResponse;
+let adminEmployeeLoginResponse;
 let multipleCompanies = false;
-let employee;
+let adminEmployee;
 let docTypes: any[];
 const DAMDocumentTypes: string[] = [];
 
 const groupOne = "Group One";
 const groupTwo = "Group Two";
 
-const memberAdmin = "Admin";
-let memberSecond = "Second";
-let memberThird = "Third";
-let individualMember = "Importer Admin";
+const ADMIN_USER = USERS[10];
+const FIRST_USER = USERS[11];
+const SECOND_USER = USERS[12];
+const THIRD_USER = USERS[13];
+const INDIVIDUAL_USER = USERS[14];
+const IMPORTER_USER = USERS[15];
 
 const FormTitle = "New Form";
 const DAMTitle = "My DAM";
@@ -48,41 +50,24 @@ context("Document Approval Matrix Flow", () => {
         email: "zoran.kovacevic+admin@codecons.com",
         password: "Tester1!",
       }).then((response) => {
-        loginResponse = response;
+        adminEmployeeLoginResponse = response;
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAcronym: `T1${runId}`,
-            companyAdminEmail: "zoran.kovacevic+admin@codecons.com",
+            companyAdminEmail: ADMIN_USER.email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: "enlil.testmail+cy5@gmail.com",
+            importerEmail: IMPORTER_USER.email,
             maxRevisionStages: 3,
-            name: `Test Company ${runId}`,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [
-              {
-                name: "Second Tester",
-                email: "enlil.testmail+cy2@gmail.com",
-              },
-              {
-                name: "Third Tester",
-                email: "enlil.testmail+cy3@gmail.com",
-              },
-              {
-                name: "Fourth Tester",
-                email: "enlil.testmail+cy4@gmail.com",
-              }],
+            users: [FIRST_USER, SECOND_USER, THIRD_USER, INDIVIDUAL_USER],
             documentTypes: [],
-          }, sessionId: loginResponse.sessionId as unknown as string,
+          }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {
           company = response;
-          employee = company.employees.find((employee) => employee.user.name === memberAdmin);
-          memberSecond = company.employees.find((employee) => employee.user.email === "enlil.testmail+cy2@gmail.com").user.name;
-          memberThird = company.employees.find((employee) => employee.user.email === "enlil.testmail+cy3@gmail.com").user.name;
-          individualMember = company.employees.find((employee) => employee.user.email === "enlil.testmail+cy4@gmail.com").user.name;
+          adminEmployee = company.employees.find((employee) => employee.user.email === ADMIN_USER.email);
           docTypes = company.documentTypes || [];
           done();
         });
@@ -91,20 +76,20 @@ context("Document Approval Matrix Flow", () => {
 
     it("[API]Login admin", (done: any) => {
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
+        email: ADMIN_USER.email,
         password: "Tester1!",
       }).then((response) => {
-        loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
+        adminEmployeeLoginResponse = response;
+        multipleCompanies = adminEmployeeLoginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
-  context("Log in user, select company and open group management", () => {
+  context("Log in admin, select company and open group management", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
+        email: ADMIN_USER.email,
         password: "Tester1!",
       });
     });
@@ -124,15 +109,15 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Create official group", () => {
-      cy.grpSelectGroupType({ isOfficial: true });
+      cy.grpSelectOfficial();
     });
 
     it(`Fill group name: ${groupOne}`, () => {
-      cy.grpTypeGroupName({ name: groupOne });
+      cy.grpEnterGroupName({ name: groupOne });
     });
 
     it("Select members: Admin & Second", () => {
-      cy.grpTypeMembers(memberAdmin, memberSecond);
+      cy.grpTypeMembers(ADMIN_USER.name, SECOND_USER.name);
     });
 
     it("Add parent group: Everyone", () => {
@@ -154,15 +139,15 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Create official group", () => {
-      cy.grpSelectGroupType({ isOfficial: true });
+      cy.grpSelectOfficial();
     });
 
     it(`Fill group name: ${groupTwo}`, () => {
-      cy.grpTypeGroupName({ name: groupTwo });
+      cy.grpEnterGroupName({ name: groupTwo });
     });
 
     it("Select members: Second & Third", () => {
-      cy.grpTypeMembers(memberSecond, memberThird);
+      cy.grpTypeMembers(SECOND_USER.name, THIRD_USER.name);
     });
 
     it("Add parent group: Everyone", () => {
@@ -332,8 +317,8 @@ context("Document Approval Matrix Flow", () => {
 
     it("[API]Fetch Document Types", (done: any) => {
       cy.drGetDocumentType({
-        sessionId: loginResponse.sessionId as unknown as string,
-        employeeId: employee.id,
+        sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
+        employeeId: adminEmployee.id,
       }).then((response: any) => {
         const types = response || [];
         newDocTypes = types.map((t) => t.documentTypeName);
@@ -437,8 +422,8 @@ context("Document Approval Matrix Flow", () => {
       cy.drEnterApprovalRole({ name: individualRole });
     });
 
-    it(`Add approving users: ${individualMember}`, () => {
-      cy.drEnterApprovingUsers(individualMember);
+    it(`Add approving users: ${INDIVIDUAL_USER.name}`, () => {
+      cy.drEnterApprovingUsers(INDIVIDUAL_USER.name);
     });
 
     it("Save role", () => {
@@ -463,6 +448,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`Add document type: ${docTypeTwo}`, () => {
+      SystemRequirement("REQ-0400");
       cy.drAddAMItemValue({ identity: "documentType", value: docTypeTwo });
     });
 
@@ -524,8 +510,8 @@ context("Document Approval Matrix Flow", () => {
 
     it("[API]Fetch Document Types", (done: any) => {
       cy.drGetDocumentType({
-        sessionId: loginResponse.sessionId as unknown as string,
-        employeeId: employee.id,
+        sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
+        employeeId: adminEmployee.id,
       }).then((response: any) => {
         const types = response || [];
         newDocTypes = types.map((t) => t.documentTypeName);
@@ -607,8 +593,8 @@ context("Document Approval Matrix Flow", () => {
       cy.drApproveAndReleaseDialog();
     });
 
-    it(`Enforce user rule, Add ${individualMember} to approvers`, () => {
-      cy.drAddApprover({ name: individualMember });
+    it(`Enforce user rule, Add ${INDIVIDUAL_USER.name} to approvers`, () => {
+      cy.drAddApprover({ name: INDIVIDUAL_USER.name });
     });
 
     it("'Approve and Release' the document", () => {
@@ -624,14 +610,14 @@ context("Document Approval Matrix Flow", () => {
     });
   });
 
-  context(`Login ${individualMember} user now`, () => {
+  context(`Login ${INDIVIDUAL_USER.name} user now`, () => {
     it("Logout the user", () => {
       cy.authLogout();
     });
 
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy4@gmail.com",
+        email: INDIVIDUAL_USER.email,
         password: "Tester1!",
       });
     });
@@ -660,8 +646,8 @@ context("Document Approval Matrix Flow", () => {
 
     it("[API]Fetch Document Types", (done: any) => {
       cy.drGetDocumentType({
-        sessionId: loginResponse.sessionId as unknown as string,
-        employeeId: employee.id,
+        sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
+        employeeId: adminEmployee.id,
       }).then((response: any) => {
         newDocTypes = response || [];
         done();
@@ -669,22 +655,14 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`change name '${docTypeOne}' to '${newDocTypeOne}'`, () => {
-      let payload: any = newDocTypes.find((el) => el.documentTypeName === docTypeOne);
-      const documentId = payload.id;
-      payload = JSON.parse(JSON.stringify(payload));
-
-      delete payload.createdAt;
-      delete payload.updatedAt;
-      delete payload.id;
-      delete payload.pageDetails;
-      delete payload.groupOptions;
-
-      payload.documentTypeName = newDocTypeOne;
+      SystemRequirement("REQ-0430");
       cy.drUpdateDocumentTypeName({
-        sessionId: loginResponse.sessionId as unknown as string,
-        employeeId: employee.id,
-        id: documentId,
-        payload,
+        sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
+        employeeId: adminEmployee.id,
+        id: newDocTypes.find((el) => el.documentTypeName === docTypeOne).id,
+        payload: {
+          documentTypeName: newDocTypeOne,
+        },
       });
     });
   });
@@ -696,7 +674,7 @@ context("Document Approval Matrix Flow", () => {
 
     it("Logs user in", () => {
       cy.authLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
+        email: ADMIN_USER.email,
         password: "Tester1!",
       });
     });
@@ -735,6 +713,3 @@ context("Document Approval Matrix Flow", () => {
   });
 
 });
-
-// for TS error "All files must be modules when the '--isolatedModules' flag is provided" uncomment line below
-export { };
