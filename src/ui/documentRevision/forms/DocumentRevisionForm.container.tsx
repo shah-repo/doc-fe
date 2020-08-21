@@ -182,13 +182,18 @@ DocumentRevisionFormContainerProps
       ...schemaItem,
       deleteDisabled: true,
     })));
-    const outputScheme =  useMemo(() => outputDocumentTypes?.reduce((scheme, value: OptionType) => {
+    let outputScheme =  useMemo(() => outputDocumentTypes?.reduce((scheme, value: OptionType) => {
       const { schema: outputScheme = [] } = documentTypesById[value.value] || {};
       if (!_.isEmpty(outputScheme)) {
         return _.uniqBy(_.union(scheme, outputScheme), "name");
       }
+
       return scheme;
     }, [] as FBSchemaProps[]), [outputDocumentTypes]);
+    outputScheme = map(outputScheme, ((schemaItem) => ({
+      ...schemaItem,
+      deleteDisabled: true,
+    })));
 
     const schema = isOutput
       ? originScheme

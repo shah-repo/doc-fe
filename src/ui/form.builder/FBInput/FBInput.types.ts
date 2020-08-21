@@ -119,4 +119,5 @@ export const OmitInputClones: FBInputType[] = [
   "fileupload",
   "documentRevisions",
   "approvers",
+  "approval",
 ];
