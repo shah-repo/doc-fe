@@ -14,6 +14,8 @@ const documentRevisionName = "New document for testing revision";
 context("Document Revising Flow", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
+      SystemRequirement("REQ-0400");
+      SystemRequirement("REQ-0440");
       cy.authApiLogin({
         email: "zoran.kovacevic+admin@codecons.com",
         password: "Tester1!",

@@ -8,6 +8,8 @@ let multipleCompanies;
 context("Document Creation Flow", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
+      SystemRequirement("REQ-0400");
+      SystemRequirement("REQ-0440");
       cy.authApiLogin({
         email: "zoran.kovacevic+admin@codecons.com",
         password: "Tester1!",
@@ -25,7 +27,14 @@ context("Document Creation Flow", () => {
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
-            documentTypes: [],
+            documentTypes: [
+              {
+                documentTypeName: "Clinical Protocol",
+                documentTypeAcronym: "CP",
+                group: "OTHER",
+                isQms: true,
+              },
+            ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
@@ -210,6 +219,80 @@ context("Document Creation Flow", () => {
       it("Check two attachments are displayed: test.docx, image.jpg", () => {
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx", "image.jpg" ] });
       });
+    });
+  });
+
+  context("Create new document, change owner and cancel it", () => {
+    it("Navigates to document list", () => {
+      SystemRequirement("REQ-0140");
+      cy.navigToDocumentList();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enters title 'New Document Revision'", () => {
+      cy.drEnterDocumentTitle({ name: "New Document Revision" });
+    });
+
+    it("Enters description 'New Document Revision description'", () => {
+      cy.drEnterDocumentDescription({ description: "New Document Revision description" });
+    });
+
+    it("Selects 'Component Specification' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Change owner of document", () => {
+      SystemRequirement("REQ-0340");
+      cy.drChangeOwner({ employee: USERS[3].name });
+    });
+
+    it("Logs user that ownership was changed to", () => {
+      cy.authLogin({
+        email: USERS[3].email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on specific document 'CP00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP00003" });
+    });
+
+    it("Approves and releases document", () => {
+      cy.drApproveAndReleaseDocument();
+    });
+
+    it("Clicks on revise document", () => {
+      SystemRequirement("REQ-0150");
+      cy.drClickReviseDocument();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall().wait(1000);
+    });
+
+    it("Cancel draft document", () => {
+      SystemRequirement("REQ-0350");
+      cy.drCancelDraftButton();
+    });
+
+    it("Check document status is 'Canceled'", () => {
+      SystemRequirement("REQ-0350");
+      cy.drCheckDocumentStatus({ status: "Canceled" });
     });
   });
 });
