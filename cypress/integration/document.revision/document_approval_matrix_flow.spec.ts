@@ -203,7 +203,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Save DAM And Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
@@ -304,7 +304,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
@@ -365,7 +365,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("click on 'Approve and Release' button", () => {
@@ -497,7 +497,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("'Approve & Release' Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and Release the document", () => {
@@ -558,7 +558,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Save document, Check Group Role is enforced and Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("click on 'Approve and Release' button", () => {
@@ -584,7 +584,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
