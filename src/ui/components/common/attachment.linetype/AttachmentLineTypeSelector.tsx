@@ -13,7 +13,7 @@ import { FormContext, useFormContext } from "../../forms/FormContext";
 import Text from "../../Text";
 import { AttachmentStyleProps } from "../attachment.field/utils/types";
 import AttachmentLineTypeForm from "./AttachmentLineTypeForm";
-
+import { documentRevisionTypeGroupsFromDocListContext } from "../../../documentRevision/DocumentRevisionsManager.container";
 
 interface Props {
   upload: typeof attachmentsActions.upload;
@@ -71,7 +71,7 @@ export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   const dialog = useDialog();
   const async = useAsync<any>({ onSuccess: dialog.close });
   const isChangeRequestFormOnScreenContext = React.useContext(changeRequestFormOnScreenContext);
-
+  const documentRevisionTypeGroupFromDocList = React.useContext(documentRevisionTypeGroupsFromDocListContext);
 
   const openDialog = () => {
     async.reset();
@@ -93,7 +93,7 @@ export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      { isChangeRequestFormOnScreenContext &&
+      { (isChangeRequestFormOnScreenContext || documentRevisionTypeGroupFromDocList === "RECORD") &&
          <Box mt={1} className={classes.root} id="AttachmentFieldPresenter-field">
            <input
              accept="*"
@@ -119,7 +119,7 @@ export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
          </Box>
       }
 
-      { !isChangeRequestFormOnScreenContext &&
+      { (!isChangeRequestFormOnScreenContext && documentRevisionTypeGroupFromDocList !== "RECORD") &&
       <Button
         color="primary"
         startIcon={<AttachFileIcon />}
