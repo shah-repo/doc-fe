@@ -55,9 +55,8 @@ const TrainingControl: React.FunctionComponent<Props> = ({
         <Text translation="training.certify.completion" />
       </Typography>
       <TransitionDialog
-        isDialogOpen={dialog.isOpen}
+        transitionDialog={dialog}
         openDialog={openDialog}
-        closeDialog={dialog.close}
         onSubmit={onSubmit}
         asyncState={async.asyncState}
         transition={transition}
