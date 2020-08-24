@@ -199,7 +199,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     const customData = data
       .reduce<DocumentRevision[]>((acc, docRev) => {
         if (docRev.document.documentType.documentTypeName
-        && DOCUMENT_LIST_TYPE_NAMES.includes(docRev.document.documentType.documentTypeName)) {
+         && DOCUMENT_LIST_TYPE_NAMES.includes(docRev.document.documentType.documentTypeName)) {
           set(docRev, "description", stripTags(docRev.description));
           set(
             docRev,
