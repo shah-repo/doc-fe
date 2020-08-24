@@ -240,9 +240,13 @@ context("Create Purchase Order document with Product option from Form document",
   });
 
   it("Check status of PO should be Draft", () => {
-    SystemRequirement("REQ-1280");
-    SystemRequirement("REQ-0020");
+    SystemRequirement("REQ-1280", "REQ-0020", "REQ-1610");
     cy.poCheckStatus("Draft" );
+  });
+
+  it("Uploads text.docx", () => {
+    SystemRequirement("REQ-1350");
+    cy.atchUploadAttachment({ fileName: "test.docx" });
   });
 
   it("Click on 'Add item' button", () => {
@@ -346,8 +350,7 @@ context("Create Purchase Order document with Service option from Form document",
   });
 
   it("Check status of PO should be Draft", () => {
-    SystemRequirement("REQ-1280");
-    SystemRequirement("REQ-0020");
+    SystemRequirement("REQ-1280", "REQ-1610", "REQ-0020");
     cy.poCheckStatus( "Draft" );
   });
 

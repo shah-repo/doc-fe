@@ -69,7 +69,7 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
   const bodyDefaults = {
     name: `${capitalize(faker.commerce.color())} ${faker.company.companyName()} ${companyNumber}`,
     companyAcronym: `TC${companyNumber}`,
-    scheduledForDeletion: true,
+    // scheduledForDeletion: true,
   };
   const body: ICreateCompanyBootstrap = {
     ...payload,
