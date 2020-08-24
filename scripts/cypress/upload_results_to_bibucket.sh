@@ -61,7 +61,7 @@ COMMIT_HASH=( $BE_GIT_COMMIT_HASH $FE_GIT_COMMIT_HASH $VALIDATORS_GIT_COMMIT_HAS
 
 for COMMIT_HASH_BRANCH in "${COMMIT_HASH[@]}"
 do
-  curl -v --request PUT https://api.bitbucket.org/2.0/repositories/shifamed/$BE_REPO_NAME/commit/$COMMIT_HASH_BRANCH/reports/cypress_results \
+  curl --request PUT https://api.bitbucket.org/2.0/repositories/shifamed/$BE_REPO_NAME/commit/$COMMIT_HASH_BRANCH/reports/cypress_results \
     -u $BB_USER:$password \
     --header 'Content-Type: application/json' \
     --data-raw '{
