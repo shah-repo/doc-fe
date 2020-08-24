@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 // / <reference types="Cypress" />
+import { CONFIG } from "../support/config";
 import { USERS } from "../utils/constants/users";
 import { SystemRequirement } from "../utils/context/systemRequirement";
 
@@ -12,11 +13,12 @@ const sampleDocOneTitle = "Sample Document One";
 
 context("Approval request form scenario", () => {
   context("[API]Prepare company", () => {
-
     it("[API]Creates company", (done: any) => {
+      SystemRequirement("REQ-0400");
+      SystemRequirement("REQ-0440");
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response: any) => {
         sessionId = response.sessionId as unknown as string;
         multipleCompanies = response.employees.length > 0;
@@ -222,7 +224,7 @@ context("Approval request form scenario", () => {
     });
 
     //  approvers 'In_review' should be enabled now 'ENC-4797'
-    it.skip("Check 'Approvers' are not disabled", () => {
+    it("Check 'Approvers' are not disabled", () => {
       SystemRequirement("REQ-0850");
       cy.get("[data-cy=\"approvers\"] input").should("not.be.disabled");
     });
@@ -256,7 +258,7 @@ context("Approval request form scenario", () => {
       cy.arSelectARForm({ formTitle: approvalRequestFormName });
     });
 
-    it("Document One already used, it must not be added again.", () => {
+    it.skip("Document One already used, it must not be added again.", () => {
       SystemRequirement("REQ-0860");
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: sampleDocOneTitle });

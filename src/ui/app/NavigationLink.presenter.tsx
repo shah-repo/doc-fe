@@ -38,25 +38,25 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
   checkIfItemIsActive,
 }) => {
   const classes = styles({ iconLink: icon });
+  const isItemActive = checkIfItemIsActive(type, currentPath, path, category);
   return (
     <>
       <ListItem
         component={path || category ? NavLink : null}
         button
-        exact
         className={
           classNames(classes.link, {
             [classes.childLink]: isChild,
             [classes.menu]: type === "MENU",
+            [classes.activeLink]: isItemActive,
           })}
-        activeClassName={classes.activeLink}
         to={type === "CATEGORY" ? `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}` : path}
       >
         <ListItemIcon className={classes.itemIcon} onClick={toggleChildren}>
           <div
             className={classNames(
               classes.icon, {
-                [classes.iconActive]: type !== "MENU" && checkIfItemIsActive(type, currentPath, path, category),
+                [classes.iconActive]: type !== "MENU" && isItemActive,
               }
             )}
           />

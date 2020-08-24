@@ -35,7 +35,9 @@ Cypress.Commands.add("usrEnterName", (params: {name: string }) => {
 });
 
 Cypress.Commands.add("usrClickSaveButton", () => {
-  cy.get("#AddEmployeeFormPresenter-submitForm").click();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGet], () => {
+    cy.get("#AddEmployeeFormPresenter-submitForm").click();
+  });
 });
 
 Cypress.Commands.add("usrClickCloseDialogButton", () => {

@@ -1,3 +1,4 @@
+import { CONFIG } from "../support/config";
 import { USERS } from "../utils/constants/users";
 
 let company;
@@ -34,8 +35,8 @@ context("Validators tests", () => {
   context("[API] Prepare company", () => {
     it("[API] Creates company", (done: any) => {
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response: any) => {
 
         cy.cmpCreateCompany({
@@ -481,13 +482,13 @@ context("Validators tests", () => {
     });
 
     it("type a description", () => {
-      cy.get("[data-cy=\"RichTextEditor.description\"]", { timeout: 10000 }).type("Doc Desription");
+      cy.get("[data-cy=\"RichTextEditor.description\"]", { timeout: 10000 }).type("Doc Desription").wait(1000);
     });
   });
 
   context("Validation errors on custom fields should not prevent from saving document", () => {
     it("saving the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 

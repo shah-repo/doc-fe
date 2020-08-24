@@ -14,7 +14,7 @@ const FBApprovalMatrix: React.FunctionComponent<FBApprovalMatrixProps> = ({
   name,
   mode,
   workspaceMode,
-}) =>  (
+}) => (
   <FBProvider {...{ dialogState }}>
     <FBDialog onClose={handleFullScreen} />
     {!dialogState?.open && (
@@ -43,6 +43,7 @@ const FBApprovalMatrix: React.FunctionComponent<FBApprovalMatrixProps> = ({
             <FBButton
               fullWidth={true}
               label="form.builder.add.item"
+              dataCy="form.builder.add.item"
               variant="outlined"
               style={{ margin: 0 }}
               onClick={handleAdd}

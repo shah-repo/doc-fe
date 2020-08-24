@@ -68,6 +68,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
                         <FBTableCell align="center">
                           <FBApprovalMatrixCheck
                             name={`${name}.approvalMatrix.${i}.approvalRoles.${key}.${index}`}
+                            dataCy={`${name}.approvalMatrix.${i}.approvalRoles.${key}.${index}`}
                             checked={value}
                           />
                         </FBTableCell>
@@ -93,6 +94,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
                     <Box display="flex" justifyContent="center" pl={3}>
                       <FBCheckbox
                         name={`${name}.approvalMatrix.${approvalMatrix.length}.approvalRoles.${key}.${index}`}
+                        dataCy={`approvalMatrix.approvalRoles.${key}.${index}`}
                         gutter={false}
                         defaultChecked={false}
                         forceDefault={true}

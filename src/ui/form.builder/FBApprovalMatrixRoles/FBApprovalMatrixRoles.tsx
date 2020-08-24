@@ -9,7 +9,7 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
   approvalRoles = [],
   disabled,
   name,
-}) =>  (
+}) => (
   <FBProvider {...{ dialogState }}>
     <Box mb={5}>
       <FBDialog />
@@ -29,7 +29,7 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
                 placeholder="form.builder.approving.roles.placeholder"
                 optionId={FBAutocompleteAsyncOption.employees}
                 optionValueType="id"
-                forceDefault = {true}
+                forceDefault={true}
                 multiple={true}
                 defaultValue={[]}
                 autosave={true}
@@ -41,7 +41,7 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
                 placeholder="form.builder.approving.roles.placeholder"
                 optionId={FBAutocompleteAsyncOption.officialGroups}
                 optionValueType="id"
-                forceDefault = {true}
+                forceDefault={true}
                 multiple={true}
                 defaultValue={[]}
                 autosave={true}
@@ -54,6 +54,7 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
       <FBButton
         fullWidth={true}
         label="form.builder.add.another.role"
+        dataCy="form.builder.add.another.role"
         variant="outlined"
         style={{ margin: 0 }}
         {...{ disabled, onClick }}

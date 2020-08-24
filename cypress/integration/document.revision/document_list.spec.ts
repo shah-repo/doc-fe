@@ -3,6 +3,7 @@
 
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -18,9 +19,11 @@ const secondDocumentRevName = "Second document for testing";
 context("Document list test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
+      SystemRequirement("REQ-0400");
+      SystemRequirement("REQ-0440");
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
 
@@ -394,7 +397,7 @@ context("Document list test", () => {
         cy.dlFilterByEffectiveDate({ effectiveDate: "Last 7 days" });
       });
 
-      it.skip("Verify filter by effective date", () => {
+      it("Verify filter by effective date", () => {
         SystemRequirement("REQ-0060");
         cy.dlVerifyFilterByEffectiveDate({ effectiveDate: (new Date()).toLocaleDateString("en-US") });
       });

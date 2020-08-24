@@ -1,3 +1,4 @@
+import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -9,8 +10,8 @@ context("Group Landing Page Flow", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
         cy.cmpCreateCompany({
@@ -143,7 +144,7 @@ context("Group Landing Page Flow", () => {
       cy.grpNavigateToGroupManagement();
     });
 
-    it.skip("Checks if the filters are mantained", () => {
+    it("Checks if the filters are mantained", () => {
       SystemRequirement("REQ-2620");
       cy.grpCheckIfNameFilterIsSet({ name: GROUP_NAME });
       cy.grpCheckIfMembersFilterIsSet({ member: GROUP_MEMBER });
