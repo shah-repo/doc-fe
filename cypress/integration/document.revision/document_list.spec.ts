@@ -241,7 +241,7 @@ context("Document list test", () => {
     });
 
     it("Check only documents are shown on document list", () => {
-      SystemRequirement("REQ-0050");
+      SystemRequirement("REQ-0050", "REQ-0510");
       cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
     });
   });
