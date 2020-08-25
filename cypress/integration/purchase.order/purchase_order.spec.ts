@@ -1,4 +1,5 @@
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -13,8 +14,8 @@ context("Create company via API and create Purchase Order Form document", () => 
     SystemRequirement("REQ-0400");
     SystemRequirement("REQ-0440");
     cy.authApiLogin({
-      email: "zoran.kovacevic+admin@codecons.com",
-      password: "Tester1!",
+      email: CONFIG.SUPERADMIN_EMAIL,
+      password: CONFIG.SUPERADMIN_PASSWORD,
     }).then((response) => {
       loginResponse = response;
 
@@ -239,9 +240,13 @@ context("Create Purchase Order document with Product option from Form document",
   });
 
   it("Check status of PO should be Draft", () => {
-    SystemRequirement("REQ-1280");
-    SystemRequirement("REQ-0020");
+    SystemRequirement("REQ-1280", "REQ-0020", "REQ-1610");
     cy.poCheckStatus("Draft" );
+  });
+
+  it("Uploads text.docx", () => {
+    SystemRequirement("REQ-1350");
+    cy.atchUploadAttachment({ fileName: "test.docx" });
   });
 
   it("Click on 'Add item' button", () => {
@@ -345,8 +350,7 @@ context("Create Purchase Order document with Service option from Form document",
   });
 
   it("Check status of PO should be Draft", () => {
-    SystemRequirement("REQ-1280");
-    SystemRequirement("REQ-0020");
+    SystemRequirement("REQ-1280", "REQ-1610", "REQ-0020");
     cy.poCheckStatus( "Draft" );
   });
 

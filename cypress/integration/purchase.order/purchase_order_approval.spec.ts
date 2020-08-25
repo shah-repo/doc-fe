@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -21,8 +22,8 @@ context("Create company via API and create Purchase Order Form document", () => 
     SystemRequirement("REQ-0400");
     SystemRequirement("REQ-0440");
     cy.authApiLogin({
-      email: "zoran.kovacevic+admin@codecons.com",
-      password: "Tester1!",
+      email: CONFIG.SUPERADMIN_EMAIL,
+      password: CONFIG.SUPERADMIN_PASSWORD,
     }).then((response) => {
       loginResponse = response;
 
@@ -453,8 +454,7 @@ context("Test the POAM when approving Purchase Order", () => {
   });
 
   it("Verify rejected PO status, should be 'Draft'", () => {
-    SystemRequirement("REQ-1570");
-    SystemRequirement("REQ-0020");
+    SystemRequirement("REQ-0020", "REQ-0570", "REQ-1570");
     cy.poVerifyStatus({ status: "Draft" });
   });
 });

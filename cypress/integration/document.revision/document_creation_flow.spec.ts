@@ -1,3 +1,4 @@
+import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -11,8 +12,8 @@ context("Document Creation Flow", () => {
       SystemRequirement("REQ-0400");
       SystemRequirement("REQ-0440");
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
         cy.cmpCreateCompany({
@@ -89,6 +90,7 @@ context("Document Creation Flow", () => {
     });
 
     it("Selects 'Component Specification' document type from dropdown", () => {
+      SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Component Specification" });
     });
 
@@ -287,7 +289,8 @@ context("Document Creation Flow", () => {
       cy.drEnterDocumentDescription({ description: "New Document Revision description" });
     });
 
-    it("Selects 'Component Specification' document type from dropdown", () => {
+    it("Selects 'Clinical Protocol' document type from dropdown", () => {
+      SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
     });
 
