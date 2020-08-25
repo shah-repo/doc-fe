@@ -9,8 +9,7 @@ let multipleCompanies;
 context("Document Creation Flow", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
-      SystemRequirement("REQ-0400");
-      SystemRequirement("REQ-0440");
+      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
@@ -90,6 +89,7 @@ context("Document Creation Flow", () => {
     });
 
     it("Selects 'Component Specification' document type from dropdown", () => {
+      SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Component Specification" });
     });
 
@@ -241,7 +241,8 @@ context("Document Creation Flow", () => {
       cy.drEnterDocumentDescription({ description: "New Document Revision description" });
     });
 
-    it("Selects 'Component Specification' document type from dropdown", () => {
+    it("Selects 'Clinical Protocol' document type from dropdown", () => {
+      SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
     });
 

@@ -19,8 +19,7 @@ let docTypeId;
 
 context("Create company via API and create Purchase Order Form document", () => {
   it("[API] Creates company", (done: any) => {
-    SystemRequirement("REQ-0400");
-    SystemRequirement("REQ-0440");
+    SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
     cy.authApiLogin({
       email: CONFIG.SUPERADMIN_EMAIL,
       password: CONFIG.SUPERADMIN_PASSWORD,
@@ -454,8 +453,7 @@ context("Test the POAM when approving Purchase Order", () => {
   });
 
   it("Verify rejected PO status, should be 'Draft'", () => {
-    SystemRequirement("REQ-1570");
-    SystemRequirement("REQ-0020");
+    SystemRequirement("REQ-0020", "REQ-0570", "REQ-1570");
     cy.poVerifyStatus({ status: "Draft" });
   });
 });
