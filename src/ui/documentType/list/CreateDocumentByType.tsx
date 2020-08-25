@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { DocumentType, documentTypeActions, DocumentTypeById, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType, documentTypeActions, DocumentTypeById, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedId, documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { FormContext } from "../../components/forms/FormContext";
@@ -19,6 +19,7 @@ import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import DocumentTypeDialog from "../dialogs/DocumentTypeDialog.presenter";
 import FormListDialog from "../dialogs/FormListDialog/FormListDialog.presenter";
+import { MultipleFormTemplateDialog } from "../dialogs/MultipleFormTemplateDialog";
 import { filterSecurityGroupsForQms } from "./helpers";
 import { styles } from "./styles";
 
@@ -93,6 +94,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   const formDialog = useDialog();
   const docTypeDialog = useDialog();
+  const multipleFormDialog = useDialog();
 
   const getDocTypesByCategory = useActionCreator(documentTypeActions.getDocTypesByCategory);
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
@@ -106,6 +108,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   const [isVisible, label] = useCreateDocumentByTypeButton(documentTypeId);
   const buttonLabel = isByCategory ? labelName : label;
+  const isRecord = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.RECORD;
 
   if (!isByCategory && documentTypeId) {
     selectedDocumentTypeId = documentTypeId;
@@ -118,6 +121,9 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const idAsync = useAsync<DocumentTypeById>({
     onSuccess: () => {
       toggleDocTypeForm(false);
+      if (isRecord && formIds.length !== 1) {
+        return;
+      }
       if (formIds.length === 1) {
         handleCreateDocument(formIds[0] as DocumentRevision);
         return;
@@ -134,7 +140,11 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   const categoryAsync = useAsync<DocumentType[]>({
     onSuccess: () => {
-      if (documentTypes.length === 1) {
+      if (isRecord) {
+        multipleFormDialog.open();
+        return;
+      }
+      if (documentTypes.length === 1 && !isRecord) {
         selectedDocumentTypeId = documentTypes[0].id;
         idAsync.start(getDocRevByIds, documentTypes[0].id, idAsync);
         return;
@@ -176,6 +186,21 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     idAsync.start(getDocRevByIds, docTypeId, idAsync);
   };
 
+  const handleMultipleFormTypeSelection = (id) => {
+    if (!id) {
+      return;
+    }
+    idAsync.start(getDocRevByIds, id, idAsync);
+  };
+
+  const handleMultipleFormTemplateSelection = (id) => {
+    if (!id) {
+      return;
+    }
+    const selectedForm = formIds.find((form) => form.id === id);
+    handleCreateDocument(selectedForm as DocumentRevision);
+  };
+
   const renderDocumentTypeDialog = (props: FormikProps<any>) => (
     <DocumentTypeDialog
       {...props}
@@ -190,6 +215,17 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
       {...props}
       dialog={formDialog}
       handleSelection={handleFormSelection}
+      formIds={formIds}
+    />
+  );
+
+  const renderMultipleFormTemplateDialog = (props: FormikProps<any>) => (
+    <MultipleFormTemplateDialog
+      {...props}
+      dialog={multipleFormDialog}
+      handleSelection={handleMultipleFormTypeSelection}
+      handleTemplateSelection={handleMultipleFormTemplateSelection}
+      documentTypes={documentTypes}
       formIds={formIds}
     />
   );
@@ -225,7 +261,16 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         )
       }
       {
-        docTypeForm && (
+        isRecord && (
+          <FormContext.Provider value={{ submitOnChange: false }}>
+            <Formik initialValues={{}} onSubmit={handleMultipleFormTypeSelection}>
+              {renderMultipleFormTemplateDialog}
+            </Formik>
+          </FormContext.Provider>
+        )
+      }
+      {
+        docTypeForm && !isRecord && (
           <FormContext.Provider value={{ submitOnChange: false }}>
             <Formik initialValues={{}} onSubmit={handleDocTypeSelection}>
               {renderDocumentTypeDialog}
@@ -234,7 +279,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         )
       }
       {
-        multipleForm && (
+        multipleForm && !isRecord && (
           <FormContext.Provider value={{ submitOnChange: false }}>
             <Formik initialValues={{}} onSubmit={handleFormSelection}>
               {renderFormListDialog}
