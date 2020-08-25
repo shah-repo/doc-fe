@@ -38,6 +38,8 @@ export * from "./FBAutocomplete/FBAutocomplete.types";
 export { default as FBAutocompleteAsync } from "./FBAutocompleteAsync/FBAutocompleteAsync";
 export { default as FBAutocompleteAsyncState } from "./FBAutocompleteAsync/FBAutocompleteAsync.state";
 export * from "./FBAutocompleteAsync/FBAutocompleteAsync.types";
+export { default as FBBlankTplForm } from "./FBBlankTplForm/FBBlankTplForm";
+export * from "./FBBlankTplForm/FBBlankTplForm.types";
 export { default as FBButton } from "./FBButton/FBButton";
 export * from "./FBButton/FBButton.types";
 export { default as FBCheckbox } from "./FBCheckbox/FBCheckbox";

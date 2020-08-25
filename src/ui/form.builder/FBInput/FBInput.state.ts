@@ -12,6 +12,10 @@ export class FBInputState {
   @observable public children: React.ReactElement | undefined;
   @observable public autosaveNextValue?: any;
 
+  public constructor(value?: any) {
+    this.value = value;
+  }
+
   @action public setChildren = (children: React.ReactElement) => {
     set(this, "children", children);
   };
