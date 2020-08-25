@@ -1,4 +1,5 @@
 import axios from "axios";
+import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { Audit, AuditActionPayload } from "../audit/types";
@@ -161,8 +162,12 @@ const approveAndRelease = (
   method: "post",
   data: body,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
-    dispatch(load(id));
-    dispatch(loadDocument(docRev.document.id));
+    if (docRev.document?.documentType?.group === "RECORD") {
+      window.location.href = documentVersionPath(docRev.id, docRev.document.id);
+    } else {
+      dispatch(load(id));
+      dispatch(loadDocument(docRev.document.id));
+    }
   },
   handlers,
 });

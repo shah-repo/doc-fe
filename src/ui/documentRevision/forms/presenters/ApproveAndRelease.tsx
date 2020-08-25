@@ -130,6 +130,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const closeDialog = () => {
     setFormDocument("");
     setDocumentType("");
+    setSelectedInvalid(false);
     dialog.close();
   };
 
@@ -142,9 +143,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const initialValuesAR = (values: any): any => ({
     title: documentRevision.name,
     description: documentRevision.name,
-    documentType: {
-      id: values.formDocument.documentType,
-    },
+    documentType: { id: documentType },
     formDocument: {
       id: values.formDocument.value,
     },

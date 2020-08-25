@@ -8,16 +8,15 @@ const FBApprovalField = <T extends FBInlineApproverType>({
   collection,
   disabled,
   approveLoading,
-  mb,
 }: FBApprovalFieldProps<T>) => (
-  <Box {...{ mb }}>
+  <Box mt={2}>
     <FBMapWrapper<T> {...{ collection }}>
       {(approver, index) => {
         const config = approvalConfig?.(approver);
         return (
           <Box
             mb={config?.canApprove ? 1 : 2}
-            key={`fb-approver-${index}`}
+            key={`fb-approver-${approver.id}-${index}`}
             display="flex"
             alignItems="center"
             fontSize="default"

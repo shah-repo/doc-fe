@@ -1,6 +1,7 @@
-import { Button, CircularProgress, Dialog, DialogContent, DialogTitle, FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
+import { Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { DocumentTypeByIdForm } from "../../../../state/ducks/documentRevisions/documentType/types";
+import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import Text from "../../../components/Text";
 import { DialogHandler } from "../../../hooks/useDialog";
 import { styles } from "./FormListDialog.styles";
@@ -18,8 +19,7 @@ export const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
   const [selectedFormId, setSelectedFormId] = useState<string>("");
   const classes = styles();
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
-  const handleSelect = (evt) => {
-    const id = evt.target.value;
+  const handleSelect = (id: string) => {
     setSelectedFormId(id);
     handleSelection(id);
   };
@@ -45,25 +45,17 @@ export const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
             <CircularProgress size={45} />
           </div>
         }
-        <RadioGroup
-          aria-label="selectForm"
+        <AutocompleteField
           name="select-form"
-          onChange={handleSelect}
-          value={selectedFormId}
-          id="FormListDialog-selectForm"
-          style={{ visibility: selectedFormId ? "hidden" : "visible" }}
-        >
-          {
-            formIds.map((form) => (
-              <FormControlLabel
-                key={form.id}
-                value={form.id}
-                control={<Radio color="primary" />}
-                label={form.name}
-              />
-            ))
-          }
-        </RadioGroup>
+          size="sm"
+          autocompleteProps={{ id: "FormListDialog-selectForm" }}
+          options={formIds.map((form) => ({
+            label: form.name,
+            value: form.id,
+          }))}
+          onClick={(option) => handleSelect(option.value)}
+          label="supplier.select.form"
+        />
         <Button
           variant="text"
           color="secondary"

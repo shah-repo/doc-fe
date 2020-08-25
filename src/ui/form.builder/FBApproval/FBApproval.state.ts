@@ -3,6 +3,7 @@ import { action, computed, observable, set } from "mobx";
 import { FBApprovalApi, FBApprovalConstructor, FBApprovalValue, FBAutocompleteAsyncOption, FBInlineApprovalRole } from "..";
 import { Audit } from "../../../state/ducks/audit";
 import { Employee } from "../../../state/ducks/company";
+import { Document } from "../../../state/ducks/documentRevisions/types";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
@@ -13,11 +14,12 @@ export class FBApprovalState {
   @observable public hasApproved: FBApprovalValue[] = [];
   @observable public auditData?: Audit[];
 
-  public approversValue: string[] = [];
-  public groupsValue: string[] = [];
-  public approvalRolesValue: string[] = [];
+  public approversValue?: string[];
+  public groupsValue?: string[];
+  public approvalRolesValue?: string[];
 
   public postApi: FBRequest<any, FBApprovalApi> = new FBRequest();
+  public getDocumentApi: FBRequest<Document, null> = new FBRequest();
   public approversApi = new FBAutocompleteAsyncState(this.approversId);
   public groupsApi = new FBAutocompleteAsyncState(this.groupsId);
   public approvalRolesApi = new FBAutocompleteAsyncState(this.approvalRolesId);
@@ -30,7 +32,6 @@ export class FBApprovalState {
     groupsValue = [],
     approvalRolesValue = [],
   }: FBApprovalConstructor) {
-
     this.approversValue = approversValue;
     this.groupsValue = groupsValue;
     this.approvalRolesValue = approvalRolesValue;
@@ -50,6 +51,12 @@ export class FBApprovalState {
   public get approvalRolesId(): string {
     return FBAutocompleteAsyncOption.approvalRoles;
   }
+
+  public getDocument = (id?: string) => {
+    if (!id) { return; }
+    this.getDocumentApi.setTemplateUrl(FBEndpoint.Document, { id });
+    this.getDocumentApi.fetch();
+  };
 
   @computed public get isApproved(): boolean {
     return !isEmpty(this.hasApproved);

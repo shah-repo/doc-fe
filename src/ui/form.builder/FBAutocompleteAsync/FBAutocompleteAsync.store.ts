@@ -1,4 +1,4 @@
-import { map } from "lodash";
+import { isEmpty, map } from "lodash";
 import { action, observable } from "mobx";
 
 export class FBAutocompleteAsyncStore {
@@ -20,7 +20,7 @@ export class FBAutocompleteAsyncStore {
   };
 
   public getValues = <T>(optionId?: string, by?: string[]): T[] | undefined => {
-    if (!optionId || !by) { return; }
+    if (!optionId || !by || isEmpty(by)) { return; }
     const list = this.data.get(optionId);
     if (!list) { return; }
     return Array.from(map(by, (i) => list.get(i))) as T[];

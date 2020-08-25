@@ -1,4 +1,5 @@
 
+import { isEqual, union, uniqBy } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
@@ -37,21 +38,34 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     ...props
   }: T) => {
     let schema: FBSchemaProps[] = [];
-    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, { schema: props.schema, mode, autosave });
+    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
+      schema: props.schema,
+      mode,
+      autosave,
+    });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
-    workspaceState && (workspaceState.document = document);
 
+    // predefined schema hack until we remove formik from rest of the project
+    if (workspaceState) {
+      const originType = document?.document?.documentType;
+      const workspaceType = workspaceState.document?.document?.documentType;
+      if (originType !== workspaceType) {
+        workspaceState.schema = props.schema || [];
+      } else {
+        const newScheme = uniqBy(union(workspaceState.schema, props.schema || []), "name");
+        if (!isEqual(workspaceState.schema, newScheme)) {
+          workspaceState.schema = newScheme;
+        }
+      }
+      workspaceState.document = document;
+    }
     // *TODO: find a way to reset constructor props
     React.useEffect(() => {
       if (!workspaceState) { return; }
-      workspaceState.document = document;
       workspaceState.changeRequest = changeRequest;
       workspaceState.externalState = store.getState();
-      if (!props.schema?.length) { return; }
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      workspaceState.schema = props.schema!;
-    }, [workspaceState, props.schema, document, changeRequest]);
+    }, [workspaceState, changeRequest]);
 
     useObserver(() => {
       isStarter = workspaceState?.isStarter;

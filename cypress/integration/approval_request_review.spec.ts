@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 // / <reference types="Cypress" />
+import { USERS } from "../utils/constants/users";
 import { SystemRequirement } from "../utils/context/systemRequirement";
 
 let createdCompany;
@@ -23,27 +24,15 @@ context("Approval request form scenario", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+            companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: "enlil.testmail+cy5@gmail.com",
+            importerEmail: USERS[5].email,
             maxRevisionStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [
-              {
-                name: "Second Tester",
-                email: "enlil.testmail+cy2@gmail.com",
-              },
-              {
-                name: "Third Tester",
-                email: "enlil.testmail+cy3@gmail.com",
-              },
-              {
-                name: "Fourth Tester",
-                email: "enlil.testmail+cy4@gmail.com",
-              }],
+            users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
@@ -64,7 +53,7 @@ context("Approval request form scenario", () => {
 
     it("[API]Tester Login to get companies", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       }).then((response: any) => {
         multipleCompanies = response.employees.length > 1 ? true : false;
@@ -76,7 +65,7 @@ context("Approval request form scenario", () => {
   context("Log in user and select company", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       });
     });
@@ -115,7 +104,7 @@ context("Approval request form scenario", () => {
       });
 
     it("Click create document", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Approve and release document", () => {
@@ -152,7 +141,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
@@ -188,7 +177,7 @@ context("Approval request form scenario", () => {
 
     it("Add first approver to approval request on approver list",
       () => {
-        cy.arAddApproverOnApproverList({ approver: "enlil.testmail+cy1@gmail.com" });
+        cy.arAddApproverOnApproverList({ approver: USERS[1].email });
       });
 
     it("Click Create Approval Request", () => {
@@ -200,6 +189,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Verify AR status", () => {
+      SystemRequirement("REQ-0020");
       cy.arVerifyStatus({ status: "In Review" });
     });
   });
@@ -282,7 +272,7 @@ context("Approval request form scenario", () => {
 
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });

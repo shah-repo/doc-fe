@@ -231,7 +231,7 @@ pipelines:
           - step: *BUILD_SANDBOX2
       - step: *DEPLOY_SANDBOX2
 
-    release/20.19.1:
+    release/20.20:
       - parallel:
           - step: *RUN_TESTS
           - step: *RUN_LINTER

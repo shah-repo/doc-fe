@@ -1,3 +1,5 @@
+import { USERS } from "../utils/constants/users";
+
 let company;
 let docId;
 let loginResponse;
@@ -39,26 +41,15 @@ context("Validators tests", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+            companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: "enlil.testmail+cy5@gmail.com",
+            importerEmail: USERS[5].email,
             maxRevisionStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [{
-              name: "Second Tester",
-              email: "enlil.testmail+cy2@gmail.com",
-            },
-            {
-              name: "Third Tester",
-              email: "enlil.testmail+cy3@gmail.com",
-            },
-            {
-              name: "Fourth Tester",
-              email: "enlil.testmail+cy4@gmail.com",
-            }],
+            users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             whiteLabeling: null,
@@ -73,7 +64,7 @@ context("Validators tests", () => {
 
     it("[API] Login user", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: USERS[1].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -86,7 +77,7 @@ context("Validators tests", () => {
   context("Log in user, select company and open 'Create Document'", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
@@ -120,8 +111,7 @@ context("Validators tests", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocument();
-      cy.wait(3000);
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("'Approve and Release' the document", () => {
@@ -142,8 +132,7 @@ context("Validators tests", () => {
   context("Tries to submit empty form", () => {
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocument();
-      cy.wait(3000);
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("shows error 'required’ below title field", () => {
@@ -185,7 +174,7 @@ context("Validators tests", () => {
   context("Tries to submit partially filled in form", () => {
 
     it("click on 'Save' button", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("shows error 'at least one required' below 'Output Document Type' field", () => {
@@ -445,7 +434,7 @@ context("Validators tests", () => {
   context("Store DocId, Save document And 'Approve & Release Document", () => {
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Store Document Id", () => {
@@ -471,7 +460,7 @@ context("Validators tests", () => {
   context("Tries to submit empty form", () => {
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("shows error 'required’ below title field", () => {
@@ -498,7 +487,7 @@ context("Validators tests", () => {
 
   context("Validation errors on custom fields should not prevent from saving document", () => {
     it("saving the document", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -638,31 +627,26 @@ context("Validators tests", () => {
 
   context(`Test ${requiredDocTypeFieldLabel} (required document type) Field`, () => {
     it("Add incorrect document", () => {
-      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}'] input`).type("initial AR Form{downarrow}{enter}");
+      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type("initial AR Form{downarrow}{enter}");
     });
 
-    it("should show error for 'required document type' field", () => {
+    it("should show error for 'Incorrect document type' field", () => {
       cy.wait(1000);
-      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).then((elem) => {
+      cy.get(`[name^='${requiredDocTypeFieldSelector}']`).then((elem) => {
         const errorBlock = elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", "Incorrect document type.");
+          .should("have.text", `Incorrect document type.`);
       });
     });
 
     it(`fill in '${requiredDocTypeFieldLabel}' with our CS Document`, () => {
-      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}'] input`).clear();
+      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).clear();
       cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type(`${csDocTitle}{downarrow}{enter}`);
     });
   });
 
   context("Release document", () => {
-
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocument();
-    });
-
     it("'Approve and Release' the document", () => {
       cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 1000 }).click();
       cy.get("#FormList-selectForm").type("Initial AR Form{enter}");

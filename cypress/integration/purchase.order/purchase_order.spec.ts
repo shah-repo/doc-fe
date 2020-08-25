@@ -1,4 +1,5 @@
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -18,27 +19,15 @@ context("Create company via API and create Purchase Order Form document", () => 
       cy.cmpCreateCompany({
         specFilePath: __filename,
         payload: {
-          companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+          companyAdminEmail: USERS[1].email,
           helloSignIntegrationEnabled: false,
           helloSignTestMode: false,
-          importerEmail: "enlil.testmail+cy5@gmail.com",
+          importerEmail: USERS[5].email,
           maxRevisionStages: 3,
           numOfDocDigits: 5,
           remoteValidatorBundleName: "default",
           slackIntegrationEnabled: false,
-          users: [
-            {
-              name: "Second Tester",
-              email: "enlil.testmail+cy2@gmail.com",
-            },
-            {
-              name: "Third Tester",
-              email: "enlil.testmail+cy3@gmail.com",
-            },
-            {
-              name: "Fourth Tester",
-              email: "enlil.testmail+cy4@gmail.com",
-            }],
+          users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
                 documentTypeName: "PO Part",
@@ -52,7 +41,7 @@ context("Create company via API and create Purchase Order Form document", () => 
         }, sessionId: loginResponse.sessionId as unknown as string,
       }).then((response) => {
         createdCompany = response;
-        adminEmployee = createdCompany.employees.find((employee) => employee.user.name === "Company Admin");
+        adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
         createdCompany.documentTypes.forEach((item: { documentTypeName: string; id: any }) => {
           if (item.documentTypeName == "Purchase Order")
           {
@@ -66,7 +55,7 @@ context("Create company via API and create Purchase Order Form document", () => 
 
   it("[API] Updates company", (done: any) => {
     cy.authApiLogin({
-      email: "enlil.testmail+cy1@gmail.com",
+      email: USERS[1].email,
       password: "Tester1!",
     }).then((response) => {
       loginResponse = response;
@@ -127,7 +116,7 @@ context("Create company via API and create Purchase Order Form document", () => 
 
   it("[API] Login second tester", (done: any) => {
     cy.authApiLogin({
-      email: "enlil.testmail+cy2@gmail.com",
+      email: USERS[2].email,
       password: "Tester1!",
     }).then((response) => {
       loginResponse = response;
@@ -138,7 +127,7 @@ context("Create company via API and create Purchase Order Form document", () => 
 
   it("Logs user in", () => {
     cy.authLogin({
-      email: "enlil.testmail+cy2@gmail.com",
+      email: USERS[2].email,
       password: "Tester1!",
     });
   });
@@ -188,7 +177,7 @@ context("Create company via API and create Purchase Order Form document", () => 
   });
 
   it("Click create document after filling document", () => {
-    cy.drClickCreateDocument();
+    cy.drClickCreateDocumentWithApiCall();
   });
 
   it("Approve and release document", () => {
@@ -218,7 +207,7 @@ context("Create Part document for PO", () => {
   });
 
   it("Click create document after filling document", () => {
-    cy.drClickCreateDocument();
+    cy.drClickCreateDocumentWithoutApiCall();
   });
 });
 
@@ -232,7 +221,7 @@ context("Create Purchase Order document with Product option from Form document",
   });
 
   it("Check for PO ID uniqueness - ID should be PO-00001", () => {
-    SystemRequirement("REQ-1270")
+    SystemRequirement("REQ-1270");
     cy.poCheckStatus( "PO-00001" );
   });
 
@@ -241,13 +230,14 @@ context("Create Purchase Order document with Product option from Form document",
   });
 
   it("Click on existing PO that was created before", () => {
-    SystemRequirement("REQ-1370")
-    SystemRequirement("REQ-1210") 
+    SystemRequirement("REQ-1370");
+    SystemRequirement("REQ-1210");
     cy.poClickOnSpecificPOFromList({ item:"PO-00001" });
   });
 
   it("Check status of PO should be Draft", () => {
-    SystemRequirement("REQ-1280")
+    SystemRequirement("REQ-1280");
+    SystemRequirement("REQ-0020");
     cy.poCheckStatus("Draft" );
   });
 
@@ -347,12 +337,13 @@ context("Create Purchase Order document with Service option from Form document",
   });
 
   it("Check for PO ID uniqueness - ID should be PO-00002", () => {
-    SystemRequirement("REQ-1270")
+    SystemRequirement("REQ-1270");
     cy.poCheckStatus( "PO-00002" );
   });
 
   it("Check status of PO should be Draft", () => {
-    SystemRequirement("REQ-1280")
+    SystemRequirement("REQ-1280");
+    SystemRequirement("REQ-0020");
     cy.poCheckStatus( "Draft" );
   });
 
@@ -508,7 +499,7 @@ context("Creates second PO form document and checks if both documents are availa
   });
 
   it("Click create document after filling document", () => {
-    cy.drClickCreateDocument();
+    cy.drClickCreateDocumentWithApiCall();
   });
 
   it("Approve and release document", () => {

@@ -1,10 +1,10 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import _, { cloneDeep, filter, get } from "lodash";
+import _, { cloneDeep, filter, get, map } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
+import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -121,8 +121,7 @@ DocumentRevisionFormContainerProps
     const attachments = outputRevision
       ? filter(initialValues.attachments, (file) => file.lineType !== "RED_LINE")
       : initialValues.attachments;
-    const docId = initialValues.formDocument?.document?.docId;
-    const isAdministrativeDefault = Boolean(docId && !_.isEmpty(docId)) && isAlphaReleased && isRecord;
+
     return {
       ...initialValues,
       attachments,
@@ -136,9 +135,6 @@ DocumentRevisionFormContainerProps
       renderHTML,
       securityGroups,
       outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
-      revisionChangeType: isAdministrativeDefault ?
-        RevisionChangeType.AdministrativeChange :
-        initialValues.revisionChangeType,
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canUpdateHTML, initialValues, groupOptions]);
@@ -176,21 +172,28 @@ DocumentRevisionFormContainerProps
   } else if (outputGroup) {
     mode = "form";
   }
-  const showAdministrativeAndVoidChange = isOutput &&
-  revisionStage === 3 &&
-  isRecord;
+  const showAdministrativeAndVoidChange = isOutput && isAlphaReleased && isRecord;
 
   const GetScheme = (props: FormikProps<DocumentRevisionFormValues>): FBSchemaProps[] => {
     const { id: documentTypeId = "" } = props.values.document?.documentType || {};
     const { outputDocumentTypes } = props.values || {};
-    const { schema: docScheme = [] } = documentTypesById?.[documentTypeId] || {};
-    const outputScheme =  useMemo(() => outputDocumentTypes?.reduce((scheme, value: OptionType) => {
+    let { schema: docScheme = [] } = documentTypesById?.[documentTypeId] || {};
+    docScheme = map(docScheme, ((schemaItem) => ({
+      ...schemaItem,
+      deleteDisabled: true,
+    })));
+    let outputScheme =  useMemo(() => outputDocumentTypes?.reduce((scheme, value: OptionType) => {
       const { schema: outputScheme = [] } = documentTypesById[value.value] || {};
       if (!_.isEmpty(outputScheme)) {
         return _.uniqBy(_.union(scheme, outputScheme), "name");
       }
+
       return scheme;
     }, [] as FBSchemaProps[]), [outputDocumentTypes]);
+    outputScheme = map(outputScheme, ((schemaItem) => ({
+      ...schemaItem,
+      deleteDisabled: true,
+    })));
 
     const schema = isOutput
       ? originScheme
@@ -201,10 +204,9 @@ DocumentRevisionFormContainerProps
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
     <FBWorkspace
       portalContainer={FBContainer}
-      // TODO: check if merging both objects would satisfy all our needs
       document={{
+        ...props.values as unknown as DocumentRevision,
         ...documentRevision as unknown as DocumentRevision,
-        outputRevision: props.values.outputRevision,
       }}
       initialValues={formInput}
       autosave={true}

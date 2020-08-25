@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { Nullable } from "../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import SummaryInfo from "../common/summary/SummaryInfo";
-import Date from "../components/Date";
+import DateFormatter from "../components/Date";
 import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import { useDocumentVersion } from "../hooks/docCustomization/useCustomization";
@@ -57,7 +57,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isNumericRelease = documentRevision.revisionStage === 1;
 
   if (isDraft && isRecord && isInlineApproval && !isAlphaReleased) {
-    verPrefix = "common.work.in.progress";
+    statLabel = "common.wip";
   }
   if (isReleased || ((isDeprecated || isDraft) && isInlineApproval && isRecord && isAlphaReleased)) {
     verPrefix = "common.revision";
@@ -67,6 +67,9 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   }
   if ((isDeprecated || isReleased) && isInlineApproval && isNumericRelease) {
     statLabel = "common.archived";
+  }
+  if (isReleased && isInlineApproval && isNumericRelease) {
+    statLabel = "common.last.signed";
   }
 
   return (
@@ -111,7 +114,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         <SummaryInfo
           label="common.effective.date"
           value={
-            <Date
+            <DateFormatter
               value={documentRevision.obsoletedAt || documentRevision.effectiveDate}
             />
           }

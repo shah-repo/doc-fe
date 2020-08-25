@@ -11,6 +11,8 @@ type ICyRoutes = {[key in keyof typeof CyRoutes]: {
 }};
 
 export enum CyRoutes {
+  EmployeesGet = "EmployeesGet",
+  GroupsGet = "GroupsGet",
   ReleaseDocRev = "ReleaseDocRev",
   ARtoReview = "ARtoReview",
   IOTCredentials = "IOTCredentials",
@@ -18,13 +20,34 @@ export enum CyRoutes {
   SetPrimaryAttachment = "SetPrimaryAttachment",
   UploadAttachment = "UploadAttachment",
   PatchDocRev = "PatchDocRev",
+  PostOrPatchDocRev = "PostOrPatchDocRev",
   Login = "Login"
 }
 
 export const routes: ICyRoutes =   {
+  EmployeesGet: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/employees*",
+    },
+  },
+  GroupsGet: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/groups*",
+    },
+  },
   PatchDocRev: {
     requestConfig: {
       method: "PATCH",
+      url: "/api/v1/document_revisions/*",
+    },
+    callConfig: {
+      responseTimeout: 25 * 1000,
+    },
+  },
+  PostOrPatchDocRev: {
+    requestConfig: {
       url: "/api/v1/document_revisions/*",
     },
     callConfig: {

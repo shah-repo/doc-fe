@@ -1,4 +1,3 @@
-import { BoxProps } from "@material-ui/core";
 import { FBApprovalState, FBInputProps } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
@@ -24,15 +23,17 @@ export type FBApprovalProps =
 | "reviseDisabled"
 | "editorProperties"
 | "autosave"
+| "gutter"
 > & {
   onApprove?: (approver?: FBInlineApproverType) => () => void;
   approvalConfig?: (approver?: FBInlineApproverType) => FBApprovalConfig | undefined;
-  approvalFieldState?: FBApprovalState;
+  approvalState?: FBApprovalState;
   hasApproved?: FBApprovalValue[];
   isApproved?: boolean;
   isDefined?: boolean;
   loading?: boolean;
   approveLoading?: boolean;
+  approvalNonVersioned?: boolean;
 };
 
 export enum FBApprovalStatus {
@@ -53,10 +54,7 @@ export interface FBApprovalApi {
   fieldValue: FBApprovalValue[];
 }
 
-export type FBApprovalFieldProps<T> =
-& FBApprovalProps
-& Pick<BoxProps, "mb">
-& {
+export type FBApprovalFieldProps<T> = FBApprovalProps & {
   collection: T[];
 };
 
@@ -87,3 +85,4 @@ export interface FBInlineApprovalRole {
 }
 
 export type FBInlineApproverType = Employee | GroupRequestBody | FBInlineApprovalRole;
+export type FBApprovalSocketProps = Pick<FBApprovalProps, "name">;
