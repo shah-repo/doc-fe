@@ -67,6 +67,7 @@ declare global {
       drClickOnSpecificDocFromList(params: { item: string }): Chainable<Subject>;
       drCancelDraftButton(): Chainable<Subject>;
       drIsTrainingRequired(params: {shouldBe: boolean}): Chainable<Subject>;
+      drApproveAndReleaseNonQMSDocument(): Chainable<Subject>;
     }
   }
 }
@@ -176,6 +177,12 @@ Cypress.Commands.add("drApproveAndReleaseDocument", () => {
     () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
     });
+});
+
+Cypress.Commands.add("drApproveAndReleaseNonQMSDocument", () => {
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+  cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
+  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
 });
 
 Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
