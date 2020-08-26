@@ -13,6 +13,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
     disabled,
     name,
     defaultValue,
+    withState,
     ...props
   }: T) => {
 
@@ -31,7 +32,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
       reaction(
         () => fileUploadState?.files,
         (files) => {
-          formState?.setFieldValue(name, files);
+          formState?.setFieldValue(name, files, withState);
           formState?.setFieldAutosave(name);
         }
       );
@@ -43,6 +44,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
       fileUploadState,
       filePresenters,
       disabled,
+      withState,
       name,
     });
   };
