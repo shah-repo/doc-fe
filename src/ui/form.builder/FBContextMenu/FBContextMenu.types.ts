@@ -15,8 +15,9 @@ export type FBContextMenuProps =
 & Pick<Partial<MenuProps>, "anchorPosition" | "open">
 & Pick<FBFormProps, "children">
 & {
-  contextMenuState?: FBContextMenuState;
   onClose?: () => any;
+  onBlur?: () => any;
+  contextMenuState?: FBContextMenuState;
   menuItems?: FBContextMenuItemProps[];
   menuEls?: FBFormProps["children"];
 };

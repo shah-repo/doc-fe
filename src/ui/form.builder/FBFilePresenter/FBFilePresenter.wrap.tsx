@@ -1,3 +1,4 @@
+import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBDialogState, FBFilePresenterDownloadType, FBFilePresenterProps, FBFilePresenterState, FBFilePreview } from "..";
@@ -26,6 +27,18 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     const { fileUploadState } = FB.useStores();
     const { fileName, fileShortName, fileType } = filePresenterState;
 
+    React.useEffect(() => {
+      reaction(
+        () => filePresenterState?.data,
+        (data) => {
+          if (!data?.url) { return; }
+          file.url = filePresenterState?.data?.url;
+          handleLoaded();
+        }
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     function handleLoaded() {
       switch (filePresenterState?.downloadType) {
         case "view":
@@ -53,12 +66,8 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
       handleLoaded();
     };
 
-
     useObserver(() => {
       loading = filePresenterState?.loading;
-      file.url = filePresenterState?.data?.url;
-      if (loading && !file.url) { return; }
-      handleLoaded();
     });
 
     // File menu items

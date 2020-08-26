@@ -18,8 +18,9 @@ export const withFBOnChange = <T extends FBInputProps>(
     ...props
   }: T) => {
 
-    inputState = FB.useRef<FBInputState>(FBInputState);
     const { formState, schemaState, workspaceState } = FB.useStores();
+    const { value: inputValue } = formState?.inputState.get(name || "") || {};
+    inputState = FB.useRef<FBInputState>(FBInputState, inputValue);
 
     React.useEffect(() => {
       const defaultValue = formState?.getFieldValue(name);
