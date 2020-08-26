@@ -14,7 +14,7 @@ secs_to_human() {
 }
 start=$(date +%s)
 
-DATE_ISO_DEFAULT=$(date --iso-8601=seconds)
+DATE_ISO_DEFAULT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 export CI_BUILD_ID=${CI_BUILD_ID:-$DATE_ISO_DEFAULT}
 export NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-2}
 export REPORT_TITLE=${REPORT_TITLE:-generated_specs}
