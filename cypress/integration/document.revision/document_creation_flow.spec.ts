@@ -113,6 +113,14 @@ context("Document Creation Flow", () => {
       cy.drRemoveReferences( 1 );
     });
 
+    it("'Training Required' should be unchecked initially", () => {
+      cy.drIsTrainingRequired({ shouldBe: false });
+    });
+
+    it("Mark 'Training Required' for next revision", () => {
+      cy.drClickTrainingRequired();
+    });
+
     context("Uploads attachments", () => {
       it("Uploads text.docx", () => {
         cy.atchUploadAttachment({ fileName: "test.docx" });
@@ -144,6 +152,30 @@ context("Document Creation Flow", () => {
 
       it("Check one attachment is displayed: test.docx", () => {
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx" ] });
+      });
+
+      it("Upload multiple attachments at once: image.jpg and test_image.jpg", () => {
+        SystemRequirement("REQ-0220");
+        cy.get("#AttachmentFieldPresenter-linkButton").click();
+        cy.get("#attachments-button-file-clean-copy")
+          .attachFiles(
+            [
+              { name: "./image.jpg", type: "image/jpg" },
+              { name: "./test_image.jpg", type: "image/jpg" },
+            ]
+          );
+      });
+
+      it("Check three attachments are displayed: test.docx, image.jpg and test_image.jpg", () => {
+        cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx", "image.jpg", "test_image.jpg" ] });
+      });
+
+      it("Remove attachment image.jpg", () => {
+        cy.atchRemoveAttachment({ fileName: "image.jpg" });
+      });
+
+      it("Remove attachment test_image.jpg", () => {
+        cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
       });
     });
 
@@ -219,6 +251,21 @@ context("Document Creation Flow", () => {
 
       it("Check two attachments are displayed: test.docx, image.jpg", () => {
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx", "image.jpg" ] });
+      });
+    });
+
+    context("Check training for next revision", () => {
+      it("Approve and Release document", () => {
+        cy.drApproveAndReleaseDocument();
+      });
+
+      it("Revise document", () => {
+        cy.drClickReviseDocument();
+      });
+
+      it("'Training Required' should be checked as previous version was checked", () => {
+        SystemRequirement("REQ-0280");
+        cy.drIsTrainingRequired({ shouldBe: true });
       });
     });
   });
