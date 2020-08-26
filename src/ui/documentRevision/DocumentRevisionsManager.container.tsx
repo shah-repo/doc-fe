@@ -19,6 +19,7 @@ import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers"
 import Bookmarks from "./Sidebar/Bookmarks";
 import { SidebarContainer } from "./Sidebar/Sidebar.container";
 import styles from "./styles";
+import { DocumentGroupType } from "../../state/ducks/documentRevisions/documentType";
 
 interface StateProps {
   documentRevisions: DocumentRevision[];
@@ -39,6 +40,7 @@ StateProps;
 // TO-DO Move To Context Folder
 export let documentRevisionStatusContext = React.createContext<DocumentRevisionStatus>(DocumentRevisionStatus.Draft);
 export let documentRevisionStatusContextFromDocList = React.createContext<undefined | DocumentRevisionStatus>(undefined);
+export let documentRevisionTypeGroupsFromDocListContext = React.createContext<undefined | DocumentGroupType>(undefined);
 export let documentRevisionVersionContext = React.createContext<number>(1);
 
 const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
@@ -151,10 +153,13 @@ DocumentRevisionManagerContainerProps
   documentRevisionStatusContext = React.createContext(selectedDocument?.status);
   const status = selectedDocument ? selectedDocument.status : undefined;
   documentRevisionStatusContextFromDocList = React.createContext(status);
+  documentRevisionTypeGroupsFromDocListContext = React.createContext(selectedDocument?.document.documentType.group);
   documentRevisionVersionContext = React.createContext(selectedDocument?.version);
 
   useEffect(() => () => {
     documentRevisionStatusContextFromDocList = React.createContext<undefined | DocumentRevisionStatus>(undefined);
+    documentRevisionTypeGroupsFromDocListContext = React.createContext<undefined | DocumentGroupType>(undefined);
+
   }, []);
 
   if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {

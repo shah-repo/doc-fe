@@ -23,7 +23,7 @@ import useDialog from "../../hooks/useDialog";
 import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionQueryStatus, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
-import ExportListDialog from "./ExportListDialog./ExportListDialog";
+import ExportListDialog from "./ExportListDialog/ExportListDialog";
 import styles from "./styles";
 
 
