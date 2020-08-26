@@ -33,7 +33,7 @@ export class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, 
   }
 
   public get isFileViewable(): boolean {
-    return includes(VIEWABLE_FILES, this.fileType);
+    return includes(VIEWABLE_FILES, this.fileType?.toLowerCase());
   }
 
   public get canWatermark(): boolean {

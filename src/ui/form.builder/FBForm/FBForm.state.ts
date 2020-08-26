@@ -65,15 +65,10 @@ export class FBFormState extends FBSchemaState {
     withState = false,
     forceDefault = false
   ) => {
-    if (!fieldName) {
-      return;
-    }
-    const prevValue = this.getFieldValue(fieldName);
+    if (!fieldName) { return; }
     _.set(this.values, fieldName, value);
-    if (withState) {
-      this.inputState.get(fieldName)?.setValue(prevValue);
-      this.inputState.get(fieldName)?.setValue(value);
-    }
+    if (!withState) { return; }
+    this.inputState.get(fieldName)?.setValue(value);
   };
 
   @action public omitFieldValue = (fieldName?: string) => {

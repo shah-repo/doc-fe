@@ -7,6 +7,7 @@ import { FBActionField } from "../FBActionField";
 import { FBApproval } from "../FBApproval";
 import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
 import { FBApprovers } from "../FBApprovers";
+import { FBBlankTplForm } from "../FBBlankTplForm";
 import { FBButton } from "../FBButton";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
@@ -44,6 +45,7 @@ export class FBSchemaState {
     "teststep",
     "purchaseorder",
     "task",
+    "blanktplform",
   ];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
@@ -63,6 +65,7 @@ export class FBSchemaState {
     radio: FBRadio,
     radiogroup: FBRadioGroup,
     fileupload: FBFileUpload,
+    blanktplform: FBBlankTplForm,
     schemaselect: FBSchemaSelect,
     paragraph: FBParagraph,
     quantity: FBQuantityField,
@@ -137,7 +140,7 @@ export class FBSchemaState {
   @action public setSchemaItem = (schemaItem: FBSchemaProps) => {
     const schemaItemIndex = _.findIndex(this.getSchema(), { name: schemaItem.name });
     const schemaAt = this.getSchemaItemAt(schemaItemIndex);
-    if (schemaAt) {
+    if (!schemaAt) {
       const schema = _.union(this.schema, [schemaItem]);
       this.setSchema(schema);
       return;
