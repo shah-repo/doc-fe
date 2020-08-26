@@ -10,6 +10,7 @@ const FBTableCell: React.FunctionComponent<FBTableCellProps> = ({
   tooltipTitle,
   children,
   loading,
+  dataCy,
   ...props
 }) => (
   <TableCell {...props} >
@@ -30,7 +31,8 @@ const FBTableCell: React.FunctionComponent<FBTableCellProps> = ({
         )}
       >
         <>
-          {label && <Text message={label} />}
+          {label && dataCy && <Text dataCy={dataCy} message={label} />}
+          {label && !dataCy && <Text message={label} />}
           {children}
         </>
       </FBConditionalWrapper>

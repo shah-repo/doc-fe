@@ -8,11 +8,13 @@ export interface TextProps extends Props {
   translation?: Translation;
   /** id of the translation or string to display */
   message?: Translation | string;
+  dataCy?: string;
 }
 
 const Text: React.FunctionComponent<TextProps> = ({
   message = "",
   translation = "translation.unknown",
+  dataCy = "",
   ...props
 }: TextProps) => {
   const [hasTranslation, text] = React.useMemo(() => {
@@ -36,6 +38,10 @@ const Text: React.FunctionComponent<TextProps> = ({
 
   if (hasTranslation) {
     return <FormattedMessage id={text} {...props} />;
+  }
+
+  if (dataCy !== "") {
+    return <span data-cy={dataCy}>{text}</span>;
   }
 
   return <span>{text}</span>;

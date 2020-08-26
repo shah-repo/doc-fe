@@ -107,6 +107,16 @@ Example
 NUMBER_OF_WORKERS=4 CI_BUILD_ID=2020-07-03T14:07:48+02:00 ./scripts/cypress/run_in_parallel.sh
 ```
 
+### Run Cypress suite on deployed code
+To run Cypress test suites on code that was deployed, you need to:
+ 1. Start Sorry Cypress working in the background: `./scripts/cypress/start_dashboard.sh`
+ 2. Start test suite on selected environment 
+    1. for DEV and DEMO, start `./scripts/cypress/run_on_deployment.sh` and select the right option in the menu
+    2. for SANDBOX and PROD, you need to export the superadmin credentials to be used for the testrun first and then select the option in the menu:
+    ```
+      CYPRESS_SUPERADMIN_EMAIL=<superadmin_email> CYPRESS_SUPERADMIN_PASSWORD=<superadmin_password> ./scripts/cypress/run_on_deployment.sh
+    ```
+
 ## Toolkit
 
 ### Adding requirements

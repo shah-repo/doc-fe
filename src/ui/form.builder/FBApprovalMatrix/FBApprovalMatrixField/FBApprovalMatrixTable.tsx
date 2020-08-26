@@ -202,7 +202,7 @@ const FBApprovalMatrixTable: React.FunctionComponent<Props> = ({
                     const value = cell.value ? "status.true" : " ";
                     return (
                       <div key={`${index}-${cell.column.id}}`} {...cell.getCellProps()} className="td">
-                        <Text  message={value} />
+                        <Text message={value} />
                       </div>
                     );
                   }
@@ -213,7 +213,7 @@ const FBApprovalMatrixTable: React.FunctionComponent<Props> = ({
                       </div>
                     );
                   }
-                  if (addTableMode && (cell.column.id === "group") ) {
+                  if (addTableMode && (cell.column.id === "group")) {
                     return (
                       <div key={`${index}-${cell.column.id}}`} {...cell.getCellProps()} className="td">
                         <Select

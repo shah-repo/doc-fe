@@ -20,10 +20,10 @@ import "cypress-promise/register";
 import "cypress-xpath";
 import { addScreenshotToContext } from "../utils/context/screenshotsToContext";
 import "./commands";
+import "./commands/approval.request/commands";
 import "./commands/approver.request.list/commands";
 import "./commands/attachments/commands";
 import "./commands/auth/commands";
-import "./commands/change.request/commands";
 import "./commands/company/commands";
 import "./commands/document.list/commands";
 import "./commands/document.revision/commands";
@@ -47,6 +47,12 @@ Cypress.on("uncaught:exception", (err, runnable) => {
   if (socketIsClosingError) {
     // eslint-disable-next-line no-console
     console.log("Ignoring 'Socket is closed' or 'Socket is closing' error");
+    return false;
+  }
+
+  if (err.message.includes("Connection was closed abnormally")) {
+    // eslint-disable-next-line no-console
+    console.log("Ignoring 'Connection was closed abnormally' error");
     return false;
   }
   return true;

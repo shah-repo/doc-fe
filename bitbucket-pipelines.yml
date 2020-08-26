@@ -144,6 +144,24 @@ definitions:
         script:
           - ./aws/bash_scripts/publish.sh "sandbox"
         trigger: manual
+    #
+    # SANDBOX2
+    #
+    - step: &BUILD_SANDBOX2
+        <<: *COMMON_BUILD
+        name: Building for Sandbox2
+        script:
+          - ./aws/bash_scripts/build.sh "sandbox2"
+        artifacts:
+          - compiled.tar.gz
+
+    - step: &DEPLOY_SANDBOX2
+        <<: *COMMON_DEPLOY
+        name: Deploy to Sandbox2
+        deployment: Sandbox
+        script:
+          - ./aws/bash_scripts/publish.sh "sandbox2"
+        trigger: manual
 #
 # Pipelines
 #
@@ -206,7 +224,14 @@ pipelines:
           - step: *BUILD_SANDBOX
       - step: *DEPLOY_SANDBOX
 
-    release/20.19.1:
+    sandbox2:
+      - parallel:
+          - step: *RUN_TESTS
+          - step: *RUN_LINTER
+          - step: *BUILD_SANDBOX2
+      - step: *DEPLOY_SANDBOX2
+
+    release/20.20:
       - parallel:
           - step: *RUN_TESTS
           - step: *RUN_LINTER

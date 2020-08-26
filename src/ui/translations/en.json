@@ -505,6 +505,7 @@
   "form.builder.field.name": "Field Name",
   "form.builder.hyperlink": "Hyperlink",
   "form.builder.fileupload": "File Upload",
+  "form.builder.blanktplform": "Blank Template Form",
   "form.builder.groups": "Groups",
   "form.builder.validator": "Verified",
   "form.builder.additions": "Additions",

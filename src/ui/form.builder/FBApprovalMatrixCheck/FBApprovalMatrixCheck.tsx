@@ -7,7 +7,7 @@ import { withFBApprovalMatrixCheck } from "./FBApprovalMatrixCheck.wrap";
 const FBApprovalMatrixCheck: React.FunctionComponent<FBApprovalMatrixCheckProps> = ({
   handleCheck,
   checked,
-}) =>  (
+}) => (
   <>
     {checked && (
       <CheckBoxTwoToneIcon

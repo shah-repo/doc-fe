@@ -9,7 +9,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
   classes,
   mode,
   name,
-}) =>  (
+}) => (
   <Table className={classes?.tableInfo}>
     <TableHead>
       <TableRow>
@@ -41,6 +41,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
             />
             <FBTableCell
               label={am.docType.name}
+              dataCy={`documentTypeApprovalMatrix`}
               align="center"
             />
             {mode !== "edit" && (
@@ -93,6 +94,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                     <Box display="flex" justifyContent="center" pl={3}>
                       <FBCheckbox
                         name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.defaultTraining`}
+                        dataCy={key}
                         gutter={false}
                         defaultChecked={false}
                       />
@@ -104,6 +106,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                     <Box display="flex" justifyContent="center" pl={3}>
                       <FBCheckbox
                         name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.needsSignature`}
+                        dataCy={key}
                         gutter={false}
                         defaultChecked={false}
                       />
@@ -114,6 +117,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                   <FBTableCell>
                     <Box display="flex" px={1} alignItems="center">
                       <FBSelect
+                        dataCy={key}
                         name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.group`}
                         rules="required"
                         showErrorMsg={false}
@@ -132,6 +136,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                     <Box display="flex" px={1}>
                       <FBTextField
                         name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.acronym`}
+                        dataCy={key}
                         gutter={false}
                         size="small"
                         inputProps={{ style: { padding: "8px" } }}
@@ -147,6 +152,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                     <Box display="flex" px={1}>
                       <FBTextField
                         name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.name`}
+                        dataCy={key}
                         gutter={false} size="small"
                         inputProps={{ style: { padding: "8px" } }}
                         rules="required"
@@ -160,6 +166,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                     <Box display="flex" px={1}>
                       <FBTextField
                         name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.category`}
+                        dataCy={key}
                         gutter={false} size="small"
                         inputProps={{ style: { padding: "8px" } }}
                         showErrorMsg={false}

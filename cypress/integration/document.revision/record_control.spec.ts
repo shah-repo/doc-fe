@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -25,9 +26,10 @@ context("Record Control Flow", () => {
 
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
+      SystemRequirement("REQ-0400", "REQ-0410", "REQ-0420", "REQ-0440");
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
         cy.cmpCreateCompany({

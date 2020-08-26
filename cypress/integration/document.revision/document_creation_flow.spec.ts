@@ -1,3 +1,4 @@
+import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -8,9 +9,10 @@ let multipleCompanies;
 context("Document Creation Flow", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
+      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
         cy.cmpCreateCompany({
@@ -25,7 +27,14 @@ context("Document Creation Flow", () => {
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
-            documentTypes: [],
+            documentTypes: [
+              {
+                documentTypeName: "Clinical Protocol",
+                documentTypeAcronym: "CP",
+                group: "OTHER",
+                isQms: true,
+              },
+            ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
@@ -80,6 +89,7 @@ context("Document Creation Flow", () => {
     });
 
     it("Selects 'Component Specification' document type from dropdown", () => {
+      SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Component Specification" });
     });
 
@@ -101,6 +111,14 @@ context("Document Creation Flow", () => {
     it("Remove reference for document", () => {
       SystemRequirement("REQ-0190");
       cy.drRemoveReferences( 1 );
+    });
+
+    it("'Training Required' should be unchecked initially", () => {
+      cy.drIsTrainingRequired({ shouldBe: false });
+    });
+
+    it("Mark 'Training Required' for next revision", () => {
+      cy.drClickTrainingRequired();
     });
 
     context("Uploads attachments", () => {
@@ -134,6 +152,30 @@ context("Document Creation Flow", () => {
 
       it("Check one attachment is displayed: test.docx", () => {
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx" ] });
+      });
+
+      it("Upload multiple attachments at once: image.jpg and test_image.jpg", () => {
+        SystemRequirement("REQ-0220");
+        cy.get("#AttachmentFieldPresenter-linkButton").click();
+        cy.get("#attachments-button-file-clean-copy")
+          .attachFiles(
+            [
+              { name: "./image.jpg", type: "image/jpg" },
+              { name: "./test_image.jpg", type: "image/jpg" },
+            ]
+          );
+      });
+
+      it("Check three attachments are displayed: test.docx, image.jpg and test_image.jpg", () => {
+        cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx", "image.jpg", "test_image.jpg" ] });
+      });
+
+      it("Remove attachment image.jpg", () => {
+        cy.atchRemoveAttachment({ fileName: "image.jpg" });
+      });
+
+      it("Remove attachment test_image.jpg", () => {
+        cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
       });
     });
 
@@ -192,7 +234,7 @@ context("Document Creation Flow", () => {
         cy.atchSetPrimaryAttachment({ fileName: "test_image.jpg" });
       });
 
-      it.skip("Allow user to only set single attachment to be primary", () => {
+      it("Allow user to only set single attachment to be primary", () => {
         SystemRequirement("REQ-0250");
         cy.atchSetPrimaryAttachment({ fileName: "test.docx" });
         cy.atchCheckForSinglePrimaryAttachment();
@@ -210,6 +252,96 @@ context("Document Creation Flow", () => {
       it("Check two attachments are displayed: test.docx, image.jpg", () => {
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx", "image.jpg" ] });
       });
+    });
+
+    context("Check training for next revision", () => {
+      it("Approve and Release document", () => {
+        cy.drApproveAndReleaseDocument();
+      });
+
+      it("Revise document", () => {
+        cy.drClickReviseDocument();
+      });
+
+      it("'Training Required' should be checked as previous version was checked", () => {
+        SystemRequirement("REQ-0280");
+        cy.drIsTrainingRequired({ shouldBe: true });
+      });
+    });
+  });
+
+  context("Create new document, change owner and cancel it", () => {
+    it("Navigates to document list", () => {
+      SystemRequirement("REQ-0140");
+      cy.navigToDocumentList();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enters title 'New Document Revision'", () => {
+      cy.drEnterDocumentTitle({ name: "New Document Revision" });
+    });
+
+    it("Enters description 'New Document Revision description'", () => {
+      cy.drEnterDocumentDescription({ description: "New Document Revision description" });
+    });
+
+    it("Selects 'Clinical Protocol' document type from dropdown", () => {
+      SystemRequirement("REQ-0490");
+      cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Change owner of document", () => {
+      SystemRequirement("REQ-0340");
+      cy.drChangeOwner({ employee: USERS[3].name });
+    });
+
+    it("Logs user that ownership was changed to", () => {
+      cy.authLogin({
+        email: USERS[3].email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on specific document 'CP00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP00003" });
+    });
+
+    it("Approves and releases document", () => {
+      cy.drApproveAndReleaseDocument();
+    });
+
+    it("Clicks on revise document", () => {
+      SystemRequirement("REQ-0150");
+      cy.drClickReviseDocument();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall().wait(1000);
+    });
+
+    it("Cancel draft document", () => {
+      SystemRequirement("REQ-0350");
+      cy.drCancelDraftButton();
+    });
+
+    it("Check document status is 'Canceled'", () => {
+      SystemRequirement("REQ-0350");
+      cy.drCheckDocumentStatus({ status: "Canceled" });
     });
   });
 });

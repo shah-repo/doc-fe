@@ -26,13 +26,11 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
   }: T) => {
 
     const { workspaceState, formState } = FB.useStores();
-    const { documentId } = workspaceState || {};
     const formValue = formState?.getFieldValue(name);
     const intl = useIntl();
 
     poReceiveState = FB.useRef<FBPOReceiveState>(FBPOReceiveState, formValue);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
-    disabled = disabled || Boolean(documentId);
 
     const handleItem = (item?: FBPurchaseOrderItem) => {
       if (workspaceState?.isReleased || workspaceState?.isRevised) {

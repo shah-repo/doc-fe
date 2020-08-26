@@ -49,10 +49,15 @@ export const withFBSortable = <T extends FBSortableProps>(
       workspaceState?.setSchema(newSchema);
     };
 
+    const shouldCancelStart = (e: { buttons: number; ctrlKey: boolean; button: number }) =>
+      (e.buttons === 1 && e.ctrlKey === true) || // macOS trackpad ctrl click
+      (e.buttons === 2 && e.button === 2);
+
     return Component({
       ...(props),
       items,
       onSortEnd,
+      shouldCancelStart,
     });
   };
 

@@ -88,36 +88,36 @@ export const Container: React.FunctionComponent<Props> = ({
   const summaryPresenterRenderer = (
     props: FormikProps<ChangeRequestFormValues>,
   ) => (
-    <Form>
-      <Presenter
-        dataProp={dataProp}
-        asyncState={async.asyncState}
-        canEdit={canEdit}
-        canChangeOwnerShip={canChangeOwnerShip}
-        {...props}
-        {...{ FBContainer }}
-      />
-    </Form>
+    <FBWorkspace
+      portalContainer={FBContainer}
+      initialValues={dataProp.formInput}
+      changeRequest={dataProp}
+      autosave={true}
+      schema={schema}
+      mode={"preview"}
+    >
+      <Form>
+        <Presenter
+          dataProp={dataProp}
+          asyncState={async.asyncState}
+          canEdit={canEdit}
+          canChangeOwnerShip={canChangeOwnerShip}
+          {...props}
+          {...{ FBContainer }}
+        />
+      </Form>
+    </FBWorkspace>
   );
 
   const summaryFormikRenderer = () => (
     <FormContext.Provider value={{ submitOnChange: false }}>
-      <FBWorkspace
-        portalContainer={FBContainer}
-        initialValues={dataProp.formInput}
-        changeRequest={dataProp}
-        autosave={true}
-        schema={schema}
-        mode={"preview"}
+      <Formik
+        initialValues={toChangeRequestFormValues(dataProp)}
+        onSubmit={onSubmit}
+        enableReinitialize={true}
       >
-        <Formik
-          initialValues={toChangeRequestFormValues(dataProp)}
-          onSubmit={onSubmit}
-          enableReinitialize={true}
-        >
-          {summaryPresenterRenderer}
-        </Formik>
-      </FBWorkspace>
+        {summaryPresenterRenderer}
+      </Formik>
     </FormContext.Provider>
   );
 

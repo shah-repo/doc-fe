@@ -1,4 +1,5 @@
 
+import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -8,9 +9,10 @@ let multipleCompanies;
 
 context("Create company via API and create Suppliers document", () => {
   it("[API] Creates company", (done: any) => {
+    SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
     cy.authApiLogin({
-      email: "zoran.kovacevic+admin@codecons.com",
-      password: "Tester1!",
+      email: CONFIG.SUPERADMIN_EMAIL,
+      password: CONFIG.SUPERADMIN_PASSWORD,
     }).then((response) => {
       loginResponse = response;
 
@@ -105,12 +107,12 @@ context("Create company via API and create Suppliers document", () => {
 
   it("Create supplier from Form document", () => {
     SystemRequirement("REQ-2330");
-    cy.supCreateNew().wait(1000);
+    cy.supCreateNew();
   });
 
   it("Enter 'Supplier Address/Phone'", () => {
     SystemRequirement("REQ-2360");
-    cy.supEnterSuppAddressPhone({ address: "Test Supplier address" });
+    cy.drEnterDocumentDescription({ description: "Test Supplier address" });
   });
 
   it("Enter 'Supplier Name'", () => {
@@ -189,7 +191,7 @@ context("Create company via API and create Suppliers document", () => {
 
   it("Click on create supplier to prompt option of which supplier form we should use", () => {
     SystemRequirement("REQ-2350");
-    cy.supCreateNew().wait(1000);
+    cy.supCreateNew();
   });
 
   it("Check if forms are suggested on creating new supplier", () => {

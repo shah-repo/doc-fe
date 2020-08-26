@@ -5,4 +5,5 @@ export interface FBApprovalMatrixCheckProps {
   approvalMatrixCheckState?: FBApprovalMatrixCheckState;
   checked?: boolean;
   name?: string;
+  dataCy?: string;
 }

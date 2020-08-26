@@ -2,6 +2,7 @@ import { fail } from "assert";
 import { GroupTag, NavigationItems } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -24,9 +25,10 @@ let createdReceivable1;
 context("Approval request landing page test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
+      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
 
@@ -423,7 +425,6 @@ context("Approval request landing page test", () => {
     });
 
     it.skip("Verify supplier name is present", () => {
-      SystemRequirement("REQ-1680");
       fail;
     });
 
@@ -516,7 +517,7 @@ context("Approval request landing page test", () => {
 
       it("Verify receivable counter on document list", () => {
         SystemRequirement("REQ-1760");
-        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
       });
     });
 

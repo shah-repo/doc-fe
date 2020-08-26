@@ -1,4 +1,5 @@
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -10,9 +11,10 @@ let docTypeId;
 
 context("Create company via API and create Purchase Order Form document", () => {
   it("[API] Creates company", (done: any) => {
+    SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
     cy.authApiLogin({
-      email: "zoran.kovacevic+admin@codecons.com",
-      password: "Tester1!",
+      email: CONFIG.SUPERADMIN_EMAIL,
+      password: CONFIG.SUPERADMIN_PASSWORD,
     }).then((response) => {
       loginResponse = response;
 
@@ -28,14 +30,14 @@ context("Create company via API and create Purchase Order Form document", () => 
           remoteValidatorBundleName: "default",
           slackIntegrationEnabled: false,
           users: [USERS[2], USERS[3], USERS[4]],
-            documentTypes: [
-              {
-                documentTypeName: "PO Part",
-                documentTypeAcronym: "PRT-",
-                group: "PART",
-                isQms: true,
-              },
-            ],
+          documentTypes: [
+            {
+              documentTypeName: "PO Part",
+              documentTypeAcronym: "PRT-",
+              group: "PART",
+              isQms: true,
+            },
+          ],
           acctCodes: ["code 1"],
           addresses: ["Address 1"],
         }, sessionId: loginResponse.sessionId as unknown as string,
@@ -43,7 +45,7 @@ context("Create company via API and create Purchase Order Form document", () => 
         createdCompany = response;
         adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
         createdCompany.documentTypes.forEach((item: { documentTypeName: string; id: any }) => {
-          if (item.documentTypeName == "Purchase Order")
+          if (item.documentTypeName === "Purchase Order")
           {
             docTypeId = item.id;
           }
@@ -68,7 +70,7 @@ context("Create company via API and create Purchase Order Form document", () => 
             {
               label: "Dashboard",
               path: "/",
-              type: "LINK"
+              type: "LINK",
             },
             {
               label: "Document Control",
@@ -77,38 +79,39 @@ context("Create company via API and create Purchase Order Form document", () => 
                 {
                   label: "Document List",
                   path: "/document_revision",
-                  type: "LINK"
+                  type: "LINK",
                 },
                 {
                   label: "Approval Requests",
                   path: "/change_request",
-                  type: "LINK"
+                  type: "LINK",
                 },
               ],
             },
             {
               label: "User Management",
               path: "/user_management",
-              restrictedToUsersWithTags:[
-                GroupTag.USER_MANAGEMENT
+              restrictedToUsersWithTags: [
+                GroupTag.USER_MANAGEMENT,
               ],
-              type: "LINK"
+              type: "LINK",
             },
             {
               label: "Group Management",
               path: "/group_management",
-              restrictedToUsersWithTags:[
+              restrictedToUsersWithTags: [
                 GroupTag.GROUP_MANAGEMENT,
               ],
-              type: "LINK"
+              type: "LINK",
             },
             {
               label: "Purchase Order",
               path: "/document_by_type/" + docTypeId,
               type: "LINK",
-            }
-          ]}
-        ).then(() => {
+            },
+          ],
+        },
+      }).then(() => {
         done();
       });
     });
@@ -217,7 +220,7 @@ context("Create Purchase Order document with Product option from Form document",
   });
 
   it("Click on 'Create PO' button", () => {
-    cy.poCreateNew().wait(1000);
+    cy.poCreateNew();
   });
 
   it("Check for PO ID uniqueness - ID should be PO-00001", () => {
@@ -232,13 +235,17 @@ context("Create Purchase Order document with Product option from Form document",
   it("Click on existing PO that was created before", () => {
     SystemRequirement("REQ-1370");
     SystemRequirement("REQ-1210");
-    cy.poClickOnSpecificPOFromList({ item:"PO-00001" });
+    cy.poClickOnSpecificPOFromList({ item: "PO-00001" });
   });
 
   it("Check status of PO should be Draft", () => {
-    SystemRequirement("REQ-1280");
-    SystemRequirement("REQ-0020");
+    SystemRequirement("REQ-1280", "REQ-0020", "REQ-1610");
     cy.poCheckStatus("Draft" );
+  });
+
+  it("Uploads text.docx", () => {
+    SystemRequirement("REQ-1350");
+    cy.atchUploadAttachment({ fileName: "test.docx" });
   });
 
   it("Click on 'Add item' button", () => {
@@ -304,22 +311,22 @@ context("Create Purchase Order document with Product option from Form document",
 
   it("Check Subtotal value", () => {
     SystemRequirement("REQ-1430");
-    cy.poCheckAmount({ number: "\$10.00" });
+    cy.poCheckAmount({ number: "$10.00" });
   });
 
   it("Check Tax value", () => {
     SystemRequirement("REQ-1450");
-    cy.poCheckAmount({ number: "\$0.65" });
+    cy.poCheckAmount({ number: "$0.65" });
   });
 
   it("Check Total value", () => {
     SystemRequirement("REQ-1440");
-    cy.poCheckAmount({ number: "\$30.65" });
+    cy.poCheckAmount({ number: "$30.65" });
   });
 
   it("Enter description 'New Purchase Order'", () => {
     SystemRequirement("REQ-1290");
-    cy.poEnterDocumentDescription({ description: "New Purchase Order" });
+    cy.drEnterDocumentDescription({ description: "New Purchase Order" });
   });
 
   it("Approve and release document", () => {
@@ -342,8 +349,7 @@ context("Create Purchase Order document with Service option from Form document",
   });
 
   it("Check status of PO should be Draft", () => {
-    SystemRequirement("REQ-1280");
-    SystemRequirement("REQ-0020");
+    SystemRequirement("REQ-1280", "REQ-1610", "REQ-0020");
     cy.poCheckStatus( "Draft" );
   });
 
@@ -354,7 +360,7 @@ context("Create Purchase Order document with Service option from Form document",
   it("Click on 'Service' select option", () => {
     SystemRequirement("REQ-1390");
     SystemRequirement("REQ-1420");
-   cy.poSelectOption({ optionName: "service" });
+    cy.poSelectOption({ optionName: "service" });
   });
 
   it("Enter ServiceID", () => {
@@ -400,7 +406,7 @@ context("Create Purchase Order document with Service option from Form document",
     SystemRequirement("REQ-1320");
     cy.poCheckCurrency();
   });
-  
+
   it("Select Currency 'EUR'", () => {
     cy.poSelectCurrency({ currencyValue: "EUR" });
   });
@@ -416,12 +422,12 @@ context("Create Purchase Order document with Service option from Form document",
 
   it("Check Subtotal value", () => {
     SystemRequirement("REQ-1430");
-    cy.poCheckAmount({ number: "\€10.00" });
+    cy.poCheckAmount({ number: "€10.00" });
   });
 
   it("Check Total value", () => {
     SystemRequirement("REQ-1440");
-    cy.poCheckAmount({ number: "\€30.00" });
+    cy.poCheckAmount({ number: "€30.00" });
   });
 
   it("Check if total converted to dollars is shown", () => {
@@ -445,7 +451,7 @@ context("Creates second line item and checks ID and if all line item details are
     SystemRequirement("REQ-1360");
     SystemRequirement("REQ-1380");
     cy.poCheckForLineItemsAndTheirID({ firstId: "1", secondId: "2" });
-  });   
+  });
 
   it("Enter description 'New Purchase Order with Service item'", () => {
     SystemRequirement("REQ-1290");
@@ -511,7 +517,7 @@ context("Creates second PO form document and checks if both documents are availa
   });
 
   it("Click on 'Create PO' button", () => {
-    cy.poCreateNew();
+    cy.poClickCreatePO();
   });
 
   it("Check if two options are available when two forms with PO exist", () => {
@@ -532,7 +538,12 @@ context("Check for Landing page columns and values", () => {
 
   it("Check for Landing page default columns", () => {
     SystemRequirement("REQ-1120");
-    cy.filterCheckHeaderValues("PO #", "Revision", "PO Status", "Supplier", "Part Number", "Amount", "Requestor", "Issue Date");
+    cy.filterCheckHeaderValues("PO #",
+      "Revision", "PO Status",
+      "Supplier",
+      "Part Number",
+      "Amount", "Requestor",
+      "Issue Date");
   });
 });
 
@@ -540,13 +551,13 @@ context("Test the filter inside PO", () => {
   it("Enter version number '1' inside filter", () => {
     cy.filterPOVersion({ version: "1" });
   });
-  
+
   it("Check if item with right version is displayed", () => {
     cy.poCheckForSpecificPOItemValue({ itemValue: "1" });
   });
 
   it("Check if number of displayed filtered items is '2", () => {
-    SystemRequirement("REQ-1200")
+    SystemRequirement("REQ-1200");
     cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "2" });
   });
 
@@ -557,8 +568,10 @@ context("Test the filter inside PO", () => {
 
   it("Enter all fields to check if all filter fields are working", () => {
     SystemRequirement("REQ-1150");
-    cy.filterPO({ docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
-    partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020" }).wait(2000);
+    cy.filterPO({
+      docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
+      partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
+    }).wait(2000);
   });
 
   it("Navigate to Document List", () => {
@@ -571,8 +584,10 @@ context("Test the filter inside PO", () => {
 
   it.skip("Check if all filter values persist after changing landing page", () => {
     SystemRequirement("REQ-1170");
-    cy.filterCheckIfPOFilterPersists({ docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
-    partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020" });
+    cy.filterCheckIfPOFilterPersists({
+      docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
+      partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
+    });
   });
 
   it("Clear filter", () => {
