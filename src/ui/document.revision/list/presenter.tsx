@@ -9,7 +9,6 @@ import { stripTags } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
-import { DOCUMENT_LIST_TYPE_NAMES } from "../../../state/ducks/documentRevisions/documentType/constants";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../common/utils/helpers";
 import Date from "../../components/Date";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -196,8 +195,21 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   ];
 
   const customDataSet = (data: DocumentRevision[]) => {
+
+    /** Temp fix - disabling filtering by document type name.
+     * Remove .map and uncomment .reduce to enable filtering. */
     const customData = data
-      .reduce<DocumentRevision[]>((acc, docRev) => {
+      .map((docRev) => {
+        set(docRev, "description", stripTags(docRev.description));
+        set(
+          docRev,
+          "document.documentType.documentTypeAcronym",
+          removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
+        );
+        return docRev;
+      });
+
+    /*    const customData = data.reduce<DocumentRevision[]>((acc, docRev) => {
         if (docRev.document.documentType.documentTypeName
          && DOCUMENT_LIST_TYPE_NAMES.includes(docRev.document.documentType.documentTypeName)) {
           set(docRev, "description", stripTags(docRev.description));
@@ -209,7 +221,8 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           acc.push(docRev);
         }
         return acc;
-      }, []);
+      }, []); */
+
     return customData;
   };
 
