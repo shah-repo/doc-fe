@@ -1,10 +1,17 @@
+import { RevisionChangeType } from "../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../support/commands/company/commands";
 import { CONFIG } from "../support/config";
 import { USERS } from "../utils/constants/users";
 
-let company;
 let docId;
 let loginResponse;
 let multipleCompanies;
+let createdCompany;
+let secondEmployee;
+let componentSpecificationDocumentType;
+let group;
+
+const documentRevisionName = "New document for testing validators";
 
 const requiredFieldLabel = "Name";
 const requiredFieldSelector = `${requiredFieldLabel.toLowerCase().split(" ").join("-")}-`;
@@ -24,6 +31,7 @@ const requiredWithoutFieldLabel = "Address";
 const requiredWithoutFieldSelector = `${requiredWithoutFieldLabel.toLowerCase().split(" ").join("-")}-`;
 
 const requiredDocStatusFieldLabel = "Document Status";
+const requiredDocStatusFieldSelector = `${requiredDocStatusFieldLabel.toLowerCase().split(" ").join("-")}-`;
 
 const requiredDocTypeFieldLabel = "Document Type";
 const requiredDocTypeFieldSelector = `${requiredDocTypeFieldLabel.toLowerCase().split(" ").join("-")}-`;
@@ -37,7 +45,8 @@ context("Validators tests", () => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
-      }).then((response: any) => {
+      }).then((response) => {
+        loginResponse = response;
 
         cy.cmpCreateCompany({
           specFilePath: __filename,
@@ -53,19 +62,20 @@ context("Validators tests", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
-            whiteLabeling: null,
             documentTypes: [],
-          }, sessionId: response.sessionId,
+          }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
-          company = response;
+          createdCompany = response;
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
           done();
         });
       });
     });
 
-    it("[API] Login user", (done: any) => {
+    it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[2].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -73,18 +83,58 @@ context("Validators tests", () => {
         done();
       });
     });
+
+    it("[API]Creates document revision for validators test", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Test Doc Rev Description</p>",
+            document: {
+              docId: "CS-00099",
+              documentType: {
+                id: componentSpecificationDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: documentRevisionName,
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+          },
+          employeeId: secondEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then(() => {
+          done();
+        });
+      });
+    });
   });
 
   context("Log in user, select company and open 'Create Document'", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[2].email,
         password: "Tester1!",
       });
     });
 
     it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: multipleCompanies });
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
     context("Open 'Create Document'", () => {
@@ -387,7 +437,7 @@ context("Validators tests", () => {
     });
 
     it("select Released status", () => {
-      cy.get("[data-cy=\"validators.required_document_status.name\"]").type("Released{downarrow}{enter}");
+      cy.get("[data-cy=\"validators.required_document_status.name\"]").type("Draft{downarrow}{enter}");
     });
 
     it("Add autocomplete", () => {
@@ -626,6 +676,27 @@ context("Validators tests", () => {
     });
   });
 
+  context(`Test ${requiredDocStatusFieldLabel} (required document status) Field`, () => {
+    it("Add incorrect document", () => {
+      cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type("initial AR Form{downarrow}{enter}");
+    });
+
+    it("should show error for 'Incorrect document status' field", () => {
+      cy.wait(1000);
+      cy.get(`[name^='${requiredDocStatusFieldSelector}']`).then((elem) => {
+        const errorBlock = elem.offsetParent().siblings("p");
+
+        cy.wrap(errorBlock)
+          .should("contain.text", `is not in DRAFT status.`);
+      });
+    });
+
+    it(`fill in '${requiredDocStatusFieldLabel}' with draft CS Document`, () => {
+      cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).clear();
+      cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type(`${documentRevisionName}{downarrow}{enter}`);
+    });
+  });
+
   context(`Test ${requiredDocTypeFieldLabel} (required document type) Field`, () => {
     it("Add incorrect document", () => {
       cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type("initial AR Form{downarrow}{enter}");
@@ -656,9 +727,10 @@ context("Validators tests", () => {
   });
 
   context("No validation error, submission is successful", () => {
-
-    it("Check returned errors are empty", () => {
-      cy.checkToastMessage({ exists: false });
+    // No need to check if validation pop-up is shown.
+    // If doc status is released that means there were no validation errors.
+    it("Check document status is released", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
     });
   });
 });
