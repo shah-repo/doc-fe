@@ -4,6 +4,7 @@ import { FormikProps } from "formik";
 import React from "react";
 import { DocumentType, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType";
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
+import FormWrapper from "../../components/forms/FormWrapper";
 import Text from "../../components/Text";
 import { DialogHandler } from "../../hooks/useDialog";
 import { styles } from "./FormListDialog/FormListDialog.styles";
@@ -14,6 +15,7 @@ export interface DocumentTypeDialogProps extends FormikProps<any> {
   dialog: DialogHandler;
   handleSelection: (id: string) => void;
   handleTemplateSelection: (id: string) => void;
+  isRecord: boolean;
 }
 export const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProps> = ({
   dialog,
@@ -21,6 +23,10 @@ export const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDia
   documentTypes,
   handleSelection,
   handleTemplateSelection,
+  initialValues,
+  dirty,
+  resetForm,
+  isRecord,
 }) => {
   const classes = styles();
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
@@ -44,46 +50,52 @@ export const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDia
           </Grid>
           <Grid item xs={10}>
             <Typography variant="h6">
-              <Text translation="record.select.type" />
+              <Text translation={isRecord ? "record.select.type" : "supplier.select.type" } />
             </Typography>
             <Typography variant="h5">
-              <Text translation="react.select.create.title" />
+              <Text translation={isRecord ? "record.select.create.title" : "document.select.create.title"}/>
             </Typography>
           </Grid>
         </Grid>
       </DialogTitle>
       <DialogContent classes={{ root: classes.dialogContent }} style={{ position: "relative" }}>
-        <AutocompleteField
-          name="select-form"
-          size="sm"
-          autocompleteProps={{ id: "MultipleFormTemplate-selectDocForm" }}
-          options={documentTypes.map((docType) => ({
-            label: docType.documentTypeName,
-            value: docType.id,
-          }))}
-          onClick={(option) => handleSelect(option.value)}
-          label="record.select.type"
-        />
-        {formIds.length > 1 && <AutocompleteField
-          name="select-template-form"
-          size="sm"
-          autocompleteProps={{ id: "MultipleFormTemplate-selectDocType" }}
-          options={formIds.map((form) => ({
-            label: form.name,
-            value: form.id,
-          }))}
-          onClick={(option) => handleTemplateSelection(option.value)}
-          label="record.select.template"
-        />}
-        <Button
-          variant="text"
-          color="secondary"
-          className={classes.cancelButton}
-          onClick={dialog.close}
-          id="DocTypeListDialog-cancelButton"
+        <FormWrapper
+          dirty={dirty}
+          initialValues={initialValues}
+          resetForm={resetForm}
         >
-          <Text translation="transition.action.cancel" />
-        </Button>
+          <AutocompleteField
+            name="selectType"
+            size="sm"
+            autocompleteProps={{ id: "MultipleFormTemplate-selectDocForm" }}
+            options={documentTypes.map((docType) => ({
+              label: docType.documentTypeName,
+              value: docType.id,
+            }))}
+            onClick={(option) => handleSelect(option.value)}
+            label={isRecord ? "record.select.type" : "supplier.select.type" }
+          />
+          {formIds.length > 1 && <AutocompleteField
+            name="selectForm"
+            size="sm"
+            autocompleteProps={{ id: "MultipleFormTemplate-selectDocType" }}
+            options={formIds.map((form) => ({
+              label: form.name,
+              value: form.id,
+            }))}
+            onClick={(option) => handleTemplateSelection(option.value)}
+            label={isRecord ? "record.select.template" : "supplier.select.form"}
+          />}
+          <Button
+            variant="text"
+            color="secondary"
+            className={classes.cancelButton}
+            onClick={dialog.close}
+            id="DocTypeListDialog-cancelButton"
+          >
+            <Text translation="transition.action.cancel" />
+          </Button>
+        </FormWrapper>
       </DialogContent>
     </Dialog>
   );
