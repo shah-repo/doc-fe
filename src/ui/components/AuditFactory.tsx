@@ -9,6 +9,7 @@ import { DocumentRevision, Reference } from "../../state/ducks/documentRevisions
 import { DocumentType } from "../../state/ducks/documentRevisions/documentType";
 import { getAuditDefaultValue } from "../common/utils/audit";
 import Text from "../components/Text";
+import { Translation } from "../translations/types";
 import DateFormatter from "./Date";
 import DialogOpener from "./textDiff/DialogOpener";
 
@@ -70,12 +71,12 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       returnValue = (audit.nextValue as DocumentType).documentTypeName;
       break;
     case "approvals.status":
-    case "state":
+    case "status":
       returnValue = (
         <Text
           translation="changeRequest.audit.status.updated.by"
           values={{
-            status: audit.nextValue as string,
+            status: <Text translation={audit.nextValue as Translation} />,
             name: audit.owner?.user.name,
           }}
         />
