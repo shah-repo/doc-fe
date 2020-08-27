@@ -66,6 +66,7 @@ declare global {
       drUpdateDocumentTypeName(params: { employeeId: string; sessionId: string; payload: any; id: string }): Chainable<Subject>;
       drClickOnSpecificDocFromList(params: { item: string }): Chainable<Subject>;
       drCancelDraftButton(): Chainable<Subject>;
+      drIsTrainingRequired(params: {shouldBe: boolean}): Chainable<Subject>;
       drApproveAndReleaseNonQMSDocument(): Chainable<Subject>;
     }
   }
@@ -238,7 +239,7 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
   cy.get("#HeaderMenuButton").click();
   cy.get("[data-cy=\"changeOwner\"]").click();
   cy.get("#employee").click();
-  cy.get(`[data-cy=\"selectItem.employee.${params.employee}\"]`).click();
+  cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
   cy.get("[data-cy=\"changeOwner-submit\"]").click();
 });
 
@@ -247,7 +248,7 @@ Cypress.Commands.add("drClickReviseDocument", () => {
 });
 
 Cypress.Commands.add("drClickTrainingRequired", () => {
-  cy.get("input[type=checkbox]").click();
+  cy.get("[data-cy=\"field-retrain\"] input[type=checkbox]").click();
 });
 
 Cypress.Commands.add("drCheckTypeOfRevisionChangeOptions", () => {
@@ -370,3 +371,6 @@ Cypress.Commands.add("drAPIApproveAndRelease", (params: {
   }).then((response) => response.body);
 });
 
+Cypress.Commands.add("drIsTrainingRequired", (params: {shouldBe: boolean}) => {
+  cy.get("[data-cy=\"field-retrain\"] input[type=checkbox]").should(params.shouldBe ? "be.checked" : "not.be.checked");
+});

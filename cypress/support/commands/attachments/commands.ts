@@ -18,6 +18,7 @@ declare global {
       atchCheckAtributes(params: {fileName: string; attributes: string }): Chainable<Subject>;
       atchDownloadAllAttachments(): Chainable<Subject>;
       atchEnterConfirmationPassword(params: {password: string }): Chainable<Subject>;
+      attachFiles(files: {name: string; type: string}[]): Chainable<Subject>;
     }
   }
 }
@@ -35,6 +36,30 @@ Cypress.Commands.add("atchUploadAttachment", (params: {fileName: string }) => {
     });
   });
 });
+
+Cypress.Commands.add("attachFiles", { prevSubject: "element" },
+  (input, files: {name: string; type: string}[]) => {
+    files.forEach((file) => {
+      const { name, type } = file;
+      cy.fixture(name)
+        .then((content) => Cypress.Blob.base64StringToBlob(content, type))
+        .then((blob) => {
+          const testFile = new File([blob], name);
+          const dataTransfer = new DataTransfer();
+          for (const fileObj of input[0].files) {
+            dataTransfer.items.add(fileObj);
+          }
+          dataTransfer.items.add(testFile);
+          input[0].files = dataTransfer.files;
+          return input;
+        });
+    });
+    cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
+      cy.get("#attachments-button-file-clean-copy")
+        .trigger("change", { force: true });
+    });
+  },
+);
 
 Cypress.Commands.add("atchUploadRedlineAttachment", (params: {fileName: string }) => {
   cy.fixture(params.fileName).then((fileContent) => {
@@ -87,10 +112,10 @@ Cypress.Commands.add("atchCheckDisplayedAttachments", (params: {fileNames: strin
 });
 
 Cypress.Commands.add("atchRemoveAttachment", (params: {fileName: string }) => {
-  cy.xpath(`//span[@title=\"${params.fileName}\"]`).trigger("mouseover");
-  cy.xpath(`//span[@title=\"${params.fileName}\"]/../../div[3]`).click();
+  cy.xpath(`//span[@title="${params.fileName}"]`).trigger("mouseover");
+  cy.xpath(`//span[@title="${params.fileName}"]/../../div[3]`).click();
 });
 
 Cypress.Commands.add("atchCheckAtributes", (params: {fileName: string; attributes: string}) => {
-  cy.xpath(`//span[@title=\"${params.fileName}\"]/../span[2]`).should("have.text", params.attributes);
+  cy.xpath(`//span[@title="${params.fileName}"]/../span[2]`).should("have.text", params.attributes);
 });

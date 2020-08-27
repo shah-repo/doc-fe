@@ -55,7 +55,8 @@ export type FBInputType =
   | "customcontrol"
   | "poApprovalMatrix"
   | "task"
-  | "approvers";
+  | "approvers"
+  | "blanktplform";
 
 export type FBInputProps =
   & FBLabelProps
@@ -120,4 +121,5 @@ export const OmitInputClones: FBInputType[] = [
   "documentRevisions",
   "approvers",
   "approval",
+  "blanktplform",
 ];

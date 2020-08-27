@@ -48,6 +48,7 @@ export class FBEditorState {
     "approvalMatrix",
     "poApprovalMatrix",
     "task",
+    "blanktplform",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -65,6 +66,7 @@ export class FBEditorState {
     "createlabel",
     "approval",
     "requestapproval",
+    "blanktplform",
   ];
 
   public static pickStepIndex: FBInputType[] = ["stepsection", "teststep"];
@@ -87,6 +89,7 @@ export class FBEditorState {
     radio: FBEditorCheckControl,
     radiogroup: FBEditorOptionGroup,
     fileupload: FBEditorLabel,
+    blanktplform: FBEditorLabel,
     paragraph: FBEditorParagraph,
     quantity: FBEditorLabel,
     timer: FBEditorLabel,

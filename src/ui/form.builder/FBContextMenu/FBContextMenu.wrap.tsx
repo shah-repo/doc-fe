@@ -12,6 +12,7 @@ export const withFBContextMenu = <T extends FBContextMenuProps>(
   const Comp = ({
     onContextMenu,
     onClose,
+    onBlur,
     contextMenuState,
     anchorPosition,
     open = false,
@@ -21,7 +22,6 @@ export const withFBContextMenu = <T extends FBContextMenuProps>(
   }: T) => {
 
     contextMenuState = FB.useRef<FBContextMenuState>(FBContextMenuState);
-    open = !_.isUndefined(contextMenuState.mouseY);
 
     menuItems = _.filter(menuItems, (menuItem) => !menuItem.hidden);
     menuItems && (menuEls = _.map(menuItems, (menuItem, index) => {
@@ -41,18 +41,19 @@ export const withFBContextMenu = <T extends FBContextMenuProps>(
       );
     };
 
-    onClose = () => {
-      contextMenuState?.setPosition();
-    };
+    onClose = () => contextMenuState?.setPosition();
+    onBlur = onClose;
 
     useObserver(() => {
       anchorPosition = contextMenuState?.anchorPosition;
+      open = !_.isUndefined(contextMenuState?.mouseY);
     });
 
     return Component({
       ...(props as T),
       onContextMenu,
       onClose,
+      onBlur,
       anchorPosition,
       open,
       menuEls,
