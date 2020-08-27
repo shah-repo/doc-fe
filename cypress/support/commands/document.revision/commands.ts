@@ -51,6 +51,7 @@ declare global {
       drAMCheckRole(params: { stage: string; index: number }): Chainable<Subject>;
       drUpgradeRevisionLevel(): Chainable<Subject>;
       drRoleExistsAndChecked(params: { group: number; role: string }): Chainable<Subject>;
+      drNewTypeTrainingSelect(): Chainable<Subject>;
 
       /* Document Approval Matrix End */
       drCreateNewDocumentFromForm(): Chainable<Subject>;
@@ -326,6 +327,10 @@ Cypress.Commands.add("drUpgradeRevisionLevel", () => cy.get(`[data-cy="upgradeNe
 Cypress.Commands.add("drRoleExistsAndChecked", (params: { group: number; role: string }) => {
   cy.get(`[data-cy="group-${params.group}"]`).contains(params.role);
   cy.get(`[data-cy="checked-${params.group}"]`).should("be.visible");
+});
+
+Cypress.Commands.add("drNewTypeTrainingSelect", () => {
+  cy.get(`[data-cy="trainingReq"]`).click();
 });
 
 Cypress.Commands.add("drApproveAndReleaseDialog", () => {

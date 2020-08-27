@@ -227,6 +227,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Check Document types", () => {
+      SystemRequirement("REQ-0480");
       let exists = true;
       docTypes = docTypes || [];
       docTypes.forEach((type) => {
@@ -289,6 +290,11 @@ context("Document Approval Matrix Flow", () => {
       cy.drAMCheckValue({ identity: "needsSignature" });
     });
 
+    it("Mark needs training", () => {
+      SystemRequirement("REQ-0470");
+      cy.drNewTypeTrainingSelect();
+    });
+
     it("Add Category", () => {
       cy.drAddAMItemValue({ identity: "category", value: "Test" });
     });
@@ -329,6 +335,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Check Document types", () => {
+      SystemRequirement("REQ-0480");
       let exists = true;
       docTypes = docTypes || [];
       docTypes.push({ documentTypeName: docTypeOne });
@@ -368,6 +375,17 @@ context("Document Approval Matrix Flow", () => {
   context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+    });
+
+    it("'Training Required' should be checked because of DAM", () => {
+      SystemRequirement("REQ-0270");
+      cy.drIsTrainingRequired({ shouldBe: true });
+    });
+
+    it("Verify training can be deselected", () => {
+      SystemRequirement("REQ-0270");
+      cy.drClickTrainingRequired();
+      cy.drIsTrainingRequired({ shouldBe: false });
     });
 
     it("click on 'Approve and Release' button", () => {
@@ -522,6 +540,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Check Document types", () => {
+      SystemRequirement("REQ-0480");
       let exists = true;
       docTypes = docTypes || [];
       docTypes.push({ documentTypeName: docTypeTwo });
