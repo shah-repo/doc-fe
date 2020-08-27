@@ -2,13 +2,12 @@ import { Button, Dialog, DialogContent, DialogTitle, withStyles, WithStyles } fr
 import { ButtonProps } from "@material-ui/core/Button";
 import { Formik, FormikProps } from "formik";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
-import { TIME_ZONE } from "../../../common/utils/date";
+import React from "react";
 import { AsyncState } from "../../../state/types";
 import AlertDialog from "../../app/alert.dialog/AlertDialog";
 import { EffectiveDateFormValues } from "../../change.request/form/types";
 import Text from "../../components/Text";
-import useDialog from "../../hooks/useDialog";
+import { DialogHandler } from "../../hooks/useDialog";
 import EffectiveDateForm from "../effectiveDate/form/EffectiveDateForm";
 import { FormContext } from "../forms/FormContext";
 import PasswordForm from "../password/form/PasswordForm";
@@ -17,52 +16,35 @@ import { PasswordFormValues, Transition } from "./types";
 
 export interface TransitionDialogProps {
   onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void;
-  closeDialog: () => void;
   openDialog: () => void;
-  isDialogOpen: boolean;
   asyncState: AsyncState;
   buttonProps?: ButtonProps;
   transition: Transition;
   label: string;
+  transitionDialog: DialogHandler;
+  effectiveDateDialog?: DialogHandler;
 }
 
 type Props = TransitionDialogProps & WithStyles<typeof styles>;
 
 const TransitionDialog: React.FunctionComponent<Props> =
-  ({ classes, onSubmit, closeDialog, openDialog, isDialogOpen, asyncState, buttonProps, transition, label }) => {
+  ({
+    classes,
+    onSubmit,
+    openDialog,
+    asyncState,
+    buttonProps,
+    transition,
+    label,
+    transitionDialog,
+    effectiveDateDialog,
+  }) => {
     const renderPasswordForm = (props: FormikProps<any>) => (
-      <PasswordForm {...props} asyncState={asyncState} cancel={closeDialog} />
+      <PasswordForm {...props} asyncState={asyncState} cancel={transitionDialog.close} />
     );
 
-    const effectiveDateDialog = useDialog();
-    const [isDatepickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
-
-    useEffect(() => {
-      effectiveDateDialog.open();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const cancelClose = () => {
-      effectiveDateDialog.open();
-      closeDialog();
-      setIsDatePickerOpen(false);
-    };
-
     const renderCloseForm = (props: FormikProps<any>) => (
-      <>
-        <AlertDialog
-          dialog={effectiveDateDialog}
-          confirmAction={() => onSubmit({ effectiveDate: moment().tz(TIME_ZONE, true).toISOString() })}
-          cancelAction={() => {
-            effectiveDateDialog.close();
-            setIsDatePickerOpen(true);
-          }}
-          message={"transition.action.effective.date.message"}
-          confirmLabel={"common.true"}
-          cancelLabel={"common.false"}
-        />
-        {isDatepickerOpen && <EffectiveDateForm {...props} asyncState={asyncState} cancel={cancelClose} />}
-      </>
+      <EffectiveDateForm {...props} asyncState={asyncState} cancel={transitionDialog.close} />
     );
 
     const preventPropagation = (event: React.FormEvent) =>  event.stopPropagation();
@@ -77,10 +59,23 @@ const TransitionDialog: React.FunctionComponent<Props> =
         >
           <Text message={label} />
         </Button>
+        {effectiveDateDialog && (
+          <AlertDialog
+            dialog={effectiveDateDialog}
+            confirmAction={() => onSubmit({ effectiveDate: moment.utc().toISOString() })}
+            cancelAction={() => {
+              effectiveDateDialog.close();
+              transitionDialog.open();
+            }}
+            message={"transition.action.effective.date.message"}
+            confirmLabel={"common.true"}
+            cancelLabel={"common.false"}
+          />
+        )}
         <Dialog
           disableEscapeKeyDown={true}
           disableBackdropClick={true}
-          open={isDialogOpen}
+          open={transitionDialog.isOpen}
           onSubmit={preventPropagation}
         >
           <DialogTitle>

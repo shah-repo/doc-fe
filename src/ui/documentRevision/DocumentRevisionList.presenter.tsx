@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { Nullable } from "../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import SummaryInfo from "../common/summary/SummaryInfo";
-import Date from "../components/Date";
+import DateFormatter from "../components/Date";
 import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import { useDocumentVersion } from "../hooks/docCustomization/useCustomization";
@@ -114,7 +114,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         <SummaryInfo
           label="common.effective.date"
           value={
-            <Date
+            <DateFormatter
               value={documentRevision.obsoletedAt || documentRevision.effectiveDate}
             />
           }
