@@ -3,6 +3,7 @@ import { Formik } from "formik";
 import _ from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
+import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
@@ -24,7 +25,6 @@ import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
 import TrainingControl from "./training.control";
-import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
@@ -140,7 +140,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           <ReferencedByContainer dataProp={document.referencedBy} />
         )}
         {attachments && <Attachment
-          isAttachmentEmpty={!(attachments.length > 1)}
+          isAttachmentEmpty={attachments.length < 1}
           docRevId = {id}
           containsRedline = {containsRedline()}
           docRevStatus={status}/>}{/* Need to put actual check here*/}
