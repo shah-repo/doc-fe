@@ -1,13 +1,16 @@
 import React from "react";
 import Config from "../../config";
+import { getRemoteValidatorBundle } from "./../remoteValidators/RemoteValidators";
 
 const API = Config.ApiEndpoint;
+const WORKER_API = Config.WorkerApiEndpoint;
 const STATUS_QUERY = "/status";
 const MICRO_STATUS_QUERY = "/micro/healthcheck";
 
 interface StatusState {
   data: object;
   data1: object;
+  data2: object;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -37,7 +40,7 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
           console.log(error);
         },
       );
-    fetch(API + MICRO_STATUS_QUERY)
+    fetch((WORKER_API || API) + MICRO_STATUS_QUERY)
       .then((res) => res.text())
       .then(
         (result) => {
@@ -53,56 +56,71 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
           console.log(error);
         },
       );
+    getRemoteValidatorBundle()
+      .then(
+        (result) => {
+          const dict = result?.buildInfo;
+          if (dict) {
+            this.setState({ data2: dict });
+          } else {
+            this.setState({ data2: { Status: "You have to be logged in" } });
+          }
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          // eslint-disable-next-line no-console
+          console.log(error);
+        },
+      );
   }
 
-  public render() {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const dict = require("../../data/buildInfo.json");
-    // console.log("Dict: " + dict);
-    let index = 0;
-    const elements = Object.keys(dict).map((key) => {
-      index += 1;
-      return (
+  buildElements(dict) {
+    return Object.keys(dict).map((key, index) =>
+      (
         <tr key={index}>
           <td><b>{key}: </b></td>
           <td>{dict[key]}</td>
         </tr>
-      );
-    });
+      )
+    );
+  }
+
+  public render() {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const feElements = this.buildElements(require("../../data/buildInfo.json"));
+    // const beElems
+    const beElements = this.buildElements(this.state?.data || {});
+    const beWorkerElements = this.buildElements(this.state?.data1 || {});
+    const remoteJsElements = this.buildElements(this.state?.data2 || {});
     return (
       <div style={{ padding: "10px", backgroundColor: "white" }}>
         <h1>Build Info [Frontend]</h1>
         <table style={{ fontSize: "20px" }}>
           <tbody>
-            {elements}
+            {feElements}
           </tbody>
         </table>
         <br/>
         <h1>Build Info [Backend]</h1>
         <table style={{ fontSize: "20px" }}>
           <tbody>
-            { this.state && this.state.data &&
-              Object.keys(this.state.data).map((key) => (
-                <tr key={key}>
-                  <td><b>{key}: </b></td>
-                  <td>{(this.state.data as any)[key]}</td>
-                </tr>
-              ))
-            }
+            { beElements }
+          </tbody>
+        </table>
+        <br/>
+        <h1>Remote JS Validators</h1>
+        <table style={{ fontSize: "20px" }}>
+          <tbody>
+            { remoteJsElements }
           </tbody>
         </table>
         <br/>
         <h1>Background Worker Service</h1>
         <table style={{ fontSize: "20px" }}>
           <tbody>
-            { this.state && this.state.data1 &&
-              Object.keys(this.state.data1).map((key) => (
-                <tr key={key}>
-                  <td><b>{key}: </b></td>
-                  <td>{(this.state.data1 as any)[key]}</td>
-                </tr>
-              ))
-            }
+            { beWorkerElements }
           </tbody>
         </table>
       </div>
