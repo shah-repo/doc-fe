@@ -383,7 +383,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Verify training can be deselected", () => {
-      SystemRequirement("REQ-0270");
+      SystemRequirement("REQ-0290");
       cy.drClickTrainingRequired();
       cy.drIsTrainingRequired({ shouldBe: false });
     });
