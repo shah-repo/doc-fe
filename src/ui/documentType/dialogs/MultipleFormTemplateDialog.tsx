@@ -16,6 +16,7 @@ export interface DocumentTypeDialogProps extends FormikProps<any> {
   handleSelection: (id: string) => void;
   handleTemplateSelection: (id: string) => void;
   isRecord: boolean;
+  closeMultipleFormDialog: () => void;
 }
 export const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProps> = ({
   dialog,
@@ -27,6 +28,7 @@ export const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDia
   dirty,
   resetForm,
   isRecord,
+  closeMultipleFormDialog,
 }) => {
   const classes = styles();
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
@@ -38,7 +40,7 @@ export const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDia
     <Dialog
       open={dialog.isOpen}
       onSubmit={preventPropagation}
-      onClose={dialog.close}
+      onClose={closeMultipleFormDialog}
       classes={{ paper: classes.dialogPaper }}
     >
       <DialogTitle>
@@ -90,7 +92,7 @@ export const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDia
             variant="text"
             color="secondary"
             className={classes.cancelButton}
-            onClick={dialog.close}
+            onClick={closeMultipleFormDialog}
             id="DocTypeListDialog-cancelButton"
           >
             <Text translation="transition.action.cancel" />

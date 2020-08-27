@@ -111,7 +111,10 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const [forms, setForms] = useState<DocumentTypeByIdForm[]>([]);
   const buttonLabel = isByCategory ? labelName : label;
   const isRecord = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.RECORD;
-
+  const closeMultipleFormDialog = () => {
+    multipleFormDialog.close();
+    setForms([]);
+  };
   if (!isByCategory && documentTypeId) {
     selectedDocumentTypeId = documentTypeId;
   }
@@ -136,6 +139,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         setErrorMessage("missing.form.error");
         return;
       }
+      multipleFormDialog.open();
     },
     onError: (msg) => setErrorMessage(msg),
   });
@@ -150,7 +154,6 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
             value: documentTypes[0].id,
           }],
         });
-        multipleFormDialog.open();
         idAsync.start(getDocRevByIds, documentTypes[0].id, idAsync);
         return;
       }
@@ -211,6 +214,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
       {...{
         documentTypes,
         isRecord,
+        closeMultipleFormDialog,
       }}
     />
   );
