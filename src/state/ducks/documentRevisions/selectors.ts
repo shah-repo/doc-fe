@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get, some, sortBy } from "lodash";
 import { createSelector } from "reselect";
 import { stripTags, stripTagsFromObject } from "../../../common/utils/helpers";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
@@ -31,7 +31,7 @@ const getDocumentRevision = (
 const getDocument = (state: ApplicationState, documentId: string) =>
   documentsById(state)[documentId];
 const getDocumentRevisions = (state: ApplicationState, documentId: string) =>
-  _.get(documentsById(state)[documentId], "documentRevisions", []);
+  get(documentsById(state)[documentId], "documentRevisions", []);
 
 const getAudit = (
   state: ApplicationState,
@@ -39,17 +39,17 @@ const getAudit = (
 ): AuditGroupType => auditsByCRId(state)[documentRevisionId];
 
 const getDocId = (state: ApplicationState, documentId: string) =>
-  _.get(documentsById(state)[documentId], "docId", "");
+  get(documentsById(state)[documentId], "docId", "");
 
 const makeGetDocumentRevisions = () => createSelector(
   getDocumentRevisions,
-  (documentRevisions) => _.sortBy(documentRevisions, (docRev) => -docRev.version),
+  (documentRevisions) => sortBy(documentRevisions, (docRev) => -docRev.version),
 );
 
 const makeGetDisableCreateNewVersion = () => createSelector(
   [getDocumentRevisions],
   (documentRevisions) =>
-    _.some(
+    some(
       documentRevisions,
       (docRev) =>
         docRev.status === DocumentRevisionStatus.Draft ||
@@ -96,7 +96,7 @@ const makeGetAvailableReferences = () => createSelector(
     const uniqueIds = filteredIds.filter((id) => {
       const docRev = docRevs[id];
 
-      const skipId = _.some(filteredIds, (filteredId) => {
+      const skipId = some(filteredIds, (filteredId) => {
         const filteredDocRev = docRevs[filteredId];
 
         if (filteredDocRev.document.id === docRev.document.id) {

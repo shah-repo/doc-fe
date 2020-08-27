@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isUndefined } from "lodash";
 import { action } from "mobx";
 import { FBFile } from ".";
 import { Attachment } from "../../../state/ducks/attachments";
@@ -9,7 +9,7 @@ export class FBFileFieldState extends FBRequest<Attachment, FBFile> {
   public url: string = ATTACHMENT_UPLOAD_URL;
 
   @action public upload = (files: File[] | undefined) => {
-    if (_.isUndefined(files) || files.length === 0) {
+    if (isUndefined(files) || files.length === 0) {
       return;
     }
 

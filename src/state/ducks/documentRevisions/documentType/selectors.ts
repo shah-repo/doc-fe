@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get, orderBy } from "lodash";
 import { createSelector } from "reselect";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../../../ui/common/utils/helpers";
 import { FBDocTypeGroup } from "../../../../ui/form.builder/FBApprovalMatrixTable/FBApprovalMatrixTable.types";
@@ -33,7 +33,7 @@ const getDocumentTypesWithPageDetails = createSelector(
 const getDocumentTypeFormOptions = createSelector(
   allIds, byId,
   (ids, documentTypes) =>
-    _.orderBy(
+    orderBy(
       ids.map((id) => ({
         ...documentTypes[id],
       }))
@@ -43,7 +43,7 @@ const getDocumentTypeFormOptions = createSelector(
 const getDocumentTypeOptions = createSelector(
   allIds, byId,
   (ids, documentTypes) =>
-    _.orderBy(
+    orderBy(
       ids.map((id) => ({
         value: documentTypes[id].id,
         text: removeLastCharacterIfNotAlphaNumeric(documentTypes[id].documentTypeAcronym),
@@ -54,7 +54,7 @@ const getDocumentTypeOptions = createSelector(
 const getDocumentTypeOptionsForDocumentList = createSelector(
   allIds, byId,
   (ids, documentTypes) =>
-    _.orderBy(
+    orderBy(
       ids
         .filter((id) => documentTypes[id].group ===
         FBDocTypeGroup.OTHER ||
@@ -88,7 +88,7 @@ const getDocumentTypesByCategory = (state: ApplicationState) => state.documentTy
 const getDocTypeName = createSelector(
   byId,
   (state, docTypeId) => docTypeId,
-  (byIds, docTypeId) => _.get(byIds[docTypeId], "documentTypeName", "N/A"),
+  (byIds, docTypeId) => get(byIds[docTypeId], "documentTypeName", "N/A"),
 );
 
 const makeGetDocTypeByAcronym = () => createSelector(

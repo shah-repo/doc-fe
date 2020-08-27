@@ -1,6 +1,6 @@
 import { List, Typography } from "@material-ui/core";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
-import _ from "lodash";
+import { filter, isEmpty, isEqual, some } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import Select, { components } from "react-select";
@@ -53,9 +53,9 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   };
 
   const handleDelete = (deletedId: string) => {
-    const deleteAccessGroup = _.filter(security.securityGroups, (group) => (!_.isEqual(group.id, deletedId)));
-    const deleteAccessEmployees = _.filter(security.securityEmployees, (employee) =>
-      (!_.isEqual(employee.id, deletedId)));
+    const deleteAccessGroup = filter(security.securityGroups, (group) => (!isEqual(group.id, deletedId)));
+    const deleteAccessEmployees = filter(security.securityEmployees, (employee) =>
+      (!isEqual(employee.id, deletedId)));
     const securityDeleted = {
       securityEmployees: deleteAccessEmployees,
       securityGroups: deleteAccessGroup,
@@ -69,8 +69,8 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   };
 
   const handleDeleteOperatorAccess = (deletedId: string) => {
-    const deleteOperators = _.filter(security.operators, (operator) =>
-      (!_.isEqual(operator.id, deletedId)));
+    const deleteOperators = filter(security.operators, (operator) =>
+      (!isEqual(operator.id, deletedId)));
     const securityDeleted = {
       operators: deleteOperators,
     };
@@ -93,7 +93,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   const [accessElement, saveAccessElement] = React.useState(initialElements);
   const [operator, saveOperator] = React.useState<any>(null);
 
-  const isGroup = _.some(groupOptions, {
+  const isGroup = some(groupOptions, {
     label: accessElement.label, text: accessElement.text, value: accessElement.value,
   });
   const handleUpdate = (e) => {
@@ -177,7 +177,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
       </Typography>
       <div style={{ width: 200, paddingBottom: 32 }}>
         {
-          !_.isEmpty(securityEmployees) &&
+          !isEmpty(securityEmployees) &&
           <List className={securityGroups.length > 3 ? rowStyles.customRows : undefined}>
             {securityEmployees.map((e: Owner, index) => (
               <div
@@ -207,7 +207,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
       </Typography>
       <div style={{ width: 200, paddingBottom: 32 }}>
         {
-          !_.isEmpty(securityGroups) &&
+          !isEmpty(securityGroups) &&
           <List className={securityGroups.length > 3 ? rowStyles.customRows : undefined}>
             {securityGroups.map((e: Group, index) => (
               <div
@@ -240,7 +240,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
           </Typography>
           <div style={{ width: 200, paddingBottom: 32 }}>
             {
-              !_.isEmpty(operators) &&
+              !isEmpty(operators) &&
               <List className={operators.length > 3 ? rowStyles.customRows : undefined}>
                 {operators.map((e: Owner, index) => (
                   <div
