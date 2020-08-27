@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
-import { FormikProps, isObject } from "formik";
-import { Dictionary, get, has, includes, isEmpty, isUndefined, kebabCase, keys, omit, pick, set, truncate, union } from "lodash";
+import { FormikProps } from "formik";
+import { Dictionary, get, has, includes, isEmpty, isObject, isUndefined, kebabCase, keys, omit, pick, set, truncate, union } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FB, FBData } from "..";
