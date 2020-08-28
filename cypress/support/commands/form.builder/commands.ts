@@ -16,6 +16,8 @@ declare global {
       fbSelectAutoComplete(): Chainable<Subject>;
       fbOpenValidation(): Chainable<Subject>;
       fbAddField(): Chainable<Subject>;
+      fbAddLabelName(params: { name: string }): Chainable<Subject>;
+      fbSelectCustomControl(): Chainable<Subject>;
     }
   }
 }
@@ -38,8 +40,14 @@ Cypress.Commands.add("fbAddNewFieldButton", (params: { name: string }) => {
   cy.get("[data-cy=\"fb-editor-actions-add\"]").contains("Add").click();
 });
 
+Cypress.Commands.add("fbAddLabelName", (params: { name: string }) => {
+  cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(params.name);
+});
+
 Cypress.Commands.add("fbSelectApprovalMatrix", () => cy.get("[data-cy=\"form.builder.approvalMatrix\"]").click());
 Cypress.Commands.add("fbSelectTextField", () => cy.get("[data-cy=\"form.builder.textfield\"]").click());
+
+Cypress.Commands.add("fbSelectCustomControl", () => cy.get("[data-cy=\"fb-control-btn\"]").click());
 
 Cypress.Commands.add("fbSelectAutoComplete", () => cy.get("[data-cy=\"form.builder.autocomplete\"]").click());
 
