@@ -1,5 +1,5 @@
 import axios from "axios";
-import _ from "lodash";
+import { filter, find, get, isEmpty, isUndefined, pick, size, sortBy, union } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { apiClient, FBMediaAlbumFieldConstructor, FBMediaAlbumFieldMode, FBMediaAlbumFieldStore, FBMediaFile, FBMediaProps, FBMediaUrlProps, FBWorkspaceState } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
@@ -39,7 +39,7 @@ export class FBMediaAlbumFieldState {
   @computed public get collection(): FBMediaProps[] {
     const fieldImgs = FBMediaAlbumFieldStore.data.get(this.fieldName || "");
     if (fieldImgs) {
-      return _.sortBy(Array.from(fieldImgs.values()), "order");
+      return sortBy(Array.from(fieldImgs.values()), "order");
     }
     return [];
   }
@@ -47,7 +47,7 @@ export class FBMediaAlbumFieldState {
   @action public setMode = (mode: FBMediaAlbumFieldMode) => set(this, "mode", mode);
 
   @action public upload = (files: FBMediaFile[] | undefined) => {
-    if (_.isUndefined(files) || _.size(files) === 0) {
+    if (isUndefined(files) || size(files) === 0) {
       return;
     }
 
@@ -67,8 +67,8 @@ export class FBMediaAlbumFieldState {
     const { promise } = apiClient().get(FBEndpoint.PrivateUpload, { filename });
     promise
       .then((data: FBMediaUrlProps) => {
-        const presignedUrl = _.get(data, "url");
-        if (_.isUndefined(presignedUrl)) {
+        const presignedUrl = get(data, "url");
+        if (isUndefined(presignedUrl)) {
           return;
         }
         this.uploadS3(presignedUrl, file);
@@ -91,7 +91,7 @@ export class FBMediaAlbumFieldState {
       return;
     }
     const { promise } = apiClient().post(FBEndpoint.FileUploadCandidates, {
-      ..._.pick(file, ["name", "type"]),
+      ...pick(file, ["name", "type"]),
       preSignedUrl: url,
       fieldNameFromSchema: this.fieldName,
       order: file.order,
@@ -118,15 +118,15 @@ export class FBMediaAlbumFieldState {
     promise
       .then((data: FBMediaProps[]) => {
         const fieldNameFromSchema = this.fieldName;
-        const filesByName = _.filter(data, { fieldNameFromSchema });
-        !_.isEmpty(filesByName) && this.setMode("media");
+        const filesByName = filter(data, { fieldNameFromSchema });
+        !isEmpty(filesByName) && this.setMode("media");
         this.download(filesByName);
       })
       .catch((_error) => this.error(_error));
   };
 
   @action public download = (filesUploaded: FBMediaProps[]) => {
-    if (_.isUndefined(filesUploaded) || _.size(filesUploaded) === 0) {
+    if (isUndefined(filesUploaded) || size(filesUploaded) === 0) {
       return this.setLoading(false);
     }
 
@@ -141,7 +141,7 @@ export class FBMediaAlbumFieldState {
       return this.download(filesUploaded);
     }
 
-    if (!_.isUndefined(_.find(this.collection, { id }))) {
+    if (!isUndefined(find(this.collection, { id }))) {
       return this.download(filesUploaded);
     }
 
@@ -158,7 +158,7 @@ export class FBMediaAlbumFieldState {
     promise
       .then((data: FBMediaUrlProps) => {
         s3link = data.url;
-        const collection = _.union(this.collection, [{ ...img, s3link }]);
+        const collection = union(this.collection, [{ ...img, s3link }]);
         this.fieldName && FBMediaAlbumFieldStore.setData(this.fieldName, collection);
         this.setLoading(false);
       })
@@ -173,7 +173,7 @@ export class FBMediaAlbumFieldState {
 
     promise
       .then((data: FBMediaProps) => {
-        const collection = _.filter(this.collection, (media) => media.id !== data.id);
+        const collection = filter(this.collection, (media) => media.id !== data.id);
         this.fieldName && FBMediaAlbumFieldStore.setData(this.fieldName, collection);
         this.setLoading(false);
       })

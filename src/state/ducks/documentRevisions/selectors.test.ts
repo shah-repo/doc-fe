@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { cloneDeep } from "lodash";
 import { ApplicationState } from "../../reducers";
 import { getAsyncState } from "../../tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
@@ -25,7 +25,7 @@ describe("document revision selectors tests", () => {
   };
 
   beforeAll(() => {
-    state = _.cloneDeep(initialStoreState);
+    state = cloneDeep(initialStoreState);
     state.documentRevisions.allIds = allIds;
     state.documentRevisions.byId = byId;
     state.documentRevisions.documentsById = documentsById;

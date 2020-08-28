@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { groupBy, keyBy, merge, uniq } from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { AuditByCRIdState } from "../audit/types";
@@ -15,8 +15,8 @@ export const byId = (
 ): DocumentRevisionsByIdState => {
   switch (action.type) {
     case DOCUMENT_REVISION_LIST: {
-      const payloadById = _.keyBy(action.payload, "id");
-      return _.merge(state, payloadById);
+      const payloadById = keyBy(action.payload, "id");
+      return merge(state, payloadById);
     }
     case DOCUMENT_REVISION_SET:
       return { ...state, [action.payload.id]: action.payload };
@@ -31,12 +31,12 @@ export const allIds = (
 ): DocumentRevisionsAllIdsState => {
   switch (action.type) {
     case DOCUMENT_REVISION_LIST:
-      return _.uniq([
+      return uniq([
         ...state,
         ...action.payload.map((documentRevision) => documentRevision.id),
       ]);
     case DOCUMENT_REVISION_SET:
-      return _.uniq([...state, action.payload.id]);
+      return uniq([...state, action.payload.id]);
     default:
       return state;
   }
@@ -63,7 +63,7 @@ export const documentsById = (
                 return docRev;
               }
 
-              return _.merge(docRev, action.payload);
+              return merge(docRev, action.payload);
             }),
         },
       };
@@ -80,7 +80,7 @@ export const auditsByCRId = (
 ): AuditByCRIdState => {
   switch (action.type) {
     case DOCUMENT_REVISION_AUDIT_SET: {
-      const audits = _.groupBy(action.payload.audit, "groupId");
+      const audits = groupBy(action.payload.audit, "groupId");
       return { ...state, [action.payload.id]: audits };
     }
     default:
@@ -94,7 +94,7 @@ export const auditsAllId = (
 ): AllIdsState => {
   switch (action.type) {
     case DOCUMENT_REVISION_AUDIT_SET:
-      return _.uniq([...state, action.payload.id]);
+      return uniq([...state, action.payload.id]);
     default:
       return state;
   }

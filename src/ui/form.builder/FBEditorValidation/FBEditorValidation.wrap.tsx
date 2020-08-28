@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get, includes, isEmpty, map } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { FB, FBButton, FBDialogState, FBEditorValidationProps, FBSchemaProps, FBSchemaState } from "..";
@@ -24,7 +24,7 @@ export const withFBEditorValidation = <T extends FBEditorValidationProps>(
       getHasPermission(Permission.FORM_BUILDER_CUSTOM_VALIDATORS_ENABLED),
     );
 
-    schema = _.map(predefinedValidators as FBSchemaProps[], (schemaItem: FBSchemaProps) => ({
+    schema = map(predefinedValidators as FBSchemaProps[], (schemaItem: FBSchemaProps) => ({
       ...schemaItem,
       onChange: (ev: React.ChangeEvent<any>) => onChange && onChange(ev, schemaItem),
     }));
@@ -33,7 +33,7 @@ export const withFBEditorValidation = <T extends FBEditorValidationProps>(
     const { formState } = FB.useStores();
 
     const onChange = (ev: React.ChangeEvent<any>, schemaItem: FBSchemaProps) => {
-      const value = _.get(ev.target, "checked");
+      const value = get(ev.target, "checked");
       const { name } = schemaItem;
       if (!value) {
         formState?.omitFieldValue(name + ".value");
@@ -48,8 +48,8 @@ export const withFBEditorValidation = <T extends FBEditorValidationProps>(
       formState?.setFieldValue("customValidator", customValidator);
       let rules = formState?.getFieldValue("rules") || "";
       const customValidatorRule = customValidator && customValidator.name;
-      if (customValidatorRule && !_.includes(rules, customValidatorRule)) {
-        rules += `${!_.isEmpty(rules) ? "|" : ""}${customValidatorRule}`;
+      if (customValidatorRule && !includes(rules, customValidatorRule)) {
+        rules += `${!isEmpty(rules) ? "|" : ""}${customValidatorRule}`;
       }
       formState?.setFieldValue("rules", rules);
       dialogState?.closeDialog();

@@ -1,4 +1,4 @@
-import _, { Dictionary } from "lodash";
+import { Dictionary, get, isUndefined, map, omit } from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
 import FBButton from "../../components/inputs/FBButton";
@@ -14,10 +14,10 @@ export const withAction = <T extends FBActionProps>(
 ) => {
   const Comp = ({ action, form, field, ...props }: T) => {
     const onClick = () => {
-      let values = _.get(form, `values.${action.name || ""}`);
+      let values = get(form, `values.${action.name || ""}`);
       const addition: Dictionary<string> = {};
-      _.map(form?.values, (v, k) => {
-        if (!_.isUndefined(k.split(".")[1])) {
+      map(form?.values, (v, k) => {
+        if (!isUndefined(k.split(".")[1])) {
           addition[k.split(".")[1]] = v;
         }
       });
@@ -25,13 +25,13 @@ export const withAction = <T extends FBActionProps>(
         ...values,
         ...addition,
       };
-      FBActionStore.values[action.name || ""] = _.omit(values, [
+      FBActionStore.values[action.name || ""] = omit(values, [
         "send-email-action-supplier-field",
       ]);
       const rules: Dictionary<string> = {};
       const attributes: Dictionary<string> = {};
 
-      _.map(action.indicators, (indicator) => {
+      map(action.indicators, (indicator) => {
         rules[indicator.name || ""] = indicator.rules || "";
         attributes[indicator.name || ""] =
           (indicator.label as string) ||
@@ -47,7 +47,7 @@ export const withAction = <T extends FBActionProps>(
       function fails() {
         const errors = validator.errors.all();
         const t: Dictionary<string> = {};
-        _.map(errors, (v, k) => {
+        map(errors, (v, k) => {
           t[`${action.name}.${k}`] = v;
         });
         FBDynamicValidatorStore.setHelperText(t);
@@ -57,7 +57,7 @@ export const withAction = <T extends FBActionProps>(
     };
 
     const afterChange = (fieldName: string, value: any, values: any) => {
-      FBActionStore.values[action.name || ""] = _.get(
+      FBActionStore.values[action.name || ""] = get(
         values,
         action.name || "",
       );
@@ -65,8 +65,8 @@ export const withAction = <T extends FBActionProps>(
 
     const indicators = (action.indicators || []).map((indicator, index) => {
       const InputType = FBFieldComponent[indicator.type || ""];
-      const docId = _.get(form, `values.${action.name}.${indicator.name}`);
-      if (indicator.requiredDocId && _.isUndefined(docId)) {
+      const docId = get(form, `values.${action.name}.${indicator.name}`);
+      if (indicator.requiredDocId && isUndefined(docId)) {
         form?.setFieldValue(`${action.name}.${indicator.name}`, FBStore.docId);
       }
       return (

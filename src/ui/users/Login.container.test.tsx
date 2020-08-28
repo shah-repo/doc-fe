@@ -1,5 +1,5 @@
 import { mount, ReactWrapper } from "enzyme";
-import _ from "lodash";
+import { defaultsDeep } from "lodash";
 import React from "react";
 import { getEmployee } from "../../state/ducks/company/tests/factories";
 import { HOME_URL } from "../constants/urls";
@@ -27,7 +27,7 @@ describe("LoginContainer unit tests", () => {
 
   const getProps = (
     customProps: Partial<LoginContainerProps>,
-  ): LoginContainerProps => _.defaultsDeep({}, customProps, defaultProps);
+  ): LoginContainerProps => defaultsDeep({}, customProps, defaultProps);
 
   const getWrapper = (props: LoginContainerProps) =>
     mount(<LoginContainer {...props} />);

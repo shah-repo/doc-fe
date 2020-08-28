@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { filter, get, isEmpty, join } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -18,18 +18,18 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
     fileFieldState = FB.useRef<FBFileFieldState>(FBFileFieldState);
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const eventFiles = _.get(event, "currentTarget.files", []);
+      const eventFiles = get(event, "currentTarget.files", []);
       const invalidFiles: string[] = [];
 
-      const validFiles: File[] = _.filter(eventFiles, (file) => {
-        const fileName = _.get(file, "name", "");
+      const validFiles: File[] = filter(eventFiles, (file) => {
+        const fileName = get(file, "name", "");
         const type = fileName.split(".").pop();
         (type === "doc") && (invalidFiles.push(fileName));
         return type !== "doc";
       });
 
-      if (!_.isEmpty(invalidFiles)) {
-        alert(`.doc files are not accepted. Please use .docx. Invalid documents: ${_.join(invalidFiles, ", ")}`);
+      if (!isEmpty(invalidFiles)) {
+        alert(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ", ")}`);
       }
 
       fileFieldState?.upload(validFiles);

@@ -1,5 +1,5 @@
 import { Checkbox, FormControlLabel } from "@material-ui/core";
-import _ from "lodash";
+import { at, includes, map } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FBCheckboxGroupProps } from ".";
@@ -28,9 +28,9 @@ export const withFBCheckboxGroup = <T extends FBCheckboxGroupProps>(
     const formValue = formState?.getFieldValue(name, defaultValue);
     const intl = useIntl();
 
-    controls = _.map(options as FBOption[], (option, index) => {
-      const [value, message] = _.at(option, [optionValueKey, optionLabelKey]);
-      const defaultChecked = _.includes(formValue, value);
+    controls = map(options as FBOption[], (option, index) => {
+      const [value, message] = at(option, [optionValueKey, optionLabelKey]);
+      const defaultChecked = includes(formValue, value);
       let attr = message;
       if (isTranslation(attr)) {
         attr = intl.formatMessage({ id: message });

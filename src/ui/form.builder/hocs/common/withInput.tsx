@@ -1,4 +1,4 @@
-import _, { Dictionary } from "lodash";
+import { Dictionary, get, includes, isEmpty, map, pick } from "lodash";
 import { observer, useObserver } from "mobx-react";
 import React from "react";
 import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
@@ -30,26 +30,26 @@ export const withInput = <T extends FBInputProps>(
   }: T) => {
     const elements = React.Children.toArray(children);
     value =
-      _.get(form, `values.${name}`) ||
-      _.get(FBStore.getValues(), name) ||
+      get(form, `values.${name}`) ||
+      get(FBStore.getValues(), name) ||
       defaultValue ||
-      _.get(FBValidatorStore.formValues, name) ||
+      get(FBValidatorStore.formValues, name) ||
       "";
 
-    error = Boolean(_.get(form, `errors.${name}`));
+    error = Boolean(get(form, `errors.${name}`));
     helperText =
-      (error && _.get(form, `errors.${name}`)) ||
+      (error && get(form, `errors.${name}`)) ||
       FBDynamicValidatorStore.helperText[name];
 
     if (FBStore.mode === "form") {
-      const isFieldHidden = _.isEmpty(helperText) && _.isEmpty(field?.value);
-      hidden = _.includes(validationMode, "ValidationHidden") && isFieldHidden;
+      const isFieldHidden = isEmpty(helperText) && isEmpty(field?.value);
+      hidden = includes(validationMode, "ValidationHidden") && isFieldHidden;
       disabled =
-        (_.includes(validationMode, "ValidationDisabled") && isFieldHidden) ||
+        (includes(validationMode, "ValidationDisabled") && isFieldHidden) ||
         disabled;
     }
 
-    children = _.map(elements, (el) => React.cloneElement(
+    children = map(elements, (el) => React.cloneElement(
       el as React.ReactElement, {
         name,
         ...((type !== "autocomplete" && type !== "texteditor") && { value }),
@@ -58,7 +58,7 @@ export const withInput = <T extends FBInputProps>(
         error,
         checked: value,
         disabled,
-        ..._.pick(props, ["onChange", "afterChange"]),
+        ...pick(props, ["onChange", "afterChange"]),
       },
     ));
 

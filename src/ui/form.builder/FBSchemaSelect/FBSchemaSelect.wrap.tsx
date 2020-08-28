@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { omit } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBSchemaSelectProps, FBSchemaSelectState } from ".";
@@ -32,7 +32,7 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
       }
       const { type } = value;
       schemaState?.setSchemaItemAt({
-        ..._.omit(value, ["validationMode"]),
+        ...omit(value, ["validationMode"]),
         name: name?.replace("name", "value"),
         ...(type === "checkbox" && { defaultChecked: false }),
         ...(type === "radiogroup" && { type: "checkboxgroup" }),

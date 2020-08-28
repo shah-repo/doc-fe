@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get, isUndefined } from "lodash";
 import { action, observable } from "mobx";
 import React from "react";
 import FBForm from "../../components/form/FBForm";
@@ -44,7 +44,7 @@ export class FBEditorStore {
     title?: string,
   ) => () => {
 
-    FBValidatorStore.formValues = _.get(initialValues, "formValuesRules") || {};
+    FBValidatorStore.formValues = get(initialValues, "formValuesRules") || {};
 
     this.content = (
       <FBForm
@@ -60,7 +60,7 @@ export class FBEditorStore {
   };
 
   @action public editorTypeEdit = (schema: FBTemplateSchema) => {
-    if (_.isUndefined(schema.index)) {
+    if (isUndefined(schema.index)) {
       return;
     }
     const { type, index, customValidator, name = "" } = schema;

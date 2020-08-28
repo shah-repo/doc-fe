@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { filter, includes, size, union } from "lodash";
 import React from "react";
 import { FBEditorHelperProps } from ".";
 import { FB, FBEditorActions, FBEditorState, FBEditorTitle, FBInputProps } from "..";
@@ -17,19 +17,19 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
 
     function defaultProps(props: Partial<FBInputProps>): Partial<FBInputProps> {
       const { type, stepIndex } = props;
-      if (_.includes(FBEditorState.pickStepIndex, type)) {
-        const stepSections = _.filter(workspaceState?.getSchema(), (schemaItem) =>
-          _.includes(FBEditorState.pickStepIndex, schemaItem.type));
+      if (includes(FBEditorState.pickStepIndex, type)) {
+        const stepSections = filter(workspaceState?.getSchema(), (schemaItem) =>
+          includes(FBEditorState.pickStepIndex, schemaItem.type));
         props = {
           ...props,
-          stepIndex: stepIndex || (_.size(stepSections) + 1),
+          stepIndex: stepIndex || (size(stepSections) + 1),
         };
       }
       return props;
     }
 
     function addTestStep() {
-      workspaceState?.setSchema(_.union(workspaceState.schema, FBData.testStepSchema));
+      workspaceState?.setSchema(union(workspaceState.schema, FBData.testStepSchema));
       dialogState?.closeDialog();
     }
 
@@ -45,7 +45,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       if (!type) {
         return;
       }
-      if (_.includes(FBEditorState.pickCustomHandler, type)) {
+      if (includes(FBEditorState.pickCustomHandler, type)) {
         return customHandler(type);
       }
       const editorForm = FBEditorState.editor({

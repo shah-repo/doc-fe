@@ -1,7 +1,7 @@
 import { Box, Tooltip } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText/FormHelperText";
-import _ from "lodash";
+import { isEmpty } from "lodash";
 import React from "react";
 import { FBInputProps } from "../../types/common";
 import FBTextField from "../inputs/FBTextField";
@@ -20,7 +20,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   <Tooltip title={tooltip} placement="bottom-start">
     <FormControl {...{ error, fullWidth }}>
       {children}
-      {!_.isEmpty(helperText) && (
+      {!isEmpty(helperText) && (
         <FormHelperText>
           <Box color={error ? "" : "primary.main"}>{helperText}</Box>
         </FormHelperText>
