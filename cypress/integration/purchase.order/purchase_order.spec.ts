@@ -1,4 +1,3 @@
-import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -6,8 +5,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
-let adminEmployee;
-let docTypeId;
 
 context("PO test", () => {
   context("Create company via API and create Purchase Order Form document", () => {
@@ -44,83 +41,14 @@ context("PO test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          createdCompany.documentTypes.forEach((item: { documentTypeName: string; id: any }) => {
-            if (item.documentTypeName === "Purchase Order")
-            {
-              docTypeId = item.id;
-            }
-          });
           done();
         });
       });
     });
 
-    it("[API] Updates company", (done: any) => {
+    it("[API] Login admin tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
-      }).then((response) => {
-        loginResponse = response;
-
-        cy.cmpUpdateCompany({
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId as unknown as string,
-          payload: {
-            navigation: [
-              {
-                label: "Dashboard",
-                path: "/",
-                type: "LINK",
-              },
-              {
-                label: "Document Control",
-                type: "MENU",
-                menu: [
-                  {
-                    label: "Document List",
-                    path: "/document_revision",
-                    type: "LINK",
-                  },
-                  {
-                    label: "Approval Requests",
-                    path: "/change_request",
-                    type: "LINK",
-                  },
-                ],
-              },
-              {
-                label: "User Management",
-                path: "/user_management",
-                restrictedToUsersWithTags: [
-                  GroupTag.USER_MANAGEMENT,
-                ],
-                type: "LINK",
-              },
-              {
-                label: "Group Management",
-                path: "/group_management",
-                restrictedToUsersWithTags: [
-                  GroupTag.GROUP_MANAGEMENT,
-                ],
-                type: "LINK",
-              },
-              {
-                label: "Purchase Order",
-                path: "/document_by_type/" + docTypeId,
-                type: "LINK",
-              },
-            ],
-          },
-        }).then(() => {
-          done();
-        });
-      });
-    });
-
-    it("[API] Login second tester", (done: any) => {
-      cy.authApiLogin({
-        email: USERS[2].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -131,7 +59,7 @@ context("PO test", () => {
 
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
@@ -222,10 +150,6 @@ context("PO test", () => {
 
     it("Click on 'Create PO' button", () => {
       cy.poClickCreatePO();
-    });
-
-    it("Select PO form from list", () => {
-      cy.poSelectPoForm({ nameOfPoForm: "New Purchase Order Form" });
     });
 
     it("Check for PO ID uniqueness - ID should be PO-00001", () => {
@@ -346,10 +270,6 @@ context("PO test", () => {
 
     it("Click on 'Create PO' button", () => {
       cy.poClickCreatePO();
-    });
-
-    it("Select PO form from list", () => {
-      cy.poSelectPoForm({ nameOfPoForm: "New Purchase Order Form" });
     });
 
     it("Check for PO ID uniqueness - ID should be PO-00002", () => {

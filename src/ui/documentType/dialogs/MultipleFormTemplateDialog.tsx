@@ -96,6 +96,7 @@ export const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDia
             className={classes.cancelButton}
             onClick={closeMultipleFormDialog}
             id="DocTypeListDialog-cancelButton"
+            data-cy="suggestFormCancelBtn"
           >
             <Text translation="transition.action.cancel" />
           </Button>

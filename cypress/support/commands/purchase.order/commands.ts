@@ -182,15 +182,15 @@ Cypress.Commands.add("poCheckStatus", (...list: string[]) => {
 });
 
 Cypress.Commands.add("poCheckIfFormPopUpIsActive", (...list: string[]) => {
-  cy.get("[id=\"FormListDialog-selectForm\"]").click();
+  cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").click();
   list.forEach((item) => {
-    cy.get("[id=\"FormListDialog-selectForm\"] > div > div > div").contains(item).should("exist");
+    cy.get("[id^=react-select]").contains(item).should("exist");
   });
+  cy.get("[data-cy=field-selectType]>div:nth-child(1)").click();
 });
 
 Cypress.Commands.add("poCloseFormPopUpOnLandingPage", () => {
-  cy.get("[id=\"FormListDialog-selectForm\"]").click();
-  cy.get("[id=\"FormListDialog-cancelButton\"]").click();
+  cy.get("[data-cy=suggestFormCancelBtn]").click();
 });
 
 Cypress.Commands.add("poCheckForLineItemsAndTheirID", (params: {firstId: string; secondId: string}) => {

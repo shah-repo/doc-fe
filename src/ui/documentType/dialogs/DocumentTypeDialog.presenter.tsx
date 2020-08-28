@@ -63,6 +63,7 @@ export const DocumentTypeDialog: React.FunctionComponent<DocumentTypeDialogProps
           className={classes.cancelButton}
           onClick={dialog.close}
           id="DocTypeListDialog-cancelButton"
+          data-cy="suggestFormCancelBtn"
         >
           <Text translation="transition.action.cancel" />
         </Button>
