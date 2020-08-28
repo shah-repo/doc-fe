@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -23,7 +23,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
 
 
     useObserver(() => {
-      filePresenters = _.map(fileUploadState?.files, (file) => (
+      filePresenters = map(fileUploadState?.files, (file) => (
         <FBFilePresenter key={`fb-file-presenter-${file.id}`} {...{ file, name, disabled }} />
       ));
     });

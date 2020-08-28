@@ -2,7 +2,7 @@ import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Portal } from "
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import CloseIcon from "@material-ui/icons/Close";
-import _ from "lodash";
+import { isString } from "lodash";
 import React from "react";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
@@ -30,7 +30,7 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
       <Box display="flex" flexDirection="row-reverse">
         <CloseIcon fontSize="large" data-cy="dialog-close" onClick={handleClose} />
       </Box>
-      {_.isString(title) && (
+      {isString(title) && (
         <Box
           fontWeight="fontWeightBold"
           textAlign="left"
@@ -52,7 +52,7 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
       {content && portalTitle && portalAction && (
         <content.type {...content.props}>
           {content.props.children}
-          {!_.isString(title) && (
+          {!isString(title) && (
             <Portal container={portalTitle}>
               {title}
             </Portal>

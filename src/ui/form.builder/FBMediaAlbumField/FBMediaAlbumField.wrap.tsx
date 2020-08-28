@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get, last, map, toNumber } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBMediaAlbumFieldProps, FBMediaAlbumFieldState, FBMediaFile } from "..";
@@ -35,9 +35,9 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
 
     // Handle image upload
     onFileUploadChange = (event: React.FormEvent<HTMLInputElement>) => {
-      const files = _.get(event, "currentTarget.files", []);
-      _.map(files, (file, index) => {
-        (file as FBMediaFile).order = (_.last(collection)?.order || 0) + _.toNumber(index + 1);
+      const files = get(event, "currentTarget.files", []);
+      map(files, (file, index) => {
+        (file as FBMediaFile).order = (last(collection)?.order || 0) + toNumber(index + 1);
       });
       mediaAlbumFieldState?.upload(files as FBMediaFile[]);
     };

@@ -4,7 +4,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import DeleteIcon from "@material-ui/icons/Delete";
-import _ from "lodash";
+import { keys, truncate, values } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FBMapWrapper, FBPurchaseOrderDetailsHead, FBPurchaseOrderItem, FBPurchaseOrderTableDetailsProps, FBTableCell, FBTooltip } from "..";
@@ -26,7 +26,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
         <TableHead>
           <TableRow>
             <FBTableCell />
-            <FBMapWrapper<string[]> collection={_.values(FBPurchaseOrderDetailsHead)}>
+            <FBMapWrapper<string[]> collection={values(FBPurchaseOrderDetailsHead)}>
               {(head, index) => (
                 <FBTableCell
                   label={head}
@@ -55,13 +55,13 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                     </FBTooltip>
                   )}
                 </FBTableCell>
-                <FBMapWrapper<string[]> collection={_.keys(FBPurchaseOrderDetailsHead)}>
+                <FBMapWrapper<string[]> collection={keys(FBPurchaseOrderDetailsHead)}>
                   {(key, index) => {
                     let label = item[key];
                     let tooltipTitle: string | undefined;
                     if (key === "description") {
                       key = "partNumberTitle";
-                      label = _.truncate(item[key], { length: 35, omission: " ..." });
+                      label = truncate(item[key], { length: 35, omission: " ..." });
                       tooltipTitle = label;
                     }
                     if (key === "unitPrice") {

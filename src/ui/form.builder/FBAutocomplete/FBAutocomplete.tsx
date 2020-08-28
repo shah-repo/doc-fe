@@ -1,7 +1,7 @@
 import { Box, Chip, IconButton, TextField, Typography } from "@material-ui/core";
 import CachedIcon from "@material-ui/icons/Cached";
 import Autocomplete, { createFilterOptions, RenderInputParams } from "@material-ui/lab/Autocomplete";
-import _ from "lodash";
+import { get } from "lodash";
 import React from "react";
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
 import { ApprovalStatus } from "../../../state/ducks/documents";
@@ -89,11 +89,11 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             <FBMapWrapper<any[]> collection={value}>
               {(option, index) => {
                 const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
-                  (e.approver.id === _.get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
+                  (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
                 return (
                   <Chip
-                    key={`fb-autocomplete-${_.get(option, optionLabelKey)}-${index}`}
-                    label={<Box whiteSpace="normal">{_.get(option, optionLabelKey)}</Box>}
+                    key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
+                    label={<Box whiteSpace="normal">{get(option, optionLabelKey)}</Box>}
                     style={{ minHeight: "32px", height: "auto" }}
                     {...getTagProps({ index })}
                     disabled={props.name === "approvers" ? isAlreadyApproved : disabled}

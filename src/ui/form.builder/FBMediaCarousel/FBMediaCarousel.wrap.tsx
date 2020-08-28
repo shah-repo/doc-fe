@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isEmpty, isEqual, isUndefined, size } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBMediaCarouselProps, FBMediaCarouselState, FBMediaProps } from "..";
@@ -24,44 +24,44 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
     const { mediaAlbumState } = FB.useStores();
 
     React.useEffect(() => {
-      if (_.isUndefined(mediaAlbumState?.activeMedia)) {
+      if (isUndefined(mediaAlbumState?.activeMedia)) {
         mediaAlbumState?.setActiveMedia(0);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     handleNext = () => {
-      if (_.isUndefined(mediaAlbumState)) {
+      if (isUndefined(mediaAlbumState)) {
         return;
       }
       let nextStep = (mediaAlbumState?.activeMedia || 0) + 1;
-      _.isEqual(nextStep, _.size(collection)) && (nextStep = 0);
+      isEqual(nextStep, size(collection)) && (nextStep = 0);
       mediaAlbumState?.setActiveMedia(nextStep);
     };
 
     handleBack = () => {
-      if (_.isUndefined(mediaAlbumState)) {
+      if (isUndefined(mediaAlbumState)) {
         return;
       }
-      let prevStep = (mediaAlbumState?.activeMedia || _.size(collection)) - 1;
-      prevStep < 0 && (prevStep = _.size(collection) - 1);
+      let prevStep = (mediaAlbumState?.activeMedia || size(collection)) - 1;
+      prevStep < 0 && (prevStep = size(collection) - 1);
       mediaAlbumState?.setActiveMedia(prevStep);
     };
 
     handleDelete = () => {
       const activeMedia = mediaAlbumState?.activeMedia;
-      if (_.isUndefined(activeMedia)) {
+      if (isUndefined(activeMedia)) {
         return;
       }
       const media: FBMediaProps | undefined = collection[activeMedia];
-      if (_.isUndefined(media)) {
+      if (isUndefined(media)) {
         return;
       }
       removeMedia && removeMedia(media.id);
       mediaAlbumState?.setActiveMedia(0);
     };
 
-    onMouseOver = () => !_.isEmpty(activeMediaPath) && mediaCarouselState?.setToolsVisible(true);
+    onMouseOver = () => !isEmpty(activeMediaPath) && mediaCarouselState?.setToolsVisible(true);
     onMouseLeave = () => mediaCarouselState?.setToolsVisible(false);
 
     useObserver(() => {

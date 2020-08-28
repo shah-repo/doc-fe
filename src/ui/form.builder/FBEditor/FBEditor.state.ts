@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { includes } from "lodash";
 import { action, observable, set } from "mobx";
 import React from "react";
 import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
@@ -139,8 +139,8 @@ export class FBEditorState {
     });
   };
 
-  public static underValidation = (type: FBInputType) => !_.includes(FBEditorState.omitValidation, type);
-  public static includeDefaultValue = (type: FBInputType) => _.includes(FBEditorState.pickDefaultValue, type);
+  public static underValidation = (type: FBInputType) => !includes(FBEditorState.omitValidation, type);
+  public static includeDefaultValue = (type: FBInputType) => includes(FBEditorState.pickDefaultValue, type);
 
   @action public setMode = (mode: FBEditorMode) => set(this, "mode", mode);
 }

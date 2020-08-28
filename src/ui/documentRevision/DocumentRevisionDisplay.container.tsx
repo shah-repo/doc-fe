@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get } from "lodash";
 import React, { useCallback, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
@@ -82,7 +82,7 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
     loadDocumentRevisionAction();
   }, [loadDocumentRevisionAction]);
 
-  const operators = _.get(selectedDocument, "document.operators", []);
+  const operators = get(selectedDocument, "document.operators", []);
   const availableOperators = operators.map((operator) => operator.user.email);
   const isCurrentUserOperator = availableOperators.includes(currentUserEmail);
 

@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { filter, first, get } from "lodash";
 import { Collection } from "mobx-rest";
 // import actionData from "../../../../../data/fbActions.json";
 import { FBValidatorIndicatorProps } from "../../../types/validation/validator";
@@ -7,7 +7,7 @@ import { FBActionModel } from "../models/FBActionModel";
 export class FBActionCollection extends Collection<FBActionModel> {
   public data(): Partial<FBActionModel>[] {
     // return actionData;
-    return _.get(window, "EnlilRemoteValidators.avaliableActions");
+    return get(window, "EnlilRemoteValidators.avaliableActions");
   }
 
   public url() {
@@ -19,8 +19,8 @@ export class FBActionCollection extends Collection<FBActionModel> {
   }
 
   public getAction = (name: string): Partial<FBActionModel> | undefined => {
-    const filtered = _.filter(this.data(), (action) => action.name === name);
-    return _.first(filtered);
+    const filtered = filter(this.data(), (action) => action.name === name);
+    return first(filtered);
   };
 
   public getIndicators = (

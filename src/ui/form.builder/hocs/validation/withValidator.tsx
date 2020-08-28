@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get, isUndefined, map, omit } from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
 import { FBFieldComponent } from "../../defaults/editor";
@@ -19,16 +19,16 @@ export const withValidator = <T extends FBValidatorProps>(
       if (value) {
         return FBValidatorStore.indicatorValues[fieldName] = {};
       }
-      FBValidatorStore.indicatorValues = _.omit(indicatorValues, fieldName);
+      FBValidatorStore.indicatorValues = omit(indicatorValues, fieldName);
     };
 
     const indicatorAfterChange = (fieldName: string, value: any) => {
-      const propname = _.get(props, "name");
+      const propname = get(props, "name");
       FBValidatorStore.indicatorValues[propname][":"] = value;
       FBValidatorStore.formValues[fieldName] = value;
     };
 
-    const indicatorElements = (): React.ReactNode[] | undefined => _.map(indicators, (
+    const indicatorElements = (): React.ReactNode[] | undefined => map(indicators, (
       { type, ...indicatorProps }: Partial<FBValidatorIndicatorProps>,
       index,
     ) => {
@@ -50,7 +50,7 @@ export const withValidator = <T extends FBValidatorProps>(
         return false;
       }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return !_.isUndefined(_.get(FBValidatorStore.indicatorValues, props.name!));
+      return !isUndefined(get(FBValidatorStore.indicatorValues, props.name!));
     }
 
     return Component({

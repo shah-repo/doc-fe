@@ -1,5 +1,5 @@
 import { Box, Tooltip } from "@material-ui/core";
-import _ from "lodash";
+import { isString, isUndefined } from "lodash";
 import React from "react";
 import { FBConditionalWrapper } from "..";
 import Text from "../../components/Text";
@@ -11,12 +11,12 @@ const FBTooltip: React.FunctionComponent<FBTooltipProps> = ({
   ...props
 }) => (
   <FBConditionalWrapper
-    condition={!_.isUndefined(title)}
+    condition={!isUndefined(title)}
     wrapper={(children) => (
       <Tooltip
         {...props}
         title={title}
-        {..._.isString(title) && { title: <Text message={title} /> }}
+        {...isString(title) && { title: <Text message={title} /> }}
       >
         <Box component="span">
           {children}

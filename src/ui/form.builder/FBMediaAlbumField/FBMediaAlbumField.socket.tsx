@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get } from "lodash";
 import React from "react";
 import { FB, FBMediaProps } from "..";
 import { IotService } from "../../../common/utils/iot/mqttClient";
@@ -7,7 +7,7 @@ import useMqttSubscription from "../../hooks/useMqttSubscription";
 const FBMediaAlbumFieldSocket: React.FunctionComponent<Pick<FBMediaProps, "fieldNameFromSchema">> = ({
   fieldNameFromSchema,
 }) => {
-  const mediaAlbumFieldState = _.get(FB.useStores(), `mediaAlbumFieldState_${fieldNameFromSchema}`);
+  const mediaAlbumFieldState = get(FB.useStores(), `mediaAlbumFieldState_${fieldNameFromSchema}`);
   const iotService = IotService.getInstance();
   const subscribe = () => {
     iotService.subscribeToTopic(

@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { cloneDeep } from "lodash";
 import { ApplicationState } from "../../reducers";
 import { getAsyncState } from "../../tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
@@ -15,7 +15,7 @@ describe("auth selectors tests", () => {
   const employee = getEmployee();
 
   beforeEach(() => {
-    state = _.cloneDeep(initialStoreState);
+    state = cloneDeep(initialStoreState);
     state.auth.user = {
       ...user,
       groups,
