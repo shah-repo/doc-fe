@@ -314,7 +314,11 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poCreateNew();
+      cy.poClickCreatePO();
+    });
+
+    it("Select PO form from list", () => {
+      cy.poSelectPoForm({ nameOfPoForm: "New Purchase Order Form" });
     });
 
     it("Enter description 'POAM test", () => {
@@ -387,7 +391,11 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poCreateNew();
+      cy.poClickCreatePO();
+    });
+
+    it("Select PO form from list", () => {
+      cy.poSelectPoForm({ nameOfPoForm: "New Purchase Order Form" });
     });
 
     it("Enter description 'POAM test", () => {

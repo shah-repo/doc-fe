@@ -51,9 +51,15 @@ declare global {
       poRejectAR(params: {password: string}): Chainable<Subject>;
       poVerifyStatus(params: {status: string}): Chainable<Subject>;
       poAPICreatePO(params: {payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
+      poSelectPoForm(params: {nameOfPoForm: string}): Chainable<Subject>;
     }
   }
 }
+
+Cypress.Commands.add("poSelectPoForm", (params: {nameOfPoForm: string}) => {
+  cy.get("[id=FormListDialog-selectForm]").click();
+  cy.get("[id^=react-select]").contains(params.nameOfPoForm).click();
+});
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
   cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-fullWidth\"]").contains("Add item").click().wait(500);
