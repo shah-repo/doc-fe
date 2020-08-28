@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { keyBy, uniq } from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST } from "./constants";
@@ -11,7 +11,7 @@ export const groupsById = (
   switch (action.type) {
     case COMPANY_GROUPS_LIST:
       return {
-        ..._.keyBy<LoadCompanyGroup>(
+        ...keyBy<LoadCompanyGroup>(
           action.payload,
           (group) => group.id,
         ),
@@ -27,7 +27,7 @@ export const groupsAllIds = (
 ): GroupsAllIdsState => {
   switch (action.type) {
     case COMPANY_GROUPS_LIST:
-      return _.uniq([...action.payload.map((group) => group.id)]);
+      return uniq([...action.payload.map((group) => group.id)]);
     default:
       return state;
   }

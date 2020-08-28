@@ -1,5 +1,5 @@
 import Base64 from "Base64";
-import _ from "lodash";
+import { join, map, template as lodashTemplate } from "lodash";
 import marked from "marked";
 import React from "react";
 import { FBFormMarkDownProps } from ".";
@@ -11,7 +11,7 @@ export const withFBFormMarkDown = <T extends FBFormMarkDownProps>(
   const Comp = ({ ...props }: T) => {
     const { workspaceState, formState } = FB.useStores();
 
-    const template = _.template(`
+    const template = lodashTemplate(`
       <%= label %>
       ========================
       - **type:**  <%= type %>
@@ -23,7 +23,7 @@ export const withFBFormMarkDown = <T extends FBFormMarkDownProps>(
     `);
 
     const source = (): string => {
-      const tpl = _.map(workspaceState?.getSchema(), (schemaItem) => {
+      const tpl = map(workspaceState?.getSchema(), (schemaItem) => {
         let { customValidator } = schemaItem;
         const { name } = schemaItem;
         customValidator = customValidator
@@ -37,7 +37,7 @@ export const withFBFormMarkDown = <T extends FBFormMarkDownProps>(
         });
       });
 
-      return _.join(tpl, "\n");
+      return join(tpl, "\n");
     };
 
     const exportMarkdown = () => {

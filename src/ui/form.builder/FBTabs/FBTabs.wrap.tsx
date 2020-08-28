@@ -1,5 +1,5 @@
 import { Tab } from "@material-ui/core";
-import _ from "lodash";
+import { get, isUndefined, map } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBSwitchPanelState, FBTabsProps } from "..";
@@ -19,7 +19,7 @@ export const withFBTabs = <T extends FBTabsProps>(
     state = FB.useRef<FBSwitchPanelState>(FBSwitchPanelState);
 
     function getContent(step: number): React.ReactNode | string {
-      const stepConfig = _.get(config, step);
+      const stepConfig = get(config, step);
       return stepConfig.content;
     }
 
@@ -36,7 +36,7 @@ export const withFBTabs = <T extends FBTabsProps>(
     const onChange = (event: React.ChangeEvent<{}>, newValue: number) =>
       stateConfig(newValue);
 
-    _.isUndefined(tabs) && (tabs = _.map(config, (tab, index) => (
+    isUndefined(tabs) && (tabs = map(config, (tab, index) => (
       <Tab
         key={`${tab.title}-${index}`}
         label={<Text message={tab.title} />}

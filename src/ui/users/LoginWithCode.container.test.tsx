@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { mount } from "enzyme";
-import _ from "lodash";
+import { defaultsDeep } from "lodash";
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { LoginWithCodeRequestBody } from "../../state/ducks/auth/types";
@@ -21,7 +21,7 @@ describe("LoginWithCodeContainer unit tests", () => {
   };
 
   const getProps = (customProps: Partial<LoginWithCodeContainerProps>): LoginWithCodeContainerProps =>
-    _.defaultsDeep({}, customProps, defaultProps);
+    defaultsDeep({}, customProps, defaultProps);
 
   const getWrapper = (props: LoginWithCodeContainerProps) => mount(<LoginWithCodeContainer {...props} />);
 

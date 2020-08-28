@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { map } from "lodash";
 import React from "react";
 import { FBValidationModeOption, FBValidationModeProps } from ".";
 
@@ -10,7 +10,7 @@ export const withFBValidationMode = <T extends FBValidationModeProps>(
     ...props
   }: T) => {
 
-    options = _.map(FBValidationModeOption, (text, value) => ({ text, value }));
+    options = map(FBValidationModeOption, (text, value) => ({ text, value }));
 
     return Component({
       ...(props as T),

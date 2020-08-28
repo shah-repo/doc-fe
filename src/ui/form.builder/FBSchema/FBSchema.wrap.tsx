@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isEmpty, map, range } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable } from "..";
@@ -32,7 +32,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       const { formState } = FB.useStores();
       let disabled = false;
 
-      _.range(0, index).reverse().some((current) => {
+      range(0, index).reverse().some((current) => {
         if (!schema) { return disabled; }
         const item =  schema[current];
         const { type, name } = item;
@@ -57,7 +57,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       if (workspaceMode === "design") {
         return <FBSortable />;
       }
-      return _.map(schema, (schemaItem, index) => {
+      return map(schema, (schemaItem, index) => {
         const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
         const { disabled, reviseDisabled, outputDisabled } = schemaItem || {};
         return controlRenderer({
@@ -68,7 +68,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
             workspaceMode === "preview" ||
             isApproved({ ...schemaItem, index }) ||
             (reviseDisabled && outputRevision) ||
-            (outputDisabled && isOutput && !_.isEmpty(id))
+            (outputDisabled && isOutput && !isEmpty(id))
           ),
           index,
         });

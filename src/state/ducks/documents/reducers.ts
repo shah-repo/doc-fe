@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { uniq } from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { DOCUMENTS_LIST, DOCUMENTS_LIST_ASYNC, DOCUMENTS_TO_REVIEW_LIST, DOCUMENTS_TO_REVIEW_LIST_ASYNC, DOCUMENT_GET_ASYNC, DOCUMENT_PROPOSED_DOC_ID_ASYNC, DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET } from "./constants";
@@ -19,7 +19,7 @@ export const byId = (state: DocumentsByIdState = {}, action: DocumentActions): D
     case DOCUMENTS_LIST:
     case DOCUMENTS_TO_REVIEW_LIST:
       return action.payload.reduce(keyByDocumentIdReducer, state);
-      // return { ...state, ...(_.keyBy<Document>(action.payload, (document) => document.id)) };
+      // return { ...state, ...(keyBy<Document>(action.payload, (document) => document.id)) };
     case DOCUMENT_SET:
       return { ...state, [action.payload.id]: extendDocument(action.payload) };
     default:
@@ -31,9 +31,9 @@ export const allIds = (state: DocumentsAllIdsState = [], action: DocumentActions
   switch (action.type) {
     case DOCUMENTS_LIST:
     case DOCUMENTS_TO_REVIEW_LIST:
-      return _.uniq([...state, ...action.payload.map((document) => document.id)]);
+      return uniq([...state, ...action.payload.map((document) => document.id)]);
     case DOCUMENT_SET:
-      return _.uniq([...state, action.payload.id]);
+      return uniq([...state, action.payload.id]);
     default:
       return state;
   }

@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { filter, get, isArray, isEmpty, isEqual, isString as lodashIsString, isUndefined, map, omit, pick, toInteger, toString, union } from "lodash";
 import React from "react";
 import { FB, FBButton } from "../..";
 import FBTextField from "../../components/inputs/FBTextField";
@@ -32,9 +32,9 @@ export const withOnChange = <T extends FBInputProps>(
     const fieldValue = FBStore.getValue(fieldName);
 
     const isFieldValue =
-        Boolean(_.toInteger(fieldValue)) ||
-        _.isEqual(fieldValue, `context-${fieldName}`);
-    const isFormValue = _.get(
+        Boolean(toInteger(fieldValue)) ||
+        isEqual(fieldValue, `context-${fieldName}`);
+    const isFormValue = get(
       FBStore.getValues(),
       `context-${fieldName}`,
     ) as boolean;
@@ -59,7 +59,7 @@ export const withOnChange = <T extends FBInputProps>(
         case type !== "checkboxgroup" && value !== `context-${field.name}`:
         case fieldName === `context-${field.name}` && !value:
           form?.setFieldValue(inputContextName, "");
-          FBStore.setValues(_.omit(FBStore.getValues(), inputContextName));
+          FBStore.setValues(omit(FBStore.getValues(), inputContextName));
         default: break;
       }
     }
@@ -70,8 +70,8 @@ export const withOnChange = <T extends FBInputProps>(
         [fieldName]: value,
       };
 
-      if (_.isUndefined(value) || _.isEmpty(_.toString(value))) {
-        values = _.omit(values, fieldName);
+      if (isUndefined(value) || isEmpty(toString(value))) {
+        values = omit(values, fieldName);
       }
 
       FBStore.setValues(values);
@@ -120,19 +120,19 @@ export const withOnChange = <T extends FBInputProps>(
     }
 
     if (type !== "autocomplete") {
-      value = _.get(ev, "target.value", "");
+      value = get(ev, "target.value", "");
     }
 
     function isChecked() {
-      return _.get(ev.target, "checked");
+      return get(ev.target, "checked");
     }
 
     function isString() {
-      return _.toString(ev);
+      return toString(ev);
     }
 
     function isDate() {
-      if (_.isEmpty(ev)) {
+      if (isEmpty(ev)) {
         return ev;
       }
       return (ev as unknown as Date).toISOString();
@@ -140,15 +140,15 @@ export const withOnChange = <T extends FBInputProps>(
 
     let fieldValue = {
       checkboxgroup() {
-        const checked = _.get(ev.target, "checked");
+        const checked = get(ev.target, "checked");
         storeValue(value as string, checked);
-        let groupValue: string[] = _.get(form, `values.${name}`) || [];
+        let groupValue: string[] = get(form, `values.${name}`) || [];
         groupValue = checked
-          ? _.union(groupValue, [value as string])
-          : _.filter(groupValue, (v) => v !== (value as string));
+          ? union(groupValue, [value as string])
+          : filter(groupValue, (v) => v !== (value as string));
         storeValue(name, groupValue);
 
-        if (_.isEqual(value as string, "includeContext")) {
+        if (isEqual(value as string, "includeContext")) {
           storeValue("contextLabel", contextLabel);
         }
       },
@@ -158,18 +158,18 @@ export const withOnChange = <T extends FBInputProps>(
       datepicker: isDate,
       autocomplete() {
         const { optionValueKey = "id", optionValueType = "key", optionObjectKeys } = props;
-        if (_.isArray(value)) {
+        if (isArray(value)) {
           if (optionValueType === "object") {
             return optionObjectKeys ?
-              _.map(value, (v) => _.pick(v, optionObjectKeys as string[]))
+              map(value, (v) => pick(v, optionObjectKeys as string[]))
               : value;
           }
-          return _.map(value, (v) => (_.isString(v) ? v : _.get(v, optionValueKey)));
+          return map(value, (v) => (lodashIsString(v) ? v : get(v, optionValueKey)));
         }
-        return _.get(value, optionValueKey);
+        return get(value, optionValueKey);
       },
       default() {
-        return _.get(ev.target, "value");
+        return get(ev.target, "value");
       },
     };
 

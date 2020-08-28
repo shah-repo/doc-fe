@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
-import _ from "lodash";
+import { first, get, has, isArray, join } from "lodash";
 import { Action, Dispatch, Middleware, MiddlewareAPI } from "redux";
 import { redirectTo } from "../../../common/redirectHandler";
 import { MAINTENANCE } from "../../../ui/constants/urls";
@@ -101,8 +101,8 @@ const apiMiddleware: Middleware = ({
       const {
         data: { message },
       } = exception.response as AsyncActionErrorResponse;
-      if (_.isArray(message) && _.has(_.first(message), "message")) {
-        responseMessage = _.join(_.get(_.first(message), "message"), "\n");
+      if (isArray(message) && has(first(message), "message")) {
+        responseMessage = join(get(first(message), "message"), "\n");
       } else {
         responseMessage = Array.isArray(message) ? message.join("; ") : message;
       }

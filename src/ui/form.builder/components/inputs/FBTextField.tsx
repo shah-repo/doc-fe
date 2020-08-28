@@ -1,6 +1,6 @@
 import { TextField, TextFieldProps } from "@material-ui/core";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete/Autocomplete";
-import _ from "lodash";
+import { get } from "lodash";
 import React from "react";
 import FBStore from "../../stores/ui/FBStore";
 import { FBInputProps } from "../../types/common";
@@ -23,7 +23,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
 }) => {
   const disableEdit =
     disabled ||
-    _.get(props.hellosignFlowProps, "type") === "HS_DEFINED_FIELD" ||
+    get(props.hellosignFlowProps, "type") === "HS_DEFINED_FIELD" ||
     FBStore.getValue("signatureRequestId");
 
   return (

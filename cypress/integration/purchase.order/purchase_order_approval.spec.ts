@@ -15,7 +15,8 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 let adminEmployee;
-let docTypeId;
+let secondEmployee;
+let thirdEmployee;
 
 context("PO approval test", () => {
   context("Create company via API and create Purchase Order Form document", () => {
@@ -53,77 +54,30 @@ context("PO approval test", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          createdCompany.documentTypes.forEach((item: { documentTypeName: string; id: any }) => {
-            if (item.documentTypeName === "Purchase Order")
-            {
-              docTypeId = item.id;
-            }
-          });
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           done();
         });
       });
     });
 
-    it("[API] Updates company", (done: any) => {
+    it("[API] Create group with access to restricted doc_types", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-
-        cy.cmpUpdateCompany({
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId as unknown as string,
+        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
+        cy.grpAPICreateNewGroup({
           payload: {
-            navigation:
-          [
-            {
-              label: "Dashboard",
-              path: "/",
-              type: "LINK",
-            },
-            {
-              label: "Document Control",
-              type: "MENU",
-              menu: [
-                {
-                  label: "Document List",
-                  path: "/document_revision",
-                  type: "LINK",
-                },
-                {
-                  label: "Approval Requests",
-                  path: "/change_request",
-                  type: "LINK",
-                },
-              ],
-            },
-            {
-              label: "User Management",
-              path: "/user_management",
-              restrictedToUsersWithTags: [
-                GroupTag.USER_MANAGEMENT,
-              ],
-              type: "LINK",
-            },
-            {
-              label: "Group Management",
-              path: "/group_management",
-              restrictedToUsersWithTags: [
-                GroupTag.GROUP_MANAGEMENT,
-              ],
-              type: "LINK",
-            },
-            {
-              label: "Purchase Order",
-              path: "/document_by_type/" + docTypeId,
-              type: "LINK",
-            },
-          ],
+            name: "Group with access to restricted doc types",
+            tags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
+            permissions: [],
+            employees: [{ id: secondEmployee.id }, { id: thirdEmployee.id }],
           },
-        }).then(() => {
-          done();
-        });
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
       });
     });
 
@@ -314,7 +268,7 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poCreateNew();
+      cy.poClickCreatePO();
     });
 
     it("Enter description 'POAM test", () => {
@@ -387,7 +341,7 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poCreateNew();
+      cy.poClickCreatePO();
     });
 
     it("Enter description 'POAM test", () => {

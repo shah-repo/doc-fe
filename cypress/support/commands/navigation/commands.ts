@@ -67,7 +67,7 @@ Cypress.Commands.add("navigToApprovalRequestList", () => {
 });
 
 Cypress.Commands.add("navigToPurchaseOrder", () => {
-  cy.get("[data-cy=\"navigation.purchaseOrder\"]").click({ force: true });
+  cy.navigClickOnItem({ navigItem: NavigationItems.PURCHASE_ORDERS });
 });
 
 Cypress.Commands.add("navigToSuppliers", () => {

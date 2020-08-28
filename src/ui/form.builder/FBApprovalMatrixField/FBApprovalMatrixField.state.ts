@@ -1,4 +1,4 @@
-import _, { sortBy } from "lodash";
+import { map, sortBy, union } from "lodash";
 import { action, observable, set } from "mobx";
 import * as generateUuid from "uuid/v4";
 import { FBApprovalMatrixConstructor, FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixItem, FBApprovalRole } from "..";
@@ -43,13 +43,13 @@ export class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldD
   };
 
   @action public addApprovalRole = (role: FBApprovalRole) => {
-    const approvalRoles = _.union(this.data?.approvalRoles || [], [{
+    const approvalRoles = union(this.data?.approvalRoles || [], [{
       ...role,
       id: generateUuid(),
       index: this.data?.approvalRoles?.length || 0,
     }]);
-    const approvalMatrix = _.map(this.data?.approvalMatrix, (am) => {
-      _.map(new Array(approvalRoles.length), (_, i) => {
+    const approvalMatrix = map(this.data?.approvalMatrix, (am) => {
+      map(new Array(approvalRoles.length), (_, i) => {
         am.approvalRoles.stage1[i] = am.approvalRoles.stage1[i] || false;
         am.approvalRoles.stage2[i] = am.approvalRoles.stage2[i] || false;
         am.approvalRoles.stage3[i] = am.approvalRoles.stage3[i] || false;

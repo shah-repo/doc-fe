@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import _ from "lodash";
+import { find, get } from "lodash";
 import React from "react";
 import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceTplActions } from "..";
 import FBStore from "../stores/ui/FBStore";
@@ -32,7 +32,7 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
       }
 
       const schema: FBSchemaProps[] = JSON.parse(result as string);
-      if (!_.find(schema, "type") && !_.find(schema, "index")) {
+      if (!find(schema, "type") && !find(schema, "index")) {
         return alert("Not a valid template.");
       }
 
@@ -42,7 +42,7 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
     };
 
     importSchema = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = _.get(event, "currentTarget.files[0]");
+      const file = get(event, "currentTarget.files[0]");
       if (!file) {
         return alert("Invalid file.");
       }

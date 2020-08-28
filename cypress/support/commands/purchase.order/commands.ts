@@ -51,9 +51,15 @@ declare global {
       poRejectAR(params: {password: string}): Chainable<Subject>;
       poVerifyStatus(params: {status: string}): Chainable<Subject>;
       poAPICreatePO(params: {payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
+      poSelectPoForm(params: {nameOfPoForm: string}): Chainable<Subject>;
     }
   }
 }
+
+Cypress.Commands.add("poSelectPoForm", (params: {nameOfPoForm: string}) => {
+  cy.get("[id=FormListDialog-selectForm]").click();
+  cy.get("[id^=react-select]").contains(params.nameOfPoForm).click();
+});
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
   cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-fullWidth\"]").contains("Add item").click().wait(500);
@@ -176,15 +182,15 @@ Cypress.Commands.add("poCheckStatus", (...list: string[]) => {
 });
 
 Cypress.Commands.add("poCheckIfFormPopUpIsActive", (...list: string[]) => {
-  cy.get("[id=\"FormListDialog-selectForm\"]").click();
+  cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").click();
   list.forEach((item) => {
-    cy.get("[id=\"FormListDialog-selectForm\"] > div > div > div").contains(item).should("exist");
+    cy.get("[id^=react-select]").contains(item).should("exist");
   });
+  cy.get("[data-cy=field-selectType]>div:nth-child(1)").click();
 });
 
 Cypress.Commands.add("poCloseFormPopUpOnLandingPage", () => {
-  cy.get("[id=\"FormListDialog-selectForm\"]").click();
-  cy.get("[id=\"FormListDialog-cancelButton\"]").click();
+  cy.get("[data-cy=suggestFormCancelBtn]").click();
 });
 
 Cypress.Commands.add("poCheckForLineItemsAndTheirID", (params: {firstId: string; secondId: string}) => {
