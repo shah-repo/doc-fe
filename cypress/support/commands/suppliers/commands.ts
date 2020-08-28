@@ -33,8 +33,8 @@ Cypress.Commands.add("supClickOnSpecificSupplierFileFromList", (params: {item: s
 });
 
 Cypress.Commands.add("supCheckForSuggestedForms", (...list: string[]) => {
-  cy.get("[id=\"FormListDialog-selectForm\"]").click();
+  cy.get("[data-cy=field-selectForm]>div:nth-child(2)").click();
   list.forEach((item) => {
-    cy.get("[id=\"FormListDialog-selectForm\"] > div > div > div").contains(item).should("exist");
+    cy.get("[id^=react-select]").contains(item).should("exist");
   });
 });
