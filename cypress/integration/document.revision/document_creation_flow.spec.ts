@@ -5,6 +5,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
+let documentUploadFailureCaught = false;
 
 context("Document Creation Flow", () => {
   context("[API]Prepare company", () => {
@@ -122,19 +123,38 @@ context("Document Creation Flow", () => {
     });
 
     context("Uploads attachments", () => {
-      it("Uploads text.docx", () => {
-        cy.atchUploadAttachment({ fileName: "test.docx" });
-      });
-
-      it("Check one attachment is displayed: test.docx", () => {
-        cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx" ] });
+      it("Uploads redline attachment: test.docx", () => {
+        // SystemRequirement("REQ-0260"); Removed from list.csv
+        cy.atchUploadRedlineAttachment({ fileName: "test.docx" });
       });
 
       it("Check test.docx attachment atributes", () => {
         cy.atchCheckAtributes({ fileName: "test.docx", attributes: "11.00 B Microsoft Word File" });
       });
 
-      it("Uploads image.jpg", () => {
+      it("check if it has the redline indicator", () => {
+        cy.atchCheckRedLineIndicator({ fileName: "test.docx" });
+      });
+
+      it("Check one attachment is displayed: test.docx", () => {
+        cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx" ] });
+      });
+
+      it("Uploads invalid-docType.doc", () => {
+        cy.on("fail", () => {
+          documentUploadFailureCaught = true;
+          return false;
+        });
+        cy.atchUploadAttachment({ fileName: "invalid-docType.doc" });
+      });
+
+      it("Check if document failure was caught", () => {
+        SystemRequirement("REQ-0230");
+        expect(documentUploadFailureCaught).equal(true);
+        cy.closeAtchUploadDialog();
+      });
+
+      it("Upload image.jpg", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
@@ -168,6 +188,10 @@ context("Document Creation Flow", () => {
 
       it("Check three attachments are displayed: test.docx, image.jpg and test_image.jpg", () => {
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx", "image.jpg", "test_image.jpg" ] });
+      });
+
+      it("Redline attachment should be last on the list", () => {
+        cy.atchCheckDisplayedAtLast({ fileName: "test.docx" });
       });
 
       it("Remove attachment image.jpg", () => {
@@ -236,7 +260,7 @@ context("Document Creation Flow", () => {
 
       it("Allow user to only set single attachment to be primary", () => {
         SystemRequirement("REQ-0250");
-        cy.atchSetPrimaryAttachment({ fileName: "test.docx" });
+        cy.atchSetPrimaryAttachment({ fileName: "image.jpg" });
         cy.atchCheckForSinglePrimaryAttachment();
       });
 
