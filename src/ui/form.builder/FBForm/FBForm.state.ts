@@ -1,5 +1,5 @@
 import { flatten } from "flat";
-import { Dictionary, isArray, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet } from "lodash";
+import { Dictionary, get as lodashGet, isArray, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBFormConstructor, FBInputState, FBWorkspaceMode, FBWorkspaceState } from "..";
 import { FBSchemaState } from "../FBSchema";
@@ -29,7 +29,7 @@ export class FBFormState extends FBSchemaState {
   }
 
   @computed public get Validator(): any {
-    return get(window, "EnlilRemoteValidators.validator");
+    return lodashGet(window, "EnlilRemoteValidators.validator");
   }
 
   public reset = () => {
@@ -52,11 +52,11 @@ export class FBFormState extends FBSchemaState {
     if (!fieldName) {
       return defaultValue;
     }
-    if (isUndefined(get(this.values, fieldName)) && !isUndefined(defaultValue)) {
+    if (isUndefined(lodashGet(this.values, fieldName)) && !isUndefined(defaultValue)) {
       lodashSet(this.initialValues, fieldName, defaultValue);
       lodashSet(this.values, fieldName, defaultValue);
     }
-    return get(this.values, fieldName) || get(this.initialValues, fieldName);
+    return lodashGet(this.values, fieldName) || lodashGet(this.initialValues, fieldName);
   };
 
   @action public setFieldValue = (
