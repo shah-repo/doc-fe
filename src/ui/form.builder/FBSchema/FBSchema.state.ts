@@ -1,4 +1,4 @@
-import { filter, find, findIndex, includes, inRange, isUndefined, size, union } from "lodash";
+import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, size, union } from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
@@ -109,7 +109,7 @@ export class FBSchemaState {
     });
   };
 
-  @action public getSchema = (): FBSchemaProps[] => get(this, "schema");
+  @action public getSchema = (): FBSchemaProps[] => cloneDeep(get(this, "schema"));
 
   @action public getSchemaItem = (name?: string): FBSchemaProps | undefined => {
     if (!name) {
