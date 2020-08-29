@@ -102,7 +102,8 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
       <Text translation="attachment.download.clean.copy" values={{ fileName, fileType }} />
     </MenuItem>;
   const renderPDFFile = canWatermark &&
-    <MenuItem onClick={handleWatermarkClick(AttachmentType.Attached, isDocObsoleteOrDeprecated)}>
+    <MenuItem data-cy={"attachment.download.pdf"}
+      onClick={handleWatermarkClick(AttachmentType.Attached, isDocObsoleteOrDeprecated)}>
       <Text translation="attachment.download.pdf" />
     </MenuItem>;
   // const renderWatermarkFile = (documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete ||

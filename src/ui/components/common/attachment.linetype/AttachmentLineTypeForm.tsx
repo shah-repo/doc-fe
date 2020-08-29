@@ -35,6 +35,7 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
         className={classes.closeRoot}
         onClick={onCancel}
         id="AttachmentFieldPresenter-handleRemove"
+        data-cy="AttachmentFieldPresenter-handleRemove"
       >
         <CloseIcon className={classes.closeIcon} />
       </IconButton>
