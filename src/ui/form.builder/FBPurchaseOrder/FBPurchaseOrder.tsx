@@ -19,7 +19,7 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
     <FBDialog />
     <FBInput {...{ name, disabled, autosave }} type="purchaseorder">
       <Box mb={gutter ? 5 : 0}>
-        {mode === "form" && <FBSection {...{ label }}  />}
+        {mode === "form" && <FBSection name={`fb-po-section-${name}`} {...{ label }}  />}
         <FBPurchaseOrderTable {...{ name, disabled, handleItem, mode }} />
         {!disabled && (
           <FBButton

@@ -8,12 +8,18 @@ import Colors from "../../layout/theme/utils/colors";
 const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemProps> = ({
   handleOpen,
   remove,
+  id,
   index = 0,
   disabled,
   name,
 }) => (
   <>
-    <FBSection label="form.builder.document" stepIndex={index + 1} >
+    <FBSection
+      label="form.builder.document"
+      stepIndex={index + 1}
+      bookmarked={false}
+      name={`fb-docrev-section-${name}-${id}`}
+    >
       <Box
         display="flex"
         flexDirection="row-reverse"
@@ -43,6 +49,7 @@ const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemPr
           gutter={false}
           disabled={true}
           freeSolo={true}
+          withState={true}
         />
       </Box>
       <Box
