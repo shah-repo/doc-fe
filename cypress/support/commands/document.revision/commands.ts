@@ -30,7 +30,6 @@ declare global {
       drClickReviseDocument(): Chainable<Subject>;
       drClickTrainingRequired(): Chainable<Subject>;
       drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
-      drAddOutputDocType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocTypeSecondTime(params: { documentType: string }): Chainable<Subject>;
       drChooseTypeOfRevisionChangeOption(params: { option: string }): Chainable<Subject>;
       drDocumentFieldError(params: { field: string; message: string }): Chainable<Subject>;
@@ -69,6 +68,7 @@ declare global {
       drCancelDraftButton(): Chainable<Subject>;
       drIsTrainingRequired(params: {shouldBe: boolean}): Chainable<Subject>;
       drApproveAndReleaseNonQMSDocument(): Chainable<Subject>;
+      drSelectHistoryTab(): Chainable<Subject>;
     }
   }
 }
@@ -162,11 +162,6 @@ Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`).wait(500);
-});
-
-Cypress.Commands.add("drAddOutputDocType", (params: { documentType: string }) => {
-  cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
-  cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`);
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
@@ -378,4 +373,8 @@ Cypress.Commands.add("drAPIApproveAndRelease", (params: {
 
 Cypress.Commands.add("drIsTrainingRequired", (params: {shouldBe: boolean}) => {
   cy.get("[data-cy=\"field-retrain\"] input[type=checkbox]").should(params.shouldBe ? "be.checked" : "not.be.checked");
+});
+
+Cypress.Commands.add("drSelectHistoryTab", () => {
+  cy.get("[data-cy=\"timeline-icon\"]").click();
 });

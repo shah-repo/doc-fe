@@ -18,7 +18,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const classes = styles();
 
   const renderAuditGroup = () =>
-    Object.keys(audit).map((groupId) => {
+    Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
       const { owner, ownerUser, ownerThirdParty } = change;
       const { name } = ((owner && owner.user) || ownerUser || ownerThirdParty);
@@ -31,15 +31,15 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer}>
-            <div className={classes.owner}>{name}</div>
-            <DateTime value={change.timestamp} />
+            <div className={classes.owner} data-cy={`owner-${key}`}>{name}</div>
+            <DateTime value={change.timestamp} data-cy={`time-${key}`}/>
           </div>
-          {renderChanges(audit[groupId])}
+          {renderChanges(audit[groupId], key)}
         </Box>
       );
     });
 
-  const renderChanges = (audits: Audit[]) => {
+  const renderChanges = (audits: Audit[], groupKey?: number) => {
     const newReferences: Audit[] = [];
     const deletedReferences: Audit[] = [];
     const attachments: Audit[] = [];
@@ -58,12 +58,12 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         singleFields.push((
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
-              <Text
+              <Text dataCy={`change-key-${groupKey}-${index}`}
                 message={`documentRevision.audit.${change.field}.${change.type}`}
               />
             </Box>
             <div className={classes.auditValue}>
-              <AuditFactory audit={change} />
+              <AuditFactory audit={change} dataCy={`change-value-${groupKey}-${index}`} />
             </div>
           </Box>
         ));
