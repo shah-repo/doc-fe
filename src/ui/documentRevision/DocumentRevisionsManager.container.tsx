@@ -10,6 +10,7 @@ import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } 
 import { DocumentGroupType } from "../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import { FB, FBBookmarkState, FBProvider } from "../form.builder";
 import { FBDocTypeGroup } from "../form.builder/FBApprovalMatrixTable";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.container";
@@ -19,8 +20,8 @@ import DocumentRevisionListContainer from "./DocumentRevisionList.container";
 import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers";
 import Bookmarks from "./Sidebar/Bookmarks";
 import { SidebarContainer } from "./Sidebar/Sidebar.container";
+import { Sidebar } from "./Sidebar/types";
 import styles from "./styles";
-import { FB, FBBookmarkState, FBProvider } from "../form.builder";
 
 interface StateProps {
   documentRevisions: DocumentRevision[];
@@ -91,9 +92,10 @@ DocumentRevisionManagerContainerProps
       (e) => (e.document?.documentType?.groupOptions || []).includes(FBDocTypeGroup.RECORD)) ||
     (!!selectedDocument?.document?.documentType?.groupOptions?.includes(FBDocTypeGroup.RECORD) || false);
 
-  const sidebarList = [
+  const sidebarList: Sidebar[] = [
     {
       icon: <NoteIcon />,
+      type: "note",
       details: {
         title: intl.formatMessage({
           id: `document.revision.docVersion.${acronym}`,
@@ -112,6 +114,7 @@ DocumentRevisionManagerContainerProps
     },
     {
       icon: <TimelineIcon />,
+      type: "history",
       details: {
         dataCy: "timeline-icon",
         title: intl.formatMessage({
@@ -124,6 +127,7 @@ DocumentRevisionManagerContainerProps
     },
     {
       icon: <BadgeIcon />,
+      type: "permissions",
       details: {
         dataCy: "permission-icon",
         title: intl.formatMessage({
@@ -140,6 +144,7 @@ DocumentRevisionManagerContainerProps
     },
     {
       icon: <BookmarkIcon />,
+      type: "bookmarks",
       details: {
         dataCy: "bookmark-icon",
         title: intl.formatMessage({

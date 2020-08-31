@@ -41,22 +41,24 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     React.useEffect(() => {
       const docList = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.documentRevisions);
       if (docList) {
-        collection?.map((value, index) => {
+        docRevState?.value?.map((value, index) => {
           const { proposedDocumentRevision: { id: docRevId } } = value;
           setBookmark(docList.get(docRevId), index);
         });
       } else {
-        collection?.map((value, index) => {
+        bookmarkState?.setLoading(true);
+        docRevState?.value?.map((value, index) => {
           reaction(
             () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.documentRevisions),
             (data) => {
               const { proposedDocumentRevision: { id: docRevId } } = value;
               setBookmark(data.get(docRevId), index);
+              bookmarkState?.setLoading(false);
             }
           );
         });
       }
-    }, [collection]);
+    }, [docRevState?.value]);
 
     function setBookmark(documentRevision?: DocumentRevision, at?: number) {
       if (!documentRevision) { return; }

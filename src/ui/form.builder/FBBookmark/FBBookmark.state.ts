@@ -4,8 +4,11 @@ import { FBBookmarkItem } from "..";
 
 export class FBBookmarkState {
   @observable public bookmarks?: FBBookmarkItem[];
+  @observable public loading?: boolean;
 
   public clear = () => set(this, "bookmarks", undefined);
+
+  @action public setLoading = (state: boolean) => set(this, "loading", state);
 
   @action public addBookmark = (bookmark?: FBBookmarkItem, at?: number) => {
     if (!bookmark) { return; }
