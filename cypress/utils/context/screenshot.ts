@@ -1,7 +1,7 @@
 import { addScreenshotToContext } from "./screenshotsToContext";
 
-export function Screenshot() {
-  cy.screenshot();
+export function Screenshot(options = {}) {
+  cy.screenshot(options);
   cy.once("test:after:run", (attributes, test) => {
     addScreenshotToContext(attributes, test, "Screenshot");
   });
