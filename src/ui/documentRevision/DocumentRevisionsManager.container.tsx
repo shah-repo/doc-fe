@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { connect, useSelector } from "react-redux";
-import { Redirect, useLocation } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { ReactComponent as BadgeIcon } from "../../assets/images/badge.svg";
 import { ReactComponent as BookmarkIcon } from "../../assets/images/bookmark.svg";
 import { ReactComponent as TimelineIcon } from "../../assets/images/history.svg";
 import { ReactComponent as NoteIcon } from "../../assets/images/note.svg";
 import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
+import { DocumentGroupType } from "../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import { FBDocTypeGroup } from "../form.builder/FBApprovalMatrixTable";
@@ -19,7 +20,7 @@ import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers"
 import Bookmarks from "./Sidebar/Bookmarks";
 import { SidebarContainer } from "./Sidebar/Sidebar.container";
 import styles from "./styles";
-import { DocumentGroupType } from "../../state/ducks/documentRevisions/documentType";
+import { FB, FBBookmarkState, FBProvider } from "../form.builder";
 
 interface StateProps {
   documentRevisions: DocumentRevision[];
@@ -64,10 +65,10 @@ DocumentRevisionManagerContainerProps
   docId,
 }) => {
   useDocumentTitle(docId);
+  const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
   const [isDrawerOpen, setOpen] = React.useState(true);
   const classes = styles({ isDrawerOpen });
   const intl = useIntl();
-  const url = useLocation();
 
   const docRevsWithoutCanceled = useMemo(() => documentRevisions.filter((docrev) =>
     docrev.status !== DocumentRevisionStatus.Canceled), [documentRevisions]);
@@ -75,7 +76,6 @@ DocumentRevisionManagerContainerProps
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
   const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
   const canAccess = selectedDocument?.document.canAccess;
-  const schema = selectedDocument?.formTemplate?.schema || selectedDocument?.formDocument?.formTemplate?.schema || [];
   const { documentTypeAcronym: acronym } = document?.documentType || {};
 
   const isInlineApproval =
@@ -145,7 +145,7 @@ DocumentRevisionManagerContainerProps
         title: intl.formatMessage({
           id: "document.revision.bookmarks",
         }),
-        component: <Bookmarks location={url} schema={schema} />,
+        component: <Bookmarks />,
       },
     },
   ];
@@ -170,25 +170,27 @@ DocumentRevisionManagerContainerProps
   }
 
   return (
-    <div className={classes.root}>
-      <div className={classes.appFrame}>
-        {documentRevisionId && !isNewOutput && (
-          <DocumentRevisionDisplayContainer
-            documentRevisionId={documentRevisionId}
-            isNewVersion={isNewVersion}
-            documentId={documentId}
-          />
-        )}
-        {documentRevisionId && isNewOutput && (
-          <DocumentRevisionDisplayContainer
-            documentRevisionId={documentRevisionId}
-            isNewOutput={isNewOutput}
-            documentId={documentId}
-          />
-        )}
+    <FBProvider {...{ bookmarkState }}>
+      <div className={classes.root}>
+        <div className={classes.appFrame}>
+          {documentRevisionId && !isNewOutput && (
+            <DocumentRevisionDisplayContainer
+              documentRevisionId={documentRevisionId}
+              isNewVersion={isNewVersion}
+              documentId={documentId}
+            />
+          )}
+          {documentRevisionId && isNewOutput && (
+            <DocumentRevisionDisplayContainer
+              documentRevisionId={documentRevisionId}
+              isNewOutput={isNewOutput}
+              documentId={documentId}
+            />
+          )}
+        </div>
+        <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />
       </div>
-      <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />
-    </div>
+    </FBProvider>
   );
 };
 

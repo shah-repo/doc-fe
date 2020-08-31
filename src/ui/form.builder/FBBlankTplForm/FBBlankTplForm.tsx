@@ -5,11 +5,12 @@ import { withFBBlankTplForm } from "./FBBlankTplForm.wrap";
 
 const FBBlankTplForm: React.FunctionComponent<FBBlankTplFormProps> = ({
   label,
+  name,
   ...props
 }) => (
   <FBInput type="blanktplform">
-    <FBSection {...{ label }}  />
-    <FBFileUpload {...props} gutter={false} withState autosave />
+    <FBSection {...{ label }} name={`fb-btf-section-${name}`} />
+    <FBFileUpload {...props} {...{ name }} gutter={false} withState autosave />
   </FBInput>
 );
 

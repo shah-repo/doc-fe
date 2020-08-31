@@ -20,11 +20,12 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     dialogState,
     formState,
     collection,
-    name,
+    name = "",
+    index = 0,
     ...props
   }: T) => {
 
-    const { formState: parentFormState } = FB.useStores();
+    const { formState: parentFormState, bookmarkState } = FB.useStores();
     const parentFormValue = parentFormState?.getFieldValue(name);
 
     docRevState = FB.useRef(FBDocumentRevisionsState, parentFormValue);
@@ -36,6 +37,36 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
       (data) => parentFormState?.setFieldValue(name, cloneDeep(data), true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
+
+    React.useEffect(() => {
+      const docList = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.documentRevisions);
+      if (docList) {
+        collection?.map((value, index) => {
+          const { proposedDocumentRevision: { id: docRevId } } = value;
+          setBookmark(docList.get(docRevId), index);
+        });
+      } else {
+        collection?.map((value, index) => {
+          reaction(
+            () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.documentRevisions),
+            (data) => {
+              const { proposedDocumentRevision: { id: docRevId } } = value;
+              setBookmark(data.get(docRevId), index);
+            }
+          );
+        });
+      }
+    }, [collection]);
+
+    function setBookmark(documentRevision?: DocumentRevision, at?: number) {
+      if (!documentRevision) { return; }
+      const { document: { docId }, name: docName } = documentRevision;
+      at = (at || 0) + index;
+      bookmarkState?.addBookmark({
+        name: `fb-docrev-section-${name}-${documentRevision.id}`,
+        label: `${docId} - ${docName}`,
+      }, at);
+    }
 
     function disabledOptions(): string[] | undefined {
       return map(docRevState?.value, "proposedDocumentRevision.id");
@@ -90,6 +121,7 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
       remove,
       dialogState,
       collection,
+      index,
       name,
     });
   };

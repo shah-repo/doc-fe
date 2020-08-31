@@ -2,7 +2,6 @@ import { Formik, FormikProps } from "formik";
 import { cloneDeep } from "lodash";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
-import { useLocation } from "react-router-dom";
 import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
 import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
@@ -11,7 +10,7 @@ import { AsyncState } from "../../../state/types";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
 import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
-import { FBWorkspace } from "../../form.builder";
+import { FBWorkspace, FBProvider, FB, FBBookmarkState } from "../../form.builder";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
 import AssessmentFormPresenter from "./assessmentForm/AssessmentForm.presenter";
 import styles from "./styles";
@@ -42,13 +41,13 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
   chosenForm,
 }) => {
   const FBContainer = React.useRef(null);
+  const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
 
   useEffect(() => () => {
     changeRequestFormOnScreenContext = React.createContext<boolean>(false);
   }, []);
 
   const intl = useIntl();
-  const url = useLocation();
   const [isDrawerOpen, setOpen] = React.useState(true);
   const classes = styles({ isDrawerOpen });
   const schemaData = changeRequest
@@ -95,25 +94,26 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
         title: intl.formatMessage({
           id: "document.revision.bookmarks",
         }),
-        component: <Bookmarks location={url} schema={schemaData} />,
+        component: <Bookmarks />,
       },
     },
   ];
 
   return (
-    <div className={classes.root}>
-      <div className={classes.appFrame}>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          enableReinitialize={true}
-        >
-          {render}
-        </Formik>
+    <FBProvider {...{ bookmarkState }}>
+      <div className={classes.root}>
+        <div className={classes.appFrame}>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+            enableReinitialize={true}
+          >
+            {render}
+          </Formik>
+        </div>
+        {changeRequest && <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />}
       </div>
-
-      {changeRequest && <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />}
-    </div>
+    </FBProvider>
   );
 };
 
