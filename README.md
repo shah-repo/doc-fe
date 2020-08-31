@@ -1,9 +1,36 @@
-# DOC-POC Frontend Service
+# Enlil Frontend Service
+
+- [Enlil Frontend Service](#enlil-frontend-service)
+  * [Runing dev server](#runing-dev-server)
+    + [Environment variables](#environment-variables)
+    + [Available Scripts](#available-scripts)
+      - [`yarn start`](#-yarn-start-)
+      - [`yarn test`](#-yarn-test-)
+      - [`yarn lint`](#-yarn-lint-)
+      - [`yarn build`](#-yarn-build-)
+      - [`yarn eject`](#-yarn-eject-)
+    + [Learn More](#learn-more)
+  * [Cypress](#cypress)
+    + [Prerequisites](#prerequisites)
+    + [First time config](#first-time-config)
+    + [Running tests](#running-tests)
+      - [Run Cypress Test Runner](#run-cypress-test-runner)
+      - [Run Cypress in parallel, headless](#run-cypress-in-parallel--headless)
+      - [Run Cypress suite on deployed code](#run-cypress-suite-on-deployed-code)
+      - [Upload results to bitbucket](#upload-results-to-bitbucket)
+      - [Recommended flow](#recommended-flow)
+    + [Toolkit](#toolkit)
+      - [Adding requirements](#adding-requirements)
+      - [Adding Screenshot](#adding-screenshot)
+      - [Preventing failed test case to trigger skipping of all subsiquent test cases](#preventing-failed-test-case-to-trigger-skipping-of-all-subsiquent-test-cases)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-
-## Environment variables
+## Runing dev server
+### Environment variables
 
 ```bash
 REACT_APP_API_ENDPOINT='https://api.develop.enlil.io/api'
@@ -19,11 +46,11 @@ REACT_APP_DATADOG_CLIENT_TOKEN="REACT_APP_DATADOG_CLIENT_TOKEN"
 
 ```
 
-## Available Scripts
+### Available Scripts
 
 In the project directory, you can run:
 
-### `yarn start`
+#### `yarn start`
 
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -31,16 +58,16 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
-### `yarn test`
+#### `yarn test`
 
 Launches the test runner in the interactive watch mode.<br>
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn lint`
+#### `yarn lint`
 
 Launches linter.<br>
 
-### `yarn build`
+#### `yarn build`
 
 Builds the app for production to the `build` folder.<br>
 It correctly bundles React in production mode and optimizes the build for the best performance.
@@ -50,7 +77,7 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `yarn eject`
+#### `yarn eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
@@ -60,7 +87,7 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+### Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
@@ -68,19 +95,32 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 
 
-# Cypress
+## Cypress
 
-## Prerequisites
+### Prerequisites
 - None
 
-## First time config
+### First time config
+
+Copy *scripts/cypress/env_vars_for_compose.sh.example* to *scripts/cypress/env_vars_for_compose.sh*
+
+Update
+- **BE_REPO**
+- **FE_REPO**
+- **VALIDATORS_REPO**
+- **NAME**
+- **BB_USER** (Bitbucket username)
+
+in *scripts/cypress/env_vars_for_compose.sh* to point to repositories on your machine
 
 Add exection permission to all scripts in *./scripts*
 ```
 chmod -R +x ./scripts
 ```
 
-### Run Cypress Test Runner
+### Running tests
+
+#### Run Cypress Test Runner
 Optionally you set ENLIL_COMPOSE_PORT_RANGE_START. Defaults to 5600, same as in BE scripts. 
 ```
 ./scripts/cypress/run_dev.sh
@@ -92,7 +132,12 @@ ENLIL_COMPOSE_PORT_RANGE_START=1234  ./scripts/cypress/run_dev.sh
 ```
 
 It will open cypress Test Runner window where you can execute one spec file at the time. https://docs.cypress.io/guides/core-concepts/test-runner.html#Overview
-### Run Cypress in parallel, headless
+#### Run Cypress in parallel, headless
+**(Optional)** Generate *CI_BUILD_ID*. Script `scripts/cypress/run_in_parallel.sh` executed with *CI_BUILD_ID* present in shell will **NOT** generate *CI_BUILD_ID*. Its recommended to generate CI_BUILD_ID manually so you can easily repeat test execution and upload results to BitBucket. 
+```
+source ./scripts/cypress/generate_ci_build_id.sh
+```
+
 Run script:
 ```
 ./scripts/cypress/run_in_parallel.sh
@@ -100,6 +145,7 @@ Run script:
 Optional environment variables:
 
 *NUMBER_OF_WORKERS* - number of workers :grin: , defaults to 4. Go as high as you can without having (too many?) specs failing due to timeouts or you system becomes unbearably slow.
+
 *CI_BUILD_ID* - Build ID, defaults to current ISO8601 timestamp. When you want to rerun tests, but only failing ones, you need to define it manually.
 
 Example
@@ -107,7 +153,7 @@ Example
 NUMBER_OF_WORKERS=4 CI_BUILD_ID=2020-07-03T14:07:48+02:00 ./scripts/cypress/run_in_parallel.sh
 ```
 
-### Run Cypress suite on deployed code
+#### Run Cypress suite on deployed code
 To run Cypress test suites on code that was deployed, you need to:
  1. Start Sorry Cypress working in the background: `./scripts/cypress/start_dashboard.sh`
  2. Start test suite on selected environment 
@@ -117,9 +163,32 @@ To run Cypress test suites on code that was deployed, you need to:
       CYPRESS_SUPERADMIN_EMAIL=<superadmin_email> CYPRESS_SUPERADMIN_PASSWORD=<superadmin_password> ./scripts/cypress/run_on_deployment.sh
     ```
 
-## Toolkit
+#### Upload results to bitbucket
 
-### Adding requirements
+When you have *CI_BUILD_ID* defined in shell (eg. you loaded it with `. ./scripts/cypress/generate_ci_build_id.sh`), 
+- run:
+  ```
+  ./scripts/cypress/upload_results_to_bitbucket.sh
+  ```
+When you don't have *CI_BUILD_ID* defined in shell,
+- run:
+  ```
+  CI_BUILD_ID=<build id> ./scripts/cypress/upload_results_to_bitbucket.sh
+  ```
+- example
+  ```
+  CI_BUILD_ID=2020-07-03T14:07:48+02:00 ./scripts/cypress/upload_results_to_bitbucket.sh
+  ```
+
+#### Recommended flow
+- generate *CI_BUILD_ID* `source ./scripts/cypress/generate_ci_build_id.sh`
+- run tests in parallel `./scripts/cypress/run_in_parallel.sh`
+  - If tests failed and you think its a timeout issue, rerun tests
+- upload results to BitBucket `./scripts/cypress/upload_results_to_bitbucket.sh`
+
+### Toolkit
+
+#### Adding requirements
 Download Google spreadsheet as CSV file in *cypress/requirements/list.csv*
 
 
@@ -183,7 +252,7 @@ context("Example specs for requirements linking:", () => {
 </details>
 
 
-### Adding Screenshot
+#### Adding Screenshot
 
 <details>
 <summary>Example of a spec with Screenshot</summary>
@@ -202,7 +271,7 @@ context("Example of a spec with Screenshot", () => {
 </details>
 
 
-### Preventing failed test case to trigger skipping of all subsiquent test cases
+#### Preventing failed test case to trigger skipping of all subsiquent test cases
 
 <details>
 <summary>Preventing failed test case to trigger skipping of all subsiquent test cases</summary>
