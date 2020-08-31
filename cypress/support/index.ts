@@ -74,6 +74,36 @@ Cypress.on("test:after:run", (test, runnable: any ) => {
   }
 });
 
+
+if (CONFIG.TAKE_SCREENSHOT_AFTER_EACH) {
+  const oldIt = it;
+  const foo = (title, callback) => {
+    const hasDone = callback.length > 0;
+    if (hasDone) {
+      oldIt(title, (done) => {
+        callback(() => {
+          cy.once("test:after:run", (attributes, test) => {
+            addScreenshotToContext(attributes, test, "Screenshot");
+          });
+          cy.screenshot().then(() => {
+            done();
+          });
+        });
+      } );
+    } else {
+      oldIt(title, () => {
+        callback();
+        cy.screenshot();
+        cy.once("test:after:run", (attributes, test) => {
+          addScreenshotToContext(attributes, test, "Screenshot");
+        });
+      }
+      );
+    }
+  };
+  it = foo.bind(oldIt) as unknown as Mocha.TestFunction;
+}
+
 export function PreventSkipOnFailure(this: Mocha.Context) {
   if (!this.test) {
     throw new Error(
@@ -104,4 +134,3 @@ if (CONFIG.SKIP_ON_RUN_FAILURE) {
     cy.task("resetShouldSkipFlag");
   });
 }
-
