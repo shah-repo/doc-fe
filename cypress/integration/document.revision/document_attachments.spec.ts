@@ -99,6 +99,10 @@ context("Document Attachment Flow", () => {
         cy.atchUploadRedlineAttachment({ fileName: "image.jpg" });
       });
 
+      it("Fail upload text.docx", () => {
+        cy.atchUploadAttachmentFail({ fileName: "test.docx" });
+      });
+
       it("Check if Selected Groups are set to 'Everyone' by default", () => {
         SystemRequirement("REQ-0300");
         cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
