@@ -19,6 +19,10 @@ declare global {
       atchDownloadAllAttachments(): Chainable<Subject>;
       atchEnterConfirmationPassword(params: {password: string }): Chainable<Subject>;
       attachFiles(files: {name: string; type: string}[]): Chainable<Subject>;
+      closeAtchUploadDialog(): Chainable<Subject>;
+      atchCheckDisplayedAtLast(params: {fileName: string}): Chainable<Subject>;
+      atchCheckRedLineIndicator(params: {fileName: string}): Chainable<Subject>;
+      atchNoPrimaryForRedline(params: {fileName: string}): Chainable<Subject>;
     }
   }
 }
@@ -118,4 +122,22 @@ Cypress.Commands.add("atchRemoveAttachment", (params: {fileName: string }) => {
 
 Cypress.Commands.add("atchCheckAtributes", (params: {fileName: string; attributes: string}) => {
   cy.xpath(`//span[@title="${params.fileName}"]/../span[2]`).should("have.text", params.attributes);
+});
+
+Cypress.Commands.add("closeAtchUploadDialog", () => {
+  cy.get("[data-cy=\"AttachmentFieldPresenter-handleRemove\"]").click();
+});
+
+Cypress.Commands.add("atchCheckDisplayedAtLast", (params: {fileName: string }) => {
+  cy.get("[data-cy=\"attachment.title\"]").last().contains(params.fileName);
+});
+
+Cypress.Commands.add("atchCheckRedLineIndicator", (params: {fileName: string }) => {
+  cy.get(`button[title="${params.fileName}"] > div[data-cy="attachment.icon.redline"]`).should("be.visible");
+});
+
+Cypress.Commands.add("atchNoPrimaryForRedline", (params: {fileName: string }) => {
+  cy.get(`button[title="${params.fileName}"]`).rightclick();
+  cy.get("[data-cy=\"set.attachment.as.primary\"]").should("not.be.visible");
+  cy.get("[data-cy=\"field-name\"]").click({ force: true });
 });
