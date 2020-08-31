@@ -76,6 +76,7 @@ export const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDia
             }))}
             onClick={(option) => handleSelect(option.value)}
             label={isRecord ? "record.select.type" : "supplier.select.type" }
+            data-cy={isRecord ? "record.select.type" : "supplier.select.type" }
           />
           {formIds.length > 1 && <AutocompleteField
             name="selectForm"
@@ -87,6 +88,7 @@ export const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDia
             }))}
             onClick={(option) => handleTemplateSelection(option.value)}
             label={isRecord ? "record.select.template" : "supplier.select.form"}
+            data-cy={isRecord ? "record.select.template" : "supplier.select.form"}
           />}
           <Button
             variant="text"
@@ -94,6 +96,7 @@ export const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDia
             className={classes.cancelButton}
             onClick={closeMultipleFormDialog}
             id="DocTypeListDialog-cancelButton"
+            data-cy="suggestFormCancelBtn"
           >
             <Text translation="transition.action.cancel" />
           </Button>

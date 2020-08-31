@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { map, values } from "lodash";
 import Validator from "validatorjs";
 import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
@@ -24,8 +24,8 @@ export const FBValidate = (forRelease = false) => {
   validator.fails(() => {
     const errors = validator.errors.all();
 
-    _.map(errors, (v: string, k: string) =>
-      FBValidatorStore.errors[k] = _.values(v).join("\n"),
+    map(errors, (v: string, k: string) =>
+      FBValidatorStore.errors[k] = values(v).join("\n"),
     );
   });
 

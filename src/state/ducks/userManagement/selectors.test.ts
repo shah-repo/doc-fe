@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { cloneDeep } from "lodash";
 import { ApplicationState } from "../../reducers";
 import initialStoreState from "../../tests/helpers/initialStoreState";
 import selectors from "./selectors";
@@ -16,7 +16,7 @@ describe("user management selectors test", () => {
   ];
 
   beforeAll(() => {
-    state = _.cloneDeep(initialStoreState);
+    state = cloneDeep(initialStoreState);
     state.userManagement.groupsAllIds = groupsAllIds;
     state.userManagement.groupsById = groupsById;
   });

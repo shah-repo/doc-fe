@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
@@ -35,9 +35,9 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const selectedDocument = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId));
-  const securityGroups = _.get(selectedDocument, "document.securityGroups", []);
-  const securityEmployees = _.get(selectedDocument, "document.securityEmployees", []);
-  const operators = _.get(selectedDocument, "document.operators", []);
+  const securityGroups = get(selectedDocument, "document.securityGroups", []);
+  const securityEmployees = get(selectedDocument, "document.securityEmployees", []);
+  const operators = get(selectedDocument, "document.operators", []);
 
   const [isVisible] = useAssignDocument(documentTypeId);
 

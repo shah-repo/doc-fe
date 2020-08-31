@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get, orderBy } from "lodash";
 import moment from "moment";
 import "moment-timezone";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
@@ -13,7 +13,7 @@ const isPendingChange = (documentRevision: DocumentRevision) =>
   documentRevision.status === DocumentRevisionStatus.PendingChange;
 
 export const canEditDocumentRevision = (documentRevision: DocumentRevision) => {
-  const owner = _.get(documentRevision, "owner.user.email");
+  const owner = get(documentRevision, "owner.user.email");
   const currentUser = store.getState().auth.user.email;
   return (
     currentUser === owner &&
@@ -39,7 +39,7 @@ export const documentRevisionStatusOption = () => {
       options.push({ value: keyName, text: keyName });
     }
   });
-  return _.orderBy(options, ["text"], ["asc"]);
+  return orderBy(options, ["text"], ["asc"]);
 };
 
 export const documentRevisionQueryStatus = (): DocumentRevisionStatus[] =>

@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { findIndex, isEmpty, union } from "lodash";
 import { action, observable, set } from "mobx";
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBFormState } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
@@ -25,7 +25,7 @@ export class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
     if (!isOutput) {
       return;
     }
-    if (outputRevision || !approvalLevels || _.isEmpty(approvalLevels)) {
+    if (outputRevision || !approvalLevels || isEmpty(approvalLevels)) {
       this.fetch();
       return;
     }
@@ -38,9 +38,9 @@ export class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
   };
 
   @action public addItem = (approvalLevel: POApprovalMatrixLevel) => {
-    const appLevelIndex = _.findIndex(this.approvalLevels, { id: approvalLevel.id });
+    const appLevelIndex = findIndex(this.approvalLevels, { id: approvalLevel.id });
     if (appLevelIndex === -1) {
-      set(this, "approvalLevels", _.union(this.approvalLevels, [approvalLevel]));
+      set(this, "approvalLevels", union(this.approvalLevels, [approvalLevel]));
       return;
     }
     const al = [...this.approvalLevels];

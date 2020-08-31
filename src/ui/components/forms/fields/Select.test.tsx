@@ -1,6 +1,6 @@
 import { mount, ReactWrapper } from "enzyme";
 import { Form, Formik } from "formik";
-import _ from "lodash";
+import { get } from "lodash";
 import React from "react";
 import SelectField, { SelectOption, SelectOwnProps } from "./Select";
 
@@ -60,9 +60,9 @@ describe("Select component tests", () => {
     const optionsNodes = wrapper.find("option");
 
     expect(optionsNodes.at(0).prop("value")).toEqual(options[0].value);
-    expect(_.get(optionsNodes.at(0).props(), "children.props.message")).toEqual(options[0].text);
+    expect(get(optionsNodes.at(0).props(), "children.props.message")).toEqual(options[0].text);
 
     expect(optionsNodes.at(1).prop("value")).toEqual(options[1].value);
-    expect(_.get(optionsNodes.at(1).props(), "children.props.message")).toEqual(options[1].text);
+    expect(get(optionsNodes.at(1).props(), "children.props.message")).toEqual(options[1].text);
   });
 });

@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { findIndex, intersection, keys, pickBy, union } from "lodash";
 import React from "react";
 import { FBData, FBEditorOptionsProps, FBEditorPropertiesType, FBOption } from "..";
 
@@ -21,8 +21,8 @@ export const withFBEditorOptions = <T extends FBEditorOptionsProps>(
     }
 
     function editorOptions(editorProperties: FBEditorPropertiesType[]): FBOption[] {
-      const editorProps = _.pickBy(FBData.editorProperties, (e) => e.isOption);
-      const intersectionOptions = _.intersection(_.keys(editorProps), editorProperties);
+      const editorProps = pickBy(FBData.editorProperties, (e) => e.isOption);
+      const intersectionOptions = intersection(keys(editorProps), editorProperties);
       return intersectionOptions.map((key) => ({
         value: key,
         text: editorProps[key].outputText || "",
@@ -32,8 +32,8 @@ export const withFBEditorOptions = <T extends FBEditorOptionsProps>(
     stringToOptions = (options = "", editorProperties: FBEditorPropertiesType[] = []): FBOption[] => {
       const strOptions = stringOptions(options);
       const eOptions = editorOptions(editorProperties);
-      const mergedOptions = _.union(strOptions, eOptions);
-      const includeNoneIndex = _.findIndex(mergedOptions, { value: "includeNone" });
+      const mergedOptions = union(strOptions, eOptions);
+      const includeNoneIndex = findIndex(mergedOptions, { value: "includeNone" });
       if (includeNoneIndex > 0) {
         const includeNone = mergedOptions[includeNoneIndex];
         mergedOptions.splice(includeNoneIndex, 1);
@@ -44,7 +44,7 @@ export const withFBEditorOptions = <T extends FBEditorOptionsProps>(
 
     optionsToString = (options?: FBOption[]): string | undefined => {
       if (!options) { return; }
-      const editorProps = _.keys(FBData.editorProperties);
+      const editorProps = keys(FBData.editorProperties);
       return options.reduce((acc, opt) => {
         !editorProps.includes(opt.value) && (acc += `${opt.text}\n`);
         return acc;

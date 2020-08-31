@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get, includes, map } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { useState } from "react";
 import { FB, FBPurchaseOrderFormProps } from "..";
@@ -39,7 +39,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
     };
 
     handleTypeChange = (ev: React.ChangeEvent<any>) => {
-      const value = _.get(ev.target, "value");
+      const value = get(ev.target, "value");
       formState?.setFieldValue("type", value, true);
       formState?.setFieldValue("tax", false);
       formState?.setFieldValue("capitalEquipment", false);
@@ -50,13 +50,13 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
     };
 
     const handlePartDescription = (ev: React.ChangeEvent<any>) => {
-      const value = _.get(ev.target, "value");
+      const value = get(ev.target, "value");
       formState?.setFieldValue("partNumberTitle", value, true);
     };
 
     getOptionDisabled = (option: DocumentRevision) => {
-      const selectedParts = _.map(purchaseOrderState?.items, "partNumber");
-      return _.includes(selectedParts, option.id);
+      const selectedParts = map(purchaseOrderState?.items, "partNumber");
+      return includes(selectedParts, option.id);
     };
 
     getOptionLabel = (option) => generateDocIdLabel(option);

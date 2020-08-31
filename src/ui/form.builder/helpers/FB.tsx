@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isUndefined } from "lodash";
 import { MobXProviderContext } from "mobx-react";
 import React from "react";
 import { FBProviderProps } from "..";
@@ -6,7 +6,7 @@ import { FBProviderProps } from "..";
 export class FB {
   public static useRef<T>(state: (new(props: any) => T), props: any = undefined): T {
     const stateRef = React.useRef<T | undefined>(undefined);
-    if (_.isUndefined(stateRef.current)) {
+    if (isUndefined(stateRef.current)) {
       stateRef.current = new state(props);
     }
     return stateRef.current;

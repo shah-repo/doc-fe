@@ -1,6 +1,6 @@
 import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
-import _ from "lodash";
+import { isEmpty } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
@@ -61,7 +61,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const { formInput } = dataProp || {};
   const { schema } = formTemplate || formDocument?.formTemplate || {};
   const { docId } = formDocument?.document || {};
-  const FBIsOutput = Boolean(docId && !_.isEmpty(docId));
+  const FBIsOutput = Boolean(docId && !isEmpty(docId));
   const FBIsActive = formInput || formTemplate || formDocument;
   const docTypeId = dataProp?.document?.documentType?.id;
   const [isTrainingVisible] = useTraining(docTypeId);

@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import { FormikProps } from "formik";
-import _, { Dictionary } from "lodash";
+import { Dictionary, get, has, includes, isEmpty, isObject, isUndefined, kebabCase, keys, omit, pick, set, truncate, union } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FB, FBData } from "..";
@@ -24,14 +24,14 @@ export const withEditorRenderer =
     const uniqid = require("uniqid");
     const intl = useIntl();
     FBValidatorStore.setActiveValidatorType(type);
-    if (_.includes(pickDefaultLabel, type) && _.isUndefined(_.get(props, "values.label"))) {
-      _.set(props, "values.label", intl.formatMessage({ id: `form.builder.${type}` }));
+    if (includes(pickDefaultLabel, type) && isUndefined(get(props, "values.label"))) {
+      set(props, "values.label", intl.formatMessage({ id: `form.builder.${type}` }));
     }
 
     if (type === "stepsection" || type === "teststep") {
       const stepLabel = props.values.label as string;
       const orderStr = FBStore.getSectionStepReg(stepLabel);
-      orderStr && _.set(props, "values.label", stepLabel.replace(orderStr, ""));
+      orderStr && set(props, "values.label", stepLabel.replace(orderStr, ""));
     }
 
     // const schemaItem = (): FBTemplateSchema => ({
@@ -44,14 +44,14 @@ export const withEditorRenderer =
 
     const propsByType = (): Dictionary<FBTemplateSchema | string[]> => {
       if (type === "action") {
-        return { actions: _.keys(props.values) };
+        return { actions: keys(props.values) };
       }
       return props.values as FBTemplateSchema;
     };
 
     const onClick = () => {
-      const label = _.get(props, "values.label");
-      if (!_.includes(omitLabelValidation, type) && !label) {
+      const label = get(props, "values.label");
+      if (!includes(omitLabelValidation, type) && !label) {
         FBDynamicValidatorStore.setHelperText({
           label: ["The Label field is required."],
         });
@@ -60,12 +60,12 @@ export const withEditorRenderer =
 
       const values = propsByType();
       let name = "";
-      if (_.isObject(props.values) && _.has(props.values, "label")) {
-        name = _.truncate(props.values.label as string, {
+      if (isObject(props.values) && has(props.values, "label")) {
+        name = truncate(props.values.label as string, {
           length: 22,
           separator: " ",
         });
-        name = _.kebabCase(name);
+        name = kebabCase(name);
       }
       name = `${name}-${uniqid()}`;
       // const item = schemaItem();
@@ -73,7 +73,7 @@ export const withEditorRenderer =
 
       let rules = FBValidatorStore.getRules();
       const customValidatorRule = customValidator && customValidator.name;
-      customValidatorRule && (rules += `${!_.isEmpty(rules) ? "|" : ""}${customValidatorRule}`);
+      customValidatorRule && (rules += `${!isEmpty(rules) ? "|" : ""}${customValidatorRule}`);
 
       const schema: FBTemplateSchema = {
         index,
@@ -107,14 +107,14 @@ export const withEditorRenderer =
       if (type === "inlineapproval") {
         const approvalName: string = (values as FBInputProps).name || "";
         FBStore.setValues({
-          ..._.omit(FBStore.getValues(), ["approvers", "approverGroups", "approveIsBlocking"]),
-          [approvalName]: _.pick(values, ["approvers", "approverGroups", "approveIsBlocking"]),
+          ...omit(FBStore.getValues(), ["approvers", "approverGroups", "approveIsBlocking"]),
+          [approvalName]: pick(values, ["approvers", "approverGroups", "approveIsBlocking"]),
         });
         FBStore.clearSchema();
       }
 
       if (type === "teststep") {
-        newSchema = _.union(newSchema, FBData.testStepSchema as FBInputProps[]);
+        newSchema = union(newSchema, FBData.testStepSchema as FBInputProps[]);
       }
 
       FBStore.setSchema(newSchema);
@@ -127,14 +127,14 @@ export const withEditorRenderer =
 
     const defaulLabel = props.values.label;
     if (defaulLabel && isTranslation(defaulLabel as string)) {
-      _.set(props, "values.label", intl.formatMessage({ id: defaulLabel as string }));
+      set(props, "values.label", intl.formatMessage({ id: defaulLabel as string }));
     }
 
     return (
       <Box>
         <InputType
-          {..._.omit(props.values, "label")}
-          {...(_.includes(pickDefaultLabel, type) && { defaultValue: _.get(props, "values.label") })}
+          {...omit(props.values, "label")}
+          {...(includes(pickDefaultLabel, type) && { defaultValue: get(props, "values.label") })}
           {...{ index, type }}
         />
         <Box display="flex" flexDirection="row-reverse" mx={-1}>

@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isUndefined } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { FBValidationEditorProps } from ".";
@@ -15,7 +15,7 @@ export const withFBValidationEditor = <T extends FBValidationEditorProps>(
     ...props
   }: T) => {
 
-    _.isUndefined(config) && (config = [
+    isUndefined(config) && (config = [
       {
         title: "form.builder.predefined.validation",
         content: <FBValidatorForm />,

@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isUndefined } from "lodash";
 import React from "react";
 import { FBStepperEditorProps } from ".";
 import { FBValidationEditor, FBValidationMode } from "..";
@@ -14,7 +14,7 @@ export const withFBStepperEditor = <T extends FBStepperEditorProps>(
     ...props
   }: T) => {
 
-    _.isUndefined(config) && (config = [
+    isUndefined(config) && (config = [
       {
         title: "form.builder.field.config",
         content: children,
@@ -27,7 +27,7 @@ export const withFBStepperEditor = <T extends FBStepperEditorProps>(
       },
     ]);
 
-    _.isUndefined(beforeStepChange) && (beforeStepChange =
+    isUndefined(beforeStepChange) && (beforeStepChange =
       (step: number) => editorStore.maxWidth = (step === 1) ? "lg" : "md"
     );
 

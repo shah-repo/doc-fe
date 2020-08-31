@@ -1,4 +1,4 @@
-import _, { Dictionary } from "lodash";
+import { Dictionary, filter, first, get, isUndefined, map, set as lodashSet, uniqBy } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
 import { FBFormValues } from "../../defaults/formik";
@@ -61,7 +61,7 @@ export class FormBuilderStore {
   @action public getSchemaItem = (
     index?: number,
   ): FBTemplateSchema | undefined => {
-    if (_.isUndefined(index)) {
+    if (isUndefined(index)) {
       return;
     }
     return this.schema[index];
@@ -70,14 +70,14 @@ export class FormBuilderStore {
   @action public getSchemaItemByName = (
     name: string,
   ): FBTemplateSchema | undefined => {
-    const filtered = _.filter(this.schema, (schemaItem) => schemaItem.name === name);
+    const filtered = filter(this.schema, (schemaItem) => schemaItem.name === name);
     return filtered[0];
   };
 
   @action public getSchemaItemByType = (
     type: string,
   ): FBTemplateSchema | undefined => {
-    const filtered = _.filter(this.schema, { type });
+    const filtered = filter(this.schema, { type });
     return filtered[0];
   };
 
@@ -101,11 +101,11 @@ export class FormBuilderStore {
     editorStore.editorTypeEdit(schema);
   };
 
-  @action public getSchema = (): FBTemplateSchema[] => _.uniqBy(this.schema || [], "name");
+  @action public getSchema = (): FBTemplateSchema[] => uniqBy(this.schema || [], "name");
 
   @action public getSectionStepReg = (label: string): string | undefined => {
     const reg = this.stepSectionReg.exec(label);
-    return _.first(reg);
+    return first(reg);
   };
 
   @action public setSchema = (newSchema: FBTemplateSchema[]) => {
@@ -137,14 +137,14 @@ export class FormBuilderStore {
   };
 
   @action public setFormSchema = (newSchema: FBTemplateSchema[]) => {
-    const filtered = _.filter(newSchema, (schemaItem) => schemaItem.type !== "action");
+    const filtered = filter(newSchema, (schemaItem) => schemaItem.type !== "action");
     filtered.map((o, i) => o.index = i);
     this.schema = filtered;
   };
 
   @action public getValues = () => {
     const initialValues: Dictionary<any> = {};
-    _.map(this.getSchema(), (schemaItem) => {
+    map(this.getSchema(), (schemaItem) => {
       initialValues[schemaItem.name || ""] = FBFormValues[schemaItem.type || ""];
     });
     return {
@@ -153,11 +153,11 @@ export class FormBuilderStore {
     };
   };
 
-  @action public getValue = (name?: string): any => _.get(this.getValues(), name || "");
+  @action public getValue = (name?: string): any => get(this.getValues(), name || "");
 
   @action public getValidationAttribute = () => {
     const attributes: Dictionary<string> = {};
-    _.map(this.getSchema(), (schemaItem) => {
+    map(this.getSchema(), (schemaItem) => {
       attributes[schemaItem.name || ""] =
           (schemaItem.label as string) ||
           schemaItem.placeholder ||
@@ -175,7 +175,7 @@ export class FormBuilderStore {
     if (!name) {
       return;
     }
-    this.setValues(_.set(this.values, name, value));
+    this.setValues(lodashSet(this.values, name, value));
   };
 
   @action private setModeConfig = () => {
