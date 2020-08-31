@@ -1,5 +1,5 @@
 import DOMPurify from "dompurify";
-import _ from "lodash";
+import { cloneDeep } from "lodash";
 import striptags from "striptags";
 import Config from "../../config";
 import { ChangeRequest } from "../../state/ducks/changeRequest";
@@ -14,7 +14,7 @@ export const getInnerHTMLProp = (html: string) => (
 export const stripTags = (html: string) => striptags(html, [], "\n");
 
 export const stripTagsFromObject = <T extends ChangeRequest | DocumentRevision>(item: T) => {
-  const copy = _.cloneDeep(item);
+  const copy = cloneDeep(item);
   copy.description = stripTags(item.description);
 
   return copy;

@@ -1,5 +1,5 @@
 import { Checkbox, FormControlLabel, FormGroup } from "@material-ui/core";
-import _ from "lodash";
+import { get, map } from "lodash";
 import React from "react";
 import Text from "../../../components/Text";
 import { withOptions } from "../../hocs/common/withOptions";
@@ -19,15 +19,15 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
 }) => (
   <FBInput {...props} {...{ type }}>
     <FormGroup row={row}>
-      {_.map(options, (option, index) => {
+      {map(options, (option, index) => {
 
-        const valueKey = _.get(option, optionValueKey);
+        const valueKey = get(option, optionValueKey);
         const checked = form?.values[valueKey] || FBStore.getValue(valueKey);
 
         return (
           <FormControlLabel
-            key={`${_.get(option, optionValueKey)}-${index}`}
-            value={_.get(option, optionValueKey)}
+            key={`${get(option, optionValueKey)}-${index}`}
+            value={get(option, optionValueKey)}
             control={
               <Checkbox
                 disabled={props.disabled}
@@ -36,7 +36,7 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
             }
             label={
               <Text
-                message={_.get(option, optionLabelKey)}
+                message={get(option, optionLabelKey)}
                 values={labelValues}
               />
             }

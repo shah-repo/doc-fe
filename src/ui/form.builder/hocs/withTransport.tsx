@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { find, get } from "lodash";
 import React from "react";
 import FBStore from "../stores/ui/FBStore";
 import { FBTemplateSchema } from "../types/store";
@@ -24,7 +24,7 @@ export const withTransport = <T extends FBTransportSchemaProps>(
       }
 
       const schema: FBTemplateSchema[] = JSON.parse(result as string);
-      if (!_.find(schema, "type") && !_.find(schema, "index")) {
+      if (!find(schema, "type") && !find(schema, "index")) {
         return alert("Not a valid template.");
       }
 
@@ -32,7 +32,7 @@ export const withTransport = <T extends FBTransportSchemaProps>(
     };
 
     const importSchema = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = _.get(event, "currentTarget.files[0]");
+      const file = get(event, "currentTarget.files[0]");
       if (!file) {
         return alert("Invalid file.");
       }

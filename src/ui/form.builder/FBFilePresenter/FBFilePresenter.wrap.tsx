@@ -74,12 +74,12 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     menuItems = [{
       text: "form.builder.download.file",
       textValues: { fileShortName },
-      onClick: () => handleDownload,
+      onClick: () => handleDownload?.("download"),
     }, {
       text: "form.builder.download.clean.copy",
       textValues: { fileShortName },
       hidden: !filePresenterState?.isCleanCopy,
-      onClick: () => handleDownload,
+      onClick: () => handleDownload?.("download"),
     }, {
       text: "common.view.file",
       hidden: !filePresenterState?.isFileViewable,

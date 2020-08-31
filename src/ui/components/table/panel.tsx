@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, CircularProgress } from "@material-ui/core";
 import axios, { AxiosRequestConfig } from "axios";
-import _ from "lodash";
+import { debounce, set, sortBy as lodashSortBy } from "lodash";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -57,7 +57,7 @@ export function TablePanel<T extends any>({
     sortBy = "",
     sortDirection = "DESC",
   ) => {
-    let sortedData = _.sortBy(
+    let sortedData = lodashSortBy(
       data,
       sortBy === "docId" ? `document.${sortBy}` : sortBy,
     );
@@ -80,7 +80,7 @@ export function TablePanel<T extends any>({
     }
   }, [tableCriteria.forceUpdate]);
 
-  const debounced = _.debounce((f) => {
+  const debounced = debounce((f) => {
     f();
   }, 300);
 
@@ -121,7 +121,7 @@ export function TablePanel<T extends any>({
     Object.entries(tableCriteria.queryDict)
       .forEach(([key, value]) => {
         if (key.startsWith("dynamicParams")) {
-          _.set(params, key, value);
+          set(params, key, value);
         } else {
           params[key] = value;
         }

@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { cloneDeep } from "lodash";
 import { ApplicationState } from "../../reducers";
 import { getAsyncState } from "../../tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
@@ -26,7 +26,7 @@ describe("change requests selectors tests", () => {
   };
 
   beforeAll(() => {
-    state = _.cloneDeep(initialStoreState);
+    state = cloneDeep(initialStoreState);
     state.changeRequests.allIds = allIds;
     state.changeRequests.byId = byId;
     state.changeRequests.approversAllIds = approversAllIds;

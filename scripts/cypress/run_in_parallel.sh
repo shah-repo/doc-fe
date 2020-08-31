@@ -14,7 +14,13 @@ secs_to_human() {
 }
 start=$(date +%s)
 
-DATE_ISO_DEFAULT=$(date --iso-8601=seconds)
+source ./scripts/cypress/platform_specific_variables.sh
+
+if [[ -z "${DATE_ISO_DEFAULT}" ]]; then
+  echo "DATE_ISO_DEFAULT not set, exiting"
+  exit
+fi
+
 export CI_BUILD_ID=${CI_BUILD_ID:-$DATE_ISO_DEFAULT}
 export NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-2}
 export REPORT_TITLE=${REPORT_TITLE:-generated_specs}

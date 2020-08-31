@@ -1,6 +1,6 @@
 import { FormControl, FormHelperText } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
-import _ from "lodash";
+import { includes, isEmpty } from "lodash";
 import React from "react";
 import { FBFieldName, FBInputProps, FBInputState, FBLabel, FBTextField } from "..";
 import Text from "../../components/Text";
@@ -25,12 +25,12 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
     {!hidden && (
       <Box mb={gutter ? 5 : 0}>
         <FormControl fullWidth {...{ error }}>
-          {!_.includes(FBInputState.omitLabel, type) && label && (
+          {!includes(FBInputState.omitLabel, type) && label && (
             <FBLabel {...{ error, label, labelValues, loading }} />
           )}
           {children}
         </FormControl>
-        {!_.isEmpty(helperText) && showErrorMsg && (
+        {!isEmpty(helperText) && showErrorMsg && (
           <FormHelperText {...{ error }}>
             <Text message={helperText as string} />
           </FormHelperText>

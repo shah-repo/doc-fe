@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get, isUndefined } from "lodash";
 import React from "react";
 import { FBLabelFontSize, FBLabelProps } from "./FBLabel.types";
 
@@ -10,8 +10,8 @@ export const withFBLabel = <T extends FBLabelProps>(
     ...props
   }: T) => {
 
-    !_.isUndefined(_.get(FBLabelFontSize, fontSize)) && (
-      fontSize = `${_.get(FBLabelFontSize, fontSize)}.fontSize`
+    !isUndefined(get(FBLabelFontSize, fontSize)) && (
+      fontSize = `${get(FBLabelFontSize, fontSize)}.fontSize`
     );
 
     return Component({

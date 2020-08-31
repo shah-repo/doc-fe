@@ -20,6 +20,8 @@ interface IdocumentTypeDto {
   documentTypeAcronym: string;
   isQms?: boolean;
   group: string;
+  privateNumberPool?: boolean;
+  startingNumber?: number;
 }
 
 export interface ICreateCompanyBootstrap {

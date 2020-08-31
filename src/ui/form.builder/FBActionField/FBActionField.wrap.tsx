@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { find, map } from "lodash";
 import React from "react";
 import { FB, FBActionFieldActions, FBActionFieldProps, FBActionOptionProps, FBData, FBDialogState, FBForm } from "..";
 
@@ -18,7 +18,7 @@ export const withFBActionField = <T extends FBActionFieldProps>(
     const { workspaceState } = FB.useStores();
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    options = _.map(actions, (actionName) => _.find(FBData.actionOptions, { name: actionName })!);
+    options = map(actions, (actionName) => find(FBData.actionOptions, { name: actionName })!);
     disabled = disabled || !workspaceState?.id;
 
     handleAction = (option: FBActionOptionProps) => {

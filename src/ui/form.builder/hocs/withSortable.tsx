@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import arrayMove from "array-move";
-import _ from "lodash";
+import { range } from "lodash";
 import React from "react";
 import { SortEnd } from "react-sortable-hoc";
 import { FBFieldName } from "..";
@@ -36,7 +36,7 @@ export function withSortable<T extends FBSortableProps>(
       let state = { disabled: false, approved: false };
       const FBSchema = FBStore.getSchema();
 
-      _.range(0, index).reverse().some((current) => {
+      range(0, index).reverse().some((current) => {
         const schemaItem =  FBSchema[current];
         const { type, name } = schemaItem;
         if (type === "inlineapproval" || type === "approval") {

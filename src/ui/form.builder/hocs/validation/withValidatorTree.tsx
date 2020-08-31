@@ -1,6 +1,6 @@
 import { Tooltip } from "@material-ui/core";
 import TreeItem from "@material-ui/lab/TreeItem";
-import _ from "lodash";
+import { includes, isUndefined, kebabCase, map, size, split, truncate as lodashTruncate } from "lodash";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
@@ -27,7 +27,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
     const { workspaceState } = FB.useStores();
 
     const truncate = (value = ""): string =>
-      _.truncate(value, {
+      lodashTruncate(value, {
         length: truncateValue,
         omission: " [...]",
       });
@@ -37,7 +37,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
     };
 
     const afterChange = (fieldName: string, value: boolean) => {
-      if (_.isUndefined(value) || !value) {
+      if (isUndefined(value) || !value) {
         return dynamicValidatorStore?.removeVariable(fieldName);
       }
       dynamicValidatorStore?.setVariable(fieldName);
@@ -47,9 +47,9 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
       const isValueVar = type === "radiogroup" || type === "select";
       const valueVar = isValueVar ? "-<-val->" : "";
 
-      return _.map(options, (option) => {
-        const optionName = `${_.kebabCase(option)}${valueVar}-${name}`;
-        const tooltip = _.size(option) >= truncateValue ? option : "";
+      return map(options, (option) => {
+        const optionName = `${kebabCase(option)}${valueVar}-${name}`;
+        const tooltip = size(option) >= truncateValue ? option : "";
         const key = `tree-node-${name}-${option}`;
         const label = truncate(option);
 
@@ -70,7 +70,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
     ) => {
       const contextLabel = truncate(label as string);
       const tooltip =
-        _.size(contextLabel) >= truncateValue ? (label as string) : "";
+        size(contextLabel) >= truncateValue ? (label as string) : "";
       // Workaround for mui treeview bug where it registers the child but do not render it
       if (!included) {
         return <div />;
@@ -88,7 +88,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
     const labelNode = (name: string, label: string | React.ReactNode) => {
       const nodeLabel = truncate(label as string);
       const tooltip =
-        _.size(nodeLabel) >= truncateValue ? (label as string) : "";
+        size(nodeLabel) >= truncateValue ? (label as string) : "";
       return (
         <FBCheckbox
           label={nodeLabel}
@@ -101,7 +101,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
     const regularNode = (name: string, label: string | React.ReactNode) => {
       const regularLabel = truncate(label as string);
       const tooltip =
-        _.size(regularLabel) >= truncateValue ? (label as string) : "";
+        size(regularLabel) >= truncateValue ? (label as string) : "";
       return (
         <FBCheckbox
           key={`tree-node-${name}`}
@@ -118,14 +118,14 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
     ) => {
       const { name, includeContext, type, label } = schemaItem;
       let { options } = schemaItem;
-      const isOther = type === "select" || _.includes(type, "group");
+      const isOther = type === "select" || includes(type, "group");
       const contextLabel = isOther ? "form.builder.other" : "form.builder.note";
       let treeLabel: string | React.ReactNode = truncate(label as string);
       const tooltip =
-        _.size(treeLabel) >= truncateValue ? (label as string) : "";
+        size(treeLabel) >= truncateValue ? (label as string) : "";
 
-      !_.isUndefined(options) &&
-        (options = _.split((schemaItem.options || "") as string, "\n"));
+      !isUndefined(options) &&
+        (options = split((schemaItem.options || "") as string, "\n"));
       includeNodeField && (treeLabel = labelNode(name || "", label));
 
       return (
@@ -138,9 +138,9 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
       );
     };
 
-    const items = _.map(workspaceState?.getSchema(), (schemaItem) => {
+    const items = map(workspaceState?.getSchema(), (schemaItem) => {
       const { name, label, type } = schemaItem;
-      if (_.includes(FBEditorSectionConfig.section, type)) {
+      if (includes(FBEditorSectionConfig.section, type)) {
         return <div />;
       }
       switch (type) {
