@@ -7,14 +7,15 @@ import { Screenshot } from "../utils/context/screenshot";
 
 context("Server", () => {
   it("Info", () => {
-    cy.viewport(800, 800 * 1.7);
     cy.authLogin({
       email: "zoran.kovacevic+admin@codecons.com",
       password: "Tester1!",
     });
     cy.wait(2000);
     cy.visit(`${CONFIG.FE_URL}/status`);
-    cy.wait(1000);
-    Screenshot({ scale: true });
+    cy.get("[data-cy=\"status-fe-branch\"]").should("exist");
+    cy.get("[data-cy=\"status-be-branch\"]").should("exist");
+    cy.get("[data-cy=\"status-remote-branch\"]").should("exist");
+    Screenshot();
   });
 });

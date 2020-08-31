@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from "react";
 import Config from "../../config";
 import { getRemoteValidatorBundle } from "./../remoteValidators/RemoteValidators";
@@ -8,9 +9,9 @@ const STATUS_QUERY = "/status";
 const MICRO_STATUS_QUERY = "/micro/healthcheck";
 
 interface StatusState {
-  data: object;
-  data1: object;
-  data2: object;
+  backend: object;
+  bgWorker: object;
+  remoteJS: object;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -19,8 +20,13 @@ interface StatusProps {}
 class StatusPresenter extends React.Component<StatusProps, StatusState> {
 
   // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
-  constructor() {
-    super({}, { data: null, data1: null });
+  constructor(props) {
+    super(props);
+    this.state =  { backend: {}, remoteJS: {}, bgWorker: {} };
+  }
+
+  toSnakeCase(str) {
+    return str.trim().toLowerCase().split(/[ ]+/).join("-");
   }
 
   public componentDidMount() {
@@ -30,13 +36,9 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
         (result) => {
           const dict = JSON.parse(result);
           // console.log("Dict 2: " + dict);
-          this.setState({ data: dict });
+          this.setState({ backend: dict });
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
         (error) => {
-          // eslint-disable-next-line no-console
           console.log(error);
         },
       );
@@ -45,14 +47,9 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
       .then(
         (result) => {
           const dict = JSON.parse(result);
-          // console.log("Dict 3: " + dict);
-          this.setState({ data1: dict });
+          this.setState({ bgWorker: dict });
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
         (error) => {
-          // eslint-disable-next-line no-console
           console.log(error);
         },
       );
@@ -61,68 +58,68 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
         (result) => {
           const dict = result?.buildInfo;
           if (dict) {
-            this.setState({ data2: dict });
+            this.setState({ remoteJS: dict });
           } else {
-            this.setState({ data2: { Status: "You have to be logged in" } });
+            this.setState({ remoteJS: { Status: "You have to be logged in" } });
           }
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
         (error) => {
-          // eslint-disable-next-line no-console
           console.log(error);
         },
       );
   }
 
-  buildElements(dict) {
+  buildElements(nameRaw, dict) {
+    const name = this.toSnakeCase(nameRaw);
     return Object.keys(dict).map((key, index) =>
+
       (
-        <tr key={index}>
-          <td><b>{key}: </b></td>
+        <tr
+          key={index} data-cy={`status-${name}-${this.toSnakeCase(key)}`}
+
+        >
+          <td style={{
+            paddingRight: "1em",
+          }}><b>{key}: </b></td>
           <td>{dict[key]}</td>
         </tr>
       )
     );
   }
 
+  renderTable(title, dict = {}) {
+    return (
+      <table style={{
+        fontSize: "14px",
+        marginBottom: "1.2em",
+      }}>
+        <thead>
+          <td
+            colSpan={2}
+            style={{
+              fontSize: "18px",
+              fontWeight: "bold",
+              paddingBottom: "0.8em",
+            }}>
+            {title}
+          </td>
+        </thead>
+        <tbody>
+          {this.buildElements(title, dict)}
+        </tbody>
+      </table>
+    );
+  }
+
   public render() {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const feElements = this.buildElements(require("../../data/buildInfo.json"));
-    // const beElems
-    const beElements = this.buildElements(this.state?.data || {});
-    const beWorkerElements = this.buildElements(this.state?.data1 || {});
-    const remoteJsElements = this.buildElements(this.state?.data2 || {});
+    const feStatusJson = require("../../data/buildInfo.json");
     return (
-      <div style={{ padding: "10px", backgroundColor: "white" }}>
-        <h1>Build Info [Frontend]</h1>
-        <table style={{ fontSize: "20px" }}>
-          <tbody>
-            {feElements}
-          </tbody>
-        </table>
-        <br/>
-        <h1>Build Info [Backend]</h1>
-        <table style={{ fontSize: "20px" }}>
-          <tbody>
-            { beElements }
-          </tbody>
-        </table>
-        <br/>
-        <h1>Remote JS Validators</h1>
-        <table style={{ fontSize: "20px" }}>
-          <tbody>
-            { remoteJsElements }
-          </tbody>
-        </table>
-        <br/>
-        <h1>Background Worker Service</h1>
-        <table style={{ fontSize: "20px" }}>
-          <tbody>
-            { beWorkerElements }
-          </tbody>
-        </table>
+      <div style={{ padding: "10px", backgroundColor: "white", lineHeight: 1.2 }}>
+        { this.renderTable("Frontend", feStatusJson)}
+        { this.renderTable("Backend", this.state.backend)}
+        { this.renderTable("Remote JS Validators", this.state.remoteJS)}
+        { this.renderTable("Background Worker Service", this.state.bgWorker)}
       </div>
     );
   }
