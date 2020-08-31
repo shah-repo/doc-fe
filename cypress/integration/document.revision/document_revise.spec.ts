@@ -7,7 +7,6 @@ import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-let adminEmployee;
 let initialArDocument;
 let createdCompany;
 let loginResponse;
@@ -20,7 +19,7 @@ let createdDocument;
 
 const documentRevisionName = "Test document for revising";
 
-context("Document list test", () => {
+context("Document revise test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -55,7 +54,6 @@ context("Document list test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
@@ -170,7 +168,7 @@ context("Document list test", () => {
     });
 
     it("Verify 'Test document for revising' revision is set to 1", () => {
-      SystemRequirement("REQ-0580");
+      SystemRequirement("REQ-0580", "REQ-0620");
       cy.navigToDocumentList();
       cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
       cy.dlVerifyFilterByRev({ revision: "1" });
@@ -198,10 +196,87 @@ context("Document list test", () => {
     });
 
     it("Verify 'Test document for revising' revision is set to 2", () => {
-      SystemRequirement("REQ-0580");
+      SystemRequirement("REQ-0580", "REQ-0620");
       cy.navigToDocumentList();
       cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
       cy.dlVerifyFilterByRev({ revision: "2" });
+    });
+  });
+
+  context("Verify 'Upgrade to Next Revision Level' change is shown on document list", () => {
+    context("Revise document to 'Upgrade to Next Revision Level'", () => {
+      it("Navigate to created document", () => {
+        cy.navigToDocumentList();
+        cy.drClickOnSpecificDocFromList({ item: documentRevisionName });
+      });
+
+      it("Revise document with 'Next Revision' option", () => {
+        cy.drClickReviseDocument();
+        cy.drChooseTypeOfRevisionChangeOption({ option: "Upgrade to Next Revision Level" });
+        cy.drClickCreateDocumentWithApiCall();
+      });
+    });
+
+    context("Create AR for reviseed document to 'Upgrade to Next Revision Level'", () => {
+      it("Navigate to approval request list", () => {
+        cy.navigToApprovalRequestList();
+      });
+
+      it("Click Create a Approval Request button", () => {
+        cy.cmpClickCreateApprovalRequest();
+      });
+
+      it("Choose newly AR Form template", () => {
+        cy.arSelectARForm({ formTitle: "Initial AR Form" });
+      });
+
+      it("Enter title AR title: 'AR for Upgrade to Next Revision Level'", () => {
+        cy.arEnterApprovalRequestTitle({ title: "AR for Upgrade to Next Revision Level" });
+      });
+
+      it("Enter description 'AR from New form template for approval request'", () => {
+        cy.arEnterApprovalRequestDescription(
+          { description: "AR for testing document that has been revised to 'Upgrade to Next Revision Level'" });
+      });
+
+      it("Add created document revision", () => {
+        cy.arClickAddDocument().wait(500);
+        cy.arChoseSpecificProposedDocument({ name: documentRevisionName });
+        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
+        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
+        cy.arClickAddBtnOnAddDocumentsDialog();
+      });
+
+      it("Add first approver to approval request on approver list", () => {
+        cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+      });
+
+      it("Click Create Approval Request", () => {
+        cy.arClickCreateApprovalRequestAfterCompletingForm();
+      });
+
+      it("Click send to review", () => {
+        cy.arClickSendToReview();
+      });
+    });
+
+    context("Approve submission and close AR", () => {
+      it("Click approve submission", () => {
+        cy.arApproveAR();
+      });
+
+      it("Click close AR", () => {
+        cy.arCloseAR();
+      });
+    });
+
+    context("Verify 'Upgrade to Next Revision Level' revision is shown on document list", () => {
+      it("Verify 'Test document for revising' revision is set to '1A'", () => {
+        SystemRequirement("REQ-0580", "REQ-0620");
+        cy.navigToDocumentList();
+        cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
+        cy.dlVerifyFilterByRev({ revision: "1A" });
+      });
     });
   });
 });
