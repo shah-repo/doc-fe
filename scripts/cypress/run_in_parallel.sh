@@ -36,6 +36,7 @@ fi
 
 ./scripts/cypress/delete_cache.sh
 source ./scripts/cypress/make_results_dir.sh
+./scripts/cypress/run_generate_info_report.sh
 export CYPRESS_SCREENSHOTS_FOLDER=$DIR_SCREENSHOTS_REPORT
 ./scripts/cypress/delete_failed_specs.sh
 ./scripts/cypress/run_workers_in_parallel.sh
