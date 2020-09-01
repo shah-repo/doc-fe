@@ -42,6 +42,7 @@
           "options": [
             {"value": "DRAFT", "text": "DRAFT"},
             {"value": "PENDING_CHANGE", "text": "PENDING CHANGE"},
+            { "value": "APPROVED", "text": "APPROVED"},
             {"value": "IN_REVIEW", "text": " IN REVIEW"},
             {"value": "RELEASED", "text": "RELEASED"}
           ],
