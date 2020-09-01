@@ -40,7 +40,7 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
       dataKey: "releasedAfter",
       searchType: "select",
       selectOptions: documentRevisionEffectiveDateOption(),
-      defaultValue: tableCriteria.queryDict.releasedAfter,
+      defaultValue: tableCriteria.queryDict?.releasedAfter,
     };
   }
   if (valuePath === "name") {
