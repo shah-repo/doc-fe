@@ -34,18 +34,23 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   isDisabled = false,
   documentTypeId,
 }) => {
-  const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
   const [isVisible, label, validators] = useDocumentTypeSelect(documentTypeId);
+
   const { workspaceState } = FB.useStores();
   const formik = useFormikContext();
   const dispatch = useDispatch();
+
   const loadDocumentProposedId = (documentTypeId: string) =>
     dispatch(documentsActions.loadDocumentProposedId(documentTypeId));
+
+  const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeFormOptions);
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+
   const isDocTypeDisabled = (type === "newVersion" || isdocRevStatusDraft) || isDisabled;
   const isNewOutput = type === "newOutput";
+
   const options: SelectOption[] = React.useMemo(() => {
     if (type === "newOutput" && outputDocumentTypes) {
       return outputDocumentTypes.map((e) =>
@@ -66,6 +71,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         ({ value: docType.id, text: docType.documentTypeName })
       );
   }, [type, outputDocumentTypes, documentTypes, currentUserTags]);
+
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
@@ -83,10 +89,14 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       formik.setFieldValue("retrain", type.defaultTraining);
       loadDocumentProposedId(type.id);
     }
-
+    // Security groups
     if (type.isQms) {
       const securityGroups = filterSecurityGroupsForQms(type.isQms, groupOptions);
       formik.setFieldValue("securityGroups", securityGroups);
+    }
+
+    if (!type.isQms) {
+      formik.setFieldValue("securityGroups", []);
     }
 
     // FB mode
