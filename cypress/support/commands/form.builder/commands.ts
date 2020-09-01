@@ -18,6 +18,7 @@ declare global {
       fbAddField(): Chainable<Subject>;
       fbAddLabelName(params: { name: string }): Chainable<Subject>;
       fbSelectCustomControl(): Chainable<Subject>;
+      fbClickAddNewHiddenBtn(): Chainable<Subject>;
     }
   }
 }
@@ -27,6 +28,10 @@ Cypress.Commands.add("fbAddNewFieldOption", () => {
 });
 
 Cypress.Commands.add("fbAddNewField", () => cy.get("[data-cy=\"form.builder.add.field\"]").click());
+
+Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {
+  cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+});
 
 Cypress.Commands.add("fbSelectItemFromNewFieldList", (params: { field: string }) => {
   cy.get("[class=\"MuiButton-label\"]").contains(new RegExp(params.field, "g")).click();
