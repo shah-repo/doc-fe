@@ -13,9 +13,9 @@ context("Server", () => {
     });
     cy.wait(2000);
     cy.visit(`${CONFIG.FE_URL}/status`);
-    cy.get("[data-cy=\"status-fe-branch\"]").should("exist");
-    cy.get("[data-cy=\"status-be-branch\"]").should("exist");
-    cy.get("[data-cy=\"status-remote-branch\"]").should("exist");
+    cy.get("[data-cy=\"status-frontend-branch\"]").should("exist");
+    cy.get("[data-cy=\"status-backend-branch\"]").should("exist");
+    cy.get("[data-cy=\"status-remote-js-validators-branch\"]").should("exist");
     Screenshot();
   });
 });
