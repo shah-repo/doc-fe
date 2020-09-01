@@ -34,6 +34,8 @@ export enum CyRoutes {
   GetProposedDocId = "GetProposedDocId",
   PatchCancelDocRev = "PatchCancelDocRev",
   GetPendingActions = "GetPendingActions",
+  PostCloseAR = "PostCloseAR",
+  GetRequiredApprovers = "GetRequiredApprovers",
 }
 
 export const routes: ICyRoutes =   {
@@ -193,6 +195,18 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/pending_actions",
+    },
+  },
+  PostCloseAR: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/change_requests/*/closed",
+    },
+  },
+  GetRequiredApprovers: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions/required_approvers*",
     },
   },
 };

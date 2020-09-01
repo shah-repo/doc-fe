@@ -4,6 +4,7 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -266,7 +267,10 @@ context("Document revise test", () => {
       });
 
       it("Click close AR", () => {
-        cy.arCloseAR();
+        cy.wrapWithWaitOnApiCalls(
+          [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
+            cy.arCloseAR();
+          });
       });
     });
 
