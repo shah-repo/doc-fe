@@ -123,9 +123,12 @@ Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
 });
 
 Cypress.Commands.add("drCancelDraftButton", () => {
-  cy.get("[data-cy=\"HeaderMenuButton\"]").click();
-  cy.get("[data-cy=\"cancelDraftButton\"]").click();
-  cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.PatchCancelDocRev, () => {
+      cy.get("[data-cy=\"HeaderMenuButton\"]").click();
+      cy.get("[data-cy=\"cancelDraftButton\"]").click();
+      cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+    });
 });
 
 Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion: int }) => {
@@ -155,8 +158,11 @@ Cypress.Commands.add("drEnterDocumentDescriptionWithWait", (params: { descriptio
 });
 
 Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) => {
-  cy.get("[data-cy=\"select.document.documentType.id\"]").click();
-  cy.get(`[data-cy="selectItem.document.documentType.id.${params.documentType}"]`).click();
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.GetProposedDocId, () => {
+      cy.get("[data-cy=\"select.document.documentType.id\"]").click();
+      cy.get(`[data-cy="selectItem.document.documentType.id.${params.documentType}"]`).click();
+    });
 });
 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
@@ -195,9 +201,8 @@ Cypress.Commands.add("drClickCreateDocument", () => {
 });
 
 Cypress.Commands.add("drClickCreateDocumentWithApiCall", () => {
-  cy.wrapWithWaitOnApiCall(
-    CyRoutes.PostOrPatchDocRev,
-    () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
 });
@@ -207,7 +212,6 @@ Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
-  cy.wait(5000);
   cy.get("[id=HeaderInfo-status]").should("have.text", params.status);
 });
 
