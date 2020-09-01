@@ -11,15 +11,17 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionsProps> = (
   name,
   gutter,
   disabled,
+  index,
 }) => (
   <FBProvider {...{ dialogState }}>
     <FBDialog />
-    <FBInput {...{ name, gutter }} type="documentRevisions">
+    <FBInput {...{ name, gutter, index }} type="documentRevisions">
       <FBMapWrapper<FBDocumentRevisionsValue[]> {...{ collection }}>
         {(value: FBDocumentRevisionsValue, index) => (
           <FBDocumentRevisionsItem
             key={`fb-document-revision-${value.id}-${index}`}
             {...{ name, disabled, index, handleOpen, remove }}
+            id={value.proposedDocumentRevision.id}
           />
         )}
       </FBMapWrapper>

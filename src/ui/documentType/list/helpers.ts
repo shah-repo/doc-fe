@@ -34,6 +34,15 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
       defaultValue: tableCriteria.queryDict.effectiveDate,
     };
   }
+  if (valuePath === "releasedAt") {
+    omitSearch = false;
+    searchOptions = {
+      dataKey: "releasedAfter",
+      searchType: "select",
+      selectOptions: documentRevisionEffectiveDateOption(),
+      defaultValue: tableCriteria.queryDict.releasedAfter,
+    };
+  }
   if (valuePath === "name") {
     omitSearch = false;
   }

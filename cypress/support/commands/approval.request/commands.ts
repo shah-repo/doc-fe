@@ -168,6 +168,12 @@ Cypress.Commands.add("arWithdrawSubmission", () => {
   cy.get("[data-cy=\"AlertDialog-continueButton\"]", { timeout: 1000 }).click();
 });
 
+Cypress.Commands.add("arCloseAR", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").click();
+  cy.get("[data-cy=\"transition-closed\"]").click();
+  cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+});
+
 Cypress.Commands.add("arIsProposedDocumentEmpty", () => {
   cy.get("[data-cy=\"proposedDocumentRevision\"] input").should("be.empty");
 });

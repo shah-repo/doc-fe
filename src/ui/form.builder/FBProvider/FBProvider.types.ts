@@ -1,7 +1,7 @@
 import {
   FBApprovalMatrixFieldState,
   FBApproversState,
-  FBDialogState,
+  FBBookmarkState, FBDialogState,
   FBDocumentRevisionsState,
   FBEditorCustomControlState,
   FBEditorState,
@@ -41,4 +41,5 @@ export interface FBProviderProps {
   approvalMatrixFieldState?: FBApprovalMatrixFieldState;
   taskState?: FBTaskState;
   approversState?: FBApproversState;
+  bookmarkState?: FBBookmarkState;
 }

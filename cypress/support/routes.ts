@@ -31,6 +31,8 @@ export enum CyRoutes {
   DocRevGet = "DocRevGet",
   LotQuantity = "LotQuantity",
   DocRevPreview = "DocRevPreview",
+  GetProposedDocId = "GetProposedDocId",
+  PatchCancelDocRev = "PatchCancelDocRev",
 }
 
 export const routes: ICyRoutes =   {
@@ -172,6 +174,18 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/*",
+    },
+  },
+  GetProposedDocId: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/documents/proposed_docid*",
+    },
+  },
+  PatchCancelDocRev: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/document_revisions/cancel/*",
     },
   },
 };
