@@ -2,7 +2,6 @@ import { useFormikContext } from "formik";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
-import { GroupTag } from "../../../../state/ducks/auth/types";
 import { FBOutputDocumentType } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType, documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../../state/ducks/documents";
@@ -78,13 +77,8 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
     savedocInfo({ name: event.target.name || "", isQms: type.isQms });
-    groupOptions.forEach((group) => {
-      if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-        formik.setFieldValue("securityGroups", [
-          { value: group.value, label: group.label },
-        ]);
-      }
-    });
+    formik.setFieldValue("securityGroups", []);
+
     if (loadDocumentProposedId) {
       formik.setFieldValue("retrain", type.defaultTraining);
       loadDocumentProposedId(type.id);
@@ -93,10 +87,6 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     if (type.isQms) {
       const securityGroups = filterSecurityGroupsForQms(type.isQms, groupOptions);
       formik.setFieldValue("securityGroups", securityGroups);
-    }
-
-    if (!type.isQms) {
-      formik.setFieldValue("securityGroups", []);
     }
 
     // FB mode
