@@ -1,21 +1,17 @@
 #!/bin/bash
 set -e
 
+printf 'Waiting for backend .'
 until $(curl --output /dev/null --silent --head --fail http://localhost:5601/api/v1/healthcheck); do
     printf '.'
-    sleep 5
+    sleep 2
 done
+echo ""
 
+printf 'Waiting for frontend .'
 until $(curl --output /dev/null --silent --head --fail http://localhost:5602); do
     printf '.'
-    sleep 5
+    sleep 2
 done
 
-. ./scripts/cypress/generate_ci_build_id.sh
-
-yarn install --frozen-lockfile 
-./scripts/cypress/run_in_parallel.sh
-./scripts/cypress/run_in_parallel.sh
-./scripts/cypress/run_in_parallel.sh
-./scripts/cypress/run_in_parallel.sh
-firefox results/$CI_BUILD_ID/reports/result.html &
+echo ""

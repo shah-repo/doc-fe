@@ -27,7 +27,7 @@ export REACT_APP_DATADOG_CLIENT_TOKEN="fake"
 
 docker build \
   -f docker/cypress_web.Dockerfile \
-  -t enlil/cypress_web:${FE_GIT_COMMIT_HASH}_${ENLIL_COMPOSE_PORT_RANGE_START} \
+  -t enlil_cypress_web:${FE_GIT_COMMIT_HASH}_${ENLIL_COMPOSE_PORT_RANGE_START} \
   --build-arg FE_GIT_COMMIT_HASH \
   --build-arg REACT_APP_API_ENDPOINT \
   --build-arg REACT_APP_WORKER_API_ENDPOINT \

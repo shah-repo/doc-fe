@@ -22,7 +22,6 @@ if [[ -z "${DATE_ISO_DEFAULT}" ]]; then
 fi
 
 export CI_BUILD_ID=${CI_BUILD_ID:-$DATE_ISO_DEFAULT}
-export NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-4}
 export REPORT_TITLE=${REPORT_TITLE:-generated_specs}
 export CYPRESS_INTEGRATION_FOLDER=${CYPRESS_INTEGRATION_FOLDER:-"cypress/integration"}
 export CYPRESS_SKIP_ON_RUN_FAILURE=${CYPRESS_SKIP_ON_RUN_FAILURE:-true}
@@ -39,8 +38,18 @@ fi
 source ./scripts/cypress/make_results_dir.sh
 ./scripts/cypress/run_generate_info_report.sh
 export CYPRESS_SCREENSHOTS_FOLDER=$DIR_SCREENSHOTS_REPORT
-./scripts/cypress/delete_failed_specs.sh
-./scripts/cypress/run_workers_in_parallel.sh
+
+if [[ -z "${NUMBER_OF_WORKERS_PER_RUN}" ]]; then
+  ./scripts/cypress/delete_failed_specs.sh
+  NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-4} ./scripts/cypress/run_workers_in_parallel.sh
+else
+  for i in $(echo $NUMBER_OF_WORKERS_PER_RUN | sed "s/,/ /g")
+  do
+    ./scripts/cypress/delete_failed_specs.sh
+    NUMBER_OF_WORKERS=$i ./scripts/cypress/run_workers_in_parallel.sh
+  done
+fi
+
 ./scripts/cypress/run_generate_requirements_report.sh
 ./scripts/cypress/merge_reports.sh
 

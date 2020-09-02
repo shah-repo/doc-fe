@@ -77,6 +77,7 @@ echo "--| BB_USER: $BB_USER"
 echo "--| Backend $BE_GIT_BRANCH_NAME $BE_GIT_COMMIT_HASH"
 echo "--| Frontend $FE_GIT_BRANCH_NAME $FE_GIT_COMMIT_HASH"
 echo "--| RemoteJS $VALIDATORS_GIT_BRANCH_NAME $VALIDATORS_GIT_COMMIT_HASH"
+echo "--| CI_BUILD_ID $CI_BUILD_ID"
 echo ""
 echo -n BitBucket Password: 
 read -s password

@@ -29,6 +29,7 @@ export CYPRESS_BASE_URL=$CYPRESS_FE_URL
 
 export CYPRESS_KONFIG_ENV="development"
 
+./scripts/cypress/wait.sh
 
 yarn cypress run \
   --parallel --record --key 9e6e4a3d-c43a-4e60-8984-fa2ae0a90a76 \
