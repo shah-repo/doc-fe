@@ -99,7 +99,7 @@ context("Non-QMS Document Creation Flow", () => {
         cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
           .should("have.text", "Enter the name of users to access the document");
         cy.get("[data-cy=\"field-securityGroups\"]")
-          .should("have.text", "Enter the name of the user groups to access the document");
+          .should("have.text", "Selected GroupsEnter the name of the user groups to access the document");
       });
     });
   });

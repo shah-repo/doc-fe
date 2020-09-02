@@ -40,7 +40,11 @@ Cypress.Commands.add("navigClickOnItem", (params: { navigItem: string }) => {
 });
 
 Cypress.Commands.add("navigToDashboard", () => {
-  cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.GetPendingActions,
+    () => {
+      cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
+    }).wait(1000);
 });
 
 Cypress.Commands.add("navigToReceivableList", () => {
