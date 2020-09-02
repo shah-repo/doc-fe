@@ -345,6 +345,53 @@ context("Document Creation Flow", () => {
       cy.drClickOnSpecificDocFromList({ item: "CP00003" });
     });
 
+    it("Verify owner", () => {
+      cy.drVerifyDocumentOWner({ owner: USERS[3].name }).wait(1000);
+    });
+
+    it("Logs with admin", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on specific document 'CP00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP00003" });
+    });
+
+    it("Change owner of document by admin", () => {
+      SystemRequirement("REQ-0340");
+      cy.drChangeOwnerByAdmin({ employee: USERS[2].name });
+    });
+
+    it("Logs user that ownership was changed to", () => {
+      cy.authLogin({
+        email: USERS[2].email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on specific document 'CP00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP00003" });
+    });
+
     it("Approves and releases document", () => {
       cy.drApproveAndReleaseDocument();
     });

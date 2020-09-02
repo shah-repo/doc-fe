@@ -22,6 +22,7 @@ declare global {
       arClickCreateApprovalRequestAfterCompletingForm(): Chainable<Subject>;
       arClickSendToReview(): Chainable<Subject>;
       arVerifyStatus(params: { status: string }): Chainable<Subject>;
+      arCheckImplementationTaskStatus(params: { status: string }): Chainable<Subject>;)
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
@@ -33,6 +34,8 @@ declare global {
       arCreateApprovalRequest(params: {payload: ChangeRequestEditRequestBody; employeeId: string; sessionId: string}): Chainable<Subject>;
       arGetArDocumentByName(params: {employeeId: string; sessionId: string; name: string}): Chainable<Subject>;
       arCloseAR(): Chainable<Subject>;
+      arVoidAR(): Chainable<Subject>;
+      arSaveApiCall(): Chainable<Subject>;
     }
   }
 }
@@ -71,6 +74,10 @@ Cypress.Commands.add("arGetArDocumentByName", (params: {
 
 Cypress.Commands.add("arEnterApprovalRequestTitle", (params: {title: string }) => {
   cy.get("[data-cy=\"field-title\"]").type(params.title);
+});
+
+Cypress.Commands.add("arCheckImplementationTaskStatus", (params: {status: string }) => {
+  cy.get("[data-cy=\"form.builder.status\"]").contains(params.status);
 });
 
 Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description: string }) => {
@@ -131,6 +138,13 @@ Cypress.Commands.add("arClickSendToReview", () => {
     });
 });
 
+Cypress.Commands.add("arSaveApiCall", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PatchAR], () => {
+      cy.get("[data-cy=\"common.save\"]").click();
+    });
+});
+
 Cypress.Commands.add("arVerifyStatus", (params: { status: string }) => {
   cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
   // cy.get("#HeaderInfo-status>span").contains(params.status);
@@ -171,6 +185,12 @@ Cypress.Commands.add("arWithdrawSubmission", () => {
 Cypress.Commands.add("arCloseAR", () => {
   cy.get("[data-cy=\"HeaderMenuButton\"]").click();
   cy.get("[data-cy=\"transition-closed\"]").click();
+  cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+});
+
+Cypress.Commands.add("arVoidAR", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").click();
+  cy.get("[id=\"void\"]").click();
   cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
 });
 

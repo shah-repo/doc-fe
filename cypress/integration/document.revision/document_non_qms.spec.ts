@@ -94,7 +94,7 @@ context("Non-QMS Document Creation Flow", () => {
     });
 
     context("Check permission groups", () => {
-      it("Check if Selected Groups are set to 'Everyone' by default", () => {
+      it("Check if Selected Groups are not set by default", () => {
         SystemRequirement("REQ-0300");
         cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
           .should("have.text", "Enter the name of users to access the document");
