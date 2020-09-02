@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+./scripts/cypress_generate_server_info.sh
+
 export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START:-5600}
 
 export ENLIL_COMPOSE_EXPOSE_BE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+1))"

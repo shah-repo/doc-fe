@@ -8,7 +8,6 @@ COPY yarn*.lock ./
 RUN yarn install --frozen-lockfile
 
 COPY src /opt/app/src
-COPY buildInfoCypress.json /opt/app/src/data/buildInfo.json
 COPY public /opt/app/public
 COPY tsconfig* /opt/app/
 

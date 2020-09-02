@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 export FE_GIT_COMMIT_HASH=$(git rev-parse HEAD |  cut -c1-8)
+
 ./scripts/cypress_generate_server_info.sh
 
 if [[ -z "${ENLIL_COMPOSE_PORT_RANGE_START}" ]]; then
