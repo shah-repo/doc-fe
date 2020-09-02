@@ -337,9 +337,6 @@ context("Document Approval Matrix Flow", () => {
     it("Save Approval Matrix Item", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
     });
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-    });
   });
 
   context("Approve & Release Document", () => {
