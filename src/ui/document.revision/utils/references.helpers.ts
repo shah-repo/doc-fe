@@ -34,7 +34,8 @@ const getCorrectDocRev = (
     return handleReferenceForDeprecated(documentRevisions, deprecatedAt);
   }
 
-  const released = documentRevisions.find((docRev) => docRev.status === DocumentRevisionStatus.Released);
+  const released = documentRevisions.find((docRev) => docRev.status === DocumentRevisionStatus.Released ||
+    docRev.status === DocumentRevisionStatus.Obsolete);
   return released;
 };
 

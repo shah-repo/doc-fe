@@ -1,6 +1,7 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -195,11 +196,11 @@ context("Approval request form", () => {
       cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
 
-    it("Click send to review", () => {
+    it("Click 'Send To Review'", () => {
       cy.arClickSendToReview();
     });
 
-    it("Verify AR status", () => {
+    it("Verify AR status is 'In Review'", () => {
       SystemRequirement("REQ-0730");
       SystemRequirement("REQ-0740");
       SystemRequirement("REQ-0020");
@@ -207,7 +208,7 @@ context("Approval request form", () => {
     });
   });
 
-  context("Check document revision is in review", () => {
+  context("Check document revision is 'In Review'", () => {
     it("Navigate to added document in AR", () => {
       cy.navigToDocumentList();
     });
@@ -216,7 +217,7 @@ context("Approval request form", () => {
       cy.drFilterDocListByNameAndStatus({ title: documentRevisionName, status: "In Review" });
     });
 
-    it("Check document revision status", () => {
+    it("Check document revision status is 'In Review'", () => {
       cy.drCheckDocumentStatus({ status: "In Review" });
     });
   });
@@ -235,27 +236,53 @@ context("Approval request form", () => {
       cy.arApproveAR();
     });
 
-    it("Check approval request status is approved", () => {
+    it("Check approval request status is 'Approved'", () => {
       SystemRequirement("REQ-0730");
       SystemRequirement("REQ-0020");
       cy.arVerifyStatus({ status: "Approved" });
     });
   });
 
-  context("Check document revision is Released", () => {
+  context("Check document revision is 'Released'", () => {
     it("Navigate to added document in AR", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Filter document by name and status, and select it", () => {
+      cy.drFilterDocListByNameAndStatus({ title: documentRevisionName, status: "Approved" });
+    });
+
+    it("Check document revision status is 'Approved'", () => {
+      cy.drCheckDocumentStatus({ status: "Approved" });
+    });
+
+    it("Navigate to AR list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Filter approval by name and status, and select it", () => {
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Approved" });
+    });
+
+    it("Close AR", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
+          cy.arCloseAR();
+        });
+    });
+
+    it("Check approval request status is 'Closed'", () => {
+      cy.arVerifyStatus({ status: "Closed" });
+    });
+
+    it("Navigate to document list to check if document is 'Released'", () => {
       cy.navigToDocumentList();
     });
 
     it("Filter document by name and status, and select it", () => {
       cy.drFilterDocListByNameAndStatus({ title: documentRevisionName, status: "Released" });
     });
-
-    it("Check document revision status is released", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
-    });
   });
-
 });
 
 export { };

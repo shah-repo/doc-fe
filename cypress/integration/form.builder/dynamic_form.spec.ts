@@ -153,7 +153,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Click on 'Add a field'", () => {
-      cy.fbAddNewField();
+      cy.fbClickAddNewHiddenBtn();
     });
 
     it("Select 'Text Field 2' field", () => {
@@ -188,12 +188,12 @@ context("Dynamic Form Test", () => {
       cy.drEnterDocumentDescription({ description: "New Document from Form description" });
     });
 
-    it("Enters text inside 'New Text Field 1'", () => {
-      cy.get("[data-cy*=\"new-text-field\"]").eq(1).type("Some text for Text field");
+    it("Enters text inside 'New Text Field 1' dynamic form field", () => {
+      cy.get("[data-cy*=\"new-text-field\"]").eq(0).type("Some text for Dynamic Form field");
     });
 
     it("Enters text inside 'New Text Field 2'", () => {
-      cy.get("[data-cy*=\"new-text-field-2\"]").type("Some text for Dynamic Form field");
+      cy.get("[data-cy*=\"new-text-field-2\"]").type("Some text for Text field");
     });
 
     it("Click create document after filling document", () => {

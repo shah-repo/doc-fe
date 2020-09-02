@@ -95,7 +95,7 @@ Cypress.Commands.add("atchUploadRedlineAttachment", (params: {fileName: string }
         fileName: params.fileName,
         mimeType: "*",
         filePath: `fixtures/${params.fileName}`,
-      }).wait(5000);
+      });
     });
   });
 });

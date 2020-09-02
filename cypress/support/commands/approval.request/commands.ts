@@ -32,6 +32,7 @@ declare global {
       arSelectFirstDocument(): Chainable<Subject>;
       arCreateApprovalRequest(params: {payload: ChangeRequestEditRequestBody; employeeId: string; sessionId: string}): Chainable<Subject>;
       arGetArDocumentByName(params: {employeeId: string; sessionId: string; name: string}): Chainable<Subject>;
+      arCloseAR(): Chainable<Subject>;
     }
   }
 }
@@ -84,6 +85,12 @@ Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
 
 Cypress.Commands.add("arClickAddDocument", () => {
   cy.get("[data-cy=\"fb.add.document\"]").click().wait(500);
+});
+
+Cypress.Commands.add("arCloseAR", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").click();
+  cy.get("[aria-label=closed]").click();
+  cy.get("[data-cy=AlertDialog-continueButton]").click();
 });
 
 Cypress.Commands.add("arChoseProposedDocument", ({ name }) => {
@@ -142,9 +149,13 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
 });
 
 Cypress.Commands.add("arApproveAR", () => {
-  cy.get("button[aria-label=approve]").first().click().wait(300);
-  cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
-  cy.get("[data-cy=\"passwordConfirm\"]").click().wait(2000);
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PostApproveAR, CyRoutes.ARPreview], () => {
+      cy.get("button[aria-label=approve]").first().click();
+      cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
+      cy.get("[data-cy=\"passwordConfirm\"]").click();
+    });
+
 });
 
 Cypress.Commands.add("arCheckTitleInEditableAndMatches", (params: { name: string }) => {
@@ -155,6 +166,12 @@ Cypress.Commands.add("arWithdrawSubmission", () => {
   cy.get("[data-cy=\"HeaderMenuButton\"]").click();
   cy.get("[data-cy=\"change.request.withdraw.alert\"]").click();
   cy.get("[data-cy=\"AlertDialog-continueButton\"]", { timeout: 1000 }).click();
+});
+
+Cypress.Commands.add("arCloseAR", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").click();
+  cy.get("[data-cy=\"transition-closed\"]").click();
+  cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
 });
 
 Cypress.Commands.add("arIsProposedDocumentEmpty", () => {

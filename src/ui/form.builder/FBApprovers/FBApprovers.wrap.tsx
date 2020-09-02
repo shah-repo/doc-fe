@@ -4,7 +4,6 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
 import { FB, FBApprover, FBApproversProps, FBApproversState, FBRequiredApprover } from "..";
-import Colors from "../../layout/theme/utils/colors";
 import { FBDocumentRevisionsValue } from "../FBDocumentRevisions";
 
 export const withFBApprovers = <T extends FBApproversProps>(
@@ -58,10 +57,10 @@ export const withFBApprovers = <T extends FBApproversProps>(
         compact(map(groups, (group) => includesApprover(group, option.id) ? group.name : ""));
       return (
         <Box display="flex" key={`fb-required-approver-${option.id}`}>
-          {option.user?.name} - {option.user?.email}
+          <b>{option.user?.name}</b>&nbsp; ({option.user?.email})
           {!isEmpty(requiredGroups) && (
-            <Box color={Colors.medium_gray}>
-              {`, ${requiredGroups.join(", ")}`}
+            <Box>
+              &nbsp;{`- ${requiredGroups.join(", ")}`}
             </Box>
           )}
         </Box>

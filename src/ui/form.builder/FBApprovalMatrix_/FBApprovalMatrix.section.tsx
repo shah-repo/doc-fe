@@ -12,8 +12,12 @@ const FBApprovalMatrixSection: React.FunctionComponent<FBApprovalMatrixProps> = 
   mode,
   workspaceMode,
   dialogState,
+  name,
 }) => (
-  <FBSection label="form.builder.approvalMatrix" key="ddd">
+  <FBSection
+    name={`fb-am-section-${name}`}
+    label="form.builder.approvalMatrix"
+  >
     <Box display="flex" flexDirection="row-reverse" mt={-3.5}>
       {!dialogState?.open && (
         <IconButton color="inherit" size="small" disabled={workspaceMode === "design"} onClick={handleFullScreen} >

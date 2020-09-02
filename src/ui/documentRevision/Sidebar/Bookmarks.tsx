@@ -1,74 +1,60 @@
-import { Box, Button, createStyles, makeStyles, Theme, Tooltip } from "@material-ui/core";
+import { Box, IconButton } from "@material-ui/core";
 import copy from "copy-to-clipboard";
+import { useObserver } from "mobx-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as CopyIcon } from "../../../assets/images/copy_outlined.svg";
-import Text from "../../components/Text";
-import { FBSchemaProps } from "../../form.builder/FBSchema/FBSchema.types";
+import { FB, FBBookmarkItem, FBMapWrapper, FBTooltip } from "../../form.builder";
 import Colors from "../../layout/theme/utils/colors";
 
 interface SidebarPresenterProps {
-  location: Location;
-  schema: FBSchemaProps[] | undefined;
+  bookmarks?: FBBookmarkItem[];
 }
 
-export const styles = makeStyles((theme: Theme) =>
-  createStyles({
-    link: {
-      textDecoration: "none",
-    },
-    item: ({ isCurrentBookmark }) => ({
-      color: Colors.black,
-      width: "100%",
-      fontWeight: isCurrentBookmark ? 700 : 100,
-      padding: theme.spacing(1, 2),
-      paddingRight: theme.spacing(1),
-    }),
-    button: {
-      "padding": 0,
-      "margin": 0,
-      "backgroundColor": "transparent",
-      "float": "right",
-      "&:hover": {
-        backgroundColor: "transparent",
-      },
-    },
-  }));
+export const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }) => {
 
-export const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ location, schema }) => {
-  if (!schema) {
-    return null;
-  }
-  const links =  schema.map((schema) => {
-    if (schema.type === "section") {
-      const hash = schema.label?.toString().replace(/\s/g, "");
-      const link = window.location.href.split("#");
-      const isCurrentBookmark = hash === link[1];
-      const classes = styles({ isCurrentBookmark });
+  const { bookmarkState } = FB.useStores();
+  const [selectedIndex, setSelectedIndex] = React.useState(undefined);
 
-      return (
-        <Link
-          className={classes.link}
-          to={{ hash }}
-          key={schema.index}>
-          <Box className={classes.item}>
-            {schema.label}
-            <Button
-              onClick={() => copy(`${link[0]}#${hash}`)}
-              className={classes.button}
-            >
-              <Tooltip arrow title={<Text translation={"common.copy.link"}/>} placement="top">
-                <CopyIcon/>
-              </Tooltip>
-            </Button>
-          </Box>
-        </Link>
-      );
-    }
-    return null;
+  useObserver(() => {
+    bookmarks = bookmarkState?.bookmarks;
   });
+
   return (
-    <Box>{links}</Box>
+    <Box pt={0.4}>
+      <FBMapWrapper<FBBookmarkItem[]> collection={bookmarks || []}>
+        {(bookmark: FBBookmarkItem, index) => {
+          const { name: hash, label = "" } = bookmark;
+          const link = window.location.href.split("#");
+          return (
+            <Box display="flex" py={0.3} pl={1}>
+              <Box flexGrow={1}>
+                <Link
+                  to={{ hash }}
+                  key={`fb-bookmark-${hash}-${index}`}
+                  style={{ textDecoration: "none" }}
+                  onClick={() => setSelectedIndex(index)}
+                >
+                  <Box
+                    color={Colors.dark_gray}
+                    fontWeight={selectedIndex === index ? 500 : 100}
+                  >
+                    {label}
+                  </Box>
+                </Link>
+              </Box>
+              <Box mr={3.5}>
+                <IconButton size="small" onClick={() => copy(`${link[0]}#${hash}`)}>
+                  <FBTooltip title="common.copy.link">
+                    <CopyIcon/>
+                  </FBTooltip>
+                </IconButton>
+              </Box>
+            </Box>
+          );
+        }}
+      </FBMapWrapper>
+    </Box>
   );
 };
 
