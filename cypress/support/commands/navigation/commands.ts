@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import { NavigationItems } from "../../../../src/state/ducks/auth/types";
+import { CyRoutes } from "../../routes";
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export { };
@@ -39,7 +40,11 @@ Cypress.Commands.add("navigClickOnItem", (params: { navigItem: string }) => {
 });
 
 Cypress.Commands.add("navigToDashboard", () => {
-  cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.GetPendingActions,
+    () => {
+      cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
+    }).wait(1000);
 });
 
 Cypress.Commands.add("navigToReceivableList", () => {
@@ -47,13 +52,17 @@ Cypress.Commands.add("navigToReceivableList", () => {
 });
 
 Cypress.Commands.add("navigToDocumentList", () => {
-  cy.navigToNestedItem({
-    navigItems: [
-      NavigationItems.DASHBOARD,
-      NavigationItems.DOCUMENT_CONTROL,
-      NavigationItems.DOCUMENT_LIST,
-    ],
-  });
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.GetDocumentTypes,
+    () => {
+      cy.navigToNestedItem({
+        navigItems: [
+          NavigationItems.DASHBOARD,
+          NavigationItems.DOCUMENT_CONTROL,
+          NavigationItems.DOCUMENT_LIST,
+        ],
+      });
+    });
 });
 
 Cypress.Commands.add("navigToApprovalRequestList", () => {

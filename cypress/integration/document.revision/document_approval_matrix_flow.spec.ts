@@ -403,7 +403,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("'Training Required' should be checked because of DAM", () => {

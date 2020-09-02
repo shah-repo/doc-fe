@@ -355,6 +355,10 @@ context("Approval request landing page test", () => {
         cy.alFilterByTitle({ title: approvalRequestName });
       });
 
+      it("Navigate to Dashboard", () => {
+        cy.navigToDashboard();
+      });
+
       it("Navigate back to approval request list", () => {
         cy.navigToApprovalRequestList();
       });

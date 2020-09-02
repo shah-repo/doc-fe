@@ -87,6 +87,12 @@ Cypress.Commands.add("arClickAddDocument", () => {
   cy.get("[data-cy=\"fb.add.document\"]").click().wait(500);
 });
 
+Cypress.Commands.add("arCloseAR", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").click();
+  cy.get("[aria-label=closed]").click();
+  cy.get("[data-cy=AlertDialog-continueButton]").click();
+});
+
 Cypress.Commands.add("arChoseProposedDocument", ({ name }) => {
   cy.get("[role=dialog]>div:nth-child(2)>div>div>div>div>div>div>div>input").click();
   cy.get("[role=listbox]>li").contains(name).click();
@@ -143,9 +149,13 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
 });
 
 Cypress.Commands.add("arApproveAR", () => {
-  cy.get("button[aria-label=approve]").first().click().wait(300);
-  cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
-  cy.get("[data-cy=\"passwordConfirm\"]").click().wait(2000);
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PostApproveAR, CyRoutes.ARPreview], () => {
+      cy.get("button[aria-label=approve]").first().click();
+      cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
+      cy.get("[data-cy=\"passwordConfirm\"]").click();
+    });
+
 });
 
 Cypress.Commands.add("arCheckTitleInEditableAndMatches", (params: { name: string }) => {
