@@ -164,11 +164,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   },
   MuiOutlinedInput: {
     root: {
-      [`&.${FBClasses.inputDisabled}`]: {
-        "& fieldset": {
-          borderWidth: "0px!important",
-        },
-      },
       backgroundColor: Colors.white,
     },
     notchedOutline: {
@@ -184,6 +179,11 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiFormControl: {
     root: {
       fontFamily: "Open Sans, sans-serif;",
+      [`& .${FBClasses.inputPreview}`]: {
+        "& fieldset": {
+          borderWidth: "0px!important",
+        }
+      }
     },
   },
   MuiChip: {
