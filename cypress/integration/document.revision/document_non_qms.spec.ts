@@ -98,7 +98,8 @@ context("Non-QMS Document Creation Flow", () => {
         SystemRequirement("REQ-0300");
         cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
           .should("have.text", "Enter the name of users to access the document");
-        cy.get("[data-cy=\"field-securityGroups\"]").should("not.contain", "Everyone");
+        cy.get("[data-cy=\"field-securityGroups\"]")
+          .should("have.text", "Enter the name of the user groups to access the document");
       });
     });
   });

@@ -169,8 +169,7 @@ context("Document revise test", () => {
     });
 
     it("Verify 'Test document for revising' revision is set to 1", () => {
-      SystemRequirement("REQ-0580", "REQ-0620");
-      cy.navigToDocumentList();
+      SystemRequirement("REQ-0580", "REQ-0620", "REQ-0370");
       cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
       cy.dlVerifyFilterByRev({ revision: "1" });
     });
@@ -178,7 +177,6 @@ context("Document revise test", () => {
 
   context("Verify 'Next Revision' change is shown on document list", () => {
     it("Navigate to created document", () => {
-      cy.navigToDocumentList();
       cy.drClickOnSpecificDocFromList({ item: documentRevisionName });
     });
 
@@ -197,8 +195,7 @@ context("Document revise test", () => {
     });
 
     it("Verify 'Test document for revising' revision is set to 2", () => {
-      SystemRequirement("REQ-0580", "REQ-0620");
-      cy.navigToDocumentList();
+      SystemRequirement("REQ-0580", "REQ-0620", "REQ-0370");
       cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
       cy.dlVerifyFilterByRev({ revision: "2" });
     });
@@ -207,7 +204,6 @@ context("Document revise test", () => {
   context("Verify 'Upgrade to Next Revision Level' change is shown on document list", () => {
     context("Revise document to 'Upgrade to Next Revision Level'", () => {
       it("Navigate to created document", () => {
-        cy.navigToDocumentList();
         cy.drClickOnSpecificDocFromList({ item: documentRevisionName });
       });
 
@@ -276,10 +272,89 @@ context("Document revise test", () => {
 
     context("Verify 'Upgrade to Next Revision Level' revision is shown on document list", () => {
       it("Verify 'Test document for revising' revision is set to '1A'", () => {
-        SystemRequirement("REQ-0580", "REQ-0620");
+        SystemRequirement("REQ-0580", "REQ-0620", "REQ-0370");
         cy.navigToDocumentList();
         cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
         cy.dlVerifyFilterByRev({ revision: "1A" });
+      });
+    });
+  });
+
+  context("Verify 'Obsolete' change is shown on document list", () => {
+    context("Revise document to 'Obsolete'", () => {
+      it("Navigate to created document", () => {
+        cy.drClickOnSpecificDocFromList({ item: documentRevisionName });
+      });
+
+      it("Revise document with 'Obsolete' option", () => {
+        cy.drClickReviseDocument();
+        cy.drChooseTypeOfRevisionChangeOption({ option: "Obsolete" });
+        cy.drClickCreateDocumentWithApiCall();
+      });
+    });
+
+    context("Create AR for reviseed document to 'Obsolete'", () => {
+      it("Navigate to approval request list", () => {
+        cy.navigToApprovalRequestList();
+      });
+
+      it("Click Create a Approval Request button", () => {
+        cy.cmpClickCreateApprovalRequest();
+      });
+
+      it("Choose newly AR Form template", () => {
+        cy.arSelectARForm({ formTitle: "Initial AR Form" });
+      });
+
+      it("Enter title AR title: 'AR for Upgrade to Obsolete'", () => {
+        cy.arEnterApprovalRequestTitle({ title: "AR for Upgrade to Obsolete" });
+      });
+
+      it("Enter description 'AR from New form template for approval request'", () => {
+        cy.arEnterApprovalRequestDescription(
+          { description: "AR for testing document that has been revised to 'Obsolete'" });
+      });
+
+      it("Add created document revision", () => {
+        cy.arClickAddDocument().wait(500);
+        cy.arChoseSpecificProposedDocument({ name: documentRevisionName });
+        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
+        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
+        cy.arClickAddBtnOnAddDocumentsDialog();
+      });
+
+      it("Add first approver to approval request on approver list", () => {
+        cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+      });
+
+      it("Click Create Approval Request", () => {
+        cy.arClickCreateApprovalRequestAfterCompletingForm();
+      });
+
+      it("Click send to review", () => {
+        cy.arClickSendToReview();
+      });
+    });
+
+    context("Approve submission and close AR", () => {
+      it("Click approve submission", () => {
+        cy.arApproveAR();
+      });
+
+      it("Click close AR", () => {
+        cy.wrapWithWaitOnApiCalls(
+          [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
+            cy.arCloseAR();
+          });
+      });
+    });
+
+    context("Verify 'Upgrade to Next Revision Level' revision is shown on document list", () => {
+      it("Verify 'Test document for revising' revision is set to 'OBS'", () => {
+        SystemRequirement("REQ-0580", "REQ-0620", "REQ-0370");
+        cy.navigToDocumentList();
+        cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
+        cy.dlVerifyFilterByRev({ revision: "OBS" });
       });
     });
   });

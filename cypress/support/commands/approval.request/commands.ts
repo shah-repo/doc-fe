@@ -149,8 +149,8 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
 });
 
 Cypress.Commands.add("arApproveAR", () => {
-  cy.wrapWithWaitOnApiCall(
-    CyRoutes.GetPendingActions, () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PostApproveAR, CyRoutes.ARPreview], () => {
       cy.get("button[aria-label=approve]").first().click();
       cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
       cy.get("[data-cy=\"passwordConfirm\"]").click();
