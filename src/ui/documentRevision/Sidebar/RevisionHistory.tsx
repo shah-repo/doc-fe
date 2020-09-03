@@ -24,7 +24,7 @@ export const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = (
             return null;
           }
           return (
-            <Box display="flex" key={index} >
+            <Box display="flex" key={`${changeRequest.id}-${index}`} >
               <Box flexGrow={1} borderBottom="1px solid lightgray" mb={2}>
                 <Box display="grid">
                   <div className={classes.titleOfRevision}>{changeRequest.owner.user.name}</div>
