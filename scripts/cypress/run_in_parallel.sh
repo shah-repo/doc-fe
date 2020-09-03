@@ -15,7 +15,6 @@ secs_to_human() {
 start=$(date +%s)
 
 source ./scripts/cypress/platform_specific_variables.sh
-source ./scripts/cypress/make_results_dir.sh
 
 if [[ -z "${DATE_ISO_DEFAULT}" ]]; then
   echo "DATE_ISO_DEFAULT not set, exiting"
@@ -42,6 +41,8 @@ if [[ -z "${CI_BUILD_ID}" ]]; then
   echo "CI_BUILD_ID not set, exiting"
   exit 1
 fi
+
+source ./scripts/cypress/make_results_dir.sh
 
 ./scripts/cypress/patch_director_port_in_cache.sh
 ./scripts/cypress/generate_requirements_json_file.sh
