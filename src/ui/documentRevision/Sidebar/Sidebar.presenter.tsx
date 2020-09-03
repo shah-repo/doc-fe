@@ -73,9 +73,9 @@ export const SidebarPresenter: React.FunctionComponent<Props> = ({
             height: "calc(100% - 105px)",
             width: "253px",
           }}>
-          <Box mt={2}>
-            <Typography variant="h6">
-              <Text message={sidebarList[indexNumber].details.title} />
+          <Box mt={2.25}>
+            <Typography variant="button">
+              <Text message={(sidebarList[indexNumber].details.title)} />
             </Typography>
           </Box>
           <Box mt={2.5} className={classes.sidebarList}>
