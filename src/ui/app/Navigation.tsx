@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import { getCurrentUserTags } from "../../common/utils/selectors";
+import { authSelectors } from "../../state/ducks/auth";
 import { GroupTag } from "../../state/ducks/auth/types";
 import { companyActions, companySelectors, NavigationItem } from "../../state/ducks/company";
 import BottomLogo from "../components/icons/BottomLogo.container";
@@ -33,9 +34,12 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   const userTags = useSelector(getCurrentUserTags());
   const async = useAsync({
     onSuccess: () => {
+      console.log("here");
+
       setIsLoading(false);
     },
   });
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const getCompanyMine = useActionCreator(companyActions.getCompanyMine);
 
   const navigationItems = useSelector(companySelectors.getNavigationItems)
@@ -52,7 +56,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async.start(getCompanyMine, async);
+    async.start(getCompanyMine, currentEmployeeId, async);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
