@@ -32,8 +32,10 @@ export CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL:-"zoran.kovacevic+adm
 export CYPRESS_SUPERADMIN_PASSWORD=${CYPRESS_SUPERADMIN_PASSWORD:-"Tester1!"}
 
 export CYPRESS_CACHE_FOLDER="cypress/cache/cypressLib"
-mkdir -p cypressCache
+mkdir -p $CYPRESS_CACHE_FOLDER
 yarn install --frozen-lockfile
+yarn cypress install
+yarn cypress verify
 
 if [[ -z "${CI_BUILD_ID}" ]]; then
   echo "CI_BUILD_ID not set, exiting"

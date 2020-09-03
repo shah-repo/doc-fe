@@ -8,7 +8,8 @@ if [ "$(uname)" == "Darwin" ]; then
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # GNU/Linux platform
     export DATE_ISO_DEFAULT=$(date --iso-8601=seconds)
-    export ENLIL_CYPRESS_CACHE_PATH="/home/$USER/.cache/Cypress/*/Cypress/resources/app/packages/server/config/app.yml"
+    export ENLIL_CYPRESS_CACHE_PATH="cypress/cache/cypressLib/*/Cypress/resources/app/packages/server/config/app.yml"
+    # export ENLIL_CYPRESS_CACHE_PATH="/home/$USER/.cache/Cypress/*/Cypress/resources/app/packages/server/config/app.yml"
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     # 32 bits Windows NT platform
     echo "Windows not supported"
