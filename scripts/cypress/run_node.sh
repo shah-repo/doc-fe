@@ -21,10 +21,16 @@ if [[ -z "${REPORT_TITLE}" ]]; then
   exit 1
 fi
 
-export ENLIL_COMPOSE_EXPOSE_BE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+1))"
-export ENLIL_COMPOSE_EXPOSE_FE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+2))"
-export CYPRESS_BE_URL=${CYPRESS_BE_URL:-"http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_PORT"}
-export CYPRESS_FE_URL=${CYPRESS_FE_URL:-"http://localhost:$ENLIL_COMPOSE_EXPOSE_FE_PORT"}
+if [[ -z "${CYPRESS_FE_URL}" ]]; then
+  echo "CYPRESS_FE_URL not set, exiting"
+  exit 1
+fi
+
+if [[ -z "${CYPRESS_BE_URL}" ]]; then
+  echo "CYPRESS_BE_URL not set, exiting"
+  exit 1
+fi
+
 export CYPRESS_BASE_URL=$CYPRESS_FE_URL
 
 export CYPRESS_KONFIG_ENV="development"
