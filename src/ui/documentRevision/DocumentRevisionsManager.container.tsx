@@ -157,6 +157,7 @@ DocumentRevisionManagerContainerProps
     },
     {
       icon: <CRIcon />,
+      type: "crHistory",
       details: {
         dataCy: "cr-icon",
         title: intl.formatMessage({
