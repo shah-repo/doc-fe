@@ -255,7 +255,6 @@ Cypress.Commands.add("drChangeOwnerByAdmin", (params: { employee: string }) => {
 });
 
 Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
-  cy.get("#HeaderMenuButton").click();
   cy.get("[data-cy=\"changeOwner\"]").click();
   cy.get("#employee").click();
   cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();

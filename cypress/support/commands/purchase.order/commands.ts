@@ -57,7 +57,6 @@ declare global {
   }
 }
 
-<<<<<<< HEAD
 export interface PurchaseOrderItem {
   index: integer;
   partNumber?: string;
@@ -69,12 +68,10 @@ export interface PurchaseOrderItem {
   unitPrice: string;
   totalPrice?: string;
 }
-=======
 Cypress.Commands.add("poSelectPoForm", (params: {nameOfPoForm: string}) => {
   cy.get("[id=FormListDialog-selectForm]").click();
   cy.get("[id^=react-select]").contains(params.nameOfPoForm).click();
 });
->>>>>>> develop
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
   cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-fullWidth\"]").contains("Add item").click().wait(500);

@@ -1,10 +1,19 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { PurchaseOrderItem } from "../../support/commands/purchase.order/commands";
+import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
+
+const ADMIN_USER = USERS[1];
+const FIRST_USER = USERS[2];
+const SECOND_USER = USERS[3];
+const THIRD_USER = USERS[4];
+const INDIVIDUAL_USER = USERS[5];
+const IMPORTER_USER = USERS[6];
 
 let createdCompany;
 let loginResponse;
+let adminEmployeeLoginResponse;
 let multipleCompanies;
 let adminEmployee;
 let purchaseOrderDocumentType;
@@ -24,46 +33,24 @@ context("Approval request landing page test", () => {
         email: "zoran.kovacevic+admin@codecons.com",
         password: "Tester1!",
       }).then((response) => {
-        loginResponse = response;
-
+        adminEmployeeLoginResponse = response;
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+            companyAdminEmail: ADMIN_USER.email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: "enlil.testmail+cy5@gmail.com",
+            importerEmail: IMPORTER_USER.email,
             maxRevisionStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [
-              {
-                name: "Second Tester",
-                email: "enlil.testmail+cy2@gmail.com",
-              },
-              {
-                name: "Third Tester",
-                email: "enlil.testmail+cy3@gmail.com",
-              },
-              {
-                name: "Fourth Tester",
-                email: "enlil.testmail+cy4@gmail.com",
-              }],
-            acctCodes: ["code 1"],
-            addresses: ["Address 1"],
-            documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
-                group: "OTHER",
-                isQms: true,
-              },
-            ],
-          }, sessionId: loginResponse.sessionId as unknown as string,
+            users: [FIRST_USER, SECOND_USER, THIRD_USER, INDIVIDUAL_USER],
+            documentTypes: [],
+          }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.name === "Company Admin");
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           receivableDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable");
@@ -75,7 +62,7 @@ context("Approval request landing page test", () => {
 
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: ADMIN_USER.email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -386,7 +373,7 @@ context("Login user", () => {
   context("Login user when he doesn't have privileges", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: ADMIN_USER.email,
         password: "Tester1!",
       });
     });
@@ -404,7 +391,7 @@ context("Create receivable", () => {
     });
 
     it("Click create receivable", () => {
-      cy.poCreateNew();
+      cy.recCreateNew();
     });
   });
 
@@ -454,28 +441,28 @@ context("Create receivable", () => {
 
     context("Verify receivable creation", () => {
       it("Verify adding attachments", () => {
-        SystemRequirement("REQ-1980");
+        // SystemRequirement("REQ-1980");
         cy.atchUploadAttachment({ fileName: "test.docx" });
       });
 
       it("Fill custom text field added in receivable form", () => {
-        SystemRequirement("REQ-1880");
+        // SystemRequirement("REQ-1880");
         cy.get("input[type=textfield]").type("Custom field");
       });
 
       it("Click 'Create document' ", () => {
         SystemRequirement("REQ-1770");
-        cy.drClickCreateDocumentWithApiCall();
+        cy.recClickCreateDocumentWithApiCall();
       });
 
       it("Verify receivable status is 'Draft'", () => {
-        SystemRequirement("REQ-1870");
+        // SystemRequirement("REQ-1870");
         cy.drCheckDocumentStatus({ status: "Draft" });
       });
 
       it("Verify owner change", () => {
-        SystemRequirement("REQ-1990");
-        cy.drChangeOwnerFromMenu({ employee: "Second Tester" });
+        // SystemRequirement("REQ-1990");
+        cy.drChangeOwnerFromMenu({ employee: SECOND_USER.name });
       });
     });
 
@@ -485,12 +472,12 @@ context("Create receivable", () => {
       });
 
       it("Click 'Add new receiving'", () => {
-        cy.poCreateNew();
+        cy.recCreateNew();
       });
 
       it("Click 'Create document' on empty receivable form", () => {
-        SystemRequirement("REQ-1860");
-        cy.drClickCreateDocumentWithApiCall();
+        // SystemRequirement("REQ-1860");
+        cy.recClickCreateDocumentWithApiCall();
       });
     });
   });

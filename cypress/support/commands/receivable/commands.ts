@@ -5,6 +5,7 @@
 import { integer } from "aws-sdk/clients/cloudfront";
 import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { CONFIG } from "../../config";
+import { CyRoutes } from "../../routes";
 import { PurchaseOrderItem } from "../purchase.order/commands";
 export { };
 
@@ -17,6 +18,7 @@ declare global {
       recFilterByReceivableId(params: {id: string}): Chainable<Subject>;
       recClickUpdateRecord(): Chainable<Subject>;
       recClickSaveBtn(): Chainable<Subject>;
+      recCreateNew(): Chainable<Subject>;
       recVerifyFilterByReceivableId(params: {recId: string}): Chainable<Subject>;
       recFilterByOwner(params: {owner: string}): Chainable<Subject>;
       recVerifyFilterByOwner(params: {owner: string}): Chainable<Subject>;
@@ -25,12 +27,20 @@ declare global {
       recFilterByARId(params: {arId: string}): Chainable<Subject>;
       recVerifyFilterByARId(params: {arId: string}): Chainable<Subject>;
       recVerifyFilterClear(): Chainable<Subject>;
+      recClickCreateDocumentWithApiCall(): Chainable<Subject>;
       recCheckNumberOfAvailablePo(params: {numberOfOpenPOs: integer}): Chainable<Subject>;
       recSelectPo(params: {poTitle: string}): Chainable<Subject>;
       recVerifyPOIsDisplayed(params: {loadedPoItems: PurchaseOrderItem[]}): Chainable<Subject>;
     }
   }
 }
+
+Cypress.Commands.add("recClickCreateDocumentWithApiCall", () => {
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.PatchDocRev, () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    });
+});
 
 Cypress.Commands.add("recAPICreateReceivable", (params: {
   payload: DocumentRevisionEditRequestBody;
@@ -45,6 +55,12 @@ Cypress.Commands.add("recAPICreateReceivable", (params: {
       Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
     },
   }).then((response) => response.body);
+});
+
+Cypress.Commands.add("recCreateNew", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet, CyRoutes.DocPreview], () => {
+    cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
+  });
 });
 
 Cypress.Commands.add("recVerifyStartingFilter", () => {
