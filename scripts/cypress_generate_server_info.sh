@@ -1,5 +1,6 @@
 #!/bin/bash
 
+tmp=$(mktemp)
 
 jq \
   --arg date "$(git show -s --format=%ci)"  \
@@ -13,5 +14,5 @@ jq \
 | .Date = $date 
 | .["ECR Image"] = "Cypress" 
 | .["Build Number"] = "-"
-' src/data/buildInfo.json > buildInfoCypress.json
+' src/data/buildInfo.json > "$tmp" && mv "$tmp" src/data/buildInfo.json
 
