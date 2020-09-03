@@ -22,6 +22,7 @@ import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers"
 import Bookmarks from "./Sidebar/Bookmarks";
 import RevisionHistory from "./Sidebar/RevisionHistory";
 import { SidebarContainer } from "./Sidebar/Sidebar.container";
+import { Sidebar } from "./Sidebar/types";
 import styles from "./styles";
 
 interface StateProps {
@@ -93,9 +94,10 @@ DocumentRevisionManagerContainerProps
       (e) => (e.document?.documentType?.groupOptions || []).includes(FBDocTypeGroup.RECORD)) ||
     (!!selectedDocument?.document?.documentType?.groupOptions?.includes(FBDocTypeGroup.RECORD) || false);
 
-  const sidebarList = [
+  const sidebarList: Sidebar[] = [
     {
       icon: <NoteIcon />,
+      type: "note",
       details: {
         title: intl.formatMessage({
           id: `document.revision.docVersion.${acronym}`,
@@ -114,6 +116,7 @@ DocumentRevisionManagerContainerProps
     },
     {
       icon: <TimelineIcon />,
+      type: "history",
       details: {
         dataCy: "timeline-icon",
         title: intl.formatMessage({
@@ -126,6 +129,7 @@ DocumentRevisionManagerContainerProps
     },
     {
       icon: <BadgeIcon />,
+      type: "permissions",
       details: {
         dataCy: "permission-icon",
         title: intl.formatMessage({
@@ -142,6 +146,7 @@ DocumentRevisionManagerContainerProps
     },
     {
       icon: <BookmarkIcon />,
+      type: "bookmarks",
       details: {
         dataCy: "bookmark-icon",
         title: intl.formatMessage({

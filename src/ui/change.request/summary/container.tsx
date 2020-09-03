@@ -12,7 +12,8 @@ import { DataProps } from "../../../state/ducks/common";
 import { FormContext } from "../../components/forms/FormContext";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
 import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
-import { FBWorkspace, FB, FBBookmarkState, FBProvider } from "../../form.builder";
+import { Sidebar } from "../../documentRevision/Sidebar/types";
+import { FB, FBBookmarkState, FBProvider, FBWorkspace } from "../../form.builder";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
@@ -121,9 +122,10 @@ export const Container: React.FunctionComponent<Props> = ({
     </FormContext.Provider>
   );
 
-  const sidebarList = [
+  const sidebarList: Sidebar[] = [
     {
       icon: <TimelineIcon />,
+      type: "history",
       details: {
         dataCy: "timeline-icon",
         title: intl.formatMessage({
@@ -134,6 +136,7 @@ export const Container: React.FunctionComponent<Props> = ({
       },
     }, {
       icon: <BookmarkIcon />,
+      type: "bookmarks",
       details: {
         dataCy: "bookmark-icon",
         title: intl.formatMessage({

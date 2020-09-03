@@ -49,7 +49,6 @@ const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemPr
           gutter={false}
           disabled={true}
           freeSolo={true}
-          withState={true}
         />
       </Box>
       <Box

@@ -10,7 +10,8 @@ import { AsyncState } from "../../../state/types";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
 import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
-import { FBWorkspace, FBProvider, FB, FBBookmarkState } from "../../form.builder";
+import { Sidebar } from "../../documentRevision/Sidebar/types";
+import { FB, FBBookmarkState, FBProvider, FBWorkspace } from "../../form.builder";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
 import AssessmentFormPresenter from "./assessmentForm/AssessmentForm.presenter";
 import styles from "./styles";
@@ -75,9 +76,10 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
 
   );
 
-  const sidebarList = [
+  const sidebarList: Sidebar[] = [
     {
       icon: <TimelineIcon />,
+      type: "history",
       details: {
         dataCy: "timeline-icon",
         title: intl.formatMessage({
@@ -89,6 +91,7 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
     },
     {
       icon: <BookmarkIcon />,
+      type: "bookmarks",
       details: {
         dataCy: "bookmark-icon",
         title: intl.formatMessage({
