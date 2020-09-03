@@ -154,13 +154,23 @@ NUMBER_OF_WORKERS=4 CI_BUILD_ID=2020-07-03T14:07:48+02:00 ./scripts/cypress/run_
 ```
 
 #### Take screenshots after every step
-Set env variable `CYPRESS_TAKE_SCREENSHOT_AFTER_EACH` to true
+Set env variable `CYPRESS_TAKE_SCREENSHOT_AFTER_EACH` to `true`
 Eg:
 ```
 CYPRESS_TAKE_SCREENSHOT_AFTER_EACH=true ./scripts/cypress/run_on_deployment.sh
 ```
 ```
 CYPRESS_TAKE_SCREENSHOT_AFTER_EACH=true ./scripts/cypress/run_in_parallel.sh
+```
+
+#### Recording a video of scenario run
+Set env variable `CYPRESS_VIDEO` to `true`
+Eg:
+```
+CYPRESS_VIDEO=true ./scripts/cypress/run_on_deployment.sh
+```
+```
+CYPRESS_VIDEO=true ./scripts/cypress/run_in_parallel.sh
 ```
 
 #### Run Cypress suite on deployed code

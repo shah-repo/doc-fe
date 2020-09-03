@@ -30,6 +30,7 @@ export CYPRESS_SKIP_ON_RUN_FAILURE=${CYPRESS_SKIP_ON_RUN_FAILURE:-true}
 export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH=${CYPRESS_TAKE_SCREENSHOT_AFTER_EACH:-false}
 export CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL:-"zoran.kovacevic+admin@codecons.com"}
 export CYPRESS_SUPERADMIN_PASSWORD=${CYPRESS_SUPERADMIN_PASSWORD:-"Tester1!"}
+export CYPRESS_VIDEO=${CYPRESS_VIDEO:-false}
 
 export COMPOSE_PROJECT_NAME="enlil_$ENLIL_COMPOSE_PORT_RANGE_START"
 
@@ -54,6 +55,7 @@ source ./scripts/cypress/make_results_dir.sh
 ./scripts/cypress/run_generate_info_report.sh
 
 export CYPRESS_SCREENSHOTS_FOLDER=$DIR_SCREENSHOTS_REPORT
+export CYPRESS_VIDEOS_FOLDER=$DIR_VIDEOS_REPORT
 
 if [[ -z "${NUMBER_OF_WORKERS_PER_RUN}" ]]; then
   ./scripts/cypress/delete_failed_specs.sh

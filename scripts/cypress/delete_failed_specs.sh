@@ -22,6 +22,11 @@ if [[ -z "${CYPRESS_SCREENSHOTS_FOLDER}" ]]; then
   exit 1
 fi
 
+if [[ -z "${CYPRESS_VIDEOS_FOLDER}" ]]; then
+  echo "CYPRESS_VIDEOS_FOLDER not set, exiting"
+  exit 1
+fi
+
 if [[ -z "${COMPOSE_PROJECT_NAME}" ]]; then
   echo "COMPOSE_PROJECT_NAME not set, exiting"
   exit 1
@@ -62,6 +67,14 @@ do
     screenshotDir="${screenshotDir}/"
     rm -rf $screenshotDir
     echo "--| deleting screenshots in $screenshotDir"
+
+    videoDir=${x/$CYPRESS_INTEGRATION_FOLDER/$CYPRESS_VIDEOS_FOLDER}
+
+    videoDir=${videoDir%\"}
+    videoDir=${videoDir#\"}
+    videoDir="${videoDir}/"
+    rm -rf $videoDir
+    echo "--| deleting vides in $videoDir"
     done
 
     echo "--| deleting  $i"
