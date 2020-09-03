@@ -36,6 +36,7 @@ declare global {
       drDocumentFieldError(params: { field: string; message: string }): Chainable<Subject>;
       closeAllAlertMessages(): Chainable<Subject>;
       checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
+      checkToastMessageIsEqual(params: { message: string }): Chainable<Subject>;
 
       /* Document Approval Matrix */
 
@@ -289,6 +290,11 @@ Cypress.Commands.add("drDocumentFieldError", (params: { field: string; message: 
 Cypress.Commands.add("checkToastMessage", (params: { exists: boolean }) => {
   cy.get(".Toastify").should((params.exists ? "not." : "") + "be.empty");
 });
+
+Cypress.Commands.add("checkToastMessageIsEqual", (params: { message: string }) => {
+  cy.get(".Toastify").should("have.text", params.message);
+});
+
 
 Cypress.Commands.add("closeAllAlertMessages", () => {
   cy.get(".Toastify__close-button").click({ multiple: true, force: true });

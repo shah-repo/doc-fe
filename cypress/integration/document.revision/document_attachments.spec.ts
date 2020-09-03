@@ -109,6 +109,17 @@ context("Document Attachment Flow", () => {
         cy.atchUploadRedlineAttachment({ fileName: "image.jpg" });
       });
 
+      it("Fail upload text.docx", () => {
+        cy.atchUploadAttachmentFail({ fileName: "test.docx" });
+      });
+
+      it("Verify upload error message is shown", () => {
+        SystemRequirement("REQ-0230");
+        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({ message: "Upload failed" });
+        cy.closeAllAlertMessages();
+      });
+
       it("Check if Selected Groups are set to 'Everyone' by default", () => {
         SystemRequirement("REQ-0300");
         cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
