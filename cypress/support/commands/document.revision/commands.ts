@@ -69,6 +69,8 @@ declare global {
       drCancelDraftButton(): Chainable<Subject>;
       drIsTrainingRequired(params: {shouldBe: boolean}): Chainable<Subject>;
       drApproveAndReleaseNonQMSDocument(): Chainable<Subject>;
+      drVerifyDocumentOWner(params: {owner: string}): Chainable<Subject>;
+      drChangeOwnerByAdmin(params: {employee: string}): Chainable<Subject>;
     }
   }
 }
@@ -129,6 +131,10 @@ Cypress.Commands.add("drCancelDraftButton", () => {
       cy.get("[data-cy=\"cancelDraftButton\"]").click();
       cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
     });
+});
+
+Cypress.Commands.add("drVerifyDocumentOWner", (params: { owner: string }) => {
+  cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains(params.owner);
 });
 
 Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion: int }) => {
@@ -238,6 +244,13 @@ Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string;
 Cypress.Commands.add("drChangeOwnerFromMenu", (params: { employee: string }) => {
   cy.get("#HeaderMenuButton").click();
   cy.drChangeOwner({ employee: params.employee });
+});
+
+Cypress.Commands.add("drChangeOwnerByAdmin", (params: { employee: string }) => {
+  cy.get("[data-cy=\"changeOwner\"]").click();
+  cy.get("#employee").click();
+  cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
+  cy.get("[data-cy=\"changeOwner-submit\"]").click();
 });
 
 Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {

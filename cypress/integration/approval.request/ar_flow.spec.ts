@@ -108,6 +108,47 @@ context("Approval request form", () => {
         });
       });
     });
+
+    it("[API]Creates another document revision for approval", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Test Doc Rev Description 2 </p>",
+            document: {
+              docId: "CS-00005",
+              documentType: {
+                id: componentSpecificationDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: documentRevisionName,
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+
+          },
+          employeeId: secondEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then(() => {
+          done();
+        });
+      });
+    });
   });
   context("Login user", () => {
     it("Logs user in", () => {
@@ -201,9 +242,7 @@ context("Approval request form", () => {
     });
 
     it("Verify AR status is 'In Review'", () => {
-      SystemRequirement("REQ-0730");
-      SystemRequirement("REQ-0740");
-      SystemRequirement("REQ-0020");
+      SystemRequirement("REQ-0020", "REQ-0730", "REQ-0740");
       cy.arVerifyStatus({ status: "In Review" });
     });
   });
@@ -237,8 +276,7 @@ context("Approval request form", () => {
     });
 
     it("Check approval request status is 'Approved'", () => {
-      SystemRequirement("REQ-0730");
-      SystemRequirement("REQ-0020");
+      SystemRequirement("REQ-0020", "REQ-0730");
       cy.arVerifyStatus({ status: "Approved" });
     });
   });
@@ -272,6 +310,7 @@ context("Approval request form", () => {
     });
 
     it("Check approval request status is 'Closed'", () => {
+      SystemRequirement("REQ-0020", "REQ-0730");
       cy.arVerifyStatus({ status: "Closed" });
     });
 
@@ -282,6 +321,60 @@ context("Approval request form", () => {
     it("Filter document by name and status, and select it", () => {
       cy.drFilterDocListByNameAndStatus({ title: documentRevisionName, status: "Released" });
     });
+  });
+
+  context("Create AR and move it to 'Void'", () => {
+    it("Navigate to approval request list", () => {
+      SystemRequirement("REQ-0680");
+      cy.navigToDashboard();
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Click Create a Approval Request button", () => {
+      cy.cmpClickCreateApprovalRequest();
+    });
+
+    it("Choose newly AR Form template", () => {
+      SystemRequirement("REQ-0690", "REQ-0700");
+      cy.arSelectARForm({ formTitle: approvalRequestFormName });
+    });
+
+    it("Enter title AR title: 'AR for Void'", () => {
+      cy.arEnterApprovalRequestTitle({ title: "AR for Void" });
+    });
+
+    it("Enter description 'AR from New form template for approval request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for voided approval request" });
+    });
+
+    it("Add created document revision", () => {
+      cy.arClickAddDocument().wait(500);
+      cy.arChoseSpecificProposedDocument({ name: "CS-00005" });
+      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
+      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
+      cy.arClickAddBtnOnAddDocumentsDialog();
+    });
+
+    it("Click Create Approval Request", () => {
+      SystemRequirement("REQ-0730");
+      cy.arClickCreateApprovalRequestAfterCompletingForm();
+    });
+
+    it("Click 'Void'", () => {
+      cy.arVoidAR();
+    });
+
+    it("Verify AR status is 'Voided'", () => {
+      SystemRequirement("REQ-0020", "REQ-0730", "REQ-0740");
+      cy.arVerifyStatus({ status: "Voided" });
+    });
+
+    // it("Add 'Implementation Task' to AR", () => {
+    //   cy.fbClickAddNewHiddenBtn();
+    //   cy.fbSelectItemFromNewFieldList({ field: "Implementation Task" });
+    //   cy.get("[data-cy=\"label\"]").type("Implementation Task");
+    //   cy.fbAddField();
+    // });
   });
 });
 
