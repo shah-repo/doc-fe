@@ -1,14 +1,17 @@
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { connect, useSelector } from "react-redux";
-import { Redirect, useLocation } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { ReactComponent as BadgeIcon } from "../../assets/images/badge.svg";
 import { ReactComponent as BookmarkIcon } from "../../assets/images/bookmark.svg";
+import { ReactComponent as CRIcon } from "../../assets/images/cr.svg";
 import { ReactComponent as TimelineIcon } from "../../assets/images/history.svg";
 import { ReactComponent as NoteIcon } from "../../assets/images/note.svg";
 import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
+import { DocumentGroupType } from "../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import { FB, FBBookmarkState, FBProvider } from "../form.builder";
 import { FBDocTypeGroup } from "../form.builder/FBApprovalMatrixTable";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.container";
@@ -17,9 +20,10 @@ import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.containe
 import DocumentRevisionListContainer from "./DocumentRevisionList.container";
 import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers";
 import Bookmarks from "./Sidebar/Bookmarks";
+import RevisionHistory from "./Sidebar/RevisionHistory";
 import { SidebarContainer } from "./Sidebar/Sidebar.container";
+import { Sidebar } from "./Sidebar/types";
 import styles from "./styles";
-import { DocumentGroupType } from "../../state/ducks/documentRevisions/documentType";
 
 interface StateProps {
   documentRevisions: DocumentRevision[];
@@ -64,10 +68,10 @@ DocumentRevisionManagerContainerProps
   docId,
 }) => {
   useDocumentTitle(docId);
+  const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
   const [isDrawerOpen, setOpen] = React.useState(true);
   const classes = styles({ isDrawerOpen });
   const intl = useIntl();
-  const url = useLocation();
 
   const docRevsWithoutCanceled = useMemo(() => documentRevisions.filter((docrev) =>
     docrev.status !== DocumentRevisionStatus.Canceled), [documentRevisions]);
@@ -75,7 +79,6 @@ DocumentRevisionManagerContainerProps
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
   const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
   const canAccess = selectedDocument?.document.canAccess;
-  const schema = selectedDocument?.formTemplate?.schema || selectedDocument?.formDocument?.formTemplate?.schema || [];
   const { documentTypeAcronym: acronym } = document?.documentType || {};
 
   const isInlineApproval =
@@ -91,9 +94,10 @@ DocumentRevisionManagerContainerProps
       (e) => (e.document?.documentType?.groupOptions || []).includes(FBDocTypeGroup.RECORD)) ||
     (!!selectedDocument?.document?.documentType?.groupOptions?.includes(FBDocTypeGroup.RECORD) || false);
 
-  const sidebarList = [
+  const sidebarList: Sidebar[] = [
     {
       icon: <NoteIcon />,
+      type: "note",
       details: {
         title: intl.formatMessage({
           id: `document.revision.docVersion.${acronym}`,
@@ -112,6 +116,7 @@ DocumentRevisionManagerContainerProps
     },
     {
       icon: <TimelineIcon />,
+      type: "history",
       details: {
         dataCy: "timeline-icon",
         title: intl.formatMessage({
@@ -124,6 +129,7 @@ DocumentRevisionManagerContainerProps
     },
     {
       icon: <BadgeIcon />,
+      type: "permissions",
       details: {
         dataCy: "permission-icon",
         title: intl.formatMessage({
@@ -140,12 +146,24 @@ DocumentRevisionManagerContainerProps
     },
     {
       icon: <BookmarkIcon />,
+      type: "bookmarks",
       details: {
         dataCy: "bookmark-icon",
         title: intl.formatMessage({
           id: "document.revision.bookmarks",
         }),
-        component: <Bookmarks location={url} schema={schema} />,
+        component: <Bookmarks />,
+      },
+    },
+    {
+      icon: <CRIcon />,
+      type: "crHistory",
+      details: {
+        dataCy: "cr-icon",
+        title: intl.formatMessage({
+          id: "document.revision.cr.history",
+        }),
+        component: <RevisionHistory changeRequests={documentRevisions.map((e) => e.changeRequest)} />,
       },
     },
   ];
@@ -170,25 +188,27 @@ DocumentRevisionManagerContainerProps
   }
 
   return (
-    <div className={classes.root}>
-      <div className={classes.appFrame}>
-        {documentRevisionId && !isNewOutput && (
-          <DocumentRevisionDisplayContainer
-            documentRevisionId={documentRevisionId}
-            isNewVersion={isNewVersion}
-            documentId={documentId}
-          />
-        )}
-        {documentRevisionId && isNewOutput && (
-          <DocumentRevisionDisplayContainer
-            documentRevisionId={documentRevisionId}
-            isNewOutput={isNewOutput}
-            documentId={documentId}
-          />
-        )}
+    <FBProvider {...{ bookmarkState }}>
+      <div className={classes.root}>
+        <div className={classes.appFrame}>
+          {documentRevisionId && !isNewOutput && (
+            <DocumentRevisionDisplayContainer
+              documentRevisionId={documentRevisionId}
+              isNewVersion={isNewVersion}
+              documentId={documentId}
+            />
+          )}
+          {documentRevisionId && isNewOutput && (
+            <DocumentRevisionDisplayContainer
+              documentRevisionId={documentRevisionId}
+              isNewOutput={isNewOutput}
+              documentId={documentId}
+            />
+          )}
+        </div>
+        <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />
       </div>
-      <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />
-    </div>
+    </FBProvider>
   );
 };
 

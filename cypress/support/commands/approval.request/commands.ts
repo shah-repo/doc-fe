@@ -22,6 +22,7 @@ declare global {
       arClickCreateApprovalRequestAfterCompletingForm(): Chainable<Subject>;
       arClickSendToReview(): Chainable<Subject>;
       arVerifyStatus(params: { status: string }): Chainable<Subject>;
+      arCheckImplementationTaskStatus(params: { status: string }): Chainable<Subject>;)
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
@@ -32,6 +33,9 @@ declare global {
       arSelectFirstDocument(): Chainable<Subject>;
       arCreateApprovalRequest(params: {payload: ChangeRequestEditRequestBody; employeeId: string; sessionId: string}): Chainable<Subject>;
       arGetArDocumentByName(params: {employeeId: string; sessionId: string; name: string}): Chainable<Subject>;
+      arCloseAR(): Chainable<Subject>;
+      arVoidAR(): Chainable<Subject>;
+      arSaveApiCall(): Chainable<Subject>;
     }
   }
 }
@@ -72,6 +76,10 @@ Cypress.Commands.add("arEnterApprovalRequestTitle", (params: {title: string }) =
   cy.get("[data-cy=\"field-title\"]").type(params.title);
 });
 
+Cypress.Commands.add("arCheckImplementationTaskStatus", (params: {status: string }) => {
+  cy.get("[data-cy=\"form.builder.status\"]").contains(params.status);
+});
+
 Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description: string }) => {
   cy.get("[data-cy=\"field-description\"]").type(params.description).unClick();
 });
@@ -84,6 +92,12 @@ Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
 
 Cypress.Commands.add("arClickAddDocument", () => {
   cy.get("[data-cy=\"fb.add.document\"]").click().wait(500);
+});
+
+Cypress.Commands.add("arCloseAR", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").click();
+  cy.get("[aria-label=closed]").click();
+  cy.get("[data-cy=AlertDialog-continueButton]").click();
 });
 
 Cypress.Commands.add("arChoseProposedDocument", ({ name }) => {
@@ -124,6 +138,13 @@ Cypress.Commands.add("arClickSendToReview", () => {
     });
 });
 
+Cypress.Commands.add("arSaveApiCall", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PatchAR], () => {
+      cy.get("[data-cy=\"common.save\"]").click();
+    });
+});
+
 Cypress.Commands.add("arVerifyStatus", (params: { status: string }) => {
   cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
   // cy.get("#HeaderInfo-status>span").contains(params.status);
@@ -142,9 +163,13 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
 });
 
 Cypress.Commands.add("arApproveAR", () => {
-  cy.get("button[aria-label=approve]").first().click().wait(300);
-  cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
-  cy.get("[data-cy=\"passwordConfirm\"]").click().wait(2000);
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PostApproveAR, CyRoutes.ARPreview], () => {
+      cy.get("button[aria-label=approve]").first().click();
+      cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
+      cy.get("[data-cy=\"passwordConfirm\"]").click();
+    });
+
 });
 
 Cypress.Commands.add("arCheckTitleInEditableAndMatches", (params: { name: string }) => {
@@ -155,6 +180,18 @@ Cypress.Commands.add("arWithdrawSubmission", () => {
   cy.get("[data-cy=\"HeaderMenuButton\"]").click();
   cy.get("[data-cy=\"change.request.withdraw.alert\"]").click();
   cy.get("[data-cy=\"AlertDialog-continueButton\"]", { timeout: 1000 }).click();
+});
+
+Cypress.Commands.add("arCloseAR", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").click();
+  cy.get("[data-cy=\"transition-closed\"]").click();
+  cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+});
+
+Cypress.Commands.add("arVoidAR", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").click();
+  cy.get("[id=\"void\"]").click();
+  cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
 });
 
 Cypress.Commands.add("arIsProposedDocumentEmpty", () => {

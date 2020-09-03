@@ -2,7 +2,6 @@ import { useFormikContext } from "formik";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
-import { GroupTag } from "../../../../state/ducks/auth/types";
 import { FBOutputDocumentType } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType, documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../../state/ducks/documents";
@@ -34,18 +33,23 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   isDisabled = false,
   documentTypeId,
 }) => {
-  const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
   const [isVisible, label, validators] = useDocumentTypeSelect(documentTypeId);
+
   const { workspaceState } = FB.useStores();
   const formik = useFormikContext();
   const dispatch = useDispatch();
+
   const loadDocumentProposedId = (documentTypeId: string) =>
     dispatch(documentsActions.loadDocumentProposedId(documentTypeId));
+
+  const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeFormOptions);
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+
   const isDocTypeDisabled = (type === "newVersion" || isdocRevStatusDraft) || isDisabled;
   const isNewOutput = type === "newOutput";
+
   const options: SelectOption[] = React.useMemo(() => {
     if (type === "newOutput" && outputDocumentTypes) {
       return outputDocumentTypes.map((e) =>
@@ -66,24 +70,20 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         ({ value: docType.id, text: docType.documentTypeName })
       );
   }, [type, outputDocumentTypes, documentTypes, currentUserTags]);
+
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
     savedocInfo({ name: event.target.name || "", isQms: type.isQms });
-    groupOptions.forEach((group) => {
-      if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-        formik.setFieldValue("securityGroups", [
-          { value: group.value, label: group.label },
-        ]);
-      }
-    });
+    formik.setFieldValue("securityGroups", []);
+
     if (loadDocumentProposedId) {
       formik.setFieldValue("retrain", type.defaultTraining);
       loadDocumentProposedId(type.id);
     }
-
+    // Security groups
     if (type.isQms) {
       const securityGroups = filterSecurityGroupsForQms(type.isQms, groupOptions);
       formik.setFieldValue("securityGroups", securityGroups);

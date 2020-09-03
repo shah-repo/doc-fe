@@ -31,12 +31,15 @@ const FormTitle = "New Form";
 const DAMTitle = "My DAM";
 const DDTitle = "DD Test";
 const CDTitle = "CD Test";
+const DWOTSTitle = "Document Without Training & Signature Test";
 
 const docTypeOne = "Design Document";
 const docTypeTwo = "Clinical Document";
 const newDocTypeOne = "Edited Design Document";
 const docTypeOnePrefix = "DD";
 const docTypeTwoPrefix = "CD";
+const docTypeThreePrefix = "DWOTS";
+const docTypeThree = "Document Without Training & Signature";
 
 const roleOne = "Role One";
 const roleTwo = "Role Two";
@@ -310,6 +313,32 @@ context("Document Approval Matrix Flow", () => {
     });
   });
 
+  context("Add Another Document Type without training", () => {
+    it("Click on 'Add Item' button", () => {
+      cy.drAddApprovalMatrixItem();
+    });
+
+    it(`Add prefix: ${docTypeThreePrefix}`, () => {
+      cy.drAddAMItemValue({ identity: "prefix", value: docTypeThreePrefix });
+    });
+
+    it("Add internalType", () => {
+      cy.drAMInternalType({ value: "OTHER" });
+    });
+
+    it(`Add document type: ${docTypeThree}`, () => {
+      cy.drAddAMItemValue({ identity: "documentType", value: docTypeThree });
+    });
+
+    it("Ensure 'Training Required' not selected", () => {
+      cy.get(`[data-cy="trainingReq"] input[type=checkbox]`).should("not.be.checked");
+    });
+
+    it("Save Approval Matrix Item", () => {
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+    });
+  });
+
   context("Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithoutApiCall();
@@ -374,7 +403,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("'Training Required' should be checked because of DAM", () => {
@@ -394,6 +423,55 @@ context("Document Approval Matrix Flow", () => {
 
     it(`Check ${roleOne} exists and is checked`, () => {
       cy.drRoleExistsAndChecked({ group: 0, role: roleOne });
+    });
+
+    it("'Approve and Release' the document", () => {
+      cy.drSelectTemplateReleaseDocument({ template: "Initial AR Form" });
+    });
+  });
+
+  context(`Create document of new doc type: ${docTypeThree}`, () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on 'create a document'", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+  });
+
+  context("Fill in document attributes", () => {
+    it("type a title", () => {
+      cy.drEnterDocumentTitle({ name: `${DWOTSTitle}{enter}` });
+    });
+
+    it("type a description", () => {
+      cy.drEnterDocumentDescription({ description: "Description" });
+    });
+
+    it(`fill in document type: ${docTypeThree}`, () => {
+      cy.drSelectDocumentType({ documentType: docTypeThree });
+    });
+  });
+
+  context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
+    it("'Training Required' should not be checked because of DAM", () => {
+      SystemRequirement("REQ-0270");
+      cy.drIsTrainingRequired({ shouldBe: false });
+    });
+
+    it("Verify training can be selected", () => {
+      SystemRequirement("REQ-0290");
+      cy.drClickTrainingRequired();
+      cy.drIsTrainingRequired({ shouldBe: true });
+    });
+
+    it("click on 'Approve and Release' button", () => {
+      cy.drApproveAndReleaseDialog();
     });
 
     it("'Approve and Release' the document", () => {

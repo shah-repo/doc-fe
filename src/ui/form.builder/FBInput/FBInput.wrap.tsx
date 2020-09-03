@@ -39,10 +39,11 @@ export const withFBInput = <T extends FBInputProps>(
     value,
     autosave = false,
     transform,
+    bookmarked,
     ...props
   }: T) => {
 
-    const { formState, workspaceState } = FB.useStores();
+    const { formState, workspaceState, bookmarkState } = FB.useStores();
     const { isOutput } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
@@ -132,6 +133,12 @@ export const withFBInput = <T extends FBInputProps>(
       );
     }, []);
 
+    React.useEffect(() => {
+      if (!bookmarked) { return; }
+      isTranslation(label as string) && (label = intl.formatMessage({ id: label as string }));
+      bookmarkState?.addBookmark({ name, label });
+    }, [bookmarked]);
+
     return Component({
       ...(props as T),
       includeContext,
@@ -154,6 +161,7 @@ export const withFBInput = <T extends FBInputProps>(
       value,
       autosave,
       transform,
+      bookmarked,
     });
   };
 

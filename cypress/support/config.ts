@@ -18,6 +18,7 @@ export class ConfigEnv {
       FE_URL: Cypress.env("FE_URL"),
       KONFIG_ENV: Cypress.env("KONFIG_ENV"),
       SCREENSHOT_OF_RUN_FAILURE: Cypress.env("SCREENSHOT_OF_RUN_FAILURE"),
+      TAKE_SCREENSHOT_AFTER_EACH: Cypress.env("TAKE_SCREENSHOT_AFTER_EACH"),
       SKIP_ON_RUN_FAILURE: Cypress.env("SKIP_ON_RUN_FAILURE"),
       SUPERADMIN_EMAIL: Cypress.env("SUPERADMIN_EMAIL"),
       SUPERADMIN_PASSWORD: Cypress.env("SUPERADMIN_PASSWORD"),
@@ -49,6 +50,11 @@ export class ConfigEnv {
   @IsDefined()
   @IsBoolean()
   SCREENSHOT_OF_RUN_FAILURE!: boolean;
+
+
+  @IsDefined()
+  @IsBoolean()
+  TAKE_SCREENSHOT_AFTER_EACH!: boolean;
 
   @IsDefined()
   @IsBoolean()

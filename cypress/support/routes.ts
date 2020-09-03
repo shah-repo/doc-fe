@@ -31,6 +31,14 @@ export enum CyRoutes {
   DocRevGet = "DocRevGet",
   LotQuantity = "LotQuantity",
   DocRevPreview = "DocRevPreview",
+  GetProposedDocId = "GetProposedDocId",
+  PatchCancelDocRev = "PatchCancelDocRev",
+  GetPendingActions = "GetPendingActions",
+  PostCloseAR = "PostCloseAR",
+  PostApproveAR = "PostApproveAR",
+  GetRequiredApprovers = "GetRequiredApprovers",
+  GetAvailableApprovers = "GetAvailableApprovers",
+  PatchAR = "PatchAR"
 }
 
 export const routes: ICyRoutes =   {
@@ -172,6 +180,54 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/*",
+    },
+  },
+  GetProposedDocId: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/documents/proposed_docid*",
+    },
+  },
+  PatchCancelDocRev: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/document_revisions/cancel/*",
+    },
+  },
+  GetPendingActions: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/pending_actions",
+    },
+  },
+  PostCloseAR: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/change_requests/*/closed",
+    },
+  },
+  GetRequiredApprovers: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions/required_approvers*",
+    },
+  },
+  PostApproveAR: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/change_requests/*/approve",
+    },
+  },
+  PatchAR: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/change_requests/*",
+    },
+  },
+  GetAvailableApprovers: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/change_requests/available_approvers",
     },
   },
 };

@@ -13,7 +13,10 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
   <FBProvider {...{ dialogState }}>
     <Box mb={5}>
       <FBDialog />
-      <FBSection label="form.builder.approval.roles" />
+      <FBSection
+        label="form.builder.approval.roles"
+        name={`fb-amr-section-${name}`}
+      />
       {approvalRoles && (
         <FBMapWrapper<FBApprovalRole[]> collection={approvalRoles}>
           {(role: FBApprovalRole, index) => (

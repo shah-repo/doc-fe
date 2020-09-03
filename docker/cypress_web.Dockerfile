@@ -12,6 +12,7 @@ COPY public /opt/app/public
 COPY tsconfig* /opt/app/
 
 ARG REACT_APP_API_ENDPOINT
+ARG REACT_APP_WORKER_API_ENDPOINT
 ARG REACT_APP_REFRESH_TOKEN_VALIDITY_DAYS
 ARG REACT_APP_AWS_COGNITO_CLIENT_ID
 ARG REACT_APP_FRONTEND_URL
@@ -28,5 +29,6 @@ RUN yarn cache clean
 COPY scripts/cypress_docker_run_web.sh /opt/app/scripts/
 
 LABEL enlil_cypress=$FE_GIT_COMMIT_HASH
+
 
 CMD ["bash","./scripts/cypress_docker_run_web.sh"]
