@@ -43,7 +43,11 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         attachments.push(change);
       } else if (change.field.includes("referenceTo")) {
         references.push(change);
-      } else {
+      } else if (change.field.includes("approvals")) {
+        // This is a hack to not display approvers twice in history
+        // Until BE removes field approvals
+        return;
+      } else if (change.field !== "effectiveDate" || change.nextValue !== "null") {
         singleFields.push(
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>

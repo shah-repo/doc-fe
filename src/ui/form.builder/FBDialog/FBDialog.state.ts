@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isUndefined } from "lodash";
 import { action, observable, set } from "mobx";
 import React from "react";
 import { FBDialogProps } from ".";
@@ -9,7 +9,6 @@ export class FBDialogState {
   @observable public content?: React.ReactElement;
   @observable public title?: React.ReactNode | string;
   @observable public actions?: React.ReactNode;
-  @observable public portalAction2?: React.MutableRefObject<null>;
 
   @action public setDialog = (open: boolean) => {
     set(this, "open", open);
@@ -27,7 +26,7 @@ export class FBDialogState {
   @action public config = (config: FBDialogProps) => {
     this.reset();
     const { maxWidth, title, content, actions, open } = config;
-    !_.isUndefined(open) && this.setDialog(open);
+    !isUndefined(open) && this.setDialog(open);
     this.setMaxWidth(maxWidth || this.maxWidth);
     this.setTitle(title || this.title);
     this.setActions(actions || this.actions);

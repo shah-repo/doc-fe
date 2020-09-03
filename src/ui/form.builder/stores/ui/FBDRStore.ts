@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get, includes, isEmpty, union } from "lodash";
 import { action, computed, observable } from "mobx";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType, DocumentType } from "../../../../state/ducks/documentRevisions/documentType";
@@ -24,8 +24,8 @@ export class FBDocumentRevisionStore {
   };
 
   @action public setValues = (values: DocumentRevision | DocumentRevisionFormValues) => {
-    const fmGroup = _.get(values, "document.documentType.group");
-    const outputGroup = _.get(values, "formDocument.document.docId");
+    const fmGroup = get(values, "document.documentType.group");
+    const outputGroup = get(values, "formDocument.document.docId");
     FBStore.documentId = values.formDocument?.document?.id || values.document?.id || "";
     FBStore.docId = values.id || "";
     this.docSchema = values.document?.documentType?.schema as FBInputProps[] || [];
@@ -33,7 +33,7 @@ export class FBDocumentRevisionStore {
 
     switch (true) {
       // TEMPLATE FORM
-      case fmGroup && _.includes(fmGroup, "FORM"):
+      case fmGroup && includes(fmGroup, "FORM"):
         return this.fmConfig(values);
       // OUTPUT FORM
       case outputGroup !== undefined:
@@ -61,7 +61,7 @@ export class FBDocumentRevisionStore {
   };
 
   @action private outputConfig = (values: DocumentRevision | DocumentRevisionFormValues) => {
-    const schema = _.get(values, "formDocument.formTemplate.schema") || [];
+    const schema = get(values, "formDocument.formTemplate.schema") || [];
     const isRevised = (values as DocumentRevisionFormValues).outputRevision;
     const { formInput } = values;
 
@@ -71,7 +71,7 @@ export class FBDocumentRevisionStore {
     ];
     const canEditOutput = isRevised ||  editableIn.includes((values as DocumentRevision).status);
     let docRevMode: FBDocumentRevisionMode = canEditOutput ? "outputCreate" : "outputPreview";
-    if (docRevMode === "outputCreate" && !_.isEmpty(values.id)) {
+    if (docRevMode === "outputCreate" && !isEmpty(values.id)) {
       docRevMode = "outputUpdate";
     }
 
@@ -79,7 +79,7 @@ export class FBDocumentRevisionStore {
   };
 
   @action private fmConfig = (values: DocumentRevision | DocumentRevisionFormValues) => {
-    const schema = _.get(values, "formTemplate.schema") || [];
+    const schema = get(values, "formTemplate.schema") || [];
     const { formTemplate, formInput } = values;
     let docRevMode: FBDocumentRevisionMode = formTemplate ? "update" : "create";
     const isRevised = (values as DocumentRevisionFormValues).outputRevision;
@@ -97,7 +97,7 @@ export class FBDocumentRevisionStore {
     formInput,
   }: FBDRGroupConfig) => {
     this.setMode(docRevMode);
-    FBStore.setSchema(_.union(this.docSchema, schema));
+    FBStore.setSchema(union(this.docSchema, schema));
     FBStore.setValues(formInput);
   };
 }

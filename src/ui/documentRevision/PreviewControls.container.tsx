@@ -103,6 +103,10 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   };
 
   const renderOutputButton = () => {
+    const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
+      && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
+        .find((type) => type.documentTypeName === "Approval Request");
+
     if (hasAccess && canCreateOutput(documentRevision)) {
       return (
         <Button

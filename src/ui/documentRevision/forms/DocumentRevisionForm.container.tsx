@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import _, { cloneDeep, filter, get, map } from "lodash";
+import { cloneDeep, filter, get, isEmpty, map, union, uniqBy } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
@@ -162,7 +162,7 @@ DocumentRevisionFormContainerProps
   const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
   const { schema: originScheme = [] } =
   cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
-  const isOutput =  Boolean(outputGroup && !_.isEmpty(outputGroup));
+  const isOutput =  Boolean(outputGroup && !isEmpty(outputGroup));
   const formInput = useMemo(() =>
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
   , [cleanInitialValues]);
@@ -182,17 +182,22 @@ DocumentRevisionFormContainerProps
       ...schemaItem,
       deleteDisabled: true,
     })));
-    const outputScheme =  useMemo(() => outputDocumentTypes?.reduce((scheme, value: OptionType) => {
+    let outputScheme =  useMemo(() => outputDocumentTypes?.reduce((scheme, value: OptionType) => {
       const { schema: outputScheme = [] } = documentTypesById[value.value] || {};
-      if (!_.isEmpty(outputScheme)) {
-        return _.uniqBy(_.union(scheme, outputScheme), "name");
+      if (!isEmpty(outputScheme)) {
+        return uniqBy(union(scheme, outputScheme), "name");
       }
+
       return scheme;
     }, [] as FBSchemaProps[]), [outputDocumentTypes]);
+    outputScheme = map(outputScheme, ((schemaItem) => ({
+      ...schemaItem,
+      deleteDisabled: true,
+    })));
 
     const schema = isOutput
       ? originScheme
-      : _.uniqBy([ ...originScheme, ...docScheme || [], ...outputScheme || []], "name");
+      : uniqBy([ ...originScheme, ...docScheme || [], ...outputScheme || []], "name");
     return schema;
   };
 

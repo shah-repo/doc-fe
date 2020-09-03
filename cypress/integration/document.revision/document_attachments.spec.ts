@@ -1,42 +1,42 @@
+import { CONFIG } from "../../support/config";
+import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
 
+const approvalRequestTitle = "Approval request from newly created form";
+const approvalRequestFormName = "Inline Approve Form";
+
 context("Document Attachment Flow", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+            companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: "enlil.testmail+cy5@gmail.com",
+            importerEmail: USERS[5].email,
             maxRevisionStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [
+            users: [USERS[2], USERS[3], USERS[4]],
+            documentTypes: [
               {
-                name: "Second Tester",
-                email: "enlil.testmail+cy2@gmail.com",
+                documentTypeName: "Clinical Protocol",
+                documentTypeAcronym: "CP",
+                group: "OTHER",
+                isQms: true,
               },
-              {
-                name: "Third Tester",
-                email: "enlil.testmail+cy3@gmail.com",
-              },
-              {
-                name: "Fourth Tester",
-                email: "enlil.testmail+cy4@gmail.com",
-              }],
-            documentTypes: [],
+            ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
@@ -47,7 +47,7 @@ context("Document Attachment Flow", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -60,7 +60,7 @@ context("Document Attachment Flow", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       });
     });
@@ -91,6 +91,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Selects 'Component Specification' document type from dropdown", () => {
+      SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Component Specification" });
     });
 
@@ -99,13 +100,24 @@ context("Document Attachment Flow", () => {
       cy.drCheckIfDocumentIdMatches({ docId: "CS-00003" });
     });
 
-    context("Uploads attachments", () => {
+    context("Test download of uploaded attachments", () => {
       it("Uploads text.docx", () => {
         cy.atchUploadAttachment({ fileName: "test.docx" });
       });
 
       it("Uploads redline attachment 'image.jpg'", () => {
         cy.atchUploadRedlineAttachment({ fileName: "image.jpg" });
+      });
+
+      it("Fail upload text.docx", () => {
+        cy.atchUploadAttachmentFail({ fileName: "test.docx" });
+      });
+
+      it("Verify upload error message is shown", () => {
+        SystemRequirement("REQ-0230");
+        cy.checkToastMessage({ exists: true });
+        cy.checkToastMessageIsEqual({ message: "Upload failed" });
+        cy.closeAllAlertMessages();
       });
 
       it("Check if Selected Groups are set to 'Everyone' by default", () => {
@@ -172,6 +184,192 @@ context("Document Attachment Flow", () => {
       it("Enter password to confirm download", () => {
         cy.atchEnterConfirmationPassword({ password: "Tester1!" });
       });
+
+      it("Select Superseded version of document without redline attachments", () => {
+        cy.drSelectReleasedVersionOfDocument({ docVersion: 0 });
+      });
+
+      it("Revise document", () => {
+        cy.drClickReviseDocument();
+      });
+
+      it("Select Obsolete revision option", () => {
+        cy.get("[id=\"RevisionTypeChange-obsolete\"]").click();
+      });
+
+      it("Clicks Save button", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Approves and releases document", () => {
+        cy.drApproveAndReleaseDocument();
+      });
+
+      it("Download all attachments without redline document on Obsolete version", () => {
+        SystemRequirement("REQ-0380");
+        cy.atchDownloadAllAttachments().wait(2000);
+      });
+
+      it("Enter password to confirm download", () => {
+        cy.atchEnterConfirmationPassword({ password: "Tester1!" });
+      });
+    });
+  });
+
+  // remove comments and lines for password
+  // when Pending change download of redline document is fixed - should not require a password
+
+  context("Check Pending Change and In Review for downloading redline document", () => {
+    it("Navigates to document list", () => {
+      SystemRequirement("REQ-0140");
+      cy.navigToDocumentList();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enters title 'New Document Revision'", () => {
+      cy.drEnterDocumentTitle({ name: "New Document for AR" });
+    });
+
+    it("Enters description 'New Document Revision description'", () => {
+      cy.drEnterDocumentDescription({ description: "New Document for AR description" });
+    });
+
+    it("Selects 'Component Specification' document type from dropdown", () => {
+      SystemRequirement("REQ-0490");
+      cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
+    });
+
+    it("Uploads redline attachment 'image.jpg'", () => {
+      cy.atchUploadRedlineAttachment({ fileName: "image.jpg" });
+    });
+
+    it("Uploads text.docx", () => {
+      cy.atchUploadAttachment({ fileName: "test.docx" });
+    });
+
+    it("Clicks Save button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to approval request list", () => {
+      SystemRequirement("REQ-0680");
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Click Create a Approval Request button", () => {
+      cy.cmpClickCreateApprovalRequest();
+    });
+
+    it("Choose 'Inline Approve Form'", () => {
+      cy.arSelectARForm({ formTitle: approvalRequestFormName });
+    });
+
+    it("Enter title AR title: " + approvalRequestTitle, () => {
+      cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
+    });
+
+    it("Enter description 'AR from New form template for approval request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
+    });
+
+    it("Add created document revision", () => {
+      cy.arClickAddDocument().wait(500);
+      cy.arChoseSpecificProposedDocument({ name: "CP00004" });
+      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
+      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
+      cy.arClickAddBtnOnAddDocumentsDialog();
+    });
+
+    it("Add first approver to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+    });
+
+    it("Click Create Approval Request", () => {
+      SystemRequirement("REQ-0730");
+      cy.arClickCreateApprovalRequestAfterCompletingForm();
+    });
+
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on specific document 'CP00004'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP00004" });
+    });
+
+    it("Download all attachments with redline document in Pending Change state", () => {
+      SystemRequirement("REQ-0390");
+      cy.atchDownloadAllAttachments();
+    });
+
+    // this should not be here - document in 'Pending Change' state should not have password
+    it("Enter password to confirm download", () => {
+      cy.atchEnterConfirmationPassword({ password: "Tester1!" });
+    });
+
+    it("Navigate to added document in AR", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Filter approval by name and status, and select it", () => {
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Draft" });
+    });
+
+    it("Click 'Send To Review'", () => {
+      cy.arClickSendToReview();
+    });
+
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on specific document 'CP00004'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP00004" });
+    });
+
+    it("Download all attachments with redline document in 'In Review' state", () => {
+      SystemRequirement("REQ-0390");
+      cy.atchDownloadAllAttachments();
+    });
+
+    // this should not be here - document in 'In Review' state should not have password
+    it("Enter password to confirm download", () => {
+      cy.atchEnterConfirmationPassword({ password: "Tester1!" });
+    });
+
+    it("Navigate to added document in AR", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Filter approval by name and status, and select it", () => {
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "In Review" });
+    });
+
+    it("Approve AR", () => {
+      SystemRequirement("REQ-0920");
+      cy.arApproveAR();
+    });
+
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on specific document 'CP00004'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP00004" });
+    });
+
+    // should use only download redline attachment not download all...
+    it("Download all attachments with redline document in 'Approved' state", () => {
+      SystemRequirement("REQ-0390");
+      cy.atchDownloadAllAttachments();
+    });
+
+    // this should not be here - document in 'Approved' state should not have password
+    it("Enter password to confirm download", () => {
+      cy.atchEnterConfirmationPassword({ password: "Tester1!" });
     });
   });
 });

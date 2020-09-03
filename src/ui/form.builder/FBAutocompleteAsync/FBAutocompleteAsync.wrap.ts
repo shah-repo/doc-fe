@@ -1,6 +1,6 @@
-import _ from "lodash";
+import { get, isEmpty, map } from "lodash";
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { FBAutocompleteAsyncProps, FBAutocompleteAsyncState } from ".";
 import { FB, FBOptionValueType } from "..";
 import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
@@ -21,6 +21,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     refresh,
     name,
     value,
+    shouldReloadOnInit = false,
     ...props
   }: T) => {
 
@@ -40,8 +41,8 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
         key: () => autocompleteAsyncState?.sliceValue(formValue),
         id: () =>  {
           const slicedValue = multiple
-            ? _.map(formValue, optionValueKey)
-            : _.get(formValue, optionValueKey);
+            ? map(formValue, optionValueKey)
+            : get(formValue, optionValueKey);
           return  autocompleteAsyncState?.sliceValue(slicedValue);
         },
       };
@@ -53,7 +54,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
         return;
       }
       const slicedOptions = autocompleteAsyncState?.sliceData;
-      loading = FBAutocompleteAsyncStore.loading.get(optionId);
+      loading = loading || FBAutocompleteAsyncStore.loading.get(optionId);
       if (slicedOptions) {
         options = selectedOptions
           ? autocompleteAsyncState?.sliceValue(selectedOptions)
@@ -61,29 +62,36 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       }
     });
 
-    (optionId && options && formValue && !_.isEmpty(formValue)) && (defaultValue = getDefault());
+    useEffect(() => {
+      if (shouldReloadOnInit) {
+        autocompleteAsyncState?.load(true);
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    (optionId && options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
 
     refresh = () => autocompleteAsyncState?.load(true);
 
     !getOptionLabel && (getOptionLabel = (option) => {
       const { labelPrefixRoot } = autocompleteAsyncState?.optionConfig || {};
-      const optionLabel = labelPrefixRoot ? `${_.get(option, labelPrefixRoot)} - ` : "";
-      return `${optionLabel}${_.get(option, optionLabelKey, "")}`;
+      const optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
+      return `${optionLabel}${get(option, optionLabelKey, "")}`;
     });
 
     return Component({
       ...(props as T),
+      getOptionLabel,
+      refresh,
       options,
       loading,
       optionId,
       optionValueKey,
       optionLabelKey,
       optionValueType,
-      getOptionLabel,
       selectedOptions,
       defaultValue,
       multiple,
-      refresh,
       name,
       value,
     });

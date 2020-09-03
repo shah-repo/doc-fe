@@ -3,6 +3,8 @@
 
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { CONFIG } from "../../support/config";
+import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -17,36 +19,25 @@ const secondDocumentRevName = "Second document for testing";
 context("Document list test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
+      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
 
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+            companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: "enlil.testmail+cy5@gmail.com",
+            importerEmail: USERS[5].email,
             maxRevisionStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [
-              {
-                name: "Second Tester",
-                email: "enlil.testmail+cy2@gmail.com",
-              },
-              {
-                name: "Third Tester",
-                email: "enlil.testmail+cy3@gmail.com",
-              },
-              {
-                name: "Fourth Tester",
-                email: "enlil.testmail+cy4@gmail.com",
-              }],
+            users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
@@ -60,7 +51,7 @@ context("Document list test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.name === "Second Tester");
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           done();
         });
@@ -69,7 +60,7 @@ context("Document list test", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -155,7 +146,7 @@ context("Document list test", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       });
     });
@@ -249,7 +240,7 @@ context("Document list test", () => {
     });
 
     it("Check only documents are shown on document list", () => {
-      SystemRequirement("REQ-0050");
+      SystemRequirement("REQ-0050", "REQ-0510");
       cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
     });
   });
@@ -342,12 +333,12 @@ context("Document list test", () => {
       });
 
       it("Filter list by owner", () => {
-        cy.dlFilterByOwner({ owner: "Second Tester" });
+        cy.dlFilterByOwner({ owner: USERS[2].name });
       });
 
       it("Verify filter by owner", () => {
         SystemRequirement("REQ-0060");
-        cy.dlVerifyFilterByOwner({ owner: "Second Tester" });
+        cy.dlVerifyFilterByOwner({ owner: USERS[2].name });
       });
 
       it("Verify document counter on document list", () => {
@@ -405,7 +396,7 @@ context("Document list test", () => {
         cy.dlFilterByEffectiveDate({ effectiveDate: "Last 7 days" });
       });
 
-      it.skip("Verify filter by effective date", () => {
+      it("Verify filter by effective date", () => {
         SystemRequirement("REQ-0060");
         cy.dlVerifyFilterByEffectiveDate({ effectiveDate: (new Date()).toLocaleDateString("en-US") });
       });
@@ -422,6 +413,10 @@ context("Document list test", () => {
 
       it("Filter list by document title", () => {
         cy.dlFilterByDocTitle({ docTitle: secondDocumentRevName });
+      });
+
+      it("Navigate to Dashboard", () => {
+        cy.navigToDashboard();
       });
 
       it("Navigate back to document list", () => {

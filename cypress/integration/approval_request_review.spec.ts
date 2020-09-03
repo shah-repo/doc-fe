@@ -1,5 +1,7 @@
 /* eslint-disable max-classes-per-file */
 // / <reference types="Cypress" />
+import { CONFIG } from "../support/config";
+import { USERS } from "../utils/constants/users";
 import { SystemRequirement } from "../utils/context/systemRequirement";
 
 let createdCompany;
@@ -11,11 +13,11 @@ const sampleDocOneTitle = "Sample Document One";
 
 context("Approval request form scenario", () => {
   context("[API]Prepare company", () => {
-
     it("[API]Creates company", (done: any) => {
+      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response: any) => {
         sessionId = response.sessionId as unknown as string;
         multipleCompanies = response.employees.length > 0;
@@ -23,27 +25,15 @@ context("Approval request form scenario", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+            companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: "enlil.testmail+cy5@gmail.com",
+            importerEmail: USERS[5].email,
             maxRevisionStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [
-              {
-                name: "Second Tester",
-                email: "enlil.testmail+cy2@gmail.com",
-              },
-              {
-                name: "Third Tester",
-                email: "enlil.testmail+cy3@gmail.com",
-              },
-              {
-                name: "Fourth Tester",
-                email: "enlil.testmail+cy4@gmail.com",
-              }],
+            users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
@@ -64,7 +54,7 @@ context("Approval request form scenario", () => {
 
     it("[API]Tester Login to get companies", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       }).then((response: any) => {
         multipleCompanies = response.employees.length > 1 ? true : false;
@@ -76,7 +66,7 @@ context("Approval request form scenario", () => {
   context("Log in user and select company", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       });
     });
@@ -188,7 +178,7 @@ context("Approval request form scenario", () => {
 
     it("Add first approver to approval request on approver list",
       () => {
-        cy.arAddApproverOnApproverList({ approver: "enlil.testmail+cy1@gmail.com" });
+        cy.arAddApproverOnApproverList({ approver: USERS[1].email });
       });
 
     it("Click Create Approval Request", () => {
@@ -233,7 +223,7 @@ context("Approval request form scenario", () => {
     });
 
     //  approvers 'In_review' should be enabled now 'ENC-4797'
-    it.skip("Check 'Approvers' are not disabled", () => {
+    it("Check 'Approvers' are not disabled", () => {
       SystemRequirement("REQ-0850");
       cy.get("[data-cy=\"approvers\"] input").should("not.be.disabled");
     });
@@ -267,7 +257,7 @@ context("Approval request form scenario", () => {
       cy.arSelectARForm({ formTitle: approvalRequestFormName });
     });
 
-    it("Document One already used, it must not be added again.", () => {
+    it.skip("Document One already used, it must not be added again.", () => {
       SystemRequirement("REQ-0860");
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: sampleDocOneTitle });
@@ -283,7 +273,7 @@ context("Approval request form scenario", () => {
 
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });

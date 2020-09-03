@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { includes } from "lodash";
 import { action, observable, set } from "mobx";
 import React from "react";
 import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
@@ -48,6 +48,7 @@ export class FBEditorState {
     "approvalMatrix",
     "poApprovalMatrix",
     "task",
+    "blanktplform",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -65,6 +66,7 @@ export class FBEditorState {
     "createlabel",
     "approval",
     "requestapproval",
+    "blanktplform",
   ];
 
   public static pickStepIndex: FBInputType[] = ["stepsection", "teststep"];
@@ -87,6 +89,7 @@ export class FBEditorState {
     radio: FBEditorCheckControl,
     radiogroup: FBEditorOptionGroup,
     fileupload: FBEditorLabel,
+    blanktplform: FBEditorLabel,
     paragraph: FBEditorParagraph,
     quantity: FBEditorLabel,
     timer: FBEditorLabel,
@@ -136,8 +139,8 @@ export class FBEditorState {
     });
   };
 
-  public static underValidation = (type: FBInputType) => !_.includes(FBEditorState.omitValidation, type);
-  public static includeDefaultValue = (type: FBInputType) => _.includes(FBEditorState.pickDefaultValue, type);
+  public static underValidation = (type: FBInputType) => !includes(FBEditorState.omitValidation, type);
+  public static includeDefaultValue = (type: FBInputType) => includes(FBEditorState.pickDefaultValue, type);
 
   @action public setMode = (mode: FBEditorMode) => set(this, "mode", mode);
 }

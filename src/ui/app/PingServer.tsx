@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { throttle } from "lodash";
 import React, { useCallback, useEffect } from "react";
 import IdleTimer from "react-idle-timer";
 import { useDispatch } from "react-redux";
@@ -19,7 +19,7 @@ const PingServer: React.FunctionComponent = () => {
     dialogHandler.close();
   };
 
-  const pingEveryTenMinutes = _.throttle(() => {
+  const pingEveryTenMinutes = throttle(() => {
     pingServer();
   }, tenMinutes);
 

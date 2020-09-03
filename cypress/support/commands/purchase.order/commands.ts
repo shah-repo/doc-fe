@@ -4,6 +4,7 @@
 import { integer } from "aws-sdk/clients/cloudfront";
 import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { CONFIG } from "../../config";
+import { CyRoutes } from "../../routes";
 export { };
 
 declare global {
@@ -11,6 +12,7 @@ declare global {
     interface Chainable<Subject> {
       poAddNewFieldItem(): Chainable<Subject>;
       poCreateNew(): Chainable<Subject>;
+      poClickCreatePO(): Chainable<Subject>;
       poAddPOButtonClick(): Chainable<Subject>;
       poEnterDocumentDescription(params: {description: string }): Chainable<Subject>;
       poSelectPartNumber(): Chainable<Subject>;
@@ -50,10 +52,12 @@ declare global {
       poRejectAR(params: {password: string}): Chainable<Subject>;
       poVerifyStatus(params: {status: string}): Chainable<Subject>;
       poAPICreatePO(params: {payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
+      poSelectPoForm(params: {nameOfPoForm: string}): Chainable<Subject>;
     }
   }
 }
 
+<<<<<<< HEAD
 export interface PurchaseOrderItem {
   index: integer;
   partNumber?: string;
@@ -65,9 +69,15 @@ export interface PurchaseOrderItem {
   unitPrice: string;
   totalPrice?: string;
 }
+=======
+Cypress.Commands.add("poSelectPoForm", (params: {nameOfPoForm: string}) => {
+  cy.get("[id=FormListDialog-selectForm]").click();
+  cy.get("[id^=react-select]").contains(params.nameOfPoForm).click();
+});
+>>>>>>> develop
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
-  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-fullWidth\"]").contains("Add item").click().wait(300);
+  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-fullWidth\"]").contains("Add item").click().wait(500);
 });
 
 Cypress.Commands.add("poAddPOButtonClick", () => {
@@ -75,6 +85,12 @@ Cypress.Commands.add("poAddPOButtonClick", () => {
 });
 
 Cypress.Commands.add("poCreateNew", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet, CyRoutes.DocPreview, CyRoutes.LotQuantity], () => {
+    cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
+  });
+});
+
+Cypress.Commands.add("poClickCreatePO", () => {
   cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
 });
 
@@ -131,7 +147,7 @@ Cypress.Commands.add("poCheckCurrency", () => {
 
 Cypress.Commands.add("poSelectCurrency", (params: { currencyValue: string }) => {
   cy.get("[id*=\"currency\"]").click();
-  cy.get("ul[role=listbox] > li").contains(params.currencyValue).click();
+  cy.get("ul[role=listbox] > li").contains(params.currencyValue).click().wait(500);
 });
 
 Cypress.Commands.add("poSelectTaxCheckbox", () => {
@@ -155,7 +171,9 @@ Cypress.Commands.add("poEnterDescription", (params: {description: string}) => {
 });
 
 Cypress.Commands.add("poClickOnSpecificPOFromList", (params: {item: string}) => {
-  cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).click();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
+    cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).click();
+  });
 });
 
 Cypress.Commands.add("poCheckForSpecificPOItemValue", (params: {itemValue: string}) => {
@@ -179,15 +197,15 @@ Cypress.Commands.add("poCheckStatus", (...list: string[]) => {
 });
 
 Cypress.Commands.add("poCheckIfFormPopUpIsActive", (...list: string[]) => {
-  cy.get("[id=\"FormListDialog-selectForm\"]").click();
+  cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").click();
   list.forEach((item) => {
-    cy.get("[id=\"FormListDialog-selectForm\"] > div > div > div").contains(item).should("exist");
+    cy.get("[id^=react-select]").contains(item).should("exist");
   });
+  cy.get("[data-cy=field-selectType]>div:nth-child(1)").click();
 });
 
 Cypress.Commands.add("poCloseFormPopUpOnLandingPage", () => {
-  cy.get("[id=\"FormListDialog-selectForm\"]").click();
-  cy.get("[id=\"FormListDialog-cancelButton\"]").click();
+  cy.get("[data-cy=suggestFormCancelBtn]").click();
 });
 
 Cypress.Commands.add("poCheckForLineItemsAndTheirID", (params: {firstId: string; secondId: string}) => {
@@ -216,7 +234,9 @@ Cypress.Commands.add("poAMSelectApprover", (...list: string[]) => {
 });
 
 Cypress.Commands.add("poSaveDocument", () => {
-  cy.get("[id=\"DocumentRevisionForm-submit\"]").wait(3000).click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+    cy.get("[id=\"DocumentRevisionForm-submit\"]").click();
+  });
 });
 
 Cypress.Commands.add("poAMCheckForApproval", () => {

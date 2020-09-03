@@ -14,12 +14,21 @@ secs_to_human() {
 }
 start=$(date +%s)
 
-DATE_ISO_DEFAULT=$(date --iso-8601=seconds)
+source ./scripts/cypress/platform_specific_variables.sh
+
+if [[ -z "${DATE_ISO_DEFAULT}" ]]; then
+  echo "DATE_ISO_DEFAULT not set, exiting"
+  exit
+fi
+
 export CI_BUILD_ID=${CI_BUILD_ID:-$DATE_ISO_DEFAULT}
-export NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-2}
+export NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-4}
 export REPORT_TITLE=${REPORT_TITLE:-generated_specs}
 export CYPRESS_INTEGRATION_FOLDER=${CYPRESS_INTEGRATION_FOLDER:-"cypress/integration"}
 export CYPRESS_SKIP_ON_RUN_FAILURE=${CYPRESS_SKIP_ON_RUN_FAILURE:-true}
+export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH=${CYPRESS_TAKE_SCREENSHOT_AFTER_EACH:-false}
+export CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL:-"zoran.kovacevic+admin@codecons.com"}
+export CYPRESS_SUPERADMIN_PASSWORD=${CYPRESS_SUPERADMIN_PASSWORD:-"Tester1!"}
 
 if [[ -z "${CI_BUILD_ID}" ]]; then
   echo "CI_BUILD_ID not set, exiting"
@@ -28,6 +37,7 @@ fi
 
 ./scripts/cypress/delete_cache.sh
 source ./scripts/cypress/make_results_dir.sh
+./scripts/cypress/run_generate_info_report.sh
 export CYPRESS_SCREENSHOTS_FOLDER=$DIR_SCREENSHOTS_REPORT
 ./scripts/cypress/delete_failed_specs.sh
 ./scripts/cypress/run_workers_in_parallel.sh

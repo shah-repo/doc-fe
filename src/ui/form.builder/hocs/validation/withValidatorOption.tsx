@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isUndefined, map, omit } from "lodash";
 import React from "react";
 import { FBFieldComponent } from "../../defaults/editor";
 import FBValidatorStore from "../../stores/ui/FBValidatorStore";
@@ -31,11 +31,11 @@ export const withValidatorOption = <T extends FBValidatorOptionProps>(
         return FBValidatorStore.indicatorValues[name] = {};
       }
       form && (form.setFieldValue(name, ""));
-      FBValidatorStore.indicatorValues = _.omit(indicatorValues, name);
+      FBValidatorStore.indicatorValues = omit(indicatorValues, name);
     };
 
     const indicatorElements = (): React.ReactNode[] | undefined =>
-      _.map(indicators, (
+      map(indicators, (
         { type, ...props }: Partial<FBTemplateSchema>,
         index,
       ) => {
@@ -74,10 +74,10 @@ export const withValidatorOption = <T extends FBValidatorOptionProps>(
     ;
 
     function doRenderIndicators(): boolean {
-      if (_.isUndefined(form)) {
+      if (isUndefined(form)) {
         return false;
       }
-      if (_.isUndefined(field)) {
+      if (isUndefined(field)) {
         return false;
       }
       return form.values[field.name] === field.name;
@@ -109,7 +109,7 @@ export const withValidatorOption = <T extends FBValidatorOptionProps>(
 // if (value) {
 //   return FBValidatorStore.indicatorValues[name] = {};
 // }
-// FBValidatorStore.indicatorValues = _.omit(indicatorValues, name);
+// FBValidatorStore.indicatorValues = omit(indicatorValues, name);
 // };
 
 //     function isEvent(

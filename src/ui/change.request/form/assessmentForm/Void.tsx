@@ -50,7 +50,7 @@ const AssessmentFormVoidContainer: React.FunctionComponent<Props> = ({
         <Text translation="common.void" />
       </Button>
       <AlertDialog
-        action={voidDocument}
+        confirmAction={voidDocument}
         message={"change.request.void.alert"}
         {...{ dialog }}
       />

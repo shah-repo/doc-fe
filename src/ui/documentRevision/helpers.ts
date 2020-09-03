@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { findLastIndex, get, isEmpty, orderBy, some } from "lodash";
 import moment from "moment";
 import { Document, DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP_OPTION } from "../../state/ducks/documentRevisions/documentType";
@@ -30,7 +30,7 @@ export const canCreateNewVersion = (
   canShowCreateVersionButton;
 
 export const canCreateOutput = (documentRevision: DocumentRevision) => {
-  const documentType = _.get(documentRevision, "document.documentType");
+  const documentType = get(documentRevision, "document.documentType");
   return (
     documentType &&
     documentType.group === "FORM" &&
@@ -114,7 +114,7 @@ export const getDocRevIdToRedirect = (
 ) => {
   if (deprecatedAt) {
     const depreactedAtDate = moment(deprecatedAt);
-    const indexOfLastReleased = _.findLastIndex(documentRevisions, (doc) => {
+    const indexOfLastReleased = findLastIndex(documentRevisions, (doc) => {
       if (!doc.releasedAt) {
         return false;
       }
@@ -132,7 +132,7 @@ export const getDocRevIdToRedirect = (
     return documentRevisions[0].id;
   }
 
-  const sortedList = _.orderBy(
+  const sortedList = orderBy(
     filteredList,
     [({ releasedAt }) => releasedAt ? new Date(releasedAt) : new Date()],
     "desc",
@@ -145,11 +145,11 @@ export const canChangeDocumentOwner = (status: DocumentRevisionStatus, currentEm
   (status === DocumentRevisionStatus.Draft || status === DocumentRevisionStatus.PendingChange) &&
     (isCompanyAdmin || ownerId === currentEmployeeId);
 
-export const getIsLastVersionObsolete = (formDocuments: Document) => _.some(formDocuments.documentRevisions, ["status", DocumentRevisionStatus.Obsolete ]);
+export const getIsLastVersionObsolete = (formDocuments: Document) => some(formDocuments.documentRevisions, ["status", DocumentRevisionStatus.Obsolete ]);
 
 export const getIsAdministrativeDefault = (documentRevision: DocumentRevision) => {
   const docId = documentRevision.formDocument?.document?.docId;
   const isAlphaReleased = documentRevision.revisionStage === 3;
   const isRecord = (documentRevision.document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
-  return Boolean(docId && !_.isEmpty(docId)) && isAlphaReleased && isRecord;
+  return Boolean(docId && !isEmpty(docId)) && isAlphaReleased && isRecord;
 };

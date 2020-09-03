@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { at, get, isArray, isEmpty, isString, map, remove, toNumber, union } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from "..";
@@ -14,11 +14,13 @@ export const withFBOnChange = <T extends FBInputProps>(
     forceDefault,
     inputState,
     transform,
+    withState,
     ...props
   }: T) => {
 
-    inputState = FB.useRef<FBInputState>(FBInputState);
     const { formState, schemaState, workspaceState } = FB.useStores();
+    const { value: inputValue } = formState?.inputState.get(name || "") || {};
+    inputState = FB.useRef<FBInputState>(FBInputState, inputValue);
 
     React.useEffect(() => {
       const defaultValue = formState?.getFieldValue(name);
@@ -37,42 +39,43 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
     };
 
-    function setValue(formValue: any, withState = false, forceDefault = false) {
+    function setValue(formValue: any, state = false, forceDefault = false) {
       if (!name) { return; }
-      _.isString(formValue) && transform && (formValue = setTranform?.(formValue));
-      formState?.setFieldValue(name, formValue, withState, forceDefault);
+      isString(formValue) && transform && (formValue = setTranform?.(formValue));
+      // TODO: refactor with state opt
+      formState?.setFieldValue(name, formValue, state || withState, forceDefault);
       if (type && !FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);
       }
     }
 
     function checkboxGroupValue(ev: React.ChangeEvent<HTMLInputElement>) {
-      const [valueName, checked] = _.at(ev.target, ["value", "checked"]);
+      const [valueName, checked] = at(ev.target, ["value", "checked"]);
       const checkedValue = formState?.getFieldValue(name, []);
       const groupValue: string[] = checked
-        ? _.union(checkedValue, [valueName])
-        : _.remove(checkedValue, (cv) => cv !== valueName);
+        ? union(checkedValue, [valueName])
+        : remove(checkedValue, (cv) => cv !== valueName);
 
       contextValue(groupValue);
       setValue(groupValue);
     }
 
     function checkValue(ev: React.ChangeEvent<HTMLInputElement>) {
-      const value = _.get(ev.target, "checked");
+      const value = get(ev.target, "checked");
       contextValue(value);
       setValue(value);
     }
 
     function contextValue(value: boolean | string | string[] | undefined = "") {
-      if (!editorProperties || _.isEmpty(editorProperties)) {
+      if (!editorProperties || isEmpty(editorProperties)) {
         return;
       }
 
-      if (_.isString(value)) {
+      if (isString(value)) {
         value = (value as FBEditorPropertiesType) === "includeContext";
       }
 
-      if (_.isArray(value)) {
+      if (isArray(value)) {
         value = value.includes("includeContext");
       }
       inputState?.setIncludeContext(value);
@@ -86,10 +89,10 @@ export const withFBOnChange = <T extends FBInputProps>(
       const simpleValue: Record<FBOptionValueType, () => any> = {
         object: () => value,
         key: () => multiple
-          ? _.map(value, (v) => v[optionValueKey])
+          ? map(value, (v) => v[optionValueKey])
           : value[optionValueKey],
         id: () =>  multiple
-          ? _.map(value, (v) => ({ [optionValueKey]: v[optionValueKey] }))
+          ? map(value, (v) => ({ [optionValueKey]: v[optionValueKey] }))
           : { [optionValueKey]: value[optionValueKey] },
       };
       setValue(simpleValue[optionValueType](), false, forceDefault);
@@ -115,7 +118,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
 
       function isGroupCheck() {
-        contextValue(_.get(ev.target, "value"));
+        contextValue(get(ev.target, "value"));
         isDefault();
       }
 
@@ -123,7 +126,7 @@ export const withFBOnChange = <T extends FBInputProps>(
         const { type } = ev.target;
         let { value } = ev.target;
         if (type === "number") {
-          value = _.toNumber(value);
+          value = toNumber(value);
         }
         setValue(value);
       }
@@ -161,6 +164,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       forceDefault,
       inputState,
       transform,
+      withState,
       type,
       name,
     }));

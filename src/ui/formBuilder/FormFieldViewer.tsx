@@ -274,6 +274,8 @@ const FormFieldViewer: React.FunctionComponent<FormFieldProps> = ({
         />
       );
       break;
+    default:
+      break;
   }
 
   const width = ` ${styles[config ? config.colWidth : ""]}`;

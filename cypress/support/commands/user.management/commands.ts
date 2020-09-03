@@ -1,3 +1,5 @@
+import { CyRoutes } from "../../routes";
+
 /* eslint-disable @typescript-eslint/no-namespace */
 
 export { };
@@ -33,7 +35,9 @@ Cypress.Commands.add("usrEnterName", (params: {name: string }) => {
 });
 
 Cypress.Commands.add("usrClickSaveButton", () => {
-  cy.get("#AddEmployeeFormPresenter-submitForm").click();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGet], () => {
+    cy.get("#AddEmployeeFormPresenter-submitForm").click();
+  });
 });
 
 Cypress.Commands.add("usrClickCloseDialogButton", () => {
@@ -42,6 +46,8 @@ Cypress.Commands.add("usrClickCloseDialogButton", () => {
 
 Cypress.Commands.add("usrCheckIfUserIsCreated", (params: {email: string}) => {
   cy.get("#clearFilter").click();
-  cy.get("#email").type(params.email).wait(300);
+  cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
+    cy.get("#email").type(params.email);
+  });
   cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(2)>div>div>div").should("contain.text", params.email);
 });

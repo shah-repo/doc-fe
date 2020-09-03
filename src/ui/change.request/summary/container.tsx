@@ -2,7 +2,7 @@ import { Form, Formik, FormikProps } from "formik";
 import React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
-import { Redirect, useLocation } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
 import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
 import { authSelectors } from "../../../state/ducks/auth";
@@ -12,7 +12,8 @@ import { DataProps } from "../../../state/ducks/common";
 import { FormContext } from "../../components/forms/FormContext";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
 import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
-import { FBWorkspace } from "../../form.builder";
+import { Sidebar } from "../../documentRevision/Sidebar/types";
+import { FB, FBBookmarkState, FBProvider, FBWorkspace } from "../../form.builder";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
@@ -37,11 +38,11 @@ export const Container: React.FunctionComponent<Props> = ({
   currentUserEmail,
 }) => {
   const FBContainer = React.useRef(null);
+  const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
 
   /*   const [summaryDocumentTypeGroups, setSummaryDocTypeGroups] = useState<any[]>([]);
  */
   const [isDrawerOpen, setOpen] = React.useState(true);
-  const url = useLocation();
   const classes = styles({ isDrawerOpen });
   useDocumentTitle(dataProp.crId);
   const intl = useIntl();
@@ -88,42 +89,43 @@ export const Container: React.FunctionComponent<Props> = ({
   const summaryPresenterRenderer = (
     props: FormikProps<ChangeRequestFormValues>,
   ) => (
-    <Form>
-      <Presenter
-        dataProp={dataProp}
-        asyncState={async.asyncState}
-        canEdit={canEdit}
-        canChangeOwnerShip={canChangeOwnerShip}
-        {...props}
-        {...{ FBContainer }}
-      />
-    </Form>
+    <FBWorkspace
+      portalContainer={FBContainer}
+      initialValues={dataProp.formInput}
+      changeRequest={dataProp}
+      autosave={true}
+      schema={schema}
+      mode={"preview"}
+    >
+      <Form>
+        <Presenter
+          dataProp={dataProp}
+          asyncState={async.asyncState}
+          canEdit={canEdit}
+          canChangeOwnerShip={canChangeOwnerShip}
+          {...props}
+          {...{ FBContainer }}
+        />
+      </Form>
+    </FBWorkspace>
   );
 
   const summaryFormikRenderer = () => (
     <FormContext.Provider value={{ submitOnChange: false }}>
-      <FBWorkspace
-        portalContainer={FBContainer}
-        initialValues={dataProp.formInput}
-        changeRequest={dataProp}
-        autosave={true}
-        schema={schema}
-        mode={"preview"}
+      <Formik
+        initialValues={toChangeRequestFormValues(dataProp)}
+        onSubmit={onSubmit}
+        enableReinitialize={true}
       >
-        <Formik
-          initialValues={toChangeRequestFormValues(dataProp)}
-          onSubmit={onSubmit}
-          enableReinitialize={true}
-        >
-          {summaryPresenterRenderer}
-        </Formik>
-      </FBWorkspace>
+        {summaryPresenterRenderer}
+      </Formik>
     </FormContext.Provider>
   );
 
-  const sidebarList = [
+  const sidebarList: Sidebar[] = [
     {
       icon: <TimelineIcon />,
+      type: "history",
       details: {
         dataCy: "timeline-icon",
         title: intl.formatMessage({
@@ -134,24 +136,27 @@ export const Container: React.FunctionComponent<Props> = ({
       },
     }, {
       icon: <BookmarkIcon />,
+      type: "bookmarks",
       details: {
         dataCy: "bookmark-icon",
         title: intl.formatMessage({
           id: "document.revision.bookmarks",
         }),
-        component: <Bookmarks location={url} schema={schema} />,
+        component: <Bookmarks />,
       },
     },
   ];
 
   return (
-    <div className={classes.root}>
-      <ChangeRequestSummarySockets crId={dataProp.crId} />
-      <div className={classes.appFrame}>
-        {summaryFormikRenderer()}
+    <FBProvider {...{ bookmarkState }}>
+      <div className={classes.root}>
+        <ChangeRequestSummarySockets crId={dataProp.crId} />
+        <div className={classes.appFrame}>
+          {summaryFormikRenderer()}
+        </div>
+        <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />
       </div>
-      <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />
-    </div>
+    </FBProvider>
   );
 };
 

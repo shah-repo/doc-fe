@@ -1,4 +1,4 @@
-import _, { isEmpty } from "lodash";
+import { isEmpty, isEqual } from "lodash";
 import { toJS } from "mobx";
 import React from "react";
 import { AsyncStatus } from "../../../state/types";
@@ -29,12 +29,12 @@ const getDiff = (transformedValues, transformedInitialValues) => {
         outputDocumentTypes: (value as any).outputDocumentTypes,
         schema: toJS((value as any).schema),
       };
-      if (!_.isEqual(initialFormTemplate, newFormTemplateValue)) {
+      if (!isEqual(initialFormTemplate, newFormTemplateValue)) {
         diff[key] = value;
       }
       continue;
     }
-    if (!_.isEqual(value, transformedInitialValues[key])) {
+    if (!isEqual(value, transformedInitialValues[key])) {
       diff[key] = value;
     }
   }
@@ -47,7 +47,7 @@ const getFormInputDiff = (transformedValues, transformedInitialValues) => {
     const initialValueToCompare = clearMobxObject(transformedInitialValues.formInput?.[key]);
     const valueToCompare = clearMobxObject(value);
 
-    if (!_.isEqual(valueToCompare, initialValueToCompare)) {
+    if (!isEqual(valueToCompare, initialValueToCompare)) {
       formInputDiff[key] = valueToCompare;
     }
   }
@@ -64,7 +64,7 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
     Object.keys(transformedInitialValues.formInput).some((k) => !(k in transformedValues.formInput)) :
     false;
 
-  if (_.isEmpty(formInputDiff) && !hasKeysNotInValuesFormInput) {
+  if (isEmpty(formInputDiff) && !hasKeysNotInValuesFormInput) {
     return diff;
   }
 
@@ -100,7 +100,7 @@ export const useFindDiff = () => {
     const compare = (a, b) => {
       const diff = {};
       for (const [key, value] of Object.entries(a)) {
-        if (!_.isEqual(value, b[key])) {
+        if (!isEqual(value, b[key])) {
           diff[key] = value;
         }
       }

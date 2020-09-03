@@ -1,10 +1,10 @@
-import _ from "lodash";
+import { find, isEmpty, isUndefined, map, size } from "lodash";
 import React from "react";
 import FBValidator from "../../components/validation/FBValidator";
 import validatorCollection from "../../stores/domain/collections/FBValidatorCollection";
+import FBStore from "../../stores/ui/FBStore";
 import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 import { FBValidatorFormProps } from "../../types/validation/validatorForm";
-import FBStore from "../../stores/ui/FBStore";
 
 export const withValidatorForm = <T extends FBValidatorFormProps>(
   Component: React.FunctionComponent<T>,
@@ -12,14 +12,14 @@ export const withValidatorForm = <T extends FBValidatorFormProps>(
   const Comp = (props: T) => {
 
     const validators =
-      _.map(validatorCollection.data(), (validator, index) => {
+      map(validatorCollection.data(), (validator, index) => {
         const { applicableIn } = validator;
         const activeType = FBValidatorStore.activeValidatorType;
-        let renderEl = (_.isEmpty(applicableIn) || (applicableIn || []).includes(activeType || ""));
+        let renderEl = (isEmpty(applicableIn) || (applicableIn || []).includes(activeType || ""));
 
-        const isRelational = _.find(validator.indicators, { type: "schemaSelect" });
+        const isRelational = find(validator.indicators, { type: "schemaSelect" });
 
-        if (!_.isUndefined(isRelational) && _.size(FBStore.getSchema()) === 0) {
+        if (!isUndefined(isRelational) && size(FBStore.getSchema()) === 0) {
           renderEl = false;
         }
 

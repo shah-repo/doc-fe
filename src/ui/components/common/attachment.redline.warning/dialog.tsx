@@ -31,7 +31,8 @@ export const AttachmentRedLineWarningDialog: React.FunctionComponent<Props> = ({
       asyncState={asyncState}
       cancel={closeDialog}
       translationText = {translationText}
-      translationButtonText = {translationButtonText}/>
+      translationButtonText = {translationButtonText}
+    />
   );
 
   return (

@@ -40,6 +40,7 @@ const Lists: React.FunctionComponent<ListsProps> = ({
     } else {
       setStringTitle(title);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stringTitle]);
 
   const selectOptions = choices.map((choice: string, i) => (

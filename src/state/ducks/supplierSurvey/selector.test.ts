@@ -1,5 +1,5 @@
 
-import _ from "lodash";
+import { cloneDeep } from "lodash";
 import { ApplicationState } from "../../reducers";
 import { getAsyncState } from "../../tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
@@ -12,7 +12,7 @@ describe("supplier survey selectors tests", () => {
   const supplierSurveyForm = getSurveyFormDocumentRevision();
 
   beforeAll(() => {
-    state = _.cloneDeep(initialStoreState);
+    state = cloneDeep(initialStoreState);
     state.supplierSurvey.supplierSurvey = supplierSurveyForm;
     state.supplierSurvey.loadSupplierSurveyAsyncInfo = getAsyncState();
   });

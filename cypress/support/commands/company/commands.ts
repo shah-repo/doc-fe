@@ -20,6 +20,8 @@ interface IdocumentTypeDto {
   documentTypeAcronym: string;
   isQms?: boolean;
   group: string;
+  privateNumberPool?: boolean;
+  startingNumber?: number;
 }
 
 export interface ICreateCompanyBootstrap {
@@ -69,6 +71,7 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
   const bodyDefaults = {
     name: `${capitalize(faker.commerce.color())} ${faker.company.companyName()} ${companyNumber}`,
     companyAcronym: `TC${companyNumber}`,
+    scheduledForDeletion: true,
   };
   const body: ICreateCompanyBootstrap = {
     ...payload,

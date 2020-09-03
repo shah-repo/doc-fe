@@ -1,7 +1,7 @@
 import { mount, ReactWrapper } from "enzyme";
 // eslint-disable-next-line: no-implicit-dependencies
 import { History } from "history";
-import _ from "lodash";
+import { defaultsDeep } from "lodash";
 import React from "react";
 import { LOGIN_URL } from "../../constants/urls";
 import PrivateRoutePresenter, { PrivateRoutePresenterProps } from "./PrivateRoute.presenter";
@@ -30,7 +30,7 @@ describe("PrivateRoute tests", () => {
   };
 
   const getProps = (customProps: Partial<PrivateRoutePresenterProps>): PrivateRoutePresenterProps =>
-    _.defaultsDeep({}, customProps, defaultProps);
+    defaultsDeep({}, customProps, defaultProps);
 
   const getWrapper = (props: PrivateRoutePresenterProps) => mount(<PrivateRoutePresenter {...props} />);
 

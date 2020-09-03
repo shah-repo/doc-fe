@@ -1,5 +1,5 @@
 import { Portal } from "@material-ui/core";
-import _ from "lodash";
+import { isUndefined } from "lodash";
 import React from "react";
 import { FBWorkspaceMemo, FBWorkspaceProps } from ".";
 import { FBConditionalWrapper, FBDialog, FBForm, FBProvider, FBSnackbar } from "..";
@@ -26,7 +26,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
       {active && (
         <>
           <FBConditionalWrapper
-            condition={!_.isUndefined(portalContainer)}
+            condition={!isUndefined(portalContainer)}
             wrapper={(wrapperChildren) => (
               <Portal container={portalContainer?.current}>
                 {wrapperChildren}

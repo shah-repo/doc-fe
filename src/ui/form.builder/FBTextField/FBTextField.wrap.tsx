@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get, isUndefined } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FB, FBTextFieldProps } from "..";
@@ -19,11 +19,11 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     const intl = useIntl();
     disabled = (
       disabled ||
-      _.get(props.hellosignFlowProps, "type") === "HS_DEFINED_FIELD" ||
+      get(props.hellosignFlowProps, "type") === "HS_DEFINED_FIELD" ||
       formState?.getFieldValue("signatureRequestId")
     );
 
-    (_.isUndefined(multiline)) && (
+    (isUndefined(multiline)) && (
       multiline = Boolean(rows && (rows as number) > 1)
     );
 

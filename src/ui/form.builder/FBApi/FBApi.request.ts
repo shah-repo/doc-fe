@@ -1,4 +1,4 @@
-import _, { first, get, has, isArray, join } from "lodash";
+import { first, get, has, isArray, isEmpty, isUndefined, join, template } from "lodash";
 import { action, observable, set } from "mobx";
 import apiClient from ".";
 import { ApiActionMethod } from "../../../state/types";
@@ -17,7 +17,7 @@ export default class FBRequest<Data, Body> {
   }
 
   @action public setTemplateUrl = (url: string, values: Record<string, any>) => {
-    const urlTpl = _.template(url);
+    const urlTpl = template(url);
     const urlStr = urlTpl(values);
     this.setUrl(urlStr);
   };
@@ -47,8 +47,7 @@ export default class FBRequest<Data, Body> {
   @action public patch = () => this.start("patch");
   @action public delete = () => this.start("delete");
 
-  @action public dataFilter = (data: Data): Data | undefined => data;
-  @action public dataSort = (data: Data): Data | undefined => data;
+  @action public prepareData = (data: Data): Data | undefined => data;
 
   protected onSuccess() {
     this.setLoading(false);
@@ -88,15 +87,14 @@ export default class FBRequest<Data, Body> {
         return;
     }
 
-    if (_.isUndefined(promise)) {
+    if (isUndefined(promise)) {
       return this.setLoading(false);
     }
 
     promise
       .then((data) => {
-        !_.isEmpty(this.root) && (data = _.get(data as Data, this.root));
-        data = this.dataFilter(data);
-        data = this.dataSort(data);
+        !isEmpty(this.root) && (data = get(data as Data, this.root));
+        data = this.prepareData(data);
         this.setData(data as Data);
         this.onSuccess();
       })

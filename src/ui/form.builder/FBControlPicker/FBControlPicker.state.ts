@@ -39,6 +39,7 @@ export class FBControlPickerState {
         "radiogroup",
         "paragraph",
         "fileupload",
+        "blanktplform",
         "quantity",
         "timer",
         ...this.hasPurchaseOrder ? ["purchaseorder"] as FBInputType[] : [],

@@ -52,7 +52,10 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
           justifyContent="flex-end"
           alignItems="flex-end"
         >
-          <SubmitButton asyncState={asyncState} label="change.owner.update" id="OwnerChangerPresenter-submitButton" />
+          <SubmitButton asyncState={asyncState}
+            label="change.owner.update"
+            id="OwnerChangerPresenter-submitButton"
+            data-cy="changeOwner-submit" />
         </Box>
       </Form>
     </Box>
@@ -85,7 +88,12 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
 
   return (
     <Fragment>
-      <Button color="secondary" variant="outlined" onClick={openDialog} id="OwnerChangerPresenter-changeOwner" >
+      <Button
+        color="secondary"
+        variant="outlined"
+        onClick={openDialog}
+        id="OwnerChangerPresenter-changeOwner"
+        data-cy="changeOwner" >
         <Text translation="change.owner" />
       </Button>
       {dialogRenderer()}

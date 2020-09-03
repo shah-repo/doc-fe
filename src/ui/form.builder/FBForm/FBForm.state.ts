@@ -1,5 +1,5 @@
 import { flatten } from "flat";
-import _, { Dictionary } from "lodash";
+import { Dictionary, get as lodashGet, isArray, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBFormConstructor, FBInputState, FBWorkspaceMode, FBWorkspaceState } from "..";
 import { FBSchemaState } from "../FBSchema";
@@ -29,8 +29,17 @@ export class FBFormState extends FBSchemaState {
   }
 
   @computed public get Validator(): any {
-    return _.get(window, "EnlilRemoteValidators.validator");
+    return lodashGet(window, "EnlilRemoteValidators.validator");
   }
+
+  public reset = () => {
+    this.initialValues = {};
+    this.values = {};
+    this.rules = {};
+    this.validationAttributeNames = {};
+    this.inputState.clear();
+    this.validate();
+  };
 
   @action public setValues = (values: Dictionary<any>) => {
     this.values = values;
@@ -43,11 +52,11 @@ export class FBFormState extends FBSchemaState {
     if (!fieldName) {
       return defaultValue;
     }
-    if (_.isUndefined(_.get(this.values, fieldName)) && !_.isUndefined(defaultValue)) {
-      _.set(this.initialValues, fieldName, defaultValue);
-      _.set(this.values, fieldName, defaultValue);
+    if (isUndefined(lodashGet(this.values, fieldName)) && !isUndefined(defaultValue)) {
+      lodashSet(this.initialValues, fieldName, defaultValue);
+      lodashSet(this.values, fieldName, defaultValue);
     }
-    return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
+    return lodashGet(this.values, fieldName) || lodashGet(this.initialValues, fieldName);
   };
 
   @action public setFieldValue = (
@@ -56,23 +65,18 @@ export class FBFormState extends FBSchemaState {
     withState = false,
     forceDefault = false
   ) => {
-    if (!fieldName) {
-      return;
-    }
-    const prevValue = this.getFieldValue(fieldName);
-    _.set(this.values, fieldName, value);
-    if (withState) {
-      this.inputState.get(fieldName)?.setValue(prevValue);
-      this.inputState.get(fieldName)?.setValue(value);
-    }
+    if (!fieldName) { return; }
+    lodashSet(this.values, fieldName, value);
+    if (!withState) { return; }
+    this.inputState.get(fieldName)?.setValue(value);
   };
 
   @action public omitFieldValue = (fieldName?: string) => {
     if (!fieldName) {
       return;
     }
-    this.initialValues = _.omit(this.initialValues, fieldName);
-    this.values = _.omit(this.getValues(), fieldName);
+    this.initialValues = omit(this.initialValues, fieldName);
+    this.values = omit(this.getValues(), fieldName);
   };
 
   @action public setRules = (rules: Dictionary<string>) =>
@@ -101,10 +105,10 @@ export class FBFormState extends FBSchemaState {
     get(this.helpers, fieldName);
 
   @action public setFieldRules = (fieldName: string, rules: string | undefined) => {
-    if (_.isUndefined(rules)) {
+    if (isUndefined(rules)) {
       return;
     }
-    _.set(this.rules, fieldName, rules);
+    lodashSet(this.rules, fieldName, rules);
   };
 
   @action public setValidationAttributeName = (fieldName: string, attrName: string) => {
@@ -115,12 +119,12 @@ export class FBFormState extends FBSchemaState {
   };
 
   @action public validate = (callback?: (valid: boolean) => any) => {
-    if (_.isUndefined(this.Validator)) {
+    if (isUndefined(this.Validator)) {
       return;
     }
 
-    const rules = this.getRules();
-    const values = _.omitBy(this.values, (v) => _.isString(v) && _.isEmpty(v));
+    const rules = flatten(this.getRules());
+    const values = omitBy(this.values, (v) => isString(v) && isEmpty(v));
     // *TODO: unify validators format
     let validator: any;
     try {
@@ -144,7 +148,7 @@ export class FBFormState extends FBSchemaState {
       () => {
         this.errors.clear();
         const errors = validator.errors.all();
-        _.map(errors, (v, k) => this.setFieldError(k, _.join(v, "\n")));
+        map(errors, (v, k) => this.setFieldError(k, join(v, "\n")));
         callback && callback(false);
       });
   };
@@ -158,9 +162,9 @@ export class FBFormState extends FBSchemaState {
         const reqName = reqs.shift() || "";
         let inputValue = validator.input[reqName];
         // Radio group support
-        !_.isArray(inputValue) && (inputValue = [inputValue]);
+        !isArray(inputValue) && (inputValue = [inputValue]);
         const diff = inputValue && inputValue.filter((val) => reqs.includes(val));
-        if (diff && diff.length > 0 && (!val || _.isEmpty(val))) {
+        if (diff && diff.length > 0 && (!val || isEmpty(val))) {
           const { messages: { attributeNames } } = validator;
           const reqsAttributes = reqs.map((req) => attributeNames[req]);
           return passes(

@@ -1,5 +1,7 @@
 import path from "path";
 import { GroupTag, NavigationItems } from "../../../src/state/ducks/auth/types";
+import { CONFIG } from "../../support/config";
+import { USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
@@ -11,8 +13,8 @@ context(`Test: ${path.basename(__filename)}`, () => {
   context("Check navigation bar for default company", () => {
     it("[API] API login as admin with default company", (done: any) => {
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -22,8 +24,8 @@ context(`Test: ${path.basename(__filename)}`, () => {
 
     it("Logs admin in default company with default navigation", () => {
       cy.authLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       });
     });
 
@@ -57,35 +59,23 @@ context(`Test: ${path.basename(__filename)}`, () => {
   context("Create company and checks admin navigation bar", () => {
     it("[API] Creates company", (done: any) => {
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
 
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+            companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: "enlil.testmail+cy5@gmail.com",
+            importerEmail: USERS[5].email,
             maxRevisionStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [
-              {
-                name: "Second Tester",
-                email: "enlil.testmail+cy2@gmail.com",
-              },
-              {
-                name: "Third Tester",
-                email: "enlil.testmail+cy3@gmail.com",
-              },
-              {
-                name: "Fourth Tester",
-                email: "enlil.testmail+cy4@gmail.com",
-              }],
+            users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
@@ -99,7 +89,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.name === "Company Admin");
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           createdCompany.documentTypes.forEach((item: { documentTypeName: string; id: any }) => {
             if (item.documentTypeName === "Testing docType")
             {
@@ -113,7 +103,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
 
     it("[API] API login with company admin", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: USERS[1].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -124,7 +114,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
 
     it("Logs in with company admin", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
@@ -168,7 +158,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
   context("Creates new navigation item and checks visibility", () => {
     it("[API] Updates company", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: USERS[1].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -225,7 +215,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
 
     it("[API] API login with company admin", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: USERS[1].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -236,7 +226,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
 
     it("Logs in with company admin", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
@@ -262,7 +252,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
 
     it("Logs in with user without group management and user management tags", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       });
     });

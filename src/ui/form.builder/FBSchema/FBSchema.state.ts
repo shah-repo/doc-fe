@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, size, union } from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
@@ -6,10 +6,12 @@ import { FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBIn
 import { FBActionField } from "../FBActionField";
 import { FBApproval } from "../FBApproval";
 import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
+import { FBApprovers } from "../FBApprovers";
+import { FBBlankTplForm } from "../FBBlankTplForm";
 import { FBButton } from "../FBButton";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
-import { FBDocumentRevisions } from "../FBDocumentRevisionsField";
+import { FBDocumentRevisions } from "../FBDocumentRevisions";
 import { FBFileUpload } from "../FBFileUpload";
 import { FBHelloSign } from "../FBHelloSign";
 import { FBHyperlink } from "../FBHyperlink";
@@ -43,6 +45,7 @@ export class FBSchemaState {
     "teststep",
     "purchaseorder",
     "task",
+    "blanktplform",
   ];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
@@ -62,6 +65,7 @@ export class FBSchemaState {
     radio: FBRadio,
     radiogroup: FBRadioGroup,
     fileupload: FBFileUpload,
+    blanktplform: FBBlankTplForm,
     schemaselect: FBSchemaSelect,
     paragraph: FBParagraph,
     quantity: FBQuantityField,
@@ -84,6 +88,7 @@ export class FBSchemaState {
     approvalMatrix: FBApprovalMatrixField,
     poApprovalMatrix: FBPOApprovalMatrix,
     task: FBTask,
+    approvers: FBApprovers,
   };
 
   @observable public schema?: FBSchemaProps[];
@@ -104,17 +109,17 @@ export class FBSchemaState {
     });
   };
 
-  @action public getSchema = (): FBSchemaProps[] => get(this, "schema");
+  @action public getSchema = (): FBSchemaProps[] => cloneDeep(get(this, "schema"));
 
   @action public getSchemaItem = (name?: string): FBSchemaProps | undefined => {
     if (!name) {
       return;
     }
-    return _.find(this.getSchema(), { name });
+    return find(this.getSchema(), { name });
   };
 
   @action public getSchemaItemAt = (index?: number): FBSchemaProps | undefined => {
-    if (_.isUndefined(index)) {
+    if (isUndefined(index) || !inRange(index, 0, this.schema?.length)) {
       return;
     }
     return this.schema && this.schema[index];
@@ -124,19 +129,19 @@ export class FBSchemaState {
     schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
       ...schemaItem,
       index: i,
-      ...(_.includes(FBEditorState.pickStepIndex, schemaItem.type)) && {
-        stepIndex: _.size(_.filter(ro.slice(0, i + 1), (step) =>
-          _.includes(FBEditorState.pickStepIndex, step.type))),
+      ...(includes(FBEditorState.pickStepIndex, schemaItem.type)) && {
+        stepIndex: size(filter(ro.slice(0, i + 1), (step) =>
+          includes(FBEditorState.pickStepIndex, step.type))),
       },
     }));
     set(this, "schema", schema);
   };
 
   @action public setSchemaItem = (schemaItem: FBSchemaProps) => {
-    const schemaItemIndex = _.findIndex(this.getSchema(), { name: schemaItem.name });
+    const schemaItemIndex = findIndex(this.getSchema(), { name: schemaItem.name });
     const schemaAt = this.getSchemaItemAt(schemaItemIndex);
-    if (schemaAt) {
-      const schema = _.union(this.schema, [schemaItem]);
+    if (!schemaAt) {
+      const schema = union(this.schema, [schemaItem]);
       this.setSchema(schema);
       return;
     }
@@ -163,13 +168,13 @@ export class FBSchemaState {
     if (!schemaItem) {
       return;
     }
-    const schema = _.filter(this.schema, (item) => item.name !== schemaItem.name);
+    const schema = filter(this.schema, (item) => item.name !== schemaItem.name);
     this.setSchema(schema);
   };
 
   @action public removeSchemaItemAt = (index: number | undefined) => {
     const schemaItem = this.getSchemaItemAt(index);
-    if (_.isUndefined(schemaItem)) {
+    if (isUndefined(schemaItem)) {
       return;
     }
     this.removeSchemaItem(schemaItem);

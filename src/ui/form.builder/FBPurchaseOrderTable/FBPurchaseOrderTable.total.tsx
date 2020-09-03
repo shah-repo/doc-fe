@@ -35,6 +35,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
       <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
         <FormattedNumber
           value={Number(calculation?.subTotal)}
+          // eslint-disable-next-line react/style-prop-object
           style="currency"
           currency={calculation?.currency}
         />
@@ -45,6 +46,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
       <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
         <FormattedNumber
           value={Number(calculation?.tax)}
+          // eslint-disable-next-line react/style-prop-object
           style="currency"
           currency={calculation?.currency}
         />
@@ -74,6 +76,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
       <FBTableCell className="FBTotal-root" align="right" colSpan={2} data-cy="poTotal">
         <FormattedNumber
           value={Number(calculation?.totalAmount)}
+          // eslint-disable-next-line react/style-prop-object
           style="currency"
           currency={calculation?.currency}
         />

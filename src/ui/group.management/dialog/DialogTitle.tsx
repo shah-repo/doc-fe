@@ -25,6 +25,7 @@ export const DialogTitle: React.FunctionComponent<Props> = ({
           onClick={closeDialog}
           aria-label="Close"
           id="DialogContent-close"
+          data-cy="DialogContent-close"
         >
           <CloseIcon />
         </IconButton>

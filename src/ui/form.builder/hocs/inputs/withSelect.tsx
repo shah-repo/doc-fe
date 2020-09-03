@@ -1,6 +1,6 @@
 import { Chip } from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
-import _ from "lodash";
+import { map } from "lodash";
 import React from "react";
 import Text from "../../../components/Text";
 import { FBSelectProps } from "../../types/inputs/select.js";
@@ -16,7 +16,7 @@ export const withSelect = <T extends FBSelectProps>(
   ...props
 }: T) => {
 
-  const menuItems = _.map(options, (option, index) => (
+  const menuItems = map(options, (option, index) => (
     <MenuItem
       key={`${option[optionValueKey || ""]}-${index}`}
       value={option[optionValueKey || ""]}

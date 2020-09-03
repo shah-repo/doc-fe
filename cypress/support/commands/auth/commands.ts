@@ -1,4 +1,5 @@
 import { CONFIG } from "../../config";
+import { CyRoutes } from "../../routes";
 
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
@@ -33,13 +34,16 @@ Cypress.Commands.add("authApiLogout", () => {
 
 Cypress.Commands.add("authLogin", (params: { email: string; password: string }) => {
   cy.visit(CONFIG.FE_URL, { timeout: 20 * 1000 });
-  cy.get("[data-cy=\"LoginFormPresenter-email\"]").type(params.email)
-    .get("[data-cy=\"LoginFormPresenter-password\"]").type(params.password)
-    .get("[data-cy=\"LoginFormPresenter-submit\"]").click();
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.Login, () => {
+      cy.get("[data-cy=\"LoginFormPresenter-email\"]").type(params.email)
+        .get("[data-cy=\"LoginFormPresenter-password\"]").type(params.password)
+        .get("[data-cy=\"LoginFormPresenter-submit\"]").click();
+    });
 });
 
 Cypress.Commands.add("authLogout", () => {
-  cy.get("[data-cy=\"UserMenuButton\"]").click();
+  cy.get("[data-cy=\"UserMenuButton\"]", { timeout: 50 * 1000 }).click();
   cy.get("[data-cy=\"header.logout\"]").click();
 });
 

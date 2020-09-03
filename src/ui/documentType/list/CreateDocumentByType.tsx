@@ -6,9 +6,10 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { DocumentType, documentTypeActions, DocumentTypeById, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType, documentTypeActions, DocumentTypeById, DocumentTypeByIdForm, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedId, documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import { documentVersionPath } from "../../document.revision/utils/paths";
@@ -17,10 +18,14 @@ import { useCreateDocumentByTypeButton } from "../../hooks/docCustomization/useC
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
-import DocumentTypeDialog from "../dialogs/DocumentTypeDialog.presenter";
 import FormListDialog from "../dialogs/FormListDialog/FormListDialog.presenter";
+import { MultipleFormTemplateDialog } from "../dialogs/MultipleFormTemplateDialog";
 import { filterSecurityGroupsForQms } from "./helpers";
 import { styles } from "./styles";
+
+interface MultipleFormInitialValues {
+  selectType: OptionType[];
+}
 
 interface Props {
   isByCategory: boolean;
@@ -92,21 +97,24 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const classes = styles();
 
   const formDialog = useDialog();
-  const docTypeDialog = useDialog();
+  const multipleFormDialog = useDialog();
 
   const getDocTypesByCategory = useActionCreator(documentTypeActions.getDocTypesByCategory);
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
 
   const formIds = useSelector(documentTypeSelectors.formIds);
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypesByCategory);
+  const [isVisible, label] = useCreateDocumentByTypeButton(documentTypeId);
 
   const [errorMessage, setErrorMessage] = useState<string>();
-  const [multipleForm, toggleMultipleForm] = React.useState(false);
-  const [docTypeForm, toggleDocTypeForm] = React.useState(false);
-
-  const [isVisible, label] = useCreateDocumentByTypeButton(documentTypeId);
+  const [initialValues, setInitialValues] = useState<MultipleFormInitialValues>({ selectType: [] });
+  const [forms, setForms] = useState<DocumentTypeByIdForm[]>([]);
   const buttonLabel = isByCategory ? labelName : label;
-
+  const isRecord = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.RECORD;
+  const closeMultipleFormDialog = () => {
+    multipleFormDialog.close();
+    setForms([]);
+  };
   if (!isByCategory && documentTypeId) {
     selectedDocumentTypeId = documentTypeId;
   }
@@ -117,17 +125,21 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   const idAsync = useAsync<DocumentTypeById>({
     onSuccess: () => {
-      toggleDocTypeForm(false);
+      setForms(formIds);
+      if (!isByCategory) {
+        formDialog.open();
+        return;
+      }
       if (formIds.length === 1) {
         handleCreateDocument(formIds[0] as DocumentRevision);
+        setForms([]);
         return;
       }
       if (isEmpty(formIds)) {
         setErrorMessage("missing.form.error");
         return;
       }
-      toggleMultipleForm(true);
-      formDialog.open();
+      multipleFormDialog.open();
     },
     onError: (msg) => setErrorMessage(msg),
   });
@@ -136,6 +148,12 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     onSuccess: () => {
       if (documentTypes.length === 1) {
         selectedDocumentTypeId = documentTypes[0].id;
+        setInitialValues({
+          selectType: [{
+            label: documentTypes[0].documentTypeName,
+            value: documentTypes[0].id,
+          }],
+        });
         idAsync.start(getDocRevByIds, documentTypes[0].id, idAsync);
         return;
       }
@@ -143,8 +161,8 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         setErrorMessage("missing.type.error");
         return;
       }
-      toggleDocTypeForm(true);
-      docTypeDialog.open();
+      setInitialValues({ selectType: [] });
+      multipleFormDialog.open();
     },
     onError: (msg) => setErrorMessage(msg),
   });
@@ -165,6 +183,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     }
     const selectedForm = formIds.find((form) => form.id === docRevId);
     handleCreateDocument(selectedForm as DocumentRevision);
+    setForms([]);
   };
 
   const handleDocTypeSelection = (docTypeId) => {
@@ -176,21 +195,27 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     idAsync.start(getDocRevByIds, docTypeId, idAsync);
   };
 
-  const renderDocumentTypeDialog = (props: FormikProps<any>) => (
-    <DocumentTypeDialog
-      {...props}
-      dialog={docTypeDialog}
-      handleSelection={handleDocTypeSelection}
-      documentTypes={documentTypes}
-    />
-  );
-
   const renderFormListDialog = (props: FormikProps<any>) => (
     <FormListDialog
       {...props}
       dialog={formDialog}
       handleSelection={handleFormSelection}
       formIds={formIds}
+    />
+  );
+
+  const renderFormTemplateDialog = (props: FormikProps<any>) => (
+    <MultipleFormTemplateDialog
+      {...props}
+      dialog={multipleFormDialog}
+      handleSelection={handleDocTypeSelection}
+      handleTemplateSelection={handleFormSelection}
+      formIds={forms}
+      {...{
+        documentTypes,
+        isRecord,
+        closeMultipleFormDialog,
+      }}
     />
   );
 
@@ -225,22 +250,18 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         )
       }
       {
-        docTypeForm && (
-          <FormContext.Provider value={{ submitOnChange: false }}>
-            <Formik initialValues={{}} onSubmit={handleDocTypeSelection}>
-              {renderDocumentTypeDialog}
-            </Formik>
-          </FormContext.Provider>
-        )
+        <FormContext.Provider value={{ submitOnChange: false }}>
+          <Formik initialValues={initialValues} onSubmit={handleDocTypeSelection}>
+            {renderFormTemplateDialog}
+          </Formik>
+        </FormContext.Provider>
       }
       {
-        multipleForm && (
-          <FormContext.Provider value={{ submitOnChange: false }}>
-            <Formik initialValues={{}} onSubmit={handleFormSelection}>
-              {renderFormListDialog}
-            </Formik>
-          </FormContext.Provider>
-        )
+        <FormContext.Provider value={{ submitOnChange: false }}>
+          <Formik initialValues={{}} onSubmit={handleFormSelection}>
+            {renderFormListDialog}
+          </Formik>
+        </FormContext.Provider>
       }
     </>
   );
