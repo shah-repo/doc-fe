@@ -136,12 +136,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     return documentType?.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.RECORD);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentTypesById, values.document?.documentType?.id]);
-  const isInlineApproval = documentRevision?.formDocument?.formTemplate?.schema.some((e) =>
-    (e.type === "approval" || e.type === "inlineapproval" as string));
-  const isRevisionChangeHidden = (isRecord &&
-    isInlineApproval &&
-    isdocRevStatusDraft &&
-    !showAdministrativeAndVoidChange);
+  const isRevisionChangeHidden = isRecord && isdocRevStatusDraft;
 
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments.length > 1);
@@ -187,6 +182,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       includeEmpty={false}
     />
   );
+  const defaultLabel = isRecord ? "document.revision.type.of.update" : "document.revision.stage";
   const documentTypeId = values.document?.documentType?.id;
 
   return (
@@ -281,6 +277,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           documentTypeId,
           showObsoleteRevisionChange,
           showAdministrativeAndVoidChange,
+          defaultLabel,
         }}
         isDisabled={isDisabledInput} />}
         {
