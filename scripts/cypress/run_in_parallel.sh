@@ -21,6 +21,8 @@ if [[ -z "${DATE_ISO_DEFAULT}" ]]; then
   exit
 fi
 
+export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START:-5600}
+export ENLIL_COMPOSE_EXPOSE_DIRECTOR_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+6))"
 export CI_BUILD_ID=${CI_BUILD_ID:-$DATE_ISO_DEFAULT}
 export REPORT_TITLE=${REPORT_TITLE:-generated_specs}
 export CYPRESS_INTEGRATION_FOLDER=${CYPRESS_INTEGRATION_FOLDER:-"cypress/integration"}
@@ -34,8 +36,9 @@ if [[ -z "${CI_BUILD_ID}" ]]; then
   exit
 fi
 
+./scripts/cypress/patch_director_port_in_cache.sh
+
 ./scripts/cypress/delete_cache.sh
-source ./scripts/cypress/make_results_dir.sh
 ./scripts/cypress/run_generate_info_report.sh
 export CYPRESS_SCREENSHOTS_FOLDER=$DIR_SCREENSHOTS_REPORT
 
