@@ -113,7 +113,7 @@ Update
 
 in *scripts/cypress/env_vars_for_compose.sh* to point to repositories on your machine
 
-Add exection permission to all scripts in *./scripts*
+Add execution permission to all scripts in *./scripts*
 ```
 chmod -R +x ./scripts
 ```
