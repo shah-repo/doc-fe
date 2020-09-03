@@ -153,6 +153,16 @@ Example
 NUMBER_OF_WORKERS=4 CI_BUILD_ID=2020-07-03T14:07:48+02:00 ./scripts/cypress/run_in_parallel.sh
 ```
 
+#### Take screenshots after every step
+Set env variable `CYPRESS_TAKE_SCREENSHOT_AFTER_EACH` to true
+Eg:
+```
+CYPRESS_TAKE_SCREENSHOT_AFTER_EACH=true ./scripts/cypress/run_on_deployment.sh
+```
+```
+CYPRESS_TAKE_SCREENSHOT_AFTER_EACH=true ./scripts/cypress/run_in_parallel.sh
+```
+
 #### Run Cypress suite on deployed code
 To run Cypress test suites on code that was deployed, you need to:
  1. Start Sorry Cypress working in the background: `./scripts/cypress/start_dashboard.sh`
@@ -162,6 +172,7 @@ To run Cypress test suites on code that was deployed, you need to:
     ```
       CYPRESS_SUPERADMIN_EMAIL=<superadmin_email> CYPRESS_SUPERADMIN_PASSWORD=<superadmin_password> ./scripts/cypress/run_on_deployment.sh
     ```
+
 
 #### Upload results to bitbucket
 

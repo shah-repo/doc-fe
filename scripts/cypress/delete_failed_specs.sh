@@ -22,7 +22,7 @@ if [[ -z "${CYPRESS_SCREENSHOTS_FOLDER}" ]]; then
   exit 1
 fi
 
-
+SORRY_CYPRESS_DASBOARD_CONTAINER_NAME=$COMPOSE_PROJECT_NAME"_enlil_cypress_dashboard_mongo_1"
 MOCHAWESOME_FILES=($(find results/$CI_BUILD_ID/json -name "$REPORT_TITLE*"))
 
 for i in "${MOCHAWESOME_FILES[@]}"
@@ -49,7 +49,7 @@ do
         db.getCollection('runs').updateOne({\"meta.ciBuildId\": ciBuildId, \"specs.spec\": specFile}, {\$set: {\"specs.\$.claimed\": false}});
         db.getCollection('instances').deleteOne({runId: run[0].runId, spec: specFile});"
       
-    echo $SCRIPT | docker exec -i enlil_cypress_dashboard_mongo bash -c mongo  1> /dev/null
+    echo $SCRIPT | docker exec -i $SORRY_CYPRESS_DASBOARD_CONTAINER_NAME bash -c mongo  1> /dev/null
     screenshotDir=${x/$CYPRESS_INTEGRATION_FOLDER/$CYPRESS_SCREENSHOTS_FOLDER}
 
     screenshotDir=${screenshotDir%\"}
