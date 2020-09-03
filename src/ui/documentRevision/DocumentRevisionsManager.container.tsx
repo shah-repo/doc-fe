@@ -4,12 +4,14 @@ import { connect, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { ReactComponent as BadgeIcon } from "../../assets/images/badge.svg";
 import { ReactComponent as BookmarkIcon } from "../../assets/images/bookmark.svg";
+import { ReactComponent as CRIcon } from "../../assets/images/cr.svg";
 import { ReactComponent as TimelineIcon } from "../../assets/images/history.svg";
 import { ReactComponent as NoteIcon } from "../../assets/images/note.svg";
 import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { DocumentGroupType } from "../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import { FB, FBBookmarkState, FBProvider } from "../form.builder";
 import { FBDocTypeGroup } from "../form.builder/FBApprovalMatrixTable";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.container";
@@ -18,9 +20,9 @@ import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.containe
 import DocumentRevisionListContainer from "./DocumentRevisionList.container";
 import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers";
 import Bookmarks from "./Sidebar/Bookmarks";
+import RevisionHistory from "./Sidebar/RevisionHistory";
 import { SidebarContainer } from "./Sidebar/Sidebar.container";
 import styles from "./styles";
-import { FB, FBBookmarkState, FBProvider } from "../form.builder";
 
 interface StateProps {
   documentRevisions: DocumentRevision[];
@@ -146,6 +148,16 @@ DocumentRevisionManagerContainerProps
           id: "document.revision.bookmarks",
         }),
         component: <Bookmarks />,
+      },
+    },
+    {
+      icon: <CRIcon />,
+      details: {
+        dataCy: "cr-icon",
+        title: intl.formatMessage({
+          id: "document.revision.cr.history",
+        }),
+        component: <RevisionHistory changeRequests={documentRevisions.map((e) => e.changeRequest)} />,
       },
     },
   ];

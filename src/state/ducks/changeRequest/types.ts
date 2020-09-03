@@ -63,6 +63,7 @@ export interface ImplementationPlan {
 }
 // This needs to be properly cleaned up
 export interface ChangeRequest {
+  createdAt: string;
   id: string;
   crId: string;
   ordinalNumber: number;
