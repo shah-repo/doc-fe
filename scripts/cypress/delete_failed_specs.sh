@@ -22,6 +22,11 @@ if [[ -z "${CYPRESS_SCREENSHOTS_FOLDER}" ]]; then
   exit 1
 fi
 
+if [[ -z "${COMPOSE_PROJECT_NAME}" ]]; then
+  echo "COMPOSE_PROJECT_NAME not set, exiting"
+  exit 1
+fi
+
 SORRY_CYPRESS_DASBOARD_CONTAINER_NAME=$COMPOSE_PROJECT_NAME"_enlil_cypress_dashboard_mongo_1"
 MOCHAWESOME_FILES=($(find results/$CI_BUILD_ID/json -name "$REPORT_TITLE*"))
 
