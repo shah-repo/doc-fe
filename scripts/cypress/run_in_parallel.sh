@@ -15,10 +15,11 @@ secs_to_human() {
 start=$(date +%s)
 
 source ./scripts/cypress/platform_specific_variables.sh
+source ./scripts/cypress/make_results_dir.sh
 
 if [[ -z "${DATE_ISO_DEFAULT}" ]]; then
   echo "DATE_ISO_DEFAULT not set, exiting"
-  exit
+  exit 1
 fi
 
 export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START:-5600}
@@ -39,13 +40,16 @@ yarn cypress verify
 
 if [[ -z "${CI_BUILD_ID}" ]]; then
   echo "CI_BUILD_ID not set, exiting"
-  exit
+  exit 1
 fi
 
 ./scripts/cypress/patch_director_port_in_cache.sh
+./scripts/cypress/generate_requirements_json_file.sh
 
 ./scripts/cypress/delete_cache.sh
+
 ./scripts/cypress/run_generate_info_report.sh
+
 export CYPRESS_SCREENSHOTS_FOLDER=$DIR_SCREENSHOTS_REPORT
 
 if [[ -z "${NUMBER_OF_WORKERS_PER_RUN}" ]]; then

@@ -3,7 +3,7 @@ set -e
 
 if [[ -z "${CI_BUILD_ID}" ]]; then
   echo "CI_BUILD_ID not set, exiting"
-  exit
+  exit 1
 fi
 
 export DIR_JSON="results/$CI_BUILD_ID/json"

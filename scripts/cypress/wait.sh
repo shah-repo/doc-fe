@@ -3,7 +3,7 @@ set -e
 
 if [[ -z "${ENLIL_COMPOSE_PORT_RANGE_START}" ]]; then
   echo "ENLIL_COMPOSE_PORT_RANGE_START not set, exiting"
-  exit
+  exit 1
 fi
 
 export ENLIL_COMPOSE_EXPOSE_BE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+1))"

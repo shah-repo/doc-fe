@@ -3,26 +3,25 @@ set -e
 
 if [[ -z "${CI_BUILD_ID}" ]]; then
   echo "CI_BUILD_ID not set, exiting"
-  exit
+  exit 1
 fi
 
 
 if [[ -z "${REPORT_TITLE}" ]]; then
   echo "REPORT_TITLE not set, exiting"
-  exit
+  exit 1
 fi
 
 if [[ -z "${CYPRESS_INTEGRATION_FOLDER}" ]]; then
   echo "CYPRESS_INTEGRATION_FOLDER not set, exiting"
-  exit
+  exit 1
 fi
 
 if [[ -z "${CYPRESS_SCREENSHOTS_FOLDER}" ]]; then
   echo "CYPRESS_SCREENSHOTS_FOLDER not set, exiting"
-  exit
+  exit 1
 fi
 
-./scripts/cypress/make_results_dir.sh
 
 MOCHAWESOME_FILES=($(find results/$CI_BUILD_ID/json -name "$REPORT_TITLE*"))
 
