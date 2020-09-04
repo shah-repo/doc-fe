@@ -103,7 +103,7 @@ context("Document list test", () => {
 
   context("Create first document", () => {
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -120,7 +120,7 @@ context("Document list test", () => {
     });
 
     it("Selects 'Clinical Protocol' document type from dropdown", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
     });
 
@@ -136,7 +136,7 @@ context("Document list test", () => {
 
   context("Create second document with same document prefix", () => {
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -153,7 +153,7 @@ context("Document list test", () => {
     });
 
     it("Selects 'Clinical Part' document type from dropdown", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Clinical Part" });
     });
 
@@ -169,7 +169,7 @@ context("Document list test", () => {
 
   context("Create third document with same document prefix", () => {
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -186,7 +186,7 @@ context("Document list test", () => {
     });
 
     it("Selects 'Clinical Protocol' document type from dropdown", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
     });
 
@@ -202,7 +202,7 @@ context("Document list test", () => {
 
   context("Create fourth document with different document prefix", () => {
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -219,7 +219,7 @@ context("Document list test", () => {
     });
 
     it("Selects 'Clinical Testing' document type from dropdown", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Clinical Testing" });
     });
 
@@ -235,7 +235,7 @@ context("Document list test", () => {
 
   context("Create fifth document with different document prefix", () => {
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -252,7 +252,7 @@ context("Document list test", () => {
     });
 
     it("Selects 'Clinical Report' document type from dropdown", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Clinical Report" });
     });
 

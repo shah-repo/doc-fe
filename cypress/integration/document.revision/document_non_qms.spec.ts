@@ -70,7 +70,7 @@ context("Non-QMS Document Creation Flow", () => {
 
   context("Start Non-QMS document creation flow", () => {
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -89,7 +89,7 @@ context("Non-QMS Document Creation Flow", () => {
     });
 
     it("Selects 'NonQMS Document' document type from dropdown", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "NonQMS Document" });
     });
 

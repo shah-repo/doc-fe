@@ -6,62 +6,62 @@ source ./scripts/cypress/platform_specific_variables.sh
 
 if [[ -z "${CI_BUILD_ID}" ]]; then
   echo "CI_BUILD_ID not set, exiting"
-  exit
+  exit 1
 fi
 
 if [[ -z "${DIR_REPORTS}" ]]; then
   echo "DIR_REPORTS not set, exiting"
-  exit
+  exit 1
 fi
 
 if [[ -z "${BE_REPO}" ]]; then
   echo "BE_REPO not set, exiting"
-  exit
+  exit 1
 fi
 
 if [[ -z "${FE_REPO}" ]]; then
   echo "FE_REPO not set, exiting"
-  exit
+  exit 1
 fi
 
 if [[ -z "${VALIDATORS_REPO}" ]]; then
   echo "VALIDATORS_REPO not set, exiting"
-  exit
+  exit 1
 fi
 
 if [[ -z "${NAME}" ]]; then
   echo "NAME not set, exiting"
-  exit
+  exit 1
 fi
 
 if [[ -z "${BB_USER}" ]]; then
   echo "BB_USER not set, exiting"
-  exit
+  exit 1
 fi
 
 if [[ -z "${BE_REPO_NAME}" ]]; then
   echo "BE_REPO_NAME not set, exiting"
-  exit
+  exit 1
 fi
 
 if [[ -z "${FE_REPO_NAME}" ]]; then
   echo "FE_REPO_NAME not set, exiting"
-  exit
+  exit 1
 fi
 
 if [[ -z "${VALIDATORS_REPO_NAME}" ]]; then
   echo "VALIDATORS_REPO_NAME not set, exiting"
-  exit
+  exit 1
 fi
 
 if [[ -z "${S3_BUCKET}" ]]; then
   echo "S3_BUCKET not set, exiting"
-  exit
+  exit 1
 fi
 
 if [[ -z "${DATE_ISO_DEFAULT}" ]]; then
   echo "DATE_ISO_DEFAULT not set, exiting"
-  exit
+  exit 1
 fi
 
 export BE_GIT_COMMIT_HASH=$(cd $BE_REPO;git rev-parse HEAD)
@@ -77,6 +77,7 @@ echo "--| BB_USER: $BB_USER"
 echo "--| Backend $BE_GIT_BRANCH_NAME $BE_GIT_COMMIT_HASH"
 echo "--| Frontend $FE_GIT_BRANCH_NAME $FE_GIT_COMMIT_HASH"
 echo "--| RemoteJS $VALIDATORS_GIT_BRANCH_NAME $VALIDATORS_GIT_COMMIT_HASH"
+echo "--| CI_BUILD_ID $CI_BUILD_ID"
 echo ""
 echo -n BitBucket Password: 
 read -s password
