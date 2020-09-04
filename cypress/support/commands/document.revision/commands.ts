@@ -356,7 +356,9 @@ Cypress.Commands.add("drNewTypeTrainingSelect", () => {
 });
 
 Cypress.Commands.add("drApproveAndReleaseDialog", () => {
-  cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 5 * 1000 }).click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
+    cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 5 * 1000 }).click();
+  });
 });
 
 Cypress.Commands.add("drSelectTemplateReleaseDocument", (params: { template: string }) => {

@@ -102,7 +102,7 @@ context("Group Creation Flow", () => {
   context("Check if 'Everyone' group exists", () => {
     it("Filters groups by name and selects the 'Everyone' group", function() {
       PreventSkipOnFailure.call(this);
-      SystemRequirement("REQ-2530");
+      // SystemRequirement("REQ-2530");
       cy.grpSelectGroup({ name: "Everyone" });
     });
   });
@@ -123,7 +123,7 @@ context("Group Creation Flow", () => {
     });
 
     it("Assigns user to the group", () => {
-      SystemRequirement("REQ-2560");
+      // SystemRequirement("REQ-2560");
       cy.grpAssignUser({ name: USERS[2].name });
     });
   });
@@ -137,7 +137,7 @@ context("Group Creation Flow", () => {
   context("Check if the group was created", () => {
     it("Filters groups by name and selects the new group", function() {
       PreventSkipOnFailure.call(this);
-      SystemRequirement("REQ-2550");
+      // SystemRequirement("REQ-2550");
       cy.grpSelectGroup({ name: "Unofficial Group" });
     });
   });

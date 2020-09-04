@@ -240,7 +240,8 @@ context("Document list test", () => {
     });
 
     it("Check only documents are shown on document list", () => {
-      SystemRequirement("REQ-0050", "REQ-0510");
+      SystemRequirement("REQ-0050");
+      // SystemRequirement("REQ-0510");
       cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
     });
   });
@@ -446,7 +447,7 @@ context("Document list test", () => {
   });
   context("Verify description is shown on hover", () => {
     it("Verify description", () => {
-      SystemRequirement("REQ-0130");
+      // SystemRequirement("REQ-0130");
       cy.dlVerifyDescriptionOnHover({ description: "\nTest Doc Rev Description1\n" });
     });
   });

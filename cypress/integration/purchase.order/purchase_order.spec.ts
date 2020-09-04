@@ -153,7 +153,7 @@ context("PO test", () => {
     });
 
     it("Check for PO ID uniqueness - ID should be PO-00001", () => {
-      SystemRequirement("REQ-1270");
+      // SystemRequirement("REQ-1270");
       cy.poCheckStatus( "PO-00001" );
     });
 
@@ -162,18 +162,19 @@ context("PO test", () => {
     });
 
     it("Click on existing PO that was created before", () => {
-      SystemRequirement("REQ-1370");
-      SystemRequirement("REQ-1210");
+      // SystemRequirement("REQ-1370");
+      // SystemRequirement("REQ-1210");
       cy.poClickOnSpecificPOFromList({ item: "PO-00001" });
     });
 
     it("Check status of PO should be Draft", () => {
-      SystemRequirement("REQ-1280", "REQ-0020", "REQ-1610");
+      SystemRequirement( "REQ-0020");
+      // SystemRequirement("REQ-1280", "REQ-1610");
       cy.poCheckStatus("Draft" );
     });
 
     it("Uploads text.docx", () => {
-      SystemRequirement("REQ-1350");
+      // SystemRequirement("REQ-1350");
       cy.atchUploadAttachment({ fileName: "test.docx" });
     });
 
@@ -182,42 +183,42 @@ context("PO test", () => {
     });
 
     it("Select Part Number", () => {
-      SystemRequirement("REQ-1410");
+      // SystemRequirement("REQ-1410");
       cy.poSelectPartNumber();
     });
 
     it("Enter Quantity Ordered", () => {
-      SystemRequirement("REQ-1410");
+      // SystemRequirement("REQ-1410");
       cy.poEnterQuantityOrdered({ quantity: "5" });
     });
 
     it("Select Units", () => {
-      SystemRequirement("REQ-1410");
+      // SystemRequirement("REQ-1410");
       cy.poSelectUnits();
     });
 
     it("Select GL code", () => {
-      SystemRequirement("REQ-1410");
+      // SystemRequirement("REQ-1410");
       cy.poSelectGLCode();
     });
 
     it("Enter Supplier Part Number", () => {
-      SystemRequirement("REQ-1410");
+      // SystemRequirement("REQ-1410");
       cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
     });
 
     it("Enter number of Units", () => {
-      SystemRequirement("REQ-1410");
+      // SystemRequirement("REQ-1410");
       cy.poNumberOfUnits({ number: "2" });
     });
 
     it("Add Required Date", () => {
-      SystemRequirement("REQ-1410");
+      // SystemRequirement("REQ-1410");
       cy.poAddDateRequired();
     });
 
     it("Check Tax box", () => {
-      SystemRequirement("REQ-1450");
+      // SystemRequirement("REQ-1450");
       cy.poSelectTaxCheckbox();
     });
 
@@ -226,7 +227,7 @@ context("PO test", () => {
     });
 
     it.skip("Check currency options dropdown", () => {
-      SystemRequirement("REQ-1320");
+      // SystemRequirement("REQ-1320");
       cy.poCheckCurrency();
     });
 
@@ -239,22 +240,22 @@ context("PO test", () => {
     });
 
     it("Check Subtotal value", () => {
-      SystemRequirement("REQ-1430");
+      // SystemRequirement("REQ-1430");
       cy.poCheckAmount({ number: "$10.00" });
     });
 
     it("Check Tax value", () => {
-      SystemRequirement("REQ-1450");
+      // SystemRequirement("REQ-1450");
       cy.poCheckAmount({ number: "$0.65" });
     });
 
     it("Check Total value", () => {
-      SystemRequirement("REQ-1440");
+      // SystemRequirement("REQ-1440");
       cy.poCheckAmount({ number: "$30.65" });
     });
 
     it("Enter description 'New Purchase Order'", () => {
-      SystemRequirement("REQ-1290");
+      // SystemRequirement("REQ-1290");
       cy.drEnterDocumentDescription({ description: "New Purchase Order" });
     });
 
@@ -273,12 +274,13 @@ context("PO test", () => {
     });
 
     it("Check for PO ID uniqueness - ID should be PO-00002", () => {
-      SystemRequirement("REQ-1270");
+      // SystemRequirement("REQ-1270");
       cy.poCheckStatus( "PO-00002" );
     });
 
     it("Check status of PO should be Draft", () => {
-      SystemRequirement("REQ-1280", "REQ-1610", "REQ-0020");
+      SystemRequirement("REQ-0020");
+      // SystemRequirement("REQ-1280", "REQ-1610");
       cy.poCheckStatus( "Draft" );
     });
 
@@ -287,43 +289,43 @@ context("PO test", () => {
     });
 
     it("Click on 'Service' select option", () => {
-      SystemRequirement("REQ-1390");
-      SystemRequirement("REQ-1420");
+      // SystemRequirement("REQ-1390");
+      // SystemRequirement("REQ-1420");
       cy.poSelectOption({ optionName: "service" });
     });
 
     it("Enter ServiceID", () => {
-      SystemRequirement("REQ-1420");
+      // SystemRequirement("REQ-1420");
       cy.poEnterServiceID({ serviceId: "SRV123" });
     });
 
     it("Enter Description", () => {
-      SystemRequirement("REQ-1420");
+      // SystemRequirement("REQ-1420");
       cy.poEnterDescription({ description: "Description for SRV123" });
     });
 
     it("Enter Quantity Ordered", () => {
-      SystemRequirement("REQ-1420");
+      // SystemRequirement("REQ-1420");
       cy.poEnterQuantityOrdered({ quantity: "5" });
     });
 
     it("Select Units", () => {
-      SystemRequirement("REQ-1420");
+      // SystemRequirement("REQ-1420");
       cy.poSelectUnits();
     });
 
     it("Select GL code", () => {
-      SystemRequirement("REQ-1420");
+      // SystemRequirement("REQ-1420");
       cy.poSelectGLCode();
     });
 
     it("Enter number of Units", () => {
-      SystemRequirement("REQ-1420");
+      // SystemRequirement("REQ-1420");
       cy.poNumberOfUnits({ number: "2" });
     });
 
     it("Add Required Date", () => {
-      SystemRequirement("REQ-1420");
+      // SystemRequirement("REQ-1420");
       cy.poAddDateRequired();
     });
 
@@ -332,7 +334,7 @@ context("PO test", () => {
     });
 
     it.skip("Check currency options dropdown", () => {
-      SystemRequirement("REQ-1320");
+      // SystemRequirement("REQ-1320");
       cy.poCheckCurrency();
     });
 
@@ -341,7 +343,7 @@ context("PO test", () => {
     });
 
     it("Check for conversion message", () => {
-      SystemRequirement("REQ-1330");
+      // SystemRequirement("REQ-1330");
       cy.poCheckMessageForConversionSite();
     });
 
@@ -350,40 +352,40 @@ context("PO test", () => {
     });
 
     it("Check Subtotal value", () => {
-      SystemRequirement("REQ-1430");
+      // SystemRequirement("REQ-1430");
       cy.poCheckAmount({ number: "€10.00" });
     });
 
     it("Check Total value", () => {
-      SystemRequirement("REQ-1440");
+      // SystemRequirement("REQ-1440");
       cy.poCheckAmount({ number: "€30.00" });
     });
 
     it("Check if total converted to dollars is shown", () => {
-      SystemRequirement("REQ-1460");
+      // SystemRequirement("REQ-1460");
       cy.poConvertedToDollarsMessage();
     });
   });
 
   context("Creates second line item and checks ID and if all line item details are optional", () => {
     it("Click on 'Add item' button to add another Product line item", () => {
-      SystemRequirement("REQ-1390");
+      // SystemRequirement("REQ-1390");
       cy.poAddNewFieldItem();
     });
 
     it("Click on 'Add' inside PO dialog box to check if all line item details are optional", () => {
-      SystemRequirement("REQ-1400");
+      // SystemRequirement("REQ-1400");
       cy.poAddPOButtonClick();
     });
 
     it("Check line item IDs if they are unique, should be '1' and '2'", () => {
-      SystemRequirement("REQ-1360");
-      SystemRequirement("REQ-1380");
+      // SystemRequirement("REQ-1360");
+      // SystemRequirement("REQ-1380");
       cy.poCheckForLineItemsAndTheirID({ firstId: "1", secondId: "2" });
     });
 
     it("Enter description 'New Purchase Order with Service item'", () => {
-      SystemRequirement("REQ-1290");
+      // SystemRequirement("REQ-1290");
       cy.poEnterDocumentDescription({ description: "New Purchase Order with Service item" });
     });
 
@@ -450,7 +452,7 @@ context("PO test", () => {
     });
 
     it("Check if two options are available when two forms with PO exist", () => {
-      SystemRequirement("REQ-1260");
+      // SystemRequirement("REQ-1260");
       cy.poCheckIfFormPopUpIsActive("New Purchase Order Form", "New Purchase Order Form 2");
     });
 
@@ -461,12 +463,12 @@ context("PO test", () => {
 
   context("Check for Landing page columns and values", () => {
     it("Check if most recent added item is fist on list", () => {
-      SystemRequirement("REQ-1180");
+      // SystemRequirement("REQ-1180");
       cy.filterGetFirstValueFromList({ value: "PO-00002" });
     });
 
     it("Check for Landing page default columns", () => {
-      SystemRequirement("REQ-1120");
+      // SystemRequirement("REQ-1120");
       cy.filterCheckHeaderValues("PO #",
         "Revision", "PO Status",
         "Supplier",
@@ -486,17 +488,17 @@ context("PO test", () => {
     });
 
     it("Check if number of displayed filtered items is '2", () => {
-      SystemRequirement("REQ-1200");
+      // SystemRequirement("REQ-1200");
       cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "2" });
     });
 
     it("Clear filter", () => {
-      SystemRequirement("REQ-1190");
+      // SystemRequirement("REQ-1190");
       cy.filterClear();
     });
 
     it("Enter all fields to check if all filter fields are working", () => {
-      SystemRequirement("REQ-1150");
+      // SystemRequirement("REQ-1150");
       cy.filterPO({
         docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
         partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
@@ -512,7 +514,7 @@ context("PO test", () => {
     });
 
     it.skip("Check if all filter values persist after changing landing page", () => {
-      SystemRequirement("REQ-1170");
+      // SystemRequirement("REQ-1170");
       cy.filterCheckIfPOFilterPersists({
         docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
         partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
@@ -520,7 +522,7 @@ context("PO test", () => {
     });
 
     it("Clear filter", () => {
-      SystemRequirement("REQ-1190");
+      // SystemRequirement("REQ-1190");
       cy.filterClear();
     });
   });

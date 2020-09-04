@@ -231,13 +231,15 @@ Cypress.Commands.add("poAMSelectApprover", (...list: string[]) => {
 });
 
 Cypress.Commands.add("poSaveDocument", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
     cy.get("[id=\"DocumentRevisionForm-submit\"]").click();
   });
 });
 
 Cypress.Commands.add("poAMCheckForApproval", () => {
-  cy.get("#ApproveAndRelease-button").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
+    cy.get("#ApproveAndRelease-button").click();
+  });
 });
 
 Cypress.Commands.add("poAMCheckApprovalIconIfItsGreen", () => {
