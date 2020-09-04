@@ -17,6 +17,7 @@ import {
   FBWorkspaceState,
 } from "..";
 import { FBApprovalMatrixState } from "../FBApprovalMatrix";
+import { FBApprovalsState } from "../FBApprovals";
 import { FBPOApprovalMatrixState } from "../FBPOApprovalMatrix";
 import { FBPOReceiveState } from "../FBPOReceive";
 
@@ -41,4 +42,5 @@ export interface FBProviderProps {
   approvalMatrixFieldState?: FBApprovalMatrixFieldState;
   taskState?: FBTaskState;
   approversState?: FBApproversState;
+  approvalsState?: FBApprovalsState;
 }

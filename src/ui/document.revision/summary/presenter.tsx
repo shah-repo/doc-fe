@@ -1,13 +1,15 @@
-import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
+import { Box, Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
 import { isEmpty } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
-import { DataProps } from "../../../state/ducks/common";
+import { ApprovalStatus, DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentStatus } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
+import Approvers from "../../change.request/summary/approvers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import { FormContext } from "../../components/forms/FormContext";
@@ -29,6 +31,7 @@ import TrainingControl from "./training.control";
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
   canChangeOwnerShip?: boolean;
+  changeApprovalStatus?(status: "approve" | "reject"): void;
 }
 
 export type Props = OwnProps &
@@ -54,8 +57,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
   },
   canChangeOwnerShip,
   canShowCreateVersionButton,
+  changeApprovalStatus,
 }) => {
-
   useScrollIntoView();
   const onSubmit = () => void 0;
   const { formInput } = dataProp || {};
@@ -155,6 +158,27 @@ export const Presenter: React.FunctionComponent<Props> = ({
             schema={schema as FBSchemaProps[]}
             mode="preview"
           />
+        </Box>
+      )}
+      {dataProp.status && dataProp.status as unknown as DocumentStatus !== DocumentStatus.Draft && (
+        <>
+          <Approvers dataProp={dataProp.approvals || []}/>
+        </>
+      )}
+      {/* TODO: hide for app.user.id !== currentEmployeeId */}
+      {dataProp.status as unknown as DocumentStatus === DocumentStatus.InReview
+    && dataProp.approvals?.find((app) => app.status === ApprovalStatus.Pending)
+    && changeApprovalStatus && (
+        <Box display="flex" justifyContent="flex-end">
+          <Button
+            variant="contained"
+            onClick={() => changeApprovalStatus("approve")}
+          >
+            <Text translation="common.approve" />
+          </Button>
+          <Button onClick={() => changeApprovalStatus("reject")}>
+            <Text translation="common.reject" />
+          </Button>
         </Box>
       )}
       {FBIsOutput && (

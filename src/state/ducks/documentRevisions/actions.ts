@@ -108,13 +108,11 @@ const loadDocument = (id: string): ApiAction<Document> => apiAction({
 
 const applyTransition = (
   id: string,
-  body: DocumentRevisionTransitionRequestBody,
   transition: DocumentRevisionTransition,
   handlers: Handlers<DocumentRevisionTransitionResponse>,
 ): ApiAction<DocumentRevisionTransitionResponse, DocumentRevisionTransitionRequestBody> => apiActionWithCallbacks({
-  url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/${transition}`,
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${transition}/${id}`,
   method: "post",
-  data: body,
   onSuccess: (d, dispatch) => {
     dispatch(load(id));
   },

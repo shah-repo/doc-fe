@@ -5,7 +5,7 @@ import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
 import { Group } from "../auth/types";
 import { ChangeRequest } from "../changeRequest";
-import { Id, Owner, User } from "../common";
+import { Approval, Id, Owner, User } from "../common";
 import { TrainingRecord } from "../training";
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
 import { DocumentGroupOptionsType, DocumentType } from "./documentType";
@@ -104,6 +104,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   pdf?: PDF;
   outputRevision?: boolean;
   primaryAttachment?: Attachment;
+  approvals?: Approval[];
 }
 
 export const RevisionStageOptions = [
