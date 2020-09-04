@@ -9,6 +9,7 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       atchUploadAttachment(params: {fileName: string }): Chainable<Subject>;
+      atchUploadAttachmentFail(params: {fileName: string }): Chainable<Subject>;
       atchUploadRedlineAttachment(params: {fileName: string }): Chainable<Subject>;
       atchSetPrimaryAttachment(params: {fileName: string }): Chainable<Subject>;
       atchRemoveLastAttachment(): Chainable<Subject>;
@@ -36,9 +37,29 @@ Cypress.Commands.add("atchUploadAttachment", (params: {fileName: string }) => {
         fileName: params.fileName,
         mimeType: "*",
         filePath: `fixtures/${params.fileName}`,
-      }).wait(5000);
+      });
     });
   });
+});
+
+Cypress.Commands.add("atchUploadAttachmentFail", (params: {fileName: string }) => {
+  cy.server({ force404: true });
+  cy.route({
+    method: "POST",
+    url: "**/attachments/upload",
+    response: "fixture:test_upload_response.json",
+    status: 400,
+  }).as("upload");
+  cy.fixture(params.fileName).then((fileContent) => {
+    cy.get("#AttachmentFieldPresenter-linkButton").click();
+    cy.get("#attachments-button-file-clean-copy").attachFile({
+      fileContent: fileContent.toString(),
+      fileName: params.fileName,
+      mimeType: "*",
+      filePath: `fixtures/${params.fileName}`,
+    });
+  });
+  cy.wait("@upload");
 });
 
 Cypress.Commands.add("attachFiles", { prevSubject: "element" },
@@ -74,7 +95,7 @@ Cypress.Commands.add("atchUploadRedlineAttachment", (params: {fileName: string }
         fileName: params.fileName,
         mimeType: "*",
         filePath: `fixtures/${params.fileName}`,
-      }).wait(5000);
+      });
     });
   });
 });

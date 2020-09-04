@@ -2,7 +2,7 @@ import { FBAutocompleteProps, FBInputProps } from "..";
 import { FBProviderProps } from "../FBProvider";
 
 export type FBDocumentRevisionsProps =
-& Pick<FBInputProps, "name" | "disabled" | "gutter">
+& Pick<FBInputProps, "name" | "disabled" | "gutter" | "index">
 & Pick<FBProviderProps, "docRevState" | "dialogState" | "formState">
 & {
   handleForm: () => void;
@@ -15,7 +15,10 @@ export type FBDocumentRevisionsProps =
 
 export type FBDocumentRevisionsItemProps =
 & Pick<FBInputProps, "name" | "disabled" | "index">
-& Pick<FBDocumentRevisionsProps, "handleOpen" | "remove">;
+& Pick<FBDocumentRevisionsProps, "handleOpen" | "remove">
+& {
+  id: string;
+};
 
 export interface FBDocumentRevisionsValue {
   id: string;

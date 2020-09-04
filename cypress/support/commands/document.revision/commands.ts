@@ -36,6 +36,7 @@ declare global {
       drDocumentFieldError(params: { field: string; message: string }): Chainable<Subject>;
       closeAllAlertMessages(): Chainable<Subject>;
       checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
+      checkToastMessageIsEqual(params: { message: string }): Chainable<Subject>;
 
       /* Document Approval Matrix */
 
@@ -69,6 +70,8 @@ declare global {
       drCancelDraftButton(): Chainable<Subject>;
       drIsTrainingRequired(params: {shouldBe: boolean}): Chainable<Subject>;
       drApproveAndReleaseNonQMSDocument(): Chainable<Subject>;
+      drVerifyDocumentOWner(params: {owner: string}): Chainable<Subject>;
+      drChangeOwnerByAdmin(params: {employee: string}): Chainable<Subject>;
     }
   }
 }
@@ -123,9 +126,16 @@ Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
 });
 
 Cypress.Commands.add("drCancelDraftButton", () => {
-  cy.get("[data-cy=\"HeaderMenuButton\"]").click();
-  cy.get("[data-cy=\"cancelDraftButton\"]").click();
-  cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.PatchCancelDocRev, () => {
+      cy.get("[data-cy=\"HeaderMenuButton\"]").click();
+      cy.get("[data-cy=\"cancelDraftButton\"]").click();
+      cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+    });
+});
+
+Cypress.Commands.add("drVerifyDocumentOWner", (params: { owner: string }) => {
+  cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains(params.owner);
 });
 
 Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion: int }) => {
@@ -155,8 +165,11 @@ Cypress.Commands.add("drEnterDocumentDescriptionWithWait", (params: { descriptio
 });
 
 Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) => {
-  cy.get("[data-cy=\"select.document.documentType.id\"]").click();
-  cy.get(`[data-cy="selectItem.document.documentType.id.${params.documentType}"]`).click();
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.GetProposedDocId, () => {
+      cy.get("[data-cy=\"select.document.documentType.id\"]").click();
+      cy.get(`[data-cy="selectItem.document.documentType.id.${params.documentType}"]`).click();
+    });
 });
 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
@@ -195,9 +208,8 @@ Cypress.Commands.add("drClickCreateDocument", () => {
 });
 
 Cypress.Commands.add("drClickCreateDocumentWithApiCall", () => {
-  cy.wrapWithWaitOnApiCall(
-    CyRoutes.PostOrPatchDocRev,
-    () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
 });
@@ -207,7 +219,6 @@ Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
-  cy.wait(5000);
   cy.get("[id=HeaderInfo-status]").should("have.text", params.status);
 });
 
@@ -234,6 +245,13 @@ Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string;
 Cypress.Commands.add("drChangeOwnerFromMenu", (params: { employee: string }) => {
   cy.get("#HeaderMenuButton").click();
   cy.drChangeOwner({ employee: params.employee });
+});
+
+Cypress.Commands.add("drChangeOwnerByAdmin", (params: { employee: string }) => {
+  cy.get("[data-cy=\"changeOwner\"]").click();
+  cy.get("#employee").click();
+  cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
+  cy.get("[data-cy=\"changeOwner-submit\"]").click();
 });
 
 Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
@@ -272,6 +290,11 @@ Cypress.Commands.add("drDocumentFieldError", (params: { field: string; message: 
 Cypress.Commands.add("checkToastMessage", (params: { exists: boolean }) => {
   cy.get(".Toastify").should((params.exists ? "not." : "") + "be.empty");
 });
+
+Cypress.Commands.add("checkToastMessageIsEqual", (params: { message: string }) => {
+  cy.get(".Toastify").should("have.text", params.message);
+});
+
 
 Cypress.Commands.add("closeAllAlertMessages", () => {
   cy.get(".Toastify__close-button").click({ multiple: true, force: true });
@@ -334,7 +357,9 @@ Cypress.Commands.add("drNewTypeTrainingSelect", () => {
 });
 
 Cypress.Commands.add("drApproveAndReleaseDialog", () => {
-  cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 5 * 1000 }).click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
+    cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 5 * 1000 }).click();
+  });
 });
 
 Cypress.Commands.add("drSelectTemplateReleaseDocument", (params: { template: string }) => {

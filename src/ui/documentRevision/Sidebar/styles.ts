@@ -67,5 +67,10 @@ export default makeStyles((theme: Theme) =>
         stroke: Colors.hint_gray,
       },
     },
+    titleOfRevision: {
+      color: theme.palette.text.primary,
+      textDecoration: "none",
+      fontWeight: theme.typography.fontWeightBold,
+    },
   })
 );

@@ -1,6 +1,7 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -80,6 +81,47 @@ context("Approval request form", () => {
             description: "<p>Test Doc Rev Description</p>",
             document: {
               docId: "CS-00004",
+              documentType: {
+                id: componentSpecificationDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: documentRevisionName,
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+
+          },
+          employeeId: secondEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
+    it("[API]Creates another document revision for approval", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Test Doc Rev Description 2 </p>",
+            document: {
+              docId: "CS-00005",
               documentType: {
                 id: componentSpecificationDocumentType[0].id,
               },
@@ -195,19 +237,17 @@ context("Approval request form", () => {
       cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
 
-    it("Click send to review", () => {
+    it("Click 'Send To Review'", () => {
       cy.arClickSendToReview();
     });
 
-    it("Verify AR status", () => {
-      SystemRequirement("REQ-0730");
-      SystemRequirement("REQ-0740");
-      SystemRequirement("REQ-0020");
+    it("Verify AR status is 'In Review'", () => {
+      SystemRequirement("REQ-0020", "REQ-0730", "REQ-0740");
       cy.arVerifyStatus({ status: "In Review" });
     });
   });
 
-  context("Check document revision is in review", () => {
+  context("Check document revision is 'In Review'", () => {
     it("Navigate to added document in AR", () => {
       cy.navigToDocumentList();
     });
@@ -216,7 +256,7 @@ context("Approval request form", () => {
       cy.drFilterDocListByNameAndStatus({ title: documentRevisionName, status: "In Review" });
     });
 
-    it("Check document revision status", () => {
+    it("Check document revision status is 'In Review'", () => {
       cy.drCheckDocumentStatus({ status: "In Review" });
     });
   });
@@ -235,27 +275,107 @@ context("Approval request form", () => {
       cy.arApproveAR();
     });
 
-    it("Check approval request status is approved", () => {
-      SystemRequirement("REQ-0730");
-      SystemRequirement("REQ-0020");
+    it("Check approval request status is 'Approved'", () => {
+      SystemRequirement("REQ-0020", "REQ-0730");
       cy.arVerifyStatus({ status: "Approved" });
     });
   });
 
-  context("Check document revision is Released", () => {
+  context("Check document revision is 'Released'", () => {
     it("Navigate to added document in AR", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Filter document by name and status, and select it", () => {
+      cy.drFilterDocListByNameAndStatus({ title: documentRevisionName, status: "Approved" });
+    });
+
+    it("Check document revision status is 'Approved'", () => {
+      cy.drCheckDocumentStatus({ status: "Approved" });
+    });
+
+    it("Navigate to AR list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Filter approval by name and status, and select it", () => {
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Approved" });
+    });
+
+    it("Close AR", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
+          cy.arCloseAR();
+        });
+    });
+
+    it("Check approval request status is 'Closed'", () => {
+      SystemRequirement("REQ-0020", "REQ-0730");
+      cy.arVerifyStatus({ status: "Closed" });
+    });
+
+    it("Navigate to document list to check if document is 'Released'", () => {
       cy.navigToDocumentList();
     });
 
     it("Filter document by name and status, and select it", () => {
       cy.drFilterDocListByNameAndStatus({ title: documentRevisionName, status: "Released" });
     });
-
-    it("Check document revision status is released", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
-    });
   });
 
+  context("Create AR and move it to 'Void'", () => {
+    it("Navigate to approval request list", () => {
+      SystemRequirement("REQ-0680");
+      cy.navigToDashboard();
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Click Create a Approval Request button", () => {
+      cy.cmpClickCreateApprovalRequest();
+    });
+
+    it("Choose newly AR Form template", () => {
+      SystemRequirement("REQ-0690", "REQ-0700");
+      cy.arSelectARForm({ formTitle: approvalRequestFormName });
+    });
+
+    it("Enter title AR title: 'AR for Void'", () => {
+      cy.arEnterApprovalRequestTitle({ title: "AR for Void" });
+    });
+
+    it("Enter description 'AR from New form template for approval request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for voided approval request" });
+    });
+
+    it("Add created document revision", () => {
+      cy.arClickAddDocument().wait(500);
+      cy.arChoseSpecificProposedDocument({ name: "CS-00005" });
+      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
+      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
+      cy.arClickAddBtnOnAddDocumentsDialog();
+    });
+
+    it("Click Create Approval Request", () => {
+      SystemRequirement("REQ-0730");
+      cy.arClickCreateApprovalRequestAfterCompletingForm();
+    });
+
+    it("Click 'Void'", () => {
+      cy.arVoidAR();
+    });
+
+    it("Verify AR status is 'Voided'", () => {
+      SystemRequirement("REQ-0020", "REQ-0730", "REQ-0740");
+      cy.arVerifyStatus({ status: "Voided" });
+    });
+
+    // it("Add 'Implementation Task' to AR", () => {
+    //   cy.fbClickAddNewHiddenBtn();
+    //   cy.fbSelectItemFromNewFieldList({ field: "Implementation Task" });
+    //   cy.get("[data-cy=\"label\"]").type("Implementation Task");
+    //   cy.fbAddField();
+    // });
+  });
 });
 
 export { };

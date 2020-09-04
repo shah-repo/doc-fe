@@ -115,9 +115,11 @@ export type FBInputProps =
     transform?: FBInputTransform;
     dataCy?: string;
     withState?: boolean;
+    bookmarked?: boolean;
   };
 
 export const OmitInputClones: FBInputType[] = [
+  "section",
   "fileupload",
   "documentRevisions",
   "approvers",

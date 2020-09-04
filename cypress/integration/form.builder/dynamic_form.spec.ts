@@ -70,7 +70,7 @@ context("Dynamic Form Test", () => {
 
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -89,7 +89,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Selects 'Dynamic Form' document type from dropdown", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Dynamic Form" });
     });
 
@@ -118,7 +118,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -135,7 +135,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Selects 'Dynamic Form' document type from dropdown", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
@@ -148,12 +148,12 @@ context("Dynamic Form Test", () => {
     });
 
     it("Select 'New Dynamic Form' field", () => {
-      SystemRequirement("REQ-0550");
+      // SystemRequirement("REQ-0550");
       cy.fbSelectCustomControl();
     });
 
     it("Click on 'Add a field'", () => {
-      cy.fbAddNewField();
+      cy.fbClickAddNewHiddenBtn();
     });
 
     it("Select 'Text Field 2' field", () => {
@@ -188,12 +188,12 @@ context("Dynamic Form Test", () => {
       cy.drEnterDocumentDescription({ description: "New Document from Form description" });
     });
 
-    it("Enters text inside 'New Text Field 1'", () => {
-      cy.get("[data-cy*=\"new-text-field\"]").eq(1).type("Some text for Text field");
+    it("Enters text inside 'New Text Field 1' dynamic form field", () => {
+      cy.get("[data-cy*=\"new-text-field\"]").eq(0).type("Some text for Dynamic Form field");
     });
 
     it("Enters text inside 'New Text Field 2'", () => {
-      cy.get("[data-cy*=\"new-text-field-2\"]").type("Some text for Dynamic Form field");
+      cy.get("[data-cy*=\"new-text-field-2\"]").type("Some text for Text field");
     });
 
     it("Click create document after filling document", () => {

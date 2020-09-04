@@ -3,7 +3,7 @@ set -e
 
 if [[ -z "${CI_BUILD_ID}" ]]; then
   echo "CI_BUILD_ID not set, exiting"
-  exit
+  exit 1
 fi
 
 source ./scripts/cypress/make_results_dir.sh

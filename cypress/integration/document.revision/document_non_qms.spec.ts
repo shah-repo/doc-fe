@@ -70,7 +70,7 @@ context("Non-QMS Document Creation Flow", () => {
 
   context("Start Non-QMS document creation flow", () => {
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -89,16 +89,17 @@ context("Non-QMS Document Creation Flow", () => {
     });
 
     it("Selects 'NonQMS Document' document type from dropdown", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "NonQMS Document" });
     });
 
     context("Check permission groups", () => {
-      it("Check if Selected Groups are set to 'Everyone' by default", () => {
+      it("Check if Selected Groups are not set by default", () => {
         SystemRequirement("REQ-0300");
         cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
           .should("have.text", "Enter the name of users to access the document");
-        cy.get("[data-cy=\"field-securityGroups\"]").contains("Everyone");
+        cy.get("[data-cy=\"field-securityGroups\"]")
+          .should("have.text", "Selected GroupsEnter the name of the user groups to access the document");
       });
     });
   });

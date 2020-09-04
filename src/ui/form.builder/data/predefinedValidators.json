@@ -91,7 +91,12 @@
     }, {
       "value": "CANCELED",
       "text": "Canceled"
-    }]
+    },
+    {
+      "value": "APPROVED",
+      "text": "Approved"
+    }
+  ]
   }, {
     "type": "checkbox",
     "name": "validators.required_document_type",
