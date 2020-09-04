@@ -28,6 +28,12 @@ export CYPRESS_SUPERADMIN_PASSWORD=${CYPRESS_SUPERADMIN_PASSWORD:-"Tester1!"}
 mkdir -p $CYPRESS_SCREENSHOTS_FOLDER
 mkdir -p $CYPRESS_VIDEOS_FOLDER
 
+export CYPRESS_CACHE_FOLDER="cypress/cache/cypressLib"
+mkdir -p $CYPRESS_CACHE_FOLDER
+yarn install --frozen-lockfile
+yarn cypress install
+yarn cypress verify
+
 yarn install --frozen-lockfile
 
 ./scripts/cypress/delete_cache.sh
