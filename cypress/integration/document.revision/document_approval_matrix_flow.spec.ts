@@ -341,7 +341,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("'Approve and Release' the document", () => {
@@ -413,7 +413,9 @@ context("Document Approval Matrix Flow", () => {
 
     it("Verify training can be deselected", () => {
       SystemRequirement("REQ-0290");
-      cy.drClickTrainingRequired();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drClickTrainingRequired();
+      });
       cy.drIsTrainingRequired({ shouldBe: false });
     });
 

@@ -116,7 +116,9 @@ Cypress.Commands.add("drUpdateDocumentTypeName", (params: { employeeId: string; 
 
 Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) => {
   cy.get("#clearFilter").click().wait(500);
-  cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+    cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).click();
+  });
 });
 
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
@@ -255,7 +257,6 @@ Cypress.Commands.add("drChangeOwnerByAdmin", (params: { employee: string }) => {
 });
 
 Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
-  cy.get("#HeaderMenuButton").click();
   cy.get("[data-cy=\"changeOwner\"]").click();
   cy.get("#employee").click();
   cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
@@ -358,7 +359,7 @@ Cypress.Commands.add("drNewTypeTrainingSelect", () => {
 
 Cypress.Commands.add("drApproveAndReleaseDialog", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
-    cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 5 * 1000 }).click();
+    cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   });
 });
 
