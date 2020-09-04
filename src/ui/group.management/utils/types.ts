@@ -34,4 +34,5 @@ export const DEFAULT_GROUP: GroupRequestBody = {
   tags: [],
   employees: [],
   parents: [],
+  id: "",
 };

@@ -71,6 +71,7 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         <ParentGroups
           parentGroups={parentGroups}
           setParentGroups={setParentGroups}
+          currentGroupId={group.id}
         />}
       <JoinedGroups
         parentGroups={parentGroups}
