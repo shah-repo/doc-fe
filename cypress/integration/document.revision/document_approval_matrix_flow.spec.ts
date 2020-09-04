@@ -184,12 +184,12 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("fill in document type: Form", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
     it("fill in output document type: Document Approval Matrix", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drAddOutputDocType({ documentType: "Document Approval Matrix" });
     });
 
@@ -657,7 +657,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Save document, Check Group Role is enforced and Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("click on 'Approve and Release' button", () => {
@@ -754,7 +754,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`change name '${docTypeOne}' to '${newDocTypeOne}'`, () => {
-      SystemRequirement("REQ-0430");
+      // SystemRequirement("REQ-0430");
       cy.drUpdateDocumentTypeName({
         sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         employeeId: adminEmployee.id,
@@ -806,7 +806,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`find changed document type '${newDocTypeOne}'`, () => {
-      SystemRequirement("REQ-0530");
+      // SystemRequirement("REQ-0530");
       const exists = documentTypes.includes(newDocTypeOne);
       cy.wrap(exists).should("eq", true);
     });

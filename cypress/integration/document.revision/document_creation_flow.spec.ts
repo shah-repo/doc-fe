@@ -71,7 +71,7 @@ context("Document Creation Flow", () => {
 
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -90,7 +90,7 @@ context("Document Creation Flow", () => {
     });
 
     it("Selects 'Component Specification' document type from dropdown", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Component Specification" });
     });
 
@@ -288,7 +288,7 @@ context("Document Creation Flow", () => {
       });
 
       it("'Training Required' should be checked as previous version was checked", () => {
-        SystemRequirement("REQ-0280");
+        // SystemRequirement("REQ-0280");
         cy.drIsTrainingRequired({ shouldBe: true });
       });
     });
@@ -296,7 +296,7 @@ context("Document Creation Flow", () => {
 
   context("Create new document, change owner and cancel it", () => {
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -313,7 +313,7 @@ context("Document Creation Flow", () => {
     });
 
     it("Selects 'Clinical Protocol' document type from dropdown", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
     });
 

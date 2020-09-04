@@ -103,7 +103,7 @@ context("Group Landing Page Flow", () => {
     });
 
     it("Verifies that 'Group members' column displays no more than 15 members", () => {
-      SystemRequirement("REQ-2590");
+      // SystemRequirement("REQ-2590");
       cy.grpCheckForNumberOfGroupMembersDisplayed();
     });
   });
@@ -145,7 +145,7 @@ context("Group Landing Page Flow", () => {
     });
 
     it("Checks if the filters are mantained", () => {
-      SystemRequirement("REQ-2620");
+      // SystemRequirement("REQ-2620");
       cy.grpCheckIfNameFilterIsSet({ name: GROUP_NAME });
       cy.grpCheckIfMembersFilterIsSet({ member: GROUP_MEMBER });
       cy.grpCheckIfTypeFilterIsSet({ isOfficial: GROUP_TYPE === "Official" });
@@ -154,12 +154,12 @@ context("Group Landing Page Flow", () => {
 
   context("Check if unofficial and official groups exist", () => {
     it("Verifies that Official group exists", () => {
-      SystemRequirement("REQ-2630");
+      // SystemRequirement("REQ-2630");
       cy.grpCheckIfGroupTypeExists({ type: "Official" });
     });
 
     it("Verifies that Unofficial group exists", () => {
-      SystemRequirement("REQ-2630");
+      // SystemRequirement("REQ-2630");
       cy.grpCheckIfGroupTypeExists({ type: "Unofficial" });
     });
   });
