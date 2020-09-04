@@ -323,7 +323,7 @@ context("Document Creation Flow", () => {
 
     it("Change owner of document", () => {
       SystemRequirement("REQ-0340");
-      cy.drChangeOwner({ employee: USERS[3].name });
+      cy.drChangeOwnerFromMenu({ employee: USERS[3].name });
     });
 
     it("Logs user that ownership was changed to", () => {
