@@ -72,7 +72,7 @@ context("Document Attachment Flow", () => {
 
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -91,7 +91,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Selects 'Component Specification' document type from dropdown", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Component Specification" });
     });
 
@@ -221,7 +221,7 @@ context("Document Attachment Flow", () => {
 
   context("Check Pending Change and In Review for downloading redline document", () => {
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -238,7 +238,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Selects 'Component Specification' document type from dropdown", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
     });
 

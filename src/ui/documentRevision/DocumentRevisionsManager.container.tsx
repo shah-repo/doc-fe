@@ -7,6 +7,7 @@ import { ReactComponent as BookmarkIcon } from "../../assets/images/bookmark.svg
 import { ReactComponent as CRIcon } from "../../assets/images/cr.svg";
 import { ReactComponent as TimelineIcon } from "../../assets/images/history.svg";
 import { ReactComponent as NoteIcon } from "../../assets/images/note.svg";
+import { ChangeRequest } from "../../state/ducks/changeRequest";
 import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { DocumentGroupType } from "../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../state/reducers";
@@ -163,7 +164,8 @@ DocumentRevisionManagerContainerProps
         title: intl.formatMessage({
           id: "document.revision.cr.history",
         }),
-        component: <RevisionHistory changeRequests={documentRevisions.map((e) => e.changeRequest)} />,
+        component: <RevisionHistory changeRequests={documentRevisions.map((e) =>
+          e.changeRequest) as ChangeRequest[]} />,
       },
     },
   ];

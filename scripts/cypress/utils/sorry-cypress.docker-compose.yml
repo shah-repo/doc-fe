@@ -1,41 +1,37 @@
 version: "3.5"
 
 services:
-  enlil_cypress_dashboard_mongo_2:
-    container_name: enlil_cypress_dashboard_mongo_2_2
+  enlil_cypress_dashboard_mongo:
     image: mongo:4.0
     expose:
       - 27017
-  enlil_cypress_dashboard_director_2:
-    container_name: enlil_cypress_dashboard_director_2
+  enlil_cypress_dashboard_director:
     image: agoldis/sorry-cypress-director:latest
     environment:
       DASHBOARD_URL: "http://localhost:${ENLIL_COMPOSE_EXPOSE_SORRY_CY_DASHBOARD_PORT}"
-      MONGODB_URI: "mongodb://enlil_cypress_dashboard_mongo_2:27017"
+      MONGODB_URI: "mongodb://enlil_cypress_dashboard_mongo:27017"
       MONGODB_DATABASE: "sorry-cypress"
       EXECUTION_DRIVER: "../execution/mongo/driver"
       SCREENSHOTS_DRIVER: "../screenshots/dummy.driver"
     ports:
       - ${ENLIL_COMPOSE_EXPOSE_SORRY_CY_DIRECTOR_PORT}:1234
     depends_on:
-      - enlil_cypress_dashboard_mongo_2
-  enlil_cypress_dashboard_api_2:
-    container_name: enlil_cypress_dashboard_api_2
+      - enlil_cypress_dashboard_mongo
+  enlil_cypress_dashboard_api:
     image: agoldis/sorry-cypress-api:latest
     environment:
-      MONGODB_URI: "mongodb://enlil_cypress_dashboard_mongo_2:27017"
+      MONGODB_URI: "mongodb://enlil_cypress_dashboard_mongo:27017"
       MONGODB_DATABASE: "sorry-cypress"
     ports:
       - ${ENLIL_COMPOSE_EXPOSE_SORRY_CY_API_PORT}:4000
     depends_on:
-      - enlil_cypress_dashboard_mongo_2
-  enlil_cypress_dashboard_server_2:
-    container_name: enlil_cypress_dashboard_server_2
+      - enlil_cypress_dashboard_mongo
+  enlil_cypress_dashboard_server:
     image: agoldis/sorry-cypress-dashboard:latest
     environment:
       GRAPHQL_SCHEMA_URL: "http://localhost:${ENLIL_COMPOSE_EXPOSE_SORRY_CY_API_PORT}"
     ports:
       - ${ENLIL_COMPOSE_EXPOSE_SORRY_CY_DASHBOARD_PORT}:8080
     depends_on:
-      - enlil_cypress_dashboard_mongo_2
-      - enlil_cypress_dashboard_api_2
+      - enlil_cypress_dashboard_mongo
+      - enlil_cypress_dashboard_api
