@@ -6,26 +6,72 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 const owner = USERS[2].name;
+const sharedUser = USERS[1];
+const sharedUserTwo = USERS[3];
+const groupOne = "Developers";
+const groupTwo = "User Management";
+const documentId = { value: "00004", fullId: "FM-00004" };
+const reference = {
+  value: "FM-00001 - 1 - Initial AR Form", valueCode: "FM-00001",
+  new: "FM-00002 - 1 - Inline Approve Form", newCode: "FM-00002",
+};
+const formTitle = { value: "My Form", newValue: "My Form Edited", newChunk: " Edited" };
 
-const formTitle = "Form with multiple outputs";
 const history = [
   {
     owner,
     actions: [
       { key: "Updated status", value: `Set to Released by ${owner}` },
+      { key: "Updated status", value: `Set to Approved by ${owner}` },
       { key: "Updated status", value: `Set to In Review by ${owner}` },
       { key: "Updated status", value: `Set to Pending Change by ${owner}` },
     ],
   },
   {
+    owner: sharedUser.name,
+    actions: [
+      { key: "Access granted to group", value: groupTwo },
+    ],
+  },
+  {
+    owner: sharedUser.name,
+    actions: [
+      { key: "Access granted to user", value: sharedUserTwo.name },
+    ],
+  },
+  {
     owner,
     actions: [
-      { key: "New Doc ID", value: "FM-00003" },
+      { key: "Attachment added", value: "test.docx" },
+    ],
+  },
+  {
+    owner,
+    actions: [
+      { key: "Attachments removed", value: "test_image.jpg" },
+      { key: "New reference to", value: reference.newCode },
+      { key: "Reference removed", value: reference.valueCode },
+    ],
+  },
+  {
+    owner,
+    actions: [
+      { key: "Name changed", value: formTitle.newValue },
+    ],
+  },
+  {
+    owner,
+    actions: [
+      { key: "New Doc ID", value: documentId.fullId },
+      { key: "Access granted to user", value: sharedUser.name },
       { key: "Access granted to group", value: "Everyone" },
+      { key: "Access granted to group", value: groupOne },
       { key: "New owner", value: `${owner}` },
       { key: "New status", value: `Set to Draft by ${owner}` },
-      { key: "New name", value: "Form with multiple outputs" },
-      { key: "New description", value: "\nForm with multiple outputs\n" },
+      { key: "New name", value: formTitle.value },
+      { key: "New description", value: `\n${formTitle.value}\n` },
+      { key: "Attachment added", value: `test_image.jpg` },
+      { key: "New reference to", value: reference.valueCode },
     ],
   },
 ];
@@ -103,15 +149,39 @@ context("Check Document History", () => {
 
   context("Fill in document attributes", () => {
     it("type a title", () => {
-      cy.drEnterDocumentTitle({ name: `${formTitle}` });
+      cy.drEnterDocumentTitle({ name: `${formTitle.value}` });
     });
 
     it("type a description", () => {
-      cy.drEnterDocumentDescription({ description: formTitle });
+      cy.drEnterDocumentDescription({ description: formTitle.value });
     });
 
     it("fill in document type: Form", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Change document type id to 'FM-00004'", () => {
+      cy.drSetDocTypeId({ docId: documentId.value });
+    });
+
+    it("Select reference for document", () => {
+      cy.drSelectReferences( reference.value );
+    });
+
+    it("Mark 'Training Required'", () => {
+      cy.drClickTrainingRequired();
+    });
+
+    it("Uploads test_image.jpg", () => {
+      cy.atchUploadAttachment({ fileName: "test_image.jpg" });
+    });
+
+    it(`Select user: ${sharedUser.name}`, () => {
+      cy.drSelectUser(sharedUser.name);
+    });
+
+    it(`Select group: ${groupOne}`, () => {
+      cy.drSelectGroup(groupOne);
     });
 
     it("fill in output document type: Clinical Protocol, Component Specification", () => {
@@ -121,10 +191,136 @@ context("Check Document History", () => {
   });
 
   context("Create document and release it", () => {
-    it("Click create document after filling document", () => {
+    it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
+  });
 
+  context("Edit document attributes", () => {
+    it("edit the title", () => {
+      cy.drEnterDocumentTitle({ name: `${formTitle.newChunk}` });
+    });
+
+    it("edit the description", () => {
+      cy.drEnterDocumentDescription({ description: formTitle.newValue });
+      // auto-save
+      cy.wait(5 * 1000);
+    });
+
+    it("Remove reference for document", () => {
+      cy.drRemoveReferences(0);
+    });
+
+    it("Add reference for document", () => {
+      cy.drSelectReferences( reference.new );
+      // auto-save
+      cy.wait(5 * 1000);
+    });
+
+    it("Unmark 'Training Required'", () => {
+      cy.drClickTrainingRequired();
+    });
+
+    it("Remove attachment test_image.jpg", () => {
+      cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
+    });
+
+    it("Upload test.docx", () => {
+      cy.atchUploadAttachment({ fileName: "test.docx" });
+      // auto-save
+      cy.wait(5 * 1000);
+    });
+
+    it("add another output document type: Lots", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Lots" });
+      // auto-save
+      cy.wait(5 * 1000);
+    });
+  });
+
+  context("Save document", () => {
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+  });
+
+  context(`Logout user: '${USERS[2].name}' and Login user: '${sharedUser.name}'`, () => {
+    it("Logout existing user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: sharedUser.email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+  });
+
+  context(`Open created document, ${formTitle.newValue} document creation`, () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Filter the DRAFT document", () => {
+      cy.dlFilterByStatus({ status: "Draft" });
+    });
+
+    it(`select '${formTitle.newValue}'`, () => {
+      cy.get("#root").contains(formTitle.newValue).click();
+    });
+  });
+
+  context("Edit permissions", () => {
+    it("Open permissions tab", () => {
+      cy.drSelectPermissionTab();
+    });
+
+    it("Add another user permission", () => {
+      cy.drAddUserFromPermissionTab(sharedUserTwo.name);
+    });
+
+    it("Add another group permission", () => {
+      cy.drAddGroupFromPermissionTab(groupTwo);
+    });
+  });
+
+  context(`Logout user: '${sharedUser.name}' and Login user: '${USERS[2].name}'`, () => {
+    it("Logout existing user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[2].email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+  });
+
+  context(`Open created document, ${formTitle.newValue} document creation`, () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Filter the DRAFT document", () => {
+      cy.dlFilterByStatus({ status: "Draft" });
+    });
+
+    it(`select '${formTitle.newValue}'`, () => {
+      cy.get("#root").contains(formTitle.newValue).click();
+    });
+  });
+
+  context("Approve and Release document", () => {
     it("Approves and releases document", () => {
       cy.drApproveAndReleaseDocument();
     });

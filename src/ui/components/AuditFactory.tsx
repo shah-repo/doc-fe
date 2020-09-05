@@ -36,7 +36,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
     case "assessments.design.attachments":
     case "assessments.regulatory.attachments": {
       const { name, type } = audit.nextValue as Attachment;
-      returnValue = `${name}.${type}`;
+      returnValue = (<div data-cy={dataCy}>{`${name}.${type}`}</div>);
       break;
     }
     case "approvals":
@@ -63,7 +63,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       returnValue = <DialogOpener id={audit.id} text={audit.nextValue as string} dataCy={dataCy} />;
       break;
     case "referenceTo":
-      returnValue = (audit.nextValue as Reference).docId;
+      returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Reference).docId}</div>);
       break;
     case "changeRequest":
       returnValue = (audit.nextValue as ChangeRequest).crId;

@@ -231,7 +231,7 @@ context("Document Creation Flow", () => {
         cy.atchUploadAttachment({ fileName: "test_image.jpg" });
       });
 
-      it("Check test.docx attachment atributes", () => {
+      it("Check test_image.jpg attachment atributes", () => {
         cy.atchCheckAtributes({ fileName: "test_image.jpg", attributes: "79.54 kB JPG File" });
       });
 
