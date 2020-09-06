@@ -15,6 +15,7 @@ import { FBDocumentRevisions } from "../FBDocumentRevisions";
 import { FBFileUpload } from "../FBFileUpload";
 import { FBHelloSign } from "../FBHelloSign";
 import { FBHyperlink } from "../FBHyperlink";
+import { FBInlineApproval } from "../FBInlineApproval";
 import { FBInstructionsDocument } from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
@@ -82,6 +83,7 @@ export class FBSchemaState {
     checkpoint: FBButton,
     createlabel: FBButton,
     approval: FBApproval,
+    inlineapproval: FBInlineApproval,
     requestapproval: FBRequestApproval,
     action: FBActionField,
     hellosign: FBHelloSign,

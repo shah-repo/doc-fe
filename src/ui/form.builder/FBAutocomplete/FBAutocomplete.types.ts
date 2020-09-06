@@ -11,7 +11,9 @@ export type FBAutocompleteProps =
  | "getOptionDisabled"
  | "freeSolo"
  | "filterSelectedOptions"
+ | "groupBy"
  > & {
    refresh?: () => any;
    disabledOptions?: string[];
+   groupByKey?: string;
  };
