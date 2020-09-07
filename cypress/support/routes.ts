@@ -38,7 +38,8 @@ export enum CyRoutes {
   PostApproveAR = "PostApproveAR",
   GetRequiredApprovers = "GetRequiredApprovers",
   GetAvailableApprovers = "GetAvailableApprovers",
-  PatchAR = "PatchAR"
+  PatchAR = "PatchAR",
+  GetDocAggregatedAudit = "GetDocAggregatedAudit"
 }
 
 export const routes: ICyRoutes =   {
@@ -180,6 +181,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/*",
+    },
+  },
+  GetDocAggregatedAudit: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions/*/aggregated_audit",
     },
   },
   GetProposedDocId: {

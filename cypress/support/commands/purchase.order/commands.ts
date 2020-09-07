@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
+import { integer } from "aws-sdk/clients/cloudfront";
 import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
@@ -56,6 +57,17 @@ declare global {
   }
 }
 
+export interface PurchaseOrderItem {
+  index: integer;
+  partNumber?: string;
+  descritpion?: string;
+  ordered: integer;
+  received: integer;
+  units?: string;
+  dateRequired?: string;
+  unitPrice: string;
+  totalPrice?: string;
+}
 Cypress.Commands.add("poSelectPoForm", (params: {nameOfPoForm: string}) => {
   cy.get("[id=FormListDialog-selectForm]").click();
   cy.get("[id^=react-select]").contains(params.nameOfPoForm).click();
@@ -219,13 +231,15 @@ Cypress.Commands.add("poAMSelectApprover", (...list: string[]) => {
 });
 
 Cypress.Commands.add("poSaveDocument", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
     cy.get("[id=\"DocumentRevisionForm-submit\"]").click();
   });
 });
 
 Cypress.Commands.add("poAMCheckForApproval", () => {
-  cy.get("#ApproveAndRelease-button").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
+    cy.get("#ApproveAndRelease-button").click();
+  });
 });
 
 Cypress.Commands.add("poAMCheckApprovalIconIfItsGreen", () => {

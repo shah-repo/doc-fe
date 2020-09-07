@@ -30,6 +30,8 @@ export * from "./FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 export { default as FBApprovalMatrix } from "./FBApprovalMatrix_/FBApprovalMatrix";
 export { default as FBApprovalMatrixSection } from "./FBApprovalMatrix_/FBApprovalMatrix.section";
 export * from "./FBApprovalMatrix_/FBApprovalMatrix.types";
+export { default as FBApprovals } from "./FBApprovals/FBApprovals";
+export { default as FBApprovalsState } from "./FBApprovals/FBApprovals.state";
 export { default as FBApprovers } from "./FBApprovers/FBApprovers";
 export { default as FBApproversState } from "./FBApprovers/FBApprovers.state";
 export * from "./FBApprovers/FBApprovers.types";

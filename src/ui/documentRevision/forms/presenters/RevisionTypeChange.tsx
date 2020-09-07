@@ -13,6 +13,7 @@ interface Props {
   isDisabled: boolean;
   showObsoleteRevisionChange: boolean;
   showAdministrativeAndVoidChange: boolean;
+  defaultLabel: string;
 }
 
 export const RevisionTypeChange: React.FunctionComponent<Props> = ({
@@ -20,9 +21,10 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
   isDisabled,
   showObsoleteRevisionChange,
   showAdministrativeAndVoidChange,
+  defaultLabel,
 }) => {
   const classes = styles();
-  const [showRevisionSelect, revisionSelectLabel] = useRevisionSelect(documentTypeId);
+  const [showRevisionSelect, revisionSelectLabel] = useRevisionSelect(documentTypeId, defaultLabel);
   const [showNextRevisionLevel, nextRevisionLevelLabel] = useNextRevision(documentTypeId);
   const [showNextRevisionStage, nextRevisionStageLabel] = useNextRevisionStage(documentTypeId);
   const [showObsolete, obsoleteLabel] = useObsolete(documentTypeId);

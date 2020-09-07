@@ -57,7 +57,8 @@ export type FBInputType =
   | "poApprovalMatrix"
   | "task"
   | "approvers"
-  | "blanktplform";
+  | "blanktplform"
+  | "approvals";
 
 export type FBInputProps =
   & FBLabelProps

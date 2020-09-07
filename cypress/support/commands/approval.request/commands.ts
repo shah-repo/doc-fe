@@ -22,7 +22,7 @@ declare global {
       arClickCreateApprovalRequestAfterCompletingForm(): Chainable<Subject>;
       arClickSendToReview(): Chainable<Subject>;
       arVerifyStatus(params: { status: string }): Chainable<Subject>;
-      arCheckImplementationTaskStatus(params: { status: string }): Chainable<Subject>;)
+      arCheckImplementationTaskStatus(params: { status: string }): Chainable<Subject>;
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;

@@ -720,9 +720,7 @@ context("Validators tests", () => {
 
   context("Release document", () => {
     it("'Approve and Release' the document", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]", { timeout: 1000 }).click();
-      cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
-      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click().wait(3000);
+      cy.drApproveAndReleaseDocument();
     });
   });
 
