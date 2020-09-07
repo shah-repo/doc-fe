@@ -114,6 +114,8 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
   public render() {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const feStatusJson = require("../../data/buildInfo.json");
+    // if the line above is failing when you want to run `yarn start`,
+    // copy src/data/buildInfo.json.example to src/data/buildInfo.json
     return (
       <div style={{ padding: "10px", backgroundColor: "white", lineHeight: 1.2 }}>
         { this.renderTable("Frontend", feStatusJson)}

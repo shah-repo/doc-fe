@@ -17,3 +17,4 @@ results
 .git
 src/*.spec.js
 cypress/requirements/cache
+cypress/cache/*
