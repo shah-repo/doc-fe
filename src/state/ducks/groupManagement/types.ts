@@ -4,7 +4,7 @@ import { SET_JOINED_DATA } from "../userManagement/constants";
 import { LoadCompanyGroups } from "../userManagement/types";
 
 export interface GroupRequestBody {
-  id?: string;
+  id: string;
   name?: string;
   permissions: Permission[];
   defaultForNewUsers: boolean;
