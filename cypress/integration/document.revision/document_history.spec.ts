@@ -1,4 +1,5 @@
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -48,6 +49,7 @@ const history = [
   {
     owner,
     actions: [
+      { key: "Description changed", value: `\n${formTitle.newValue}\n` },
       { key: "Attachments removed", value: "test_image.jpg" },
       { key: "New reference to", value: reference.newCode },
       { key: "Reference removed", value: reference.valueCode },
@@ -198,13 +200,16 @@ context("Check Document History", () => {
 
   context("Edit document attributes", () => {
     it("edit the title", () => {
-      cy.drEnterDocumentTitle({ name: `${formTitle.newChunk}` });
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drEnterDocumentTitle({ name: `${formTitle.newChunk}` });
+        cy.get("[data-cy=field-description]>label").click();
+        // auto-save
+        cy.wait(1000);
+      });
     });
 
     it("edit the description", () => {
       cy.drEnterDocumentDescription({ description: formTitle.newValue });
-      // auto-save
-      cy.wait(5 * 1000);
     });
 
     it("Remove reference for document", () => {
@@ -233,14 +238,14 @@ context("Check Document History", () => {
 
     it("add another output document type: Lots", () => {
       cy.drSelectOutputDocumentType({ documentType: "Lots" });
-      // auto-save
-      cy.wait(5 * 1000);
     });
   });
 
   context("Save document", () => {
     it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
   });
 

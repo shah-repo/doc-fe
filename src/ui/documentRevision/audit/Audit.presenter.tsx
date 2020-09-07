@@ -57,19 +57,19 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       } else if (change.field.includes("formInput")) {
         return;
       } else {
-        key++;
         singleFields.push((
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
-              <Text dataCy={`change-key-${groupKey}-${index}`}
+              <Text dataCy={`change-key-${groupKey}-${key}`}
                 message={`documentRevision.audit.${change.field}.${change.type}`}
               />
             </Box>
             <div className={classes.auditValue}>
-              <AuditFactory audit={change} dataCy={`change-value-${groupKey}-${index}`} />
+              <AuditFactory audit={change} dataCy={`change-value-${groupKey}-${key}`} />
             </div>
           </Box>
         ));
+        key++;
       }
     });
 
