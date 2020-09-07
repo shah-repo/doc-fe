@@ -23,7 +23,19 @@ export REACT_APP_HELLOSIGN_TEST_MODE=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REA
 export REACT_APP_HELLOSIGN_CLIENT_ID=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_HELLOSIGN_CLIENT_ID 2>&1)
 
 yarn install --frozen-lockfile
-./aws/bash_scripts/status.sh
+
+echo "-------- Generate fake server info -------"
+cat >> "${BITBUCKET_CLONE_DIR}/src/data/buildInfo.json" <<EOF 
+{
+"Repository": "sample",
+"Branch": "sample",
+"Tag": "sample",
+"Commit Hash": "sample",
+"Build Number": "sample",
+"ECR Image": "sample",
+"Date": "sample"
+}
+EOF
 
 # Executing Test
 echo "-------- Executing Tests --------"
