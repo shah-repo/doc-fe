@@ -1,37 +1,46 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { ChangeRequest, changeRequestsActions } from "../../state/ducks/changeRequest";
-import { ApplicationState } from "../../state/reducers";
+import { documentTypeActions, DocumentTypeById } from "../../state/ducks/documentRevisions/documentType";
 import { FormContext } from "../components/forms/FormContext";
+import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import ChangeRequestFormContainer from "./form/ChangeRequestForm.container";
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./form/transform";
 import { ChangeRequestFormValues } from "./form/types";
 import { changeRequestEditPath } from "./utils/paths";
-
-interface DispatchProps {
-  create: typeof changeRequestsActions.create;
-}
+import { RouteParamsCreate } from "./utils/types";
 
 interface OwnProps extends RouteComponentProps {
   changeRequest?: ChangeRequest;
 }
 
-export type ChangeRequestCreateContainerProps = OwnProps & DispatchProps;
+export type ChangeRequestCreateContainerProps = OwnProps & RouteComponentProps<RouteParamsCreate>;
 
 export const DEFAULT_INITIAL_VALUES = (): ChangeRequest => ({
   title: "",
   description: "",
-  justifications: { description: "", attachments: [] },
-  implementationPlan: { tasks: [], attachments: [] },
-  approvals: [],
-  documentRevisions: [],
 } as unknown as ChangeRequest);
 
 export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateContainerProps> =
-  ({ create, history }) => {
+  ({ history, match }) => {
+    const documentTypeId = match.params.documentTypeId;
+    const formId = match.params.formId;
+    const create = useActionCreator(changeRequestsActions.create);
+    const [templateOptions, setTemplateOptions] = useState<DocumentTypeById[]>([]);
     const [doNotPrompt, setDoNotPrompt] = React.useState(false);
+    const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
+    const chosenForm = templateOptions
+      .find((template) => template.documentType.id === documentTypeId)
+      ?.forms
+      .find((form) => form.id === formId);
+
+    const asyncGetDocTypeByGroup = useAsync({
+      onSuccess: (data: DocumentTypeById[] = []) => {
+        setTemplateOptions(data);
+      },
+    });
+
     const async = useAsync<ChangeRequest>({
       onSuccess: (createdChangeRequest?) => {
         setDoNotPrompt(true);
@@ -39,10 +48,18 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
       },
     });
 
+    useEffect(() => {
+      asyncGetDocTypeByGroup.start(
+        getDocTypeByGroupAction,
+        { docTypeGroupOption: "CHANGE_REQUEST" },
+        asyncGetDocTypeByGroup);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+
     const onSubmitAssessment = (values: ChangeRequestFormValues) => {
       async.start(create, toChangeRequestEditRequestBody(values), async);
     };
-
 
     return (
       <FormContext.Provider value={{ submitOnChange: false }}>
@@ -51,11 +68,10 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
           asyncState={async.asyncState}
           onSubmit={onSubmitAssessment}
           doNotPrompt={doNotPrompt}
+          chosenForm={chosenForm}
         />
       </FormContext.Provider>
     );
   };
 
-export default connect<{}, DispatchProps, OwnProps, ApplicationState>(null, {
-  create: changeRequestsActions.create,
-})(ChangeRequestCreateContainer);
+export default ChangeRequestCreateContainer;

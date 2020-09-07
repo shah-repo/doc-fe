@@ -21,7 +21,7 @@ export const withFBValidation = <T extends FBValidationProps>(
 
     function valueSplit(key: string, value: any): string {
       const ruleDelimiter = [":", ","];
-      let rules = key;
+      let rules = value ? key : "";
       if (_.isObject(value)) {
         _.map(value, (v, k) => {
           rules += `${ruleDelimiter.shift()}${valueByType(v, k)}`;

@@ -36,8 +36,8 @@ export const withFBEditorValidation = <T extends FBEditorValidationProps>(
       const value = _.get(ev.target, "checked");
       const { name } = schemaItem;
       if (!value) {
-        formState?.setFieldValue(name + ".value", undefined);
-        formState?.setFieldValue(name + ".name", undefined, true);
+        formState?.omitFieldValue(name + ".value");
+        formState?.omitFieldValue(name + ".name");
       }
       const schemaSelectItem = schemaState?.getSchemaItem(name + ".value");
       schemaSelectItem && schemaState && (schemaState.removeSchemaItem(schemaSelectItem));
@@ -48,7 +48,9 @@ export const withFBEditorValidation = <T extends FBEditorValidationProps>(
       formState?.setFieldValue("customValidator", customValidator);
       let rules = formState?.getFieldValue("rules") || "";
       const customValidatorRule = customValidator && customValidator.name;
-      customValidatorRule && !_.includes(rules, customValidatorRule) && (rules += `${!_.isEmpty(rules) ? "|" : ""}${customValidatorRule}`);
+      if (customValidatorRule && !_.includes(rules, customValidatorRule)) {
+        rules += `${!_.isEmpty(rules) ? "|" : ""}${customValidatorRule}`;
+      }
       formState?.setFieldValue("rules", rules);
       dialogState?.closeDialog();
     };

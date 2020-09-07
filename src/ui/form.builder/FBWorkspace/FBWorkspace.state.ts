@@ -3,20 +3,21 @@ import { action, computed, get, observable, set } from "mobx";
 import { FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from ".";
 import { FBSchemaState } from "..";
 import { GroupTag, UserState } from "../../../state/ducks/auth/types";
+import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 
 export class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
   public externalState?: FBWorkspaceExternalState;
   public document?: DocumentRevision;
+  public changeRequest?: ChangeRequest;
   public autosave?: boolean;
 
-  public constructor({ schema, mode, autosave, document }: FBWorkspaceConstructor) {
+  public constructor({ schema, mode, autosave }: FBWorkspaceConstructor) {
     super(schema);
     this.schema = schema;
     this.mode = mode || "none";
     this.autosave = autosave;
-    this.document = document;
   }
 
   public get auth(): FBWorkspaceExternalState["auth"] | undefined {
@@ -36,11 +37,19 @@ export class FBWorkspaceState extends FBSchemaState {
   }
 
   public get id(): string | undefined {
-    return this.document?.id;
+    return this.document?.id || this.changeRequest?.id;
   }
 
   public get documentId(): string | undefined {
     return this.document?.document?.id;
+  }
+
+  public get documentStatus(): DocumentRevisionStatus {
+    return this.document?.status || DocumentRevisionStatus.Draft;
+  }
+
+  public get changeRequestStatus(): ChangeRequestStatus {
+    return this.changeRequest?.state || ChangeRequestStatus.Draft;
   }
 
   public get isReleased(): boolean {

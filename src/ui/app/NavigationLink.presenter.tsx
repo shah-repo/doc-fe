@@ -1,68 +1,78 @@
 import { ListItemIcon } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import { withStyles, WithStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
-import _ from "lodash";
+import { camelCase } from "lodash";
 import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
-import { ReactComponent as ChangeRequestListIcon } from "../../assets/images/change_request_list_icon.svg";
-import { ReactComponent as DashboardIcon } from "../../assets/images/dashboard_icon.svg";
-import { ReactComponent as DocumentListICon } from "../../assets/images/document_list_icon.svg";
-import { ReactComponent as GroupManagementIcon } from "../../assets/images/group_management_icon.svg";
-import { ReactComponent as UserManagementIcon } from "../../assets/images/user_management_icon.svg";
+import { NavigationItem, NavigationItemType } from "../../state/ducks/company";
 import Text from "../components/Text";
-import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, GROUP_MANAGEMENT_ROOT_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
-import { LinkDefinition } from "./NavigationLink.container";
+import { DOCUMENT_BY_CATEGORY_ROOT_URL } from "../constants/urls";
 import styles from "./NavigationLink.styles";
 
-interface NavigationLinkPresenterProps
-  extends LinkDefinition,
-  WithStyles<typeof styles> {
+interface NavigationLinkPresenterProps extends
+  NavigationItem {
   ActionIcon?: ReactNode;
   isChild?: boolean;
+  toggleChildren?: (event: React.MouseEvent) => void;
+  currentPath: string;
+  checkIfItemIsActive: (
+    type: NavigationItemType,
+    currentPath: string,
+    path?: string,
+    category?: string,
+    menu?: NavigationItem[],
+  ) => boolean;
 }
-
-interface IconObject {
-  [key: string]: JSX.Element;
-}
-
-const iconMapping: IconObject = {
-  "/": <DashboardIcon />,
-  [DOCUMENT_REVISION_LIST_URL]: <DocumentListICon />,
-  [CHANGE_REQUEST_LIST_URL]: <ChangeRequestListIcon />,
-  [USER_MANAGEMENT_ROOT_URL]: <UserManagementIcon />,
-  [GROUP_MANAGEMENT_ROOT_URL]: <GroupManagementIcon />,
-};
 
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
-  classes,
-  url,
-  text,
+  path,
+  category,
+  label,
+  type,
+  icon,
   ActionIcon,
   isChild,
-}) => (
-  <>
-    <ListItem
-      component={NavLink}
-      button
-      exact
-      className={classNames(classes.link, { [classes.childLink]: isChild })}
-      activeClassName={classes.activeLink}
-      to={url}
-    >
-      <ListItemIcon className={classes.itemIcon}>
-        {_.get(iconMapping, url) || <div />}
-      </ListItemIcon>
-      <ListItemText
-        primary={<Text message={text} />}
-        classes={{
-          primary: classes.itemText,
-        }}
-      />
-    </ListItem>
-    {ActionIcon}
-  </>
-);
+  toggleChildren,
+  currentPath,
+  checkIfItemIsActive,
+}) => {
+  const classes = styles({ iconLink: icon });
+  return (
+    <>
+      <ListItem
+        component={path || category ? NavLink : null}
+        button
+        exact
+        className={
+          classNames(classes.link, {
+            [classes.childLink]: isChild,
+            [classes.menu]: type === "MENU",
+          })}
+        activeClassName={classes.activeLink}
+        to={type === "CATEGORY" ? `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}` : path}
+      >
+        <ListItemIcon className={classes.itemIcon} onClick={toggleChildren}>
+          <div
+            className={classNames(
+              classes.icon, {
+                [classes.iconActive]: type !== "MENU" && checkIfItemIsActive(type, currentPath, path, category),
+              }
+            )}
+          />
+        </ListItemIcon>
+        <ListItemText
+          primary={<Text message={label} />}
+          classes={{
+            primary: classes.itemText,
+          }}
+          data-cy={`navigation.${camelCase(label)}`}
+          onClick={toggleChildren}
+        />
+        {ActionIcon}
+      </ListItem>
+    </>
+  );
+};
 
-export default withStyles(styles)(NavigationLinkPresenter);
+export default NavigationLinkPresenter;

@@ -10,7 +10,9 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
   getOptionDisabled,
   getOptionLabel,
   handleTypeChange,
+  handlePartDescription,
   type,
+  hasPartNumber,
   children,
 }) => (
   <FormContext.Provider value={{ submitOnChange: false }}>
@@ -42,7 +44,8 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         <FBTextField
           label="form.builder.field.part.description"
           name="partNumberTitle"
-          disabled
+          onChange={handlePartDescription}
+          disabled={hasPartNumber}
         />
       </>
     }

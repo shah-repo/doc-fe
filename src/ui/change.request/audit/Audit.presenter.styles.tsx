@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      margin: theme.spacing(0, 4, 0, 2),
+      margin: theme.spacing(0, 0, 0, 2),
     },
     details: {
       overflowY: "auto",
@@ -11,7 +11,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     changeContainer: {
       borderBottom: "1px solid " + theme.palette.text.hint,
-      padding: theme.spacing(1),
+      padding: theme.spacing(1, 3.5, 1, 0),
       background: "#fff",
     },
     auditValue: {

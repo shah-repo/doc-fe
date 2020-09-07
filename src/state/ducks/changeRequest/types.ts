@@ -1,12 +1,9 @@
+import { FBTaskItem } from "../../../ui/form.builder/FBTask";
 import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
 import { Approval, Id, Owner, User } from "../common";
-import {
-  CHANGE_REQUEST_AUDIT_SET,
-  CHANGE_REQUEST_LIST,
-  CHANGE_REQUEST_LIST_APPROVERS,
-  CHANGE_REQUEST_SET,
-} from "./constants";
+import { FBDocumentRevisionProps } from "../documentRevisions";
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from "./constants";
 
 export enum ChangeRequestStatus {
   Draft = "DRAFT",
@@ -64,7 +61,7 @@ export interface ImplementationPlan {
   tasks: ImplementationPlanTask[];
   attachments: Attachment[];
 }
-
+// This needs to be properly cleaned up
 export interface ChangeRequest {
   id: string;
   crId: string;
@@ -80,6 +77,9 @@ export interface ChangeRequest {
   owner: Owner;
   documentRevisions: any[];
   closedAt: Date;
+  formInput?: Record<string, any>;
+  formDocument?: FBDocumentRevisionProps;
+  tasks?: FBTaskItem[];
 }
 
 export interface Approver {
@@ -116,12 +116,9 @@ export interface ImplementationPlanRequest {
 export interface ChangeRequestEditRequestBody {
   title: string;
   description: string;
-  assessments: Assessment;
-  implementationPlan: ImplementationPlanRequest;
-  justifications: EditRequestBodyNestedObject;
-  effectiveDate?: string;
-  approvals: Approver[];
-  documentRevisions: DocumentRevisionRequestBody[];
+  formInput?: Record<string, any>;
+  formDocument?: FBDocumentRevisionProps;
+  documentType?: Id;
 }
 
 export interface ChangeRequestSetAction {
@@ -144,7 +141,8 @@ export type ChangeRequestTransition =
   "approve" | "reject" | "to_review" | "withdrawn" | "submitted" | "in_review" | "closed";
 
 export interface ChangeRequestTransitionRequestBody {
-  password: string;
+  password?: string;
+  effectiveDate?: string;
 }
 
 export interface ChangeRequestTransitionResponse {

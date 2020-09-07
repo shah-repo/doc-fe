@@ -31,10 +31,10 @@ const Numeric: React.FunctionComponent<NumericProps> = ({
   const defaulValue = values
     ? values
     : {
-        value: "",
-        minValue: "",
-        maxValue: "",
-      };
+      value: "",
+      minValue: "",
+      maxValue: "",
+    };
   const [fieldValues, setValue] = useState(defaulValue);
   const [error, setError] = useState(false);
 

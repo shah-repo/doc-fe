@@ -388,24 +388,20 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off", // should we warn? remove : leave
     "@typescript-eslint/array-type": "error",
     "@typescript-eslint/consistent-type-definitions": "error",
-    "@typescript-eslint/explicit-member-accessibility": [
-      "error",
-      {
-        "accessibility": "explicit"
-      }
-    ],
+    "@typescript-eslint/explicit-member-accessibility": "off",
     "indent": "off",
     "@typescript-eslint/indent": [
       "error",
       2,
       {
         "FunctionDeclaration": {
-          "parameters": "first"
+          "parameters": 1
         },
         "FunctionExpression": {
-          "parameters": "first"
+          "parameters": 1
         },
-        "SwitchCase": 1
+        "SwitchCase": 1,
+        "ignoredNodes": ['TSTypeParameterInstantiation']
       }
     ],
     "@typescript-eslint/interface-name-prefix": "off",
@@ -422,7 +418,7 @@ module.exports = {
         }
       }
     ],
-    "@typescript-eslint/member-ordering": "error",
+    "@typescript-eslint/member-ordering": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-parameter-properties": "off",
     "@typescript-eslint/no-use-before-define": "off",
@@ -430,14 +426,17 @@ module.exports = {
     "@typescript-eslint/prefer-function-type": "error",
     "@typescript-eslint/quotes": [
       "error",
-      "double"
+      "double", 
+      { "allowTemplateLiterals": true }
     ],
     "@typescript-eslint/semi": [
       "error",
       "always"
     ],
     "@typescript-eslint/unified-signatures": "error",
-    "arrow-body-style": "error",
+    "arrow-body-style": [
+      "error"
+    ],
     "arrow-parens": "error",
     "comma-dangle": [
       "error",
@@ -507,7 +506,10 @@ module.exports = {
     "object-curly-spacing": ["error", "always"],
     "object-curly-newline":["error", {"multiline":true, "consistent":true,}],
     "key-spacing": "error",
-    "keyword-spacing": "error",
+    "keyword-spacing": [
+      "error",
+      { "before": true, "after": true }
+    ],
     "space-before-blocks": "error",
     "block-spacing": "error",
     "func-call-spacing": "error",

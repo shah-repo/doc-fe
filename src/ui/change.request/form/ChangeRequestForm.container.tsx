@@ -1,16 +1,22 @@
-import { Grid, WithStyles, withStyles } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import { Formik, FormikProps } from "formik";
+import { cloneDeep } from "lodash";
+import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
-import { Group } from "../../../state/ducks/auth/types";
+import { useLocation } from "react-router-dom";
+import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
+import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions";
 import { AsyncState } from "../../../state/types";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import DocumentRevisionControlContainer from "../documentRevision/DocumentRevisionControl.container";
-import { ChangeRequestFormPresenter } from "./ChangeRequestForm.presenter";
+import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
+import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
+import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
+import { FBWorkspace } from "../../form.builder";
+import ChangeRequestAuditContainer from "../audit/Audit.container";
+import AssessmentFormPresenter from "./assessmentForm/AssessmentForm.presenter";
 import styles from "./styles";
 import { ChangeRequestFormValues } from "./types";
+
 
 interface OwnProps {
   initialValues: ChangeRequestFormValues;
@@ -18,113 +24,97 @@ interface OwnProps {
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
   doNotPrompt?: boolean;
+  chosenForm?: FBDocumentRevisionProps;
 }
 
 export let changeRequestFormOnScreenContext = React.createContext<boolean>(false);
 
-type ChangeRequestFormContainerProps = OwnProps &
-WithStyles<typeof styles>;
+type ChangeRequestFormContainerProps = OwnProps;
 
 export const ChangeRequestFormContainer: React.FunctionComponent<
-ChangeRequestFormContainerProps
+  ChangeRequestFormContainerProps
 > = ({
-  classes,
   onSubmit,
   asyncState,
   initialValues,
   changeRequest,
   doNotPrompt,
+  chosenForm,
 }) => {
-  const intl = useIntl();
-  const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
-  const [documentTypeGroups, setDocumentTypeGroups] = useState<any[]>([]);
-  const [selectedDocumentRevision, setSelectedDocumentRevision] = useState<string | null>(null);
-  const [documentRevisionsList, setDocumentRevisionsList] = useState<string[]>(
-    initialValues.documentRevisions,
-  );
-  const [documentsInCrById, setDocumentsInCrById] = useState({});
-
-  const async = useAsync({
-    onSuccess: (response: Group[] = []) => {
-      setDocumentTypeGroups([
-        ...documentTypeGroups,
-        response,
-      ]);
-    },
-  });
-  const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
-  changeRequestFormOnScreenContext = React.createContext<boolean>(true);
-
-  useEffect(() => {
-    if (changeRequest && changeRequest.documentRevisions) {
-      setDocumentsInCrById(
-        changeRequest.documentRevisions.reduce(
-          (acc, docRev: DocumentRevision) => ({ ...acc, [docRev.id]: docRev }),
-          {},
-        ),
-      );
-      changeRequest.documentRevisions.map((docRev) => async.start(
-        getGroupsByStage,
-        docRev.id,
-        async,
-      ));
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [(changeRequest || {}).documentRevisions]);
+  const FBContainer = React.useRef(null);
 
   useEffect(() => () => {
     changeRequestFormOnScreenContext = React.createContext<boolean>(false);
   }, []);
 
-  const alertIfFormDirty = () => {
-    if (!isFormDirty) {
-      return true;
-    }
-    alert(intl.formatMessage({ id: "common.unsaved.changes" }));
-    return false;
-  };
+  const intl = useIntl();
+  const url = useLocation();
+  const [isDrawerOpen, setOpen] = React.useState(true);
+  const classes = styles({ isDrawerOpen });
+  const schemaData = changeRequest
+    ? changeRequest.formDocument?.formTemplate?.schema
+    : chosenForm?.formTemplate?.schema;
 
-  const selectDocumentRevision = (documentRevisionId: string) => {
-    alertIfFormDirty() && setSelectedDocumentRevision(documentRevisionId);
-  };
+  const render = (props: FormikProps<ChangeRequestFormValues>) => (
+    <FBWorkspace
+      portalContainer={FBContainer}
+      initialValues={cloneDeep(changeRequest?.formInput)}
+      changeRequest={cloneDeep(changeRequest)}
+      autosave={true}
+      schema={schemaData}
+      mode="form"
+    >
+      <AssessmentFormPresenter
+        asyncState={asyncState}
+        changeRequest={changeRequest}
+        doNotPrompt={doNotPrompt}
+        {...props}
+        {...{ FBContainer }}
+      />
+      <DocumentRevisionOutputInfo formDocument={chosenForm || changeRequest?.formDocument} />
+    </FBWorkspace>
 
-  const selectAssessmentForm = () => {
-    alertIfFormDirty() && setSelectedDocumentRevision(null);
-  };
+  );
 
-  const onDirtyFlagChange = (dirty: boolean) => setIsFormDirty(dirty);
-
-  const transformedDocTypeGroups = [].concat(...documentTypeGroups);
+  const sidebarList = [
+    {
+      icon: <TimelineIcon />,
+      details: {
+        dataCy: "timeline-icon",
+        title: intl.formatMessage({
+          id: "document.revision.history",
+        }),
+        component: changeRequest ? <ChangeRequestAuditContainer changeRequestId={changeRequest.id} />
+          : null,
+      },
+    },
+    {
+      icon: <BookmarkIcon />,
+      details: {
+        dataCy: "bookmark-icon",
+        title: intl.formatMessage({
+          id: "document.revision.bookmarks",
+        }),
+        component: <Bookmarks location={url} schema={schemaData} />,
+      },
+    },
+  ];
 
   return (
-    <Grid container={true} className={classes.whiteContainer}>
-      <Grid container={true} spacing={4}>
-        <Grid item={true} xs={12} sm={3} md={2}>
-          <DocumentRevisionControlContainer
-            setDocumentRevisionsList={setDocumentRevisionsList}
-            documentsInChangeRequest={documentRevisionsList}
-            selectDocumentRevision={selectDocumentRevision}
-            selectAssessmentForm={selectAssessmentForm}
-            selectedDocumentRevision={selectedDocumentRevision}
-            documentsInCrById={documentsInCrById}
-            setDocumentTypeGroups={setDocumentTypeGroups}
-            documentTypeGroups={documentTypeGroups}
-          />
-        </Grid>
-        <ChangeRequestFormPresenter
+    <div className={classes.root}>
+      <div className={classes.appFrame}>
+        <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
-          asyncState={asyncState}
-          doNotPrompt={doNotPrompt}
-          onDirtyFlagChange={onDirtyFlagChange}
-          changeRequest={changeRequest}
-          selectedDocumentRevision={selectedDocumentRevision}
-          documentRevisionsList={documentRevisionsList}
-          documentTypeGroups={transformedDocTypeGroups}
-        />
-      </Grid>
-    </Grid>
+          enableReinitialize={true}
+        >
+          {render}
+        </Formik>
+      </div>
+
+      {changeRequest && <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />}
+    </div>
   );
 };
 
-export default withStyles(styles)(ChangeRequestFormContainer);
+export default ChangeRequestFormContainer;

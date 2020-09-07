@@ -5,6 +5,6 @@ export type FBTabsProps =
   & Pick<Partial<TabsProps>, "value" | "onChange">
   & FBSwitchPanelProps
   & {
-  tabs?: React.ReactNode[];
-  activeTab?: number;
-};
+    tabs?: React.ReactNode[];
+    activeTab?: number;
+  };

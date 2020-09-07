@@ -1,3 +1,4 @@
+import { GroupTag } from "../auth/types";
 import { User } from "../common";
 import { DocumentType } from "../documentRevisions/documentType";
 import { SELECT_COMPANY, SET_COMPANY_MINE } from "./constants";
@@ -37,6 +38,7 @@ export interface Company {
   teamId: string;
   addresses: [];
   acctCodes: [];
+  navigation: NavigationItem[];
 }
 
 export interface SelectCompanyAction {
@@ -57,3 +59,15 @@ export interface CompanyMineRequest {
 }
 
 export type SelectCompanyState = Company;
+
+export type NavigationItemType = "LINK" | "MENU" | "CATEGORY";
+
+export interface NavigationItem {
+  label: string;
+  type: NavigationItemType;
+  path?: string;
+  menu?: NavigationItem[];
+  icon?: string;
+  category?: string;
+  restrictedToUsersWithTags?: GroupTag[];
+}

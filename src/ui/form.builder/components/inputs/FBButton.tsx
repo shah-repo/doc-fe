@@ -16,6 +16,7 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
       {...props}
       type={buttonType}
       id="FBButton-label"
+      data-cy="FBButton-label"
     >
       <Text message={label} />
     </Button>

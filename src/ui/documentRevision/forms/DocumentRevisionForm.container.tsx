@@ -1,11 +1,11 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import _, { cloneDeep, get } from "lodash";
+import _, { cloneDeep, filter, get, map } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeByIdState, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
@@ -49,6 +49,7 @@ interface OwnProps {
   loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
   canChangeOwnerShip?: boolean;
   type?: DocumentCloneType;
+  isNewVersion?: boolean;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
@@ -91,14 +92,19 @@ DocumentRevisionFormContainerProps
   document,
   canChangeOwnerShip = false,
   type,
+  isNewVersion,
 }) => {
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const bannerPortal = React.useRef(null);
+  const { revisionStage } = documentRevision || {};
+  const isAlphaReleased = revisionStage === 3;
+  const isRecord = (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
 
   const cleanInitialValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
+    const { outputRevision } = initialValues;
     const securityGroups: any[] = [];
     if (initialValues.document?.documentType?.isQms) {
       groupOptions.forEach((group) => {
@@ -112,8 +118,13 @@ DocumentRevisionFormContainerProps
       initialValues.retrain :
       initialValues.document?.documentType?.defaultTraining || false;
 
+    const attachments = outputRevision
+      ? filter(initialValues.attachments, (file) => file.lineType !== "RED_LINE")
+      : initialValues.attachments;
+
     return {
       ...initialValues,
+      attachments,
       document: {
         ...(initialValues.document || {}),
         // NOTE: workaround. DocId is set before groupOptions are loaded
@@ -161,18 +172,28 @@ DocumentRevisionFormContainerProps
   } else if (outputGroup) {
     mode = "form";
   }
+  const showAdministrativeAndVoidChange = isOutput && isAlphaReleased && isRecord;
 
   const GetScheme = (props: FormikProps<DocumentRevisionFormValues>): FBSchemaProps[] => {
     const { id: documentTypeId = "" } = props.values.document?.documentType || {};
     const { outputDocumentTypes } = props.values || {};
-    const { schema: docScheme = [] } = documentTypesById?.[documentTypeId] || {};
-    const outputScheme =  useMemo(() => outputDocumentTypes?.reduce((scheme, value: OptionType) => {
+    let { schema: docScheme = [] } = documentTypesById?.[documentTypeId] || {};
+    docScheme = map(docScheme, ((schemaItem) => ({
+      ...schemaItem,
+      deleteDisabled: true,
+    })));
+    let outputScheme =  useMemo(() => outputDocumentTypes?.reduce((scheme, value: OptionType) => {
       const { schema: outputScheme = [] } = documentTypesById[value.value] || {};
       if (!_.isEmpty(outputScheme)) {
         return _.uniqBy(_.union(scheme, outputScheme), "name");
       }
+
       return scheme;
     }, [] as FBSchemaProps[]), [outputDocumentTypes]);
+    outputScheme = map(outputScheme, ((schemaItem) => ({
+      ...schemaItem,
+      deleteDisabled: true,
+    })));
 
     const schema = isOutput
       ? originScheme
@@ -183,10 +204,9 @@ DocumentRevisionFormContainerProps
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
     <FBWorkspace
       portalContainer={FBContainer}
-      // TODO: check if merging both objects would satisfy all our needs
       document={{
+        ...props.values as unknown as DocumentRevision,
         ...documentRevision as unknown as DocumentRevision,
-        outputRevision: props.values.outputRevision,
       }}
       initialValues={formInput}
       autosave={true}
@@ -207,11 +227,11 @@ DocumentRevisionFormContainerProps
         documentTypesById={documentTypesById}
         canChangeOwnerShip={canChangeOwnerShip}
         type={type}
-        {...{ FBContainer, bannerPortal }}
+        isNewVersion={isNewVersion}
+        {...{ FBContainer, bannerPortal, showAdministrativeAndVoidChange }}
       />
     </FBWorkspace>
   );
-
   // TODO: check why are we loading all document revisions
   // if it's really necessary maybe it can be loaded through the DataFetcherContainer
   // it will be loaded only once instead every time this component is mounted

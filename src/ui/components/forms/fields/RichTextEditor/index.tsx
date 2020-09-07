@@ -101,7 +101,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   }, [debouncedToggle]);
 
   const handleBlur = () => {
-    const  { name } = field;
+    const { name } = field;
     const { touched, setFieldTouched } = form;
 
     if (toggleToolbar) {
@@ -120,7 +120,6 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
       setToolbarHidden(false);
     }
   };
-
   return (
     <Field
       size={size}
@@ -128,7 +127,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
       {...fieldProps}
       inputLabelProps={{ shrink: true }}
     >
-      <Box hidden={hidden}>
+      <Box hidden={hidden} data-cy={`RichTextEditor.${field.name}`}>
         <Editor
           editorState={value}
           onEditorStateChange={setValue}
@@ -149,6 +148,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
             inline,
           }}
           {...editorProps}
+
         />
       </Box>
     </Field>

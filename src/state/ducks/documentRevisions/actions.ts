@@ -1,4 +1,5 @@
 import axios from "axios";
+import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { Audit, AuditActionPayload } from "../audit/types";
@@ -155,16 +156,18 @@ const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
 const approveAndRelease = (
   id: string,
   body: ApproveAndReleaseRequest,
-  password: string,
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/release/${id}`,
   method: "post",
   data: body,
-  password,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
-    dispatch(load(id));
-    dispatch(loadDocument(docRev.document.id));
+    if (docRev.document?.documentType?.group === "RECORD") {
+      window.location.href = documentVersionPath(docRev.id, docRev.document.id);
+    } else {
+      dispatch(load(id));
+      dispatch(loadDocument(docRev.document.id));
+    }
   },
   handlers,
 });
@@ -231,6 +234,28 @@ const cancelDraft = (id: string): ApiAction<DocumentRevision> => apiAction({
   },
 });
 
+const voidDocument = (id: string): ApiAction<DocumentRevision> => apiAction({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/void/${id}`,
+  method: "patch",
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionSet(documentRevision));
+  },
+});
+
+const setPrimaryAttachment = (
+  docRevId: string,
+  attachmentId: string,
+  handlers: Handlers
+): ApiAction<DocumentRevision> =>
+  apiActionWithCallbacks({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/${docRevId}/set_primary/${attachmentId}`,
+    method: "patch",
+    onSuccess: (documentRevision, dispatch) => {
+      dispatch(documentRevisionSet(documentRevision));
+    },
+    handlers,
+  });
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -253,4 +278,6 @@ export default {
   loadGroupsByStage,
   cancelDraft,
   reload,
+  setPrimaryAttachment,
+  voidDocument,
 };

@@ -1,8 +1,6 @@
-import { Box, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, List, Typography } from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { Box, List } from "@material-ui/core";
 import React from "react";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
-import { TypographySize } from "../../../state/ducks/common";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -20,14 +18,14 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const classes = styles();
 
   const renderAuditGroup = () =>
-    Object.keys(audit).map((groupId) => {
+    Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
 
       return (
         <Box key={groupId} className={classes.changeContainer}>
-          <div className={classes.dateContainer}>
-            <div className={classes.owner}>{change.owner.user.name}</div>
-            <DateTime value={change.timestamp} />
+          <div className={classes.dateContainer} data-cy={`audit-${key}`}>
+            <div data-cy={`audit-owner-${key}`} className={classes.owner}>{change.owner?.user.name}</div>
+            <DateTime data-cy={`audit-time-${key}`} value={change.timestamp} />
           </div>
 
           {renderChanges(audit[groupId])}
@@ -45,7 +43,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         attachments.push(change);
       } else if (change.field.includes("referenceTo")) {
         references.push(change);
-      } else {
+      } else if (change.field !== "effectiveDate" || change.nextValue !== "null") {
         singleFields.push(
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
@@ -91,22 +89,9 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     );
   };
 
-  const [expanded, setExpanded] = React.useState<boolean>(false);
-
-  const handleChange = () => () => setExpanded(!expanded);
-
   return (
     <div className={classes.container}>
-      <ExpansionPanel expanded={expanded} onChange={handleChange()}>
-        <ExpansionPanelSummary id="crHistoryButton" expandIcon={<ExpandMoreIcon />}>
-          <Typography variant={TypographySize.md}>
-            <Text translation="changeRequest.audit.crHistory" />
-          </Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails className={classes.details}>
-          <List>{audit && renderAuditGroup()}</List>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+      <List>{audit && renderAuditGroup()}</List>
     </div>
   );
 };

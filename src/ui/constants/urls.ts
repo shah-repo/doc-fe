@@ -4,7 +4,7 @@ export const LOGIN_WITH_CODE_URL = "/auth/tokens";
 
 export const DOCUMENT_CREATE_URL = "/document/create";
 
-export const CHANGE_REQUEST_CREATE_URL = "/change_request/create";
+export const CHANGE_REQUEST_CREATE_URL = "/change_request/:formId/create/:documentTypeId";
 
 export const CHANGE_REQUEST_LIST_URL = "/change_request";
 export const CHANGE_REQUEST_ROOT_URL = `${CHANGE_REQUEST_LIST_URL}/:changeRequestId`;
@@ -42,6 +42,9 @@ export const SLACK_USER_URL = `${SLACK_ROOT_URL}/user`;
 
 export const DOCUMENT_BY_TYPE_ROOT_URL = "/document_by_type";
 export const DOCUMENT_BY_TYPE_LIST_URL = `${DOCUMENT_BY_TYPE_ROOT_URL}/:docTypeId`;
+
+export const DOCUMENT_BY_CATEGORY_ROOT_URL = "/document_by_category";
+export const DOCUMENT_BY_CATEGORY_LIST_URL = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/:categoryName`;
 
 export const GROUP_MANAGEMENT_ROOT_URL = "/group_management";
 

@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { documentRevisionQueryStatus } from "../utils/helpers";
@@ -31,6 +32,8 @@ export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
           ...tableCriteria,
           queryDict: {
             "status[]": status,
+            /** Temp fix - disabling filtering by doc type name */
+            // "documentTypeNames[]": DOCUMENT_TABLE_LIST_NAMES,
           },
         },
         TABLE_NAME,
@@ -42,11 +45,12 @@ export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
     if (_.isEmpty(tableCriteria.queryDict)) {
       setSearchStatus(DocumentRevisionStatus.Released);
     }
+    dispatch(documentTypeActions.loadList());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
   const clearFilter = () => setSearchStatus(documentRevisionQueryStatus());
   const documentTypeOptions = useSelector(
-    documentTypeSelectors.getDocumentTypeOptions,
+    documentTypeSelectors.getDocumentTypeOptionsForDocumentList,
   );
 
   return (

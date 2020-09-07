@@ -1,13 +1,15 @@
 import { Button, Grid } from "@material-ui/core";
-import React from "react";
+import classNames from "classnames";
+import React, { useState } from "react";
+import { ReactComponent as TriangleDown } from "../../../assets/images/triangle-down.svg";
 import { Employee } from "../../../state/ducks/company";
 import { LoadCompanyGroup } from "../../../state/ducks/userManagement";
 import { GROUPS_URL } from "../../../state/ducks/userManagement/constants";
+import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import DocumentInfo from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
-import Text from "../../components/Text";
 import AddGroupContainer from "../add.group/AddGroup.container";
 import AddGroup from "../add.group/Group";
 import { GroupsDisplay } from "../display.groups/GroupsDisplay";
@@ -37,7 +39,51 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
   canCreateGroups,
 }) => {
   const classes = styles();
-  const handleMembers = (members: Employee[]) => members.map((member) => member.user && member.user.name).join(", ");
+
+  /** Marks which row is expanded (in case there are more than 15 group members). */
+  const [expandedGroupId, setExpandedGroupId] = useState<string | null>(null);
+
+  /** Handles group members display for each row.
+   * @param members List of all the group members.
+   * @param groupId Id of the group, used for member list expansion.
+   */
+  const handleMembers = (members: Employee[], groupId: string) => {
+    const NUMBER_OF_MEMBERS_TO_DISPLAY = 15;
+    const membersToDisplay = groupId === expandedGroupId ? members : members.slice(0, NUMBER_OF_MEMBERS_TO_DISPLAY);
+    const remainder = groupId === expandedGroupId ? 0 : members.length - NUMBER_OF_MEMBERS_TO_DISPLAY;
+    return (
+      <>
+        {membersToDisplay.map((member) => member.user && member.user.name).join(", ")}
+        {
+          members.length > NUMBER_OF_MEMBERS_TO_DISPLAY && (
+            <>
+              {groupId !== expandedGroupId && "..."}
+              <Button
+                color="primary"
+                variant="contained"
+                className={classes.remainderButton}
+                onClick={(e) => handleExpandMembers(e, groupId)}
+              >
+                {remainder}
+                <TriangleDown className={classNames({
+                  [classes.triangleDown]: true,
+                  expanded: groupId === expandedGroupId,
+                })}/>
+              </Button>
+            </>
+          )
+        }
+      </>
+    );
+  };
+
+  /** Handles click on Expand button (to show more than 15 group members).
+   * @param groupId Id of the group to be expanded.
+   */
+  const handleExpandMembers = (e: React.MouseEvent<HTMLButtonElement>, groupId: string) => {
+    e.stopPropagation();
+    setExpandedGroupId(groupId === expandedGroupId ? null : groupId);
+  };
 
   const columns: TableColumnProps<LoadCompanyGroup>[] = [
     {
@@ -48,7 +94,7 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
         cellDataGetter: ({ rowData }) => rowData.name,
       },
       searchOptions: {
-        defaultValue: tableCriteria.queryDict.groupName,
+        defaultValue: tableCriteria.queryDict?.groupName,
       },
     },
     {
@@ -56,10 +102,10 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
       id: "GroupManagementListPresenter-employees",
       label: "common.members",
       columnOptions: {
-        cellDataGetter: ({ rowData }) => handleMembers(rowData.employees),
+        cellDataGetter: ({ rowData }) => handleMembers(rowData.employees, rowData.id),
       },
       searchOptions: {
-        defaultValue: tableCriteria.queryDict.userName,
+        defaultValue: tableCriteria.queryDict?.userName,
       },
     },
     {
@@ -72,7 +118,7 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
           { text: "Official", value: "true" },
           { text: "Unofficial", value: "false" },
         ],
-        defaultValue: tableCriteria.queryDict.isOfficial,
+        defaultValue: tableCriteria.queryDict?.isOfficial,
       },
       columnOptions: {
         cellDataGetter: ({ rowData }) =>
@@ -84,18 +130,10 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
-        <Button
-          color="primary"
-          variant="outlined"
-          className={classes.clearButton}
-          onClick={clearFilter}
-          id="GroupManagementListPresenter-clearButton"
-        >
-          <Text translation="common.clear.filters" />
-        </Button>
+        <ClearFilters {...{ clearFilter }}/>
         <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
-      <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+      <Grid item={true} xs={6} style={{ textAlign: "right", marginBottom: "16px" }}>
         {canCreateGroups && <AddGroupContainer />}
       </Grid>
       <Grid item={true} className={classes.item}>

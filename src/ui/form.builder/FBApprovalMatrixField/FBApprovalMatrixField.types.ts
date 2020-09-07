@@ -26,6 +26,8 @@ export interface FBApprovalMatrixDocType {
   name: string;
   defaultTraining: boolean;
   group: string;
+  needsSignature: boolean;
+  category: string;
 }
 
 export interface FBApprovalRolesStages {
@@ -50,5 +52,6 @@ export type FBApprovalMatrixFieldMode = "none" | "add" | "edit" | "fullscreen";
 
 export interface FBApprovalMatrixConstructor {
   formValue?: FBApprovalMatrixFieldData;
+  outputRevision?: boolean;
   isOutput?: boolean;
 }

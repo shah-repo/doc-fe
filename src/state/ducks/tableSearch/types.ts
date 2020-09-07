@@ -15,7 +15,7 @@ import {
 
 export interface TableSearchSetAction {
   type: typeof TABLE_SEARCH_SET;
-  payload: TablePanelStateProps;
+  payload: Partial<TablePanelStateProps>;
   tableName: string;
 }
 

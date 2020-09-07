@@ -38,9 +38,12 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 export const ChangeRequestUpdateContainer: React.FunctionComponent<
 ChangeRequestUpdateContainerProps
 > = ({ save, changeRequest, currentUserEmail, loadAudit }) => {
+
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
+  const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const async = useAsync<ChangeRequest>({
     onSuccess: () => {
+      setDoNotPrompt(true);
       loadAudit(changeRequest.id);
     },
   });
@@ -72,6 +75,7 @@ ChangeRequestUpdateContainerProps
         onSubmit={onSubmit}
         initialValues={initialValues}
         changeRequest={changeRequest}
+        doNotPrompt={doNotPrompt}
       />
     </FormContext.Provider>
   );

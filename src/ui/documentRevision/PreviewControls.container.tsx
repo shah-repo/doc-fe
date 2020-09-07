@@ -5,6 +5,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { toastInfo } from "../components/notifications";
@@ -53,11 +54,15 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
     return formDocuments && getIsLastVersionObsolete(formDocuments);
   };
 
+  const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
+  && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
+    .find((type) => type.documentTypeName === "Approval Request" || type.documentTypeName === "Change Request");
+
   useEffect(() => {
     if (formDocumentId) {
       dispatch(documentRevisionsActions.loadDocument(formDocumentId));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formDocumentId]);
 
   const async = useAsync({
@@ -72,6 +77,11 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
 
   const cloneOutputDocument = () => {
+    if (isAR) {
+      const revisionId = documentRevision.id;
+      const templateId = isAR.id;
+      history.push(`/change_request/${revisionId}/create/${templateId}`);
+    }
     handleCreateDocument(documentRevision);
   };
 
@@ -80,7 +90,12 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const renderCloneButton = () => {
     if (hasAccess && canCreate() && showRevise) {
       return (
-        <Button color="secondary" variant="outlined" onClick={cloneDocument} id="PreviewControlsContainer-revise" >
+        <Button
+          color="secondary"
+          variant="outlined"
+          onClick={cloneDocument}
+          id="PreviewControlsContainer-revise"
+          data-cy="updateRecord" >
           <Text message={reviseLabel} />
         </Button>
       );
@@ -95,8 +110,9 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
           variant="outlined"
           onClick={cloneOutputDocument}
           id="PreviewControlsContainer-createNew"
+          data-cy="PreviewControlsContainer-createNew"
         >
-          <Text translation="common.create.new" />
+          <Text translation={isAR ? "changeRequest.create" : "common.create.new"} />
         </Button>
       );
     }

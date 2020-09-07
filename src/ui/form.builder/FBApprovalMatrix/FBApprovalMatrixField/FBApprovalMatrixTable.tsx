@@ -4,6 +4,7 @@ import { useBlockLayout, useTable } from "react-table";
 import { useSticky } from "react-table-sticky";
 import styled from "styled-components";
 import Text from "../../../components/Text";
+import { Translation } from "../../../translations/types";
 import { FBFormDefaultProps } from "../../types/common";
 
 const BootstrapInput = withStyles((theme) => ({
@@ -178,9 +179,13 @@ const FBApprovalMatrixTable: React.FunctionComponent<Props> = ({
         <div className="header">
           {headerGroups.map((headerGroup, index) => (
             <div key={index} {...headerGroup.getHeaderGroupProps()} className="tr">
-              {headerGroup.headers.map((column, key) => (<div key={key} {...column.getHeaderProps()} className={column.depth === 1 ? "secondRowTh" : "th"}>
-                {column.render("Header")}
-              </div>))}
+              {headerGroup.headers.map(
+                (column, key) => (<div
+                  key={key}
+                  {...column.getHeaderProps()} className={column.depth === 1 ? "secondRowTh" : "th"}
+                >
+                  {column.render("Header")}
+                </div>))}
             </div>
           ))}
         </div>
@@ -194,7 +199,7 @@ const FBApprovalMatrixTable: React.FunctionComponent<Props> = ({
                   const defaultTableMode = !editMode && !(cell.row.index === (data.length - 1) && addMode);
                   const addTableMode = addMode && (cell.row.index === (data.length - 1));
                   if (cell.column.parent.id !== " " && defaultTableMode) {
-                    const value = cell.value ? "common.y" : " ";
+                    const value = cell.value ? "status.true" : " ";
                     return (
                       <div key={`${index}-${cell.column.id}}`} {...cell.getCellProps()} className="td">
                         <Text  message={value} />
@@ -202,10 +207,9 @@ const FBApprovalMatrixTable: React.FunctionComponent<Props> = ({
                     );
                   }
                   if (cell.column.id === "defaultTraining" && defaultTableMode) {
-                    const value = cell.value ? "common.yes" : "common.no";
                     return (
                       <div key={`${index}-${cell.column.id}}`} {...cell.getCellProps()} className="td">
-                        <Text  translation={value} />
+                        <Text translation={`common.${cell.value}` as Translation} />
                       </div>
                     );
                   }

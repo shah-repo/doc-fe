@@ -10,4 +10,6 @@ export type FBPurchaseOrderFormProps =
   getOptionLabel?: FBAutocompleteProps["getOptionLabel"];
   handleTypeChange?: FBInputProps["onChange"];
   type?: FBPurchaseOrderItem["type"];
+  handlePartDescription?: FBInputProps["onChange"];
+  hasPartNumber?: boolean;
 };

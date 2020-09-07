@@ -84,6 +84,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
         </button>
         <button
           class="MuiButtonBase-root MuiIconButton-root Mui-disabled MuiIconButton-sizeSmall Mui-disabled"
+          data-cy="FBWorkspace-clickView"
           disabled=""
           id="FBWorkspace-clickView"
           tabindex="-1"

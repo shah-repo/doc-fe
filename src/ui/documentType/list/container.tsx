@@ -1,30 +1,57 @@
-import { isEmpty } from "lodash";
+import { get, isEmpty } from "lodash";
+import moment from "moment";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { authSelectors } from "../../../state/ducks/auth";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { documentTypeSelectors, PageDetailsColumn } from "../../../state/ducks/documentRevisions/documentType";
+import { pageDetailsSelectors } from "../../../state/ducks/pageDetails";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
-import { HOME_URL } from "../../constants/urls";
-import { documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
+import Date from "../../components/Date";
+import { TableColumnProps } from "../../components/table/column/types";
+import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
+import { canEditDocumentRevision, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
+import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
 import { RouteParams } from "../utils/types";
+import { columnSearchConfiguration, getStaticColumns } from "./helpers";
 import DocumentByTypeListPresenter from "./presenter";
 
 type Props = RouteComponentProps<RouteParams>;
 
+const getFormattedRowValue = (value: string) => {
+  const isDate = moment(value, "YYYY-MM-DDTHH:mm:ss.SSSZ", true).isValid();
+  return isDate ? <Date value={value} /> : value;
+};
+
 export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
-  match, history,
+  match,
 }) => {
-  const { docTypeId } = match.params;
-  const documentType = useSelector(documentTypeSelectors.byId)?.[docTypeId];
-  const currentUsersName = useSelector(authSelectors.currentUserName);
-  const TABLE_NAME = `documentsByTypeList-${documentType?.documentTypeAcronym}`;
   const dispatch = useDispatch();
+  const { categoryName, docTypeId } = match.params;
+  const currentUsersName = useSelector(authSelectors.currentUserName);
+  const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
+
+  /** If true, documents are filtered by category. If false, documents are filtered by type. */
+  const isByCategory = match.path.includes(DOCUMENT_BY_CATEGORY_LIST_URL);
+
+  const documentType = useSelector(documentTypeSelectors.byId)?.[docTypeId];
+  const documentCategory = useSelector(pageDetailsSelectors.byCategory)?.[categoryName];
+
+  const TABLE_NAME = isByCategory
+    ? `documentsByCategoryList-${categoryName}`
+    : `documentsByTypeList-${documentType?.documentTypeAcronym}`;
+
+  const queryUrl = DOCUMENT_REVISION_ROOT_URL + (isByCategory
+    ? `?documentTypeCategory=${categoryName}`
+    : `?documentTypeId=${documentType?.id}`);
+
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
-  const isPO = documentType.group === "PO";
+
+  const isPO = documentType?.group === "PO" || documentCategory?.category === "Purchase Order";
 
   useEffect(() => {
     if (isEmpty(tableCriteria.queryDict) || isPO) {
@@ -45,17 +72,47 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docTypeId]);
 
-  useEffect(() => {
-    dispatch(documentRevisionsActions.loadList());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  if ((!isByCategory && !documentType) || (isByCategory && !documentCategory)) {
+    return <Redirect to={HOME_URL} />;
+  }
 
   const clearFilter = () =>
     dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
 
-  if (!documentType || !documentType.pageDetails) {
-    return <Redirect to={HOME_URL} />;
-  }
+  const cellHrefRenderer = (rowData: DocumentRevision): string => {
+    if (canEdit(rowData)) {
+      return documentEditPath(rowData.id, rowData.document.id);
+    }
+    return documentPreviewPath(rowData.id, rowData.document.id);
+  };
+
+  const pageDetailColumns = (isByCategory ? documentCategory.columns : documentType?.pageDetails?.columns) || [];
+
+  const columns: TableColumnProps<DocumentRevision>[] = pageDetailColumns.map(
+    (column: PageDetailsColumn) => {
+      const [omitSearch, searchOptions] = columnSearchConfiguration(column.valuePath, tableCriteria);
+      return {
+        key: column.valuePath as keyof DocumentRevision,
+        // version is a hack need to insert inside configuration 20.19
+        label: column.label === "Version" as string ? "common.revision" : column.label,
+        cellHref: cellHrefRenderer,
+        omitSearch,
+        columnOptions: {
+          cellDataGetter: ({ rowData }) => getFormattedRowValue(get(rowData, column.valuePath)),
+        },
+        searchOptions,
+      };
+    },
+  );
+
+  const staticColumns: TableColumnProps<DocumentRevision>[] = getStaticColumns(
+    isByCategory,
+    categoryName,
+    documentType,
+    cellHrefRenderer,
+    tableCriteria,
+    canEdit,
+  );
 
   return (
     <div style={{ height: "100%" }}>
@@ -64,6 +121,10 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         tableCriteria={tableCriteria}
         tableData={tableData}
         clearFilter={clearFilter}
+        queryUrl={queryUrl}
+        columns={columns.length ? columns : staticColumns}
+        isByCategory={isByCategory}
+        documentCategory={documentCategory}
         documentType={documentType}
       />
     </div>

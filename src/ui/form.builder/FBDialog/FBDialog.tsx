@@ -5,6 +5,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import _ from "lodash";
 import React from "react";
 import Text from "../../components/Text";
+import Colors from "../../layout/theme/utils/colors";
 import { FBDialogProps } from "./FBDialog.types";
 import { withFBDialog } from "./FBDialog.wrap";
 
@@ -27,10 +28,21 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
   >
     <DialogTitle>
       <Box display="flex" flexDirection="row-reverse">
-        <CloseIcon fontSize="large" onClick={handleClose} />
+        <CloseIcon fontSize="large" data-cy="dialog-close" onClick={handleClose} />
       </Box>
       {_.isString(title) && (
-        <Box fontWeight="fontWeightBold" textAlign="center">
+        <Box
+          fontWeight="fontWeightBold"
+          textAlign="left"
+          border={1}
+          // MUI border color issue
+          borderTop={0}
+          borderLeft={0}
+          borderRight={0}
+          borderColor={Colors.hint_gray}
+          mt={-2}
+          mb={2}
+        >
           <Text message={title} />
         </Box>
       )}

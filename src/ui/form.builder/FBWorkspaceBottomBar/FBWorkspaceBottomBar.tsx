@@ -41,6 +41,7 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
     <IconButton
       size="small"
       id="FBWorkspace-clickView"
+      data-cy="FBWorkspace-clickView"
       disabled={previewDisabled}
       onClick={handleFormPreview}
     >

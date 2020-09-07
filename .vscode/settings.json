@@ -22,4 +22,5 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "npm.packageManager": "yarn",
   "eslint.packageManager": "yarn",
+  "eslint.format.enable": true
 }

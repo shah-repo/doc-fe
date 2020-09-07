@@ -50,6 +50,24 @@ const getDocumentTypeOptions = createSelector(
       , ["text"], ["asc"]),
 );
 
+const getDocumentTypeOptionsForDocumentList = createSelector(
+  allIds, byId,
+  (ids, documentTypes) =>
+    _.orderBy(
+      ids
+      /** Temp fix - disabling filtering by document type name */
+      /*         .filter((id) => documentTypes[id].group ===
+        FBDocTypeGroup.OTHER ||
+        documentTypes[id].group === FBDocTypeGroup.POAM ||
+        documentTypes[id].group === FBDocTypeGroup.DAM ||
+        documentTypes[id].group === FBDocTypeGroup.FORM ) */
+        .map((id) => ({
+          value: documentTypes[id].id,
+          text: removeLastCharacterIfNotAlphaNumeric(documentTypes[id].documentTypeAcronym),
+        }))
+      , ["text"], ["asc"]),
+);
+
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documentType.loadListAsyncInfo;
 
 const getDocumentTypeByAcronym = createSelector(
@@ -64,6 +82,8 @@ const docRevTypeById = (state: ApplicationState) => state.documentType.docRevTyp
   state.documentType.docRevTypeId.forms[0].id : "";
 
 const formIds = (state: ApplicationState) => state.documentType.docRevTypeId.forms;
+
+const getDocumentTypesByCategory = (state: ApplicationState) => state.documentType.docTypesByCategory;
 
 const getDocTypeName = createSelector(
   byId,
@@ -83,6 +103,7 @@ export default {
   getDocumentTypeList,
   getDocumentTypeFormOptions,
   getDocumentTypeOptions,
+  getDocumentTypeOptionsForDocumentList,
   getLoadListAsyncState,
   getDocumentTypeById,
   getDocumentTypesWithPageDetails,
@@ -91,4 +112,5 @@ export default {
   getDocTypeName,
   formIds,
   makeGetDocTypeByAcronym,
+  getDocumentTypesByCategory,
 };

@@ -1,14 +1,13 @@
-import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
+import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
-import { Link as RouterLink } from "react-router-dom";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
+import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
-import Text from "../../components/Text";
-import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
+import FromListContainer from "../form.list/FormList.container";
 import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helpers";
 import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
 import { ChangeRequestsUserProps } from "../utils/types";
@@ -43,7 +42,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: { width: 100 },
       sortable: true,
       searchOptions: {
-        defaultValue: tableCriteria.queryDict.crId,
+        defaultValue: tableCriteria.queryDict?.crId,
       },
     },
     {
@@ -53,7 +52,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: { flexGrow: 2 },
       tooltipKey: "description",
       searchOptions: {
-        defaultValue: tableCriteria.queryDict.title,
+        defaultValue: tableCriteria.queryDict?.title,
       },
     },
     {
@@ -65,7 +64,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         flexGrow: 1,
       },
       searchOptions: {
-        defaultValue: tableCriteria.queryDict.owner,
+        defaultValue: tableCriteria.queryDict?.owner,
       },
     },
     {
@@ -78,7 +77,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       searchOptions: {
         searchType: "select",
         selectOptions: changeRequestStatusOption(),
-        defaultValue: tableCriteria.queryDict.state,
+        defaultValue: tableCriteria.queryDict?.state,
       },
     },
   ];
@@ -89,29 +88,10 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
-        <Button
-          color="primary"
-          variant="outlined"
-          className={classes.clearButton}
-          onClick={clearFilter}
-          id="ChangeRequest-clearFilter"
-        >
-          <Text translation="common.clear.filters" />
-        </Button>
+        <ClearFilters {...{ clearFilter }}/>
         <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
-      <Grid item={true} xs={6} style={{ textAlign: "right" }}>
-        <RouterLink to={CHANGE_REQUEST_CREATE_URL} className={classes.link}>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            id="ChangeRequest-create"
-          >
-            <Text translation="change.request.create" />
-          </Button>
-        </RouterLink>
-      </Grid>
+      <FromListContainer/>
       <Grid item={true} className={classes.item}>
         <TablePanel<ChangeRequest>
           columns={columns}

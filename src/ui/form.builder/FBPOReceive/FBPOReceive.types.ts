@@ -1,4 +1,4 @@
-import { FBDialogState, FBFormProps, FBInputProps, FBPOReceiveState, FBPurchaseOrderProps, FBSchemaProps } from "..";
+import { FBAutocompleteProps, FBDialogState, FBFormProps, FBInputProps, FBPOReceiveState, FBPurchaseOrderProps, FBSchemaProps } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 
 export enum FBPOReceiveImportance {
@@ -8,6 +8,7 @@ export enum FBPOReceiveImportance {
 export type FBPOReceiveProps =
 & Pick<FBInputProps, "name" | "index" | "label" | "onChange" | "disabled">
 & Pick<FBFormProps, "initialValues">
+& Pick<FBAutocompleteProps, "getOptionLabel">
 & {
   dialogState?: FBDialogState;
   poReceiveState?: FBPOReceiveState;

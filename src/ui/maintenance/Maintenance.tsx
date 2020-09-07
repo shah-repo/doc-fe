@@ -13,7 +13,7 @@ export const Maintenance: React.FunctionComponent = () => {
         />
       </div>
       <div className={classes.base}>
-        <img src="/maintenance.png" alt="Maintenance" className={classes.image} />
+        <img src="/maintenance.svg" alt="Maintenance" className={classes.image} />
       </div>
       <div className={classes.base} style={{ textAlign: "center", whiteSpace: "pre-line" }}>
         <h1 className={classes.title}>

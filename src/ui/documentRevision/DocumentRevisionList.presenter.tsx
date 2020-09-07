@@ -2,9 +2,9 @@ import classNames from "classnames";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Nullable } from "../../state/ducks/common";
-import { DocumentRevision } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import SummaryInfo from "../common/summary/SummaryInfo";
-import Date from "../components/Date";
+import DateFormatter from "../components/Date";
 import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import { useDocumentVersion } from "../hooks/docCustomization/useCustomization";
@@ -18,6 +18,8 @@ interface Props {
   docId: string;
   documentTypeId?: string;
   isDocumentPO: boolean;
+  isInlineApproval: boolean;
+  isRecord: boolean;
 }
 
 export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
@@ -27,6 +29,8 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   docId,
   documentTypeId,
   isDocumentPO,
+  isInlineApproval,
+  isRecord,
 }) => {
   const classes = styles();
   const link = documentVersionPath(
@@ -39,15 +43,42 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     documentRevision.subRevision,
     documentRevision.revisionChangeType,
   );
-  const isSelected = selectedDocumentRevision === documentRevision.id;
+
   const { status } = documentRevision;
   const [isStatusVisible, statusLabel] = useDocumentVersion(documentTypeId, status);
+  let verPrefix = "common.revision";
+  let statLabel = statusLabel;
+
+  const isSelected = selectedDocumentRevision === documentRevision.id;
+  const isDraft = status === DocumentRevisionStatus.Draft;
+  const isReleased = status === DocumentRevisionStatus.Released;
+  const isDeprecated = status === DocumentRevisionStatus.Deprecated;
+  const isAlphaReleased = documentRevision.revisionStage === 3;
+  const isNumericRelease = documentRevision.revisionStage === 1;
+
+  if (isDraft && isRecord && isInlineApproval && !isAlphaReleased) {
+    statLabel = "common.wip";
+  }
+  if (isReleased || ((isDeprecated || isDraft) && isInlineApproval && isRecord && isAlphaReleased)) {
+    verPrefix = "common.revision";
+  }
+  if (isDeprecated && isInlineApproval && isRecord && isAlphaReleased) {
+    statLabel = "common.archived";
+  }
+  if ((isDeprecated || isReleased) && isInlineApproval && isNumericRelease) {
+    statLabel = "common.archived";
+  }
+  if (isReleased && isInlineApproval && isNumericRelease) {
+    statLabel = "common.last.signed";
+  }
+
   return (
     <div
       key={documentRevision.id}
       className={classNames(classes.linkContainer, {
         [classes.selected]: isSelected,
       })}
+      data-cy={"DocumentRevisionList-item"}
     >
       <NavLink
         to={link}
@@ -55,13 +86,13 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         activeClassName={classes.activeLinkTitle}
       >
         <div>
-          <Text translation="common.version" />
+          <Text message={verPrefix} />
           &nbsp;
           {versionNumber}
           {
             isStatusVisible &&
             <>
-              &nbsp; - <Text message={statusLabel} />
+              &nbsp; - <Text message={statLabel} />
             </>
           }
         </div>
@@ -71,7 +102,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         key={documentRevision.id}
         className={classes.linkBody}
       >
-        <SummaryInfo label={isDocumentPO ? undefined : "common.docId"} value={docId} />
+        <SummaryInfo dataCy={"common.docId"} label={isDocumentPO ? undefined : "common.docId"} value={docId} />
         <SummaryInfo
           label="common.title"
           value={documentRevision.name}
@@ -81,10 +112,10 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           value={documentRevision.owner.user.name}
         />
         <SummaryInfo
-          label="common.released"
+          label="common.effective.date"
           value={
-            <Date
-              value={documentRevision.obsoletedAt || documentRevision.releasedAt}
+            <DateFormatter
+              value={documentRevision.obsoletedAt || documentRevision.effectiveDate}
             />
           }
         />

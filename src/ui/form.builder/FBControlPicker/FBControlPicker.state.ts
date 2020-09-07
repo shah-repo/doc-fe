@@ -56,7 +56,7 @@ export class FBControlPickerState {
       ],
       customcontrols: ["customcontrol"],
       instructions: ["instructionsdocument", "selectdocument", "selectrequirement"],
-      buttons: ["checkpoint", "createlabel"],
+      buttons: ["checkpoint", "createlabel", "task"],
       actions: ["action"],
     };
   }

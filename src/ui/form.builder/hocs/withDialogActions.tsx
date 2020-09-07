@@ -1,17 +1,13 @@
 import { Button, DialogActions } from "@material-ui/core";
 import React from "react";
 import Text from "../../components/Text";
-import {
-  FBDialogAction,
-  FBDialogActionLabel,
-  FBDialogProps,
-} from "../types/dialog";
+import { FBDialogAction, FBDialogActionLabel, FBDialogProps } from "../types/dialog";
 
 export function withDialogActions<T extends FBDialogProps>(
   Component: React.ComponentType<T>,
 ) {
 
-  return (props: T) => {
+  return function theOnewithDialogActions(props: T) {
 
     const onActionClick = (action: FBDialogAction) => () => {
       if (props.onActionClick) {
@@ -19,7 +15,7 @@ export function withDialogActions<T extends FBDialogProps>(
       }
     };
 
-    const actionRenderer = () => props.actions && props.actions!.map((action, i) => {
+    const actionRenderer = () => props.actions && props.actions.map((action, i) => {
       const text = FBDialogActionLabel[action];
       return (
         <Button

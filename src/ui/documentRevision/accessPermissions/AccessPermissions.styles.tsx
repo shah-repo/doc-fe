@@ -4,8 +4,7 @@ import Colors from "../../layout/theme/utils/colors";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      marginLeft: "16px",
-      marginTop: "8px",
+
     },
     details: {
       overflowY: "auto",

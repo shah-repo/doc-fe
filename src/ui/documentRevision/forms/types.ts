@@ -1,5 +1,6 @@
 import { Attachment } from "../../../state/ducks/attachments";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
+import { Id } from "../../../state/ducks/common/types";
 import { DocumentRevisionDocument, DocumentRevisionStatus, FBDocumentRevisionProps, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 
@@ -30,4 +31,6 @@ export interface SecurityId {
 export interface ApproveAndReleaseFormValues {
   approvals: OptionType[];
   password: string;
+  formDocument: Id;
+  documentType: Id;
 }

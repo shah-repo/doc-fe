@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { FBAutocompleteAsyncProps, FBAutocompleteAsyncState } from ".";
 import { FB, FBOptionValueType } from "..";
 import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
@@ -21,6 +21,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     refresh,
     name,
     value,
+    shouldReloadOnInit = false,
     ...props
   }: T) => {
 
@@ -53,13 +54,20 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
         return;
       }
       const slicedOptions = autocompleteAsyncState?.sliceData;
-      loading = FBAutocompleteAsyncStore.loading.get(optionId);
+      loading = loading || FBAutocompleteAsyncStore.loading.get(optionId);
       if (slicedOptions) {
         options = selectedOptions
           ? autocompleteAsyncState?.sliceValue(selectedOptions)
           : slicedOptions;
       }
     });
+
+    useEffect(() => {
+      if (shouldReloadOnInit) {
+        autocompleteAsyncState?.load(true);
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     (optionId && options && formValue && !_.isEmpty(formValue)) && (defaultValue = getDefault());
 
@@ -73,17 +81,17 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
 
     return Component({
       ...(props as T),
+      getOptionLabel,
+      refresh,
       options,
       loading,
       optionId,
       optionValueKey,
       optionLabelKey,
       optionValueType,
-      getOptionLabel,
       selectedOptions,
       defaultValue,
       multiple,
-      refresh,
       name,
       value,
     });

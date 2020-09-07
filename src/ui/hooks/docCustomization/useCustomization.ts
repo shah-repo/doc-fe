@@ -28,13 +28,15 @@ export const useObsolete = (documentTypeId = ""): UIConfig =>
 export const useReviseDocument = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType.REVISE_BTN, "documentRevision.revise");
 export const useRevisionSelect = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, InputFieldType.REVISION_SELECTION, "documentRevision.form.typeOfRevisionChange");
+  useCustomization(documentTypeId, InputFieldType.REVISION_SELECTION, "document.revision.stage");
 export const useTraining = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.TRAINING);
 export const useTitle = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.TITLE, "common.title");
 export const useAssignDocument = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.ASSIGN_DOCUMENT, "", false);
+export const useCreateDocumentByTypeButton = (documentTypeId = ""): UIConfig =>
+  useCustomization(documentTypeId, DisplayFieldType.ADD_NEW_BTN, "document.add");
 
 const useCustomization = (
   documentTypeId = "",

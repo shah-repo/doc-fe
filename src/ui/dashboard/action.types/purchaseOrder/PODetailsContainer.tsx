@@ -26,7 +26,7 @@ export const PODetailsContainer: React.FunctionComponent<Props> = ({
     const schema = documentRevision.formDocument?.formTemplate?.schema;
 
     const fieldName = (schema as FBInputProps[])
-      .find((schemaItem) => schemaItem.optionId === FBAutocompleteAsyncOption.supplier)
+      .find((schemaItem) => schemaItem.optionId === FBAutocompleteAsyncOption.suppliers)
       ?.name;
 
     return documentRevision.formInput?.[fieldName || ""];

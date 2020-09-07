@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { filter, find, get, includes, isEmpty, map } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FBAutocompleteProps } from ".";
@@ -9,11 +9,13 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
+    getOptionDisabled,
+    getOptionLabel,
     optionLabelKey = "text",
     optionValueKey = "value",
     optionValueType = "key",
+    disabledOptions,
     placeholder,
-    getOptionLabel,
     multiple,
     name,
     defaultValue,
@@ -29,8 +31,8 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     function getDefault() {
       function  sliceValue(value: any) {
         return multiple
-          ? _.filter(options, (o) => (value || formValue).includes(o[optionValueKey]))
-          : _.find(options, { [optionValueKey]: value || formValue });
+          ? filter(options, (o) => (value || formValue).includes(o[optionValueKey]))
+          : find(options, { [optionValueKey]: value || formValue });
       }
 
       const objectValue: Record<FBOptionValueType, () => any> = {
@@ -38,8 +40,8 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
         key: () => sliceValue(formValue),
         id: (value?: any) =>  {
           const slicedValue = multiple
-            ? _.map(value || formValue, optionValueKey)
-            : _.get(value || formValue, optionValueKey);
+            ? map(value || formValue, optionValueKey)
+            : get(value || formValue, optionValueKey);
           return sliceValue(slicedValue);
         },
       };
@@ -50,18 +52,23 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       placeholder = intl.formatMessage({ id: placeholder });
     }
 
-    (!optionId && options && formValue && !_.isEmpty(formValue)) && (defaultValue = getDefault());
+    (!optionId && options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
 
     !getOptionLabel && (getOptionLabel = (option) => {
-      let optionText = _.get(option, optionLabelKey);
+      let optionText = get(option, optionLabelKey);
       if (isTranslation(optionText)) {
         optionText = intl.formatMessage({ id: optionText });
       }
       return optionText;
     });
 
+    disabledOptions && (getOptionDisabled = (option) =>
+      includes(disabledOptions, option.id)
+    );
+
     return Component({
       ...(props as T),
+      getOptionDisabled,
       getOptionLabel,
       options,
       defaultValue,

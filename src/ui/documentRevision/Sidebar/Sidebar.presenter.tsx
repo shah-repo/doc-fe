@@ -1,55 +1,61 @@
-import { Box, Fade, Grid, IconButton, Typography } from "@material-ui/core";
+import { Box, Divider, Drawer, IconButton, Typography } from "@material-ui/core";
+import classNames from "classnames";
 import React from "react";
 import { ReactComponent as SidebarCloseIcon } from "../../../assets/images/move-down.svg";
 import { ReactComponent as SidebarOpenIcon } from "../../../assets/images/move-up.svg";
 import Text from "../../components/Text";
-import Colors from "../../layout/theme/utils/colors";
-import styles from "../styles";
+import styles from "./styles";
 import { Sidebar } from "./types";
 
 interface Props {
-  sidebar: any;
-  changeSize: () => void;
+  isDrawerOpen: boolean;
   indexNumber: number;
   sidebarList: Sidebar[];
   inputRef: React.MutableRefObject<null>;
   setIndex: (index: number) => void;
   handleMenuIconClick: (index: number) => void;
+  onDrawerToggle: () => void;
 }
 
 export const SidebarPresenter: React.FunctionComponent<Props> = ({
-  sidebar,
-  changeSize,
+  isDrawerOpen,
   indexNumber,
   sidebarList,
   inputRef,
   handleMenuIconClick,
+  onDrawerToggle,
 }) => {
   const classes = styles();
 
   return (
-    <Grid item={true} xs={sidebar ? 3 : 1}
-      style={{
-        position: "sticky",
+    <Drawer
+      variant="permanent"
+      classes={{
+        paper: classNames(
+          classes.drawerPaper,
+          !isDrawerOpen && classes.drawerPaperClose
+        ),
       }}
-      className={classes.transitions}
+      anchor="right"
+      open={isDrawerOpen}
     >
-      <Grid item={true} xs={1}
-        style={{
-          borderRight: sidebar ? `1px solid ${Colors.hint_gray}` : "none",
-          position: "fixed",
-          height: "100%",
-          textAlign: "center",
-        }}>
-        <Box>
-          <IconButton onClick={() => changeSize()} className={classes.openButton}>
-            {sidebar ? <SidebarOpenIcon /> : <SidebarCloseIcon />}
-          </IconButton>
-          <hr className={classes.border}/>
-        </Box>
+      <div className={classes.drawerInner}>
+        <div className={classes.drawerHeader} />
+        <IconButton
+          color="inherit"
+          aria-label="Open drawer"
+          onClick={onDrawerToggle}
+          className={classes.menuIcon}
+          disableFocusRipple={true}
+          disableRipple={true}
+        >
+          {isDrawerOpen ? <SidebarOpenIcon /> : <SidebarCloseIcon />}
+        </IconButton>
+        <Divider />
         {sidebarList.map((item, index) =>
           <Box key={item.details.title}>
             <IconButton
+              data-cy={item.details.dataCy !== undefined ? item.details.dataCy : "sss"}
               ref={sidebarList[indexNumber].details.title === item.details.title ? inputRef : null}
               onClick={() => handleMenuIconClick(index)}
               className={classes.iconButton}
@@ -58,28 +64,26 @@ export const SidebarPresenter: React.FunctionComponent<Props> = ({
             </IconButton>
           </Box>
         )}
-      </Grid>
-      <Fade in={sidebar}>
-        <Grid
-          item={true}
-          xs={11}
+        <div
           style={{
-            display: sidebar ? "block" : "none",
+            display: isDrawerOpen ? "block" : "none",
             padding: 0,
             position: "fixed",
-            marginLeft: 68,
+            marginLeft: 65,
+            height: "calc(100% - 105px)",
+            width: "253px",
           }}>
-          <Box padding={2} paddingLeft={2} className={classes.sidebarItemTitle}>
+          <Box mt={2}>
             <Typography variant="h6">
               <Text message={sidebarList[indexNumber].details.title} />
             </Typography>
           </Box>
-          <Box top={60} position="absolute" width={260} className={classes.sidebarContent}>
+          <Box mt={2.5} className={classes.sidebarList}>
             {sidebarList[indexNumber].details.component}
           </Box>
-        </Grid>
-      </Fade>
-    </Grid>
+        </div>
+      </div>
+    </Drawer>
   );
 };
 

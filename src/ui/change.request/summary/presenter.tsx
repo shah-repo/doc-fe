@@ -1,109 +1,69 @@
-import { Box, Grid, ListItem, WithStyles, withStyles } from "@material-ui/core";
+import { Box, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { filter } from "lodash";
-import React, { useMemo } from "react";
-import { Group } from "../../../state/ducks/auth/types";
-import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
+import React from "react";
+import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import { AsyncState } from "../../../state/types";
+import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
-import ApproversField from "../form/approvers";
+import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { ChangeRequestFormValues } from "../form/types";
-import ApproversSummary from "./approvers";
-import Assessment from "./assessment";
-import ImplementationPlan from "./implementation.plan";
-import Justification from "./justification";
-import styles from "./styles";
+import Approvers from "./approvers";
 import SummaryHeader from "./SummaryHeader";
+
+const styles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      margin: theme.spacing(2, 0, 0, 0),
+      padding: theme.spacing(0, 5),
+      width: "100%",
+    },
+    fbContainer: {
+      paddingLeft: theme.spacing(2),
+      marginTop: theme.spacing(2),
+    },
+  }));
 
 interface OwnProps extends DataProps<ChangeRequest> {
   asyncState: AsyncState;
   canEdit: boolean;
-  currentUserEmail: string;
-  closeTask: typeof changeRequestsActions.closeTask;
   canChangeOwnerShip: boolean;
-  documentTypeGroups: Group[];
+  FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
-export type Props = OwnProps &
-WithStyles<typeof styles> &
-FormikProps<ChangeRequestFormValues>;
+export type Props = OwnProps & FormikProps<ChangeRequestFormValues>;
 
 export const Presenter: React.FunctionComponent<Props> = ({
-  classes,
   dataProp,
   asyncState,
   canEdit,
-  currentUserEmail,
-  closeTask,
   canChangeOwnerShip,
   errors,
-  documentTypeGroups,
-  values,
+  FBContainer,
 }) => {
-  const approvedApprovers = useMemo(
-    () => filter(dataProp.approvals, ["status", "APPROVED"]),
-    [dataProp],
-  );
-
-  const approversFieldRenderer = () => (
-    <Box>
-      <ListItem style={{ display: "inline-block" }}>
-        <ApproversField dataProp={approvedApprovers} documentTypeGroups={documentTypeGroups} values={values} />
-      </ListItem>
-    </Box>
-  );
-
-
-  const renderImplementationPlan = dataProp.implementationPlan &&
-    (dataProp.implementationPlan.attachments.length > 0 ||
-      dataProp.implementationPlan.tasks.length > 0) && (
-    <ImplementationPlan
-      dataProp={dataProp.implementationPlan}
-      currentUserEmail={currentUserEmail}
-      crStatus={dataProp.state}
-      closeTask={closeTask}
-      crId={dataProp.id}
-    />
-  );
-
+  const classes = styles();
 
   return (
     <Box>
-      <SummaryHeader
-        {...{
-          dataProp,
-          canChangeOwnerShip,
-          asyncState,
-          errors,
-          canEdit,
-        }}
-      />
-      <Grid
-        container={true}
-        spacing={4}
-        direction="column"
-        className={classes.previewBox}
-      >
+      <SummaryHeader {...{ dataProp, canChangeOwnerShip, asyncState, errors, canEdit }}/>
+      <Grid container={true} spacing={4} direction="column" className={classes.container}>
         {canEdit && <FormProgress asyncState={asyncState} />}
         {canEdit && <FormMessage asyncState={asyncState} />}
-        <Grid item={true} xs={12} className={classes.box}>
-          <SummaryFieldWithHtml
-            label="cr.description"
-            value={dataProp.description}
-          />
-        </Grid>
-
-        <Justification dataProp={dataProp.justifications} />
-        <Assessment dataProp={dataProp.assessments} />
-        {renderImplementationPlan}
-        {canEdit && approversFieldRenderer()}
-        <ApproversSummary dataProp={dataProp.approvals} />
+        <SummaryField
+          label="common.title"
+          value={dataProp.title}
+        />
+        <SummaryFieldWithHtml
+          label="common.description"
+          value={dataProp.description}
+        />
+        <div className={classes.fbContainer} ref={FBContainer}/>
+        <Approvers dataProp={dataProp.approvals}/>
+        <DocumentRevisionOutputInfo formDocument={dataProp.formDocument}/>
       </Grid>
     </Box>
-  );
-};
+  ); };
 
-export default withStyles(styles)(Presenter);
+export default Presenter;

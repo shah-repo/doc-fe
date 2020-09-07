@@ -17,16 +17,14 @@ export class FB {
   }
 
   public static get uniqid(): string {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const uniqid = require("uniqid");
     return uniqid();
   }
 
-  public static stripOption(fielddName: string, optionName?: string): string {
-    if (!optionName) {
-      return "";
-    }
-    const striped = optionName.toString().replace(fielddName, "").replace("-<-val->", "");
-    return _.startCase(striped);
+  public static stripTags(value?: string): string {
+    if (!value) { return ""; }
+    return value.replace(/(<([^>]+)>)/ig, "");
   }
 }
 

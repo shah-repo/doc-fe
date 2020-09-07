@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _, { sortBy } from "lodash";
 import { action, observable, set } from "mobx";
 import * as generateUuid from "uuid/v4";
 import { FBApprovalMatrixConstructor, FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixItem, FBApprovalRole } from "..";
@@ -9,14 +9,20 @@ export class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldD
   @observable public mode: FBApprovalMatrixFieldMode = "none";
   public url = FBEndpoint.ApprovalMatrix;
 
-  public constructor({ formValue, isOutput }: FBApprovalMatrixConstructor) {
+  public constructor({ formValue, outputRevision, isOutput }: FBApprovalMatrixConstructor) {
     super();
-    if (!formValue || isOutput) {
+    if (!isOutput) { return; }
+    if (!formValue || outputRevision) {
       this.fetch();
       return;
     }
     this.data = formValue;
   }
+
+  @action public prepareData = (data: FBApprovalMatrixFieldData): FBApprovalMatrixFieldData | undefined => this.data = {
+    approvalRoles: data?.approvalRoles || [],
+    approvalMatrix: sortBy(data?.approvalMatrix, (row) => row.docType.name.toLowerCase()) || [],
+  };
 
   @action public setMode = (mode: FBApprovalMatrixFieldMode) => {
     set(this, "mode", mode);

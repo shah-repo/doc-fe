@@ -11,7 +11,7 @@
   {
     "id": "2",
     "path": "/change_requests",
-    "label": "Change requests",
+    "label": "Approval requests",
     "valueKey": "id",
     "labelKey": "title",
     "labelPrefixRoot": "crId",
@@ -23,6 +23,7 @@
     "label": "Approvers",
     "valueKey": "id",
     "labelKey": "user.email",
+    "labelPrefixRoot": "user.name",
     "root": "optionalApprovers"
   },
   {
@@ -120,6 +121,33 @@
     "id": "15",
     "path": "/document_revisions?docTypeGroups%5B%5D=WO_PARTS",
     "label": "Part Number in WO",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "16",
+    "path": "/document_revisions?docTypeGroups%5B%5D=FORM&docTypeGroups%5B%5D=SUPPLIER&docTypeGroups%5B%5D=OTHER&docTypeGroups%5B%5D=MPI&docTypeGroups%5B%5D=DYNAMIC_FORM&docTypeGroups%5B%5D=POAM&docTypeGroups%5B%5D=PO&docTypeGroups%5B%5D=WORK_ORDER&docTypeGroups%5B%5D=PART&docTypeGroups%5B%5D=DAM&status%5B%5D=DRAFT",
+    "label": "Document Revisions In Draft without Records",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "17",
+    "path": "/groups/approval_roles",
+    "label": "Approval Roles",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "",
+    "root": ""
+  },
+  {
+    "id": "18",
+    "path": "/document_revisions",
+    "label": "Document revisions (all versions)",
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",

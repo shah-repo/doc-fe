@@ -1,14 +1,14 @@
-import { Grid } from "@material-ui/core";
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { Attachment, AttachmentDownloadResponse, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 import { authSelectors } from "../../../../state/ducks/auth";
-import { Nullable } from "../../../../state/ducks/common";
+import { Id, Nullable } from "../../../../state/ducks/common";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../../state/reducers";
 import { AsyncStatus } from "../../../../state/types";
+import { FormHeaderSummaryContext } from "../../../document.revision/header/SummaryHeader";
 import { isOperator } from "../../../documentRevision/DocumentRevisionDisplay.container";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import { documentRevisionStatusContextFromCR } from "../../../documentRevision/DocumentRevisionUpdate.container";
@@ -40,6 +40,8 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   form,
   field,
   value,
+  isNewVersion,
+  documentRevision,
   ...other
 }) => {
   const dialogHandler = useDialog();
@@ -52,6 +54,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const [password, setPassword] = useState<Password | undefined>();
   const [downloadType, setdownloadType] = useState<AttachmentType>();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isWatermarking, setWatermark] = useState<boolean>(false);
   const [PasswordSubmitAction, setPasswordSubmitAction] = useState<PasswordSubmitActionType>();
   const { submitForm } = useFormContext();
   const isCurrentUserOperator = React.useContext(isOperator);
@@ -63,8 +66,9 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const downloadAttachment = useActionCreator(attachmentsActions.download);
   const downloadAttachmentPassword = useActionCreator(attachmentsActions.downloadRedLine);
   const requestWatermarkAction = useActionCreator(attachmentsActions.requestWatermarkedFile);
+  const { documentRevisionSummary } = React.useContext(FormHeaderSummaryContext) || {};
 
-  const passwordState =  {
+  const passwordState = {
     status: AsyncStatus.Idle,
     message: "",
   };
@@ -95,8 +99,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
   SetFile = React.createContext(setSelectedAttachment);
 
-
-  const docRevStatusRequiresPassword = () => {
+  const redLineRequiresPassword = (attachment: Attachment) => {
     const hasPasswordRequiredStatusFromDocList = (
       documentRevisionStatusFromDocList === DocumentRevisionStatus.Released ||
       documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated ||
@@ -106,7 +109,21 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated ||
       documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete);
 
-    return hasPasswordRequiredStatusFromCR || hasPasswordRequiredStatusFromDocList;
+    return (attachment.lineType === LINE_TYPES.RED_LINE)
+      && (hasPasswordRequiredStatusFromCR || hasPasswordRequiredStatusFromDocList);
+  };
+
+  const cleanCopyRequiresPassword = (attachment: Attachment) => {
+    const hasPasswordRequiredStatusFromDocList = (
+      documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated ||
+      documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete);
+
+    const hasPasswordRequiredStatusFromCR = (
+      documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated ||
+      documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete);
+
+    return (attachment.lineType === LINE_TYPES.CLEAN_COPY)
+      && (hasPasswordRequiredStatusFromCR || hasPasswordRequiredStatusFromDocList);
   };
 
   const handleDownload = (attachment: Attachment, type?: AttachmentType, password?: string) => {
@@ -144,13 +161,27 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     setAnchorEl(evt.currentTarget);
   };
 
-  const startWaterMarkRequest  = (attachment: Attachment, attachmentType: AttachmentType) => {
-    const body: WatermarkRequestBody = {
+  const startWaterMarkRequest  = (
+    attachment: Attachment,
+    attachmentType: AttachmentType,
+    documentRevisionId?: string
+  ) => {
+    const pdfBody: WatermarkRequestBody = {
       attachment: {
         id: attachment.id,
       },
       type: attachmentType,
     };
+    const watermarkBody: WatermarkRequestBody = {
+      attachment: {
+        id: attachment.id,
+      },
+      type: attachmentType,
+      documentRevision: {
+        id: documentRevisionId,
+      } as Id,
+    };
+    const body = documentRevisionId ? watermarkBody : pdfBody;
     requestWatermarkAsync.start(
       requestWatermarkAction,
       body,
@@ -158,24 +189,26 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     );
   };
 
-  const handleWatermarkRequest = (attachment: Attachment, attachmentType: AttachmentType) => {
-
-    const cleanCopyRequiresPassword = (
-      documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete ||
-      documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated ||
-      documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete ||
-      documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated
-    );
+  const handleWatermarkRequest = (
+    attachment: Attachment,
+    attachmentType: AttachmentType,
+    documentRevisionId?: string) => {
     setNewWatermarkError("");
     setNewWatermarkRequest(null);
-    if (cleanCopyRequiresPassword && attachment.lineType === LINE_TYPES.RED_LINE) {
+
+    if (documentRevisionId) {
+      setWatermark(true);
+    }
+    if (cleanCopyRequiresPassword(attachment) || redLineRequiresPassword(attachment)) {
       setdownloadType(attachmentType);
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_WATER_MARK);
       openWarningDialog();
       closeContextMenu();
-    } else {
+    }
+    else {
       startWaterMarkRequest(attachment, attachmentType);
     }
+
   };
 
   const passwordSubmit = (values: Password) => {
@@ -193,12 +226,15 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
             selectedAttachment,
             AttachmentType.Attached,
             values.password,
-          ); }
+          );
+        }
         break;
 
       case PasswordSubmitActionType.DOWNLOAD_WATER_MARK:
         if (selectedAttachment && downloadType) {
-          startWaterMarkRequest(selectedAttachment, downloadType);
+          const id = isWatermarking ? documentRevisionSummary?.id : undefined;
+          startWaterMarkRequest(selectedAttachment, downloadType, id);
+          setWatermark(false);
         }
         break;
       case PasswordSubmitActionType.DOWNLOAD_CLEAN_COPY_FILE:
@@ -208,7 +244,8 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
             selectedAttachment,
             AttachmentType.CleanCopy,
             values.password,
-          ); }
+          );
+        }
 
       default:
         break;
@@ -265,14 +302,17 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
   const handleClick = (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
-    if (
-      docRevStatusRequiresPassword() &&
-      attachment.lineType === LINE_TYPES.RED_LINE) {
+    if (redLineRequiresPassword(attachment)) {
+      setSelectedAttachment(attachment);
       needPasswordHandler(attachment);
-    } else {
+    } else if (cleanCopyRequiresPassword(attachment)) {
+      setSelectedAttachment(attachment);
+      needPasswordHandler(attachment);
+    }
+    else {
+      setSelectedAttachment(attachment);
       noNeedPasswordHandler(attachment);
     }
-    setSelectedAttachment(attachment);
   };
 
   const closeContextMenu = () => setAnchorEl(null);
@@ -281,7 +321,12 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const openWarningDialog = () => redlineWarningDialogHandler.open();
   const openFileView = () => dialogHandler.open();
 
-  const attachmentsRenderer = attachments.map((attachment) => {
+  const sortedAttachments = useMemo(() =>
+    attachments
+      .sort((a) => a.lineType === LINE_TYPES.CLEAN_COPY ? -1 : 0)
+      .sort((a) => a.id === documentRevision?.primaryAttachment?.id ? -1 : 0)
+  , [attachments, documentRevision]);
+  const attachmentsRenderer = sortedAttachments.map((attachment) => {
     let showAttachment = true;
     let canDeleteFile = true;
     if (isCurrentUserOperator && (documentType === "LOT" || documentType === "EB")) {
@@ -311,31 +356,32 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
           handleContextMenu,
           handleIconClick: handleClick,
           canDeleteFile,
+          isNewVersion,
         }}
       />
     );
   });
 
   return (
-    <Grid container={true} spacing={2}>
+    <div style={{ display: "flex", flexWrap: "wrap", marginTop: "2rem" }}>
       <AttachmentRedLineWarningDialog
-        isDialogOpen = {redlineWarningDialogHandler.isOpen}
-        onSubmit = {warningSubmit}
-        closeDialog = {redlineWarningDialogHandler.close}
-        asyncState = {warningState}
-        translationText = {warningPasswordText()}
+        isDialogOpen={redlineWarningDialogHandler.isOpen}
+        onSubmit={warningSubmit}
+        closeDialog={redlineWarningDialogHandler.close}
+        asyncState={warningState}
+        translationText={warningPasswordText()}
       />
 
       <PasswordDialog
-        isDialogOpen = {passwordDialogHandler.isOpen}
-        onSubmit = {passwordSubmit}
-        closeDialog = {passwordDialogHandler.close}
-        asyncState = {passwordState}
+        isDialogOpen={passwordDialogHandler.isOpen}
+        onSubmit={passwordSubmit}
+        closeDialog={passwordDialogHandler.close}
+        asyncState={passwordState}
       />
       <ViewFile
         isOpen={dialogHandler.isOpen}
         handleClose={dialogHandler.close}
-        password = {password}
+        password={password}
         attachments={attachments}
         attachment={selectedAttachment}
       />
@@ -344,20 +390,24 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         newWatermarkError={newWatermakrError}
       />
       <Menu
-        handleIconClick = {handleClick}
-        setSelectedAttachment = {setSelectedAttachment}
+        handleIconClick={handleClick}
         handleClose={closeContextMenu}
-        anchorEl={anchorEl}
         attachment={selectedAttachment}
-        openFileView={openFileView}
-        download= {handleDownload}
-        openWarningDialog = {openWarningDialog}
-        setPasswordSubmitAction = {setPasswordSubmitAction}
-        handleWatermarkRequest={handleWatermarkRequest}
-        docRevStatusRequiresPassword = {docRevStatusRequiresPassword}
+        download={handleDownload}
+        {...{
+          setSelectedAttachment,
+          anchorEl,
+          openFileView,
+          openWarningDialog,
+          setPasswordSubmitAction,
+          handleWatermarkRequest,
+          cleanCopyRequiresPassword,
+          redLineRequiresPassword,
+          documentRevision,
+        }}
       />
       {attachmentsRenderer}
-    </Grid>
+    </div>
   );
 };
 

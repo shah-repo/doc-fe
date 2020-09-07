@@ -19,6 +19,7 @@ interface OwnProps {
   employeeGroups: OptionType[];
   employeeId: string;
   callbackUpdateGroups?: (values: GetEmployeeResponse) => void;
+  fromUserProfile?: boolean;
 }
 
 type Props = OwnProps;
@@ -28,6 +29,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
   employeeGroups,
   callbackUpdateGroups,
   employeeId,
+  fromUserProfile = false,
 }) => {
   const classes = styles();
 
@@ -84,7 +86,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
         value={handleGroups(employeeGroups)}
         noValueOption={<Text translation="user.management.no.groups.specified" />}
       />
-      {canManageUsers && addGroupsRenderer()}
+      {canManageUsers && !fromUserProfile && addGroupsRenderer()}
     </Box>
   );
 
@@ -113,7 +115,6 @@ export const UserGroups: React.FunctionComponent<Props> = ({
         }}
         id="UserGroups-done"
       >
-        <Text translation="common.done" />
       </Button>
       <Button
         className={classes.outlinedButton}

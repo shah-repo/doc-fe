@@ -9,13 +9,16 @@ interface Props {
   revisionChangeType?: RevisionChangeType ;
   documentTypeId?: string;
   isDisabled?: boolean;
+  isRecord?: boolean;
 }
 
 const RetrainField: React.FunctionComponent<Props> = ({
   documentTypeId = "",
   revisionChangeType,
   isDisabled = false,
+  isRecord,
 }) => {
+
   const [isVisible] = useTraining(documentTypeId);
   const formik = useFormikContext();
   useEffect(() => {
@@ -25,7 +28,7 @@ const RetrainField: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [revisionChangeType]);
 
-  if (!isVisible) {
+  if (!isVisible || isRecord) {
     return null;
   }
 

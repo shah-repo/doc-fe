@@ -16,7 +16,7 @@ const FBSelect: React.FunctionComponent<FBSelectProps> = ({
   <FBInput {...props} {...{ placeholder }} type="select">
     <Select displayEmpty {...{ defaultValue, style, variant, SelectDisplayProps }}>
       {placeholder && (
-        <MenuItem value="" disabled>
+        <MenuItem value={undefined} disabled>
           <Text message={placeholder} />
         </MenuItem>
       )}

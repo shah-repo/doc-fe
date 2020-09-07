@@ -63,7 +63,12 @@ const FBApprovalMatrixFieldUI: React.FunctionComponent<FBApprovalMatrixFieldUIPr
         style={{ margin: "8px 0" }}
         disabled={editMode || disabled}
       />}
-    {errorMessage && <Typography variant="subtitle2" color="error" style={{ marginTop: 10 }} ><Text message={errorMessage} /></Typography>}
+    {
+      errorMessage &&
+        <Typography variant="subtitle2" color="error" style={{ marginTop: 10 }} >
+          <Text message={errorMessage} />
+        </Typography>
+    }
     {addMode &&
       <Box display="flex" flexDirection="row-reverse">
         <FBButton

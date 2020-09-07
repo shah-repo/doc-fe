@@ -31,7 +31,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                 <FBTableCell
                   label={head}
                   key={`fb-po-head-${head}-${index}`}
-                  align={(index > 1) ? "right" : "left"}
+                  align={(index > 2) ? "right" : "left"}
                 />
               )}
             </FBMapWrapper>
@@ -60,6 +60,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                     let label = item[key];
                     let tooltipTitle: string | undefined;
                     if (key === "description") {
+                      key = "partNumberTitle";
                       label = _.truncate(item[key], { length: 35, omission: " ..." });
                       tooltipTitle = label;
                     }
@@ -71,7 +72,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                         {index === 0 && <TableCell>{item.index + 1}</TableCell>}
                         {index > 0 && (
                           <FBTableCell
-                            align={(index > 1) ? "right" : "left"}
+                            align={(index > 2) ? "right" : "left"}
                             loading={key === "received" ? loading : false}
                             {...{ label, tooltipTitle }}
                           />

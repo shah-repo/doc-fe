@@ -1,5 +1,5 @@
 import { mount, ReactWrapper } from "enzyme";
-// tslint:disable-next-line: no-implicit-dependencies
+// eslint-disable-next-line: no-implicit-dependencies
 import { History } from "history";
 import _ from "lodash";
 import React from "react";

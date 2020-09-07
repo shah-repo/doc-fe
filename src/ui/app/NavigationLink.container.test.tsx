@@ -1,4 +1,4 @@
-import { ExpandLess, ExpandMore, Home } from "@material-ui/icons";
+import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import { mount, ReactWrapper } from "enzyme";
 import React from "react";
 import { NavLink } from "react-router-dom";
@@ -18,12 +18,19 @@ jest.mock("react-redux", () => ({
 
 describe("NavigationLinkContainer component unit tests", () => {
   const defaultProps: NavigationLinkContainerProps = {
-    url: "/url",
-    text: "header.title",
-    Icon: Home,
-    childrenUrls: [
-      { url: "/child1", text: "header.title", Icon: Home },
-      { url: "/child2", text: "header.title" },
+    label: "Menu",
+    type: "MENU",
+    menu: [
+      {
+        label: "Child 1",
+        type: "LINK",
+        path: "/child1",
+      },
+      {
+        label: "Child 1",
+        type: "LINK",
+        path: "/child2",
+      },
     ],
     currentPath: "/url",
   };
@@ -42,9 +49,7 @@ describe("NavigationLinkContainer component unit tests", () => {
     const rootUrl = wrapper.find(NavigationLinkPresenter).first();
 
     expect(rootUrl.props()).toMatchObject({
-      url: "/url",
-      text: "header.title",
-      Icon: Home,
+      label: "Menu",
     });
   });
 
@@ -64,17 +69,17 @@ describe("NavigationLinkContainer component unit tests", () => {
 
   it("renders expand less icon and shows children when child is active", () => {
     const wrapper = getWrapper(getProps({
-      currentPath: defaultProps.childrenUrls && defaultProps.childrenUrls[0].url,
+      currentPath: defaultProps.menu && defaultProps.menu[0].path,
     }));
 
     expect(wrapper.find(ExpandLess)).toHaveLength(1);
-    expect(wrapper.find(NavLink)).toHaveLength(3);
+    expect(wrapper.find(NavLink)).toHaveLength(2);
   });
 
   it("does not render children links when not open", () => {
     const wrapper = getWrapper(getProps({}));
 
-    expect(wrapper.find(NavLink)).toHaveLength(1);
+    expect(wrapper.find(NavLink)).toHaveLength(0);
   });
 
   it("renders children links", () => {
@@ -82,6 +87,6 @@ describe("NavigationLinkContainer component unit tests", () => {
 
     wrapper.find(ExpandMore).simulate("click");
 
-    expect(wrapper.find(NavLink)).toHaveLength(3);
+    expect(wrapper.find(NavLink)).toHaveLength(2);
   });
 });

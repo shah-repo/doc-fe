@@ -1,11 +1,13 @@
 import { BaseTextFieldProps } from "@material-ui/core";
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
 import { Dictionary } from "lodash";
-import { FBEditorOptionsProps, FBEditorPropertiesType, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
+import { FBEditorOptionsProps, FBEditorPropertiesType, FBInlineApprovalRole, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { FBEditorValidationMode } from "../FBEditorValidation";
 import { FBValidatorConfigProps } from "../types/validation/validatorDialog";
+
+export type FBInputTransform = "upper" |  "lower";
 
 export type FBInputType =
   | "url"
@@ -30,6 +32,7 @@ export type FBInputType =
   | "editoroptions"
   | "schemaselect"
   | "paragraph"
+  | "documentRevisions"
   | "testRequirement"
   | "instructionsmediaupload"
   | "evidencemediaupload"
@@ -50,7 +53,9 @@ export type FBInputType =
   | "testRequirement"
   | "hellosign"
   | "customcontrol"
-  | "poApprovalMatrix";
+  | "poApprovalMatrix"
+  | "task"
+  | "approvers";
 
 export type FBInputProps =
 & FBLabelProps
@@ -71,6 +76,7 @@ export type FBInputProps =
 > & {
   onBlur?: (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => any;
   onChange?: (ev: React.ChangeEvent<any> | any, value: any, context?: FBSchemaState) => any;
+  setTranform?: (value: string) => string;
   type?: FBInputType;
   index?: number;
   stepIndex?: number;
@@ -88,12 +94,14 @@ export type FBInputProps =
   isTemplate?: boolean;
   includeQRScan?: boolean;
   designDisabled?: boolean;
+  deleteDisabled?: boolean;
   instructionsDocument?: string;
   reviseDisabled?: boolean;
   outputDisabled?: boolean;
   customValidator?: FBValidatorConfigProps;
   approvers?: string[] | Employee[];
   approverGroups?: string[] | GroupRequestBody[];
+  approvalRoles?: string[] | FBInlineApprovalRole[];
   approveIsBlocking?: boolean;
   applicableOn?: any[];
   actions?: string[];
@@ -102,6 +110,13 @@ export type FBInputProps =
   validators?: Dictionary<any>;
   forceDefault?: boolean;
   autosave?: boolean;
+  transform?: FBInputTransform;
+  withState?: boolean;
 };
 
-export const OmitInputClones: FBInputType[] = ["fileupload"];
+export const OmitInputClones: FBInputType[] = [
+  "fileupload",
+  "documentRevisions",
+  "approvers",
+  "approval",
+];

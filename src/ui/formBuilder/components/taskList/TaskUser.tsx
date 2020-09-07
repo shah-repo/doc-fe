@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { ReactComponent as DocIcon } from "../../../../assets/images/formBuilder/icon_doc.svg";
@@ -11,7 +12,7 @@ interface LocalProps {
   title: string;
   description: string;
   assignee: string;
-  due_date: string;
+  dueDate: string;
   status: string;
   attachments: [];
   id: any;
@@ -21,11 +22,9 @@ interface DispatchProps {
   closeTask: any;
 }
 
-const mapDispatchToProps = (dispatch: any): DispatchProps => {
-  return {
-    closeTask: (id: any) => dispatch({ type: "CLOSE_TASK", id }),
-  };
-};
+const mapDispatchToProps = (dispatch: any): DispatchProps => ({
+  closeTask: (id: any) => dispatch({ type: "CLOSE_TASK", id }),
+});
 
 export type TaskProps = DispatchProps & LocalProps;
 
@@ -34,7 +33,7 @@ const TaskUser: React.FunctionComponent<TaskProps> = ({
   title,
   description,
   assignee,
-  due_date,
+  dueDate,
   attachments,
   currentUser,
   closeTask,
@@ -45,7 +44,7 @@ const TaskUser: React.FunctionComponent<TaskProps> = ({
     title,
     description,
     assignee,
-    due_date,
+    dueDate,
     attachments,
     status,
   });
@@ -53,8 +52,8 @@ const TaskUser: React.FunctionComponent<TaskProps> = ({
   const [files, setFiles]: any = useState([]);
 
   useEffect(() => {
-    setTask({ title, description, assignee, due_date, attachments, status });
-  }, [title, description, assignee, due_date, attachments, status]);
+    setTask({ title, description, assignee, dueDate, attachments, status });
+  }, [title, description, assignee, dueDate, attachments, status]);
 
   const closeTaskHandler = () => {
     closeTask(id);
@@ -148,7 +147,7 @@ const TaskUser: React.FunctionComponent<TaskProps> = ({
         </span>
         <span>
           <strong>Due Date: </strong>
-          {currentTask.due_date}{" "}
+          {currentTask.dueDate}{" "}
         </span>
         <span>
           <strong>Status: </strong>

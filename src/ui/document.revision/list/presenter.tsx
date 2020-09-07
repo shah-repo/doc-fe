@@ -1,13 +1,17 @@
-import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
-import _ from "lodash";
-import React from "react";
+import { Box, Button, Grid, WithStyles, withStyles } from "@material-ui/core";
+import { isString, set } from "lodash";
+import moment from "moment";
+import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
+import { TIME_ZONE } from "../../../common/utils/date";
 import { stripTags } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../common/utils/helpers";
 import Date from "../../components/Date";
+import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
@@ -15,10 +19,13 @@ import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import { generateVersionNumber } from "../../documentRevision/helpers";
-import { canEditDocumentRevision, documentRevisionQueryStatus, documentRevisionReleasedDateOption, documentRevisionStatusOption } from "../utils/helpers";
+import useDialog from "../../hooks/useDialog";
+import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionQueryStatus, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
+import ExportListDialog from "./ExportListDialog./ExportListDialog";
 import styles from "./styles";
+
 
 export type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
@@ -68,17 +75,22 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       },
     },
     {
-      key: "version",
-      label: "common.version",
+      key: "revision",
+      label: "common.revision",
       searchOptions: {
         searchValueGetter: (value) => unmaskId(value),
-        defaultValue: tableCriteria.queryDict.version,
+        defaultValue: tableCriteria.queryDict.revision,
       },
       cellOptions: { align: "center" },
       cellHref: cellHrefRenderer,
       columnOptions: {
-        cellDataGetter: ({ rowData: { revision, revisionStage, revisionChangeType } }) =>
-          generateVersionNumber(revision, revisionStage, revisionChangeType),
+        cellDataGetter: ({ rowData }) => generateVersionNumber(
+          rowData.revision,
+          rowData.revisionStage,
+          rowData.subRevision,
+          rowData.revisionChangeType,
+          rowData.status,
+        ),
         width: 80,
         flexShrink: 1,
       },
@@ -141,7 +153,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         editDocumentRevision(rowData.id, rowData.document.id),
       searchOptions: {
         dataKey: "status[]",
-        defaultValue: _.isString(tableCriteria.queryDict["status[]"])
+        defaultValue: isString(tableCriteria.queryDict["status[]"])
           ? tableCriteria.queryDict["status[]"]
           : undefined,
         searchType: "select",
@@ -149,20 +161,20 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       },
     },
     {
-      key: "releasedAt",
-      label: "document.revision.released.date",
+      key: "effectiveDate",
+      label: "common.effective.date",
       cellHref: cellHrefRenderer,
       cellOptions: { align: "center" },
       columnOptions: {
         width: 115,
         // eslint-disable-next-line react/display-name
-        cellDataGetter: ({ rowData }) => <Date value={rowData.releasedAt} />,
+        cellDataGetter: ({ rowData }) => <Date value={rowData.effectiveDate} />,
       },
       searchOptions: {
-        dataKey: "releasedAfter",
+        dataKey: "effectiveDate",
         searchType: "select",
-        selectOptions: documentRevisionReleasedDateOption(),
-        defaultValue: tableCriteria.queryDict.releasedAfter,
+        selectOptions: documentRevisionEffectiveDateOption(),
+        defaultValue: tableCriteria.queryDict.effectiveDate,
       },
     },
     // We will add one more column if will be neccessery
@@ -182,38 +194,103 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     // },
   ];
 
-  const customDataSet = (data: DocumentRevision[]) =>
-    data.map((docRev) => {
-      _.set(docRev, "description", stripTags(docRev.description));
-      _.set(
-        docRev,
-        "document.documentType.documentTypeAcronym",
-        removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
-      );
-      return docRev;
-    });
+  const customDataSet = (data: DocumentRevision[]) => {
+
+    /** Temp fix - disabling filtering by document type name.
+     * Remove .map and uncomment .reduce to enable filtering. */
+    const customData = data
+      .map((docRev) => {
+        set(docRev, "description", stripTags(docRev.description));
+        set(
+          docRev,
+          "document.documentType.documentTypeAcronym",
+          removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
+        );
+        return docRev;
+      });
+
+    /*    const customData = data.reduce<DocumentRevision[]>((acc, docRev) => {
+        if (docRev.document.documentType.documentTypeName
+        && DOCUMENT_LIST_TYPE_NAMES.includes(docRev.document.documentType.documentTypeName)) {
+          set(docRev, "description", stripTags(docRev.description));
+          set(
+            docRev,
+            "document.documentType.documentTypeAcronym",
+            removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
+          );
+          acc.push(docRev);
+        }
+        return acc;
+      }, []); */
+
+    return customData;
+  };
+
+  const data = tableData.map((e) => ({
+    docId: e.document.docId,
+    revision: e.revision,
+    documentTitle: e.name,
+    type: e.document.documentType.documentTypeAcronym,
+    owner: e.owner.user.name,
+    crId: e.changeRequest?.crId,
+    status: e.status,
+    effectiveDate: e.effectiveDate ? moment(e.effectiveDate).tz(TIME_ZONE, true).format("M/D/YYYY") : "",
+  }));
+
+  const documentTypeSearchName = documentTypeOptions.find((e) =>
+    e.value === tableCriteria.queryDict.documentTypeId)?.text;
+  const effectiveDateSearch = documentRevisionEffectiveDateOption().find((e) =>
+    e.value === tableCriteria.queryDict.effectiveDate)?.text;
+
+  const headers = [
+    { label: `DOC ID: ${tableCriteria.queryDict.docId  || ""}`, key: "docId" },
+    { label: `REVISION: ${tableCriteria.queryDict.revision  || ""}`, key: "revision" },
+    { label: `DOCUMENT TITLE: ${tableCriteria.queryDict.name  || ""}`, key: "documentTitle" },
+    { label: `TYPE: ${documentTypeSearchName || ""}`, key: "type" },
+    { label: `OWNER: ${tableCriteria.queryDict.owner || ""}`, key: "owner" },
+    { label: `AR ID: ${tableCriteria.queryDict.crId || ""}`, key: "crId" },
+    { label: `STATUS: ${tableCriteria.queryDict["status[]"] || ""}`, key: "status" },
+    { label: `EFFECTIVE DATE: ${effectiveDateSearch || ""}`, key: "effectiveDate" },
+  ];
+
+  const dialog = useDialog();
+  const [fileName, saveFileName] = useState("");
+  const handleOpen = () => {
+    dialog.open();
+    saveFileName("");
+  };
 
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
-        <Button
-          color="primary"
-          variant="outlined"
-          className={classes.clearButton}
-          onClick={clearFilter}
-          id="ListPresenter-clearButton"
-        >
-          <Text translation="common.clear.filters" />
-        </Button>
+        <ClearFilters {...{ clearFilter }}/>
         <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
-      <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+      <Grid item={true} xs={6} style={{ textAlign: "right", marginBottom: "16px" }}>
+        <Button
+          variant="outlined"
+          color="primary"
+          className={classes.button}
+          style={{ marginRight: 5 }}
+          id="ListPresenter-export-list"
+          data-cy="document.revision.export.list"
+          onClick={handleOpen}
+        >
+          <Box marginRight={1}>
+            <ExportIcon className={classes.iconSvg} />
+          </Box>
+          <Text translation="document.revision.export.list" />
+        </Button>
+        <ExportListDialog
+          {...{ dialog, headers, data, fileName, saveFileName }}
+        />
         <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
           <Button
             variant="contained"
             color="primary"
             className={classes.button}
             id="ListPresenter-create"
+            data-cy="document.revision.create"
           >
             <Text translation="document.revision.create" />
           </Button>

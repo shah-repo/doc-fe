@@ -30,6 +30,7 @@ const MultipleHyperLink: React.FunctionComponent<MultipleHyperLinkProps> = ({
   const hyperLinkList =
     hyperLinks &&
     hyperLinks.map((link: string, i: any) => (
+      // eslint-disable-next-line react/jsx-no-target-blank
       <a key={i} target="_blank" href={`http://${link}`}>
         {link}
       </a>

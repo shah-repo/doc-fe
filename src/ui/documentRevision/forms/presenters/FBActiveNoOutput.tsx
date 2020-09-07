@@ -15,6 +15,7 @@ interface Props {
   version: number;
   docRevId?: string;
   isDisabled: boolean;
+  outputDocs: OptionType[];
 }
 
 export const styles = makeStyles((theme: Theme) =>
@@ -29,6 +30,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   version,
   docRevId,
   isDisabled = false,
+  outputDocs,
 }) => {
   const classes = styles();
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeFormOptions);

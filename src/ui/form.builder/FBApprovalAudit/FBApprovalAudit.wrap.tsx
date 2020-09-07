@@ -1,4 +1,4 @@
-import { compact, get, groupBy, isEmpty, last, map, range, toNumber } from "lodash";
+import { compact, filter, get, groupBy, isEmpty, last, map, range, sortBy, toNumber } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import moment from "moment";
@@ -16,6 +16,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
 ) => {
   const Comp = ({
     approvalAuditState,
+    approvalNonVersioned,
     audits,
     loading,
     index,
@@ -25,8 +26,15 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
   }: T) => {
 
     const { workspaceState, formState } = FB.useStores();
-    const { id: documentId, isOutput } = workspaceState || {};
-    approvalAuditState = FB.useRef(FBApprovalAuditState, { documentId, isOutput });
+    const {
+      id: documentId,
+      isOutput,
+      document: { releasedAt = null, createdAt = (new Date()).toISOString() } = {},
+    } = workspaceState || {};
+    approvalAuditState = FB.useRef(FBApprovalAuditState, {
+      documentId,
+      isOutput,
+    });
 
     function underApproval(): string[] | undefined {
       if (!name) { return; }
@@ -80,7 +88,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           if (moment(nextValue, moment.ISO_8601, true).isValid()) {
             nextValue = moment(nextValue).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a");
           }
-          return ("Changed " + label + prevValue + " to " + nextValue).replace(/(<([^>]+)>)/ig, "");
+          return FB.stripTags("Changed " + label + prevValue + " to " + nextValue);
         }
 
         function isCheck() {
@@ -228,10 +236,31 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           formattedTime: moment(v[0].timestamp).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a"),
           description: (description[type || ""] || description.default)(),
           timestamp: v[0].timestamp,
+          type,
         };
       });
-      return (compact(mapped) as FBAuditData[])
-        .sort((a, b) => new Date(a.timestamp).valueOf() - new Date(b.timestamp).valueOf());
+
+      const compactMapped = sortBy(compact(mapped), "timestamp");
+      const approvals = filter(compactMapped,  ({ type, timestamp }) =>
+        type === "approval" || type === "requestapproval"
+      );
+
+
+      // TODO: refacoring & sync approveAt with createdAt
+      let startDate = last(approvals)?.timestamp || (new Date()).toISOString();
+      if (moment(startDate).subtract(1, "seconds").isAfter(moment(createdAt)) && approvals[approvals.length - 2]) {
+        startDate = approvals[approvals.length - 2].timestamp;
+      }
+
+
+      const endDate = releasedAt ? new Date(releasedAt) : new Date();
+
+      const filteredMapped = filter(compactMapped, (cm) => (
+        startDate &&
+        new Date(cm.timestamp) >= new Date(startDate) &&
+        new Date(cm.timestamp) <= new Date(endDate)
+      ));
+      return filteredMapped as FBAuditData[];
     }
 
     function isApproved(): boolean {
@@ -259,6 +288,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
     return Component({
       ...(props as T),
       approvalAuditState,
+      approvalNonVersioned,
       audits,
       loading,
       index,

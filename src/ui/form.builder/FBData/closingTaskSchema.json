@@ -1,0 +1,6 @@
+[{
+  "type": "texteditor",
+  "name": "description",
+  "label": "form.builder.description",
+  "rules": "required"
+}]

@@ -32,6 +32,7 @@ describe("apiActionWithCallbacks factory tests", () => {
   const handlers: Handlers<string> = {
     successHandler: getCallbackHandler<string>(),
     errorHandler: getCallbackHandler<string>(),
+    setCancelToken: () => null,
   };
 
   const dispatch = jest.fn();
@@ -48,6 +49,7 @@ describe("apiActionWithCallbacks factory tests", () => {
     action.onSuccess("test", dispatch);
 
     expect(onSuccess).toHaveBeenCalledWith("test", dispatch);
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(handlers.successHandler.execute).toHaveBeenCalledWith("test");
   });
 
@@ -55,6 +57,7 @@ describe("apiActionWithCallbacks factory tests", () => {
     action.onFailure("test", dispatch);
 
     expect(onFailure).toHaveBeenCalledWith("test", dispatch);
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(handlers.errorHandler.execute).toHaveBeenCalledWith("test");
   });
 });

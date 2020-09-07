@@ -1,82 +1,80 @@
 import { Box } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
+import { isEmpty } from "lodash";
 import React from "react";
-import { FBApprovalAudit, FBApprovalField, FBApprovalProps, FBApprovalSocket } from "..";
+import { FBApprovalAudit, FBApprovalField, FBApprovalProps, FBApprovalSocket, FBFieldName, FBInlineApprovalRole, FBInput, FBProvider, FBText } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
-import Text from "../../components/Text";
+import Colors from "../../layout/theme/utils/colors";
 import { withFBApproval } from "./FBApproval.wrap";
 
 const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
+  approvalState,
   approvers,
   approverGroups,
+  approvalRoles,
   disabled,
   isApproved,
   isDefined,
   approveIsBlocking,
+  approvalNonVersioned,
+  autosave,
   loading,
   label,
   name,
   type,
   index,
+  gutter,
   ...props
 }) => (
-  <Box mb={3}>
-    <FBApprovalSocket />
-    {approveIsBlocking && (
-      <Box
-        py={1}
-        mb={3}
-        display="flex"
-        border={1}
-        borderLeft={0}
-        borderRight={0}
-        borderTop={0}
-        borderColor={isApproved ? "#b1d439" : "#e9424a"}
-      >
-        {isApproved && <CheckCircleIcon style={{ color: "#b1d439" }} />}
-        {!isApproved && <ErrorIcon style={{ color: "#e9424a" }} />}
-        <Box ml={1} display="flex" mt={0.3}>
-          {isApproved && <Text message="form.builder.approved" />}
-          {!isApproved && (
-            <>
-              <Box flexGrow={1}>
-                <Text message="form.builder.approval.waiting" />
-              </Box>
-              {/* <Text message="form.builder.approval.condition" /> */}
-            </>
-          )}
-        </Box>
-      </Box>
-    )}
-    {/* {isDefined && (
-      <Typography variant="button" display="block" style={{ color: "rgb(120, 138, 156)" }}>
-        {<Text message={label as string} />}
-        {loading && (
-          <Box ml={1} component="span">
-            <CircularProgress size={16} />
+  <FBProvider {...{ [`${FBFieldName.ApprovalState}-${name}`]: approvalState }}>
+    <FBApprovalSocket {...{ name }} />
+    <FBInput {...{ name, disabled, autosave, gutter }} type="approval">
+      {approveIsBlocking && (
+        <Box
+          py={1}
+          display="flex"
+          border={1}
+          borderLeft={0}
+          borderRight={0}
+          borderTop={0}
+          borderColor={isApproved ? Colors.green : Colors.red}
+        >
+          {isApproved && <CheckCircleIcon style={{ color: Colors.green }} />}
+          {!isApproved && <ErrorIcon style={{ color: Colors.red }} />}
+          <Box ml={1} display="flex" mt={0.3}>
+            {isApproved && <FBText locale="form.builder.approved" />}
+            {!isApproved && (
+              <FBText boxProps={{ flexGrow: 1 }} locale="form.builder.approval.waiting" />
+            )}
           </Box>
-        )}
-      </Typography>
-    )} */}
-    {approvers && (
-      <FBApprovalField<Employee>
-        {...props}
-        collection={approvers as Employee[]}
-        {...{ disabled }}
-      />
-    )}
-    {approverGroups && (
-      <FBApprovalField<GroupRequestBody>
-        {...props}
-        mt={approvers ? 2 : 0}
-        collection={approverGroups as GroupRequestBody[]}
-        {...{ disabled }}
-      />
-    )}
-    <FBApprovalAudit {...{ name, type, index }} />
-  </Box>
+        </Box>
+      )}
+      {!isEmpty(approvers) && (
+        <FBApprovalField<Employee>
+          {...props}
+          {...{ disabled }}
+          collection={approvers as Employee[]}
+        />
+      )}
+      {!isEmpty(approverGroups) && (
+        <FBApprovalField<GroupRequestBody>
+          {...props}
+          {...{ disabled }}
+          collection={approverGroups as GroupRequestBody[]}
+        />
+      )}
+      {!isEmpty(approvalRoles) && (
+        <FBApprovalField<FBInlineApprovalRole>
+          {...props}
+          {...{ disabled }}
+          collection={approvalRoles as FBInlineApprovalRole[]}
+        />
+      )}
+      <FBApprovalAudit {...{ name, type, index }} />
+    </FBInput>
+  </FBProvider>
 );
 
 export default withFBApproval(FBApproval);

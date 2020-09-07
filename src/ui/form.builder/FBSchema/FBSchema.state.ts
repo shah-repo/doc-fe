@@ -6,9 +6,11 @@ import { FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBIn
 import { FBActionField } from "../FBActionField";
 import { FBApproval } from "../FBApproval";
 import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
+import { FBApprovers } from "../FBApprovers";
 import { FBButton } from "../FBButton";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
+import { FBDocumentRevisions } from "../FBDocumentRevisions";
 import { FBFileUpload } from "../FBFileUpload";
 import { FBHelloSign } from "../FBHelloSign";
 import { FBHyperlink } from "../FBHyperlink";
@@ -28,6 +30,7 @@ import { FBSelect } from "../FBSelect";
 import { FBSelectDocument } from "../FBSelectDocument";
 import { FBSelectRequirement } from "../FBSelectRequirement";
 import { FBSubsection } from "../FBSubsection";
+import { FBTask } from "../FBTask";
 import { FBTestRequirement } from "../FBTestRequirement";
 import { FBTextEditor } from "../FBTextEditor";
 import { FBTextField } from "../FBTextField";
@@ -40,6 +43,7 @@ export class FBSchemaState {
     "stepsection",
     "teststep",
     "purchaseorder",
+    "task",
   ];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
@@ -65,6 +69,7 @@ export class FBSchemaState {
     timer: FBTimerField,
     purchaseorder: FBPurchaseOrder,
     poreceive: FBPOReceive,
+    documentRevisions: FBDocumentRevisions,
     instructionsmediaupload: FBMediaAlbumField,
     evidencemediaupload: FBMediaAlbumField,
     testRequirement: FBTestRequirement,
@@ -79,6 +84,8 @@ export class FBSchemaState {
     hellosign: FBHelloSign,
     approvalMatrix: FBApprovalMatrixField,
     poApprovalMatrix: FBPOApprovalMatrix,
+    task: FBTask,
+    approvers: FBApprovers,
   };
 
   @observable public schema?: FBSchemaProps[];
@@ -109,7 +116,7 @@ export class FBSchemaState {
   };
 
   @action public getSchemaItemAt = (index?: number): FBSchemaProps | undefined => {
-    if (_.isUndefined(index)) {
+    if (_.isUndefined(index) || !_.inRange(index, 0, this.schema?.length)) {
       return;
     }
     return this.schema && this.schema[index];
@@ -140,7 +147,7 @@ export class FBSchemaState {
 
   @action public setSchemaItemAt = (schemaItem: FBSchemaProps | FBInputProps, index = 0) => {
     const schemaAt = this.getSchemaItemAt(index);
-    if (schemaAt && schemaItem.name ===  schemaAt.name) {
+    if (schemaAt && schemaItem.name === schemaAt.name) {
       return this.updateSchemaItem(schemaItem, index);
     }
     const newSchema = this.schema?.slice(0) || [];

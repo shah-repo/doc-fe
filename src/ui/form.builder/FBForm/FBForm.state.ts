@@ -32,14 +32,20 @@ export class FBFormState extends FBSchemaState {
     return _.get(window, "EnlilRemoteValidators.validator");
   }
 
+  public reset = () => {
+    this.initialValues = {};
+    this.values = {};
+    this.rules = {};
+    this.validationAttributeNames = {};
+    this.inputState.clear();
+    this.validate();
+  };
+
   @action public setValues = (values: Dictionary<any>) => {
     this.values = values;
   };
 
   @action public getValues = () => this.values;
-  // TODO: Remove if works
-  //   unflatten(this.values, { overwrite: true })
-  // ;
 
   @action public getFieldValue = (
     fieldName: string | undefined, defaultValue: any = undefined): any => {
@@ -53,7 +59,12 @@ export class FBFormState extends FBSchemaState {
     return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
   };
 
-  @action public setFieldValue = (fieldName: string | undefined, value: any, withState = false, forceDefault = false) => {
+  @action public setFieldValue = (
+    fieldName: string | undefined,
+    value: any,
+    withState = false,
+    forceDefault = false
+  ) => {
     if (!fieldName) {
       return;
     }
@@ -117,9 +128,8 @@ export class FBFormState extends FBSchemaState {
       return;
     }
 
-    const rules = this.getRules();
-    // const values = flatten(this.getValues(), { safe: true });
-    const values = this.getValues();
+    const rules = flatten(this.getRules());
+    const values = _.omitBy(this.values, (v) => _.isString(v) && _.isEmpty(v));
     // *TODO: unify validators format
     let validator: any;
     try {
@@ -150,22 +160,25 @@ export class FBFormState extends FBSchemaState {
 
   // *NOTE: remove this after it is set in be script
   public registerValidator = (validator: any) => {
-    this.Validator.registerAsyncImplicit("required_if_in", function(val: string[], req: string, attribute: string, passes) {
-      const reqs = req.split(",");
-      const reqName = reqs.shift() || "";
-      let inputValue = validator.input[reqName];
-      // Radio group support
-      !_.isArray(inputValue) && (inputValue = [inputValue]);
-      const diff = inputValue && inputValue.filter((val) => reqs.includes(val));
-      if (diff && diff.length > 0 && (!val || _.isEmpty(val))) {
-        const { messages: { attributeNames } } = validator;
-        const reqsAttributes = reqs.map((req) => attributeNames[req]);
-        return passes(
-          false,
-          `The ${attributeNames[attribute]} field is required when ${attributeNames[reqName]} includes ${reqsAttributes.join(", ")}.`);
-      }
-      return passes();
-    });
+    this.Validator.registerAsyncImplicit(
+      "required_if_in",
+      function(val: string[], req: string, attribute: string, passes) {
+        const reqs = req.split(",");
+        const reqName = reqs.shift() || "";
+        let inputValue = validator.input[reqName];
+        // Radio group support
+        !_.isArray(inputValue) && (inputValue = [inputValue]);
+        const diff = inputValue && inputValue.filter((val) => reqs.includes(val));
+        if (diff && diff.length > 0 && (!val || _.isEmpty(val))) {
+          const { messages: { attributeNames } } = validator;
+          const reqsAttributes = reqs.map((req) => attributeNames[req]);
+          return passes(
+            false,
+            `The ${attributeNames[attribute]} field is required when ` +
+            `${attributeNames[reqName]} includes ${reqsAttributes.join(", ")}.`);
+        }
+        return passes();
+      });
   };
 
   public setFieldAutosave = (name?: string) => {

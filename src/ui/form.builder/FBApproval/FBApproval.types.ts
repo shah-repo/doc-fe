@@ -1,4 +1,3 @@
-import { BoxProps } from "@material-ui/core";
 import { FBApprovalState, FBInputProps } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
@@ -18,17 +17,23 @@ export type FBApprovalProps =
 | "index"
 | "approvers"
 | "approverGroups"
+| "approvalRoles"
 | "disabled"
 | "approveIsBlocking"
 | "reviseDisabled"
+| "editorProperties"
+| "autosave"
+| "gutter"
 > & {
-  onApprove?: (approver?: Employee | GroupRequestBody) => () => void;
-  approvalConfig?: (approver?: Employee | GroupRequestBody) => FBApprovalConfig | undefined;
-  approvalFieldState?: FBApprovalState;
+  onApprove?: (approver?: FBInlineApproverType) => () => void;
+  approvalConfig?: (approver?: FBInlineApproverType) => FBApprovalConfig | undefined;
+  approvalState?: FBApprovalState;
   hasApproved?: FBApprovalValue[];
   isApproved?: boolean;
   isDefined?: boolean;
   loading?: boolean;
+  approveLoading?: boolean;
+  approvalNonVersioned?: boolean;
 };
 
 export enum FBApprovalStatus {
@@ -40,6 +45,7 @@ export interface FBApprovalValue {
   id: string;
   userId?: string;
   groupId?: string;
+  approvalRoleId?: string;
   approvedAt: string;
 }
 
@@ -48,16 +54,14 @@ export interface FBApprovalApi {
   fieldValue: FBApprovalValue[];
 }
 
-export type FBApprovalFieldProps<T> =
-& FBApprovalProps
-& Pick<BoxProps, "mt">
-& {
+export type FBApprovalFieldProps<T> = FBApprovalProps & {
   collection: T[];
 };
 
 export interface FBApprovalData {
   approvers?: Employee[];
   approverGroups?: GroupRequestBody[];
+  approvalRoles?: FBInlineApprovalRole;
 }
 
 export interface FBApprovalSocketMsg {
@@ -68,6 +72,17 @@ export interface FBApprovalSocketMsg {
 
 export interface FBApprovalConstructor {
   documentId?: string;
-  name?: string;
   value?: FBApprovalValue[];
+  approversValue?: string[];
+  groupsValue?: string[];
+  approvalRolesValue?: string[];
 }
+
+export interface FBInlineApprovalRole {
+  id: string;
+  name: string;
+  joinedEmployees?: Employee[];
+}
+
+export type FBInlineApproverType = Employee | GroupRequestBody | FBInlineApprovalRole;
+export type FBApprovalSocketProps = Pick<FBApprovalProps, "name">;

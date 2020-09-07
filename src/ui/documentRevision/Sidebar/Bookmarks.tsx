@@ -9,7 +9,7 @@ import Colors from "../../layout/theme/utils/colors";
 
 interface SidebarPresenterProps {
   location: Location;
-  schema: FBSchemaProps[];
+  schema: FBSchemaProps[] | undefined;
 }
 
 export const styles = makeStyles((theme: Theme) =>
@@ -36,7 +36,9 @@ export const styles = makeStyles((theme: Theme) =>
   }));
 
 export const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ location, schema }) => {
-
+  if (!schema) {
+    return null;
+  }
   const links =  schema.map((schema) => {
     if (schema.type === "section") {
       const hash = schema.label?.toString().replace(/\s/g, "");

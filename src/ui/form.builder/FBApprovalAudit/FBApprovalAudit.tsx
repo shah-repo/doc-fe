@@ -21,7 +21,7 @@ const FBApprovalAudit: React.FunctionComponent<FBApprovalAuditProps> = ({
         </Typography>
         <FBMapWrapper<FBAuditData[]> collection={audits}>
           {(change: FBAuditData, index) => (
-            <Box mb={2} key={`fb-approval-audit-${change.id}`} display="flex" alignItems="center">
+            <Box mb={2} key={`fb-approval-audit-${change.id}-${index}`} display="flex" alignItems="center">
               <Box flexGrow={1} color="rgb(69, 69, 69)" fontWeight="fontWeightMedium">
                 {change?.ownerName}
                 <Box component="span" ml={0.6} color="rgb(164, 177, 189)">

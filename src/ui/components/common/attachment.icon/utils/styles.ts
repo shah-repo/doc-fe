@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import Colors from "../../../../layout/theme/utils/colors";
 import { AttachmentIconStyleProp } from "./types";
 
 export const styles = makeStyles((theme) => ({
@@ -6,17 +7,6 @@ export const styles = makeStyles((theme) => ({
     display: "grid",
     width: size === "lg" ? "90px" : size === "md" ? "70px" : "50px",
     height: size === "lg" ? "90px" : size === "md" ? "70px" : "50px",
-  }),
-  closeRoot: ({ size, disabled }: AttachmentIconStyleProp) => ({
-    margin:
-      size === "lg"
-        ? theme.spacing(0, 0, -1.7, 4.5)
-        : size === "md"
-          ? theme.spacing(0, 0, -1.3, 3.7)
-          : theme.spacing(0, 0, -1.4, 3.1),
-    padding: theme.spacing(0.5, 0.5, 0),
-    fontSize: size === "lg" ? "1.3em" : size === "md" ? "1.2em" : "1.1em",
-    display: disabled ? "none" : "inherit",
   }),
   progress: ({ size }: AttachmentIconStyleProp) => ({
     "color": theme.palette.secondary.main,
@@ -28,21 +18,43 @@ export const styles = makeStyles((theme) => ({
       margin: theme.spacing(2.5),
     },
   }),
+  attachmentContainer: {
+    "display": "flex",
+    "width": "50%",
+    "alignItems": "center",
+    "marginBottom": "1rem",
+    "&:hover": {
+      backgroundColor: "white",
+      borderRadius: "8px",
+    },
+  },
+  iconContainer: {
+    maxHeight: "48px",
+    margin: "0.8rem",
+  },
+  removeButton: {
+    "margin": 0,
+    "minWidth": 40,
+    "borderRadius": "inherit",
+    "min-width": "auto",
+    "&:hover": {
+      backgroundColor: Colors.red,
+    },
+  },
+  fileNameContainer: {
+    width: 170,
+    cursor: "pointer",
+  },
   fileName: {
     overflowWrap: "break-word",
     wordWrap: "break-word",
     hyphens: "auto",
-    maxWidth: "4.38rem",
     maxWeight: "1rem",
     overflow: "hidden",
     display: "block",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
-    textAlign: "center",
-  },
-  closeIcon: {
-    fontSize: "inherit",
-    color: theme.palette.primary.main,
+    fontWeight: "bold",
   },
   fileIcon: {
     width: "100%",
@@ -114,5 +126,11 @@ export const styles = makeStyles((theme) => ({
     border: "2px solid red",
     paddingLeft: "5px",
     paddingRight: "5px",
+  },
+  primaryBadge: {
+    position: "absolute",
+    zIndex: 1,
+    top: -5,
+    left: 2,
   },
 }));

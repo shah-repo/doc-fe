@@ -1,24 +1,26 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import { Nullable } from "../../../state/ducks/common/types";
 import UserMenuPresenter from "./UserMenu.presenter";
 
-export const UserMenuContainer: React.FunctionComponent = () => {
+interface Props {
+  anchorEl: Nullable<HTMLElement>;
+  handleCloseMenu: () => void;
+}
+
+export const UserMenuContainer: React.FunctionComponent<Props> = ({
+  anchorEl,
+  handleCloseMenu,
+}) => {
   const location = useLocation();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+
 
   return (
     <UserMenuPresenter
       {...{
         location,
-        handleClick,
         anchorEl,
-        handleClose,
+        handleCloseMenu,
       }}
     />
   );

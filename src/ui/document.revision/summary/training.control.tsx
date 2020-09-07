@@ -1,6 +1,7 @@
 import { Typography, WithStyles } from "@material-ui/core";
 import React, { useMemo } from "react";
 import { trainingActions, TrainingPlanTransition } from "../../../state/ducks/training";
+import { EffectiveDateFormValues } from "../../change.request/form/types";
 import Text from "../../components/Text";
 import TransitionDialog from "../../components/transitionDialog/TransitionDialog";
 import { PasswordFormValues } from "../../components/transitionDialog/types";
@@ -37,7 +38,7 @@ const TrainingControl: React.FunctionComponent<Props> = ({
     dialog.open();
   };
 
-  const onSubmit = (values: PasswordFormValues) => {
+  const onSubmit = (values: PasswordFormValues | EffectiveDateFormValues) => {
     async.start(
       applyTransition,
       trainingRecord.id,
@@ -54,9 +55,8 @@ const TrainingControl: React.FunctionComponent<Props> = ({
         <Text translation="training.certify.completion" />
       </Typography>
       <TransitionDialog
-        isDialogOpen={dialog.isOpen}
+        transitionDialog={dialog}
         openDialog={openDialog}
-        closeDialog={dialog.close}
         onSubmit={onSubmit}
         asyncState={async.asyncState}
         transition={transition}

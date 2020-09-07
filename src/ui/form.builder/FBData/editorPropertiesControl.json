@@ -1,29 +1,98 @@
 {
-  "autocomplete": ["multiple", "includeQRScan", "reviseDisabled"],
-  "select": ["includeNone", "includeContext", "reviseDisabled"],
-  "checkbox": ["includeContext", "reviseDisabled"],
-  "radio": ["includeContext", "reviseDisabled"],
-  "checkboxgroup": ["includeContext", "reviseDisabled"],
-  "radiogroup": ["includeContext", "reviseDisabled"],
-  "approval": ["approveIsBlocking", "reviseDisabled"],
-  "textfield": ["reviseDisabled"],
-  "texteditor": ["reviseDisabled"],
-  "datepicker": ["reviseDisabled"],
-  "hyperlink": ["reviseDisabled"],
-  "fileupload": ["reviseDisabled"],
-  "quantity": ["reviseDisabled"],
-  "timer": ["reviseDisabled"],
-  "purchaseorder": ["reviseDisabled"],
-  "poreceive": ["reviseDisabled"],
-  "instructionsmediaupload": ["reviseDisabled"],
-  "evidencemediaupload": ["reviseDisabled"],
-  "testRequirement": ["reviseDisabled"],
-  "requestapproval": ["reviseDisabled"],
-  "checkpoint": ["reviseDisabled"],
-  "createlabel": ["reviseDisabled"],
-  "selectrequirement": ["reviseDisabled"],
-  "selectdocument": ["reviseDisabled"],
-  "instructionsdocument": ["reviseDisabled"],
-  "approvalMatrix": ["reviseDisabled"],
-  "poApprovalMatrix": ["reviseDisabled"]
+  "autocomplete": [
+    "multiple",
+    "includeQRScan",
+    "reviseDisabled"
+  ],
+  "select": [
+    "includeNone",
+    "includeContext",
+    "reviseDisabled"
+  ],
+  "checkbox": [
+    "includeContext",
+    "reviseDisabled"
+  ],
+  "radio": [
+    "includeContext",
+    "reviseDisabled"
+  ],
+  "checkboxgroup": [
+    "includeContext",
+    "reviseDisabled"
+  ],
+  "radiogroup": [
+    "includeContext",
+    "reviseDisabled"
+  ],
+  "approval": [
+    "approveIsBlocking",
+    "reviseDisabled"
+  ],
+  "textfield": [
+    "reviseDisabled"
+  ],
+  "texteditor": [
+    "reviseDisabled"
+  ],
+  "datepicker": [
+    "reviseDisabled"
+  ],
+  "hyperlink": [
+    "reviseDisabled"
+  ],
+  "fileupload": [
+    "reviseDisabled"
+  ],
+  "quantity": [
+    "reviseDisabled"
+  ],
+  "timer": [
+    "reviseDisabled"
+  ],
+  "purchaseorder": [
+    "reviseDisabled"
+  ],
+  "poreceive": [
+    "reviseDisabled"
+  ],
+  "instructionsmediaupload": [
+    "reviseDisabled"
+  ],
+  "evidencemediaupload": [
+    "reviseDisabled"
+  ],
+  "testRequirement": [
+    "reviseDisabled"
+  ],
+  "requestapproval": [
+    "reviseDisabled"
+  ],
+  "checkpoint": [
+    "reviseDisabled"
+  ],
+  "createlabel": [
+    "reviseDisabled"
+  ],
+  "selectrequirement": [
+    "reviseDisabled"
+  ],
+  "selectdocument": [
+    "reviseDisabled"
+  ],
+  "instructionsdocument": [
+    "reviseDisabled"
+  ],
+  "approvalMatrix": [
+    "reviseDisabled"
+  ],
+  "poApprovalMatrix": [
+    "reviseDisabled"
+  ],
+  "documentRevisions": [
+    "reviseDisabled"
+  ],
+  "task": [
+    "reviseDisabled"
+  ]
 }

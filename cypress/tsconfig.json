@@ -1,0 +1,18 @@
+{
+  "extends": "./../tsconfig.json",
+  "include": [
+    "support",
+    "fixtures",
+    "plugins",
+    "integration",
+    "requirements",
+    "utils"
+    // "./../src"
+  ],
+  "compilerOptions": {
+    "types": [
+      "cypress",
+      "node"
+    ]
+  },
+}

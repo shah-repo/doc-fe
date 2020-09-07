@@ -1,4 +1,4 @@
-// tslint:disable-next-line: no-implicit-dependencies
+// eslint-disable-next-line: no-implicit-dependencies
 import { DeltaStatic } from "quill";
 
 export const findDiff = (oldContent: DeltaStatic, newContent: DeltaStatic): DeltaStatic => {

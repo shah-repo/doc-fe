@@ -1,5 +1,5 @@
 import { Box, Table, TableBody, TableHead, TableRow } from "@material-ui/core";
-import _ from "lodash";
+import { keys, map, values } from "lodash";
 import React from "react";
 import * as generateUuid from "uuid/v4";
 import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableInfoHead, FBApprovalMatrixTableProps, FBCheckbox, FBDocTypeGroup, FBMapWrapper, FBSelect, FBTableCell, FBTextField } from "..";
@@ -13,7 +13,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
   <Table className={classes?.tableInfo}>
     <TableHead>
       <TableRow>
-        <FBMapWrapper<string[]> collection={_.values(FBApprovalMatrixTableInfoHead)}>
+        <FBMapWrapper<string[]> collection={values(FBApprovalMatrixTableInfoHead)}>
           {(head: string, index) => (
             <FBTableCell
               key={`fb-approval-matrix-column-${head}-${index}`}
@@ -26,7 +26,9 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
       </TableRow>
     </TableHead>
     <TableBody>
-      <FBMapWrapper<FBApprovalMatrixItem[]> collection={approvalMatrix}>
+      <FBMapWrapper<FBApprovalMatrixItem[]>
+        collection={approvalMatrix}
+      >
         {(am: FBApprovalMatrixItem, index) => (
           <TableRow key={`fb-approval-matrix-am-${am.id}-${index}`}>
             <FBTableCell
@@ -43,7 +45,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
             />
             {mode !== "edit" && (
               <FBTableCell
-                label={am.docType.defaultTraining ? "Yes" : "No"}
+                label={`common.${am.docType.defaultTraining}`}
                 align="center"
               />
             )}
@@ -55,6 +57,24 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                 />
               </FBTableCell>
             )}
+            {mode !== "edit" && (
+              <FBTableCell
+                label={`common.${am.docType.needsSignature}`}
+                align="center"
+              />
+            )}
+            {mode === "edit" && (
+              <FBTableCell align="center">
+                <FBApprovalMatrixCheck
+                  name={`${name}.approvalMatrix.${index}.docType.needsSignature`}
+                  checked={am.docType.needsSignature}
+                />
+              </FBTableCell>
+            )}
+            <FBTableCell
+              label={am.docType.category}
+              align="center"
+            />
           </TableRow>
         )}
       </FBMapWrapper>
@@ -65,7 +85,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
             defaultValue={generateUuid()}
             hidden={true}
           />
-          <FBMapWrapper<string[]> collection={_.keys(FBApprovalMatrixTableInfoHead)}>
+          <FBMapWrapper<string[]> collection={keys(FBApprovalMatrixTableInfoHead)}>
             {(key: keyof typeof FBApprovalMatrixTableInfoHead, index) => (
               <>
                 {key === "trainingReq" && (
@@ -73,6 +93,17 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                     <Box display="flex" justifyContent="center" pl={3}>
                       <FBCheckbox
                         name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.defaultTraining`}
+                        gutter={false}
+                        defaultChecked={false}
+                      />
+                    </Box>
+                  </FBTableCell>
+                )}
+                {key === "needsSignature" && (
+                  <FBTableCell>
+                    <Box display="flex" justifyContent="center" pl={3}>
+                      <FBCheckbox
+                        name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.needsSignature`}
                         gutter={false}
                         defaultChecked={false}
                       />
@@ -87,7 +118,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                         rules="required"
                         showErrorMsg={false}
                         // TODO: define options as static
-                        options={_.map(_.keys(FBDocTypeGroup), (k) =>
+                        options={map(keys(FBDocTypeGroup), (k) =>
                           ({ text: FBDocTypeGroup[k as keyof typeof FBDocTypeGroup], value: k })
                         )}
                         gutter={false}
@@ -106,6 +137,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                         inputProps={{ style: { padding: "8px" } }}
                         rules="required"
                         showErrorMsg={false}
+                        transform="upper"
                       />
                     </Box>
                   </FBTableCell>
@@ -118,6 +150,18 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                         gutter={false} size="small"
                         inputProps={{ style: { padding: "8px" } }}
                         rules="required"
+                        showErrorMsg={false}
+                      />
+                    </Box>
+                  </FBTableCell>
+                )}
+                {(key === "category") && (
+                  <FBTableCell>
+                    <Box display="flex" px={1}>
+                      <FBTextField
+                        name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.category`}
+                        gutter={false} size="small"
+                        inputProps={{ style: { padding: "8px" } }}
                         showErrorMsg={false}
                       />
                     </Box>

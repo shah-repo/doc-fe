@@ -17,12 +17,12 @@ export const withValidatorForm = <T extends FBValidatorFormProps>(
         const activeType = FBValidatorStore.activeValidatorType;
         let renderEl = (_.isEmpty(applicableIn) || (applicableIn || []).includes(activeType || ""));
 
-        const isRelational = _.find(validator.indicators, { type: "schemaSelect"});
+        const isRelational = _.find(validator.indicators, { type: "schemaSelect" });
 
         if (!_.isUndefined(isRelational) && _.size(FBStore.getSchema()) === 0) {
           renderEl = false;
         }
-       
+
         if (renderEl) {
           return (
             <FBValidator

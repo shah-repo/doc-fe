@@ -2,8 +2,11 @@ import { Chip, Grid, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
 import { ChangeRequestStatus } from "../../../../state/ducks/changeRequest";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
-import { useDocumentStatus } from "../../../hooks/docCustomization/useCustomization";
+import { DocumentRevisionStatus, DocumentRevisionStatusAlias } from "../../../../state/ducks/documentRevisions";
+import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType";
+import { DocumentStatus } from "../../../../state/ducks/documents";
+import { FBDocTypeGroup } from "../../../form.builder";
+import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
 import Text from "../../Text";
 import { styles } from "./HeaderInfo.styles";
 
@@ -12,6 +15,9 @@ export interface Props {
   id: string;
   name: string;
   documentTypeId?: string;
+  revisionStage?: number;
+  groupOptions?: DocumentGroupOptionsType[];
+  isInlineApproval?: boolean;
 }
 
 export const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -19,8 +25,20 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   name,
   id,
   documentTypeId,
+  revisionStage,
+  groupOptions,
+  isInlineApproval,
 }) => {
+  const isDraft = status === DocumentStatus.Draft;
+  const isAlphaReleased = revisionStage === 3;
+  const isRecord = groupOptions?.includes(FBDocTypeGroup.RECORD);
+
+  // we should rename enum for document types, it is not only for FB
+  if ( isRecord && isInlineApproval && isDraft && !isAlphaReleased) {
+    status = DocumentRevisionStatusAlias.Draft;
+  }
   const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
+  const [isTitleVisible] = useTitle(documentTypeId);
   const classes = styles();
   const isStatusReleased = status === DocumentRevisionStatus.Released || status === ChangeRequestStatus.Approved;
   const isStatusCanceled = status === DocumentRevisionStatus.Canceled || status === ChangeRequestStatus.Voided;
@@ -28,7 +46,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
     <div className={classNames(classes.statusIconDefault, {
       [classes.statusIconReleased]: isStatusReleased,
       [classes.statusIconCanceled]: isStatusCanceled,
-    })}/>;
+    })} />;
 
   return (
     <Grid container={true} xs={6} alignItems="center">
@@ -37,6 +55,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
         <Chip
           label={<Text message={statusLabel} />}
           id="HeaderInfo-status"
+          data-cy="HeaderInfo-status"
           className={classNames(classes.statusDefault)}
           icon={statusIcon}
         />
@@ -44,10 +63,14 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
       <Typography variant="h6" id="HeaderInfo-docId" className={classes.id} >
         {id}
       </Typography>
-      <Typography variant="h6" id="HeaderInfo-name">
-        {name}
-      </Typography>
+      {
+        isTitleVisible &&
+        <Typography variant="h6" id="HeaderInfo-name">
+          {name}
+        </Typography>
+      }
     </Grid>
-  ); };
+  );
+};
 
 export default HeaderInfo;

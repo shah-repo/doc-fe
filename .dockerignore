@@ -1,0 +1,18 @@
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# env files
+.env
+
+node_modules
+.gitignore
+.eslint
+.git
+src/*.spec.js
+cypress/requirements/cache

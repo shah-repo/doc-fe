@@ -1,7 +1,6 @@
 import { Box, CircularProgress, IconButton, Link } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import NotesIcon from "@material-ui/icons/Notes";
-import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
 import * as React from "react";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
@@ -48,11 +47,11 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
           id={`${name}-button-file-create-clean-copy`}
           multiple={multiple}
           type="file"
-          onChange={onChange(LINE_TYPES.CLEAN_COPY, true)}
+          onChange={onChange(LINE_TYPES.RED_LINE, true)}
           className = {classes.input}
           disabled={disabled}
         />
-        <label htmlFor={`${name}-button-file-create-clean-copy`} >
+        {/* <label htmlFor={`${name}-button-file-create-clean-copy`} >
           <Link component="span"
             variant="button"
             className={classes.link}
@@ -60,7 +59,7 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
             <PlaylistAddIcon className={classes.iconCleanCopy} />
             <Text translation="common.attachment.upload.button.createCleanCopy" />
           </Link>
-        </label>
+        </label> */}
       </Box>
       <Box >
         <input

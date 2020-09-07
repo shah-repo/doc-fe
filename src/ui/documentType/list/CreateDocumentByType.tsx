@@ -1,5 +1,6 @@
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import { Formik, FormikProps } from "formik";
 import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -8,22 +9,31 @@ import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks
 import { DocumentType, documentTypeActions, DocumentTypeById, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedId, documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
+import { useCreateDocumentByTypeButton } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
-import FormListDialog from "../FormListDialog/FormListDialog.presenter";
+import DocumentTypeDialog from "../dialogs/DocumentTypeDialog.presenter";
+import FormListDialog from "../dialogs/FormListDialog/FormListDialog.presenter";
 import { filterSecurityGroupsForQms } from "./helpers";
 import { styles } from "./styles";
 
 interface Props {
-  documentTypeName: string;
-  documentTypeId: string;
+  isByCategory: boolean;
+  labelName: string;
+  documentTypeId?: string;
+  categoryName?: string;
 }
 
+let selectedTypeLabel = "";
+let selectedDocumentTypeId: string;
+
 export const useHandleCreateDoc = () => {
+  const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const history = useHistory();
   const [form, setForm] = useState<DocumentRevision>();
@@ -41,7 +51,7 @@ export const useHandleCreateDoc = () => {
     }, onError: (msg) => redirect(),
   });
   const createDoc = (docId: string) => {
-    const formValues = toDocumentRevisionFormValuesForOutput(form as DocumentRevision);
+    const formValues = toDocumentRevisionFormValuesForOutput(form as DocumentRevision, selectedDocumentType);
     const outputDocumentTypes = form?.formTemplate?.outputDocumentTypes || [];
     const isQms = (outputDocumentTypes[0] as unknown as DocumentType)?.isQms;
     formValues.securityGroups = filterSecurityGroupsForQms(isQms, groupOptions);
@@ -63,9 +73,8 @@ export const useHandleCreateDoc = () => {
   };
 
   return (selectedForm: DocumentRevision) => {
-    const outputDocumentTypes = selectedForm?.formTemplate?.outputDocumentTypes || [];
-    if (outputDocumentTypes.length === 1 && !(outputDocumentTypes[0] as any)?.documentTypeAcronym?.startsWith("RC")) {
-      fetchDocIdAsync.start(fetchDocIdAction, (outputDocumentTypes[0] as any)?.id, fetchDocIdAsync);
+    if (selectedDocumentTypeId) {
+      fetchDocIdAsync.start(fetchDocIdAction, selectedDocumentTypeId, fetchDocIdAsync);
       setForm(selectedForm);
       return;
     }
@@ -74,23 +83,41 @@ export const useHandleCreateDoc = () => {
 };
 
 const CreateDocumentByType: React.FunctionComponent<Props> = ({
-  documentTypeName,
+  labelName,
   documentTypeId,
+  categoryName,
+  isByCategory,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();
-  const dialog = useDialog();
   const classes = styles();
+
+  const formDialog = useDialog();
+  const docTypeDialog = useDialog();
+
+  const getDocTypesByCategory = useActionCreator(documentTypeActions.getDocTypesByCategory);
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
+
   const formIds = useSelector(documentTypeSelectors.formIds);
+  const documentTypes = useSelector(documentTypeSelectors.getDocumentTypesByCategory);
+
   const [errorMessage, setErrorMessage] = useState<string>();
   const [multipleForm, toggleMultipleForm] = React.useState(false);
+  const [docTypeForm, toggleDocTypeForm] = React.useState(false);
+
+  const [isVisible, label] = useCreateDocumentByTypeButton(documentTypeId);
+  const buttonLabel = isByCategory ? labelName : label;
+
+  if (!isByCategory && documentTypeId) {
+    selectedDocumentTypeId = documentTypeId;
+  }
 
   useEffect(() => {
     setErrorMessage(undefined);
   }, [documentTypeId]);
 
-  const async = useAsync<DocumentTypeById>({
+  const idAsync = useAsync<DocumentTypeById>({
     onSuccess: () => {
+      toggleDocTypeForm(false);
       if (formIds.length === 1) {
         handleCreateDocument(formIds[0] as DocumentRevision);
         return;
@@ -100,23 +127,76 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         return;
       }
       toggleMultipleForm(true);
-      dialog.open();
+      formDialog.open();
     },
     onError: (msg) => setErrorMessage(msg),
   });
 
-  const openDocRev = () => {
+  const categoryAsync = useAsync<DocumentType[]>({
+    onSuccess: () => {
+      if (documentTypes.length === 1) {
+        selectedDocumentTypeId = documentTypes[0].id;
+        idAsync.start(getDocRevByIds, documentTypes[0].id, idAsync);
+        return;
+      }
+      if (isEmpty(documentTypes)) {
+        setErrorMessage("missing.type.error");
+        return;
+      }
+      toggleDocTypeForm(true);
+      docTypeDialog.open();
+    },
+    onError: (msg) => setErrorMessage(msg),
+  });
+
+  const handleAddButtonClick = () => {
     setErrorMessage(undefined);
-    async.start(getDocRevByIds, documentTypeId, async);
+    if (isByCategory) {
+      categoryAsync.start(getDocTypesByCategory, { category: categoryName }, categoryAsync);
+      return;
+    }
+    idAsync.start(getDocRevByIds, documentTypeId, idAsync);
+    return;
   };
 
-  const handleSelection = (docRevId) => {
+  const handleFormSelection = (docRevId) => {
     if (!docRevId) {
       return;
     }
     const selectedForm = formIds.find((form) => form.id === docRevId);
     handleCreateDocument(selectedForm as DocumentRevision);
   };
+
+  const handleDocTypeSelection = (docTypeId) => {
+    if (!docTypeId) {
+      return;
+    }
+    selectedDocumentTypeId = docTypeId;
+    selectedTypeLabel = documentTypes.find((type) => type.id === docTypeId)?.documentTypeName || "";
+    idAsync.start(getDocRevByIds, docTypeId, idAsync);
+  };
+
+  const renderDocumentTypeDialog = (props: FormikProps<any>) => (
+    <DocumentTypeDialog
+      {...props}
+      dialog={docTypeDialog}
+      handleSelection={handleDocTypeSelection}
+      documentTypes={documentTypes}
+    />
+  );
+
+  const renderFormListDialog = (props: FormikProps<any>) => (
+    <FormListDialog
+      {...props}
+      dialog={formDialog}
+      handleSelection={handleFormSelection}
+      formIds={formIds}
+    />
+  );
+
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <>
@@ -125,12 +205,12 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
           variant="contained"
           color="primary"
           className={classes.button}
-          onClick={openDocRev}
+          onClick={handleAddButtonClick}
           id="DocumentByTypeListPresenter-openDocRev"
         >
           <Text
-            translation="supplier.add.new"
-            values={{ name: documentTypeName }}
+            message={buttonLabel}
+            values={{ name: labelName }}
           />
         </Button>
       </Grid>
@@ -139,18 +219,28 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
           <div style={{ color: "red" }} id="DocumentByTypeListPresenter-showError">
             <Text
               message={errorMessage}
-              values={{ name: documentTypeName }}
+              values={{ name: isByCategory ? selectedTypeLabel : labelName }}
             />
           </div>
         )
       }
       {
-        multipleForm &&
-        <FormListDialog
-          dialog={dialog}
-          handleSelection={handleSelection}
-          formIds={formIds}
-        />
+        docTypeForm && (
+          <FormContext.Provider value={{ submitOnChange: false }}>
+            <Formik initialValues={{}} onSubmit={handleDocTypeSelection}>
+              {renderDocumentTypeDialog}
+            </Formik>
+          </FormContext.Provider>
+        )
+      }
+      {
+        multipleForm && (
+          <FormContext.Provider value={{ submitOnChange: false }}>
+            <Formik initialValues={{}} onSubmit={handleFormSelection}>
+              {renderFormListDialog}
+            </Formik>
+          </FormContext.Provider>
+        )
       }
     </>
   );

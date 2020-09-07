@@ -11,16 +11,14 @@ import Actions from "./Actions";
 interface Props {
   changeRequest?: ChangeRequest;
   asyncState: AsyncState;
-  selectedDocumentRevision: string | null;
 }
 
 export const FormHeader: React.FunctionComponent<Props> = ({
   changeRequest,
   asyncState,
-  selectedDocumentRevision,
 }) => (
   <Header>
-    {changeRequest && !selectedDocumentRevision &&
+    {changeRequest &&
         <HeaderInfo
           status={changeRequest.state}
           id={changeRequest.crId}

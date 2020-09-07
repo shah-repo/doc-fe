@@ -1,14 +1,21 @@
 import { ButtonProps } from "@material-ui/core/Button";
 import { FormikErrors } from "formik";
-import _ from "lodash";
+import { isEmpty } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
+import { GroupTag } from "../../../../state/ducks/auth/types";
 import { ChangeRequest, ChangeRequestStatus, ChangeRequestTransition } from "../../../../state/ducks/changeRequest";
 import { Approval, ApprovalStatus } from "../../../../state/ducks/documents";
 import HeaderMenu from "../../../components/common/header/Menu";
+import OwnerChangerContainer from "../../../components/common/owner.changer/container";
+import { RequestType } from "../../../components/common/owner.changer/helpers/types";
+import useGetHasTag from "../../../hooks/useGetHasTag";
 import ChangeRequestTransitionDialogContainer from "../../dialogs/ChangeRequestTransitionDialog.container";
+import { ChangeRequestWithdrawDialog } from "../../dialogs/ChangeRequestWithdrawDialog";
+import { canChangeCROwner } from "../../utils/helpers";
 import TransitionButton from "./TransitionButton";
+import AssessmentFormVoidContainer from "./Void";
 
 interface Props {
   changeRequest?: ChangeRequest;
@@ -20,9 +27,31 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
   errors,
 }) => {
   const currentUserEmail = useSelector(authSelectors.currentUserEmail);
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+  const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
+
+  const canChangeOwnerShip = React.useMemo(() => {
+    if (!changeRequest) {
+      return false;
+    }
+    return canChangeCROwner(changeRequest.state, currentEmployeeId, changeRequest?.owner.id, isCompanyAdmin);
+  }, [changeRequest, currentEmployeeId, isCompanyAdmin]);
+
   if (!changeRequest) {
     return null;
   }
+
+  const renderAlertDialogButton = (
+    showButton: boolean,
+    transition: ChangeRequestTransition,
+    buttonProps?: ButtonProps,
+  ) => showButton &&
+        <ChangeRequestWithdrawDialog
+          transition={transition}
+          changeRequestId={changeRequest.id}
+          buttonProps={buttonProps}
+          label={`changeRequest.transition.${transition}`}
+        />;
 
   const renderDialogButton = (
     showButton: boolean,
@@ -49,7 +78,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
         />;
 
 
-  const formHasErrors = !_.isEmpty(errors);
+  const formHasErrors = !isEmpty(errors);
   const isCurrentUserOwner = changeRequest.owner.user.email === currentUserEmail;
   const canWithdraw =
     isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.InReview;
@@ -68,13 +97,20 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
     (currentUserApproval as unknown as Approval).status === ApprovalStatus.Pending;
 
   return (
-    <HeaderMenu>
-      {renderTransitionButton(canWithdraw, "withdrawn")}
+    <>
       {renderTransitionButton(canSendToReview, "in_review")}
       {renderDialogButton(canApproveOrReject, "reject", { disabled: formHasErrors })}
       {renderDialogButton(canApproveOrReject, "approve", { disabled: formHasErrors })}
-      {renderTransitionButton(canClose, "closed")}
-    </HeaderMenu>
+      <HeaderMenu>
+        {canSendToReview && <AssessmentFormVoidContainer changeRequest={changeRequest} />}
+        {
+          canChangeOwnerShip &&
+           <OwnerChangerContainer requestId={changeRequest.id} requestType={RequestType.ChangeRequest}/>
+        }
+        {renderAlertDialogButton(canWithdraw, "withdrawn")}
+        {renderDialogButton(canClose, "closed")}
+      </HeaderMenu>
+    </>
   );
 };
 

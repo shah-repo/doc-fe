@@ -1,11 +1,7 @@
-import * as _ from "lodash";
-import { getStartOfDayDateString, toStartOfDay } from "../../../common/utils/date";
-import { Attachment } from "../../../state/ducks/attachments";
-import { Approver, Assessment, AssessmentType, ChangeRequest, ChangeRequestEditRequestBody, ImplementationPlan, ImplementationPlanRequest, ImplementationPlanTaskRequest, Justifications } from "../../../state/ducks/changeRequest";
+import { pick } from "lodash";
+import { ChangeRequest, ChangeRequestEditRequestBody } from "../../../state/ducks/changeRequest";
 import { reactQuillEmptyString } from "../../components/forms/fields/validators";
-import { ChangeRequestFormValues, ImplementationPlanFormValues, ImplementationPlanTaskFormValues } from "./types";
-
-type NestedObject = Justifications;
+import { ChangeRequestFormValues } from "./types";
 
 export interface OptionApproverType {
   value: string;
@@ -13,95 +9,15 @@ export interface OptionApproverType {
   groups: string[];
 }
 
-const createNestedObject = (value: NestedObject = { description: "", attachments: [] }) => ({
-  description: value.description,
-  attachments: value.attachments,
-});
-
-const createAssessment = (value: Assessment = {
-  design: { reasoning: "", attachments: [] },
-  process: { reasoning: "", attachments: [] },
-  regulatory: { reasoning: "", attachments: [] },
-}) => ({
-  design: { reasoning: value.design.reasoning, attachments: value.design.attachments },
-  process: { reasoning: value.process.reasoning, attachments: value.process.attachments },
-  regulatory: { reasoning: value.regulatory.reasoning, attachments: value.regulatory.attachments },
-});
-
-const toImplementationPlanFormValues = (plan: ImplementationPlan): ImplementationPlanFormValues => (
-  {
-    attachments: plan.attachments,
-    tasks: plan.tasks.map((task) => {
-      const taskForm: ImplementationPlanTaskFormValues = {
-        id: task.id,
-        status: task.status,
-        title: task.title,
-        description: task.description,
-        dueDate: toStartOfDay(task.dueDate),
-      };
-
-      if (task.assigned) {
-        taskForm.assigned = {
-          value: task.assigned.id,
-          label: task.assigned.user.name,
-        };
-      }
-      return taskForm;
-    }),
-  }
-);
-
 export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeRequestFormValues => {
   const values: ChangeRequestFormValues = {
     id: changeRequest.id,
     title: changeRequest.title,
-    assessments: createAssessment(changeRequest.assessments),
-    justifications: createNestedObject(changeRequest.justifications),
-    implementationPlan: toImplementationPlanFormValues(changeRequest.implementationPlan),
-    approvals: changeRequest.approvals.map((approval) => ({
-      label: approval.approver.user.name, value: approval.approver.id,
-    })),
-    effectiveDate: changeRequest.effectiveDate && toStartOfDay(changeRequest.effectiveDate),
-    documentRevisions: changeRequest.documentRevisions.map((documentRevision) => documentRevision.id ),
     description: changeRequest.description || reactQuillEmptyString,
+    formInput: changeRequest.formInput,
+    formDocument: changeRequest.formDocument,
   };
-
   return values;
-};
-
-const createNestedObjectForRequestBody = (value: NestedObject) => ({
-  description: value.description,
-  attachments: value.attachments.map((attachment) => ({ id: attachment.id })),
-});
-
-const toImplementationPlanEditRequestBody = (values: ImplementationPlanFormValues): ImplementationPlanRequest => {
-  const valuesTasks: ImplementationPlanTaskRequest[] = values.tasks.map((t) => {
-    const { assigned, dueDate, ...excluded } = t;
-    const normalizedDueDate = getStartOfDayDateString(dueDate);
-    if (assigned) {
-      return ({ assigned: { id: assigned.value }, dueDate: normalizedDueDate, ...excluded });
-    } else {
-      return ({ dueDate: normalizedDueDate, ...excluded });
-    }
-  });
-  return {
-    tasks: valuesTasks,
-    attachments: values.attachments.map((attachment) => ({ id: attachment.id })),
-  };
-};
-
-const createAssessmentObjectForRequestBody = (value: Assessment) => {
-  const assessments: any = createAssessment(value);
-
-  Object.values(AssessmentType).forEach((t) => {
-    const attachmentValue = _.get(value, `${t}.attachments`, null);
-    const itemAttachment = (attachmentValue) ?
-      attachmentValue.map((attachment: Attachment) => ({ id: attachment.id })) :
-      [];
-    const itemReasoning: string = _.get(value, `${t}.reasoning`, null);
-    assessments[t] = { attachments: itemAttachment, reasoning: itemReasoning };
-  });
-  return assessments;
 };
 
 export const toOptions = (values: any[]): OptionApproverType[] => values.map((value) => ({
@@ -122,16 +38,33 @@ export const toUniqGroupOptions = (approvers) => {
 };
 
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
-  const changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
+  let changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
+    ...pick(values, ["formDocument"]),
     title: values.title,
     description: values.description,
-    assessments: createAssessmentObjectForRequestBody(values.assessments),
-    implementationPlan: toImplementationPlanEditRequestBody(values.implementationPlan),
-    justifications: createNestedObjectForRequestBody(values.justifications),
-    approvals: (values.approvals || []).map((approver): Approver => ({ id: approver.value })),
-    effectiveDate: values.effectiveDate && getStartOfDayDateString(values.effectiveDate),
-    documentRevisions: values.documentRevisions.map((documentRevisionId) => ({ id: documentRevisionId })),
+    formInput: {
+      ...values.formInput,
+      effectiveDate: values.formInput?.effectiveDate === "" ? null : values.formInput?.effectiveDate,
+    },
   };
+  if (!values.id) {
+    changeRequestEditRequestBody = { ...changeRequestEditRequestBody, documentType: values.documentType };
+  }
+  return changeRequestEditRequestBody;
+};
 
+
+export const toChangeRequestUpdateRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
+  let changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
+    title: values.title,
+    description: values.description,
+    formInput: {
+      ...values.formInput,
+      effectiveDate: values.formInput?.effectiveDate === "" ? null : values.formInput?.effectiveDate,
+    },
+  };
+  if (!values.id) {
+    changeRequestEditRequestBody = { ...changeRequestEditRequestBody, documentType: values.documentType };
+  }
   return changeRequestEditRequestBody;
 };

@@ -1,9 +1,23 @@
 import { FBSchemaProps } from "../../../../ui/form.builder";
+import { Translation } from "../../../../ui/translations/types";
 import { GroupTag } from "../../auth/types";
 import { Nullable } from "../../common";
-import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST } from "./constants";
+import { FBFormTemplateProps } from "../types";
+import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, SET_DOCUMENT_TYPES_BY_CATEGORY } from "./constants";
 
-export type DocumentGroupType = "FORM" | "OTHER" | "RECORD" | "DAM" | "MPI" | "DYNAMIC_FORM" | "POAM" | "PO" | "WORK_ORDER";
+export type DocumentGroupType =
+  "FORM" |
+  "OTHER" |
+  "RECORD" |
+  "DAM" |
+  "MPI" |
+  "DYNAMIC_FORM" |
+  "POAM" |
+  "PO" |
+  "WORK_ORDER" |
+  "SUPPLIER" |
+  "PART";
+
 export type DocumentGroupOptionsType =
   "FORM" |
   "DAM" |
@@ -16,9 +30,30 @@ export type DocumentGroupOptionsType =
   "POAM" |
   "PO" |
   "WORK_ORDER" |
-  "WO_PARTS";
+  "WO_PARTS" |
+  "CHANGE_REQUEST" |
+  "BE_OUTPUT";
+
+export enum DOC_TYPE_GROUP_OPTION {
+  FORM = "FORM",
+  DAM = "DAM", // this can only go to DAM group
+  CAN_BE_OUTPUT = "CAN_BE_OUTPUT",
+  MUST_BE_OUTPUT = "MUST_BE_OUTPUT",
+  HAVE_OUTPUT = "HAVE_OUTPUT",
+  RECORD = "RECORD",
+  CHANGE_REQUEST = "CHANGE_REQUEST",
+  ONE_ITEM = "ONE_ITEM",
+  DYNAMIC_FORM = "DYNAMIC_FORM",
+  POAM = "POAM",
+  PO = "PO",
+  WORK_ORDER = "WORK_ORDER",
+  WO_PARTS = "WO_PARTS",
+  PART = "PART",
+  SUPPLIER = "SUPPLIER",
+  RECEIVABLE = "RECEIVABLE",
+}
 export interface PageDetailsColumn {
-  label: string;
+  label: Translation;
   sourcePath: string;
   valuePath: string;
 }
@@ -28,8 +63,9 @@ export interface PageDetailsAddNew {
 }
 
 export interface PageDetails {
-  addNew: PageDetailsAddNew;
+  addNewBtnLabel: string;
   columns: PageDetailsColumn[];
+  category: string;
 }
 export interface DocumentType {
   id: string;
@@ -53,6 +89,8 @@ export interface DocumentTypeByIdForm {
   name: string;
   id: string;
   document: DocumentForms;
+  formInput?: Record<string, any>;
+  formTemplate?: FBFormTemplateProps;
 }
 
 export interface DocumentTypeById {
@@ -70,6 +108,11 @@ export interface DocumentTypeListAction {
   payload: DocumentType[];
 }
 
+export interface DocumentTypeByCategoryAction {
+  type: typeof SET_DOCUMENT_TYPES_BY_CATEGORY;
+  payload: DocumentType[];
+}
+
 export interface DocumentTypeByIdState {
   [key: string]: DocumentType;
 }
@@ -77,6 +120,8 @@ export interface DocumentTypeByIdState {
 export type DocRevByIdState = DocumentTypeById;
 
 export type DocumentTypeAllIdsState = string[];
+
+export type DocumentTypeByCategoryState = DocumentType[];
 
 export type FieldConfig = { [key in FieldType]?: IFieldConfigItem };
 
@@ -122,6 +167,7 @@ export enum DisplayFieldType{
   CR_ID = "R",
   REVISE_BTN = "S",
   BOOKMARKS = "Q",
+  ADD_NEW_BTN = "V",
 }
 
 export type FieldType = InputFieldType | DisplayFieldType;

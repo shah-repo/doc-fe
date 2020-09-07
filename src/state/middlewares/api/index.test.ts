@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/await-thenable */
 import { AxiosRequestConfig } from "axios";
 import MockAdapter from "axios-mock-adapter";
 import _ from "lodash";
@@ -5,7 +6,6 @@ import { Action, Dispatch, Middleware, Store } from "redux";
 import Config from "../../../config";
 import apiInstance from "../../apiClient";
 import { apiAction } from "../../factories";
-import { ApplicationState } from "../../reducers";
 import initialStoreState from "../../tests/helpers/initialStoreState";
 import { ApiAction, AsyncAction, AsyncStatus } from "../../types";
 import api from "../api";
@@ -19,7 +19,6 @@ describe("api middleware test", () => {
   let store: Partial<Store>;
   let next: Dispatch;
   let invoke: (action: Action) => Middleware;
-  let defaultState: ApplicationState;
   let requestConfig: AxiosRequestConfig;
 
   const mockResponse = {
@@ -71,7 +70,7 @@ describe("api middleware test", () => {
     beforeAll(async () => {
       requestConfig = {};
 
-      ({ store, next, invoke, defaultState } = middlewareMockStore(api, state));
+      ({ store, next, invoke } = middlewareMockStore(api, state));
 
       action = apiAction({
         asyncType,
@@ -102,8 +101,7 @@ describe("api middleware test", () => {
     });
 
     it("sets Authorization in request headers", () => {
-      expect(requestConfig.headers).toMatchObject({
-        Authorization: `bearer ${EMPLOYEE_ID}:${SESSION_ID}` });
+      expect(requestConfig.headers).toMatchObject({ Authorization: `bearer ${EMPLOYEE_ID}:${SESSION_ID}` });
     });
 
     it("correctly configured axios requst", () => {
@@ -150,7 +148,7 @@ describe("api middleware test", () => {
     const dispatchCalls: any[] = [];
 
     beforeAll(async () => {
-      ({ store, next, invoke, defaultState } = middlewareMockStore(api));
+      ({ store, next, invoke } = middlewareMockStore(api));
 
       await invoke(apiAction({
         asyncType,
@@ -202,7 +200,7 @@ describe("api middleware test", () => {
   });
 
   it("correctly handles error as string", async () => {
-    ({ store, next, invoke, defaultState } = middlewareMockStore(api));
+    ({ store, next, invoke } = middlewareMockStore(api));
 
     const onFailure = jest.fn();
 
@@ -226,7 +224,7 @@ describe("api middleware test", () => {
   });
 
   it("does not dispatch async actions when asyncType is not defined", async () => {
-    ({ store, next, invoke, defaultState } = middlewareMockStore(api));
+    ({ store, next, invoke } = middlewareMockStore(api));
 
     await invoke(apiAction({ url: "/test", includeAuthorization: false }));
 
@@ -235,7 +233,7 @@ describe("api middleware test", () => {
 
   it("sets correct content type", async () => {
     requestConfig = {};
-    ({ store, next, invoke, defaultState } = middlewareMockStore(api));
+    ({ store, next, invoke } = middlewareMockStore(api));
 
     await invoke(apiAction({ url: "/test", includeAuthorization: false, contentType: "multipart/form-data" }));
 

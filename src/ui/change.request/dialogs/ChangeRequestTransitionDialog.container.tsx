@@ -6,7 +6,7 @@ import { ApplicationState } from "../../../state/reducers";
 import TransitionDialog from "../../components/transitionDialog/TransitionDialog";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
-import { PasswordFormValues } from "../form/types";
+import { EffectiveDateFormValues, PasswordFormValues } from "../form/types";
 
 interface OwnProps {
   changeRequestId: string;
@@ -30,20 +30,25 @@ export const TransitionDialogContainer: React.FunctionComponent<TransitionDialog
   label,
   onSuccess,
 }) => {
-  const dialog = useDialog();
+  const transitionDialog = useDialog();
+  const effectiveDateDialog = useDialog();
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {
       onSuccess && onSuccess();
-      dialog.close();
+      transitionDialog.close();
     },
   });
 
   const openDialog = () => {
     async.reset();
-    dialog.open();
+    if (transition === "closed") {
+      effectiveDateDialog.open();
+    } else {
+      transitionDialog.open();
+    }
   };
 
-  const onSubmit = (values: PasswordFormValues) => {
+  const onSubmit = (values: PasswordFormValues | EffectiveDateFormValues) => {
     async.start(
       applyTransition,
       changeRequestId, values, transition, async,
@@ -52,14 +57,16 @@ export const TransitionDialogContainer: React.FunctionComponent<TransitionDialog
 
   return (
     <TransitionDialog
-      isDialogOpen={dialog.isOpen}
       openDialog={openDialog}
-      closeDialog={dialog.close}
       onSubmit={onSubmit}
       asyncState={async.asyncState}
       buttonProps={buttonProps}
       transition={transition}
       label={label}
+      { ...{
+        transitionDialog,
+        effectiveDateDialog,
+      }}
     />
   );
 };

@@ -1,53 +1,86 @@
 import { Collapse, List } from "@material-ui/core";
-import { SvgIconProps } from "@material-ui/core/SvgIcon";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
-import _ from "lodash";
-import React, { ComponentType, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
+import { NavigationItem, NavigationItemType } from "../../state/ducks/company";
+import { DOCUMENT_BY_CATEGORY_ROOT_URL } from "../constants/urls";
 import NavigationLinkPresenter from "./NavigationLink.presenter";
 
-export interface LinkDefinition {
-  url: string;
-  text: string;
-  Icon?: ComponentType<SvgIconProps>;
-}
-
-export interface NavigationLinkContainerProps extends LinkDefinition {
-  childrenUrls?: LinkDefinition[];
+export interface NavigationLinkContainerProps extends NavigationItem {
   currentPath: string;
 }
 
-const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerProps> =
-  ({ url, text, Icon, childrenUrls = [], currentPath }) => {
-    const [isOpen, setIsOpen] = useState(false);
+const checkIfItemIsActive = (
+  type: NavigationItemType,
+  currentPath: string,
+  path?: string,
+  category?: string,
+  menu?: NavigationItem[],
+): boolean => {
+  switch (type) {
+    case "LINK":
+      return currentPath === path;
+    case "CATEGORY":
+      return currentPath === `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}`;
+    case "MENU":
+      return menu?.some((item) => checkIfItemIsActive(item.type, currentPath, item.path, item.category)) || false;
+    default:
+      return false;
+  }
+};
 
-    useEffect(() => {
-      const isChildActive = _.includes(childrenUrls.map((link) => link.url), currentPath);
-      setIsOpen(isChildActive);
-    }, [currentPath, childrenUrls]);
+const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerProps> = ({
+  type,
+  currentPath,
+  menu,
+  ...rest
+}) => {
 
-    const toggleChildren = (event: React.MouseEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
-      setIsOpen(!isOpen);
-    };
+  const [isOpen, setIsOpen] = useState(false);
 
-    const actionIcon = isOpen ? <ExpandLess onClick={toggleChildren} /> : <ExpandMore onClick={toggleChildren} />;
+  useEffect(() => {
+    const isItemActive = checkIfItemIsActive(type, currentPath, rest.path, rest.category, menu);
+    setIsOpen(isItemActive);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPath]);
 
-    const childrenList = childrenUrls.length === 0 ? null : (
-      <Collapse in={isOpen} timeout="auto" unmountOnExit={true}>
-        <List>
-          {childrenUrls.map((ld) => <NavigationLinkPresenter {...ld} key={ld.url} isChild={true} />)}
-        </List>
-      </Collapse>
-    );
-
-    return (
-      <React.Fragment>
-        <NavigationLinkPresenter url={url} text={text} Icon={Icon} ActionIcon={childrenUrls.length ? actionIcon : ""} />
-        {childrenList}
-      </React.Fragment>
-    );
+  const toggleChildren = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsOpen(!isOpen);
   };
+
+  const actionIcon = isOpen ? <ExpandLess onClick={toggleChildren} /> : <ExpandMore onClick={toggleChildren} />;
+
+  const childrenList = menu?.length === 0 ? null : (
+    <Collapse in={isOpen} timeout="auto" unmountOnExit={true}>
+      <List disablePadding>
+        {menu?.map((ld) => (
+          ld.type !== "MENU" &&
+          <NavigationLinkPresenter
+            {...ld}
+            key={ld.path || ld.category}
+            isChild={true}
+            currentPath={currentPath}
+            checkIfItemIsActive={checkIfItemIsActive}
+          />
+        ))}
+      </List>
+    </Collapse>
+  );
+  return (
+    <React.Fragment>
+      <NavigationLinkPresenter
+        {...{ type }}
+        {...rest}
+        ActionIcon={menu?.length ? actionIcon : ""}
+        toggleChildren={type === "MENU" ? toggleChildren : undefined}
+        currentPath={currentPath}
+        checkIfItemIsActive={checkIfItemIsActive}
+      />
+      {childrenList}
+    </React.Fragment>
+  );
+};
 
 export default NavigationLinkContainer;

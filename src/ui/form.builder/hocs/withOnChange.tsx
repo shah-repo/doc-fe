@@ -11,24 +11,18 @@ import { FBOnChangeProps, Subtract } from "../types/common";
 const customValidators = () => {
 
   Validator.register(
-    "", () => {
-      return true;
-    }, "",
+    "", () => true, "",
   );
 
   Validator.register(
     "required_document_status",
-    (value, requirement) => {
-      return _.get(value, "status") === requirement;
-    },
+    (value, requirement) => _.get(value, "status") === requirement,
     "The :attribute is not in required state.",
   );
 
   Validator.register(
     "required_document_type",
-    (value, requirement) => {
-      return _.get(value, "document.documentType.documentTypeAcronym") === requirement;
-    },
+    (value, requirement) => _.get(value, "document.documentType.documentTypeAcronym") === requirement,
     "The :attribute is not required type.",
   );
 };
@@ -60,7 +54,7 @@ export function withOnChange<T extends FBOnChangeProps>(
       value: React.ChangeEvent<HTMLInputElement>,
     ): value is React.ChangeEvent<HTMLInputElement> {
       return (
-        (value as React.ChangeEvent<HTMLInputElement>).target !== undefined
+        (value).target !== undefined
       );
     }
 
@@ -71,9 +65,10 @@ export function withOnChange<T extends FBOnChangeProps>(
       if (newValue && newValue.length > 0) {
         value = [newValue[0].value];
       } else {
+        let target;
         switch (true) {
           case trigger && this.isEvent(trigger):
-            const target = (trigger as React.ChangeEvent<HTMLInputElement>)
+            target = (trigger as React.ChangeEvent<HTMLInputElement>)
               .target;
             value = target.type === "checkbox" ? target.checked : target.value;
             break;
@@ -95,10 +90,10 @@ export function withOnChange<T extends FBOnChangeProps>(
       if (FBStore.mode === "form") {
         FBStore.setValues({
           ...FBStore.values,
-          [field.name as string]: value,
+          [field.name]: value,
         });
       }
-    }
+    };
 
     private validate = () => {
       const { form, field } = this.props;
@@ -109,8 +104,8 @@ export function withOnChange<T extends FBOnChangeProps>(
       }
 
       const validator = new Validator(
-          form.values,
-          rules,
+        form.values,
+        rules,
       );
 
       validator.setAttributeNames(
@@ -129,7 +124,7 @@ export function withOnChange<T extends FBOnChangeProps>(
       validator.passes(() => {
         FBValidatorStore.errors = {};
       });
-    }
+    };
   }
 
   return withFormik(observer(HOC));

@@ -18,6 +18,7 @@ export interface FieldOwnProps {
   variant?: "standard" | "outlined" | "filled";
   required?: boolean;
   gutter?: boolean;
+  minDate?: Date;
   actionsRenderer?: () => any;
 }
 
@@ -60,7 +61,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
     }
     return (
       label && (
-        <LabelField htmlFor={field.name}>
+        <LabelField htmlFor={field.name} style={{ position: "inherit" }}>
           <Typography
             variant={TypographySize[size]}
             className={classes.typography}
@@ -86,6 +87,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
       fullWidth={true}
       error={shouldDisplayError}
       className={classes.form}
+      data-cy={`field-${field.name}`}
       {...formControlProps}
     >
       {LabelComponent()}

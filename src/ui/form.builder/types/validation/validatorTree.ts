@@ -6,4 +6,4 @@ export type FBValidatorTreeProps =
     expanded?: string[];
     onNodeToggle?: (event: React.ChangeEvent<{}>, nodes: string[]) => void;
     items?: React.ReactNode[];
- };
+  };

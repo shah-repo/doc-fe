@@ -40,7 +40,7 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
   );
 
   const Items = options.map((option) => (
-    <MenuItem key={option.value} value={option.value}>
+    <MenuItem key={option.value} value={option.value} data-cy={`selectItem.${fieldProps.field.name}.${option.text}`}>
       <Text message={option.text} />
     </MenuItem>
   ));
@@ -50,6 +50,7 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
       <MuiSelect
         {...fieldProps.field}
         {...selectProps}
+        data-cy={`select.${fieldProps.field.name}`}
         input={<InputField name={fieldProps.field.name} {...inputFieldProps}/>}
         onChange={(evt, child) => {
           field.onChange(evt);

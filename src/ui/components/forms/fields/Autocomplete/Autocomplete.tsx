@@ -68,6 +68,10 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
     }
 
     setFieldValue(name, value);
+
+    if (onClick) {
+      onClick(value);
+    }
   };
 
   const stringify = (option: OptionType) => option.label;
@@ -87,6 +91,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
         onChange={onChange}
         styles={selectStyles}
         filterOption={filterOption}
+        data-cy={`select_${fieldProps.field.name}`}
         input={<InputField name={fieldProps.field.name} />}
         isDisabled={isDisabled}
         components={{ MultiValueRemove }}
@@ -103,7 +108,7 @@ FieldConfig &
 Partial<TypographyProps>;
 
 const AutocompleteField: React.FunctionComponent<
-AutocompleteFieldProps
+  AutocompleteFieldProps
 > = (props) => <FormikField component={Autocomplete} {...props} />;
 
 export default AutocompleteField;
