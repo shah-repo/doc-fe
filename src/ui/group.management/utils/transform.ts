@@ -58,6 +58,7 @@ export const toGroupOptions = (selectedGroup: LoadCompanyGroup): GroupRequestBod
   tags: selectedGroup.tags || [],
   employees: toArrayOfIds(selectedGroup.employees),
   parents: toArrayOfIds(selectedGroup.parents),
+  id: selectedGroup.id,
 });
 
 export const toIds = (options: OptionType[] | null) => {
