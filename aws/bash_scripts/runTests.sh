@@ -23,6 +23,7 @@ export REACT_APP_HELLOSIGN_TEST_MODE=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REA
 export REACT_APP_HELLOSIGN_CLIENT_ID=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_HELLOSIGN_CLIENT_ID 2>&1)
 
 yarn install --frozen-lockfile
+./scripts/cypress_generate_server_info.sh
 
 # Executing Test
 echo "-------- Executing Tests --------"
