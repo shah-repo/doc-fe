@@ -115,7 +115,9 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
 });
 
 Cypress.Commands.add("cmpClickCreateNewDocument", () => {
-  cy.get("[data-cy=\"document.revision.create\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
+    cy.get("[data-cy=\"document.revision.create\"]").click();
+  });
 });
 
 Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {

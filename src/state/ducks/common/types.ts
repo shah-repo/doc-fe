@@ -1,7 +1,13 @@
+import { ChangeRequest } from "../changeRequest";
+import { Employee } from "../company";
+import { DocumentRevision } from "../documentRevisions";
+
 export enum ApprovalStatus {
+  Draft = "DRAFT",
   Pending = "PENDING",
   Approved = "APPROVED",
   Rejected = "REJECTED",
+  Abandoned = "ABANDONED",
 }
 
 export interface Owner {
@@ -19,10 +25,15 @@ export interface User {
 export interface Approval {
   id: string;
   status: ApprovalStatus;
+  type: "MASTER" | "SECTION";
+  fieldId?: string;
   approver: Owner;
+  documentRevision?: DocumentRevision;
+  changeRequest?: ChangeRequest;
   reviewedAt?: string;
-  active: boolean;
   assignedAt?: string;
+  assigned: Partial<Employee>;
+  partOf?: Partial<DocumentRevision> | Partial<ChangeRequest>;
 }
 
 export interface Id {

@@ -272,7 +272,7 @@ context("PO approval test", () => {
     });
 
     it("Enter description 'POAM test", () => {
-      SystemRequirement("REQ-1290");
+      // SystemRequirement("REQ-1290");
       cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
     });
 
@@ -297,7 +297,7 @@ context("PO approval test", () => {
     });
 
     it("Check if error message says that approver must be added", () => {
-      SystemRequirement("REQ-1500");
+      // SystemRequirement("REQ-1500");
       cy.poAMCheckForAlertMessage();
     });
 
@@ -306,7 +306,7 @@ context("PO approval test", () => {
     });
 
     it("Check if selected approver has approval signature right by his name", () => {
-      SystemRequirement("REQ-1510");
+      // SystemRequirement("REQ-1510");
       cy.poAMCheckIfApproverHasApprovalSign();
     });
 
@@ -332,7 +332,7 @@ context("PO approval test", () => {
     });
 
     it("Withdraw PO that's set for approval", () => {
-      SystemRequirement("REQ-1530");
+      // SystemRequirement("REQ-1530");
       cy.arWithdrawSubmission();
     });
 
@@ -345,7 +345,7 @@ context("PO approval test", () => {
     });
 
     it("Enter description 'POAM test", () => {
-      SystemRequirement("REQ-1290");
+      // SystemRequirement("REQ-1290");
       cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
     });
 
@@ -358,7 +358,7 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Add Approver'", () => {
-      SystemRequirement("REQ-1490");
+      // SystemRequirement("REQ-1490");
       cy.poAMCheckForApproval();
     });
 
@@ -367,7 +367,7 @@ context("PO approval test", () => {
     });
 
     it("Create document in 'Pending for approval' state", () => {
-      SystemRequirement("REQ-1490");
+      // SystemRequirement("REQ-1490");
       cy.poAMApproveButton();
     });
 
@@ -387,7 +387,7 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Reject' AR and enter confirmation password", () => {
-      SystemRequirement("REQ-1570");
+      // SystemRequirement("REQ-1570");
       cy.poRejectAR({ password: "Tester1!" });
     });
 
@@ -408,7 +408,8 @@ context("PO approval test", () => {
     });
 
     it("Verify rejected PO status, should be 'Draft'", () => {
-      SystemRequirement("REQ-0020", "REQ-0570", "REQ-1570");
+      SystemRequirement("REQ-0020");
+      // SystemRequirement("REQ-0570", "REQ-1570");
       cy.poVerifyStatus({ status: "Draft" });
     });
   });
