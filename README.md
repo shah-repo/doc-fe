@@ -132,12 +132,24 @@ ENLIL_COMPOSE_PORT_RANGE_START=1234  ./scripts/cypress/run_dev.sh
 ```
 
 It will open cypress Test Runner window where you can execute one spec file at the time. https://docs.cypress.io/guides/core-concepts/test-runner.html#Overview
+
 #### Run Cypress in parallel, headless
-**(Optional)** Generate *CI_BUILD_ID*. Script `scripts/cypress/run_in_parallel.sh` executed with *CI_BUILD_ID* present in shell will **NOT** generate *CI_BUILD_ID*. Its recommended to generate CI_BUILD_ID manually so you can easily repeat test execution and upload results to BitBucket. 
+##### Generate CI_BUILD_ID
+**Required!!** Generate *CI_BUILD_ID*. Script `scripts/cypress/run_in_parallel.sh` executed without *CI_BUILD_ID* present in shell will **NOT** generate *CI_BUILD_ID* and will return and error. Generate *CI_BUILD_ID* manually. You can provide additional argument which will be appended to the timestamp.
 ```
 source ./scripts/cypress/generate_ci_build_id.sh
+# eg. CI_BUILED_ID is set to 2020-09-08T13:35:25+02:00
+```
+```
+source ./scripts/cypress/generate_ci_build_id.sh report_for_20.20
+# eg. CI_BUILED_ID is set to 2020-09-08T13:38:45+02:00_report_for_20.20
 ```
 
+##### Select CI_BUILD_ID
+Run script `./scripts/cypress/select_ci_build_id_from_results.sh`. It will list all ids used in last 2 days.
+
+
+##### Run Cypress
 Run script:
 ```
 ./scripts/cypress/run_in_parallel.sh
@@ -146,11 +158,9 @@ Optional environment variables:
 
 *NUMBER_OF_WORKERS* - number of workers :grin: , defaults to 4. Go as high as you can without having (too many?) specs failing due to timeouts or you system becomes unbearably slow.
 
-*CI_BUILD_ID* - Build ID, defaults to current ISO8601 timestamp. When you want to rerun tests, but only failing ones, you need to define it manually.
-
 Example
 ```
-NUMBER_OF_WORKERS=4 CI_BUILD_ID=2020-07-03T14:07:48+02:00 ./scripts/cypress/run_in_parallel.sh
+NUMBER_OF_WORKERS=4 ./scripts/cypress/run_in_parallel.sh
 ```
 
 #### Take screenshots after every step
