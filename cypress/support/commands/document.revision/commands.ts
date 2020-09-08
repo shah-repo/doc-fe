@@ -53,6 +53,7 @@ declare global {
       drUpgradeRevisionLevel(): Chainable<Subject>;
       drRoleExistsAndChecked(params: { group: number; role: string }): Chainable<Subject>;
       drNewTypeTrainingSelect(): Chainable<Subject>;
+      drClickDAMEditBtn(): Chainable<Subject>;
 
       /* Document Approval Matrix End */
       drCreateNewDocumentFromForm(): Chainable<Subject>;
@@ -125,6 +126,10 @@ Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
   list.forEach((item) => {
     cy.get("[id=\"referenceTo\"]").click().type(item + "{downarrow}{enter}");
   });
+});
+
+Cypress.Commands.add("drClickDAMEditBtn", () => {
+  cy.get("[data-cy=\"EditBtnDAM\"]").click();
 });
 
 Cypress.Commands.add("drCancelDraftButton", () => {
