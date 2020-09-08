@@ -12,13 +12,11 @@ import { withFBApprovals } from "./FBApprovals.wrap";
 
 const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
   approvals = [],
-  approvalsState,
   changeApprovalStatus,
   currentEmployeeId,
   disabled,
   docId,
   documentStatus,
-  formState,
   groups = {},
   isIncluded,
   label,
@@ -29,7 +27,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
 }) => {
   const classes = styles();
   return (
-    <FBProvider {...{ approvalsState, formState }}>
+    <FBProvider>
       {(documentStatus === DocumentStatus.Draft || documentStatus === DocumentStatus.InReview) && (
         <>
           <FBSection {...{ label }} />

@@ -9,16 +9,11 @@ import { store } from "../../../state/store";
 import { toastError } from "../../components/notifications";
 import { FBApprovalsProps, FBApprovalsStatusEndpoint } from "./FBApprovals.types";
 
-/* Hack for approvals being added twice.
-TODO: Remove once the double mounting problem is fixed. */
-let tempId = "";
-
 export const withFBApprovals = <T extends FBApprovalsProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     approvals,
-    approvalsState,
     name,
     loading,
     disabled,
@@ -39,7 +34,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       changeRequest,
       id,
     } = workspaceState || {};
-    approvalsState = FB.useRef(
+    const approvalsState = FB.useRef(
       FBApprovalsState,
       { id, approvals: document?.approvals || changeRequest?.approvals },
     );
@@ -83,11 +78,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
           if (!id) {
             toastError("Please save the document first.");
             return;
-            /* Condition below is a hack for approvals being added twice.
-            TODO: Remove once the double mounting problem is fixed. */
-          } else if (data.id !== tempId) {
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-            tempId = data.id;
+          } else {
             approvalsState?.addApproval({
               assigned: {
                 id: data.id,
@@ -101,7 +92,6 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     }, []);
 
     useObserver(() => {
-      console.log(loading);
       groups = approvalsState?.groups;
       loading = approvalsState?.loading;
     });
@@ -109,12 +99,10 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     return Component({
       ...(props as T),
-      approvalsState,
       approvals: approvalsState?.approvals,
       name,
       loading,
       disabled,
-      formState,
       documentStatus: document?.status,
       docId: id,
       changeApprovalStatus,

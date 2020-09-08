@@ -2,7 +2,7 @@ import { filter, isEmpty, map, template } from "lodash";
 import { observable } from "mobx";
 import { FBApprovalsStatusEndpoint } from ".";
 import { FBFormState } from "..";
-import { Approval, ApprovalStatus } from "../../../state/ducks/common";
+import { Approval } from "../../../state/ducks/common";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { FBJoinedEmployee, FBRequiredApprover } from "../FBApprovers";
@@ -29,19 +29,13 @@ export class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | 
   };
 
   public onSuccess() {
-    if (!this.data) { return; }
     if (
       this.method === "post"
     ) {
-      const { id } = this.data;
+      const { id } = this.data as Approval;
       const approvals = filter(this.approvals, (app) => app.id !== id);
-      const { status = "DRAFT" } = this.data || {};
-      const setApprovals: Partial<Record<ApprovalStatus | "default", () => any>> = {
-        ABANDONED: () => this.setApprovals(approvals),
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        default: () => this.setApprovals([...approvals, ...[this.data!]]),
-      };
-      (setApprovals[status] || setApprovals.default)?.();
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this.setApprovals([...approvals, ...[this.data!]]);
       this.formState?.reset();
     } else if (this.method === "get") {
       this.setGroups(this.data);
