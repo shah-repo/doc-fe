@@ -52,28 +52,28 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         addApprover(difference(fieldValue, formValue));
         removeApprover(difference(formValue, fieldValue));
       }
-    // react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     // Init
     React.useEffect(() => {
       const fieldValue = map(inlineApprovalState?.getApprovals, "approver.id");
       formState?.setFieldValue(`fb-ia-${name}`, fieldValue);
-    // react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // On transition
     React.useEffect(() => reaction(
       () => inlineApprovalState?.transitionApi.data,
       (data) => concatApprovals(data)
-    // react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     // On add approver
     React.useEffect(() => reaction(
       () => inlineApprovalState?.approvalApi.data,
       (data) => concatApprovals(data)
-    // react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     // Approvers list
@@ -85,7 +85,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       }, {
         fireImmediately: true,
       },
-    // react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     // Groups list
@@ -97,7 +97,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       }, {
         fireImmediately: true,
       },
-    // react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     // Roles list
@@ -109,7 +109,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       }, {
         fireImmediately: true,
       },
-    // react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     // MARK: @helpers
