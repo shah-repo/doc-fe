@@ -1,5 +1,8 @@
+import { GroupTag, GroupType, Permission } from "../../../../src/state/ducks/auth/types";
+import { Id } from "../../../../src/state/ducks/common/types";
+import { Employee } from "../../../../src/state/ducks/company/types";
 import { CONFIG } from "../../config";
-
+import { CyRoutes } from "../../routes";
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
 
@@ -35,8 +38,24 @@ declare global {
       grpSelectGroup(params: {name: string}): Chainable;
       grpCloseDialog(): Chainable;
       grpSelectUnofficial(): Chainable;
+      grpAPICreateNewGroup(params: {payload: Group; employeeId: string;  sessionId: string}): Chainable<Subject>;
+      grpCheckForNumberOfGroupMembersDisplayed(): Chainable;
     }
   }
+}
+
+interface Group {
+  id?: string;
+  name: string;
+  tags: Nullable<GroupTag[]>;
+  joinedTags?: Nullable<GroupTag[]>;
+  permissions: Permission[];
+  joinedPermissions?: Nullable<Permission[]>;
+  joinedParents?: Group[];
+  parents?: Group[];
+  joinedEmployees?: Employee[];
+  type?: GroupType;
+  employees: Id[];
 }
 
 Cypress.Commands.add("grpGetGroupByName", (params: {sessionId: string; employeeId: string;  groupName: string}) => {
@@ -176,8 +195,12 @@ Cypress.Commands.add("grpSaveGroup", () => {
 });
 
 Cypress.Commands.add("grpSelectGroup", (params: {name: string}) => {
-  cy.get("#clearFilter").click();
-  cy.get("#groupName").type(params.name);
+  cy.wrapWithWaitOnApiCall(CyRoutes.GroupsGet, () => {
+    cy.get("#clearFilter").click();
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.GroupsGet, () => {
+    cy.get("#groupName").type(params.name);
+  });
   cy.get(".ReactVirtualized__Table__rowColumn").contains(params.name).click();
   cy.grpCloseDialog();
 });
@@ -188,4 +211,27 @@ Cypress.Commands.add("grpCloseDialog", () => {
 
 Cypress.Commands.add("grpSelectUnofficial", () => {
   cy.get("#Group-unofficialOption").click();
+});
+
+Cypress.Commands.add("grpAPICreateNewGroup", (params: {
+  payload: Group;
+  employeeId: string;
+  sessionId: string;
+}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/groups`,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("grpCheckForNumberOfGroupMembersDisplayed", () => {
+  const hasFifteenOrLess = new RegExp("^([^,]+,){0,14}[^,]+$");
+  const hasZero = new RegExp("");
+  cy.get(".ReactVirtualized__Table__row > div:nth-child(2) > div > div > div").each((element) => {
+    expect(element.text()).to.match(hasFifteenOrLess || hasZero);
+  });
 });

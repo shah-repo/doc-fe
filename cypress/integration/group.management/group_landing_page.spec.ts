@@ -1,3 +1,4 @@
+import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -15,27 +16,15 @@ context("Group Landing Page Flow", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+            companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: "enlil.testmail+cy5@gmail.com",
+            importerEmail: USERS[5].email,
             maxRevisionStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [
-              {
-                name: "Second Tester",
-                email: "enlil.testmail+cy2@gmail.com",
-              },
-              {
-                name: "Third Tester",
-                email: "enlil.testmail+cy3@gmail.com",
-              },
-              {
-                name: "Fourth Tester",
-                email: "enlil.testmail+cy4@gmail.com",
-              }],
+            users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -47,7 +36,7 @@ context("Group Landing Page Flow", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -60,7 +49,7 @@ context("Group Landing Page Flow", () => {
   context("Login company admin", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy1@gmail.com",
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
@@ -96,7 +85,7 @@ context("Group Landing Page Flow", () => {
   });
 
 
-  context("Check if all groups are displayed", () => {
+  context("Check if all groups are displayed and have maximum 15 members displayed", () => {
     it("Verifies that group name filter is empty", () => {
       SystemRequirement("REQ-2610");
       cy.grpCheckIfNameFilterIsEmpty();
@@ -111,6 +100,11 @@ context("Group Landing Page Flow", () => {
       SystemRequirement("REQ-2610");
       cy.grpCheckIfTypeFilterIsEmpty();
     });
+
+    it("Verifies that 'Group members' column displays no more than 15 members", () => {
+      SystemRequirement("REQ-2590");
+      cy.grpCheckForNumberOfGroupMembersDisplayed();
+    });
   });
 
   context("Filter groups by each column", () => {
@@ -121,7 +115,7 @@ context("Group Landing Page Flow", () => {
 
     it("Filters groups by member", () => {
       SystemRequirement("REQ-2600");
-      cy.grpFilterByMembers({ member: "Company Admin" });
+      cy.grpFilterByMembers({ member: USERS[1].name });
     });
 
     it("Filters groups by type", () => {
@@ -132,7 +126,7 @@ context("Group Landing Page Flow", () => {
 
   context("Validate that filters are maintained during session", () => {
     const GROUP_NAME = "Everyone";
-    const GROUP_MEMBER = "Company Admin";
+    const GROUP_MEMBER = USERS[1].name;
     const GROUP_TYPE = "Official";
 
     it("Sets the filters", () => {

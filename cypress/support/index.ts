@@ -32,6 +32,7 @@ import "./commands/form.builder/commands";
 import "./commands/group.management/commands";
 import "./commands/navigation/commands";
 import "./commands/purchase.order/commands";
+import "./commands/receivable/commands";
 import "./commands/suppliers/commands";
 import "./commands/user.management/commands";
 import { CONFIG } from "./config";
@@ -66,3 +67,35 @@ Cypress.on("test:after:run", (test, runnable: any ) => {
     addScreenshotToContext(test, runnable, "Screenshot On Failure");
   }
 });
+
+export function PreventSkipOnFailure(this: Mocha.Context) {
+  if (!this.test) {
+    throw new Error(
+      "this not binded correctly. " +
+      "Callback in test case should not be arrow function.",
+    );
+  }
+  (this.test as any).DontSkipOnFailure = true;
+}
+
+function skipTestIfNeeded(this: any, ...args) {
+  cy.task("shouldSkip").then((value) => {
+    if (value) { this.skip(); }
+  });
+}
+
+function markFutureTestsForSkippingIfNeeded(this: any) {
+  const { state, DontSkipOnFailure } = this.currentTest;
+  if (!DontSkipOnFailure && state === "failed") {
+    return cy.task("shouldSkip", true);
+  }
+}
+
+if (CONFIG.SKIP_ON_RUN_FAILURE) {
+  beforeEach(skipTestIfNeeded);
+  afterEach(markFutureTestsForSkippingIfNeeded);
+  before(() => {
+    cy.task("resetShouldSkipFlag");
+  });
+}
+

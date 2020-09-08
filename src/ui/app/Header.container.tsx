@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { authActions, authSelectors } from "../../state/ducks/auth";
-import { companyActions } from "../../state/ducks/company";
+import { LOGIN_URL } from "../constants/urls";
 import FBStore from "../form.builder/stores/ui/FBStore";
 import HeaderPresenter from "./Header.presenter";
 
@@ -12,6 +12,7 @@ interface UserMenuContext {
   handleLogout: () => void;
   openUserProfile: () => void;
   hasMultipleCompanies: boolean;
+  handleSwitchCompany: () => void;
 }
 
 export let UserMenuContext = React.createContext<UserMenuContext | undefined>(undefined);
@@ -42,18 +43,21 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   };
 
   const closeUserProfile = () => setUserProfile(false);
-  useEffect(() => {
-    dispatch(companyActions.getCompanyMine());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const hasMultipleCompanies = useSelector(authSelectors.hasMultipleCompanies);
   const avatar = useSelector(authSelectors.currentEmployeeAvatar);
+
+  /** Handles click on the Switch Company button. */
+  const handleSwitchCompany = () => {
+    history.push(LOGIN_URL);
+    FBStore.clearStores();
+  };
 
   UserMenuContext = React.createContext<UserMenuContext | undefined>({
     openUserProfile,
     handleLogout,
     hasMultipleCompanies,
+    handleSwitchCompany,
   });
 
   return (

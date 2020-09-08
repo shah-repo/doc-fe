@@ -116,7 +116,7 @@ export class FBSchemaState {
   };
 
   @action public getSchemaItemAt = (index?: number): FBSchemaProps | undefined => {
-    if (_.isUndefined(index)) {
+    if (_.isUndefined(index) || !_.inRange(index, 0, this.schema?.length)) {
       return;
     }
     return this.schema && this.schema[index];

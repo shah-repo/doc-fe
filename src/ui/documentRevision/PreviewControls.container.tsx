@@ -90,7 +90,12 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const renderCloneButton = () => {
     if (hasAccess && canCreate() && showRevise) {
       return (
-        <Button color="secondary" variant="outlined" onClick={cloneDocument} id="PreviewControlsContainer-revise" >
+        <Button
+          color="secondary"
+          variant="outlined"
+          onClick={cloneDocument}
+          id="PreviewControlsContainer-revise"
+          data-cy="updateRecord" >
           <Text message={reviseLabel} />
         </Button>
       );

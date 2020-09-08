@@ -27,8 +27,7 @@
   ],
   "approval": [
     "approveIsBlocking",
-    "reviseDisabled",
-    "approvalNonVersioned"
+    "reviseDisabled"
   ],
   "textfield": [
     "reviseDisabled"

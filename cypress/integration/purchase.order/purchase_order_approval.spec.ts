@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 Cypress.Screenshot.defaults({
@@ -26,27 +27,15 @@ context("Create company via API and create Purchase Order Form document", () => 
       cy.cmpCreateCompany({
         specFilePath: __filename,
         payload: {
-          companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+          companyAdminEmail: USERS[1].email,
           helloSignIntegrationEnabled: false,
           helloSignTestMode: false,
-          importerEmail: "enlil.testmail+cy5@gmail.com",
+          importerEmail: USERS[5].email,
           maxRevisionStages: 3,
           numOfDocDigits: 5,
           remoteValidatorBundleName: "default",
           slackIntegrationEnabled: false,
-          users: [
-            {
-              name: "Second Tester",
-              email: "enlil.testmail+cy2@gmail.com",
-            },
-            {
-              name: "Third Tester",
-              email: "enlil.testmail+cy3@gmail.com",
-            },
-            {
-              name: "Fourth Tester",
-              email: "enlil.testmail+cy4@gmail.com",
-            }],
+          users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
                 documentTypeName: "PO Part",
@@ -60,7 +49,7 @@ context("Create company via API and create Purchase Order Form document", () => 
         }, sessionId: loginResponse.sessionId as unknown as string,
       }).then((response) => {
         createdCompany = response;
-        adminEmployee = createdCompany.employees.find((employee) => employee.user.name === "Company Admin");
+        adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
         createdCompany.documentTypes.forEach((item: { documentTypeName: string; id: any }) => {
           if (item.documentTypeName == "Purchase Order")
           {
@@ -74,7 +63,7 @@ context("Create company via API and create Purchase Order Form document", () => 
 
   it("[API] Updates company", (done: any) => {
     cy.authApiLogin({
-      email: "enlil.testmail+cy1@gmail.com",
+      email: USERS[1].email,
       password: "Tester1!",
     }).then((response) => {
       loginResponse = response;
@@ -136,7 +125,7 @@ context("Create company via API and create Purchase Order Form document", () => 
 
   it("[API] Login second tester", (done: any) => {
     cy.authApiLogin({
-      email: "enlil.testmail+cy2@gmail.com",
+      email: USERS[2].email,
       password: "Tester1!",
     }).then((response) => {
       loginResponse = response;
@@ -147,7 +136,7 @@ context("Create company via API and create Purchase Order Form document", () => 
 
   it("Logs user in", () => {
     cy.authLogin({
-      email: "enlil.testmail+cy2@gmail.com",
+      email: USERS[2].email,
       password: "Tester1!",
     });
   });
@@ -197,7 +186,7 @@ context("Create company via API and create Purchase Order Form document", () => 
   });
 
   it("Click create document after filling document", () => {
-    cy.drClickCreateDocument();
+    cy.drClickCreateDocumentWithApiCall();
   });
 
   it("Approve and release document", () => {
@@ -247,7 +236,7 @@ context("Create Purchase Order Approval Matrix document with from Form document"
   });
 
   it("Click create document after filling document", () => {
-    cy.drClickCreateDocument();
+    cy.drClickCreateDocumentWithApiCall();
   });
 
   it("Approve and release document", () => {
@@ -278,8 +267,8 @@ context("Create Purchase Order Approval Matrix document with from Form document"
     cy.poAMEnterLimit({ limit: "200" });
   });
 
-  it("Select Users 'Second Tester'", () => {
-    cy.poAMSelectUsers("Second Tester");
+  it(`Select Users '${USERS[2].name}'`, () => {
+    cy.poAMSelectUsers(USERS[2].name);
   });
 
   it("Add first POAM level", () => {
@@ -298,8 +287,8 @@ context("Create Purchase Order Approval Matrix document with from Form document"
     cy.poAMEnterLimit({ limit: "400" });
   });
 
-  it("Select Users 'Third Tester'", () => {
-    cy.poAMSelectUsers("Third Tester");
+  it(`Select Users '${USERS[3].name}'`, () => {
+    cy.poAMSelectUsers(USERS[3].name);
   });
 
   it("Add second POAM level", () => {
@@ -354,8 +343,8 @@ context("Test the POAM when approving Purchase Order", () => {
     cy.poAMCheckForAlertMessage();
   });
 
-  it("Select 'Thrid Tester' as approver", () => {
-    cy.poAMSelectApprover("Third Tester");
+  it(`Select '${USERS[3].name}' as approver`, () => {
+    cy.poAMSelectApprover(USERS[3].name);
   });
 
   it("Check if selected approver has approval signature right by his name", () => {
@@ -414,8 +403,8 @@ context("Test the POAM when approving Purchase Order", () => {
     cy.poAMCheckForApproval();
   });
 
-  it("Select 'Thrid Tester' as approver", () => {
-    cy.poAMSelectApprover("Third Tester");
+  it(`Select '${USERS[3].name}' as approver`, () => {
+    cy.poAMSelectApprover(USERS[3].name);
   });
 
   it("Create document in 'Pending for approval' state", () => {
@@ -423,13 +412,13 @@ context("Test the POAM when approving Purchase Order", () => {
     cy.poAMApproveButton();
   });
 
-  it("Log out with 'Second Tester'", () => {
+  it(`Log out with '${USERS[2].name}'`, () => {
     cy.authLogout();
   });
 
-  it("Log in with 'Third Tester'", () => {
+  it(`Log in with '${USERS[3].name}'`, () => {
     cy.authLogin({ 
-      email: "enlil.testmail+cy3@gmail.com", 
+      email: USERS[3].email, 
       password: "Tester1!" });
   });
 
@@ -460,7 +449,8 @@ context("Test the POAM when approving Purchase Order", () => {
 
   it("Verify rejected PO status, should be 'Draft'", () => {
     SystemRequirement("REQ-1570");
-    cy.poVerifyStatus({ status: "Draft"});
+    SystemRequirement("REQ-0020");
+    cy.poVerifyStatus({ status: "Draft" });
   });
 });
 

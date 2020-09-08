@@ -1,3 +1,4 @@
+import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -15,27 +16,15 @@ context("Document Creation Flow", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: "enlil.testmail+cy1@gmail.com",
+            companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: "enlil.testmail+cy5@gmail.com",
+            importerEmail: USERS[5].email,
             maxRevisionStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [
-              {
-                name: "Second Tester",
-                email: "enlil.testmail+cy2@gmail.com",
-              },
-              {
-                name: "Third Tester",
-                email: "enlil.testmail+cy3@gmail.com",
-              },
-              {
-                name: "Fourth Tester",
-                email: "enlil.testmail+cy4@gmail.com",
-              }],
+            users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -47,7 +36,7 @@ context("Document Creation Flow", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -60,7 +49,7 @@ context("Document Creation Flow", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: "enlil.testmail+cy2@gmail.com",
+        email: USERS[2].email,
         password: "Tester1!",
       });
     });
@@ -99,6 +88,21 @@ context("Document Creation Flow", () => {
       cy.drCheckIfDocumentIdMatches({ docId: "CS-00003" });
     });
 
+    it("Set document type id manually to 'CS-00999'", () => {
+      SystemRequirement("REQ-0170");
+      cy.drSetDocTypeId({ docId: "00999" });
+    });
+
+    it("Select reference for document", () => {
+      SystemRequirement("REQ-0180");
+      cy.drSelectReferences( "Initial AR Form", "Inline Approve Form" );
+    });
+
+    it("Remove reference for document", () => {
+      SystemRequirement("REQ-0190");
+      cy.drRemoveReferences( 1 );
+    });
+
     context("Uploads attachments", () => {
       it("Uploads text.docx", () => {
         cy.atchUploadAttachment({ fileName: "test.docx" });
@@ -117,7 +121,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Check image.jpg attachment atributes", () => {
-        cy.atchCheckAtributes({ fileName: "image.jpg", attributes: "329.33 kB JPG File" });
+        cy.atchCheckAtributes({ fileName: "image.jpg", attributes: "48.45 kB JPG File" });
       });
 
       it("Check two attachment are displayed: test.docx, image.jpg", () => {
@@ -145,13 +149,14 @@ context("Document Creation Flow", () => {
 
   context("Creates document", () => {
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocument();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
   context("Document in Draft", () => {
     it("Check if document status is Draft after creating a document", () => {
       SystemRequirement("REQ-0330");
+      SystemRequirement("REQ-0020");
       cy.drCheckDocumentStatus({ status: "Draft" });
     });
 
@@ -161,7 +166,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Check test.docx attachment atributes", () => {
-        cy.atchCheckAtributes({ fileName: "test_image.jpg", attributes: "373.56 kB JPG File" });
+        cy.atchCheckAtributes({ fileName: "test_image.jpg", attributes: "79.54 kB JPG File" });
       });
 
       it("Check two attachments are displayed: test.docx, test_image.jpg", () => {
@@ -173,7 +178,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Check test.docx attachment atributes", () => {
-        cy.atchCheckAtributes({ fileName: "image.jpg", attributes: "329.33 kB JPG File" });
+        cy.atchCheckAtributes({ fileName: "image.jpg", attributes: "48.45 kB JPG File" });
       });
 
       it("Check three attachments are displayed: test.docx, image.jpg, test_image.jpg", () => {
@@ -194,7 +199,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Save document after setting primary attachment", () => {
-        cy.drClickCreateDocument();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Remove attachment test_image.jpg", () => {

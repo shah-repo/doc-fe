@@ -1,5 +1,6 @@
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import { Formik, FormikProps } from "formik";
 import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -8,6 +9,7 @@ import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks
 import { DocumentType, documentTypeActions, DocumentTypeById, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedId, documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
@@ -27,7 +29,11 @@ interface Props {
   categoryName?: string;
 }
 
+let selectedTypeLabel = "";
+let selectedDocumentTypeId: string;
+
 export const useHandleCreateDoc = () => {
+  const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const history = useHistory();
   const [form, setForm] = useState<DocumentRevision>();
@@ -45,7 +51,7 @@ export const useHandleCreateDoc = () => {
     }, onError: (msg) => redirect(),
   });
   const createDoc = (docId: string) => {
-    const formValues = toDocumentRevisionFormValuesForOutput(form as DocumentRevision);
+    const formValues = toDocumentRevisionFormValuesForOutput(form as DocumentRevision, selectedDocumentType);
     const outputDocumentTypes = form?.formTemplate?.outputDocumentTypes || [];
     const isQms = (outputDocumentTypes[0] as unknown as DocumentType)?.isQms;
     formValues.securityGroups = filterSecurityGroupsForQms(isQms, groupOptions);
@@ -67,17 +73,14 @@ export const useHandleCreateDoc = () => {
   };
 
   return (selectedForm: DocumentRevision) => {
-    const outputDocumentTypes = selectedForm?.formTemplate?.outputDocumentTypes || [];
-    if (outputDocumentTypes.length === 1 && !(outputDocumentTypes[0] as any)?.documentTypeAcronym?.startsWith("RC")) {
-      fetchDocIdAsync.start(fetchDocIdAction, (outputDocumentTypes[0] as any)?.id, fetchDocIdAsync);
+    if (selectedDocumentTypeId) {
+      fetchDocIdAsync.start(fetchDocIdAction, selectedDocumentTypeId, fetchDocIdAsync);
       setForm(selectedForm);
       return;
     }
     redirect(selectedForm);
   };
 };
-
-let selectedTypeLabel = "";
 
 const CreateDocumentByType: React.FunctionComponent<Props> = ({
   labelName,
@@ -104,6 +107,10 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const [isVisible, label] = useCreateDocumentByTypeButton(documentTypeId);
   const buttonLabel = isByCategory ? labelName : label;
 
+  if (!isByCategory && documentTypeId) {
+    selectedDocumentTypeId = documentTypeId;
+  }
+
   useEffect(() => {
     setErrorMessage(undefined);
   }, [documentTypeId]);
@@ -128,6 +135,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const categoryAsync = useAsync<DocumentType[]>({
     onSuccess: () => {
       if (documentTypes.length === 1) {
+        selectedDocumentTypeId = documentTypes[0].id;
         idAsync.start(getDocRevByIds, documentTypes[0].id, idAsync);
         return;
       }
@@ -163,9 +171,28 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     if (!docTypeId) {
       return;
     }
+    selectedDocumentTypeId = docTypeId;
     selectedTypeLabel = documentTypes.find((type) => type.id === docTypeId)?.documentTypeName || "";
     idAsync.start(getDocRevByIds, docTypeId, idAsync);
   };
+
+  const renderDocumentTypeDialog = (props: FormikProps<any>) => (
+    <DocumentTypeDialog
+      {...props}
+      dialog={docTypeDialog}
+      handleSelection={handleDocTypeSelection}
+      documentTypes={documentTypes}
+    />
+  );
+
+  const renderFormListDialog = (props: FormikProps<any>) => (
+    <FormListDialog
+      {...props}
+      dialog={formDialog}
+      handleSelection={handleFormSelection}
+      formIds={formIds}
+    />
+  );
 
   if (!isVisible) {
     return null;
@@ -198,18 +225,22 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         )
       }
       {
-        docTypeForm && <DocumentTypeDialog
-          dialog={docTypeDialog}
-          handleSelection={handleDocTypeSelection}
-          documentTypes={documentTypes}
-        />
+        docTypeForm && (
+          <FormContext.Provider value={{ submitOnChange: false }}>
+            <Formik initialValues={{}} onSubmit={handleDocTypeSelection}>
+              {renderDocumentTypeDialog}
+            </Formik>
+          </FormContext.Provider>
+        )
       }
       {
-        multipleForm && <FormListDialog
-          dialog={formDialog}
-          handleSelection={handleFormSelection}
-          formIds={formIds}
-        />
+        multipleForm && (
+          <FormContext.Provider value={{ submitOnChange: false }}>
+            <Formik initialValues={{}} onSubmit={handleFormSelection}>
+              {renderFormListDialog}
+            </Formik>
+          </FormContext.Provider>
+        )
       }
     </>
   );

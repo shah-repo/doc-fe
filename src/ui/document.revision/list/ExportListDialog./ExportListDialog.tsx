@@ -19,7 +19,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   dialog,
   headers,
   data,
-  fileName,
+  fileName = "DocumentList",
   saveFileName,
 }) => {
   const classes = styles();
@@ -73,26 +73,34 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
             >
               <Text translation="common.cancel" />
             </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              className={classes.submitButton}
-              id="ExportListDialog-downloadButton"
-              data-cy="ExportListDialog-downloadButton"
-              onClick={dialog.close}
-              disabled={fileName === ""}
+            <div
+              style = {{
+                flexGrow: 1,
+              }}
             >
               <CSVLink
                 data={data}
                 headers={headers}
                 filename={fileName + ".csv"}
-                style={{ textDecoration: "none" }}
-                target="_blank"
+                style={{ textDecoration: "none", display: "flex" }}
+                asyncOnClick={true}
+                onClick={(event, done) => {
+                  dialog.close();
+                }}
                 ref={csvRef}
               >
-                <Text translation="common.download" />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  className={classes.submitButton}
+                  id="ExportListDialog-downloadButton"
+                  data-cy="ExportListDialog-downloadButton"
+                  onClick={() => csvRef.current.handleClick()}
+                >
+                  <Text translation="common.download" />
+                </Button>
               </CSVLink>
-            </Button>
+            </div>
           </Box>
         </Dialog>
       }

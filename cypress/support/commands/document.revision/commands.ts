@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable max-len */
+import { int } from "aws-sdk/clients/datapipeline";
 import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
@@ -18,7 +19,8 @@ declare global {
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drCloseApproveAndReleaseDialog(): Chainable<Subject>;
-      drClickCreateDocument(): Chainable<Subject>;
+      drClickCreateDocumentWithApiCall(): Chainable<Subject>;
+      drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
       drCheckIfDocumentIdMatches(params: { docId: string }): Chainable<Subject>;
@@ -33,6 +35,11 @@ declare global {
       closeAllAlertMessages(): Chainable<Subject>;
       checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
       drCreateNewDocumentFromForm(): Chainable<Subject>;
+      drAPIApproveAndRelease(params: { documentId: string; payload: IApproveAndReleasePayload; employeeId: string; sessionId: string }): Chainable<Subject>;
+      drSetDocTypeId(params: { docId: string }): Chainable<Subject>;
+      drSelectReferences(...list: string[]): Chainable<Subject>;
+      drRemoveReferences(...list: int[]): Chainable<Subject>;
+      drSelectReleasedVersionOfDocument(params: { docVersion: int }): Chainable<Subject>;
     }
   }
 }
@@ -62,12 +69,29 @@ Cypress.Commands.add("drGetDocumentType", (params: { employeeId: string; session
   }).then((response) => response);
 });
 
+Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get("[id=\"referenceTo\"]").click().type(item + "{downarrow}{enter}");
+  });
+});
+
+
+Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion: int }) => {
+  cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(params.docVersion).click().wait(2000);
+});
+
+Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
+  list.forEach((item) => {
+    cy.get("[class=\"circle_remove\"]").eq(item).click({ force: true });
+  });
+});
+
 Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
   cy.get("[data-cy=\"field-name\"]").type(params.name);
 });
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
-  cy.get("[data-cy=\"field-description\"]").click().type(params.description);
+  cy.get("[data-cy=\"field-description\"]").type(params.description);
 });
 
 Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) => {
@@ -95,8 +119,16 @@ Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
   cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").click();
 });
 
-Cypress.Commands.add("drClickCreateDocument", () => {
-  cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click().wait(2000);
+Cypress.Commands.add("drClickCreateDocumentWithApiCall", () => {
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.PostOrPatchDocRev,
+    () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    });
+});
+
+Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
+  cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
@@ -110,6 +142,10 @@ Cypress.Commands.add("drCheckIfDocumentIdIsGenerated", () => {
 
 Cypress.Commands.add("drCheckIfDocumentIdMatches", (params: { docId: string }) => {
   cy.get("[id=\"document.docId\"]").should("have.value", params.docId);
+});
+
+Cypress.Commands.add("drSetDocTypeId", (params: { docId: string }) => {
+  cy.get("[id=\"document.docId\"]").type("{backspace}{backspace}{backspace}{backspace}{backspace}" + params.docId);
 });
 
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {
@@ -169,3 +205,26 @@ Cypress.Commands.add("closeAllAlertMessages", () => {
 Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
   cy.get("[id=\"PreviewControlsContainer-createNew\"]").click();
 });
+
+export interface IApproveAndReleasePayload{
+  effectiveDate: string;
+  documentType: { id: string };
+  formDocument: { id: string };
+}
+
+Cypress.Commands.add("drAPIApproveAndRelease", (params: {
+  documentId: string;
+  payload: IApproveAndReleasePayload;
+  employeeId: string;
+  sessionId: string;
+}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/document_revisions/release/` + params.documentId,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
