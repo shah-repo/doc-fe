@@ -38,7 +38,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   });
   const getCompanyMine = useActionCreator(companyActions.getCompanyMine);
 
-  const navigationItems = useSelector(companySelectors.getNavigationItems)
+  const navigationItems = (useSelector(companySelectors.getNavigationItems) || [])
     .reduce<NavigationItem[]>((acc, item) => {
       if (itemAllowedForUser(item, userTags)) {
         if (item.type === "MENU") {
