@@ -782,6 +782,8 @@
   "record.select.create.title": "Select the type of record you want to create",
   "record.finalize.and.release": "Finalize and Release",
   "record.release.alert": "You are about to release this record. Would you like to continue?",
+  "record.required.approvals": "Required Approvals",
+  "record.remove.approval": "Remove Approval",
   "document.select.create.title": "Select the type of document you want to create",
   "watermark.successfully.requested": "{fileType} copy of {file}.{type} successfully requested. We will notify you when it's ready to download.",
   "watermark.file": "Watermarked",
