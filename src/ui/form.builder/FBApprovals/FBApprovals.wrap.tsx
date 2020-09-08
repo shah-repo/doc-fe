@@ -18,6 +18,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 ) => {
   const Comp = ({
     approvals,
+    approvalsState,
     name,
     loading,
     disabled,
@@ -38,7 +39,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       changeRequest,
       id,
     } = workspaceState || {};
-    const approvalsState = FB.useRef(
+    approvalsState = FB.useRef(
       FBApprovalsState,
       { id, approvals: document?.approvals || changeRequest?.approvals },
     );
@@ -100,15 +101,16 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     }, []);
 
     useObserver(() => {
+      console.log(loading);
       groups = approvalsState?.groups;
-      approvals = approvalsState?.approvals;
+      loading = approvalsState?.loading;
     });
 
 
     return Component({
       ...(props as T),
       approvalsState,
-      approvals,
+      approvals: approvalsState?.approvals,
       name,
       loading,
       disabled,

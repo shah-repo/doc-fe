@@ -1,14 +1,16 @@
-import { isEmpty, map, template } from "lodash";
-import { observable, set } from "mobx";
+import { filter, isEmpty, map, template } from "lodash";
+import { observable } from "mobx";
 import { FBApprovalsStatusEndpoint } from ".";
-import { Approval } from "../../../state/ducks/common";
+import { FBFormState } from "..";
+import { Approval, ApprovalStatus } from "../../../state/ducks/common";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { FBJoinedEmployee, FBRequiredApprover } from "../FBApprovers";
 
-export class FBApprovalsState extends FBRequest<any, any> {
+export class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approval> {
   @observable public groups?: Record<string, FBRequiredApprover> = {};
-  @observable public approvals?: Approval[];
+  public approvals?: Approval[];
+  private formState?: FBFormState;
 
   public constructor({ id, approvals }) {
     super();
@@ -26,27 +28,36 @@ export class FBApprovalsState extends FBRequest<any, any> {
     this.fetch();
   };
 
-  protected onSuccess() {
-    super.onSuccess();
+  public onSuccess() {
+    if (!this.data) { return; }
     if (
       this.method === "post"
-      && this.data
-      && !this.approvals?.find((app) => app.id === this.data?.id)
     ) {
-      const newApprovals = this.approvals || [];
-      newApprovals.push(this.data);
-      set(this, "approvals", newApprovals);
+      const { id } = this.data;
+      const approvals = filter(this.approvals, (app) => app.id !== id);
+      const { status = "DRAFT" } = this.data || {};
+      const setApprovals: Partial<Record<ApprovalStatus | "default", () => any>> = {
+        ABANDONED: () => this.setApprovals(approvals),
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        default: () => this.setApprovals([...approvals, ...[this.data!]]),
+      };
+      (setApprovals[status] || setApprovals.default)?.();
+      this.formState?.reset();
     } else if (this.method === "get") {
-      this.groups = (this.data || []).reduce((group, item) => {
-        group[item.id] = {
-          ...item,
-          joinedEmployees: map(item.joinedEmployees as FBJoinedEmployee[], "id"),
-        };
-        return group;
-      }, {});
-      return this.data;
+      this.setGroups(this.data);
     }
+    super.onSuccess();
   }
+
+  private setGroups = (data) => {
+    this.groups = (data || []).reduce((group, item) => {
+      group[item.id] = {
+        ...item,
+        joinedEmployees: map(item.joinedEmployees as FBJoinedEmployee[], "id"),
+      };
+      return group;
+    }, {});
+  };
 
   public setApprovals = (approvals?: Approval[]) => {
     this.approvals = approvals;
