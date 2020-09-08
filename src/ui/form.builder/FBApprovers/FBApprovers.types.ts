@@ -10,6 +10,10 @@ export type FBApproversProps =
   value?: string[];
 };
 
+export interface FBId {
+  id: string;
+}
+
 export interface FBEmployee {
   id: string;
   user: FBUser;
@@ -23,11 +27,13 @@ export interface FBUser {
 
 export interface FBGroup {
   id: string;
+  name?: string;
   employees: FBEmployee[];
 }
 
 export interface FBApprover {
   id: string;
+  name?: string;
   user?: FBUser;
 }
 

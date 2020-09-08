@@ -18,7 +18,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   filterSelectedOptions = false,
   freeSolo = false,
   multiple = false,
-  options = [],
+  options,
   defaultValue,
   includeQRScan,
   optionLabelKey = "",

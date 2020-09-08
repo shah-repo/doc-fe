@@ -1,10 +1,11 @@
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
 import { UseAutocompleteProps } from "@material-ui/lab/useAutocomplete";
-import { FBInputProps } from "..";
+import { FBAutocompleteAsyncConfig, FBInputProps } from "..";
 
 export type FBAutocompleteProps =
  & FBInputProps
  & Pick<Partial<AutocompleteProps>, "renderOption">
+ & Pick<FBAutocompleteAsyncConfig, "labelPrefixRoot">
  & Pick<UseAutocompleteProps,
  | "getOptionLabel"
  | "filterOptions"

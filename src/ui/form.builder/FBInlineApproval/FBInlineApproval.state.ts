@@ -1,26 +1,63 @@
-import { action, observable, set } from "mobx";
-import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBInlineApprovalOptions } from "..";
+import { filter, map, uniqBy } from "lodash";
+import { action, computed, observable, set } from "mobx";
+import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalOptions, FBInlineApprovalTransition } from "..";
+import { FBEndpoint } from "../defaults/FBEndpoint";
+import FBRequest from "../FBApi/FBApi.request";
 
 export class FBInlineApprovalState {
+  // MARK: @observable
   @observable public options?: FBInlineApprovalOptions[];
-  public approversApi = new FBAutocompleteAsyncState(this.approversId);
-  public groupsApi = new FBAutocompleteAsyncState(this.groupsId);
-  public rolesApi = new FBAutocompleteAsyncState(this.approvalRolesId);
+  @observable approvals?: FBInlineApprovalBody[];
 
-  public get approversId(): string {
-    return FBAutocompleteAsyncOption.availableApprovers;
+  // MARK: @config
+  private isOwner?: boolean;
+
+  // MARK: @api
+  public approversApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.availableApprovers);
+  public groupsApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.groups);
+  public rolesApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.approvalRoles);
+  public approvalApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalBody>(FBEndpoint.Approvals);
+  public transitionApi = new FBRequest<FBInlineApprovalBody, null>();
+
+  // MARK: @constructor
+  public constructor({ approvals, isOwner }: FBInlineApprovalConstructor) {
+    this.approvals = filter(approvals, (a) => a.status !== "ABANDONED");
+    this.isOwner = isOwner;
+    const approvers = map(approvals, "approver");
+    this.options = map(approvers, (o) => ({ ...o, listGroup: "Approvers" })) as FBInlineApprovalOptions[];
   }
 
-  public get groupsId(): string {
-    return FBAutocompleteAsyncOption.groups;
+  // MARK: @computed
+  @computed public get getApprovals(): FBInlineApprovalBody[] {
+    const filtered = filter(this.approvals, (a) => a.status !== "ABANDONED");
+    return map(filtered, (a: FBInlineApprovalBody) => ({
+      ...a,
+      canRequest: this.isOwner && a.status === "DRAFT",
+    }));
   }
 
-  public get approvalRolesId(): string {
-    return FBAutocompleteAsyncOption.approvalRoles;
+  @computed public get getOptions(): FBInlineApprovalOptions[] {
+    return uniqBy(this.options, "user.id");
   }
 
+  // MARK: @actions
   @action public setOptions = (options?: FBInlineApprovalOptions[]) =>
     set(this, "options", options);
+
+  @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
+    set(this, "approvals", approvals);
+
+  // MARK: @helpers
+  public approvalBody = (body: FBInlineApprovalBody) => {
+    this.approvalApi.setBody(body);
+    this.approvalApi.post();
+  };
+
+  public approvalTransition = (transition: FBInlineApprovalTransition, id?: string, ) => {
+    if (!id) { return; }
+    this.transitionApi.setTemplateUrl(FBEndpoint.ApprovalsTransition, { id, transition });
+    this.transitionApi.post();
+  };
 }
 
 export default FBInlineApprovalState;
