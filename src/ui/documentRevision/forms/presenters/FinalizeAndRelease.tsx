@@ -9,19 +9,21 @@ import useDialog from "../../../hooks/useDialog";
 
 interface Props {
   docRevId: string;
-  revisionStage?: number;
+  revisionStage: number;
+  subRevision?: number;
   status?: DocumentRevisionStatus;
 }
 
 export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
   docRevId,
   revisionStage,
+  subRevision,
   status,
 }) => {
   const releaseRecordDialog = useDialog();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
   const async = useAsync();
-
+  const isSubmitApproval = revisionStage === 3 && (subRevision && subRevision > 0);
   const releaseRecord = () => {
     async.start(
       applyTransition,
@@ -44,7 +46,11 @@ export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
         id="ApproveAndRelease-button"
         data-cy="ApproveAndRelease-button"
       >
-        <Text message="record.finalize.and.release" />
+        {
+          isSubmitApproval ?
+            <Text message="record.submit.for.approval" /> :
+            <Text message="record.finalize.and.release" />
+        }
       </Button>
       <AlertDialog
         dialog={releaseRecordDialog}
