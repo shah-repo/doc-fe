@@ -50,7 +50,8 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
   const handleMembers = (members: Employee[], groupId: string) => {
     const NUMBER_OF_MEMBERS_TO_DISPLAY = 15;
     const activeMembers = members.filter((member) => member.active);
-    const membersToDisplay = groupId === expandedGroupId ? activeMembers : activeMembers.slice(0, NUMBER_OF_MEMBERS_TO_DISPLAY);
+    const membersToDisplay = groupId === expandedGroupId ?
+      activeMembers : activeMembers.slice(0, NUMBER_OF_MEMBERS_TO_DISPLAY);
     const remainder = groupId === expandedGroupId ? 0 : activeMembers.length - NUMBER_OF_MEMBERS_TO_DISPLAY;
 
     return (
