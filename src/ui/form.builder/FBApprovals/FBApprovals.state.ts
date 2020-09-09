@@ -44,17 +44,6 @@ export class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | 
   };
 
   public onSuccess() {
-    // if (
-    //   this.method === "post"
-    // ) {
-    //   const { id } = this.data as Approval;
-    //   const approvals = filter(this.approvals, (app) => app.id !== id);
-    //   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    //   this.setApprovals([...approvals, ...[this.data!]]);
-    //   this.formState?.reset();
-    // } else if (this.method === "get") {
-    //   this.setGroups(this.data);
-    // }
     this.setGroups(this.data);
     super.onSuccess();
   }
@@ -71,8 +60,6 @@ export class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | 
 
   @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
     set(this, "approvals", approvals);
-
-  // public getApproval = (id?: string): Approval | undefined => this.approvals?.find((approval) => approval.id === id);
 
   public addApproval = (approval: FBInlineApprovalBody) => {
     this.approvalApi.setBody(approval);

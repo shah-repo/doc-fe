@@ -64,7 +64,6 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       return (group.joinedEmployees as string[]).includes(approver);
     }
 
-
     // On add approver
     React.useEffect(() => reaction(
       () => approvalsState?.approvalApi.data,
@@ -93,17 +92,6 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       if (!id) { return; }
       approvalsState?.applyTransition("pending", id);
     };
-
-    // MARK: @observer
-    useObserver(() => {
-      groups = approvalsState?.groups;
-      approvals = approvalsState?.getApprovals;
-      loading = (
-        approvalsState.loading ||
-        approvalsState?.approvalApi.loading ||
-        approvalsState?.transitionApi.loading
-      );
-    });
 
     React.useEffect(() => reaction(
       () => formState?.inputState.get("fb-approvals-" + name)?.value,
@@ -154,34 +142,19 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       );
     };
 
+    // MARK: @observer
+    useObserver(() => {
+      groups = approvalsState?.groups;
+      approvals = approvalsState?.getApprovals;
+      loading = (
+        approvalsState.loading ||
+        approvalsState?.approvalApi.loading ||
+        approvalsState?.transitionApi.loading
+      );
+    });
+
     const fieldValue = map(approvalsState?.getApprovals, "approver.id");
     formState?.setFieldValue(`fb-approvals-${name}`, fieldValue);
-
-    // React.useEffect(() => {
-    //   reaction(
-    //     () => formState?.inputState.get(name || "")?.value,
-    //     (data) => {
-    //       if (!id) {
-    //         toastError("Please save the document first.");
-    //         return;
-    //       } else {
-    //         approvalsState?.addApproval({
-    //           assigned: {
-    //             id: data.id,
-    //           },
-    //           partOf: { id },
-    //         } as Approval);
-    //       }
-    //     }
-    //   );
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
-
-    // useObserver(() => {
-    //   groups = approvalsState?.groups;
-    //   loading = approvalsState?.loading;
-    // });
-
 
     return Component({
       ...(props as T),
