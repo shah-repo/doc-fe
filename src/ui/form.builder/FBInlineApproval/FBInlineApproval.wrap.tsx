@@ -32,7 +32,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     const userId = (
       document?.owner?.user?.id ||
       changeRequest?.owner?.user?.id
-    )
+    );
 
     disabled = disabled || isUndefined(id);
     const fieldApprovals = useMemo(() => filter(docApprovals, { fieldId: name }), [docApprovals, name]);
@@ -48,10 +48,11 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     React.useEffect(() => {
       if (!isEmpty(fieldApprovals)) { return; }
       inlineApprovalState?.getDocument(documentId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-     // On document load
-     React.useEffect(() => reaction(
+    // On document load
+    React.useEffect(() => reaction(
       () => inlineApprovalState?.documentApi.data,
       (data) => {
         if (!documentId) { return; }
@@ -59,8 +60,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         const documentRevision = last(sortBy(documentRevisions, "version"));
         if (!documentRevision) { return; }
         if (id === documentRevision.id) {
-          const approvals = map(documentRevisions, "approvals");
-          console.log("approvals: " + JSON.stringify(approvals));
+          // const approvals = map(documentRevisions, "approvals");
+          // console.log("approvals: " + JSON.stringify(approvals));
         } else {
           window.location.href = documentVersionPath(documentRevision.id, documentId);
         }
@@ -68,8 +69,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-     // On transition
-     React.useEffect(() => reaction(
+    // On transition
+    React.useEffect(() => reaction(
       () => inlineApprovalState?.transitionApi.data,
       (data) => {
         concatApprovals(data);
@@ -102,8 +103,6 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       (data) => concatApprovals(data)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
-
-   
 
     // Approvers list
     React.useEffect(() => reaction(
@@ -179,7 +178,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     approvalTransition = (transition: FBInlineApprovalTransition, id?: string) => {
       if (!id) { return; }
       inlineApprovalState?.approvalTransition(transition, id);
-    }
+    };
 
     // MARK: @observer
     useObserver(() => {
