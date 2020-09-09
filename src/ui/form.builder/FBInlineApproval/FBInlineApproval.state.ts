@@ -1,6 +1,7 @@
 import { filter, map, uniqBy } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalOptions, FBInlineApprovalTransition } from "..";
+import { Document } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
@@ -18,6 +19,7 @@ export class FBInlineApprovalState {
   public rolesApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.approvalRoles);
   public approvalApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalBody>(FBEndpoint.Approvals);
   public transitionApi = new FBRequest<FBInlineApprovalBody, null>();
+  public documentApi: FBRequest<Document, null> = new FBRequest();
 
   // MARK: @constructor
   public constructor({ approvals, isOwner }: FBInlineApprovalConstructor) {
@@ -57,6 +59,12 @@ export class FBInlineApprovalState {
     if (!id) { return; }
     this.transitionApi.setTemplateUrl(FBEndpoint.ApprovalsTransition, { id, transition });
     this.transitionApi.post();
+  };
+
+  public getDocument = (id?: string) => {
+    if (!id) { return; }
+    this.documentApi.setTemplateUrl(FBEndpoint.Document, { id });
+    this.documentApi.fetch();
   };
 }
 

@@ -1,17 +1,17 @@
-import { difference, filter, find, isUndefined, map, sortBy, unionBy } from "lodash";
+import { difference, filter, find, isEmpty, isUndefined, last, map, sortBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
-import { FB, FBAutocompleteAsyncOption, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState } from "..";
+import { FB, FBAutocompleteAsyncOption, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from "..";
 import { store } from "../../../state/store";
+import { documentVersionPath } from "../../document.revision/utils/paths";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    requestApproval,
-    approve,
+    approvalTransition,
     inlineApprovalState,
     defaultValue: { approvers, groups, roles } = {},
     defaultValue,
@@ -27,13 +27,14 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
-    const { id, document } = workspaceState || {};
-    const {
-      approvals: docApprovals = [],
-      owner: { user: { id: userId = "" } = {} } = {},
-    } = document || {};
+    const { id, document, changeRequest, documentId } = workspaceState || {};
+    const docApprovals = document?.approvals || changeRequest?.approvals;
+    const userId = (
+      document?.owner?.user?.id ||
+      changeRequest?.owner?.user?.id
+    )
 
-    disabled = disabled || isUndefined(id) || loading;
+    disabled = disabled || isUndefined(id);
     const fieldApprovals = useMemo(() => filter(docApprovals, { fieldId: name }), [docApprovals, name]);
     const authUser = store.getState().auth.user;
     const isOwner = authUser.id === userId;
@@ -42,6 +43,39 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       approvals: fieldApprovals,
       isOwner,
     });
+
+    // On document load
+    React.useEffect(() => {
+      if (!isEmpty(fieldApprovals)) { return; }
+      inlineApprovalState?.getDocument(documentId);
+    }, []);
+
+     // On document load
+     React.useEffect(() => reaction(
+      () => inlineApprovalState?.documentApi.data,
+      (data) => {
+        if (!documentId) { return; }
+        const { documentRevisions } = data || {};
+        const documentRevision = last(sortBy(documentRevisions, "version"));
+        if (!documentRevision) { return; }
+        if (id === documentRevision.id) {
+          const approvals = map(documentRevisions, "approvals");
+          console.log("approvals: " + JSON.stringify(approvals));
+        } else {
+          window.location.href = documentVersionPath(documentRevision.id, documentId);
+        }
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+     // On transition
+     React.useEffect(() => reaction(
+      () => inlineApprovalState?.transitionApi.data,
+      (data) => {
+        concatApprovals(data);
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     // MARK: @reaction
     // Form sync
@@ -62,13 +96,6 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // On transition
-    React.useEffect(() => reaction(
-      () => inlineApprovalState?.transitionApi.data,
-      (data) => concatApprovals(data)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
     // On add approver
     React.useEffect(() => reaction(
       () => inlineApprovalState?.approvalApi.data,
@@ -76,10 +103,13 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+   
+
     // Approvers list
     React.useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.availableApprovers),
       (data) => {
+        if (!data) { return; }
         const value = Array.from(map(approvers as string[], (i) => data.get(i)));
         concatOptions(value, "Approvers");
       }, {
@@ -92,6 +122,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     React.useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.groups),
       (data) => {
+        if (!data) { return; }
         const value = Array.from(map(groups as string[], (i) => data.get(i)));
         map(value, (v) => concatOptions(v.employees, v.name));
       }, {
@@ -104,6 +135,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     React.useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.approvalRoles),
       (data) => {
+        if (!data) { return; }
         const value = Array.from(map(roles as string[], (i) => data.get(i)));
         map(value, (v) => concatOptions(v.joinedEmployees, v.name));
       }, {
@@ -144,15 +176,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     }
 
     // MARK: @methods
-    requestApproval = (id?: string) => {
+    approvalTransition = (transition: FBInlineApprovalTransition, id?: string) => {
       if (!id) { return; }
-      inlineApprovalState?.approvalTransition("pending", id);
-    };
-
-    approve = (id?: string) => {
-      if (!id) { return; }
-      inlineApprovalState?.approvalTransition("approve", id);
-    };
+      inlineApprovalState?.approvalTransition(transition, id);
+    }
 
     // MARK: @observer
     useObserver(() => {
@@ -160,15 +187,16 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       approvals = inlineApprovalState?.getApprovals;
       loading = (
         inlineApprovalState?.approvalApi.loading ||
-        inlineApprovalState?.transitionApi.loading
+        inlineApprovalState?.transitionApi.loading ||
+        inlineApprovalState?.documentApi.loading
       );
       isApproved = !isUndefined(find(approvals, { status: "APPROVED" }));
     });
 
     return Component({
       ...(props as T),
-      requestApproval,
-      approve,
+      approvalTransition,
+      inlineApprovalState,
       defaultValue,
       currentUser,
       isApproved,
