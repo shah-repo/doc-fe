@@ -1,7 +1,7 @@
-import { filter, isEmpty, map, template } from "lodash";
-import { observable } from "mobx";
-import { FBApprovalsStatusEndpoint } from ".";
-import { FBFormState } from "..";
+import { filter, isEmpty, map } from "lodash";
+import { action, computed, observable, set } from "mobx";
+import { FBApprovalsConstructor } from ".";
+import { FBInlineApprovalBody, FBInlineApprovalTransition } from "..";
 import { Approval } from "../../../state/ducks/common";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
@@ -9,13 +9,28 @@ import { FBJoinedEmployee, FBRequiredApprover } from "../FBApprovers";
 
 export class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approval> {
   @observable public groups?: Record<string, FBRequiredApprover> = {};
-  public approvals?: Approval[];
-  private formState?: FBFormState;
+  @observable approvals?: FBInlineApprovalBody[];
 
-  public constructor({ id, approvals }) {
+  // MARK: @config
+  private isOwner?: boolean;
+
+  public approvalApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalBody>(FBEndpoint.Approvals);
+  public transitionApi = new FBRequest<FBInlineApprovalBody, null>();
+
+  public constructor({ id, approvals, isOwner }: FBApprovalsConstructor) {
     super();
-    this.approvals = approvals;
+    this.approvals = filter(approvals, (a) => a.status !== "ABANDONED");
+    this.isOwner = isOwner;
     this.fetchRequiredApprovals(id);
+  }
+
+  // MARK: @computed
+  @computed public get getApprovals(): FBInlineApprovalBody[] {
+    const filtered = filter(this.approvals, (a) => a.status !== "ABANDONED");
+    return map(filtered, (a: FBInlineApprovalBody) => ({
+      ...a,
+      canRequest: this.isOwner && a.status === "DRAFT",
+    }));
   }
 
   public fetchRequiredApprovals = (documentRevisions: string[] = []) => {
@@ -29,17 +44,18 @@ export class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | 
   };
 
   public onSuccess() {
-    if (
-      this.method === "post"
-    ) {
-      const { id } = this.data as Approval;
-      const approvals = filter(this.approvals, (app) => app.id !== id);
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this.setApprovals([...approvals, ...[this.data!]]);
-      this.formState?.reset();
-    } else if (this.method === "get") {
-      this.setGroups(this.data);
-    }
+    // if (
+    //   this.method === "post"
+    // ) {
+    //   const { id } = this.data as Approval;
+    //   const approvals = filter(this.approvals, (app) => app.id !== id);
+    //   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    //   this.setApprovals([...approvals, ...[this.data!]]);
+    //   this.formState?.reset();
+    // } else if (this.method === "get") {
+    //   this.setGroups(this.data);
+    // }
+    this.setGroups(this.data);
     super.onSuccess();
   }
 
@@ -53,23 +69,20 @@ export class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | 
     }, {});
   };
 
-  public setApprovals = (approvals?: Approval[]) => {
-    this.approvals = approvals;
+  @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
+    set(this, "approvals", approvals);
+
+  // public getApproval = (id?: string): Approval | undefined => this.approvals?.find((approval) => approval.id === id);
+
+  public addApproval = (approval: FBInlineApprovalBody) => {
+    this.approvalApi.setBody(approval);
+    this.approvalApi.post();
   };
 
-  public getApproval = (id?: string): Approval | undefined => this.approvals?.find((approval) => approval.id === id);
-
-  public addApproval = (approval: Approval) => {
-    this.setUrl(FBEndpoint.Approvals);
-    this.setBody(approval);
-    this.post();
-  };
-
-  public applyTransition = (transition: FBApprovalsStatusEndpoint, approvalId: string) => {
-    const urlTpl = template(FBEndpoint.ApplyApprovalTransition);
-    const url = urlTpl({ approvalId, transition });
-    this.setUrl(url);
-    this.post();
+  public applyTransition = (transition: FBInlineApprovalTransition, id?: string) => {
+    if (!id) { return; }
+    this.transitionApi.setTemplateUrl(FBEndpoint.ApprovalsTransition, { id, transition });
+    this.transitionApi.post();
   };
 }
 

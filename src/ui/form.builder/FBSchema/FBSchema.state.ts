@@ -48,6 +48,7 @@ export class FBSchemaState {
     "purchaseorder",
     "task",
     "blanktplform",
+    "approvals",
   ];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {

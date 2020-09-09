@@ -127,4 +127,5 @@ export const OmitInputClones: FBInputType[] = [
   "approval",
   "blanktplform",
   "inlineapproval",
+  "approvals",
 ];
