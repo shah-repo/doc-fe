@@ -154,12 +154,8 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       );
     };
 
-    // Init
-    React.useEffect(() => {
-      const fieldValue = map(approvalsState?.getApprovals, "approver.id");
-        formState?.setFieldValue(`fb-approvals-${name}`, fieldValue);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const fieldValue = map(approvalsState?.getApprovals, "approver.id");
+    formState?.setFieldValue(`fb-approvals-${name}`, fieldValue);
 
     // React.useEffect(() => {
     //   reaction(
