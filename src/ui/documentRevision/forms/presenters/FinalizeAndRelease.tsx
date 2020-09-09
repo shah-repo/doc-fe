@@ -20,7 +20,12 @@ export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
 }) => {
   const releaseRecordDialog = useDialog();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
-  const async = useAsync();
+  const async = useAsync({
+    onError: (error) => {
+      toastError(error as string);
+      releaseRecordDialog.close();
+    },
+  });
 
   const releaseRecord = () => {
     async.start(
