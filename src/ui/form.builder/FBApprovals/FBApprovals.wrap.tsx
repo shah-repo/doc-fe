@@ -58,6 +58,8 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       return (group.joinedEmployees as string[]).includes(approver);
     }
 
+   
+
     // On add approver
     React.useEffect(() => reaction(
       () => approvalsState?.approvalApi.data,
@@ -77,7 +79,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       const stateApprovals = filter(approvalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
       approvalsState?.setApprovals(unionBy(stateApprovals, [approval], "id"));
     }
-
+    
     requestApproval = (id?: string) => {
       if (!id) { return; }
       approvalsState?.applyTransition("pending", id);
@@ -142,6 +144,13 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
         </Box>
       );
     };
+
+       // Init
+       React.useEffect(() => {
+        const fieldValue = map(approvalsState?.getApprovals, "approver.id");
+        formState?.setFieldValue(`fb-approvals-${name}`, fieldValue);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, []);
 
     // React.useEffect(() => {
     //   reaction(

@@ -31,9 +31,9 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
         label="form.builder.approvals"
         name={`fb-approvals-${name}`}
         optionId={FBAutocompleteAsyncOption.availableApprovers}
-        optionValueType="id"
         withState
         gutter={false}
+        multiple={true}
         {...{ disabled, renderOption }}
       />
       <Box display="flex" flexWrap="wrap" my={2}>
