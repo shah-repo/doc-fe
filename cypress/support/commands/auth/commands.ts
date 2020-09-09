@@ -13,6 +13,13 @@ declare global {
       authLogin(params: { email: string; password: string }): Chainable<Subject>;
       authApiLogout(): Chainable<Subject>;
       authLogout(): Chainable<Subject>;
+      authVisitLogin(): Chainable<Subject>;
+      authSubmitLogin(): Chainable<Subject>;
+      authRequiredValidation(params: {selector: string; show: boolean}): Chainable<Subject>;
+      authInvalidEmailValidation(): Chainable<Subject>;
+      authEnterEmail(params: {value: string}): Chainable<Subject>;
+      authEnterPassword(params: {value: string}): Chainable<Subject>;
+      authSubmitLoginError(params: {show: boolean; message?: string}): Chainable<Subject>;
     }
   }
 }
@@ -42,8 +49,50 @@ Cypress.Commands.add("authLogin", (params: { email: string; password: string }) 
     });
 });
 
+Cypress.Commands.add("authEnterEmail", (params: { value: string }) => {
+  cy.get("[data-cy=\"LoginFormPresenter-email\"]").clear().type(params.value);
+});
+
+Cypress.Commands.add("authEnterPassword", (params: { value: string }) => {
+  cy.get("[data-cy=\"LoginFormPresenter-password\"]").clear().type(params.value);
+});
+
+Cypress.Commands.add("authVisitLogin", () => {
+  cy.visit(CONFIG.FE_URL, { timeout: 20 * 1000 });
+});
+
+Cypress.Commands.add("authSubmitLogin", () => {
+  cy.get("[data-cy=\"LoginFormPresenter-submit\"]").click();
+});
+
+Cypress.Commands.add("authRequiredValidation", (params: {selector: string; show: boolean}) => {
+  if (params.show) {
+    cy.get(`[data-cy="${params.selector}"] p`).should("be.visible");
+    cy.get(`[data-cy="${params.selector}"] p`).should("have.text", "Required");
+  } else {
+    cy.get(`[data-cy="${params.selector}"] p`).should("not.be.visible");
+  }
+});
+
+Cypress.Commands.add("authInvalidEmailValidation", () => {
+  cy.get(`[data-cy="field-email"] p`)
+    .should("be.visible")
+    .should("have.text", "Invalid email address");
+});
+
+Cypress.Commands.add("authSubmitLoginError", (params: {show: boolean; message: string}) => {
+  if (params.show) {
+    cy.get(`[class="Toastify__toast-body"]`)
+      .should("be.visible")
+      .should("have.text", params.message);
+  }
+  else {
+    cy.get(`[class="Toastify__toast-body"]`)
+      .should("not.be.visible");
+  }
+});
+
 Cypress.Commands.add("authLogout", () => {
   cy.get("[data-cy=\"UserMenuButton\"]", { timeout: 50 * 1000 }).click();
   cy.get("[data-cy=\"header.logout\"]").click();
 });
-

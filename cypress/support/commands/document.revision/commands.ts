@@ -13,6 +13,7 @@ declare global {
       drCreateDocumentRevision(params: { payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
       drGetDocumentType(params: { employeeId: string; sessionId: string }): Chainable<Subject>;
       drEnterDocumentTitle(params: { name: string }): Chainable<Subject>;
+      drClearDocumentTitle(): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drEnterDocumentDescriptionWithWait(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
@@ -30,7 +31,6 @@ declare global {
       drClickReviseDocument(): Chainable<Subject>;
       drClickTrainingRequired(): Chainable<Subject>;
       drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
-      drAddOutputDocType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocTypeSecondTime(params: { documentType: string }): Chainable<Subject>;
       drChooseTypeOfRevisionChangeOption(params: { option: string }): Chainable<Subject>;
       drDocumentFieldError(params: { field: string; message: string }): Chainable<Subject>;
@@ -70,8 +70,14 @@ declare global {
       drCancelDraftButton(): Chainable<Subject>;
       drIsTrainingRequired(params: {shouldBe: boolean}): Chainable<Subject>;
       drApproveAndReleaseNonQMSDocument(): Chainable<Subject>;
+      drSelectHistoryTab(): Chainable<Subject>;
+      drSelectPermissionTab(): Chainable<Subject>;
       drVerifyDocumentOWner(params: {owner: string}): Chainable<Subject>;
       drChangeOwnerByAdmin(params: {employee: string}): Chainable<Subject>;
+      drSelectUser(...users: string[]): Chainable<Subject>;
+      drAddUserFromPermissionTab(...users: string[]): Chainable<Subject>;
+      drSelectGroup(...groups: string[]): Chainable<Subject>;
+      drAddGroupFromPermissionTab(...groups: string[]): Chainable<Subject>;
     }
   }
 }
@@ -154,8 +160,12 @@ Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
   cy.get("[data-cy=\"field-name\"]").type(params.name);
 });
 
+Cypress.Commands.add("drClearDocumentTitle", () => {
+  cy.get("[data-cy=\"field-name\"] svg").click();
+});
+
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
-  cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").type(params.description);
+  cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").clear().type(params.description);
   cy.get("[data-cy=field-description]>label").click().wait(1000);
 });
 
@@ -179,11 +189,6 @@ Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: stri
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`).wait(500);
 });
 
-Cypress.Commands.add("drAddOutputDocType", (params: { documentType: string }) => {
-  cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
-  cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`);
-});
-
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
   cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
@@ -203,10 +208,6 @@ Cypress.Commands.add("drApproveAndReleaseNonQMSDocument", () => {
 
 Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
   cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").click();
-});
-
-Cypress.Commands.add("drClickCreateDocument", () => {
-  cy.get("[data-cy=\"DocumentRevisionForm-submit\"]", { timeout: 5 * 1000 }).click();
 });
 
 Cypress.Commands.add("drClickCreateDocumentWithApiCall", () => {
@@ -404,4 +405,40 @@ Cypress.Commands.add("drAPIApproveAndRelease", (params: {
 
 Cypress.Commands.add("drIsTrainingRequired", (params: {shouldBe: boolean}) => {
   cy.get("[data-cy=\"field-retrain\"] input[type=checkbox]").should(params.shouldBe ? "be.checked" : "not.be.checked");
+});
+
+Cypress.Commands.add("drSelectHistoryTab", () => {
+  cy.get("[data-cy=\"timeline-icon\"]").click();
+});
+
+Cypress.Commands.add("drSelectPermissionTab", () => {
+  cy.get("[data-cy=\"permission-icon\"]").click();
+});
+
+Cypress.Commands.add("drSelectUser", (...users: string[]) => {
+  users.forEach((user) => {
+    cy.get(`[data-cy="field-securityEmployees"]`).type(`${user}{downarrow}{enter}`);
+  });
+  cy.get(`[data-cy="field-securityEmployees"]`).click();
+});
+
+Cypress.Commands.add("drAddUserFromPermissionTab", (...users: string[]) => {
+  users.forEach((user) => {
+    cy.get(`[id="react-select-2-input"]`).type(`${user}{downarrow}{enter}`, { force: true });
+    cy.get(`[data-cy="add-user"]`).click();
+  });
+});
+
+Cypress.Commands.add("drSelectGroup", (...groups: string[]) => {
+  groups.forEach((group) => {
+    cy.get(`[data-cy="field-securityGroups"]`).type(`${group}{downarrow}{enter}`);
+  });
+  cy.get(`[data-cy="field-securityGroups"]`).click();
+});
+
+Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
+  groups.forEach((group) => {
+    cy.get(`[id="react-select-3-input"]`).type(`${group}{downarrow}{enter}`, { force: true });
+    cy.get(`[data-cy="add-user"]`).click();
+  });
 });

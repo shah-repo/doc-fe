@@ -190,7 +190,7 @@ context("Document Approval Matrix Flow", () => {
 
     it("fill in output document type: Document Approval Matrix", () => {
       // SystemRequirement("REQ-0490");
-      cy.drAddOutputDocType({ documentType: "Document Approval Matrix" });
+      cy.drSelectOutputDocumentType({ documentType: "Document Approval Matrix" });
     });
 
     it("open add field dialogue", () => {
