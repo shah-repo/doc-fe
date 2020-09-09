@@ -49,13 +49,15 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
    */
   const handleMembers = (members: Employee[], groupId: string) => {
     const NUMBER_OF_MEMBERS_TO_DISPLAY = 15;
-    const membersToDisplay = groupId === expandedGroupId ? members : members.slice(0, NUMBER_OF_MEMBERS_TO_DISPLAY);
-    const remainder = groupId === expandedGroupId ? 0 : members.length - NUMBER_OF_MEMBERS_TO_DISPLAY;
+    const activeMembers = members.filter((member) => member.active);
+    const membersToDisplay = groupId === expandedGroupId ? activeMembers : activeMembers.slice(0, NUMBER_OF_MEMBERS_TO_DISPLAY);
+    const remainder = groupId === expandedGroupId ? 0 : activeMembers.length - NUMBER_OF_MEMBERS_TO_DISPLAY;
+
     return (
       <>
-        {membersToDisplay.map((member) => member.user && member.user.name).join(", ")}
+        {membersToDisplay.map((e) => e.user && e.user.name).join(", ")}
         {
-          members.length > NUMBER_OF_MEMBERS_TO_DISPLAY && (
+          activeMembers.length > NUMBER_OF_MEMBERS_TO_DISPLAY && (
             <>
               {groupId !== expandedGroupId && "..."}
               <Button
