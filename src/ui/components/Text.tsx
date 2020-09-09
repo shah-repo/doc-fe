@@ -36,7 +36,10 @@ const Text: React.FunctionComponent<TextProps> = ({
     return [false, stringToCheck];
   }, [message, translation]);
 
-  if (hasTranslation) {
+  if (hasTranslation && dataCy !== "") {
+    return <div data-cy={dataCy}><FormattedMessage id={text} {...props} /></div>;
+  }
+  else if (hasTranslation) {
     return <FormattedMessage id={text} {...props} />;
   }
 

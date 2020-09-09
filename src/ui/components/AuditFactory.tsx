@@ -15,12 +15,13 @@ import DialogOpener from "./textDiff/DialogOpener";
 
 interface OwnProps {
   audit: Audit;
+  dataCy?: string;
 }
 
 export type Props = OwnProps;
 
 export const AuditFactory: React.FunctionComponent<Props> = ({
-  audit,
+  audit, dataCy,
 }) => {
   let returnValue;
 
@@ -35,7 +36,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
     case "assessments.design.attachments":
     case "assessments.regulatory.attachments": {
       const { name, type } = audit.nextValue as Attachment;
-      returnValue = `${name}.${type}`;
+      returnValue = (<div data-cy={dataCy}>{`${name}.${type}`}</div>);
       break;
     }
     case "approvals":
@@ -47,7 +48,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
     case "tasks.assigned":
     case "owner":
     case "securityEmployees":
-      returnValue = (audit.nextValue as Owner).user.name;
+      returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Owner).user.name}</div>);
       break;
     case "documentRevisions":
       returnValue = (audit.nextValue as DocumentRevision).name;
@@ -59,10 +60,10 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
     case "justifications.description":
     case "tasks.description":
     case "description":
-      returnValue = <DialogOpener id={audit.id} text={audit.nextValue as string} />;
+      returnValue = <DialogOpener id={audit.id} text={audit.nextValue as string} dataCy={dataCy} />;
       break;
     case "referenceTo":
-      returnValue = (audit.nextValue as Reference).docId;
+      returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Reference).docId}</div>);
       break;
     case "changeRequest":
       returnValue = (audit.nextValue as ChangeRequest).crId;
@@ -74,6 +75,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
     case "status":
       returnValue = (
         <Text
+          dataCy={dataCy}
           translation="changeRequest.audit.status.updated.by"
           values={{
             status: <Text translation={audit.nextValue as Translation} />,
@@ -83,10 +85,10 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       );
       break;
     case "securityGroups":
-      returnValue = (audit.nextValue as Group).name;
+      returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Group).name}</div>);
       break;
     default:
-      returnValue = getAuditDefaultValue(audit.nextValue);
+      returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
   }
 
   return (
