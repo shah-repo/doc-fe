@@ -153,7 +153,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
             document={dataProp}
             initialValues={dataProp.formInput}
             schema={schema as FBSchemaProps[]}
-            mode="preview"
+            mode={dataProp.document.documentType.group === "FORM" ?
+              "formPreview" : "preview"}
           />
         </Box>
       )}
