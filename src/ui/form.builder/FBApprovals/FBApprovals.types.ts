@@ -27,4 +27,4 @@ export type FBApprovalsProps =
 
 export type FBApprovalsConstructor = FBInlineApprovalConstructor & {
   id: string[];
-}
+};
