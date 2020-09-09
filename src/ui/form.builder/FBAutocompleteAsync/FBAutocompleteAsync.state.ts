@@ -16,7 +16,7 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!this.optionId) {
       return;
     }
-    return  find(FBData.autocompleteOptions, { id: this.optionId });
+    return find(FBData.autocompleteOptions, { id: this.optionId });
   }
 
   @computed public get sliceData(): any {

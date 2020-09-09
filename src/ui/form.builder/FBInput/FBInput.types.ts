@@ -43,6 +43,7 @@ export type FBInputType =
   | "teststep"
   | "checkpoint"
   | "approval"
+  | "inlineapproval"
   | "createlabel"
   | "quantity"
   | "timer"
@@ -125,4 +126,6 @@ export const OmitInputClones: FBInputType[] = [
   "approvers",
   "approval",
   "blanktplform",
+  "inlineapproval",
+  "approvals",
 ];

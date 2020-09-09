@@ -11,6 +11,7 @@ import {
   FBFilePresenterState,
   FBFileUploadState,
   FBFormState,
+  FBInlineApprovalState,
   FBMediaAlbumState,
   FBPurchaseOrderState,
   FBSchemaState,
@@ -45,4 +46,5 @@ export interface FBProviderProps {
   approversState?: FBApproversState;
   approvalsState?: FBApprovalsState;
   bookmarkState?: FBBookmarkState;
+  inlineApprovalState?: FBInlineApprovalState;
 }

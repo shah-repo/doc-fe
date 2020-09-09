@@ -9,19 +9,20 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
+    getOptionLabel,
+    refresh,
     autocompleteAsyncState,
     optionValueType = "key",
+    shouldReloadOnInit = false,
+    labelPrefixRoot,
     selectedOptions,
-    getOptionLabel,
     defaultValue,
     optionId,
     options,
     loading,
     multiple,
-    refresh,
     name,
     value,
-    shouldReloadOnInit = false,
     ...props
   }: T) => {
 
@@ -88,6 +89,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       optionId,
       optionValueKey,
       optionLabelKey,
+      labelPrefixRoot,
       optionValueType,
       selectedOptions,
       defaultValue,
