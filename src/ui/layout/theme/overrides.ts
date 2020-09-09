@@ -180,10 +180,18 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     root: {
       fontFamily: "Open Sans, sans-serif;",
       [`& .${FBClasses.inputPreview}`]: {
+        [`& .Mui-disabled`]: {
+          color: `${appTheme.palette.text.primary} !important`,
+          backgroundColor: Colors.light_gray,
+          paddingLeft: "2px",
+          fontSize: "1rem",
+          fontWeight: 400,
+          lineHeight: 1.33,
+        },
         "& fieldset": {
           borderWidth: "0px!important",
-        }
-      }
+        },
+      },
     },
   },
   MuiChip: {
