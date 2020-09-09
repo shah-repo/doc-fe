@@ -1,5 +1,7 @@
 // / <reference types="Cypress" />
 
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -7,11 +9,20 @@ let company;
 let adminEmployeeLoginResponse;
 let multipleCompanies = false;
 let adminEmployee;
-let docTypes: any[];
-const DAMDocumentTypes: string[] = [];
+let group;
+let initialArDocument;
+let createdPOFormDocument;
+let formDocumentType;
+let purchaseOrderDocumentType;
+let approvalRequestDocumentType;
+let POAMDocumentType;
+
+
 const DAMTitle = "My DAM";
 const roleOne = "Role One";
 const FormTitle = "New Form";
+const POAMFormTitle = "POAM form";
+
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
@@ -20,7 +31,7 @@ const THIRD_USER = USERS[4];
 const INDIVIDUAL_USER = USERS[14];
 const IMPORTER_USER = USERS[15];
 
-context("Document Approval Matrix Flow", () => {
+context("Check DAM enforcement rules for document types", () => {
 
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
@@ -46,7 +57,10 @@ context("Document Approval Matrix Flow", () => {
         }).then((response) => {
           company = response;
           adminEmployee = company.employees.find((employee) => employee.user.email === ADMIN_USER.email);
-          docTypes = company.documentTypes || [];
+          purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(company, "Purchase Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(company, "Approval Request");
+          formDocumentType = cmpFilterDocumentTypeIdByName(company, "Form");
+          POAMDocumentType = cmpFilterDocumentTypeIdByName(company, "PO Approval Matrix");
           done();
         });
       });
@@ -60,6 +74,136 @@ context("Document Approval Matrix Flow", () => {
         adminEmployeeLoginResponse = response;
         multipleCompanies = adminEmployeeLoginResponse.employees.length > 1 ? true : false;
         done();
+      });
+    });
+
+    it("[API]Create PO form", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: adminEmployeeLoginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: adminEmployeeLoginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "Initial AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>PO Form document</p>",
+              document: {
+                docId: "FM-00003",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "PO Form document",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: purchaseOrderDocumentType[0].id,
+                }],
+                schema: [{
+                  index: 0,
+                  type: "purchaseorder",
+                  label: "PO",
+                  name: "po-kdpqvhc7",
+                  applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+                }],
+              },
+
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdPOFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdPOFormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+              },
+              employeeId: adminEmployee.id,
+              sessionId: adminEmployeeLoginResponse.sessionId,
+            }).then(() => {
+              done();
+            });
+          });
+        });
+      });
+    });
+
+    it("[API]Create POAM form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>POAM Form document</p>",
+          document: {
+            docId: "FM-00004",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: POAMFormTitle,
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: POAMDocumentType[0].id,
+            }],
+            schema: [{
+              index: 0,
+              type: "poApprovalMatrix",
+              label: "POAM",
+              name: "poam-keva19by",
+              applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+            }],
+          },
+
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdPOFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdPOFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+          },
+          employeeId: adminEmployee.id,
+          sessionId: adminEmployeeLoginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
       });
     });
   });
@@ -101,7 +245,7 @@ context("Document Approval Matrix Flow", () => {
 
     it("fill in output document type: Document Approval Matrix", () => {
       // SystemRequirement("REQ-0490");
-      cy.drAddOutputDocType({ documentType: "Document Approval Matrix" });
+      cy.drSelectOutputDocumentType({ documentType: "Document Approval Matrix" });
     });
 
     it("open add field dialogue", () => {
@@ -190,8 +334,8 @@ context("Document Approval Matrix Flow", () => {
     });
   });
 
-  context("Test enforced approvals for all document types", () => {
-    context("Test 'Component Specification' approvals", () => {
+  context("Test enforced approvals for all internal document types", () => {
+    context("Test 'Component Specification' approvals for 'WO_PARTS' internal type", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
       });
@@ -217,14 +361,11 @@ context("Document Approval Matrix Flow", () => {
       });
 
       it("Check approvals enfocment", () => {
-        cy.drApproveAndReleaseDialog();
-        cy.get("[data-cy=unchecked]").should("exist");
-        cy.get("[data-cy=group-0]").should("have.text", "Role One");
-        cy.get("[data-cy=ApproveAndRelease-cancelButton]").click();
+        cy.drCheckApprovalsEnforcment();
       });
     });
 
-    context("Test 'Dynamic Form' approvals", () => {
+    context("Test 'Dynamic Form' approvals for 'Dynamic Form' internal type", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
       });
@@ -250,14 +391,11 @@ context("Document Approval Matrix Flow", () => {
       });
 
       it("Check approvals enfocment", () => {
-        cy.drApproveAndReleaseDialog();
-        cy.get("[data-cy=unchecked]").should("exist");
-        cy.get("[data-cy=group-0]").should("have.text", "Role One");
-        cy.get("[data-cy=ApproveAndRelease-cancelButton]").click();
+        cy.drCheckApprovalsEnforcment();
       });
     });
 
-    context("Test 'Engineering Build' approvals", () => {
+    context("Test 'Engineering Build' approvals for 'OTHER' internal type", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
       });
@@ -279,14 +417,11 @@ context("Document Approval Matrix Flow", () => {
       });
 
       it("Check approvals enfocment", () => {
-        cy.drApproveAndReleaseDialog();
-        cy.get("[data-cy=unchecked]").should("exist");
-        cy.get("[data-cy=group-0]").should("have.text", "Role One");
-        cy.get("[data-cy=ApproveAndRelease-cancelButton]").click();
+        cy.drCheckApprovalsEnforcment();
       });
     });
 
-    context("Test 'Form' approvals", () => {
+    context("Test 'Form' approvals for 'FORM' internal type", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
       });
@@ -296,7 +431,7 @@ context("Document Approval Matrix Flow", () => {
       });
 
       it("Fill document name", () => {
-        cy.drEnterDocumentTitle({ name: "Form" });
+        cy.drEnterDocumentTitle({ name: "Form approvals" });
         cy.get("[data-cy=field-name]").click();
       });
 
@@ -308,7 +443,7 @@ context("Document Approval Matrix Flow", () => {
         cy.drSelectDocumentType({ documentType: "Form" });
       });
 
-      it("Select document type", () => {
+      it("Select output document type", () => {
         cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
       });
 
@@ -317,11 +452,159 @@ context("Document Approval Matrix Flow", () => {
       });
 
       it("Check approvals enfocment", () => {
-        cy.drApproveAndReleaseDialog();
-        cy.get("[data-cy=unchecked]").should("exist");
-        cy.get("[data-cy=group-0]").should("have.text", "Role One");
-        cy.get("[data-cy=ApproveAndRelease-cancelButton]").click();
+        cy.drCheckApprovalsEnforcment();
       });
+    });
+
+    context("Test 'Document Approval Matrix' approvals for 'DAM' internal type", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it(`Select document named '${DAMTitle}'`, () => {
+        cy.drClickOnSpecificDocFromList({ item: DAMTitle });
+      });
+
+      it("Click revise", () => {
+        cy.drClickReviseDocument();
+      });
+
+      it("Create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Check approvals enfocment", () => {
+        cy.drCheckApprovalsEnforcment();
+      });
+    });
+
+    context("Test 'Purchase order' approvals for 'PO' internal type", () => {
+
+      it("Navigate to PO list", () => {
+        cy.navigToPurchaseOrder();
+      });
+
+      it("Click create new PO", () => {
+        cy.poClickCreatePO();
+      });
+
+      it("Enter description 'POAM test", () => {
+        // SystemRequirement("REQ-1290");
+        cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
+      });
+
+      it("Check approvals enfocment", () => {
+        cy.drCheckApprovalsEnforcment();
+      });
+    });
+
+    context("Test 'PO Approval Matrix' approvals for 'POAM' internal type", () => {
+
+      it("Navigate to PO list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it(`Select document named '${POAMFormTitle}'`, () => {
+        cy.drClickOnSpecificDocFromList({ item: POAMFormTitle });
+      });
+
+      it("Create new POAM document from Form", () => {
+        cy.drCreateNewDocumentFromForm();
+      });
+
+      it("Enter title 'New POAM'", () => {
+        cy.drEnterDocumentTitle({ name: "New POAM" });
+      });
+
+      it("Enter description 'New POAM description'", () => {
+        cy.drEnterDocumentDescription({ description: "New POAM description" });
+      });
+
+      it("Click 'Save' document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Check approvals enfocment", () => {
+        cy.drCheckApprovalsEnforcment();
+      });
+    });
+
+    context("Test 'Suppliers' approvals for 'SUPPLIER' internal type", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click create document", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it("Select document type", () => {
+        cy.drSelectDocumentType({ documentType: "Suppliers" });
+      });
+
+      it("Fill document name", () => {
+        cy.drEnterDocumentTitle({ name: "Suppliers doc" });
+      });
+
+      it("Fill document description", () => {
+        cy.drEnterDocumentDescription({ description: "Suppliers address" });
+      });
+
+      it("Create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Check approvals enfocment", () => {
+        cy.drCheckApprovalsEnforcment();
+      });
+    });
+
+    context("Test 'Work Order' approvals for 'WORK_ORDER' internal type", () => {
+      context("Create form for Work Order", () => {
+        it("Navigate to document list", () => {
+          cy.navigToDocumentList();
+        });
+
+        it("Click create document", () => {
+          cy.cmpClickCreateNewDocument();
+        });
+
+        it("Fill document name", () => {
+          cy.drEnterDocumentTitle({ name: "Suppliers doc" });
+        });
+
+        it("Fill document description", () => {
+          cy.drEnterDocumentDescription({ description: "Suppliers address" });
+        });
+
+        it("Select document type", () => {
+          cy.drSelectDocumentType({ documentType: "Form" });
+        });
+
+        it("Select output document type", () => {
+          cy.drSelectOutputDocumentType({ documentType: "Work Order" });
+        });
+
+        it("Create document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Approve and release form", () => {
+          cy.drApproveAndReleaseDocument();
+        });
+      });
+
+      context("Verify 'Work Order' approvals", () => {
+        /* Create work order by:
+        Create SA
+        Create MPI->Other
+        Create LHR->Lots, add SA to sa field, add MPI field and add MPI
+        Create WO form
+        Create WO
+        */
+      });
+
+
     });
 
   });

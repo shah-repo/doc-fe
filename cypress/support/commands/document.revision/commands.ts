@@ -37,6 +37,8 @@ declare global {
       closeAllAlertMessages(): Chainable<Subject>;
       checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
       checkToastMessageIsEqual(params: { message: string }): Chainable<Subject>;
+      checkToastMessageContains(params: { message: string }): Chainable<Subject>;
+      drCheckApprovalsEnforcment(): Chainable<Subject>;
 
       /* Document Approval Matrix */
 
@@ -136,6 +138,16 @@ Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
 
 Cypress.Commands.add("drClickDAMEditBtn", () => {
   cy.get("[data-cy=\"EditBtnDAM\"]").click();
+});
+
+Cypress.Commands.add("drCheckApprovalsEnforcment", () => {
+  cy.drApproveAndReleaseDialog();
+  cy.get("[data-cy=unchecked]").should("exist");
+  cy.get("[data-cy=group-0]").should("have.text", "Role One");
+  cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
+  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+  cy.checkToastMessageContains({ message: "at least one approver from group Role One has to be selected" });
+  cy.drCloseApproveAndReleaseDialog();
 });
 
 Cypress.Commands.add("drCancelDraftButton", () => {
@@ -302,6 +314,9 @@ Cypress.Commands.add("checkToastMessageIsEqual", (params: { message: string }) =
   cy.get(".Toastify").should("have.text", params.message);
 });
 
+Cypress.Commands.add("checkToastMessageContains", (params: { message: string }) => {
+  cy.get(".Toastify").should("contain.text", params.message);
+});
 
 Cypress.Commands.add("closeAllAlertMessages", () => {
   cy.get(".Toastify__close-button").click({ multiple: true, force: true });
