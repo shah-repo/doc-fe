@@ -1,7 +1,6 @@
 import { get } from "lodash";
 import React, { useCallback, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
-import { approvalsActions } from "../../state/ducks/approvals";
 import { authSelectors } from "../../state/ducks/auth";
 import { GroupTag } from "../../state/ducks/auth/types";
 import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
@@ -10,8 +9,6 @@ import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
 import HelloSignAllSignedRefreshSockets from "../document.revision/HelloSignAllSignedRefreshSockets";
 import SummaryPresenter from "../document.revision/summary/presenter";
-import useActionCreator from "../hooks/useActionCreator";
-import useAsync from "../hooks/useAsync";
 import CloneContainer from "./Clone.container";
 import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
 import { canChangeDocumentOwner, canEditDocumentRevision } from "./helpers";
@@ -91,19 +88,6 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
 
   isOperator = React.createContext(isCurrentUserOperator);
 
-  const async = useAsync();
-  const applyTransition = useActionCreator(approvalsActions.applyTransition);
-
-  const changeApprovalStatus = (transition: "approve" | "reject") => {
-    const approvalId = documentRevision?.approvals?.find((app) => app.approver.id === currentEmployeeId)?.id;
-    async.start(
-      applyTransition,
-      approvalId,
-      transition,
-      async,
-    );
-  };
-
   const canChangeOwnerShip = useMemo(() => {
     if (!documentRevision) {
       return false;
@@ -148,7 +132,6 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
           dataProp={documentRevision}
           canChangeOwnerShip={canChangeOwnerShip}
           canShowCreateVersionButton={true}
-          changeApprovalStatus={changeApprovalStatus}
         />
       )}
       {isNewVersion && (
