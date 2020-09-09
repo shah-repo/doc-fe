@@ -34,7 +34,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
       withState
       gutter={false}
       multiple={true}
-      {...{ disabled, renderOption }}
+      {...{ disabled, renderOption, loading }}
     />
     <Box display="flex" flexWrap="wrap" my={2}>
       <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
