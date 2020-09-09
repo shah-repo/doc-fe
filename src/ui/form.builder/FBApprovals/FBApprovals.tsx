@@ -2,6 +2,7 @@ import { Box } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBRequiredApprover, FBSection, FBText } from "..";
+import { DocumentStatus } from "../../../state/ducks/documents";
 import Colors from "../../layout/theme/utils/colors";
 import { FBApprovalsProps } from "./FBApprovals.types";
 import { withFBApprovals } from "./FBApprovals.wrap";
@@ -71,7 +72,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
               />
             </>
           )}
-          {currentUser === approval.approver?.user.id && (
+          {documentStatus === DocumentStatus.InReview && currentUser === approval.approver?.user.id && (
             <Box flexGrow={1} textAlign="right">
               <FBButton
                 {...{ disabled }}
