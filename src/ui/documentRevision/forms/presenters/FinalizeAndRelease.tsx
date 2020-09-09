@@ -2,6 +2,7 @@ import { Button } from "@material-ui/core";
 import React from "react";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
+import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
