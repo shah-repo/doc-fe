@@ -72,7 +72,7 @@ export const toRequestBody = (
   values: GroupRequestBody,
   members: OptionType[],
   parentGroups: OptionType[]) =>
-  ({ ...values, employees: toIds(members), parents: toIds(parentGroups) });
+  ({ ...omit(values, ["id"]), employees: toIds(members), parents: toIds(parentGroups) });
 
 
 export const toEditRequestBody = (

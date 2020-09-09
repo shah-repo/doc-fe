@@ -159,7 +159,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   >
     <button onMouseDown={(e) => handleUpdate(e)} className={classes.accessButton}>
       {(props.selectProps.menuIsOpen || props.hasValue) ?
-        <AddBoxOutlinedIcon color="primary" fontSize="small" /> :
+        <AddBoxOutlinedIcon data-cy="add-user" color="primary" fontSize="small" /> :
         <AddBoxOutlinedIcon color="disabled" fontSize="small" />}
     </button>
   </components.DropdownIndicator>);

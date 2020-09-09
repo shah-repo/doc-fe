@@ -9,6 +9,7 @@ type Props = DialogOpenerProps;
 const DialogOpener: React.FunctionComponent<Props> = ({
   id,
   text,
+  dataCy,
 }) => {
   const textToShow = useMemo(() => {
     if (!text) {
@@ -27,6 +28,7 @@ const DialogOpener: React.FunctionComponent<Props> = ({
   return (
     <Fragment>
       <div
+        data-cy={dataCy}
         className={classes.container}
         onClick={openDialog}
       >
