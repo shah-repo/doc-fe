@@ -135,7 +135,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     isIncluded = (group: FBRequiredApprover): boolean =>
       group.joinedEmployees.some((employee) =>
-        approvalsState?.approvals?.map((approval) => approval.approver?.id).includes(employee));
+        approvals?.map((approval) => approval.approver?.id).includes(employee));
 
     // eslint-disable-next-line react/display-name
     renderOption = (option: FBApprover) => {
