@@ -784,6 +784,7 @@
   "record.select.template": "This record has several templates. Please choose the appropriate one:",
   "record.select.create.title": "Select the type of record you want to create",
   "record.finalize.and.release": "Finalize and Release",
+  "record.submit.for.approval": "Submit for approval",
   "record.release.alert": "You are about to release this record. Would you like to continue?",
   "record.required.approvals": "Required Approvals",
   "record.remove.approval": "Remove Approval",
