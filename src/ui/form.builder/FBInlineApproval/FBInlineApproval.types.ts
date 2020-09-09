@@ -10,8 +10,7 @@ export type FBInlineApprovalProps =
 & Omit<FBInputProps, "defaultValue">
 & Pick<FBProviderProps, "inlineApprovalState">
 & {
-  requestApproval?: (id?: string) => any;
-  approve?: (id?: string) => any;
+  approvalTransition?: (transition: FBInlineApprovalTransition, id?: string) => any;
   defaultValue?: FBInlineApprovalValue;
   approvals?: FBInlineApprovalBody[];
   currentUser?: string;

@@ -66,6 +66,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
           disabled: (
             disabled ||
             workspaceMode === "preview" ||
+            workspaceMode === "formPreview" ||
             isApproved({ ...schemaItem, index }) ||
             (reviseDisabled && outputRevision) ||
             (outputDisabled && isOutput && !isEmpty(id))

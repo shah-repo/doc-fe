@@ -137,6 +137,7 @@ export * from "./FBHelloSign/FBHelloSign.types";
 export { default as FBHyperlink } from "./FBHyperlink/FBHyperlink";
 export * from "./FBHyperlink/FBHyperlink.types";
 export { default as FBInlineApproval } from "./FBInlineApproval/FBInlineApproval";
+export { default as FBInlineApprovalSocket } from "./FBInlineApproval/FBInlineApproval.socket";
 export { default as FBInlineApprovalState } from "./FBInlineApproval/FBInlineApproval.state";
 export * from "./FBInlineApproval/FBInlineApproval.types";
 export { default as FBInput } from "./FBInput/FBInput";
