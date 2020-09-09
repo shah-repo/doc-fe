@@ -1,7 +1,6 @@
-import { FBApprovalsState, FBFormState, FBInputProps, FBRequiredApprover } from "..";
+import { FBApprovalsState, FBAutocompleteAsyncProps, FBFormState, FBInputProps, FBRequiredApprover } from "..";
 import { Approval } from "../../../state/ducks/common";
 import { DocumentStatus } from "../../../state/ducks/documents";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 
 export enum FBApprovalsStatusEndpoint {
   APPROVE = "approve",
@@ -12,17 +11,16 @@ export enum FBApprovalsStatusEndpoint {
 
 export type FBApprovalsProps =
 & Pick<FBInputProps, "name" | "label" | "disabled">
+& FBAutocompleteAsyncProps
 & {
-  handleAdd(value: any, test: any): any;
-  groups?: Record<string, FBRequiredApprover>;
-  loading?: boolean;
-  approvalsState?: FBApprovalsState;
-  formState?: FBFormState;
   approvals?: Approval[];
-  availableApprovers: OptionType[];
-  isIncluded?(group: FBRequiredApprover): void;
-  documentStatus: DocumentStatus;
+  approvalsState?: FBApprovalsState;
+  changeApprovalStatus(transition: FBApprovalsStatusEndpoint, approvalId: string): void;
   currentEmployeeId: string;
-  changeApprovalStatus(transition: "approve" | "reject"): void;
   docId?: string;
+  documentStatus: DocumentStatus;
+  formState?: FBFormState;
+  groups?: Record<string, FBRequiredApprover>;
+  isIncluded?(group: FBRequiredApprover): void;
+  ownerId?: string;
 };

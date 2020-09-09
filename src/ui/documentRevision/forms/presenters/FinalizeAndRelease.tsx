@@ -31,7 +31,7 @@ export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
     );
   };
 
-  if (!docRevId || status !== DocumentRevisionStatus.Draft/*  || revisionStage !== 2 */) {
+  if (!docRevId || status !== DocumentRevisionStatus.Draft) {
     return null;
   }
 
@@ -40,12 +40,11 @@ export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
       <Button
         color="secondary"
         variant="outlined"
-        /* onClick={releaseRecordDialog.open} */
-        onClick={releaseRecord}
+        onClick={releaseRecordDialog.open}
         id="ApproveAndRelease-button"
         data-cy="ApproveAndRelease-button"
       >
-        <Text message="document.action.to_review" />
+        <Text message="record.finalize.and.release" />
       </Button>
       <AlertDialog
         dialog={releaseRecordDialog}

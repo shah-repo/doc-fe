@@ -1,7 +1,9 @@
 import {
   FBApprovalMatrixFieldState,
+  FBApprovalsState,
   FBApproversState,
-  FBBookmarkState, FBDialogState,
+  FBBookmarkState,
+  FBDialogState,
   FBDocumentRevisionsState,
   FBEditorCustomControlState,
   FBEditorState,
@@ -17,7 +19,6 @@ import {
   FBWorkspaceState,
 } from "..";
 import { FBApprovalMatrixState } from "../FBApprovalMatrix";
-import { FBApprovalsState } from "../FBApprovals";
 import { FBPOApprovalMatrixState } from "../FBPOApprovalMatrix";
 import { FBPOReceiveState } from "../FBPOReceive";
 
