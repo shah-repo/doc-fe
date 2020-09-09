@@ -2,6 +2,7 @@ import { Button } from "@material-ui/core";
 import React from "react";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
+import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -20,7 +21,12 @@ export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
 }) => {
   const releaseRecordDialog = useDialog();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
-  const async = useAsync();
+  const async = useAsync({
+    onError: (error) => {
+      toastError(error as string);
+      releaseRecordDialog.close();
+    },
+  });
 
   const releaseRecord = () => {
     async.start(
