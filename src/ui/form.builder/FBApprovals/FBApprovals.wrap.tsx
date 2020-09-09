@@ -4,6 +4,8 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBApprovalsState, FBApprover, FBInlineApprovalBody, FBRequiredApprover } from "..";
+import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
 import { FBApprovalsProps, FBApprovalsStatusEndpoint } from "./FBApprovals.types";
 
@@ -39,6 +41,10 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     } = document || changeRequest || {};
 
     disabled = disabled || isUndefined(id) || loading;
+    if (document?.status === DocumentRevisionStatus.InReview
+      || changeRequest?.state === ChangeRequestStatus.InReview) {
+      disabled = false;
+    }
 
     const authUser = store.getState().auth.user;
     const isOwner = authUser.id === userId;
@@ -58,7 +64,6 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       return (group.joinedEmployees as string[]).includes(approver);
     }
 
-   
 
     // On add approver
     React.useEffect(() => reaction(
@@ -79,7 +84,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       const stateApprovals = filter(approvalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
       approvalsState?.setApprovals(unionBy(stateApprovals, [approval], "id"));
     }
-    
+
     requestApproval = (id?: string) => {
       if (!id) { return; }
       approvalsState?.applyTransition("pending", id);
@@ -145,12 +150,12 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       );
     };
 
-       // Init
-       React.useEffect(() => {
-        const fieldValue = map(approvalsState?.getApprovals, "approver.id");
+    // Init
+    React.useEffect(() => {
+      const fieldValue = map(approvalsState?.getApprovals, "approver.id");
         formState?.setFieldValue(`fb-approvals-${name}`, fieldValue);
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
+    }, []);
 
     // React.useEffect(() => {
     //   reaction(
