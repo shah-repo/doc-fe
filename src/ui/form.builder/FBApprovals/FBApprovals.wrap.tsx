@@ -81,8 +81,12 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     function concatApprovals(approval?: FBInlineApprovalBody) {
       if (!approval) { return; }
-      const stateApprovals = filter(approvalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
-      approvalsState?.setApprovals(unionBy(stateApprovals, [approval], "id"));
+      if (approval.status === "REJECTED" || approval.status === "APPROVED") {
+        window.location.reload();
+      } else {
+        const stateApprovals = filter(approvalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
+        approvalsState?.setApprovals(unionBy(stateApprovals, [approval], "id"));
+      }
     }
 
     requestApproval = (id?: string) => {

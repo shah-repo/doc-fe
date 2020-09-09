@@ -76,17 +76,17 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
               <Box flexGrow={1} textAlign="right">
                 <FBButton
                   {...{ disabled }}
-                  label="form.builder.request.approve"
-                  size="small"
-                  style={{ fontSize: "11px" }}
-                  onClick={() => changeApprovalStatus("approve", approval.id)}
-                />
-                <FBButton
-                  {...{ disabled }}
                   label="common.reject"
                   size="small"
                   style={{ fontSize: "11px" }}
                   onClick={() => changeApprovalStatus("reject", approval.id)}
+                />
+                <FBButton
+                  {...{ disabled }}
+                  label="form.builder.request.approve"
+                  size="small"
+                  style={{ fontSize: "11px" }}
+                  onClick={() => changeApprovalStatus("approve", approval.id)}
                 />
               </Box>
             )}
