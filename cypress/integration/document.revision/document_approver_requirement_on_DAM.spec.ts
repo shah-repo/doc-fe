@@ -614,38 +614,69 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
+  context(`Login admin '${ADMIN_USER.name}' user now`, () => {
+    it("Logout the user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: ADMIN_USER.email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: company.name, multiple: true });
+    });
+  });
+
+  context(`Open AR Doc: ${ARDocument}`, () => {
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it(`select '${ARDocument}'`, () => {
+      cy.get("#root").contains(ARDocument).click();
+    });
+
+    it("Close Approval Request", () => {
+      cy.arCloseAR();
+    });
+  });
+
   context(`Open created documents, ${documentOne} and ${documentTwo}`, () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
     });
 
-    it("Filter the Approved document", () => {
-      cy.dlFilterByStatus({ status: "Approved" });
+    it("Filter the Released documents", () => {
+      cy.dlFilterByStatus({ status: "Released" });
     });
 
     it(`select '${documentOne}'`, () => {
       cy.get("#root").contains(documentOne).click();
     });
 
-    it("Verify Document status is 'Approved'", () => {
-      cy.arVerifyStatus({ status: "Approved" });
+    it("Verify Document status is 'Released'", () => {
+      cy.arVerifyStatus({ status: "Released" });
     });
 
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
     });
 
-    it("Filter the Approved document", () => {
-      cy.dlFilterByStatus({ status: "Approved" });
+    it("Filter the Released document", () => {
+      cy.dlFilterByStatus({ status: "Released" });
     });
 
     it(`select '${documentTwo}'`, () => {
       cy.get("#root").contains(documentTwo).click();
     });
 
-    it("Verify Document status is 'Approved'", () => {
+    it("Verify Document status is 'Released'", () => {
       SystemRequirement("REQ-0870");
-      cy.arVerifyStatus({ status: "Approved" });
+      cy.arVerifyStatus({ status: "Released" });
     });
   });
 
