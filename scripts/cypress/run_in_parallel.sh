@@ -14,10 +14,8 @@ secs_to_human() {
 }
 start=$(date +%s)
 
-source ./scripts/cypress/platform_specific_variables.sh
-
-if [[ -z "${DATE_ISO_DEFAULT}" ]]; then
-  echo "DATE_ISO_DEFAULT not set, exiting"
+if [[ -z "${CI_BUILD_ID}" ]]; then
+  echo "CI_BUILD_ID not set, exiting"
   exit 1
 fi
 
@@ -25,7 +23,6 @@ export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START:-5600}
 export ENLIL_COMPOSE_EXPOSE_BE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+1))"
 export ENLIL_COMPOSE_EXPOSE_FE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+2))"
 export ENLIL_COMPOSE_EXPOSE_DIRECTOR_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+6))"
-export CI_BUILD_ID=${CI_BUILD_ID:-$DATE_ISO_DEFAULT}
 export REPORT_TITLE=${REPORT_TITLE:-generated_specs}
 export CYPRESS_INTEGRATION_FOLDER=${CYPRESS_INTEGRATION_FOLDER:-"cypress/integration"}
 export CYPRESS_SKIP_ON_RUN_FAILURE=${CYPRESS_SKIP_ON_RUN_FAILURE:-true}
@@ -43,11 +40,6 @@ mkdir -p $CYPRESS_CACHE_FOLDER
 yarn install --frozen-lockfile
 yarn cypress install
 yarn cypress verify
-
-if [[ -z "${CI_BUILD_ID}" ]]; then
-  echo "CI_BUILD_ID not set, exiting"
-  exit 1
-fi
 
 source ./scripts/cypress/make_results_dir.sh
 
