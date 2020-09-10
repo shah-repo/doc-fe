@@ -19,6 +19,7 @@ declare global {
       navigToPurchaseOrder(): Chainable<Subject>;
       navigToSuppliers(): Chainable<Subject>;
       navigToReceivableList(): Chainable<Subject>;
+      navigToWorkOrders(): Chainable<Subject>;
     }
   }
 }
@@ -71,6 +72,16 @@ Cypress.Commands.add("navigToApprovalRequestList", () => {
       NavigationItems.DASHBOARD,
       NavigationItems.DOCUMENT_CONTROL,
       NavigationItems.APPROVAL_REQUEST,
+    ],
+  });
+});
+
+Cypress.Commands.add("navigToWorkOrders", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.MANUFACTURING,
+      NavigationItems.WORK_ORDERS,
     ],
   });
 });

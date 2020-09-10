@@ -100,11 +100,6 @@ Cypress.Commands.add("arCloseAR", () => {
   cy.get("[data-cy=AlertDialog-continueButton]").click();
 });
 
-Cypress.Commands.add("arChoseProposedDocument", ({ name }) => {
-  cy.get("[role=dialog]>div:nth-child(2)>div>div>div>div>div>div>div>input").click();
-  cy.get("[role=listbox]>li").contains(name).click();
-});
-
 Cypress.Commands.add("arChoseSpecificProposedDocument", (params: { name: string }) => {
   cy.get("[data-cy=\"proposedDocumentRevision\"]").type(params.name + "{downarrow}{enter}");
 });
