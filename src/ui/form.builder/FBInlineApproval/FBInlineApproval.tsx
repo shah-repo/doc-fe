@@ -13,6 +13,7 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   approvals = [],
   currentUser,
   isApproved,
+  isPreview,
   index,
   type,
   disabled,
@@ -47,7 +48,7 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
           )}
         </Box>
       </Box>
-      {options && (
+      {options && !isPreview && (
         <FBAutocomplete
           {...{ label, disabled, options, loading }}
           name={`fb-ia-${name}`}

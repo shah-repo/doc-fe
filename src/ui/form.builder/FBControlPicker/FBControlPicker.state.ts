@@ -56,7 +56,6 @@ export class FBControlPickerState {
         ...this.hasApproval ? ["approval"] as FBInputType[] : [],
         ...this.hasApproval ? ["inlineapproval"] as FBInputType[] : [],
         ...this.hasRequestApproval ? ["requestapproval"] as FBInputType[] : [],
-        "inlineapproval",
       ],
       customcontrols: ["customcontrol"],
       instructions: ["instructionsdocument", "selectdocument", "selectrequirement"],

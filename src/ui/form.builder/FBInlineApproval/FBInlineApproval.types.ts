@@ -4,6 +4,7 @@ export interface FBInlineApprovalValue {
   approvers?: string[] | FBEmployee[];
   groups?: string[] | FBGroup[];
   roles?: string[] | FBInlineApprovalRole[];
+  isApproved?: boolean;
 }
 
 export type FBInlineApprovalProps =
@@ -15,6 +16,7 @@ export type FBInlineApprovalProps =
   approvals?: FBInlineApprovalBody[];
   currentUser?: string;
   isApproved?: boolean;
+  isPreview?: boolean;
 };
 
 export type FBInlineApprovalOptions = FBEmployee & {

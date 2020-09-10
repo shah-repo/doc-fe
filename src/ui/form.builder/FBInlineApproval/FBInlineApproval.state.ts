@@ -22,11 +22,8 @@ export class FBInlineApprovalState {
   public documentApi: FBRequest<Document, null> = new FBRequest();
 
   // MARK: @constructor
-  public constructor({ approvals, isOwner }: FBInlineApprovalConstructor) {
-    this.approvals = filter(approvals, (a) => a.status !== "ABANDONED");
-    this.isOwner = isOwner;
-    const approvers = map(approvals, "approver");
-    this.options = map(approvers, (o) => ({ ...o, listGroup: "Approvers" })) as FBInlineApprovalOptions[];
+  public constructor(props: FBInlineApprovalConstructor) {
+    this.initialApprovals(props);
   }
 
   // MARK: @computed
@@ -50,6 +47,14 @@ export class FBInlineApprovalState {
     set(this, "approvals", approvals);
 
   // MARK: @helpers
+  public initialApprovals = ({ approvals, isOwner }: FBInlineApprovalConstructor) => {
+    approvals = filter(approvals, (a) => a.status !== "ABANDONED");
+    this.setApprovals(approvals);
+    this.isOwner = isOwner;
+    const approvers = map(approvals, "approver");
+    const options = map(approvers, (o) => ({ ...o, listGroup: "Approvers" })) as FBInlineApprovalOptions[];
+    this.setOptions(options);
+  }
   public approvalBody = (body: FBInlineApprovalBody) => {
     this.approvalApi.setBody(body);
     this.approvalApi.post();

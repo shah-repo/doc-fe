@@ -214,7 +214,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
 
         const description: Partial<Record<FBInputType | "default", () => any>> = {
           purchaseorder: () => isPurchaseorder(),
-          approval: () => "Approved",
+          inlineapproval: () => "Approved",
           checkboxgroup: () => isCheckGroup(),
           textfield: () => isSimple(),
           texteditor: () => isSimple(),
