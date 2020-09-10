@@ -64,6 +64,24 @@ if [[ -z "${DATE_ISO_DEFAULT}" ]]; then
   exit 1
 fi
 
+if [[ -z "${AWS_ACCESS_KEY_ID}" ]]; then
+  echo "AWS_ACCESS_KEY_ID not set, exiting"
+  echo "Use ./scripts/export_aws_credentials.sh"
+  exit
+fi
+
+if [[ -z "${AWS_SECRET_ACCESS_KEY}" ]]; then
+  echo "AWS_SECRET_ACCESS_KEY not set, exiting"
+  echo "Use ./scripts/export_aws_credentials.sh"
+  exit
+fi
+
+if [[ -z "${AWS_SESSION_TOKEN}" ]]; then
+  echo "AWS_SESSION_TOKEN not set, exiting"
+  echo "Use ./scripts/export_aws_credentials.sh"
+  exit
+fi
+
 export BE_GIT_COMMIT_HASH=$(cd $BE_REPO;git rev-parse HEAD)
 export FE_GIT_COMMIT_HASH=$(cd $FE_REPO;git rev-parse HEAD)
 export VALIDATORS_GIT_COMMIT_HASH=$(cd $VALIDATORS_REPO;git rev-parse HEAD)
