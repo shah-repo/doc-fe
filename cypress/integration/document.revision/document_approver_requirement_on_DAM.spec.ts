@@ -20,7 +20,7 @@ const THIRD_USER = USERS[13];
 const INDIVIDUAL_USER = USERS[14];
 const IMPORTER_USER = USERS[15];
 
-const ARForm = "My AR Form";
+const ARForm = "Initial AR Form";
 const ARDocument = "AR Document";
 const FormDAM = "Form DAM";
 const DAMDocument = "DAM Document";
@@ -88,40 +88,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: company.name, multiple: multipleCompanies });
-    });
-  });
-
-  context("Create new AR form", () => {
-    it("Navigate to document list", () => {
-      cy.navigToDocumentList();
-    });
-
-    it("Click on 'create a document'", () => {
-      cy.cmpClickCreateNewDocument();
-    });
-
-    it(`Enter title '${ARForm}'`, () => {
-      cy.drEnterDocumentTitle({ name: ARForm });
-    });
-
-    it(`Enter description '${ARForm}'`, () => {
-      cy.drEnterDocumentDescription({ description: ARForm });
-    });
-
-    it("Click on 'Form' document type", () => {
-      cy.drSelectDocumentType({ documentType: "Form" });
-    });
-
-    it("Click on 'Approval request' output document type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
-    });
-
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
-    it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
     });
   });
 
@@ -429,7 +395,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  context(`Create approval request with newly created form: ${ARDocument}`, () => {
+  context(`Create approval request: ${ARDocument}`, () => {
     it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
