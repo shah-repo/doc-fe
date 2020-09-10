@@ -34,6 +34,7 @@ export enum FBInlineApprovalStatusIdent {
 }
 
 export interface FBInlineApprovalBody {
+  reviewedAt?: string;
   id?: string;
   assigned?: FBId;
   type: FBInlineApprovalType;
