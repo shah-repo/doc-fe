@@ -52,7 +52,16 @@ context("Check DAM enforcement rules for document types", () => {
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
             users: [FIRST_USER, SECOND_USER, THIRD_USER, INDIVIDUAL_USER],
-            documentTypes: [],
+            documentTypes: [
+              {
+                documentTypeName: "Clinical Protocol",
+                documentTypeAcronym: "CP-",
+                group: "OTHER",
+                isQms: true,
+                privateNumberPool: true,
+                startingNumber: 1,
+              },
+            ],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {
           company = response;
@@ -221,6 +230,155 @@ context("Check DAM enforcement rules for document types", () => {
     });
   });
 
+  context("Create requisite for Work Order", () => {
+    context("Create Subassembly document", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click create document", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it("Fill document name", () => {
+        cy.drEnterDocumentTitle({ name: "Subassembly doc" });
+      });
+
+      it("Fill document description", () => {
+        cy.drEnterDocumentDescription({ description: "Subassembly descripiton" });
+      });
+
+      it("Select document type", () => {
+        cy.drSelectDocumentType({ documentType: "Subassembly" });
+      });
+
+      it("Create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Approve and release form", () => {
+        cy.drApproveAndReleaseDocument();
+      });
+    });
+
+    context("Create MPI document", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click create document", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it("Fill document name", () => {
+        cy.drEnterDocumentTitle({ name: "Manufacturing Process Instructure doc" });
+      });
+
+      it("Fill document description", () => {
+        cy.drEnterDocumentDescription({ description: "Suppliers address" });
+      });
+
+      it("Select document type", () => {
+        cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructure" });
+      });
+
+      it("Select output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+      });
+
+      it("Create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Approve and release form", () => {
+        cy.drApproveAndReleaseDocument();
+      });
+    });
+
+    context("Create LHR", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click create document", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it("Fill document name", () => {
+        cy.drEnterDocumentTitle({ name: "LHR doc" });
+      });
+
+      it("Fill document description", () => {
+        cy.drEnterDocumentDescription({ description: "LHR description" });
+      });
+
+      it("Select document type", () => {
+        cy.drSelectDocumentType({ documentType: "Lot History Record" });
+      });
+
+      it("Select output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Lots" });
+      });
+
+      it("Add subassembly to LHR", () => {
+        cy.get("[data-cy=edit-schema-item]").first().click({ force: true });
+        cy.get("[data-cy=options]").type(`Subassembly doc{enter}`);
+        cy.get("[role=option]").contains("Subassembly doc").click();
+        cy.get("[data-cy=fb-editor-actions-add]").click();
+      });
+
+      it("Add MPI to LHR", () => {
+        cy.get("[data-cy=fb-control-btn]").last().click({ force: true });
+        cy.get("[data-cy=\"form.builder.instructionsdocument\"]").click();
+        cy.get("[data-cy=instructionsDocument]").type(`Manufacturing Process Instructure doc{enter}`);
+        cy.get("[role=option]").contains("Manufacturing Process Instructure doc").click();
+        cy.get("[data-cy=fb-editor-actions-add]").click();
+      });
+
+      it("Create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Approve and release form", () => {
+        cy.drApproveAndReleaseDocument();
+      });
+    });
+
+    context("Create form for Work Order", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click create document", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it("Fill document name", () => {
+        cy.drEnterDocumentTitle({ name: "Suppliers doc" });
+      });
+
+      it("Fill document description", () => {
+        cy.drEnterDocumentDescription({ description: "Suppliers address" });
+      });
+
+      it("Select document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Work Order" });
+      });
+
+      it("Create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Approve and release form", () => {
+        cy.drApproveAndReleaseDocument();
+      });
+    });
+  });
+
   context("Create DAM", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
@@ -301,8 +459,6 @@ context("Check DAM enforcement rules for document types", () => {
     });
 
     it("Save role", () => {
-      SystemRequirement("REQ-0590");
-
       cy.drAddApprovalRole();
     });
   });
@@ -335,6 +491,73 @@ context("Check DAM enforcement rules for document types", () => {
   });
 
   context("Test enforced approvals for all internal document types", () => {
+    context("Test 'Work Order' approvals for 'WORK_ORDER' internal type", () => {
+      it("Navigate to Work Orders", () => {
+        cy.navigToWorkOrders();
+      });
+
+      it("Click create document", () => {
+        cy.poClickCreatePO();
+      });
+
+      it("Fill document name", () => {
+        cy.drEnterDocumentTitle({ name: "Work order doc" });
+      });
+
+      it("Fill document description", () => {
+        cy.drEnterDocumentDescription({ description: "Work Order description" });
+      });
+
+      it("Fill 'Work Order Status'", () => {
+        cy.get("[id=mui-component-select-wo_status]").click()
+          .get("[data-value=Open]").click();
+      });
+
+      it("Fill 'Part Number'", () => {
+        cy.get("[data-cy=wo_part_number]").type(`Subassembly doc{enter}`);
+        cy.get("[role=option]").contains("Subassembly doc").click();
+      });
+
+      it("Fill 'Lot Quantitity'", () => {
+        cy.get("[data-cy=wo_lot_quantity]").type("2");
+      });
+
+      it("Fill 'Supplier Serial Number'", () => {
+        cy.get("[name=wo_supplier_serial_number]").type("12345");
+      });
+
+      it("Fill 'Quantity Unit'", () => {
+        cy.get("[name=wo_quantity_unit]").type("3");
+      });
+
+      it("Fill 'Build Type'", () => {
+        cy.get("[data-cy=wo_build_type]").type(`Lots{enter}`);
+        cy.get("[role=option]").contains("Lots").click();
+      });
+
+      it("Fill 'Build Priority'", () => {
+        cy.get("[id=mui-component-select-wo_build_priority]").click()
+          .get("[data-value=Normal]").click();
+      });
+
+      it("Fill 'Due Date'", () => {
+        cy.poAddDateRequired();
+      });
+
+      it("Fill 'Assigned Work Order to:'", () => {
+        cy.get("[data-cy=wo_assigned_to]").type(`${ADMIN_USER.name}{enter}`);
+        cy.get("[role=option]").contains(`${ADMIN_USER.name}`).click();
+      });
+
+      it("Fill 'Serialized/Non-Serialized'", () => {
+        cy.get("[value=Non-Serialized]").click();
+      });
+
+      it("Check approvals enfocment", () => {
+        cy.drCheckApprovalsEnforcment();
+      });
+    });
+
     context("Test 'Component Specification' approvals for 'WO_PARTS' internal type", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
@@ -555,57 +778,9 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Check approvals enfocment", () => {
+        SystemRequirement("REQ-0520");
         cy.drCheckApprovalsEnforcment();
       });
     });
-
-    context("Test 'Work Order' approvals for 'WORK_ORDER' internal type", () => {
-      context("Create form for Work Order", () => {
-        it("Navigate to document list", () => {
-          cy.navigToDocumentList();
-        });
-
-        it("Click create document", () => {
-          cy.cmpClickCreateNewDocument();
-        });
-
-        it("Fill document name", () => {
-          cy.drEnterDocumentTitle({ name: "Suppliers doc" });
-        });
-
-        it("Fill document description", () => {
-          cy.drEnterDocumentDescription({ description: "Suppliers address" });
-        });
-
-        it("Select document type", () => {
-          cy.drSelectDocumentType({ documentType: "Form" });
-        });
-
-        it("Select output document type", () => {
-          cy.drSelectOutputDocumentType({ documentType: "Work Order" });
-        });
-
-        it("Create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-
-        it("Approve and release form", () => {
-          cy.drApproveAndReleaseDocument();
-        });
-      });
-
-      context("Verify 'Work Order' approvals", () => {
-        /* Create work order by:
-        Create SA
-        Create MPI->Other
-        Create LHR->Lots, add SA to sa field, add MPI field and add MPI
-        Create WO form
-        Create WO
-        */
-      });
-
-
-    });
-
   });
 });
