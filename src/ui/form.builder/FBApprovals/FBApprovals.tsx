@@ -23,8 +23,9 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
   ownerId,
   renderOption,
   loading,
+  isComponentVisible,
   ...props
-}) => (
+}) => isComponentVisible ? (
   <FBInput {...props} {...{ name }} type="approvals">
     <FBSection {...{ label }} />
     <FBAutocompleteAsync
@@ -57,7 +58,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
         >
           {approval.approver?.user.name}
           {approval.status && approval.status !== "DRAFT" && (
-            <Box color={Colors.gray}> | {FBInlineApprovalStatusIdent[approval.status]}</Box>
+            <Box color={Colors.gray}> | {FBInlineApprovalStatusIdent[approval.status]} | {approval.reviewedAt}</Box>
           )}
           {approval.canRequest && (
             <>
@@ -96,6 +97,6 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
       )}
     </FBMapWrapper>
   </FBInput>
-);
+) : null;
 
 export default withFBApprovals(FBApprovals);

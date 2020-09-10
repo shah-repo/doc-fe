@@ -1,6 +1,6 @@
 import { useFormikContext } from "formik";
 import * as React from "react";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
@@ -25,7 +25,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   } = React.useContext(FormHeaderContext)!;
 
   const { workspaceState, formState } = FB.useStores();
-  const { revisionStage, subRevision } = documentRevision || {};
+  const { revisionStage, subRevision, revisionChangeType } = documentRevision || {};
   const formik = useFormikContext();
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
@@ -71,7 +71,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         data-cy={"DocumentRevisionForm-submit"}
       />
       {
-        values.document?.documentType?.group === "RECORD"
+        values.document?.documentType?.group === "RECORD" && revisionChangeType !== RevisionChangeType.Obsolete
           ? (
             <FinalizeAndRelease
               docRevId={values.id as string}
