@@ -122,20 +122,29 @@ context("Record Control Flow", () => {
       });
 
       context("Add Inline Approval fileds", () => {
-        it("Adds inline approval field with approvers", () => {
+        it("Adds inline approval field", () => {
           SystemRequirement("REQ-0980");
           cy.fbAddNewFieldOption();
           cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" }).wait(2000);
-          cy.get("[data-cy=\"approvers\"]").wait(2000).type("enlil.testmail+cy2{downarrow}{enter}");
-          cy.fbAddField().wait(5000);
         });
 
-        it("Adds inline approval field with approver groups", () => {
+        it("Fill label field with 'Inline Approve'", () => {
           SystemRequirement("REQ-0980");
-          cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
-          cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" }).wait(2000);
-          cy.get("[data-cy=\"approverGroups\"]").wait(2000).type("Everyone{downarrow}{enter}");
-          cy.fbAddField();
+          cy.get("[name=\"label\"]").type("Inline Approve").wait(2000);
+        });
+
+        it("Fill approvers field", () => {
+          SystemRequirement("REQ-0980");
+          cy.get("[data-cy=\"defaultValue.approvers\"]").type("enlil.testmail+cy2{downarrow}{enter}").wait(2000);
+        });
+
+        it("Select group field value 'Everyone'", () => {
+          SystemRequirement("REQ-0980");
+          cy.get("[data-cy=\"defaultValue.groups\"]").type("Everyone{downarrow}{enter}").wait(2000);
+        });
+
+        it("Add inline approve field", () => {
+          cy.fbAddField().wait(3000);
         });
       });
 
@@ -166,12 +175,18 @@ context("Record Control Flow", () => {
       });
 
       it("Saves Document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickCreateDocumentWithApiCall();
       });
-    });
 
-    it("Check inline approvals", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").should("not.be.disabled");
+      it("Select inline approvers", () => {
+        cy.get("[name*=\"fb-ia-inline-approve\"] input")
+          .type("enlil.testmail+cy2{downarrow}{enter}", { force: true }).wait(2000);
+        cy.get("[data-cy*=\"fb-ia-inline-approve-\"]").last().type("enlil.testmail+cy3{downarrow}{enter}").wait(2000);
+      });
+
+      it("Check inline approvals is not disabled", () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").should("not.be.disabled");
+      });
     });
 
     context("Approve Inline Approval", () => {
@@ -225,4 +240,5 @@ context("Record Control Flow", () => {
 });
 
 export { };
+
 
