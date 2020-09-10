@@ -386,6 +386,11 @@ context("PO approval test", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
+    it("Check for AR notification on dashboard", () => {
+      SystemRequirement("REQ-2150");
+      cy.arCheckDashboardARNotificationExistance({ shouldExist: true });
+    });
+
     it("Click on 'Reject' AR and enter confirmation password", () => {
       // SystemRequirement("REQ-1570");
       cy.poRejectAR({ password: "Tester1!" });

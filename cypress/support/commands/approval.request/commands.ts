@@ -36,9 +36,14 @@ declare global {
       arCloseAR(): Chainable<Subject>;
       arVoidAR(): Chainable<Subject>;
       arSaveApiCall(): Chainable<Subject>;
+      arCheckDashboardARNotificationExistance(params: {shouldExist: boolean}): Chainable<Subject>;
     }
   }
 }
+
+Cypress.Commands.add("arCheckDashboardARNotificationExistance", (params: {shouldExist: boolean}) => {
+  cy.get("[data-cy=\"pendingActionsAR\"]").should(params.shouldExist ? "exist" : "not.exist");
+});
 
 Cypress.Commands.add("arCreateApprovalRequest", (params: {
   payload: ChangeRequestEditRequestBody;
