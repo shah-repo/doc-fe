@@ -134,37 +134,37 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.cmpClickCreateNewDocument();
     });
 
-    it(`type a title: '${FormDAM}'`, () => {
+    it(`Type a title: '${FormDAM}'`, () => {
       cy.drEnterDocumentTitle({ name: `${FormDAM}` });
     });
 
-    it(`type a description: '${FormDAM}'`, () => {
+    it(`Type a description: '${FormDAM}'`, () => {
       cy.drEnterDocumentDescription({ description: FormDAM });
     });
 
-    it("fill in document type: Form", () => {
+    it("Fill in document type: Form", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("fill in output document type: Document Approval Matrix", () => {
+    it("Fill in output document type: Document Approval Matrix", () => {
       cy.drSelectOutputDocumentType({ documentType: "Document Approval Matrix" });
     });
 
-    it("open add field dialogue", () => {
+    it("Open add field dialogue", () => {
       cy.fbAddNewField();
     });
 
-    it("select 'Approval Matrix'", () => {
+    it("Select 'Approval Matrix'", () => {
       cy.fbSelectApprovalMatrix();
     });
 
-    it("add 'Approval Matrix' field", () => {
+    it("Add 'Approval Matrix' field", () => {
       cy.fbAddField();
     });
   });
 
   context("Save DAM And Approve & Release Document", () => {
-    it("clicks on 'Save' button", () => {
+    it("Clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
 
@@ -174,17 +174,17 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
   });
 
   context("Create New Document out of the Form", () => {
-    it("open new document", () => {
+    it("Open new document", () => {
       cy.drCreateNewDocumentFromForm();
     });
   });
 
-  context("fills in Title and Description", () => {
-    it(`type a title: ${DAMDocument}`, () => {
+  context("Fills in Title and Description", () => {
+    it(`Type a title: ${DAMDocument}`, () => {
       cy.drEnterDocumentTitle({ name: `${DAMDocument}` });
     });
 
-    it(`type a description: ${DAMDocument}`, () => {
+    it(`Type a description: ${DAMDocument}`, () => {
       cy.drEnterDocumentDescription({ description: DAMDocument });
     });
   });
@@ -360,7 +360,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
   });
 
   context("Approve & Release Document", () => {
-    it("clicks on 'Save' button", () => {
+    it("Clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
@@ -380,21 +380,21 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
   });
 
   context("Fill in document attributes", () => {
-    it("type a title", () => {
+    it("Type a title", () => {
       cy.drEnterDocumentTitle({ name: `${documentOne}` });
     });
 
-    it("type a description", () => {
+    it("Type a description", () => {
       cy.drEnterDocumentDescription({ description: documentOne });
     });
 
-    it(`fill in document type: ${docTypeOne}`, () => {
+    it(`Fill in document type: ${docTypeOne}`, () => {
       cy.drSelectDocumentType({ documentType: docTypeOne });
     });
   });
 
   context("Save document", () => {
-    it("clicks on 'Save' button", () => {
+    it("Clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
   });
@@ -410,21 +410,21 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
   });
 
   context("Fill in document attributes", () => {
-    it("type a title", () => {
+    it("Type a title", () => {
       cy.drEnterDocumentTitle({ name: `${documentTwo}` });
     });
 
-    it("type a description", () => {
+    it("Type a description", () => {
       cy.drEnterDocumentDescription({ description: documentTwo });
     });
 
-    it(`fill in document type: ${docTypeTwo}`, () => {
+    it(`Fill in document type: ${docTypeTwo}`, () => {
       cy.drSelectDocumentType({ documentType: docTypeTwo });
     });
   });
 
   context("Save document", () => {
-    it("clicks on 'Save' button", () => {
+    it("Clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
   });
@@ -533,7 +533,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
   });
 
   context("Approve document in review", () => {
-    it(`approve document`, () => {
+    it(`Approve document`, () => {
       cy.get("#root").contains("Approve").click();
     });
 
@@ -564,7 +564,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
   });
 
   context("Approve document in review", () => {
-    it(`approve document`, () => {
+    it(`Approve document`, () => {
       cy.get("#root").contains("Approve").click();
     });
 
@@ -595,7 +595,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
   });
 
   context("Approve document in review", () => {
-    it(`approve document`, () => {
+    it(`Approve document`, () => {
       cy.get("#root").contains("Approve").click();
     });
 
@@ -636,7 +636,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it(`select '${ARDocument}'`, () => {
+    it(`Select '${ARDocument}'`, () => {
       cy.get("#root").contains(ARDocument).click();
     });
 
@@ -670,7 +670,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.dlFilterByStatus({ status: "Released" });
     });
 
-    it(`select '${documentTwo}'`, () => {
+    it(`Select '${documentTwo}'`, () => {
       cy.get("#root").contains(documentTwo).click();
     });
 
