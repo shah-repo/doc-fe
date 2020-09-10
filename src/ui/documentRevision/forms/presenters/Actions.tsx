@@ -1,6 +1,6 @@
 import { useFormikContext } from "formik";
 import * as React from "react";
-import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
@@ -71,15 +71,15 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         data-cy={"DocumentRevisionForm-submit"}
       />
       {
-        values.document?.documentType?.group === "RECORD" && revisionChangeType !== RevisionChangeType.Obsolete
+        values.document?.documentType?.group === "RECORD"
           ? (
             <FinalizeAndRelease
               docRevId={values.id as string}
               revisionStage={revisionStage}
               subRevision={subRevision}
               status={values.status}
+              revisionChangeType={revisionChangeType}
             />
-
           )
           : (
             <ApproveAndRelease
