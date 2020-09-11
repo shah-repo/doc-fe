@@ -1,13 +1,14 @@
 import { includes, isArray, isEmpty, size } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from ".";
-import { FBSchemaState } from "..";
+import { FBInlineApprovalBody, FBSchemaState } from "..";
 import { GroupTag, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 
 export class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
+  @observable approvals?: FBInlineApprovalBody[];
   public externalState?: FBWorkspaceExternalState;
   public document?: DocumentRevision;
   public changeRequest?: ChangeRequest;

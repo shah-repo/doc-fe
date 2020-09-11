@@ -4,17 +4,19 @@ export interface FBInlineApprovalValue {
   approvers?: string[] | FBEmployee[];
   groups?: string[] | FBGroup[];
   roles?: string[] | FBInlineApprovalRole[];
+  isApproved?: boolean;
 }
 
 export type FBInlineApprovalProps =
-& Omit<FBInputProps, "defaultValue">
+& Omit<FBInputProps, "editorConfig">
 & Pick<FBProviderProps, "inlineApprovalState">
 & {
   approvalTransition?: (transition: FBInlineApprovalTransition, id?: string) => any;
-  defaultValue?: FBInlineApprovalValue;
+  editorConfig?: FBInlineApprovalValue;
   approvals?: FBInlineApprovalBody[];
   currentUser?: string;
   isApproved?: boolean;
+  isPreview?: boolean;
 };
 
 export type FBInlineApprovalOptions = FBEmployee & {
