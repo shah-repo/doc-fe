@@ -1,6 +1,6 @@
 import { Button } from "@material-ui/core";
 import React from "react";
-import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { documentRevisionsActions, DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
@@ -13,6 +13,7 @@ interface Props {
   revisionStage: number;
   subRevision?: number;
   status?: DocumentRevisionStatus;
+  revisionChangeType: string;
 }
 
 export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
@@ -20,16 +21,26 @@ export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
   revisionStage,
   subRevision,
   status,
+  revisionChangeType,
 }) => {
   const releaseRecordDialog = useDialog();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
   const isSubmitApproval = revisionStage === 3 && (subRevision && subRevision > 0);
+  const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
   const async = useAsync({
     onError: (error) => {
       toastError(error as string);
       releaseRecordDialog.close();
     },
   });
+
+  let buttonText = "record.finalize.and.release";
+  if (isSubmitApproval) {
+    buttonText = "record.submit.for.approval";
+  }
+  if (isObsolete) {
+    buttonText = "common.void";
+  }
 
   const releaseRecord = () => {
     async.start(
@@ -53,15 +64,11 @@ export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
         id="ApproveAndRelease-button"
         data-cy="ApproveAndRelease-button"
       >
-        {
-          isSubmitApproval ?
-            <Text message="record.submit.for.approval" /> :
-            <Text message="record.finalize.and.release" />
-        }
+        <Text message={buttonText} />
       </Button>
       <AlertDialog
         dialog={releaseRecordDialog}
-        message="record.release.alert"
+        message={isObsolete ? "documentRevision.void.alert" : "record.release.alert"}
         confirmLabel="common.true"
         cancelLabel="common.false"
         confirmAction={releaseRecord}

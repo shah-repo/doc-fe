@@ -5,7 +5,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBApprovalsState, FBApprover, FBInlineApprovalBody, FBRequiredApprover } from "..";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
 import { FBApprovalsProps, FBApprovalsStatusEndpoint } from "./FBApprovals.types";
 
@@ -26,6 +26,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     isIncluded,
     currentUser,
     ownerId,
+    isComponentVisible,
     ...props
   }: T) => {
 
@@ -146,6 +147,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     useObserver(() => {
       groups = approvalsState?.groups;
       approvals = approvalsState?.getApprovals;
+      isComponentVisible = document?.revisionChangeType !== RevisionChangeType.Obsolete;
       loading = (
         approvalsState.loading ||
         approvalsState?.approvalApi.loading ||
@@ -171,6 +173,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       isIncluded,
       currentUser,
       ownerId,
+      isComponentVisible,
     });
   };
 

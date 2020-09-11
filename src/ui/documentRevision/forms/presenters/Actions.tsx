@@ -25,7 +25,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   } = React.useContext(FormHeaderContext)!;
 
   const { workspaceState, formState } = FB.useStores();
-  const { revisionStage, subRevision } = documentRevision || {};
+  const { revisionStage, subRevision, revisionChangeType } = documentRevision || {};
   const formik = useFormikContext();
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
@@ -78,8 +78,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               revisionStage={revisionStage}
               subRevision={subRevision}
               status={values.status}
+              revisionChangeType={revisionChangeType}
             />
-
           )
           : (
             <ApproveAndRelease
