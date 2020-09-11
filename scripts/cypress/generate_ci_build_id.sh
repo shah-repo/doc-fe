@@ -1,6 +1,7 @@
 #!/bin/bash
+set -e
 
-source ./scripts/cypress/platform_specific_variables.sh
+source ./scripts/cypress/utils/platform_specific_variables.sh
 
 if [[ -z "${DATE_ISO_DEFAULT}" ]]; then
   echo "DATE_ISO_DEFAULT not set, exiting"
@@ -14,5 +15,6 @@ if [[ -z "${ID_SUFFIX}" ]]; then
 else
   export CI_BUILD_ID=$DATE_ISO_DEFAULT"_"$ID_SUFFIX
 fi
+set +e
 
 echo "CI_BUILD_ID=$CI_BUILD_ID"
