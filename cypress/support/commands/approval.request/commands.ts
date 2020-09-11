@@ -36,6 +36,7 @@ declare global {
       arCloseAR(): Chainable<Subject>;
       arVoidAR(): Chainable<Subject>;
       arSaveApiCall(): Chainable<Subject>;
+      arApproverRoleStatus(params: {roleName: string; enabled: boolean}): Chainable<Subject>;
     }
   }
 }
@@ -200,4 +201,8 @@ Cypress.Commands.add("arRejectComfirmationAR", () => {
 
 Cypress.Commands.add("arSelectFirstDocument", () => {
   cy.get(".MuiTableCell-root a:nth-child(1)").first().click().wait(3000);
+});
+
+Cypress.Commands.add("arApproverRoleStatus", (params: {roleName: string; enabled: boolean}) => {
+  cy.get(`[data-cy="fb-approvers-${params.roleName}-check-${params.enabled ? "marked" : "disabled"}"]`).should("not.be.undefined");
 });
