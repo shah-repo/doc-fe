@@ -37,6 +37,7 @@ declare global {
       arVoidAR(): Chainable<Subject>;
       arSaveApiCall(): Chainable<Subject>;
       arCheckDashboardARNotificationExistance(params: {shouldExist: boolean}): Chainable<Subject>;
+      arVerifySignatureIsNotMet(): Chainable<Subject>;
     }
   }
 }
@@ -79,6 +80,14 @@ Cypress.Commands.add("arGetArDocumentByName", (params: {
 
 Cypress.Commands.add("arEnterApprovalRequestTitle", (params: {title: string }) => {
   cy.get("[data-cy=\"field-title\"]").type(params.title);
+});
+
+Cypress.Commands.add("arVerifySignatureIsNotMet", (params: {title: string }) => {
+  cy.get("button[aria-label=approve]").first().click();
+  cy.get("[data-cy=\"transition.action.password\"]").type("wrongPassword");
+  cy.get("[data-cy=\"passwordConfirm\"]").click();
+  cy.checkToastMessage({ exists: true });
+  cy.get("[data-cy=\"reject.request\"]").click();
 });
 
 Cypress.Commands.add("arCheckImplementationTaskStatus", (params: {status: string }) => {
