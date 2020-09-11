@@ -99,6 +99,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   isNewVersion = false,
   showAdministrativeAndVoidChange,
 }) => {
+
   useScrollIntoView();
   const { workspaceState } = FB.useStores();
   const isDisabled: boolean = initialValues.id !== undefined;
@@ -183,6 +184,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
   const defaultLabel = isRecord ? "document.revision.type.of.update" : "document.revision.stage";
   const documentTypeId = values.document?.documentType?.id;
+
   return (
     <Grid
       item={true}

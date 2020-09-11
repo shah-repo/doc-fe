@@ -103,7 +103,6 @@ DocumentRevisionFormContainerProps
   const isRecord = (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
 
   const cleanInitialValues = useMemo(() => {
-    console.log(initialValues.referenceTo.map((ref) => ref.label));
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
     const { outputRevision } = initialValues;
     const securityGroups: any[] = [];
