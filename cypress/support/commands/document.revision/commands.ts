@@ -81,6 +81,7 @@ declare global {
       drAddUserFromPermissionTab(...users: string[]): Chainable<Subject>;
       drSelectGroup(...groups: string[]): Chainable<Subject>;
       drAddGroupFromPermissionTab(...groups: string[]): Chainable<Subject>;
+      drRequestAccessVisibility(params: {isVisible: boolean}): Chainable<Subject>;
     }
   }
 }
@@ -461,4 +462,8 @@ Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
     cy.get(`[id="react-select-3-input"]`).type(`${group}{downarrow}{enter}`, { force: true });
     cy.get(`[data-cy="add-user"]`).click();
   });
+});
+
+Cypress.Commands.add("drRequestAccessVisibility", (params: {isVisible: boolean}) => {
+  cy.get(`[data-cy="PreviewControlsContainer-access"]`).should((params.isVisible ? "" : "not.") + "be.visible");
 });
