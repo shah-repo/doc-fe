@@ -58,49 +58,53 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
           labelPrefixRoot="user.name"
           optionValueKey="id"
           groupByKey="listGroup"
-          gutter={approvals.length > 0}
+          gutter={false}
         />
       )}
-      <FBApprovalAudit {...{ name, type, index }} />
-      <FBMapWrapper<FBInlineApprovalBody[]> collection={approvals}>
-        {(approval: FBInlineApprovalBody, index) => (
-          <Box
-            key={`fb-ia-info-${approval.id}-${index}`}
-            pb={currentUser === approval.approver?.user.id ? 0 : 0.6}
-            display="flex"
-            flexDirection="row"
-            alignItems="center"
-          >
-            {approval.approver?.user.name}
-            {approval.status && approval.status !== "DRAFT" && (
-              <Box color={Colors.gray}> | {FBInlineApprovalStatusIdent[approval.status]}</Box>
-            )}
-            {approval.canRequest && (
-              <>
-                <Box> |</Box>
-                <FBButton
-                  style={{ margin: 0 }}
-                  label="form.builder.request.approval"
-                  variant="text"
-                  color="primary"
-                  onClick={() => approvalTransition?.("pending", approval.id)}
-                />
-              </>
-            )}
-            {currentUser === approval.approver?.user.id && (
-              <Box flexGrow={1} textAlign="right">
-                <FBButton
-                  {...{ disabled }}
-                  label="form.builder.request.approve"
-                  size="small"
-                  style={{ fontSize: "11px" }}
-                  onClick={() => approvalTransition?.("approve", approval.id)}
-                />
-              </Box>
-            )}
-          </Box>
-        )}
-      </FBMapWrapper>
+      <Box my={1}>
+        <FBApprovalAudit {...{ name, type, index }} />
+      </Box>
+      <Box mt={approvals.length ? 1 : 0}>
+        <FBMapWrapper<FBInlineApprovalBody[]> collection={approvals}>
+          {(approval: FBInlineApprovalBody, index) => (
+            <Box
+              key={`fb-ia-info-${approval.id}-${index}`}
+              pb={currentUser === approval.approver?.user.id ? 0 : 0.6}
+              display="flex"
+              flexDirection="row"
+              alignItems="center"
+            >
+              {approval.approver?.user.name}
+              {approval.status && approval.status !== "DRAFT" && (
+                <Box color={Colors.gray}> | {FBInlineApprovalStatusIdent[approval.status]}</Box>
+              )}
+              {approval.canRequest && (
+                <>
+                  <Box pl={0.5}>|</Box>
+                  <FBButton
+                    style={{ margin: 0 }}
+                    label="form.builder.request.approval"
+                    variant="text"
+                    color="primary"
+                    onClick={() => approvalTransition?.("pending", approval.id)}
+                  />
+                </>
+              )}
+              {currentUser === approval.approver?.user.id && (
+                <Box flexGrow={1} textAlign="right">
+                  <FBButton
+                    {...{ disabled }}
+                    label="form.builder.request.approve"
+                    size="small"
+                    style={{ fontSize: "11px" }}
+                    onClick={() => approvalTransition?.("approve", approval.id)}
+                  />
+                </Box>
+              )}
+            </Box>
+          )}
+        </FBMapWrapper>
+      </Box>
     </FBInput>
   </FBProvider>
 );

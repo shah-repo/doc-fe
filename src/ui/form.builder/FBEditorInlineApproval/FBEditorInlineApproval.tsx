@@ -18,26 +18,26 @@ const FBEditorInlineApproval: React.FunctionComponent<FBEditorProps> = ({
     <FBAutocompleteAsync
       label="common.approvers"
       optionId={FBAutocompleteAsyncOption.availableApprovers}
-      name="defaultValue.approvers"
+      name="editorConfig.approvers"
       multiple={true}
       defaultValue={(defaultValue as FBInlineApprovalValue)?.approvers}
-      rules="required_without_all:defaultValue.groups,defaultValue.roles"
+      rules="required_without_all:editorConfig.groups,editorConfig.roles"
     />
     <FBAutocompleteAsync
       label="form.builder.approver.groups"
       optionId={FBAutocompleteAsyncOption.groups}
-      name="defaultValue.groups"
+      name="editorConfig.groups"
       multiple={true}
       defaultValue={(defaultValue as FBInlineApprovalValue)?.groups}
-      rules="required_without_all:defaultValue.approvers,defaultValue.roles"
+      rules="required_without_all:editorConfig.approvers,editorConfig.roles"
     />
     <FBAutocompleteAsync
       label="form.builder.approval.roles"
       optionId={FBAutocompleteAsyncOption.approvalRoles}
-      name="defaultValue.roles"
+      name="editorConfig.roles"
       multiple={true}
       defaultValue={(defaultValue as FBInlineApprovalValue)?.roles}
-      rules="required_without_all:defaultValue.approvers,defaultValue.groups"
+      rules="required_without_all:editorConfig.approvers,editorConfig.groups"
     />
     {children}
   </FBEditor>

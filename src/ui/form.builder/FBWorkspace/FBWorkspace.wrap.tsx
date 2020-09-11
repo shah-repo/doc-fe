@@ -3,7 +3,7 @@ import { isEqual, union, uniqBy } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
-import { FB, FBSchemaProps, FBSnackbarState } from "..";
+import { FB, FBInlineApprovalBody, FBSchemaProps, FBSnackbarState } from "..";
 import { store } from "../../../state/store";
 import { FBDialogState } from "../FBDialog";
 
@@ -60,6 +60,13 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       }
       workspaceState.document = document;
     }
+
+    React.useEffect(() => {
+      if (!workspaceState) { return; }
+      workspaceState.approvals = document?.approvals as FBInlineApprovalBody[];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [document?.approvals]);
+
     // *TODO: find a way to reset constructor props
     React.useEffect(() => {
       if (!workspaceState) { return; }

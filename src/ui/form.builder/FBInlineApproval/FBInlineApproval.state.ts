@@ -54,7 +54,8 @@ export class FBInlineApprovalState {
     const approvers = map(approvals, "approver");
     const options = map(approvers, (o) => ({ ...o, listGroup: "Approvers" })) as FBInlineApprovalOptions[];
     this.setOptions(options);
-  }
+  };
+
   public approvalBody = (body: FBInlineApprovalBody) => {
     this.approvalApi.setBody(body);
     this.approvalApi.post();
