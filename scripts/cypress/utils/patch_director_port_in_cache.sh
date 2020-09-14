@@ -1,7 +1,6 @@
 #!/bin/bash
-set -e
 
-source ./scripts/cypress/platform_specific_variables.sh
+source ./scripts/cypress/utils/platform_specific_variables.sh
 
 if [[ -z "${ENLIL_COMPOSE_EXPOSE_DIRECTOR_PORT}" ]]; then
   echo "ENLIL_COMPOSE_EXPOSE_DIRECTOR_PORT not set, exiting"

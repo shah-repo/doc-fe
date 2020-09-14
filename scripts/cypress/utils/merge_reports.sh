@@ -1,12 +1,11 @@
 #!/bin/bash
-set -e
 
 if [[ -z "${CI_BUILD_ID}" ]]; then
   echo "CI_BUILD_ID not set, exiting"
   exit 1
 fi
 
-source ./scripts/cypress/make_results_dir.sh
+source ./scripts/cypress/utils/make_results_dir.sh
 
 yarn --silent mochawesome-merge \"$DIR_JSON/generated*.json\" > "$DIR_JSON/merged.json" 
 # TODO parse merged.json, get report form 

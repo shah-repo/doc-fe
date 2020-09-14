@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -e
 
 secs_to_human() {
@@ -41,31 +42,31 @@ yarn install --frozen-lockfile
 yarn cypress install
 yarn cypress verify
 
-source ./scripts/cypress/make_results_dir.sh
+source ./scripts/cypress/utils/make_results_dir.sh
 
-./scripts/cypress/patch_director_port_in_cache.sh
-./scripts/cypress/generate_requirements_json_file.sh
+./scripts/cypress/utils/patch_director_port_in_cache.sh
+./scripts/cypress/utils/generate_requirements_json_file.sh
 
-./scripts/cypress/delete_cache.sh
+./scripts/cypress/utils/delete_cache.sh
 
-./scripts/cypress/run_generate_info_report.sh
+./scripts/cypress/utils/run_generate_info_report.sh
 
 export CYPRESS_SCREENSHOTS_FOLDER=$DIR_SCREENSHOTS_REPORT
 export CYPRESS_VIDEOS_FOLDER=$DIR_VIDEOS_REPORT
 
 if [[ -z "${NUMBER_OF_WORKERS_PER_RUN}" ]]; then
-  ./scripts/cypress/delete_failed_specs.sh
-  NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-4} ./scripts/cypress/run_workers_in_parallel.sh
+  ./scripts/cypress/utils/delete_failed_specs.sh
+  NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-4} ./scripts/cypress/utils/run_workers_in_parallel.sh
 else
   for i in $(echo $NUMBER_OF_WORKERS_PER_RUN | sed "s/,/ /g")
   do
-    ./scripts/cypress/delete_failed_specs.sh
-    NUMBER_OF_WORKERS=$i ./scripts/cypress/run_workers_in_parallel.sh
+    ./scripts/cypress/utils/delete_failed_specs.sh
+    NUMBER_OF_WORKERS=$i ./scripts/cypress/utils/run_workers_in_parallel.sh
   done
 fi
 
-./scripts/cypress/run_generate_requirements_report.sh
-./scripts/cypress/merge_reports.sh
+./scripts/cypress/utils/run_generate_requirements_report.sh
+./scripts/cypress/utils/merge_reports.sh
 
 echo "================="
 echo "================="

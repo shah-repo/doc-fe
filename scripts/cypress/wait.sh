@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 if [[ -z "${CYPRESS_BE_URL}" ]]; then
   echo "CYPRESS_BE_URL not set, exiting"
