@@ -29,7 +29,8 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
       <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
         {(group: FBRequiredApprover, id) => (
           <Box display="flex" key={`fb-approvers-group-${id}`} mr={2.5} >
-            <CheckCircleIcon color={isIncluded?.(group) ? "primary" : "disabled"} />
+            <CheckCircleIcon data-cy={`fb-approvers-${group.name}-check-${isIncluded?.(group) ? "marked" : "disabled"}`}
+              color={isIncluded?.(group) ? "primary" : "disabled"} />
             <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={group.name} />
           </Box>
         )}

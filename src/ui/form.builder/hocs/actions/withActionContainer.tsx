@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { find, first, isString } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB } from "../..";
@@ -17,14 +17,14 @@ export const withActionContainer = <T extends FBActionContainerProps>(
 
   state = FB.useRef<FBActionContainerState>(FBActionContainerState);
   function doRenderActions(): boolean {
-    return Boolean(actions && _.isString(_.first(actions)));
+    return Boolean(actions && isString(first(actions)));
   }
 
   return useObserver(() => {
 
     doRenderActions() && (actions =
         (actions || []).map((actionName, index) => {
-          const action = _.find(state?.data, (d: FBActionModel) => d.name === actionName);
+          const action = find(state?.data, (d: FBActionModel) => d.name === actionName);
           return (action && <FBAction key={`${actionName}-${index}`} {...{ action }} />);
         })
     );

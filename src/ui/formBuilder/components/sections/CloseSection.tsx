@@ -32,6 +32,7 @@ const CloseSection: React.FunctionComponent<CloseSectionProps> = ({
 
   useEffect(() => {
     setClosed(closed);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isClosed]);
 
   const closeSection = () => {
@@ -78,6 +79,7 @@ const CloseSection: React.FunctionComponent<CloseSectionProps> = ({
   let diffList = [];
   if (stateDiff) {
     diffList = stateDiff.map((diffItem: any, i: string) => {
+      // eslint-disable-next-line array-callback-return
       const list = Object.keys(diffItem.changes[1]).map((diffItemKey, j) => {
         if (
           diffItem.changes[1][diffItemKey] !== diffItem.changes[0][diffItemKey]

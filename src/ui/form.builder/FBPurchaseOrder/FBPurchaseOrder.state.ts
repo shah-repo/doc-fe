@@ -1,4 +1,4 @@
-import _, { Dictionary, template } from "lodash";
+import { Dictionary, filter, isEmpty, isUndefined, omit, reduce, size, template, toNumber, union } from "lodash";
 import { action, observable, set } from "mobx";
 import moment from "moment";
 import { FB, FBPurchaseOrderCalculation, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from "..";
@@ -24,7 +24,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
   public constructor({ documentId, ...initialValues }: FBPurchaseOrderConstructor) {
     super();
-    if (!initialValues || _.isEmpty(initialValues)) {
+    if (!initialValues || isEmpty(initialValues)) {
       return;
     }
     if (documentId) {
@@ -32,14 +32,14 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     }
     const items = (initialValues?.items || [])
       .map((item, index) => ({ ...item, index }));
-    const calculation = _.omit(initialValues, "items");
+    const calculation = omit(initialValues, "items");
     set(this, "items", items);
     set(this, "calculation", { ...this.calculation, ...calculation });
   }
 
   @action public setItemTotalAmount = (item?: FBPurchaseOrderItem) => {
     const { unitPrice = 0, order = 0 } = item || {};
-    const itemTotalAmount = _.toNumber(unitPrice) * _.toNumber(order);
+    const itemTotalAmount = toNumber(unitPrice) * toNumber(order);
     set(this, "itemTotalAmount", itemTotalAmount);
   };
 
@@ -86,7 +86,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     if (!item) {
       return;
     }
-    const items: FBPurchaseOrderItem[] = _.isUndefined(item.index)
+    const items: FBPurchaseOrderItem[] = isUndefined(item.index)
       ? this.addItem(item)
       : this.updateItem(item);
     set(this, "items", items);
@@ -98,7 +98,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     if (!item) {
       return;
     }
-    set(this, "items", _.filter(this.items, (itm) => itm.id !== item.id));
+    set(this, "items", filter(this.items, (itm) => itm.id !== item.id));
   };
 
   @action public calculateCost = () => {
@@ -138,7 +138,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
   protected onSuccess() {
     super.onSuccess();
-    const items = _.reduce(this.items, (reduced: FBPurchaseOrderItem[], item) => {
+    const items = reduce(this.items, (reduced: FBPurchaseOrderItem[], item) => {
       reduced.push({
         ...item,
         received: this.data[item.partNumber] ?? 0,
@@ -149,7 +149,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   }
 
   private fetchReceivedItems = (documentId: string) => {
-    const urlTpl = _.template(FBEndpoint.ReceivedItemsQuantity);
+    const urlTpl = template(FBEndpoint.ReceivedItemsQuantity);
     const url = urlTpl({ documentId });
     this.setUrl(url);
     this.fetch();
@@ -159,13 +159,13 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
   private formatDate = (date) => date ? moment(date).format("MM/DD/YYYY") : "";
 
-  private addItem = (item: FBPurchaseOrderItem): FBPurchaseOrderItem[] => _.union(this.items, [{
+  private addItem = (item: FBPurchaseOrderItem): FBPurchaseOrderItem[] => union(this.items, [{
     id: FB.uniqid,
     ...item,
     received: 0,
     totalAmount: this.itemTotalAmount.toFixed(2),
     formattedDate: this.formatDate(item.date),
-    index: _.size(this.items),
+    index: size(this.items),
   }]);
 
   private updateItem = (item: FBPurchaseOrderItem): FBPurchaseOrderItem[] => {

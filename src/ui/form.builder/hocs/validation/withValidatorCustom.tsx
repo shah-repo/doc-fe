@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get, isUndefined } from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
 import Validator from "validatorjs";
@@ -23,7 +23,7 @@ export const withValidatorCustom = <T extends FBValidatorDynamicProps>(
     };
 
     React.useEffect(() => {
-      if (!_.isUndefined(dynamicValidatorStore?.dynamicValidator)) {
+      if (!isUndefined(dynamicValidatorStore?.dynamicValidator)) {
         return;
       }
       dynamicValidatorStore?.setValidatorName(`validator_${uniqid()}`);
@@ -38,7 +38,7 @@ export const withValidatorCustom = <T extends FBValidatorDynamicProps>(
     };
 
     const onMessageChange = (ev: React.ChangeEvent) => {
-      const value = _.get(ev.target, "value");
+      const value = get(ev.target, "value");
       dynamicValidatorStore?.setErrorMessage(value);
     };
 

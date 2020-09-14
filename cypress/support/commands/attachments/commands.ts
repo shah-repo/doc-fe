@@ -9,6 +9,7 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       atchUploadAttachment(params: {fileName: string }): Chainable<Subject>;
+      atchUploadAttachmentFail(params: {fileName: string }): Chainable<Subject>;
       atchUploadRedlineAttachment(params: {fileName: string }): Chainable<Subject>;
       atchSetPrimaryAttachment(params: {fileName: string }): Chainable<Subject>;
       atchRemoveLastAttachment(): Chainable<Subject>;
@@ -18,6 +19,11 @@ declare global {
       atchCheckAtributes(params: {fileName: string; attributes: string }): Chainable<Subject>;
       atchDownloadAllAttachments(): Chainable<Subject>;
       atchEnterConfirmationPassword(params: {password: string }): Chainable<Subject>;
+      attachFiles(files: {name: string; type: string}[]): Chainable<Subject>;
+      closeAtchUploadDialog(): Chainable<Subject>;
+      atchCheckDisplayedAtLast(params: {fileName: string}): Chainable<Subject>;
+      atchCheckRedLineIndicator(params: {fileName: string}): Chainable<Subject>;
+      atchNoPrimaryForRedline(params: {fileName: string}): Chainable<Subject>;
     }
   }
 }
@@ -31,10 +37,54 @@ Cypress.Commands.add("atchUploadAttachment", (params: {fileName: string }) => {
         fileName: params.fileName,
         mimeType: "*",
         filePath: `fixtures/${params.fileName}`,
-      }).wait(5000);
+      });
     });
   });
 });
+
+Cypress.Commands.add("atchUploadAttachmentFail", (params: {fileName: string }) => {
+  cy.server({ force404: true });
+  cy.route({
+    method: "POST",
+    url: "**/attachments/upload",
+    response: "fixture:test_upload_response.json",
+    status: 400,
+  }).as("upload");
+  cy.fixture(params.fileName).then((fileContent) => {
+    cy.get("#AttachmentFieldPresenter-linkButton").click();
+    cy.get("#attachments-button-file-clean-copy").attachFile({
+      fileContent: fileContent.toString(),
+      fileName: params.fileName,
+      mimeType: "*",
+      filePath: `fixtures/${params.fileName}`,
+    });
+  });
+  cy.wait("@upload");
+});
+
+Cypress.Commands.add("attachFiles", { prevSubject: "element" },
+  (input, files: {name: string; type: string}[]) => {
+    files.forEach((file) => {
+      const { name, type } = file;
+      cy.fixture(name)
+        .then((content) => Cypress.Blob.base64StringToBlob(content, type))
+        .then((blob) => {
+          const testFile = new File([blob], name);
+          const dataTransfer = new DataTransfer();
+          for (const fileObj of input[0].files) {
+            dataTransfer.items.add(fileObj);
+          }
+          dataTransfer.items.add(testFile);
+          input[0].files = dataTransfer.files;
+          return input;
+        });
+    });
+    cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
+      cy.get("#attachments-button-file-clean-copy")
+        .trigger("change", { force: true });
+    });
+  },
+);
 
 Cypress.Commands.add("atchUploadRedlineAttachment", (params: {fileName: string }) => {
   cy.fixture(params.fileName).then((fileContent) => {
@@ -45,7 +95,7 @@ Cypress.Commands.add("atchUploadRedlineAttachment", (params: {fileName: string }
         fileName: params.fileName,
         mimeType: "*",
         filePath: `fixtures/${params.fileName}`,
-      }).wait(5000);
+      });
     });
   });
 });
@@ -87,10 +137,28 @@ Cypress.Commands.add("atchCheckDisplayedAttachments", (params: {fileNames: strin
 });
 
 Cypress.Commands.add("atchRemoveAttachment", (params: {fileName: string }) => {
-  cy.xpath(`//span[@title=\"${params.fileName}\"]`).trigger("mouseover");
-  cy.xpath(`//span[@title=\"${params.fileName}\"]/../../div[3]`).click();
+  cy.xpath(`//span[@title="${params.fileName}"]`).trigger("mouseover");
+  cy.xpath(`//span[@title="${params.fileName}"]/../../div[3]`).click();
 });
 
 Cypress.Commands.add("atchCheckAtributes", (params: {fileName: string; attributes: string}) => {
-  cy.xpath(`//span[@title=\"${params.fileName}\"]/../span[2]`).should("have.text", params.attributes);
+  cy.xpath(`//span[@title="${params.fileName}"]/../span[2]`).should("have.text", params.attributes);
+});
+
+Cypress.Commands.add("closeAtchUploadDialog", () => {
+  cy.get("[data-cy=\"AttachmentFieldPresenter-handleRemove\"]").click();
+});
+
+Cypress.Commands.add("atchCheckDisplayedAtLast", (params: {fileName: string }) => {
+  cy.get("[data-cy=\"attachment.title\"]").last().contains(params.fileName);
+});
+
+Cypress.Commands.add("atchCheckRedLineIndicator", (params: {fileName: string }) => {
+  cy.get(`button[title="${params.fileName}"] > div[data-cy="attachment.icon.redline"]`).should("be.visible");
+});
+
+Cypress.Commands.add("atchNoPrimaryForRedline", (params: {fileName: string }) => {
+  cy.get(`button[title="${params.fileName}"]`).rightclick();
+  cy.get("[data-cy=\"set.attachment.as.primary\"]").should("not.be.visible");
+  cy.get("[data-cy=\"field-name\"]").click({ force: true });
 });

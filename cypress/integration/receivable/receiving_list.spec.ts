@@ -2,6 +2,7 @@ import { fail } from "assert";
 import { GroupTag, NavigationItems } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -24,9 +25,10 @@ let createdReceivable1;
 context("Approval request landing page test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
+      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
 
@@ -363,14 +365,14 @@ context("Approval request landing page test", () => {
 
     context("Check for access to receivable list", () => {
       it("Verify user can't access receivable list", () => {
-        SystemRequirement("REQ-1700");
+        // SystemRequirement("REQ-1700");
         cy.navigListNotExistsCheck( NavigationItems.RECEIVING );
       });
     });
 
     context("Create group with privilages to restricted doc types", () => {
       it("Create group with permission to access receivable list", () => {
-        SystemRequirement("REQ-1700");
+        // SystemRequirement("REQ-1700");
         cy.grpAPICreateNewGroup({
           payload: {
             name: "Group with access to restricted doc types",
@@ -399,7 +401,7 @@ context("Approval request landing page test", () => {
 
     context("Check for access to receivable list", () => {
       it("Verify user can access receivable list", () => {
-        SystemRequirement("REQ-1700");
+        // SystemRequirement("REQ-1700");
         cy.navigListExistsCheck( NavigationItems.RECEIVING );
       });
     });
@@ -411,34 +413,33 @@ context("Approval request landing page test", () => {
     });
 
     it.skip("Verify receivable list defaults to show receivables in DRAFT status", () => {
-      SystemRequirement("REQ-1720");
+      // SystemRequirement("REQ-1720");
       cy.recVerifyStartingFilter();
     });
   });
 
   context("Check for displaying default columns", () => {
     it("Verify receivable id is present", () => {
-      SystemRequirement("REQ-1680");
+      // SystemRequirement("REQ-1680");
       cy.recVerifyFilterByReceivableId({ recId: "RC-00006" });
     });
 
     it.skip("Verify supplier name is present", () => {
-      SystemRequirement("REQ-1680");
       fail;
     });
 
     it("Verify owner is present", () => {
-      SystemRequirement("REQ-1680");
+      // SystemRequirement("REQ-1680");
       cy.recVerifyFilterByOwner({ owner: USERS[1].name });
     });
 
     it("Verify record state is present", () => {
-      SystemRequirement("REQ-1680");
+      // SystemRequirement("REQ-1680");
       cy.recVerifyFilterByState({ state: "DRAFT" });
     });
 
     it.skip("Verify approval date is present", () => {
-      SystemRequirement("REQ-1680");
+      // SystemRequirement("REQ-1680");
       cy.recVerifyFilterByState({ state: "DRAFT" });
       fail;
     });
@@ -450,7 +451,7 @@ context("Approval request landing page test", () => {
     });
 
     it("Enter first receivable on list", () => {
-      SystemRequirement("REQ-1780");
+      // SystemRequirement("REQ-1780");
       cy.recClickOnFirstReceivableOnList();
     });
 
@@ -473,7 +474,7 @@ context("Approval request landing page test", () => {
     });
 
     it("Verify last edited receivable is first on list", () => {
-      SystemRequirement("REQ-1740");
+      // SystemRequirement("REQ-1740");
       cy.dlClearFilters();
       cy.recVerifyFilterByReceivableId({ recId: "RC-00005" });
     });
@@ -490,12 +491,12 @@ context("Approval request landing page test", () => {
       });
 
       it("Verify filter by receivable id", () => {
-        SystemRequirement("REQ-1710");
+        // SystemRequirement("REQ-1710");
         cy.recVerifyFilterByReceivableId({ recId: "RC-00006" });
       });
 
       it("Verify receivable counter on document list", () => {
-        SystemRequirement("REQ-1760");
+        // SystemRequirement("REQ-1760");
         cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       });
     });
@@ -510,13 +511,13 @@ context("Approval request landing page test", () => {
       });
 
       it("Verify filter by owner", () => {
-        SystemRequirement("REQ-1710");
+        // SystemRequirement("REQ-1710");
         cy.recVerifyFilterByOwner({ owner: USERS[1].name });
       });
 
       it("Verify receivable counter on document list", () => {
-        SystemRequirement("REQ-1760");
-        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
+        // SystemRequirement("REQ-1760");
+        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
       });
     });
 
@@ -530,12 +531,12 @@ context("Approval request landing page test", () => {
       });
 
       it("Verify filter by state", () => {
-        SystemRequirement("REQ-1710");
+        // SystemRequirement("REQ-1710");
         cy.recVerifyFilterByState({ state: "DRAFT" });
       });
 
       it("Verify receivable counter on document list", () => {
-        SystemRequirement("REQ-1760");
+        // SystemRequirement("REQ-1760");
         cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       });
     });
@@ -550,12 +551,12 @@ context("Approval request landing page test", () => {
       });
 
       it("Verify filter by approval id", () => {
-        SystemRequirement("REQ-1710");
+        // SystemRequirement("REQ-1710");
         cy.recVerifyFilterByARId({ arId: "AR00005" });
       });
 
       it("Verify receivable counter on document list", () => {
-        SystemRequirement("REQ-1760");
+        // SystemRequirement("REQ-1760");
         cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       });
     });
@@ -566,7 +567,7 @@ context("Approval request landing page test", () => {
       });
 
       it("Verify filter clear", () => {
-        SystemRequirement("REQ-1750");
+        // SystemRequirement("REQ-1750");
         cy.recVerifyFilterClear();
       });
     });
@@ -586,12 +587,12 @@ context("Approval request landing page test", () => {
       });
 
       it("Verify filter by owner", () => {
-        SystemRequirement("REQ-1730");
+        // SystemRequirement("REQ-1730");
         cy.recVerifyFilterByOwner({ owner: USERS[1].name });
       });
 
       it("Verify filter by receivable id", () => {
-        SystemRequirement("REQ-1730");
+        // SystemRequirement("REQ-1730");
         cy.recVerifyFilterByReceivableId({ recId: "RC-00006" });
       });
     });

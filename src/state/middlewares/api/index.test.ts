@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/await-thenable */
 import { AxiosRequestConfig } from "axios";
 import MockAdapter from "axios-mock-adapter";
-import _ from "lodash";
+import { cloneDeep } from "lodash";
 import { Action, Dispatch, Middleware, Store } from "redux";
 import Config from "../../../config";
 import apiInstance from "../../apiClient";
@@ -62,7 +62,7 @@ describe("api middleware test", () => {
     const onCompleted = jest.fn();
     const onFailure = jest.fn();
     const dispatchCalls: any[] = [];
-    const state = _.cloneDeep(initialStoreState);
+    const state = cloneDeep(initialStoreState);
     state.auth.user.sessionId = "SESSION_ID";
     state.auth.user.employeeId = "EMPLOYEE_ID";
     let action: ApiAction;

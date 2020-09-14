@@ -1,13 +1,14 @@
-import _ from "lodash";
+import { includes, isArray, isEmpty, size } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from ".";
-import { FBSchemaState } from "..";
+import { FBInlineApprovalBody, FBSchemaState } from "..";
 import { GroupTag, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 
 export class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
+  @observable approvals?: FBInlineApprovalBody[];
   public externalState?: FBWorkspaceExternalState;
   public document?: DocumentRevision;
   public changeRequest?: ChangeRequest;
@@ -58,7 +59,7 @@ export class FBWorkspaceState extends FBSchemaState {
 
   public get isOutput(): boolean {
     const { docId } = this.document?.formDocument?.document || {};
-    return Boolean(docId && !_.isEmpty(docId));
+    return Boolean(docId && !isEmpty(docId));
   }
 
   public get isRevised(): boolean | undefined {
@@ -71,7 +72,7 @@ export class FBWorkspaceState extends FBSchemaState {
   }
 
   @computed public get isStarter() {
-    return (this.mode === "design" && _.size(this.schema) === 0);
+    return (this.mode === "design" && size(this.schema) === 0);
   }
 
   // TO BE REMOVED!!
@@ -88,8 +89,8 @@ export class FBWorkspaceState extends FBSchemaState {
   @action public getMode = (): FBWorkspaceMode => get(this, "mode");
 
   @action public isMode = (mode: FBWorkspaceMode | FBWorkspaceMode[]): boolean => {
-    if (_.isArray(mode)) {
-      return _.includes(mode, this.mode);
+    if (isArray(mode)) {
+      return includes(mode, this.mode);
     }
     return this.mode === mode;
   };

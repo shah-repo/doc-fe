@@ -1,5 +1,5 @@
 import { MenuItem } from "@material-ui/core";
-import _ from "lodash";
+import { at, find, isUndefined, map } from "lodash";
 import React from "react";
 import { FB, FBSelectProps } from "..";
 import Text from "../../components/Text";
@@ -20,10 +20,10 @@ export const withFBSelect = <T extends FBSelectProps>(
     const { formState } = FB.useStores();
 
     const formValue = formState?.getFieldValue(name);
-    defaultValue = _.find(options as Record<any, any>[], (o) => o[optionValueKey] === formValue);
-    _.isUndefined(menuItems) &&
-      (menuItems = _.map(options as Record<any, any>[], (option, index) => {
-        const [value, message] = _.at(option, [
+    defaultValue = find(options as Record<any, any>[], (o) => o[optionValueKey] === formValue);
+    isUndefined(menuItems) &&
+      (menuItems = map(options as Record<any, any>[], (option, index) => {
+        const [value, message] = at(option, [
           optionValueKey,
           optionLabelKey,
         ]);

@@ -13,7 +13,8 @@ import { FormContext, useFormContext } from "../../forms/FormContext";
 import Text from "../../Text";
 import { AttachmentStyleProps } from "../attachment.field/utils/types";
 import AttachmentLineTypeForm from "./AttachmentLineTypeForm";
-
+import { documentRevisionTypeGroupsFromDocListContext } from "../../../documentRevision/DocumentRevisionsManager.container";
+import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
 
 interface Props {
   upload: typeof attachmentsActions.upload;
@@ -71,8 +72,8 @@ export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   const dialog = useDialog();
   const async = useAsync<any>({ onSuccess: dialog.close });
   const isChangeRequestFormOnScreenContext = React.useContext(changeRequestFormOnScreenContext);
-
-
+  const documentRevisionTypeGroupFromDocList = React.useContext(documentRevisionTypeGroupsFromDocListContext);
+  const isRecord = documentRevisionTypeGroupFromDocList === DOC_TYPE_GROUP_OPTION.RECORD;
   const openDialog = () => {
     async.reset();
     dialog.open();
@@ -93,7 +94,7 @@ export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      { isChangeRequestFormOnScreenContext &&
+      { (isChangeRequestFormOnScreenContext || isRecord) &&
          <Box mt={1} className={classes.root} id="AttachmentFieldPresenter-field">
            <input
              accept="*"
@@ -119,7 +120,7 @@ export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
          </Box>
       }
 
-      { !isChangeRequestFormOnScreenContext &&
+      { (!isChangeRequestFormOnScreenContext && !isRecord) &&
       <Button
         color="primary"
         startIcon={<AttachFileIcon />}

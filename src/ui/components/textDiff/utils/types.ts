@@ -33,4 +33,5 @@ export interface DiffPresenterProps {
 export interface DialogOpenerProps {
   id: string;
   text: string;
+  dataCy?: string;
 }

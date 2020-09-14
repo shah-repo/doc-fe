@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { map, template } from "lodash";
 import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBInputType, FBOption } from "..";
 import { FBCurrencyOption } from "../FBPurchaseOrderTable";
 import { FBSchemaProps } from "../FBSchema";
@@ -17,7 +17,7 @@ import unitsOptions from "./unitsOptions.json";
 
 export class FBData {
   public static get testStepSchema(): FBSchemaProps[]  {
-    const compiled = _.template(JSON.stringify(testStepSchema));
+    const compiled = template(JSON.stringify(testStepSchema));
     return JSON.parse(compiled({ id: FB.uniqid })) as unknown as FBSchemaProps[];
   }
 
@@ -32,7 +32,7 @@ export class FBData {
   public static editorPropertiesByType(type: FBInputType): FBEditorPropertiesOption[] | undefined {
     const editorProps = FBData.editorPropertiesControl[type];
     if (!editorProps) { return; }
-    return _.map(editorProps, (itm) => ({
+    return map(editorProps, (itm) => ({
       value: itm,
       ...FBData.editorProperties[itm],
       // :/
@@ -65,7 +65,7 @@ export class FBData {
   }
 
   public static additionalSchema(type: FBInputType): Partial<FBSchemaProps>[] {
-    const compiled = _.template(JSON.stringify(additionalSchema));
+    const compiled = template(JSON.stringify(additionalSchema));
     const parse = JSON.parse(compiled({ id: FB.uniqid }));
     return parse[type];
   }

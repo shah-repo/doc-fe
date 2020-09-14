@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isString } from "lodash";
 
 /**
  * Return nextValue only if string, otherwise it will crash FE
@@ -6,7 +6,7 @@ import _ from "lodash";
  * @returns {string} nextValue if string, otherwise returns "N/A"
  */
 export const getAuditDefaultValue = (nextValue: any): string => {
-  if (_.isString(nextValue)) {
+  if (isString(nextValue)) {
     return nextValue;
   }
 

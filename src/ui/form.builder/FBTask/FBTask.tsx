@@ -11,11 +11,12 @@ const FBTask: React.FunctionComponent<FBTaskProps> = ({
   tasks = [],
   loading,
   label,
+  name,
 }) => (
   <FBProvider {...{ dialogState, taskState }}>
     <FBDialog />
     <Box mb={3}>
-      <FBSection {...{ label }} />
+      <FBSection {...{ label }} name={`fb-task-section-${name}`} />
       <FBMapWrapper<FBTaskItem[]> collection={tasks}>
         {(task: FBTaskItem, index) => (
           <FBTaskField key={`fb-task-${task.id}-${index}`} {...{ task, onClick }} />

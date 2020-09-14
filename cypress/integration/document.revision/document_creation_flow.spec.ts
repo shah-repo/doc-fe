@@ -1,16 +1,19 @@
+import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
+let documentUploadFailureCaught = false;
 
 context("Document Creation Flow", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
+      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
         cy.cmpCreateCompany({
@@ -25,7 +28,14 @@ context("Document Creation Flow", () => {
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
-            documentTypes: [],
+            documentTypes: [
+              {
+                documentTypeName: "Clinical Protocol",
+                documentTypeAcronym: "CP",
+                group: "OTHER",
+                isQms: true,
+              },
+            ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
@@ -61,7 +71,7 @@ context("Document Creation Flow", () => {
 
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -80,6 +90,7 @@ context("Document Creation Flow", () => {
     });
 
     it("Selects 'Component Specification' document type from dropdown", () => {
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Component Specification" });
     });
 
@@ -103,20 +114,47 @@ context("Document Creation Flow", () => {
       cy.drRemoveReferences( 1 );
     });
 
-    context("Uploads attachments", () => {
-      it("Uploads text.docx", () => {
-        cy.atchUploadAttachment({ fileName: "test.docx" });
-      });
+    it("'Training Required' should be unchecked initially", () => {
+      cy.drIsTrainingRequired({ shouldBe: false });
+    });
 
-      it("Check one attachment is displayed: test.docx", () => {
-        cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx" ] });
+    it("Mark 'Training Required' for next revision", () => {
+      cy.drClickTrainingRequired();
+    });
+
+    context("Uploads attachments", () => {
+      it("Uploads redline attachment: test.docx", () => {
+        // SystemRequirement("REQ-0260"); Removed from list.csv
+        cy.atchUploadRedlineAttachment({ fileName: "test.docx" });
       });
 
       it("Check test.docx attachment atributes", () => {
         cy.atchCheckAtributes({ fileName: "test.docx", attributes: "11.00 B Microsoft Word File" });
       });
 
-      it("Uploads image.jpg", () => {
+      it("check if it has the redline indicator", () => {
+        cy.atchCheckRedLineIndicator({ fileName: "test.docx" });
+      });
+
+      it("Check one attachment is displayed: test.docx", () => {
+        cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx" ] });
+      });
+
+      it("Uploads invalid-docType.doc", () => {
+        cy.on("fail", () => {
+          documentUploadFailureCaught = true;
+          return false;
+        });
+        cy.atchUploadAttachment({ fileName: "invalid-docType.doc" });
+      });
+
+      it("Check if document failure was caught", () => {
+        SystemRequirement("REQ-0230");
+        expect(documentUploadFailureCaught).equal(true);
+        cy.closeAtchUploadDialog();
+      });
+
+      it("Upload image.jpg", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
@@ -134,6 +172,34 @@ context("Document Creation Flow", () => {
 
       it("Check one attachment is displayed: test.docx", () => {
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx" ] });
+      });
+
+      it("Upload multiple attachments at once: image.jpg and test_image.jpg", () => {
+        SystemRequirement("REQ-0220");
+        cy.get("#AttachmentFieldPresenter-linkButton").click();
+        cy.get("#attachments-button-file-clean-copy")
+          .attachFiles(
+            [
+              { name: "./image.jpg", type: "image/jpg" },
+              { name: "./test_image.jpg", type: "image/jpg" },
+            ]
+          );
+      });
+
+      it("Check three attachments are displayed: test.docx, image.jpg and test_image.jpg", () => {
+        cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx", "image.jpg", "test_image.jpg" ] });
+      });
+
+      it("Redline attachment should be last on the list", () => {
+        cy.atchCheckDisplayedAtLast({ fileName: "test.docx" });
+      });
+
+      it("Remove attachment image.jpg", () => {
+        cy.atchRemoveAttachment({ fileName: "image.jpg" });
+      });
+
+      it("Remove attachment test_image.jpg", () => {
+        cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
       });
     });
 
@@ -165,7 +231,7 @@ context("Document Creation Flow", () => {
         cy.atchUploadAttachment({ fileName: "test_image.jpg" });
       });
 
-      it("Check test.docx attachment atributes", () => {
+      it("Check test_image.jpg attachment atributes", () => {
         cy.atchCheckAtributes({ fileName: "test_image.jpg", attributes: "79.54 kB JPG File" });
       });
 
@@ -192,9 +258,9 @@ context("Document Creation Flow", () => {
         cy.atchSetPrimaryAttachment({ fileName: "test_image.jpg" });
       });
 
-      it.skip("Allow user to only set single attachment to be primary", () => {
+      it("Allow user to only set single attachment to be primary", () => {
         SystemRequirement("REQ-0250");
-        cy.atchSetPrimaryAttachment({ fileName: "test.docx" });
+        cy.atchSetPrimaryAttachment({ fileName: "image.jpg" });
         cy.atchCheckForSinglePrimaryAttachment();
       });
 
@@ -210,6 +276,143 @@ context("Document Creation Flow", () => {
       it("Check two attachments are displayed: test.docx, image.jpg", () => {
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx", "image.jpg" ] });
       });
+    });
+
+    context("Check training for next revision", () => {
+      it("Approve and Release document", () => {
+        cy.drApproveAndReleaseDocument();
+      });
+
+      it("Revise document", () => {
+        cy.drClickReviseDocument();
+      });
+
+      it("'Training Required' should be checked as previous version was checked", () => {
+        // SystemRequirement("REQ-0280");
+        cy.drIsTrainingRequired({ shouldBe: true });
+      });
+    });
+  });
+
+  context("Create new document, change owner and cancel it", () => {
+    it("Navigates to document list", () => {
+      // SystemRequirement("REQ-0140");
+      cy.navigToDocumentList();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enters title 'New Document Revision'", () => {
+      cy.drEnterDocumentTitle({ name: "New Document Revision" });
+    });
+
+    it("Enters description 'New Document Revision description'", () => {
+      cy.drEnterDocumentDescription({ description: "New Document Revision description" });
+    });
+
+    it("Selects 'Clinical Protocol' document type from dropdown", () => {
+      // SystemRequirement("REQ-0490");
+      cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Change owner of document", () => {
+      SystemRequirement("REQ-0340");
+      cy.drChangeOwnerFromMenu({ employee: USERS[3].name });
+    });
+
+    it("Logs user that ownership was changed to", () => {
+      cy.authLogin({
+        email: USERS[3].email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on specific document 'CP00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP00003" });
+    });
+
+    it("Verify owner", () => {
+      cy.drVerifyDocumentOWner({ owner: USERS[3].name }).wait(1000);
+    });
+
+    it("Logs with admin", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on specific document 'CP00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP00003" });
+    });
+
+    it("Change owner of document by admin", () => {
+      SystemRequirement("REQ-0340");
+      cy.drChangeOwnerByAdmin({ employee: USERS[2].name });
+    });
+
+    it("Logs user that ownership was changed to", () => {
+      cy.authLogin({
+        email: USERS[2].email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on specific document 'CP00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP00003" });
+    });
+
+    it("Approves and releases document", () => {
+      cy.drApproveAndReleaseDocument();
+    });
+
+    it("Clicks on revise document", () => {
+      SystemRequirement("REQ-0150");
+      cy.drClickReviseDocument();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall().wait(1000);
+    });
+
+    it("Cancel draft document", () => {
+      SystemRequirement("REQ-0350");
+      cy.drCancelDraftButton();
+    });
+
+    it("Check document status is 'Canceled'", () => {
+      SystemRequirement("REQ-0350");
+      cy.drCheckDocumentStatus({ status: "Canceled" });
     });
   });
 });

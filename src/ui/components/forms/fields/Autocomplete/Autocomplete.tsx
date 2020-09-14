@@ -80,7 +80,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   return (
     <Field {...fieldProps} label={undefined}>
       <Box mb={0.3}>
-        <Typography variant="h6">
+        <Typography variant="h5">
           <Text message={fieldProps.label} />
         </Typography>
       </Box>

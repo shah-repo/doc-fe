@@ -1,17 +1,18 @@
 import { Box, CircularProgress } from "@material-ui/core";
-import _ from "lodash";
+import { map, pick } from "lodash";
 import React, { useState } from "react";
+import { useIntl } from "react-intl";
 import { connect } from "react-redux";
-import {  attachmentsActions, Attachment } from "../../../../state/ducks/attachments";
+import { Attachment, attachmentsActions } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
+import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
+import FBStore from "../../../form.builder/stores/ui/FBStore";
+import useAsync from "../../../hooks/useAsync";
+import { useFormContext } from "../../forms/FormContext";
 import { withFormik } from "../../hoc/formik";
+import { toastError } from "../../notifications";
 import Presenter from "./presenter";
 import { AttachmentContainerProps, AttachmentFieldDispatchProps } from "./utils/types";
-import { useFormContext } from "../../forms/FormContext";
-import useAsync from "../../../hooks/useAsync";
-import FBStore from "../../../form.builder/stores/ui/FBStore";
-import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
-import { useIntl } from "react-intl";
 
 type DispatchProps = AttachmentFieldDispatchProps;
 
@@ -42,16 +43,16 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
 
       FBStore.setValues({
         ...FBStore.values,
-        [name]: _.map(attachments, (attach) =>
-          _.pick(attach, ["id", "name", "s3link", "type"]),
+        [name]: map(attachments, (attach) =>
+          pick(attach, ["id", "name", "s3link", "type"]),
         ),
       });
 
       if (FBStore.mode === "form") {
         FBStore.setValues({
           ...FBStore.values,
-          [name]: _.map(attachments, (attach) =>
-            _.pick(attach, ["id", "name", "s3link", "type"]),
+          [name]: map(attachments, (attach) =>
+            pick(attach, ["id", "name", "s3link", "type"]),
           ),
         });
         FBDynamicValidatorStore.validate();
@@ -59,8 +60,9 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       form.setFieldValue(name, attachments);
       submitForm();
     },
-    onError: () => {
+    onError: (error) => {
       setIsUploading(false);
+      toastError(error as string);
     },
   });
 

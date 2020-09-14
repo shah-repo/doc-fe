@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { includes } from "lodash";
 import { action, observable, set } from "mobx";
 import React from "react";
 import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
@@ -8,6 +8,7 @@ import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
 import { FBEditorEmpty } from "../FBEditorEmpty";
 import { FBEditorHyperlink } from "../FBEditorHyperlink";
+import { FBEditorInlineApproval } from "../FBEditorInlineApproval";
 import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
 import { FBEditorLabel } from "../FBEditorLabel";
 import { FBEditorMediaAlbum } from "../FBEditorMediaAlbum";
@@ -43,11 +44,15 @@ export class FBEditorState {
     "checkpoint",
     "createlabel",
     "poreceive",
+    "approval",
+    "inlineapproval",
     "requestapproval",
     "hellosign",
     "approvalMatrix",
     "poApprovalMatrix",
     "task",
+    "blanktplform",
+    "approvals",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -64,7 +69,10 @@ export class FBEditorState {
     "checkpoint",
     "createlabel",
     "approval",
+    "inlineapproval",
     "requestapproval",
+    "blanktplform",
+    "approvals",
   ];
 
   public static pickStepIndex: FBInputType[] = ["stepsection", "teststep"];
@@ -87,6 +95,7 @@ export class FBEditorState {
     radio: FBEditorCheckControl,
     radiogroup: FBEditorOptionGroup,
     fileupload: FBEditorLabel,
+    blanktplform: FBEditorLabel,
     paragraph: FBEditorParagraph,
     quantity: FBEditorLabel,
     timer: FBEditorLabel,
@@ -101,6 +110,7 @@ export class FBEditorState {
     checkpoint: FBEditorLabel,
     createlabel: FBEditorLabel,
     approval: FBEditorApprovalField,
+    inlineapproval: FBEditorInlineApproval,
     requestapproval: FBEditorRequestApproval,
     action: FBEditorAction,
     hellosign: FBEditorLabel,
@@ -108,6 +118,7 @@ export class FBEditorState {
     documentRevisions: FBEditorEmpty,
     poApprovalMatrix: FBEditorLabel,
     task: FBEditorLabel,
+    approvals: FBEditorLabel,
   };
 
   @observable public mode?: FBEditorMode = "config";
@@ -136,8 +147,8 @@ export class FBEditorState {
     });
   };
 
-  public static underValidation = (type: FBInputType) => !_.includes(FBEditorState.omitValidation, type);
-  public static includeDefaultValue = (type: FBInputType) => _.includes(FBEditorState.pickDefaultValue, type);
+  public static underValidation = (type: FBInputType) => !includes(FBEditorState.omitValidation, type);
+  public static includeDefaultValue = (type: FBInputType) => includes(FBEditorState.pickDefaultValue, type);
 
   @action public setMode = (mode: FBEditorMode) => set(this, "mode", mode);
 }

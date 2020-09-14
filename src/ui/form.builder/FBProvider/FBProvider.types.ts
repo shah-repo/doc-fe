@@ -1,6 +1,8 @@
 import {
   FBApprovalMatrixFieldState,
+  FBApprovalsState,
   FBApproversState,
+  FBBookmarkState,
   FBDialogState,
   FBDocumentRevisionsState,
   FBEditorCustomControlState,
@@ -9,6 +11,7 @@ import {
   FBFilePresenterState,
   FBFileUploadState,
   FBFormState,
+  FBInlineApprovalState,
   FBMediaAlbumState,
   FBPurchaseOrderState,
   FBSchemaState,
@@ -41,4 +44,7 @@ export interface FBProviderProps {
   approvalMatrixFieldState?: FBApprovalMatrixFieldState;
   taskState?: FBTaskState;
   approversState?: FBApproversState;
+  approvalsState?: FBApprovalsState;
+  bookmarkState?: FBBookmarkState;
+  inlineApprovalState?: FBInlineApprovalState;
 }

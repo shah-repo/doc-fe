@@ -20,10 +20,10 @@ import "cypress-promise/register";
 import "cypress-xpath";
 import { addScreenshotToContext } from "../utils/context/screenshotsToContext";
 import "./commands";
+import "./commands/approval.request/commands";
 import "./commands/approver.request.list/commands";
 import "./commands/attachments/commands";
 import "./commands/auth/commands";
-import "./commands/change.request/commands";
 import "./commands/company/commands";
 import "./commands/document.list/commands";
 import "./commands/document.revision/commands";
@@ -33,6 +33,7 @@ import "./commands/group.management/commands";
 import "./commands/navigation/commands";
 import "./commands/purchase.order/commands";
 import "./commands/receivable/commands";
+import "./commands/status/commands";
 import "./commands/suppliers/commands";
 import "./commands/user.management/commands";
 import { CONFIG } from "./config";
@@ -47,6 +48,12 @@ Cypress.on("uncaught:exception", (err, runnable) => {
   if (socketIsClosingError) {
     // eslint-disable-next-line no-console
     console.log("Ignoring 'Socket is closed' or 'Socket is closing' error");
+    return false;
+  }
+
+  if (err.message.includes("Connection was closed abnormally")) {
+    // eslint-disable-next-line no-console
+    console.log("Ignoring 'Connection was closed abnormally' error");
     return false;
   }
   return true;
@@ -67,6 +74,36 @@ Cypress.on("test:after:run", (test, runnable: any ) => {
     addScreenshotToContext(test, runnable, "Screenshot On Failure");
   }
 });
+
+
+if (CONFIG.TAKE_SCREENSHOT_AFTER_EACH) {
+  const oldIt = it;
+  const foo = (title, callback) => {
+    const hasDone = callback.length > 0;
+    if (hasDone) {
+      oldIt(title, (done) => {
+        callback(() => {
+          cy.once("test:after:run", (attributes, test) => {
+            addScreenshotToContext(attributes, test, "Screenshot");
+          });
+          cy.screenshot().then(() => {
+            done();
+          });
+        });
+      } );
+    } else {
+      oldIt(title, () => {
+        callback();
+        cy.screenshot();
+        cy.once("test:after:run", (attributes, test) => {
+          addScreenshotToContext(attributes, test, "Screenshot");
+        });
+      }
+      );
+    }
+  };
+  it = foo.bind(oldIt) as unknown as Mocha.TestFunction;
+}
 
 export function PreventSkipOnFailure(this: Mocha.Context) {
   if (!this.test) {
@@ -98,4 +135,3 @@ if (CONFIG.SKIP_ON_RUN_FAILURE) {
     cy.task("resetShouldSkipFlag");
   });
 }
-

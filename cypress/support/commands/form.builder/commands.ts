@@ -10,16 +10,27 @@ declare global {
       fbSelectItemFromNewFieldList(params: { field: string }): Chainable<Subject>;
       fbEnterPOLabelName(params: { name: string }): Chainable<Subject>;
       fbAddNewFieldButton(): Chainable<Subject>;
+      fbAddNewField(): Chainable<Subject>;
+      fbSelectApprovalMatrix(): Chainable<Subject>;
       fbSelectTextField(): Chainable<Subject>;
       fbSelectAutoComplete(): Chainable<Subject>;
       fbOpenValidation(): Chainable<Subject>;
       fbAddField(): Chainable<Subject>;
+      fbAddLabelName(params: { name: string }): Chainable<Subject>;
+      fbSelectCustomControl(): Chainable<Subject>;
+      fbClickAddNewHiddenBtn(): Chainable<Subject>;
     }
   }
 }
 
 Cypress.Commands.add("fbAddNewFieldOption", () => {
   cy.contains("Add a Field").click();
+});
+
+Cypress.Commands.add("fbAddNewField", () => cy.get("[data-cy=\"form.builder.add.field\"]").click());
+
+Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {
+  cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
 });
 
 Cypress.Commands.add("fbSelectItemFromNewFieldList", (params: { field: string }) => {
@@ -31,10 +42,17 @@ Cypress.Commands.add("fbEnterPOLabelName", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("fbAddNewFieldButton", (params: { name: string }) => {
-  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary\"]").contains("Add").click();
+  cy.get("[data-cy=\"fb-editor-actions-add\"]").contains("Add").click();
 });
 
+Cypress.Commands.add("fbAddLabelName", (params: { name: string }) => {
+  cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(params.name);
+});
+
+Cypress.Commands.add("fbSelectApprovalMatrix", () => cy.get("[data-cy=\"form.builder.approvalMatrix\"]").click());
 Cypress.Commands.add("fbSelectTextField", () => cy.get("[data-cy=\"form.builder.textfield\"]").click());
+
+Cypress.Commands.add("fbSelectCustomControl", () => cy.get("[data-cy=\"fb-control-btn\"]").click());
 
 Cypress.Commands.add("fbSelectAutoComplete", () => cy.get("[data-cy=\"form.builder.autocomplete\"]").click());
 

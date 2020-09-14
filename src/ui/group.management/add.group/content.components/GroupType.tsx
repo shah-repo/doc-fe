@@ -38,15 +38,17 @@ export const GroupType: React.FunctionComponent<Props> = ({
       >
         <FormControlLabel
           id="Group-officialOption"
+          data-cy="Group-officialOption"
           label="Official"
           value="official"
-          control={<Radio/>}
+          control={<Radio />}
         />
         <FormControlLabel
           id="Group-unofficialOption"
+          data-cy="Group-unofficialOption"
           label="Unofficial"
           value="unofficial"
-          control={<Radio/>}
+          control={<Radio />}
         />
       </RadioGroup>
     </Box>

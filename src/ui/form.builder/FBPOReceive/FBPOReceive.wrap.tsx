@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get, last } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -26,13 +26,11 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
   }: T) => {
 
     const { workspaceState, formState } = FB.useStores();
-    const { documentId } = workspaceState || {};
     const formValue = formState?.getFieldValue(name);
     const intl = useIntl();
 
     poReceiveState = FB.useRef<FBPOReceiveState>(FBPOReceiveState, formValue);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
-    disabled = disabled || Boolean(documentId);
 
     const handleItem = (item?: FBPurchaseOrderItem) => {
       if (workspaceState?.isReleased || workspaceState?.isRevised) {
@@ -71,10 +69,10 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       };
       schema.sort((a, b) =>
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        prior[_.get(a, "type", "other")]! - prior[_.get(b, "type", "other")]!);
+        prior[get(a, "type", "other")]! - prior[get(b, "type", "other")]!);
 
       schema = schema.reduce((reduced: FBSchemaProps[], item) => {
-        if (_.last(reduced)?.type === "purchaseorder" && item.type !== "purchaseorder") {
+        if (last(reduced)?.type === "purchaseorder" && item.type !== "purchaseorder") {
           reduced.push({ type: "section", label: "form.builder.purchaseorder" });
         }
         reduced.push(setSchemaItem(item));

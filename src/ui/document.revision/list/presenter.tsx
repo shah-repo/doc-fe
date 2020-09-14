@@ -23,7 +23,7 @@ import useDialog from "../../hooks/useDialog";
 import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionQueryStatus, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
-import ExportListDialog from "./ExportListDialog./ExportListDialog";
+import ExportListDialog from "./ExportListDialog/ExportListDialog";
 import styles from "./styles";
 
 
@@ -211,7 +211,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
 
     /*    const customData = data.reduce<DocumentRevision[]>((acc, docRev) => {
         if (docRev.document.documentType.documentTypeName
-        && DOCUMENT_LIST_TYPE_NAMES.includes(docRev.document.documentType.documentTypeName)) {
+         && DOCUMENT_LIST_TYPE_NAMES.includes(docRev.document.documentType.documentTypeName)) {
           set(docRev, "description", stripTags(docRev.description));
           set(
             docRev,

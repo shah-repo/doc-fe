@@ -8,8 +8,9 @@ import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
 import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.presenter";
 import { withActionButton } from "./ActionButton.wrap";
-import ApproveAndRelease from "./ApproveAndRelease";
+import { ApproveAndRelease } from "./ApproveAndRelease";
 import CancelButton from "./CancelButton";
+import { FinalizeAndRelease } from "./FinalizeAndRelease";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
 import VoidButton from "./VoidButton";
 
@@ -20,10 +21,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     docInfo,
     asyncState,
     canChangeOwnerShip,
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   } = React.useContext(FormHeaderContext)!;
 
   const { workspaceState, formState } = FB.useStores();
-  const { revisionStage } = documentRevision || {};
+  const { revisionStage, subRevision, revisionChangeType } = documentRevision || {};
   const formik = useFormikContext();
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
@@ -68,16 +70,30 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         id="DocumentRevisionForm-submit"
         data-cy={"DocumentRevisionForm-submit"}
       />
-      <ApproveAndRelease
-        id={values.id}
-        status={values.status}
-        isQms={docInfo.isQms}
-        documentName={docInfo.name}
-        docRevId={values.id as string}
-        owner={documentRevision?.owner}
-        documentTypeId={documentTypeId}
-        revisionStage={revisionStage}
-      />
+      {
+        values.document?.documentType?.group === "RECORD"
+          ? (
+            <FinalizeAndRelease
+              docRevId={values.id as string}
+              revisionStage={revisionStage}
+              subRevision={subRevision}
+              status={values.status}
+              revisionChangeType={revisionChangeType}
+            />
+          )
+          : (
+            <ApproveAndRelease
+              id={values.id}
+              status={values.status}
+              isQms={docInfo.isQms}
+              documentName={docInfo.name}
+              docRevId={values.id as string}
+              owner={documentRevision?.owner}
+              documentTypeId={documentTypeId}
+              revisionStage={revisionStage}
+            />
+          )
+      }
       <HeaderMenu>
         <CancelButton
           documentStatus={documentRevision?.status}

@@ -58,6 +58,7 @@ export const toGroupOptions = (selectedGroup: LoadCompanyGroup): GroupRequestBod
   tags: selectedGroup.tags || [],
   employees: toArrayOfIds(selectedGroup.employees),
   parents: toArrayOfIds(selectedGroup.parents),
+  id: selectedGroup.id,
 });
 
 export const toIds = (options: OptionType[] | null) => {
@@ -71,7 +72,7 @@ export const toRequestBody = (
   values: GroupRequestBody,
   members: OptionType[],
   parentGroups: OptionType[]) =>
-  ({ ...values, employees: toIds(members), parents: toIds(parentGroups) });
+  ({ ...omit(values, ["id"]), employees: toIds(members), parents: toIds(parentGroups) });
 
 
 export const toEditRequestBody = (

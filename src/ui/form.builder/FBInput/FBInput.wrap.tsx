@@ -7,6 +7,7 @@ import { useIntl } from "react-intl";
 import { FBOption } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
+import { FBClasses } from "../defaults/layout";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { FBInputProps, OmitInputClones } from "../FBInput";
 import { FB } from "../helpers";
@@ -39,10 +40,11 @@ export const withFBInput = <T extends FBInputProps>(
     value,
     autosave = false,
     transform,
+    bookmarked,
     ...props
   }: T) => {
 
-    const { formState, workspaceState } = FB.useStores();
+    const { formState, workspaceState, bookmarkState } = FB.useStores();
     const { isOutput } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
@@ -55,7 +57,8 @@ export const withFBInput = <T extends FBInputProps>(
     // TODO: Autocomplete default set as input
     // then this can be removed and handle through defaultValue
     const validationValue = get(formState?.values, name);
-    if (isOutput || formState?.workspaceMode === "form") {
+
+    if (isOutput || formState?.workspaceMode !== "design") {
       (isUndefined(hidden) && validationMode === "visibility") && (hidden =
         !helperText && (!validationValue || isEmpty(validationValue))
       );
@@ -106,6 +109,7 @@ export const withFBInput = <T extends FBInputProps>(
         value,
         ...(type === "textfield" && { error }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
+        ...( workspaceState?.mode === "preview" && { className: FBClasses.inputPreview }),
       });
     }
 
@@ -132,6 +136,12 @@ export const withFBInput = <T extends FBInputProps>(
       );
     }, []);
 
+    React.useEffect(() => {
+      if (!bookmarked) { return; }
+      isTranslation(label as string) && (label = intl.formatMessage({ id: label as string }));
+      bookmarkState?.addBookmark({ name, label });
+    }, [bookmarked]);
+
     return Component({
       ...(props as T),
       includeContext,
@@ -154,6 +164,7 @@ export const withFBInput = <T extends FBInputProps>(
       value,
       autosave,
       transform,
+      bookmarked,
     });
   };
 

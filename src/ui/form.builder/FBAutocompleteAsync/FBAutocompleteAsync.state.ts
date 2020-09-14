@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { filter, find, groupBy, isArray, last, map, sortBy } from "lodash";
 import { action, computed, set } from "mobx";
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncOption, FBData } from "..";
 import FBRequest from "../FBApi/FBApi.request";
@@ -16,7 +16,7 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!this.optionId) {
       return;
     }
-    return  _.find(FBData.autocompleteOptions, { id: this.optionId });
+    return find(FBData.autocompleteOptions, { id: this.optionId });
   }
 
   @computed public get sliceData(): any {
@@ -36,10 +36,10 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!options) {
       return;
     }
-    if (!_.isArray(id)) {
+    if (!isArray(id)) {
       return options.get(id);
     }
-    return Array.from(_.map(id, (i) => options.get(i)));
+    return Array.from(map(id, (i) => options.get(i)));
   };
 
   @action public setOptionId = (id?: string) => {
@@ -70,11 +70,11 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
       case FBAutocompleteAsyncOption.parts:
       case FBAutocompleteAsyncOption.POList:
       case FBAutocompleteAsyncOption.suppliers:
-        return _.map(
-          _.groupBy(data, "document.docId"), (recs) => _.last(_.sortBy(recs, "version"))
+        return map(
+          groupBy(data, "document.docId"), (recs) => last(sortBy(recs, "version"))
         );
       case FBAutocompleteAsyncOption.officialGroups:
-        return _.filter(data, { isOfficial: true });
+        return filter(data, { isOfficial: true });
       default: return data;
     }
   };
@@ -90,7 +90,7 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
       return;
     }
     if (data.some && !data.some((value) => typeof value === "object")) {
-      data = _.map(this.data, (d) => ({ id: d, name: d }));
+      data = map(this.data, (d) => ({ id: d, name: d }));
       return FBAutocompleteAsyncStore.setOptionData(this.optionId, data);
     }
     data.slice && FBAutocompleteAsyncStore.setOptionData(this.optionId, data.slice());

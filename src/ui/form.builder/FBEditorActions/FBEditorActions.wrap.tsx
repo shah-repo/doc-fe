@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isString, kebabCase, size, union } from "lodash";
 import React from "react";
 import { FBEditorActionsProps } from ".";
 import { FB, FBData, FBSchemaProps } from "..";
@@ -26,8 +26,8 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       if (!type) { return; }
       const additionalSchema = FBData.additionalSchema(type);
       if (!workspaceState?.getSchemaItemAt(index) && additionalSchema) {
-        workspaceState?.setSchema(_.union(workspaceState.getSchema(), additionalSchema));
-        index = index + _.size(additionalSchema);
+        workspaceState?.setSchema(union(workspaceState.getSchema(), additionalSchema));
+        index = index + size(additionalSchema);
       }
     }
 
@@ -49,9 +49,9 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       workspaceState?.setSchemaItemAt({
         index,
         type,
-        name: `${_.kebabCase(label as string)}-${FB.uniqid}`,
+        name: `${kebabCase(label as string)}-${FB.uniqid}`,
         ...formValues,
-        ..._.isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
+        ...isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
         ...validators && toStringRules && { rules: toStringRules(validators) },
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
       }, index);

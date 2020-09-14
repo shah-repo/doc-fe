@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { groupBy, keyBy, uniq } from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { AuditByCRIdState } from "../audit/types";
@@ -14,7 +14,7 @@ export const byId = (
   switch (action.type) {
     case CHANGE_REQUEST_LIST:
       return {
-        ..._.keyBy<ChangeRequest>(
+        ...keyBy<ChangeRequest>(
           action.payload,
           (changeRequest) => changeRequest.id,
         ),
@@ -22,7 +22,8 @@ export const byId = (
     case CHANGE_REQUEST_SET: {
       const newState: ChangeRequest = {
         ...action.payload,
-        approvals: action.payload.approvals.filter((a) => a.active),
+        // approvals: action.payload.approvals.filter((a) => a.active),
+        approvals: action.payload.approvals,
       };
       return { ...state, [action.payload.id]: newState };
     }
@@ -37,9 +38,9 @@ export const allIds = (
 ): ChangeRequestsAllIdsState => {
   switch (action.type) {
     case CHANGE_REQUEST_LIST:
-      return _.uniq([...action.payload.map((changeRequest) => changeRequest.id)]);
+      return uniq([...action.payload.map((changeRequest) => changeRequest.id)]);
     case CHANGE_REQUEST_SET:
-      return _.uniq([...state, action.payload.id]);
+      return uniq([...state, action.payload.id]);
     default:
       return state;
   }
@@ -53,7 +54,7 @@ export const approversById = (
     case CHANGE_REQUEST_LIST_APPROVERS:
       return {
         ...state,
-        ..._.keyBy<ChangeRequestAvailableApprovers>(
+        ...keyBy<ChangeRequestAvailableApprovers>(
           action.payload,
           (approver) => approver.user.id,
         ),
@@ -68,7 +69,7 @@ export const approversAllIds = (
 ): ChangeRequestsApproversAllIdsState => {
   switch (action.type) {
     case CHANGE_REQUEST_LIST_APPROVERS:
-      return _.uniq([
+      return uniq([
         ...state,
         ...action.payload.map((approver) => approver.user.id),
       ]);
@@ -83,7 +84,7 @@ export const auditsByCRId = (
 ): AuditByCRIdState => {
   switch (action.type) {
     case CHANGE_REQUEST_AUDIT_SET: {
-      const audits = _.groupBy(action.payload.audit, "groupId");
+      const audits = groupBy(action.payload.audit, "groupId");
       return { ...state, [action.payload.id]: audits };
     }
     default:
@@ -97,7 +98,7 @@ export const auditsAllId = (
 ): allIdsState => {
   switch (action.type) {
     case CHANGE_REQUEST_AUDIT_SET:
-      return _.uniq([...state, action.payload.id]);
+      return uniq([...state, action.payload.id]);
     default:
       return state;
   }

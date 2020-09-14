@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { map } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBEditorCustomControlProps, FBEditorCustomControlState, FBSchemaProps } from "..";
@@ -23,7 +23,7 @@ export const withFBEditorCustomControl = <T extends FBEditorCustomControlProps>(
     handleSelect = (control: DocumentRevision) => {
       const newSchema = workspaceState?.getSchema();
       const schema = control.formTemplate?.schema as FBSchemaProps[] || [];
-      _.map(schema, (schemaItem) => ({
+      map(schema, (schemaItem) => ({
         ...schemaItem,
         name: FB.uniqid,
       }));

@@ -11,25 +11,23 @@ import Text from "../../../components/Text";
 interface Props {
   parentGroups: any[];
   setParentGroups: (selectedItems: any) => void;
+  currentGroupId: string;
 }
 
 export const ParentGroups: React.FunctionComponent<Props> = ({
   parentGroups,
   setParentGroups,
+  currentGroupId,
 }) => {
   const allGroups = useSelector(userManagementSelectors.getOfficialGroups);
+  const availableGroups = allGroups.filter((group) => group.value !== currentGroupId);
 
-  const MultiValueRemove = (props) => (
-    <components.MultiValueRemove {...props}>
-      <DeleteIcon
-        style={{
-          width: 12,
-          height: 12,
-          display: props.data.type === GroupType.MANAGMENT ? "block" : "none",
-        }}
-      />
-    </components.MultiValueRemove>
-  );
+  const MultiValueRemove = (props) =>
+    props.data.type === GroupType.MANAGMENT ?
+      <components.MultiValueRemove {...props}>
+        <DeleteIcon style={{ width: 12, height: 12 }}/>
+      </components.MultiValueRemove> :
+      <></>;
 
   return (
     <Grid>
@@ -40,7 +38,7 @@ export const ParentGroups: React.FunctionComponent<Props> = ({
         <Select
           id="Group-addParentGroups"
           isMulti={true}
-          options={allGroups}
+          options={availableGroups}
           onChange={(state: any) => setParentGroups(state)}
           value={parentGroups}
           components={{ MultiValueRemove }}

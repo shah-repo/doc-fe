@@ -1,5 +1,5 @@
 import { FormControlLabel, Radio } from "@material-ui/core";
-import _ from "lodash";
+import { at, map } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FBRadioGroupProps } from ".";
@@ -23,8 +23,8 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
     const { formState } = FB.useStores();
     const intl = useIntl();
 
-    controls = _.map(options as FBOption[], (option, index) => {
-      const [value, message] = _.at(option, [optionValueKey, optionLabelKey]);
+    controls = map(options as FBOption[], (option, index) => {
+      const [value, message] = at(option, [optionValueKey, optionLabelKey]);
       let attr = message;
       if (isTranslation(attr)) {
         attr = intl.formatMessage({ id: message });

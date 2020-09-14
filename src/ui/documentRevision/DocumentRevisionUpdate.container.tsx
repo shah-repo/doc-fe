@@ -39,7 +39,6 @@ StateProps;
 
 // TO-DO Move To Context Folder
 export let documentRevisionStatusContextFromCR = React.createContext< undefined | DocumentRevisionStatus >(undefined);
-
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
 });

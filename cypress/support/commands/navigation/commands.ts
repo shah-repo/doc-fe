@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import { NavigationItems } from "../../../../src/state/ducks/auth/types";
+import { CyRoutes } from "../../routes";
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export { };
@@ -18,6 +19,7 @@ declare global {
       navigToPurchaseOrder(): Chainable<Subject>;
       navigToSuppliers(): Chainable<Subject>;
       navigToReceivableList(): Chainable<Subject>;
+      navigToWorkOrders(): Chainable<Subject>;
     }
   }
 }
@@ -35,11 +37,15 @@ Cypress.Commands.add("navigListNotExistsCheck", (...list: NavigationItems[]) => 
 });
 
 Cypress.Commands.add("navigClickOnItem", (params: { navigItem: string }) => {
-  cy.wait(200).get("[data-cy=\"navigation." + params.navigItem + "\"]").click({ force: true });
+  cy.wait(1000).get("[data-cy=\"navigation." + params.navigItem + "\"]").click({ force: true });
 });
 
 Cypress.Commands.add("navigToDashboard", () => {
-  cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.GetPendingActions,
+    () => {
+      cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
+    }).wait(1000);
 });
 
 Cypress.Commands.add("navigToReceivableList", () => {
@@ -47,13 +53,17 @@ Cypress.Commands.add("navigToReceivableList", () => {
 });
 
 Cypress.Commands.add("navigToDocumentList", () => {
-  cy.navigToNestedItem({
-    navigItems: [
-      NavigationItems.DASHBOARD,
-      NavigationItems.DOCUMENT_CONTROL,
-      NavigationItems.DOCUMENT_LIST,
-    ],
-  });
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.GetDocumentTypes,
+    () => {
+      cy.navigToNestedItem({
+        navigItems: [
+          NavigationItems.DASHBOARD,
+          NavigationItems.DOCUMENT_CONTROL,
+          NavigationItems.DOCUMENT_LIST,
+        ],
+      });
+    });
 });
 
 Cypress.Commands.add("navigToApprovalRequestList", () => {
@@ -66,8 +76,18 @@ Cypress.Commands.add("navigToApprovalRequestList", () => {
   });
 });
 
+Cypress.Commands.add("navigToWorkOrders", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.MANUFACTURING,
+      NavigationItems.WORK_ORDERS,
+    ],
+  });
+});
+
 Cypress.Commands.add("navigToPurchaseOrder", () => {
-  cy.get("[data-cy=\"navigation.purchaseOrder\"]").click({ force: true });
+  cy.navigClickOnItem({ navigItem: NavigationItems.PURCHASE_ORDERS });
 });
 
 Cypress.Commands.add("navigToSuppliers", () => {

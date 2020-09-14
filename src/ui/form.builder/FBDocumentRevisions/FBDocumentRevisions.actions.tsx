@@ -11,11 +11,13 @@ const FBDocumentRevisionsActions: React.FunctionComponent<FBDocumentRevisionsAct
       variant="contained"
       label="form.builder.add"
       onClick={handleAdd}
+      dataCy="arAddDocumentDialogAddBtn"
     />
     <FBButton
       variant="outlined"
       label="form.builder.cancel"
       onClick={handleCancel}
+      dataCy="arAddDocumentDialogCancelBtn"
     />
   </Box>
 );
