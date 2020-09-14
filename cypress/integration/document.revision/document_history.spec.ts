@@ -64,10 +64,10 @@ const history = [
   {
     owner,
     actions: [
-      { key: "New Doc ID", value: documentId.fullId },
-      { key: "Access granted to user", value: sharedUser.name },
-      { key: "Access granted to group", value: "Everyone" },
       { key: "Access granted to group", value: groupOne },
+      { key: "Access granted to group", value: "Everyone" },
+      { key: "Access granted to user", value: sharedUser.name },
+      { key: "New Doc ID", value: documentId.fullId },
       { key: "New description", value: `\n${formTitle.value}\n` },
       { key: "New name", value: formTitle.value },
       { key: "New status", value: `Set to Draft by ${owner}` },
