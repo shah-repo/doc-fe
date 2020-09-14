@@ -1,6 +1,6 @@
 import { filter, union } from "lodash";
 import { useObserver } from "mobx-react";
-import React, { useState } from "react";
+import React from "react";
 import { FB, FBDialogState, FBTaskFormDescription, FBTaskProps, FBTaskState } from "..";
 import { FBTaskItem } from "./FBTask.types";
 
@@ -11,6 +11,7 @@ export const withFBTask = <T extends FBTaskProps>(
     onClick,
     taskState,
     dialogState,
+    canAddTask,
     tasks,
     name,
     loading,
@@ -29,17 +30,16 @@ export const withFBTask = <T extends FBTaskProps>(
     taskState = FB.useRef(FBTaskState, formValue);
     dialogState = FB.useRef(FBDialogState);
     disabled = loading || disabled;
-    const [canAddTask, handleAddTask] = useState<boolean>(true);
 
     onClick = (id?: string) => {
-      handleAddTask(crId as unknown as boolean);
+      taskState?.handleAddTask(Boolean(crId));
       const initialValues = taskState?.getTask(id);
       const title = initialValues ?
         "form.builder.edit.implementation.task" :
         "form.builder.add.implementation.task";
 
       dialogState?.config({
-        open: crId as unknown as boolean,
+        open: Boolean(crId),
         title,
         content: (
           <FBTaskFormDescription
@@ -52,6 +52,7 @@ export const withFBTask = <T extends FBTaskProps>(
 
     useObserver(() => {
       loading = taskState?.loading;
+      canAddTask = taskState?.canAddTask;
     });
 
     return Component({
