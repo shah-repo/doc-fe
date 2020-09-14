@@ -80,7 +80,7 @@ DocumentRevisionManagerContainerProps
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
   const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
   const canAccess = selectedDocument?.document.canAccess;
-  const { documentTypeAcronym: acronym } = document?.documentType || {};
+  const { documentTypeAcronym: acronym, id: docTypeId } = document?.documentType || {};
 
   const isInlineApproval =
     !!docRevsWithoutCanceled.find(
@@ -112,6 +112,7 @@ DocumentRevisionManagerContainerProps
           docId={docId}
           selectedDocumentRevision={documentRevisionId}
           documentRevisionId={documentRevisionId}
+          documentTypeId={docTypeId}
         />,
       },
     },
