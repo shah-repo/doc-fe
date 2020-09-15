@@ -57,7 +57,7 @@ export interface ICreateCompanyBootstrap {
   slackIntegrationEnabled: boolean;
   helloSignIntegrationEnabled: boolean;
   helloSignTestMode: boolean;
-  maxRevisionStages: number;
+  numOfRevStages: number;
   numOfDocDigits: number;
   users: IUser[];
   documentTypes: IdocumentTypeDto[];
