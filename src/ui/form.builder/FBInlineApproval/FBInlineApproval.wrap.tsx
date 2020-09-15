@@ -38,7 +38,6 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       changeRequest?.owner?.user?.id
     );
 
-    disabled = disabled || isUndefined(id);
     isPreview = workspaceState?.mode === "preview";
     const fieldApprovals = useMemo(() => filter(docApprovals, { fieldId: name }), [docApprovals, name]);
     const authUser = store.getState().auth.user;
@@ -180,6 +179,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         inlineApprovalState?.transitionApi.loading ||
         inlineApprovalState?.documentApi.loading
       );
+      disabled = disabled || isUndefined(id) || loading;
     });
 
     // MARK: @final config
