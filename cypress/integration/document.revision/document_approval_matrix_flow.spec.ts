@@ -420,6 +420,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("click on 'Approve and Release' button", () => {
+      cy.wait(5000);
       cy.drApproveAndReleaseDialog();
     });
 
