@@ -36,10 +36,10 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
         if (!schema) { return disabled; }
         const item =  schema[current];
         const { type, name } = item;
-        if (type === "requestapproval" || type === "approval") {
-          const activeConfig = type === "approval" ? item : formState?.getFieldValue(name);
+        if (type === "requestapproval" || type === "inlineapproval") {
+          const activeConfig = type === "inlineapproval" ? item : formState?.getFieldValue(name);
           const { approveIsBlocking = false } = activeConfig || {};
-          let hasValue = type === "approval"
+          let hasValue = type === "inlineapproval"
             ? formState?.getFieldValue(name)
             : formState?.getFieldValue(FBFieldName.RequestApproval + name);
           hasValue = Boolean(hasValue);
@@ -66,6 +66,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
           disabled: (
             disabled ||
             workspaceMode === "preview" ||
+            workspaceMode === "formPreview" ||
             isApproved({ ...schemaItem, index }) ||
             (reviseDisabled && outputRevision) ||
             (outputDisabled && isOutput && !isEmpty(id))

@@ -22,6 +22,7 @@ declare global {
       arClickCreateApprovalRequestAfterCompletingForm(): Chainable<Subject>;
       arClickSendToReview(): Chainable<Subject>;
       arVerifyStatus(params: { status: string }): Chainable<Subject>;
+      arCheckImplementationTaskStatus(params: { status: string }): Chainable<Subject>;
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
@@ -33,6 +34,9 @@ declare global {
       arCreateApprovalRequest(params: {payload: ChangeRequestEditRequestBody; employeeId: string; sessionId: string}): Chainable<Subject>;
       arGetArDocumentByName(params: {employeeId: string; sessionId: string; name: string}): Chainable<Subject>;
       arCloseAR(): Chainable<Subject>;
+      arVoidAR(): Chainable<Subject>;
+      arSaveApiCall(): Chainable<Subject>;
+      arApproverRoleStatus(params: {roleName: string; enabled: boolean}): Chainable<Subject>;
     }
   }
 }
@@ -73,6 +77,10 @@ Cypress.Commands.add("arEnterApprovalRequestTitle", (params: {title: string }) =
   cy.get("[data-cy=\"field-title\"]").type(params.title);
 });
 
+Cypress.Commands.add("arCheckImplementationTaskStatus", (params: {status: string }) => {
+  cy.get("[data-cy=\"form.builder.status\"]").contains(params.status);
+});
+
 Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description: string }) => {
   cy.get("[data-cy=\"field-description\"]").type(params.description).unClick();
 });
@@ -91,11 +99,6 @@ Cypress.Commands.add("arCloseAR", () => {
   cy.get("[data-cy=\"HeaderMenuButton\"]").click();
   cy.get("[aria-label=closed]").click();
   cy.get("[data-cy=AlertDialog-continueButton]").click();
-});
-
-Cypress.Commands.add("arChoseProposedDocument", ({ name }) => {
-  cy.get("[role=dialog]>div:nth-child(2)>div>div>div>div>div>div>div>input").click();
-  cy.get("[role=listbox]>li").contains(name).click();
 });
 
 Cypress.Commands.add("arChoseSpecificProposedDocument", (params: { name: string }) => {
@@ -128,6 +131,13 @@ Cypress.Commands.add("arClickSendToReview", () => {
     CyRoutes.ARtoReview,
     () => {
       cy.get("[data-cy=\"transitionButton\"]").click();
+    });
+});
+
+Cypress.Commands.add("arSaveApiCall", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PatchAR], () => {
+      cy.get("[data-cy=\"common.save\"]").click();
     });
 });
 
@@ -174,6 +184,12 @@ Cypress.Commands.add("arCloseAR", () => {
   cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
 });
 
+Cypress.Commands.add("arVoidAR", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").click();
+  cy.get("[id=\"void\"]").click();
+  cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+});
+
 Cypress.Commands.add("arIsProposedDocumentEmpty", () => {
   cy.get("[data-cy=\"proposedDocumentRevision\"] input").should("be.empty");
 });
@@ -185,4 +201,8 @@ Cypress.Commands.add("arRejectComfirmationAR", () => {
 
 Cypress.Commands.add("arSelectFirstDocument", () => {
   cy.get(".MuiTableCell-root a:nth-child(1)").first().click().wait(3000);
+});
+
+Cypress.Commands.add("arApproverRoleStatus", (params: {roleName: string; enabled: boolean}) => {
+  cy.get(`[data-cy="fb-approvers-${params.roleName}-check-${params.enabled ? "marked" : "disabled"}"]`).should("not.be.undefined");
 });

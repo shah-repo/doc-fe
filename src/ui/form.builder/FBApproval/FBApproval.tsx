@@ -46,7 +46,7 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
           <Box ml={1} display="flex" mt={0.3}>
             {isApproved && <FBText locale="form.builder.approved" />}
             {!isApproved && (
-              <FBText boxProps={{ flexGrow: 1 }} locale="form.builder.approval.waiting" />
+              <FBText boxProps={{ flexGrow: 1 }} locale="form.builder.approval.pending" />
             )}
           </Box>
         </Box>

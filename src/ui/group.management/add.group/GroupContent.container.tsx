@@ -42,7 +42,9 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   useEffect(() => {
     if (selectedGroup) {
       setGroup(toGroupOptions(selectedGroup));
-      setMembers(toMembersOptions((selectedGroup.employees as unknown) as GetEmployeeResponse[]));
+      setMembers(toMembersOptions(
+        (selectedGroup.employees.filter((e) => e.active) as unknown) as GetEmployeeResponse[])
+      );
       setParentGroups(toParentOptions((selectedGroup.parents as unknown) as Group[]));
     }
   }, [selectedGroup]);

@@ -8,6 +8,7 @@ import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
 import { FBEditorEmpty } from "../FBEditorEmpty";
 import { FBEditorHyperlink } from "../FBEditorHyperlink";
+import { FBEditorInlineApproval } from "../FBEditorInlineApproval";
 import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
 import { FBEditorLabel } from "../FBEditorLabel";
 import { FBEditorMediaAlbum } from "../FBEditorMediaAlbum";
@@ -43,12 +44,15 @@ export class FBEditorState {
     "checkpoint",
     "createlabel",
     "poreceive",
+    "approval",
+    "inlineapproval",
     "requestapproval",
     "hellosign",
     "approvalMatrix",
     "poApprovalMatrix",
     "task",
     "blanktplform",
+    "approvals",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -65,8 +69,10 @@ export class FBEditorState {
     "checkpoint",
     "createlabel",
     "approval",
+    "inlineapproval",
     "requestapproval",
     "blanktplform",
+    "approvals",
   ];
 
   public static pickStepIndex: FBInputType[] = ["stepsection", "teststep"];
@@ -104,6 +110,7 @@ export class FBEditorState {
     checkpoint: FBEditorLabel,
     createlabel: FBEditorLabel,
     approval: FBEditorApprovalField,
+    inlineapproval: FBEditorInlineApproval,
     requestapproval: FBEditorRequestApproval,
     action: FBEditorAction,
     hellosign: FBEditorLabel,
@@ -111,6 +118,7 @@ export class FBEditorState {
     documentRevisions: FBEditorEmpty,
     poApprovalMatrix: FBEditorLabel,
     task: FBEditorLabel,
+    approvals: FBEditorLabel,
   };
 
   @observable public mode?: FBEditorMode = "config";

@@ -26,7 +26,7 @@ const FBApprovalMatrixSection: React.FunctionComponent<FBApprovalMatrixProps> = 
           </FBTooltip>
         </IconButton>
       )}
-      <IconButton color="inherit" size="small" {...{ disabled }} onClick={handleEdit} >
+      <IconButton data-cy="EditBtnDAM" color="inherit" size="small" {...{ disabled }} onClick={handleEdit} >
         {mode !== "edit" && (
           <FBTooltip title='form.builder.edit.matrix'>
             <EditIcon fontSize="small" />

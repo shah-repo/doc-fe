@@ -22,7 +22,8 @@ export const byId = (
     case CHANGE_REQUEST_SET: {
       const newState: ChangeRequest = {
         ...action.payload,
-        approvals: action.payload.approvals.filter((a) => a.active),
+        // approvals: action.payload.approvals.filter((a) => a.active),
+        approvals: action.payload.approvals,
       };
       return { ...state, [action.payload.id]: newState };
     }

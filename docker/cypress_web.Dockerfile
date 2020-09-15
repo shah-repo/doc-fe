@@ -8,7 +8,6 @@ COPY yarn*.lock ./
 RUN yarn install --frozen-lockfile
 
 COPY src /opt/app/src
-COPY buildInfoCypress.json /opt/app/src/data/buildInfo.json
 COPY public /opt/app/public
 COPY tsconfig* /opt/app/
 
@@ -31,5 +30,6 @@ COPY scripts/cypress_docker_run_web.sh /opt/app/scripts/
 
 LABEL enlil_cypress=$FE_GIT_COMMIT_HASH
 
+COPY src/data/buildInfo.json /opt/app/src/data/buildInfo.json
 
 CMD ["bash","./scripts/cypress_docker_run_web.sh"]

@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -e
 
 secs_to_human() {
@@ -14,35 +15,58 @@ secs_to_human() {
 }
 start=$(date +%s)
 
-source ./scripts/cypress/platform_specific_variables.sh
-
-if [[ -z "${DATE_ISO_DEFAULT}" ]]; then
-  echo "DATE_ISO_DEFAULT not set, exiting"
-  exit
+if [[ -z "${CI_BUILD_ID}" ]]; then
+  echo "CI_BUILD_ID not set, exiting"
+  exit 1
 fi
 
-export CI_BUILD_ID=${CI_BUILD_ID:-$DATE_ISO_DEFAULT}
-export NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-4}
+export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START:-5600}
+export ENLIL_COMPOSE_EXPOSE_BE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+1))"
+export ENLIL_COMPOSE_EXPOSE_FE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+2))"
+export ENLIL_COMPOSE_EXPOSE_DIRECTOR_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+6))"
 export REPORT_TITLE=${REPORT_TITLE:-generated_specs}
 export CYPRESS_INTEGRATION_FOLDER=${CYPRESS_INTEGRATION_FOLDER:-"cypress/integration"}
 export CYPRESS_SKIP_ON_RUN_FAILURE=${CYPRESS_SKIP_ON_RUN_FAILURE:-true}
 export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH=${CYPRESS_TAKE_SCREENSHOT_AFTER_EACH:-false}
 export CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL:-"zoran.kovacevic+admin@codecons.com"}
 export CYPRESS_SUPERADMIN_PASSWORD=${CYPRESS_SUPERADMIN_PASSWORD:-"Tester1!"}
+export CYPRESS_VIDEO=${CYPRESS_VIDEO:-false}
+export CYPRESS_BE_URL=${CYPRESS_BE_URL:-"http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_PORT"}
+export CYPRESS_FE_URL=${CYPRESS_FE_URL:-"http://localhost:$ENLIL_COMPOSE_EXPOSE_FE_PORT"}
 
-if [[ -z "${CI_BUILD_ID}" ]]; then
-  echo "CI_BUILD_ID not set, exiting"
-  exit
+export COMPOSE_PROJECT_NAME="enlil_$ENLIL_COMPOSE_PORT_RANGE_START"
+
+export CYPRESS_CACHE_FOLDER="cypress/cache/cypressLib"
+mkdir -p $CYPRESS_CACHE_FOLDER
+yarn install --frozen-lockfile
+yarn cypress install
+yarn cypress verify
+
+source ./scripts/cypress/utils/make_results_dir.sh
+
+./scripts/cypress/utils/patch_director_port_in_cache.sh
+./scripts/cypress/utils/generate_requirements_json_file.sh
+
+./scripts/cypress/utils/delete_cache.sh
+
+./scripts/cypress/utils/run_generate_info_report.sh
+
+export CYPRESS_SCREENSHOTS_FOLDER=$DIR_SCREENSHOTS_REPORT
+export CYPRESS_VIDEOS_FOLDER=$DIR_VIDEOS_REPORT
+
+if [[ -z "${NUMBER_OF_WORKERS_PER_RUN}" ]]; then
+  ./scripts/cypress/utils/delete_failed_specs.sh
+  NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-4} ./scripts/cypress/utils/run_workers_in_parallel.sh
+else
+  for i in $(echo $NUMBER_OF_WORKERS_PER_RUN | sed "s/,/ /g")
+  do
+    ./scripts/cypress/utils/delete_failed_specs.sh
+    NUMBER_OF_WORKERS=$i ./scripts/cypress/utils/run_workers_in_parallel.sh
+  done
 fi
 
-./scripts/cypress/delete_cache.sh
-source ./scripts/cypress/make_results_dir.sh
-./scripts/cypress/run_generate_info_report.sh
-export CYPRESS_SCREENSHOTS_FOLDER=$DIR_SCREENSHOTS_REPORT
-./scripts/cypress/delete_failed_specs.sh
-./scripts/cypress/run_workers_in_parallel.sh
-./scripts/cypress/run_generate_requirements_report.sh
-./scripts/cypress/merge_reports.sh
+./scripts/cypress/utils/run_generate_requirements_report.sh
+./scripts/cypress/utils/merge_reports.sh
 
 echo "================="
 echo "================="

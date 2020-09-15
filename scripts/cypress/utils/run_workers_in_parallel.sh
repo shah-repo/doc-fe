@@ -2,33 +2,28 @@
 set -e
 
 export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START:-5600}
-export ENLIL_COMPOSE_EXPOSE_DIRECTOR_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+6))"
 export CYPRESS_SCREENSHOT_OF_RUN_FAILURE=${CYPRESS_SCREENSHOT_OF_RUN_FAILURE:-true}
 
 # calculate CI build number, has to be unique
 # export CI_BUILD_ID=$(date -R)
 if [[ -z "${CI_BUILD_ID}" ]]; then
   echo "CI_BUILD_ID not set, exiting"
-  exit
+  exit 1
 fi
 
 if [[ -z "${NUMBER_OF_WORKERS}" ]]; then
   echo "NUMBER_OF_WORKERS not set, exiting"
-  exit
+  exit 1
 fi
-
-# make folders for results
-source ./scripts/cypress/make_results_dir.sh
 
 if [[ -z "${DIR_REPORTS}" ]]; then
   echo "DIR_REPORTS not set, exiting"
-  exit
+  exit 1
 fi
 
 export ENLIL_WORKER_LOG_FILE="$DIR_REPORTS/worker.log"
 
-./scripts/cypress/patch_director_port_in_cache.sh
-./scripts/cypress/generate_requirements_json_file.sh
+./scripts/cypress/utils/generate_requirements_json_file.sh
 
 echo "--| CI_BUILD_ID: $CI_BUILD_ID"
 echo "--| CYPRESS_SKIP_ON_RUN_FAILURE: $CYPRESS_SKIP_ON_RUN_FAILURE"
@@ -43,13 +38,13 @@ export CYPRESS_SKIP_ON_RUN_FAILURE=${CYPRESS_SKIP_ON_RUN_FAILURE:-true}
 
 function prepend() { while read line; do echo "${1}${line}"; done; }
 function runNode() { 
-  ./scripts/cypress/run_node.sh 2>/dev/null | prepend "Worker ${1} | " | tee -a $ENLIL_WORKER_LOG_FILE 2>/dev/null || true
+  ./scripts/cypress/utils/run_node.sh 2>/dev/null | prepend "Worker ${1} | " | tee -a $ENLIL_WORKER_LOG_FILE 2>/dev/null || true
  }
 
 for((i=1; i <= $NUMBER_OF_WORKERS; i+=1))
 do
   echo "Started worker: $i"
-  # ./scripts/cypress/run_node.sh  2>/dev/null || true  &
+  # ./scripts/cypress/utils/run_node.sh  2>/dev/null || true  &
   runNode $i &
   pids[${i}]=$!
 done

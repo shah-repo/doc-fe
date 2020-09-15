@@ -10,7 +10,7 @@ const FBText: React.FunctionComponent<FBTextProps> = ({
   suffix,
   locale,
 }) => (
-  <Box {...boxProps}>
+  <Box {...boxProps} data-cy={locale}>
     {prefix}
     <Text message={locale} />
     {suffix}

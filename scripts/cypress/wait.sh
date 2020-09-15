@@ -1,21 +1,29 @@
 #!/bin/bash
-set -e
 
-until $(curl --output /dev/null --silent --head --fail http://localhost:5601/api/v1/healthcheck); do
+if [[ -z "${CYPRESS_BE_URL}" ]]; then
+  echo "CYPRESS_BE_URL not set, exiting"
+  exit 1
+fi
+
+if [[ -z "${CYPRESS_FE_URL}" ]]; then
+  echo "CYPRESS_FE_URL not set, exiting"
+  exit 1
+fi
+
+echo "CYPRESS_FE_URL $CYPRESS_FE_URL"
+echo "CYPRESS_BE_URL $CYPRESS_BE_URL"
+
+printf 'Waiting for backend .'
+until $(curl --output /dev/null --silent --head --fail $CYPRESS_BE_URL/api/v1/healthcheck); do
     printf '.'
-    sleep 5
+    sleep 2
+done
+echo ""
+
+printf 'Waiting for frontend .'
+until $(curl --output /dev/null --silent --head --fail $CYPRESS_FE_URL); do
+    printf '.'
+    sleep 2
 done
 
-until $(curl --output /dev/null --silent --head --fail http://localhost:5602); do
-    printf '.'
-    sleep 5
-done
-
-. ./scripts/cypress/generate_ci_build_id.sh
-
-yarn install --frozen-lockfile 
-./scripts/cypress/run_in_parallel.sh
-./scripts/cypress/run_in_parallel.sh
-./scripts/cypress/run_in_parallel.sh
-./scripts/cypress/run_in_parallel.sh
-firefox results/$CI_BUILD_ID/reports/result.html &
+echo ""

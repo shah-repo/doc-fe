@@ -7,6 +7,7 @@ import { useIntl } from "react-intl";
 import { FBOption } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
+import { FBClasses } from "../defaults/layout";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { FBInputProps, OmitInputClones } from "../FBInput";
 import { FB } from "../helpers";
@@ -56,7 +57,8 @@ export const withFBInput = <T extends FBInputProps>(
     // TODO: Autocomplete default set as input
     // then this can be removed and handle through defaultValue
     const validationValue = get(formState?.values, name);
-    if (isOutput || formState?.workspaceMode === "form") {
+
+    if (isOutput || formState?.workspaceMode !== "design") {
       (isUndefined(hidden) && validationMode === "visibility") && (hidden =
         !helperText && (!validationValue || isEmpty(validationValue))
       );
@@ -107,6 +109,7 @@ export const withFBInput = <T extends FBInputProps>(
         value,
         ...(type === "textfield" && { error }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
+        ...( workspaceState?.mode === "preview" && { className: FBClasses.inputPreview }),
       });
     }
 

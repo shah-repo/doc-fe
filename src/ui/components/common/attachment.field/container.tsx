@@ -10,6 +10,7 @@ import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useAsync from "../../../hooks/useAsync";
 import { useFormContext } from "../../forms/FormContext";
 import { withFormik } from "../../hoc/formik";
+import { toastError } from "../../notifications";
 import Presenter from "./presenter";
 import { AttachmentContainerProps, AttachmentFieldDispatchProps } from "./utils/types";
 
@@ -59,8 +60,9 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       form.setFieldValue(name, attachments);
       submitForm();
     },
-    onError: () => {
+    onError: (error) => {
       setIsUploading(false);
+      toastError(error as string);
     },
   });
 

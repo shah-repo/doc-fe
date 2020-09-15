@@ -7,6 +7,7 @@ import { ReactComponent as BookmarkIcon } from "../../assets/images/bookmark.svg
 import { ReactComponent as CRIcon } from "../../assets/images/cr.svg";
 import { ReactComponent as TimelineIcon } from "../../assets/images/history.svg";
 import { ReactComponent as NoteIcon } from "../../assets/images/note.svg";
+import { ChangeRequest } from "../../state/ducks/changeRequest";
 import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { DocumentGroupType } from "../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../state/reducers";
@@ -22,6 +23,7 @@ import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers"
 import Bookmarks from "./Sidebar/Bookmarks";
 import RevisionHistory from "./Sidebar/RevisionHistory";
 import { SidebarContainer } from "./Sidebar/Sidebar.container";
+import { Sidebar } from "./Sidebar/types";
 import styles from "./styles";
 
 interface StateProps {
@@ -78,7 +80,7 @@ DocumentRevisionManagerContainerProps
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
   const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
   const canAccess = selectedDocument?.document.canAccess;
-  const { documentTypeAcronym: acronym } = document?.documentType || {};
+  const { documentTypeAcronym: acronym, id: documentTypeId } = document?.documentType || {};
 
   const isInlineApproval =
     !!docRevsWithoutCanceled.find(
@@ -93,9 +95,10 @@ DocumentRevisionManagerContainerProps
       (e) => (e.document?.documentType?.groupOptions || []).includes(FBDocTypeGroup.RECORD)) ||
     (!!selectedDocument?.document?.documentType?.groupOptions?.includes(FBDocTypeGroup.RECORD) || false);
 
-  const sidebarList = [
+  const sidebarList: Sidebar[] = [
     {
       icon: <NoteIcon />,
+      type: "note",
       details: {
         title: intl.formatMessage({
           id: `document.revision.docVersion.${acronym}`,
@@ -103,17 +106,23 @@ DocumentRevisionManagerContainerProps
         }),
         component: <DocumentRevisionListContainer
           documentRevisions={docRevsWithoutCanceled}
-          isInlineApproval={isInlineApproval}
-          isRecord={isRecord}
-          documentId={documentId}
-          docId={docId}
           selectedDocumentRevision={documentRevisionId}
-          documentRevisionId={documentRevisionId}
+          {
+            ...{
+              isInlineApproval,
+              isRecord,
+              documentId,
+              docId,
+              documentRevisionId,
+              documentTypeId,
+            }
+          }
         />,
       },
     },
     {
       icon: <TimelineIcon />,
+      type: "history",
       details: {
         dataCy: "timeline-icon",
         title: intl.formatMessage({
@@ -126,6 +135,7 @@ DocumentRevisionManagerContainerProps
     },
     {
       icon: <BadgeIcon />,
+      type: "permissions",
       details: {
         dataCy: "permission-icon",
         title: intl.formatMessage({
@@ -142,6 +152,7 @@ DocumentRevisionManagerContainerProps
     },
     {
       icon: <BookmarkIcon />,
+      type: "bookmarks",
       details: {
         dataCy: "bookmark-icon",
         title: intl.formatMessage({
@@ -152,12 +163,14 @@ DocumentRevisionManagerContainerProps
     },
     {
       icon: <CRIcon />,
+      type: "crHistory",
       details: {
         dataCy: "cr-icon",
         title: intl.formatMessage({
           id: "document.revision.cr.history",
         }),
-        component: <RevisionHistory changeRequests={documentRevisions.map((e) => e.changeRequest)} />,
+        component: <RevisionHistory changeRequests={documentRevisions.map((e) =>
+          e.changeRequest) as ChangeRequest[]} />,
       },
     },
   ];

@@ -43,6 +43,7 @@ export type FBInputType =
   | "teststep"
   | "checkpoint"
   | "approval"
+  | "inlineapproval"
   | "createlabel"
   | "quantity"
   | "timer"
@@ -56,7 +57,8 @@ export type FBInputType =
   | "poApprovalMatrix"
   | "task"
   | "approvers"
-  | "blanktplform";
+  | "blanktplform"
+  | "approvals";
 
 export type FBInputProps =
   & FBLabelProps
@@ -124,4 +126,6 @@ export const OmitInputClones: FBInputType[] = [
   "approvers",
   "approval",
   "blanktplform",
+  "inlineapproval",
+  "approvals",
 ];

@@ -55,7 +55,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
   canChangeOwnerShip,
   canShowCreateVersionButton,
 }) => {
-
   useScrollIntoView();
   const onSubmit = () => void 0;
   const { formInput } = dataProp || {};
@@ -153,7 +152,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
             document={dataProp}
             initialValues={dataProp.formInput}
             schema={schema as FBSchemaProps[]}
-            mode="preview"
+            mode={dataProp.document.documentType.group === "FORM" ?
+              "formPreview" : "preview"}
           />
         </Box>
       )}

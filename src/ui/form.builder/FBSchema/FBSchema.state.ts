@@ -6,6 +6,7 @@ import { FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBIn
 import { FBActionField } from "../FBActionField";
 import { FBApproval } from "../FBApproval";
 import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
+import { FBApprovals } from "../FBApprovals";
 import { FBApprovers } from "../FBApprovers";
 import { FBBlankTplForm } from "../FBBlankTplForm";
 import { FBButton } from "../FBButton";
@@ -15,6 +16,7 @@ import { FBDocumentRevisions } from "../FBDocumentRevisions";
 import { FBFileUpload } from "../FBFileUpload";
 import { FBHelloSign } from "../FBHelloSign";
 import { FBHyperlink } from "../FBHyperlink";
+import { FBInlineApproval } from "../FBInlineApproval";
 import { FBInstructionsDocument } from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
@@ -46,6 +48,7 @@ export class FBSchemaState {
     "purchaseorder",
     "task",
     "blanktplform",
+    "approvals",
   ];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
@@ -82,6 +85,7 @@ export class FBSchemaState {
     checkpoint: FBButton,
     createlabel: FBButton,
     approval: FBApproval,
+    inlineapproval: FBInlineApproval,
     requestapproval: FBRequestApproval,
     action: FBActionField,
     hellosign: FBHelloSign,
@@ -89,6 +93,7 @@ export class FBSchemaState {
     poApprovalMatrix: FBPOApprovalMatrix,
     task: FBTask,
     approvers: FBApprovers,
+    approvals: FBApprovals,
   };
 
   @observable public schema?: FBSchemaProps[];

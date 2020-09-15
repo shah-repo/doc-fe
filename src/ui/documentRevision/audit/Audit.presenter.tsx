@@ -18,7 +18,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const classes = styles();
 
   const renderAuditGroup = () =>
-    Object.keys(audit).map((groupId) => {
+    Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
       const { owner, ownerUser, ownerThirdParty } = change;
       const { name } = ((owner && owner.user) || ownerUser || ownerThirdParty);
@@ -31,21 +31,23 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer}>
-            <div className={classes.owner}>{name}</div>
-            <DateTime value={change.timestamp} />
+            <div className={classes.owner} data-cy={`owner-${key}`}>{name}</div>
+            <DateTime value={change.timestamp} data-cy={`time-${key}`}/>
           </div>
-          {renderChanges(audit[groupId])}
+          {renderChanges(audit[groupId], key)}
         </Box>
       );
     });
 
-  const renderChanges = (audits: Audit[]) => {
+  const renderChanges = (audits: Audit[], groupKey?: number) => {
     const newReferences: Audit[] = [];
     const deletedReferences: Audit[] = [];
     const attachments: Audit[] = [];
     const singleFields: JSX.Element[] = [];
+    let key = 0;
 
     audits.forEach((change: Audit, index) => {
+      change.groupKey = groupKey;
       if (change.field.includes("attachments")) {
         attachments.push(change);
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_NEW") {
@@ -58,16 +60,28 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         singleFields.push((
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
-              <Text
+              <Text dataCy={`change-key-${groupKey}-${key}`}
                 message={`documentRevision.audit.${change.field}.${change.type}`}
               />
             </Box>
             <div className={classes.auditValue}>
-              <AuditFactory audit={change} />
+              <AuditFactory audit={change} dataCy={`change-value-${groupKey}-${key}`} />
             </div>
           </Box>
         ));
+        key++;
       }
+    });
+
+    // This key is added to keep sequential data-cy identifier in the history
+    attachments.forEach((change) => {
+      change.index = key++;
+    });
+    newReferences.forEach((change) => {
+      change.index = key++;
+    });
+    deletedReferences.forEach((change) => {
+      change.index = key++;
     });
 
     return (
@@ -83,18 +97,21 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderGroupChanges = (auditGroup: Audit[]) => {
     const field = auditGroup[0].field;
     const type = auditGroup[0].type;
+    const parentGroupKey = auditGroup[0].groupKey;
+    const parentIndex = auditGroup[0].index;
 
     return (
       <Box mb={1} key={`${auditGroup[0].groupId}`}>
         <Box>
-          <Text message={`documentRevision.audit.${field}.${type}`} />
+          <Text dataCy={`change-key-${parentGroupKey}-${parentIndex}`}
+            message={`documentRevision.audit.${field}.${type}`} />
         </Box>
         {auditGroup.map((change, index) => (
           <div
             key={change.groupId + `-${index}`}
             className={classes.auditValue}
           >
-            <AuditFactory audit={change} />
+            <AuditFactory audit={change} dataCy={`change-value-${change.groupKey}-${change.index}`} />
           </div>
         ))}
       </Box>

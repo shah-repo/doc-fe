@@ -7,7 +7,7 @@ import SummaryInfo from "../common/summary/SummaryInfo";
 import DateFormatter from "../components/Date";
 import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
-import { useDocumentVersion } from "../hooks/docCustomization/useCustomization";
+import { useDocumentStatus } from "../hooks/docCustomization/useCustomization";
 import { styles } from "./DocumentRevisionList.container.styles";
 import { generateVersionNumber } from "./helpers";
 
@@ -45,7 +45,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   );
 
   const { status } = documentRevision;
-  const [isStatusVisible, statusLabel] = useDocumentVersion(documentTypeId, status);
+  const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
   let verPrefix = "common.revision";
   let statLabel = statusLabel;
 

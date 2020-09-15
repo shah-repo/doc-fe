@@ -43,7 +43,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
       range(0, index).reverse().some((current) => {
         if (!schema) { return false; }
         const { type, name = "" } =  schema[current];
-        if (type === "requestapproval" || type === "approval") { return true; }
+        if (type === "requestapproval" || type === "inlineapproval") { return true; }
         underApprovalField.push(name);
         return false;
       });
@@ -214,7 +214,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
 
         const description: Partial<Record<FBInputType | "default", () => any>> = {
           purchaseorder: () => isPurchaseorder(),
-          approval: () => "Approved",
+          inlineapproval: () => "Approved",
           checkboxgroup: () => isCheckGroup(),
           textfield: () => isSimple(),
           texteditor: () => isSimple(),
@@ -242,7 +242,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
 
       const compactMapped = sortBy(compact(mapped), "timestamp");
       const approvals = filter(compactMapped,  ({ type, timestamp }) =>
-        type === "approval" || type === "requestapproval"
+        type === "inlineapproval" || type === "requestapproval"
       );
 
 
@@ -264,7 +264,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
     }
 
     function isApproved(): boolean {
-      let hasValue = type === "approval"
+      let hasValue = type === "inlineapproval"
         ? formState?.getFieldValue(name)
         : formState?.getFieldValue(FBFieldName.RequestApproval + name);
       hasValue = Boolean(hasValue);

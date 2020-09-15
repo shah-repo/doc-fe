@@ -30,8 +30,11 @@ const DocRevActions: React.FunctionComponent<Props> = ({
   function setFBValue() {
     switch (workspaceState?.getMode()) {
       case "form":
-        formik.setFieldValue("formDocument", { id: formDocumentId });
-        formik.setFieldValue("documentType", { id: documentTypeId });
+        // formDocument and documentType fields should be set only once
+        // and that is when we create CR, not on every save
+        // because it sets dirty flag to true and prompts alert for unsaved changes
+        !changeRequest && formik.setFieldValue("formDocument", { id: formDocumentId });
+        !changeRequest && formik.setFieldValue("documentType", { id: documentTypeId });
         formik.setFieldValue("formInput", formState?.getValues());
         break;
       default:

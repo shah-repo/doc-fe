@@ -71,7 +71,7 @@ context("Document Creation Flow", () => {
 
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -90,7 +90,7 @@ context("Document Creation Flow", () => {
     });
 
     it("Selects 'Component Specification' document type from dropdown", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Component Specification" });
     });
 
@@ -231,7 +231,7 @@ context("Document Creation Flow", () => {
         cy.atchUploadAttachment({ fileName: "test_image.jpg" });
       });
 
-      it("Check test.docx attachment atributes", () => {
+      it("Check test_image.jpg attachment atributes", () => {
         cy.atchCheckAtributes({ fileName: "test_image.jpg", attributes: "79.54 kB JPG File" });
       });
 
@@ -288,7 +288,7 @@ context("Document Creation Flow", () => {
       });
 
       it("'Training Required' should be checked as previous version was checked", () => {
-        SystemRequirement("REQ-0280");
+        // SystemRequirement("REQ-0280");
         cy.drIsTrainingRequired({ shouldBe: true });
       });
     });
@@ -296,7 +296,7 @@ context("Document Creation Flow", () => {
 
   context("Create new document, change owner and cancel it", () => {
     it("Navigates to document list", () => {
-      SystemRequirement("REQ-0140");
+      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -313,7 +313,7 @@ context("Document Creation Flow", () => {
     });
 
     it("Selects 'Clinical Protocol' document type from dropdown", () => {
-      SystemRequirement("REQ-0490");
+      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
     });
 
@@ -323,12 +323,59 @@ context("Document Creation Flow", () => {
 
     it("Change owner of document", () => {
       SystemRequirement("REQ-0340");
-      cy.drChangeOwner({ employee: USERS[3].name });
+      cy.drChangeOwnerFromMenu({ employee: USERS[3].name });
     });
 
     it("Logs user that ownership was changed to", () => {
       cy.authLogin({
         email: USERS[3].email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on specific document 'CP00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP00003" });
+    });
+
+    it("Verify owner", () => {
+      cy.drVerifyDocumentOWner({ owner: USERS[3].name }).wait(1000);
+    });
+
+    it("Logs with admin", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on specific document 'CP00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP00003" });
+    });
+
+    it("Change owner of document by admin", () => {
+      SystemRequirement("REQ-0340");
+      cy.drChangeOwnerByAdmin({ employee: USERS[2].name });
+    });
+
+    it("Logs user that ownership was changed to", () => {
+      cy.authLogin({
+        email: USERS[2].email,
         password: "Tester1!",
       });
     });

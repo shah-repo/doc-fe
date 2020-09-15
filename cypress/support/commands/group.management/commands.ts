@@ -243,7 +243,12 @@ Cypress.Commands.add("grpAddParentGroups", (...groups: string[]) => {
 
 Cypress.Commands.add("grpCloseGroupBtn", () => cy.get("[data-cy=\"DialogContent-close\"]").click());
 
-Cypress.Commands.add("grpAddGroup", () => cy.get("[data-cy=\"Group-createGroup\"]").click());
+Cypress.Commands.add("grpAddGroup", () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPost, () => {
+    cy.get("[data-cy=\"Group-createGroup\"]").click();
+  });
+});
+
 Cypress.Commands.add("grpAPICreateNewGroup", (params: {
   payload: Group;
   employeeId: string;
