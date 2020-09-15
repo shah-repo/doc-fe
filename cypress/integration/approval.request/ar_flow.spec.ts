@@ -188,6 +188,10 @@ context("Approval request form", () => {
       cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });

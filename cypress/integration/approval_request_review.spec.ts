@@ -104,6 +104,10 @@ context("Approval request form scenario", () => {
         cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
       });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
@@ -139,6 +143,10 @@ context("Approval request form scenario", () => {
     it("Click on 'Component Specification' outputdocument type", () =>
     {
       cy.drSelectOutputDocumentType({ documentType: "Component Specification" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document", () => {

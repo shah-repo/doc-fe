@@ -159,6 +159,11 @@ context("Validators tests", () => {
 
     it("fill in document type as Component Specification", () => {
       cy.drSelectDocumentType({ documentType: "Component Specification" });
+      cy.get("h6").contains("Document Type").click();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("clicks on 'Save' button", () => {
@@ -235,10 +240,14 @@ context("Validators tests", () => {
 
   });
 
-  context("Adds Output Document Type", () => {
+  context("Adds Output Document Type and revision Stage", () => {
     it("fill in output document type as Component Specification", () => {
       cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
       cy.get("[data-cy=\"field-outputDocumentTypes\"]").type("Component Specification{enter}");
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
   });
 
