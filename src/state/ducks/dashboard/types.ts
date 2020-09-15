@@ -17,6 +17,7 @@ export interface PendingAction {
   changeReq?: ChangeRequest;
   trainingRecord?: TrainingRecord;
   documentRevision?: DocumentRevision;
+  docRev?: DocumentRevision;
 }
 
 export interface PendingActionsListAction {
