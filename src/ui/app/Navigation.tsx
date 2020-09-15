@@ -34,8 +34,6 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   const userTags = useSelector(getCurrentUserTags());
   const async = useAsync({
     onSuccess: () => {
-      console.log("here");
-
       setIsLoading(false);
     },
   });

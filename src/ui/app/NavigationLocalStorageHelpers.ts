@@ -1,5 +1,5 @@
 import { indexOf } from "lodash";
-import { NavigationMenu } from "../../state/ducks/company";
+import { NavigationMenu, NavigationMenuItem } from "../../state/ducks/company";
 
 let navigationMenu: NavigationMenu[];
 
@@ -20,6 +20,7 @@ export const getEmployeeNavigation = (id: string) => {
 
 export const setNavigation = (id: string, data: any) => {
   navigationMenu = getNavigation() || [];
+
   const currentEmployeeNavigation = getEmployeeNavigation(id);
   if (currentEmployeeNavigation) {
     const index = indexOf(navigationMenu, currentEmployeeNavigation);
@@ -31,8 +32,9 @@ export const setNavigation = (id: string, data: any) => {
   localStorage.setItem("navigationMenu", JSON.stringify(navigationMenu));
 };
 
-export const updateNavigationItem = ( id: string, data: any) => {
+export const updateNavigationItem = ( id: string, data: NavigationMenuItem) => {
   navigationMenu = getNavigation() || [];
+
   const menus = getEmployeeNavigation(id).menus.filter((item) => item.label !== data.label);
   menus.push(data);
   setNavigation(id, { id, menus });

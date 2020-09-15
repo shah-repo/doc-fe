@@ -84,7 +84,7 @@ export interface NavigationItem {
 
 export interface NavigationMenu {
   id: string;
-  menus: NavigationItem[];
+  menus: NavigationMenuItem[];
 }
 
 export interface NavigationMenuItem {
