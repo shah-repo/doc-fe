@@ -145,9 +145,15 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     // MARK: @observer
     useObserver(() => {
+      const inlineApprovalExists = document?.formDocument?.formTemplate?.schema
+      .some((e) => (e.type === "approval" || e.type === "inlineapproval" as string));
+
       groups = approvalsState?.groups;
       approvals = approvalsState?.getApprovals;
-      isComponentVisible = document?.status !== DocumentRevisionStatus.Voided;
+
+      isComponentVisible = document?.status !== DocumentRevisionStatus.Voided
+        && (!inlineApprovalExists || document?.revisionStage !== 1);
+
       loading = (
         approvalsState.loading ||
         approvalsState?.approvalApi.loading ||

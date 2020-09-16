@@ -15,6 +15,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     editorConfig: { approvers, groups, roles } = {},
     currentUser,
     isApproved,
+    isComponentVisible,
     isPreview,
     approvals,
     disabled,
@@ -174,6 +175,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     useObserver(() => {
       options = inlineApprovalState?.getOptions;
       approvals = inlineApprovalState?.getApprovals;
+
+      isComponentVisible = document?.status !== "VOIDED"
+        && document?.revisionStage === 1;
+
       loading = (
         inlineApprovalState?.approvalApi.loading ||
         inlineApprovalState?.transitionApi.loading ||
@@ -196,6 +201,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       inlineApprovalState,
       currentUser,
       isApproved,
+      isComponentVisible,
       isPreview,
       approvals,
       disabled,
