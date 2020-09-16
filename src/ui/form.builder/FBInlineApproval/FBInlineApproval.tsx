@@ -13,7 +13,6 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   approvals = [],
   currentUser,
   isApproved,
-  isComponentVisible,
   isPreview,
   index,
   type,
@@ -22,7 +21,7 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   loading,
   name,
   ...props
-}) => isComponentVisible ? (
+}) => (
   <FBProvider {...{ [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
     <FBInlineApprovalSocket {...{ name }} />
     <FBInput {...props} {...{ name }} type="inlineapproval">
@@ -108,6 +107,6 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
       </Box>
     </FBInput>
   </FBProvider>
-) : null;
+);
 
 export default withFBInlineApproval(FBInlineApproval);

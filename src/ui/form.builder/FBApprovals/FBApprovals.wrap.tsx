@@ -26,9 +26,9 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     isIncluded,
     currentUser,
     ownerId,
-    isComponentVisible,
     ...props
   }: T) => {
+    let isComponentVisible = false;
 
     const { workspaceState, formState } = FB.useStores();
     const {
@@ -149,7 +149,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     // MARK: @observer
     useObserver(() => {
       const inlineApprovalExists = document?.formDocument?.formTemplate?.schema
-      .some((e) => (e.type === "approval" || e.type === "inlineapproval" as string));
+      .some((e) => (e.type === "inlineapproval" as string));
 
       groups = approvalsState?.groups;
       approvals = approvalsState?.getApprovals;
@@ -167,6 +167,10 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     const fieldValue = map(approvalsState?.getApprovals, "approver.id");
     formState?.setFieldValue(`fb-approvals-${name}`, fieldValue);
 
+    if (!isComponentVisible) {
+      return null;
+    }
+
     return Component({
       ...(props as T),
       requestApproval,
@@ -182,7 +186,6 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       isIncluded,
       currentUser,
       ownerId,
-      isComponentVisible,
     });
   };
 

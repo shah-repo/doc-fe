@@ -15,7 +15,6 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     editorConfig: { approvers, groups, roles } = {},
     currentUser,
     isApproved,
-    isComponentVisible,
     isPreview,
     approvals,
     disabled,
@@ -24,6 +23,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     loading,
     ...props
   }: T) => {
+
+    let isComponentVisible = false;
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
@@ -195,13 +196,16 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     ) ? true
       : !isUndefined(find(approvals, { status: "APPROVED" }));
 
+    if (!isComponentVisible) {
+      return null;
+    }
+
     return Component({
       ...(props as T),
       approvalTransition,
       inlineApprovalState,
       currentUser,
       isApproved,
-      isComponentVisible,
       isPreview,
       approvals,
       disabled,

@@ -28,7 +28,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const { workspaceState, formState, inlineApprovalState } = FB.useStores();
 
   const inlineApprovalFields = documentRevision?.formDocument?.formTemplate?.schema
-    .filter((field) => (field.type === "approval" || field.type === "inlineapproval" as string));
+    .filter((field) => (field.type === "inlineapproval" as string));
 
   const isInlineApproval = inlineApprovalFields && inlineApprovalFields.length > 0;
   const isRecord = values.document?.documentType?.group === "RECORD";
@@ -97,10 +97,14 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         isRecord && (!isInlineApproval || revisionStage !== 1) && (
           <FinalizeAndRelease
             docRevId={values.id as string}
-            revisionStage={revisionStage}
-            subRevision={subRevision}
             status={values.status}
-            revisionChangeType={revisionChangeType}
+            {
+              ...{
+                revisionStage,
+                subRevision,
+                revisionChangeType,
+              }
+            }
           />
         )
       }
