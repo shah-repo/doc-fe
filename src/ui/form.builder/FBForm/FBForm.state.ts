@@ -166,11 +166,13 @@ export class FBFormState extends FBSchemaState {
         const diff = inputValue && inputValue.filter((val) => reqs.includes(val));
         if (diff && diff.length > 0 && (!val || isEmpty(val))) {
           const { messages: { attributeNames } } = validator;
-          const reqsAttributes = reqs.map((req) => attributeNames[req]);
+          // validator message changed according to ENC-5130
+          // `The ${attributeNames[attribute]} field is required when ` +
+          //  `${attributeNames[reqName]} includes ${reqsAttributes.join(", ")}.`
+          // const reqsAttributes = reqs.map((req) => attributeNames[req]);
           return passes(
             false,
-            `The ${attributeNames[attribute]} field is required when ` +
-            `${attributeNames[reqName]} includes ${reqsAttributes.join(", ")}.`);
+            `The ${attributeNames[attribute]} is a required field.`);
         }
         return passes();
       });
