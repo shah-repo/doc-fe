@@ -46,6 +46,9 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       || changeRequest?.state === ChangeRequestStatus.InReview) {
       disabled = false;
     }
+    if (document?.status === DocumentRevisionStatus.Released) {
+      disabled = true;
+    }
 
     const authUser = store.getState().auth.user;
     const isOwner = authUser.id === userId;
