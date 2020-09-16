@@ -3,14 +3,14 @@ import { COMPANY_MINE_URL } from "../../../ui/constants/urls";
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from "./constants";
-import { Company, CompanyMineAction, CompanyMineRequest, SelectCompanyAction, UpdateNavigationMenuItem } from "./types";
+import { Company, CompanyMineAction, CompanyMineRequest, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from "./types";
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
   type: SELECT_COMPANY,
   payload: company,
 });
 
-const setCompanyMine = (company: Company, navigationMenu?: any, currentEmployeeId?: string): CompanyMineAction => ({
+const setCompanyMine = (company: Company, navigationMenu?: NavigationMenu, currentEmployeeId?: string): CompanyMineAction => ({
   type: SET_COMPANY_MINE,
   payload: company,
   navigationMenu,

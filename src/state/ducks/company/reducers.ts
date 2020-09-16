@@ -54,11 +54,7 @@ export const companyMine = (
       }
       if (!action.navigationMenu) {
         const menuItems = action.payload.navigation.filter((item) => item.type === "MENU");
-        const menus = menuItems.map((item) => {
-          if (item.type === "MENU") {
-            return { label: item.label, isOpen: false };
-          }
-        });
+        const menus = menuItems.map((item) => ({ label: item.label, isOpen: false }));
         setNavigation(action.currentEmployeeId || "", { id: action.currentEmployeeId, menus });
       }
 
