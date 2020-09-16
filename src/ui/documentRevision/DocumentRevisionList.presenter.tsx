@@ -8,6 +8,7 @@ import DateFormatter from "../components/Date";
 import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import { useDocumentStatus } from "../hooks/docCustomization/useCustomization";
+import { Translation } from "../translations/types";
 import { styles } from "./DocumentRevisionList.container.styles";
 import { generateVersionNumber } from "./helpers";
 
@@ -47,7 +48,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const { status } = documentRevision;
   const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
   let verPrefix = "common.revision";
-  let statLabel = statusLabel;
+  let stateLabel = statusLabel;
 
   const isSelected = selectedDocumentRevision === documentRevision.id;
   const isDraft = status === DocumentRevisionStatus.Draft;
@@ -57,20 +58,26 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isNumericRelease = documentRevision.revisionStage === 1;
 
   if (isDraft && isRecord && isInlineApproval && !isAlphaReleased) {
-    statLabel = "common.wip";
+    stateLabel = "common.wip";
   }
   if (isReleased || ((isDeprecated || isDraft) && isInlineApproval && isRecord && isAlphaReleased)) {
     verPrefix = "common.revision";
   }
   if (isDeprecated && isInlineApproval && isRecord && isAlphaReleased) {
-    statLabel = "common.archived";
+    stateLabel = "common.archived";
   }
   if ((isDeprecated || isReleased) && isInlineApproval && isNumericRelease) {
-    statLabel = "common.archived";
+    stateLabel = "common.archived";
   }
   if (isReleased && isInlineApproval && isNumericRelease) {
-    statLabel = "common.last.signed";
+    stateLabel = "common.last.signed";
   }
+  if (isRecord && !isInlineApproval && !isDeprecated) {
+    stateLabel = status;
+  }
+
+
+  const docIdLabel = isRecord ? "common.id" : "common.docId";
 
   return (
     <div
@@ -92,7 +99,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           {
             isStatusVisible &&
             <>
-              &nbsp; - <Text message={statLabel} />
+              &nbsp; - <Text message={stateLabel} />
             </>
           }
         </div>
@@ -102,17 +109,23 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         key={documentRevision.id}
         className={classes.linkBody}
       >
-        <SummaryInfo dataCy={"common.docId"} label={isDocumentPO ? undefined : "common.docId"} value={docId} />
         <SummaryInfo
-          label="common.title"
-          value={documentRevision.name}
+          dataCy={"common.docId"}
+          label={isDocumentPO ? undefined : docIdLabel as Translation}
+          value={docId}
         />
+        {!isRecord && (
+          <SummaryInfo
+            label="common.title"
+            value={documentRevision.name}
+          />
+        )}
         <SummaryInfo
-          label="common.owner"
+          label={isRecord ? "record.released.by" : "common.owner"}
           value={documentRevision.owner.user.name}
         />
         <SummaryInfo
-          label="common.effective.date"
+          label={isRecord ? "document.revision.released.date" : "common.effective.date"}
           value={
             <DateFormatter
               value={documentRevision.obsoletedAt || documentRevision.effectiveDate}
