@@ -43,13 +43,14 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   const classes = styles();
   const isStatusReleased = status === DocumentRevisionStatus.Released || status === ChangeRequestStatus.Approved;
   const isStatusCanceled = status === DocumentRevisionStatus.Canceled || status === ChangeRequestStatus.Voided;
+  const isStatusDeprecated = status === DocumentRevisionStatus.Deprecated;
   const statusIcon =
     <div className={classNames(classes.statusIconDefault, {
       [classes.statusIconReleased]: isStatusReleased,
       [classes.statusIconCanceled]: isStatusCanceled,
     })} />;
 
-  if (isRecord && !isInlineApproval) {
+  if (isRecord && !isInlineApproval && !isStatusDeprecated) {
     stateLabel = status;
   }
 

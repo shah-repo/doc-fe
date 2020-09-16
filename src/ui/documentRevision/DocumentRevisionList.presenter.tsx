@@ -72,7 +72,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   if (isReleased && isInlineApproval && isNumericRelease) {
     stateLabel = "common.last.signed";
   }
-  if (isRecord && !isInlineApproval) {
+  if (isRecord && !isInlineApproval && !isDeprecated) {
     stateLabel = status;
   }
 
