@@ -5,14 +5,12 @@ import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
 import { default as AutocompleteField } from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
-import SelectField from "../../components/forms/fields/Select";
-import { required, validator } from "../../components/forms/fields/validators";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
@@ -33,6 +31,7 @@ import FBActiveNoOutput from "./presenters/FBActiveNoOutput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
 import References from "./presenters/References";
 import RetrainField from "./presenters/RetrainField";
+import RevisionStage from "./presenters/RevisionStage";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import UpgradeToLatestContainer from "./presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { DocumentRevisionFormValues } from "./types";
@@ -99,7 +98,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   isNewVersion = false,
   showAdministrativeAndVoidChange,
 }) => {
-
   useScrollIntoView();
   const { workspaceState } = FB.useStores();
   const isDisabled: boolean = initialValues.id !== undefined;
@@ -172,16 +170,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   }, [isdocRevStatusDraft, values.document, values.name]);
 
-  const renderRevisionStageDropdown = !isDisabled && (
-    <SelectField
-      name="revisionStage"
-      label="document.revision.stage"
-      selectProps={{ inputProps: { id: "revisionStage" } }}
-      options={RevisionStageOptions}
-      validate={validator(required)}
-      includeEmpty={false}
-    />
-  );
+
   const defaultLabel = isRecord ? "document.revision.type.of.update" : "document.revision.stage";
   const documentTypeId = values.document?.documentType?.id;
 
@@ -244,7 +233,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             type,
           }}
         />
-        {renderRevisionStageDropdown}
+        <RevisionStage {...{ isDisabled }}/>
         <AutocompleteField
           name="referenceTo"
           label="documentRevision.form.references"

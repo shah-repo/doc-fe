@@ -10,7 +10,7 @@ let loginResponse;
 let multipleCompanies;
 
 
-context("Document list test", () => {
+context("Document sequential numbering test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440", "REQ-0460");
@@ -27,7 +27,7 @@ context("Document list test", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -129,6 +129,10 @@ context("Document list test", () => {
       cy.drCheckIfDocumentIdMatches({ docId: "CP-00001" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
@@ -160,6 +164,10 @@ context("Document list test", () => {
     it("Checks if document type id is 'CP-00002'", () => {
       SystemRequirement("REQ-0320", "REQ-0460");
       cy.drCheckIfDocumentIdMatches({ docId: "CP-00002" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document after filling document", () => {
@@ -195,6 +203,10 @@ context("Document list test", () => {
       cy.drCheckIfDocumentIdMatches({ docId: "CP-00003" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
@@ -228,6 +240,10 @@ context("Document list test", () => {
       cy.drCheckIfDocumentIdMatches({ docId: "CT-00001" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
@@ -259,6 +275,10 @@ context("Document list test", () => {
     it("Checks if document type id is 'CR-00001'", () => {
       SystemRequirement("REQ-0320", "REQ-0450");
       cy.drCheckIfDocumentIdMatches({ docId: "CR-00001" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document after filling document", () => {

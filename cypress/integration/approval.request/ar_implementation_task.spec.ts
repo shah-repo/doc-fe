@@ -15,7 +15,7 @@ const documentRevisionName = "New document for testing AR";
 const approvalRequestTitle = "Approval request from newly created form";
 const approvalRequestFormName = "New Approval request form template";
 
-context("Approval request form", () => {
+context("Approval request implementation tasks", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -32,7 +32,7 @@ context("Approval request form", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -146,6 +146,10 @@ context("Approval request form", () => {
 
     it("Click on 'Approval request' outputdocument type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Add 'Implementation Task' to AR", () => {

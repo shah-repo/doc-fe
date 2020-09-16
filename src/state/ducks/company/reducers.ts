@@ -8,7 +8,7 @@ import { CompanyMineAction, SelectCompanyAction, SelectCompanyState, UpdateNavig
 export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   id: "",
   name: "",
-  maxRevisionStages: 1,
+  numOfRevStages: 1,
   users: [],
   documentTypes: [],
   whiteLabeling: WHITE_LABEL_DEFAULT,

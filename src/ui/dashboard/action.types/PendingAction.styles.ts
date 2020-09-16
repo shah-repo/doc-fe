@@ -6,5 +6,18 @@ export const styles = makeStyles((theme: Theme) =>
     highlight: {
       color: "red",
     },
+    actionLink: {
+      textDecoration: "none",
+      color: "inherit",
+    },
+    containerWrap: {
+      paddingLeft: "42px",
+      marginTop: "15px",
+      marginBottom: "15px",
+    },
+    itemWrap: {
+      display: "flex",
+      justifyContent: "flex-end",
+    },
   },
   ));

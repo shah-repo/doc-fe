@@ -92,7 +92,7 @@ export const surveyResponse = {
     slackIntegrationEnabled: false,
     teamId: null,
     botToken: null,
-    maxRevisionStages: 3,
+    numOfRevStages: 3,
     numOfDocDigits: 5,
     whiteLabeling: null,
   },

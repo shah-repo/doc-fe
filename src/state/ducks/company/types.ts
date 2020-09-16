@@ -29,7 +29,7 @@ export interface Company {
   slackIntegrationEnabled: boolean;
   id: string;
   name: string;
-  maxRevisionStages: number;
+  numOfRevStages: number;
   users: User[];
   documentTypes: DocumentType[];
   whiteLabeling: WhiteLabeling;

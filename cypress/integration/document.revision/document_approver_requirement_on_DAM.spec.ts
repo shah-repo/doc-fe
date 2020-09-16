@@ -52,7 +52,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: IMPORTER_USER.email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -126,6 +126,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Add 'Approval Matrix' field", () => {
       cy.fbAddField();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
   });
 
@@ -357,6 +361,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it(`Fill in document type: ${docTypeOne}`, () => {
       cy.drSelectDocumentType({ documentType: docTypeOne });
     });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
   });
 
   context("Save document", () => {
@@ -386,6 +394,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it(`Fill in document type: ${docTypeTwo}`, () => {
       cy.drSelectDocumentType({ documentType: docTypeTwo });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
   });
 

@@ -93,7 +93,7 @@ context("Check Document History", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -189,6 +189,10 @@ context("Check Document History", () => {
     it("fill in output document type: Clinical Protocol, Component Specification", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.drSelectOutputDocumentType({ documentType: "Component Specification" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
   });
 
