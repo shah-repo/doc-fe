@@ -16,6 +16,10 @@ const getWhiteLabeling = createSelector(
 const getCompanyMine = (state: ApplicationState) => state.company.companyMine;
 
 const getNavigationItems = (state: ApplicationState) => state.company.selectedCompany.navigation;
+const getNavigationItemStatus = (state: ApplicationState, label: string) =>
+  state.company.companyMine.navigation.find((item) => item.label === label);
+
+const getCompanyMaxRevisionStage = (state: ApplicationState) => state.company.companyMine.numOfRevStages;
 
 export default {
   getWhiteLabeling,
@@ -25,4 +29,6 @@ export default {
   getCompanyMine,
   isHelloSignIntegrationEnabled,
   getNavigationItems,
+  getNavigationItemStatus,
+  getCompanyMaxRevisionStage,
 };
