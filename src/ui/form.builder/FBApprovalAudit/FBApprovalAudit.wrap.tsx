@@ -252,8 +252,8 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         startDate = approvals[approvals.length - 2].timestamp;
       }
 
-
-      const endDate = releasedAt ? new Date(releasedAt) : new Date();
+      const lastChange = last(compactMapped)?.timestamp;
+      const endDate = releasedAt ? new Date(releasedAt) : (lastChange ? new Date(lastChange) : Date.now());
 
       const filteredMapped = filter(compactMapped, (cm) => (
         startDate &&
