@@ -10,7 +10,11 @@ const selectCompany = (company: Company): SelectCompanyAction => ({
   payload: company,
 });
 
-const setCompanyMine = (company: Company, navigationMenu?: NavigationMenu, currentEmployeeId?: string): CompanyMineAction => ({
+const setCompanyMine = (
+  company: Company,
+  navigationMenu?: NavigationMenu,
+  currentEmployeeId?: string
+): CompanyMineAction => ({
   type: SET_COMPANY_MINE,
   payload: company,
   navigationMenu,
