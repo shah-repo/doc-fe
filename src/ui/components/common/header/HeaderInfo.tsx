@@ -38,6 +38,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
     status = DocumentRevisionStatusAlias.Draft;
   }
   const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
+  let stateLabel = statusLabel;
   const [isTitleVisible] = useTitle(documentTypeId);
   const classes = styles();
   const isStatusReleased = status === DocumentRevisionStatus.Released || status === ChangeRequestStatus.Approved;
@@ -48,12 +49,16 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
       [classes.statusIconCanceled]: isStatusCanceled,
     })} />;
 
+  if (isRecord && !isInlineApproval) {
+    stateLabel = status;
+  }
+
   return (
     <Grid item xs={6} className={classes.itemWrap} >
       {
         isStatusVisible &&
         <Chip
-          label={<Text message={statusLabel} />}
+          label={<Text message={stateLabel} />}
           id="HeaderInfo-status"
           data-cy="HeaderInfo-status"
           className={classNames(classes.statusDefault)}
