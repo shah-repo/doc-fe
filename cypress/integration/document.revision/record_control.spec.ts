@@ -40,7 +40,7 @@ context("Record Control Flow", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             name: `Test Company ${runId}`,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",

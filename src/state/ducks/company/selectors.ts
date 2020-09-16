@@ -17,6 +17,8 @@ const getCompanyMine = (state: ApplicationState) => state.company.companyMine;
 
 const getNavigationItems = (state: ApplicationState) => state.company.selectedCompany.navigation;
 
+const getCompanyMaxRevisionStage = (state: ApplicationState) => state.company.companyMine.numOfRevStages;
+
 export default {
   getWhiteLabeling,
   isSlackIntegrationEnabled,
@@ -25,4 +27,5 @@ export default {
   getCompanyMine,
   isHelloSignIntegrationEnabled,
   getNavigationItems,
+  getCompanyMaxRevisionStage,
 };

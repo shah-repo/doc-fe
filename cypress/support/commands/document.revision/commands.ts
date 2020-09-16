@@ -33,6 +33,7 @@ declare global {
       drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
       drSelectOutputDocTypeSecondTime(params: { documentType: string }): Chainable<Subject>;
       drChooseTypeOfRevisionChangeOption(params: { option: string }): Chainable<Subject>;
+      drSelectRevisionStageOptions(params: { revisionStageOption: string }): Chainable<Subject>;
       drDocumentFieldError(params: { field: string; message: string }): Chainable<Subject>;
       closeAllAlertMessages(): Chainable<Subject>;
       checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
@@ -295,6 +296,11 @@ Cypress.Commands.add("drCheckTypeOfRevisionChangeOptions", () => {
   cy.get("#RevisionTypeChange-nextRevisionStage").contains("Upgrade to Next Revision Level");
   cy.get("#RevisionTypeChange-obsolete").contains("Obsolete");
   cy.get("#RevisionTypeChange-administrativeChange").contains("Administrative Change");
+});
+
+Cypress.Commands.add("drSelectRevisionStageOptions", (params: {revisionStageOption: string}) => {
+  cy.get("[data-cy^=\"common.\"]");
+  cy.get("label").contains(params.revisionStageOption).click();
 });
 
 Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: { option: string }) => {

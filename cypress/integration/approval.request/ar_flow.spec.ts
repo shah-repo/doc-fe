@@ -32,7 +32,7 @@ context("Approval request form", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -186,6 +186,10 @@ context("Approval request form", () => {
 
     it("Click on 'Approval request' outputdocument type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document after filling document", () => {

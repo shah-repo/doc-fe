@@ -22,7 +22,7 @@ context("Non-QMS Document Creation Flow", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -91,6 +91,10 @@ context("Non-QMS Document Creation Flow", () => {
     it("Selects 'NonQMS Document' document type from dropdown", () => {
       // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "NonQMS Document" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     context("Check permission groups", () => {

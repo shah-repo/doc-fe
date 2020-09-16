@@ -23,7 +23,7 @@ context("PO test", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -92,6 +92,10 @@ context("PO test", () => {
       cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Click 'Add New Field'", () => {
       cy.fbAddNewFieldOption();
     });
@@ -134,12 +138,16 @@ context("PO test", () => {
       cy.drEnterDocumentDescription({ description: "New Part description" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Selects 'PO Part' document type from dropdown", () => {
       cy.drSelectDocumentType({ documentType: "PO Part" });
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
@@ -433,6 +441,10 @@ context("PO test", () => {
 
     it("Click 'Add' to finish adding new field", () => {
       cy.fbAddNewFieldButton();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document after filling document", () => {

@@ -24,7 +24,7 @@ context("Document Attachment Flow", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -98,6 +98,10 @@ context("Document Attachment Flow", () => {
     it("Checks if document type id is 'CS-00003'", () => {
       SystemRequirement("REQ-0320");
       cy.drCheckIfDocumentIdMatches({ docId: "CS-00003" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     context("Test download of uploaded attachments", () => {
@@ -248,6 +252,10 @@ context("Document Attachment Flow", () => {
 
     it("Uploads text.docx", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Clicks Save button", () => {

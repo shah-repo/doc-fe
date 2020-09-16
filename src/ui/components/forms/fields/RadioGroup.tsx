@@ -3,7 +3,6 @@ import { RadioGroupProps as MuiRadioGroupProps } from "@material-ui/core/RadioGr
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
 import { useFormContext } from "../FormContext";
-import ErrorMessage from "./ErrorMessage";
 import Field, { FieldOwnProps } from "./Field";
 
 interface RadioGroupOwnProps extends FieldOwnProps {
@@ -20,7 +19,6 @@ const RadioGroup: React.FunctionComponent<RadioGroupPropsWithFormik> = ({
 
   return (
     <Field {...fieldProps}>
-      <ErrorMessage {...fieldProps} />
       <MuiRadioGroup
         {...fieldProps.field}
         {...radioGroupProps}
