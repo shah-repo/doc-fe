@@ -26,8 +26,13 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
               if (pendingAction.changeReq) {
                 return <ChangeRequestApproval key={index} index={index} changeRequest={pendingAction.changeReq} />;
               }
-              return pendingAction.docRev &&
-                <DocumentRevisionApproval key={index} index={index} documentRevision={pendingAction.docRev} />;
+              return pendingAction.docRev && pendingAction.approval &&
+                <DocumentRevisionApproval
+                  key={index}
+                  index={index}
+                  documentRevision={pendingAction.docRev}
+                  approval={pendingAction.approval}
+                />;
             case PendingActionType.PENDING_TRAINING_RECORDS:
               return pendingAction.trainingRecord &&
                 <TrainingRequest key={index} index={index} trainingRecord={pendingAction.trainingRecord} />;

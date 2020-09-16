@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import { approvalsActions } from "../../../state/ducks/approvals";
+import { Approval } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { toastError } from "../../components/notifications";
 import Text from "../../components/Text";
@@ -15,21 +16,26 @@ import { styles } from "./PendingAction.styles";
 interface Props {
   index: number;
   documentRevision: DocumentRevision;
+  approval: Approval;
 }
 
 export const DocumentRevisionApproval: React.FunctionComponent<Props> = ({
   index,
   documentRevision,
+  approval,
 }) => {
   const classes = styles();
   const intl = useIntl();
   const [docTitle] = useState(intl.formatMessage(
     { id: "dashboard.title.approval.request" },
-    { docId: documentRevision.docId, name: documentRevision.owner.user.name },
+    { docId: documentRevision.document.docId, name: documentRevision.owner.user.name },
   ));
 
   const applyTransition = useActionCreator(approvalsActions.applyTransition);
   const async = useAsync({
+    onSuccess: () => {
+      window.location.reload();
+    },
     onError: (error) => {
       toastError(error as string);
     },
@@ -46,7 +52,7 @@ export const DocumentRevisionApproval: React.FunctionComponent<Props> = ({
 
   const linkRenderer = () => (
     <Link
-      to={documentVersionPath(documentRevision.id, documentRevision.document?.id || "TEST-FAKE-DOC-ID")}
+      to={documentVersionPath(documentRevision.id, documentRevision.document?.id || "")}
       className={classes.actionLink}
     >
       <Box>
@@ -73,14 +79,14 @@ export const DocumentRevisionApproval: React.FunctionComponent<Props> = ({
         <Button
           variant="outlined"
           color="secondary"
-          onClick={() => changeApprovalStatus("reject", "TEST-FAKE-APPROVAL-ID")}
+          onClick={() => changeApprovalStatus("reject", approval.id)}
         >
           <Text translation="transition.action.reject"/>
         </Button>
         <Button
           variant="outlined"
           color="secondary"
-          onClick={() => changeApprovalStatus("approve", "TEST-FAKE-APPROVAL-ID")}
+          onClick={() => changeApprovalStatus("approve", approval.id)}
         >
           <Text translation="transition.action.approve"/>
         </Button>
