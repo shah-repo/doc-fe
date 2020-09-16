@@ -182,7 +182,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       includeEmpty={false}
     />
   );
-  const defaultLabel = isRecord ? "document.revision.type.of.update" : "document.revision.stage";
+
   const documentTypeId = values.document?.documentType?.id;
 
   return (
@@ -277,7 +277,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           documentTypeId,
           showObsoleteRevisionChange,
           showAdministrativeAndVoidChange,
-          defaultLabel,
+          isRecord,
         }}
         isDisabled={isDisabledInput} />}
         {
