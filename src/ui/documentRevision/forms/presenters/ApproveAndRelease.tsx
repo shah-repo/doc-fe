@@ -33,6 +33,7 @@ interface Props {
   owner?: Owner;
   documentTypeId?: string;
   revisionStage?: number;
+  isRecord?: boolean;
 }
 
 const styles = makeStyles(() =>
@@ -55,6 +56,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   owner,
   documentTypeId,
   revisionStage,
+  isRecord,
 }) => {
   const [isVisible, label] = useApproveAndRelease(documentTypeId);
   const classes = styles();
@@ -238,7 +240,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
         id="ApproveAndRelease-button"
         data-cy="ApproveAndRelease-button"
       >
-        <Text message={label} />
+        <Text message={isRecord ? "record.finalize.and.release" : label} />
       </Button>
       {
         dialog.isOpen &&
@@ -253,7 +255,9 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
           id="ApproveAndRelease-dialog"
         >
           <DialogTitle>
-            {isQms && <Text translation="common.approve.and.release" />}
+            {isQms &&
+              <Text translation={isRecord ? "record.finalize.and.release" : "common.approve.and.release"} />
+            }
             {!isQms && <Text translation="common.warning.message" values={{ name: documentName }} />}
           </DialogTitle>
           <DialogContent

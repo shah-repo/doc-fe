@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
+import { find, isEmpty, isUndefined } from "lodash";
 import * as React from "react";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import HeaderMenu from "../../../components/common/header/Menu";
@@ -21,16 +23,37 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     docInfo,
     asyncState,
     canChangeOwnerShip,
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   } = React.useContext(FormHeaderContext)!;
 
-  const { workspaceState, formState } = FB.useStores();
+  const { workspaceState, formState, inlineApprovalState } = FB.useStores();
+
+  const inlineApprovalFields = documentRevision?.formDocument?.formTemplate?.schema
+    .filter((field) => (field.type === "inlineapproval" as string));
+
+  const isInlineApproval = inlineApprovalFields && inlineApprovalFields.length > 0;
+  const isRecord = values.document?.documentType?.group === "RECORD";
+
+  /** Function that checks if a form section is approved.
+   * @param fieldName Unique name of the form field.
+  */
+  const isSectionApproved = (fieldName: string) => (
+      documentRevision?.version > 1 &&
+      isEmpty(inlineApprovalState?.getApprovals) &&
+      Boolean(formState?.getFieldValue(fieldName))
+  ) ? true
+    : !isUndefined(find(inlineApprovalState?.getApprovals, { status: "APPROVED" }));
+
+  /** Every form field that is inline approval should have
+   * at least one approval in status approved in order to be considered as approved. */
+  const isApproved = inlineApprovalFields?.every((field) => isSectionApproved(field.name!));
+
   const { revisionStage, subRevision, revisionChangeType } = documentRevision || {};
   const formik = useFormikContext();
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
   const isUserDocumentOwner = React.useContext(isOwnerContext);
   const showVoidButton = documentRevision?.status === DocumentRevisionStatus.Draft && documentRevision?.version === 1;
+
   function setFBValue() {
     switch (workspaceState?.getMode()) {
       case "design":
@@ -71,28 +94,38 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         data-cy={"DocumentRevisionForm-submit"}
       />
       {
-        values.document?.documentType?.group === "RECORD"
-          ? (
-            <FinalizeAndRelease
-              docRevId={values.id as string}
-              revisionStage={revisionStage}
-              subRevision={subRevision}
-              status={values.status}
-              revisionChangeType={revisionChangeType}
-            />
-          )
-          : (
-            <ApproveAndRelease
-              id={values.id}
-              status={values.status}
-              isQms={docInfo.isQms}
-              documentName={docInfo.name}
-              docRevId={values.id as string}
-              owner={documentRevision?.owner}
-              documentTypeId={documentTypeId}
-              revisionStage={revisionStage}
-            />
-          )
+        isRecord && (!isInlineApproval || revisionStage !== 1) && (
+          <FinalizeAndRelease
+            docRevId={values.id as string}
+            status={values.status}
+            {
+              ...{
+                revisionStage,
+                subRevision,
+                revisionChangeType,
+              }
+            }
+          />
+        )
+      }
+      {
+        (!isRecord || (isInlineApproval && isApproved)) && (
+          <ApproveAndRelease
+            id={values.id}
+            status={values.status}
+            isQms={docInfo.isQms}
+            documentName={docInfo.name}
+            docRevId={values.id as string}
+            owner={documentRevision?.owner}
+            {
+              ...{
+                documentTypeId,
+                revisionStage,
+                isRecord,
+              }
+            }
+          />
+        )
       }
       <HeaderMenu>
         <CancelButton

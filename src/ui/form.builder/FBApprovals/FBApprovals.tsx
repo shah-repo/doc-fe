@@ -25,9 +25,8 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
   ownerId,
   renderOption,
   loading,
-  isComponentVisible,
   ...props
-}) => isComponentVisible ? (
+}) => (
   <FBInput {...props} {...{ name }} type="approvals">
     <FBSection {...{ label }} />
     <FBAutocompleteAsync
@@ -104,6 +103,6 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
       )}
     </FBMapWrapper>
   </FBInput>
-) : null;
+);
 
 export default withFBApprovals(FBApprovals);
