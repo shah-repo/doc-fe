@@ -143,6 +143,10 @@ context("PO approval test", () => {
       cy.fbAddNewFieldButton();
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
@@ -191,6 +195,10 @@ context("PO approval test", () => {
 
     it("Click 'Add' to finish adding new field", () => {
       cy.fbAddNewFieldButton();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document after filling document", () => {

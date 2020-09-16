@@ -93,6 +93,10 @@ context("Non-QMS Document Creation Flow", () => {
       cy.drSelectDocumentType({ documentType: "NonQMS Document" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     context("Check permission groups", () => {
       it("Check if Selected Groups are not set by default", () => {
         SystemRequirement("REQ-0300");

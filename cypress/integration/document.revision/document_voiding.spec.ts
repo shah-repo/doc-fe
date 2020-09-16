@@ -87,6 +87,10 @@ context("Document Creation Flow", () => {
       // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Component Specification" });
     });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
   });
 
   context("Creates document", () => {

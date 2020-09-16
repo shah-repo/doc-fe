@@ -122,6 +122,10 @@ context("Document Creation Flow", () => {
       cy.drClickTrainingRequired();
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     context("Uploads attachments", () => {
       it("Uploads redline attachment: test.docx", () => {
         // SystemRequirement("REQ-0260"); Removed from list.csv
@@ -315,6 +319,10 @@ context("Document Creation Flow", () => {
     it("Selects 'Clinical Protocol' document type from dropdown", () => {
       // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document after filling document", () => {

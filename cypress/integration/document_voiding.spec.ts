@@ -6,7 +6,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 
-context("Document Creation Flow", () => {
+context("Document voiding", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
@@ -81,6 +81,10 @@ context("Document Creation Flow", () => {
 
     it("Selects 'Component Specification' document type from dropdown", () => {
       cy.drSelectDocumentType({ documentType: "Component Specification" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
   });
 

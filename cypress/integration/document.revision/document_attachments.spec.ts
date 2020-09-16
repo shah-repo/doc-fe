@@ -100,6 +100,10 @@ context("Document Attachment Flow", () => {
       cy.drCheckIfDocumentIdMatches({ docId: "CS-00003" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     context("Test download of uploaded attachments", () => {
       it("Uploads text.docx", () => {
         cy.atchUploadAttachment({ fileName: "test.docx" });
@@ -248,6 +252,10 @@ context("Document Attachment Flow", () => {
 
     it("Uploads text.docx", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Clicks Save button", () => {

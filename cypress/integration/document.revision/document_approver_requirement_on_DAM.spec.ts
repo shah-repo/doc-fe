@@ -127,6 +127,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it("Add 'Approval Matrix' field", () => {
       cy.fbAddField();
     });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
   });
 
   context("Save DAM And Approve & Release Document", () => {
@@ -357,6 +361,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it(`Fill in document type: ${docTypeOne}`, () => {
       cy.drSelectDocumentType({ documentType: docTypeOne });
     });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
   });
 
   context("Save document", () => {
@@ -386,6 +394,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it(`Fill in document type: ${docTypeTwo}`, () => {
       cy.drSelectDocumentType({ documentType: docTypeTwo });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
   });
 

@@ -109,6 +109,10 @@ context("Dynamic Form Test", () => {
       cy.fbAddNewFieldButton();
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
@@ -166,6 +170,10 @@ context("Dynamic Form Test", () => {
 
     it("Add 'Text Field' field", () => {
       cy.fbAddNewFieldButton();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document after filling document", () => {
