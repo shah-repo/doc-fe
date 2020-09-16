@@ -32,7 +32,7 @@ export enum FBInlineApprovalStatusIdent {
   PENDING = "Pending approval",
   ABANDONED = "Abandoned",
   APPROVED = "Approved",
-  REJECT = "Rejected",
+  REJECTED = "Rejected",
 }
 
 export interface FBInlineApprovalBody {
