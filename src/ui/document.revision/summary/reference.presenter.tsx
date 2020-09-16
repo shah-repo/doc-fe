@@ -37,7 +37,10 @@ export const ReferencePresenter: React.FunctionComponent<Props> = ({
       <Box marginLeft={2} component="span" key={reference.id}>
         <Tooltip title={reference.title} id="ChangeRequestLink-tootlip" >
           <Link className={classes.link} to={reference.url} target="_blank" id="ReferencePresenter-link">
-            <Chip className={classes.chip} label={reference.docId}/>
+            <Chip
+              className={classes.chip}
+              label={`${reference.docId} - ${reference.revisionStage} - ${reference.title}`}
+            />
           </Link>
         </Tooltip>
       </Box>
