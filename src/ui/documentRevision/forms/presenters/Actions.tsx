@@ -30,7 +30,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const inlineApprovalFields = documentRevision?.formDocument?.formTemplate?.schema
     .filter((field) => (field.type === "inlineapproval" as string));
 
-  const isInlineApproval = inlineApprovalFields && inlineApprovalFields.length > 0;
+  const isInlineApproval = Boolean(inlineApprovalFields && inlineApprovalFields.length > 0);
   const isRecord = values.document?.documentType?.group === "RECORD";
 
   /** Function that checks if a form section is approved.
@@ -109,7 +109,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         )
       }
       {
-        (!isRecord || (isInlineApproval && isApproved)) && (
+        (!isRecord || (isInlineApproval && isApproved && revisionStage === 1)) && (
           <ApproveAndRelease
             id={values.id}
             status={values.status}
@@ -122,6 +122,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
                 documentTypeId,
                 revisionStage,
                 isRecord,
+                isInlineApproval,
               }
             }
           />
