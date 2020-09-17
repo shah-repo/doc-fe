@@ -1,5 +1,6 @@
 import { map, template } from "lodash";
-import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBInputType, FBOption } from "..";
+import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBIconConfig, FBInputType, FBOption } from "..";
+import { FBIconType } from "../FBIcon";
 import { FBCurrencyOption } from "../FBPurchaseOrderTable";
 import { FBSchemaProps } from "../FBSchema";
 import actionOptions from "./actionOptions.json";
@@ -10,6 +11,7 @@ import closingTaskSchema from "./closingTaskSchema.json";
 import currencyOptions from "./currencyOptions.json";
 import editorProperties from "./editorProperties.json";
 import editorPropertiesControl from "./editorPropertiesControl.json";
+import icons from "./icons.json";
 import requirementOptions from "./requirementOptions.json";
 import taskSchema from "./taskSchema.json";
 import testStepSchema from "./testStepSchema.json";
@@ -84,6 +86,11 @@ export class FBData {
 
   public static get closingTaskSchema(): FBSchemaProps[] {
     return closingTaskSchema as FBSchemaProps[];
+  }
+
+  public static icons(color?: string): Record<FBIconType, FBIconConfig[]> {
+    const compiled = template(JSON.stringify(icons));
+    return JSON.parse(compiled({ color }));
   }
 }
 
