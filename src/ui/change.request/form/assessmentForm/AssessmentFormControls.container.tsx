@@ -85,7 +85,9 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
   const canSendToReview =
     isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Draft;
   const canClose =
-    isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Approved;
+    isCurrentUserOwner &&
+    (changeRequest.state === ChangeRequestStatus.Approved ||
+      changeRequest.state === ChangeRequestStatus.Implementation);
 
   const currentUserApproval = changeRequest.approvals.find(
     (approval) => approval.approver.user.email === currentUserEmail,
