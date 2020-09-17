@@ -40,6 +40,10 @@ class Config {
   }
 
   public static get WorkerApiEndpoint() {
+    const apiEndpoint = this.get("WORKER_API_ENDPOINT");
+    if (!apiEndpoint) {
+      return null;
+    }
     return `${this.get("WORKER_API_ENDPOINT")}/v1`;
   }
 

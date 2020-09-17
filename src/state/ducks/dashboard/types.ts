@@ -1,4 +1,5 @@
 import { ChangeRequest } from "../changeRequest";
+import { Approval } from "../common";
 import { DocumentRevision } from "../documentRevisions";
 import { TrainingRecord } from "../training";
 import { PENDING_ACTIONS_LIST, PENDING_ACTIONS_REMOVE } from "./constants";
@@ -17,6 +18,8 @@ export interface PendingAction {
   changeReq?: ChangeRequest;
   trainingRecord?: TrainingRecord;
   documentRevision?: DocumentRevision;
+  docRev?: DocumentRevision;
+  approval?: Approval;
 }
 
 export interface PendingActionsListAction {

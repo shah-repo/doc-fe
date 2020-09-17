@@ -40,7 +40,7 @@ context("Approval request landing page test", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: IMPORTER_USER.email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,

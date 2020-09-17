@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-source ./scripts/cypress/make_results_dir.sh
+source ./scripts/cypress/utils/make_results_dir.sh
 
 FILE=./results/$DIR_REPORTS/reports
 

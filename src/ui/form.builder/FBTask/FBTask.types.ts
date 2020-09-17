@@ -35,6 +35,7 @@ export type FBTaskProps =
   dialogState?: FBDialogState;
   tasks?: FBTaskItem[];
   loading?: boolean;
+  canAddTask?: boolean;
 };
 
 export type FBTaskFormProps =
