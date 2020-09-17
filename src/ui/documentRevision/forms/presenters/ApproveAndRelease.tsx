@@ -173,7 +173,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     const approvers = !values.approvals || values.approvals.length === 0 ?
       undefined :
       values.approvals.map((approver) => ({ id: approver.value }));
-    const effectiveDate = values.effectiveDate;
+    const effectiveDate = values.effectiveDate !== "" ? values.effectiveDate : undefined;
 
     if (!isQms) {
       async.start(
@@ -204,7 +204,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const transformedDocTypeGroups = [].concat(...documentTypeGroups);
   const initialValues = {
     password: "",
-    effectiveDate: (new Date()).toISOString(),
+    effectiveDate: "",
     approvals: [],
     formDocument: { id: "" },
     documentType: { id: "" },

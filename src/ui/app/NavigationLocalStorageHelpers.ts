@@ -33,9 +33,11 @@ export const setNavigation = (id: string, data: any) => {
 };
 
 export const updateNavigationItem = ( id: string, data: NavigationMenuItem) => {
-  navigationMenu = getNavigation() || [];
+  navigationMenu = getEmployeeNavigation(id);
 
-  const menus = getEmployeeNavigation(id).menus.filter((item) => item.label !== data.label);
-  menus.push(data);
-  setNavigation(id, { id, menus });
+  if (navigationMenu) {
+    const menus = getEmployeeNavigation(id).menus.filter((item) => item.label !== data.label);
+    menus.push(data);
+    setNavigation(id, { id, menus });
+  }
 };
