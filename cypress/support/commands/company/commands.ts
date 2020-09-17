@@ -22,6 +22,8 @@ interface IdocumentTypeDto {
   group: string;
   privateNumberPool?: boolean;
   startingNumber?: number;
+  needsSignature?: boolean;
+  category?: string;
 }
 
 export interface ICreateCompanyBootstrap {

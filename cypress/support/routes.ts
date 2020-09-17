@@ -39,7 +39,8 @@ export enum CyRoutes {
   GetRequiredApprovers = "GetRequiredApprovers",
   GetAvailableApprovers = "GetAvailableApprovers",
   PatchAR = "PatchAR",
-  GetDocAggregatedAudit = "GetDocAggregatedAudit"
+  GetDocAggregatedAudit = "GetDocAggregatedAudit",
+  PostApprovalsApprove = "PostApprovalsApprove"
 }
 
 export const routes: ICyRoutes =   {
@@ -235,6 +236,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/change_requests/available_approvers",
+    },
+  },
+  PostApprovalsApprove: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/approvals/*/approve",
     },
   },
 };
