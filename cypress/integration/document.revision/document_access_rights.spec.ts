@@ -29,8 +29,7 @@ const normalDocument = "Normal Document";
 const documentType = "Form";
 const outputDocumentType = "Component Specification";
 
-context("Document Approval Matrix Flow", () => {
-  SystemRequirement("REQ-2650");
+context("Document Access Rights", () => {
 
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
@@ -46,7 +45,7 @@ context("Document Approval Matrix Flow", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: IMPORTER_USER.email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -143,6 +142,10 @@ context("Document Approval Matrix Flow", () => {
     it(`Fill in output document type: ${outputDocumentType}`, () => {
       cy.drSelectOutputDocumentType({ documentType: outputDocumentType });
     });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
   });
 
   context("Save document And Approve & Release Document", () => {
@@ -186,6 +189,10 @@ context("Document Approval Matrix Flow", () => {
 
     it(`Remove default Everyone from group`, () => {
       cy.get(`[data-cy="field-securityGroups"]`).type(`{backspace}`);
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
   });
 
@@ -231,6 +238,10 @@ context("Document Approval Matrix Flow", () => {
     it(`Select one group: '${groupOne}'`, () => {
       cy.drSelectGroup(groupOne);
     });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
   });
 
   context("Save document And Approve & Release Document", () => {
@@ -265,8 +276,8 @@ context("Document Approval Matrix Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it(`select '${normalDocument}'`, () => {
-      cy.get("#root").contains(normalDocument).click();
+    it("Filter document by name and status, and select it", () => {
+      cy.drFilterDocListByNameAndStatus({ title: normalDocument, status: "Release" });
     });
 
     it("User is not restricted.", () => {
@@ -279,8 +290,8 @@ context("Document Approval Matrix Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it(`select '${userPermissionDocument}'`, () => {
-      cy.get("#root").contains(userPermissionDocument).click();
+    it("Filter document by name and status, and select it", () => {
+      cy.drFilterDocListByNameAndStatus({ title: userPermissionDocument, status: "Release" });
     });
 
     it("User is not restricted.", () => {
@@ -293,8 +304,8 @@ context("Document Approval Matrix Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it(`select '${groupPermissionDocument}'`, () => {
-      cy.get("#root").contains(groupPermissionDocument).click();
+    it("Filter document by name and status, and select it", () => {
+      cy.drFilterDocListByNameAndStatus({ title: groupPermissionDocument, status: "Release" });
     });
 
     it("User is restricted.", () => {
@@ -324,8 +335,8 @@ context("Document Approval Matrix Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it(`select '${normalDocument}'`, () => {
-      cy.get("#root").contains(normalDocument).click();
+    it("Filter document by name and status, and select it", () => {
+      cy.drFilterDocListByNameAndStatus({ title: normalDocument, status: "Release" });
     });
 
     it("User is not restricted.", () => {
@@ -338,8 +349,8 @@ context("Document Approval Matrix Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it(`select '${userPermissionDocument}'`, () => {
-      cy.get("#root").contains(userPermissionDocument).click();
+    it("Filter document by name and status, and select it", () => {
+      cy.drFilterDocListByNameAndStatus({ title: userPermissionDocument, status: "Release" });
     });
 
     it("User is restricted.", () => {
@@ -348,12 +359,13 @@ context("Document Approval Matrix Flow", () => {
   });
 
   context(`Open '${groupPermissionDocument}', check it has restriction`, () => {
+    SystemRequirement("REQ-2650");
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
     });
 
-    it(`select '${groupPermissionDocument}'`, () => {
-      cy.get("#root").contains(groupPermissionDocument).click();
+    it("Filter document by name and status, and select it", () => {
+      cy.drFilterDocListByNameAndStatus({ title: groupPermissionDocument, status: "Release" });
     });
 
     it("User is not restricted.", () => {

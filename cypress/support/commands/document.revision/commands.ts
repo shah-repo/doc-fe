@@ -209,9 +209,10 @@ Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: stri
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
-  cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").click().wait(500);
+  cy.get("[aria-label=\"change date\"]").click().wait(200);
+  cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]").click().wait(300);
   cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
-
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {
