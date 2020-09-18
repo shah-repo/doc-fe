@@ -1,7 +1,8 @@
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBDialogState, FBFilePresenterDownloadType, FBFilePresenterProps, FBFilePresenterState, FBFilePreview } from "..";
+import React, { useMemo } from "react";
+import { useIntl } from "react-intl";
+import { FB, FBDialogState, FBFilePresenterColor, FBFilePresenterDownloadType, FBFilePresenterProps, FBFilePresenterState, FBFilePreview } from "..";
 
 export const withFBFilePresenter = <T extends FBFilePresenterProps>(
   Component: React.FunctionComponent<T>,
@@ -9,9 +10,15 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
   const Comp = ({
     handleDownload,
     handleRemove,
+    onMouseOver,
+    onMouseLeave,
     filePresenterState,
     dialogState,
+    toolsVisible,
     disabled = false,
+    fileSize,
+    fileDescription,
+    fileColor,
     menuItems,
     loading,
     name,
@@ -19,6 +26,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     ...props
   }: T) => {
 
+    const intl = useIntl();
     const { formState } = FB.useStores();
     filePresenterState = FB.useRef<FBFilePresenterState>(FBFilePresenterState);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
@@ -26,6 +34,25 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
 
     const { fileUploadState } = FB.useStores();
     const { fileName, fileShortName, fileType } = filePresenterState;
+
+    fileSize = useMemo(() => {
+      const size = filePresenterState?.fileSize;
+      if (!size) { return; }
+      const i = Math.floor( Math.log(size) / Math.log(1024) );
+      return `${(size / Math.pow(1024, i)).toFixed(2)} ${["B", "kB", "MB", "GB", "TB"][i]}`;
+    }, [filePresenterState]);
+
+    fileDescription = useMemo(() => {
+      const microsoftFiles = ["XLSX", "XLS", "DOCX", "DOC"];
+      const type = fileType?.toUpperCase();
+      if (!type) { return; }
+      if (microsoftFiles.includes(type)) {
+        return intl.formatMessage({ id: `file.type.${type}` });
+      }
+      return intl.formatMessage({ id: "file.type" }, { type });
+    }, [fileType, intl]);
+
+    fileType && (fileColor = FBFilePresenterColor[fileType.toUpperCase()]);
 
     React.useEffect(() => {
       reaction(
@@ -66,8 +93,12 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
       handleLoaded();
     };
 
+    onMouseOver = () => filePresenterState?.setToolsVisible(true);
+    onMouseLeave = () => filePresenterState?.setToolsVisible(false);
+
     useObserver(() => {
       loading = filePresenterState?.loading;
+      toolsVisible = filePresenterState?.toolsVisible;
     });
 
     // File menu items
@@ -90,12 +121,18 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
       ...(props as T),
       handleDownload,
       handleRemove,
+      onMouseOver,
+      onMouseLeave,
       dialogState,
+      toolsVisible,
       disabled,
       menuItems,
       fileName,
       fileShortName,
+      fileDescription,
+      fileColor,
       fileType,
+      fileSize,
       loading,
     });
   };
