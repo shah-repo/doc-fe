@@ -144,6 +144,11 @@ Cypress.Commands.add("drClickDAMEditBtn", () => {
 
 Cypress.Commands.add("drCheckApprovalsEnforcment", () => {
   cy.drApproveAndReleaseDialog();
+  cy.wait(2000);
+  cy.get("[aria-label=\"change date\"]").click().wait(1000);
+  // eslint-disable-next-line max-len
+  cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]")
+    .click().wait(500);
   cy.get("[data-cy=unchecked]").should("exist");
   cy.get("[data-cy=group-0]").should("have.text", "Role One");
   cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
@@ -209,7 +214,8 @@ Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: stri
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
-  cy.get("[data-cy=\"ApproveAndRelease-button\"]").click().wait(1000);
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+  cy.wait(2000);
   cy.get("[aria-label=\"change date\"]").click().wait(500);
   cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]").click().wait(500);
   cy.get("#FormList-selectForm").type("Initial AR Form{enter}").wait(500);
