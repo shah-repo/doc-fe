@@ -87,6 +87,16 @@ Cypress.Commands.add("navigToApprovalRequestList", () => {
   });
 });
 
+Cypress.Commands.add("navigToRecords", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.DOCUMENT_CONTROL,
+      NavigationItems.RECORDS,
+    ],
+  });
+});
+
 Cypress.Commands.add("navigToWorkOrders", () => {
   cy.navigToNestedItem({
     navigItems: [

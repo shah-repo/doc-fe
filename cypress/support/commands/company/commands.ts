@@ -22,7 +22,10 @@ interface IdocumentTypeDto {
   group: string;
   privateNumberPool?: boolean;
   startingNumber?: number;
+<<<<<<< HEAD
   needsSignature?: boolean;
+=======
+>>>>>>> develop
   category?: string;
 }
 
