@@ -22,6 +22,7 @@ interface IdocumentTypeDto {
   group: string;
   privateNumberPool?: boolean;
   startingNumber?: number;
+  category?: string;
 }
 
 export interface ICreateCompanyBootstrap {
