@@ -54,14 +54,14 @@ declare global {
       drAMCheckValue(params: { identity: string }): Chainable<Subject>;
       drAMCheckRole(params: { stage: string; index: number }): Chainable<Subject>;
       drUpgradeRevisionLevel(): Chainable<Subject>;
-      drRoleExistsAndChecked(params: { group: number; role: string }): Chainable<Subject>;
+      drReleaseDocAfterRoleExistsAndChecked(params: { group: number; role: string }): Chainable<Subject>;
       drNewTypeTrainingSelect(): Chainable<Subject>;
       drClickDAMEditBtn(): Chainable<Subject>;
 
       /* Document Approval Matrix End */
       drCreateNewDocumentFromForm(): Chainable<Subject>;
       drApproveAndReleaseDialog(): Chainable<Subject>;
-      drSelectTemplateReleaseDocument(params: { template: string }): Chainable<Subject>;
+      drSelectTemplateReleaseDocument(params: { template: string; selectDate?: boolean }): Chainable<Subject>;
       drAPIApproveAndRelease(params: { documentId: string; payload: IApproveAndReleasePayload; employeeId: string; sessionId: string }): Chainable<Subject>;
       drSetDocTypeId(params: { docId: string }): Chainable<Subject>;
       drSelectReferences(...list: string[]): Chainable<Subject>;
@@ -82,6 +82,7 @@ declare global {
       drAddUserFromPermissionTab(...users: string[]): Chainable<Subject>;
       drSelectGroup(...groups: string[]): Chainable<Subject>;
       drAddGroupFromPermissionTab(...groups: string[]): Chainable<Subject>;
+      drRequestAccessVisibility(params: {isVisible: boolean}): Chainable<Subject>;
     }
   }
 }
@@ -376,9 +377,11 @@ Cypress.Commands.add("drAMCheckValue", (params: { identity: string }) => cy.get(
 
 Cypress.Commands.add("drUpgradeRevisionLevel", () => cy.get(`[data-cy="upgradeNextRevisionStage"]`).click({ force: true }));
 
-Cypress.Commands.add("drRoleExistsAndChecked", (params: { group: number; role: string }) => {
+Cypress.Commands.add("drReleaseDocAfterRoleExistsAndChecked", (params: { group: number; role: string }) => {
+  cy.drApproveAndReleaseDialog();
   cy.get(`[data-cy="group-${params.group}"]`).contains(params.role);
   cy.get(`[data-cy="checked-${params.group}"]`).should("be.visible");
+  cy.drSelectTemplateReleaseDocument({ template: "Initial AR Form", selectDate: true });
 });
 
 Cypress.Commands.add("drNewTypeTrainingSelect", () => {
@@ -391,7 +394,12 @@ Cypress.Commands.add("drApproveAndReleaseDialog", () => {
   });
 });
 
-Cypress.Commands.add("drSelectTemplateReleaseDocument", (params: { template: string }) => {
+Cypress.Commands.add("drSelectTemplateReleaseDocument", (params: { template: string; selectDate?: boolean }) => {
+  if (params.selectDate) {
+    cy.wait(500);
+    cy.get("[aria-label=\"change date\"]").click().wait(200);
+    cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]").click().wait(300);
+  }
   cy.get("#FormList-selectForm").type(`${params.template}{enter}`);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
@@ -468,4 +476,8 @@ Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
     cy.get(`[id="react-select-3-input"]`).type(`${group}{downarrow}{enter}`, { force: true });
     cy.get(`[data-cy="add-user"]`).click();
   });
+});
+
+Cypress.Commands.add("drRequestAccessVisibility", (params: {isVisible: boolean}) => {
+  cy.get(`[data-cy="PreviewControlsContainer-access"]`).should((params.isVisible ? "" : "not.") + "be.visible");
 });
