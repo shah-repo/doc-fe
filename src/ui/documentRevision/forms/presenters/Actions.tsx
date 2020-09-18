@@ -2,6 +2,7 @@
 import { useFormikContext } from "formik";
 import { find, isEmpty, isUndefined } from "lodash";
 import * as React from "react";
+import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
@@ -47,7 +48,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
    * at least one approval in status approved in order to be considered as approved. */
   const isApproved = inlineApprovalFields?.every((field) => isSectionApproved(field.name!));
 
-  const { revisionStage, subRevision, revisionChangeType } = documentRevision || {};
+  const { revisionStage, subRevision, revisionChangeType, owner, updatedAt } = documentRevision || {};
   const formik = useFormikContext();
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
@@ -98,6 +99,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           <FinalizeAndRelease
             docRevId={values.id as string}
             status={values.status}
+            docRevOwner={owner.user.name}
+            /** Using updated date because releasedAt (voided at) date does not exist before Void is approved.
+            * TODO: Check for date requirements.
+            */
+            updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
             {
               ...{
                 revisionStage,
