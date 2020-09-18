@@ -209,6 +209,7 @@ export enum GroupType{
 
 export enum NavigationItems{
   DASHBOARD = "dashboard",
+  RECORDS = "records",
   DOCUMENT_LIST = "documentList",
   APPROVAL_REQUEST = "approvalRequests",
   DOCUMENT_CONTROL = "documentControl",
