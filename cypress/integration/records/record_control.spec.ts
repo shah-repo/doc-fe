@@ -91,7 +91,7 @@ context("Record Control Flow", () => {
       });
     });
 
-    it("Selects company", () => {
+    it("Select company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
   });
@@ -99,29 +99,29 @@ context("Record Control Flow", () => {
   context("FORM document creation flow", () => {
 
     context("Start document creation flow", () => {
-      it("Navigates to document list", () => {
+      it("Navigate to document list", () => {
         cy.navigToDocumentList();
       });
 
-      it("Clicks on 'create a document' button", () => {
+      it("Click on 'create a document' button", () => {
         cy.cmpClickCreateNewDocument();
       });
     });
 
     context("Fill in document attributes", () => {
-      it("Enters title 'Inline Form Document Revision'", () => {
+      it("Enter title 'Inline Form Document Revision'", () => {
         cy.drEnterDocumentTitle({ name: "Inline Form Document Revision" });
       });
 
-      it("Enters description 'Inline Form Document Revision description'", () => {
+      it("Enter description 'Inline Form Document Revision description'", () => {
         cy.drEnterDocumentDescription({ description: "Inline Form Document Revision description" });
       });
 
-      it("Selects 'Form' document type from dropdown", () => {
+      it("Select 'Form' document type from dropdown", () => {
         cy.drSelectDocumentType({ documentType: "Form" });
       });
 
-      it("Selects 'Record Document' output document type from dropdown", () => {
+      it("Select 'Record Document' output document type from dropdown", () => {
         cy.drSelectOutputDocumentType({ documentType: "Legal Record" });
       });
 
@@ -151,12 +151,12 @@ context("Record Control Flow", () => {
       });
     });
 
-    context("Creates document and release it", () => {
+    context("Create document and release it", () => {
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
-      it("Approves and releases document", () => {
+      it("Approve and release document", () => {
         cy.drApproveAndReleaseDocument();
       });
     });
@@ -167,16 +167,16 @@ context("Record Control Flow", () => {
       cy.navigToRecords();
     });
 
-    it("Clicks on create new", () => {
+    it("Click on create new", () => {
       cy.poClickCreatePO();
     });
 
     context("Fill in document attributes", () => {
-      it("Enters title 'Record Document Revision'", () => {
+      it("Enter title 'Record Document Revision'", () => {
         cy.drEnterDocumentTitle({ name: "Record Document Revision" });
       });
 
-      it("Enters description 'Record Document Revision description'", () => {
+      it("Enter description 'Record Document Revision description'", () => {
         cy.drEnterDocumentDescription({ description: "Record Document Revision description" });
       });
 
@@ -203,7 +203,7 @@ context("Record Control Flow", () => {
     });
 
     context("Approve Inline Approval", () => {
-      it("Approves first Inline Approval", () => {
+      it("Approve first Inline Approval", () => {
         cy.wrapWithWaitOnApiCall(
           CyRoutes.PostApprovalsApprove,
           () => {
@@ -211,7 +211,7 @@ context("Record Control Flow", () => {
           });
       });
 
-      it("Reloads", () => {
+      it("Reload page", () => {
         cy.reload();
       });
 
@@ -221,7 +221,7 @@ context("Record Control Flow", () => {
 
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline", () => {
-          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type("Second entry");
+          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", Second entry");
         });
 
         it("Save record", () => {
@@ -232,7 +232,7 @@ context("Record Control Flow", () => {
             });
         });
 
-        it("Approves first Inline Approval", () => {
+        it("Approve Inline Approval", () => {
           cy.wrapWithWaitOnApiCall(
             CyRoutes.PostApprovalsApprove,
             () => {
@@ -252,7 +252,7 @@ context("Record Control Flow", () => {
 
       context("Edit and try to release it ", () => {
         it("Enter text 'Third entry' in textfield for inline", () => {
-          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type("Third entry");
+          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", Third entry");
         });
 
         it("Save record", () => {
@@ -272,7 +272,7 @@ context("Record Control Flow", () => {
           cy.checkToastMessageContains({ message: inlineApprovalError });
         });
 
-        it("Approves first Inline Approval", () => {
+        it("Approve Inline Approval", () => {
           cy.wrapWithWaitOnApiCall(
             CyRoutes.PostApprovalsApprove,
             () => {
@@ -290,7 +290,7 @@ context("Record Control Flow", () => {
       });
 
       context("Approve and Release document", () => {
-        it("Try approve and release it", () => {
+        it("Approve and release it", () => {
           cy.drApproveAndReleaseDocument();
         });
       });
