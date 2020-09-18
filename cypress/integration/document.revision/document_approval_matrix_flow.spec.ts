@@ -692,14 +692,6 @@ context("Document Approval Matrix Flow", () => {
       cy.drApproveAndReleaseDialog();
     });
 
-    it("Select effective date", () => {
-      cy.get("[aria-label=\"change date\"]").click().wait(200);
-      let selector = "[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day ";
-      selector += "MuiPickersDay-current MuiPickersDay-daySelected\"]";
-      cy.get(selector)
-        .click().wait(300);
-    });
-
     it(`Enforce user rule, Add ${INDIVIDUAL_USER.name} to approvers`, () => {
       cy.drAddApprover({ name: INDIVIDUAL_USER.name });
     });

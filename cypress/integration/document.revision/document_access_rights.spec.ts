@@ -358,7 +358,7 @@ context("Document Access Rights", () => {
     });
   });
 
-  context(`Open '${groupPermissionDocument}', check it has restriction`, () => {
+  context(`Open '${groupPermissionDocument}', check it has no restriction`, () => {
     SystemRequirement("REQ-2650");
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
