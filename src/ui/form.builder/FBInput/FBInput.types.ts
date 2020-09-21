@@ -8,6 +8,7 @@ import { FBEditorValidationMode } from "../FBEditorValidation";
 import { FBValidatorConfigProps } from "../types/validation/validatorDialog";
 
 export type FBInputTransform = "upper" | "lower";
+export type FBVisibilityType = "visible" | "hidden";
 
 export type FBInputType =
   | "url"
@@ -128,4 +129,5 @@ export const OmitInputClones: FBInputType[] = [
   "blanktplform",
   "inlineapproval",
   "approvals",
+  "texteditor",
 ];

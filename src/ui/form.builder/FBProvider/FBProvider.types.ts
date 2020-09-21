@@ -22,6 +22,8 @@ import {
 import { FBApprovalMatrixState } from "../FBApprovalMatrix";
 import { FBPOApprovalMatrixState } from "../FBPOApprovalMatrix";
 import { FBPOReceiveState } from "../FBPOReceive";
+import { FBTextEditorState } from "../FBTextEditor";
+import { FBTextEditorOptionsState } from "../FBTextEditorOptions";
 
 export interface FBProviderProps {
   workspaceState?: FBWorkspaceState;
@@ -47,4 +49,6 @@ export interface FBProviderProps {
   approvalsState?: FBApprovalsState;
   bookmarkState?: FBBookmarkState;
   inlineApprovalState?: FBInlineApprovalState;
+  textEditorState?: FBTextEditorState;
+  textEditorOptionsState?: FBTextEditorOptionsState;
 }

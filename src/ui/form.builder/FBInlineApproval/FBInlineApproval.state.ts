@@ -6,7 +6,7 @@ import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
 export class FBInlineApprovalState {
-  // MARK: @observable
+  // MARK: @observables
   @observable public options?: FBInlineApprovalOptions[];
   @observable approvals?: FBInlineApprovalBody[];
 
