@@ -17,6 +17,7 @@ const reference = {
   new: "FM-00002 - 1 - Inline Approve Form", newCode: "FM-00002",
 };
 const formTitle = { value: "My Form", newValue: "My Form Edited", newChunk: " Edited" };
+const formDescription = { value: "My Form description", newValue: "My Form description Edited", newChunk: " Edited" };
 
 const history = [
   {
@@ -49,7 +50,7 @@ const history = [
   {
     owner,
     actions: [
-      { key: "Description changed", value: `${formTitle.newValue}` },
+      { key: "Description changed", value: `${formDescription.newValue}` },
       { key: "Attachments removed", value: "test_image.jpg" },
       { key: "New reference to", value: reference.newCode },
       { key: "Reference removed", value: reference.valueCode },
@@ -71,7 +72,7 @@ const history = [
       { key: "New owner", value: `${owner}` },
       { key: "New status", value: `Set to Draft by ${owner}` },
       { key: "New name", value: formTitle.value },
-      { key: "New description", value: `${formTitle.value}` },
+      { key: "New description", value: `${formDescription.value}` },
       { key: "Attachment added", value: `test_image.jpg` },
       { key: "New reference to", value: reference.valueCode },
     ],
@@ -155,7 +156,7 @@ context("Check Document History", () => {
     });
 
     it("type a description", () => {
-      cy.drEnterDocumentDescription({ description: formTitle.value });
+      cy.drEnterDocumentDescription({ description: formDescription.value });
     });
 
     it("fill in document type: Form", () => {
@@ -213,7 +214,7 @@ context("Check Document History", () => {
     });
 
     it("edit the description", () => {
-      cy.drEnterDocumentDescription({ description: formTitle.newValue });
+      cy.drEnterDocumentDescription({ description: formDescription.newValue });
     });
 
     it("Remove reference for document", () => {
@@ -346,18 +347,22 @@ context("Check Document History", () => {
         cy.get(`[data-cy="owner-${groupIndex}"]`).should("have.text", element.owner);
       });
 
-      element.actions.forEach((action, index) => {
+      element.actions.forEach((action) => {
         it(`'${action.key}' as '${action.value}' exists`, () => {
-          let keyIndex = "";
-          cy.get(`[data-cy^="change-value-${groupIndex}-"]`)
+          const typeOfChange = action.key;
+          let contentOfChange = action.value;
+
+          if (action.key === "New description" || action.key === "Description changed" ) {
+            contentOfChange = "\n" + action.value + "\n";
+          }
+
+          cy.get(`[data-cy^=\"change-value-${groupIndex}-\"]`)
             .contains(action.value)
-            .then(($el) => {
-              if ($el.attr("data-cy")) {
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                keyIndex = $el.attr("data-cy")!.charAt($el.attr("data-cy")!.length - 1);
-              }
-              cy.get(`[data-cy^="change-key-${groupIndex}-${keyIndex}"]`).should("have.text", action.key);
-              cy.get(`[data-cy^="change-value-${groupIndex}-${keyIndex}"]`).should("have.text", action.value);
+            .parent()
+            .parent()
+            .within(() => {
+              cy.get("[data-cy^=change-key]").should("have.text", typeOfChange);
+              cy.get("[data-cy^=change-value]").should("have.text", contentOfChange);
             });
         });
       });
