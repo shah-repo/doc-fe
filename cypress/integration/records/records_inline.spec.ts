@@ -12,7 +12,7 @@ let loginResponse;
 let multipleCompanies;
 const inlineApprovalError = "cannot be released without every InlineApproval approved";
 
-context("Record Control Flow", () => {
+context("Record inline Flow", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -145,6 +145,7 @@ context("Record Control Flow", () => {
       });
 
       it("Add approvals", () => {
+        SystemRequirement("REQ-0980");
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectApprovals();
         cy.fbAddField();
@@ -181,6 +182,7 @@ context("Record Control Flow", () => {
       });
 
       it("Enter text 'First entry' in textfield for inline", () => {
+        SystemRequirement("REQ-1080");
         cy.get("[data-cy^=\"textfield-for-inline\"]").click().type("First entry");
       });
 
@@ -195,6 +197,12 @@ context("Record Control Flow", () => {
           () => {
             cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
           });
+      });
+
+      it("Check inline record creation default to numeric revision", () => {
+        SystemRequirement("REQ-1020");
+        cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
+          .contains("Revision 1");
       });
 
       it("Check approve button is not disabled", () => {
@@ -219,8 +227,15 @@ context("Record Control Flow", () => {
         cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
       });
 
+      it("Check system creates new major revision after inline approve", () => {
+        SystemRequirement("REQ-1040");
+        cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
+          .contains("Revision 2");
+      });
+
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline", () => {
+          SystemRequirement("REQ-1080");
           cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", Second entry");
         });
 
@@ -230,6 +245,12 @@ context("Record Control Flow", () => {
             () => {
               cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
             });
+        });
+
+        it("Verify system asks for another approval afer changing section", () => {
+          SystemRequirement("REQ-1050");
+          cy.get("[data-cy^=\"form.builder.approval.pending\"]")
+            .should("have.text", "Inline approval pending");
         });
 
         it("Approve Inline Approval", () => {
@@ -252,6 +273,7 @@ context("Record Control Flow", () => {
 
       context("Edit and try to release it ", () => {
         it("Enter text 'Third entry' in textfield for inline", () => {
+          SystemRequirement("REQ-1080");
           cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", Third entry");
         });
 
@@ -289,9 +311,15 @@ context("Record Control Flow", () => {
         });
       });
 
-      context("Approve and Release document", () => {
+      context("Approve and Release document and verify record is in alpha", () => {
         it("Approve and release it", () => {
           cy.drApproveAndReleaseDocument();
+        });
+
+        it("Verify record is in alpha state", () => {
+          SystemRequirement("REQ-1060");
+          cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
+            .contains("Revision A");
         });
       });
     });
