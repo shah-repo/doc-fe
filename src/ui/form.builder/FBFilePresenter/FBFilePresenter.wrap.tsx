@@ -99,7 +99,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
         return handleDownload?.("view");
       }
       handleDownload?.("download");
-    }
+    };
 
     onMouseOver = () => filePresenterState?.setToolsVisible(true);
     onMouseLeave = () => filePresenterState?.setToolsVisible(false);
