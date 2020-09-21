@@ -1,12 +1,10 @@
 import { EditorState } from "draft-js";
 import { action, observable, set } from "mobx";
-import { FBFieldWrapperProps } from "..";
 
 export class FBTextEditorState {
   // MARK: @observables
   @observable public editorState?: EditorState;
   @observable public masked?: boolean = true;
-  @observable public optionVisible: FBFieldWrapperProps["toolsVisible"] = "hidden";
 
   // MARK: @config
   public editorReference?: HTMLInputElement;
