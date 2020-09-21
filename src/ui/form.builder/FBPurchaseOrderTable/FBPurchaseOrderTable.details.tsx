@@ -4,7 +4,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import DeleteIcon from "@material-ui/icons/Delete";
-import _ from "lodash";
+import { keys, truncate, values } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FBMapWrapper, FBPurchaseOrderDetailsHead, FBPurchaseOrderItem, FBPurchaseOrderTableDetailsProps, FBTableCell, FBTooltip } from "..";
@@ -26,7 +26,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
         <TableHead>
           <TableRow>
             <FBTableCell />
-            <FBMapWrapper<string[]> collection={_.values(FBPurchaseOrderDetailsHead)}>
+            <FBMapWrapper<string[]> collection={values(FBPurchaseOrderDetailsHead)}>
               {(head, index) => (
                 <FBTableCell
                   label={head}
@@ -43,6 +43,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
               <TableRow
                 key={`fb-po-item-${item.id}-${index}`}
                 onClick={() => handleItem && handleItem(item)}
+                data-cy="poItems"
               >
                 <FBTableCell align="right">
                   {mode === "form" && (
@@ -55,13 +56,14 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                     </FBTooltip>
                   )}
                 </FBTableCell>
-                <FBMapWrapper<string[]> collection={_.keys(FBPurchaseOrderDetailsHead)}>
+                <FBMapWrapper<string[]> collection={keys(FBPurchaseOrderDetailsHead)}>
                   {(key, index) => {
                     let label = item[key];
                     let tooltipTitle: string | undefined;
+                    const dataCy = key;
                     if (key === "description") {
                       key = "partNumberTitle";
-                      label = _.truncate(item[key], { length: 35, omission: " ..." });
+                      label = truncate(item[key], { length: 35, omission: " ..." });
                       tooltipTitle = label;
                     }
                     if (key === "unitPrice") {
@@ -69,9 +71,10 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                     }
                     return (
                       <React.Fragment  key={`fb-po-item-${key}-${index}`}>
-                        {index === 0 && <TableCell>{item.index + 1}</TableCell>}
+                        {index === 0 && <TableCell data-cy = "poItemIndex" >{item.index + 1}</TableCell>}
                         {index > 0 && (
                           <FBTableCell
+                            data-cy = {dataCy}
                             align={(index > 2) ? "right" : "left"}
                             loading={key === "received" ? loading : false}
                             {...{ label, tooltipTitle }}

@@ -7,6 +7,8 @@ import { DocumentType } from "../documentRevisions/documentType";
 
 type AuditTypes = "ARRAY_NEW" | "ARRAY_DELETED";
 export interface Audit {
+  groupKey?: number | undefined;
+  index?: number | undefined;
   id: string;
   field: string;
   type: AuditTypes;

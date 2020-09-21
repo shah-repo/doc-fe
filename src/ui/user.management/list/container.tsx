@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isEmpty } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,7 +39,7 @@ export const UserManagementListContainer: React.FunctionComponent = () => {
 
   const handleResendSignupEmail = ( email: string ) => async.start(getResendSignupEmailAction, email, async);
 
-  if (_.isEmpty(tableCriteria.queryDict) && !didMount) {
+  if (isEmpty(tableCriteria.queryDict) && !didMount) {
     dispatch(
       tableSearchActions.setSearchCriteria(
         {

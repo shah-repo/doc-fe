@@ -1,0 +1,7 @@
+{
+  "statusCode": 400,
+  "message": [
+    "Upload failed"
+  ],
+  "error": "Unauthorized"
+}

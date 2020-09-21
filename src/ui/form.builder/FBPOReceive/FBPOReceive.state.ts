@@ -1,4 +1,4 @@
-import _, { Dictionary } from "lodash";
+import { Dictionary, template } from "lodash";
 import { action, computed } from "mobx";
 import { useIntl } from "react-intl";
 import { FBPurchaseOrderItem } from "..";
@@ -55,7 +55,7 @@ export class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
       return;
     }
     this.data = undefined;
-    const urlTpl = _.template(FBEndpoint.FetchDocumentRevision);
+    const urlTpl = template(FBEndpoint.FetchDocumentRevision);
     const url = urlTpl({ documentId: id });
     this.setUrl(url);
     this.fetch();

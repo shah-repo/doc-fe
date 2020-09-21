@@ -55,6 +55,7 @@ const TransitionDialog: React.FunctionComponent<Props> =
           variant= "outlined"
           aria-label={transition}
           onClick={openDialog}
+          data-cy={`transition-${transition}`}
           {...buttonProps}
         >
           <Text message={label} />

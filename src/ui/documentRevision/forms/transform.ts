@@ -1,10 +1,19 @@
-import _ from "lodash";
+import { get, maxBy, pick } from "lodash";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
-import { getIsAdministrativeDefault } from "../helpers";
+import { generateVersionNumber, getIsAdministrativeDefault } from "../helpers";
 import { DocumentRevisionFormValues } from "./types";
+
+
+const getHighestRevision = (revisions: DocumentRevision[]) => maxBy(revisions, "revision");
+
+const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateVersionNumber(revision.revision,
+  revision.revisionStage,
+  revision.subRevision,
+  revision.revisionChangeType,
+) : "";
 
 export const toDocumentRevisionFormValues = (
   documentRevision: DocumentRevision,
@@ -14,10 +23,13 @@ export const toDocumentRevisionFormValues = (
     description: documentRevision.description,
     name: documentRevision.name,
     attachments: documentRevision.attachments,
-    referenceTo: documentRevision.referenceTo.map((reference: any) => ({
-      value: reference.id,
-      label: reference.docId,
-    })),
+    referenceTo: documentRevision.referenceTo.map((reference: any) => {
+      const highestRev = getHighestRevision(reference.documentRevisions);
+      return ({
+        value: reference.id,
+        label: `${reference.docId} - ${getRevisionNumber(highestRev)} - ${highestRev?.name}`,
+      });
+    }),
     document: documentRevision.document,
     changeRequest: documentRevision.changeRequest,
     retrain: documentRevision.retrain,
@@ -25,18 +37,18 @@ export const toDocumentRevisionFormValues = (
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
     revisionChangeType: documentRevision.revisionChangeType,
-    securityEmployees: _.get(documentRevision, "document.securityList.securityEmployees", [])
+    securityEmployees: get(documentRevision, "document.securityList.securityEmployees", [])
       .map((employee) => ({ label: employee.name, value: employee.id })),
-    securityGroups: _.get(documentRevision, "document.securityList.securityGroups", [])
+    securityGroups: get(documentRevision, "document.securityList.securityGroups", [])
       .map((group) => ({ label: group.name, value: group.id })),
-    operators: _.get(documentRevision, "document.securityList.operators", [])
+    operators: get(documentRevision, "document.securityList.operators", [])
       .map((operator) => ({ label: operator.name, value: operator.id })),
     renderHTML: documentRevision.renderHTML,
   };
   if (documentRevision.formTemplate) {
     values.formTemplate = {
       schema: documentRevision.formTemplate?.schema,
-      outputDocumentTypes: _.get(documentRevision, "formTemplate.outputDocumentTypes", [])
+      outputDocumentTypes: get(documentRevision, "formTemplate.outputDocumentTypes", [])
         .map((e) => ({ label: e.documentTypeName, value: e.id })),
     };
   }
@@ -48,7 +60,7 @@ export const toDocumentRevisionEditRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
   const data = {
-    ..._.pick(values, ["formTemplate", "formDocument", "formInput" ]),
+    ...pick(values, ["formTemplate", "formDocument", "formInput" ]),
     description: values.description,
     name: values.name,
     attachments: values.attachments,
@@ -82,21 +94,21 @@ export const toNewVersionRequestBody = (
       // new revision
       newValues.document = {
         ...newValues.document,
-        id: _.get(values, "document.id"),
+        id: get(values, "document.id"),
       };
     } else {
       // new document
       newValues.document = {
         ...newValues.document,
-        id: _.get(values, "document.id"),
-        docId: _.get(values, "document.docId"),
+        id: get(values, "document.id"),
+        docId: get(values, "document.docId"),
         securityList: {
           securityEmployees: (values.securityEmployees || []).map((employee) => ({ id: employee.value })),
           securityGroups: (values.securityGroups || []).map((group) => ({ id: group.value })),
           operators: (values.operators || []).map((operator) => ({ id: operator.value })),
         },
       };
-      newValues.document.documentType = { id: _.get(values, "document.documentType.id") };
+      newValues.document.documentType = { id: get(values, "document.documentType.id") };
     }
   }
 

@@ -2,7 +2,7 @@ import { FormControl, FormHelperText, Typography } from "@material-ui/core";
 import { FormControlProps } from "@material-ui/core/FormControl";
 import { InputLabelProps } from "@material-ui/core/InputLabel";
 import { FieldProps as FormikFieldProps } from "formik";
-import _ from "lodash";
+import { get } from "lodash";
 import * as React from "react";
 import { TypographyProps, TypographySize } from "../../../../state/ducks/common";
 import { Translation } from "../../../translations/types";
@@ -43,8 +43,8 @@ const Field: React.FunctionComponent<FieldProps> = ({
   actionsRenderer,
 }) => {
   // storing BE response in status
-  const error = _.get(errors, field.name);
-  const isFieldTouched = _.get(touched, field.name);
+  const error = get(errors, field.name);
+  const isFieldTouched = get(touched, field.name);
   const shouldDisplayError = Boolean(isFieldTouched && error);
   const classes = styles({ gutter, error: shouldDisplayError });
 

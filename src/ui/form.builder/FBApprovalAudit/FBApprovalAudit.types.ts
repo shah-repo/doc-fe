@@ -1,4 +1,4 @@
-import { FBApprovalAuditState, FBApprovalProps, FBInputProps, FBSchemaProps } from "..";
+import { FBApprovalAuditState, FBApprovalProps, FBEmployee, FBInputProps, FBSchemaProps } from "..";
 
 export type FBAuditType =
 | "STRING_NEW"
@@ -11,17 +11,6 @@ export type FBAuditType =
 | "NUMBER_EDITED"
 | "default";
 
-export interface FBOwner {
-  id: string;
-  user: FBUser;
-}
-
-export interface FBUser {
-  id: string;
-  email: string;
-  name: string;
-}
-
 export interface FBAuditData {
   id: string;
   field: string;
@@ -29,7 +18,7 @@ export interface FBAuditData {
   previousValue?: any;
   nextValue: any;
   timestamp: string;
-  owner: FBOwner;
+  owner: FBEmployee;
   description?: string;
   ownerName?: string;
   formattedTime?: string;

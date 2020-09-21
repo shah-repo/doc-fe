@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get } from "lodash";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Redirect, RouteComponentProps, useParams } from "react-router-dom";
@@ -68,8 +68,8 @@ SupplierSurveyContainerProps
   };
 
   const schema =
-  _.get(supplierSurvey, "surveyFormDocumentRevision.formTemplate.schema") ||
-  _.get(supplierSurvey, "surveyFormDocumentRevision.formDocument.formTemplate.schema", []);
+  get(supplierSurvey, "surveyFormDocumentRevision.formTemplate.schema") ||
+  get(supplierSurvey, "surveyFormDocumentRevision.formDocument.formTemplate.schema", []);
   FBStore.setFormSchema(schema);
 
   return (

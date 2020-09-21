@@ -1,4 +1,5 @@
 import { PreventSkipOnFailure } from "../../support";
+import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -10,8 +11,8 @@ context("Group Creation Flow", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
         cy.cmpCreateCompany({
@@ -101,7 +102,7 @@ context("Group Creation Flow", () => {
   context("Check if 'Everyone' group exists", () => {
     it("Filters groups by name and selects the 'Everyone' group", function() {
       PreventSkipOnFailure.call(this);
-      SystemRequirement("REQ-2530");
+      // SystemRequirement("REQ-2530");
       cy.grpSelectGroup({ name: "Everyone" });
     });
   });
@@ -122,12 +123,12 @@ context("Group Creation Flow", () => {
     });
 
     it("Assigns user to the group", () => {
-      SystemRequirement("REQ-2560");
+      // SystemRequirement("REQ-2560");
       cy.grpAssignUser({ name: USERS[2].name });
     });
   });
 
-  context("Create official group", () => {
+  context("Create unofficial group", () => {
     it("Saves the group", () => {
       cy.grpSaveGroup();
     });
@@ -136,7 +137,7 @@ context("Group Creation Flow", () => {
   context("Check if the group was created", () => {
     it("Filters groups by name and selects the new group", function() {
       PreventSkipOnFailure.call(this);
-      SystemRequirement("REQ-2550");
+      // SystemRequirement("REQ-2550");
       cy.grpSelectGroup({ name: "Unofficial Group" });
     });
   });

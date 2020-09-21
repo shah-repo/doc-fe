@@ -12,12 +12,14 @@ const FBApprovalMatrixRolesActions: React.FunctionComponent<FBApprovalMatrixRole
     <FBSubmitButton
       variant="outlined"
       label="common.add"
+      dataCy="common.add"
       onClick={handleAdd}
       autoFocus
     />
     <FBButton
       variant="outlined"
       label="common.cancel"
+      dataCy="common.cancel"
       onClick={handleCancel}
     />
   </Box>

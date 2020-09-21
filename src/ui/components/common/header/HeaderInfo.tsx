@@ -2,7 +2,7 @@ import { Chip, Grid, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
 import { ChangeRequestStatus } from "../../../../state/ducks/changeRequest";
-import { DocumentRevisionStatus, DocumentRevisionStatusAlias } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevisionStatus, DocumentRevisionStatusAlias, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentStatus } from "../../../../state/ducks/documents";
 import { FBDocTypeGroup } from "../../../form.builder";
@@ -14,6 +14,8 @@ export interface Props {
   status: string;
   id: string;
   name: string;
+  revisionChangeType?: RevisionChangeType;
+  subRevision?: number;
   documentTypeId?: string;
   revisionStage?: number;
   groupOptions?: DocumentGroupOptionsType[];
@@ -28,6 +30,8 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   revisionStage,
   groupOptions,
   isInlineApproval,
+  revisionChangeType,
+  subRevision,
 }) => {
   const isDraft = status === DocumentStatus.Draft;
   const isAlphaReleased = revisionStage === 3;
@@ -38,34 +42,49 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
     status = DocumentRevisionStatusAlias.Draft;
   }
   const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
+  let stateLabel = statusLabel;
   const [isTitleVisible] = useTitle(documentTypeId);
   const classes = styles();
   const isStatusReleased = status === DocumentRevisionStatus.Released || status === ChangeRequestStatus.Approved;
   const isStatusCanceled = status === DocumentRevisionStatus.Canceled || status === ChangeRequestStatus.Voided;
+  const isDeprecated = status === DocumentRevisionStatus.Deprecated;
+  const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
+  const isInReview = status === DocumentRevisionStatus.InReview;
+
   const statusIcon =
     <div className={classNames(classes.statusIconDefault, {
       [classes.statusIconReleased]: isStatusReleased,
       [classes.statusIconCanceled]: isStatusCanceled,
     })} />;
 
+  if (isRecord && !isInlineApproval && (!isObsolete || isInReview)) {
+    stateLabel = status;
+  }
+  if (isRecord && !isInlineApproval && isDeprecated) {
+    stateLabel = "common.released";
+  }
+  if (isDraft && isRecord && subRevision === 0 && !isObsolete) {
+    stateLabel = "common.wip";
+  }
+
   return (
-    <Grid container={true} xs={6} alignItems="center">
+    <Grid item xs={6} className={classes.itemWrap} >
       {
         isStatusVisible &&
         <Chip
-          label={<Text message={statusLabel} />}
+          label={<Text message={stateLabel} />}
           id="HeaderInfo-status"
           data-cy="HeaderInfo-status"
           className={classNames(classes.statusDefault)}
           icon={statusIcon}
         />
       }
-      <Typography variant="h6" id="HeaderInfo-docId" className={classes.id} >
+      <Typography variant="h6" id="HeaderInfo-docId" className={classes.id} component="span">
         {id}
       </Typography>
       {
         isTitleVisible &&
-        <Typography variant="h6" id="HeaderInfo-name">
+        <Typography variant="h6" id="HeaderInfo-name" component="span">
           {name}
         </Typography>
       }

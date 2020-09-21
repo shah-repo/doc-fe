@@ -47,6 +47,7 @@ export interface CompanyValidators {
   validateInput: (params: IValidateInput) => Promise<any>;
   registerHelperCallback: (callback: () => IRemoteValidatorsHelper) => void;
   registerContextCallback: (callback: () => IRemoteValidatorsContext) => void;
+  buildInfo: {[K: string]: string};
 }
 
 export enum APPLICABLE_FOR_ACTION {

@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { at } from "lodash";
 import React from "react";
 import { FB, FBData, FBEditorPropertiesProps } from "..";
 
@@ -17,7 +17,7 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     type && (options = FBData.editorPropertiesByType(type));
 
     onChange = (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      const [valueName, checked] = _.at(ev.target, ["value", "checked"]);
+      const [valueName, checked] = at(ev.target, ["value", "checked"]);
       // *NOTE: Mobile support until mobile switches to editor props
       formState?.setFieldValue(valueName, checked);
     };

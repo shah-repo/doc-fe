@@ -5,7 +5,7 @@ import moment from "moment";
 import React from "react";
 import { FBAuditPOCalculation, FBAuditPOItem } from ".";
 import { FB, FBApprovalAuditProps, FBApprovalAuditState, FBAuditData, FBFieldName } from "..";
-import { TIME_ZONE } from "../../../common/utils/date";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBInputType } from "../FBInput";
 import FBStore from "../FBStore/FBStore";
@@ -43,7 +43,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
       range(0, index).reverse().some((current) => {
         if (!schema) { return false; }
         const { type, name = "" } =  schema[current];
-        if (type === "requestapproval" || type === "approval") { return true; }
+        if (type === "requestapproval" || type === "inlineapproval") { return true; }
         underApprovalField.push(name);
         return false;
       });
@@ -78,7 +78,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           if (nextValue === "[]") { return; } // checkgroup
           if (prevValue !== "undefined" && prevValue !== "") {
             if (moment(prevValue, moment.ISO_8601, true).isValid()) {
-              prevValue = moment(prevValue).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a");
+              prevValue = getFormattedDateString(prevValue, MomentFormats.DateTimeAlt);
             }
             prevValue = " from " + prevValue;
           } else {
@@ -86,7 +86,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           }
 
           if (moment(nextValue, moment.ISO_8601, true).isValid()) {
-            nextValue = moment(nextValue).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a");
+            nextValue = getFormattedDateString(nextValue, MomentFormats.DateTimeAlt);
           }
           return FB.stripTags("Changed " + label + prevValue + " to " + nextValue);
         }
@@ -214,7 +214,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
 
         const description: Partial<Record<FBInputType | "default", () => any>> = {
           purchaseorder: () => isPurchaseorder(),
-          approval: () => "Approved",
+          inlineapproval: () => "Approved",
           checkboxgroup: () => isCheckGroup(),
           textfield: () => isSimple(),
           texteditor: () => isSimple(),
@@ -233,7 +233,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         if (!desc) { return; }
         return {
           ownerName: v[0].owner.user.name,
-          formattedTime: moment(v[0].timestamp).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a"),
+          formattedTime: getFormattedDateString(v[0].timestamp, MomentFormats.DateTimeAlt),
           description: (description[type || ""] || description.default)(),
           timestamp: v[0].timestamp,
           type,
@@ -242,7 +242,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
 
       const compactMapped = sortBy(compact(mapped), "timestamp");
       const approvals = filter(compactMapped,  ({ type, timestamp }) =>
-        type === "approval" || type === "requestapproval"
+        type === "inlineapproval" || type === "requestapproval"
       );
 
 
@@ -252,8 +252,8 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         startDate = approvals[approvals.length - 2].timestamp;
       }
 
-
-      const endDate = releasedAt ? new Date(releasedAt) : new Date();
+      const lastChange = last(compactMapped)?.timestamp;
+      const endDate = releasedAt ? new Date(releasedAt) : (lastChange ? new Date(lastChange) : Date.now());
 
       const filteredMapped = filter(compactMapped, (cm) => (
         startDate &&
@@ -264,7 +264,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
     }
 
     function isApproved(): boolean {
-      let hasValue = type === "approval"
+      let hasValue = type === "inlineapproval"
         ? formState?.getFieldValue(name)
         : formState?.getFieldValue(FBFieldName.RequestApproval + name);
       hasValue = Boolean(hasValue);

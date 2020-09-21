@@ -1,4 +1,4 @@
-import _, { Dictionary } from "lodash";
+import { Dictionary, get, isArray, isDate, isObject, join, map } from "lodash";
 import React from "react";
 import { FBValidationProps } from ".";
 
@@ -12,9 +12,9 @@ export const withFBValidation = <T extends FBValidationProps>(
 
     function valueByType(value: any, key: string): any {
       switch (true) {
-        case _.isArray(value): return value;
-        case _.isDate(value): return (value as string);
-        case _.isObject(value): return _.get(value, key);
+        case isArray(value): return value;
+        case isDate(value): return (value as string);
+        case isObject(value): return get(value, key);
         default: return value;
       }
     }
@@ -22,8 +22,8 @@ export const withFBValidation = <T extends FBValidationProps>(
     function valueSplit(key: string, value: any): string {
       const ruleDelimiter = [":", ","];
       let rules = value ? key : "";
-      if (_.isObject(value)) {
-        _.map(value, (v, k) => {
+      if (isObject(value)) {
+        map(value, (v, k) => {
           rules += `${ruleDelimiter.shift()}${valueByType(v, k)}`;
         });
       }
@@ -31,8 +31,8 @@ export const withFBValidation = <T extends FBValidationProps>(
     }
 
     toStringRules = (validators: Dictionary<any>): string | undefined => {
-      const rules = _.map(validators, (value, key) => `${valueSplit(key, value)}`);
-      return _.join(rules, "|");
+      const rules = map(validators, (value, key) => `${valueSplit(key, value)}`);
+      return join(rules, "|");
     };
 
     return Component({

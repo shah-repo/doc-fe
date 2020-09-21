@@ -3,7 +3,7 @@ import { action, observable, set } from "mobx";
 import { FBInputType } from ".";
 
 export class FBInputState {
-  public static omitLabel: FBInputType[] = ["checkbox", "radio", "hyperlink"];
+  public static omitLabel: FBInputType[] = ["checkbox", "radio", "hyperlink", "section"];
   // Set value on blur
   public static omitOnChange: FBInputType[] = ["textfield", "texteditor"];
   public autosavePrevValue?: any;
@@ -11,6 +11,10 @@ export class FBInputState {
   @observable public includeContext = false;
   @observable public children: React.ReactElement | undefined;
   @observable public autosaveNextValue?: any;
+
+  public constructor(value?: any) {
+    this.value = value;
+  }
 
   @action public setChildren = (children: React.ReactElement) => {
     set(this, "children", children);

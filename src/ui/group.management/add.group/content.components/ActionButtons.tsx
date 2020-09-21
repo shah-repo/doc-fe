@@ -27,6 +27,7 @@ export const ActionButtons: React.FunctionComponent<Props> = ({
   const submitButtonRenderer = () => (
     <Button
       id="Group-createGroup"
+      data-cy="Group-createGroup"
       variant="contained"
       onClick={handleSubmit}
       disabled={isEmpty(group.name)}

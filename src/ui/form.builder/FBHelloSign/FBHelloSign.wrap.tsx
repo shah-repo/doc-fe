@@ -1,5 +1,5 @@
 import HelloSign from "hellosign-embedded";
-import _ from "lodash";
+import { includes, isEmpty, keys, pick, values } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -77,8 +77,8 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
 
     async function handleForm() {
       const items = formState?.getValues();
-      const filteredItems = _.pick(items, _.keys(items).filter((x) => !_.includes(x, "Generated_From_Template")));
-      if (_.values(filteredItems).some((x) => x === "") || filteredItems === null) {
+      const filteredItems = pick(items, keys(items).filter((x) => !includes(x, "Generated_From_Template")));
+      if (values(filteredItems).some((x) => x === "") || filteredItems === null) {
         return alert(intl.formatMessage({ id: "form.builder.signature.warning" }));
       }
       if (!signatureId) {
@@ -109,7 +109,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     async function handleDesign() {
       const { attachments, formTemplate: { helloSignTemplateId = null } = {} } = workspaceState?.document || {};
       let msg: string | undefined;
-      if (_.isEmpty(attachments)) {
+      if (isEmpty(attachments)) {
         msg = intl.formatMessage({ id: "form.builder.template.warning" });
       } else if (helloSignTemplateId) {
         msg = intl.formatMessage({ id: "form.builder.template.created.warning" });

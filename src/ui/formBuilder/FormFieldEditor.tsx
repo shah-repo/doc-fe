@@ -231,6 +231,8 @@ const FormFieldEditor: React.FunctionComponent<FormFieldProps> = ({
         />
       );
       break;
+    default:
+      break;
   }
 
   const showModalHandler = () => {

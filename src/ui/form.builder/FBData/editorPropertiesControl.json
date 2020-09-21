@@ -29,6 +29,9 @@
     "approveIsBlocking",
     "reviseDisabled"
   ],
+  "inlineapproval": [
+    "reviseDisabled"
+  ],
   "textfield": [
     "reviseDisabled"
   ],

@@ -20,6 +20,8 @@ interface IdocumentTypeDto {
   documentTypeAcronym: string;
   isQms?: boolean;
   group: string;
+  privateNumberPool?: boolean;
+  startingNumber?: number;
 }
 
 export interface ICreateCompanyBootstrap {
@@ -69,6 +71,7 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
   const bodyDefaults = {
     name: `${capitalize(faker.commerce.color())} ${faker.company.companyName()} ${companyNumber}`,
     companyAcronym: `TC${companyNumber}`,
+    scheduledForDeletion: true,
   };
   const body: ICreateCompanyBootstrap = {
     ...payload,
@@ -112,7 +115,9 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
 });
 
 Cypress.Commands.add("cmpClickCreateNewDocument", () => {
-  cy.get("[data-cy=\"document.revision.create\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
+    cy.get("[data-cy=\"document.revision.create\"]").click();
+  });
 });
 
 Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {

@@ -1,5 +1,5 @@
 import Base64 from "Base64";
-import _, { Dictionary } from "lodash";
+import { camelCase, concat, Dictionary, dropRight, get, includes, isUndefined, join, map, padStart, pull, split, template, toString, trimStart } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import Validator from "validatorjs";
 import { FBSchemaProps } from "../..";
@@ -10,10 +10,10 @@ import FBValidatorStore from "./FBValidatorStore";
 
 export class FormBuilderDynamicValidatorStore {
   @computed get Validator(): any {
-    return _.get(window, "EnlilRemoteValidators.validator");
+    return get(window, "EnlilRemoteValidators.validator");
   }
   @computed get dynamicValidator(): FBValidatorConfigProps | undefined {
-    if (_.isUndefined(this.validatorName)) {
+    if (isUndefined(this.validatorName)) {
       return;
     }
     return {
@@ -22,7 +22,7 @@ export class FormBuilderDynamicValidatorStore {
       fn: Base64.btoa(this.liveCode),
     };
   }
-  public originCode = _.template(`
+  public originCode = template(`
     // Available Variables:
 
     // value: any
@@ -61,7 +61,7 @@ export class FormBuilderDynamicValidatorStore {
   @action public setDynamicValidator = (
     customValidator: FBValidatorConfigProps | undefined,
   ) => {
-    if (_.isUndefined(customValidator)) {
+    if (isUndefined(customValidator)) {
       return;
     }
     this.setLiveCode(Base64.atob(customValidator.fn));
@@ -70,12 +70,12 @@ export class FormBuilderDynamicValidatorStore {
   };
 
   @action public setVariable = (fieldName: string) => {
-    this.fieldNames = _.concat(this.fieldNames, fieldName);
+    this.fieldNames = concat(this.fieldNames, fieldName);
     this.generateTemplate();
   };
 
   @action public removeVariable = (fieldName: string) => {
-    this.fieldNames = _.pull(this.fieldNames, fieldName);
+    this.fieldNames = pull(this.fieldNames, fieldName);
     this.generateTemplate();
   };
 
@@ -113,7 +113,7 @@ export class FormBuilderDynamicValidatorStore {
   };
 
   @action public validate = () => {
-    if (_.isUndefined(this.Validator)) {
+    if (isUndefined(this.Validator)) {
       return;
     }
 
@@ -122,8 +122,8 @@ export class FormBuilderDynamicValidatorStore {
 
     const rules = FBValidatorStore.getSchemaReleasedRules();
     const values = {};
-    _.map(FBStore.getValues(), (v, k) => {
-      values[k] = _.toString(v);
+    map(FBStore.getValues(), (v, k) => {
+      values[k] = toString(v);
     });
     const validator = new this.Validator(values, rules);
 
@@ -139,23 +139,23 @@ export class FormBuilderDynamicValidatorStore {
   @action public setHelperText = (
     errors: Validator.ValidationErrors | Dictionary<string>,
   ) => {
-    _.map(errors, (v, k) => {
-      set(this.helperText, k, _.join(v, "\n"));
+    map(errors, (v, k) => {
+      set(this.helperText, k, join(v, "\n"));
     });
   };
 
-  @action public getHelperText = (fieldName: string): string | undefined => _.get(this.helperText, fieldName);
+  @action public getHelperText = (fieldName: string): string | undefined => get(this.helperText, fieldName);
 
   @action public registerValidators = (schema: FBSchemaProps[] = [], validator: any) => {
-    if (_.isUndefined(this.Validator)) {
+    if (isUndefined(this.Validator)) {
       return;
     }
 
-    _.map(schema, (schemaItem) => {
+    map(schema, (schemaItem) => {
       const { customValidator } = schemaItem;
 
-      if (!_.isUndefined(customValidator)) {
-        // const tpl = _.template(`<% ${Base64.atob(customValidator.fn)} %>`);
+      if (!isUndefined(customValidator)) {
+        // const tpl = template(`<% ${Base64.atob(customValidator.fn)} %>`);
 
         // eslint-disable-next-line @typescript-eslint/require-await
         let customValFn = async (...args) => true;
@@ -199,13 +199,13 @@ export class FormBuilderDynamicValidatorStore {
     let interpolation = "\n";
     const values: Dictionary<string> = {};
 
-    _.map(this.fieldNames, (variable, index) => {
-      interpolation += `${_.padStart(`<%= var${index} %>`, 17)}\n`;
+    map(this.fieldNames, (variable, index) => {
+      interpolation += `${padStart(`<%= var${index} %>`, 17)}\n`;
 
       // Set obj for tpl values
-      let varName = _.dropRight(_.split(variable, "-")).join(" ");
-      varName = _.camelCase(varName);
-      const isValueVar = _.includes(variable, "<-val->");
+      let varName = dropRight(split(variable, "-")).join(" ");
+      varName = camelCase(varName);
+      const isValueVar = includes(variable, "<-val->");
       const varValue = isValueVar ? `"${variable}"` : `req["${variable}"]`;
       values[`var${index}`] = `var ${varName} = ${varValue};`;
     });
@@ -221,14 +221,14 @@ export class FormBuilderDynamicValidatorStore {
       .split(start)[1]
       .split(end)[0]
       .replace("\n", "");
-    return _.trimStart(code);
+    return trimStart(code);
   };
 
   @action private generateTemplate = () => {
     const { interpolation, values } = this.generateVariables();
     const code = this.liveCodeExtraction();
     const tplStr = this.originCode({ interpolation, code });
-    const tpl = _.template(tplStr);
+    const tpl = template(tplStr);
     this.setLiveCode(tpl(values));
   };
 }

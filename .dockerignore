@@ -11,8 +11,10 @@ pids
 .env
 
 node_modules
+results
 .gitignore
 .eslint
 .git
 src/*.spec.js
 cypress/requirements/cache
+cypress/cache/*

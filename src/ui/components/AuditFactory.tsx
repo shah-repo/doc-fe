@@ -4,22 +4,25 @@ import { Attachment } from "../../state/ducks/attachments";
 import { Audit } from "../../state/ducks/audit";
 import { Group } from "../../state/ducks/auth/types";
 import { ChangeRequest } from "../../state/ducks/changeRequest";
-import { Approval, Owner, User } from "../../state/ducks/common";
+import { Approval, Owner } from "../../state/ducks/common";
+import { Employee } from "../../state/ducks/company";
 import { DocumentRevision, Reference } from "../../state/ducks/documentRevisions";
 import { DocumentType } from "../../state/ducks/documentRevisions/documentType";
 import { getAuditDefaultValue } from "../common/utils/audit";
 import Text from "../components/Text";
+import { Translation } from "../translations/types";
 import DateFormatter from "./Date";
 import DialogOpener from "./textDiff/DialogOpener";
 
 interface OwnProps {
   audit: Audit;
+  dataCy?: string;
 }
 
 export type Props = OwnProps;
 
 export const AuditFactory: React.FunctionComponent<Props> = ({
-  audit,
+  audit, dataCy,
 }) => {
   let returnValue;
 
@@ -34,19 +37,19 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
     case "assessments.design.attachments":
     case "assessments.regulatory.attachments": {
       const { name, type } = audit.nextValue as Attachment;
-      returnValue = `${name}.${type}`;
+      returnValue = (<div data-cy={dataCy}>{`${name}.${type}`}</div>);
       break;
     }
     case "approvals":
       returnValue = (audit.nextValue as Approval).approver.user.name;
       break;
-    case "approvers":
-      returnValue = (audit.nextValue as User).name;
+    case "approvals.approver":
+      returnValue = (audit.nextValue as Employee).user?.name;
       break;
     case "tasks.assigned":
     case "owner":
     case "securityEmployees":
-      returnValue = (audit.nextValue as Owner).user.name;
+      returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Owner).user.name}</div>);
       break;
     case "documentRevisions":
       returnValue = (audit.nextValue as DocumentRevision).name;
@@ -58,10 +61,10 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
     case "justifications.description":
     case "tasks.description":
     case "description":
-      returnValue = <DialogOpener id={audit.id} text={audit.nextValue as string} />;
+      returnValue = <DialogOpener id={audit.id} text={audit.nextValue as string} dataCy={dataCy} />;
       break;
     case "referenceTo":
-      returnValue = (audit.nextValue as Reference).docId;
+      returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Reference).docId}</div>);
       break;
     case "changeRequest":
       returnValue = (audit.nextValue as ChangeRequest).crId;
@@ -70,22 +73,23 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       returnValue = (audit.nextValue as DocumentType).documentTypeName;
       break;
     case "approvals.status":
-    case "state":
+    case "status":
       returnValue = (
         <Text
+          dataCy={dataCy}
           translation="changeRequest.audit.status.updated.by"
           values={{
-            status: audit.nextValue as string,
+            status: <Text translation={audit.nextValue as Translation} />,
             name: audit.owner?.user.name,
           }}
         />
       );
       break;
     case "securityGroups":
-      returnValue = (audit.nextValue as Group).name;
+      returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Group).name}</div>);
       break;
     default:
-      returnValue = getAuditDefaultValue(audit.nextValue);
+      returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
   }
 
   return (

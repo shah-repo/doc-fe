@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isEmpty } from "lodash";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
@@ -42,7 +42,7 @@ export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
   };
 
   useEffect(() => {
-    if (_.isEmpty(tableCriteria.queryDict)) {
+    if (isEmpty(tableCriteria.queryDict)) {
       setSearchStatus(DocumentRevisionStatus.Released);
     }
     dispatch(documentTypeActions.loadList());

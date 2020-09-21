@@ -2,7 +2,7 @@
 /* eslint-disable no-underscore-dangle */
 import * as AWSMqttClient from "aws-mqtt";
 import { Credentials } from "aws-sdk/global";
-import _, { Dictionary } from "lodash";
+import { Dictionary, isEmpty, some } from "lodash";
 import MQTTPattern from "mqtt-pattern";
 
 interface AwsMqttClient {
@@ -47,7 +47,9 @@ export class IotService {
 
   private constructor(
     private mqttClientInstance: AwsMqttClient,
-  ) {}
+  ) {
+    this.mqttClientInstance = mqttClientInstance;
+  }
 
   public async updateMqttClient(endpointRedux: any): Promise<any> {
     credentialsMqtt = endpointRedux;
@@ -70,7 +72,7 @@ export class IotService {
     }
 
     const fullTopic = `${credentialsMqtt.environment}/${credentialsMqtt.companyId}/${topic}`;
-    const topicSubscribed = _.some(Object.keys(this.mqttClientInstance._resubscribeTopics),
+    const topicSubscribed = some(Object.keys(this.mqttClientInstance._resubscribeTopics),
       (id) => id === fullTopic,
     );
     if (topicSubscribed) {
@@ -86,7 +88,7 @@ export class IotService {
       return;
     }
 
-    const hasSubscriptions = !_.isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
+    const hasSubscriptions = !isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
     if (hasSubscriptions) {
       const topics = Object.keys(this.mqttClientInstance._resubscribeTopics);
       await this.mqttClientInstance.unsubscribe(topics);
@@ -109,8 +111,8 @@ export class IotService {
 
   private async subscribe(topic: string, notif: any) {
     const fullTopic = `${credentialsMqtt.environment}/${credentialsMqtt.companyId}/${topic}`;
-    const noSubscriptions = _.isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
-    const alreadySubscribed = _.some(Object.keys(this.mqttClientInstance._resubscribeTopics),
+    const noSubscriptions = isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
+    const alreadySubscribed = some(Object.keys(this.mqttClientInstance._resubscribeTopics),
       (id) => id === fullTopic,
     );
 

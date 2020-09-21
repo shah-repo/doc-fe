@@ -1,4 +1,5 @@
 import { DocumentRevision, DocumentRevisionStatus, Reference } from "../../../state/ducks/documentRevisions";
+import { generateVersionNumber } from "../../documentRevision/helpers";
 import { documentVersionPath } from "./paths";
 import { ReferenceSummary } from "./types";
 
@@ -34,7 +35,8 @@ const getCorrectDocRev = (
     return handleReferenceForDeprecated(documentRevisions, deprecatedAt);
   }
 
-  const released = documentRevisions.find((docRev) => docRev.status === DocumentRevisionStatus.Released);
+  const released = documentRevisions.find((docRev) => docRev.status === DocumentRevisionStatus.Released ||
+    docRev.status === DocumentRevisionStatus.Obsolete);
   return released;
 };
 
@@ -53,6 +55,12 @@ export const getReferenceToSummary = (dataProp: Reference[], status: DocumentRev
         url: documentVersionPath(docRev.id, ref.id),
         docId: ref.docId,
         title: docRev.name,
+        revisionStage: generateVersionNumber(
+          docRev.revision,
+          docRev.revisionStage,
+          docRev.subRevision,
+          docRev.revisionChangeType,
+        ),
       },
     );
   });
@@ -84,6 +92,12 @@ export const getReferencedBySummary = (dataProp: DocumentRevision[]): ReferenceS
         url: getReferencedByUrl(docRev),
         docId: docRev.document.docId,
         title: docRev.name,
+        revisionStage: generateVersionNumber(
+          docRev.revision,
+          docRev.revisionStage,
+          docRev.subRevision,
+          docRev.revisionChangeType,
+        ),
       },
     );
   });

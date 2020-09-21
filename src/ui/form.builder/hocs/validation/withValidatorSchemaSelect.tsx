@@ -1,5 +1,5 @@
 
-import _ from "lodash";
+import { toString } from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
 import { FBFieldComponent } from "../../defaults/editor";
@@ -38,7 +38,7 @@ export const withValidatorSchemaSelect = <
   };
 
   const onItemChange = (fieldName: string, value: any, formValues: any, type?: FBEditorElementType | string) => {
-    FBValidatorStore.indicatorValues[props.validatorFieldName || ""][","] = _.toString(value);
+    FBValidatorStore.indicatorValues[props.validatorFieldName || ""][","] = toString(value);
   };
 
   return Component({

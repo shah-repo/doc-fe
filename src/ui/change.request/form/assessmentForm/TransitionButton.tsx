@@ -5,6 +5,7 @@ import { AsyncStatus } from "../../../../state/types";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import Text from "../../../components/Text";
+import { FB } from "../../../form.builder";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 
@@ -23,14 +24,20 @@ const TransitionButton: React.FunctionComponent<Props> = ({
 }) => {
   const applyTransition = useActionCreator(changeRequestsActions.applyTransition);
   const async = useAsync<ChangeRequestTransitionResponse>();
+
+  const { formState } = FB.useStores();
   const onClick = () => {
-    async.start(
-      applyTransition,
-      changeRequestId,
-      { password: "" },
-      transition,
-      async,
-    );
+    formState?.validate((valid) => {
+      if (valid) {
+        async.start(
+          applyTransition,
+          changeRequestId,
+          { password: "" },
+          transition,
+          async,
+        );
+      }
+    });
   };
 
   return (

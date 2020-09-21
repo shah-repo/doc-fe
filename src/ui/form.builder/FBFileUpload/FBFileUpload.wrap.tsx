@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -13,6 +13,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
     disabled,
     name,
     defaultValue,
+    withState,
     ...props
   }: T) => {
 
@@ -22,7 +23,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
 
 
     useObserver(() => {
-      filePresenters = _.map(fileUploadState?.files, (file) => (
+      filePresenters = map(fileUploadState?.files, (file) => (
         <FBFilePresenter key={`fb-file-presenter-${file.id}`} {...{ file, name, disabled }} />
       ));
     });
@@ -31,7 +32,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
       reaction(
         () => fileUploadState?.files,
         (files) => {
-          formState?.setFieldValue(name, files);
+          formState?.setFieldValue(name, files, withState);
           formState?.setFieldAutosave(name);
         }
       );
@@ -43,6 +44,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
       fileUploadState,
       filePresenters,
       disabled,
+      withState,
       name,
     });
   };

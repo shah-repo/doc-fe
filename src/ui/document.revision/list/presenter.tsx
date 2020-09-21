@@ -1,10 +1,9 @@
 import { Box, Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { isString, set } from "lodash";
-import moment from "moment";
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
-import { TIME_ZONE } from "../../../common/utils/date";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { stripTags } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -23,7 +22,7 @@ import useDialog from "../../hooks/useDialog";
 import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionQueryStatus, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
-import ExportListDialog from "./ExportListDialog./ExportListDialog";
+import ExportListDialog from "./ExportListDialog/ExportListDialog";
 import styles from "./styles";
 
 
@@ -211,7 +210,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
 
     /*    const customData = data.reduce<DocumentRevision[]>((acc, docRev) => {
         if (docRev.document.documentType.documentTypeName
-        && DOCUMENT_LIST_TYPE_NAMES.includes(docRev.document.documentType.documentTypeName)) {
+         && DOCUMENT_LIST_TYPE_NAMES.includes(docRev.document.documentType.documentTypeName)) {
           set(docRev, "description", stripTags(docRev.description));
           set(
             docRev,
@@ -234,7 +233,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     owner: e.owner.user.name,
     crId: e.changeRequest?.crId,
     status: e.status,
-    effectiveDate: e.effectiveDate ? moment(e.effectiveDate).tz(TIME_ZONE, true).format("M/D/YYYY") : "",
+    effectiveDate: e.effectiveDate ? getFormattedDateString(e.effectiveDate, MomentFormats.MonthDateYear) : "",
   }));
 
   const documentTypeSearchName = documentTypeOptions.find((e) =>

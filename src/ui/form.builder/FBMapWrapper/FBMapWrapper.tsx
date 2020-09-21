@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { map } from "lodash";
 import React from "react";
 import { FBMapWrapperProps } from "./FBMapWrapper.types";
 
@@ -8,7 +8,7 @@ const FBMapWrapper = <T extends any>({
   ...props
 }: FBMapWrapperProps<T>) => (
   <React.Fragment>
-    {_.map(collection, (value: T, key: number | any) => children(value, key, props))}
+    {map(collection, (value: T, key: number | any) => children(value, key, props))}
   </React.Fragment>
 );
 

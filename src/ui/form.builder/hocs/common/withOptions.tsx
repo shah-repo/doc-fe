@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isString, kebabCase, map, split, union } from "lodash";
 import React from "react";
 import { FBOptionProps } from "../../types/common";
 import { withFormik } from "./withFormik";
@@ -17,24 +17,24 @@ export const withOptions = <T extends FBOptionProps>(
     ...props
   }: T) => {
     function mapStringOption(): T["options"] {
-      const splitArray = _.split(props.options as string, "\n");
+      const splitArray = split(props.options as string, "\n");
       const isValueVar = type === "radiogroup" || type === "select";
       const valueVar = isValueVar ? "-<-val->" : "";
-      return _.map(splitArray, (option) => ({
-        [optionValueKey]: `${_.kebabCase(option)}${valueVar}-${name}`,
+      return map(splitArray, (option) => ({
+        [optionValueKey]: `${kebabCase(option)}${valueVar}-${name}`,
         [optionLabelKey]: option,
       }));
     }
 
     function unionNoneOption(options: any[]): T["options"] {
-      return _.union([{
+      return union([{
         [optionValueKey]: "",
         [optionLabelKey]: "fields.select.none",
       }], options);
     }
 
     function unionContextOption(options: any[]): T["options"] {
-      return _.union(options, [{
+      return union(options, [{
         [optionValueKey]: `context-${name}`,
         [optionLabelKey]: "form.builder.other",
       }]);
@@ -42,7 +42,7 @@ export const withOptions = <T extends FBOptionProps>(
 
     const optionsSet = (): T["options"] => {
       let options = props.options || "";
-      _.isString(options) && (options = mapStringOption());
+      isString(options) && (options = mapStringOption());
       includeNone && (options = unionNoneOption(options as any[]));
       includeContext && (options = unionContextOption(options as any[]));
       return options;

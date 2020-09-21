@@ -6,12 +6,13 @@ import { withFBContextMenu } from "./FBContextMenu.wrap";
 const FBContextMenu: React.FunctionComponent<FBContextMenuProps> = ({
   onContextMenu,
   onClose,
+  onBlur,
   open = false,
   anchorPosition,
   children,
   menuEls,
 }) =>  (
-  <div {...{ onContextMenu }} style={{ cursor: "context-menu" }}>
+  <div {...{ onContextMenu, onBlur }} style={{ cursor: "context-menu" }}>
     {children}
     <Menu
       keepMounted

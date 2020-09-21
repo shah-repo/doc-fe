@@ -1,5 +1,5 @@
 import { Box, CircularProgress, TableCell } from "@material-ui/core";
-import _ from "lodash";
+import { isUndefined } from "lodash";
 import React from "react";
 import { FBTableCellProps } from ".";
 import { FBConditionalWrapper, FBTooltip } from "..";
@@ -10,6 +10,7 @@ const FBTableCell: React.FunctionComponent<FBTableCellProps> = ({
   tooltipTitle,
   children,
   loading,
+  dataCy,
   ...props
 }) => (
   <TableCell {...props} >
@@ -20,7 +21,7 @@ const FBTableCell: React.FunctionComponent<FBTableCellProps> = ({
     )}
     {!loading && (
       <FBConditionalWrapper
-        condition={!_.isUndefined(tooltipTitle)}
+        condition={!isUndefined(tooltipTitle)}
         wrapper={(children) => (
           <FBTooltip title={tooltipTitle} placement="bottom">
             <Box component="span">
@@ -30,7 +31,8 @@ const FBTableCell: React.FunctionComponent<FBTableCellProps> = ({
         )}
       >
         <>
-          {label && <Text message={label} />}
+          {label && dataCy && <Text dataCy={dataCy} message={label} />}
+          {label && !dataCy && <Text message={label} />}
           {children}
         </>
       </FBConditionalWrapper>
