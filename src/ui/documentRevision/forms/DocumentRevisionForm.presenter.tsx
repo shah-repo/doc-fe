@@ -138,7 +138,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   }, [documentTypesById, values.document?.documentType?.id]);
   const isRevisionChangeHidden = isRecord && isdocRevStatusDraft && !isSubrevision;
 
-
   const isDisabledInput = (values.id !== undefined && isCurrentUserOperator && !isOwner)
     || Boolean(isRecord && isdocRevStatusDraft && documentRevision.revisionChangeType === RevisionChangeType.Obsolete);
 
