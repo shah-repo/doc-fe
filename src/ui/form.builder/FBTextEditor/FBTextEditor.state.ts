@@ -25,11 +25,6 @@ export class FBTextEditorState {
   @action public setMasked = (masked?: boolean) =>
     set(this, "masked", masked);
 
-  @action public setOptionVisible = (active: boolean) => {
-    const visibleState: FBFieldWrapperProps["addToolVisible"] = active ? "visible" : "hidden";
-    set(this, "optionVisible", visibleState);
-  };
-
   // MARK: @helpers
   public setPreserveFocus = (state: boolean) =>
     set(this, "preserveFocus", state);
