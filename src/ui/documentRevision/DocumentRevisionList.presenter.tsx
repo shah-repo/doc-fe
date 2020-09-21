@@ -134,7 +134,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           label={isRecord ? "document.revision.released.date" : "common.effective.date"}
           value={
             <DateFormatter
-              value={documentRevision.obsoletedAt || documentRevision.effectiveDate}
+              value={isRecord ? documentRevision.releasedAt : documentRevision.obsoletedAt || documentRevision.effectiveDate}
             />
           }
         />
