@@ -5,7 +5,7 @@ import { documentRevisionsActions, DocumentRevisionStatus, RevisionChangeType } 
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
-import { FB, FBSubmitButton, FBTextField } from "../../../form.builder";
+import { FB, FBFormState, FBProvider, FBSubmitButton, FBTextField } from "../../../form.builder";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
@@ -49,7 +49,7 @@ export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
     },
   });
 
-  const { formState } = FB.useStores();
+  const formState = FB.useRef(FBFormState, {});
   const save = useActionCreator(documentRevisionsActions.save);
 
   let buttonText = "record.finalize.and.release";
@@ -118,27 +118,29 @@ export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
               </Box>
             </DialogContentText>
           </Box>
-          <FBTextField
-            name="voidDescription"
-            label="common.description"
-            dataCy="void.record.description"
-            rules="required"
-            rows={3}
-          />
-          <Box display="flex" mx={3}>
-            <Button
-              variant="outlined"
-              onClick={() => voidRecordDialog.close()}
-            >
-              <Text translation="common.false" />
-            </Button>
-            <FBSubmitButton
-              variant="contained"
-              label="common.true"
-              onClick={voidRecord}
-              fullWidth
+          <FBProvider {...{ formState }} >
+            <FBTextField
+              name="voidDescription"
+              label="common.description"
+              dataCy="void.record.description"
+              rules="required"
+              rows={3}
             />
-          </Box>
+            <Box display="flex" mx={3}>
+              <Button
+                variant="outlined"
+                onClick={() => voidRecordDialog.close()}
+              >
+                <Text translation="common.false" />
+              </Button>
+              <FBSubmitButton
+                variant="contained"
+                label="common.true"
+                onClick={voidRecord}
+                fullWidth
+              />
+            </Box>
+          </FBProvider>
         </DialogContent>
       </Dialog>
       <AlertDialog
