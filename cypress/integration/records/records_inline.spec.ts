@@ -12,7 +12,7 @@ let loginResponse;
 let multipleCompanies;
 const inlineApprovalError = "cannot be released without every InlineApproval approved";
 
-context("Record Control Flow", () => {
+context("Record inline Flow", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -202,7 +202,7 @@ context("Record Control Flow", () => {
       it("Check inline record creation default to numeric revision", () => {
         SystemRequirement("REQ-1020");
         cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
-          .should("contain.text", "1");
+          .contains("Revision 1");
       });
 
       it("Check approve button is not disabled", () => {
@@ -230,7 +230,7 @@ context("Record Control Flow", () => {
       it("Check system creates new major revision after inline approve", () => {
         SystemRequirement("REQ-1040");
         cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
-          .should("contain.text", "2");
+          .contains("Revision 2");
       });
 
       context("Change textfield and approve again", () => {
@@ -319,7 +319,7 @@ context("Record Control Flow", () => {
         it("Verify record is in alpha state", () => {
           SystemRequirement("REQ-1060");
           cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
-            .should("contain.text", "A");
+            .contains("Revision A");
         });
       });
     });
