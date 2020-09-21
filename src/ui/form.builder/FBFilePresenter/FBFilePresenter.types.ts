@@ -40,6 +40,7 @@ export type FBFilePresenterProps =
 & Pick<BoxProps, "onMouseOver" | "onMouseLeave">
 & {
   handleDownload?: (type: FBFilePresenterDownloadType) => any;
+  handleIconClick?: () => any;
   handleRemove?: () => any;
   toolsVisible?: boolean;
   file: FBAttachment;

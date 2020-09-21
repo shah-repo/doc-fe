@@ -9,6 +9,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
 ) => {
   const Comp = ({
     handleDownload,
+    handleIconClick,
     handleRemove,
     onMouseOver,
     onMouseLeave,
@@ -93,6 +94,13 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
       handleLoaded();
     };
 
+    handleIconClick = () => {
+      if (filePresenterState?.isFileViewable) {
+        return handleDownload?.("view");
+      }
+      handleDownload?.("download");
+    };
+
     onMouseOver = () => filePresenterState?.setToolsVisible(true);
     onMouseLeave = () => filePresenterState?.setToolsVisible(false);
 
@@ -120,6 +128,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     return Component({
       ...(props as T),
       handleDownload,
+      handleIconClick,
       handleRemove,
       onMouseOver,
       onMouseLeave,

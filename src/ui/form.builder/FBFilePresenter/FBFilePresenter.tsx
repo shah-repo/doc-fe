@@ -7,6 +7,7 @@ import { withFBFilePresenter } from "./FBFilePresenter.wrap";
 
 const FBFilePresenter: React.FunctionComponent<FBFilePresenterProps> = ({
   handleDownload,
+  handleIconClick,
   handleRemove,
   onMouseOver,
   onMouseLeave,
@@ -50,7 +51,7 @@ const FBFilePresenter: React.FunctionComponent<FBFilePresenterProps> = ({
               width: 46,
               height: 46,
               color: fileColor,
-              onClick: () => handleDownload?.("download"),
+              onClick: () => handleIconClick?.(),
             }}
             text={fileType}
           />
