@@ -56,6 +56,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isDeprecated = status === DocumentRevisionStatus.Deprecated;
   const isAlphaReleased = documentRevision.revisionStage === 3;
   const isNumericRelease = documentRevision.revisionStage === 1;
+  const isVoided = status === DocumentRevisionStatus.Obsolete || status === DocumentRevisionStatus.Voided;
 
   if (isDraft && isRecord && isInlineApproval && !isAlphaReleased) {
     stateLabel = "common.wip";
@@ -77,7 +78,9 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   }
 
 
-  const docIdLabel = isRecord ? "common.id" : "common.docId";
+  const docIdLabel = (isRecord ? "common.id" : "common.docId") as Translation;
+  const recordOwnerLabel = (isVoided ? "record.voided.by" : "record.released.by") as Translation;
+  const recordDateLabel = (isVoided ? "record.voided.date" : "document.revision.released.date") as Translation;
 
   return (
     <div
@@ -111,7 +114,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
       >
         <SummaryInfo
           dataCy={"common.docId"}
-          label={isDocumentPO ? undefined : docIdLabel as Translation}
+          label={isDocumentPO ? undefined : docIdLabel}
           value={docId}
         />
         {!isRecord && (
@@ -121,11 +124,11 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           />
         )}
         <SummaryInfo
-          label={isRecord ? "record.released.by" : "common.owner"}
+          label={isRecord ? recordOwnerLabel : "common.owner"}
           value={documentRevision.owner.user.name}
         />
         <SummaryInfo
-          label={isRecord ? "document.revision.released.date" : "common.effective.date"}
+          label={isRecord ? recordDateLabel : "common.effective.date"}
           value={
             <DateFormatter
               value={documentRevision.obsoletedAt || documentRevision.effectiveDate}

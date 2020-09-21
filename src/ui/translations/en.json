@@ -792,6 +792,8 @@
   "record.required.approvals": "Required Approvals",
   "record.remove.approval": "Remove Approval",
   "record.released.by": "Released by",
+  "record.voided.by": "Voided by",
+  "record.voided.date": "Voided Date",
   "document.select.create.title": "Select the type of document you want to create",
   "watermark.successfully.requested": "{fileType} copy of {file}.{type} successfully requested. We will notify you when it's ready to download.",
   "watermark.file": "Watermarked",
