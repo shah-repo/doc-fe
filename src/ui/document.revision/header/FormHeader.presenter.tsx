@@ -24,6 +24,8 @@ const FormHeaderPresenter: React.FunctionComponent = () => {
         id={documentRevision.document.docId}
         name={documentRevision.name}
         documentTypeId={documentRevision?.document?.documentType.id}
+        revisionChangeType={documentRevision?.revisionChangeType}
+        subRevision={documentRevision?.subRevision}
       />}
       <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12}>
         <Grid container={true} alignItems="flex-end" justify="flex-end">
