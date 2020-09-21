@@ -124,6 +124,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
   const isdocRevStatusDraft = documentRevision?.status === DocumentRevisionStatus.Draft;
+  const isSubrevision = documentRevision?.subRevision as number > 0;
 
   const hasOutput = useMemo(() => {
     const documentType = documentTypesById[values.document?.documentType?.id || ""];
@@ -136,7 +137,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     return documentType?.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.RECORD);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentTypesById, values.document?.documentType?.id]);
-  const isRevisionChangeHidden = isRecord && isdocRevStatusDraft;
+  const isRevisionChangeHidden = isRecord && isdocRevStatusDraft && !isSubrevision;
 
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments.length > 1);
