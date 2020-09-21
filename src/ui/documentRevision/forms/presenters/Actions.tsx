@@ -117,9 +117,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
             docRevId={values.id as string}
             status={values.status}
             docRevOwner={owner.user.name}
-            /** Using updated date because releasedAt (voided at) date does not exist before Void is approved.
-            * TODO: Check for date requirements.
-            */
             updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
             {
               ...{
