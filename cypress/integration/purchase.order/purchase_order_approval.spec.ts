@@ -300,6 +300,13 @@ context("PO approval test", () => {
       cy.poAMCheckApprovalIconIfItsGray();
     });
 
+    it("Add Effective date", () => {
+      cy.get("[aria-label=\"change date\"]").click().wait(500);
+      // eslint-disable-next-line max-len
+      cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]")
+        .click().wait(500);
+    });
+
     it("Try to approve document without approver when it contains POAM", () => {
       cy.poAMApproveButton();
     });
