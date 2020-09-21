@@ -49,7 +49,7 @@ const history = [
   {
     owner,
     actions: [
-      { key: "Description changed", value: `\n${formTitle.newValue}\n` },
+      { key: "Description changed", value: `${formTitle.newValue}` },
       { key: "Attachments removed", value: "test_image.jpg" },
       { key: "New reference to", value: reference.newCode },
       { key: "Reference removed", value: reference.valueCode },
@@ -71,7 +71,7 @@ const history = [
       { key: "New owner", value: `${owner}` },
       { key: "New status", value: `Set to Draft by ${owner}` },
       { key: "New name", value: formTitle.value },
-      { key: "New description", value: `\n${formTitle.value}\n` },
+      { key: "New description", value: `${formTitle.value}` },
       { key: "Attachment added", value: `test_image.jpg` },
       { key: "New reference to", value: reference.valueCode },
     ],
@@ -196,7 +196,7 @@ context("Check Document History", () => {
     });
   });
 
-  context("Create document and release it", () => {
+  context("Create document", () => {
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
@@ -348,8 +348,17 @@ context("Check Document History", () => {
 
       element.actions.forEach((action, index) => {
         it(`'${action.key}' as '${action.value}' exists`, () => {
-          cy.get(`[data-cy="change-key-${groupIndex}-${index}"]`).should("have.text", action.key);
-          cy.get(`[data-cy="change-value-${groupIndex}-${index}"]`).should("have.text", action.value);
+          let keyIndex = "";
+          cy.get(`[data-cy^="change-value-${groupIndex}-"]`)
+            .contains(action.value)
+            .then(($el) => {
+              if ($el.attr("data-cy")) {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                keyIndex = $el.attr("data-cy")!.charAt($el.attr("data-cy")!.length - 1);
+              }
+              cy.get(`[data-cy^="change-key-${groupIndex}-${keyIndex}"]`).should("have.text", action.key);
+              cy.get(`[data-cy^="change-value-${groupIndex}-${keyIndex}"]`).should("have.text", action.value);
+            });
         });
       });
     });
