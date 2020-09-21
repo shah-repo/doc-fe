@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Nullable } from "../../state/ducks/common";
-import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import SummaryInfo from "../common/summary/SummaryInfo";
 import DateFormatter from "../components/Date";
 import Text from "../components/Text";
@@ -43,6 +43,8 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     documentRevision.revisionStage,
     documentRevision.subRevision,
     documentRevision.revisionChangeType,
+    undefined,
+    isRecord,
   );
 
   const { status } = documentRevision;
@@ -56,8 +58,16 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isDeprecated = status === DocumentRevisionStatus.Deprecated;
   const isAlphaReleased = documentRevision.revisionStage === 3;
   const isNumericRelease = documentRevision.revisionStage === 1;
+  const isObsolete = documentRevision.revisionChangeType === RevisionChangeType.Obsolete;
+  const isInReview = status === DocumentRevisionStatus.InReview;
 
-  if (isDraft && isRecord && isInlineApproval && !isAlphaReleased) {
+  if (isRecord && !isInlineApproval && (!isObsolete || isInReview)) {
+    stateLabel = status;
+  }
+  if (isRecord && !isInlineApproval && isDeprecated) {
+    stateLabel = "common.released";
+  }
+  if (isDraft && isRecord && documentRevision.subRevision === 0 && !isObsolete) {
     stateLabel = "common.wip";
   }
   if (isReleased || ((isDeprecated || isDraft) && isInlineApproval && isRecord && isAlphaReleased)) {
@@ -72,10 +82,6 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   if (isReleased && isInlineApproval && isNumericRelease) {
     stateLabel = "common.last.signed";
   }
-  if (isRecord && !isInlineApproval && !isDeprecated) {
-    stateLabel = status;
-  }
-
 
   const docIdLabel = isRecord ? "common.id" : "common.docId";
 
