@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
-import { find, isEmpty, isUndefined } from "lodash";
+import { find, isEmpty, isUndefined, keys } from "lodash";
 import * as React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
@@ -68,7 +68,18 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         formik.setFieldValue("formDocument", {
           id: values.formDocument?.id,
         });
-        formik.setFieldValue("formInput", formState?.getValues());
+        if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
+          const newInput = {};
+          keys(values.formInput).map((key) => {
+            newInput[key] = values?.formInput && typeof values?.formInput[key] === "string"
+              ? "Void"
+              : null;
+            return key;
+          });
+          formik.setFieldValue("formInput", newInput);
+        } else {
+          formik.setFieldValue("formInput", formState?.getValues());
+        }
         break;
       default:
         formik.setFieldValue("formTemplate", undefined);
@@ -76,6 +87,12 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
   const onFormClick = () => {
     setFBValue();
+    if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
+      formik.setFieldValue("attachments", []);
+      formik.setFieldValue("name", "Void");
+      formik.setFieldValue("description", "Void");
+      formik.setFieldValue("referenceTo", null);
+    }
     formik.submitForm();
   };
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
