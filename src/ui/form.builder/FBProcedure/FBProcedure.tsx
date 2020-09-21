@@ -1,13 +1,57 @@
+import { Box } from "@material-ui/core";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBInput, FBProcedureProps, FBSection } from "..";
+import { FBInput, FBProcedureProps, FBSection, FBTextEditor } from "..";
+import Colors from "../../layout/theme/utils/colors";
 import { withFBProcedure } from "./FBProcedure.wrap";
 
 const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
   ...props
 }) => (
   <FBInput {...props } type="procedure">
-    <FBSection label="form.builder.procedure" gutter={false} />
+    <FBSection label="form.builder.procedure" />
+    <FBTextEditor
+      name={`fb-procedure-texteditor-${props.name}`}
+      label="Step #1" gutter={false}
+    />
+    <Box
+      display="flex"
+      border={1}
+      borderBottom={0}
+      borderRight={0}
+      borderTop={0}
+      borderColor={Colors.hint_gray}
+      mt={1}
+      ml={1.5}
+    >
+      <Box width={10} mr={1}>
+        <Box display="flex" height="100%" flexDirection="column">
+          <Box
+            flexGrow={1}
+            border={1}
+            borderLeft={0}
+            borderRight={0}
+            borderTop={0}
+            borderColor={Colors.hint_gray}
+            mt={4}
+          />
+          <Box
+            border={1}
+            borderLeft={0}
+            borderRight={0}
+            borderTop={0}
+            borderColor={Colors.hint_gray}
+            height={1}
+          />
+        </Box>
+      </Box>
+      <Box flexGrow={1} p={4} bgcolor="white" mb={5.5} mt={2}>
+        Materials
+      </Box>
+    </Box>
+    <Box p={4} bgcolor="white" ml={4} mt={-2.5}>
+      Equipment
+    </Box>
   </FBInput>
 );
 
