@@ -87,7 +87,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const onFormClick = () => {
     setFBValue();
     if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
-      formik.setFieldValue("attachments", null);
+      formik.setFieldValue("attachments", []);
       formik.setFieldValue("name", "Void");
       formik.setFieldValue("description", "Void");
       formik.setFieldValue("referenceTo", null);
