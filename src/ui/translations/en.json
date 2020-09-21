@@ -734,6 +734,7 @@
   "form.builder.start.typing.list": "Start typing to see the list...",
   "form.builder.request.approval": "Request approval",
   "form.builder.request.approve": "Approve",
+  "form.builder.procedure": "Procedure",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.pdf": "Download PDF file",

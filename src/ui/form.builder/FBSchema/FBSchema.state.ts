@@ -22,6 +22,7 @@ import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
 import { FBPOApprovalMatrix } from "../FBPOApprovalMatrix";
 import { FBPOReceive } from "../FBPOReceive";
+import { FBProcedure } from "../FBProcedure";
 import { FBPurchaseOrder } from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import { FBRadio } from "../FBRadio";
@@ -94,6 +95,7 @@ export class FBSchemaState {
     task: FBTask,
     approvers: FBApprovers,
     approvals: FBApprovals,
+    procedure: FBProcedure,
   };
 
   @observable public schema?: FBSchemaProps[];

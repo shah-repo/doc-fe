@@ -59,7 +59,8 @@ export type FBInputType =
   | "task"
   | "approvers"
   | "blanktplform"
-  | "approvals";
+  | "approvals"
+  | "procedure";
 
 export type FBInputProps =
   & FBLabelProps
@@ -130,4 +131,5 @@ export const OmitInputClones: FBInputType[] = [
   "inlineapproval",
   "approvals",
   "texteditor",
+  "procedure",
 ];

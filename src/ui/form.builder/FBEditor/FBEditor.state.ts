@@ -119,6 +119,7 @@ export class FBEditorState {
     poApprovalMatrix: FBEditorLabel,
     task: FBEditorLabel,
     approvals: FBEditorLabel,
+    procedure: FBEditorEmpty,
   };
 
   @observable public mode?: FBEditorMode = "config";
