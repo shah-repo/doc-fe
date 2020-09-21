@@ -630,7 +630,7 @@ context("Validators tests", () => {
 
         cy.wrap(errorBlock)
           .should("have.text",
-            `The ${requiredIfInFieldLabel} field is required when ${requiredIfFieldLabel} includes , .`);
+            `The ${requiredIfInFieldLabel} is a required field.`);
       });
     });
 

@@ -427,17 +427,9 @@ context("Document Approval Matrix Flow", () => {
       cy.drIsTrainingRequired({ shouldBe: false });
     });
 
-    it("click on 'Approve and Release' button", () => {
+    it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
       cy.wait(5000);
-      cy.drApproveAndReleaseDialog();
-    });
-
-    it(`Check ${roleOne} exists and is checked`, () => {
-      cy.drRoleExistsAndChecked({ group: 0, role: roleOne });
-    });
-
-    it("'Approve and Release' the document", () => {
-      cy.drSelectTemplateReleaseDocument({ template: "Initial AR Form" });
+      cy.drReleaseDocAfterRoleExistsAndChecked({ group: 0, role: roleOne });
     });
   });
 
@@ -485,12 +477,8 @@ context("Document Approval Matrix Flow", () => {
       cy.drIsTrainingRequired({ shouldBe: true });
     });
 
-    it("click on 'Approve and Release' button", () => {
-      cy.drApproveAndReleaseDialog();
-    });
-
     it("'Approve and Release' the document", () => {
-      cy.drSelectTemplateReleaseDocument({ template: "Initial AR Form" });
+      cy.drApproveAndReleaseDocument();
     });
   });
 
@@ -679,16 +667,9 @@ context("Document Approval Matrix Flow", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("click on 'Approve and Release' button", () => {
-      cy.drApproveAndReleaseDialog();
-    });
-
-    it(`Check ${roleOne} exists and is checkeded`, () => {
-      cy.drRoleExistsAndChecked({ group: 0, role: roleOne });
-    });
-
-    it("'Approve and Release' the document", () => {
-      cy.drSelectTemplateReleaseDocument({ template: "Initial AR Form" });
+    it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
+      cy.wait(5000);
+      cy.drReleaseDocAfterRoleExistsAndChecked({ group: 0, role: roleOne });
     });
   });
 
