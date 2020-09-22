@@ -20,6 +20,7 @@ import { FBInlineApproval } from "../FBInlineApproval";
 import { FBInstructionsDocument } from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
+import { FBParts } from "../FBParts";
 import { FBPOApprovalMatrix } from "../FBPOApprovalMatrix";
 import { FBPOReceive } from "../FBPOReceive";
 import { FBProcedure } from "../FBProcedure";
@@ -96,6 +97,7 @@ export class FBSchemaState {
     approvers: FBApprovers,
     approvals: FBApprovals,
     procedure: FBProcedure,
+    parts: FBParts,
   };
 
   @observable public schema?: FBSchemaProps[];
