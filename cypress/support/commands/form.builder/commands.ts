@@ -1,3 +1,4 @@
+import { CyRoutes } from "../../routes";
 /* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
@@ -14,9 +15,12 @@ declare global {
       fbSelectApprovalMatrix(): Chainable<Subject>;
       fbSelectTextField(): Chainable<Subject>;
       fbSelectAutoComplete(): Chainable<Subject>;
+      fbSelectInlineApproval(): Chainable<Subject>;
+      fbSelectApprovals(): Chainable<Subject>;
       fbOpenValidation(): Chainable<Subject>;
       fbAddField(): Chainable<Subject>;
       fbAddLabelName(params: { name: string }): Chainable<Subject>;
+      fbAddApproverToInlineDialog(params: { approverName: string }): Chainable<Subject>;
       fbSelectCustomControl(): Chainable<Subject>;
       fbClickAddNewHiddenBtn(): Chainable<Subject>;
     }
@@ -31,6 +35,12 @@ Cypress.Commands.add("fbAddNewField", () => cy.get("[data-cy=\"form.builder.add.
 
 Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {
   cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+});
+
+Cypress.Commands.add("fbAddApproverToInlineDialog", (params: { approverName: string }) => {
+  cy.get("[data-cy=\"editorConfig.approvers\"]").click();
+  cy.get("[role=option]").contains(params.approverName).click();
+  cy.get("[role=dialog]>div>h2").click();
 });
 
 Cypress.Commands.add("fbSelectItemFromNewFieldList", (params: { field: string }) => {
@@ -52,10 +62,19 @@ Cypress.Commands.add("fbAddLabelName", (params: { name: string }) => {
 Cypress.Commands.add("fbSelectApprovalMatrix", () => cy.get("[data-cy=\"form.builder.approvalMatrix\"]").click());
 Cypress.Commands.add("fbSelectTextField", () => cy.get("[data-cy=\"form.builder.textfield\"]").click());
 
+Cypress.Commands.add("fbSelectInlineApproval", () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetGroupsApprovalRoles, () => {
+    cy.get("[data-cy=\"form.builder.inlineapproval\"]").click();
+  });
+});
+
+Cypress.Commands.add("fbSelectApprovals", () => cy.get("[data-cy=\"form.builder.approvals\"]").click());
+
+
 Cypress.Commands.add("fbSelectCustomControl", () => cy.get("[data-cy=\"fb-control-btn\"]").click());
 
 Cypress.Commands.add("fbSelectAutoComplete", () => cy.get("[data-cy=\"form.builder.autocomplete\"]").click());
 
 Cypress.Commands.add("fbOpenValidation", () => cy.get("[data-cy=\"fb-editor-mode-validation-1\"]").click());
 
-Cypress.Commands.add("fbAddField", () => cy.get("[data-cy=\"fb-editor-actions-add\"]").click());
+Cypress.Commands.add("fbAddField", () => cy.get("[data-cy=\"fb-editor-actions-add\"]").click().wait(500));

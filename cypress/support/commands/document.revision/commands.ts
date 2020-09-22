@@ -207,7 +207,10 @@ Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: stri
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
-  cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
+    cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+  });
+  cy.wait(500);
   cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
 
   cy.wrapWithWaitOnApiCall(

@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -11,7 +12,7 @@ let loginResponse;
 let multipleCompanies;
 const inlineApprovalError = "cannot be released without every InlineApproval approved";
 
-context("Record Control Flow", () => {
+context("Record inline Flow", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -54,9 +55,12 @@ context("Record Control Flow", () => {
                 isQms: true,
               },
               {
-                documentTypeName: "Record Document",
-                documentTypeAcronym: "RD-",
+                documentTypeName: "Legal Record",
+                documentTypeAcronym: "LR-",
                 group: "RECORD",
+                isQms: true,
+                needsSignature: true,
+                category: "Record",
               },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -87,7 +91,7 @@ context("Record Control Flow", () => {
       });
     });
 
-    it("Selects company", () => {
+    it("Select company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
   });
@@ -95,144 +99,223 @@ context("Record Control Flow", () => {
   context("FORM document creation flow", () => {
 
     context("Start document creation flow", () => {
-      it("Navigates to document list", () => {
+      it("Navigate to document list", () => {
         cy.navigToDocumentList();
       });
 
-      it("Clicks on 'create a document' button", () => {
+      it("Click on 'create a document' button", () => {
         cy.cmpClickCreateNewDocument();
       });
     });
 
     context("Fill in document attributes", () => {
-      it("Enters title 'Inline Form Document Revision'", () => {
+      it("Enter title 'Inline Form Document Revision'", () => {
         cy.drEnterDocumentTitle({ name: "Inline Form Document Revision" });
       });
 
-      it("Enters description 'Inline Form Document Revision description'", () => {
+      it("Enter description 'Inline Form Document Revision description'", () => {
         cy.drEnterDocumentDescription({ description: "Inline Form Document Revision description" });
       });
 
-      it("Selects 'Form' document type from dropdown", () => {
+      it("Select 'Form' document type from dropdown", () => {
         cy.drSelectDocumentType({ documentType: "Form" });
       });
 
-      it("Selects 'Record Document' output document type from dropdown", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Record Document" });
+      it("Select 'Record Document' output document type from dropdown", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Legal Record" });
       });
 
-      context("Add Inline Approval fileds", () => {
-        it("Adds inline approval field", () => {
-          SystemRequirement("REQ-0980");
-          cy.fbAddNewFieldOption();
-          cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" }).wait(2000);
-        });
-
-        it("Fill label field with 'Inline Approve'", () => {
-          SystemRequirement("REQ-0980");
-          cy.get("[name=\"label\"]").type("Inline Approve").wait(2000);
-        });
-
-        it("Fill approvers field", () => {
-          SystemRequirement("REQ-0980");
-          cy.get("[data-cy=\"defaultValue.approvers\"]").type("enlil.testmail+cy2{downarrow}{enter}").wait(2000);
-        });
-
-        it("Select group field value 'Everyone'", () => {
-          SystemRequirement("REQ-0980");
-          cy.get("[data-cy=\"defaultValue.groups\"]").type("Everyone{downarrow}{enter}").wait(2000);
-        });
-
-        it("Add inline approve field", () => {
-          cy.fbAddField().wait(3000);
-        });
+      it("Add textfield", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").click();
+        cy.fbSelectTextField();
+        cy.fbAddLabelName({ name: "Textfield for inline" });
+        cy.fbAddField();
       });
 
-      context("Creates document", () => {
-        it("Click create document after filling document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+      it("Add inline approval", () => {
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectInlineApproval();
+        cy.get("[name=\"label\"]").type("Inline field");
+        cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
+        cy.fbAddField();
+      });
+
+      it("Add approvals", () => {
+        SystemRequirement("REQ-0980");
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectApprovals();
+        cy.fbAddField();
+      });
+    });
+
+    context("Create document and release it", () => {
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Approve and release document", () => {
+        cy.drApproveAndReleaseDocument();
       });
     });
   });
 
-  context("FORM document in DRAFT", () => {
-    it("Approves and releases document", () => {
-      cy.drApproveAndReleaseDocument();
+  context("Create record", () => {
+    it("Navigate to records", () => {
+      cy.navigToRecords();
     });
 
-    it("Clicks on create new", () => {
-      cy.drCreateNewDocumentFromForm();
+    it("Click on create new", () => {
+      cy.poClickCreatePO();
     });
 
     context("Fill in document attributes", () => {
-      it("Enters title 'Record Document Revision'", () => {
+      it("Enter title 'Record Document Revision'", () => {
         cy.drEnterDocumentTitle({ name: "Record Document Revision" });
       });
 
-      it("Enters description 'Record Document Revision description'", () => {
+      it("Enter description 'Record Document Revision description'", () => {
         cy.drEnterDocumentDescription({ description: "Record Document Revision description" });
       });
 
-      it("Saves Document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+      it("Enter text 'First entry' in textfield for inline", () => {
+        SystemRequirement("REQ-1080");
+        cy.get("[data-cy^=\"textfield-for-inline\"]").click().type("First entry");
       });
 
-      it("Select inline approvers", () => {
-        cy.get("[name*=\"fb-ia-inline-approve\"] input")
-          .type("enlil.testmail+cy2{downarrow}{enter}", { force: true }).wait(2000);
-        cy.get("[data-cy*=\"fb-ia-inline-approve-\"]").last().type("enlil.testmail+cy3{downarrow}{enter}").wait(2000);
+      it("Select inline approver", () => {
+        cy.get("[name*=\"fb-ia-inline-field\"] input")
+          .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
       });
 
-      it("Check inline approvals is not disabled", () => {
+      it("Save record", () => {
+        cy.wrapWithWaitOnApiCall(
+          CyRoutes.PatchDocRev,
+          () => {
+            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+          });
+      });
+
+      it("Check inline record creation default to numeric revision", () => {
+        SystemRequirement("REQ-1020");
+        cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
+          .contains("Revision 1");
+      });
+
+      it("Check approve button is not disabled", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").should("not.be.disabled");
       });
     });
 
     context("Approve Inline Approval", () => {
-      it("Approves first Inline Approval", () => {
-        cy.wait(5000).get("[data-cy=\"fb-control-btn\"]").first().click().wait(10000);
+      it("Approve first Inline Approval", () => {
+        cy.wrapWithWaitOnApiCall(
+          CyRoutes.PostApprovalsApprove,
+          () => {
+            cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
+          });
       });
 
-      it("Reloads", () => {
+      it("Reload page", () => {
         cy.reload();
       });
 
-      it("Clicks on new version of document", () => {
+      it("Click WIP document", () => {
         cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
       });
 
-      context("Tries to Approve and Release document", () => {
-        it("Approve and Release document", () => {
-          cy.drApproveAndReleaseDocument();
-        });
-
-        it("Checks for inline approval error", () => {
-          cy.get("[class=\"Toastify__toast-body\"]").contains(inlineApprovalError).should("exist");
-        });
-
-        it("Closes Approve and Release dialog", () => {
-          cy.drCloseApproveAndReleaseDialog();
-        });
+      it("Check system creates new major revision after inline approve", () => {
+        SystemRequirement("REQ-1040");
+        cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
+          .contains("Revision 2");
       });
 
-      context("Second Inline Approval", () => {
-        it("Approves second Inline Approval", () => {
-          cy.wait(5000).get("[data-cy=\"fb-control-btn\"]").last().click().wait(10000);
+      context("Change textfield and approve again", () => {
+        it("Enter text 'Second entry' in textfield for inline", () => {
+          SystemRequirement("REQ-1080");
+          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", Second entry");
         });
 
-        it("Reloads", () => {
+        it("Save record", () => {
+          cy.wrapWithWaitOnApiCall(
+            CyRoutes.PatchDocRev,
+            () => {
+              cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+            });
+        });
+
+        it("Verify system asks for another approval afer changing section", () => {
+          SystemRequirement("REQ-1050");
+          cy.get("[data-cy^=\"form.builder.approval.pending\"]")
+            .should("have.text", "Inline approval pending");
+        });
+
+        it("Approve Inline Approval", () => {
+          cy.wrapWithWaitOnApiCall(
+            CyRoutes.PostApprovalsApprove,
+            () => {
+              cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
+            });
+        });
+
+        it("Reload document", () => {
           cy.reload();
         });
 
-        it("Clicks on new version of document", () => {
+        it("Click WIP document", () => {
+          cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
+        });
+
+      });
+
+      context("Edit and try to release it ", () => {
+        it("Enter text 'Third entry' in textfield for inline", () => {
+          SystemRequirement("REQ-1080");
+          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", Third entry");
+        });
+
+        it("Save record", () => {
+          cy.wrapWithWaitOnApiCall(
+            CyRoutes.PatchDocRev,
+            () => {
+              cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+            });
+        });
+
+        it("Try approve and release it", () => {
+          cy.drApproveAndReleaseDocument();
+          cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").click();
+        });
+
+        it("Check error message", () => {
+          cy.checkToastMessageContains({ message: inlineApprovalError });
+        });
+
+        it("Approve Inline Approval", () => {
+          cy.wrapWithWaitOnApiCall(
+            CyRoutes.PostApprovalsApprove,
+            () => {
+              cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
+            });
+        });
+
+        it("Reload document", () => {
+          cy.reload();
+        });
+
+        it("Click WIP document", () => {
           cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
         });
       });
 
-      context("Approve and Release document", () => {
-        it("Approve and Release document", () => {
+      context("Approve and Release document and verify record is in alpha", () => {
+        it("Approve and release it", () => {
           cy.drApproveAndReleaseDocument();
+        });
+
+        it("Verify record is in alpha state", () => {
+          SystemRequirement("REQ-1060");
+          cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
+            .contains("Revision A");
         });
       });
     });
