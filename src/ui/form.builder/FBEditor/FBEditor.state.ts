@@ -120,6 +120,7 @@ export class FBEditorState {
     task: FBEditorLabel,
     approvals: FBEditorLabel,
     procedure: FBEditorEmpty,
+    parts: FBEditorEmpty,
   };
 
   @observable public mode?: FBEditorMode = "config";

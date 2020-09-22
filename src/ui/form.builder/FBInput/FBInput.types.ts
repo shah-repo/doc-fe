@@ -60,7 +60,8 @@ export type FBInputType =
   | "approvers"
   | "blanktplform"
   | "approvals"
-  | "procedure";
+  | "procedure"
+  | "parts";
 
 export type FBInputProps =
   & FBLabelProps

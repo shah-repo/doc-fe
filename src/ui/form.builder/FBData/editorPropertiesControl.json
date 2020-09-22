@@ -100,5 +100,8 @@
   ],
   "procedure": [
     "reviseDisabled"
+  ],
+  "parts": [
+    "reviseDisabled"
   ]
 }
