@@ -133,5 +133,4 @@ export const OmitInputClones: FBInputType[] = [
   "approvals",
   "texteditor",
   "procedure",
-  "parts",
 ];
