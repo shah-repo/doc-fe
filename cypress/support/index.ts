@@ -33,6 +33,7 @@ import "./commands/group.management/commands";
 import "./commands/navigation/commands";
 import "./commands/purchase.order/commands";
 import "./commands/receivable/commands";
+import "./commands/records/commands";
 import "./commands/status/commands";
 import "./commands/suppliers/commands";
 import "./commands/user.management/commands";

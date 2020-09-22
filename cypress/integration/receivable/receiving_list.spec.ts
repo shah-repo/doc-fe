@@ -22,7 +22,7 @@ let createdPODocument;
 let createdRecivableFormDocument;
 let createdReceivable1;
 
-context("Approval request landing page test", () => {
+context("Receivable list test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
