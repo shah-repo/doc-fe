@@ -1,10 +1,11 @@
 import { Button } from "@material-ui/core";
+import { hasIn, isString } from "lodash";
 import React from "react";
 import { FBButtonProps } from ".";
-import Text from "../../components/Text";
+import { FBLabelLocaleProps, FBText } from "..";
 
 const FBButton: React.FunctionComponent<FBButtonProps> = ({
-  label,
+  label = "",
   color = "secondary",
   variant = "contained",
   dataCy = "fb-control-btn",
@@ -23,7 +24,15 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
       ...hidden && { display: "none" },
     }}
   >
-    {label && <Text message={label} />}
+    {isString(label) && (
+      <FBText locale={label} />
+    )}
+    {hasIn(label, "locale") && (
+      <FBText
+        locale={(label as FBLabelLocaleProps).locale}
+        values={(label as FBLabelLocaleProps).values}
+      />
+    )}
   </Button>
 );
 

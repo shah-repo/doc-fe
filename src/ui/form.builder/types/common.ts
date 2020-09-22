@@ -9,7 +9,6 @@ import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
-import { TextProps } from "../../components/Text";
 import { FBValidationModeType } from "../FBValidationMode";
 import { FBActionContainerProps } from "./actions/action";
 import { FBContextProps } from "./common/context";
@@ -39,7 +38,6 @@ export type FBLabelProps =
   & Pick<BoxProps, "m" | "mb" | "ml" | "mr" | "mt" | "mx" | "my" | "p" | "pb" | "pl" | "pr" | "pt" | "px" | "py">
   & {
     label?: string | ReactNode;
-    labelValues?: TextProps["values"];
     fontSize?: "sm" | "md" | "lg";
     loading?: boolean;
     isFullWidth?: boolean;

@@ -87,17 +87,23 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
       <FBText
         boxProps={{ mr: 3 }}
         locale="form.builder.assigned.to"
-        suffix={`: ${task?.assigned.user?.name}`}
+        values={{
+          user: `: ${task?.assigned.user?.name}`,
+        }}
       />
       <FBText
         boxProps={{ mr: 3 }}
         locale="form.builder.due.by"
-        suffix={`: ${moment(task.dueDate).tz(TIME_ZONE, true).format("MMMM D, YYYY")}`}
+        values={{
+          date: `: ${moment(task.dueDate).tz(TIME_ZONE, true).format("MMMM D, YYYY")}`,
+        }}
       />
       <FBText
         boxProps={{ mr: 3 }}
         locale="form.builder.status"
-        suffix={`: ${task.status || "DRAFT"}`}
+        values={{
+          status: `: ${task.status || "DRAFT"}`,
+        }}
       />
     </Box>
     {canBeDone && (
