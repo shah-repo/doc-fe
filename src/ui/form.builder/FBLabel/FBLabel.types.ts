@@ -17,7 +17,7 @@ export type FBLabelProps =
   };
 
 export enum FBLabelFontSize {
-  sm = "subtitle1",
-  md = "h6",
-  lg = "h5",
+  sm = "caption",
+  md = "subtitle1",
+  lg = "h6",
 }

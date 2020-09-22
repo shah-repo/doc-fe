@@ -51,7 +51,10 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
               ],
             }}
             toolbarHidden={masked}
-            toolbarStyle={{ border: "none" }}
+            toolbarStyle={{
+              border: "none",
+              borderBottom: `1px solid ${Colors.hint_gray}`,
+            }}
             editorStyle={{
               height: "100%",
               padding: "0 13px",
