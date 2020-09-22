@@ -25,6 +25,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
   ownerId,
   renderOption,
   loading,
+  inlineApprovalExists,
   ...props
 }) => (
   <FBInput {...props} {...{ name }} type="approvals">
@@ -66,7 +67,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
               &nbsp;| {moment(approval.reviewedAt).tz(TIME_ZONE).format("MMMM D, YYYY HH:mm A")}
             </Box>
           )}
-          {approval.canRequest && (
+          {approval.canRequest && inlineApprovalExists && (
             <>
               <Box> |</Box>
               <FBButton
