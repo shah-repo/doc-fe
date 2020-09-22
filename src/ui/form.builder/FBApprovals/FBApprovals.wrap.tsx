@@ -149,8 +149,8 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     // MARK: @observer
     useObserver(() => {
-      inlineApprovalExists = document?.formDocument?.formTemplate?.schema
-      .some((e) => (e.type === "inlineapproval" as string)) || false;
+      inlineApprovalExists = Boolean(document?.formDocument?.formTemplate?.schema
+      .some((e) => (e.type === "inlineapproval" as string)));
 
       groups = approvalsState?.groups;
       approvals = approvalsState?.getApprovals;
