@@ -8,7 +8,6 @@ import FBLabel from "./FBLabel";
 const FBInput: React.FunctionComponent<FBInputProps> = ({
   label,
   error,
-  labelValues,
   gutter = true,
   hidden,
   loading,
@@ -17,7 +16,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   <Box>
     {!hidden && (
       <Box mb={gutter ? 4 : 0}>
-        {label && <FBLabel {...{ error, label, labelValues, loading }} />}
+        {label && <FBLabel {...{ error, label, loading }} />}
         <FBInputControl {...props} {...{ label }} />
       </Box>
     )}

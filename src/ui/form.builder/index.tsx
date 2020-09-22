@@ -180,6 +180,9 @@ export * from "./FBPOReceiveForm/FBPOReceiveForm.types";
 export { default as FBProcedure } from "./FBProcedure/FBProcedure";
 export { default as FBProcedureState } from "./FBProcedure/FBProcedure.state";
 export * from "./FBProcedure/FBProcedure.types";
+export { default as FBProcedureAsset } from "./FBProcedureAsset/FBProcedureAsset";
+export { default as FBProcedureAssetState } from "./FBProcedureAsset/FBProcedureAsset.state";
+export * from "./FBProcedureAsset/FBProcedureAsset.types";
 export { default as FBProvider } from "./FBProvider/FBProvider";
 export * from "./FBProvider/FBProvider.types";
 export { default as FBPurchaseOrder } from "./FBPurchaseOrder/FBPurchaseOrder";
@@ -271,4 +274,5 @@ export { default as FBWorkspaceTplActions } from "./FBWorkspaceTplActions/FBWork
 export * from "./FBWorkspaceTplActions/FBWorkspaceTplActions.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
+
 

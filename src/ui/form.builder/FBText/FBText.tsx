@@ -6,14 +6,11 @@ import Text from "../../components/Text";
 
 const FBText: React.FunctionComponent<FBTextProps> = ({
   boxProps,
-  prefix,
-  suffix,
   locale,
+  values,
 }) => (
   <Box {...boxProps} data-cy={locale}>
-    {prefix}
-    <Text message={locale} />
-    {suffix}
+    <Text message={locale} {...{ values }} />
   </Box>
 );
 

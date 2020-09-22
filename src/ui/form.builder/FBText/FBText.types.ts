@@ -1,8 +1,9 @@
 import { BoxProps } from "@material-ui/core";
+import { Props } from "react-intl/lib/components/message";
 
-export interface FBTextProps {
+export type FBTextProps =
+& Pick<Props, "values">
+& {
   locale?: string;
   boxProps?: BoxProps;
-  prefix?: string;
-  suffix?: string;
-}
+};
