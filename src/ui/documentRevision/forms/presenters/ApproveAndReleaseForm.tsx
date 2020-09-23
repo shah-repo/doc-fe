@@ -30,6 +30,8 @@ interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   owner: Owner;
   templateOptions: TemplateOption[];
   selectedInvalid: boolean;
+  isRecord: boolean;
+  isInlineApproval: boolean;
   setFormDocument: (value: string) => void;
   setDocumentType: (value: string) => void;
   setSelectedInvalid: (value: boolean) => void;
@@ -47,8 +49,9 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   setFormDocument,
   setDocumentType,
   setSelectedInvalid,
-  closeDialog,
   selectedInvalid,
+  isRecord,
+  isInlineApproval,
 }) => {
   const classes = styles();
 
@@ -118,8 +121,19 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
-      {isQms && <Approvers owner={owner} withoutCurrentUser={true} values={values}
-        documentTypeGroups={documentTypeGroups} />}
+      {isQms && (
+        <Approvers
+          withoutCurrentUser={true}
+          shouldShowDAMCheck={!isInlineApproval || !isRecord}
+          {
+            ...{
+              owner,
+              values,
+              documentTypeGroups,
+            }
+          }
+        />
+      )}
       {isEmpty(values.approvals) && <DatePickerField
         label="transition.action.effective.date"
         name="effectiveDate"

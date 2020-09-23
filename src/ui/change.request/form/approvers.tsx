@@ -25,6 +25,7 @@ interface OwnProps {
   documentTypeGroups?: Group[];
   values?: ApproveAndReleaseFormValues;
   owner?: Owner;
+  shouldShowDAMCheck?: boolean;
 }
 
 export type Props = OwnProps;
@@ -35,6 +36,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
   documentTypeGroups,
   values,
   owner,
+  shouldShowDAMCheck = true,
 }) => {
   // We should check if we need all of this
   // Now that approvers are moved to the FB
@@ -126,7 +128,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
         }}
         options={uniqBy(arrayOfOptions, "value").filter((e: any) => e.value !== owner?.id) as OptionType[]}
       />
-      {documentTypeGroups && renderGroupApproversResults()}
+      {documentTypeGroups && shouldShowDAMCheck && renderGroupApproversResults()}
     </AsyncGate>
   );
 };

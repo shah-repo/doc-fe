@@ -39,6 +39,7 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
           display="flex"
           style={{ gridArea: "1/1" }}
           borderRadius={4}
+          data-cy={name}
         >
           <Editor
             {...{ editorRef, editorState, onEditorStateChange, toolbar, onBlur }}

@@ -13,7 +13,7 @@ interface Props {
   isDisabled: boolean;
   showObsoleteRevisionChange: boolean;
   showAdministrativeAndVoidChange: boolean;
-  defaultLabel: string;
+  isRecord?: boolean;
 }
 
 export const RevisionTypeChange: React.FunctionComponent<Props> = ({
@@ -21,10 +21,10 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
   isDisabled,
   showObsoleteRevisionChange,
   showAdministrativeAndVoidChange,
-  defaultLabel,
+  isRecord,
 }) => {
   const classes = styles();
-  const [showRevisionSelect, revisionSelectLabel] = useRevisionSelect(documentTypeId, defaultLabel);
+  const [showRevisionSelect, revisionSelectLabel] = useRevisionSelect(documentTypeId);
   const [showNextRevisionLevel, nextRevisionLevelLabel] = useNextRevision(documentTypeId);
   const [showNextRevisionStage, nextRevisionStageLabel] = useNextRevisionStage(documentTypeId);
   const [showObsolete, obsoleteLabel] = useObsolete(documentTypeId);
@@ -38,7 +38,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
     <Box mt={7}>
       <Typography variant="h6">
         <Text
-          message={revisionSelectLabel}
+          message={isRecord ? "document.revision.type.of.update" : revisionSelectLabel}
         />
       </Typography>
       <RadioGroup name="revisionChangeType" validate={validator(required)}>
