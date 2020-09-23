@@ -8,5 +8,9 @@
     "type": "section",
     "name": "fb-requestapproval-section-${id}",
     "label": "form.builder.section"
+  }],
+  "procedure": [{
+    "type": "parts",
+    "name": "fb-parts-${id}"
   }]
 }
