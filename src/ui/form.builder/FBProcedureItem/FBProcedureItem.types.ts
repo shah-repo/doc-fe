@@ -17,8 +17,9 @@ export type FBProcedureItemProps =
 & Pick<FBProcedureProps, "name" | "stepIndex">
 & {
   onClick?: () => void;
-  handleAdd?: () => any;
-  handleCancel?: () => any;
+  handleAdd?: () => void;
+  handleCancel?: () => void;
+  handleRemove?: (id: string) => void;
   type: FBProcedureItemType;
   value?: FBProcedureItemConfig[];
 };

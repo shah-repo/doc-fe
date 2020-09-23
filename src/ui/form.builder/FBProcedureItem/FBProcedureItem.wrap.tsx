@@ -10,6 +10,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     onClick,
     handleAdd,
     handleCancel,
+    handleRemove,
     dialogState,
     formState,
     name,
@@ -23,12 +24,9 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     dialogState = FB.useRef(FBDialogState);
     formState = FB.useRef<FBFormState>(FBFormState, {});
 
-
     // MARK: @reactions
 
-
     // MARK: @helpers
-
 
     // MARK: @methods
     onClick = () => dialogState?.config({
@@ -50,6 +48,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     };
 
     handleCancel = () => dialogState?.closeDialog();
+    handleRemove = (id: string) => procedureState?.removeItem(id, type);
 
     // MARK: @observer
     useObserver(() => {
@@ -59,6 +58,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     return Component({
       ...(props as T),
       onClick,
+      handleRemove,
       dialogState,
       formState,
       name,

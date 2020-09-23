@@ -1,5 +1,6 @@
-import { Box } from "@material-ui/core";
+import { Box, IconButton } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { FBButton, FBDialog, FBMapWrapper, FBProcedureItemActionLocale, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemProps, FBProvider, FBText } from "..";
@@ -8,6 +9,7 @@ import { withFBProcedureItem } from "./FBProcedureItem.wrap";
 
 const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   onClick,
+  handleRemove,
   dialogState,
   formState,
   type,
@@ -36,8 +38,36 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
     </Box>
     <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
       {(item: FBProcedureItemConfig, index) => (
-        <Box key={`fb-procedure-item-${type}-${index}`} p={2}>
-          {item.title}
+        <Box
+          key={`fb-procedure-item-${type}-${index}`}
+          display="flex"
+          border={1}
+          borderLeft={0}
+          borderRight={0}
+          borderTop={0}
+          borderColor={Colors.hint_gray}
+          p={1.5}
+        >
+          <FBText
+            locale="form.builder.procedure.qty"
+            values={{
+              title: item.title,
+              quantity: item.quantity,
+              unit: item.unit,
+            }}
+            boxProps={{
+              flexGrow: 1,
+            }}
+          />
+          <Box color={Colors.errror_red}>
+            <IconButton
+              color="inherit"
+              size="small"
+              onClick={() => handleRemove?.(item.id)}
+            >
+              <RemoveCircleIcon fontSize="small" />
+            </IconButton>
+          </Box>
         </Box>
       )}
     </FBMapWrapper>
