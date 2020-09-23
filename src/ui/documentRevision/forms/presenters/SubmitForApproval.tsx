@@ -2,7 +2,6 @@ import { Box, Button, Dialog, DialogContent, DialogContentText, Typography } fro
 import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined";
 import React from "react";
 import { documentRevisionsActions, DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
-import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
 import { FB, FBFormState, FBProvider, FBSubmitButton, FBTextField } from "../../../form.builder";
@@ -127,13 +126,6 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
           </FBProvider>
         </DialogContent>
       </Dialog>
-      <AlertDialog
-        dialog={voidRecordDialog}
-        message={"documentRevision.void.alert"}
-        confirmLabel="common.true"
-        cancelLabel="common.false"
-        confirmAction={releaseRecord}
-      />
     </>
   );
 };
