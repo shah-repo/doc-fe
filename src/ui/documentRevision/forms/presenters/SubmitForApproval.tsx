@@ -13,33 +13,26 @@ import { styles } from "./FinalizeAndRelease.styles";
 
 interface Props {
   docRevId: string;
-  revisionStage: number;
-  subRevision?: number;
   status?: DocumentRevisionStatus;
   revisionChangeType: string;
   docRevOwner: string;
   updatedAt?: string;
 }
 
-export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
+export const SubmitForApproval: React.FunctionComponent<Props> = ({
   docRevId,
-  revisionStage,
-  subRevision,
   status,
   revisionChangeType,
   docRevOwner,
   updatedAt,
 }) => {
   const classes = styles();
-  const releaseRecordDialog = useDialog();
   const voidRecordDialog = useDialog();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
-  const isSubmitApproval = revisionStage === 3 && (subRevision && subRevision > 0);
   const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
   const releaseAsync = useAsync({
     onError: (error) => {
       toastError(error as string);
-      releaseRecordDialog.close();
       voidRecordDialog.close();
     },
   });
@@ -52,15 +45,6 @@ export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
   const formState = FB.useRef(FBFormState, {});
   const save = useActionCreator(documentRevisionsActions.save);
 
-  let buttonText = "record.finalize.and.release";
-  if (isSubmitApproval) {
-    buttonText = "record.submit.for.approval";
-  }
-  if (isObsolete) {
-    buttonText = "common.void";
-  }
-
-  /** Sends record to review. */
   const releaseRecord = () => {
     releaseAsync.start(
       applyTransition,
@@ -93,11 +77,11 @@ export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
       <Button
         color="secondary"
         variant="outlined"
-        onClick={isObsolete ? voidRecordDialog.open : releaseRecordDialog.open}
+        onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
         id="ApproveAndRelease-button"
         data-cy="ApproveAndRelease-button"
       >
-        <Text message={buttonText} />
+        <Text message={isObsolete ? "common.void" : "record.submit.for.approval"} />
       </Button>
       <Dialog
         open={voidRecordDialog.isOpen}
@@ -144,8 +128,8 @@ export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
         </DialogContent>
       </Dialog>
       <AlertDialog
-        dialog={releaseRecordDialog}
-        message={"record.release.alert"}
+        dialog={voidRecordDialog}
+        message={"documentRevision.void.alert"}
         confirmLabel="common.true"
         cancelLabel="common.false"
         confirmAction={releaseRecord}

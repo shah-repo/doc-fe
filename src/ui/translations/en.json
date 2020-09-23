@@ -99,6 +99,7 @@
   "change.request.assessments.error": "Please provide attachment or reasoning for each assessment",
   "change.request.void.alert": "You are voiding the approval request\nAre you sure you want to continue?",
   "change.request.withdraw.alert": "Are you sure you want to withdraw this Approval Request?\nWithdraw the AR to make edits to the AR or related documents. Once withdrawn, the AR will need to be re-submitted and all approvers will need to approve the AR.",
+  "document.revision.withdraw.alert": "Are you sure you want to withdraw this Record?",
   "change.request.select.reasoning": "Select reasoning",
   "change.request.select.template": "Select an Approval Request template to continue",
   "changeRequest.transition.submitted": "Submit approval request",
