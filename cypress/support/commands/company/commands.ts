@@ -22,6 +22,8 @@ interface IdocumentTypeDto {
   group: string;
   privateNumberPool?: boolean;
   startingNumber?: number;
+  needsSignature?: boolean;
+  category?: string;
 }
 
 export interface ICreateCompanyBootstrap {
@@ -32,7 +34,7 @@ export interface ICreateCompanyBootstrap {
   slackIntegrationEnabled: boolean;
   helloSignIntegrationEnabled: boolean;
   helloSignTestMode: boolean;
-  maxRevisionStages: number;
+  numOfRevStages: number;
   numOfDocDigits: number;
   users: IUser[];
   documentTypes: IdocumentTypeDto[];

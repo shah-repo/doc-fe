@@ -191,7 +191,7 @@ export type AllIdsState = string[];
 
 export interface ApproveAndReleaseRequest {
   approvers: Id[];
-  effectiveDate: string;
+  effectiveDate?: string;
   documentType: Id;
   formDocument: Id;
 }

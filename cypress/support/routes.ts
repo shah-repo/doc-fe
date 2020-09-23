@@ -39,7 +39,9 @@ export enum CyRoutes {
   GetRequiredApprovers = "GetRequiredApprovers",
   GetAvailableApprovers = "GetAvailableApprovers",
   PatchAR = "PatchAR",
-  GetDocAggregatedAudit = "GetDocAggregatedAudit"
+  GetDocAggregatedAudit = "GetDocAggregatedAudit",
+  PostApprovalsApprove = "PostApprovalsApprove",
+  GetGroupsApprovalRoles = "GetGroupsApprovalRoles"
 }
 
 export const routes: ICyRoutes =   {
@@ -216,7 +218,7 @@ export const routes: ICyRoutes =   {
   GetRequiredApprovers: {
     requestConfig: {
       method: "GET",
-      url: "/api/v1/document_revisions/required_approvers*",
+      url: "/api/v1/document_revisions/*/required_approvers",
     },
   },
   PostApproveAR: {
@@ -235,6 +237,18 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/change_requests/available_approvers",
+    },
+  },
+  PostApprovalsApprove: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/approvals/*/approve",
+    },
+  },
+  GetGroupsApprovalRoles: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/groups/approval_roles",
     },
   },
 };

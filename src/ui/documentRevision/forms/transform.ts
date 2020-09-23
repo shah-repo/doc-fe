@@ -72,7 +72,7 @@ export const toDocumentRevisionEditRequestBody = (
       .map((reference) => ({
         id: reference.value,
       })),
-    revisionStage: values.revisionStage,
+    revisionStage: Number(values.revisionStage),
     revisionChangeType: values.revisionChangeType,
     retrain: values.retrain,
     renderHTML: values.renderHTML ? values.renderHTML.replace(/(\r\n|\n|\r)/gm, "") : values.renderHTML,

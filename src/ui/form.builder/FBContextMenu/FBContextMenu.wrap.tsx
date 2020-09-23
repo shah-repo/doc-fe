@@ -33,7 +33,7 @@ export const withFBContextMenu = <T extends FBContextMenuProps>(
       );
     }));
 
-    onContextMenu = (event: React.MouseEvent<HTMLDivElement>) => {
+    onContextMenu = (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
       contextMenuState?.setPosition(
         event.clientY - 4,

@@ -23,7 +23,7 @@ context("Create company via API and create Suppliers document", () => {
           helloSignIntegrationEnabled: false,
           helloSignTestMode: false,
           importerEmail: USERS[5].email,
-          maxRevisionStages: 3,
+          numOfRevStages: 3,
           numOfDocDigits: 5,
           remoteValidatorBundleName: "default",
           slackIntegrationEnabled: false,
@@ -90,6 +90,10 @@ context("Create company via API and create Suppliers document", () => {
 
   it("Click on 'Supplier' document type", () => {
     cy.drSelectOutputDocumentType({ documentType: "Supplier" }).wait(500);
+  });
+
+  it("Select 'Numeric' revision stage", () => {
+    cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
   });
 
   it("Click create document after filling document", () => {
@@ -174,6 +178,10 @@ context("Create company via API and create Suppliers document", () => {
 
   it("Click on 'Supplier' document type", () => {
     cy.drSelectOutputDocumentType({ documentType: "Supplier" }).wait(500);
+  });
+
+  it("Select 'Numeric' revision stage", () => {
+    cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
   });
 
   it("Click create document after filling document", () => {

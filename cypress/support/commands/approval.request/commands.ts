@@ -34,6 +34,7 @@ declare global {
       arCreateApprovalRequest(params: {payload: ChangeRequestEditRequestBody; employeeId: string; sessionId: string}): Chainable<Subject>;
       arGetArDocumentByName(params: {employeeId: string; sessionId: string; name: string}): Chainable<Subject>;
       arCloseAR(): Chainable<Subject>;
+      arCloseARFromMenu(): Chainable<Subject>;
       arVoidAR(): Chainable<Subject>;
       arSaveApiCall(): Chainable<Subject>;
       arApproverRoleStatus(params: {roleName: string; enabled: boolean}): Chainable<Subject>;
@@ -96,7 +97,6 @@ Cypress.Commands.add("arClickAddDocument", () => {
 });
 
 Cypress.Commands.add("arCloseAR", () => {
-  cy.get("[data-cy=\"HeaderMenuButton\"]").click();
   cy.get("[aria-label=closed]").click();
   cy.get("[data-cy=AlertDialog-continueButton]").click();
 });
@@ -178,7 +178,7 @@ Cypress.Commands.add("arWithdrawSubmission", () => {
   cy.get("[data-cy=\"AlertDialog-continueButton\"]", { timeout: 1000 }).click();
 });
 
-Cypress.Commands.add("arCloseAR", () => {
+Cypress.Commands.add("arCloseARFromMenu", () => {
   cy.get("[data-cy=\"HeaderMenuButton\"]").click();
   cy.get("[data-cy=\"transition-closed\"]").click();
   cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();

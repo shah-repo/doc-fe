@@ -17,6 +17,7 @@ const reference = {
   new: "FM-00002 - 1 - Inline Approve Form", newCode: "FM-00002",
 };
 const formTitle = { value: "My Form", newValue: "My Form Edited", newChunk: " Edited" };
+const formDescription = { value: "My Form description", newValue: "My Form description Edited", newChunk: " Edited" };
 
 const history = [
   {
@@ -49,7 +50,7 @@ const history = [
   {
     owner,
     actions: [
-      { key: "Description changed", value: `\n${formTitle.newValue}\n` },
+      { key: "Description changed", value: `${formDescription.newValue}` },
       { key: "Attachments removed", value: "test_image.jpg" },
       { key: "New reference to", value: reference.newCode },
       { key: "Reference removed", value: reference.valueCode },
@@ -64,14 +65,14 @@ const history = [
   {
     owner,
     actions: [
-      { key: "Access granted to group", value: groupOne },
-      { key: "Access granted to group", value: "Everyone" },
-      { key: "Access granted to user", value: sharedUser.name },
       { key: "New Doc ID", value: documentId.fullId },
-      { key: "New description", value: `\n${formTitle.value}\n` },
-      { key: "New name", value: formTitle.value },
-      { key: "New status", value: `Set to Draft by ${owner}` },
+      { key: "Access granted to user", value: sharedUser.name },
+      { key: "Access granted to group", value: "Everyone" },
+      { key: "Access granted to group", value: groupOne },
       { key: "New owner", value: `${owner}` },
+      { key: "New status", value: `Set to Draft by ${owner}` },
+      { key: "New name", value: formTitle.value },
+      { key: "New description", value: `${formDescription.value}` },
       { key: "Attachment added", value: `test_image.jpg` },
       { key: "New reference to", value: reference.valueCode },
     ],
@@ -93,7 +94,7 @@ context("Check Document History", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -155,7 +156,7 @@ context("Check Document History", () => {
     });
 
     it("type a description", () => {
-      cy.drEnterDocumentDescription({ description: formTitle.value });
+      cy.drEnterDocumentDescription({ description: formDescription.value });
     });
 
     it("fill in document type: Form", () => {
@@ -190,9 +191,13 @@ context("Check Document History", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.drSelectOutputDocumentType({ documentType: "Component Specification" });
     });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
   });
 
-  context("Create document and release it", () => {
+  context("Create document", () => {
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
@@ -209,7 +214,7 @@ context("Check Document History", () => {
     });
 
     it("edit the description", () => {
-      cy.drEnterDocumentDescription({ description: formTitle.newValue });
+      cy.drEnterDocumentDescription({ description: formDescription.newValue });
     });
 
     it("Remove reference for document", () => {
@@ -342,10 +347,23 @@ context("Check Document History", () => {
         cy.get(`[data-cy="owner-${groupIndex}"]`).should("have.text", element.owner);
       });
 
-      element.actions.forEach((action, index) => {
+      element.actions.forEach((action) => {
         it(`'${action.key}' as '${action.value}' exists`, () => {
-          cy.get(`[data-cy="change-key-${groupIndex}-${index}"]`).should("have.text", action.key);
-          cy.get(`[data-cy="change-value-${groupIndex}-${index}"]`).should("have.text", action.value);
+          const typeOfChange = action.key;
+          let contentOfChange = action.value;
+
+          if (action.key === "New description" || action.key === "Description changed" ) {
+            contentOfChange = "\n" + action.value + "\n";
+          }
+
+          cy.get(`[data-cy^=\"change-value-${groupIndex}-\"]`)
+            .contains(action.value)
+            .parent()
+            .parent()
+            .within(() => {
+              cy.get("[data-cy^=change-key]").should("have.text", typeOfChange);
+              cy.get("[data-cy^=change-value]").should("have.text", contentOfChange);
+            });
         });
       });
     });

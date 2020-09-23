@@ -49,6 +49,7 @@ export type RenderSize = "sm" | "md" | "lg";
 export enum TypographySize {
   sm = "subtitle1",
   md = "h6",
+  mdw = "h5",
   lg = "h4",
 }
 

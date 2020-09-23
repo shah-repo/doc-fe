@@ -145,7 +145,8 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
             <Text translation="document.security.warning" />
           </Box>
           {!isEmailSent &&
-            <Button color="secondary" variant="outlined" onClick={onSubmit} id="PreviewControlsContainer-access" >
+            <Button color="secondary" variant="outlined" onClick={onSubmit}
+              id="PreviewControlsContainer-access" data-cy="PreviewControlsContainer-access" >
               <Text translation="document.request.access" />
             </Button>
           }

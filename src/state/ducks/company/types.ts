@@ -1,7 +1,7 @@
 import { GroupTag } from "../auth/types";
 import { User } from "../common";
 import { DocumentType } from "../documentRevisions/documentType";
-import { SELECT_COMPANY, SET_COMPANY_MINE } from "./constants";
+import { SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from "./constants";
 
 export interface WhiteLabelingColors {
   defaultBackground: string;
@@ -29,7 +29,7 @@ export interface Company {
   slackIntegrationEnabled: boolean;
   id: string;
   name: string;
-  maxRevisionStages: number;
+  numOfRevStages: number;
   users: User[];
   documentTypes: DocumentType[];
   whiteLabeling: WhiteLabeling;
@@ -49,6 +49,15 @@ export interface SelectCompanyAction {
 export interface CompanyMineAction {
   type: typeof SET_COMPANY_MINE;
   payload: Company;
+  navigationMenu?: NavigationMenu;
+  currentEmployeeId?: string;
+}
+
+export interface UpdateNavigationMenuItem {
+  type: typeof UPDATE_NAVIGATION_ITEM;
+  payload: NavigationMenuItem;
+  navigationMenu?: NavigationMenu;
+  currentEmployeeId?: string;
 }
 
 export interface CompanyMineRequest {
@@ -70,4 +79,15 @@ export interface NavigationItem {
   icon?: string;
   category?: string;
   restrictedToUsersWithTags?: GroupTag[];
+  isOpen?: boolean;
+}
+
+export interface NavigationMenu {
+  id: string;
+  menus: NavigationMenuItem[];
+}
+
+export interface NavigationMenuItem {
+  label: string;
+  isOpen: boolean;
 }
