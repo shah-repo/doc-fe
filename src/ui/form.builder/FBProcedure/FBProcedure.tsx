@@ -1,27 +1,44 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBInput, FBProcedureItem, FBProcedureProps, FBSection, FBTextEditor } from "..";
+import { FBButton, FBInput, FBProcedureItem, FBProcedureProps, FBSection, FBTextEditor } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { FBProvider } from "../FBProvider";
 import { withFBProcedure } from "./FBProcedure.wrap";
 
 const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
+  handleClone,
   procedureState,
   isOutput,
+  isClone,
   stepIndex,
   name,
   ...props
 }) => (
   <FBInput {...props } {...{ name }} type="procedure">
-    <FBSection label="form.builder.procedure" gutter={isOutput} />
+    {!isClone && (
+      <FBSection label="form.builder.procedure" gutter={isOutput} />
+    )}
     {isOutput && (
       <FBProvider {...{ procedureState }}>
-        <FBTextEditor
-          name={`fb-procedure-texteditor-${name}`}
-          label={`Step #${stepIndex}`}
-          gutter={false}
-        />
+        <Box display="flex" flexDirection="row-reverse">
+          <FBButton
+            label="form.builder.clone.step"
+            style={{ textTransform: "none", margin: 0 }}
+            size="small"
+            onClick={handleClone}
+          />
+        </Box>
+        <Box mt={-1.2}>
+          <FBTextEditor
+            name={`fb-procedure-texteditor-${name}`}
+            gutter={false}
+            label={{
+              locale: "form.builder.step.number",
+              values: { number: stepIndex },
+            }}
+          />
+        </Box>
         <Box
           display="flex"
           border={1}

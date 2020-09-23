@@ -615,6 +615,8 @@
   "form.builder.evidencemediaupload": "Evidence Media upload",
   "form.builder.stepsection": "Step",
   "form.builder.teststep": "Test Step",
+  "form.builder.step.number": "Step #{number}",
+  "form.builder.clone.step": "Clone Step",
   "form.builder.buttons": "Buttons",
   "form.builder.checkpoint": "Checkpoint",
   "form.builder.approval": "Approval",

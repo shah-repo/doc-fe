@@ -6,8 +6,10 @@ export const withFBProcedure = <T extends FBProcedureProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    handleClone,
     procedureState,
     isOutput,
+    index = 0,
     name,
     ...props
   }: T) => {
@@ -22,22 +24,32 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     // Value sync with the form
     React.useEffect(() => reaction(
       () => procedureState?.value,
-      (data) => formState?.setFieldValue(name, data)
+      (data) => formState?.setFieldValue(name, data, true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-
     // MARK: @helpers
 
-
     // MARK: @methods
+    handleClone = () => {
+      const cloneName = FB.uniqid;
+      const itemClone = {
+        ...workspaceState?.getSchemaItemAt(index),
+        isClone: true,
+        name: cloneName,
+      };
+      formState?.setFieldValue(cloneName, formState.getFieldValue(name));
+      workspaceState?.setSchemaItemAt(itemClone, index + 1);
+    };
 
     // MARK: @observer
 
     return Component({
       ...(props as T),
+      handleClone,
       procedureState,
       isOutput,
+      index,
       name,
     });
   };
