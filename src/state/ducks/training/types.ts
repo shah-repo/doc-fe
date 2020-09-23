@@ -1,5 +1,6 @@
 import { User } from "../common";
-import { DocumentRevisionDocument } from "../documentRevisions";
+import { DocumentRevisionDocument, DocumentRevision } from "../documentRevisions";
+import { Employee } from "../company";
 
 export enum TrainingPlanStatus {
   ACTIVE = "ACTIVE",
@@ -19,6 +20,15 @@ export interface TrainingRecord {
   isRefreshed: boolean;
   isValid: boolean;
   trainingPlan?: TrainingPlan;
+}
+
+export interface TrainingRecordQuery{
+  documentRevision: DocumentRevision;
+  trainingPlan: TrainingPlan;
+  employee: Employee;
+  createdAt:string;
+  dueOn: string;
+  completedAt?:string;
 }
 
 export interface TrainingPlan {
