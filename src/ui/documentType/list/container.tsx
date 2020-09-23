@@ -106,7 +106,8 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         cellHref: cellHrefRenderer,
         omitSearch,
         columnOptions: {
-          cellDataGetter: ({ rowData }) => getFormattedRowValue(get(rowData, column.valuePath), column.valuePath, rowData),
+          cellDataGetter: ({ rowData }) =>
+            getFormattedRowValue(get(rowData, column.valuePath), column.valuePath, rowData),
         },
         searchOptions,
       };
