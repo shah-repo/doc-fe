@@ -167,6 +167,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   });
 
   const onSubmit = (values: any) => {
+    console.log("here test");
     if (selectedInvalid) {
       asyncAR.start(create, toChangeRequestEditRequestBody(initialValuesAR(values)), asyncAR);
       return;
