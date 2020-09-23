@@ -23,6 +23,7 @@ export const withFBParts = <T extends FBPartsProps>(
 
     const procedureFields = document?.formTemplate?.schema
       .filter((field) => (field.type === "procedure" as string));
+    // eslint-disable-next-line no-console
     console.log(procedureFields);
 
     // mock value, will be replaced with procedureFields value
