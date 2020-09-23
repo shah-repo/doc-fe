@@ -12,7 +12,7 @@ import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.prese
 import { withActionButton } from "./ActionButton.wrap";
 import { ApproveAndRelease } from "./ApproveAndRelease";
 import CancelButton from "./CancelButton";
-import { FinalizeAndRelease } from "./FinalizeAndRelease";
+import { SubmitForApproval } from "./SubmitForApproval";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
 import VoidButton from "./VoidButton";
 
@@ -47,7 +47,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
    * at least one approval in status approved in order to be considered as approved. */
   const isApproved = inlineApprovalFields?.every((field) => isSectionApproved(field.name!));
 
-  const { revisionStage, subRevision, revisionChangeType } = documentRevision || {};
+  const { revisionStage, revisionChangeType } = documentRevision || {};
   const formik = useFormikContext();
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
@@ -95,13 +95,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       />
       {
         isRecord && (!isInlineApproval || revisionStage !== 1) && (
-          <FinalizeAndRelease
+          <SubmitForApproval
             docRevId={values.id as string}
             status={values.status}
             {
               ...{
-                revisionStage,
-                subRevision,
                 revisionChangeType,
               }
             }

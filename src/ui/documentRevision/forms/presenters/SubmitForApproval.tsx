@@ -10,37 +10,24 @@ import useDialog from "../../../hooks/useDialog";
 
 interface Props {
   docRevId: string;
-  revisionStage: number;
-  subRevision?: number;
   status?: DocumentRevisionStatus;
   revisionChangeType: string;
 }
 
-export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
+export const SubmitForApproval: React.FunctionComponent<Props> = ({
   docRevId,
-  revisionStage,
-  subRevision,
   status,
   revisionChangeType,
 }) => {
-  const releaseRecordDialog = useDialog();
+  const voidRecordDialog = useDialog();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
-  const isSubmitApproval = revisionStage === 3 && (subRevision && subRevision > 0);
   const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
   const async = useAsync({
     onError: (error) => {
       toastError(error as string);
-      releaseRecordDialog.close();
+      voidRecordDialog.close();
     },
   });
-
-  let buttonText = "record.finalize.and.release";
-  if (isSubmitApproval) {
-    buttonText = "record.submit.for.approval";
-  }
-  if (isObsolete) {
-    buttonText = "common.void";
-  }
 
   const releaseRecord = () => {
     async.start(
@@ -60,15 +47,15 @@ export const FinalizeAndRelease: React.FunctionComponent<Props> = ({
       <Button
         color="secondary"
         variant="outlined"
-        onClick={releaseRecordDialog.open}
+        onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
         id="ApproveAndRelease-button"
         data-cy="ApproveAndRelease-button"
       >
-        <Text message={buttonText} />
+        <Text message={isObsolete ? "common.void" : "record.submit.for.approval"} />
       </Button>
       <AlertDialog
-        dialog={releaseRecordDialog}
-        message={isObsolete ? "documentRevision.void.alert" : "record.release.alert"}
+        dialog={voidRecordDialog}
+        message={"documentRevision.void.alert"}
         confirmLabel="common.true"
         cancelLabel="common.false"
         confirmAction={releaseRecord}
