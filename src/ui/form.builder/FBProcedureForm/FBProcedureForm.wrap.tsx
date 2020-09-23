@@ -1,17 +1,17 @@
 import React from "react";
-import { FBProcedureAssetProps } from "..";
+import { FBProcedureFormProps } from "..";
 
-export const withFBProcedureAsset = <T extends FBProcedureAssetProps>(
+export const withFBProcedureForm = <T extends FBProcedureFormProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    name,
     ...props
   }: T) =>
 
   // MARK: @config
 
-
-  // MARK: Reactions
+  // MARK: @reactions
 
 
   // MARK: @helpers
@@ -22,10 +22,11 @@ export const withFBProcedureAsset = <T extends FBProcedureAssetProps>(
   // MARK: @observer
 
     Component({
-      ...(props),
+      ...(props as T),
+      name,
     })
   ;
 
-  Comp.displayName = "withFBProcedureAsset";
+  Comp.displayName = "withFBProcedureForm";
   return Comp;
 };

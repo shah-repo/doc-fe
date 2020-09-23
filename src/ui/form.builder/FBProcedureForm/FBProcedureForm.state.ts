@@ -1,5 +1,5 @@
 
-export class FBProcedureAssetState {
+export class FBProcedureFormState {
   // MARK: @observables
 
   // MARK: @config
@@ -11,4 +11,4 @@ export class FBProcedureAssetState {
   // MARK: @helpers
 }
 
-export default FBProcedureAssetState;
+export default FBProcedureFormState;

@@ -18,7 +18,7 @@ const FBLabel: React.FunctionComponent<FBLabelProps> = ({
   <FormLabel component="legend" {...{ error }}>
     <Box
       mb={0.5}
-      fontWeight={400}
+      fontWeight={500}
       color={Colors.dark_gray}
       {...boxProps}
     >

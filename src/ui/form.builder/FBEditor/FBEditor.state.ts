@@ -75,7 +75,7 @@ export class FBEditorState {
     "approvals",
   ];
 
-  public static pickStepIndex: FBInputType[] = ["stepsection", "teststep"];
+  public static pickStepIndex: FBInputType[] = ["stepsection", "teststep", "procedure"];
 
   public static pickCustomHandler: FBInputType[] = ["teststep"];
 

@@ -1,9 +1,9 @@
 import { Box, Fade } from "@material-ui/core";
-import { isEmpty } from "lodash";
+import { isEmpty, isUndefined } from "lodash";
 import React from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBInput, FBProvider, FBTextEditorProps } from "..";
+import { FBConditionalWrapper, FBInput, FBProvider, FBTextEditorProps } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { FBTextEditorOptions } from "../FBTextEditorOptions";
 import { withFBTextEditor } from "./FBTextEditor.wrap";
@@ -50,8 +50,10 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
                 />,
               ],
             }}
-            toolbarHidden={masked}
-            toolbarStyle={{ border: "none" }}
+            toolbarStyle={{
+              border: "none",
+              borderBottom: `1px solid ${Colors.hint_gray}`,
+            }}
             editorStyle={{
               height: "100%",
               padding: "0 13px",
@@ -59,7 +61,14 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
             }}
           />
         </Box>
-        <Fade in={masked}>
+        <FBConditionalWrapper
+          condition={!isUndefined(masked)}
+          wrapper={(wrapperChildren) => (
+            <Fade in={masked} mountOnEnter>
+              {wrapperChildren}
+            </Fade>
+          )}
+        >
           <Box
             {...!disabled && { onClick: () => handleMask?.(false) }}
             bgcolor="white"
@@ -77,7 +86,7 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
               dangerouslySetInnerHTML={{ __html: formValue }}
             />
           </Box>
-        </Fade>
+        </FBConditionalWrapper>
       </Box>
     </FBInput>
   </FBProvider>

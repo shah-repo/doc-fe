@@ -22,6 +22,7 @@ import {
 import { FBApprovalMatrixState } from "../FBApprovalMatrix";
 import { FBPOApprovalMatrixState } from "../FBPOApprovalMatrix";
 import { FBPOReceiveState } from "../FBPOReceive";
+import { FBProcedureState } from "../FBProcedure";
 import { FBTextEditorState } from "../FBTextEditor";
 import { FBTextEditorOptionsState } from "../FBTextEditorOptions";
 
@@ -51,4 +52,5 @@ export interface FBProviderProps {
   inlineApprovalState?: FBInlineApprovalState;
   textEditorState?: FBTextEditorState;
   textEditorOptionsState?: FBTextEditorOptionsState;
+  procedureState?: FBProcedureState;
 }

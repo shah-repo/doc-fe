@@ -1,7 +1,7 @@
 import { isString, kebabCase, size, union } from "lodash";
 import React from "react";
 import { FBEditorActionsProps } from ".";
-import { FB, FBData, FBSchemaProps } from "..";
+import { FB, FBData, FBSchemaProps, UniqueAdditionalSchema } from "..";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";
 
@@ -24,6 +24,12 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
     function additionalSchema() {
       if (!type) { return; }
+      // If additional schema is unique and we have already added it into scheme
+      const isUnique = (
+        UniqueAdditionalSchema.includes(type) &&
+        (workspaceState?.getItemsByType(type).length || 0) > 0
+      );
+      if (isUnique) { return; }
       const additionalSchema = FBData.additionalSchema(type);
       if (!workspaceState?.getSchemaItemAt(index) && additionalSchema) {
         workspaceState?.setSchema(union(workspaceState.getSchema(), additionalSchema));

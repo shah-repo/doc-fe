@@ -50,12 +50,10 @@ export class FBControlPickerState {
         "evidencemediaupload",
         "testRequirement",
         "procedure",
-        "parts",
       ],
       approvals: [
         "approvals",
         ...this.hasHelloSign ? ["hellosign"] as FBInputType[] : [],
-        // ...this.hasApproval ? ["approval"] as FBInputType[] : [],
         ...this.hasApproval ? ["inlineapproval"] as FBInputType[] : [],
         ...this.hasRequestApproval ? ["requestapproval"] as FBInputType[] : [],
       ],
