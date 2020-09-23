@@ -1,3 +1,4 @@
+import { reaction } from "mobx";
 import React from "react";
 import { FB, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
 
@@ -17,8 +18,13 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     procedureState = FB.useRef(FBProcedureState, formValue);
     isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
 
-
     // MARK: @reactions
+    // Value sync with the form
+    React.useEffect(() => reaction(
+      () => procedureState?.value,
+      (data) => formState?.setFieldValue(name, data)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
 
     // MARK: @helpers
@@ -27,7 +33,6 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     // MARK: @methods
 
     // MARK: @observer
-
 
     return Component({
       ...(props as T),
