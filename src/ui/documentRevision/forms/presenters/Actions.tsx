@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
-import { find, isEmpty, isUndefined } from "lodash";
+import { find, isEmpty, isUndefined, keys } from "lodash";
 import * as React from "react";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
+import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
@@ -30,7 +31,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const inlineApprovalFields = documentRevision?.formDocument?.formTemplate?.schema
     .filter((field) => (field.type === "inlineapproval" as string));
 
-  const isInlineApproval = inlineApprovalFields && inlineApprovalFields.length > 0;
+  const isInlineApproval = Boolean(inlineApprovalFields && inlineApprovalFields.length > 0);
   const isRecord = values.document?.documentType?.group === "RECORD";
 
   /** Function that checks if a form section is approved.
@@ -47,7 +48,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
    * at least one approval in status approved in order to be considered as approved. */
   const isApproved = inlineApprovalFields?.every((field) => isSectionApproved(field.name!));
 
-  const { revisionStage, revisionChangeType } = documentRevision || {};
+  const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
   const formik = useFormikContext();
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
@@ -67,7 +68,18 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         formik.setFieldValue("formDocument", {
           id: values.formDocument?.id,
         });
-        formik.setFieldValue("formInput", formState?.getValues());
+        if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
+          const newInput = {};
+          keys(values.formInput).map((key) => {
+            newInput[key] = values?.formInput && typeof values?.formInput[key] === "string"
+              ? "Void"
+              : null;
+            return key;
+          });
+          formik.setFieldValue("formInput", newInput);
+        } else {
+          formik.setFieldValue("formInput", formState?.getValues());
+        }
         break;
       default:
         formik.setFieldValue("formTemplate", undefined);
@@ -75,6 +87,12 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
   const onFormClick = () => {
     setFBValue();
+    if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
+      formik.setFieldValue("attachments", []);
+      formik.setFieldValue("name", "Void");
+      formik.setFieldValue("description", "Void");
+      formik.setFieldValue("referenceTo", null);
+    }
     formik.submitForm();
   };
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
@@ -98,6 +116,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           <SubmitForApproval
             docRevId={values.id as string}
             status={values.status}
+            docRevOwner={owner.user.name}
+            updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
             {
               ...{
                 revisionChangeType,
@@ -107,7 +127,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         )
       }
       {
-        (!isRecord || (isInlineApproval && isApproved)) && (
+        (!isRecord || (isInlineApproval && isApproved && revisionStage === 1)) && (
           <ApproveAndRelease
             id={values.id}
             status={values.status}
@@ -120,6 +140,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
                 documentTypeId,
                 revisionStage,
                 isRecord,
+                isInlineApproval,
               }
             }
           />

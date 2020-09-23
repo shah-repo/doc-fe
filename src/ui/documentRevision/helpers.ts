@@ -72,6 +72,7 @@ export const generateVersionNumber = (
   subRevision?: number,
   revisionChangeType?: RevisionChangeType,
   revisionStatus?: DocumentRevisionStatus,
+  isRecord = false,
 ) => {
   if (!revision || !revisionStage) {
     return "";
@@ -79,7 +80,7 @@ export const generateVersionNumber = (
   if (revisionChangeType === RevisionChangeType.Void) {
     return "Void";
   }
-  if (revisionChangeType === RevisionChangeType.Obsolete) {
+  if (revisionChangeType === RevisionChangeType.Obsolete && !isRecord) {
     return "OBS";
   }
 

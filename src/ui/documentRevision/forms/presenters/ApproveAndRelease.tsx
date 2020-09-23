@@ -33,7 +33,8 @@ interface Props {
   owner?: Owner;
   documentTypeId?: string;
   revisionStage?: number;
-  isRecord?: boolean;
+  isRecord: boolean;
+  isInlineApproval: boolean;
 }
 
 const styles = makeStyles(() =>
@@ -57,6 +58,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   documentTypeId,
   revisionStage,
   isRecord,
+  isInlineApproval,
 }) => {
   const [isVisible, label] = useApproveAndRelease(documentTypeId);
   const classes = styles();
@@ -217,13 +219,19 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       {...props}
       asyncState={selectedInvalid ? asyncAR.asyncState : async.asyncState}
       cancel={closeDialog}
-      isQms={isQms}
       documentTypeGroups={transformedDocTypeGroups}
       owner={owner as Owner}
-      templateOptions={templateOptions}
-      setFormDocument={setFormDocument}
-      setDocumentType={setDocumentType}
-      {...{ closeDialog, setSelectedInvalid, selectedInvalid }}
+      {...{
+        isQms,
+        templateOptions,
+        setFormDocument,
+        setDocumentType,
+        closeDialog,
+        setSelectedInvalid,
+        selectedInvalid,
+        isRecord,
+        isInlineApproval,
+      }}
     />
   );
 
