@@ -14,10 +14,6 @@ export const TrainingListContainer: React.FunctionComponent<Props> = () => {
   const TABLE_NAME = "training";
   const tableData = useSelector(getTableData(TABLE_NAME));
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
-
-  console.log(TABLE_NAME);
-  console.log(tableData);
-
   const clearFilter = () =>
     dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
 
@@ -26,7 +22,7 @@ export const TrainingListContainer: React.FunctionComponent<Props> = () => {
     <ListPresenter
       tableName={TABLE_NAME}
       clearFilter={clearFilter}
-      tableData={tableData}
+      data={tableData}
       tableCriteria={tableCriteria}
     />
   );

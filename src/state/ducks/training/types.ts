@@ -26,9 +26,9 @@ export interface TrainingRecordQuery{
   documentRevision: DocumentRevision;
   trainingPlan: TrainingPlan;
   employee: Employee;
-  createdAt:string;
+  createdAt: string;
   dueOn: string;
-  completedAt?:string;
+  completedAt?: string;
 }
 
 export interface TrainingPlan {

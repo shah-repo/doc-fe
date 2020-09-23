@@ -28,5 +28,12 @@ export const styles = makeStyles((theme: Theme) =>
         transform: "rotate(180deg)",
       },
     },
+    button: {
+      margin: "0px",
+      boxShadow: "none",
+    },
+    iconSvg: {
+      fill: theme.palette.primary.main,
+    },
   }),
 );
