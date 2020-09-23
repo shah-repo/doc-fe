@@ -19,20 +19,15 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   status,
   revisionChangeType,
 }) => {
-  const releaseRecordDialog = useDialog();
+  const voidRecordDialog = useDialog();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
   const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
   const async = useAsync({
     onError: (error) => {
       toastError(error as string);
-      releaseRecordDialog.close();
+      voidRecordDialog.close();
     },
   });
-
-  let buttonText = "record.submit.for.approval";
-  if (isObsolete) {
-    buttonText = "common.void";
-  }
 
   const releaseRecord = () => {
     async.start(
@@ -52,20 +47,19 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
       <Button
         color="secondary"
         variant="outlined"
-        onClick={isObsolete ? releaseRecordDialog.open : releaseRecord}
+        onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
         id="ApproveAndRelease-button"
         data-cy="ApproveAndRelease-button"
       >
-        <Text message={buttonText} />
+        <Text message={isObsolete ? "common.void" : "record.submit.for.approval"} />
       </Button>
-      {isObsolete && <AlertDialog
-        dialog={releaseRecordDialog}
+      <AlertDialog
+        dialog={voidRecordDialog}
         message={"documentRevision.void.alert"}
         confirmLabel="common.true"
         cancelLabel="common.false"
         confirmAction={releaseRecord}
       />
-      }
     </>
   );
 
