@@ -221,4 +221,5 @@ export enum NavigationItems{
   MANUFACTURING = "manufacturing",
   WORK_ORDERS = "workOrders",
   LOTS = "lots",
+  RECORDS = "records",
 }

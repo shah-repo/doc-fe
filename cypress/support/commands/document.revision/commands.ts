@@ -207,7 +207,10 @@ Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: stri
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
-  cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
+    cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+  });
+  cy.wait(500);
   cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
 
   cy.wrapWithWaitOnApiCall(
@@ -271,14 +274,18 @@ Cypress.Commands.add("drChangeOwnerByAdmin", (params: { employee: string }) => {
   cy.get("[data-cy=\"changeOwner\"]").click();
   cy.get("#employee").click();
   cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
-  cy.get("[data-cy=\"changeOwner-submit\"]").click();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocRevAudit], () => {
+    cy.get("[data-cy=\"changeOwner-submit\"]").click();
+  });
 });
 
 Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
   cy.get("[data-cy=\"changeOwner\"]").click();
   cy.get("#employee").click();
   cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
-  cy.get("[data-cy=\"changeOwner-submit\"]").click();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocRevAudit], () => {
+    cy.get("[data-cy=\"changeOwner-submit\"]").click();
+  });
 });
 
 Cypress.Commands.add("drClickReviseDocument", () => {
