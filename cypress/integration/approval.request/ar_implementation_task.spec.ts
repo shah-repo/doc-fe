@@ -253,7 +253,7 @@ context("Approval request implementation tasks", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Done$", "g")).click();
       cy.get("[data-cy=\"description\"]").next().type("Task is done");
       cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
-      cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
+      // cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
     });
 
     it("Check 'Implementation task' status is 'Done'", () => {

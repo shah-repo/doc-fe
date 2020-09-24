@@ -257,7 +257,6 @@ context("Records flow", () => {
 
     it("Finalize and release button click'", () => {
       cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
-      cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
       cy.wait(1000);
     });
   });
