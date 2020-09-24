@@ -12,6 +12,7 @@ const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemPr
   index = 0,
   disabled,
   name,
+  getOptionLabel,
 }) => (
   <>
     <FBSection
@@ -49,6 +50,7 @@ const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemPr
           gutter={false}
           disabled={true}
           freeSolo={true}
+          {...{ getOptionLabel }}
         />
       </Box>
       <Box
