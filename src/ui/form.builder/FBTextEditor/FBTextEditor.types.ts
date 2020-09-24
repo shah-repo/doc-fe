@@ -13,4 +13,5 @@ export type FBTextEditorProps =
   editorReference?: HTMLInputElement;
   formValue?: string;
   masked?: boolean;
+  isPreview?: boolean;
 };
