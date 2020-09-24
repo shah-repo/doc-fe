@@ -1,3 +1,5 @@
+import { FBProcedureItemConfig } from "..";
+
 export interface FBPartsItemProps {
-  value: string;
+  value: FBProcedureItemConfig;
 }

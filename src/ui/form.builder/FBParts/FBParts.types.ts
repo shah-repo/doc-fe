@@ -1,5 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface FBPartsProps {
-  equipment: string[];
-  materials: string[];
-}
+import { FBInputProps, FBProcedureItemConfig } from "..";
+
+export type FBPartsProps =
+& Pick<FBInputProps, "name">
+& {
+  equipment: FBProcedureItemConfig[];
+  materials: FBProcedureItemConfig[];
+};
