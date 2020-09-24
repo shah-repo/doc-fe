@@ -12,6 +12,8 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   handleRemove,
   dialogState,
   formState,
+  isPreview,
+  disabled,
   type,
   value = [],
 }) => (
@@ -28,13 +30,15 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
         boxProps={{ flexGrow: 1, pt: 2, pl: 2 }}
         locale={FBProcedureItemLocale[type]}
       />
-      <FBButton
-        variant="text"
-        color="inherit"
-        startIcon={<AddCircleIcon />}
-        label={FBProcedureItemActionLocale[type]}
-        {...{ onClick }}
-      />
+      {!isPreview && (
+        <FBButton
+          variant="text"
+          color="inherit"
+          startIcon={<AddCircleIcon />}
+          label={FBProcedureItemActionLocale[type]}
+          {...{ onClick, disabled }}
+        />
+      )}
     </Box>
     <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
       {(item: FBProcedureItemConfig, index) => (
@@ -59,15 +63,18 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
               flexGrow: 1,
             }}
           />
-          <Box color={Colors.errror_red}>
-            <IconButton
-              color="inherit"
-              size="small"
-              onClick={() => handleRemove?.(item.id)}
-            >
-              <RemoveCircleIcon fontSize="small" />
-            </IconButton>
-          </Box>
+          {!isPreview && (
+            <Box color={Colors.errror_red}>
+              <IconButton
+                color="inherit"
+                size="small"
+                onClick={() => handleRemove?.(item.id)}
+                {...{ disabled }}
+              >
+                <RemoveCircleIcon fontSize="small" />
+              </IconButton>
+            </Box>
+          )}
         </Box>
       )}
     </FBMapWrapper>

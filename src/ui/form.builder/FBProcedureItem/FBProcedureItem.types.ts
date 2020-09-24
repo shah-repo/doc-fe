@@ -14,7 +14,7 @@ export enum FBProcedureItemActionLocale {
 
 export type FBProcedureItemProps =
 & Pick<FBProviderProps, "dialogState" | "formState">
-& Pick<FBProcedureProps, "name" | "stepIndex">
+& Pick<FBProcedureProps, "name" | "stepIndex" | "disabled" | "isPreview">
 & {
   onClick?: () => void;
   handleAdd?: () => void;

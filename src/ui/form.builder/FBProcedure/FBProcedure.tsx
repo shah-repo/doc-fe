@@ -9,9 +9,11 @@ import { withFBProcedure } from "./FBProcedure.wrap";
 const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
   handleClone,
   procedureState,
+  isPreview,
   isOutput,
   isClone,
   stepIndex,
+  disabled,
   name,
   ...props
 }) => (
@@ -22,15 +24,19 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
     {isOutput && (
       <FBProvider {...{ procedureState }}>
         <Box display="flex" flexDirection="row-reverse">
-          <FBButton
-            label="form.builder.clone.step"
-            style={{ textTransform: "none", margin: 0 }}
-            size="small"
-            onClick={handleClone}
-          />
+          {!isPreview && (
+            <FBButton
+              label="form.builder.clone.step"
+              style={{ textTransform: "none", margin: 0 }}
+              size="small"
+              onClick={handleClone}
+              {...{ disabled }}
+            />
+          )}
         </Box>
         <Box mt={-1.2}>
           <FBTextEditor
+            {...{ disabled }}
             name={`fb-procedure-texteditor-${name}`}
             gutter={false}
             label={{
@@ -41,41 +47,43 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
         </Box>
         <Box
           display="flex"
-          border={1}
+          border={isPreview ? 0 : 1}
           borderBottom={0}
           borderRight={0}
           borderTop={0}
           borderColor={Colors.hint_gray}
           mt={1}
-          ml={1.5}
+          ml={isPreview ? 0 : 1.5}
         >
-          <Box width={10} mr={1}>
-            <Box display="flex" height="100%" flexDirection="column">
-              <Box
-                flexGrow={1}
-                border={1}
-                borderLeft={0}
-                borderRight={0}
-                borderTop={0}
-                borderColor={Colors.hint_gray}
-                mt={5}
-              />
-              <Box
-                border={1}
-                borderLeft={0}
-                borderRight={0}
-                borderTop={0}
-                borderColor={Colors.hint_gray}
-                height={1}
-              />
+          {!isPreview && (
+            <Box width={10} mr={1}>
+              <Box display="flex" height="100%" flexDirection="column">
+                <Box
+                  flexGrow={1}
+                  border={1}
+                  borderLeft={0}
+                  borderRight={0}
+                  borderTop={0}
+                  borderColor={Colors.hint_gray}
+                  mt={5}
+                />
+                <Box
+                  border={1}
+                  borderLeft={0}
+                  borderRight={0}
+                  borderTop={0}
+                  borderColor={Colors.hint_gray}
+                  height={1}
+                />
+              </Box>
             </Box>
-          </Box>
+          )}
           <Box flexGrow={1} bgcolor="white" mb={6.5} mt={2}>
-            <FBProcedureItem type="materials" {...{ name }} />
+            <FBProcedureItem type="materials" {...{ name, disabled, isPreview }} />
           </Box>
         </Box>
-        <Box bgcolor="white" ml={4} mt={-3.5}>
-          <FBProcedureItem type="equipment" {...{ name }} />
+        <Box bgcolor="white" ml={isPreview ? 0 : 4} mt={-3.5}>
+          <FBProcedureItem type="equipment" {...{ name, disabled, isPreview }} />
         </Box>
       </FBProvider>
     )}

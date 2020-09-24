@@ -53,6 +53,7 @@ export class FBEditorState {
     "task",
     "blanktplform",
     "approvals",
+    "procedure",
   ];
 
   public static pickDefaultValue: FBInputType[] = [

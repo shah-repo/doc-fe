@@ -8,6 +8,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
   const Comp = ({
     handleClone,
     procedureState,
+    isPreview,
     isOutput,
     index = 0,
     name,
@@ -19,6 +20,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     const formValue = formState?.getFieldValue(name) as FBProcedureValue;
     procedureState = FB.useRef(FBProcedureState, formValue);
     isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
+    isPreview = workspaceState?.mode === "preview";
 
     // MARK: @reactions
     // Value sync with the form
@@ -48,6 +50,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
       ...(props as T),
       handleClone,
       procedureState,
+      isPreview,
       isOutput,
       index,
       name,
