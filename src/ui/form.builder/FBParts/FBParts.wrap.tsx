@@ -1,12 +1,8 @@
+import { map, pick, reduce } from "lodash";
+import { reaction } from "mobx";
+import { useObserver } from "mobx-react";
 import React from "react";
-import { FB } from "..";
-import { FBPartsProps } from "./FBParts.types";
-
-// mock type, will be deleted
-interface MockProcedureType {
-  materials: string[];
-  equipment: string[];
-}
+import { FB, FBPartsProps, FBPartsState, FBProcedureItemConfig } from "..";
 
 export const withFBParts = <T extends FBPartsProps>(
   Component: React.FunctionComponent<T>,
@@ -18,42 +14,62 @@ export const withFBParts = <T extends FBPartsProps>(
   }: T) => {
 
     // MARK: @config
-    const { workspaceState } = FB.useStores();
+    const { workspaceState, formState } = FB.useStores();
     const { document } = workspaceState || {};
 
-    const procedureFields = document?.formTemplate?.schema
-      .filter((field) => (field.type === "procedure" as string));
-    // eslint-disable-next-line no-console
-    console.log(procedureFields);
+    const procedureFieldNames = document?.formDocument?.formTemplate?.schema
+      .filter((field) => (field.type === "procedure")).map((field) => field.name);
 
-    // mock value, will be replaced with procedureFields value
-    const mockValue: MockProcedureType = {
-      materials: [
-        "CS00001 A - Nordson (n73130), 8F OD, 55D Pebax shaft | Qty: 6 m",
-        "CS00187 A - Vention (VS21839), 28mm balloon | Qty: 3 pcs",
-        "CS00233 A - Qosina (M-133), Y manifold | Qty: 2pcs",
-      ],
-      equipment: [
-        "ES00222 A - 0.010'' punch",
-        "ES00333 A - 0.020'' punch",
-      ],
-    };
+    const fields = pick(document?.formInput, procedureFieldNames as string[]);
+
+    const initialEquipment = reduce(
+      map(fields, (field) => field.equipment),
+      (eq: FBProcedureItemConfig[] = [], field) => eq.concat(field),
+    );
+
+    const initialMaterials = reduce(
+      map(fields, (field) => field.materials),
+      (m: FBProcedureItemConfig[] = [], field) => m.concat(field),
+    );
+
+    const partsState = FB.useRef(
+      FBPartsState,
+      {
+        equipment: initialEquipment,
+        materials: initialMaterials,
+      }
+    );
 
 
     // MARK: Reactions
-
+    React.useEffect(() => {
+      procedureFieldNames?.map((field) => {
+        reaction(
+          () => formState?.inputState.get(field || "")?.value,
+          (data) => {
+            partsState.setEquipment(data.equipment);
+            partsState.setMaterials(data.materials);
+          }
+        );
+      });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // MARK: @helpers
-
 
     // MARK: @methods
 
     // MARK: @observer
+    useObserver(() => {
+      equipment = partsState?.equipment;
+      materials = partsState?.materials;
+    });
+
 
     return  Component({
       ...(props as T),
-      equipment: mockValue.equipment,
-      materials: mockValue.materials,
+      equipment,
+      materials,
     });
   };
 

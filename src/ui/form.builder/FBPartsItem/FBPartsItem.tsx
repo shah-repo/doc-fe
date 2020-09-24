@@ -17,7 +17,7 @@ const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
     fontWeight="bold"
     marginBottom={2}
   >
-    {value}
+    {`${value.id} - ${value.title} | Qty: ${value.quantity} ${value.unit}`}
   </Box>
 );
 

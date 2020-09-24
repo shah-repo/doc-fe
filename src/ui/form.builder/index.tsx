@@ -171,6 +171,7 @@ export * from "./FBOption/FBOption.types";
 export { default as FBParagraph } from "./FBParagraph/FBParagraph";
 export * from "./FBParagraph/FBParagraph.types";
 export { default as FBParts } from "./FBParts/FBParts";
+export { default as FBPartsState } from "./FBParts/FBParts.state";
 export * from "./FBParts/FBParts.types";
 export { default as FBPOApprovalMatrix } from "./FBPOApprovalMatrix/FBPOApprovalMatrix";
 export { default as FBPOReceive } from "./FBPOReceive/FBPOReceive";
