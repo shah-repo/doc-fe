@@ -5,7 +5,7 @@ import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
@@ -119,9 +119,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
-  const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
   const isdocRevStatusDraft = documentRevision?.status === DocumentRevisionStatus.Draft;
+  const isSubrevision = documentRevision?.subRevision as number > 0;
 
   const hasOutput = useMemo(() => {
     const documentType = documentTypesById[values.document?.documentType?.id || ""];
@@ -134,7 +134,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     return documentType?.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.RECORD);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentTypesById, values.document?.documentType?.id]);
-  const isRevisionChangeHidden = isRecord && isdocRevStatusDraft;
+  const isRevisionChangeHidden = isRecord && isdocRevStatusDraft && !isSubrevision;
+
+  const isDisabledInput = (values.id !== undefined && isCurrentUserOperator && !isOwner)
+    || Boolean(isRecord && isdocRevStatusDraft && documentRevision.revisionChangeType === RevisionChangeType.Obsolete);
 
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments.length > 1);
@@ -170,8 +173,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   }, [isdocRevStatusDraft, values.document, values.name]);
 
-
-  const defaultLabel = isRecord ? "document.revision.type.of.update" : "document.revision.stage";
   const documentTypeId = values.document?.documentType?.id;
 
   return (
@@ -266,7 +267,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           documentTypeId,
           showObsoleteRevisionChange,
           showAdministrativeAndVoidChange,
-          defaultLabel,
+          isRecord,
         }}
         isDisabled={isDisabledInput} />}
         {

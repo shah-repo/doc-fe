@@ -83,7 +83,7 @@ export const SidebarPresenter: React.FunctionComponent<Props> = ({
             height: "calc(100% - 105px)",
             width: "253px",
           }}>
-          <Box mt={2.25}>
+          <Box mt={2.25} ml={1}>
             <Typography variant="button">
               <Text message={(sidebarList[indexNumber].details.title)} />
             </Typography>
