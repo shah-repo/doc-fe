@@ -214,7 +214,7 @@ context("Approval request implementation tasks", () => {
       SystemRequirement("REQ-0710");
       cy.get("[data-cy=\"fb-control-btn\"]").click();
       cy.get("[data-cy=\"title\"]").type("Task One");
-      cy.get("[name=\"description\"]").type("Task Description");
+      cy.get("[data-cy=\"description\"]").next().type("Task Description");
       cy.get("[data-cy=\"assigned\"]").type(`${USERS[2].email}{downarrow}{enter}`);
       cy.poAddDateRequired();
       cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
@@ -251,7 +251,8 @@ context("Approval request implementation tasks", () => {
     it("Complete Implementation Task'", () => {
       SystemRequirement("REQ-0710");
       cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Done$", "g")).click();
-      cy.get("[name=\"description\"]").type("Task is done");
+      cy.get("[data-cy=\"description\"]").next().type("Task is done");
+      cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
       cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
     });
 

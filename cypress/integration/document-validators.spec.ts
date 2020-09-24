@@ -580,7 +580,7 @@ context("Validators tests", () => {
         const errorBlock = elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredFieldLabel} field is required.`);
+          .should("have.text", `The ${requiredFieldLabel} is a required field.`);
       });
     });
 
