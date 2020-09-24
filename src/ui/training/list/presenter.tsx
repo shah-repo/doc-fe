@@ -11,6 +11,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
+import { documentRevisionEffectiveDateOption, trainingCompletedOnDateOption } from "../../document.revision/utils/helpers";
 import useDialog from "../../hooks/useDialog";
 import { styles } from "./styles";
 
@@ -47,7 +48,7 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
   const columns: TableColumnProps<TrainingRecordQuery>[] = [
     {
       // Issue with Key Here cannot do trainingPlan.document.docId so it wont work in headers for export list
-      key: "trainingPlan",
+      key: "trainingPlan" as keyof TrainingRecordQuery,
       id: "TrainingListPresenter-id",
       label: "common.docId",
       columnOptions: {
@@ -55,12 +56,12 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
         width: 75,
       },
       searchOptions: {
-        dataKey: "documentRevision", // search options not working for query
+        dataKey: "docId", // search options not working for query
       },
     },
     {
       // Issue with Key Here cannot do documentRevision.revision so it wont work in headers for export list
-      key: "documentRevision",
+      key: "revision" as keyof TrainingRecordQuery,
       id: "TrainingListPresenter-revision",
       label: "common.revision",
       columnOptions: {
@@ -68,24 +69,24 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
         width: 75,
       },
       searchOptions: {
-        dataKey: "documentRevision", // search options not working for query
+        dataKey: "revision", // search options not working for query
       },
     },
     {
       // Issue with Key Here cannot do documentRevision.name so it wont work in headers for export list
-      key: "documentRevision",
+      key: "docRevTitle" as keyof TrainingRecordQuery,
       id: "TrainingListPresenter-title",
       label: "document.title",
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.documentRevision.name,
       },
       searchOptions: {
-        dataKey: "documentRevision", // search options not working for query
+        dataKey: "docRevTitle", // search options not working for query
       },
     },
     {
       // Issue with Key Here cannot do trainingPlan.employee.user.name so it wont work in headers for export list
-      key: "trainingPlan",
+      key: "userName" as keyof TrainingRecordQuery,
       id: "TrainingListPresenter-trainee",
       label: "common.trainee",
       columnOptions: {
@@ -93,11 +94,11 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
         width: 75,
       },
       searchOptions: {
-        // search options not working for query
+        dataKey: "userName", // search options not working for query
       },
     },
     {
-      key: "createdAt",
+      key: "createdAtAfter" as keyof TrainingRecordQuery,
       id: "TrainingListPresenter-assignDate",
       label: "common.assign.date",
       columnOptions: {
@@ -106,11 +107,13 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
         width: 75,
       },
       searchOptions: {
-        dataKey: "createdAt", // search options not working for query
+        dataKey: "createdAtAfter",
+        searchType: "select",
+        selectOptions: documentRevisionEffectiveDateOption(),
       },
     },
     {
-      key: "dueOn",
+      key: "dueDateAfter" as keyof TrainingRecordQuery,
       id: "TrainingListPresenter-dueDate",
       label: "common.due.date",
       columnOptions: {
@@ -119,15 +122,19 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
         width: 75,
       },
       searchOptions: {
-        dataKey: "dueOn", // search options not working for query
+        dataKey: "dueDateAfter",
+        searchType: "select",
+        selectOptions: documentRevisionEffectiveDateOption(),
       },
     },
     {
-      key: "completedAt",
+      key: "completedAtAfter" as keyof TrainingRecordQuery,
       id: "TrainingListPresenter-completedOn",
       label: "common.completed.on",
       searchOptions: {
-        dataKey: "completedAt", // search options not working for query
+        dataKey: "completedAtAfter",
+        searchType: "select",
+        selectOptions: trainingCompletedOnDateOption(),
       },
       columnOptions: {
         // eslint-disable-next-line react/display-name
