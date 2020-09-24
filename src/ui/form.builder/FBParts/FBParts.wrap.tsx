@@ -1,8 +1,8 @@
-import { map, pick, reduce } from "lodash";
+import { map, reduce } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBPartsProps, FBPartsState, FBProcedureItemConfig } from "..";
+import { FB, FBPartsProps, FBPartsState, FBProcedureItemConfig, FBProcedureValue } from "..";
 
 export const withFBParts = <T extends FBPartsProps>(
   Component: React.FunctionComponent<T>,
@@ -20,35 +20,51 @@ export const withFBParts = <T extends FBPartsProps>(
     const procedureFieldNames = document?.formDocument?.formTemplate?.schema
       .filter((field) => (field.type === "procedure")).map((field) => field.name);
 
-    const fields = pick(document?.formInput, procedureFieldNames as string[]);
+    const procedures: FBProcedureValue[] = [];
+    map(document?.formInput, (field, key) => {
+      if (procedureFieldNames?.includes(key)) {
+        const item = field;
+        item.equipment = map(item.equipment, (eq) => ({
+          ...eq,
+          procedureFieldId: key,
+        }));
+        item.materials = map(item.materials, (m) => ({
+          ...m,
+          procedureFieldId: key,
+        }));
+        procedures.push(item);
+      }
+    });
 
-    const initialEquipment = reduce(
-      map(fields, (field) => field.equipment),
+    const getInitialValuesFromProcedures = (key: string) => reduce(
+      map(procedures, (field) => field[key]),
       (eq: FBProcedureItemConfig[] = [], field) => eq.concat(field),
-    );
-
-    const initialMaterials = reduce(
-      map(fields, (field) => field.materials),
-      (m: FBProcedureItemConfig[] = [], field) => m.concat(field),
     );
 
     const partsState = FB.useRef(
       FBPartsState,
       {
-        equipment: initialEquipment,
-        materials: initialMaterials,
+        equipment: getInitialValuesFromProcedures("equipment"),
+        materials: getInitialValuesFromProcedures("materials"),
       }
     );
 
-
     // MARK: Reactions
     React.useEffect(() => {
-      procedureFieldNames?.map((field) => {
+      procedureFieldNames?.map((procedureField) => {
         reaction(
-          () => formState?.inputState.get(field || "")?.value,
+          () => formState?.inputState.get(procedureField || "")?.value,
           (data) => {
-            partsState.setEquipment(data.equipment);
-            partsState.setMaterials(data.materials);
+            const eq = map(data.equipment, (item) => ({
+              ...item,
+              procedureFieldId: procedureField,
+            }));
+            const mat = map(data.materials, (item) => ({
+              ...item,
+              procedureFieldId: procedureField,
+            }));
+            partsState.setEquipment(eq, procedureField);
+            partsState.setMaterials(mat, procedureField);
           }
         );
       });

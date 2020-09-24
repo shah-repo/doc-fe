@@ -29,4 +29,5 @@ export interface FBProcedureItemConfig {
   title: string;
   quantity: number;
   unit: string;
+  procedureFieldId?: string;
 }
