@@ -16,7 +16,6 @@ import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
-import { generateVersionNumber } from "../../documentRevision/helpers";
 import useDialog from "../../hooks/useDialog";
 import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionQueryStatus, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
@@ -83,13 +82,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       cellOptions: { align: "center" },
       cellHref: cellHrefRenderer,
       columnOptions: {
-        cellDataGetter: ({ rowData }) => generateVersionNumber(
-          rowData.revision,
-          rowData.revisionStage,
-          rowData.subRevision,
-          rowData.revisionChangeType,
-          rowData.status,
-        ),
+        cellDataGetter: ({ rowData }) => rowData.displayRevision,
         width: 80,
         flexShrink: 1,
       },
