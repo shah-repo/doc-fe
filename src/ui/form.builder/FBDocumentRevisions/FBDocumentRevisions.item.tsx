@@ -8,6 +8,7 @@ import Colors from "../../layout/theme/utils/colors";
 const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemProps> = ({
   handleOpen,
   remove,
+  getOptionLabel,
   id,
   index = 0,
   disabled,
@@ -49,6 +50,7 @@ const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemPr
           gutter={false}
           disabled={true}
           freeSolo={true}
+          {...{ getOptionLabel }}
         />
       </Box>
       <Box
