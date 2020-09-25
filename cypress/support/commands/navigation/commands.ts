@@ -49,6 +49,16 @@ Cypress.Commands.add("navigToDashboard", () => {
     }).wait(1000);
 });
 
+Cypress.Commands.add("navigToRecords", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.DOCUMENT_CONTROL,
+      NavigationItems.RECORDS,
+    ],
+  });
+});
+
 Cypress.Commands.add("navigToReceivableList", () => {
   cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
 });

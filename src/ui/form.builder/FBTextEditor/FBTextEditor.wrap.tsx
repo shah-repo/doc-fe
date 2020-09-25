@@ -1,9 +1,11 @@
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
+import { isEmpty } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
+import { useIntl } from "react-intl";
 import { FB, FBTextEditorProps, FBTextEditorState } from "..";
 
 export const withFBTextEditor = <T extends FBTextEditorProps>(
@@ -18,6 +20,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     textEditorState,
     editorState,
     editorReference,
+    isPreview,
     formValue,
     toolbar,
     masked,
@@ -26,10 +29,20 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
   }: T) => {
 
     // MARK: @config
-    const { formState } = FB.useStores();
-    formValue = formState?.getFieldValue(name);
+    const { formState, workspaceState } = FB.useStores();
     const emptyHtmlContent = "<p></p>";
+    const intl = useIntl();
+    formValue = formState?.getFieldValue(name);
     textEditorState = FB.useRef(FBTextEditorState, htmlToEditorState(formValue));
+
+    // form preview mode just disables the text editor
+    // preview mode pulls a new style
+    isPreview = workspaceState?.mode === "preview";
+
+    // Default value for preview mode
+    if (!formValue && isEmpty(formValue) && isPreview) {
+      formValue = intl.formatMessage({ id: "form.builder.none" });
+    }
 
     !toolbar && (toolbar = {
       options: [
@@ -112,6 +125,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       textEditorState,
       editorState,
       editorReference,
+      isPreview,
       formValue,
       toolbar,
       masked,

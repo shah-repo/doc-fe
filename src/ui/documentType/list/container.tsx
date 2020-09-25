@@ -22,7 +22,8 @@ import DocumentByTypeListPresenter from "./presenter";
 
 type Props = RouteComponentProps<RouteParams>;
 
-const getFormattedRowValue = (value: string, path: any, rowData: any) => {
+const getFormattedRowValue = (path: any, rowData: any) => {
+  const value = get(rowData, path);
   const isDate = moment(value, "YYYY-MM-DDTHH:mm:ss.SSSZ", true).isValid();
   const versionNumber = generateVersionNumber(
     rowData.revision,
@@ -107,7 +108,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         omitSearch,
         columnOptions: {
           cellDataGetter: ({ rowData }) =>
-            getFormattedRowValue(get(rowData, column.valuePath), column.valuePath, rowData),
+            getFormattedRowValue(column.valuePath, rowData),
         },
         searchOptions,
       };
