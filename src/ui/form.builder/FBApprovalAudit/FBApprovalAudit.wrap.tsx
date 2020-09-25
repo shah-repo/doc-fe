@@ -80,7 +80,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
             if (moment(prevValue, moment.ISO_8601, true).isValid()) {
               prevValue = getFormattedDateString(prevValue, MomentFormats.DateTimeAlt);
             }
-            prevValue = " from " + prevValue;
+            prevValue = <span> from <b>{prevValue}</b></span>;
           } else {
             prevValue = "";
           }
@@ -88,11 +88,11 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           if (moment(nextValue, moment.ISO_8601, true).isValid()) {
             nextValue = getFormattedDateString(nextValue, MomentFormats.DateTimeAlt);
           }
-          return FB.stripTags("Changed " + label + prevValue + " to " + nextValue);
+          return (<span>Changed {label} {prevValue} to <b>{nextValue}</b></span>);
         }
 
         function isCheck() {
-          return "Changed " + label + " value to " + v[0].nextValue;
+          return (<span> Changed {label} value to  <b>{v[0].nextValue}</b> </span>);
         }
 
         function isPurchaseorder(): string {
@@ -139,7 +139,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           const { previousValue, nextValue } = v[0];
           if (previousValue === "undefined" && nextValue === "[]") { return; }
           if (nextValue === "undefined" || nextValue === "false") {
-            return "Unchecked in " + label + ": " + previousValue;
+            return (<span>Unchecked in {label}: {previousValue}</span>);
           }
           return (<span>Checked in {label}: <b>{nextValue}</b></span>);
         }
