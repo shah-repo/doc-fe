@@ -33,7 +33,7 @@ export const DashboardCRBase: React.FunctionComponent<Props> = ({
   const classes = styles();
   const linkRenderer = () => (
     <Link to={url} style={{ textDecoration: "none", color: "inherit" }}>
-      <Box>
+      <Box data-cy="pendingActionsAR">
         <Box
           color="primary.main"
           fontWeight="fontWeightBold"
