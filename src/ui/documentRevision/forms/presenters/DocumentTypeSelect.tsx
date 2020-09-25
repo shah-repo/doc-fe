@@ -2,7 +2,7 @@ import { useFormikContext } from "formik";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
-import { FBOutputDocumentType } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision, FBOutputDocumentType } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType, documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
@@ -12,6 +12,7 @@ import { FB } from "../../../form.builder";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
 import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
 import { DocumentCloneType } from "../../Clone.container";
+import { getFBSchemeByDocType } from "../../helpers";
 
 interface Props {
   isdocRevStatusDraft: boolean;
@@ -95,6 +96,18 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       type.groupOptions?.includes(formOption) ? "design" : "none";
     workspaceState?.setMode(mode);
     formik.handleChange(event);
+    if (mode === "design") {
+      const formValues = {
+        ...formik.values as Partial<DocumentRevision>,
+        "document.documentType.id": typeId,
+      };
+      const scheme = getFBSchemeByDocType(
+        formValues,
+        documentTypesById,
+        workspaceState?.getSchema(),
+      );
+      workspaceState?.setSchema(scheme);
+    }
   };
 
   if (!isVisible && type !== "newOutput") {

@@ -1,7 +1,9 @@
-import { findLastIndex, get, isEmpty, orderBy, some } from "lodash";
+import { find, findLastIndex, get, isEmpty, map, orderBy, some, unionBy } from "lodash";
 import moment from "moment";
-import { Document, DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../state/ducks/documentRevisions";
-import { DOC_TYPE_GROUP_OPTION } from "../../state/ducks/documentRevisions/documentType";
+import { Document, DocumentRevision, DocumentRevisionStatus, FBFormTemplateProps, RevisionChangeType } from "../../state/ducks/documentRevisions";
+import { DocumentTypeByIdState, DOC_TYPE_GROUP_OPTION } from "../../state/ducks/documentRevisions/documentType";
+import { OptionType } from "../components/forms/fields/Autocomplete/types";
+import { FBSchemaProps } from "../form.builder";
 
 export const canEditDocumentRevision = (
   documentRevision: DocumentRevision,
@@ -153,4 +155,51 @@ export const getIsAdministrativeDefault = (documentRevision: DocumentRevision) =
   const isAlphaReleased = documentRevision.revisionStage === 3;
   const isRecord = (documentRevision.document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
   return Boolean(docId && !isEmpty(docId)) && isAlphaReleased && isRecord;
+};
+
+/**
+   * @method
+   *
+   * This will generate new initial workspace scheme based on predefined schemes of
+   * selected document type & output type. At the end we will merge config of each predefined
+   * item in case the user has already updated some item config.
+   * This is a temp hack to enable further creation of the FB form with all
+   * associated actions (i.e delete item).
+   *
+   * @param {Record<string, any>} formik form values
+   * @param {Record<string, DocumentType>} document types dict
+   * @param {FBSchemaProps[]} active workspace scheme
+   */
+export const getFBSchemeByDocType = (
+  formValue: Partial<DocumentRevision> & Partial<FBFormTemplateProps>,
+  documentTypesById: DocumentTypeByIdState,
+  originScheme?: FBSchemaProps[],
+): FBSchemaProps[] => {
+  const outDocTypeIds = map(formValue.outputDocumentTypes as OptionType[], "value");
+  const outputScheme = outDocTypeIds.reduce((scheme, typeId) => {
+    const rec = documentTypesById[typeId];
+    // If type has scheme
+    if (!rec.schema) { return scheme; }
+    const typeScheme = map(rec.schema, ((schemaItem) => ({
+      ...schemaItem,
+      deleteDisabled: true,
+    })));
+    return unionBy(scheme, typeScheme, "name");
+  }, [] as FBSchemaProps[]);
+
+  const docTypeId = get(formValue, "document.documentType.id") || "";
+  let docTypeScheme = documentTypesById[docTypeId]?.schema || [];
+
+  docTypeScheme = map(docTypeScheme, ((schemaItem) => ({
+    ...schemaItem,
+    deleteDisabled: true,
+  })));
+  let finalScheme = unionBy(docTypeScheme, outputScheme, "name");
+
+  // Add possible additional config added from FB
+  finalScheme = map(finalScheme, (schemeItem) => ({
+    ...schemeItem,
+    ...find(originScheme, { name: schemeItem.name }),
+  }));
+  return finalScheme;
 };
