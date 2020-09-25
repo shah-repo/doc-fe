@@ -11,7 +11,7 @@ export const toStartOfDay = (date: DateTypes) => new Date(...moment.utc(date).to
 
 export const getFormattedStartOfDayDateString = (date: DateTypes) => getStartOfDayDateString(date, "LL");
 
-export const getFormattedDateString = (date: DateTypes, format = "") => moment(date).tz(TIME_ZONE, true).format(format);
+export const getFormattedDateString = (date: DateTypes, format = "") => moment(date).tz(TIME_ZONE).format(format);
 
 export enum MomentFormats {
   MonthDateYear = "M/D/YYYY",

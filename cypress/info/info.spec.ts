@@ -9,8 +9,8 @@ context("Server", () => {
   it("Info", () => {
     cy.server();
     cy.authLogin({
-      email: "zoran.kovacevic+admin@codecons.com",
-      password: "Tester1!",
+      email: CONFIG.SUPERADMIN_EMAIL,
+      password: CONFIG.SUPERADMIN_PASSWORD,
     });
     cy.route({ method: "GET", url: "/api/v1/remoteValidators", status: 200 }).as("status");
     cy.visit(`${CONFIG.FE_URL}/status`);
