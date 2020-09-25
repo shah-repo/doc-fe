@@ -33,10 +33,13 @@ declare global {
       drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
       drSelectOutputDocTypeSecondTime(params: { documentType: string }): Chainable<Subject>;
       drChooseTypeOfRevisionChangeOption(params: { option: string }): Chainable<Subject>;
+      drSelectRevisionStageOptions(params: { revisionStageOption: string }): Chainable<Subject>;
       drDocumentFieldError(params: { field: string; message: string }): Chainable<Subject>;
       closeAllAlertMessages(): Chainable<Subject>;
       checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
       checkToastMessageIsEqual(params: { message: string }): Chainable<Subject>;
+      checkToastMessageContains(params: { message: string }): Chainable<Subject>;
+      drCheckApprovalsEnforcment(): Chainable<Subject>;
 
       /* Document Approval Matrix */
 
@@ -51,13 +54,14 @@ declare global {
       drAMCheckValue(params: { identity: string }): Chainable<Subject>;
       drAMCheckRole(params: { stage: string; index: number }): Chainable<Subject>;
       drUpgradeRevisionLevel(): Chainable<Subject>;
-      drRoleExistsAndChecked(params: { group: number; role: string }): Chainable<Subject>;
+      drReleaseDocAfterRoleExistsAndChecked(params: { group: number; role: string }): Chainable<Subject>;
       drNewTypeTrainingSelect(): Chainable<Subject>;
+      drClickDAMEditBtn(): Chainable<Subject>;
 
       /* Document Approval Matrix End */
       drCreateNewDocumentFromForm(): Chainable<Subject>;
       drApproveAndReleaseDialog(): Chainable<Subject>;
-      drSelectTemplateReleaseDocument(params: { template: string }): Chainable<Subject>;
+      drSelectTemplateReleaseDocument(params: { template: string; selectDate?: boolean }): Chainable<Subject>;
       drAPIApproveAndRelease(params: { documentId: string; payload: IApproveAndReleasePayload; employeeId: string; sessionId: string }): Chainable<Subject>;
       drSetDocTypeId(params: { docId: string }): Chainable<Subject>;
       drSelectReferences(...list: string[]): Chainable<Subject>;
@@ -78,6 +82,7 @@ declare global {
       drAddUserFromPermissionTab(...users: string[]): Chainable<Subject>;
       drSelectGroup(...groups: string[]): Chainable<Subject>;
       drAddGroupFromPermissionTab(...groups: string[]): Chainable<Subject>;
+      drRequestAccessVisibility(params: {isVisible: boolean}): Chainable<Subject>;
     }
   }
 }
@@ -131,6 +136,25 @@ Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
   list.forEach((item) => {
     cy.get("[id=\"referenceTo\"]").click().type(item + "{downarrow}{enter}");
   });
+});
+
+Cypress.Commands.add("drClickDAMEditBtn", () => {
+  cy.get("[data-cy=\"EditBtnDAM\"]").click();
+});
+
+Cypress.Commands.add("drCheckApprovalsEnforcment", () => {
+  cy.drApproveAndReleaseDialog();
+  cy.wait(2000);
+  cy.get("[aria-label=\"change date\"]").click().wait(1000);
+  // eslint-disable-next-line max-len
+  cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]")
+    .click().wait(500);
+  cy.get("[data-cy=unchecked]").should("exist");
+  cy.get("[data-cy=group-0]").should("have.text", "Role One");
+  cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
+  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+  cy.checkToastMessageContains({ message: "at least one approver from group Role One has to be selected" });
+  cy.drCloseApproveAndReleaseDialog();
 });
 
 Cypress.Commands.add("drCancelDraftButton", () => {
@@ -190,9 +214,15 @@ Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: stri
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
-  cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
+    cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+  });
+  cy.wait(500);
+  cy.get("[aria-label=\"change date\"]").click().wait(500);
+  cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]")
+    .click()
+    .wait(500);
   cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
-
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {
@@ -280,6 +310,11 @@ Cypress.Commands.add("drCheckTypeOfRevisionChangeOptions", () => {
   cy.get("#RevisionTypeChange-administrativeChange").contains("Administrative Change");
 });
 
+Cypress.Commands.add("drSelectRevisionStageOptions", (params: {revisionStageOption: string}) => {
+  cy.get("[data-cy^=\"common.\"]");
+  cy.get("label").contains(params.revisionStageOption).click();
+});
+
 Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: { option: string }) => {
   cy.get("[data-cy=\"field-revisionChangeType\"]");
   cy.get("label").contains(params.option).click();
@@ -297,6 +332,9 @@ Cypress.Commands.add("checkToastMessageIsEqual", (params: { message: string }) =
   cy.get(".Toastify").should("have.text", params.message);
 });
 
+Cypress.Commands.add("checkToastMessageContains", (params: { message: string }) => {
+  cy.get(".Toastify").should("contain.text", params.message);
+});
 
 Cypress.Commands.add("closeAllAlertMessages", () => {
   cy.get(".Toastify__close-button").click({ multiple: true, force: true });
@@ -349,9 +387,11 @@ Cypress.Commands.add("drAMCheckValue", (params: { identity: string }) => cy.get(
 
 Cypress.Commands.add("drUpgradeRevisionLevel", () => cy.get(`[data-cy="upgradeNextRevisionStage"]`).click({ force: true }));
 
-Cypress.Commands.add("drRoleExistsAndChecked", (params: { group: number; role: string }) => {
+Cypress.Commands.add("drReleaseDocAfterRoleExistsAndChecked", (params: { group: number; role: string }) => {
+  cy.drApproveAndReleaseDialog();
   cy.get(`[data-cy="group-${params.group}"]`).contains(params.role);
   cy.get(`[data-cy="checked-${params.group}"]`).should("be.visible");
+  cy.drSelectTemplateReleaseDocument({ template: "Initial AR Form", selectDate: true });
 });
 
 Cypress.Commands.add("drNewTypeTrainingSelect", () => {
@@ -364,7 +404,12 @@ Cypress.Commands.add("drApproveAndReleaseDialog", () => {
   });
 });
 
-Cypress.Commands.add("drSelectTemplateReleaseDocument", (params: { template: string }) => {
+Cypress.Commands.add("drSelectTemplateReleaseDocument", (params: { template: string; selectDate?: boolean }) => {
+  if (params.selectDate) {
+    cy.wait(500);
+    cy.get("[aria-label=\"change date\"]").click().wait(200);
+    cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]").click().wait(300);
+  }
   cy.get("#FormList-selectForm").type(`${params.template}{enter}`);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
@@ -441,4 +486,8 @@ Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
     cy.get(`[id="react-select-3-input"]`).type(`${group}{downarrow}{enter}`, { force: true });
     cy.get(`[data-cy="add-user"]`).click();
   });
+});
+
+Cypress.Commands.add("drRequestAccessVisibility", (params: {isVisible: boolean}) => {
+  cy.get(`[data-cy="PreviewControlsContainer-access"]`).should((params.isVisible ? "" : "not.") + "be.visible");
 });

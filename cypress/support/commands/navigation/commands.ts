@@ -19,6 +19,8 @@ declare global {
       navigToPurchaseOrder(): Chainable<Subject>;
       navigToSuppliers(): Chainable<Subject>;
       navigToReceivableList(): Chainable<Subject>;
+      navigToWorkOrders(): Chainable<Subject>;
+      navigToRecords(): Chainable<Subject>;
     }
   }
 }
@@ -65,12 +67,42 @@ Cypress.Commands.add("navigToDocumentList", () => {
     });
 });
 
+Cypress.Commands.add("navigToRecords", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.DOCUMENT_CONTROL,
+      NavigationItems.RECORDS,
+    ],
+  });
+});
+
 Cypress.Commands.add("navigToApprovalRequestList", () => {
   cy.navigToNestedItem({
     navigItems: [
       NavigationItems.DASHBOARD,
       NavigationItems.DOCUMENT_CONTROL,
       NavigationItems.APPROVAL_REQUEST,
+    ],
+  });
+});
+
+Cypress.Commands.add("navigToRecords", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.DOCUMENT_CONTROL,
+      NavigationItems.RECORDS,
+    ],
+  });
+});
+
+Cypress.Commands.add("navigToWorkOrders", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.MANUFACTURING,
+      NavigationItems.WORK_ORDERS,
     ],
   });
 });

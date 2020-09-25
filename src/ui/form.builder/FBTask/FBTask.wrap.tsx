@@ -11,6 +11,7 @@ export const withFBTask = <T extends FBTaskProps>(
     onClick,
     taskState,
     dialogState,
+    canAddTask,
     tasks,
     name,
     loading,
@@ -20,6 +21,7 @@ export const withFBTask = <T extends FBTaskProps>(
 
     const { workspaceState } = FB.useStores();
     const {
+      id: crId,
       changeRequest: { tasks: crTasks = [] } = {},
       document: { tasks: docTasks = [] } = {},
     } = workspaceState || {};
@@ -30,13 +32,14 @@ export const withFBTask = <T extends FBTaskProps>(
     disabled = loading || disabled;
 
     onClick = (id?: string) => {
+      taskState?.handleAddTask(Boolean(crId));
       const initialValues = taskState?.getTask(id);
       const title = initialValues ?
         "form.builder.edit.implementation.task" :
         "form.builder.add.implementation.task";
 
       dialogState?.config({
-        open: true,
+        open: Boolean(crId),
         title,
         content: (
           <FBTaskFormDescription
@@ -49,6 +52,7 @@ export const withFBTask = <T extends FBTaskProps>(
 
     useObserver(() => {
       loading = taskState?.loading;
+      canAddTask = taskState?.canAddTask;
     });
 
     return Component({
@@ -60,6 +64,7 @@ export const withFBTask = <T extends FBTaskProps>(
       name,
       loading,
       disabled,
+      canAddTask,
     });
   };
 

@@ -1,7 +1,9 @@
 import { Box } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import moment from "moment";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBRequiredApprover, FBSection, FBText } from "..";
+import { TIME_ZONE } from "../../../common/utils/date";
 import { ApprovalStatus } from "../../../state/ducks/common";
 import { DocumentStatus } from "../../../state/ducks/documents";
 import Colors from "../../layout/theme/utils/colors";
@@ -23,6 +25,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
   ownerId,
   renderOption,
   loading,
+  inlineApprovalExists,
   ...props
 }) => (
   <FBInput {...props} {...{ name }} type="approvals">
@@ -57,9 +60,14 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
         >
           {approval.approver?.user.name}
           {approval.status && approval.status !== "DRAFT" && (
-            <Box color={Colors.gray}> | {FBInlineApprovalStatusIdent[approval.status]}</Box>
+            <Box color={Colors.gray}>&nbsp;| {FBInlineApprovalStatusIdent[approval.status]}</Box>
           )}
-          {approval.canRequest && (
+          {approval.reviewedAt && (
+            <Box color={Colors.gray}>
+              &nbsp;| {moment(approval.reviewedAt).tz(TIME_ZONE).format("MMMM D, YYYY HH:mm A")}
+            </Box>
+          )}
+          {approval.canRequest && inlineApprovalExists && (
             <>
               <Box> |</Box>
               <FBButton

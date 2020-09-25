@@ -1,5 +1,5 @@
 import { BoxProps } from "@material-ui/core";
-import { FBDialogState, FBFormProps, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBTaskState } from "..";
+import { FBDialogState, FBFormProps, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBTaskState, FBVisibilityType } from "..";
 import { Attachment } from "../../../state/ducks/attachments";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { Employee } from "../../../state/ducks/company";
@@ -35,6 +35,7 @@ export type FBTaskProps =
   dialogState?: FBDialogState;
   tasks?: FBTaskItem[];
   loading?: boolean;
+  canAddTask?: boolean;
 };
 
 export type FBTaskFormProps =
@@ -55,6 +56,6 @@ export type FBTaskFieldProps =
   handleClosingNote?: () => any;
   taskFieldState?: FBTaskFieldState;
   task: FBTaskItem;
-  visibility?: "visible" | "hidden";
+  visibility?: FBVisibilityType;
   canBeDone?: boolean;
 };

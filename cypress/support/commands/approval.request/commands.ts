@@ -34,10 +34,12 @@ declare global {
       arCreateApprovalRequest(params: {payload: ChangeRequestEditRequestBody; employeeId: string; sessionId: string}): Chainable<Subject>;
       arGetArDocumentByName(params: {employeeId: string; sessionId: string; name: string}): Chainable<Subject>;
       arCloseAR(): Chainable<Subject>;
+      arCloseARFromMenu(): Chainable<Subject>;
       arVoidAR(): Chainable<Subject>;
       arSaveApiCall(): Chainable<Subject>;
       arCheckDashboardARNotificationExistance(params: {shouldExist: boolean}): Chainable<Subject>;
       arVerifySignatureIsNotMet(): Chainable<Subject>;
+      arApproverRoleStatus(params: {roleName: string; enabled: boolean}): Chainable<Subject>;
     }
   }
 }
@@ -109,14 +111,8 @@ Cypress.Commands.add("arClickAddDocument", () => {
 });
 
 Cypress.Commands.add("arCloseAR", () => {
-  cy.get("[data-cy=\"HeaderMenuButton\"]").click();
   cy.get("[aria-label=closed]").click();
   cy.get("[data-cy=AlertDialog-continueButton]").click();
-});
-
-Cypress.Commands.add("arChoseProposedDocument", ({ name }) => {
-  cy.get("[role=dialog]>div:nth-child(2)>div>div>div>div>div>div>div>input").click();
-  cy.get("[role=listbox]>li").contains(name).click();
 });
 
 Cypress.Commands.add("arChoseSpecificProposedDocument", (params: { name: string }) => {
@@ -196,7 +192,7 @@ Cypress.Commands.add("arWithdrawSubmission", () => {
   cy.get("[data-cy=\"AlertDialog-continueButton\"]", { timeout: 1000 }).click();
 });
 
-Cypress.Commands.add("arCloseAR", () => {
+Cypress.Commands.add("arCloseARFromMenu", () => {
   cy.get("[data-cy=\"HeaderMenuButton\"]").click();
   cy.get("[data-cy=\"transition-closed\"]").click();
   cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
@@ -219,4 +215,8 @@ Cypress.Commands.add("arRejectComfirmationAR", () => {
 
 Cypress.Commands.add("arSelectFirstDocument", () => {
   cy.get(".MuiTableCell-root a:nth-child(1)").first().click().wait(3000);
+});
+
+Cypress.Commands.add("arApproverRoleStatus", (params: {roleName: string; enabled: boolean}) => {
+  cy.get(`[data-cy="fb-approvers-${params.roleName}-check-${params.enabled ? "marked" : "disabled"}"]`).should("not.be.undefined");
 });

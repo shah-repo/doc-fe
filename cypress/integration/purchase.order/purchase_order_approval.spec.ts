@@ -35,7 +35,7 @@ context("PO approval test", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -143,6 +143,10 @@ context("PO approval test", () => {
       cy.fbAddNewFieldButton();
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
@@ -191,6 +195,10 @@ context("PO approval test", () => {
 
     it("Click 'Add' to finish adding new field", () => {
       cy.fbAddNewFieldButton();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document after filling document", () => {
@@ -290,6 +298,13 @@ context("PO approval test", () => {
 
     it("Check approval icon if it's gray", () => {
       cy.poAMCheckApprovalIconIfItsGray();
+    });
+
+    it("Add Effective date", () => {
+      cy.get("[aria-label=\"change date\"]").click().wait(500);
+      // eslint-disable-next-line max-len
+      cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]")
+        .click().wait(500);
     });
 
     it("Try to approve document without approver when it contains POAM", () => {

@@ -23,7 +23,7 @@ context("Document Creation Flow", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -120,6 +120,10 @@ context("Document Creation Flow", () => {
 
     it("Mark 'Training Required' for next revision", () => {
       cy.drClickTrainingRequired();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     context("Uploads attachments", () => {
@@ -315,6 +319,10 @@ context("Document Creation Flow", () => {
     it("Selects 'Clinical Protocol' document type from dropdown", () => {
       // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document after filling document", () => {

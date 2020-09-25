@@ -15,7 +15,7 @@ const documentRevisionName = "New document for testing AR";
 const approvalRequestTitle = "Approval request from newly created form";
 const approvalRequestFormName = "New Approval request form template";
 
-context("Approval request form", () => {
+context("Approval request implementation tasks", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -32,7 +32,7 @@ context("Approval request form", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -148,6 +148,10 @@ context("Approval request form", () => {
       cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Add 'Implementation Task' to AR", () => {
       cy.fbClickAddNewHiddenBtn();
       cy.fbSelectItemFromNewFieldList({ field: "Implementation Task" });
@@ -210,7 +214,7 @@ context("Approval request form", () => {
       SystemRequirement("REQ-0710");
       cy.get("[data-cy=\"fb-control-btn\"]").click();
       cy.get("[data-cy=\"title\"]").type("Task One");
-      cy.get("[name=\"description\"]").type("Task Description");
+      cy.get("[data-cy=\"description\"]").next().type("Task Description");
       cy.get("[data-cy=\"assigned\"]").type(`${USERS[2].email}{downarrow}{enter}`);
       cy.poAddDateRequired();
       cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
@@ -247,7 +251,8 @@ context("Approval request form", () => {
     it("Complete Implementation Task'", () => {
       SystemRequirement("REQ-0710");
       cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Done$", "g")).click();
-      cy.get("[name=\"description\"]").type("Task is done");
+      cy.get("[data-cy=\"description\"]").next().type("Task is done");
+      cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
       cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
     });
 

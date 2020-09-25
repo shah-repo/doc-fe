@@ -1,10 +1,9 @@
-import { difference, filter, find, isEmpty, isUndefined, last, map, sortBy, unionBy } from "lodash";
+import { difference, filter, find, isEmpty, isUndefined, map, sortBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
 import { FB, FBAutocompleteAsyncOption, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from "..";
 import { store } from "../../../state/store";
-import { documentVersionPath } from "../../document.revision/utils/paths";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
@@ -13,10 +12,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
   const Comp = ({
     approvalTransition,
     inlineApprovalState,
-    defaultValue: { approvers, groups, roles } = {},
-    defaultValue,
+    editorConfig: { approvers, groups, roles } = {},
     currentUser,
     isApproved,
+    isPreview,
     approvals,
     disabled,
     options,
@@ -25,16 +24,23 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     ...props
   }: T) => {
 
+    let isComponentVisible = false;
+
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
-    const { id, document, changeRequest, documentId } = workspaceState || {};
+    const {
+      id,
+      document,
+      changeRequest,
+      document: { version: docVersion = 1 } = {},
+    } = workspaceState || {};
     const docApprovals = document?.approvals || changeRequest?.approvals;
     const userId = (
       document?.owner?.user?.id ||
       changeRequest?.owner?.user?.id
     );
 
-    disabled = disabled || isUndefined(id);
+    isPreview = workspaceState?.mode === "preview";
     const fieldApprovals = useMemo(() => filter(docApprovals, { fieldId: name }), [docApprovals, name]);
     const authUser = store.getState().auth.user;
     const isOwner = authUser.id === userId;
@@ -44,27 +50,16 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       isOwner,
     });
 
-    // On document load
-    React.useEffect(() => {
-      if (!isEmpty(fieldApprovals)) { return; }
-      inlineApprovalState?.getDocument(documentId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    // On document load
+    // MARK: @reaction
+    // Approvals sync
     React.useEffect(() => reaction(
-      () => inlineApprovalState?.documentApi.data,
+      () => workspaceState?.approvals,
       (data) => {
-        if (!documentId) { return; }
-        const { documentRevisions } = data || {};
-        const documentRevision = last(sortBy(documentRevisions, "version"));
-        if (!documentRevision) { return; }
-        if (id === documentRevision.id) {
-          // const approvals = map(documentRevisions, "approvals");
-          // console.log("approvals: " + JSON.stringify(approvals));
-        } else {
-          window.location.href = documentVersionPath(documentRevision.id, documentId);
+        if (!difference(inlineApprovalState?.approvals, data || [])) {
+          return;
         }
+        const fieldApprovals = filter(data, { fieldId: name });
+        inlineApprovalState?.setApprovals(fieldApprovals);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -72,13 +67,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     // On transition
     React.useEffect(() => reaction(
       () => inlineApprovalState?.transitionApi.data,
-      (data) => {
-        concatApprovals(data);
-      }
+      (data) => concatApprovals(data)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    // MARK: @reaction
     // Form sync
     React.useEffect(() => reaction(
       () => formState?.inputState.get("fb-ia-" + name)?.value,
@@ -184,21 +176,37 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     useObserver(() => {
       options = inlineApprovalState?.getOptions;
       approvals = inlineApprovalState?.getApprovals;
+
+      isComponentVisible = document?.status !== "VOIDED"
+        && document?.revisionStage === 1;
+
       loading = (
         inlineApprovalState?.approvalApi.loading ||
         inlineApprovalState?.transitionApi.loading ||
         inlineApprovalState?.documentApi.loading
       );
-      isApproved = !isUndefined(find(approvals, { status: "APPROVED" }));
+      disabled = disabled || isUndefined(id) || loading;
     });
+
+    // MARK: @final config
+    isApproved = (
+      docVersion > 1 &&
+      isEmpty(inlineApprovalState.getApprovals) &&
+      Boolean(formState?.getFieldValue(name))
+    ) ? true
+      : !isUndefined(find(approvals, { status: "APPROVED" }));
+
+    if (!isComponentVisible) {
+      return null;
+    }
 
     return Component({
       ...(props as T),
       approvalTransition,
       inlineApprovalState,
-      defaultValue,
       currentUser,
       isApproved,
+      isPreview,
       approvals,
       disabled,
       loading,

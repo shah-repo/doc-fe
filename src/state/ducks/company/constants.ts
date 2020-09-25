@@ -5,6 +5,7 @@ import { NavigationItem } from "./types";
 
 export const SELECT_COMPANY = "company/SELECT_COMPANY";
 export const SET_COMPANY_MINE = "company/SET_COMPANY_MINE";
+export const UPDATE_NAVIGATION_ITEM = "company/UPDATE_NAVIGATION_ITEM";
 
 export const WHITE_LABEL_DEFAULT = {
   logo: "",
@@ -29,6 +30,7 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     label: "Document Control",
     type: "MENU",
     icon: "/navigation_icons/document-menu.svg",
+    isOpen: false,
     menu: [
       {
         label: "Document List",
@@ -75,6 +77,7 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     label: "Manufacturing",
     type: "MENU",
     icon: "/navigation_icons/tools.svg",
+    isOpen: false,
     menu: [
       {
         label: "Work Orders",

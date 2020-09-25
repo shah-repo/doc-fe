@@ -1,8 +1,9 @@
 #!/bin/bash
+set -e
 
 source ./scripts/cypress/env_vars_for_compose.sh
-source ./scripts/cypress/make_results_dir.sh
-source ./scripts/cypress/platform_specific_variables.sh
+source ./scripts/cypress/utils/make_results_dir.sh
+source ./scripts/cypress/utils/platform_specific_variables.sh
 
 if [[ -z "${CI_BUILD_ID}" ]]; then
   echo "CI_BUILD_ID not set, exiting"

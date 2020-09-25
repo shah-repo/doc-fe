@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
+import { find, isEmpty, isUndefined, keys } from "lodash";
 import * as React from "react";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
+import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
@@ -10,7 +13,7 @@ import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.prese
 import { withActionButton } from "./ActionButton.wrap";
 import { ApproveAndRelease } from "./ApproveAndRelease";
 import CancelButton from "./CancelButton";
-import { FinalizeAndRelease } from "./FinalizeAndRelease";
+import { SubmitForApproval } from "./SubmitForApproval";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
 import VoidButton from "./VoidButton";
 
@@ -21,16 +24,37 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     docInfo,
     asyncState,
     canChangeOwnerShip,
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   } = React.useContext(FormHeaderContext)!;
 
-  const { workspaceState, formState } = FB.useStores();
-  const { revisionStage, subRevision } = documentRevision || {};
+  const { workspaceState, formState, inlineApprovalState } = FB.useStores();
+
+  const inlineApprovalFields = documentRevision?.formDocument?.formTemplate?.schema
+    .filter((field) => (field.type === "inlineapproval" as string));
+
+  const isInlineApproval = Boolean(inlineApprovalFields && inlineApprovalFields.length > 0);
+  const isRecord = values.document?.documentType?.group === "RECORD";
+
+  /** Function that checks if a form section is approved.
+   * @param fieldName Unique name of the form field.
+  */
+  const isSectionApproved = (fieldName: string) => (
+      documentRevision?.version > 1 &&
+      isEmpty(inlineApprovalState?.getApprovals) &&
+      Boolean(formState?.getFieldValue(fieldName))
+  ) ? true
+    : !isUndefined(find(inlineApprovalState?.getApprovals, { status: "APPROVED" }));
+
+  /** Every form field that is inline approval should have
+   * at least one approval in status approved in order to be considered as approved. */
+  const isApproved = inlineApprovalFields?.every((field) => isSectionApproved(field.name!));
+
+  const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
   const formik = useFormikContext();
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
   const isUserDocumentOwner = React.useContext(isOwnerContext);
   const showVoidButton = documentRevision?.status === DocumentRevisionStatus.Draft && documentRevision?.version === 1;
+
   function setFBValue() {
     switch (workspaceState?.getMode()) {
       case "design":
@@ -44,7 +68,18 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         formik.setFieldValue("formDocument", {
           id: values.formDocument?.id,
         });
-        formik.setFieldValue("formInput", formState?.getValues());
+        if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
+          const newInput = {};
+          keys(values.formInput).map((key) => {
+            newInput[key] = values?.formInput && typeof values?.formInput[key] === "string"
+              ? "Void"
+              : null;
+            return key;
+          });
+          formik.setFieldValue("formInput", newInput);
+        } else {
+          formik.setFieldValue("formInput", formState?.getValues());
+        }
         break;
       default:
         formik.setFieldValue("formTemplate", undefined);
@@ -52,6 +87,12 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
   const onFormClick = () => {
     setFBValue();
+    if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
+      formik.setFieldValue("attachments", []);
+      formik.setFieldValue("name", "Void");
+      formik.setFieldValue("description", "Void");
+      formik.setFieldValue("referenceTo", null);
+    }
     formik.submitForm();
   };
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
@@ -71,28 +112,39 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         data-cy={"DocumentRevisionForm-submit"}
       />
       {
-        values.document?.documentType?.group === "RECORD"
-          ? (
-            <FinalizeAndRelease
-              docRevId={values.id as string}
-              revisionStage={revisionStage}
-              subRevision={subRevision}
-              status={values.status}
-            />
-
-          )
-          : (
-            <ApproveAndRelease
-              id={values.id}
-              status={values.status}
-              isQms={docInfo.isQms}
-              documentName={docInfo.name}
-              docRevId={values.id as string}
-              owner={documentRevision?.owner}
-              documentTypeId={documentTypeId}
-              revisionStage={revisionStage}
-            />
-          )
+        isRecord && (!isInlineApproval || revisionStage !== 1) && (
+          <SubmitForApproval
+            docRevId={values.id as string}
+            status={values.status}
+            docRevOwner={owner.user.name}
+            updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
+            {
+              ...{
+                revisionChangeType,
+              }
+            }
+          />
+        )
+      }
+      {
+        (!isRecord || (isInlineApproval && isApproved && revisionStage === 1)) && (
+          <ApproveAndRelease
+            id={values.id}
+            status={values.status}
+            isQms={docInfo.isQms}
+            documentName={docInfo.name}
+            docRevId={values.id as string}
+            owner={documentRevision?.owner}
+            {
+              ...{
+                documentTypeId,
+                revisionStage,
+                isRecord,
+                isInlineApproval,
+              }
+            }
+          />
+        )
       }
       <HeaderMenu>
         <CancelButton

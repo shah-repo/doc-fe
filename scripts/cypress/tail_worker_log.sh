@@ -6,7 +6,7 @@ if [[ -z "${CI_BUILD_ID}" ]]; then
   exit 1
 fi
 # make folders for results
-source ./scripts/cypress/make_results_dir.sh
+source ./scripts/cypress/utils/make_results_dir.sh
 
 export ENLIL_WORKER_LOG_FILE="$DIR_REPORTS/worker.log"
 

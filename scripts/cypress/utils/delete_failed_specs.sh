@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 if [[ -z "${CI_BUILD_ID}" ]]; then
   echo "CI_BUILD_ID not set, exiting"

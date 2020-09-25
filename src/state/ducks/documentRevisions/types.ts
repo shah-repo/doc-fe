@@ -106,6 +106,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   outputRevision?: boolean;
   primaryAttachment?: Attachment;
   approvals?: Approval[];
+  updatedAt?: string;
 }
 
 export const RevisionStageOptions = [
@@ -190,7 +191,7 @@ export type AllIdsState = string[];
 
 export interface ApproveAndReleaseRequest {
   approvers: Id[];
-  effectiveDate: string;
+  effectiveDate?: string;
   documentType: Id;
   formDocument: Id;
 }

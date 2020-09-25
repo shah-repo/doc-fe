@@ -28,6 +28,8 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     ownerId,
     ...props
   }: T) => {
+    let isComponentVisible = false;
+    let inlineApprovalExists = false;
 
     const { workspaceState, formState } = FB.useStores();
     const {
@@ -44,6 +46,9 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     if (document?.status === DocumentRevisionStatus.InReview
       || changeRequest?.state === ChangeRequestStatus.InReview) {
       disabled = false;
+    }
+    if (document?.status === DocumentRevisionStatus.Released) {
+      disabled = true;
     }
 
     const authUser = store.getState().auth.user;
@@ -144,8 +149,15 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     // MARK: @observer
     useObserver(() => {
+      inlineApprovalExists = Boolean(document?.formDocument?.formTemplate?.schema
+      .some((e) => (e.type === "inlineapproval" as string)));
+
       groups = approvalsState?.groups;
       approvals = approvalsState?.getApprovals;
+
+      isComponentVisible = document?.status !== DocumentRevisionStatus.Voided
+        && (!inlineApprovalExists || document?.revisionStage !== 1);
+
       loading = (
         approvalsState.loading ||
         approvalsState?.approvalApi.loading ||
@@ -155,6 +167,10 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     const fieldValue = map(approvalsState?.getApprovals, "approver.id");
     formState?.setFieldValue(`fb-approvals-${name}`, fieldValue);
+
+    if (!isComponentVisible) {
+      return null;
+    }
 
     return Component({
       ...(props as T),
@@ -171,6 +187,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       isIncluded,
       currentUser,
       ownerId,
+      inlineApprovalExists,
     });
   };
 

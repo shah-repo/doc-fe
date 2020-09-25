@@ -23,7 +23,7 @@ const FBFieldTopBar: React.FunctionComponent<FBFieldTopBarProps> = ({
       />
     </Box>
     <Box pr={2} zIndex={1000}>
-      <BorderColorIcon color="primary" onClick={editSchemaItem} />
+      <BorderColorIcon color="primary" data-cy={"edit-schema-item"} onClick={editSchemaItem} />
     </Box>
     <Box pr={2} zIndex={1000}>
       <CodeIcon color="primary" onClick={markDownSchemaItem} />

@@ -2,12 +2,13 @@ import classNames from "classnames";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Nullable } from "../../state/ducks/common";
-import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import SummaryInfo from "../common/summary/SummaryInfo";
 import DateFormatter from "../components/Date";
 import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
-import { useDocumentVersion } from "../hooks/docCustomization/useCustomization";
+import { useDocumentStatus } from "../hooks/docCustomization/useCustomization";
+import { Translation } from "../translations/types";
 import { styles } from "./DocumentRevisionList.container.styles";
 import { generateVersionNumber } from "./helpers";
 
@@ -42,12 +43,14 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     documentRevision.revisionStage,
     documentRevision.subRevision,
     documentRevision.revisionChangeType,
+    undefined,
+    isRecord,
   );
 
   const { status } = documentRevision;
-  const [isStatusVisible, statusLabel] = useDocumentVersion(documentTypeId, status);
+  const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
   let verPrefix = "common.revision";
-  let statLabel = statusLabel;
+  let stateLabel = statusLabel;
 
   const isSelected = selectedDocumentRevision === documentRevision.id;
   const isDraft = status === DocumentRevisionStatus.Draft;
@@ -55,22 +58,35 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isDeprecated = status === DocumentRevisionStatus.Deprecated;
   const isAlphaReleased = documentRevision.revisionStage === 3;
   const isNumericRelease = documentRevision.revisionStage === 1;
+  const isObsolete = documentRevision.revisionChangeType === RevisionChangeType.Obsolete;
+  const isInReview = status === DocumentRevisionStatus.InReview;
+  const isVoided = status === DocumentRevisionStatus.Obsolete || status === DocumentRevisionStatus.Voided;
 
-  if (isDraft && isRecord && isInlineApproval && !isAlphaReleased) {
-    statLabel = "common.wip";
+  if (isRecord && !isInlineApproval && (!isObsolete || isInReview)) {
+    stateLabel = status;
+  }
+  if (isRecord && !isInlineApproval && isDeprecated) {
+    stateLabel = "common.released";
+  }
+  if (isDraft && isRecord && documentRevision.subRevision === 0 && !isObsolete) {
+    stateLabel = "common.wip";
   }
   if (isReleased || ((isDeprecated || isDraft) && isInlineApproval && isRecord && isAlphaReleased)) {
     verPrefix = "common.revision";
   }
   if (isDeprecated && isInlineApproval && isRecord && isAlphaReleased) {
-    statLabel = "common.archived";
+    stateLabel = "common.archived";
   }
   if ((isDeprecated || isReleased) && isInlineApproval && isNumericRelease) {
-    statLabel = "common.archived";
+    stateLabel = "common.archived";
   }
   if (isReleased && isInlineApproval && isNumericRelease) {
-    statLabel = "common.last.signed";
+    stateLabel = "common.last.signed";
   }
+
+  const docIdLabel = (isRecord ? "common.id" : "common.docId") as Translation;
+  const recordOwnerLabel = (isVoided ? "record.voided.by" : "record.released.by") as Translation;
+  const recordDateLabel = (isVoided ? "record.voided.date" : "document.revision.released.date") as Translation;
 
   return (
     <div
@@ -92,7 +108,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           {
             isStatusVisible &&
             <>
-              &nbsp; - <Text message={statLabel} />
+              &nbsp; - <Text message={stateLabel} />
             </>
           }
         </div>
@@ -102,21 +118,30 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         key={documentRevision.id}
         className={classes.linkBody}
       >
-        <SummaryInfo dataCy={"common.docId"} label={isDocumentPO ? undefined : "common.docId"} value={docId} />
         <SummaryInfo
-          label="common.title"
-          value={documentRevision.name}
+          dataCy={"common.docId"}
+          label={isDocumentPO ? undefined : docIdLabel}
+          value={docId}
         />
+        {!isRecord && (
+          <SummaryInfo
+            label="common.title"
+            value={documentRevision.name}
+          />
+        )}
         <SummaryInfo
-          label="common.owner"
+          label={isRecord ? recordOwnerLabel : "common.owner"}
           value={documentRevision.owner.user.name}
         />
         <SummaryInfo
-          label="common.effective.date"
+          label={isRecord ? recordDateLabel : "common.effective.date"}
           value={
             <DateFormatter
-              value={documentRevision.obsoletedAt || documentRevision.effectiveDate}
-            />
+              value={
+                isRecord ?
+                  documentRevision.releasedAt :
+                  documentRevision.obsoletedAt || documentRevision.effectiveDate
+              }/>
           }
         />
       </NavLink>

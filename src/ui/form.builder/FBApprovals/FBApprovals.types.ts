@@ -23,6 +23,7 @@ export type FBApprovalsProps =
   isIncluded?(group: FBRequiredApprover): void;
   ownerId?: string;
   currentUser?: string;
+  inlineApprovalExists?: boolean;
 };
 
 export type FBApprovalsConstructor = FBInlineApprovalConstructor & {

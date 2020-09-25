@@ -1,10 +1,19 @@
-import { get, pick } from "lodash";
+import { get, maxBy, pick } from "lodash";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
-import { getIsAdministrativeDefault } from "../helpers";
+import { generateVersionNumber, getIsAdministrativeDefault } from "../helpers";
 import { DocumentRevisionFormValues } from "./types";
+
+
+const getHighestRevision = (revisions: DocumentRevision[]) => maxBy(revisions, "revision");
+
+const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateVersionNumber(revision.revision,
+  revision.revisionStage,
+  revision.subRevision,
+  revision.revisionChangeType,
+) : "";
 
 export const toDocumentRevisionFormValues = (
   documentRevision: DocumentRevision,
@@ -14,10 +23,13 @@ export const toDocumentRevisionFormValues = (
     description: documentRevision.description,
     name: documentRevision.name,
     attachments: documentRevision.attachments,
-    referenceTo: documentRevision.referenceTo.map((reference: any) => ({
-      value: reference.id,
-      label: reference.docId,
-    })),
+    referenceTo: documentRevision.referenceTo.map((reference: any) => {
+      const highestRev = getHighestRevision(reference.documentRevisions);
+      return ({
+        value: reference.id,
+        label: `${reference.docId} - ${getRevisionNumber(highestRev)} - ${highestRev?.name}`,
+      });
+    }),
     document: documentRevision.document,
     changeRequest: documentRevision.changeRequest,
     retrain: documentRevision.retrain,
@@ -60,7 +72,7 @@ export const toDocumentRevisionEditRequestBody = (
       .map((reference) => ({
         id: reference.value,
       })),
-    revisionStage: values.revisionStage,
+    revisionStage: Number(values.revisionStage),
     revisionChangeType: values.revisionChangeType,
     retrain: values.retrain,
     renderHTML: values.renderHTML ? values.renderHTML.replace(/(\r\n|\n|\r)/gm, "") : values.renderHTML,
