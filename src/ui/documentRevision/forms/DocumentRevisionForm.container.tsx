@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import { cloneDeep, filter, get, isEmpty, map, union, uniqBy } from "lodash";
+import { cloneDeep, filter, get, isEmpty, map, some, union, uniqBy } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
@@ -174,30 +174,54 @@ DocumentRevisionFormContainerProps
   }
   const showAdministrativeAndVoidChange = isOutput && isAlphaReleased && isRecord;
 
+  const recordsAsOutputExist = (outputTypes) =>
+    some(outputTypes, (type) => type.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.RECORD));
+
   const GetScheme = (props: FormikProps<DocumentRevisionFormValues>): FBSchemaProps[] => {
     const { id: documentTypeId = "" } = props.values.document?.documentType || {};
     const { outputDocumentTypes } = props.values || {};
+    const outputTypes = outputDocumentTypes?.map((docType) => documentTypesById[docType.value]);
+
     let { schema: docScheme = [] } = documentTypesById?.[documentTypeId] || {};
+
+
     docScheme = map(docScheme, ((schemaItem) => ({
       ...schemaItem,
       deleteDisabled: true,
     })));
+
+
     let outputScheme =  useMemo(() => outputDocumentTypes?.reduce((scheme, value: OptionType) => {
       const { schema: outputScheme = [] } = documentTypesById[value.value] || {};
       if (!isEmpty(outputScheme)) {
         return uniqBy(union(scheme, outputScheme), "name");
       }
 
+      if (recordsAsOutputExist(outputTypes)) {
+        scheme.push({
+          label: "Approvals",
+          type: "approvals",
+        });
+      }
+
       return scheme;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [] as FBSchemaProps[]), [outputDocumentTypes]);
+
+
     outputScheme = map(outputScheme, ((schemaItem) => ({
       ...schemaItem,
       deleteDisabled: true,
     })));
 
+    if (!recordsAsOutputExist(outputTypes)) {
+      // DELETE APPROVALS FROM SCHEMA
+    }
+
     const schema = isOutput
       ? originScheme
       : uniqBy([ ...originScheme, ...docScheme || [], ...outputScheme || []], "name");
+
     return schema;
   };
 
