@@ -17,6 +17,7 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
   textEditorState,
   editorState,
   editorReference,
+  isPreview,
   formValue = "",
   options = [],
   toolbar,
@@ -28,12 +29,12 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
   <FBProvider {...{ textEditorState }}>
     <FBInput {...props} {...{ name, disabled }} type="texteditor">
       <Box
-        bgcolor="white"
-        border={1}
+        bgcolor={isPreview ? "transparent" : "white"}
+        border={isPreview ? 0 : 1}
         borderColor={Colors.hint_gray}
         borderRadius={4}
         style={{ display: "grid" }}
-        minHeight={140}
+        minHeight={isPreview ? "auto" : 140}
       >
         <Box
           display="flex"
@@ -51,6 +52,7 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
                 />,
               ],
             }}
+            toolbarHidden={isPreview}
             toolbarStyle={{
               border: "none",
               borderBottom: `1px solid ${Colors.hint_gray}`,
@@ -59,6 +61,7 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
               height: "100%",
               padding: "0 13px",
               overflow: "hidden",
+              visibility: isPreview ? "hidden" : "visible",
             }}
           />
         </Box>
@@ -72,7 +75,7 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
         >
           <Box
             {...!disabled && { onClick: () => handleMask?.(false) }}
-            bgcolor="white"
+            bgcolor={isPreview ? "transparent" : "white"}
             borderRadius={4}
             zIndex={1000}
             display="flex"
@@ -80,7 +83,7 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
               gridArea: "1/1",
               cursor: !disabled ? "text" : "inherit",
             }}
-            p={1.5}
+            p={isPreview ? 0 : 1.5}
           >
             <div
               style={{ width: "100%", height: "100%" }}
