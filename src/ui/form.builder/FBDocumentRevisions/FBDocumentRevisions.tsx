@@ -6,13 +6,13 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionsProps> = (
   handleForm,
   handleOpen,
   remove,
+  getOptionLabel,
   dialogState,
   collection = [],
   name,
   gutter,
   disabled,
   index,
-  getOptionLabel,
 }) => (
   <FBProvider {...{ dialogState }}>
     <FBDialog />

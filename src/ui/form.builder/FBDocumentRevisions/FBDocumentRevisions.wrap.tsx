@@ -146,11 +146,11 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
       handleForm,
       handleOpen,
       remove,
+      getOptionLabel,
       dialogState,
       collection,
       index,
       name,
-      getOptionLabel,
     });
   };
 

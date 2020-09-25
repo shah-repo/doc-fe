@@ -8,11 +8,11 @@ import Colors from "../../layout/theme/utils/colors";
 const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemProps> = ({
   handleOpen,
   remove,
+  getOptionLabel,
   id,
   index = 0,
   disabled,
   name,
-  getOptionLabel,
 }) => (
   <>
     <FBSection

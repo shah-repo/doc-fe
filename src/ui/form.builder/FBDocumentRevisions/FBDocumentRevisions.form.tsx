@@ -2,11 +2,11 @@ import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBDocumentRevisionsFormProps, FBForm, FBTextField } from "..";
 
 const FBDocumentRevisionsForm: React.FunctionComponent<FBDocumentRevisionsFormProps> = ({
+  renderOption,
+  getOptionLabel,
   formState,
   disabledOptions,
   children,
-  renderOption,
-  getOptionLabel,
 }) => (
   <FBForm {...{ formState }} >
     <FBAutocompleteAsync
