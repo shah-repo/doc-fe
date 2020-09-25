@@ -27,7 +27,7 @@ const FBApprovalAudit: React.FunctionComponent<FBApprovalAuditProps> = ({
             <Box flexGrow={1}>
               {change?.ownerName}
               <Box component="span" ml={0.6} color={Colors.gray}>
-                {`| ${change?.description} |`}
+                | {change.description} |
                 {change?.formattedTime}
               </Box>
             </Box>

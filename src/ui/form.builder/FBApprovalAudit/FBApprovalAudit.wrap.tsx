@@ -141,7 +141,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           if (nextValue === "undefined" || nextValue === "false") {
             return "Unchecked in " + label + ": " + previousValue;
           }
-          return "Checked in " + label + ": " + nextValue;
+          return (<span>Checked in {label}: <b>{nextValue}</b></span>);
         }
 
         function isFileupload() {
@@ -212,7 +212,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           return desc;
         }
 
-        const description: Partial<Record<FBInputType | "default", () => any>> = {
+        const description: Partial<Record<FBInputType | "default", () => React.ReactNode>> = {
           purchaseorder: () => isPurchaseorder(),
           inlineapproval: () => "Approved",
           checkboxgroup: () => isCheckGroup(),
@@ -234,7 +234,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         return {
           ownerName: v[0].owner.user.name,
           formattedTime: getFormattedDateString(v[0].timestamp, MomentFormats.DateTimeAlt),
-          description: (description[type || ""] || description.default)(),
+          description: desc,
           timestamp: v[0].timestamp,
           type,
         };
