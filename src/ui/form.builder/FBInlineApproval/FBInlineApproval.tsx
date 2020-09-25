@@ -3,6 +3,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import React from "react";
 import { FBApprovalAudit, FBAutocomplete, FBButton, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from "..";
+import { ApprovalStatus } from "../../../state/ducks/common";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBInlineApproval } from "./FBInlineApproval.wrap";
 
@@ -90,10 +91,12 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
                   />
                 </>
               )}
-              {currentUser === approval.approver?.user.id && (
+              {currentUser === approval.approver?.user.id
+              && approval.status !== ApprovalStatus.Approved
+              && approval.status !== ApprovalStatus.Rejected
+              && (
                 <Box flexGrow={1} textAlign="right">
                   <FBButton
-                    {...{ disabled }}
                     label="form.builder.request.approve"
                     size="small"
                     style={{ fontSize: "11px" }}
