@@ -94,7 +94,7 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
               && (
                 <Box flexGrow={1} textAlign="right">
                   <FBButton
-                    {...{ disabled }}
+                    disabled={disabled || approval.status === "APPROVED"}
                     label="form.builder.request.approve"
                     size="small"
                     style={{ fontSize: "11px" }}
