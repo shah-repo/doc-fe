@@ -8,7 +8,7 @@ import { documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
 import { filterSecurityGroupsForQms } from "../../../documentType/list/helpers";
-import { FB } from "../../../form.builder";
+import { FB, FBSchemaProps } from "../../../form.builder";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
 import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
 import { DocumentCloneType } from "../../Clone.container";
@@ -89,25 +89,26 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       const securityGroups = filterSecurityGroupsForQms(type.isQms, groupOptions);
       formik.setFieldValue("securityGroups", securityGroups);
     }
-
+    formik.handleChange(event);
+    
     // FB mode
     const formOption: DocumentGroupOptionsType = "FORM";
     const mode: FBWorkspaceMode = isNewOutput ? "form" :
       type.groupOptions?.includes(formOption) ? "design" : "none";
-    workspaceState?.setMode(mode);
-    formik.handleChange(event);
-    if (mode === "design") {
+    let scheme: FBSchemaProps[] = [];
+    if (mode === "design" && type.group !== "DYNAMIC_FORM") {
       const formValues = {
         ...formik.values as Partial<DocumentRevision>,
         "document.documentType.id": typeId,
       };
-      const scheme = getFBSchemeByDocType(
+      scheme = getFBSchemeByDocType(
         formValues,
         documentTypesById,
         workspaceState?.getSchema(),
       );
-      workspaceState?.setSchema(scheme);
     }
+    workspaceState?.setMode(mode);
+    workspaceState?.setSchema(scheme);
   };
 
   if (!isVisible && type !== "newOutput") {

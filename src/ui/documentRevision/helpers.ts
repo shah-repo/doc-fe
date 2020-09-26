@@ -1,4 +1,4 @@
-import { find, findLastIndex, get, isEmpty, map, orderBy, some, unionBy } from "lodash";
+import { find, findLastIndex, get, isEmpty, map, orderBy, some, union, unionBy } from "lodash";
 import moment from "moment";
 import { Document, DocumentRevision, DocumentRevisionStatus, FBFormTemplateProps, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, DOC_TYPE_GROUP_OPTION } from "../../state/ducks/documentRevisions/documentType";
@@ -175,31 +175,21 @@ export const getFBSchemeByDocType = (
   documentTypesById: DocumentTypeByIdState,
   originScheme?: FBSchemaProps[],
 ): FBSchemaProps[] => {
-  const outDocTypeIds = map(formValue.outputDocumentTypes as OptionType[], "value");
-  const outputScheme = outDocTypeIds.reduce((scheme, typeId) => {
+  const outputTypes = map(formValue.outputDocumentTypes as OptionType[], "value");
+  const tplType = get(formValue, "document.documentType.id") || "";
+  const documentTypes = union([tplType], outputTypes);
+  
+  const finalScheme = documentTypes.reduce((scheme, typeId) => {
     const rec = documentTypesById[typeId];
     // If type has scheme
     if (!rec.schema) { return scheme; }
     const typeScheme = map(rec.schema, ((schemaItem) => ({
       ...schemaItem,
+      ...find(originScheme, { name: schemaItem.name }),
       deleteDisabled: true,
     })));
     return unionBy(scheme, typeScheme, "name");
   }, [] as FBSchemaProps[]);
-
-  const docTypeId = get(formValue, "document.documentType.id") || "";
-  let docTypeScheme = documentTypesById[docTypeId]?.schema || [];
-
-  docTypeScheme = map(docTypeScheme, ((schemaItem) => ({
-    ...schemaItem,
-    deleteDisabled: true,
-  })));
-  let finalScheme = unionBy(docTypeScheme, outputScheme, "name");
-
-  // Add possible additional config added from FB
-  finalScheme = map(finalScheme, (schemeItem) => ({
-    ...schemeItem,
-    ...find(originScheme, { name: schemeItem.name }),
-  }));
+  
   return finalScheme;
 };
