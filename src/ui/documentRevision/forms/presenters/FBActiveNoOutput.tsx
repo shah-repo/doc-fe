@@ -70,7 +70,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     const scheme = getFBSchemeByDocType(
       formValue,
       documentTypesById,
-        workspaceState?.getSchema(),
+      workspaceState?.getSchema(),
     );
       workspaceState?.setSchema(scheme);
   };

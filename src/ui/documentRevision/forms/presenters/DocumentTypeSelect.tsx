@@ -90,7 +90,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       formik.setFieldValue("securityGroups", securityGroups);
     }
     formik.handleChange(event);
-    
+
     // FB mode
     const formOption: DocumentGroupOptionsType = "FORM";
     const mode: FBWorkspaceMode = isNewOutput ? "form" :

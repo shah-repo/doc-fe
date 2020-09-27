@@ -178,7 +178,7 @@ export const getFBSchemeByDocType = (
   const outputTypes = map(formValue.outputDocumentTypes as OptionType[], "value");
   const tplType = get(formValue, "document.documentType.id") || "";
   const documentTypes = union([tplType], outputTypes);
-  
+
   const finalScheme = documentTypes.reduce((scheme, typeId) => {
     const rec = documentTypesById[typeId];
     // If type has scheme
@@ -190,6 +190,6 @@ export const getFBSchemeByDocType = (
     })));
     return unionBy(scheme, typeScheme, "name");
   }, [] as FBSchemaProps[]);
-  
+
   return finalScheme;
 };
