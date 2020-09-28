@@ -4,7 +4,7 @@ import { Dictionary, isEmpty } from "lodash";
 import moment from "moment";
 import * as React from "react";
 import * as generateUuid from "uuid/v4";
-import { toStartOfDay } from "../../../../common/utils/date";
+import { getStartOfDayDateString, TIME_ZONE } from "../../../../common/utils/date";
 import { Group } from "../../../../state/ducks/auth/types";
 import { Owner } from "../../../../state/ducks/common/types";
 import { AsyncState, AsyncStatus } from "../../../../state/types";
@@ -134,14 +134,16 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           }
         />
       )}
-      {isEmpty(values.approvals) && <DatePickerField
-        label="transition.action.effective.date"
-        name="effectiveDate"
-        size="mdw"
-        minDate={toStartOfDay(moment.utc().toISOString())}
-        value={toStartOfDay(moment.utc().toISOString())}
-        validate={validator(required)}
-      />}
+      {isEmpty(values.approvals) && (
+        <DatePickerField
+          label="transition.action.effective.date"
+          name="effectiveDate"
+          size="mdw"
+          minDate={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
+          value={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
+          validate={validator(required)}
+        />
+      )}
       {templateOptions.length > 1 && (
         <AutocompleteField
           name="formDocument"
