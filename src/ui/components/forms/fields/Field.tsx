@@ -18,7 +18,8 @@ export interface FieldOwnProps {
   variant?: "standard" | "outlined" | "filled";
   required?: boolean;
   gutter?: boolean;
-  minDate?: Date;
+  minDate?: string;
+  value?: string;
   actionsRenderer?: () => any;
 }
 
