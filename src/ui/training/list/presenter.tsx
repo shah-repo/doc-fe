@@ -2,9 +2,8 @@ import { Box, Button, Grid } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { DataTable } from "../../../state/ducks/documentRevisions";
 import { TRAINING_RECORD_ROOT_URL } from "../../../state/ducks/training/constants";
-import { TrainingRecordQuery } from "../../../state/ducks/training/types";
+import { TrainingListData, TrainingRecordQuery } from "../../../state/ducks/training/types";
 import Date from "../../components/Date";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
@@ -19,7 +18,7 @@ import { styles } from "./styles";
 
 export interface Props {
   tableName: string;
-  data: TableDataProps<any>;
+  data: TableDataProps<TrainingListData>;
   clearFilter?: () => void;
   tableCriteria: TablePanelStateProps;
 }
@@ -56,7 +55,7 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
     docId: e.trainingPlan.document.docId,
     revision: e.documentRevision.revision,
     docRevTitle: e.documentRevision.name,
-    userName: e.trainingPlan.employee.user.name,
+    userName: e.trainingPlan.employee.user?.name,
     createdAtAfter: e.createdAt ? getFormattedDateString(e.createdAt, MomentFormats.MonthDateYear) : "",
     dueOn: e.dueOn ? getFormattedDateString(e.dueOn, MomentFormats.MonthDateYear) : "",
     completedAtAfter: e.completedAt ? getFormattedDateString(e.completedAt, MomentFormats.MonthDateYear) : "Pending",
@@ -177,7 +176,7 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
         </Button>
         <ExportListDialog
           {...{ dialog, headers }}
-          data={exportedData as unknown as DataTable[]}
+          data={exportedData}
         />
       </Grid>
       <Grid item={true} className={classes.item}>

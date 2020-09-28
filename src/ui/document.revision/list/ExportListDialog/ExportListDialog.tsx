@@ -2,7 +2,7 @@ import { Box, Button, Dialog, DialogContent, DialogContentText, TextField, Typog
 import React, { useEffect, useRef, useState } from "react";
 import { CSVLink } from "react-csv";
 import { ReactComponent as ExportIcon } from "../../../../assets/images/icon_export_data.svg";
-import { DataTable, HeaderTableType } from "../../../../state/ducks/documentRevisions/types";
+import { HeaderTableType } from "../../../../state/ducks/documentRevisions/types";
 import Text from "../../../components/Text";
 import { DialogHandler } from "../../../hooks/useDialog";
 import { styles } from "./ExportListDialog.styles";
@@ -10,7 +10,7 @@ import { styles } from "./ExportListDialog.styles";
 interface Props {
   dialog: DialogHandler;
   headers: HeaderTableType[];
-  data: DataTable[];
+  data: any[];
 }
 
 const ExportListDialog: React.FunctionComponent<Props> = ({

@@ -1,5 +1,5 @@
-import { User } from "../common";
-import { DocumentRevisionDocument } from "../documentRevisions";
+import { Employee } from "../company/types";
+import { DocumentRevision, DocumentRevisionDocument } from "../documentRevisions";
 
 export enum TrainingPlanStatus {
   ACTIVE = "ACTIVE",
@@ -21,7 +21,15 @@ export interface TrainingRecord {
   trainingPlan?: TrainingPlan;
 }
 
-export interface TrainingRecordQuery{
+export interface TrainingListData {
+  documentRevision: DocumentRevision;
+  trainingPlan: TrainingPlan;
+  createdAt: Date;
+  dueOn: Date;
+  completedAt: Date;
+}
+
+export interface TrainingRecordQuery {
   revision: number;
   docId: string;
   docRevTitle: string;
@@ -37,7 +45,7 @@ export interface TrainingPlan {
   validity: number;
   trainingRecords: TrainingRecord[];
   document: DocumentRevisionDocument;
-  user: User;
+  employee: Employee;
 }
 
 export interface TrainingTransitionRequestBody {
