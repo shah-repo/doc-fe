@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,7 +26,7 @@ export const styles = makeStyles((theme: Theme) =>
       lineHeight: "25px",
     },
     selected: {
-      background: "#DBE9FF",
+      background: Colors.background_blue,
     },
     details: {
       "&.MuiExpansionPanelDetails-root": {
