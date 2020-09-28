@@ -204,7 +204,7 @@ export const getFBSchemeByDocType = (
 
   if (recordsAsOutputExist(outputTypesWithGroups)) {
     finalScheme.push({
-      label: "Approvals",
+      label: "form.builder.approvals",
       type: "approvals",
       deleteDisabled: true,
     });
