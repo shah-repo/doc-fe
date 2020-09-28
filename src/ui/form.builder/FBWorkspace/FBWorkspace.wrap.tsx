@@ -1,9 +1,8 @@
 
-import { isEqual, union, uniqBy } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
-import { FB, FBInlineApprovalBody, FBSchemaProps, FBSnackbarState } from "..";
+import { FB, FBInlineApprovalBody, FBSnackbarState } from "..";
 import { store } from "../../../state/store";
 import { FBDialogState } from "../FBDialog";
 
@@ -35,32 +34,19 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     document,
     changeRequest,
     autosave,
+    schema,
     ...props
   }: T) => {
-    let schema: FBSchemaProps[] = [];
+    // let schema: FBSchemaProps[] = [];
     workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
-      schema: props.schema,
+      schema,
       mode,
       autosave,
     });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
 
-    // predefined schema hack until we remove formik from rest of the project
-    if (workspaceState) {
-      const originType = document?.document?.documentType;
-      const workspaceType = workspaceState.document?.document?.documentType;
-      if (originType !== workspaceType) {
-        workspaceState.schema = props.schema || [];
-      } else {
-        const newScheme = uniqBy(union(workspaceState.schema, props.schema || []), "name");
-        if (!isEqual(workspaceState.schema, newScheme)) {
-          workspaceState.schema = newScheme;
-        }
-      }
-      workspaceState.document = document;
-    }
-
+    workspaceState && (workspaceState.document = document);
     React.useEffect(() => {
       if (!workspaceState) { return; }
       workspaceState.approvals = document?.approvals as FBInlineApprovalBody[];
