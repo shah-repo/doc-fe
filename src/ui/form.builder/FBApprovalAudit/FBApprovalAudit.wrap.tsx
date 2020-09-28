@@ -78,7 +78,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           if (nextValue === "[]") { return; } // checkgroup
           if (prevValue !== "undefined" && prevValue !== "") {
             if (moment(prevValue, moment.ISO_8601, true).isValid()) {
-              prevValue = getFormattedDateString(prevValue, MomentFormats.DateTimeAlt);
+              prevValue = getFormattedDateString(prevValue, MomentFormats.MonthDateYearAlt);
             }
             prevValue = <span> from <b>{prevValue}</b></span>;
           } else {
@@ -86,7 +86,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           }
 
           if (moment(nextValue, moment.ISO_8601, true).isValid()) {
-            nextValue = getFormattedDateString(nextValue, MomentFormats.DateTimeAlt);
+            nextValue = getFormattedDateString(nextValue, MomentFormats.MonthDateYearAlt);
           }
           return (<span>Changed {label} {prevValue} to <b>{nextValue}</b></span>);
         }
