@@ -14,12 +14,13 @@ export enum FBProcedureItemActionLocale {
 
 export type FBProcedureItemProps =
 & Pick<FBProviderProps, "dialogState" | "formState">
-& Pick<FBProcedureProps, "name" | "stepIndex" | "disabled" | "isPreview">
+& Pick<FBProcedureProps, "name" | "stepIndex" | "disabled" | "isPreview" | "loading">
 & {
   onClick?: () => void;
   handleAdd?: () => void;
   handleCancel?: () => void;
   handleRemove?: (id: string) => void;
+  getItem?: (id: string) => string;
   type: FBProcedureItemType;
   value?: FBProcedureItemConfig[];
 };
@@ -27,7 +28,7 @@ export type FBProcedureItemProps =
 export interface FBProcedureItemConfig {
   id: string;
   title: string;
-  quantity: number;
-  unit: string;
+  quantity?: number;
+  unit?: string;
   procedureFieldId?: string;
 }

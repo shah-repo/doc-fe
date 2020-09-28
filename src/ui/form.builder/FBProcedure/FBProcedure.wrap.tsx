@@ -26,7 +26,10 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     // Value sync with the form
     React.useEffect(() => reaction(
       () => procedureState?.value,
-      (data) => formState?.setFieldValue(name, data, true)
+      (data) => formState?.setFieldValue(name, {
+        ...formState.getFieldValue(name),
+        ...data,
+      }, true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -37,7 +40,6 @@ export const withFBProcedure = <T extends FBProcedureProps>(
       const cloneName = FB.uniqid;
       const itemClone = {
         ...workspaceState?.getSchemaItemAt(index),
-        isClone: true,
         name: cloneName,
       };
       formState?.setFieldValue(cloneName, formState.getFieldValue(name));
@@ -45,6 +47,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     };
 
     // MARK: @observer
+
 
     return Component({
       ...(props as T),

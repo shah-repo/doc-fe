@@ -9,6 +9,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
+    onInputChange,
     getOptionDisabled,
     getOptionLabel,
     groupBy,
@@ -24,6 +25,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     defaultValue,
     options,
     optionId,
+    freeSolo,
     ...props
   }: T) => {
 
@@ -72,8 +74,15 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       includes(disabledOptions, option.id)
     );
 
+    onInputChange = (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      if (!freeSolo) { return; }
+      const { target: { value = "" } = {} } = ev;
+      formState?.setFieldValue(name, value);
+    };
+
     return Component({
       ...(props as T),
+      onInputChange,
       getOptionDisabled,
       getOptionLabel,
       groupBy,
@@ -85,6 +94,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       placeholder,
       multiple,
       optionId,
+      freeSolo,
       name,
     });
   };

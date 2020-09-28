@@ -14,6 +14,7 @@ export type FBAutocompleteProps =
  | "filterSelectedOptions"
  | "groupBy"
  > & {
+   onInputChange?: (ev: React.FocusEvent<HTMLInputElement>) => any;
    refresh?: () => any;
    disabledOptions?: string[];
    groupByKey?: string;

@@ -1,8 +1,9 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBButton, FBInput, FBProcedureItem, FBProcedureProps, FBSection, FBTextEditor } from "..";
+import { FBButton, FBInput, FBProcedureItem, FBProcedureProps, FBTextEditor } from "..";
 import Colors from "../../layout/theme/utils/colors";
+import { FBLabel } from "../FBLabel";
 import { FBProvider } from "../FBProvider";
 import { withFBProcedure } from "./FBProcedure.wrap";
 
@@ -11,20 +12,24 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
   procedureState,
   isPreview,
   isOutput,
-  isClone,
   stepIndex,
   disabled,
   name,
   ...props
 }) => (
   <FBInput {...props } {...{ name }} type="procedure">
-    {!isClone && (
-      <FBSection label="form.builder.procedure" gutter={isOutput} />
+    {!isOutput && (
+      <FBLabel
+        label={{
+          locale: "form.builder.step.number",
+          values: { number: stepIndex },
+        }}
+      />
     )}
     {isOutput && (
       <FBProvider {...{ procedureState }}>
-        <Box display="flex" flexDirection="row-reverse">
-          {!isPreview && (
+        {!isPreview && (
+          <Box display="flex" flexDirection="row-reverse" mb={-2.5} zIndex={100}>
             <FBButton
               label="form.builder.clone.step"
               style={{ textTransform: "none", margin: 0 }}
@@ -32,19 +37,17 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
               onClick={handleClone}
               {...{ disabled }}
             />
-          )}
-        </Box>
-        <Box mt={-1.2}>
-          <FBTextEditor
-            {...{ disabled }}
-            name={`fb-procedure-texteditor-${name}`}
-            gutter={false}
-            label={{
-              locale: "form.builder.step.number",
-              values: { number: stepIndex },
-            }}
-          />
-        </Box>
+          </Box>
+        )}
+        <FBTextEditor
+          {...{ disabled }}
+          name={`${name}.description`}
+          gutter={false}
+          label={{
+            locale: "form.builder.step.number",
+            values: { number: stepIndex },
+          }}
+        />
         <Box
           display="flex"
           border={isPreview ? 0 : 1}

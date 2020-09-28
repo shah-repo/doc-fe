@@ -6,4 +6,5 @@ export type FBTextProps =
 & {
   locale?: string;
   boxProps?: BoxProps;
+  loading?: boolean;
 };

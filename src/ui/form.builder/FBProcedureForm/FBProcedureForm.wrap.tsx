@@ -1,31 +1,35 @@
 import React from "react";
-import { FBProcedureFormProps } from "..";
+import { FBAutocompleteAsyncOption, FBProcedureFormProps } from "..";
 
 export const withFBProcedureForm = <T extends FBProcedureFormProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    name,
+    optionId,
+    type,
     ...props
-  }: T) =>
+  }: T) => {
 
-  // MARK: @config
+    // MARK: @config
+    optionId = type === "materials"
+      ? FBAutocompleteAsyncOption.materials
+      : FBAutocompleteAsyncOption.equipment;
+    // MARK: @reactions
 
-  // MARK: @reactions
+
+    // MARK: @helpers
 
 
-  // MARK: @helpers
+    // MARK: @methods
 
+    // MARK: @observer
 
-  // MARK: @methods
-
-  // MARK: @observer
-
-    Component({
+    return Component({
       ...(props as T),
-      name,
-    })
-  ;
+      optionId,
+      type,
+    });
+  };
 
   Comp.displayName = "withFBProcedureForm";
   return Comp;

@@ -189,8 +189,10 @@ export class FBSchemaState {
     this.removeSchemaItem(schemaItem);
   };
 
-  public getItemsByType = (type: FBInputType): FBSchemaProps[] =>
-    filter(this.getSchema(), { type });
+  public getItemsByType = (type?: FBInputType): FBSchemaProps[] => {
+    if (!type) { return []; }
+    return filter(this.getSchema(), { type });
+  };
 }
 
 export default FBSchemaState;

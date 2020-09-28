@@ -1,4 +1,3 @@
-import { CircularProgress } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import FormLabel from "@material-ui/core/FormLabel/FormLabel";
 import { hasIn, isString } from "lodash";
@@ -17,24 +16,20 @@ const FBLabel: React.FunctionComponent<FBLabelProps> = ({
 }) => (
   <FormLabel component="legend" {...{ error }}>
     <Box
-      mb={0.5}
+      mb={2}
       fontWeight={500}
       color={Colors.dark_gray}
       {...boxProps}
     >
       {isString(label) && (
-        <FBText locale={label} />
+        <FBText {...{ loading }} locale={label} />
       )}
       {hasIn(label, "locale") && (
         <FBText
+          {...{ loading }}
           locale={(label as FBLabelLocaleProps).locale}
           values={(label as FBLabelLocaleProps).values}
         />
-      )}
-      {loading && (
-        <Box ml={1} component="span">
-          <CircularProgress size={16} />
-        </Box>
       )}
     </Box>
   </FormLabel>

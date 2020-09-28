@@ -1,9 +1,14 @@
 import { filter, get, unionBy } from "lodash";
 import { action, computed, observable, set } from "mobx";
-import { FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from "..";
+import { FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from "..";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { FBAutocompleteAsyncOption } from "../FBAutocompleteAsync";
+import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export class FBProcedureState {
   // MARK: @config
+  public materialsApi = new FBAutocompleteAsyncState(this.materialsId);
+  public equipmentApi = new FBAutocompleteAsyncState(this.equipmentId);
 
   // MARK: @observables
   @observable public value?: FBProcedureValue;
@@ -42,6 +47,25 @@ export class FBProcedureState {
   };
 
   // MARK: @helpers
+  public get materialsId(): string {
+    return FBAutocompleteAsyncOption.materials;
+  }
+
+  public get equipmentId(): string {
+    return FBAutocompleteAsyncOption.equipment;
+  }
+
+  public getItem = (id: string, type: FBProcedureItemType): string | undefined => {
+    const itemId = type === "materials"
+      ? this.materialsId
+      : this.equipmentId;
+
+    const item = FBAutocompleteAsyncStore.getValue<DocumentRevision>(itemId, id);
+    if (item) {
+      return `${item.document?.docId} - ${item.name}`;
+    }
+    return id;
+  };
 }
 
 export default FBProcedureState;

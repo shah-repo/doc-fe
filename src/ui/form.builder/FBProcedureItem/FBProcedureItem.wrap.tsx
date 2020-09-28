@@ -11,6 +11,8 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     handleAdd,
     handleCancel,
     handleRemove,
+    getItem,
+    loading,
     dialogState,
     formState,
     name,
@@ -49,9 +51,13 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
 
     handleCancel = () => dialogState?.closeDialog();
     handleRemove = (id: string) => procedureState?.removeItem(id, type);
+    getItem = (id: string): string => procedureState?.getItem(id, type) || "";
 
     // MARK: @observer
     useObserver(() => {
+      loading = type === "materials"
+        ? procedureState?.materialsApi.loading
+        : procedureState?.equipmentApi.loading;
       value = get(procedureState, type);
     });
 
@@ -59,8 +65,10 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
       ...(props as T),
       onClick,
       handleRemove,
+      getItem,
       dialogState,
       formState,
+      loading,
       name,
       type,
       value,

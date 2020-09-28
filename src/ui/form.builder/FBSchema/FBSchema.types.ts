@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBInputProps, FBInputType, FBSchemaState, FBWorkspaceMode } from "..";
+import { FBInputProps, FBSchemaState, FBWorkspaceMode } from "..";
 
 export type FBSchemaProps = Pick<FBInputProps,
   | "label"
@@ -38,6 +38,7 @@ export type FBSchemaProps = Pick<FBInputProps,
   | "actions"
   | "transform"
   | "bookmarked"
+  | "uniqueSchemaItem"
 > & {
   validators?: Dictionary<any>;
 };
@@ -47,8 +48,3 @@ export interface FBSchemaComponentProps {
   schema?: FBSchemaProps[];
   schemaState?: FBSchemaState;
 }
-
-// Tells the editor to add additional schema by type only once
-export const UniqueAdditionalSchema: FBInputType[] = [
-  "procedure",
-];

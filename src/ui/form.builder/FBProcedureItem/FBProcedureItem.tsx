@@ -10,10 +10,12 @@ import { withFBProcedureItem } from "./FBProcedureItem.wrap";
 const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   onClick,
   handleRemove,
+  getItem,
   dialogState,
   formState,
   isPreview,
   disabled,
+  loading,
   type,
   value = [],
 }) => (
@@ -27,6 +29,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
       display="flex"
     >
       <FBText
+        {...{ loading }}
         boxProps={{ flexGrow: 1, pt: 2, pl: 2 }}
         locale={FBProcedureItemLocale[type]}
       />
@@ -40,44 +43,46 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
         />
       )}
     </Box>
-    <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
-      {(item: FBProcedureItemConfig, index) => (
-        <Box
-          key={`fb-procedure-item-${type}-${index}`}
-          display="flex"
-          border={1}
-          borderLeft={0}
-          borderRight={0}
-          borderTop={0}
-          borderColor={Colors.hint_gray}
-          p={1.5}
-        >
-          <FBText
-            locale="form.builder.procedure.qty"
-            values={{
-              title: item.title,
-              quantity: item.quantity,
-              unit: item.unit,
-            }}
-            boxProps={{
-              flexGrow: 1,
-            }}
-          />
-          {!isPreview && (
-            <Box color={Colors.errror_red}>
-              <IconButton
-                color="inherit"
-                size="small"
-                onClick={() => handleRemove?.(item.id)}
-                {...{ disabled }}
-              >
-                <RemoveCircleIcon fontSize="small" />
-              </IconButton>
-            </Box>
-          )}
-        </Box>
-      )}
-    </FBMapWrapper>
+    {!loading && (
+      <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
+        {(item: FBProcedureItemConfig, index) => (
+          <Box
+            key={`fb-procedure-item-${type}-${index}`}
+            display="flex"
+            border={1}
+            borderLeft={0}
+            borderRight={0}
+            borderTop={0}
+            borderColor={Colors.hint_gray}
+            p={1.5}
+          >
+            <FBText
+              locale={`form.builder.procedure.${type}.title`}
+              values={{
+                title: getItem?.(item.title),
+                quantity: item.quantity,
+                unit: item.unit,
+              }}
+              boxProps={{
+                flexGrow: 1,
+              }}
+            />
+            {!isPreview && (
+              <Box color={Colors.errror_red}>
+                <IconButton
+                  color="inherit"
+                  size="small"
+                  onClick={() => handleRemove?.(item.id)}
+                  {...{ disabled }}
+                >
+                  <RemoveCircleIcon fontSize="small" />
+                </IconButton>
+              </Box>
+            )}
+          </Box>
+        )}
+      </FBMapWrapper>
+    )}
   </FBProvider>
 );
 
