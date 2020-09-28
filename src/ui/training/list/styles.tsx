@@ -6,12 +6,16 @@ export const styles = makeStyles((theme: Theme) =>
       height: "100%",
       padding: theme.spacing(4, 5),
     },
+    container: {
+      textAlign: "right",
+      marginBottom: theme.spacing(2),
+    },
     item: {
       height: "77vh",
       width: "100%",
     },
     clearButton: {
-      margin: "0px 16px 0px 0px",
+      margin: theme.spacing(0, 2, 0, 0),
       backgroundColor: theme.palette.common.white,
     },
     remainderButton: {
@@ -23,7 +27,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     triangleDown: {
       "width": "0.65rem",
-      "marginLeft": "2px",
+      "marginLeft": theme.spacing(0.25),
       "&.expanded": {
         transform: "rotate(180deg)",
       },
@@ -31,6 +35,7 @@ export const styles = makeStyles((theme: Theme) =>
     button: {
       margin: "0px",
       boxShadow: "none",
+      marginRight: theme.spacing(0.625),
     },
     iconSvg: {
       fill: theme.palette.primary.main,

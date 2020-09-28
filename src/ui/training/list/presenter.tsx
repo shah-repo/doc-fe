@@ -1,6 +1,8 @@
 import { Box, Button, Grid } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
+import { DataTable } from "../../../state/ducks/documentRevisions";
 import { TRAINING_RECORD_ROOT_URL } from "../../../state/ducks/training/constants";
 import { TrainingRecordQuery } from "../../../state/ducks/training/types";
 import Date from "../../components/Date";
@@ -11,7 +13,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
-import { documentRevisionEffectiveDateOption, trainingCompletedOnDateOption } from "../../document.revision/utils/helpers";
+import { documentRevisionEffectiveDateOption, dueDateOption, trainingCompletedOnDateOption } from "../../document.revision/utils/helpers";
 import useDialog from "../../hooks/useDialog";
 import { styles } from "./styles";
 
@@ -30,25 +32,39 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const dialog = useDialog();
-  const [fileName, saveFileName] = useState("");
-  const handleOpen = () => {
-    dialog.open();
-    saveFileName("");
-  };
+
+  const getDateOption = (dateOptions, id) => dateOptions().find((e) =>
+    e.value === tableCriteria.queryDict?.[id])?.text;
 
   const headers = [
-    { label: `DOC ID:`, key: "docId" },
-    { label: `REVISION:`, key: "documentRevision" },
-    { label: `DOCUMENT TITLE:`, key: "documentRevision" },
-    { label: `TRAINEE:`, key: "employee" },
-    { label: `ASSIGN DATE:`, key: "createdAt" },
-    { label: `DUE DATE:`, key: "dueOn" },
-    { label: `COMPLETED ON:`, key: "status" },
+    { label: `DOC ID: ${tableCriteria.queryDict?.docId  || ""}`, key: "docId" },
+    { label: `REVISION: ${tableCriteria.queryDict?.revision  || ""}`, key: "revision" },
+    { label: `DOCUMENT TITLE: ${tableCriteria.queryDict?.docRevTitle  || ""}`, key: "docRevTitle" },
+    { label: `TRAINEE: ${tableCriteria.queryDict?.userName  || ""}`, key: "userName" },
+    {
+      label: `ASSIGN DATE: ${getDateOption(documentRevisionEffectiveDateOption, "createdAtAfter")  || ""}`,
+      key: "createdAtAfter",
+    },
+    { label: `DUE DATE: ${getDateOption(dueDateOption, "dueOn")  || ""}`, key: "dueOn" },
+    {
+      label: `COMPLETED ON: ${getDateOption(trainingCompletedOnDateOption, "completedAtAfter")  || ""}`,
+      key: "completedAtAfter",
+    },
   ];
+
+  const exportedData = data.map((e) => ({
+    docId: e.trainingPlan.document.docId,
+    revision: e.documentRevision.revision,
+    docRevTitle: e.documentRevision.name,
+    userName: e.trainingPlan.employee.user.name,
+    createdAtAfter: e.createdAt ? getFormattedDateString(e.createdAt, MomentFormats.MonthDateYear) : "",
+    dueOn: e.dueOn ? getFormattedDateString(e.dueOn, MomentFormats.MonthDateYear) : "",
+    completedAtAfter: e.completedAt ? getFormattedDateString(e.completedAt, MomentFormats.MonthDateYear) : "Pending",
+  }));
+
   const columns: TableColumnProps<TrainingRecordQuery>[] = [
     {
-      // Issue with Key Here cannot do trainingPlan.document.docId so it wont work in headers for export list
-      key: "trainingPlan" as keyof TrainingRecordQuery,
+      key: "docId",
       id: "TrainingListPresenter-id",
       label: "common.docId",
       columnOptions: {
@@ -56,12 +72,11 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
         width: 75,
       },
       searchOptions: {
-        dataKey: "docId", // search options not working for query
+        defaultValue: tableCriteria.queryDict?.docId,
       },
     },
     {
-      // Issue with Key Here cannot do documentRevision.revision so it wont work in headers for export list
-      key: "revision" as keyof TrainingRecordQuery,
+      key: "revision",
       id: "TrainingListPresenter-revision",
       label: "common.revision",
       columnOptions: {
@@ -69,24 +84,22 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
         width: 75,
       },
       searchOptions: {
-        dataKey: "revision", // search options not working for query
+        defaultValue: tableCriteria.queryDict?.revision,
       },
     },
     {
-      // Issue with Key Here cannot do documentRevision.name so it wont work in headers for export list
-      key: "docRevTitle" as keyof TrainingRecordQuery,
+      key: "docRevTitle",
       id: "TrainingListPresenter-title",
       label: "document.title",
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.documentRevision.name,
       },
       searchOptions: {
-        dataKey: "docRevTitle", // search options not working for query
+        defaultValue: tableCriteria.queryDict?.docRevTitle,
       },
     },
     {
-      // Issue with Key Here cannot do trainingPlan.employee.user.name so it wont work in headers for export list
-      key: "userName" as keyof TrainingRecordQuery,
+      key: "userName",
       id: "TrainingListPresenter-trainee",
       label: "common.trainee",
       columnOptions: {
@@ -94,55 +107,54 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
         width: 75,
       },
       searchOptions: {
-        dataKey: "userName", // search options not working for query
+        defaultValue: tableCriteria.queryDict?.userName,
       },
     },
     {
-      key: "createdAtAfter" as keyof TrainingRecordQuery,
+      key: "createdAtAfter",
       id: "TrainingListPresenter-assignDate",
       label: "common.assign.date",
       columnOptions: {
         // eslint-disable-next-line react/display-name
         cellDataGetter: ({ rowData }) => <Date value={rowData.createdAt}/>,
-        width: 75,
+        width: 130,
       },
       searchOptions: {
-        dataKey: "createdAtAfter",
         searchType: "select",
         selectOptions: documentRevisionEffectiveDateOption(),
+        defaultValue: tableCriteria.queryDict?.createdAtAfter,
       },
     },
     {
-      key: "dueDateAfter" as keyof TrainingRecordQuery,
+      key: "dueOn",
       id: "TrainingListPresenter-dueDate",
       label: "common.due.date",
       columnOptions: {
         // eslint-disable-next-line react/display-name
         cellDataGetter: ({ rowData }) => <Date value={rowData.dueOn}/>,
-        width: 75,
+        width: 130,
       },
       searchOptions: {
-        dataKey: "dueDateAfter",
         searchType: "select",
-        selectOptions: documentRevisionEffectiveDateOption(),
+        selectOptions: dueDateOption(),
+        defaultValue: tableCriteria.queryDict?.dueOn,
       },
     },
     {
-      key: "completedAtAfter" as keyof TrainingRecordQuery,
+      key: "completedAtAfter",
       id: "TrainingListPresenter-completedOn",
       label: "common.completed.on",
       searchOptions: {
-        dataKey: "completedAtAfter",
         searchType: "select",
         selectOptions: trainingCompletedOnDateOption(),
+        defaultValue: tableCriteria.queryDict?.completedAtAfter,
       },
       columnOptions: {
         // eslint-disable-next-line react/display-name
-        cellDataGetter: ({ rowData }) => rowData.completedAt ? <Date value={rowData.completedAt}/> : "Pending",
+        cellDataGetter: ({ rowData }) => rowData.completedAt ? <Date value={rowData.completedAt} /> : "Pending",
       },
     },
   ];
-
 
   return (
     <Grid container={true} className={classes.root}>
@@ -150,23 +162,22 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
         <ClearFilters {...{ clearFilter }}/>
         <DocumentInfo numberOfRecords={data.length} />
       </Grid>
-      <Grid item={true} xs={6} style={{ textAlign: "right", marginBottom: "16px" }}>
+      <Grid item={true} xs={6} className={classes.container}>
         <Button
           variant="outlined"
           color="primary"
           className={classes.button}
-          style={{ marginRight: 5 }}
-          id="ListPresenter-export-list"
           data-cy="document.revision.export.list"
-          onClick={handleOpen}
+          onClick={dialog.open}
         >
-          <Box marginRight={1}>
+          <Box mr={1}>
             <ExportIcon className={classes.iconSvg} />
           </Box>
           <Text translation="document.revision.export.list" />
         </Button>
         <ExportListDialog
-          {...{ dialog, headers, data, fileName, saveFileName }}
+          {...{ dialog, headers }}
+          data={exportedData as unknown as DataTable[]}
         />
       </Grid>
       <Grid item={true} className={classes.item}>
@@ -175,7 +186,6 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
           queryUrl={TRAINING_RECORD_ROOT_URL}
           cellMeasure={true}
           tableName={tableName}
-          onSelect={undefined}
         />
       </Grid>
     </Grid>

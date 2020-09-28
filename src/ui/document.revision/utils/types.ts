@@ -34,9 +34,9 @@ export enum ReleasedDateOptions {
 }
 
 export enum CompletedOnDateOptions {
-  LAST_WEEK = "Last 7 days",
-  LAST_TWO_WEEKS = "Last 14 days",
-  LAST_MONTH = "Last 30 days",
+  NEXT_WEEK = "Next 7 days",
+  NEXT_TWO_WEEKS = "Next 14 days",
+  NEXT_MONTH = "Next 30 days",
   PENDING = "Pending",
 }
 
