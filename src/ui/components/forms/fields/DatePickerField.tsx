@@ -4,6 +4,7 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/picker
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import moment from "moment";
 import * as React from "react";
+import { useEffect } from "react";
 import { TypographyProps } from "../../../../state/ducks/common";
 import { useFormContext } from "../FormContext";
 import Field, { FieldOwnProps } from "./Field";
@@ -18,6 +19,13 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
   ...fieldProps
 }) => {
   const { submitForm } = useFormContext();
+
+  useEffect(() => {
+    if (value) {
+      handleDateChange(value);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleDateChange = (date) => {
     const { form } = fieldProps;
