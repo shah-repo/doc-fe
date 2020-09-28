@@ -2,7 +2,7 @@
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
-import { FB, FBInlineApprovalBody, FBSnackbarState } from "..";
+import { FB, FBInlineApprovalBody, FBSchemaProps, FBSnackbarState } from "..";
 import { store } from "../../../state/store";
 import { FBDialogState } from "../FBDialog";
 
@@ -37,7 +37,8 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     schema,
     ...props
   }: T) => {
-    // let schema: FBSchemaProps[] = [];
+
+    let workspaceSchema: FBSchemaProps[] = [];
     workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
       schema,
       mode,
@@ -45,8 +46,12 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
-
     workspaceState && (workspaceState.document = document);
+
+    React.useEffect(() => {
+      workspaceState && (workspaceState.schema = schema);
+    }, [schema, workspaceState]);
+
     React.useEffect(() => {
       if (!workspaceState) { return; }
       workspaceState.approvals = document?.approvals as FBInlineApprovalBody[];
@@ -63,7 +68,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     useObserver(() => {
       isStarter = workspaceState?.isStarter;
       active = workspaceState?.active;
-      schema = workspaceState?.schema || [];
+      workspaceSchema = workspaceState?.schema || [];
       mode = workspaceState?.mode;
     });
 
@@ -71,7 +76,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       ...(props as T),
       isStarter,
       active,
-      schema,
+      schema: workspaceSchema,
       mode,
       dialogState,
       workspaceState,
