@@ -2,6 +2,7 @@ import { find, findLastIndex, get, isEmpty, map, orderBy, some, union, unionBy }
 import moment from "moment";
 import { Document, DocumentRevision, DocumentRevisionStatus, FBFormTemplateProps, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, DOC_TYPE_GROUP_OPTION } from "../../state/ducks/documentRevisions/documentType";
+import { DocumentType } from "../../state/ducks/documentRevisions/documentType/types";
 import { OptionType } from "../components/forms/fields/Autocomplete/types";
 import { FBSchemaProps } from "../form.builder";
 
@@ -158,6 +159,14 @@ export const getIsAdministrativeDefault = (documentRevision: DocumentRevision) =
 };
 
 /**
+ * Checks if any of the given output types are records.
+ *
+ * @param outputTypes Array of output types that will be checked.
+ */
+const recordsAsOutputExist = (outputTypes: DocumentType[]) =>
+  some(outputTypes, (type) => type.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.RECORD));
+
+/**
    * @method
    *
    * This will generate new initial workspace scheme based on predefined schemes of
@@ -176,6 +185,8 @@ export const getFBSchemeByDocType = (
   originScheme?: FBSchemaProps[],
 ): FBSchemaProps[] => {
   const outputTypes = map(formValue.outputDocumentTypes as OptionType[], "value");
+  const outputTypesWithGroups = outputTypes?.map((docType) => documentTypesById[docType]);
+
   const tplType = get(formValue, "document.documentType.id") || "";
   const documentTypes = union([tplType], outputTypes);
 
@@ -190,6 +201,14 @@ export const getFBSchemeByDocType = (
     })));
     return unionBy(scheme, typeScheme, "name");
   }, [] as FBSchemaProps[]);
+
+  if (recordsAsOutputExist(outputTypesWithGroups)) {
+    finalScheme.push({
+      label: "form.builder.approvals",
+      type: "approvals",
+      deleteDisabled: true,
+    });
+  }
 
   return finalScheme;
 };
