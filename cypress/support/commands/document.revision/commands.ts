@@ -284,14 +284,18 @@ Cypress.Commands.add("drChangeOwnerByAdmin", (params: { employee: string }) => {
   cy.get("[data-cy=\"changeOwner\"]").click();
   cy.get("#employee").click();
   cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
-  cy.get("[data-cy=\"changeOwner-submit\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+    cy.get("[data-cy=\"changeOwner-submit\"]").click();
+  });
 });
 
 Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
   cy.get("[data-cy=\"changeOwner\"]").click();
   cy.get("#employee").click();
   cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
-  cy.get("[data-cy=\"changeOwner-submit\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+    cy.get("[data-cy=\"changeOwner-submit\"]").click();
+  });
 });
 
 Cypress.Commands.add("drClickReviseDocument", () => {
