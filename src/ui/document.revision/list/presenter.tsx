@@ -221,8 +221,9 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         }
         return acc;
       }, []); */
-
-    return customData;
+    // REQ - show data without RECORD documents
+    const dataWithoutRecords = customData.filter((e) => e.document.documentType.group !== "RECORD");
+    return dataWithoutRecords;
   };
 
   const data = tableData.map((e) => ({
