@@ -63,7 +63,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
           )}
           {approval.reviewedAt && (
             <Box color={Colors.gray}>
-              &nbsp;| {getFormattedDateString(approval.reviewedAt, MomentFormats.DateTime)}
+              &nbsp;| {getFormattedDateString(approval.reviewedAt, MomentFormats.DateTime12h)}
             </Box>
           )}
           {approval.canRequest && inlineApprovalExists && (

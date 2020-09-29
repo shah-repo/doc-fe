@@ -1,5 +1,6 @@
 import { Box, List, Typography } from "@material-ui/core";
 import React from "react";
+import { MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
@@ -38,7 +39,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer}>
             <div className={classes.owner} data-cy={`owner-${key}`}>{name}</div>
-            <DateTime value={change.timestamp} data-cy={`time-${key}`}/>
+            <DateTime value={change.timestamp} format={MomentFormats.DateTime12h} data-cy={`time-${key}`}/>
           </div>
           {renderChanges(audit[groupId], key)}
         </Box>

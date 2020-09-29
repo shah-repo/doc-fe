@@ -85,6 +85,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   revisionChangeType: RevisionChangeType;
   name: string;
   description: string;
+  displayRevision: string;
   owner: Owner;
   attachments: Attachment[];
   status: DocumentRevisionStatus;
