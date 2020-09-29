@@ -62,7 +62,7 @@ context("Document Approval Matrix Flow", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: IMPORTER_USER.email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -205,6 +205,10 @@ context("Document Approval Matrix Flow", () => {
     it("add 'Approval Matrix' field", () => {
       cy.fbAddField();
     });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
   });
 
   context("Save DAM And Approve & Release Document", () => {
@@ -255,7 +259,9 @@ context("Document Approval Matrix Flow", () => {
 
   context("Add New Role: Role One", () => {
     it("Open 'Add Role' dialog", () => {
-      cy.drAddAnotherRoleBtn();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GroupsGet], () => {
+        cy.drAddAnotherRoleBtn();
+      });
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -400,6 +406,10 @@ context("Document Approval Matrix Flow", () => {
     it(`fill in document type: ${docTypeOne}`, () => {
       cy.drSelectDocumentType({ documentType: docTypeOne });
     });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
   });
 
   context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
@@ -420,17 +430,9 @@ context("Document Approval Matrix Flow", () => {
       cy.drIsTrainingRequired({ shouldBe: false });
     });
 
-    it("click on 'Approve and Release' button", () => {
+    it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
       cy.wait(5000);
-      cy.drApproveAndReleaseDialog();
-    });
-
-    it(`Check ${roleOne} exists and is checked`, () => {
-      cy.drRoleExistsAndChecked({ group: 0, role: roleOne });
-    });
-
-    it("'Approve and Release' the document", () => {
-      cy.drSelectTemplateReleaseDocument({ template: "Initial AR Form" });
+      cy.drReleaseDocAfterRoleExistsAndChecked({ group: 0, role: roleOne });
     });
   });
 
@@ -456,6 +458,10 @@ context("Document Approval Matrix Flow", () => {
     it(`fill in document type: ${docTypeThree}`, () => {
       cy.drSelectDocumentType({ documentType: docTypeThree });
     });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
   });
 
   context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
@@ -474,12 +480,8 @@ context("Document Approval Matrix Flow", () => {
       cy.drIsTrainingRequired({ shouldBe: true });
     });
 
-    it("click on 'Approve and Release' button", () => {
-      cy.drApproveAndReleaseDialog();
-    });
-
     it("'Approve and Release' the document", () => {
-      cy.drSelectTemplateReleaseDocument({ template: "Initial AR Form" });
+      cy.drApproveAndReleaseDocument();
     });
   });
 
@@ -500,6 +502,7 @@ context("Document Approval Matrix Flow", () => {
   context("Add New Role: Role Two", () => {
     it("Open 'Add Role' dialog", () => {
       cy.drAddAnotherRoleBtn();
+      cy.wait(1000);
     });
 
     it(`Fill role name: ${roleTwo}`, () => {
@@ -657,6 +660,10 @@ context("Document Approval Matrix Flow", () => {
     it(`fill in document type: ${docTypeTwo}`, () => {
       cy.drSelectDocumentType({ documentType: docTypeTwo });
     });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
   });
 
   context("Save document, Check Group Role is enforced and Release Document", () => {
@@ -664,16 +671,9 @@ context("Document Approval Matrix Flow", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("click on 'Approve and Release' button", () => {
-      cy.drApproveAndReleaseDialog();
-    });
-
-    it(`Check ${roleOne} exists and is checkeded`, () => {
-      cy.drRoleExistsAndChecked({ group: 0, role: roleOne });
-    });
-
-    it("'Approve and Release' the document", () => {
-      cy.drSelectTemplateReleaseDocument({ template: "Initial AR Form" });
+    it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
+      cy.wait(5000);
+      cy.drReleaseDocAfterRoleExistsAndChecked({ group: 0, role: roleOne });
     });
   });
 
@@ -758,7 +758,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`change name '${docTypeOne}' to '${newDocTypeOne}'`, () => {
-      // SystemRequirement("REQ-0430");
+    // SystemRequirement("REQ-0430");
       cy.drUpdateDocumentTypeName({
         sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         employeeId: adminEmployee.id,
@@ -810,10 +810,9 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`find changed document type '${newDocTypeOne}'`, () => {
-      // SystemRequirement("REQ-0530");
+    // SystemRequirement("REQ-0530");
       const exists = documentTypes.includes(newDocTypeOne);
       cy.wrap(exists).should("eq", true);
     });
   });
-
 });

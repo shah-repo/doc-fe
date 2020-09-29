@@ -65,14 +65,14 @@ const history = [
   {
     owner,
     actions: [
-      { key: "Access granted to group", value: groupOne },
-      { key: "Access granted to group", value: "Everyone" },
-      { key: "Access granted to user", value: sharedUser.name },
       { key: "New Doc ID", value: documentId.fullId },
-      { key: "New description", value: `${formDescription.value}` },
-      { key: "New name", value: formTitle.value },
-      { key: "New status", value: `Set to Draft by ${owner}` },
+      { key: "Access granted to user", value: sharedUser.name },
+      { key: "Access granted to group", value: "Everyone" },
+      { key: "Access granted to group", value: groupOne },
       { key: "New owner", value: `${owner}` },
+      { key: "New status", value: `Set to Draft by ${owner}` },
+      { key: "New name", value: formTitle.value },
+      { key: "New description", value: `${formDescription.value}` },
       { key: "Attachment added", value: `test_image.jpg` },
       { key: "New reference to", value: reference.valueCode },
     ],
@@ -94,7 +94,7 @@ context("Check Document History", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -190,6 +190,10 @@ context("Check Document History", () => {
     it("fill in output document type: Clinical Protocol, Component Specification", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.drSelectOutputDocumentType({ documentType: "Component Specification" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
   });
 
@@ -333,8 +337,8 @@ context("Check Document History", () => {
   });
 
   context("Check document history", () => {
-    SystemRequirement("REQ-0360");
     it("Open history drawer", () => {
+      SystemRequirement("REQ-0360");
       cy.drSelectHistoryTab();
     });
 

@@ -4,7 +4,7 @@ import "moment-timezone";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
 import { SelectOption } from "../../components/forms/fields/Select";
-import { ReleasedDateOptions } from "./types";
+import { CompletedOnDateOptions, ReleasedDateOptions } from "./types";
 
 const isDraft = (documentRevision: DocumentRevision) =>
   documentRevision.status === DocumentRevisionStatus.Draft;
@@ -59,5 +59,52 @@ export const documentRevisionEffectiveDateOption = () => [
   {
     text: ReleasedDateOptions.LAST_MONTH,
     value: moment().subtract(30, "d").startOf("day").toISOString(),
+  },
+];
+
+export const dueDateOption = () => [
+  {
+    text: ReleasedDateOptions.LAST_WEEK,
+    value: moment().subtract(7, "d").startOf("day").toISOString(),
+  },
+  {
+    text: ReleasedDateOptions.LAST_TWO_WEEKS,
+    value: moment().subtract(14, "d").startOf("day").toISOString(),
+  },
+  {
+    text: ReleasedDateOptions.LAST_MONTH,
+    value: moment().subtract(30, "d").startOf("day").toISOString(),
+  },
+  {
+    text: CompletedOnDateOptions.NEXT_WEEK,
+    value: moment().add(7, "d").startOf("day").toISOString(),
+  },
+  {
+    text: CompletedOnDateOptions.NEXT_TWO_WEEKS,
+    value: moment().add(14, "d").startOf("day").toISOString(),
+  },
+  {
+    text: CompletedOnDateOptions.NEXT_MONTH,
+    value: moment().add(30, "d").startOf("day").toISOString(),
+  },
+];
+
+export const trainingCompletedOnDateOption = () => [
+  {
+    text: ReleasedDateOptions.LAST_WEEK,
+    value: moment().subtract(7, "d").startOf("day").toISOString(),
+  },
+  {
+    text: ReleasedDateOptions.LAST_TWO_WEEKS,
+    value: moment().subtract(14, "d").startOf("day").toISOString(),
+  },
+  {
+    text: ReleasedDateOptions.LAST_MONTH,
+    value: moment().subtract(30, "d").startOf("day").toISOString(),
+  },
+  {
+    text: CompletedOnDateOptions.PENDING,
+    // sending in the feature, BE will recognize pending
+    value: moment().add(7, "d").startOf("day").toISOString(),
   },
 ];

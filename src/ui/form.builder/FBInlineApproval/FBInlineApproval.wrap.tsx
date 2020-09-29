@@ -24,14 +24,13 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     ...props
   }: T) => {
 
-    let isComponentVisible = false;
-
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const {
       id,
       document,
       changeRequest,
+      isOutput,
       document: { version: docVersion = 1 } = {},
     } = workspaceState || {};
     const docApprovals = document?.approvals || changeRequest?.approvals;
@@ -177,15 +176,17 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       options = inlineApprovalState?.getOptions;
       approvals = inlineApprovalState?.getApprovals;
 
-      isComponentVisible = document?.status !== "VOIDED"
-        && document?.revisionStage === 1;
-
       loading = (
         inlineApprovalState?.approvalApi.loading ||
         inlineApprovalState?.transitionApi.loading ||
         inlineApprovalState?.documentApi.loading
       );
-      disabled = disabled || isUndefined(id) || loading;
+
+      disabled = loading
+        || !(isOutput && Boolean(id))
+        || document?.status === "RELEASED"
+        || document?.status === "VOIDED"
+        || document?.revisionStage !== 1;
     });
 
     // MARK: @final config
@@ -195,10 +196,6 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       Boolean(formState?.getFieldValue(name))
     ) ? true
       : !isUndefined(find(approvals, { status: "APPROVED" }));
-
-    if (!isComponentVisible) {
-      return null;
-    }
 
     return Component({
       ...(props as T),

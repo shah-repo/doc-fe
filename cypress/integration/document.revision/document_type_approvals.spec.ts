@@ -48,7 +48,7 @@ context("Check DAM enforcement rules for document types", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: IMPORTER_USER.email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -253,6 +253,10 @@ context("Check DAM enforcement rules for document types", () => {
         cy.drSelectDocumentType({ documentType: "Subassembly" });
       });
 
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
       it("Create document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
@@ -287,6 +291,10 @@ context("Check DAM enforcement rules for document types", () => {
         cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       });
 
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
       it("Create document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
@@ -319,6 +327,10 @@ context("Check DAM enforcement rules for document types", () => {
 
       it("Select output document type", () => {
         cy.drSelectOutputDocumentType({ documentType: "Lots" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
       it("Add subassembly to LHR", () => {
@@ -370,6 +382,10 @@ context("Check DAM enforcement rules for document types", () => {
         cy.drSelectOutputDocumentType({ documentType: "Work Order" });
       });
 
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
       it("Create document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
@@ -417,6 +433,10 @@ context("Check DAM enforcement rules for document types", () => {
 
     it("add 'Approval Matrix' field", () => {
       cy.fbAddField();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
   });
 
@@ -580,6 +600,10 @@ context("Check DAM enforcement rules for document types", () => {
         cy.drSelectDocumentType({ documentType: "Component Specification" });
       });
 
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
       it("Create document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
@@ -610,6 +634,10 @@ context("Check DAM enforcement rules for document types", () => {
         cy.drSelectDocumentType({ documentType: "Dynamic Form" });
       });
 
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
       it("Create document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
@@ -634,6 +662,10 @@ context("Check DAM enforcement rules for document types", () => {
 
       it("Select document type", () => {
         cy.drSelectDocumentType({ documentType: "Engineering Build" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
       it("Create document", () => {
@@ -669,6 +701,10 @@ context("Check DAM enforcement rules for document types", () => {
 
       it("Select output document type", () => {
         cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
       it("Create document", () => {
@@ -772,6 +808,10 @@ context("Check DAM enforcement rules for document types", () => {
 
       it("Fill document description", () => {
         cy.drEnterDocumentDescription({ description: "Suppliers address" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
       it("Create document", () => {

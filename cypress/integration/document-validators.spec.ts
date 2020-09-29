@@ -1,6 +1,7 @@
 import { RevisionChangeType } from "../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../support/commands/company/commands";
 import { CONFIG } from "../support/config";
+import { CyRoutes } from "../support/routes";
 import { USERS } from "../utils/constants/users";
 
 let docId;
@@ -55,7 +56,7 @@ context("Validators tests", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -159,6 +160,11 @@ context("Validators tests", () => {
 
     it("fill in document type as Component Specification", () => {
       cy.drSelectDocumentType({ documentType: "Component Specification" });
+      cy.get("h6").contains("Document Type").click();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("clicks on 'Save' button", () => {
@@ -235,10 +241,14 @@ context("Validators tests", () => {
 
   });
 
-  context("Adds Output Document Type", () => {
+  context("Adds Output Document Type and revision Stage", () => {
     it("fill in output document type as Component Specification", () => {
       cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
       cy.get("[data-cy=\"field-outputDocumentTypes\"]").type("Component Specification{enter}");
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
   });
 
@@ -571,7 +581,7 @@ context("Validators tests", () => {
         const errorBlock = elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
-          .should("have.text", `The ${requiredFieldLabel} field is required.`);
+          .should("have.text", `The ${requiredFieldLabel} is a required field.`);
       });
     });
 
@@ -607,7 +617,9 @@ context("Validators tests", () => {
 
   context(`Test ${requiredIfInFieldLabel} (required if in) Field`, () => {
     it(`remove text from ${requiredIfFieldLabel}`, () => {
-      cy.get(`[data-cy^='${requiredIfFieldSelector}'] input`).clear();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.get(`[data-cy^='${requiredIfFieldSelector}'] input`).clear();
+      });
     });
 
     it(`type '${requiredIfInFieldValues.split(",").join(" or ")}' in '${requiredIfFieldLabel}' field`, () => {
@@ -621,7 +633,7 @@ context("Validators tests", () => {
 
         cy.wrap(errorBlock)
           .should("have.text",
-            `The ${requiredIfInFieldLabel} field is required when ${requiredIfFieldLabel} includes , .`);
+            `The ${requiredIfInFieldLabel} is a required field.`);
       });
     });
 
@@ -632,7 +644,9 @@ context("Validators tests", () => {
 
   context(`Test ${requiredWithFieldLabel} (required with) Field`, () => {
     it(`remove text from ${requiredIfInFieldLabel}`, () => {
-      cy.get(`[data-cy^='${requiredIfInFieldSelector}'] input`).clear();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.get(`[data-cy^='${requiredIfInFieldSelector}'] input`).clear();
+      });
     });
 
     it(`type anything in '${requiredIfInFieldLabel}' field`, () => {
@@ -657,11 +671,12 @@ context("Validators tests", () => {
 
   context(`Test ${requiredWithoutFieldLabel} (required without) Field`, () => {
     it(`remove text from ${requiredWithFieldLabel}`, () => {
-      cy.get(`[data-cy^='${requiredWithFieldSelector}'] input`).clear();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.get(`[data-cy^='${requiredWithFieldSelector}'] input`).clear();
+      });
     });
 
     it("should show error for 'required without' field", () => {
-      cy.wait(1000);
       cy.get(`[data-cy^='${requiredWithoutFieldSelector}']`).then((elem) => {
         const errorBlock = elem.offsetParent().siblings("p");
 
@@ -678,11 +693,12 @@ context("Validators tests", () => {
 
   context(`Test ${requiredDocStatusFieldLabel} (required document status) Field`, () => {
     it("Add incorrect document", () => {
-      cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type("initial AR Form{downarrow}{enter}");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type("initial AR Form{downarrow}{enter}");
+      });
     });
 
     it("should show error for 'Incorrect document status' field", () => {
-      cy.wait(1000);
       cy.get(`[name^='${requiredDocStatusFieldSelector}']`).then((elem) => {
         const errorBlock = elem.offsetParent().siblings("p");
 
@@ -699,11 +715,12 @@ context("Validators tests", () => {
 
   context(`Test ${requiredDocTypeFieldLabel} (required document type) Field`, () => {
     it("Add incorrect document", () => {
-      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type("initial AR Form{downarrow}{enter}");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type("initial AR Form{downarrow}{enter}");
+      });
     });
 
     it("should show error for 'Incorrect document type' field", () => {
-      cy.wait(1000);
       cy.get(`[name^='${requiredDocTypeFieldSelector}']`).then((elem) => {
         const errorBlock = elem.offsetParent().siblings("p");
 
@@ -714,7 +731,9 @@ context("Validators tests", () => {
 
     it(`fill in '${requiredDocTypeFieldLabel}' with our CS Document`, () => {
       cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).clear();
-      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type(`${csDocTitle}{downarrow}{enter}`);
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostRemoteValidatorsHelper, () => {
+        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type(`${csDocTitle}{downarrow}{enter}`);
+      });
     });
   });
 

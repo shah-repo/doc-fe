@@ -1,14 +1,18 @@
 import { Box, Button } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
-import { Dictionary } from "lodash";
+import { Dictionary, isEmpty } from "lodash";
+import moment from "moment";
 import * as React from "react";
 import * as generateUuid from "uuid/v4";
+import { getStartOfDayDateString, TIME_ZONE } from "../../../../common/utils/date";
 import { Group } from "../../../../state/ducks/auth/types";
 import { Owner } from "../../../../state/ducks/common/types";
 import { AsyncState, AsyncStatus } from "../../../../state/types";
 import Approvers from "../../../change.request/form/approvers";
 import { TemplateOption } from "../../../change.request/form/types";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
+import DatePickerField from "../../../components/forms/fields/DatePickerField";
+import { required, validator } from "../../../components/forms/fields/validators";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import SubmitButton from "../../../components/forms/SubmitButton";
@@ -128,6 +132,16 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
               documentTypeGroups,
             }
           }
+        />
+      )}
+      {isEmpty(values.approvals) && (
+        <DatePickerField
+          label="transition.action.effective.date"
+          name="effectiveDate"
+          size="mdw"
+          minDate={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
+          value={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
+          validate={validator(required)}
         />
       )}
       {templateOptions.length > 1 && (

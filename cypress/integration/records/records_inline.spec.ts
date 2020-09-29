@@ -41,7 +41,7 @@ context("Record inline Flow", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             name: `Test Company ${runId}`,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
@@ -125,8 +125,17 @@ context("Record inline Flow", () => {
         cy.drSelectOutputDocumentType({ documentType: "Legal Record" });
       });
 
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Verify approvals field is automatically added", () => {
+        SystemRequirement("REQ-0980");
+        cy.get("div[name=\"fb-approvals-\"]").should("exist");
+      });
+
       it("Add textfield", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").click();
+        cy.fbClickAddNewHiddenBtn();
         cy.fbSelectTextField();
         cy.fbAddLabelName({ name: "Textfield for inline" });
         cy.fbAddField();
@@ -134,16 +143,27 @@ context("Record inline Flow", () => {
 
       it("Add inline approval", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectInlineApproval();
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetGroupsApprovalRoles, () => {
+          cy.fbSelectInlineApproval();
+        });
         cy.get("[name=\"label\"]").type("Inline field");
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddField();
       });
 
-      it("Add approvals", () => {
-        SystemRequirement("REQ-0980");
+      it("Add second textfield", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectApprovals();
+        cy.fbSelectTextField();
+        cy.fbAddLabelName({ name: "Second textfield for inline" });
+        cy.fbAddField();
+      });
+
+      it("Add second inline approval", () => {
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectInlineApproval();
+        cy.get("[name=\"label\"]").type("Second inline field");
+        cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
+        cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
         cy.fbAddField();
       });
     });
@@ -182,17 +202,28 @@ context("Record inline Flow", () => {
         cy.get("[data-cy^=\"textfield-for-inline\"]").click().type("First entry");
       });
 
-      it("Select inline approver", () => {
+      it("Enter text 'First entry' in second textfield for inline", () => {
+        SystemRequirement("REQ-1080");
+        cy.get("[data-cy^=\"second-textfield-for-inline\"]")
+          .click().type("First entry");
+      });
+
+      it("Select approver for first inline", () => {
         cy.get("[name*=\"fb-ia-inline-field\"] input")
           .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
       });
 
-      it("Save record", () => {
+      it("Select approver for second inline", () => {
         cy.wrapWithWaitOnApiCall(
           CyRoutes.PatchDocRev,
           () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+            cy.get("[name*=\"fb-ia-second-inline-field\"] input")
+              .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
           });
+      });
+
+      it("Save record", () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
       });
 
       it("Check inline record creation default to numeric revision", () => {
@@ -246,10 +277,27 @@ context("Record inline Flow", () => {
         it("Verify system asks for another approval afer changing section", () => {
           SystemRequirement("REQ-1050");
           cy.get("[data-cy^=\"form.builder.approval.pending\"]")
+            .first()
             .should("have.text", "Inline approval pending");
         });
 
-        it("Approve Inline Approval", () => {
+        it("Approve first Inline Approval", () => {
+          cy.wrapWithWaitOnApiCall(
+            CyRoutes.PostApprovalsApprove,
+            () => {
+              cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
+            });
+        });
+
+        it("Reload document", () => {
+          cy.reload();
+        });
+
+        it("Click WIP document", () => {
+          cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
+        });
+
+        it("Approve second Inline Approval", () => {
           cy.wrapWithWaitOnApiCall(
             CyRoutes.PostApprovalsApprove,
             () => {

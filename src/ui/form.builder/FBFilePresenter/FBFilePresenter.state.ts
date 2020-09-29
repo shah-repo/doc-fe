@@ -1,4 +1,5 @@
 import { includes, isUndefined, set, truncate } from "lodash";
+import { action, observable } from "mobx";
 import { FBAttachment, FBFilePresenterDownloadType } from "..";
 import { Attachment, AttachmentDownloadResponse, AttachmentType } from "../../../state/ducks/attachments";
 import { ATTACHMENT_ROOT_URL } from "../../../state/ducks/attachments/constants";
@@ -6,6 +7,7 @@ import { VIEWABLE_FILES, WATERMARK_FILES } from "../../components/common/view.fi
 import FBRequest from "../FBApi/FBApi.request";
 
 export class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, Attachment> {
+  @observable public toolsVisible?: boolean;
   public file: FBAttachment | undefined;
   public downloadType?: FBFilePresenterDownloadType;
 
@@ -23,9 +25,13 @@ export class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, 
 
   public get fileShortName(): string {
     return truncate(this.fileName, {
-      length: 25,
+      length: 50,
       omission: " ...",
     });
+  }
+
+  public get fileSize(): number | undefined {
+    return this.file?.fileSizeS3Link;
   }
 
   public get isCleanCopy(): boolean {
@@ -63,6 +69,9 @@ export class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, 
       ? AttachmentType.Attached
       : AttachmentType.CleanCopy;
   };
+
+  @action public setToolsVisible = (state: boolean) =>
+    set(this, "toolsVisible", state);
 }
 
 export default FBFilePresenterState;

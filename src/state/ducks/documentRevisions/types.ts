@@ -85,6 +85,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   revisionChangeType: RevisionChangeType;
   name: string;
   description: string;
+  displayRevision: string;
   owner: Owner;
   attachments: Attachment[];
   status: DocumentRevisionStatus;
@@ -191,7 +192,7 @@ export type AllIdsState = string[];
 
 export interface ApproveAndReleaseRequest {
   approvers: Id[];
-  effectiveDate: string;
+  effectiveDate?: string;
   documentType: Id;
   formDocument: Id;
 }
@@ -232,17 +233,6 @@ export interface FBOutputDocumentType {
 export interface HeaderTableType {
   label: string;
   key: string;
-}
-
-export interface DataTable {
-  docId: string;
-  revision: number;
-  documentTitle: string;
-  type: string | undefined;
-  owner: string;
-  crId: string | undefined;
-  status: string;
-  effectiveDate: string | undefined;
 }
 
 

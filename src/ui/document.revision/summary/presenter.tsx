@@ -74,7 +74,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
       documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
 
-  const renderTrainingControl = status === DocumentRevisionStatus.Released && (
+  const renderTrainingControl = (status === DocumentRevisionStatus.Released ||
+    status === DocumentRevisionStatus.Approved) && (
     <TrainingControl
       dataProp={trainingRecords}
       classes={classes}

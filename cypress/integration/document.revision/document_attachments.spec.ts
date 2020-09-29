@@ -24,7 +24,7 @@ context("Document Attachment Flow", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -100,6 +100,10 @@ context("Document Attachment Flow", () => {
       cy.drCheckIfDocumentIdMatches({ docId: "CS-00003" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     context("Test download of uploaded attachments", () => {
       it("Uploads text.docx", () => {
         cy.atchUploadAttachment({ fileName: "test.docx" });
@@ -133,6 +137,7 @@ context("Document Attachment Flow", () => {
 
       it("Approves and releases document", () => {
         cy.drApproveAndReleaseDocument();
+        cy.wait(2000);
       });
 
       it("Download all attachments with redline document", () => {
@@ -158,6 +163,7 @@ context("Document Attachment Flow", () => {
 
       it("Approves and releases document", () => {
         cy.drApproveAndReleaseDocument();
+        cy.wait(2000);
       });
 
       it("Revise document", () => {
@@ -170,6 +176,7 @@ context("Document Attachment Flow", () => {
 
       it("Approves and releases document", () => {
         cy.drApproveAndReleaseDocument();
+        cy.wait(2000);
       });
 
       it("Select Superseded version of document without redline attachments", () => {
@@ -203,6 +210,7 @@ context("Document Attachment Flow", () => {
 
       it("Approves and releases document", () => {
         cy.drApproveAndReleaseDocument();
+        cy.wait(2000);
       });
 
       it("Download all attachments without redline document on Obsolete version", () => {
@@ -248,6 +256,10 @@ context("Document Attachment Flow", () => {
 
     it("Uploads text.docx", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Clicks Save button", () => {

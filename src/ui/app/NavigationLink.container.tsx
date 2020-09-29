@@ -1,10 +1,14 @@
 import { Collapse, List } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
-import { NavigationItem, NavigationItemType } from "../../state/ducks/company";
+import { authSelectors } from "../../state/ducks/auth";
+import { companyActions, companySelectors, NavigationItem, NavigationItemType } from "../../state/ducks/company";
+import { ApplicationState } from "../../state/reducers";
 import { DOCUMENT_BY_CATEGORY_ROOT_URL } from "../constants/urls";
 import NavigationLinkPresenter from "./NavigationLink.presenter";
+import { updateNavigationItem } from "./NavigationLocalStorageHelpers";
 
 export interface NavigationLinkContainerProps extends NavigationItem {
   currentPath: string;
@@ -35,25 +39,27 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
   menu,
   ...rest
 }) => {
+  const dispatch = useDispatch();
+  const { label } = rest;
 
-  const [isOpen, setIsOpen] = useState(false);
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+  const isOpen = useSelector((state: ApplicationState) =>
+    companySelectors.getNavigationItemStatus(state, label))?.isOpen;
 
-  useEffect(() => {
-    const isItemActive = checkIfItemIsActive(type, currentPath, rest.path, rest.category, menu);
-    setIsOpen(isItemActive);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPath]);
+  const [isOpenMenu, setIsOpenMenu] = useState(isOpen);
 
   const toggleChildren = (event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    setIsOpen(!isOpen);
+    setIsOpenMenu(!isOpenMenu);
+    updateNavigationItem(currentEmployeeId, { label, isOpen: !isOpenMenu });
+    dispatch(companyActions.updateNavigationMenuItem(label, !isOpenMenu));
   };
 
-  const actionIcon = isOpen ? <ExpandLess onClick={toggleChildren} /> : <ExpandMore onClick={toggleChildren} />;
+  const actionIcon = isOpenMenu ? <ExpandLess onClick={toggleChildren} /> : <ExpandMore onClick={toggleChildren} />;
 
   const childrenList = menu?.length === 0 ? null : (
-    <Collapse in={isOpen} timeout="auto" unmountOnExit={true}>
+    <Collapse in={isOpenMenu} timeout="auto" unmountOnExit={true}>
       <List disablePadding>
         {menu?.map((ld) => (
           ld.type !== "MENU" &&

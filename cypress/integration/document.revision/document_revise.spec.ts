@@ -4,7 +4,6 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -37,7 +36,7 @@ context("Document revise test", () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -168,10 +167,10 @@ context("Document revise test", () => {
       cy.navigToDocumentList();
     });
 
-    it("Verify 'Test document for revising' revision is set to 1", () => {
+    it("Verify 'Test document for revising' revision is set to 1.1", () => {
       SystemRequirement("REQ-0580", "REQ-0620", "REQ-0370");
       cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
-      cy.dlVerifyFilterByRev({ revision: "1" });
+      cy.dlVerifyFilterByRev({ revision: "1.1" });
     });
   });
 
@@ -263,10 +262,7 @@ context("Document revise test", () => {
       });
 
       it("Click close AR", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
-            cy.arCloseAR();
-          });
+        cy.arCloseAR();
       });
     });
 
@@ -342,10 +338,7 @@ context("Document revise test", () => {
       });
 
       it("Click close AR", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
-            cy.arCloseAR();
-          });
+        cy.arCloseAR();
       });
     });
 

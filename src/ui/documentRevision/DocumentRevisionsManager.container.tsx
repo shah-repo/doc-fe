@@ -129,7 +129,11 @@ DocumentRevisionManagerContainerProps
           id: "document.revision.history",
         }),
         component: documentRevisionId ? <DocumentRevisionAuditContainer
-          documentRevisionId={documentRevisionId}
+          {...{
+            documentRevisionId,
+            documentTypeId,
+            selectedDocument,
+          }}
         /> : null,
       },
     },

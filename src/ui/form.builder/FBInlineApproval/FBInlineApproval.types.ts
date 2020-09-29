@@ -17,6 +17,7 @@ export type FBInlineApprovalProps =
   currentUser?: string;
   isApproved?: boolean;
   isPreview?: boolean;
+  isOutput?: boolean;
 };
 
 export type FBInlineApprovalOptions = FBEmployee & {
@@ -32,7 +33,7 @@ export enum FBInlineApprovalStatusIdent {
   PENDING = "Pending approval",
   ABANDONED = "Abandoned",
   APPROVED = "Approved",
-  REJECT = "Rejected",
+  REJECTED = "Rejected",
 }
 
 export interface FBInlineApprovalBody {

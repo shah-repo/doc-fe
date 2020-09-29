@@ -60,6 +60,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isNumericRelease = documentRevision.revisionStage === 1;
   const isObsolete = documentRevision.revisionChangeType === RevisionChangeType.Obsolete;
   const isInReview = status === DocumentRevisionStatus.InReview;
+  const isVoided = status === DocumentRevisionStatus.Obsolete || status === DocumentRevisionStatus.Voided;
 
   if (isRecord && !isInlineApproval && (!isObsolete || isInReview)) {
     stateLabel = status;
@@ -83,7 +84,16 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     stateLabel = "common.last.signed";
   }
 
-  const docIdLabel = isRecord ? "common.id" : "common.docId";
+  const docIdLabel = (isRecord ? "common.id" : "common.docId") as Translation;
+  const recordOwnerLabel = isVoided ? "record.voided.by" : "record.released.by";
+
+  let recordDateLabel = "common.updated" as Translation;
+  if (isVoided) {
+    recordDateLabel = "record.voided.date";
+  }
+  if (isReleased) {
+    recordDateLabel = "document.revision.released.date";
+  }
 
   return (
     <div
@@ -117,7 +127,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
       >
         <SummaryInfo
           dataCy={"common.docId"}
-          label={isDocumentPO ? undefined : docIdLabel as Translation}
+          label={isDocumentPO ? undefined : docIdLabel}
           value={docId}
         />
         {!isRecord && (
@@ -127,16 +137,16 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           />
         )}
         <SummaryInfo
-          label={isRecord ? "record.released.by" : "common.owner"}
+          label={isRecord && (isReleased || isVoided) ? recordOwnerLabel : "common.owner"}
           value={documentRevision.owner.user.name}
         />
         <SummaryInfo
-          label={isRecord ? "document.revision.released.date" : "common.effective.date"}
+          label={isRecord ? recordDateLabel : "common.effective.date"}
           value={
             <DateFormatter
               value={
                 isRecord ?
-                  documentRevision.releasedAt :
+                  documentRevision.releasedAt || documentRevision.updatedAt :
                   documentRevision.obsoletedAt || documentRevision.effectiveDate
               }/>
           }

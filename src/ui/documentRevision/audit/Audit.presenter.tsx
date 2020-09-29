@@ -1,5 +1,6 @@
-import { Box, List } from "@material-ui/core";
+import { Box, List, Typography } from "@material-ui/core";
 import React from "react";
+import { MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
@@ -8,12 +9,18 @@ import { styles } from "./Audit.presenter.styles";
 
 interface OwnProps {
   audit: AuditGroupType;
+  statusLabel: string;
+  versionNumber: string;
+  isStatusVisible: boolean;
 }
 
 export type AuditPresenterProps = OwnProps;
 
 export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
+  statusLabel,
+  versionNumber,
+  isStatusVisible,
 }) => {
   const classes = styles();
 
@@ -32,7 +39,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer}>
             <div className={classes.owner} data-cy={`owner-${key}`}>{name}</div>
-            <DateTime value={change.timestamp} data-cy={`time-${key}`}/>
+            <DateTime value={change.timestamp} format={MomentFormats.DateTime} data-cy={`time-${key}`}/>
           </div>
           {renderChanges(audit[groupId], key)}
         </Box>
@@ -120,7 +127,20 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
   return (
     <div className={classes.container}>
-      <List>{audit && renderAuditGroup()}</List>
+      {audit && <Box className={classes.revisionContainer}>
+        <Typography variant="subtitle1" className={classes.title}>
+          <Text message={"common.revision"} />
+          &nbsp;
+          {versionNumber}
+          {
+            isStatusVisible &&
+            <>
+              &nbsp; - <Text message={statusLabel} />
+            </>
+          }
+        </Typography>
+      </Box>}
+      <List className={classes.list}>{audit && renderAuditGroup()}</List>
     </div>
   );
 };
