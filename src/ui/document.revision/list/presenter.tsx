@@ -1,6 +1,6 @@
 import { Box, Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { isString, set } from "lodash";
-import React, { useState } from "react";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
@@ -247,11 +247,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   ];
 
   const dialog = useDialog();
-  const [fileName, saveFileName] = useState("");
-  const handleOpen = () => {
-    dialog.open();
-    saveFileName("");
-  };
 
   return (
     <Grid container={true} className={classes.root}>
@@ -267,7 +262,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           style={{ marginRight: 5 }}
           id="ListPresenter-export-list"
           data-cy="document.revision.export.list"
-          onClick={handleOpen}
+          onClick={dialog.open}
         >
           <Box marginRight={1}>
             <ExportIcon className={classes.iconSvg} />
@@ -275,7 +270,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           <Text translation="document.revision.export.list" />
         </Button>
         <ExportListDialog
-          {...{ dialog, headers, data, fileName, saveFileName }}
+          {...{ dialog, headers, data  }}
         />
         <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
           <Button
