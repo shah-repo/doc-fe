@@ -168,10 +168,10 @@ context("Document revise test", () => {
       cy.navigToDocumentList();
     });
 
-    it("Verify 'Test document for revising' revision is set to 1", () => {
+    it("Verify 'Test document for revising' revision is set to 1.1", () => {
       SystemRequirement("REQ-0580", "REQ-0620", "REQ-0370");
       cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
-      cy.dlVerifyFilterByRev({ revision: "1" });
+      cy.dlVerifyFilterByRev({ revision: "1.1" });
     });
   });
 

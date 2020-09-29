@@ -119,7 +119,7 @@ Cypress.Commands.add("dlVerifyFilterByDocId", (params: {docId: string }) => {
 });
 
 Cypress.Commands.add("dlFilterByRev", (params: {revision: string }) => {
-  cy.get("input[name=revision]").type(params.revision).wait(500);
+  cy.get("input[name=displayRevision]").type(params.revision).wait(500);
 });
 
 Cypress.Commands.add("dlVerifyFilterByRev", (params: {revision: string }) => {
@@ -207,7 +207,7 @@ Cypress.Commands.add("dlVerifyFilterByEffectiveDate", (params: {effectiveDate: s
 
 Cypress.Commands.add("dlVerifyFilterClear", () => {
   cy.get("input[name=docId]").should("have.attr", "value", "");
-  cy.get("input[name=revision]").should("have.attr", "value", "");
+  cy.get("input[name=displayRevision]").should("have.attr", "value", "");
   cy.get("input[name=name]").should("have.attr", "value", "");
   cy.get("input[name=documentTypeId]").should("have.attr", "value", "");
   cy.get("input[name=owner]").should("have.attr", "value", "");
