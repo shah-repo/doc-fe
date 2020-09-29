@@ -39,10 +39,11 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
         <KeyboardDatePicker
           {
             ...{
-              value,
               minDate,
             }
           }
+          defaultValue={value}
+          value={fieldProps.field.value}
           fullWidth={true}
           disableToolbar={true}
           invalidDateMessage=""

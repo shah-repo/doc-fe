@@ -234,15 +234,4 @@ export interface HeaderTableType {
   key: string;
 }
 
-export interface DataTable {
-  docId: string;
-  revision: number;
-  documentTitle: string;
-  type: string | undefined;
-  owner: string;
-  crId: string | undefined;
-  status: string;
-  effectiveDate: string | undefined;
-}
-
 

@@ -33,6 +33,13 @@ export enum ReleasedDateOptions {
   LAST_MONTH = "Last 30 days",
 }
 
+export enum CompletedOnDateOptions {
+  NEXT_WEEK = "Next 7 days",
+  NEXT_TWO_WEEKS = "Next 14 days",
+  NEXT_MONTH = "Next 30 days",
+  PENDING = "Pending",
+}
+
 // Summary
 export type SummaryStateProps = LoadAsyncState & DataProps<DocumentRevision[]>;
 
