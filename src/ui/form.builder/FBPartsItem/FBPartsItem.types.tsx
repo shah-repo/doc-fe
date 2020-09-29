@@ -1,5 +1,7 @@
-import { FBProcedureItemConfig } from "..";
+import { FBProcedureItemConfig, FBProcedureItemProps } from "..";
 
-export interface FBPartsItemProps {
-  value: FBProcedureItemConfig;
-}
+export type FBPartsItemProps =
+& Pick<FBProcedureItemProps, "name" | "type" | "getItem" | "loading">
+& {
+  collection?: FBProcedureItemConfig[];
+};

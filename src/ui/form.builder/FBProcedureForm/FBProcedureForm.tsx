@@ -9,9 +9,9 @@ import { withFBProcedureForm } from "./FBProcedureForm.wrap";
 const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
   formState,
   children,
+  disabledOptions,
   optionId,
   type,
-  name,
 }) => (
   <FBForm {...{ formState }} >
     <FBTextField
@@ -23,7 +23,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       name="title"
       label="form.builder.title"
       rules="required"
-      {...{ optionId }}
+      {...{ optionId, disabledOptions }}
       freeSolo
     />
     {type === "materials" && (

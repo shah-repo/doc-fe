@@ -1,29 +1,32 @@
-import { uniqBy } from "lodash";
-import { action, observable, set } from "mobx";
-import { FBProcedureItemConfig } from "..";
-import FBRequest from "../FBApi/FBApi.request";
+import { unionBy } from "lodash";
+import { computed, observable } from "mobx";
+import { FBProcedureItemConfig, FBProcedureValue } from "..";
+import { FBProcedureState } from "../FBProcedure/FBProcedure.state";
 
-export class FBPartsState extends FBRequest<any, any> {
-  @observable public equipment: FBProcedureItemConfig[] = [];
-  @observable public materials: FBProcedureItemConfig[] = [];
+export class FBPartsState extends FBProcedureState {
+  // MARK: @config
 
-  public constructor({ equipment, materials }) {
-    super();
-    this.equipment = equipment || [];
-    this.materials = materials || [];
+  // MARK: @observables
+  @observable public parts = new Map<string, FBProcedureValue>();
+
+  // MARK: @computed
+  @computed public get materials(): FBProcedureItemConfig[] | undefined {
+    let materials: FBProcedureItemConfig[] = [];
+    this.parts.forEach((value) => {
+      materials = unionBy(materials, value?.materials || [], "title");
+    });
+    return materials;
   }
 
-  @action public setEquipment = (equipment: FBProcedureItemConfig[], procedureField?: string) => {
-    const equipmentWithoutCurrentProcedure = this.equipment.filter((eq) => eq.procedureFieldId !== procedureField);
-    const newEquipment = uniqBy(equipment.concat(equipmentWithoutCurrentProcedure), "id");
-    set(this, "equipment", newEquipment);
-  };
+  @computed public get equipment(): FBProcedureItemConfig[] | undefined {
+    let equipment: FBProcedureItemConfig[] = [];
+    this.parts.forEach((value) => {
+      equipment = unionBy(equipment, value?.equipment || [], "title");
+    });
+    return equipment;
+  }
 
-  @action public setMaterials = (materials: FBProcedureItemConfig[], procedureField?: string) => {
-    const materialsWithoutCurrentProcedure = this.materials.filter((m) => m.procedureFieldId !== procedureField);
-    const newMaterials = uniqBy(materials.concat(materialsWithoutCurrentProcedure), "id");
-    set(this, "materials", newMaterials);
-  };
+  // MARK: @helpers
 }
 
 export default FBPartsState;

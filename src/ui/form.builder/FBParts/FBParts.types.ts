@@ -1,8 +1,5 @@
-import { FBInputProps, FBProcedureItemConfig } from "..";
+import { FBInputProps, FBProviderProps } from "..";
 
 export type FBPartsProps =
 & Pick<FBInputProps, "name">
-& {
-  equipment: FBProcedureItemConfig[];
-  materials: FBProcedureItemConfig[];
-};
+& Pick<FBProviderProps, "partsState">;

@@ -29,7 +29,9 @@ export const withFBProcedure = <T extends FBProcedureProps>(
       (data) => formState?.setFieldValue(name, {
         ...formState.getFieldValue(name),
         ...data,
-      }, true)
+      }, true), {
+        fireImmediately: true,
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 

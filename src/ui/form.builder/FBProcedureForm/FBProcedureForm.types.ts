@@ -2,8 +2,8 @@ import { FBAutocompleteAsyncProps, FBFormProps, FBProcedureItemProps } from ".."
 
 export type FBProcedureFormProps =
 & Pick<FBFormProps, "formState" | "children" | "initialValues">
-& Pick<FBProcedureItemProps, "name" | "type">
-& Pick<FBAutocompleteAsyncProps, "optionId">;
+& Pick<FBProcedureItemProps, "type">
+& Pick<FBAutocompleteAsyncProps, "optionId" | "disabledOptions">;
 
 export type FBProcedureFormActionsProps =
 & Pick<FBProcedureItemProps, "handleAdd" | "handleCancel">;

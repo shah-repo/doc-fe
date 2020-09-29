@@ -1,4 +1,7 @@
+import { useObserver } from "mobx-react";
 import React from "react";
+import { FB, FBProcedureItemType } from "..";
+import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBPartsItemProps } from "./FBPartsItem.types";
 
 
@@ -6,27 +9,47 @@ export const withFBPartsItem = <T extends FBPartsItemProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    value,
+    getItem,
+    collection,
+    loading,
+    type,
     ...props
-  }: T) =>
+  }: T) => {
 
-  // MARK: @config
+    // MARK: @config
+    const { partsState } = FB.useStores();
 
-  // MARK: Reactions
-
-
-  // MARK: @helpers
+    // MARK: Reactions
 
 
-  // MARK: @methods
+    // MARK: @helpers
 
-  // MARK: @observer
 
-    Component({
+    // MARK: @methods
+    getItem = (id: string): string => partsState?.getItem(id, type) || "";
+
+    // MARK: @observer
+    useObserver(() => {
+      const observables: Record<FBProcedureItemType, (() => void)> = {
+        materials: () => {
+          loading = !FBAutocompleteAsyncStore.data.get(partsState?.materialsId || "");
+          collection = partsState?.materials;
+        },
+        equipment: () => {
+          loading = !FBAutocompleteAsyncStore.data.get(partsState?.equipmentId || "");
+          collection = partsState?.equipment;
+        },
+      };
+      observables[type]();
+    });
+
+    return Component({
       ...(props as T),
-      value,
-    })
-  ;
+      getItem,
+      collection,
+      type,
+    });
+  };
 
   Comp.displayName = "withFBPartsItem";
   return Comp;

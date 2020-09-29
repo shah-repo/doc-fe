@@ -2,6 +2,7 @@ import { get } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBDialogState, FBFormState, FBProcedureForm, FBProcedureFormActions, FBProcedureItemActionLocale, FBProcedureItemConfig, FBProcedureItemProps } from "..";
+import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBProcedureItem = <T extends FBProcedureItemProps>(
   Component: React.FunctionComponent<T>,
@@ -34,11 +35,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     onClick = () => dialogState?.config({
       open: true,
       title: FBProcedureItemActionLocale[type],
-      content: (
-        <FBProcedureForm
-          {...{ formState, name, type }}
-        />
-      ),
+      content: <FBProcedureForm {...{ formState, type }} />,
       actions: <FBProcedureFormActions {...{ handleAdd, handleCancel }} />,
     });
 
@@ -55,9 +52,12 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
 
     // MARK: @observer
     useObserver(() => {
+      // Hack! We should render parts only when data is available
+      // We cannot rely on the state api loading value because of the double initialization issue.
+      // This should be removed after refactoring and double initialization issue fixed
       loading = type === "materials"
-        ? procedureState?.materialsApi.loading
-        : procedureState?.equipmentApi.loading;
+        ? !FBAutocompleteAsyncStore.data.get(procedureState?.materialsId || "")
+        : !FBAutocompleteAsyncStore.data.get(procedureState?.equipmentId || "");
       value = get(procedureState, type);
     });
 
