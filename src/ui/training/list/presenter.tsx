@@ -1,8 +1,7 @@
 import { Box, Button, Grid } from "@material-ui/core";
-import moment from "moment";
 import React from "react";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
-import { getFormattedDateString, MomentFormats, TIME_ZONE } from "../../../common/utils/date";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { TRAINING_RECORD_ROOT_URL } from "../../../state/ducks/training/constants";
 import { TrainingListData, TrainingRecordQuery } from "../../../state/ducks/training/types";
 import Date from "../../components/Date";
@@ -152,7 +151,7 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: {
         // eslint-disable-next-line react/display-name
         cellDataGetter: ({ rowData }) => rowData.completedAt ?
-          moment(rowData.completedAt).tz(TIME_ZONE).format(MomentFormats.DateTimeComplete) : "Pending",
+          getFormattedDateString(rowData, MomentFormats.DateTimeComplete) : "Pending",
       },
     },
   ];
