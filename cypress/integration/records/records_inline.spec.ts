@@ -129,6 +129,10 @@ context("Record inline Flow", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
+      it("Verify approvals field is automatically added", () => {
+        cy.get("div[name=\"fb-approvals-\"]").should("exist");
+      });
+
       it("Add textfield", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectTextField();
