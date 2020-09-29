@@ -1,7 +1,6 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -307,10 +306,7 @@ context("Approval request form", () => {
     });
 
     it("Close AR", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
-          cy.arCloseAR();
-        });
+      cy.arCloseAR();
     });
 
     it("Check approval request status is 'Closed'", () => {

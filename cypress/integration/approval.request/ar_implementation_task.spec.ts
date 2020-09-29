@@ -252,7 +252,9 @@ context("Approval request implementation tasks", () => {
       SystemRequirement("REQ-0710");
       cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Done$", "g")).click();
       cy.get("[data-cy=\"description\"]").next().type("Task is done");
-      cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostTaskDone, () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
+      });
       // cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
     });
 
@@ -270,10 +272,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Close AR", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
-          cy.arCloseAR();
-        });
+      cy.arCloseAR();
     });
 
     it("Check approval request status is 'Closed'", () => {
