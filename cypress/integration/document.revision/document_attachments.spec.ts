@@ -137,6 +137,7 @@ context("Document Attachment Flow", () => {
 
       it("Approves and releases document", () => {
         cy.drApproveAndReleaseDocument();
+        cy.wait(2000);
       });
 
       it("Download all attachments with redline document", () => {
@@ -162,6 +163,7 @@ context("Document Attachment Flow", () => {
 
       it("Approves and releases document", () => {
         cy.drApproveAndReleaseDocument();
+        cy.wait(2000);
       });
 
       it("Revise document", () => {
@@ -174,6 +176,7 @@ context("Document Attachment Flow", () => {
 
       it("Approves and releases document", () => {
         cy.drApproveAndReleaseDocument();
+        cy.wait(2000);
       });
 
       it("Select Superseded version of document without redline attachments", () => {
@@ -207,6 +210,7 @@ context("Document Attachment Flow", () => {
 
       it("Approves and releases document", () => {
         cy.drApproveAndReleaseDocument();
+        cy.wait(2000);
       });
 
       it("Download all attachments without redline document on Obsolete version", () => {

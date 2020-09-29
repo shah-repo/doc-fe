@@ -259,7 +259,9 @@ context("Document Approval Matrix Flow", () => {
 
   context("Add New Role: Role One", () => {
     it("Open 'Add Role' dialog", () => {
-      cy.drAddAnotherRoleBtn();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GroupsGet], () => {
+        cy.drAddAnotherRoleBtn();
+      });
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -499,7 +501,10 @@ context("Document Approval Matrix Flow", () => {
 
   context("Add New Role: Role Two", () => {
     it("Open 'Add Role' dialog", () => {
-      cy.drAddAnotherRoleBtn();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.DocPreview], () => {
+        cy.drAddAnotherRoleBtn();
+      });
+      cy.wait(500);
     });
 
     it(`Fill role name: ${roleTwo}`, () => {

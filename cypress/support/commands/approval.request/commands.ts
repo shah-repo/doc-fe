@@ -98,7 +98,9 @@ Cypress.Commands.add("arClickAddDocument", () => {
 
 Cypress.Commands.add("arCloseAR", () => {
   cy.get("[aria-label=closed]").click();
-  cy.get("[data-cy=AlertDialog-continueButton]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.PostCloseAR, () => {
+    cy.get("[data-cy=AlertDialog-continueButton]").click();
+  });
 });
 
 Cypress.Commands.add("arChoseSpecificProposedDocument", (params: { name: string }) => {
@@ -123,7 +125,10 @@ Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string 
 });
 
 Cypress.Commands.add("arClickCreateApprovalRequestAfterCompletingForm", () => {
-  cy.get("[data-cy=\"navigation.createChangeRequest\"]").click().wait(3000);
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PostChangeRequests, CyRoutes.DocRevPreview, CyRoutes.DocRevPreview], () => {
+      cy.get("[data-cy=\"navigation.createChangeRequest\"]").click();
+    });
 });
 
 Cypress.Commands.add("arClickSendToReview", () => {
