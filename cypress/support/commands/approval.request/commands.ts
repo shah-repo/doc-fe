@@ -98,9 +98,10 @@ Cypress.Commands.add("arClickAddDocument", () => {
 
 Cypress.Commands.add("arCloseAR", () => {
   cy.get("[aria-label=closed]").click();
-  cy.wrapWithWaitOnApiCall(CyRoutes.PostCloseAR, () => {
-    cy.get("[data-cy=AlertDialog-continueButton]").click();
-  });
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
+      cy.get("[data-cy=AlertDialog-continueButton]").click();
+    });
 });
 
 Cypress.Commands.add("arChoseSpecificProposedDocument", (params: { name: string }) => {
@@ -185,8 +186,7 @@ Cypress.Commands.add("arWithdrawSubmission", () => {
 
 Cypress.Commands.add("arCloseARFromMenu", () => {
   cy.get("[data-cy=\"HeaderMenuButton\"]").click();
-  cy.get("[data-cy=\"transition-closed\"]").click();
-  cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+  cy.arCloseAR();
 });
 
 Cypress.Commands.add("arVoidAR", () => {

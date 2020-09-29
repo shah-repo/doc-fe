@@ -272,10 +272,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Close AR", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
-          cy.arCloseAR();
-        });
+      cy.arCloseAR();
     });
 
     it("Check approval request status is 'Closed'", () => {

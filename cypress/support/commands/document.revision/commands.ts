@@ -300,6 +300,7 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
 
 Cypress.Commands.add("drClickReviseDocument", () => {
   cy.get("[data-cy=\"updateRecord\"]").click();
+  cy.wait(3000);
 });
 
 Cypress.Commands.add("drClickTrainingRequired", () => {
