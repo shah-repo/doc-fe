@@ -214,16 +214,16 @@ context("Record inline Flow", () => {
       });
 
       it("Select approver for second inline", () => {
-        cy.get("[name*=\"fb-ia-second-inline-field\"] input")
-          .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
-      });
-
-      it("Save record", () => {
         cy.wrapWithWaitOnApiCall(
           CyRoutes.PatchDocRev,
           () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+            cy.get("[name*=\"fb-ia-second-inline-field\"] input")
+              .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
           });
+      });
+
+      it("Save record", () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
       });
 
       it("Check inline record creation default to numeric revision", () => {
@@ -289,11 +289,19 @@ context("Record inline Flow", () => {
             });
         });
 
+        it("Reload document", () => {
+          cy.reload();
+        });
+
+        it("Click WIP document", () => {
+          cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
+        });
+
         it("Approve second Inline Approval", () => {
           cy.wrapWithWaitOnApiCall(
             CyRoutes.PostApprovalsApprove,
             () => {
-              cy.get("[data-cy=\"fb-control-btn\"]").eq(2).contains("Approve").click();
+              cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
             });
         });
 
