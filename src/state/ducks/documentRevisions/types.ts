@@ -107,6 +107,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   primaryAttachment?: Attachment;
   approvals?: Approval[];
   updatedAt?: string;
+  schema?: FBSchemaProps[];
 }
 
 export const RevisionStageOptions = [
