@@ -79,7 +79,7 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
       id: "TrainingListPresenter-revision",
       label: "common.revision",
       columnOptions: {
-        cellDataGetter: ({ rowData }) => rowData.documentRevision.revision,
+        cellDataGetter: ({ rowData }) => rowData.documentRevision.displayRevision,
         width: 75,
       },
       searchOptions: {
