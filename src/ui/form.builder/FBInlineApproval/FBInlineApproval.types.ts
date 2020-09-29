@@ -17,6 +17,7 @@ export type FBInlineApprovalProps =
   currentUser?: string;
   isApproved?: boolean;
   isPreview?: boolean;
+  isOutput?: boolean;
 };
 
 export type FBInlineApprovalOptions = FBEmployee & {

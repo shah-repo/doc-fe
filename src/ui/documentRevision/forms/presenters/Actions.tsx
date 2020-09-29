@@ -123,7 +123,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           <SubmitForApproval
             docRevId={values.id as string}
             status={values.status}
-            docRevOwner={owner.user.name}
+            docRevOwner={owner?.user.name}
             updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
             {
               ...{

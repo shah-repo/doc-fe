@@ -29,7 +29,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
   }: T) => {
 
     // MARK: @config
-    const { formState, workspaceState } = FB.useStores();
+    const { formState } = FB.useStores();
     const emptyHtmlContent = "<p></p>";
     const intl = useIntl();
     formValue = formState?.getFieldValue(name);
@@ -37,7 +37,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
 
     // form preview mode just disables the text editor
     // preview mode pulls a new style
-    isPreview = workspaceState?.mode === "preview";
+    isPreview = formState?.workspaceMode === "preview";
 
     // Default value for preview mode
     if (!formValue && isEmpty(formValue) && isPreview) {
@@ -107,6 +107,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       // If onBlur method is called from options menu open trigger
       if (textEditorState?.preserveFocus) { return; }
       handleMask?.(true);
+      formState?.setFieldAutosave(name);
     };
 
     // MARK: @observer

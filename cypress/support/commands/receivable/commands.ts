@@ -139,7 +139,7 @@ Cypress.Commands.add("recVerifyFilterClear", () => {
 });
 
 Cypress.Commands.add("recCheckNumberOfAvailablePo", (params: {numberOfOpenPOs: integer}) => {
-  cy.get("[data-cy^=receivable]").scrollIntoView().wait(300);
+  cy.get("[data-cy^=receivable]").scrollIntoView().wait(2000);
   cy.get("[data-cy^=receivable]").click();
   cy.get("ul[role=listbox]>li").should("have.length", params.numberOfOpenPOs);
 });

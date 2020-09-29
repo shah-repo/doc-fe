@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import { NavigationItems } from "../../../src/state/ducks/auth/types";
+import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -50,8 +51,8 @@ context("Document Approval Matrix Flow", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         adminEmployeeLoginResponse = response;
         cy.cmpCreateCompany({
@@ -258,7 +259,9 @@ context("Document Approval Matrix Flow", () => {
 
   context("Add New Role: Role One", () => {
     it("Open 'Add Role' dialog", () => {
-      cy.drAddAnotherRoleBtn();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GroupsGet], () => {
+        cy.drAddAnotherRoleBtn();
+      });
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -499,6 +502,7 @@ context("Document Approval Matrix Flow", () => {
   context("Add New Role: Role Two", () => {
     it("Open 'Add Role' dialog", () => {
       cy.drAddAnotherRoleBtn();
+      cy.wait(1000);
     });
 
     it(`Fill role name: ${roleTwo}`, () => {
@@ -754,7 +758,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`change name '${docTypeOne}' to '${newDocTypeOne}'`, () => {
-      // SystemRequirement("REQ-0430");
+    // SystemRequirement("REQ-0430");
       cy.drUpdateDocumentTypeName({
         sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         employeeId: adminEmployee.id,
@@ -806,10 +810,9 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`find changed document type '${newDocTypeOne}'`, () => {
-      // SystemRequirement("REQ-0530");
+    // SystemRequirement("REQ-0530");
       const exists = documentTypes.includes(newDocTypeOne);
       cy.wrap(exists).should("eq", true);
     });
   });
-
 });

@@ -410,7 +410,7 @@ context("Document Creation Flow", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall().wait(1000);
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Cancel draft document", () => {

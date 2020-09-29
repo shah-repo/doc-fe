@@ -2,7 +2,7 @@ import { Button, withStyles, WithStyles } from "@material-ui/core";
 import { Form } from "formik";
 import moment from "moment";
 import * as React from "react";
-import { toStartOfDay } from "../../../../common/utils/date";
+import { getStartOfDayDateString, TIME_ZONE } from "../../../../common/utils/date";
 import { AsyncState, AsyncStatus } from "../../../../state/types";
 import DatePickerField from "../../forms/fields/DatePickerField";
 import { required, validator } from "../../forms/fields/validators/index";
@@ -23,8 +23,8 @@ const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps> = ({ ca
     <DatePickerField
       label="transition.action.effective.date"
       name="effectiveDate"
-      minDate={toStartOfDay(moment.utc().toISOString())}
-      value={toStartOfDay(moment.utc().toISOString())}
+      minDate={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
+      value={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
       validate={validator(required)}
     />
     <FormProgress asyncState={asyncState} />
