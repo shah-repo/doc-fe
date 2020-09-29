@@ -151,7 +151,8 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
       },
       columnOptions: {
         // eslint-disable-next-line react/display-name
-        cellDataGetter: ({ rowData }) => rowData.completedAt ? moment(rowData.completedAt).tz(TIME_ZONE).format(MomentFormats.DateTimeComplete) : "Pending",
+        cellDataGetter: ({ rowData }) => rowData.completedAt ?
+          moment(rowData.completedAt).tz(TIME_ZONE).format(MomentFormats.DateTimeComplete) : "Pending",
       },
     },
   ];
