@@ -130,6 +130,7 @@ context("Record inline Flow", () => {
       });
 
       it("Verify approvals field is automatically added", () => {
+        SystemRequirement("REQ-0980");
         cy.get("div[name=\"fb-approvals-\"]").should("exist");
       });
 
