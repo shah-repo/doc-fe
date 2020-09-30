@@ -55,6 +55,14 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isUserDocumentOwner = React.useContext(isOwnerContext);
   const showVoidButton = documentRevision?.status === DocumentRevisionStatus.Draft && documentRevision?.version === 1;
 
+  function isOutputSchema(): boolean {
+    const { schema: documentSchema = [] } = values.formDocument?.formTemplate || {};
+    return (
+      Boolean(difference(workspaceState?.schema || [],  documentSchema)) ||
+      !isUndefined(values.schema)
+    );
+  }
+
   function setFBValue() {
     switch (workspaceState?.getMode()) {
       case "design":
@@ -80,11 +88,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         } else {
           formik.setFieldValue("formInput", formState?.getValues());
         }
-        const isOutputScheme = (
-          Boolean(difference(workspaceState.schema, values.formDocument?.formTemplate?.schema || [])) ||
-          !isUndefined(values.schema)
-        );
-        if (isOutputScheme) {
+        if (isOutputSchema()) {
           formik.setFieldValue("schema", workspaceState.schema);
         }
         break;
