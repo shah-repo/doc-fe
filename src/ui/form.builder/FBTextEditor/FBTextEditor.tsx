@@ -58,7 +58,7 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
               borderBottom: `1px solid ${Colors.hint_gray}`,
             }}
             editorStyle={{
-              height: "100%",
+              height: "auto",
               padding: "0 13px",
               overflow: "hidden",
               visibility: isPreview ? "hidden" : "visible",

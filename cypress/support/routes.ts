@@ -41,7 +41,11 @@ export enum CyRoutes {
   PatchAR = "PatchAR",
   GetDocAggregatedAudit = "GetDocAggregatedAudit",
   PostApprovalsApprove = "PostApprovalsApprove",
-  GetGroupsApprovalRoles = "GetGroupsApprovalRoles"
+  GetGroupsApprovalRoles = "GetGroupsApprovalRoles",
+  GroupsGetClearFilter = "GroupsGetClearFilter",
+  PostChangeRequests = "PostChangeRequests",
+  PostTaskDone = "PostTaskDone",
+  PostRemoteValidatorsHelper = "PostRemoteValidatorsHelper",
 }
 
 export const routes: ICyRoutes =   {
@@ -67,6 +71,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/groups*",
+    },
+  },
+  GroupsGetClearFilter: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/groups",
     },
   },
   GroupsPost: {
@@ -249,6 +259,24 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/groups/approval_roles",
+    },
+  },
+  PostChangeRequests: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/change_requests",
+    },
+  },
+  PostTaskDone: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/tasks/*/done",
+    },
+  },
+  PostRemoteValidatorsHelper: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/remoteValidators/helper",
     },
   },
 };

@@ -30,6 +30,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       id,
       document,
       changeRequest,
+      isOutput,
       document: { version: docVersion = 1 } = {},
     } = workspaceState || {};
     const docApprovals = document?.approvals || changeRequest?.approvals;
@@ -180,10 +181,12 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         inlineApprovalState?.transitionApi.loading ||
         inlineApprovalState?.documentApi.loading
       );
-      disabled = disabled || isUndefined(id) || loading;
-      if (document?.status === "VOIDED" || document?.revisionStage !== 1) {
-        disabled = true;
-      }
+
+      disabled = loading
+        || !(isOutput && Boolean(id))
+        || document?.status === "RELEASED"
+        || document?.status === "VOIDED"
+        || document?.revisionStage !== 1;
     });
 
     // MARK: @final config

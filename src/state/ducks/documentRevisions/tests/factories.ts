@@ -22,6 +22,7 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
   revisionChangeType: RevisionChangeType.NextRevision,
   owner: getOwner(),
   status: DocumentRevisionStatus.Draft,
+  displayRevision: faker.random.number(10) as unknown as string,
   attachments: [],
   name: faker.lorem.sentence(),
   description: faker.lorem.sentence(),

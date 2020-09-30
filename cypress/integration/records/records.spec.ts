@@ -128,16 +128,9 @@ context("Records flow", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
-      context("Add Approvals fileds", () => {
-        it("Adds Approvals field", () => {
-          SystemRequirement("REQ-0980");
-          cy.fbAddNewFieldOption();
-          cy.fbSelectItemFromNewFieldList({ field: "Approvals" }).wait(2000);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddField().wait(3000);
-        });
+      it("Verify approvals field is automatically added", () => {
+        SystemRequirement("REQ-0980");
+        cy.get("div[name=\"fb-approvals-\"]").should("exist");
       });
 
       context("Creates document and releases it", () => {
@@ -184,16 +177,9 @@ context("Records flow", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
-      context("Add Approvals fileds", () => {
-        it("Adds Approvals field", () => {
-          SystemRequirement("REQ-0980");
-          cy.fbAddNewFieldOption();
-          cy.fbSelectItemFromNewFieldList({ field: "Approvals" }).wait(2000);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddField().wait(3000);
-        });
+      it("Verify approvals field is automatically added", () => {
+        SystemRequirement("REQ-0980");
+        cy.get("div[name=\"fb-approvals-\"]").should("exist");
       });
 
       context("Creates document and releases it", () => {
@@ -252,7 +238,7 @@ context("Records flow", () => {
     });
 
     it("Select approver'", () => {
-      cy.get("[data-cy*=fb-approvals-approvals-]").type(USERS[2].name + "{downarrow}{enter}");
+      cy.get("[data-cy*=fb-approvals-]").type(USERS[2].name + "{downarrow}{enter}");
     });
 
     it("Finalize and release button click'", () => {

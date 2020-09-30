@@ -8,7 +8,6 @@ import {
 } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
 import { useDocumentStatus } from "../../hooks/docCustomization/useCustomization";
-import { generateVersionNumber } from "../helpers";
 import AuditPresenter from "./Audit.presenter";
 
 interface OwnProps {
@@ -50,12 +49,7 @@ export const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
   }, [documentRevisionId, loadAudit]);
 
   const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, selectedDocument?.status);
-  const versionNumber = generateVersionNumber(
-    selectedDocument.revision,
-    selectedDocument.revisionStage,
-    selectedDocument.subRevision,
-    selectedDocument.revisionChangeType,
-  );
+  const versionNumber = selectedDocument.displayRevision;
 
   return <AuditPresenter {...{ audit, versionNumber, isStatusVisible }} statusLabel={statusLabel as string}/>;
 };

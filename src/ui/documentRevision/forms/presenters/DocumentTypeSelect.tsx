@@ -2,16 +2,17 @@ import { useFormikContext } from "formik";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
-import { FBOutputDocumentType } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision, FBOutputDocumentType } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType, documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
 import { filterSecurityGroupsForQms } from "../../../documentType/list/helpers";
-import { FB } from "../../../form.builder";
+import { FB, FBSchemaProps } from "../../../form.builder";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
 import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
 import { DocumentCloneType } from "../../Clone.container";
+import { getFBSchemeByDocType } from "../../helpers";
 
 interface Props {
   isdocRevStatusDraft: boolean;
@@ -88,13 +89,26 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       const securityGroups = filterSecurityGroupsForQms(type.isQms, groupOptions);
       formik.setFieldValue("securityGroups", securityGroups);
     }
+    formik.handleChange(event);
 
     // FB mode
     const formOption: DocumentGroupOptionsType = "FORM";
     const mode: FBWorkspaceMode = isNewOutput ? "form" :
       type.groupOptions?.includes(formOption) ? "design" : "none";
+    let scheme: FBSchemaProps[] = [];
+    if (mode === "design" && type.group !== "DYNAMIC_FORM") {
+      const formValues = {
+        ...formik.values as Partial<DocumentRevision>,
+        "document.documentType.id": typeId,
+      };
+      scheme = getFBSchemeByDocType(
+        formValues,
+        documentTypesById,
+        workspaceState?.getSchema(),
+      );
+    }
     workspaceState?.setMode(mode);
-    formik.handleChange(event);
+    workspaceState?.setSchema(scheme);
   };
 
   if (!isVisible && type !== "newOutput") {

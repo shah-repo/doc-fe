@@ -1,6 +1,7 @@
 import { get, orderBy } from "lodash";
 import { createSelector } from "reselect";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../../../ui/common/utils/helpers";
+import { FBDocTypeGroup } from "../../../../ui/form.builder/FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 import { ApplicationState } from "../../../reducers";
 import { AsyncState } from "../../../types";
 import { DocumentType } from "./types";
@@ -54,13 +55,13 @@ const getDocumentTypeOptionsForDocumentList = createSelector(
   allIds, byId,
   (ids, documentTypes) =>
     orderBy(
-      ids
-      /** Temp fix - disabling filtering by document type name */
-      /*         .filter((id) => documentTypes[id].group ===
-        FBDocTypeGroup.OTHER ||
-        documentTypes[id].group === FBDocTypeGroup.POAM ||
-        documentTypes[id].group === FBDocTypeGroup.DAM ||
-        documentTypes[id].group === FBDocTypeGroup.FORM ) */
+      ids.filter((id) => documentTypes[id].group !== FBDocTypeGroup.RECORD
+        /** Temp fix - disabling filtering by document type name */
+        //  FBDocTypeGroup.OTHER ||
+        //  documentTypes[id].group === FBDocTypeGroup.POAM ||
+        //  documentTypes[id].group === FBDocTypeGroup.DAM ||
+        //  documentTypes[id].group === FBDocTypeGroup.FORM )
+      )
         .map((id) => ({
           value: documentTypes[id].id,
           text: removeLastCharacterIfNotAlphaNumeric(documentTypes[id].documentTypeAcronym),

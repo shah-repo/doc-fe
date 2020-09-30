@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,7 +29,7 @@ export const styles = makeStyles((theme: Theme) =>
       color: theme.palette.text.hint,
     },
     revisionContainer: {
-      backgroundColor: theme.palette.primary.light,
+      background: Colors.background_blue,
       height: theme.spacing(5),
       paddingTop: theme.spacing(1),
       marginRight: theme.spacing(1),
