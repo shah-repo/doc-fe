@@ -132,7 +132,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
       && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
         .find((type) => type.documentTypeName === "Approval Request");
 
-    if (hasAccess && canCreateOutput(documentRevision)) {
+    if (hasAccess && canCreateOutput(documentRevision) && !isAR) {
       return (
         <Button
           color="secondary"
@@ -141,7 +141,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
           id="PreviewControlsContainer-createNew"
           data-cy="PreviewControlsContainer-createNew"
         >
-          <Text translation={isAR ? "changeRequest.create" : "common.create.new"} />
+          <Text translation={"common.create.new"} />
         </Button>
       );
     }
