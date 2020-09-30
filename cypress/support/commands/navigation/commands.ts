@@ -77,32 +77,12 @@ Cypress.Commands.add("navigToDocumentList", () => {
     });
 });
 
-Cypress.Commands.add("navigToRecords", () => {
-  cy.navigToNestedItem({
-    navigItems: [
-      NavigationItems.DASHBOARD,
-      NavigationItems.DOCUMENT_CONTROL,
-      NavigationItems.RECORDS,
-    ],
-  });
-});
-
 Cypress.Commands.add("navigToApprovalRequestList", () => {
   cy.navigToNestedItem({
     navigItems: [
       NavigationItems.DASHBOARD,
       NavigationItems.DOCUMENT_CONTROL,
       NavigationItems.APPROVAL_REQUEST,
-    ],
-  });
-});
-
-Cypress.Commands.add("navigToRecords", () => {
-  cy.navigToNestedItem({
-    navigItems: [
-      NavigationItems.DASHBOARD,
-      NavigationItems.DOCUMENT_CONTROL,
-      NavigationItems.RECORDS,
     ],
   });
 });

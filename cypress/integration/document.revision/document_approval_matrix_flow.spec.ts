@@ -259,7 +259,9 @@ context("Document Approval Matrix Flow", () => {
 
   context("Add New Role: Role One", () => {
     it("Open 'Add Role' dialog", () => {
-      cy.drAddAnotherRoleBtn();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GroupsGet], () => {
+        cy.drAddAnotherRoleBtn();
+      });
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -500,6 +502,7 @@ context("Document Approval Matrix Flow", () => {
   context("Add New Role: Role Two", () => {
     it("Open 'Add Role' dialog", () => {
       cy.drAddAnotherRoleBtn();
+      cy.wait(1000);
     });
 
     it(`Fill role name: ${roleTwo}`, () => {
@@ -755,7 +758,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`change name '${docTypeOne}' to '${newDocTypeOne}'`, () => {
-      // SystemRequirement("REQ-0430");
+    // SystemRequirement("REQ-0430");
       cy.drUpdateDocumentTypeName({
         sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         employeeId: adminEmployee.id,
@@ -807,10 +810,9 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`find changed document type '${newDocTypeOne}'`, () => {
-      // SystemRequirement("REQ-0530");
+    // SystemRequirement("REQ-0530");
       const exists = documentTypes.includes(newDocTypeOne);
       cy.wrap(exists).should("eq", true);
     });
   });
-
 });

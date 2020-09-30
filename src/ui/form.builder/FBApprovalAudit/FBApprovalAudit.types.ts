@@ -19,7 +19,7 @@ export interface FBAuditData {
   nextValue: any;
   timestamp: string;
   owner: FBEmployee;
-  description?: string;
+  description?: React.ReactNode;
   ownerName?: string;
   formattedTime?: string;
   schemaItem?: FBSchemaProps;

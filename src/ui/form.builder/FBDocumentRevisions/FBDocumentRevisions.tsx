@@ -6,6 +6,7 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionsProps> = (
   handleForm,
   handleOpen,
   remove,
+  getOptionLabel,
   dialogState,
   collection = [],
   name,
@@ -20,7 +21,7 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionsProps> = (
         {(value: FBDocumentRevisionsValue, index) => (
           <FBDocumentRevisionsItem
             key={`fb-document-revision-${value.id}-${index}`}
-            {...{ name, disabled, index, handleOpen, remove }}
+            {...{ name, disabled, index, handleOpen, remove, getOptionLabel }}
             id={value.proposedDocumentRevision.id}
           />
         )}

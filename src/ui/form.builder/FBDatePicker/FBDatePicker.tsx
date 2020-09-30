@@ -4,6 +4,7 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/picker
 import moment from "moment";
 import React from "react";
 import { FBInput, FBInputProps } from "..";
+import { getStartOfDayDateString, TIME_ZONE } from "../../../common/utils/date";
 
 const FBDatePicker: React.FunctionComponent<FBInputProps> = ({
   onChange = () => null,
@@ -21,7 +22,7 @@ const FBDatePicker: React.FunctionComponent<FBInputProps> = ({
         format="MM/DD/YYYY"
         autoOk={true}
         label=""
-        value={value as Date}
+        value={getStartOfDayDateString(moment(value as Date).tz(TIME_ZONE).toISOString())}
         {...{ onChange }}
         TextFieldComponent={(props) => <TextField {...props} disabled={true} />}
       />

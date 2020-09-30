@@ -155,8 +155,12 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       groups = approvalsState?.groups;
       approvals = approvalsState?.getApprovals;
 
+      const isRevisionAfterA = document?.revisionStage !== 1
+        && (document?.revision !== 1 || document?.subRevision !== 0);
+
       isComponentVisible = document?.status !== DocumentRevisionStatus.Voided
-        && (!inlineApprovalExists || document?.revisionStage !== 1);
+        && (!inlineApprovalExists || isRevisionAfterA);
+
 
       loading = (
         approvalsState.loading ||

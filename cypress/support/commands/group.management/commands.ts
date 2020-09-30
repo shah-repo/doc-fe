@@ -44,6 +44,7 @@ declare global {
       grpAddGroup(): Chainable<Subject>;
       grpAPICreateNewGroup(params: {payload: Group; employeeId: string;  sessionId: string}): Chainable<Subject>;
       grpCheckForNumberOfGroupMembersDisplayed(): Chainable;
+      grpClearFilter(): Chainable;
     }
   }
 }
@@ -125,8 +126,16 @@ Cypress.Commands.add("grpSetTypeFilter", (params: {type: string}) => {
     });
 });
 
+Cypress.Commands.add("grpClearFilter", (params: { name: string }) => {
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.GroupsGetClearFilter,
+    () => {
+      cy.get("#clearFilter").click();
+    });
+});
+
 Cypress.Commands.add("grpFilterByName", (params: { name: string }) => {
-  cy.get("#clearFilter").click();
+  cy.grpClearFilter();
   cy.grpSetNameFilter(params);
   cy.get("div[aria-rowindex=1]")
     .within(() => {
@@ -136,7 +145,7 @@ Cypress.Commands.add("grpFilterByName", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("grpFilterByMembers", (params: { member: string }) => {
-  cy.get("#clearFilter").click();
+  cy.grpClearFilter();
   cy.grpSetMembersFilter(params);
   cy.get("div[aria-rowindex=1]")
     .within(() => {
@@ -146,7 +155,7 @@ Cypress.Commands.add("grpFilterByMembers", (params: { member: string }) => {
 });
 
 Cypress.Commands.add("grpFilterByType", (params: { type: string }) => {
-  cy.get("#clearFilter").click();
+  cy.grpClearFilter();
   cy.grpSetTypeFilter(params);
   cy.get("div[aria-rowindex=1]")
     .within(() => {
