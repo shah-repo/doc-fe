@@ -1,4 +1,5 @@
 import { Box, List } from "@material-ui/core";
+import { orderBy } from "lodash";
 import React from "react";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import AuditFactory from "../../components/AuditFactory";
@@ -38,7 +39,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const attachments: Audit[] = [];
     const singleFields: JSX.Element[] = [];
 
-    audits.forEach((change, index) => {
+    orderBy(audits, ["field"]).forEach((change, index) => {
       if (change.field.includes("attachments")) {
         attachments.push(change);
       } else if (change.field.includes("referenceTo")) {
