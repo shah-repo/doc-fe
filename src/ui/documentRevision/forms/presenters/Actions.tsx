@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
-import { find, isEmpty, isUndefined, keys } from "lodash";
+import { difference, find, isEmpty, isUndefined, keys } from "lodash";
 import * as React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
@@ -55,6 +55,14 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isUserDocumentOwner = React.useContext(isOwnerContext);
   const showVoidButton = documentRevision?.status === DocumentRevisionStatus.Draft && documentRevision?.version === 1;
 
+  function isOutputSchema(): boolean {
+    const { schema: documentSchema = [] } = values.formDocument?.formTemplate || {};
+    return (
+      Boolean(difference(workspaceState?.schema || [],  documentSchema)) ||
+      !isUndefined(values.schema)
+    );
+  }
+
   function setFBValue() {
     switch (workspaceState?.getMode()) {
       case "design":
@@ -79,6 +87,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           formik.setFieldValue("formInput", newInput);
         } else {
           formik.setFieldValue("formInput", formState?.getValues());
+        }
+        if (isOutputSchema()) {
+          formik.setFieldValue("schema", workspaceState.schema);
         }
         break;
       default:

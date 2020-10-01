@@ -97,5 +97,11 @@
   ],
   "task": [
     "reviseDisabled"
+  ],
+  "procedure": [
+    "reviseDisabled"
+  ],
+  "parts": [
+    "reviseDisabled"
   ]
 }

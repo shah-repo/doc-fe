@@ -20,8 +20,10 @@ import { FBInlineApproval } from "../FBInlineApproval";
 import { FBInstructionsDocument } from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
+import { FBParts } from "../FBParts";
 import { FBPOApprovalMatrix } from "../FBPOApprovalMatrix";
 import { FBPOReceive } from "../FBPOReceive";
+import { FBProcedure } from "../FBProcedure";
 import { FBPurchaseOrder } from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import { FBRadio } from "../FBRadio";
@@ -94,6 +96,8 @@ export class FBSchemaState {
     task: FBTask,
     approvers: FBApprovers,
     approvals: FBApprovals,
+    procedure: FBProcedure,
+    parts: FBParts,
   };
 
   @observable public schema?: FBSchemaProps[];
@@ -183,6 +187,11 @@ export class FBSchemaState {
       return;
     }
     this.removeSchemaItem(schemaItem);
+  };
+
+  public getItemsByType = (type?: FBInputType): FBSchemaProps[] => {
+    if (!type) { return []; }
+    return filter(this.getSchema(), { type });
   };
 }
 

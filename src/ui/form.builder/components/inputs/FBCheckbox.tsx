@@ -6,13 +6,12 @@ import FBInput from "../common/FBInput";
 
 const FBCheckbox: React.FunctionComponent<FBInputProps> = ({
   label = "",
-  labelValues,
   defaultValue,
   ...props
 }) => (
   <FBInput {...props} type="checkbox" >
     <FormControlLabel
-      label={<Text message={label as string} values={labelValues} />}
+      label={<Text message={label as string} />}
       control={(
         <Checkbox
           disabled={props.disabled}

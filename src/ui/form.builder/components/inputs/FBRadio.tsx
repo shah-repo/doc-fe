@@ -6,12 +6,11 @@ import FBInput from "../common/FBInput";
 
 const FBRadio: React.FunctionComponent<FBInputProps> = ({
   label = "",
-  labelValues,
   ...props
 }) => (
   <FBInput {...props} type="radio">
     <FormControlLabel
-      label={<Text message={label as string} values={labelValues} />}
+      label={<Text message={label as string} />}
       control={<Radio disabled={props.disabled} value={props.name} />}
     />
   </FBInput>

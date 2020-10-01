@@ -102,7 +102,7 @@ DocumentRevisionFormContainerProps
   const isAlphaReleased = revisionStage === 3;
   const isRecord = (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
 
-  const cleanInitialValues = useMemo(() => {
+  const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
     const { outputRevision } = initialValues;
     const securityGroups: any[] = [];
@@ -160,8 +160,12 @@ DocumentRevisionFormContainerProps
   const FBContainer = React.useRef(null);
   const { group: formGroup } = cleanInitialValues.document?.documentType || {};
   const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
-  const { schema: originScheme = [] } =
-  cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
+  let { schema: originScheme = [] } = (
+    (cleanInitialValues)?.formTemplate ||
+    (cleanInitialValues)?.formDocument?.formTemplate ||
+    {}
+  );
+  originScheme = cleanInitialValues?.schema || originScheme;
   const isOutput =  Boolean(outputGroup && !isEmpty(outputGroup));
   const formInput = useMemo(() =>
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}

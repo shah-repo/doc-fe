@@ -170,6 +170,9 @@ export * from "./FBMediaQR/FBMediaQR.types";
 export * from "./FBOption/FBOption.types";
 export { default as FBParagraph } from "./FBParagraph/FBParagraph";
 export * from "./FBParagraph/FBParagraph.types";
+export { default as FBParts } from "./FBParts/FBParts";
+export { default as FBPartsState } from "./FBParts/FBParts.state";
+export * from "./FBParts/FBParts.types";
 export { default as FBPOApprovalMatrix } from "./FBPOApprovalMatrix/FBPOApprovalMatrix";
 export { default as FBPOReceive } from "./FBPOReceive/FBPOReceive";
 export { default as FBPOReceiveState } from "./FBPOReceive/FBPOReceive.state";
@@ -177,6 +180,16 @@ export * from "./FBPOReceive/FBPOReceive.types";
 export { default as FBPOReceiveForm } from "./FBPOReceiveForm/FBPOReceiveForm";
 export { default as FBPOReceiveFormActions } from "./FBPOReceiveForm/FBPOReceiveForm.actions";
 export * from "./FBPOReceiveForm/FBPOReceiveForm.types";
+export { default as FBProcedure } from "./FBProcedure/FBProcedure";
+export { default as FBProcedureState } from "./FBProcedure/FBProcedure.state";
+export * from "./FBProcedure/FBProcedure.types";
+export { default as FBProcedureForm } from "./FBProcedureForm/FBProcedureForm";
+export { default as FBProcedureFormActions } from "./FBProcedureForm/FBProcedureForm.actions";
+export { default as FBProcedureFormState } from "./FBProcedureForm/FBProcedureForm.state";
+export * from "./FBProcedureForm/FBProcedureForm.types";
+export { default as FBProcedureItem } from "./FBProcedureItem/FBProcedureItem";
+export { default as FBProcedureItemState } from "./FBProcedureItem/FBProcedureItem.state";
+export * from "./FBProcedureItem/FBProcedureItem.types";
 export { default as FBProvider } from "./FBProvider/FBProvider";
 export * from "./FBProvider/FBProvider.types";
 export { default as FBPurchaseOrder } from "./FBPurchaseOrder/FBPurchaseOrder";
@@ -268,4 +281,5 @@ export { default as FBWorkspaceTplActions } from "./FBWorkspaceTplActions/FBWork
 export * from "./FBWorkspaceTplActions/FBWorkspaceTplActions.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
+
 
