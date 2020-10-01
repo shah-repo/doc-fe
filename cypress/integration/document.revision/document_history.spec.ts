@@ -17,7 +17,7 @@ const reference = {
   new: "FM-00002 - 1 - Inline Approve Form", newCode: "FM-00002",
 };
 const formTitle = { value: "My Form", newValue: "My Form Edited", newChunk: " Edited" };
-const formDescription = { value: "My Form description", newValue: "My Form description Edited", newChunk: " Edited" };
+const formDescription = { value: "Description", newValue: "Description Edited" };
 
 const history = [
   {
@@ -50,10 +50,9 @@ const history = [
   {
     owner,
     actions: [
-      { key: "Description changed", value: `${formDescription.newValue}` },
       { key: "Attachments removed", value: "test_image.jpg" },
       { key: "New reference to", value: reference.newCode },
-      { key: "Reference removed", value: reference.valueCode },
+      { key: "Description changed", value: `${formDescription.newValue}` },
     ],
   },
   {
@@ -69,8 +68,8 @@ const history = [
       { key: "Access granted to user", value: sharedUser.name },
       { key: "Access granted to group", value: "Everyone" },
       { key: "Access granted to group", value: groupOne },
-      { key: "New owner", value: `${owner}` },
       { key: "New status", value: `Set to Draft by ${owner}` },
+      { key: "New owner", value: `${owner}` },
       { key: "New name", value: formTitle.value },
       { key: "New description", value: `${formDescription.value}` },
       { key: "Attachment added", value: `test_image.jpg` },
@@ -356,8 +355,9 @@ context("Check Document History", () => {
             contentOfChange = "\n" + action.value + "\n";
           }
 
+
           cy.get(`[data-cy^=\"change-value-${groupIndex}-\"]`)
-            .contains(action.value)
+            .contains(action.key === "New owner" ? new RegExp("^" + action.value + "$", "g") : action.value)
             .parent()
             .parent()
             .within(() => {

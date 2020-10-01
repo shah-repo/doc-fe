@@ -1,4 +1,5 @@
 import { Box, List, Typography } from "@material-ui/core";
+import { orderBy } from "lodash";
 import React from "react";
 import { MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
@@ -53,7 +54,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
-    audits.forEach((change: Audit, index) => {
+    orderBy(audits, ["field"]).forEach((change: Audit, index) => {
       change.groupKey = groupKey;
       if (change.field.includes("attachments")) {
         attachments.push(change);
