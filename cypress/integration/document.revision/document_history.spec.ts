@@ -355,26 +355,15 @@ context("Check Document History", () => {
             contentOfChange = "\n" + action.value + "\n";
           }
 
-          if (action.key === "New owner") {
-            cy.get(`[data-cy^=\"change-value-${groupIndex}-\"]`)
-              .contains(new RegExp("^" + action.value + "$", "g"))
-              .parent()
-              .parent()
-              .within(() => {
-                cy.get("[data-cy^=change-key]").should("have.text", typeOfChange);
-                cy.get("[data-cy^=change-value]").should("have.text", contentOfChange);
-              });
-          }
-          else {
-            cy.get(`[data-cy^=\"change-value-${groupIndex}-\"]`)
-              .contains(action.value)
-              .parent()
-              .parent()
-              .within(() => {
-                cy.get("[data-cy^=change-key]").should("have.text", typeOfChange);
-                cy.get("[data-cy^=change-value]").should("have.text", contentOfChange);
-              });
-          }
+
+          cy.get(`[data-cy^=\"change-value-${groupIndex}-\"]`)
+            .contains(action.key === "New owner" ? new RegExp("^" + action.value + "$", "g") : action.value)
+            .parent()
+            .parent()
+            .within(() => {
+              cy.get("[data-cy^=change-key]").should("have.text", typeOfChange);
+              cy.get("[data-cy^=change-value]").should("have.text", contentOfChange);
+            });
         });
       });
     });
