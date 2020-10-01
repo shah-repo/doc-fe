@@ -294,11 +294,14 @@ context("Approval request form scenario", () => {
       cy.arRejectComfirmationAR();
     });
 
+    it("Verify message is shown if e-signature not met", () => {
+      SystemRequirement("REQ-0880");
+      cy.arVerifySignatureIsNotMet();
+    });
+
     it("Accept Approval Request with password prompt", () => {
       SystemRequirement("REQ-0920");
-
       cy.arApproveAR();
-      cy.wait(6000);
     });
   });
 
