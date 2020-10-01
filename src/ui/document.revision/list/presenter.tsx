@@ -222,7 +222,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   const data = tableData.map((e) => ({
     docId: e.document.docId,
     revision: e.revision,
-    documentTitle: e.name.replace(/"/g, ""),
+    documentTitle: e.name,
     type: e.document.documentType.documentTypeAcronym,
     owner: e.owner.user.name,
     crId: e.changeRequest?.crId,
