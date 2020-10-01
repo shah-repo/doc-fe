@@ -16,6 +16,10 @@ export const generateDocumentType = (docType: Partial<DocumentType> = {}): Docum
 
 export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> = {}): DocumentRevision => ({
   id: faker.random.uuid(),
+  precalc: {
+    formDocId: faker.random.uuid(),
+    revision: faker.random.number(10),
+  },
   version: faker.random.number(10),
   revision: faker.random.number(10),
   revisionStage: faker.random.number(10),
