@@ -1,7 +1,6 @@
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBProcedureItemType } from "..";
-import { store } from "../../../state/store";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBPartsItemProps } from "./FBPartsItem.types";
 
@@ -11,7 +10,7 @@ export const withFBPartsItem = <T extends FBPartsItemProps>(
 ) => {
   const Comp = ({
     getItem,
-    getLink,
+    getItemUrl,
     collection,
     loading,
     type,
@@ -30,7 +29,7 @@ export const withFBPartsItem = <T extends FBPartsItemProps>(
     // MARK: @methods
     getItem = (id: string): string => partsState?.getItem(id, type) || "";
 
-    getLink = (id: string) => store.getState().documentRevisions.byId[id]?.document?.id;
+    getItemUrl = (id: string) => partsState?.getItemUrl(id, type);
 
     // MARK: @observer
     useObserver(() => {
@@ -50,7 +49,7 @@ export const withFBPartsItem = <T extends FBPartsItemProps>(
     return Component({
       ...(props as T),
       getItem,
-      getLink,
+      getItemUrl,
       collection,
       type,
     });

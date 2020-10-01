@@ -1,6 +1,6 @@
 import { unionBy } from "lodash";
 import { computed, observable } from "mobx";
-import { FBProcedureItemConfig, FBProcedureValue } from "..";
+import { FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from "..";
 import { FBProcedureState } from "../FBProcedure/FBProcedure.state";
 
 export class FBPartsState extends FBProcedureState {
@@ -27,6 +27,10 @@ export class FBPartsState extends FBProcedureState {
   }
 
   // MARK: @helpers
+  public getItemUrl = (id: string, type: FBProcedureItemType): string | undefined => {
+    const item = this.findRevision(id, type);
+    return item ? `/document_revision/${item?.document.id}/version/${item?.id}` : undefined;
+  };
 }
 
 export default FBPartsState;
