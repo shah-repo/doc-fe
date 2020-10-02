@@ -74,7 +74,13 @@ export interface PDF {
   type: string;
 }
 
+export interface Precalc {
+  formDocId: string;
+  revision: number;
+}
+
 export interface DocumentRevision extends FBDocumentRevisionProps {
+  precalc: Precalc;
   id: string;
   docId?: string;
   typePrefix?: string;

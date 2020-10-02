@@ -1,7 +1,9 @@
 import { Box, List, Typography } from "@material-ui/core";
+import { orderBy } from "lodash";
 import React from "react";
 import { MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
+import { ApprovalStatus } from "../../../state/ducks/common";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -28,10 +30,19 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
       const { owner, ownerUser, ownerThirdParty } = change;
-      const { name } = ((owner && owner.user) || ownerUser || ownerThirdParty);
+      const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
       const hasOnlyFBChanges = audit[groupId].every((change) => change.field.includes("formInput"));
 
       if (hasOnlyFBChanges) {
+        return null;
+      }
+
+      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
+       * TODO: this if statement should be deleted
+      */
+      if (audit[groupId].filter((change) =>
+        change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
+      ).length === 0) {
         return null;
       }
 
@@ -53,7 +64,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
-    audits.forEach((change: Audit, index) => {
+    orderBy(audits, ["field"]).forEach((change: Audit, index) => {
       change.groupKey = groupKey;
       if (change.field.includes("attachments")) {
         attachments.push(change);
@@ -61,13 +72,19 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         newReferences.push(change);
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_DELETED") {
         deletedReferences.push(change);
-      } else if (change.field.includes("formInput")) {
+      } else if (change.field.includes("formInput")
+      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
+       * TODO: this condition should be deleted
+      */
+        || (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned)
+      ) {
         return;
       } else {
         singleFields.push((
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
-              <Text dataCy={`change-key-${groupKey}-${key}`}
+              <Text
+                dataCy={`change-key-${groupKey}-${key}`}
                 message={`documentRevision.audit.${change.field}.${change.type}`}
               />
             </Box>
