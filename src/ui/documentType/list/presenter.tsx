@@ -1,4 +1,5 @@
 import { Grid } from "@material-ui/core";
+import { isString } from "lodash";
 import moment from "moment";
 import React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
@@ -38,18 +39,30 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
 
+  // currently status column by default has all types, need an empty string for csv
+  const formedTableCriteria = () => {
+    if (isString(tableCriteria.queryDict["status[]"])) {
+      return tableCriteria.queryDict;
+    }
+    return {
+      ...tableCriteria.queryDict,
+      "status[]": "",
+    };
+  };
+
   const headers =
     columns.map((column) => {
-      if (moment(tableCriteria.queryDict?.[column.searchOptions?.dataKey || ""], moment.ISO_8601, true).isValid()) {
+      if (moment(formedTableCriteria().queryDict?.[column.searchOptions?.dataKey || ""],
+        moment.ISO_8601, true).isValid()) {
         const dateSearchString = documentRevisionEffectiveDateOption().find((e) =>
-          e.value === tableCriteria.queryDict?.[column.searchOptions?.dataKey || ""])?.text;
+          e.value === formedTableCriteria().queryDict?.[column.searchOptions?.dataKey || ""])?.text;
         return {
           label: `${column.label}: ${dateSearchString || ""}`,
           key: column.key,
         };
       }
       return {
-        label: `${column.label}: ${tableCriteria.queryDict?.[column.searchOptions?.dataKey || ""] || ""}`,
+        label: `${column.label}: ${formedTableCriteria().queryDict?.[column.searchOptions?.dataKey || ""] || ""}`,
         key: column.key,
       };
     });
@@ -59,10 +72,10 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
     const h = headers.map((column) => {
       if (moment(deepValue(e, column.key), moment.ISO_8601, true).isValid()) {
         return {
-          [column.key]: getFormattedDateString(deepValue(e, column.key), MomentFormats.MonthDateYear),
+          [column.key]: getFormattedDateString(deepValue(e, column.key), MomentFormats.MonthDateYear) || "",
         };
       }
-      return { [column.key]: deepValue(e, column.key) };
+      return { [column.key]: deepValue(e, column.key) || "" };
     });
     const rows = h.reduce(function(result, current) {
       return Object.assign(result, current);
