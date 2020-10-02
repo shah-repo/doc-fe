@@ -56,15 +56,20 @@ export class FBProcedureState {
   }
 
   public getItem = (id: string, type: FBProcedureItemType): string | undefined => {
+    const item = this.findRevision(id, type);
+    if (item) {
+      return `${item.document?.docId} - ${item.name}`;
+    }
+    return id;
+  };
+
+  protected findRevision = (id: string, type: FBProcedureItemType): DocumentRevision | undefined => {
     const itemId = type === "materials"
       ? this.materialsId
       : this.equipmentId;
 
     const item = FBAutocompleteAsyncStore.getValue<DocumentRevision>(itemId, id);
-    if (item) {
-      return `${item.document?.docId} - ${item.name}`;
-    }
-    return id;
+    return item;
   };
 }
 

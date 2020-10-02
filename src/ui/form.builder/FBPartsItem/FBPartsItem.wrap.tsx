@@ -10,6 +10,7 @@ export const withFBPartsItem = <T extends FBPartsItemProps>(
 ) => {
   const Comp = ({
     getItem,
+    getItemUrl,
     collection,
     loading,
     type,
@@ -27,6 +28,8 @@ export const withFBPartsItem = <T extends FBPartsItemProps>(
 
     // MARK: @methods
     getItem = (id: string): string => partsState?.getItem(id, type) || "";
+
+    getItemUrl = (id: string) => partsState?.getItemUrl(id, type);
 
     // MARK: @observer
     useObserver(() => {
@@ -46,6 +49,7 @@ export const withFBPartsItem = <T extends FBPartsItemProps>(
     return Component({
       ...(props as T),
       getItem,
+      getItemUrl,
       collection,
       type,
     });
