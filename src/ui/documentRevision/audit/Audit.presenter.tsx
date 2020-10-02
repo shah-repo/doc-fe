@@ -37,6 +37,15 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         return null;
       }
 
+      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
+       * TODO: this if statement should be deleted
+      */
+      if (audit[groupId].filter((change) =>
+        change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
+      ).length === 0) {
+        return null;
+      }
+
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer}>
@@ -63,21 +72,20 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         newReferences.push(change);
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_DELETED") {
         deletedReferences.push(change);
-      } else if (change.field.includes("formInput")) {
+      } else if (change.field.includes("formInput")
+      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
+       * TODO: this condition should be deleted
+      */
+        || (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned)
+      ) {
         return;
       } else {
         singleFields.push((
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
-              <Text dataCy={`change-key-${groupKey}-${key}`}
-                message={
-                  change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned
-                    ? `documentRevision.audit.approvers.removed.by`
-                    : `documentRevision.audit.${change.field}.${change.type}`
-                }
-                values={{
-                  owner: change.owner?.user.name,
-                }}
+              <Text
+                dataCy={`change-key-${groupKey}-${key}`}
+                message={`documentRevision.audit.${change.field}.${change.type}`}
               />
             </Box>
             <div className={classes.auditValue}>
