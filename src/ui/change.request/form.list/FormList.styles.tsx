@@ -34,5 +34,12 @@ export const styles = makeStyles((theme: Theme) =>
       WebkitFlexWrap: "unset",
       marginBottom: "10px",
     },
+    exportListbutton: {
+      margin: "0px",
+      boxShadow: "none",
+    },
+    iconSvg: {
+      fill: theme.palette.primary.main,
+    },
   }),
 );

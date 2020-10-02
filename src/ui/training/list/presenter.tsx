@@ -1,4 +1,5 @@
 import { Box, Button, Grid } from "@material-ui/core";
+import { isEmpty } from "lodash";
 import React from "react";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
@@ -169,9 +170,10 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
           className={classes.button}
           data-cy="document.revision.export.list"
           onClick={dialog.open}
+          disabled={isEmpty(data)}
         >
           <Box mr={1}>
-            <ExportIcon className={classes.iconSvg} />
+            <ExportIcon className={classes.iconSvg} style={{ opacity: isEmpty(data) ? 0.5 : "initial" }}/>
           </Box>
           <Text translation="document.revision.export.list" />
         </Button>
