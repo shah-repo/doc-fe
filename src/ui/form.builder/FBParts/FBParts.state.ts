@@ -29,7 +29,10 @@ export class FBPartsState extends FBProcedureState {
   // MARK: @helpers
   public getItemUrl = (id: string, type: FBProcedureItemType): string | undefined => {
     const item = this.findRevision(id, type);
-    return item ? `/document_revision/${item?.document.id}/version/${item?.id}` : undefined;
+    if (!item) {
+      return;
+    }
+    return `/document_revision/${item?.document.id}/version/${item?.id}`;
   };
 }
 
