@@ -2,6 +2,7 @@ import { Box, List } from "@material-ui/core";
 import { orderBy } from "lodash";
 import React from "react";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
+import { ApprovalStatus } from "../../../state/ducks/common";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -53,7 +54,14 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
               <Text
-                message={`changeRequest.audit.${change.field}.${change.type}`}
+                message={
+                  change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned
+                    ? "changeRequest.audit.approvers.removed.by"
+                    : `changeRequest.audit.${change.field}.${change.type}`
+                }
+                values={{
+                  owner: change.owner?.user.name,
+                }}
               />
             </Box>
             <div className={classes.auditValue}>

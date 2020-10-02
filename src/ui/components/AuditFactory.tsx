@@ -4,7 +4,7 @@ import { Attachment } from "../../state/ducks/attachments";
 import { Audit } from "../../state/ducks/audit";
 import { Group } from "../../state/ducks/auth/types";
 import { ChangeRequest } from "../../state/ducks/changeRequest";
-import { Approval, Owner } from "../../state/ducks/common";
+import { Approval, ApprovalStatus, Owner } from "../../state/ducks/common";
 import { Employee } from "../../state/ducks/company";
 import { DocumentRevision, Reference } from "../../state/ducks/documentRevisions";
 import { DocumentType } from "../../state/ducks/documentRevisions/documentType";
@@ -73,6 +73,13 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       break;
     case "approvals.status":
     case "status":
+      if (audit.nextValue === ApprovalStatus.Abandoned) {
+      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
+       * TODO: should be replaced with abandoned approval's name.
+      */
+        returnValue = "";
+        break;
+      }
       returnValue = (
         <Text
           dataCy={dataCy}
