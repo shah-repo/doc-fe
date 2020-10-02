@@ -483,6 +483,8 @@
   "form.builder.change.request.details": "Approval Request Details",
   "form.builder.radio": "Radio Button",
   "form.builder.radiogroup": "Radio Button group",
+  "form.builder.password": "Password",
+  "form.builder.password.prompt": "Enter password to proceed",
   "form.builder.label": "Label",
   "form.builder.placeholder": "Placeholder",
   "form.builder.mediaupload": "Media Upload",

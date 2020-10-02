@@ -1,10 +1,12 @@
+import { Box } from "@material-ui/core";
 import { difference, filter, find, isEmpty, isUndefined, map, sortBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
-import { FB, FBAutocompleteAsyncOption, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from "..";
+import { FB, FBAutocompleteAsyncOption, FBButton, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition, FBSubmitButton, FBTextField } from "..";
 import { store } from "../../../state/store";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { FBDialogState } from "../FBDialog/FBDialog.state";
 
 export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
   Component: React.FunctionComponent<T>,
@@ -12,6 +14,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
   const Comp = ({
     approvalTransition,
     inlineApprovalState,
+    dialogState,
     editorConfig: { approvers, groups, roles } = {},
     currentUser,
     isApproved,
@@ -21,6 +24,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     options,
     name = "",
     loading,
+    onApproveClick,
     ...props
   }: T) => {
 
@@ -48,6 +52,42 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       approvals: fieldApprovals,
       isOwner,
     });
+    dialogState = FB.useRef(FBDialogState);
+
+    onApproveClick = (approvalId: string) => {
+      dialogState?.config({
+        title: "form.builder.password.prompt",
+        open: true,
+        content: (
+          <>
+            <FBTextField
+              rules="required"
+              name="password"
+              inputProps={{
+                type: "password",
+              }}
+              label="form.builder.password"
+            />
+            <Box display="flex" mx={3}>
+              <FBButton
+                variant="outlined"
+                onClick={() => dialogState?.closeDialog()}
+                label="common.false"
+              >
+              </FBButton>
+              <FBSubmitButton
+                variant="contained"
+                label="common.true"
+                onClick={() => {
+                  approvalTransition?.("approve", approvalId);
+                  dialogState?.closeDialog();
+                }}
+              />
+            </Box>
+          </>
+        ),
+      });
+    };
 
     // MARK: @reaction
     // Approvals sync
@@ -200,6 +240,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     return Component({
       ...(props as T),
       approvalTransition,
+      dialogState,
       inlineApprovalState,
       currentUser,
       isApproved,
@@ -209,6 +250,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       loading,
       options,
       name,
+      onApproveClick,
     });
   };
 
