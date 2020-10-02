@@ -30,7 +30,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
       const { owner, ownerUser, ownerThirdParty } = change;
-      const { name } = ((owner && owner.user) || ownerUser || ownerThirdParty);
+      const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
       const hasOnlyFBChanges = audit[groupId].every((change) => change.field.includes("formInput"));
 
       if (hasOnlyFBChanges) {
