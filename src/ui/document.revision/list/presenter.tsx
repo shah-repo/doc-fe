@@ -1,5 +1,5 @@
 import { Box, Button, Grid, WithStyles, withStyles } from "@material-ui/core";
-import { isString, set } from "lodash";
+import { isEmpty, isString, set } from "lodash";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
@@ -221,7 +221,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
 
   const data = tableData.map((e) => ({
     docId: e.document.docId,
-    revision: e.revision,
+    displayRevision: e.displayRevision,
     documentTitle: e.name,
     type: e.document.documentType.documentTypeAcronym,
     owner: e.owner.user.name,
@@ -237,7 +237,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
 
   const headers = [
     { label: `DOC ID: ${tableCriteria.queryDict.docId  || ""}`, key: "docId" },
-    { label: `REVISION: ${tableCriteria.queryDict.revision  || ""}`, key: "revision" },
+    { label: `REVISION: ${tableCriteria.queryDict.displayRevision  || ""}`, key: "displayRevision" },
     { label: `DOCUMENT TITLE: ${tableCriteria.queryDict.name  || ""}`, key: "documentTitle" },
     { label: `TYPE: ${documentTypeSearchName || ""}`, key: "type" },
     { label: `OWNER: ${tableCriteria.queryDict.owner || ""}`, key: "owner" },
@@ -263,9 +263,10 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           id="ListPresenter-export-list"
           data-cy="document.revision.export.list"
           onClick={dialog.open}
+          disabled={isEmpty(data)}
         >
           <Box marginRight={1}>
-            <ExportIcon className={classes.iconSvg} />
+            <ExportIcon className={classes.iconSvg} style={{ opacity: isEmpty(data) ? 0.5 : "initial" }}/>
           </Box>
           <Text translation="document.revision.export.list" />
         </Button>
