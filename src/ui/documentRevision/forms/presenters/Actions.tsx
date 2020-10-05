@@ -58,7 +58,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = values.formDocument?.formTemplate || {};
     return (
-      Boolean(difference(workspaceState?.schema || [],  documentSchema)) ||
+      !Boolean(difference(workspaceState?.schema || [],  documentSchema)) ||
       !isUndefined(values.schema)
     );
   }
