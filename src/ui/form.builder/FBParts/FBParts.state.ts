@@ -11,10 +11,9 @@ export class FBPartsState extends FBProcedureState {
 
   // MARK: @computed
   @computed public get materials(): FBProcedureItemConfig[] | undefined {
-    
     let materials: FBProcedureItemConfig[] = [];
     this.parts.forEach((value) => {
-      materials = [...materials, ...value?.materials || []]
+      materials = [...materials, ...value?.materials || []];
     });
     const materialValues = materials.reduce((result, obj) => {
       const { title, unit } = obj;
