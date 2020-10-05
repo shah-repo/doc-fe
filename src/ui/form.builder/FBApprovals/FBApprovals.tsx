@@ -28,7 +28,10 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
   ...props
 }) => (
   <FBInput {...props} {...{ name }} type="approvals">
-    <FBSection {...{ label }} />
+    <FBSection
+      name={`fb-approvals-section-${name}`}
+      {...{ label }}
+    />
     <FBAutocompleteAsync
       label="form.builder.approvals"
       name={`fb-approvals-${name}`}
