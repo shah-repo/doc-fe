@@ -218,10 +218,6 @@ Cypress.Commands.add("drApproveAndReleaseDocument", () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   });
   cy.wait(500);
-  cy.get("[aria-label=\"change date\"]").click().wait(500);
-  cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]")
-    .click()
-    .wait(500);
   cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
@@ -350,7 +346,7 @@ Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
 });
 
 Cypress.Commands.add("drAddAnotherRoleBtn", () => {
-  cy.get("[data-cy=\"form.builder.add.another.role\"]").click();
+  cy.get("button[data-cy=\"form.builder.add.another.role\"]").click();
 });
 
 Cypress.Commands.add("drEnterApprovalRole", (params: { name: string }) => {
@@ -371,9 +367,9 @@ Cypress.Commands.add("drEnterApprovingUsers", (...employees: string[]) => {
   });
 });
 
-Cypress.Commands.add("drAddApprovalRole", () => cy.get("[data-cy=\"common.add\"]").click());
+Cypress.Commands.add("drAddApprovalRole", () => cy.get("button[data-cy=\"common.add\"]").click());
 
-Cypress.Commands.add("drAddApprovalMatrixItem", () => cy.get("[data-cy=\"form.builder.add.item\"]").click({ force: true }));
+Cypress.Commands.add("drAddApprovalMatrixItem", () => cy.get("button[data-cy=\"form.builder.add.item\"]").click({ force: true }));
 
 Cypress.Commands.add("drAddAMItemValue", (params: { identity: string; value: string }) => cy.get(`[data-cy="${params.identity}"] input`).type(params.value, { force: true }));
 

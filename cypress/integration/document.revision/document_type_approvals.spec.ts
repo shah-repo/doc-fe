@@ -341,8 +341,8 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Add MPI to LHR", () => {
-        cy.get("[data-cy=fb-control-btn]").last().click({ force: true });
-        cy.get("[data-cy=\"form.builder.instructionsdocument\"]").click();
+        cy.fbClickAddNewHiddenBtn();
+        cy.get("button[data-cy=\"form.builder.instructionsdocument\"]").click();
         cy.get("[data-cy=instructionsDocument]").type(`Manufacturing Process Instructure doc{enter}`);
         cy.get("[role=option]").contains("Manufacturing Process Instructure doc").click();
         cy.get("[data-cy=fb-editor-actions-add]").click();
