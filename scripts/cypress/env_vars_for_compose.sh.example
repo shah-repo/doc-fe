@@ -1,0 +1,11 @@
+#!/bin/bash
+
+export BE_REPO="/home/zoran/Projects/shifamed/backend"
+export FE_REPO="/home/zoran/Projects/shifamed/frontend"
+export VALIDATORS_REPO="/home/zoran/Projects/shifamed/remotejs"
+export NAME="Zoran Kovacevic"
+export BB_USER="cizo_osk"
+export BE_REPO_NAME="doc-be"
+export FE_REPO_NAME="doc-fe"
+export VALIDATORS_REPO_NAME="remote-js-validators"
+export S3_BUCKET="doc-be-dev-public"

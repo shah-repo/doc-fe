@@ -1,5 +1,5 @@
 import { Step, StepButton } from "@material-ui/core";
-import _ from "lodash";
+import { get, isUndefined, map, size } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBStepperProps } from ".";
@@ -20,10 +20,10 @@ export const withFBStepper = <T extends FBStepperProps>(
     ...props
   }: T) => {
     state = FB.useRef<FBSwitchPanelState>(FBSwitchPanelState);
-    _.size(steps) <= 3 && (width = FBStepperWidth.middle);
+    size(steps) <= 3 && (width = FBStepperWidth.middle);
 
     function getContent(step: number): React.ReactNode | string {
-      const stepConfig = _.get(config, step);
+      const stepConfig = get(config, step);
       return stepConfig.content;
     }
 
@@ -34,6 +34,7 @@ export const withFBStepper = <T extends FBStepperProps>(
 
     React.useEffect(() => {
       stateConfig(activeStep);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleStep = (step: number) => () => {
@@ -41,8 +42,8 @@ export const withFBStepper = <T extends FBStepperProps>(
       stateConfig(step);
     };
 
-    _.isUndefined(steps) &&
-      (steps = _.map(config, (step, index) => (
+    isUndefined(steps) &&
+      (steps = map(config, (step, index) => (
         <Step key={`${step.title}-${index}`}>
           <StepButton onClick={handleStep(index)}>
             <Text message={step.title} />

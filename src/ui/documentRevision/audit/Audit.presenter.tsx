@@ -1,6 +1,9 @@
-import { Box, List } from "@material-ui/core";
+import { Box, List, Typography } from "@material-ui/core";
+import { orderBy } from "lodash";
 import React from "react";
+import { MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
+import { ApprovalStatus } from "../../../state/ducks/common";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -8,66 +11,101 @@ import { styles } from "./Audit.presenter.styles";
 
 interface OwnProps {
   audit: AuditGroupType;
+  statusLabel: string;
+  versionNumber: string;
+  isStatusVisible: boolean;
 }
 
 export type AuditPresenterProps = OwnProps;
 
 export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
+  statusLabel,
+  versionNumber,
+  isStatusVisible,
 }) => {
   const classes = styles();
 
   const renderAuditGroup = () =>
-    Object.keys(audit).map((groupId) => {
+    Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
       const { owner, ownerUser, ownerThirdParty } = change;
-      const { name } = ((owner && owner.user) || ownerUser || ownerThirdParty);
+      const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
       const hasOnlyFBChanges = audit[groupId].every((change) => change.field.includes("formInput"));
 
       if (hasOnlyFBChanges) {
         return null;
       }
 
+      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
+       * TODO: this if statement should be deleted
+      */
+      if (audit[groupId].filter((change) =>
+        change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
+      ).length === 0) {
+        return null;
+      }
+
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer}>
-            <div className={classes.owner}>{name}</div>
-            <DateTime value={change.timestamp} />
+            <div className={classes.owner} data-cy={`owner-${key}`}>{name}</div>
+            <DateTime value={change.timestamp} format={MomentFormats.DateTime} data-cy={`time-${key}`}/>
           </div>
-          {renderChanges(audit[groupId])}
+          {renderChanges(audit[groupId], key)}
         </Box>
       );
     });
 
-  const renderChanges = (audits: Audit[]) => {
+  const renderChanges = (audits: Audit[], groupKey?: number) => {
     const newReferences: Audit[] = [];
     const deletedReferences: Audit[] = [];
     const attachments: Audit[] = [];
     const singleFields: JSX.Element[] = [];
+    let key = 0;
 
-    audits.forEach((change: Audit, index) => {
+    orderBy(audits, ["field"]).forEach((change: Audit, index) => {
+      change.groupKey = groupKey;
       if (change.field.includes("attachments")) {
         attachments.push(change);
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_NEW") {
         newReferences.push(change);
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_DELETED") {
         deletedReferences.push(change);
-      } else if (change.field.includes("formInput")) {
+      } else if (change.field.includes("formInput")
+      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
+       * TODO: this condition should be deleted
+      */
+        || (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned)
+      ) {
         return;
       } else {
         singleFields.push((
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
               <Text
+                dataCy={`change-key-${groupKey}-${key}`}
                 message={`documentRevision.audit.${change.field}.${change.type}`}
               />
             </Box>
             <div className={classes.auditValue}>
-              <AuditFactory audit={change} />
+              <AuditFactory audit={change} dataCy={`change-value-${groupKey}-${key}`} />
             </div>
           </Box>
         ));
+        key++;
       }
+    });
+
+    // This key is added to keep sequential data-cy identifier in the history
+    attachments.forEach((change) => {
+      change.index = key++;
+    });
+    newReferences.forEach((change) => {
+      change.index = key++;
+    });
+    deletedReferences.forEach((change) => {
+      change.index = key++;
     });
 
     return (
@@ -83,18 +121,21 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderGroupChanges = (auditGroup: Audit[]) => {
     const field = auditGroup[0].field;
     const type = auditGroup[0].type;
+    const parentGroupKey = auditGroup[0].groupKey;
+    const parentIndex = auditGroup[0].index;
 
     return (
       <Box mb={1} key={`${auditGroup[0].groupId}`}>
         <Box>
-          <Text message={`documentRevision.audit.${field}.${type}`} />
+          <Text dataCy={`change-key-${parentGroupKey}-${parentIndex}`}
+            message={`documentRevision.audit.${field}.${type}`} />
         </Box>
         {auditGroup.map((change, index) => (
           <div
             key={change.groupId + `-${index}`}
             className={classes.auditValue}
           >
-            <AuditFactory audit={change} />
+            <AuditFactory audit={change} dataCy={`change-value-${change.groupKey}-${change.index}`} />
           </div>
         ))}
       </Box>
@@ -103,7 +144,20 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
   return (
     <div className={classes.container}>
-      <List>{audit && renderAuditGroup()}</List>
+      {audit && <Box className={classes.revisionContainer}>
+        <Typography variant="subtitle1" className={classes.title}>
+          <Text message={"common.revision"} />
+          &nbsp;
+          {versionNumber}
+          {
+            isStatusVisible &&
+            <>
+              &nbsp; - <Text message={statusLabel} />
+            </>
+          }
+        </Typography>
+      </Box>}
+      <List className={classes.list}>{audit && renderAuditGroup()}</List>
     </div>
   );
 };

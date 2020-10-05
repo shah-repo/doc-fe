@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { cloneDeep } from "lodash";
 import { ApplicationState } from "../../reducers";
 import { getAsyncState } from "../../tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
@@ -12,7 +12,7 @@ describe("change requests selectors tests", () => {
   const pendingActions: PendingActionsState = pendingActionsList;
 
   beforeAll(() => {
-    state = _.cloneDeep(initialStoreState);
+    state = cloneDeep(initialStoreState);
     state.dashboard.pendingActions = pendingActions;
     state.dashboard.loadPendingActionsListAsyncInfo = getAsyncState();
   });

@@ -11,9 +11,12 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
   const Comp = ({
     getOptionDisabled,
     getOptionLabel,
+    groupBy,
     optionLabelKey = "text",
     optionValueKey = "value",
     optionValueType = "key",
+    labelPrefixRoot,
+    groupByKey,
     disabledOptions,
     placeholder,
     multiple,
@@ -59,8 +62,11 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       if (isTranslation(optionText)) {
         optionText = intl.formatMessage({ id: optionText });
       }
-      return optionText;
+      const optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
+      return `${optionLabel}${optionText}`;
     });
+
+    groupByKey && (groupBy = (option) => option[groupByKey]);
 
     disabledOptions && (getOptionDisabled = (option) =>
       includes(disabledOptions, option.id)
@@ -70,6 +76,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       ...(props as T),
       getOptionDisabled,
       getOptionLabel,
+      groupBy,
       options,
       defaultValue,
       optionValueKey,

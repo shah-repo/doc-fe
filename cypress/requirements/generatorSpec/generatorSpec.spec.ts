@@ -2,13 +2,12 @@
 /// <reference types="Cypress" />
 
 
-
 // import fs from "fs";
 import { ImplementedBy } from "../../utils/context/implementedBy";
 import { SYSTEM_REQUREMENT_TITLE } from "../../utils/context/systemRequirement";
-// dynamically created by scripts/cypress/generate_requirements_json_file.sh
+// dynamically created by scripts/cypress/utils/generate_requirements_json_file.sh
 import requirementsJson from "./../../cache/generated.json";
-// dynamically created by scripts/cypress/run_generate_requirements_report.sh
+// dynamically created by scripts/cypress/utils/run_generate_requirements_report.sh
 import mergedJson from "./../../cache/merged_specs.json";
 
 

@@ -207,7 +207,10 @@ const FieldPresenter: React.FunctionComponent<Props> = ({
           config: { colWidth: "col-12" },
         });
         break;
+      default:
+        break;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chosenField]);
 
   return <div>{modalStateContent}</div>;

@@ -1,9 +1,10 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      margin: theme.spacing(0, 0, 0, 2),
+      margin: theme.spacing(0, 2, 0, 0),
     },
     details: {
       overflowY: "auto",
@@ -26,6 +27,21 @@ export const styles = makeStyles((theme: Theme) =>
     dateContainer: {
       marginBottom: theme.spacing(2),
       color: theme.palette.text.hint,
+    },
+    revisionContainer: {
+      background: Colors.background_blue,
+      height: theme.spacing(5),
+      paddingTop: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      borderRadius: theme.spacing(0.4),
+    },
+    title: {
+      color: theme.palette.primary.main,
+      fontWeight: theme.typography.fontWeightBold,
+      marginLeft: theme.spacing(1),
+    },
+    list: {
+      margin: theme.spacing(0, 1, 0, 1),
     },
   }),
 );

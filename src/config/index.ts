@@ -5,6 +5,7 @@ import { ThemeEnv } from "../ui/layout/theme/utils/types";
 
 const DEFAULTS = {
   API_ENDPOINT: "/",
+  WORKER_API_ENDPOINT: null,
   REFRESH_TOKEN_VALIDITY_DAYS: "30",
   SIGNUP_DOMAIN_URL: "/",
   FRONTEND_URL: "/",
@@ -36,6 +37,14 @@ class Config {
 
   public static get ApiEndpoint() {
     return `${this.get("API_ENDPOINT")}/v1`;
+  }
+
+  public static get WorkerApiEndpoint() {
+    const apiEndpoint = this.get("WORKER_API_ENDPOINT");
+    if (!apiEndpoint) {
+      return null;
+    }
+    return `${this.get("WORKER_API_ENDPOINT")}/v1`;
   }
 
   public static get RefreshTokenValidityInDays() {

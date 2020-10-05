@@ -14,9 +14,10 @@ import { InputField } from "../Input.styles";
 import { OptionType } from "./types";
 
 interface AutocompleteOwnProps extends FieldOwnProps {
-  autocompleteProps: SelectComponentsProps;
+  autocompleteProps: Omit<SelectComponentsProps, "onChange">;
   options: OptionType[];
   onClick?: (value: any) => void;
+  onChange?: (value: ValueType<OptionType>) => void;
   isDisabled?: boolean;
 }
 
@@ -50,14 +51,15 @@ FormikFieldProps &
 Partial<TypographyProps>;
 
 const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
+  onClick,
   autocompleteProps,
   options,
-  onClick,
   isDisabled = false,
   ...fieldProps
 }) => {
   const { submitForm } = useFormContext();
   const onChange = (value: ValueType<OptionType>) => {
+    fieldProps.onChange?.(value);
     const {
       form: { setFieldValue, setFieldTouched, touched },
       field: { name },
@@ -80,7 +82,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   return (
     <Field {...fieldProps} label={undefined}>
       <Box mb={0.3}>
-        <Typography variant="h6">
+        <Typography variant="h5">
           <Text message={fieldProps.label} />
         </Typography>
       </Box>

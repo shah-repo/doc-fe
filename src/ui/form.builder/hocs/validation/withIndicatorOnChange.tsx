@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get } from "lodash";
 import React from "react";
 import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 import { FBValidatorOptionProps } from "../../types/validation/validatorOption";
@@ -22,13 +22,14 @@ export const withIndicatorOnChange = <T extends FBValidatorOptionProps>(
         return;
       }
       onChange && onChange(ev, value);
-      const delimiter = _.get(indicator, "validatorDelimiter");
+      const delimiter = get(indicator, "validatorDelimiter");
       if (!delimiter) {
         return alert("Indicator must have delimiter defined");
       }
-      if (indicator!.optionId === "4") {
+      if (indicator?.optionId === "4") {
         value = value.documentTypeAcronym;
       }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       FBValidatorStore.indicatorValues[field!.name][`${delimiter}`] = value;
     };
 

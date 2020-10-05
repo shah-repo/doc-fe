@@ -1,11 +1,10 @@
 import { cloneDeep, filter, findLast, groupBy, includes, isEmpty, isUndefined, sortBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import moment from "moment";
 import React from "react";
 import { FBApprovalConfig, FBApprovalProps, FBApprovalState, FBApprovalStatus, FBApprovalValue, FBInlineApprovalRole, FBInlineApproverType } from ".";
 import { FB } from "..";
-import { TIME_ZONE } from "../../../common/utils/date";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { store } from "../../../state/store";
@@ -145,7 +144,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
           approver = approverName(approverObj) + ",";
         }
 
-        const mom = moment(approvedAt).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm a");
+        const mom = getFormattedDateString(approvedAt, MomentFormats.DateTimeAlt);
         return `${status}, ${approver} ${mom}`;
       }
       return status;

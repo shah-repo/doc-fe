@@ -1,7 +1,10 @@
-import _ from "lodash";
+import { find, findLastIndex, get, isEmpty, map, orderBy, some, union, unionBy } from "lodash";
 import moment from "moment";
-import { Document, DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../state/ducks/documentRevisions";
-import { DOC_TYPE_GROUP_OPTION } from "../../state/ducks/documentRevisions/documentType";
+import { Document, DocumentRevision, DocumentRevisionStatus, FBFormTemplateProps, RevisionChangeType } from "../../state/ducks/documentRevisions";
+import { DocumentTypeByIdState, DOC_TYPE_GROUP_OPTION } from "../../state/ducks/documentRevisions/documentType";
+import { DocumentType } from "../../state/ducks/documentRevisions/documentType/types";
+import { OptionType } from "../components/forms/fields/Autocomplete/types";
+import { FBSchemaProps } from "../form.builder";
 
 export const canEditDocumentRevision = (
   documentRevision: DocumentRevision,
@@ -30,7 +33,7 @@ export const canCreateNewVersion = (
   canShowCreateVersionButton;
 
 export const canCreateOutput = (documentRevision: DocumentRevision) => {
-  const documentType = _.get(documentRevision, "document.documentType");
+  const documentType = get(documentRevision, "document.documentType");
   return (
     documentType &&
     documentType.group === "FORM" &&
@@ -72,6 +75,7 @@ export const generateVersionNumber = (
   subRevision?: number,
   revisionChangeType?: RevisionChangeType,
   revisionStatus?: DocumentRevisionStatus,
+  isRecord = false,
 ) => {
   if (!revision || !revisionStage) {
     return "";
@@ -79,7 +83,7 @@ export const generateVersionNumber = (
   if (revisionChangeType === RevisionChangeType.Void) {
     return "Void";
   }
-  if (revisionChangeType === RevisionChangeType.Obsolete) {
+  if (revisionChangeType === RevisionChangeType.Obsolete && !isRecord) {
     return "OBS";
   }
 
@@ -114,7 +118,7 @@ export const getDocRevIdToRedirect = (
 ) => {
   if (deprecatedAt) {
     const depreactedAtDate = moment(deprecatedAt);
-    const indexOfLastReleased = _.findLastIndex(documentRevisions, (doc) => {
+    const indexOfLastReleased = findLastIndex(documentRevisions, (doc) => {
       if (!doc.releasedAt) {
         return false;
       }
@@ -132,7 +136,7 @@ export const getDocRevIdToRedirect = (
     return documentRevisions[0].id;
   }
 
-  const sortedList = _.orderBy(
+  const sortedList = orderBy(
     filteredList,
     [({ releasedAt }) => releasedAt ? new Date(releasedAt) : new Date()],
     "desc",
@@ -145,11 +149,66 @@ export const canChangeDocumentOwner = (status: DocumentRevisionStatus, currentEm
   (status === DocumentRevisionStatus.Draft || status === DocumentRevisionStatus.PendingChange) &&
     (isCompanyAdmin || ownerId === currentEmployeeId);
 
-export const getIsLastVersionObsolete = (formDocuments: Document) => _.some(formDocuments.documentRevisions, ["status", DocumentRevisionStatus.Obsolete ]);
+export const getIsLastVersionObsolete = (formDocuments: Document) => some(formDocuments.documentRevisions, ["status", DocumentRevisionStatus.Obsolete ]);
 
 export const getIsAdministrativeDefault = (documentRevision: DocumentRevision) => {
   const docId = documentRevision.formDocument?.document?.docId;
   const isAlphaReleased = documentRevision.revisionStage === 3;
   const isRecord = (documentRevision.document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
-  return Boolean(docId && !_.isEmpty(docId)) && isAlphaReleased && isRecord;
+  return Boolean(docId && !isEmpty(docId)) && isAlphaReleased && isRecord;
+};
+
+/**
+ * Checks if any of the given output types are records.
+ *
+ * @param outputTypes Array of output types that will be checked.
+ */
+const recordsAsOutputExist = (outputTypes: DocumentType[]) =>
+  some(outputTypes, (type) => type.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.RECORD));
+
+/**
+   * @method
+   *
+   * This will generate new initial workspace scheme based on predefined schemes of
+   * selected document type & output type. At the end we will merge config of each predefined
+   * item in case the user has already updated some item config.
+   * This is a temp hack to enable further creation of the FB form with all
+   * associated actions (i.e delete item).
+   *
+   * @param {Record<string, any>} formik form values
+   * @param {Record<string, DocumentType>} document types dict
+   * @param {FBSchemaProps[]} active workspace scheme
+   */
+export const getFBSchemeByDocType = (
+  formValue: Partial<DocumentRevision> & Partial<FBFormTemplateProps>,
+  documentTypesById: DocumentTypeByIdState,
+  originScheme?: FBSchemaProps[],
+): FBSchemaProps[] => {
+  const outputTypes = map(formValue.outputDocumentTypes as OptionType[], "value");
+  const outputTypesWithGroups = outputTypes?.map((docType) => documentTypesById[docType]);
+
+  const tplType = get(formValue, "document.documentType.id") || "";
+  const documentTypes = union([tplType], outputTypes);
+
+  const finalScheme = documentTypes.reduce((scheme, typeId) => {
+    const rec = documentTypesById[typeId];
+    // If type has scheme
+    if (!rec.schema) { return scheme; }
+    const typeScheme = map(rec.schema, ((schemaItem) => ({
+      ...schemaItem,
+      ...find(originScheme, { name: schemaItem.name }),
+      deleteDisabled: true,
+    })));
+    return unionBy(scheme, typeScheme, "name");
+  }, [] as FBSchemaProps[]);
+
+  if (recordsAsOutputExist(outputTypesWithGroups)) {
+    finalScheme.push({
+      label: "form.builder.approvals",
+      type: "approvals",
+      deleteDisabled: true,
+    });
+  }
+
+  return finalScheme;
 };

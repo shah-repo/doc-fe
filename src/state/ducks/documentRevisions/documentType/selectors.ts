@@ -1,6 +1,7 @@
-import _ from "lodash";
+import { get, orderBy } from "lodash";
 import { createSelector } from "reselect";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../../../ui/common/utils/helpers";
+import { FBDocTypeGroup } from "../../../../ui/form.builder/FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 import { ApplicationState } from "../../../reducers";
 import { AsyncState } from "../../../types";
 import { DocumentType } from "./types";
@@ -32,7 +33,7 @@ const getDocumentTypesWithPageDetails = createSelector(
 const getDocumentTypeFormOptions = createSelector(
   allIds, byId,
   (ids, documentTypes) =>
-    _.orderBy(
+    orderBy(
       ids.map((id) => ({
         ...documentTypes[id],
       }))
@@ -42,7 +43,7 @@ const getDocumentTypeFormOptions = createSelector(
 const getDocumentTypeOptions = createSelector(
   allIds, byId,
   (ids, documentTypes) =>
-    _.orderBy(
+    orderBy(
       ids.map((id) => ({
         value: documentTypes[id].id,
         text: removeLastCharacterIfNotAlphaNumeric(documentTypes[id].documentTypeAcronym),
@@ -53,14 +54,14 @@ const getDocumentTypeOptions = createSelector(
 const getDocumentTypeOptionsForDocumentList = createSelector(
   allIds, byId,
   (ids, documentTypes) =>
-    _.orderBy(
-      ids
-      /** Temp fix - disabling filtering by document type name */
-      /*         .filter((id) => documentTypes[id].group ===
-        FBDocTypeGroup.OTHER ||
-        documentTypes[id].group === FBDocTypeGroup.POAM ||
-        documentTypes[id].group === FBDocTypeGroup.DAM ||
-        documentTypes[id].group === FBDocTypeGroup.FORM ) */
+    orderBy(
+      ids.filter((id) => documentTypes[id].group !== FBDocTypeGroup.RECORD
+        /** Temp fix - disabling filtering by document type name */
+        //  FBDocTypeGroup.OTHER ||
+        //  documentTypes[id].group === FBDocTypeGroup.POAM ||
+        //  documentTypes[id].group === FBDocTypeGroup.DAM ||
+        //  documentTypes[id].group === FBDocTypeGroup.FORM )
+      )
         .map((id) => ({
           value: documentTypes[id].id,
           text: removeLastCharacterIfNotAlphaNumeric(documentTypes[id].documentTypeAcronym),
@@ -88,7 +89,7 @@ const getDocumentTypesByCategory = (state: ApplicationState) => state.documentTy
 const getDocTypeName = createSelector(
   byId,
   (state, docTypeId) => docTypeId,
-  (byIds, docTypeId) => _.get(byIds[docTypeId], "documentTypeName", "N/A"),
+  (byIds, docTypeId) => get(byIds[docTypeId], "documentTypeName", "N/A"),
 );
 
 const makeGetDocTypeByAcronym = () => createSelector(

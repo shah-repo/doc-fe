@@ -82,6 +82,20 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     },
   ];
 
+  const headers = [
+    { label: `AR ID: ${tableCriteria.queryDict?.crId  || ""}`, key: "crId" },
+    { label: `AR TITLE: ${tableCriteria.queryDict?.title  || ""}`, key: "title" },
+    { label: `OWNER: ${tableCriteria.queryDict?.owner  || ""}`, key: "owner" },
+    { label: `STATUS: ${tableCriteria.queryDict?.state || ""}`, key: "state" },
+  ];
+
+  const data = tableData.map((e) => ({
+    crId: e.crId,
+    title: e.title,
+    owner: e.owner.user.name,
+    state: e.state,
+  }));
+
   const customDataSet = (data: ChangeRequest[]) =>
     data.map((cr) => stripTagsFromObject(cr));
 
@@ -91,7 +105,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         <ClearFilters {...{ clearFilter }}/>
         <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
-      <FromListContainer/>
+      <FromListContainer {...{ headers, data }}/>
       <Grid item={true} className={classes.item}>
         <TablePanel<ChangeRequest>
           columns={columns}

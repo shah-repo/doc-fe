@@ -1,4 +1,4 @@
-import { MenuProps } from "@material-ui/core";
+import { BoxProps, MenuProps } from "@material-ui/core";
 import { FBContextMenuState } from ".";
 import { TextProps } from "../../components/Text";
 import { FBFormProps } from "../FBForm";
@@ -11,12 +11,14 @@ export interface FBContextMenuItemProps {
 }
 
 export type FBContextMenuProps =
-& Pick<React.DOMAttributes<HTMLDivElement>, "onContextMenu">
+& Pick<BoxProps, "onContextMenu">
 & Pick<Partial<MenuProps>, "anchorPosition" | "open">
 & Pick<FBFormProps, "children">
 & {
-  contextMenuState?: FBContextMenuState;
   onClose?: () => any;
+  onBlur?: () => any;
+  contextMenuState?: FBContextMenuState;
   menuItems?: FBContextMenuItemProps[];
   menuEls?: FBFormProps["children"];
+  boxProps?: Omit<BoxProps, "onContextMenu" | "onBlur">;
 };

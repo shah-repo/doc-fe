@@ -1,5 +1,6 @@
-import _ from "lodash";
-import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBInputType, FBOption } from "..";
+import { map, template } from "lodash";
+import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBIconConfig, FBInputType, FBOption } from "..";
+import { FBIconType } from "../FBIcon";
 import { FBCurrencyOption } from "../FBPurchaseOrderTable";
 import { FBSchemaProps } from "../FBSchema";
 import actionOptions from "./actionOptions.json";
@@ -10,6 +11,7 @@ import closingTaskSchema from "./closingTaskSchema.json";
 import currencyOptions from "./currencyOptions.json";
 import editorProperties from "./editorProperties.json";
 import editorPropertiesControl from "./editorPropertiesControl.json";
+import icons from "./icons.json";
 import requirementOptions from "./requirementOptions.json";
 import taskSchema from "./taskSchema.json";
 import testStepSchema from "./testStepSchema.json";
@@ -17,7 +19,7 @@ import unitsOptions from "./unitsOptions.json";
 
 export class FBData {
   public static get testStepSchema(): FBSchemaProps[]  {
-    const compiled = _.template(JSON.stringify(testStepSchema));
+    const compiled = template(JSON.stringify(testStepSchema));
     return JSON.parse(compiled({ id: FB.uniqid })) as unknown as FBSchemaProps[];
   }
 
@@ -32,7 +34,7 @@ export class FBData {
   public static editorPropertiesByType(type: FBInputType): FBEditorPropertiesOption[] | undefined {
     const editorProps = FBData.editorPropertiesControl[type];
     if (!editorProps) { return; }
-    return _.map(editorProps, (itm) => ({
+    return map(editorProps, (itm) => ({
       value: itm,
       ...FBData.editorProperties[itm],
       // :/
@@ -65,7 +67,7 @@ export class FBData {
   }
 
   public static additionalSchema(type: FBInputType): Partial<FBSchemaProps>[] {
-    const compiled = _.template(JSON.stringify(additionalSchema));
+    const compiled = template(JSON.stringify(additionalSchema));
     const parse = JSON.parse(compiled({ id: FB.uniqid }));
     return parse[type];
   }
@@ -84,6 +86,11 @@ export class FBData {
 
   public static get closingTaskSchema(): FBSchemaProps[] {
     return closingTaskSchema as FBSchemaProps[];
+  }
+
+  public static icons(color?: string): Record<FBIconType, FBIconConfig[]> {
+    const compiled = template(JSON.stringify(icons));
+    return JSON.parse(compiled({ color }));
   }
 }
 

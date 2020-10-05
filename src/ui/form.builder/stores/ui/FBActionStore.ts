@@ -1,5 +1,5 @@
 import { AxiosRequestConfig, Method } from "axios";
-import _, { Dictionary } from "lodash";
+import { Dictionary, filter, isUndefined, omit } from "lodash";
 import { action } from "mobx";
 import apiClient from "../../../../state/apiClient";
 import { AsyncActionErrorResponse } from "../../../../state/middlewares/api/types";
@@ -14,7 +14,7 @@ import FBStore from "./FBStore";
 export class FormBuilderActionStore {
   public values: Dictionary<Dictionary<any>> = {};
 
-  @action public getActions = (): FBTemplateSchema[] => _.filter(FBStore.getSchema(), (schemaItem) => (
+  @action public getActions = (): FBTemplateSchema[] => filter(FBStore.getSchema(), (schemaItem) => (
     schemaItem.type === "action"
   ));
 
@@ -27,7 +27,7 @@ export class FormBuilderActionStore {
       const requestConfig: AxiosRequestConfig = {
         method: requestMethod as Method,
         url: requestUrl,
-        data: action.payload || _.omit(this.values[action.name || ""], "send-email-action-supplier-field"),
+        data: action.payload || omit(this.values[action.name || ""], "send-email-action-supplier-field"),
         // paramsSerializer: (params) => qs.stringify(params),
         headers: {},
       };
@@ -37,7 +37,7 @@ export class FormBuilderActionStore {
       }:${store.getState().auth.user.sessionId}`;
 
       const { data } = await apiClient.request(requestConfig);
-      if (!_.isUndefined(data)) {
+      if (!isUndefined(data)) {
         if (requestUrl === CREATE_TEMPLATE_URL) {
           return data;
         }

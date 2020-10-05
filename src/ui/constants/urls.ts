@@ -48,4 +48,6 @@ export const DOCUMENT_BY_CATEGORY_LIST_URL = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/:
 
 export const GROUP_MANAGEMENT_ROOT_URL = "/group_management";
 
+export const TRAINING_URL = "/training";
+
 export const COMPANY_MINE_URL = "/company/mine";

@@ -7,7 +7,8 @@ import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { FBEditorValidationMode } from "../FBEditorValidation";
 import { FBValidatorConfigProps } from "../types/validation/validatorDialog";
 
-export type FBInputTransform = "upper" |  "lower";
+export type FBInputTransform = "upper" | "lower";
+export type FBVisibilityType = "visible" | "hidden";
 
 export type FBInputType =
   | "url"
@@ -43,6 +44,7 @@ export type FBInputType =
   | "teststep"
   | "checkpoint"
   | "approval"
+  | "inlineapproval"
   | "createlabel"
   | "quantity"
   | "timer"
@@ -55,68 +57,77 @@ export type FBInputType =
   | "customcontrol"
   | "poApprovalMatrix"
   | "task"
-  | "approvers";
+  | "approvers"
+  | "blanktplform"
+  | "approvals";
 
 export type FBInputProps =
-& FBLabelProps
-& FBOptionProps
-& FBEditorOptionsProps
-& Pick<AutocompleteProps, "multiple">
-& Pick<BaseTextFieldProps,
-| "children"
-| "error"
-| "value"
-| "disabled"
-| "name"
-| "helperText"
-| "rows"
-| "placeholder"
-| "defaultChecked"
-| "hidden"
-> & {
-  onBlur?: (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => any;
-  onChange?: (ev: React.ChangeEvent<any> | any, value: any, context?: FBSchemaState) => any;
-  setTranform?: (value: string) => string;
-  type?: FBInputType;
-  index?: number;
-  stepIndex?: number;
-  gutter?: boolean;
-  linkUrl?: string;
-  defaultValue?: any;
-  inputState?: FBInputState;
-  editorProperties?: FBEditorPropertiesType[];
-  includeContext?: boolean;
-  rules?: string;
-  validationMode?: FBEditorValidationMode;
-  includeSelectedSchema?: boolean;
-  paragraph?: string;
-  testRequirement?: string;
-  isTemplate?: boolean;
-  includeQRScan?: boolean;
-  designDisabled?: boolean;
-  deleteDisabled?: boolean;
-  instructionsDocument?: string;
-  reviseDisabled?: boolean;
-  outputDisabled?: boolean;
-  customValidator?: FBValidatorConfigProps;
-  approvers?: string[] | Employee[];
-  approverGroups?: string[] | GroupRequestBody[];
-  approvalRoles?: string[] | FBInlineApprovalRole[];
-  approveIsBlocking?: boolean;
-  applicableOn?: any[];
-  actions?: string[];
-  hellosignFlowProps?: any;
-  showErrorMsg?: boolean;
-  validators?: Dictionary<any>;
-  forceDefault?: boolean;
-  autosave?: boolean;
-  transform?: FBInputTransform;
-  withState?: boolean;
-};
+  & FBLabelProps
+  & FBOptionProps
+  & FBEditorOptionsProps
+  & Pick<AutocompleteProps, "multiple">
+  & Pick<BaseTextFieldProps,
+    | "children"
+    | "error"
+    | "value"
+    | "disabled"
+    | "name"
+    | "helperText"
+    | "rows"
+    | "placeholder"
+    | "defaultChecked"
+    | "hidden"
+  > & {
+    onBlur?: (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => any;
+    onChange?: (ev: React.ChangeEvent<any> | any, value: any, context?: FBSchemaState) => any;
+    setTranform?: (value: string) => string;
+    type?: FBInputType;
+    index?: number;
+    stepIndex?: number;
+    gutter?: boolean;
+    linkUrl?: string;
+    defaultValue?: any;
+    inputState?: FBInputState;
+    editorProperties?: FBEditorPropertiesType[];
+    includeContext?: boolean;
+    rules?: string;
+    validationMode?: FBEditorValidationMode;
+    includeSelectedSchema?: boolean;
+    paragraph?: string;
+    testRequirement?: string;
+    isTemplate?: boolean;
+    includeQRScan?: boolean;
+    designDisabled?: boolean;
+    deleteDisabled?: boolean;
+    instructionsDocument?: string;
+    reviseDisabled?: boolean;
+    outputDisabled?: boolean;
+    customValidator?: FBValidatorConfigProps;
+    approvers?: string[] | Employee[];
+    approverGroups?: string[] | GroupRequestBody[];
+    approvalRoles?: string[] | FBInlineApprovalRole[];
+    approveIsBlocking?: boolean;
+    applicableOn?: any[];
+    actions?: string[];
+    hellosignFlowProps?: any;
+    showErrorMsg?: boolean;
+    validators?: Dictionary<any>;
+    forceDefault?: boolean;
+    autosave?: boolean;
+    transform?: FBInputTransform;
+    dataCy?: string;
+    withState?: boolean;
+    bookmarked?: boolean;
+  };
 
 export const OmitInputClones: FBInputType[] = [
+  "section",
   "fileupload",
   "documentRevisions",
   "approvers",
   "approval",
+  "blanktplform",
+  "inlineapproval",
+  "approvals",
+  "texteditor",
 ];

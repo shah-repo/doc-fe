@@ -22,6 +22,7 @@ export const AddGroupPresenter: React.FunctionComponent<Props> = ({
       variant="contained"
       onClick={openDialog}
       id="Group-openDialog"
+      data-cy="Group-openDialog"
       style={{ margin: 0 }}
     >
       <Text message="group.management.add.group" />

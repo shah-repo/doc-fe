@@ -27,7 +27,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     const modeContent = () => (
       <>
         <FBApprovalMatrixSection
-          {...{ handleEdit, handleFullScreen, disabled, mode }}
+          {...{ handleEdit, handleFullScreen, disabled, mode, dialogState }}
           workspaceMode={workspaceState?.mode as FBWorkspaceMode}
         />
         <FBApprovalMatrixTable {...{ name, mode }} />

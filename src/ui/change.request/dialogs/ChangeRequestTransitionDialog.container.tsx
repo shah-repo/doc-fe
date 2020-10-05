@@ -3,6 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { changeRequestsActions, ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../state/reducers";
+import { toastError } from "../../components/notifications";
 import TransitionDialog from "../../components/transitionDialog/TransitionDialog";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
@@ -35,6 +36,10 @@ export const TransitionDialogContainer: React.FunctionComponent<TransitionDialog
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {
       onSuccess && onSuccess();
+      transitionDialog.close();
+    },
+    onError: (error) => {
+      toastError(error as string);
       transitionDialog.close();
     },
   });

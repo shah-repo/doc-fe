@@ -14,11 +14,10 @@ export const getOwner = (owner: Partial<Owner> = {}): Owner => ({
   ...owner,
 });
 
-export const getApproval = (approval: Partial<Approval> = {}): Approval => ({
+export const getApproval = (approval: Partial<Approval> = {}): Partial<Approval> => ({
   id: faker.random.uuid(),
   approver: getOwner(),
   reviewedAt: undefined,
   status: ApprovalStatus.Approved,
-  active: faker.random.boolean(),
   ...approval,
 });

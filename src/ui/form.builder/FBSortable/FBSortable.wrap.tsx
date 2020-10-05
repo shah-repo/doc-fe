@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { map } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { arrayMove, SortableElement, SortEnd } from "react-sortable-hoc";
@@ -32,7 +32,7 @@ export const withFBSortable = <T extends FBSortableProps>(
       </li>
     ));
 
-    const items = useObserver(() => _.map(workspaceState?.getSchema(), (schemaItem, index: number) => (
+    const items = useObserver(() => map(workspaceState?.getSchema(), (schemaItem, index: number) => (
       <SortableItem
         key={`fb-sortable-item-${index}`}
         value={{ ...schemaItem, index }}
@@ -49,10 +49,15 @@ export const withFBSortable = <T extends FBSortableProps>(
       workspaceState?.setSchema(newSchema);
     };
 
+    const shouldCancelStart = (e: { buttons: number; ctrlKey: boolean; button: number }) =>
+      (e.buttons === 1 && e.ctrlKey === true) || // macOS trackpad ctrl click
+      (e.buttons === 2 && e.button === 2);
+
     return Component({
       ...(props),
       items,
       onSortEnd,
+      shouldCancelStart,
     });
   };
 

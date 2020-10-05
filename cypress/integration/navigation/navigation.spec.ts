@@ -1,5 +1,6 @@
 import path from "path";
 import { GroupTag, NavigationItems } from "../../../src/state/ducks/auth/types";
+import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -12,8 +13,8 @@ context(`Test: ${path.basename(__filename)}`, () => {
   context("Check navigation bar for default company", () => {
     it("[API] API login as admin with default company", (done: any) => {
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -23,8 +24,8 @@ context(`Test: ${path.basename(__filename)}`, () => {
 
     it("Logs admin in default company with default navigation", () => {
       cy.authLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       });
     });
 
@@ -58,8 +59,8 @@ context(`Test: ${path.basename(__filename)}`, () => {
   context("Create company and checks admin navigation bar", () => {
     it("[API] Creates company", (done: any) => {
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         loginResponse = response;
 
@@ -70,7 +71,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            maxRevisionStages: 3,
+            numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,

@@ -1,4 +1,4 @@
 
 export enum FBClasses {
-  inputDisabled = "FBInput-disabled",
+  inputPreview = "FBInput-preview",
 }

@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isEmpty, omit } from "lodash";
 import React, { useMemo, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { Attachment, AttachmentDownloadResponse, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments";
@@ -144,8 +144,8 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         [name]: filtered,
       };
 
-      if (_.isEmpty(filtered)) {
-        values = _.omit(values, name);
+      if (isEmpty(filtered)) {
+        values = omit(values, name);
       }
 
       FBStore.setValues(values);
@@ -246,7 +246,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
             values.password,
           );
         }
-
+        break;
       default:
         break;
     }

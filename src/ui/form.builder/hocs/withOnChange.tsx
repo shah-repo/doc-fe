@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { get, map, values } from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
 import Validator from "validatorjs";
@@ -16,13 +16,13 @@ const customValidators = () => {
 
   Validator.register(
     "required_document_status",
-    (value, requirement) => _.get(value, "status") === requirement,
+    (value, requirement) => get(value, "status") === requirement,
     "The :attribute is not in required state.",
   );
 
   Validator.register(
     "required_document_type",
-    (value, requirement) => _.get(value, "document.documentType.documentTypeAcronym") === requirement,
+    (value, requirement) => get(value, "document.documentType.documentTypeAcronym") === requirement,
     "The :attribute is not required type.",
   );
 };
@@ -116,8 +116,8 @@ export function withOnChange<T extends FBOnChangeProps>(
         const errors = validator.errors.all();
         FBValidatorStore.errors = {};
 
-        _.map(errors, (v: string, k: string) =>
-          FBValidatorStore.errors[k] = _.values(v).join("\n"),
+        map(errors, (v: string, k: string) =>
+          FBValidatorStore.errors[k] = values(v).join("\n"),
         );
       });
 

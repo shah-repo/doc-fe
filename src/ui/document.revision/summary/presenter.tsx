@@ -1,8 +1,9 @@
 import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
-import _ from "lodash";
+import { isEmpty } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
+import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
@@ -24,7 +25,6 @@ import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
 import TrainingControl from "./training.control";
-import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
@@ -55,13 +55,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
   canChangeOwnerShip,
   canShowCreateVersionButton,
 }) => {
-
   useScrollIntoView();
   const onSubmit = () => void 0;
   const { formInput } = dataProp || {};
   const { schema } = formTemplate || formDocument?.formTemplate || {};
   const { docId } = formDocument?.document || {};
-  const FBIsOutput = Boolean(docId && !_.isEmpty(docId));
+  const FBIsOutput = Boolean(docId && !isEmpty(docId));
   const FBIsActive = formInput || formTemplate || formDocument;
   const docTypeId = dataProp?.document?.documentType?.id;
   const [isTrainingVisible] = useTraining(docTypeId);
@@ -75,7 +74,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
       documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
 
-  const renderTrainingControl = status === DocumentRevisionStatus.Released && (
+  const renderTrainingControl = (status === DocumentRevisionStatus.Released ||
+    status === DocumentRevisionStatus.Approved) && (
     <TrainingControl
       dataProp={trainingRecords}
       classes={classes}
@@ -140,7 +140,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           <ReferencedByContainer dataProp={document.referencedBy} />
         )}
         {attachments && <Attachment
-          isAttachmentEmpty={!(attachments.length > 1)}
+          isAttachmentEmpty={attachments.length < 1}
           docRevId = {id}
           containsRedline = {containsRedline()}
           docRevStatus={status}/>}{/* Need to put actual check here*/}
@@ -153,7 +153,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
             document={dataProp}
             initialValues={dataProp.formInput}
             schema={schema as FBSchemaProps[]}
-            mode="preview"
+            mode={dataProp.document.documentType.group === "FORM" ?
+              "formPreview" : "preview"}
           />
         </Box>
       )}

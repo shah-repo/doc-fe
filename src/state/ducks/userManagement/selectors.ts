@@ -14,6 +14,7 @@ const getGroupsOptions = createSelector(
       text: groups[id].name,
       value: groups[id].id,
       tags: groups[id].tags,
+      type: groups[id].type,
       defaultForNewUsers: groups[id].defaultForNewUsers,
       permissions: groups[id].permissions,
       parents: groups[id].parents,

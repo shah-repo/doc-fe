@@ -1,6 +1,8 @@
 import { Box, List } from "@material-ui/core";
+import { orderBy } from "lodash";
 import React from "react";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
+import { ApprovalStatus } from "../../../state/ducks/common";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -21,6 +23,15 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
 
+      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
+       * TODO: this if statement should be deleted
+      */
+      if (audit[groupId].filter((change) =>
+        change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
+      ).length === 0) {
+        return null;
+      }
+
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer} data-cy={`audit-${key}`}>
@@ -38,17 +49,33 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const attachments: Audit[] = [];
     const singleFields: JSX.Element[] = [];
 
-    audits.forEach((change, index) => {
+    orderBy(audits, ["field"]).forEach((change, index) => {
       if (change.field.includes("attachments")) {
         attachments.push(change);
       } else if (change.field.includes("referenceTo")) {
         references.push(change);
+        // } else if (change.field.includes("approvals")) {
+        //   // This is a hack to not display approvers twice in history
+        //   // Until BE removes field approvals
+        //   return;
+        /** Temporary solution until BE adds additional info (who was abandoned) to audit.
+       * TODO: this condition should be deleted
+      */
+      } else if (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned) {
+        return;
       } else if (change.field !== "effectiveDate" || change.nextValue !== "null") {
         singleFields.push(
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
               <Text
-                message={`changeRequest.audit.${change.field}.${change.type}`}
+                message={
+                  change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned
+                    ? "changeRequest.audit.approvers.removed.by"
+                    : `changeRequest.audit.${change.field}.${change.type}`
+                }
+                values={{
+                  owner: change.owner?.user.name,
+                }}
               />
             </Box>
             <div className={classes.auditValue}>

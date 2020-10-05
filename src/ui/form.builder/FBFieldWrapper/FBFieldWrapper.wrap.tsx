@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { includes, isUndefined } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBFieldWrapperProps, FBFieldWrapperState } from ".";
@@ -24,7 +24,7 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
 
     const { label, type, includeQRScan } = workspaceState?.getSchemaItemAt(index) || {};
 
-    if (!_.includes(FBSchemaState.omitLabel, type) && !_.isUndefined(label) && !includeQRScan) {
+    if (!includes(FBSchemaState.omitLabel, type) && !isUndefined(label) && !includeQRScan) {
       topBarMargin = -3;
       grabMargin = 3.5;
     }

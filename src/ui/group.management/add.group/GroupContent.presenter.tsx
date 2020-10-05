@@ -43,46 +43,49 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
   setParentGroups,
   handleReset,
   handleSubmit,
-}) => (
-  <Grid
-    container={true}
-    alignItems="center"
-    direction="column"
-    style={{ marginTop: 90 }}
-  >
-    <Grid>
-      <SharedContent
-        employees={employees}
-        members={members}
-        setMembers={setMembers}
-        isCreateMode={isCreateMode}
-        group={group}
-        setGroup={setGroup}
-        handleAsyncState={handleAsyncState}
-        hasOfficialPermission={hasOfficialPermission}
-      />
-      {canCreateOfficialGroup &&
+}) => {
+  const { id = "" } = group;
+  return (
+    <Grid
+      container={true}
+      alignItems="center"
+      direction="column"
+      style={{ marginTop: 90 }}
+    >
+      <Grid>
+        <SharedContent
+          employees={employees}
+          members={members}
+          setMembers={setMembers}
+          isCreateMode={isCreateMode}
+          group={group}
+          setGroup={setGroup}
+          handleAsyncState={handleAsyncState}
+          hasOfficialPermission={hasOfficialPermission}
+        />
+        {canCreateOfficialGroup &&
         <Permissions
           group={group}
           setGroup={setGroup}
           currentEmployeePermissions={currentEmployeePermissions}
         />}
-      {canCreateOfficialGroup &&
+        {canCreateOfficialGroup &&
         <ParentGroups
           parentGroups={parentGroups}
           setParentGroups={setParentGroups}
+          currentGroupId={id}
         />}
-      <JoinedGroups
-        parentGroups={parentGroups}
-      />
-      <ActionButtons
-        handleReset={handleReset}
-        handleSubmit={handleSubmit}
-        group={group}
-        isCreateMode={isCreateMode}
-      />
+        <JoinedGroups
+          parentGroups={parentGroups}
+        />
+        <ActionButtons
+          handleReset={handleReset}
+          handleSubmit={handleSubmit}
+          group={group}
+          isCreateMode={isCreateMode}
+        />
+      </Grid>
     </Grid>
-  </Grid>
-);
+  ); };
 
 export default GroupContentPresenter;

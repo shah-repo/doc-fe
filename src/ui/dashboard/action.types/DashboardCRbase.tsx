@@ -1,4 +1,4 @@
-import { Box, Grid } from "@material-ui/core";
+import { Box, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import ChangeRequestTransitionDialogContainer from "../../change.request/dialogs/ChangeRequestTransitionDialog.container";
@@ -10,46 +10,60 @@ interface Props {
   crId: string;
 }
 
+export const styles = makeStyles((theme: Theme) =>
+  createStyles({
+    containerWrap: {
+      paddingLeft: "42px",
+      marginTop: "15px",
+      marginBottom: "15px",
+    },
+
+    itemWrap: {
+      display: "flex",
+      justifyContent: "flex-end",
+    },
+  }));
+
 export const DashboardCRBase: React.FunctionComponent<Props> = ({
   title,
   crTitle,
   url,
   crId,
-}) => (
-  <Grid
-    container={true}
-    style={{
-      paddingLeft: "42px",
-      marginTop: "15px",
-      marginBottom: "15px",
-    }}
-  >
-    <Grid
-      item={true}
-      xs={9}
-    >
-      <Link to={url} style={{ textDecoration: "none", color: "inherit" }}>
-        <Box>
-          <Box
-            color="primary.main"
-            fontWeight="fontWeightBold"
-            marginBottom="5px"
-          >
-            {crTitle}
-          </Box>
-          <Box>
-            {title}
-          </Box>
+}) => {
+  const classes = styles();
+  const linkRenderer = () => (
+    <Link to={url} style={{ textDecoration: "none", color: "inherit" }}>
+      <Box>
+        <Box
+          color="primary.main"
+          fontWeight="fontWeightBold"
+          marginBottom="5px"
+        >
+          {crTitle}
         </Box>
-      </Link>
-    </Grid>
+        <Box>
+          {title}
+        </Box>
+      </Box>
+    </Link>
+  );
+
+  return (
     <Grid
       container={true}
-      alignItems="flex-end"
-      justify="flex-end"
-      xs={3}
+      className={classes.containerWrap}
     >
-      <Grid item={true}>
+      <Grid
+        item={true}
+        xs={9}
+      >
+        {linkRenderer()}
+      </Grid>
+      <Grid
+        item
+        xs={3}
+        className={classes.itemWrap}
+      >
         <ChangeRequestTransitionDialogContainer
           transition="reject"
           changeRequestId={crId}
@@ -62,7 +76,6 @@ export const DashboardCRBase: React.FunctionComponent<Props> = ({
         />
       </Grid>
     </Grid>
-  </Grid>
-);
+  ); };
 
 export default DashboardCRBase;

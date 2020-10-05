@@ -66,6 +66,7 @@ export interface PageDetails {
   addNewBtnLabel: string;
   columns: PageDetailsColumn[];
   category: string;
+  exportList: boolean;
 }
 export interface DocumentType {
   id: string;
@@ -154,6 +155,7 @@ export enum DisplayFieldType{
   STATUS_RELEASED = "A4",
   STATUS_IN_REVIEW = "A5",
   STATUS_PENDING_CHANGE = "A6",
+  STATUS_APPROVED = "A7",
   DOC_ID = "B",
   APPROVE_RELEASE_BTN = "N",
   VERSIONS = "O",
@@ -164,6 +166,7 @@ export enum DisplayFieldType{
   VERSION_RELEASED = "P4",
   VERSION_IN_REVIEW = "P5",
   VERSION_PENDING_CHANGE = "P6",
+  VERSION_APPROVED = "P7",
   CR_ID = "R",
   REVISE_BTN = "S",
   BOOKMARKS = "Q",

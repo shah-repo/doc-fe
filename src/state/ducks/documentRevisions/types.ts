@@ -5,7 +5,7 @@ import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
 import { Group } from "../auth/types";
 import { ChangeRequest } from "../changeRequest";
-import { Id, Owner, User } from "../common";
+import { Approval, Id, Owner, User } from "../common";
 import { TrainingRecord } from "../training";
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
 import { DocumentGroupOptionsType, DocumentType } from "./documentType";
@@ -15,6 +15,7 @@ export enum DocumentRevisionStatus {
   PendingChange = "PENDING_CHANGE",
   InReview = "IN_REVIEW",
   Released = "RELEASED",
+  Approved = "APPROVED",
   Deprecated = "DEPRECATED",
   Obsolete = "OBSOLETE",
   Canceled = "CANCELED",
@@ -73,7 +74,13 @@ export interface PDF {
   type: string;
 }
 
+export interface Precalc {
+  formDocId: string;
+  revision: number;
+}
+
 export interface DocumentRevision extends FBDocumentRevisionProps {
+  precalc: Precalc;
   id: string;
   docId?: string;
   typePrefix?: string;
@@ -84,6 +91,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   revisionChangeType: RevisionChangeType;
   name: string;
   description: string;
+  displayRevision: string;
   owner: Owner;
   attachments: Attachment[];
   status: DocumentRevisionStatus;
@@ -104,6 +112,8 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   pdf?: PDF;
   outputRevision?: boolean;
   primaryAttachment?: Attachment;
+  approvals?: Approval[];
+  updatedAt?: string;
 }
 
 export const RevisionStageOptions = [
@@ -188,7 +198,7 @@ export type AllIdsState = string[];
 
 export interface ApproveAndReleaseRequest {
   approvers: Id[];
-  effectiveDate: string;
+  effectiveDate?: string;
   documentType: Id;
   formDocument: Id;
 }
@@ -229,17 +239,6 @@ export interface FBOutputDocumentType {
 export interface HeaderTableType {
   label: string;
   key: string;
-}
-
-export interface DataTable {
-  docId: string;
-  revision: number;
-  documentTitle: string;
-  type: string | undefined;
-  owner: string;
-  crId: string | undefined;
-  status: string;
-  effectiveDate: string | undefined;
 }
 
 

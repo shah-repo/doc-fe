@@ -28,10 +28,13 @@ export enum Colors {
   light_blue = "#edf4ff",
   blue = "#0066FF",
   medium_blue= "#5C9DFC",
+  default_blue="#5C9DFF",
+  background_blue="#DBE9FF",
   // red
   red = "#c40000",
   dark_red = "#a10808",
   light_red = "#FCDEDE",
+  errror_red = "#F44336",
   medium_red = "#FF8183",
   // "#d31b1b"
   // purple

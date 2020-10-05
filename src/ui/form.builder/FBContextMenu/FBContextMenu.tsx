@@ -1,4 +1,4 @@
-import { Menu } from "@material-ui/core";
+import { Box, Menu } from "@material-ui/core";
 import React from "react";
 import { FBContextMenuProps } from ".";
 import { withFBContextMenu } from "./FBContextMenu.wrap";
@@ -6,12 +6,14 @@ import { withFBContextMenu } from "./FBContextMenu.wrap";
 const FBContextMenu: React.FunctionComponent<FBContextMenuProps> = ({
   onContextMenu,
   onClose,
+  onBlur,
   open = false,
   anchorPosition,
   children,
   menuEls,
+  boxProps,
 }) =>  (
-  <div {...{ onContextMenu }} style={{ cursor: "context-menu" }}>
+  <Box {...{ onContextMenu, onBlur }} style={{ cursor: "context-menu" }} {...boxProps}>
     {children}
     <Menu
       keepMounted
@@ -20,7 +22,7 @@ const FBContextMenu: React.FunctionComponent<FBContextMenuProps> = ({
     >
       {menuEls}
     </Menu>
-  </div>
+  </Box>
 );
 
 export default withFBContextMenu(FBContextMenu);

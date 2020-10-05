@@ -15,15 +15,24 @@ import { TableColumnProps } from "../../components/table/column/types";
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
 import { canEditDocumentRevision, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
+import { generateVersionNumber } from "../../documentRevision/helpers";
 import { RouteParams } from "../utils/types";
 import { columnSearchConfiguration, getStaticColumns } from "./helpers";
 import DocumentByTypeListPresenter from "./presenter";
 
 type Props = RouteComponentProps<RouteParams>;
 
-const getFormattedRowValue = (value: string) => {
+const getFormattedRowValue = (path: any, rowData: any) => {
+  const value = get(rowData, path);
   const isDate = moment(value, "YYYY-MM-DDTHH:mm:ss.SSSZ", true).isValid();
-  return isDate ? <Date value={value} /> : value;
+  const versionNumber = generateVersionNumber(
+    rowData.revision,
+    rowData.revisionStage,
+    rowData.subRevision,
+    rowData.revisionChangeType,
+  );
+  const ifRevision = path.startsWith("precalc.revision") ? versionNumber : value;
+  return isDate ? <Date value={value} /> : ifRevision;
 };
 
 export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
@@ -98,7 +107,8 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         cellHref: cellHrefRenderer,
         omitSearch,
         columnOptions: {
-          cellDataGetter: ({ rowData }) => getFormattedRowValue(get(rowData, column.valuePath)),
+          cellDataGetter: ({ rowData }) =>
+            getFormattedRowValue(column.valuePath, rowData),
         },
         searchOptions,
       };
