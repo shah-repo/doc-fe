@@ -184,6 +184,7 @@ export const getFBSchemeByDocType = (
   documentTypesById: DocumentTypeByIdState,
   originScheme?: FBSchemaProps[],
 ): FBSchemaProps[] => {
+
   const outputTypes = map(formValue.outputDocumentTypes as OptionType[], "value");
   const outputTypesWithGroups = outputTypes?.map((docType) => documentTypesById[docType]);
 
@@ -207,6 +208,7 @@ export const getFBSchemeByDocType = (
       label: "form.builder.approvals",
       type: "approvals",
       deleteDisabled: true,
+      name: `fb-approvals-${formValue.name}`,
     });
   }
 
