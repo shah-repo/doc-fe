@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
-import { difference, find, isEmpty, isUndefined, keys } from "lodash";
+import { differenceBy, find, isEmpty, isUndefined, keys } from "lodash";
 import * as React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
@@ -56,10 +56,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const showVoidButton = documentRevision?.status === DocumentRevisionStatus.Draft && documentRevision?.version === 1;
 
   function isOutputSchema(): boolean {
-    const { schema: documentSchema = [] } = values.formDocument?.formTemplate || {};
+    const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
     return (
-      Boolean(difference(workspaceState?.schema || [],  documentSchema)) ||
-      !isUndefined(values.schema)
+      Boolean(differenceBy(workspaceState?.schema || [],  documentSchema, "name").length) ||
+      ((documentRevision?.schema?.length || 0) > 0)
     );
   }
 
