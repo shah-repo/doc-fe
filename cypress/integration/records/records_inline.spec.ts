@@ -49,12 +49,6 @@ context("Record inline Flow", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
-              {
                 documentTypeName: "Legal Record",
                 documentTypeAcronym: "LR-",
                 group: "RECORD",
