@@ -17,6 +17,7 @@ import ScrollToError from "../../components/forms/ScrollToError";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import FormHeader from "../../document.revision/header/FormHeader";
+import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB } from "../../form.builder";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
@@ -135,6 +136,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentTypesById, values.document?.documentType?.id]);
   const isRevisionChangeHidden = isRecord && isdocRevStatusDraft && !isSubrevision;
+  const isRevised = values.outputRevision;
 
   const isDisabledInput = (values.id !== undefined && isCurrentUserOperator && !isOwner)
     || Boolean(isRecord && isdocRevStatusDraft && documentRevision.revisionChangeType === RevisionChangeType.Obsolete);
@@ -174,6 +176,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   }, [isdocRevStatusDraft, values.document, values.name]);
 
   const documentTypeId = values.document?.documentType?.id;
+  const isEB = documentRevision.document.documentType.group === "ENGINEERING_BUILD";
 
   return (
     <Grid
@@ -234,6 +237,20 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             type,
           }}
         />
+        {isEB && documentRevision?.parent &&
+        <BuildsContainer
+          dataProp={documentRevision.parent}
+          label="common.previous.build"
+          isDraft={isdocRevStatusDraft || isRevised}
+        />
+        }
+        {isEB && documentRevision?.children &&
+        <BuildsContainer
+          dataProp={documentRevision.children}
+          label="common.next.build"
+          isDraft={isdocRevStatusDraft || isRevised}
+        />
+        }
         <RevisionStage {...{ isDisabled }}/>
         <AutocompleteField
           name="referenceTo"

@@ -254,6 +254,15 @@ const setPrimaryAttachment = (
     handlers,
   });
 
+const copyTo = (id: string, handlers: Handlers): ApiAction<DocumentRevision> => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/copy/${id}`,
+  method: "post",
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionSet(documentRevision));
+  },
+  handlers,
+});
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -278,4 +287,5 @@ export default {
   reload,
   setPrimaryAttachment,
   voidDocument,
+  copyTo,
 };

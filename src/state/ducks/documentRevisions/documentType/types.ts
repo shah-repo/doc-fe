@@ -16,7 +16,8 @@ export type DocumentGroupType =
   "PO" |
   "WORK_ORDER" |
   "SUPPLIER" |
-  "PART";
+  "PART" |
+  "ENGINEERING_BUILD";
 
 export type DocumentGroupOptionsType =
   "FORM" |
@@ -32,7 +33,8 @@ export type DocumentGroupOptionsType =
   "WORK_ORDER" |
   "WO_PARTS" |
   "CHANGE_REQUEST" |
-  "BE_OUTPUT";
+  "BE_OUTPUT" |
+  "CAN_BE_COPIED";
 
 export enum DOC_TYPE_GROUP_OPTION {
   FORM = "FORM",
@@ -51,6 +53,7 @@ export enum DOC_TYPE_GROUP_OPTION {
   PART = "PART",
   SUPPLIER = "SUPPLIER",
   RECEIVABLE = "RECEIVABLE",
+  CAN_BE_COPIED = "CAN_BE_COPIED",
 }
 export interface PageDetailsColumn {
   label: Translation;

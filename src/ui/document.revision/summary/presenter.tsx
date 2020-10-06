@@ -20,6 +20,7 @@ import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { Translation } from "../../translations/types";
 import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
+import BuildsContainer from "./builds.container";
 import ChangeRequestLink from "./changeRequestLink";
 import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
@@ -51,6 +52,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
     trainingRecords,
     formTemplate,
     formDocument,
+    parent,
+    children,
   },
   canChangeOwnerShip,
   canShowCreateVersionButton,
@@ -69,6 +72,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const [isCRLinkVisible] = useCRLink(docTypeId);
   const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
   const isRecord = (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
+  const isEB = document.documentType.group === "ENGINEERING_BUILD";
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
@@ -138,6 +142,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
         )}
         {document.referencedBy && (
           <ReferencedByContainer dataProp={document.referencedBy} />
+        )}
+        {isEB && parent && (
+          <BuildsContainer dataProp={parent} label="common.previous.build" />
+        )}
+        {isEB && children && (
+          <BuildsContainer dataProp={children} label="common.next.build" />
         )}
         {attachments && <Attachment
           isAttachmentEmpty={attachments.length < 1}

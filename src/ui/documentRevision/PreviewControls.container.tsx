@@ -53,6 +53,9 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   );
   const isRecord = (documentRevision.document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
   const isStatusInReview = documentRevision.status === DocumentRevisionStatus.InReview;
+  const isStatusReleased = documentRevision.status === DocumentRevisionStatus.Released;
+  const canCopy = (documentRevision.document.documentType.groupOptions || []).includes(
+    DOC_TYPE_GROUP_OPTION.CAN_BE_COPIED);
   const inlineApprovalFields = documentRevision?.formDocument?.formTemplate?.schema
   .filter((field) => (field.type === "inlineapproval" as string));
 
@@ -127,6 +130,27 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
     }
   };
 
+  const asyncCopyTo = useAsync();
+  const copyTo = useActionCreator(documentRevisionsActions.copyTo);
+  const copyToAction = () => {
+    asyncCopyTo.start(
+      copyTo,
+      documentRevision.id,
+      asyncCopyTo,
+    );
+  };
+
+
+  const renderCopyButton = () => (
+    <Button
+      color="secondary"
+      variant="outlined"
+      onClick={copyToAction}
+      data-cy="PreviewControlsContainer-copy-to" >
+      <Text translation="documentRevision.copy.to" />
+    </Button>
+  );
+
   const renderOutputButton = () => {
     const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
       && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
@@ -200,6 +224,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   return (
     <>
       {!isLastVersionObsolete() && renderCloneButton()}
+      {isStatusReleased && canCopy && renderCopyButton()}
       {renderOutputButton()}
       {renderNoAccessWarning()}
       {isRecord && isStatusInReview && !isInlineApproval && isUserDocumentOwner &&
