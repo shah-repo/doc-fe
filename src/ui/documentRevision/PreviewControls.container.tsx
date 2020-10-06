@@ -13,7 +13,7 @@ import AlertDialog from "../app/alert.dialog/AlertDialog";
 import { toastInfo } from "../components/notifications";
 import Text from "../components/Text";
 import DownloadHTML from "../document.revision/summary/download.html";
-import { documentNewVersionPath } from "../document.revision/utils/paths";
+import { documentNewVersionPath, documentVersionPath } from "../document.revision/utils/paths";
 import { useHandleCreateDoc } from "../documentType/list/CreateDocumentByType";
 import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
@@ -130,7 +130,13 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
     }
   };
 
-  const asyncCopyTo = useAsync();
+  const asyncCopyTo = useAsync({
+    onSuccess: (documentRevision: any) => {
+      history.push({
+        pathname: documentVersionPath(documentRevision.id, documentRevision.document.id),
+      });
+    },
+  });
   const copyTo = useActionCreator(documentRevisionsActions.copyTo);
   const copyToAction = () => {
     asyncCopyTo.start(

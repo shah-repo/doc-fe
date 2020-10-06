@@ -76,7 +76,7 @@ export const BuildsPresenter: React.FunctionComponent<Props> = ({
       {isArray(dataProp) && dataProp.map((docRev: DocumentRevision, index) => (
         renderBuild(docRev.id, docRev.name, docRev.document.id, docRev.document.docId, docRev.description)
       ))}
-      {isArray(dataProp) && (!dataProp.length || !dataProp) && buildsEmptyRenderer()}
+      {((isArray(dataProp) && !dataProp.length) || !dataProp) && buildsEmptyRenderer()}
     </Box>
   );
 };
