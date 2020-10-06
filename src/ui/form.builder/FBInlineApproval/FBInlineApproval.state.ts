@@ -26,7 +26,7 @@ export class FBInlineApprovalState {
   public groupsApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.groups);
   public rolesApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.approvalRoles);
   public approvalApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalBody>(FBEndpoint.Approvals);
-  public transitionApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null >();
+  public transitionApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>();
   public documentApi: FBRequest<Document, null> = new FBRequest();
 
   // MARK: @constructor
