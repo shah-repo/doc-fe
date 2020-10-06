@@ -51,6 +51,10 @@ export interface FBInlineApprovalBody {
   canRequest?: boolean;
 }
 
+export interface FBInlineApprovalTransitionBody {
+  password: string;
+}
+
 export interface FBInlineApprovalConstructor {
   approvals?: FBInlineApprovalBody[];
   isOwner?: boolean;

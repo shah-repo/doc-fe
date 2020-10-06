@@ -101,9 +101,7 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
                     label="form.builder.request.approve"
                     size="small"
                     style={{ fontSize: "11px" }}
-                    // onClick={() => approvalTransition?.("approve", approval.id)}
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    onClick={() => onApproveClick?.(approval.id!)}
+                    onClick={() => onApproveClick?.(approval.id || "")}
                   />
                 </Box>
               )}

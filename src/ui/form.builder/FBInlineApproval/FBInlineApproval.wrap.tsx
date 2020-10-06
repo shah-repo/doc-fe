@@ -1,12 +1,13 @@
-import { Box } from "@material-ui/core";
-import { difference, filter, find, isEmpty, isUndefined, map, some, sortBy, unionBy } from "lodash";
+import { difference, filter, find, isEmpty, isUndefined, map, pick, some, sortBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
-import { FB, FBAutocompleteAsyncOption, FBButton, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition, FBSubmitButton, FBTextField } from "..";
+import { FB, FBAutocompleteAsyncOption, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from "..";
 import { store } from "../../../state/store";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBDialogState } from "../FBDialog/FBDialog.state";
+import FBInlinePasswordForm from "../FBInlinePasswordForm/FBInlinePasswordForm";
+import { FBInlineApprovalTransitionBody } from "./FBInlineApproval.types";
 
 export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
   Component: React.FunctionComponent<T>,
@@ -59,32 +60,9 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         title: "form.builder.password.prompt",
         open: true,
         content: (
-          <>
-            <FBTextField
-              rules="required"
-              name="password"
-              inputProps={{
-                type: "password",
-              }}
-              label="form.builder.password"
-            />
-            <Box display="flex" mx={3}>
-              <FBButton
-                variant="outlined"
-                onClick={() => dialogState?.closeDialog()}
-                label="common.false"
-              >
-              </FBButton>
-              <FBSubmitButton
-                variant="contained"
-                label="common.true"
-                onClick={() => {
-                  approvalTransition?.("approve", approvalId);
-                  dialogState?.closeDialog();
-                }}
-              />
-            </Box>
-          </>
+          <FBInlinePasswordForm
+            {...{ approvalTransition, approvalId }}
+          />
         ),
       });
     };
@@ -208,7 +186,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     // MARK: @methods
     approvalTransition = (transition: FBInlineApprovalTransition, id?: string) => {
       if (!id) { return; }
-      inlineApprovalState?.approvalTransition(transition, id);
+      const passwordBody = pick(formState?.values, "password") as FBInlineApprovalTransitionBody;
+      inlineApprovalState?.approvalTransition(transition, id, passwordBody);
     };
 
     // MARK: @observer

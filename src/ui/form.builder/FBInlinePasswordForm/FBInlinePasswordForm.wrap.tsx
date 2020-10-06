@@ -4,13 +4,19 @@ import { FB } from "..";
 export const withFBInlinePasswordForm = (
   Component: React.FunctionComponent<any>,
 ) => {
-  const Comp = () => {
-    const { dialogState } = FB.useStores();
-    console.log(dialogState);
+  const Comp = ({
+    approvalTransition,
+    approvalId,
+  }) => {
+    const { dialogState, formState } = FB.useStores();
 
     return Component({
-      test: "test",
-    }); };
+      approvalTransition,
+      approvalId,
+      dialogState,
+      formState,
+    });
+  };
   Comp.displayName = "withFBInlinePasswordForm";
   return Comp;
 };
