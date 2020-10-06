@@ -85,7 +85,7 @@ export interface BuildsSummary {
   url: string;
   docId?: string;
   title: string;
-  revisionStage?: string;
+  revisionStage?: number;
 }
 
 export interface TrainingControlProps extends DataProps<TrainingRecord[]> {

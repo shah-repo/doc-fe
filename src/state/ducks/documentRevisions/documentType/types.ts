@@ -19,6 +19,21 @@ export type DocumentGroupType =
   "PART" |
   "ENGINEERING_BUILD";
 
+export enum DOC_GROUP_TYPE {
+  FORM = "FORM",
+  OTHER ="OTHER",
+  RECORD = "RECORD",
+  DAM = "DAM",
+  MPI = "MPI",
+  DYNAMIC_FORM = "DYNAMIC_FORM",
+  POAM = "POAM",
+  PO = "PO",
+  WORK_ORDER = "WORK_ORDER",
+  SUPPLIER = "SUPPLIER",
+  PART = "PART",
+  ENGINEERING_BUILD = "ENGINEERING_BUILD",
+}
+
 export type DocumentGroupOptionsType =
   "FORM" |
   "DAM" |

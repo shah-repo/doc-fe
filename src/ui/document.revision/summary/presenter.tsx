@@ -1,12 +1,12 @@
 import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
-import { isEmpty } from "lodash";
+import { flatten, isEmpty } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
-import { documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
+import { documentTypeSelectors, DOC_GROUP_TYPE, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
@@ -72,7 +72,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const [isCRLinkVisible] = useCRLink(docTypeId);
   const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
   const isRecord = (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
-  const isEB = document.documentType.group === "ENGINEERING_BUILD";
+  const isEB = document.documentType.group === DOC_GROUP_TYPE.ENGINEERING_BUILD;
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
@@ -144,7 +144,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           <ReferencedByContainer dataProp={document.referencedBy} />
         )}
         {isEB && parent && (
-          <BuildsContainer dataProp={parent} label="common.previous.build" />
+          <BuildsContainer dataProp={flatten([parent])} label="common.previous.build" />
         )}
         {isEB && children && (
           <BuildsContainer dataProp={children} label="common.next.build" />

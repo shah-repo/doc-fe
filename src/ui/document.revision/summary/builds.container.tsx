@@ -8,7 +8,7 @@ interface OwnProps {
   label: Translation;
   isDraft?: boolean;
 }
-export type Props = OwnProps & DataProps<DocumentRevision | DocumentRevision[]>;
+export type Props = OwnProps & DataProps<DocumentRevision[]>;
 
 export const BuildsContainer: React.FunctionComponent<Props> = ({
   dataProp,
