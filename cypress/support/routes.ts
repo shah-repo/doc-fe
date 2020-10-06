@@ -176,6 +176,9 @@ export const routes: ICyRoutes =   {
       method: "GET",
       url: "/api/v1/document_revisions*",
     },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+    },
   },
   ARPreview: {
     requestConfig: {

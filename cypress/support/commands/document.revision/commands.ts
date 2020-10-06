@@ -241,6 +241,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCall", () => {
     [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
+  cy.wait(500);
 });
 
 Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {

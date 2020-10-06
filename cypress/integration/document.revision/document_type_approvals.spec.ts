@@ -3,6 +3,7 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -468,7 +469,9 @@ context("Check DAM enforcement rules for document types", () => {
 
   context("Add New Role: Role One", () => {
     it("Open 'Add Role' dialog", () => {
-      cy.drAddAnotherRoleBtn();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GroupsGet, CyRoutes.EmployeesGet], () => {
+        cy.drAddAnotherRoleBtn();
+      });
     });
 
     it(`Fill role name: ${roleOne}`, () => {
