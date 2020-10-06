@@ -1,6 +1,10 @@
-import { Button, Dialog, Grid } from "@material-ui/core";
+import { Box, Button, Dialog, Grid } from "@material-ui/core";
+import { isEmpty } from "lodash";
 import React from "react";
+import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
+import { HeaderTableType } from "../../../state/ducks/documentRevisions/types";
 import Text from "../../components/Text";
+import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { DialogHandler } from "../../hooks/useDialog";
 import { TemplateOption } from "../form/types";
 import FormListContent from "./dialog/FormListContent";
@@ -11,17 +15,42 @@ interface Props {
   templateOptions: TemplateOption[];
   dialog: DialogHandler;
   handleCreateButton(): void;
+  headers: HeaderTableType[];
+  data: any[];
+  exportDialog: DialogHandler;
 }
 
 export const FormListPresenter: React.FunctionComponent<Props> = ({
   templateOptions,
   dialog,
+  exportDialog,
   handleCreateButton,
+  headers,
+  data,
 }) => {
   const classes = styles();
   return (
     <>
       <Grid item={true} xs={6} style={{ textAlign: "right", marginBottom: "16px" }}>
+        <Button
+          variant="outlined"
+          color="primary"
+          className={classes.exportListbutton}
+          style={{ marginRight: 5 }}
+          id="ListPresenter-export-list"
+          data-cy="document.revision.export.list"
+          onClick={exportDialog.open}
+          disabled={isEmpty(data)}
+        >
+          <Box marginRight={1}>
+            <ExportIcon className={classes.iconSvg} style={{ opacity: isEmpty(data) ? 0.5 : "initial" }}/>
+          </Box>
+          <Text translation="document.revision.export.list" />
+        </Button>
+        <ExportListDialog
+          {...{ headers, data  }}
+          dialog={exportDialog}
+        />
         <Button
           variant="contained"
           color="primary"

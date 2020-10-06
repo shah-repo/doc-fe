@@ -21,5 +21,12 @@ export const styles = makeStyles((theme: Theme) =>
       margin: "0px 16px 0px 0px",
       backgroundColor: theme.palette.common.white,
     },
+    exportListbutton: {
+      margin: "0px",
+      boxShadow: "none",
+    },
+    iconSvg: {
+      fill: theme.palette.primary.main,
+    },
   }),
 );

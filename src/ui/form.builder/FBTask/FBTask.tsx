@@ -35,7 +35,7 @@ const FBTask: React.FunctionComponent<FBTaskProps> = ({
         {...{ disabled }}
       />
       {!canAddTask &&
-      <FBText locale="form.builder.warning.tasks" boxProps={{ my: 4, color: Colors.errror_red }} />
+      <FBText locale="form.builder.warning.tasks" boxProps={{ my: 4, color: Colors.error_red }} />
       }
     </Box>
   </FBProvider>

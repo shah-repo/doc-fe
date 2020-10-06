@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { difference, filter, find, isEmpty, isUndefined, map, sortBy, unionBy } from "lodash";
+import { difference, filter, find, isEmpty, isUndefined, map, some, sortBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
@@ -234,7 +234,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       docVersion > 1 &&
       isEmpty(inlineApprovalState.getApprovals) &&
       Boolean(formState?.getFieldValue(name))
-    ) ? true
+    ) ? some(fieldApprovals, (approval) => approval.status === "APPROVED") || !fieldApprovals.length
       : !isUndefined(find(approvals, { status: "APPROVED" }));
 
     return Component({

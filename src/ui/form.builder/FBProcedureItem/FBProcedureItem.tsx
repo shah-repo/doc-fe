@@ -68,7 +68,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
               }}
             />
             {!isPreview && (
-              <Box color={Colors.errror_red}>
+              <Box color={Colors.error_red}>
                 <IconButton
                   color="inherit"
                   size="small"

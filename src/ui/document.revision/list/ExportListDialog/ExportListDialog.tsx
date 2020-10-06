@@ -1,6 +1,6 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, TextField, Typography } from "@material-ui/core";
-import React, { useEffect, useRef, useState } from "react";
-import { CSVLink } from "react-csv";
+import { ExportToCsv } from "export-to-csv";
+import React, { useEffect, useState } from "react";
 import { ReactComponent as ExportIcon } from "../../../../assets/images/icon_export_data.svg";
 import { HeaderTableType } from "../../../../state/ducks/documentRevisions/types";
 import Text from "../../../components/Text";
@@ -19,8 +19,20 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   data,
 }) => {
   const classes = styles();
-  const csvRef: any = useRef(null);
   const [fileName, saveFileName] = useState("");
+
+  const options = {
+    fieldSeparator: ",",
+    quoteStrings: "\"",
+    decimalSeparator: ".",
+    showLabels: true,
+    headers: headers.map((e) => e.label ),
+    filename: fileName === "" ? "DocumentList" : fileName,
+    useTextFile: false,
+    useBom: true,
+  };
+
+  const csvExporter = new ExportToCsv(options);
 
   useEffect(() => {
     if (dialog.isOpen) {
@@ -77,34 +89,19 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
             >
               <Text translation="common.cancel" />
             </Button>
-            <div
-              style = {{
-                flexGrow: 1,
+            <Button
+              type="submit"
+              variant="contained"
+              className={classes.submitButton}
+              id="ExportListDialog-downloadButton"
+              data-cy="ExportListDialog-downloadButton"
+              onClick={() => {
+                csvExporter.generateCsv(data);
+                dialog.close();
               }}
             >
-              <CSVLink
-                data={data}
-                headers={headers}
-                filename={fileName === "" ? "DocumentList.csv" : fileName + ".csv"}
-                style={{ textDecoration: "none", display: "flex" }}
-                asyncOnClick={true}
-                onClick={(event, done) => {
-                  dialog.close();
-                }}
-                ref={csvRef}
-              >
-                <Button
-                  type="submit"
-                  variant="contained"
-                  className={classes.submitButton}
-                  id="ExportListDialog-downloadButton"
-                  data-cy="ExportListDialog-downloadButton"
-                  onClick={() => csvRef.current.handleClick()}
-                >
-                  <Text translation="common.download" />
-                </Button>
-              </CSVLink>
-            </div>
+              <Text translation="common.download" />
+            </Button>
           </Box>
         </Dialog>
       }

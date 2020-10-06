@@ -1,7 +1,9 @@
 import { Box, List, Typography } from "@material-ui/core";
+import { orderBy } from "lodash";
 import React from "react";
 import { MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
+import { ApprovalStatus } from "../../../state/ducks/common";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -53,7 +55,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
-    audits.forEach((change: Audit, index) => {
+    orderBy(audits, ["field"]).forEach((change: Audit, index) => {
       change.groupKey = groupKey;
       if (change.field.includes("attachments")) {
         attachments.push(change);
@@ -68,7 +70,14 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
               <Text dataCy={`change-key-${groupKey}-${key}`}
-                message={`documentRevision.audit.${change.field}.${change.type}`}
+                message={
+                  change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned
+                    ? `documentRevision.audit.approvers.removed.by`
+                    : `documentRevision.audit.${change.field}.${change.type}`
+                }
+                values={{
+                  owner: change.owner?.user.name,
+                }}
               />
             </Box>
             <div className={classes.auditValue}>
