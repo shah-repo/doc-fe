@@ -130,7 +130,7 @@ context("Records flow", () => {
 
       it("Verify approvals field is automatically added", () => {
         SystemRequirement("REQ-0980");
-        cy.get("div[name=\"fb-approvals-\"]").should("exist");
+        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       context("Creates document and releases it", () => {
@@ -179,7 +179,7 @@ context("Records flow", () => {
 
       it("Verify approvals field is automatically added", () => {
         SystemRequirement("REQ-0980");
-        cy.get("div[name=\"fb-approvals-\"]").should("exist");
+        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       context("Creates document and releases it", () => {
