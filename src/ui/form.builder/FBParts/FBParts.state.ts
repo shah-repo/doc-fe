@@ -1,4 +1,4 @@
-import { unionBy } from "lodash";
+import { unionBy, values } from "lodash";
 import { computed, observable } from "mobx";
 import { FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from "..";
 import { FBProcedureState } from "../FBProcedure/FBProcedure.state";
@@ -13,9 +13,17 @@ export class FBPartsState extends FBProcedureState {
   @computed public get materials(): FBProcedureItemConfig[] | undefined {
     let materials: FBProcedureItemConfig[] = [];
     this.parts.forEach((value) => {
-      materials = unionBy(materials, value?.materials || [], "title");
+      materials = [...materials, ...value?.materials || []];
     });
-    return materials;
+    const materialValues = materials.reduce((result, obj) => {
+      const { title, unit } = obj;
+      result[`${title}-${unit}`] = {
+        ...obj,
+        quantity: (result[`${title}-${unit}`]?.quantity || 0) + obj.quantity,
+      };
+      return result;
+    }, {});
+    return values(materialValues);
   }
 
   @computed public get equipment(): FBProcedureItemConfig[] | undefined {
