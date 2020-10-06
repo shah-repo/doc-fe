@@ -1,17 +1,16 @@
 import React, { Fragment } from "react";
-import { toStartOfDay } from "../../common/utils/date";
+import { getFormattedDateString, MomentFormats } from "../../common/utils/date";
 import { Attachment } from "../../state/ducks/attachments";
 import { Audit } from "../../state/ducks/audit";
 import { Group } from "../../state/ducks/auth/types";
 import { ChangeRequest } from "../../state/ducks/changeRequest";
-import { Approval, Owner } from "../../state/ducks/common";
+import { Approval, ApprovalStatus, Owner } from "../../state/ducks/common";
 import { Employee } from "../../state/ducks/company";
 import { DocumentRevision, Reference } from "../../state/ducks/documentRevisions";
 import { DocumentType } from "../../state/ducks/documentRevisions/documentType";
 import { getAuditDefaultValue } from "../common/utils/audit";
 import Text from "../components/Text";
 import { Translation } from "../translations/types";
-import DateFormatter from "./Date";
 import DialogOpener from "./textDiff/DialogOpener";
 
 interface OwnProps {
@@ -56,7 +55,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       break;
     case "tasks.dueDate":
     case "effectiveDate":
-      returnValue = <DateFormatter value={toStartOfDay(audit.nextValue as string)} />;
+      returnValue = getFormattedDateString(audit.nextValue as string, MomentFormats.MonthDateYear);
       break;
     case "justifications.description":
     case "tasks.description":
@@ -74,6 +73,13 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       break;
     case "approvals.status":
     case "status":
+      if (audit.nextValue === ApprovalStatus.Abandoned) {
+      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
+       * TODO: should be replaced with abandoned approval's name.
+      */
+        returnValue = "";
+        break;
+      }
       returnValue = (
         <Text
           dataCy={dataCy}

@@ -48,6 +48,10 @@ export class FBData {
     return autocompleteOptions;
   }
 
+  public static get unitsOptions(): FBOption[] {
+    return unitsOptions;
+  }
+
   public static get productUnitsOptions(): FBOption[] {
     const notAllowedItems = ["hours", "days", "months"];
     return unitsOptions.filter((item: {[key: string]: string}) => !notAllowedItems.includes(item.value));

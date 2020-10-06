@@ -8,6 +8,7 @@ import { FBEditorValidationMode } from "../FBEditorValidation";
 import { FBValidatorConfigProps } from "../types/validation/validatorDialog";
 
 export type FBInputTransform = "upper" | "lower";
+export type FBVisibilityType = "visible" | "hidden";
 
 export type FBInputType =
   | "url"
@@ -58,7 +59,9 @@ export type FBInputType =
   | "task"
   | "approvers"
   | "blanktplform"
-  | "approvals";
+  | "approvals"
+  | "procedure"
+  | "parts";
 
 export type FBInputProps =
   & FBLabelProps
@@ -117,6 +120,11 @@ export type FBInputProps =
     dataCy?: string;
     withState?: boolean;
     bookmarked?: boolean;
+    /**
+     * @cfg {Bool} Whether the type added to the schema must be unique.
+     * El with a type marked as a uniqueSchemaItem can be added to the schema only once.
+     */
+    uniqueSchemaItem?: boolean;
   };
 
 export const OmitInputClones: FBInputType[] = [
@@ -128,4 +136,6 @@ export const OmitInputClones: FBInputType[] = [
   "blanktplform",
   "inlineapproval",
   "approvals",
+  "texteditor",
+  "procedure",
 ];

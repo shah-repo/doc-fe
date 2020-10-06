@@ -2,10 +2,9 @@ import { Box, IconButton } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import { get, isEmpty } from "lodash";
-import moment from "moment";
 import React from "react";
 import { FB, FBButton, FBFileUpload, FBMapWrapper, FBSchemaProps, FBTaskFieldProps, FBText } from "..";
-import { TIME_ZONE } from "../../../common/utils/date";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBTaskField } from "./FBTaskField.wrap";
 
@@ -87,17 +86,23 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
       <FBText
         boxProps={{ mr: 3 }}
         locale="form.builder.assigned.to"
-        suffix={`: ${task?.assigned.user?.name}`}
+        values={{
+          user: `: ${task?.assigned.user?.name}`,
+        }}
       />
       <FBText
         boxProps={{ mr: 3 }}
         locale="form.builder.due.by"
-        suffix={`: ${moment(task.dueDate).tz(TIME_ZONE, true).format("MMMM D, YYYY")}`}
+        values={{
+          date: `: ${getFormattedDateString(task.dueDate, MomentFormats.MonthDateYearAlt)}`,
+        }}
       />
       <FBText
         boxProps={{ mr: 3 }}
         locale="form.builder.status"
-        suffix={`: ${task.status || "DRAFT"}`}
+        values={{
+          status: `: ${task.status || "DRAFT"}`,
+        }}
       />
     </Box>
     {canBeDone && (

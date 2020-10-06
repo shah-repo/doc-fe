@@ -127,5 +127,13 @@
   "task": [
     "reviseDisabled",
     "copyableValue"
+  ],
+  "procedure": [
+    "reviseDisabled",
+    "copyableValue"
+  ],
+  "parts": [
+    "reviseDisabled",
+    "copyableValue"
   ]
 }

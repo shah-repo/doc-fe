@@ -5,7 +5,7 @@ import moment from "moment";
 import React from "react";
 import { FBAuditPOCalculation, FBAuditPOItem } from ".";
 import { FB, FBApprovalAuditProps, FBApprovalAuditState, FBAuditData, FBFieldName } from "..";
-import { TIME_ZONE } from "../../../common/utils/date";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBInputType } from "../FBInput";
 import FBStore from "../FBStore/FBStore";
@@ -62,6 +62,9 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         if (!underApprovalFields?.includes(fieldName) || isOmitted) {
           return "none";
         }
+        if (type === "checkboxgroup" || type === "autocomplete") {
+          return audit.groupId + "." + fieldName + "." + type + "." + label + "." + audit.nextValue;
+        }
         return audit.groupId + "." + fieldName + "." + type + "." + label;
       });
 
@@ -78,21 +81,21 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           if (nextValue === "[]") { return; } // checkgroup
           if (prevValue !== "undefined" && prevValue !== "") {
             if (moment(prevValue, moment.ISO_8601, true).isValid()) {
-              prevValue = moment(prevValue).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a");
+              prevValue = getFormattedDateString(prevValue, MomentFormats.MonthDateYearAlt);
             }
-            prevValue = " from " + prevValue;
+            prevValue = <span> from <b>{prevValue}</b></span>;
           } else {
             prevValue = "";
           }
 
           if (moment(nextValue, moment.ISO_8601, true).isValid()) {
-            nextValue = moment(nextValue).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a");
+            nextValue = getFormattedDateString(nextValue, MomentFormats.MonthDateYearAlt);
           }
-          return FB.stripTags("Changed " + label + prevValue + " to " + nextValue);
+          return (<span>Changed {label} {prevValue} to <b>{nextValue}</b></span>);
         }
 
         function isCheck() {
-          return "Changed " + label + " value to " + v[0].nextValue;
+          return (<span> Changed {label} value to  <b>{v[0].nextValue}</b> </span>);
         }
 
         function isPurchaseorder(): string {
@@ -139,9 +142,9 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           const { previousValue, nextValue } = v[0];
           if (previousValue === "undefined" && nextValue === "[]") { return; }
           if (nextValue === "undefined" || nextValue === "false") {
-            return "Unchecked in " + label + ": " + previousValue;
+            return (<span>Unchecked in {label}: {previousValue}</span>);
           }
-          return "Checked in " + label + ": " + nextValue;
+          return (<span>Checked in {label}: <b>{nextValue}</b></span>);
         }
 
         function isFileupload() {
@@ -212,7 +215,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           return desc;
         }
 
-        const description: Partial<Record<FBInputType | "default", () => any>> = {
+        const description: Partial<Record<FBInputType | "default", () => React.ReactNode>> = {
           purchaseorder: () => isPurchaseorder(),
           inlineapproval: () => "Approved",
           checkboxgroup: () => isCheckGroup(),
@@ -233,8 +236,8 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         if (!desc) { return; }
         return {
           ownerName: v[0].owner.user.name,
-          formattedTime: moment(v[0].timestamp).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a"),
-          description: (description[type || ""] || description.default)(),
+          formattedTime: getFormattedDateString(v[0].timestamp, MomentFormats.DateTimeAlt),
+          description: desc,
           timestamp: v[0].timestamp,
           type,
         };

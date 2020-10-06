@@ -27,8 +27,8 @@ export const useObsolete = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.OBSOLETE, "documentRevision.form.obsolete");
 export const useReviseDocument = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType.REVISE_BTN, "documentRevision.revise");
-export const useRevisionSelect = (documentTypeId = "", defaultLabel): UIConfig =>
-  useCustomization(documentTypeId, InputFieldType.REVISION_SELECTION, defaultLabel);
+export const useRevisionSelect = (documentTypeId = ""): UIConfig =>
+  useCustomization(documentTypeId, InputFieldType.REVISION_SELECTION, "document.revision.stage");
 export const useTraining = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.TRAINING);
 export const useTitle = (documentTypeId = ""): UIConfig =>

@@ -7,7 +7,7 @@ definitions:
   steps:
     - step: &COMMON
         image:
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe_test-1.2
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe_test-1.3
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
@@ -17,7 +17,7 @@ definitions:
 
     - step: &COMMON_BUILD
         image:
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-1.2
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-1.3
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
@@ -28,7 +28,7 @@ definitions:
 
     - step: &COMMON_DEPLOY
         image:
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-1.2
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-1.3
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
@@ -206,7 +206,7 @@ pipelines:
           - step: *BUILD_SANDBOX
       - step: *DEPLOY_SANDBOX
 
-    release/20.21:
+    release/20.22.1:
       - parallel:
           - step: *RUN_TESTS
           - step: *RUN_LINTER

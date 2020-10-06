@@ -38,5 +38,7 @@ export enum FBAutocompleteAsyncOption {
   WOParts = "15",
   DRAFTdocumentRevisions = "16",
   approvalRoles = "17",
-  documentRevisions = "18"
+  documentRevisions = "18",
+  materials = "19",
+  equipment = "20",
 }

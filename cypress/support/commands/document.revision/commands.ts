@@ -214,11 +214,15 @@ Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: stri
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
-  cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
-  cy.wait(2000);
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
+    cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+  });
+  cy.wait(500);
   cy.get("[aria-label=\"change date\"]").click().wait(500);
-  cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]").click().wait(500);
-  cy.get("#FormList-selectForm").type("Initial AR Form{enter}").wait(500);
+  cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]")
+    .click()
+    .wait(500);
+  cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {
@@ -280,18 +284,23 @@ Cypress.Commands.add("drChangeOwnerByAdmin", (params: { employee: string }) => {
   cy.get("[data-cy=\"changeOwner\"]").click();
   cy.get("#employee").click();
   cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
-  cy.get("[data-cy=\"changeOwner-submit\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+    cy.get("[data-cy=\"changeOwner-submit\"]").click();
+  });
 });
 
 Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
   cy.get("[data-cy=\"changeOwner\"]").click();
   cy.get("#employee").click();
   cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
-  cy.get("[data-cy=\"changeOwner-submit\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+    cy.get("[data-cy=\"changeOwner-submit\"]").click();
+  });
 });
 
 Cypress.Commands.add("drClickReviseDocument", () => {
   cy.get("[data-cy=\"updateRecord\"]").click();
+  cy.wait(3000);
 });
 
 Cypress.Commands.add("drClickTrainingRequired", () => {

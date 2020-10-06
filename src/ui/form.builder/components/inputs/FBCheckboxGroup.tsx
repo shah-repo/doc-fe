@@ -13,7 +13,6 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
   options,
   optionValueKey = "value",
   optionLabelKey = "text",
-  labelValues,
   form,
   ...props
 }) => (
@@ -37,7 +36,6 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
             label={
               <Text
                 message={get(option, optionLabelKey)}
-                values={labelValues}
               />
             }
           />

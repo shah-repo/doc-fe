@@ -39,6 +39,7 @@ export const RevisionStage: React.FunctionComponent<Props> = ({
             // if value is number, cheking radio buttons doesn't work correctly
             value={option.value.toString()}
             data-cy={option.text}
+            style={{ width: "fit-content" }}
           />)
         }
       </RadioGroup>

@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -41,8 +42,8 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
   context("[API] Prepare company", () => {
     it("[API] Creates company", (done: any) => {
       cy.authApiLogin({
-        email: "zoran.kovacevic+admin@codecons.com",
-        password: "Tester1!",
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         adminEmployeeLoginResponse = response;
         cy.cmpCreateCompany({
@@ -161,7 +162,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context(`Add New Role: ${roleOne}`, () => {
     it("Open 'Add Role' dialog", () => {
-      cy.drAddAnotherRoleBtn();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GroupsGet], () => {
+        cy.drAddAnotherRoleBtn();
+      });
     });
 
     it(`Fill role name: ${roleOne}`, () => {

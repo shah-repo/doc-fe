@@ -1,12 +1,10 @@
 import { Box, Button, Grid, WithStyles, withStyles } from "@material-ui/core";
-import { isString, set } from "lodash";
-import moment from "moment";
-import React, { useState } from "react";
+import { isEmpty, isString, set } from "lodash";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
-import { TIME_ZONE } from "../../../common/utils/date";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { stripTags } from "../../../common/utils/helpers";
-import { unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../common/utils/helpers";
@@ -18,7 +16,6 @@ import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
-import { generateVersionNumber } from "../../documentRevision/helpers";
 import useDialog from "../../hooks/useDialog";
 import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionQueryStatus, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
@@ -75,22 +72,17 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       },
     },
     {
-      key: "revision",
+      // changed to displayRevision because
+      // revision number calculation is now done on BE
+      key: "displayRevision" as keyof DocumentRevision,
       label: "common.revision",
       searchOptions: {
-        searchValueGetter: (value) => unmaskId(value),
-        defaultValue: tableCriteria.queryDict.revision,
+        defaultValue: tableCriteria.queryDict.displayRevision,
       },
       cellOptions: { align: "center" },
       cellHref: cellHrefRenderer,
       columnOptions: {
-        cellDataGetter: ({ rowData }) => generateVersionNumber(
-          rowData.revision,
-          rowData.revisionStage,
-          rowData.subRevision,
-          rowData.revisionChangeType,
-          rowData.status,
-        ),
+        cellDataGetter: ({ rowData }) => rowData.displayRevision,
         width: 80,
         flexShrink: 1,
       },
@@ -222,19 +214,20 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         }
         return acc;
       }, []); */
-
-    return customData;
+    // REQ - show data without RECORD documents
+    const dataWithoutRecords = customData.filter((e) => e.document.documentType.group !== "RECORD");
+    return dataWithoutRecords;
   };
 
   const data = tableData.map((e) => ({
     docId: e.document.docId,
-    revision: e.revision,
+    displayRevision: e.displayRevision,
     documentTitle: e.name,
     type: e.document.documentType.documentTypeAcronym,
     owner: e.owner.user.name,
     crId: e.changeRequest?.crId,
     status: e.status,
-    effectiveDate: e.effectiveDate ? moment(e.effectiveDate).tz(TIME_ZONE, true).format("M/D/YYYY") : "",
+    effectiveDate: e.effectiveDate ? getFormattedDateString(e.effectiveDate, MomentFormats.MonthDateYear) : "",
   }));
 
   const documentTypeSearchName = documentTypeOptions.find((e) =>
@@ -244,7 +237,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
 
   const headers = [
     { label: `DOC ID: ${tableCriteria.queryDict.docId  || ""}`, key: "docId" },
-    { label: `REVISION: ${tableCriteria.queryDict.revision  || ""}`, key: "revision" },
+    { label: `REVISION: ${tableCriteria.queryDict.displayRevision  || ""}`, key: "displayRevision" },
     { label: `DOCUMENT TITLE: ${tableCriteria.queryDict.name  || ""}`, key: "documentTitle" },
     { label: `TYPE: ${documentTypeSearchName || ""}`, key: "type" },
     { label: `OWNER: ${tableCriteria.queryDict.owner || ""}`, key: "owner" },
@@ -254,11 +247,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   ];
 
   const dialog = useDialog();
-  const [fileName, saveFileName] = useState("");
-  const handleOpen = () => {
-    dialog.open();
-    saveFileName("");
-  };
 
   return (
     <Grid container={true} className={classes.root}>
@@ -274,15 +262,16 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           style={{ marginRight: 5 }}
           id="ListPresenter-export-list"
           data-cy="document.revision.export.list"
-          onClick={handleOpen}
+          onClick={dialog.open}
+          disabled={isEmpty(data)}
         >
           <Box marginRight={1}>
-            <ExportIcon className={classes.iconSvg} />
+            <ExportIcon className={classes.iconSvg} style={{ opacity: isEmpty(data) ? 0.5 : "initial" }}/>
           </Box>
           <Text translation="document.revision.export.list" />
         </Button>
         <ExportListDialog
-          {...{ dialog, headers, data, fileName, saveFileName }}
+          {...{ dialog, headers, data  }}
         />
         <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
           <Button

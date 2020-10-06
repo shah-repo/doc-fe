@@ -74,7 +74,13 @@ export interface PDF {
   type: string;
 }
 
+export interface Precalc {
+  formDocId: string;
+  revision: number;
+}
+
 export interface DocumentRevision extends FBDocumentRevisionProps {
+  precalc: Precalc;
   id: string;
   docId?: string;
   typePrefix?: string;
@@ -85,6 +91,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   revisionChangeType: RevisionChangeType;
   name: string;
   description: string;
+  displayRevision: string;
   owner: Owner;
   attachments: Attachment[];
   status: DocumentRevisionStatus;
@@ -106,6 +113,8 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   outputRevision?: boolean;
   primaryAttachment?: Attachment;
   approvals?: Approval[];
+  updatedAt?: string;
+  schema?: FBSchemaProps[];
 }
 
 export const RevisionStageOptions = [
@@ -231,17 +240,6 @@ export interface FBOutputDocumentType {
 export interface HeaderTableType {
   label: string;
   key: string;
-}
-
-export interface DataTable {
-  docId: string;
-  revision: number;
-  documentTitle: string;
-  type: string | undefined;
-  owner: string;
-  crId: string | undefined;
-  status: string;
-  effectiveDate: string | undefined;
 }
 
 

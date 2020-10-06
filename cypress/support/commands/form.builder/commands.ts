@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
+
+
 /* eslint-disable @typescript-eslint/no-namespace */
 export { };
 
@@ -60,7 +62,12 @@ Cypress.Commands.add("fbAddLabelName", (params: { name: string }) => {
 
 Cypress.Commands.add("fbSelectApprovalMatrix", () => cy.get("[data-cy=\"form.builder.approvalMatrix\"]").click());
 Cypress.Commands.add("fbSelectTextField", () => cy.get("[data-cy=\"form.builder.textfield\"]").click());
-Cypress.Commands.add("fbSelectInlineApproval", () => cy.get("[data-cy=\"form.builder.inlineapproval\"]").click());
+
+Cypress.Commands.add("fbSelectInlineApproval", () => {
+  cy.wait(500);
+  cy.get("[data-cy=\"form.builder.inlineapproval\"]").click();
+});
+
 Cypress.Commands.add("fbSelectApprovals", () => cy.get("[data-cy=\"form.builder.approvals\"]").click());
 
 Cypress.Commands.add("fbSelectCustomControl", () => cy.get("[data-cy=\"fb-control-btn\"]").click());

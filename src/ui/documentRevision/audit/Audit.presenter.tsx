@@ -1,6 +1,9 @@
-import { Box, List } from "@material-ui/core";
+import { Box, List, Typography } from "@material-ui/core";
+import { orderBy } from "lodash";
 import React from "react";
+import { MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
+import { ApprovalStatus } from "../../../state/ducks/common";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -8,12 +11,18 @@ import { styles } from "./Audit.presenter.styles";
 
 interface OwnProps {
   audit: AuditGroupType;
+  statusLabel: string;
+  versionNumber: string;
+  isStatusVisible: boolean;
 }
 
 export type AuditPresenterProps = OwnProps;
 
 export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
+  statusLabel,
+  versionNumber,
+  isStatusVisible,
 }) => {
   const classes = styles();
 
@@ -32,7 +41,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer}>
             <div className={classes.owner} data-cy={`owner-${key}`}>{name}</div>
-            <DateTime value={change.timestamp} data-cy={`time-${key}`}/>
+            <DateTime value={change.timestamp} format={MomentFormats.DateTime} data-cy={`time-${key}`}/>
           </div>
           {renderChanges(audit[groupId], key)}
         </Box>
@@ -46,7 +55,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
-    audits.forEach((change: Audit, index) => {
+    orderBy(audits, ["field"]).forEach((change: Audit, index) => {
       change.groupKey = groupKey;
       if (change.field.includes("attachments")) {
         attachments.push(change);
@@ -61,7 +70,14 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
               <Text dataCy={`change-key-${groupKey}-${key}`}
-                message={`documentRevision.audit.${change.field}.${change.type}`}
+                message={
+                  change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned
+                    ? `documentRevision.audit.approvers.removed.by`
+                    : `documentRevision.audit.${change.field}.${change.type}`
+                }
+                values={{
+                  owner: change.owner?.user.name,
+                }}
               />
             </Box>
             <div className={classes.auditValue}>
@@ -120,7 +136,20 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
   return (
     <div className={classes.container}>
-      <List>{audit && renderAuditGroup()}</List>
+      {audit && <Box className={classes.revisionContainer}>
+        <Typography variant="subtitle1" className={classes.title}>
+          <Text message={"common.revision"} />
+          &nbsp;
+          {versionNumber}
+          {
+            isStatusVisible &&
+            <>
+              &nbsp; - <Text message={statusLabel} />
+            </>
+          }
+        </Typography>
+      </Box>}
+      <List className={classes.list}>{audit && renderAuditGroup()}</List>
     </div>
   );
 };

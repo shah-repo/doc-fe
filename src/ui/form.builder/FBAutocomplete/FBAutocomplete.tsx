@@ -10,6 +10,7 @@ import Text from "../../components/Text";
 import { withFBAutocomplete } from "./FBAutocomplete.wrap";
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
+  onInputChange,
   getOptionDisabled,
   getOptionLabel,
   renderOption,
@@ -65,6 +66,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                 <TextField
                   {...params}
                   {...!params.InputProps.startAdornment && { placeholder }}
+                  onChange={onInputChange}
                   fullWidth
                   variant="outlined"
                   InputProps={{
@@ -78,7 +80,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   }}
                 />
               </Box>
-              {refresh && !freeSolo && (
+              {refresh && (
                 <Box ml={-4} display="flex" alignItems="center">
                   <IconButton size="small" onClick={refresh} {...{ disabled }}>
                     <CachedIcon fontSize="small" />

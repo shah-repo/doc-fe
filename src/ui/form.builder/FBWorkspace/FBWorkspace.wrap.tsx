@@ -1,5 +1,4 @@
 
-import { isEqual, union, uniqBy } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
@@ -35,31 +34,23 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     document,
     changeRequest,
     autosave,
+    schema,
     ...props
   }: T) => {
-    let schema: FBSchemaProps[] = [];
+
+    let workspaceSchema: FBSchemaProps[] = [];
     workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
-      schema: props.schema,
+      schema,
       mode,
       autosave,
     });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
+    workspaceState && (workspaceState.document = document);
 
-    // predefined schema hack until we remove formik from rest of the project
-    if (workspaceState) {
-      const originType = document?.document?.documentType;
-      const workspaceType = workspaceState.document?.document?.documentType;
-      if (originType !== workspaceType) {
-        workspaceState.schema = props.schema || [];
-      } else {
-        const newScheme = uniqBy(union(workspaceState.schema, props.schema || []), "name");
-        if (!isEqual(workspaceState.schema, newScheme)) {
-          workspaceState.schema = newScheme;
-        }
-      }
-      workspaceState.document = document;
-    }
+    React.useEffect(() => {
+      workspaceState && (workspaceState.schema = schema);
+    }, [schema, workspaceState]);
 
     React.useEffect(() => {
       if (!workspaceState) { return; }
@@ -77,7 +68,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     useObserver(() => {
       isStarter = workspaceState?.isStarter;
       active = workspaceState?.active;
-      schema = workspaceState?.schema || [];
+      workspaceSchema = workspaceState?.schema || [];
       mode = workspaceState?.mode;
     });
 
@@ -85,7 +76,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       ...(props as T),
       isStarter,
       active,
-      schema,
+      schema: workspaceSchema,
       mode,
       dialogState,
       workspaceState,

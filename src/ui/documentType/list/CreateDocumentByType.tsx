@@ -1,3 +1,4 @@
+import { Box } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { Formik, FormikProps } from "formik";
@@ -5,13 +6,15 @@ import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
+import { DocumentRevision, documentRevisionsActions, HeaderTableType } from "../../../state/ducks/documentRevisions";
 import { DocumentType, documentTypeActions, DocumentTypeById, DocumentTypeByIdForm, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedId, documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
+import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
 import { useCreateDocumentByTypeButton } from "../../hooks/docCustomization/useCustomization";
@@ -32,6 +35,9 @@ interface Props {
   labelName: string;
   documentTypeId?: string;
   categoryName?: string;
+  headers: HeaderTableType[];
+  data: any[];
+  supportExportList: boolean;
 }
 
 let selectedTypeLabel = "";
@@ -92,12 +98,16 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   documentTypeId,
   categoryName,
   isByCategory,
+  headers,
+  data,
+  supportExportList,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();
   const classes = styles();
 
   const formDialog = useDialog();
   const multipleFormDialog = useDialog();
+  const exportDialog = useDialog();
 
   const getDocTypesByCategory = useActionCreator(documentTypeActions.getDocTypesByCategory);
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
@@ -226,6 +236,25 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   return (
     <>
       <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+        { supportExportList && <Button
+          variant="outlined"
+          color="primary"
+          className={classes.exportListbutton}
+          style={{ marginRight: 5 }}
+          id="ListPresenter-export-list"
+          data-cy="document.revision.export.list"
+          onClick={exportDialog.open}
+          disabled={isEmpty(data)}
+        >
+          <Box marginRight={1}>
+            <ExportIcon className={classes.iconSvg} style={{ opacity: isEmpty(data) ? 0.5 : "initial" }}/>
+          </Box>
+          <Text translation="document.revision.export.list" />
+        </Button>}
+        <ExportListDialog
+          {...{ headers, data  }}
+          dialog={exportDialog}
+        />
         <Button
           variant="contained"
           color="primary"

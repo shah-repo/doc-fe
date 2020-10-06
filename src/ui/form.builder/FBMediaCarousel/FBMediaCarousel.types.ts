@@ -1,4 +1,5 @@
 import { BoxProps, MobileStepperProps } from "@material-ui/core";
+import { FBVisibilityType } from "..";
 import { FBMediaAlbumProps } from "../FBMediaAlbum";
 import FBMediaCarouselState from "./FBMediaCarousel.state";
 
@@ -12,5 +13,5 @@ export type FBMediaCarouselProps =
   handleDelete?: () => any;
   mediaCarouselState?: FBMediaCarouselState;
   activeMediaPath?: string;
-  toolsVisibility?: "visible" | "hidden";
+  toolsVisibility?: FBVisibilityType;
 };

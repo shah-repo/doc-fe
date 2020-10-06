@@ -4,7 +4,7 @@ import { Dictionary, isEmpty } from "lodash";
 import moment from "moment";
 import * as React from "react";
 import * as generateUuid from "uuid/v4";
-import { toStartOfDay } from "../../../../common/utils/date";
+import { getStartOfDayDateString, TIME_ZONE } from "../../../../common/utils/date";
 import { Group } from "../../../../state/ducks/auth/types";
 import { Owner } from "../../../../state/ducks/common/types";
 import { AsyncState, AsyncStatus } from "../../../../state/types";
@@ -30,6 +30,8 @@ interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   owner: Owner;
   templateOptions: TemplateOption[];
   selectedInvalid: boolean;
+  isRecord: boolean;
+  isInlineApproval: boolean;
   setFormDocument: (value: string) => void;
   setDocumentType: (value: string) => void;
   setSelectedInvalid: (value: boolean) => void;
@@ -47,8 +49,9 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   setFormDocument,
   setDocumentType,
   setSelectedInvalid,
-  closeDialog,
   selectedInvalid,
+  isRecord,
+  isInlineApproval,
 }) => {
   const classes = styles();
 
@@ -118,16 +121,29 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
-      {isQms && <Approvers owner={owner} withoutCurrentUser={true} values={values}
-        documentTypeGroups={documentTypeGroups} />}
-      {isEmpty(values.approvals) && <DatePickerField
-        label="transition.action.effective.date"
-        name="effectiveDate"
-        size="mdw"
-        minDate={toStartOfDay(moment.utc().toISOString())}
-        value={toStartOfDay(moment.utc().toISOString())}
-        validate={validator(required)}
-      />}
+      {isQms && (
+        <Approvers
+          withoutCurrentUser={true}
+          shouldShowDAMCheck={!isInlineApproval || !isRecord}
+          {
+            ...{
+              owner,
+              values,
+              documentTypeGroups,
+            }
+          }
+        />
+      )}
+      {isEmpty(values.approvals) && (
+        <DatePickerField
+          label="transition.action.effective.date"
+          name="effectiveDate"
+          size="mdw"
+          minDate={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
+          value={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
+          validate={validator(required)}
+        />
+      )}
       {templateOptions.length > 1 && (
         <AutocompleteField
           name="formDocument"

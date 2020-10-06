@@ -29,6 +29,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     ...props
   }: T) => {
     let isComponentVisible = false;
+    let inlineApprovalExists = false;
 
     const { workspaceState, formState } = FB.useStores();
     const {
@@ -148,14 +149,18 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     // MARK: @observer
     useObserver(() => {
-      const inlineApprovalExists = document?.formDocument?.formTemplate?.schema
-      .some((e) => (e.type === "inlineapproval" as string));
+      inlineApprovalExists = Boolean(document?.formDocument?.formTemplate?.schema
+      .some((e) => (e.type === "inlineapproval" as string)));
 
       groups = approvalsState?.groups;
       approvals = approvalsState?.getApprovals;
 
+      const isRevisionAfterA = document?.revisionStage !== 1
+        && (document?.revision !== 1 || document?.subRevision !== 0);
+
       isComponentVisible = document?.status !== DocumentRevisionStatus.Voided
-        && (!inlineApprovalExists || document?.revisionStage !== 1);
+        && (!inlineApprovalExists || isRevisionAfterA);
+
 
       loading = (
         approvalsState.loading ||
@@ -186,6 +191,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       isIncluded,
       currentUser,
       ownerId,
+      inlineApprovalExists,
     });
   };
 

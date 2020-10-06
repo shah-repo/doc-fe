@@ -1,4 +1,4 @@
-import { difference, filter, find, isEmpty, isUndefined, map, sortBy, unionBy } from "lodash";
+import { difference, filter, find, isEmpty, isUndefined, map, some, sortBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
@@ -24,14 +24,13 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     ...props
   }: T) => {
 
-    let isComponentVisible = false;
-
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const {
       id,
       document,
       changeRequest,
+      isOutput,
       document: { version: docVersion = 1 } = {},
     } = workspaceState || {};
     const docApprovals = document?.approvals || changeRequest?.approvals;
@@ -177,15 +176,17 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       options = inlineApprovalState?.getOptions;
       approvals = inlineApprovalState?.getApprovals;
 
-      isComponentVisible = document?.status !== "VOIDED"
-        && document?.revisionStage === 1;
-
       loading = (
         inlineApprovalState?.approvalApi.loading ||
         inlineApprovalState?.transitionApi.loading ||
         inlineApprovalState?.documentApi.loading
       );
-      disabled = disabled || isUndefined(id) || loading;
+
+      disabled = loading
+        || !(isOutput && Boolean(id))
+        || document?.status === "RELEASED"
+        || document?.status === "VOIDED"
+        || document?.revisionStage !== 1;
     });
 
     // MARK: @final config
@@ -193,12 +194,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       docVersion > 1 &&
       isEmpty(inlineApprovalState.getApprovals) &&
       Boolean(formState?.getFieldValue(name))
-    ) ? true
+    ) ? some(fieldApprovals, (approval) => approval.status === "APPROVED") || !fieldApprovals.length
       : !isUndefined(find(approvals, { status: "APPROVED" }));
-
-    if (!isComponentVisible) {
-      return null;
-    }
 
     return Component({
       ...(props as T),

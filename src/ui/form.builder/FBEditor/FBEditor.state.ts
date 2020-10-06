@@ -53,6 +53,7 @@ export class FBEditorState {
     "task",
     "blanktplform",
     "approvals",
+    "procedure",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -75,7 +76,7 @@ export class FBEditorState {
     "approvals",
   ];
 
-  public static pickStepIndex: FBInputType[] = ["stepsection", "teststep"];
+  public static pickStepIndex: FBInputType[] = ["stepsection", "teststep", "procedure"];
 
   public static pickCustomHandler: FBInputType[] = ["teststep"];
 
@@ -119,6 +120,8 @@ export class FBEditorState {
     poApprovalMatrix: FBEditorLabel,
     task: FBEditorLabel,
     approvals: FBEditorLabel,
+    procedure: FBEditorEmpty,
+    parts: FBEditorEmpty,
   };
 
   @observable public mode?: FBEditorMode = "config";
