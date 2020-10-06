@@ -58,8 +58,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
     return (
-      Boolean(differenceBy(workspaceState?.schema || [],  documentSchema, "name").length) ||
-      ((documentRevision?.schema?.length || 0) > 0)
+      (documentRevision?.document?.documentType.group === "RECORD") &&
+      Boolean(differenceBy(workspaceState?.schema || [],  documentSchema, "name").length)
     );
   }
 
