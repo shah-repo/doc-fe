@@ -1,4 +1,6 @@
 import { createSelector } from "reselect";
+import Config from "../../../config";
+import { ThemeEnv } from "../../../ui/layout/theme/utils/types";
 import { ApplicationState } from "../../reducers";
 import { WHITE_LABEL_DEFAULT } from "./constants";
 
@@ -10,7 +12,7 @@ const isHelloSignIntegrationEnabled = (state: ApplicationState) =>
 
 const getWhiteLabeling = createSelector(
   getSelectedCompany,
-  (selectedCompany) => selectedCompany.whiteLabeling || WHITE_LABEL_DEFAULT,
+  (selectedCompany) => (selectedCompany.whiteLabeling || {})[Config.Theme as ThemeEnv] || WHITE_LABEL_DEFAULT,
 );
 
 const getCompanyMine = (state: ApplicationState) => state.company.companyMine;

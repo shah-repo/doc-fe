@@ -1,3 +1,4 @@
+import { ThemeEnv } from "../../../ui/layout/theme/utils/types";
 import { GroupTag } from "../auth/types";
 import { User } from "../common";
 import { DocumentType } from "../documentRevisions/documentType";
@@ -11,10 +12,17 @@ export interface WhiteLabelingColors {
   secondaryContrastText: string;
 }
 
-export interface WhiteLabeling {
+export interface WhiteLabelingEnv {
   logo: string;
   avatar: string;
   colors: WhiteLabelingColors;
+}
+
+export interface WhiteLabeling {
+  [ThemeEnv.DEV_THEME]?: WhiteLabelingEnv;
+  [ThemeEnv.DEMO_THEME]?: WhiteLabelingEnv;
+  [ThemeEnv.SANDBOX_THEME]?: WhiteLabelingEnv;
+  [ThemeEnv.PRODUCTION_THEME]?: WhiteLabelingEnv;
 }
 
 export interface Employee {
