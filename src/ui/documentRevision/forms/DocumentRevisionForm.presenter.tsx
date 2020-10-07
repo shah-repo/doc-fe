@@ -123,6 +123,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
   const isdocRevStatusDraft = documentRevision?.status === DocumentRevisionStatus.Draft;
   const isSubrevision = documentRevision?.subRevision as number > 0;
+  const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
 
   const hasOutput = useMemo(() => {
     const documentType = documentTypesById[values.document?.documentType?.id || ""];
@@ -193,7 +194,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         formDocumentStatus={documentRevision?.formDocument?.status}
         bannerPortal={bannerPortal}
       />
-      <FormHeader />
+      <FormHeader {...{ isCreateDocumentDisabled }} />
       <FormWrapper
         dirty={dirty}
         initialValues={initialValues}
@@ -221,11 +222,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         />
         <DocumentTypeSelect
           outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]}
-          type={type}
-          isdocRevStatusDraft={isdocRevStatusDraft}
-          savedocInfo={savedocInfo}
           isDisabled={isDisabledInput}
-          documentTypeId={documentTypeId}
+          {...{
+            type,
+            isdocRevStatusDraft,
+            savedocInfo,
+            documentTypeId,
+            setDisableCreateButton,
+          }}
         />
         <DocIdInput
           document={values.document}

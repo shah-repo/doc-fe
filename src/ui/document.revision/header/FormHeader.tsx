@@ -1,8 +1,12 @@
 import React from "react";
 import FormHeaderPresenter from "./FormHeader.presenter";
 
-const FormHeader: React.FunctionComponent = () => (
-  <FormHeaderPresenter/>
+interface Props {
+  isCreateDocumentDisabled: boolean;
+}
+
+const FormHeader: React.FunctionComponent<Props> = ({ isCreateDocumentDisabled }) => (
+  <FormHeaderPresenter {...{ isCreateDocumentDisabled }}/>
 );
 
 export default FormHeader;

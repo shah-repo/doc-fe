@@ -18,6 +18,9 @@ import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.contai
 import VoidButton from "./VoidButton";
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
+  // isCreateDocumentDisabled is flag for temporary disabling
+  // of create button until correct doc id is generated
+  const { isCreateDocumentDisabled } = props;
   const {
     documentRevision,
     values,
@@ -121,6 +124,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         onClick={onFormClick}
         id="DocumentRevisionForm-submit"
         data-cy={"DocumentRevisionForm-submit"}
+        disabled={isCreateDocumentDisabled}
       />
       {
         isRecord && (!isInlineApproval || revisionStage !== 1) && (

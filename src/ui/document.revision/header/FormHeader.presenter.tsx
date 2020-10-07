@@ -7,7 +7,11 @@ import FormProgress from "../../components/forms/FormProgress";
 import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.presenter";
 import DocRevActions from "../../documentRevision/forms/presenters/Actions";
 
-const FormHeaderPresenter: React.FunctionComponent = () => {
+interface Props {
+  isCreateDocumentDisabled: boolean;
+}
+
+const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentDisabled }) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const  { documentRevision, isDisabled, asyncState, type } = React.useContext(FormHeaderContext)!;
   return (
@@ -29,7 +33,7 @@ const FormHeaderPresenter: React.FunctionComponent = () => {
       />}
       <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12}>
         <Grid container={true} alignItems="flex-end" justify="flex-end">
-          <DocRevActions/>
+          <DocRevActions {...{ isCreateDocumentDisabled }}/>
         </Grid>
       </Grid>
       <FormMessage asyncState={asyncState} />
