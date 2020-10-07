@@ -61,8 +61,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     onEditClick = (id: string) => {
       const itemToEdit = procedureState?.[type]?.find((item) => item.id === id);
       if (!itemToEdit) { return; }
-      const { title, unit, quantity } = itemToEdit;
-      formState?.setValues({ ...{ title, unit, quantity } });
+      formState?.setValues({ ...itemToEdit });
       dialogState?.config({
         open: true,
         title: FBProcedureItemActionLocale[`${type}Edit`],
