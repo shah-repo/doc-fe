@@ -9,7 +9,7 @@ import { FBProvider } from "../FBProvider";
 import { withFBProcedure } from "./FBProcedure.wrap";
 
 const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
-  handleClone,
+  handleAdd,
   removeStep,
   procedureState,
   isPreview,
@@ -51,7 +51,14 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
               label="form.builder.clone.step"
               style={{ textTransform: "none", margin: 0 }}
               size="small"
-              onClick={handleClone}
+              onClick={() => handleAdd?.(true)}
+              {...{ disabled }}
+            />
+            <FBButton
+              label="form.builder.add.step"
+              style={{ textTransform: "none", margin: 0, marginRight: 4 }}
+              size="small"
+              onClick={() => handleAdd?.()}
               {...{ disabled }}
             />
           </Box>

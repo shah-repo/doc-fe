@@ -6,7 +6,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    handleClone,
+    handleAdd,
     removeStep,
     procedureState,
     isPreview,
@@ -39,14 +39,16 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     // MARK: @helpers
 
     // MARK: @methods
-    handleClone = () => {
-      const cloneName = FB.uniqid;
-      const itemClone = {
+    handleAdd = (isClone?: boolean) => {
+      const newName = FB.uniqid;
+      const newItem = {
         ...workspaceState?.getSchemaItemAt(index),
-        name: cloneName,
+        name: newName,
       };
-      formState?.setFieldValue(cloneName, formState.getFieldValue(name));
-      workspaceState?.setSchemaItemAt(itemClone, index + 1);
+      if (isClone) {
+        formState?.setFieldValue(newName, formState.getFieldValue(name));
+      }
+      workspaceState?.setSchemaItemAt(newItem, index + 1);
     };
 
     removeStep = () => {
@@ -59,7 +61,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
 
     return Component({
       ...(props as T),
-      handleClone,
+      handleAdd,
       removeStep,
       procedureState,
       isPreview,
