@@ -36,14 +36,6 @@ context("Approval request form scenario", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
-            documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
-                group: "OTHER",
-                isQms: true,
-              },
-            ],
           }, sessionId,
         }).then((response) => {
           createdCompany = response;

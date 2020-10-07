@@ -32,7 +32,7 @@ context("Document Attachment Flow", () => {
             documentTypes: [
               {
                 documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
+                documentTypeAcronym: "CP-",
                 group: "OTHER",
                 isQms: true,
               },
@@ -289,7 +289,7 @@ context("Document Attachment Flow", () => {
 
     it("Add created document revision", () => {
       cy.arClickAddDocument().wait(500);
-      cy.arChoseSpecificProposedDocument({ name: "CP00004" });
+      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
@@ -308,8 +308,8 @@ context("Document Attachment Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it("Click on specific document 'CP00004'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP00004" });
+    it("Click on specific document 'CP-00004'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00004" });
     });
 
     it("Download all attachments with redline document in Pending Change state", () => {
@@ -338,8 +338,8 @@ context("Document Attachment Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it("Click on specific document 'CP00004'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP00004" });
+    it("Click on specific document 'CP-00004'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00004" });
     });
 
     it("Download all attachments with redline document in 'In Review' state", () => {
@@ -369,8 +369,8 @@ context("Document Attachment Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it("Click on specific document 'CP00004'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP00004" });
+    it("Click on specific document 'CP-00004'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00004" });
     });
 
     // should use only download redline attachment not download all...

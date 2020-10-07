@@ -197,7 +197,7 @@ Cypress.Commands.add("grpCheckIfGroupTypeExists", (params: { type: string }) => 
   cy.get("#menu-isOfficial>div>ul>li>span").should("contain.text", params.type);
   cy.get("#menu-isOfficial>div>ul>li>span").contains(params.type).click();
 });
-Cypress.Commands.add("grpClickAddGroup", () => cy.get("[data-cy=\"Group-openDialog\"]").click());
+Cypress.Commands.add("grpClickAddGroup", () => cy.get("button[data-cy=\"Group-openDialog\"]").click());
 
 Cypress.Commands.add("grpSelectOfficial", () => {
   cy.get("#Group-officialOption").click();
