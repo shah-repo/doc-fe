@@ -23,9 +23,9 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     multiple,
     name,
     value,
-    freeSolo,
     ...props
   }: T) => {
+
     const { formState } = FB.useStores();
     autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, optionId);
     const {
@@ -60,10 +60,6 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
         options = selectedOptions
           ? autocompleteAsyncState?.sliceValue(selectedOptions)
           : slicedOptions;
-        /*         const valueExistsInOptions = map(options, (option) => option[optionValueKey]).includes(formValue);
-        if (freeSolo && !valueExistsInOptions) {
-          options?.push(formValue);
-        } */
       }
     });
 
