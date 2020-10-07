@@ -1,6 +1,6 @@
 import { useFormikContext } from "formik";
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { DocumentRevision, FBOutputDocumentType } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType, documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -11,6 +11,8 @@ import { filterSecurityGroupsForQms } from "../../../documentType/list/helpers";
 import { FB, FBSchemaProps } from "../../../form.builder";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
 import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
+import useActionCreator from "../../../hooks/useActionCreator";
+import useAsync from "../../../hooks/useAsync";
 import { DocumentCloneType } from "../../Clone.container";
 import { getFBSchemeByDocType } from "../../helpers";
 
@@ -24,6 +26,7 @@ interface Props {
   }>>;
   isDisabled: boolean;
   documentTypeId?: string;
+  setDisableCreateButton: (value: boolean) => void;
 }
 
 const DocumentTypeSelect: React.FunctionComponent<Props> = ({
@@ -33,15 +36,26 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   savedocInfo,
   isDisabled = false,
   documentTypeId,
+  setDisableCreateButton,
 }) => {
   const [isVisible, label, validators] = useDocumentTypeSelect(documentTypeId);
 
   const { workspaceState } = FB.useStores();
   const formik = useFormikContext();
-  const dispatch = useDispatch();
 
-  const loadDocumentProposedId = (documentTypeId: string) =>
-    dispatch(documentsActions.loadDocumentProposedId(documentTypeId));
+  const loadProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
+  const asyncDocumentProposedId = useAsync({
+    onSuccess: () => {
+      setDisableCreateButton(false);
+    },
+
+  });
+  const loadDocumentProposedId = (id: string) => {
+    // Disable create button sets the flag for temporary disabling
+    // of create button until correct doc id is generated
+    setDisableCreateButton(true);
+    asyncDocumentProposedId.start(loadProposedIdAction, id, asyncDocumentProposedId);
+  };
 
   const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeFormOptions);
