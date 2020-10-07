@@ -34,6 +34,8 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
     id: faker.random.uuid(),
     docId: faker.random.alphaNumeric(),
     referencedBy: [],
+    children: [],
+    parent: {} as DocumentRevision,
     documentType: {
       id: faker.random.uuid(),
       documentTypeAcronym: faker.random.word(),
