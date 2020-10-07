@@ -79,7 +79,7 @@ context("Approval request form", () => {
             attachments: [],
             description: "<p>Test Doc Rev Description</p>",
             document: {
-              docId: "CS-00004",
+              docId: "CP-00004",
               documentType: {
                 id: componentSpecificationDocumentType[0].id,
               },
@@ -120,7 +120,7 @@ context("Approval request form", () => {
             attachments: [],
             description: "<p>Test Doc Rev Description 2 </p>",
             document: {
-              docId: "CS-00005",
+              docId: "CP-00005",
               documentType: {
                 id: componentSpecificationDocumentType[0].id,
               },
@@ -225,7 +225,7 @@ context("Approval request form", () => {
 
     it("Add created document revision", () => {
       cy.arClickAddDocument().wait(500);
-      cy.arChoseSpecificProposedDocument({ name: "CS-00004" });
+      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
@@ -349,7 +349,7 @@ context("Approval request form", () => {
 
     it("Add created document revision", () => {
       cy.arClickAddDocument().wait(500);
-      cy.arChoseSpecificProposedDocument({ name: "CS-00005" });
+      cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();

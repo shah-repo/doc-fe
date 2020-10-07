@@ -6,7 +6,7 @@ export type FBProcedureProps =
 & Pick<FBProviderProps, "procedureState">
 & {
   removeStep?: () => void;
-  handleClone?: () => void;
+  handleAdd?: (isClone?: boolean) => void;
   isOutput?: boolean;
   isPreview?: boolean;
 };
