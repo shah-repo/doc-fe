@@ -5,7 +5,13 @@ import { Company } from "../../../state/ducks/company";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 
 
-export type FBWorkspaceMode = "none" | "design" | "form" | "formPreview" | "preview";
+export type FBWorkspaceMode =
+| "none"
+| "design"
+| "form"
+| "formPreview"
+| "preview"
+| "formDesign";
 
 export type FBWorkspaceProps =
 & Pick<FBFormProps, "initialValues" | "children">
