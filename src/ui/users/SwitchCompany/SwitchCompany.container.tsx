@@ -36,7 +36,7 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
       (employee: Employee) => {
         const { company } = employee;
         const whiteLabeling =
-          (company.whiteLabeling || {})[Config.Theme as ThemeEnv] as WhiteLabelingEnv;
+          ((company.whiteLabeling || {})[Config.Theme as ThemeEnv] || {}) as WhiteLabelingEnv;
 
         return (
           <button
