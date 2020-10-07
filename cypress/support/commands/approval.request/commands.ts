@@ -107,7 +107,9 @@ Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
 });
 
 Cypress.Commands.add("arClickAddDocument", () => {
-  cy.get("[data-cy=\"fb.add.document\"]").click().wait(500);
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[data-cy=\"fb.add.document\"]").click();
+  });
 });
 
 Cypress.Commands.add("arCloseAR", () => {
