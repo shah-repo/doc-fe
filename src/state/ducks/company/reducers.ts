@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import { setNavigation } from "../../../ui/app/NavigationLocalStorageHelpers";
+import { ThemeEnv } from "../../../ui/layout/theme/utils/types";
 import { LOGOUT_USER } from "../auth/constants";
 import { LogoutUserAction } from "../auth/types";
 import { DEFAULT_NAVIGATION_ITEMS, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM, WHITE_LABEL_DEFAULT } from "./constants";
@@ -11,7 +12,12 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   numOfRevStages: 1,
   users: [],
   documentTypes: [],
-  whiteLabeling: WHITE_LABEL_DEFAULT,
+  whiteLabeling: {
+    [ThemeEnv.DEV_THEME]: WHITE_LABEL_DEFAULT,
+    [ThemeEnv.DEMO_THEME]: WHITE_LABEL_DEFAULT,
+    [ThemeEnv.SANDBOX_THEME]: WHITE_LABEL_DEFAULT,
+    [ThemeEnv.PRODUCTION_THEME]: WHITE_LABEL_DEFAULT,
+  },
   slackIntegrationEnabled: false,
   helloSignAppId: "",
   teamId: "",
