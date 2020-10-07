@@ -58,7 +58,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     }
 
     function schemaRenderer(): React.ReactNode | React.ReactNode[] | undefined {
-      if (workspaceMode === "design") {
+      if (workspaceMode === "design" || workspaceMode === "formDesign") {
         return <FBSortable />;
       }
       return map(schema, (schemaItem, index) => {

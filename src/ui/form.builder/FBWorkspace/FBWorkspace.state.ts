@@ -72,7 +72,7 @@ export class FBWorkspaceState extends FBSchemaState {
   }
 
   @computed public get isStarter() {
-    return (this.mode === "design" && size(this.schema) === 0);
+    return this.isMode(["design", "formDesign"]) && !size(this.schema);
   }
 
   // TO BE REMOVED!!
