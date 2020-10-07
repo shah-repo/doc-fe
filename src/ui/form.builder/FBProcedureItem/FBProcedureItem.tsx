@@ -1,5 +1,6 @@
 import { Box, IconButton } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import EditIcon from "@material-ui/icons/Edit";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -9,6 +10,7 @@ import { withFBProcedureItem } from "./FBProcedureItem.wrap";
 
 const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   onClick,
+  onEditClick,
   handleRemove,
   getItem,
   dialogState,
@@ -68,16 +70,28 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
               }}
             />
             {!isPreview && (
-              <Box color={Colors.error_red}>
-                <IconButton
-                  color="inherit"
-                  size="small"
-                  onClick={() => handleRemove?.(item.id)}
-                  {...{ disabled }}
-                >
-                  <RemoveCircleIcon fontSize="small" />
-                </IconButton>
-              </Box>
+              <>
+                <Box color={Colors.gray}>
+                  <IconButton
+                    color="inherit"
+                    size="small"
+                    onClick={() => onEditClick?.(item.id)}
+                    {...{ disabled }}
+                  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+                <Box color={Colors.error_red}>
+                  <IconButton
+                    color="inherit"
+                    size="small"
+                    onClick={() => handleRemove?.(item.id)}
+                    {...{ disabled }}
+                  >
+                    <RemoveCircleIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+              </>
             )}
           </Box>
         )}
