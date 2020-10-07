@@ -1,4 +1,5 @@
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -183,7 +184,9 @@ context("PO test", () => {
 
     it("Uploads text.docx", () => {
       // SystemRequirement("REQ-1350");
-      cy.atchUploadAttachment({ fileName: "test.docx" });
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.atchUploadAttachment({ fileName: "test.docx" });
+      });
     });
 
     it("Click on 'Add item' button", () => {

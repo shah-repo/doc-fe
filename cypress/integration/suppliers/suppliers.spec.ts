@@ -28,14 +28,6 @@ context("Create company via API and create Suppliers document", () => {
           remoteValidatorBundleName: "default",
           slackIntegrationEnabled: false,
           users: [USERS[2], USERS[3], USERS[4]],
-          documentTypes: [
-            {
-              documentTypeName: "Clinical Protocol",
-              documentTypeAcronym: "CP",
-              group: "OTHER",
-              isQms: true,
-            },
-          ],
           acctCodes: ["code 1"],
           addresses: ["Address 1"],
         }, sessionId: loginResponse.sessionId as unknown as string,

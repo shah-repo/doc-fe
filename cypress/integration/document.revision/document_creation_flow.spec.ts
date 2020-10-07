@@ -31,7 +31,7 @@ context("Document Creation Flow", () => {
             documentTypes: [
               {
                 documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
+                documentTypeAcronym: "CP-",
                 group: "OTHER",
                 isQms: true,
               },
@@ -349,8 +349,8 @@ context("Document Creation Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it("Click on specific document 'CP00003'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP00003" });
+    it("Click on specific document 'CP-00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00003" });
     });
 
     it("Verify owner", () => {
@@ -372,8 +372,8 @@ context("Document Creation Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it("Click on specific document 'CP00003'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP00003" });
+    it("Click on specific document 'CP-00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00003" });
     });
 
     it("Change owner of document by admin", () => {
@@ -396,8 +396,8 @@ context("Document Creation Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it("Click on specific document 'CP00003'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP00003" });
+    it("Click on specific document 'CP-00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00003" });
     });
 
     it("Approves and releases document", () => {

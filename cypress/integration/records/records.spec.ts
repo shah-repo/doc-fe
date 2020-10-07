@@ -50,12 +50,6 @@ context("Records flow", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
-              {
                 documentTypeName: "Record Document",
                 documentTypeAcronym: "RD-",
                 category: "Record",
@@ -130,7 +124,7 @@ context("Records flow", () => {
 
       it("Verify approvals field is automatically added", () => {
         SystemRequirement("REQ-0980");
-        cy.get("div[name=\"fb-approvals-\"]").should("exist");
+        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       context("Creates document and releases it", () => {
@@ -179,7 +173,7 @@ context("Records flow", () => {
 
       it("Verify approvals field is automatically added", () => {
         SystemRequirement("REQ-0980");
-        cy.get("div[name=\"fb-approvals-\"]").should("exist");
+        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       context("Creates document and releases it", () => {

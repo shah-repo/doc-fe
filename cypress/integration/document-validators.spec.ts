@@ -254,7 +254,7 @@ context("Validators tests", () => {
 
   context("Add 'Required' validation on 'Text Field'", () => {
     it("open add field dialogue", () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").click();
+      cy.fbAddNewField();
     });
 
     it("create 'Text Field'", () => {
@@ -282,7 +282,7 @@ context("Validators tests", () => {
   context("Add 'Required If' validation on 'Text Field'", () => {
 
     it("open add field dialogue", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").click({ force: true });
+      cy.fbClickAddNewHiddenBtn();
     });
 
     it("create 'Text Field'", () => {
@@ -389,7 +389,7 @@ context("Validators tests", () => {
   context("Add 'Required Without' validation on 'Text Field'", () => {
 
     it("open add field dialogue", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+      cy.get("button[data-cy=\"fb-control-btn\"]").last().click({ force: true });
     });
 
     it("create 'Text Field'", () => {

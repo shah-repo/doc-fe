@@ -732,6 +732,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Approve document in review", () => {
     it(`approve document`, () => {
+      cy.wait(1000);
       cy.get("#root").contains("Approve").click();
     });
 

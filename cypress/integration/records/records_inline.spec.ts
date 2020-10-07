@@ -49,12 +49,6 @@ context("Record inline Flow", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
-              {
                 documentTypeName: "Legal Record",
                 documentTypeAcronym: "LR-",
                 group: "RECORD",
@@ -131,7 +125,7 @@ context("Record inline Flow", () => {
 
       it("Verify approvals field is automatically added", () => {
         SystemRequirement("REQ-0980");
-        cy.get("div[name=\"fb-approvals-\"]").should("exist");
+        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Add textfield", () => {
