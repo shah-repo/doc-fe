@@ -30,7 +30,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
     >
       <FBText
         {...{ loading }}
-        boxProps={{ flexGrow: 1, pl: 2, alignItems: "center", display: "flex" }}
+        boxProps={{ flexGrow: 1, pl: 2, alignItems: "center", display: "flex", py: isPreview ? 1.5 : 0 }}
         locale={FBProcedureItemLocale[type]}
       />
       {!isPreview && (
