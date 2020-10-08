@@ -2,9 +2,9 @@ import { Box } from "@material-ui/core";
 import React from "react";
 import { FBButton, FBSubmitButton, FBTextField } from "..";
 import FBForm from "../components/form/FBForm";
-import { withFBInlinePasswordForm } from "./FBInlinePasswordForm.wrap";
+import { withFBApprovalPasswordForm } from "./FBApprovalPasswordForm.wrap";
 
-const FBInlinePasswordForm: React.FunctionComponent<any> = ({
+const FBApprovalPasswordForm: React.FunctionComponent<any> = ({
   dialogState,
   formState,
   approvalTransition,
@@ -20,7 +20,7 @@ const FBInlinePasswordForm: React.FunctionComponent<any> = ({
       }}
       label="form.builder.password"
     />
-    <Box display="flex" mx={3}>
+    <Box display="flex" justifyContent="center" mx={3}>
       <FBButton
         variant="outlined"
         onClick={() => dialogState?.closeDialog()}
@@ -39,4 +39,4 @@ const FBInlinePasswordForm: React.FunctionComponent<any> = ({
   </FBForm>
 );
 
-export default withFBInlinePasswordForm(FBInlinePasswordForm);
+export default withFBApprovalPasswordForm(FBApprovalPasswordForm);

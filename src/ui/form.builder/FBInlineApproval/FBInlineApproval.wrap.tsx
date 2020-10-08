@@ -4,9 +4,9 @@ import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
 import { FB, FBAutocompleteAsyncOption, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from "..";
 import { store } from "../../../state/store";
+import FBApprovalPasswordForm from "../FBApprovalPasswordForm/FBApprovalPasswordForm";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBDialogState } from "../FBDialog/FBDialog.state";
-import FBInlinePasswordForm from "../FBInlinePasswordForm/FBInlinePasswordForm";
 import { FBInlineApprovalTransitionBody } from "./FBInlineApproval.types";
 
 export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
@@ -60,7 +60,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         title: "form.builder.password.prompt",
         open: true,
         content: (
-          <FBInlinePasswordForm
+          <FBApprovalPasswordForm
             {...{ approvalTransition, approvalId }}
           />
         ),

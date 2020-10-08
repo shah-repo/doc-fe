@@ -1,7 +1,7 @@
 import React from "react";
 import { FB } from "..";
 
-export const withFBInlinePasswordForm = (
+export const withFBApprovalPasswordForm = (
   Component: React.FunctionComponent<any>,
 ) => {
   const Comp = ({
@@ -17,6 +17,6 @@ export const withFBInlinePasswordForm = (
       formState,
     });
   };
-  Comp.displayName = "withFBInlinePasswordForm";
+  Comp.displayName = "withFBApprovalPasswordForm";
   return Comp;
 };
