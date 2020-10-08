@@ -60,7 +60,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       );
       if (isUnique) { return; }
 
-      if (isOutput) {
+      if (isOutput && !workspaceState?.isMode("formDesign")) {
         handleAddOutput(formValues);
         return;
       }

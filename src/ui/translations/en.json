@@ -645,6 +645,7 @@
   "form.builder.approved": "Approved",
   "form.builder.approve": "Approve",
   "form.builder.blocking": "Blocking",
+  "form.builder.copyable.value": "Copyable Value",
   "form.builder.approvers": "Approvers",
   "form.builder.requestapproval": "Request Approval",
   "form.builder.set.approvers": "Set Approvers",
