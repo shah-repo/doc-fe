@@ -231,23 +231,28 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     />
   );
 
-  const data = tableData.map((e) => {
-    if (exportDialog.isOpen) {
-      const h = headers.map((column) => {
-        if (moment(get(e, column.key, ""), moment.ISO_8601, true).isValid()) {
-          return {
-            [column.key]: getFormattedDateString(get(e, column.key, ""), MomentFormats.MonthDateYear) || "",
-          };
-        }
-        return { [column.key]: get(e, column.key, "") };
+  const renderTable = () => {
+    if (!isEmpty(tableData)) {
+      return tableData.map((e) => {
+        const h = headers.map((column) => {
+          if (moment(get(e, column.key, ""), moment.ISO_8601, true).isValid()) {
+            return {
+              [column.key]: getFormattedDateString(get(e, column.key, ""), MomentFormats.MonthDateYear) || "",
+            };
+          }
+          return { [column.key]: get(e, column.key, "") };
+        });
+        const rows = h.reduce(function(result, current) {
+          return Object.assign(result, current);
+        }, {});
+        return rows;
       });
-      const rows = h.reduce(function(result, current) {
-        return Object.assign(result, current);
-      }, {});
-      return rows;
     }
-    return null;
-  });
+    const defaultEmptyColumn = headers.map((column) => ({ [column.key]: "" }));
+    return [Object.assign({}, ...defaultEmptyColumn)];
+  };
+
+  const data = exportDialog.isOpen ? renderTable() : [];
 
   if (!isVisible) {
     return null;
@@ -264,10 +269,9 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
           id="ListPresenter-export-list"
           data-cy="document.revision.export.list"
           onClick={exportDialog.open}
-          disabled={isEmpty(tableData)}
         >
           <Box marginRight={1}>
-            <ExportIcon className={classes.iconSvg} style={{ opacity: isEmpty(tableData) ? 0.5 : "initial" }}/>
+            <ExportIcon className={classes.iconSvg} />
           </Box>
           <Text translation="document.revision.export.list" />
         </Button>}
