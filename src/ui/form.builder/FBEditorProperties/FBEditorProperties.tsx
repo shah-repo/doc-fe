@@ -1,12 +1,12 @@
 import React from "react";
-import { FBEditorPropertiesProps } from ".";
+import { FBEditorPropertiesDefaultValue, FBEditorPropertiesProps } from ".";
 import { FBCheckboxGroup, FBFieldName } from "..";
 import { withFBEditorProperties } from "./FBEditorProperties.wrap";
 
 const FBEditorProperties: React.FunctionComponent<FBEditorPropertiesProps> = ({
   onChange,
   options,
-  type,
+  type = "",
 }) => (
   <>
     {options && (
@@ -14,6 +14,7 @@ const FBEditorProperties: React.FunctionComponent<FBEditorPropertiesProps> = ({
         name={FBFieldName.EditorProps}
         label="form.builder.properties"
         {...{ onChange, options }}
+        defaultValue={FBEditorPropertiesDefaultValue[type]}
       />
     )}
   </>
