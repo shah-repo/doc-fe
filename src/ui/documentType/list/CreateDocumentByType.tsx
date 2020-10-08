@@ -2,11 +2,13 @@ import { Box } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { Formik, FormikProps } from "formik";
-import { isEmpty } from "lodash";
+import { get, isEmpty } from "lodash";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { DocumentRevision, documentRevisionsActions, HeaderTableType } from "../../../state/ducks/documentRevisions";
 import { DocumentType, documentTypeActions, DocumentTypeById, DocumentTypeByIdForm, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedId, documentsActions } from "../../../state/ducks/documents";
@@ -36,7 +38,7 @@ interface Props {
   documentTypeId?: string;
   categoryName?: string;
   headers: HeaderTableType[];
-  data: any[];
+  tableData: any[];
   supportExportList: boolean;
 }
 
@@ -99,7 +101,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   categoryName,
   isByCategory,
   headers,
-  data,
+  tableData,
   supportExportList,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();
@@ -229,6 +231,29 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     />
   );
 
+  const renderTable = () => {
+    if (!isEmpty(tableData)) {
+      return tableData.map((e) => {
+        const h = headers.map((column) => {
+          if (moment(get(e, column.key, ""), moment.ISO_8601, true).isValid()) {
+            return {
+              [column.key]: getFormattedDateString(get(e, column.key, ""), MomentFormats.MonthDateYear) || "",
+            };
+          }
+          return { [column.key]: get(e, column.key, "") };
+        });
+        const rows = h.reduce(function(result, current) {
+          return Object.assign(result, current);
+        }, {});
+        return rows;
+      });
+    }
+    const defaultEmptyColumn = headers.map((column) => ({ [column.key]: "" }));
+    return [Object.assign({}, ...defaultEmptyColumn)];
+  };
+
+  const data = exportDialog.isOpen ? renderTable() : [];
+
   if (!isVisible) {
     return null;
   }
@@ -244,10 +269,9 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
           id="ListPresenter-export-list"
           data-cy="document.revision.export.list"
           onClick={exportDialog.open}
-          disabled={isEmpty(data)}
         >
           <Box marginRight={1}>
-            <ExportIcon className={classes.iconSvg} style={{ opacity: isEmpty(data) ? 0.5 : "initial" }}/>
+            <ExportIcon className={classes.iconSvg} />
           </Box>
           <Text translation="document.revision.export.list" />
         </Button>}
