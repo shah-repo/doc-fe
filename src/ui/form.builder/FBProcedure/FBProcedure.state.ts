@@ -1,4 +1,4 @@
-import { filter, get, map, unionBy } from "lodash";
+import { filter, get, unionBy } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -33,15 +33,6 @@ export class FBProcedureState {
     const value = {
       ...this.value,
       [type]: items.reverse(),
-    };
-    set(this, "value", value);
-  };
-
-  @action public editItem = (item: FBProcedureItemConfig, type: FBProcedureItemType, id: string) => {
-    const newItems = map(get(this, `value.${type}`), (i) => i.id === id ? item : i);
-    const value = {
-      ...this.value,
-      [type]: newItems,
     };
     set(this, "value", value);
   };

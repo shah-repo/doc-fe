@@ -10,7 +10,6 @@ import { withFBProcedureItem } from "./FBProcedureItem.wrap";
 
 const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   onClick,
-  onEditClick,
   handleRemove,
   getItem,
   dialogState,
@@ -41,7 +40,8 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
           color="inherit"
           startIcon={<AddCircleIcon />}
           label={FBProcedureItemActionLocale[type]}
-          {...{ onClick, disabled }}
+          onClick={() => onClick?.()}
+          {...{ disabled }}
         />
       )}
     </Box>
@@ -75,7 +75,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
                   <IconButton
                     color="inherit"
                     size="small"
-                    onClick={() => onEditClick?.(item.id)}
+                    onClick={() => onClick?.(item)}
                     {...{ disabled }}
                   >
                     <EditIcon fontSize="small" />

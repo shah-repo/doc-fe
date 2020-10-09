@@ -9,9 +9,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
 ) => {
   const Comp = ({
     onClick,
-    onEditClick,
     handleAdd,
-    handleEdit,
     handleCancel,
     handleRemove,
     getItem,
@@ -34,13 +32,20 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     // MARK: @helpers
 
     // MARK: @methods
-    onClick = () => {
+    onClick = (part?: FBProcedureItemConfig) => {
       formState?.reset();
+      let submitLabel;
+
+      if (part) {
+        formState?.setValues({ ...part });
+        submitLabel = "form.builder.save";
+      }
+
       dialogState?.config({
         open: true,
-        title: FBProcedureItemActionLocale[type],
+        title: FBProcedureItemActionLocale[`${type}${part ? "Edit" : ""}`],
         content: <FBProcedureForm {...{ formState, type }} />,
-        actions: <FBProcedureFormActions {...{ handleAdd, handleCancel }} />,
+        actions: <FBProcedureFormActions {...{ handleAdd, handleCancel, submitLabel }} />,
       });
     };
 
@@ -49,29 +54,6 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
       procedureState?.addItem(formValue, type);
       formState?.reset();
       handleCancel?.();
-    };
-
-    handleEdit = (id: string) => {
-      const formValue = formState?.getValues() as FBProcedureItemConfig;
-      procedureState?.editItem(formValue, type, id);
-      formState?.reset();
-      handleCancel?.();
-    };
-
-    onEditClick = (id: string) => {
-      const itemToEdit = procedureState?.[type]?.find((item) => item.id === id);
-      if (!itemToEdit) { return; }
-      formState?.setValues({ ...itemToEdit });
-      dialogState?.config({
-        open: true,
-        title: FBProcedureItemActionLocale[`${type}Edit`],
-        content: <FBProcedureForm {...{ formState, type }} />,
-        actions: <FBProcedureFormActions
-          {...{ handleCancel }}
-          submitLabel="form.builder.save"
-          handleAdd={() => handleEdit?.(id)}
-        />,
-      });
     };
 
     handleCancel = () => dialogState?.closeDialog();
@@ -91,7 +73,6 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
 
     return Component({
       ...(props as T),
-      onEditClick,
       onClick,
       handleRemove,
       getItem,

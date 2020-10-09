@@ -18,11 +18,9 @@ export type FBProcedureItemProps =
 & Pick<FBProviderProps, "dialogState" | "formState">
 & Pick<FBProcedureProps, "name" | "stepIndex" | "disabled" | "isPreview" | "loading">
 & {
-  onClick?: () => void;
-  onEditClick?: (id: string) => void;
+  onClick?: (part?: FBProcedureItemConfig) => void;
   handleAdd?: () => void;
   handleCancel?: () => void;
-  handleEdit?: (id: string) => void;
   handleRemove?: (id: string) => void;
   getItem?: (id: string) => string;
   type: FBProcedureItemType;
