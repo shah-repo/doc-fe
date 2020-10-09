@@ -7,7 +7,6 @@ export const withFBProcedure = <T extends FBProcedureProps>(
 ) => {
   const Comp = ({
     handleAdd,
-    removeStep,
     procedureState,
     isPreview,
     isOutput,
@@ -51,18 +50,11 @@ export const withFBProcedure = <T extends FBProcedureProps>(
       workspaceState?.setSchemaItemAt(newItem, index + 1);
     };
 
-    removeStep = () => {
-      formState?.setFieldValue(name, null, true);
-      workspaceState?.removeSchemaItemAt(index);
-    };
-
     // MARK: @observer
-
 
     return Component({
       ...(props as T),
       handleAdd,
-      removeStep,
       procedureState,
       isPreview,
       isOutput,
