@@ -51,6 +51,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
   let verPrefix = "common.revision";
   let stateLabel = statusLabel;
+  let recordDateLabel = "common.updated" as Translation;
 
   const isSelected = selectedDocumentRevision === documentRevision.id;
   const isDraft = status === DocumentRevisionStatus.Draft;
@@ -62,11 +63,16 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isInReview = status === DocumentRevisionStatus.InReview;
   const isVoided = status === DocumentRevisionStatus.Obsolete || status === DocumentRevisionStatus.Voided;
 
+
+  if (isReleased) {
+    recordDateLabel = "document.revision.released.date";
+    stateLabel = "common.released";
+  }
   if (isRecord && !isInlineApproval && (!isObsolete || isInReview)) {
     stateLabel = status;
   }
   if (isRecord && !isInlineApproval && isDeprecated) {
-    stateLabel = "common.released";
+    stateLabel = "common.archived";
   }
   if (isDraft && isRecord && documentRevision.subRevision === 0 && !isObsolete) {
     stateLabel = "common.wip";
@@ -87,12 +93,10 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const docIdLabel = (isRecord ? "common.id" : "common.docId") as Translation;
   const recordOwnerLabel = isVoided ? "record.voided.by" : "record.released.by";
 
-  let recordDateLabel = "common.updated" as Translation;
+
   if (isVoided) {
+    stateLabel = "common.voided";
     recordDateLabel = "record.voided.date";
-  }
-  if (isReleased) {
-    recordDateLabel = "document.revision.released.date";
   }
 
   return (
