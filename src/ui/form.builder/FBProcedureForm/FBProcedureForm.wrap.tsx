@@ -9,6 +9,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     disabledOptions,
     optionId,
     type,
+    initialValues,
     ...props
   }: T) => {
 
@@ -40,6 +41,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       disabledOptions,
       optionId,
       type,
+      initialValues,
     });
   };
 

@@ -33,19 +33,11 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
 
     // MARK: @methods
     onClick = (part?: FBProcedureItemConfig) => {
-      formState?.reset();
-      let submitLabel;
-
-      if (part) {
-        formState?.setValues({ ...part });
-        submitLabel = "form.builder.save";
-      }
-
       dialogState?.config({
         open: true,
         title: FBProcedureItemActionLocale[`${type}${part ? "Edit" : ""}`],
-        content: <FBProcedureForm {...{ formState, type }} />,
-        actions: <FBProcedureFormActions {...{ handleAdd, handleCancel, submitLabel }} />,
+        content: <FBProcedureForm {...{ formState, type }} initialValues={part} />,
+        actions: <FBProcedureFormActions {...{ handleAdd, handleCancel }} />,
       });
     };
 
