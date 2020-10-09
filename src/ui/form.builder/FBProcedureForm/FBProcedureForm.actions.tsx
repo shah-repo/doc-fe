@@ -5,11 +5,12 @@ import { FBButton, FBProcedureFormActionsProps, FBSubmitButton } from "..";
 const FBProcedureFormActions: React.FunctionComponent<FBProcedureFormActionsProps> = ({
   handleAdd,
   handleCancel,
+  submitLabel = "form.builder.add",
 }) => (
   <Box display="flex" flexDirection="row-reverse" mx={3}>
     <FBSubmitButton
       variant="contained"
-      label="form.builder.add"
+      label={submitLabel}
       onClick={handleAdd}
     />
     <FBButton

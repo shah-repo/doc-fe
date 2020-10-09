@@ -9,14 +9,16 @@ export enum FBProcedureItemLocale {
 
 export enum FBProcedureItemActionLocale {
   materials = "form.builder.add.material",
-  equipment = "form.builder.add.equipment"
+  equipment = "form.builder.add.equipment",
+  materialsEdit = "form.builder.edit.material",
+  equipmentEdit = "form.builder.edit.equipment",
 }
 
 export type FBProcedureItemProps =
 & Pick<FBProviderProps, "dialogState" | "formState">
 & Pick<FBProcedureProps, "name" | "stepIndex" | "disabled" | "isPreview" | "loading">
 & {
-  onClick?: () => void;
+  onClick?: (part?: FBProcedureItemConfig) => void;
   handleAdd?: () => void;
   handleCancel?: () => void;
   handleRemove?: (id: string) => void;

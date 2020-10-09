@@ -12,8 +12,9 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
   disabledOptions,
   optionId,
   type,
+  initialValues,
 }) => (
-  <FBForm {...{ formState }} >
+  <FBForm {...{ formState, initialValues }} >
     <FBTextField
       hidden={true}
       name="id"
