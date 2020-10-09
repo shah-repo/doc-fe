@@ -1,5 +1,4 @@
-import { Box, IconButton } from "@material-ui/core";
-import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
+import { Box } from "@material-ui/core";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { FBButton, FBInput, FBProcedureItem, FBProcedureProps, FBTextEditor } from "..";
@@ -10,7 +9,6 @@ import { withFBProcedure } from "./FBProcedure.wrap";
 
 const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
   handleAdd,
-  removeStep,
   procedureState,
   isPreview,
   isOutput,
@@ -32,21 +30,6 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
       <FBProvider {...{ procedureState }}>
         {!isPreview && (
           <Box display="flex" flexDirection="row-reverse" mb={-2.5} zIndex={100}>
-            <Box
-              color={Colors.error_red}
-              bgcolor={Colors.light_red}
-              borderRadius={4}
-              marginLeft={1}
-            >
-              <IconButton
-                color="inherit"
-                size="small"
-                onClick={removeStep}
-                {...{ disabled }}
-              >
-                <RemoveCircleOutlineIcon />
-              </IconButton>
-            </Box>
             <FBButton
               label="form.builder.clone.step"
               style={{ textTransform: "none", margin: 0 }}
