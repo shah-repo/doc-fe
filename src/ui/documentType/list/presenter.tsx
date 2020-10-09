@@ -2,6 +2,7 @@ import { Grid } from "@material-ui/core";
 import { isString } from "lodash";
 import moment from "moment";
 import React from "react";
+import { useIntl } from "react-intl";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DocumentType, PageDetails } from "../../../state/ducks/documentRevisions/documentType";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -41,13 +42,16 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   // currently status column by default has all types, need an empty string for csv
   const formedTableCriteria = () => {
     if (isString(tableCriteria.queryDict?.["status[]"])) {
-      return tableCriteria.queryDict;
+      return tableCriteria;
     }
-    return {
-      ...tableCriteria.queryDict,
-      "status[]": "",
-    };
+    return ({
+      queryDict: {
+        ...tableCriteria.queryDict,
+        "status[]": "",
+      },
+    });
   };
+  const intl = useIntl();
 
   const headers =
     columns.map((column) => {
@@ -61,7 +65,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
         };
       }
       return {
-        label: `${column.label}: ${formedTableCriteria().queryDict?.[column.searchOptions?.dataKey || ""] || ""}`,
+        label: `${intl.formatMessage({ id: column.label })}: ${formedTableCriteria().queryDict?.[column.searchOptions?.dataKey || column.searchOptions?.defaultValue || ""] || column.searchOptions?.defaultValue || ""}`,
         key: column.key,
       };
     });
@@ -80,8 +84,6 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
     documentTypeId: documentType.id,
   };
 
-  const supportExportList = documentCategory.exportList;
-
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
@@ -90,7 +92,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       </Grid>
       <CreateDocumentByType
         {...createDocumentProps}
-        {...{ isByCategory, headers, tableData, supportExportList }}
+        {...{ isByCategory, headers, tableData }}
         labelName={isByCategory ? documentCategory.addNewBtnLabel : documentType.documentTypeName}
       />
       <Grid item={true} className={classes.item}>
