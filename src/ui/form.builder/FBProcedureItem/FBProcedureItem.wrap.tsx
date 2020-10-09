@@ -37,7 +37,10 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
         open: true,
         title: FBProcedureItemActionLocale[`${type}${part ? "Edit" : ""}`],
         content: <FBProcedureForm {...{ formState, type }} initialValues={part} />,
-        actions: <FBProcedureFormActions {...{ handleAdd, handleCancel }} />,
+        actions: <FBProcedureFormActions
+          {...{ handleAdd, handleCancel }}
+          submitLabel={part ? "form.builder.save" : "form.builder.add"}
+        />,
       });
     };
 
