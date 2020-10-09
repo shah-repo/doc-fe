@@ -39,7 +39,6 @@ export const withFBProcedure = <T extends FBProcedureProps>(
 
     // MARK: @methods
     handleAdd = (isClone?: boolean) => {
-      console.log("clone");
       const newName = FB.uniqid;
       const newItem = {
         ...workspaceState?.getSchemaItemAt(index),
