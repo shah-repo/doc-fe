@@ -2,7 +2,6 @@ import { Grid } from "@material-ui/core";
 import { isString } from "lodash";
 import moment from "moment";
 import React from "react";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DocumentType, PageDetails } from "../../../state/ducks/documentRevisions/documentType";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -41,7 +40,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
 
   // currently status column by default has all types, need an empty string for csv
   const formedTableCriteria = () => {
-    if (isString(tableCriteria.queryDict["status[]"])) {
+    if (isString(tableCriteria.queryDict?.["status[]"])) {
       return tableCriteria.queryDict;
     }
     return {
@@ -67,22 +66,6 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       };
     });
 
-  const data = tableData.map((e) => {
-    const deepValue = (o, p) => p.split(".").reduce((a, v) => a[v], o);
-    const h = headers.map((column) => {
-      if (moment(deepValue(e, column.key), moment.ISO_8601, true).isValid()) {
-        return {
-          [column.key]: getFormattedDateString(deepValue(e, column.key), MomentFormats.MonthDateYear) || "",
-        };
-      }
-      return { [column.key]: deepValue(e, column.key) || "" };
-    });
-    const rows = h.reduce(function(result, current) {
-      return Object.assign(result, current);
-    }, {});
-    return rows;
-  });
-
   const customQuerySet = (queryDict: TableSearchQueryType) => {
     if (!queryDict["status[]"]) {
       queryDict["status[]"] = documentRevisionQueryStatus();
@@ -107,7 +90,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       </Grid>
       <CreateDocumentByType
         {...createDocumentProps}
-        {...{ isByCategory, headers, data, supportExportList }}
+        {...{ isByCategory, headers, tableData, supportExportList }}
         labelName={isByCategory ? documentCategory.addNewBtnLabel : documentType.documentTypeName}
       />
       <Grid item={true} className={classes.item}>

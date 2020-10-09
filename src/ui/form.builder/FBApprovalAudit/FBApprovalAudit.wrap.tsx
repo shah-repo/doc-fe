@@ -83,7 +83,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
             if (moment(prevValue, moment.ISO_8601, true).isValid()) {
               prevValue = getFormattedDateString(prevValue, MomentFormats.MonthDateYearAlt);
             }
-            prevValue = <span> from <b>{prevValue}</b></span>;
+            prevValue = <span> from <b>{FB.stripTags(prevValue)}</b></span>;
           } else {
             prevValue = "";
           }
@@ -91,7 +91,8 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           if (moment(nextValue, moment.ISO_8601, true).isValid()) {
             nextValue = getFormattedDateString(nextValue, MomentFormats.MonthDateYearAlt);
           }
-          return (<span>Changed {label} {prevValue} to <b>{nextValue}</b></span>);
+
+          return (<span>Changed {label} {prevValue} to <b>{FB.stripTags(nextValue)}</b></span>);
         }
 
         function isCheck() {

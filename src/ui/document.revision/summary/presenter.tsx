@@ -61,7 +61,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
   useScrollIntoView();
   const onSubmit = () => void 0;
   const { formInput } = dataProp || {};
-  const { schema } = formTemplate || formDocument?.formTemplate || {};
+  let { schema } = formTemplate || formDocument?.formTemplate || {};
+  schema = dataProp.schema || schema;
   const { docId } = formDocument?.document || {};
   const FBIsOutput = Boolean(docId && !isEmpty(docId));
   const FBIsActive = formInput || formTemplate || formDocument;

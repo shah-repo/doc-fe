@@ -1,5 +1,4 @@
 import { Box, Button, Dialog, Grid } from "@material-ui/core";
-import { isEmpty } from "lodash";
 import React from "react";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
 import { HeaderTableType } from "../../../state/ducks/documentRevisions/types";
@@ -40,10 +39,9 @@ export const FormListPresenter: React.FunctionComponent<Props> = ({
           id="ListPresenter-export-list"
           data-cy="document.revision.export.list"
           onClick={exportDialog.open}
-          disabled={isEmpty(data)}
         >
           <Box marginRight={1}>
-            <ExportIcon className={classes.iconSvg} style={{ opacity: isEmpty(data) ? 0.5 : "initial" }}/>
+            <ExportIcon className={classes.iconSvg} />
           </Box>
           <Text translation="document.revision.export.list" />
         </Button>
