@@ -37,7 +37,7 @@ export const TrainingListContainer: React.FunctionComponent<Props> = () => {
     <ListPresenter
       tableName={TABLE_NAME}
       clearFilter={clearFilter}
-      data={tableData}
+      data={tableData.filter((data) => data.isValid)}
       tableCriteria={tableCriteria}
     />
   );
