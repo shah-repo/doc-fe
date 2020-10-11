@@ -6,10 +6,10 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
+    setMediaMode,
     mediaAlbumState,
     collection = [],
     title = "",
-    setMediaMode,
     mode,
     ...props
   }: T) => {
@@ -31,9 +31,9 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
 
     return Component({
       ...(props as T),
-      collection,
-      mediaAlbumState,
       setMediaMode,
+      mediaAlbumState,
+      collection,
       title,
       mode,
     });

@@ -2,6 +2,11 @@ import { Dictionary } from "lodash";
 import { FBFormState } from ".";
 import { FBSchemaProps, FBWorkspaceMode, FBWorkspaceState } from "..";
 
+export enum FBFormMode {
+  add = "form.builder.add",
+  edit = "form.builder.edit",
+}
+
 export interface FBFormProps {
   initialValues?: Dictionary<any>;
   children?: React.ReactNode | React.ReactNode[];

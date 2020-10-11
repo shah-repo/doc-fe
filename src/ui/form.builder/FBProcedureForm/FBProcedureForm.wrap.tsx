@@ -7,16 +7,16 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
 ) => {
   const Comp = ({
     disabledOptions,
+    initialValues,
     optionId,
     type,
-    initialValues,
     ...props
   }: T) => {
 
     // MARK: @config
     const { procedureState } = FB.useStores();
 
-    const config: Record<FBProcedureItemType, (() => void)> = {
+    const config: Partial<Record<keyof typeof FBProcedureItemType, (() => void)>> = {
       materials: () => {
         optionId = FBAutocompleteAsyncOption.materials;
         disabledOptions = map(procedureState?.value?.materials, "title");
@@ -26,7 +26,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         disabledOptions = map(procedureState?.value?.equipment, "title");
       },
     };
-    config[type]();
+    config[type]?.();
 
     // MARK: @reactions
 
@@ -39,9 +39,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     return Component({
       ...(props as T),
       disabledOptions,
+      initialValues,
       optionId,
       type,
-      initialValues,
     });
   };
 
