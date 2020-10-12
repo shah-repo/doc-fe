@@ -2,8 +2,8 @@ import * as imaps from "imap-simple";
 
 const config = {
   imap: {
-    user: "test@gmail.com",
-    password: "test",
+    user: process.env.CYPRESS_TEST_EMAIL,
+    password: process.env.CYPRESS_TEST_EMAIL_PASSWORD,
     host: "imap.gmail.com",
     port: 993,
     tls: true,
@@ -11,15 +11,19 @@ const config = {
   },
 };
 
-export function getEmail() {
+export function getEmail(email) {
   return imaps.connect(config).then(function(connection) {
 
     return connection.openBox("INBOX").then(function() {
-      const searchCriteria = ["FLAGGED", ["TO", "enlil.testmail+cy2@gmail.com"]];
+      const delay = 120 * 1000;
+      let emailsSince = new Date();
+      emailsSince.setTime(Date.now() - delay);
+      emailsSince = emailsSince.toUTCString();
+      const searchCriteria = ["ALL", ["TO", email], ["SENTSINCE", emailsSince]];
 
       const fetchOptions = {
         bodies: ["HEADER", "TEXT"],
-        markSeen: false,
+        markSeen: true,
       };
 
       return connection.search(searchCriteria, fetchOptions).then(function(results) {
