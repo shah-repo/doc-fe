@@ -64,40 +64,40 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isVoided = status === DocumentRevisionStatus.Obsolete || status === DocumentRevisionStatus.Voided;
 
 
-  if (isReleased) {
-    recordDateLabel = "document.revision.released.date";
-    stateLabel = "common.released";
-  }
-  if (isRecord && !isInlineApproval && (!isObsolete || isInReview)) {
-    stateLabel = status;
-  }
-  if (isRecord && !isInlineApproval && isDeprecated) {
-    stateLabel = "common.archived";
-  }
-  if (isDraft && isRecord && documentRevision.subRevision === 0 && !isObsolete) {
-    stateLabel = "common.wip";
-  }
-  if (isReleased || ((isDeprecated || isDraft) && isInlineApproval && isRecord && isAlphaReleased)) {
-    verPrefix = "common.revision";
-  }
-  if (isDeprecated && isInlineApproval && isRecord && isAlphaReleased) {
-    stateLabel = "common.archived";
-  }
-  if ((isDeprecated || isReleased) && isInlineApproval && isNumericRelease) {
-    stateLabel = "common.archived";
-  }
-  if (isReleased && isInlineApproval && isNumericRelease) {
-    stateLabel = "common.last.signed";
+  if (isRecord) {
+    if (isReleased) {
+      recordDateLabel = "document.revision.released.date";
+      stateLabel = "common.released";
+    }
+    if (!isInlineApproval && (!isObsolete || isInReview)) {
+      stateLabel = status;
+    }
+    if (!isInlineApproval && isDeprecated) {
+      stateLabel = "common.archived";
+    }
+    if (isDraft && documentRevision.subRevision === 0 && !isObsolete) {
+      stateLabel = "common.wip";
+    }
+    if (isReleased || ((isDeprecated || isDraft) && isInlineApproval && isAlphaReleased)) {
+      verPrefix = "common.revision";
+    }
+    if (isDeprecated && isInlineApproval && isAlphaReleased) {
+      stateLabel = "common.archived";
+    }
+    if ((isDeprecated || isReleased) && isInlineApproval && isNumericRelease) {
+      stateLabel = "common.archived";
+    }
+    if (isReleased && isInlineApproval && isNumericRelease) {
+      stateLabel = "common.last.signed";
+    }
+    if (isVoided) {
+      stateLabel = "common.voided";
+      recordDateLabel = "record.voided.date";
+    }
   }
 
   const docIdLabel = (isRecord ? "common.id" : "common.docId") as Translation;
   const recordOwnerLabel = isVoided ? "record.voided.by" : "record.released.by";
-
-
-  if (isVoided) {
-    stateLabel = "common.voided";
-    recordDateLabel = "record.voided.date";
-  }
 
   return (
     <div
