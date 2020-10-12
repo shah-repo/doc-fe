@@ -23,10 +23,11 @@ const FBApprovalAudit: React.FunctionComponent<FBApprovalAuditProps> = ({
             key={`fb-approval-audit-${change.id}-${index}`}
             display="flex"
             alignItems="center"
+            data-cy={`fb-approval-history-${index}`}
           >
             <Box flexGrow={1}>
               {change?.ownerName}
-              <Box component="span" ml={0.6} color={Colors.gray}>
+              <Box component="span" ml={0.6} color={Colors.gray} >
                 | {change.description} |
                 {change?.formattedTime}
               </Box>
