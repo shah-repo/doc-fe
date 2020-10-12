@@ -16,10 +16,9 @@ export function getEmail(email) {
 
     return connection.openBox("INBOX").then(function() {
       const delay = 120 * 1000;
-      let emailsSince = new Date();
+      const emailsSince = new Date();
       emailsSince.setTime(Date.now() - delay);
-      emailsSince = emailsSince.toUTCString();
-      const searchCriteria = ["ALL", ["TO", email], ["SENTSINCE", emailsSince]];
+      const searchCriteria = ["ALL", ["TO", email], ["SENTSINCE", emailsSince.toISOString()]];
 
       const fetchOptions = {
         bodies: ["HEADER", "TEXT"],
@@ -27,12 +26,12 @@ export function getEmail(email) {
       };
 
       return connection.search(searchCriteria, fetchOptions).then(function(results) {
-        const subjects = results.map(function(res) {
+        const emailText = results.map(function(res) {
           return res.parts.filter(function(part) {
-            return part.which === "HEADER";
+            return part.which === "TEXT";
           })[0].body;
         });
-        return subjects;
+        return emailText[emailText.length - 1];
       });
     });
   }).then((result) => result);
