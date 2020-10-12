@@ -1,4 +1,4 @@
-import { isEmpty, isEqual, map, range } from "lodash";
+import { isEmpty, map, range } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable } from "..";
@@ -17,10 +17,6 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     !schemaState && (schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema));
     const { workspaceState, formState } = FB.useStores();
     const { isOutput, id, document: { outputRevision = false } = {} } = workspaceState || {};
-
-    if (!isEqual(schema, schemaState?.schema)) {
-      schemaState.setSchema(schema);
-    }
 
     React.useEffect(() => {
       FormBuilderDynamicValidatorStore.registerValidators(schema, formState?.Validator);
