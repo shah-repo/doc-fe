@@ -62,8 +62,9 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         if (!underApprovalFields?.includes(fieldName) || isOmitted) {
           return "none";
         }
+        const { groupId, nextValue, previousValue } = audit;
         if (type === "checkboxgroup" || type === "autocomplete") {
-          return audit.groupId + "." + fieldName + "." + type + "." + label + "." + audit.nextValue;
+          return `${groupId}.${fieldName}.${type}.${label}.${nextValue}.${previousValue}`;
         }
         return audit.groupId + "." + fieldName + "." + type + "." + label;
       });
