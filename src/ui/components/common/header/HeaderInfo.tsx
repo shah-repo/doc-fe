@@ -59,32 +59,31 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
       [classes.statusIconCanceled]: isStatusCanceled,
     })} />;
 
-  if (isStatusReleased) {
-    stateLabel = "common.released";
-  }
-  if (isRecord && !isInlineApproval && (!isObsolete || isInReview)) {
-    stateLabel = status;
-  }
-  if (isRecord && !isInlineApproval && isDeprecated) {
-    stateLabel = "common.archived";
-  }
-  if (isDraft && isRecord && subRevision === 0 && !isObsolete) {
-    stateLabel = "common.wip";
-  }
-  if (isDeprecated && isInlineApproval && isRecord && isAlphaReleased) {
-    stateLabel = "common.archived";
-  }
-  if ((isDeprecated || isStatusReleased) && isInlineApproval && isNumericRelease) {
-    stateLabel = "common.archived";
-  }
-  if (isObsolete) {
-    stateLabel = "common.voided";
-  }
-  if (isStatusReleased && isInlineApproval && isNumericRelease) {
-    stateLabel = "common.last.signed";
-  }
-  if (isVoided) {
-    stateLabel = "common.voided";
+  if (isRecord) {
+    if (isStatusReleased) {
+      stateLabel = "common.released";
+    }
+    if (!isInlineApproval && (!isObsolete || isInReview)) {
+      stateLabel = status;
+    }
+    if (!isInlineApproval && isDeprecated) {
+      stateLabel = "common.archived";
+    }
+    if (isDraft && subRevision === 0 && !isObsolete) {
+      stateLabel = "common.wip";
+    }
+    if (isDeprecated && isInlineApproval && isAlphaReleased) {
+      stateLabel = "common.archived";
+    }
+    if ((isDeprecated || isStatusReleased) && isInlineApproval && isNumericRelease) {
+      stateLabel = "common.archived";
+    }
+    if (isObsolete || isVoided) {
+      stateLabel = "common.voided";
+    }
+    if (isStatusReleased && isInlineApproval && isNumericRelease) {
+      stateLabel = "common.last.signed";
+    }
   }
 
   return (
