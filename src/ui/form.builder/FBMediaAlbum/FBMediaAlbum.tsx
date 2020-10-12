@@ -3,6 +3,7 @@ import AllOutIcon from "@material-ui/icons/AllOut";
 import AppsIcon from "@material-ui/icons/Apps";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CropFreeIcon from "@material-ui/icons/CropFree";
+import { truncate } from "lodash";
 import React from "react";
 import { FBMediaAlbumProps } from ".";
 import { FBMediaCarousel, FBMediaGallery, FBProvider, FBTooltip } from "..";
@@ -12,9 +13,9 @@ import { withFBMediaAlbum } from "./FBMediaAlbum.wrap";
 const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
   setMediaFieldMode,
   onFileUploadChange,
-  mediaAlbumState,
   setMediaMode,
   removeMedia,
+  mediaAlbumState,
   actionsDisabled,
   collection,
   loading,
@@ -25,7 +26,7 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
 }) => (
   <FBProvider {...{ mediaAlbumState }}>
     <input
-      accept="image/*"
+      accept="image/*, video/*"
       style={{ display: "none" }}
       id={`fb-mediaalbum-upload-${name}`}
       onChange={onFileUploadChange}
@@ -41,7 +42,10 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
           flexGrow={1}
         >
           <FBTooltip {...{ title }}>
-            {title}
+            {truncate(title, {
+              length: 70,
+              omission: " ...",
+            })}
           </FBTooltip>
         </Box>
         <Box pl={0.3}>
