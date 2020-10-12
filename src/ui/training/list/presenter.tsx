@@ -165,6 +165,9 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
     },
   ];
 
+  const customDataSet = (data: TrainingRecordQuery[]) =>
+    data.filter((e) => e.isValid);
+
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
@@ -195,6 +198,7 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
           queryUrl={TRAINING_RECORD_ROOT_URL}
           cellMeasure={true}
           tableName={tableName}
+          customDataSet={customDataSet}
         />
       </Grid>
     </Grid>
