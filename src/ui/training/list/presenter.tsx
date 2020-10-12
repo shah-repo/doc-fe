@@ -51,16 +51,24 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
       key: "completedAtAfter",
     },
   ];
+  const renderTableData = () => {
+    if (!isEmpty(data)) {
+      return data.map((e) => ({
+        docId: e.trainingPlan.document.docId,
+        revision: e.documentRevision.revision,
+        docRevTitle: e.documentRevision.name,
+        userName: e.trainingPlan.employee.user?.name,
+        createdAtAfter: e.createdAt ? getFormattedDateString(e.createdAt, MomentFormats.MonthDateYear) : "",
+        dueOn: e.dueOn ? getFormattedDateString(e.dueOn, MomentFormats.MonthDateYear) : "",
+        completedAtAfter: e.completedAt ?
+          getFormattedDateString(e.completedAt, MomentFormats.MonthDateYear) : "Pending",
+      }));
+    }
+    const defaultEmptyColumn = headers.map((column) => ({ [column.key]: "" }));
+    return [Object.assign({}, ...defaultEmptyColumn)];
+  };
 
-  const exportedData = data.map((e) => ({
-    docId: e.trainingPlan.document.docId,
-    revision: e.documentRevision.revision,
-    docRevTitle: e.documentRevision.name,
-    userName: e.trainingPlan.employee.user?.name,
-    createdAtAfter: e.createdAt ? getFormattedDateString(e.createdAt, MomentFormats.MonthDateYear) : "",
-    dueOn: e.dueOn ? getFormattedDateString(e.dueOn, MomentFormats.MonthDateYear) : "",
-    completedAtAfter: e.completedAt ? getFormattedDateString(e.completedAt, MomentFormats.MonthDateYear) : "Pending",
-  }));
+  const exportedData = dialog.isOpen ? renderTableData() : [];
 
   const columns: TableColumnProps<TrainingRecordQuery>[] = [
     {
@@ -170,10 +178,9 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
           className={classes.button}
           data-cy="document.revision.export.list"
           onClick={dialog.open}
-          disabled={isEmpty(data)}
         >
           <Box mr={1}>
-            <ExportIcon className={classes.iconSvg} style={{ opacity: isEmpty(data) ? 0.5 : "initial" }}/>
+            <ExportIcon className={classes.iconSvg} />
           </Box>
           <Text translation="document.revision.export.list" />
         </Button>
