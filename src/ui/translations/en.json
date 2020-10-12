@@ -335,6 +335,7 @@
   "common.overdue": "Overdue",
   "common.yes.im.sure": "Yes, I'm sure",
   "common.work.in.progress": "Work In Progress",
+  "common.server.automation": "Server Automation",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
