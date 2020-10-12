@@ -85,8 +85,14 @@ export const useHandleCreateDoc = () => {
   };
 
   return (selectedForm: DocumentRevision) => {
+    const outputDocumentTypes = selectedForm?.formTemplate?.outputDocumentTypes || [];
     if (selectedDocumentTypeId) {
       fetchDocIdAsync.start(fetchDocIdAction, selectedDocumentTypeId, fetchDocIdAsync);
+      setForm(selectedForm);
+      return;
+    }
+    if (outputDocumentTypes.length === 1 && !(outputDocumentTypes[0] as any)?.documentTypeAcronym?.startsWith("RC")) {
+      fetchDocIdAsync.start(fetchDocIdAction, (outputDocumentTypes[0] as any)?.id, fetchDocIdAsync);
       setForm(selectedForm);
       return;
     }
