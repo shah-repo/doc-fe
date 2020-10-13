@@ -5,7 +5,7 @@ import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, DOC_GROUP_TYPE, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
@@ -139,9 +139,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isRevisionChangeHidden = isRecord && isdocRevStatusDraft && !isSubrevision;
   const isRevised = values.outputRevision;
 
-  const isDisabledInput = (values.id !== undefined && isCurrentUserOperator && !isOwner)
-    || Boolean(isRecord && isdocRevStatusDraft && documentRevision.revisionChangeType === RevisionChangeType.Obsolete);
-
+  const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments.length > 1);
   isOwnerContext = React.createContext(isOwner);
