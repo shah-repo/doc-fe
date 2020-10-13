@@ -9,7 +9,7 @@ const FBProcedureFormActions: React.FunctionComponent<FBProcedureFormActionsProp
   <Box display="flex" flexDirection="row-reverse" mx={3}>
     <FBSubmitButton
       variant="contained"
-      label="form.builder.add"
+      label={"form.builder.save"}
       onClick={handleAdd}
     />
     <FBButton

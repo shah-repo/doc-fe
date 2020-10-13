@@ -2,12 +2,14 @@ import { Box } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import React from "react";
-import { FBApprovalAudit, FBAutocomplete, FBButton, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from "..";
+import { FBApprovalAudit, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBInlineApproval } from "./FBInlineApproval.wrap";
 
 const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
+  onApproveClick,
   approvalTransition,
+  dialogState,
   inlineApprovalState,
   label = "form.builder.approvers",
   approvals = [],
@@ -22,7 +24,8 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   name,
   ...props
 }) => (
-  <FBProvider {...{ [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
+  <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
+    <FBDialog />
     <FBInlineApprovalSocket {...{ name }} />
     <FBInput {...props} {...{ name }} type="inlineapproval">
       <Box
@@ -98,7 +101,7 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
                     label="form.builder.request.approve"
                     size="small"
                     style={{ fontSize: "11px" }}
-                    onClick={() => approvalTransition?.("approve", approval.id)}
+                    onClick={() => onApproveClick?.(approval.id || "")}
                   />
                 </Box>
               )}

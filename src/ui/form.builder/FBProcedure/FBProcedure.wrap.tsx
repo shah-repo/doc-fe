@@ -1,17 +1,18 @@
+import { keys } from "lodash";
 import { reaction } from "mobx";
 import React from "react";
-import { FB, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
+import { FB, FBProcedureItemType, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
 
 export const withFBProcedure = <T extends FBProcedureProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     handleAdd,
-    removeStep,
     procedureState,
     isPreview,
     isOutput,
     index = 0,
+    types,
     name,
     ...props
   }: T) => {
@@ -22,6 +23,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     procedureState = FB.useRef(FBProcedureState, formValue);
     isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
     isPreview = workspaceState?.mode === "preview";
+    types = keys(FBProcedureItemType);
 
     // MARK: @reactions
     // Value sync with the form
@@ -51,21 +53,15 @@ export const withFBProcedure = <T extends FBProcedureProps>(
       workspaceState?.setSchemaItemAt(newItem, index + 1);
     };
 
-    removeStep = () => {
-      formState?.setFieldValue(name, null, true);
-      workspaceState?.removeSchemaItemAt(index);
-    };
-
     // MARK: @observer
-
 
     return Component({
       ...(props as T),
       handleAdd,
-      removeStep,
       procedureState,
       isPreview,
       isOutput,
+      types,
       index,
       name,
     });

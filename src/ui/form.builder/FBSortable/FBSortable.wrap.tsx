@@ -17,7 +17,7 @@ export const withFBSortable = <T extends FBSortableProps>(
     const schemaField = (schemaItem: FBSchemaProps): React.ReactNode | undefined =>
       FBSchemaState.component({
         ...schemaItem,
-        disabled: true,
+        disabled: workspaceState?.isMode("design"),
         gutter: false,
       });
 

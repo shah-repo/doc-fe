@@ -1,4 +1,4 @@
-import { get, isEmpty, map } from "lodash";
+import { get, isEmpty, isObject, map } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FBAutocompleteAsyncProps, FBAutocompleteAsyncState } from ".";
@@ -17,6 +17,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     labelPrefixRoot,
     selectedOptions,
     defaultValue,
+    freeSolo,
     optionId,
     options,
     loading,
@@ -39,7 +40,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     function getDefault() {
       const objectValue: Record<FBOptionValueType, () => any> = {
         object: () => formValue,
-        key: () => autocompleteAsyncState?.sliceValue(formValue),
+        key: () => autocompleteAsyncState?.sliceValue(formValue) || formValue,
         id: () =>  {
           const slicedValue = multiple
             ? map(formValue, optionValueKey)
@@ -75,6 +76,9 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     refresh = () => autocompleteAsyncState?.load(true);
 
     !getOptionLabel && (getOptionLabel = (option) => {
+      if (freeSolo && !isObject(option)) {
+        return option;
+      }
       const { labelPrefixRoot } = autocompleteAsyncState?.optionConfig || {};
       const optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
       return `${optionLabel}${get(option, optionLabelKey, "")}`;
@@ -93,6 +97,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       optionValueType,
       selectedOptions,
       defaultValue,
+      freeSolo,
       multiple,
       name,
       value,

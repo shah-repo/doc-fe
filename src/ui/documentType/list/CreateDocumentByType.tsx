@@ -2,11 +2,13 @@ import { Box } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { Formik, FormikProps } from "formik";
-import { isEmpty } from "lodash";
+import { get, isEmpty } from "lodash";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { DocumentRevision, documentRevisionsActions, HeaderTableType } from "../../../state/ducks/documentRevisions";
 import { DocumentType, documentTypeActions, DocumentTypeById, DocumentTypeByIdForm, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedId, documentsActions } from "../../../state/ducks/documents";
@@ -36,8 +38,7 @@ interface Props {
   documentTypeId?: string;
   categoryName?: string;
   headers: HeaderTableType[];
-  data: any[];
-  supportExportList: boolean;
+  tableData: any[];
 }
 
 let selectedTypeLabel = "";
@@ -84,8 +85,14 @@ export const useHandleCreateDoc = () => {
   };
 
   return (selectedForm: DocumentRevision) => {
+    const outputDocumentTypes = selectedForm?.formTemplate?.outputDocumentTypes || [];
     if (selectedDocumentTypeId) {
       fetchDocIdAsync.start(fetchDocIdAction, selectedDocumentTypeId, fetchDocIdAsync);
+      setForm(selectedForm);
+      return;
+    }
+    if (outputDocumentTypes.length === 1 && !(outputDocumentTypes[0] as any)?.documentTypeAcronym?.startsWith("RC")) {
+      fetchDocIdAsync.start(fetchDocIdAction, (outputDocumentTypes[0] as any)?.id, fetchDocIdAsync);
       setForm(selectedForm);
       return;
     }
@@ -99,8 +106,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   categoryName,
   isByCategory,
   headers,
-  data,
-  supportExportList,
+  tableData,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();
   const classes = styles();
@@ -121,6 +127,10 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const [forms, setForms] = useState<DocumentTypeByIdForm[]>([]);
   const buttonLabel = isByCategory ? labelName : label;
   const isRecord = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.RECORD;
+  const isSupplier = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.SUPPLIER;
+  const isReceivable = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.RECEIVE;
+  const isWorkOrder = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.WORK_ORDER;
+
   const closeMultipleFormDialog = () => {
     multipleFormDialog.close();
     setForms([]);
@@ -229,6 +239,40 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     />
   );
 
+  const renderTable = () => {
+    if (!isEmpty(tableData)) {
+      return tableData.map((e) => {
+        const h = headers.map((column) => {
+          if (moment(get(e, column.key, ""), moment.ISO_8601, true).isValid()) {
+            return {
+              [column.key]: getFormattedDateString(get(e, column.key, ""), MomentFormats.MonthDateYear),
+            };
+          }
+          if (isSupplier || isReceivable || isWorkOrder) {
+            if (column.key === "owner") {
+              return { [column.key]: get(e, "owner.user.name") || "" };
+            }
+            if (column.key === "docId") {
+              return { [column.key]: get(e, "document.docId") || "" };
+            }
+            if (column.key === "changeRequest") {
+              return { [column.key]: get(e, "changeRequest.crId") || "" };
+            }
+          }
+          return { [column.key]: get(e, column.key) || "" };
+        });
+        const rows = h.reduce(function(result, current) {
+          return Object.assign(result, current);
+        }, {});
+        return rows;
+      });
+    }
+    const defaultEmptyColumn = headers.map((column) => ({ [column.key]: "" }));
+    return [Object.assign({}, ...defaultEmptyColumn)];
+  };
+
+  const data = exportDialog.isOpen ? renderTable() : [];
+
   if (!isVisible) {
     return null;
   }
@@ -236,7 +280,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   return (
     <>
       <Grid item={true} xs={6} style={{ textAlign: "right" }}>
-        { supportExportList && <Button
+        <Button
           variant="outlined"
           color="primary"
           className={classes.exportListbutton}
@@ -244,13 +288,12 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
           id="ListPresenter-export-list"
           data-cy="document.revision.export.list"
           onClick={exportDialog.open}
-          disabled={isEmpty(data)}
         >
           <Box marginRight={1}>
-            <ExportIcon className={classes.iconSvg} style={{ opacity: isEmpty(data) ? 0.5 : "initial" }}/>
+            <ExportIcon className={classes.iconSvg} />
           </Box>
           <Text translation="document.revision.export.list" />
-        </Button>}
+        </Button>
         <ExportListDialog
           {...{ headers, data  }}
           dialog={exportDialog}

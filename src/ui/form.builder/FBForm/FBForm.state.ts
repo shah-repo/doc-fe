@@ -41,6 +41,11 @@ export class FBFormState extends FBSchemaState {
     this.validate();
   };
 
+  public setInitialValues = (initialValues: Dictionary<any>) => {
+    this.initialValues = initialValues;
+    this.setValues(initialValues);
+  };
+
   @action public setValues = (values: Dictionary<any>) => {
     this.values = values;
   };
@@ -66,7 +71,10 @@ export class FBFormState extends FBSchemaState {
     forceDefault = false
   ) => {
     if (!fieldName) { return; }
-    lodashSet(this.values, fieldName, value);
+    this.values = {
+      ...this.values,
+      [fieldName]: value,
+    };
     if (!withState) { return; }
     this.inputState.get(fieldName)?.setValue(value);
   };

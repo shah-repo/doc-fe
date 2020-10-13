@@ -1,7 +1,5 @@
 import React from "react";
-import { FBPartsProps } from "..";
-import FBPartsItem from "../FBPartsItem/FBPartsItem";
-import { FBProvider } from "../FBProvider";
+import { FBPartsItem, FBPartsProps, FBProcedureItemType, FBProvider } from "..";
 import { withFBParts } from "./FBParts.wrap";
 
 const FBParts: React.FunctionComponent<FBPartsProps> = ({
@@ -9,8 +7,8 @@ const FBParts: React.FunctionComponent<FBPartsProps> = ({
   name,
 }) => (
   <FBProvider {...{ partsState }}>
-    <FBPartsItem type="materials" {...{ name }} />
-    <FBPartsItem type="equipment" {...{ name }} />
+    <FBPartsItem type={FBProcedureItemType.materials} {...{ name }} />
+    <FBPartsItem type={FBProcedureItemType.equipment} {...{ name }} />
   </FBProvider>
 );
 

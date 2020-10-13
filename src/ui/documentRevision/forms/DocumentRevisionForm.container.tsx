@@ -174,7 +174,7 @@ DocumentRevisionFormContainerProps
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";
   } else if (outputGroup) {
-    mode = "form";
+    mode = (formGroup === "ENGINEERING_BUILD") ? "formDesign" : "form";
   }
   const showAdministrativeAndVoidChange = isOutput && isAlphaReleased && isRecord;
 

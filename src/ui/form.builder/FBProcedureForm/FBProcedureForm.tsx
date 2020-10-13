@@ -2,6 +2,7 @@ import { Box } from "@material-ui/core";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { FBAutocomplete, FBAutocompleteAsync, FBData, FBForm, FBProcedureFormProps, FBTextField } from "..";
+import { FBProcedureItemType } from "../FBProcedureItem";
 import { FBQuantityField } from "../FBQuantityField";
 import { FB } from "../helpers";
 import { withFBProcedureForm } from "./FBProcedureForm.wrap";
@@ -10,10 +11,11 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
   formState,
   children,
   disabledOptions,
+  initialValues,
   optionId,
   type,
 }) => (
-  <FBForm {...{ formState }} >
+  <FBForm {...{ formState, initialValues }} >
     <FBTextField
       hidden={true}
       name="id"
@@ -26,7 +28,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       {...{ optionId, disabledOptions }}
       freeSolo
     />
-    {type === "materials" && (
+    {type === FBProcedureItemType.materials && (
       <Box display="flex">
         <Box width="50%" mr={1}>
           <FBQuantityField

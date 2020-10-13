@@ -1,9 +1,9 @@
 import { Box } from "@material-ui/core";
-import { compact, difference, filter, find, isEmpty, isUndefined, map, unionBy } from "lodash";
+import { compact, difference, filter, find, isEmpty, isUndefined, map, pick, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBApprovalsState, FBApprover, FBInlineApprovalBody, FBRequiredApprover } from "..";
+import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransitionBody, FBRequiredApprover } from "..";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
@@ -13,6 +13,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    onApproveClick,
     requestApproval,
     approvals,
     name = "",
@@ -26,6 +27,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     isIncluded,
     currentUser,
     ownerId,
+    dialogState,
     ...props
   }: T) => {
     let isComponentVisible = false;
@@ -59,15 +61,30 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       FBApprovalsState,
       { id, approvals: document?.approvals || changeRequest?.approvals, isOwner },
     );
+    dialogState = FB.useRef(FBDialogState);
 
     changeApprovalStatus = (transition: FBApprovalsStatusEndpoint, approvalId?: string) => {
       if (!approvalId) { return; }
-      approvalsState?.applyTransition(transition, approvalId);
+      const passwordBody = pick(formState?.values, "password") as FBInlineApprovalTransitionBody;
+      approvalsState?.applyTransition(transition, approvalId, passwordBody);
     };
 
     function includesApprover(group: FBRequiredApprover, approver: string): boolean {
       return (group.joinedEmployees as string[]).includes(approver);
     }
+
+    onApproveClick = (approvalId: string) => {
+      dialogState?.config({
+        title: "form.builder.password.prompt",
+        open: true,
+        content: (
+          <FBApprovalPasswordForm
+            {...{ approvalId }}
+            approvalTransition={changeApprovalStatus}
+          />
+        ),
+      });
+    };
 
     // On add approver
     React.useEffect(() => reaction(
@@ -179,6 +196,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     return Component({
       ...(props as T),
       requestApproval,
+      dialogState,
       approvals,
       name,
       loading,
@@ -192,6 +210,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       currentUser,
       ownerId,
       inlineApprovalExists,
+      onApproveClick,
     });
   };
 
