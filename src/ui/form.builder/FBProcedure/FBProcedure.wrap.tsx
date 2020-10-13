@@ -1,17 +1,18 @@
+import { keys } from "lodash";
 import { reaction } from "mobx";
 import React from "react";
-import { FB, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
+import { FB, FBProcedureItemType, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
 
 export const withFBProcedure = <T extends FBProcedureProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    handleClone,
-    removeStep,
+    handleAdd,
     procedureState,
     isPreview,
     isOutput,
     index = 0,
+    types,
     name,
     ...props
   }: T) => {
@@ -22,6 +23,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     procedureState = FB.useRef(FBProcedureState, formValue);
     isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
     isPreview = workspaceState?.mode === "preview";
+    types = keys(FBProcedureItemType);
 
     // MARK: @reactions
     // Value sync with the form
@@ -39,31 +41,27 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     // MARK: @helpers
 
     // MARK: @methods
-    handleClone = () => {
-      const cloneName = FB.uniqid;
-      const itemClone = {
+    handleAdd = (isClone?: boolean) => {
+      const newName = FB.uniqid;
+      const newItem = {
         ...workspaceState?.getSchemaItemAt(index),
-        name: cloneName,
+        name: newName,
       };
-      formState?.setFieldValue(cloneName, formState.getFieldValue(name));
-      workspaceState?.setSchemaItemAt(itemClone, index + 1);
-    };
-
-    removeStep = () => {
-      formState?.setFieldValue(name, null, true);
-      workspaceState?.removeSchemaItemAt(index);
+      if (isClone) {
+        formState?.setFieldValue(newName, formState.getFieldValue(name));
+      }
+      workspaceState?.setSchemaItemAt(newItem, index + 1);
     };
 
     // MARK: @observer
 
-
     return Component({
       ...(props as T),
-      handleClone,
-      removeStep,
+      handleAdd,
       procedureState,
       isPreview,
       isOutput,
+      types,
       index,
       name,
     });

@@ -80,6 +80,14 @@ export interface ReferenceSummary {
   revisionStage?: string;
 }
 
+export interface BuildsSummary {
+  id: string;
+  url: string;
+  docId?: string;
+  title: string;
+  revisionStage?: number;
+}
+
 export interface TrainingControlProps extends DataProps<TrainingRecord[]> {
   documentRevisionId: string;
 }

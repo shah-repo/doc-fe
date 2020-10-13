@@ -33,7 +33,7 @@ export const withFBPartsItem = <T extends FBPartsItemProps>(
 
     // MARK: @observer
     useObserver(() => {
-      const observables: Record<FBProcedureItemType, (() => void)> = {
+      const observables: Partial<Record<keyof typeof FBProcedureItemType, (() => void)>> = {
         materials: () => {
           loading = !FBAutocompleteAsyncStore.data.get(partsState?.materialsId || "");
           collection = partsState?.materials;
@@ -43,7 +43,7 @@ export const withFBPartsItem = <T extends FBPartsItemProps>(
           collection = partsState?.equipment;
         },
       };
-      observables[type]();
+      observables[type]?.();
     });
 
     return Component({

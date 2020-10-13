@@ -173,6 +173,8 @@ export * from "./FBParagraph/FBParagraph.types";
 export { default as FBParts } from "./FBParts/FBParts";
 export { default as FBPartsState } from "./FBParts/FBParts.state";
 export * from "./FBParts/FBParts.types";
+export { default as FBPartsItem } from "./FBPartsItem/FBPartsItem";
+export * from "./FBPartsItem/FBPartsItem.types";
 export { default as FBPOApprovalMatrix } from "./FBPOApprovalMatrix/FBPOApprovalMatrix";
 export { default as FBPOReceive } from "./FBPOReceive/FBPOReceive";
 export { default as FBPOReceiveState } from "./FBPOReceive/FBPOReceive.state";

@@ -36,6 +36,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   clearFilter,
 }) => {
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
+  const dialog = useDialog();
 
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
     rowData.document.documentType.documentTypeName || "";
@@ -219,17 +220,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     return dataWithoutRecords;
   };
 
-  const data = tableData.map((e) => ({
-    docId: e.document.docId,
-    displayRevision: e.displayRevision,
-    documentTitle: e.name,
-    type: e.document.documentType.documentTypeAcronym,
-    owner: e.owner.user.name,
-    crId: e.changeRequest?.crId,
-    status: e.status,
-    effectiveDate: e.effectiveDate ? getFormattedDateString(e.effectiveDate, MomentFormats.MonthDateYear) : "",
-  }));
-
   const documentTypeSearchName = documentTypeOptions.find((e) =>
     e.value === tableCriteria.queryDict.documentTypeId)?.text;
   const effectiveDateSearch = documentRevisionEffectiveDateOption().find((e) =>
@@ -242,11 +232,31 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     { label: `TYPE: ${documentTypeSearchName || ""}`, key: "type" },
     { label: `OWNER: ${tableCriteria.queryDict.owner || ""}`, key: "owner" },
     { label: `AR ID: ${tableCriteria.queryDict.crId || ""}`, key: "crId" },
-    { label: `STATUS: ${tableCriteria.queryDict["status[]"] || ""}`, key: "status" },
+    {
+      label: `STATUS: ${isString(tableCriteria.queryDict["status[]"]) ?
+        tableCriteria.queryDict["status[]"] : ""}`, key: "status",
+    },
     { label: `EFFECTIVE DATE: ${effectiveDateSearch || ""}`, key: "effectiveDate" },
   ];
 
-  const dialog = useDialog();
+  const renderTableData = () => {
+    if (!isEmpty(tableData)) {
+      return tableData.map((e) => ({
+        docId: e.document.docId,
+        displayRevision: e.displayRevision,
+        documentTitle: e.name,
+        type: e.document.documentType.documentTypeAcronym,
+        owner: e.owner.user.name,
+        crId: e.changeRequest?.crId || "",
+        status: e.status,
+        effectiveDate: e.effectiveDate ? getFormattedDateString(e.effectiveDate, MomentFormats.MonthDateYear) : "",
+      }));
+    }
+    const defaultEmptyColumn = headers.map((column) => ({ [column.key]: "" }));
+    return [Object.assign({}, ...defaultEmptyColumn)];
+  };
+
+  const data = dialog.isOpen ? renderTableData() : [];
 
   return (
     <Grid container={true} className={classes.root}>
@@ -263,10 +273,9 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           id="ListPresenter-export-list"
           data-cy="document.revision.export.list"
           onClick={dialog.open}
-          disabled={isEmpty(data)}
         >
           <Box marginRight={1}>
-            <ExportIcon className={classes.iconSvg} style={{ opacity: isEmpty(data) ? 0.5 : "initial" }}/>
+            <ExportIcon className={classes.iconSvg} />
           </Box>
           <Text translation="document.revision.export.list" />
         </Button>

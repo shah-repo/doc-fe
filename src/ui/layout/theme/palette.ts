@@ -14,6 +14,9 @@ export const createAppPalette = (theme: ThemeEnv, customColors: WhiteLabelingCol
     case ThemeEnv.DEV_THEME:
       palette = devPalette;
       break;
+    case ThemeEnv.SANDBOX_THEME:
+      palette = sandboxPalette;
+      break;
     default:
       palette = defaultPalette;
       break;
@@ -82,4 +85,20 @@ export const demoPalette: Palette = {
     dark: "#C42260",
     main: "#D52568",
   } as PaletteColor,
+};
+
+export const sandboxPalette: Palette = {
+  ...defaultPalette,
+  primary: {
+    main: "#FF7600",
+    contrastText: "#FFFFFF",
+  } as PaletteColor,
+  secondary: {
+    main: "#FF7600",
+    contrastText: "#FFFFFF",
+  } as PaletteColor,
+  background: {
+    ...defaultPalette.background,
+    default: "5D666F",
+  },
 };

@@ -1,8 +1,10 @@
+import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { filter, find, get, includes, isEmpty, map } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FBAutocompleteProps } from ".";
 import { FB, FBOptionValueType } from "..";
+import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { isTranslation } from "../../translations/types";
 
 export const withFBAutocomplete = <T extends FBAutocompleteProps>(
@@ -12,6 +14,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     onInputChange,
     getOptionDisabled,
     getOptionLabel,
+    filterOptions,
     groupBy,
     optionLabelKey = "text",
     optionValueKey = "value",
@@ -42,7 +45,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
 
       const objectValue: Record<FBOptionValueType, () => any> = {
         object: () => formValue,
-        key: () => sliceValue(formValue),
+        key: () => sliceValue(formValue) || formValue,
         id: (value?: any) =>  {
           const slicedValue = multiple
             ? map(value || formValue, optionValueKey)
@@ -80,11 +83,15 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       formState?.setFieldValue(name, value);
     };
 
+    const stringify = (option: OptionType) => (getOptionLabel && getOptionLabel(option)) || "";
+    filterOptions = createFilterOptions({ ignoreAccents: false, stringify });
+
     return Component({
       ...(props as T),
       onInputChange,
       getOptionDisabled,
       getOptionLabel,
+      filterOptions,
       groupBy,
       options,
       defaultValue,

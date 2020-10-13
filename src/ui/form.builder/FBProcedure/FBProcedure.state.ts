@@ -64,7 +64,7 @@ export class FBProcedureState {
   };
 
   protected findRevision = (id: string, type: FBProcedureItemType): DocumentRevision | undefined => {
-    const itemId = type === "materials"
+    const itemId = type === FBProcedureItemType.materials
       ? this.materialsId
       : this.equipmentId;
 

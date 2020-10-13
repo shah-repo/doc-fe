@@ -36,7 +36,7 @@ context("Document Revising Flow", () => {
             documentTypes: [
               {
                 documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
+                documentTypeAcronym: "CP-",
                 group: "OTHER",
                 isQms: true,
               },
@@ -74,7 +74,7 @@ context("Document Revising Flow", () => {
             attachments: [],
             description: "<p>Test Doc Rev Description</p>",
             document: {
-              docId: "CS-00004",
+              docId: "CP-00004",
               documentType: {
                 id: componentSpecificationDocumentType[0].id,
               },

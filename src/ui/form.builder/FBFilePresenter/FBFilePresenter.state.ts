@@ -20,7 +20,7 @@ export class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, 
   }
 
   public get fileName(): string {
-    return this.file?.name + "." + this.fileType;
+    return `${this.file?.name}.${this.fileType}`;
   }
 
   public get fileShortName(): string {

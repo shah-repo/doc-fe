@@ -2,9 +2,9 @@ import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Portal } from "
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import CloseIcon from "@material-ui/icons/Close";
-import { isString } from "lodash";
+import { hasIn, isString } from "lodash";
 import React from "react";
-import Text from "../../components/Text";
+import { FBLabelLocaleProps, FBText } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { FBDialogProps } from "./FBDialog.types";
 import { withFBDialog } from "./FBDialog.wrap";
@@ -30,21 +30,23 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
       <Box display="flex" flexDirection="row-reverse">
         <CloseIcon fontSize="large" data-cy="dialog-close" onClick={handleClose} />
       </Box>
-      {isString(title) && (
-        <Box
-          fontWeight="fontWeightBold"
-          textAlign="left"
-          border={1}
-          // MUI border color issue
-          borderTop={0}
-          borderLeft={0}
-          borderRight={0}
-          borderColor={Colors.hint_gray}
-          mt={-2}
-          mb={2}
-        >
-          <Text message={title} />
-        </Box>
+      {(hasIn(title, "locale") || isString(title)) && (
+        <FBText
+          locale={(title as FBLabelLocaleProps)?.locale || title as string}
+          values={(title as FBLabelLocaleProps)?.values}
+          boxProps={{
+            fontWeight: "fontWeightBold",
+            textAlign: "left",
+            border: 1,
+            // MUI border color issue
+            borderTop: 0,
+            borderLeft: 0,
+            borderRight: 0,
+            borderColor: Colors.hint_gray,
+            mt: -2,
+            mb: 2,
+          }}
+        />
       )}
       <div ref={handleTitleRef} />
     </DialogTitle>
@@ -52,7 +54,7 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
       {content && portalTitle && portalAction && (
         <content.type {...content.props}>
           {content.props.children}
-          {!isString(title) && (
+          {!isString(title) && !hasIn(title, "locale") && (
             <Portal container={portalTitle}>
               {title}
             </Portal>

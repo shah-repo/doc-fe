@@ -69,7 +69,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
             {approval.status && approval.status !== "DRAFT" && (
               <Box color={Colors.gray}>&nbsp;| {FBInlineApprovalStatusIdent[approval.status]}</Box>
             )}
-            {approval.reviewedAt && (
+            {approval.reviewedAt && approval.status !== "DRAFT" && (
               <Box color={Colors.gray}>
               &nbsp;| {getFormattedDateString(approval.reviewedAt, MomentFormats.DateTime)}
               </Box>

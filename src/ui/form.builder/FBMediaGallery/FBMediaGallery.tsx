@@ -10,8 +10,9 @@ import { withFBMediaGallery } from "./FBMediaGallery.wrap";
 
 
 const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
-  collection = [],
   handleDelete,
+  previewType,
+  collection = [],
   actionsDisabled,
 }) => {
 
@@ -38,73 +39,98 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
         cols={2}
         style={{ width: "100%", height: "350px" }}
       >
-        <FBMapWrapper<FBMediaProps> {...{ collection }}>
-          {(item, index, props) => (
-            <GridListTile {...props} key={`fb-album-item-${index}`}>
-              <LazyLoad height={175}>
-                <Img
-                  style={{ objectFit: "cover", width: "100%", height: "175px" }}
-                  src={item.s3link}
-                  loader={
-                    <Box
-                      height={175}
-                      display="flex"
-                      color="white"
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      <CircularProgress />
+        <FBMapWrapper<FBMediaProps[]> {...{ collection }}>
+          {(media: FBMediaProps, index, props) => {
+            const type = previewType?.(media);
+            const { s3link: src, name, id } = media;
+            if (!type) { return; }
+            return (
+              <GridListTile {...props} key={`fb-album-item-${index}`}>
+                {/* Render LazyLoad only with non optional child or it
+                will crash otherwise :/ */}
+                {type === "image" && (
+                  <LazyLoad height={175}>
+                    <Img
+                      {...{ src }}
+                      style={{ objectFit: "cover", width: "100%", height: "175px" }}
+                      loader={
+                        <Box
+                          height={175}
+                          display="flex"
+                          color="white"
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <CircularProgress />
+                        </Box>
+                      }
+                    />
+                  </LazyLoad>
+                )}
+                {type === "video" && (
+                  <LazyLoad height={175}>
+                    <video controls={true} width="100%" height="95%" {... { src }}>
+                      <Text translation="file.viewer.video.not.supported" />
+                    </video>
+                  </LazyLoad>
+                )}
+                {type === "pdf" && (
+                  <LazyLoad height={175}>
+                    <object width="100%" height="100%" type="application/pdf" data={src}>
+                      <Text translation="common.file.not.loaded" />
+                    </object>
+                  </LazyLoad>
+                )}
+                <GridListTileBar
+                  subtitle={(
+                    <Tooltip title={name}>
+                      <Box
+                        style={{ whiteSpace: "nowrap" }}
+                        textOverflow="ellipsis"
+                        overflow="hidden">
+                        {name}
+                      </Box>
+                    </Tooltip>
+                  )}
+                  titlePosition="top"
+                  style={{ height: "35px" }}
+                  actionIcon={
+                    <Box display="flex" flexDirection="row-reverse" color="white">
+                      <IconButton
+                        color="inherit"
+                        size="small"
+                        disabled={actionsDisabled}
+                        onClick={() => handleDelete && handleDelete(id)}
+                      >
+                        <Tooltip title={<Text message="form.builder.delete" />}>
+                          <DeleteForeverIcon fontSize="small" />
+                        </Tooltip>
+                      </IconButton>
+                      {type === "image" && (
+                        <Tooltip
+                          TransitionComponent={Zoom}
+                          enterDelay={300}
+                          placement="left-start"
+                          classes={{ tooltip: classes.noMaxWidth }}
+                          title={
+                            <img
+                              style={{ objectFit: "cover", maxHeight: "600px", maxWidth: "600px" }}
+                              alt={name}
+                              {...{ src }}
+                            />
+                          }
+                        >
+                          <IconButton color="inherit" size="small">
+                            <VisibilityIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      )}
                     </Box>
                   }
                 />
-              </LazyLoad>
-              <GridListTileBar
-                subtitle={(
-                  <Tooltip title={item.name}>
-                    <Box
-                      style={{ whiteSpace: "nowrap" }}
-                      textOverflow="ellipsis"
-                      overflow="hidden">
-                      {item.name}
-                    </Box>
-                  </Tooltip>
-                )}
-                titlePosition="top"
-                style={{ height: "35px" }}
-                actionIcon={
-                  <Box display="flex" flexDirection="row-reverse" color="white">
-                    <IconButton
-                      color="inherit"
-                      size="small"
-                      disabled={actionsDisabled}
-                      onClick={() => handleDelete && handleDelete(item.id)}
-                    >
-                      <Tooltip title={<Text message="form.builder.delete" />}>
-                        <DeleteForeverIcon fontSize="small" />
-                      </Tooltip>
-                    </IconButton>
-                    <Tooltip
-                      TransitionComponent={Zoom}
-                      enterDelay={300}
-                      placement="left-start"
-                      classes={{ tooltip: classes.noMaxWidth }}
-                      title={
-                        <img
-                          alt={item.name}
-                          src={item.s3link}
-                          style={{ objectFit: "cover", maxHeight: "600px", maxWidth: "600px" }}
-                        />
-                      }
-                    >
-                      <IconButton color="inherit" size="small">
-                        <VisibilityIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </Box>
-                }
-              />
-            </GridListTile>
-          )}
+              </GridListTile>
+            );
+          }}
         </FBMapWrapper>
       </GridList>
     </Box>

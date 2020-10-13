@@ -1,5 +1,7 @@
 import { DialogProps, SvgIconProps } from "@material-ui/core";
+import { ReactNode } from "react";
 import { FBDialogState } from ".";
+import { FBLabelLocaleProps } from "..";
 
 export type FBDialogProps =
 & Pick<Partial<DialogProps>, "open" | "maxWidth">
@@ -9,7 +11,7 @@ export type FBDialogProps =
   handleTitleRef?: (instance: any) => any;
   onClose?: () => any;
   dialogState?: FBDialogState;
-  title?: React.ReactNode | string;
+  title?: string | ReactNode | FBLabelLocaleProps;
   content?: React.ReactElement;
   actions?: React.ReactNode;
   portalAction?: Element;
