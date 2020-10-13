@@ -298,6 +298,7 @@
   "common.approve.and.release.template": "Template",
   "common.upgrade": "Upgrade to latest version",
   "common.void": "Void",
+  "common.voided": "Voided",
   "common.alert": "Alert",
   "common.dismiss": "Dismiss",
   "common.reset": "Reset",
