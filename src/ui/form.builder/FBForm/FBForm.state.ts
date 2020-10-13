@@ -71,7 +71,10 @@ export class FBFormState extends FBSchemaState {
     forceDefault = false
   ) => {
     if (!fieldName) { return; }
-    lodashSet(this.values, fieldName, value);
+    this.values = {
+      ...this.values,
+      [fieldName]: value,
+    };
     if (!withState) { return; }
     this.inputState.get(fieldName)?.setValue(value);
   };
