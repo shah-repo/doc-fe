@@ -3,11 +3,10 @@ import { compact, difference, filter, find, isEmpty, isUndefined, map, pick, uni
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransitionBody, FBRequiredApprover } from "..";
+import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransitionBody, FBRequiredApprover } from "..";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
-import FBApprovalPasswordForm from "../FBApprovalPasswordForm/FBApprovalPasswordForm";
 import { FBApprovalsProps, FBApprovalsStatusEndpoint } from "./FBApprovals.types";
 
 export const withFBApprovals = <T extends FBApprovalsProps>(

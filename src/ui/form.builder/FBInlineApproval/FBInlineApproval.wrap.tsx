@@ -2,9 +2,8 @@ import { difference, filter, find, isEmpty, isUndefined, map, pick, some, sortBy
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
-import { FB, FBAutocompleteAsyncOption, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from "..";
+import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from "..";
 import { store } from "../../../state/store";
-import FBApprovalPasswordForm from "../FBApprovalPasswordForm/FBApprovalPasswordForm";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBDialogState } from "../FBDialog/FBDialog.state";
 import { FBInlineApprovalTransitionBody } from "./FBInlineApproval.types";
