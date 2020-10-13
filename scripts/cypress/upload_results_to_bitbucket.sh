@@ -65,7 +65,7 @@ if [[ -z "${DATE_ISO_DEFAULT}" ]]; then
   exit 1
 fi
 
-export AWS_PROFILE="$((AWS_PROFILE+shifamed-temp))"
+export AWS_PROFILE="${AWS_PROFILE:-shifamed-temp}"
 
 export BE_GIT_COMMIT_HASH=$(cd $BE_REPO;git rev-parse HEAD)
 export FE_GIT_COMMIT_HASH=$(cd $FE_REPO;git rev-parse HEAD)
