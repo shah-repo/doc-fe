@@ -40,6 +40,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
               label="form.builder.note"
               {...{ disabled }}
               name={`${FBFieldName.Context}-${name}`}
+              autosave
             />
           </Box>
         )}
