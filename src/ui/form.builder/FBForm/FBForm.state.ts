@@ -41,11 +41,6 @@ export class FBFormState extends FBSchemaState {
     this.validate();
   };
 
-  public setInitialValues = (initialValues: Dictionary<any>) => {
-    this.initialValues = initialValues;
-    this.setValues(initialValues);
-  };
-
   @action public setValues = (values: Dictionary<any>) => {
     this.values = values;
   };
