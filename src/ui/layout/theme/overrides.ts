@@ -191,6 +191,9 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
         "& fieldset": {
           borderWidth: "0px!important",
         },
+        "&[data-cy='password'] fieldset": {
+          borderWidth: "1px!important",
+        },
       },
     },
   },
