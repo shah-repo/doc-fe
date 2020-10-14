@@ -44,7 +44,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       const formValue = formState?.getValues() as FBProcedureItemConfig;
       procedureState?.addItem(formValue, type);
       handleCancel?.();
-    };
+    }
 
     function handleCancel() {
       dialogState?.closeDialog();
