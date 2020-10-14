@@ -17,12 +17,10 @@ export const FBProcedureItemOmitAction: Partial<FBProcedureItemType[]> = [
 ];
 
 export type FBProcedureItemProps =
-& Pick<FBProviderProps, "dialogState" | "formState">
+& Pick<FBProviderProps, "dialogState">
 & Pick<FBProcedureProps, "name" | "stepIndex" | "disabled" | "isPreview" | "loading">
 & {
   onClick?: (part?: FBProcedureItemConfig) => void;
-  handleAdd?: () => void;
-  handleCancel?: () => void;
   handleRemove?: (id: string) => void;
   getItem?: (id: string) => string;
   type: FBProcedureItemType;
