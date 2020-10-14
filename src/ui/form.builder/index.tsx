@@ -76,6 +76,7 @@ export { default as FBEditorActions } from "./FBEditorActions/FBEditorActions";
 export * from "./FBEditorActions/FBEditorActions.types";
 export { default as FBEditorApprovalField } from "./FBEditorApprovalField/FBEditorApprovalField";
 export * from "./FBEditorApprovalField/FBEditorApprovalField.types";
+export { default as FBEditorApprovals } from "./FBEditorApprovals/FBEditorApprovals";
 export { default as FBEditorAutocomplete } from "./FBEditorAutocomplete/FBEditorAutocomplete";
 export { default as FBEditorCheckControl } from "./FBEditorCheckControl/FBEditorCheckControl";
 export { default as FBEditorCustomControl } from "./FBEditorCustomControl/FBEditorCustomControl";
@@ -283,5 +284,4 @@ export { default as FBWorkspaceTplActions } from "./FBWorkspaceTplActions/FBWork
 export * from "./FBWorkspaceTplActions/FBWorkspaceTplActions.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
-
 
