@@ -1,7 +1,7 @@
 import { keys } from "lodash";
 import { reaction } from "mobx";
 import React from "react";
-import { FB, FBProcedureItemType, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
+import { FB, FBFieldName, FBProcedureItemType, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
 
 export const withFBProcedure = <T extends FBProcedureProps>(
   Component: React.FunctionComponent<T>,
@@ -33,6 +33,18 @@ export const withFBProcedure = <T extends FBProcedureProps>(
         ...formState.getFieldValue(name),
         ...data,
       }, true), {
+        fireImmediately: true,
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    // Diff switch
+    React.useEffect(() => reaction(
+      () => formState?.inputState.get(FBFieldName.ProcedureDiff)?.value,
+      (checked) => {
+        if (!checked) { return; }
+        
+      }, {
         fireImmediately: true,
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps

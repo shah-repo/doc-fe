@@ -24,6 +24,7 @@ import { FBParts } from "../FBParts";
 import { FBPOApprovalMatrix } from "../FBPOApprovalMatrix";
 import { FBPOReceive } from "../FBPOReceive";
 import { FBProcedure } from "../FBProcedure";
+import { FBProcedureDiff } from "../FBProcedureDiff";
 import { FBPurchaseOrder } from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import { FBRadio } from "../FBRadio";
@@ -98,6 +99,7 @@ export class FBSchemaState {
     approvals: FBApprovals,
     procedure: FBProcedure,
     parts: FBParts,
+    procedurediff: FBProcedureDiff,
   };
 
   @observable public schema?: FBSchemaProps[];

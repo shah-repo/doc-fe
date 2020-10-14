@@ -17,13 +17,14 @@ import {
   FBSchemaState,
   FBSnackbarState,
   FBTaskState,
-  FBWorkspaceState,
+  FBWorkspaceState
 } from "..";
 import { FBApprovalMatrixState } from "../FBApprovalMatrix";
 import { FBPartsState } from "../FBParts";
 import { FBPOApprovalMatrixState } from "../FBPOApprovalMatrix";
 import { FBPOReceiveState } from "../FBPOReceive";
 import { FBProcedureState } from "../FBProcedure";
+import { FBProcedureDiffState } from "../FBProcedureDiff";
 import { FBTextEditorState } from "../FBTextEditor";
 import { FBTextEditorOptionsState } from "../FBTextEditorOptions";
 
@@ -54,5 +55,6 @@ export interface FBProviderProps {
   textEditorState?: FBTextEditorState;
   textEditorOptionsState?: FBTextEditorOptionsState;
   procedureState?: FBProcedureState;
+  procedureDiffState?: FBProcedureDiffState;
   partsState?: FBPartsState;
 }

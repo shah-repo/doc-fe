@@ -7,4 +7,5 @@ export enum FBFieldName {
   ApprovalState = "approvalFieldState-",
   MaterialSection = "fb-material-section-",
   EquipmentSection = "fb-equipment-section-",
+  ProcedureDiff = "fb-procedure-diff",
 }

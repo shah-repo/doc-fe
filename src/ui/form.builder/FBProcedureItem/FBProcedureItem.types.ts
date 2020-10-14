@@ -1,5 +1,12 @@
 import { FBProcedureProps, FBProviderProps } from "..";
 
+export enum FBProcedureItemStatus {
+  removed = "red",
+  added = "blue",
+  updated = "orange",
+  none = "transparent",
+}
+
 export enum FBProcedureItemType {
   attachments = "attachments",
   materials = "materials",
@@ -34,5 +41,5 @@ export interface FBProcedureItemConfig {
   title: string;
   quantity?: number;
   unit?: string;
-  procedureFieldId?: string;
+  status?: keyof FBProcedureItemStatus;
 }
