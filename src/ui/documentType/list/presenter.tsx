@@ -1,5 +1,4 @@
 import { Grid } from "@material-ui/core";
-import { isString } from "lodash";
 import moment from "moment";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -9,8 +8,8 @@ import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
-import { TableDataProps, TablePanelStateProps, TableSearchQueryType } from "../../components/table/types";
-import { documentRevisionEffectiveDateOption, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
+import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
+import { documentRevisionEffectiveDateOption } from "../../document.revision/utils/helpers";
 import CreateDocumentByType from "./CreateDocumentByType";
 import { styles } from "./styles";
 
@@ -38,45 +37,32 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   tableCriteria,
 }) => {
   const classes = styles();
-
-  // currently status column by default has all types, need an empty string for csv
-  const formedTableCriteria = () => {
-    if (isString(tableCriteria.queryDict?.["status[]"])) {
-      return tableCriteria;
-    }
-    return ({
-      queryDict: {
-        ...tableCriteria.queryDict,
-        "status[]": "",
-      },
-    });
-  };
   const intl = useIntl();
 
   const headers =
     columns.map((column) => {
-      if (moment(formedTableCriteria().queryDict?.[column.searchOptions?.dataKey || ""],
+      if (moment(tableCriteria.queryDict?.[column.searchOptions?.dataKey || ""],
         moment.ISO_8601, true).isValid()) {
         const dateSearchString = documentRevisionEffectiveDateOption().find((e) =>
-          e.value === formedTableCriteria().queryDict?.[column.searchOptions?.dataKey || ""])?.text;
+          e.value === tableCriteria.queryDict?.[column.searchOptions?.dataKey || ""])?.text;
         return {
           label: `${column.label}: ${dateSearchString || ""}`,
           key: column.key,
         };
       }
       return {
-        label: `${intl.formatMessage({ id: column.label })}: ${formedTableCriteria().queryDict?.[column.searchOptions?.dataKey || column.searchOptions?.defaultValue || ""] || column.searchOptions?.defaultValue || ""}`,
+        label: `${intl.formatMessage({ id: column.label })}: ${tableCriteria.queryDict?.[column.searchOptions?.dataKey || column.searchOptions?.defaultValue || ""] || column.searchOptions?.defaultValue || ""}`,
         key: column.key,
       };
     });
 
-  const customQuerySet = (queryDict: TableSearchQueryType) => {
-    if (!queryDict["status[]"]) {
-      queryDict["status[]"] = documentRevisionQueryStatus();
-    }
+  // const customQuerySet = (queryDict: TableSearchQueryType) => {
+  //   if (!queryDict["status[]"]) {
+  //     queryDict["status[]"] = documentRevisionQueryStatus();
+  //   }
 
-    return queryDict;
-  };
+  //   return queryDict;
+  // };
 
   const createDocumentProps = isByCategory ? {
     categoryName: documentCategory.category,
@@ -101,7 +87,6 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
           queryUrl={queryUrl}
           cellMeasure={true}
           tableName={tableName}
-          customQuerySet={customQuerySet}
         />
       </Grid>
     </Grid>
