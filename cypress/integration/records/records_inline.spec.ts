@@ -129,7 +129,9 @@ context("Record inline Flow", () => {
       });
 
       it("Add textfield", () => {
-        cy.fbClickAddNewHiddenBtn();
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
+          cy.fbClickAddNewHiddenBtn();
+        });
         cy.fbSelectTextField();
         cy.fbAddLabelName({ name: "Textfield for inline" });
         cy.fbAddField();
@@ -233,8 +235,8 @@ context("Record inline Flow", () => {
 
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
-        cy.wrapWithWaitOnApiCall(
-          CyRoutes.PostApprovalsApprove,
+        cy.wrapWithWaitOnApiCalls(
+          [CyRoutes.PostApprovalsApprove, CyRoutes.PatchDocRev],
           () => {
             cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
           });
