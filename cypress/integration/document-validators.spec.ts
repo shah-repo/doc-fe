@@ -548,7 +548,11 @@ context("Validators tests", () => {
 
   context("Validation errors on custom fields should not prevent from saving document", () => {
     it("saving the document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        });
+      cy.wait(500);
     });
   });
 
