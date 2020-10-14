@@ -4,6 +4,7 @@ import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
 import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from "..";
 import { store } from "../../../state/store";
+import FBApprovalPasswordFormActions from "../FBApprovalPasswordForm/FBApprovalPasswordForm.actions";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBDialogState } from "../FBDialog/FBDialog.state";
 import { FBInlineApprovalTransitionBody } from "./FBInlineApproval.types";
@@ -30,6 +31,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
+    dialogState = FB.useRef(FBDialogState);
     const {
       id,
       document,
@@ -52,19 +54,6 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       approvals: fieldApprovals,
       isOwner,
     });
-    dialogState = FB.useRef(FBDialogState);
-
-    onApproveClick = (approvalId: string) => {
-      dialogState?.config({
-        title: "form.builder.password.prompt",
-        open: true,
-        content: (
-          <FBApprovalPasswordForm
-            {...{ approvalTransition, approvalId }}
-          />
-        ),
-      });
-    };
 
     // MARK: @reaction
     // Approvals sync
@@ -187,6 +176,23 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       if (!id) { return; }
       const passwordBody = pick(formState?.values, "password") as FBInlineApprovalTransitionBody;
       inlineApprovalState?.approvalTransition(transition, id, passwordBody);
+    };
+
+    onApproveClick = (approvalId: string) => {
+      const handleAdd = () => {
+        approvalTransition?.("approve", approvalId);
+        dialogState?.closeDialog();
+      };
+      const handleCancel = () => {
+        dialogState?.closeDialog();
+      };
+
+      dialogState?.config({
+        title: "form.builder.password.prompt",
+        open: true,
+        content: <FBApprovalPasswordForm {...{ formState }} />,
+        actions: <FBApprovalPasswordFormActions {...{ handleAdd, handleCancel }} />,
+      });
     };
 
     // MARK: @observer

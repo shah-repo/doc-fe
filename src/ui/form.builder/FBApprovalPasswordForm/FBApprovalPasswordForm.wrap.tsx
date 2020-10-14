@@ -1,22 +1,14 @@
 import React from "react";
-import { FB } from "..";
+import { FBApprovalPasswordFormProps } from "./FBApprovalPasswordForm.types";
 
 export const withFBApprovalPasswordForm = (
-  Component: React.FunctionComponent<any>,
+  Component: React.FunctionComponent<FBApprovalPasswordFormProps>,
 ) => {
   const Comp = ({
-    approvalTransition,
-    approvalId,
-  }) => {
-    const { dialogState, formState } = FB.useStores();
-
-    return Component({
-      approvalTransition,
-      approvalId,
-      dialogState,
-      formState,
-    });
-  };
+    ...props
+  }) => Component({
+    ...(props),
+  });
   Comp.displayName = "withFBApprovalPasswordForm";
   return Comp;
 };

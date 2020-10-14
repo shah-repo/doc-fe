@@ -31,6 +31,7 @@ export { default as FBApprovalMatrix } from "./FBApprovalMatrix_/FBApprovalMatri
 export { default as FBApprovalMatrixSection } from "./FBApprovalMatrix_/FBApprovalMatrix.section";
 export * from "./FBApprovalMatrix_/FBApprovalMatrix.types";
 export { default as FBApprovalPasswordForm } from "./FBApprovalPasswordForm/FBApprovalPasswordForm";
+export { default as FBApprovalPasswordFormActions } from "./FBApprovalPasswordForm/FBApprovalPasswordForm.actions";
 export { default as FBApprovals } from "./FBApprovals/FBApprovals";
 export { default as FBApprovalsState } from "./FBApprovals/FBApprovals.state";
 export { default as FBApprovers } from "./FBApprovers/FBApprovers";

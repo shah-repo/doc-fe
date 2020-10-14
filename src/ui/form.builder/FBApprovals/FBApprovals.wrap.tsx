@@ -3,7 +3,7 @@ import { compact, difference, filter, find, isEmpty, isUndefined, map, pick, uni
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransitionBody, FBRequiredApprover } from "..";
+import { FB, FBApprovalPasswordForm, FBApprovalPasswordFormActions, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransitionBody, FBRequiredApprover } from "..";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
@@ -74,15 +74,19 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     }
 
     onApproveClick = (approvalId: string) => {
+      const handleAdd = () => {
+        changeApprovalStatus?.("approve", approvalId);
+        dialogState?.closeDialog();
+      };
+      const handleCancel = () => {
+        dialogState?.closeDialog();
+      };
+
       dialogState?.config({
         title: "form.builder.password.prompt",
         open: true,
-        content: (
-          <FBApprovalPasswordForm
-            {...{ approvalId }}
-            approvalTransition={changeApprovalStatus}
-          />
-        ),
+        content: <FBApprovalPasswordForm {...{ formState }} />,
+        actions: <FBApprovalPasswordFormActions {...{ handleAdd, handleCancel }} />,
       });
     };
 
