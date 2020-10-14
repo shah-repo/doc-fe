@@ -56,14 +56,6 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       };
     });
 
-  // const customQuerySet = (queryDict: TableSearchQueryType) => {
-  //   if (!queryDict["status[]"]) {
-  //     queryDict["status[]"] = documentRevisionQueryStatus();
-  //   }
-
-  //   return queryDict;
-  // };
-
   const createDocumentProps = isByCategory ? {
     categoryName: documentCategory.category,
   } : {
