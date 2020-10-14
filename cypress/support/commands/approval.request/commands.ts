@@ -143,7 +143,7 @@ Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string 
 
 Cypress.Commands.add("arClickCreateApprovalRequestAfterCompletingForm", () => {
   cy.wrapWithWaitOnApiCalls(
-    [CyRoutes.PostChangeRequests, CyRoutes.DocRevPreview, CyRoutes.DocRevPreview], () => {
+    [CyRoutes.PostChangeRequests, CyRoutes.DocRevPreview], () => {
       cy.get("[data-cy=\"navigation.createChangeRequest\"]").click();
     });
 });

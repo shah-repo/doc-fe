@@ -15,7 +15,6 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   handleRemove,
   getItem,
   dialogState,
-  formState,
   isPreview,
   disabled,
   loading,
@@ -23,7 +22,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   value = [],
   name,
 }) => (
-  <FBProvider {...{ dialogState, formState }}>
+  <FBProvider {...{ dialogState }}>
     <FBDialog />
     <Box
       bgcolor={Colors.gray}

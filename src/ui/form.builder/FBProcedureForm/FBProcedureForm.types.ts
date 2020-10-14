@@ -5,5 +5,7 @@ export type FBProcedureFormProps =
 & Pick<FBProcedureItemProps, "type">
 & Pick<FBAutocompleteAsyncProps, "optionId" | "disabledOptions">;
 
-export type FBProcedureFormActionsProps =
-& Pick<FBProcedureItemProps, "handleAdd" | "handleCancel">;
+export interface FBProcedureFormActionsProps {
+  handleAdd?: () => void;
+  handleCancel?: () => void;
+}
