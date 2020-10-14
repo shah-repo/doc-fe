@@ -195,6 +195,16 @@ To run Cypress test suites on code that was deployed, you need to:
 
 
 #### Upload results to bitbucket
+##### Load AWS credentials in credentils file with *scripts/fetch_shifamed_temp_credentials.sh*.
+Arguments are
+1. Name of AWS profile in *~/.aws/credentials*
+2. Your ARN.  *arn:aws:iam::817083319299:mfa/\<Your name\>*
+3. 6 digit code from MFA device
+
+Example:
+```
+./scripts/fetch_shifamed_temp_credentials.sh shifamed arn:aws:iam::817083319299:mfa/Zoran 123456
+```
 
 When you have *CI_BUILD_ID* defined in shell (eg. you loaded it with `. ./scripts/cypress/generate_ci_build_id.sh`), 
 - run:
