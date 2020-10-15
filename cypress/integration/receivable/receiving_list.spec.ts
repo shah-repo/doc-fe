@@ -498,7 +498,7 @@ context("Receivable list test", () => {
         cy.dlClearFilters();
       });
 
-      it(`Filter list by owner '${"USERS[1].name"}'`, () => {
+      it(`Filter list by owner '${USERS[1].name}'`, () => {
         cy.recFilterByOwner({ owner: USERS[1].name });
       });
 
