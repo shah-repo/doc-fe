@@ -17,7 +17,7 @@ import {
   FBSchemaState,
   FBSnackbarState,
   FBTaskState,
-  FBWorkspaceState
+  FBWorkspaceState,
 } from "..";
 import { FBApprovalMatrixState } from "../FBApprovalMatrix";
 import { FBPartsState } from "../FBParts";

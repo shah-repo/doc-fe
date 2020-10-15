@@ -41,7 +41,7 @@ export const withFBProcedureDiff = <T extends FBProcedureDiffProps>(
       } else {
         workspaceState?.setMode(procedureDiffState.initialMode);
       }
-    }
+    };
 
     // MARK: @observer
     useObserver(() => {

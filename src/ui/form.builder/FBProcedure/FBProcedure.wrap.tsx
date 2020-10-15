@@ -1,7 +1,7 @@
-import { keys } from "lodash";
+import { cloneDeep, differenceBy, find, isEqual, keys, map, union, unionBy } from "lodash";
 import { reaction } from "mobx";
 import React from "react";
-import { FB, FBFieldName, FBProcedureItemType, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
+import { FB, FBFieldName, FBInputState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureOmitDiffKey, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
 
 export const withFBProcedure = <T extends FBProcedureProps>(
   Component: React.FunctionComponent<T>,
@@ -24,6 +24,10 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
     isPreview = workspaceState?.mode === "preview";
     types = keys(FBProcedureItemType);
+    const diffValue = formState?.inputState.get(FBFieldName.ProcedureDiff)?.value;
+    procedureState?.setDiffPreview(diffValue);
+    const inputState = FB.useRef<FBInputState>(FBInputState, undefined);
+    formState?.inputState.set(`${FBFieldName.ProcedureDiff}${name}`, inputState);
 
     // MARK: @reactions
     // Value sync with the form
@@ -31,7 +35,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
       () => procedureState?.value,
       (data) => formState?.setFieldValue(name, {
         ...formState.getFieldValue(name),
-        ...data,
+        ...cloneDeep(data),
       }, true), {
         fireImmediately: true,
       }
@@ -42,8 +46,13 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get(FBFieldName.ProcedureDiff)?.value,
       (checked) => {
-        if (!checked) { return; }
-        
+        const diffInput = `${FBFieldName.ProcedureDiff}${name}`;
+        if (!checked) {
+          return formState?.setFieldValue(diffInput, undefined, true);
+        }
+        const diffCollection = getDiffValue();
+        procedureState?.setDiffValue(diffCollection);
+        formState?.setFieldValue(diffInput, diffCollection, true);
       }, {
         fireImmediately: true,
       }
@@ -51,6 +60,45 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     ), []);
 
     // MARK: @helpers
+    function getDiffValue(): FBProcedureValue {
+      const { document: { parent: { formInput = {} } = {} } = {} } = workspaceState || {};
+      const parentValue = (formInput[name || ""] || {}) as FBProcedureValue;
+      const childValue =  procedureState?.value || {};
+      const valueKeys = union(keys(parentValue), keys(childValue));
+      let diffValue = {};
+
+      map(valueKeys, (key) => {
+        if (FBProcedureOmitDiffKey.includes(key)) { return; }
+        const parentKeyValue: FBProcedureItemConfig[] = parentValue[key];
+        const childKeyValue: FBProcedureItemConfig[] = childValue[key];
+
+        const unionParts = unionBy(childKeyValue, parentKeyValue, "id");
+        const removedParts: string[] = map(differenceBy(parentKeyValue, childKeyValue || [], "id"), "id");
+        const addedParts: string[] = map(differenceBy(childKeyValue, parentKeyValue || [], "id"), "id");
+
+        diffValue = {
+          ...diffValue,
+          [key]: map(unionParts, (part) => {
+            const { id } = part;
+            switch (true) {
+              case removedParts.includes(id):
+                return { ...part, status: "removed" };
+              case addedParts.includes(id):
+                return { ...part, status: "added" };
+              default: {
+                const parentPart = find(parentKeyValue, { id });
+                const childPart = find(childKeyValue, { id });
+                if (!isEqual(parentPart, childPart)) {
+                  return { ...part, status: "updated" };
+                }
+                return { ...part, status: "none" };
+              }
+            }
+          }),
+        };
+      });
+      return diffValue;
+    }
 
     // MARK: @methods
     handleAdd = (isClone?: boolean) => {

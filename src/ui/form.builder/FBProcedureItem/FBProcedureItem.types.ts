@@ -1,11 +1,4 @@
-import { FBProcedureProps, FBProviderProps } from "..";
-
-export enum FBProcedureItemStatus {
-  removed = "red",
-  added = "blue",
-  updated = "orange",
-  none = "transparent",
-}
+import { FBPartItemStatus, FBProcedureProps, FBProviderProps } from "..";
 
 export enum FBProcedureItemType {
   attachments = "attachments",
@@ -39,5 +32,5 @@ export interface FBProcedureItemConfig {
   title: string;
   quantity?: number;
   unit?: string;
-  status?: keyof FBProcedureItemStatus;
+  status?: FBPartItemStatus;
 }
