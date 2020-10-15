@@ -2,8 +2,6 @@ import { Box } from "@material-ui/core";
 import { find, get, unionBy, uniqWith } from "lodash";
 import React from "react";
 import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceTplActions } from "..";
-import FBStore from "../stores/ui/FBStore";
-import { FBInputProps } from "../types/common";
 
 export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
   Component: React.FunctionComponent<T>,
@@ -42,8 +40,6 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
       );
 
       workspaceState?.setSchema(mergedSchema);
-      // OLD: to be removed
-      FBStore.setSchema(mergedSchema as FBInputProps[]);
     };
 
     importSchema = (event: React.ChangeEvent<HTMLInputElement>) => {
