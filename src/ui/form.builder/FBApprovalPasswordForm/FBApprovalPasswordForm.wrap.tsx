@@ -16,12 +16,15 @@ export const withFBApprovalPasswordForm = (
       formState?.reset();
     };
 
+    const onDialogApprove = () => {
+      approvalTransition?.("approve", approvalId);
+      onDialogClose();
+    };
+
     return Component({
-      approvalTransition,
-      approvalId,
-      dialogState,
       formState,
       onDialogClose,
+      onDialogApprove,
     });
   };
   Comp.displayName = "withFBApprovalPasswordForm";

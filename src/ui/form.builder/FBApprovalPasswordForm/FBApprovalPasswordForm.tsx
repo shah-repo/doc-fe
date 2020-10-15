@@ -6,11 +6,9 @@ import { FBApprovalPasswordFormProps } from "./FBApprovalPasswordForm.types";
 import { withFBApprovalPasswordForm } from "./FBApprovalPasswordForm.wrap";
 
 const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProps> = ({
-  dialogState,
   formState,
-  approvalTransition,
-  approvalId,
   onDialogClose,
+  onDialogApprove,
 }) => (
   <FBForm {...{ formState }}>
     <FBTextField
@@ -31,10 +29,7 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
       <FBSubmitButton
         variant="contained"
         label="common.confirm"
-        onClick={() => {
-          approvalTransition?.("approve", approvalId);
-          dialogState?.closeDialog();
-        }}
+        onClick={onDialogApprove}
       />
     </Box>
   </FBForm>
