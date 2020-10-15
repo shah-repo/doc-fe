@@ -3,7 +3,8 @@ import { FBInlineApprovalTransition, FBProviderProps } from "..";
 export type FBApprovalPasswordFormProps =
 & Pick<FBProviderProps, "dialogState" | "formState">
 & {
-  approvalTransition(transition: FBInlineApprovalTransition, approvalId: string): void;
-  approvalId: string;
+  approvalTransition?(transition: FBInlineApprovalTransition, approvalId: string): void;
+  approvalId?: string;
   onDialogClose?(): void;
+  onDialogApprove?(): void;
 };
