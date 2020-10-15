@@ -78,11 +78,14 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
     if ((isDeprecated || isStatusReleased) && isInlineApproval && isNumericRelease) {
       stateLabel = "common.archived";
     }
-    if (isObsolete || isVoided) {
+    if (isVoided) {
       stateLabel = "common.voided";
     }
     if (isStatusReleased && isInlineApproval && isNumericRelease) {
       stateLabel = "common.last.signed";
+    }
+    if (isStatusCanceled) {
+      stateLabel = "common.canceled";
     }
   }
 
