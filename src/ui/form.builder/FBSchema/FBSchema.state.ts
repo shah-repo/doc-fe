@@ -143,7 +143,6 @@ export class FBSchemaState {
           includes(FBEditorState.pickStepIndex, step.type))),
       },
     }));
-
     set(this, "schema", schema);
   };
 
