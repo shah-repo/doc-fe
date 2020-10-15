@@ -18,3 +18,5 @@ export interface FBProcedureValue {
   equipment?: FBProcedureItemConfig[];
   attachments?: FBMediaProps[];
 }
+
+export const FBProcedureOmitDiffKey: string[] = ["description", "attachments"];

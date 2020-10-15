@@ -4,13 +4,15 @@ import {
   FBConditionalWrapper,
   FBFieldName,
   FBMapWrapper,
-  FBProcedureItemConfig,
+
+
+  FBPartItemStatusBg,
+
+  FBPartItemStatusBorder, FBPartsItemProps, FBProcedureItemConfig,
   FBProcedureItemLocale,
   FBSection,
 } from "..";
-import Colors from "../../layout/theme/utils/colors";
 import { FBText } from "../FBText";
-import { FBPartsItemProps } from "./FBPartsItem.types";
 import { withFBPartsItem } from "./FBPartsItem.wrap";
 
 const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
@@ -55,8 +57,8 @@ const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
                 unit: item.unit,
               }}
               boxProps={{
-                bgcolor: Colors.light_blue,
-                borderColor: Colors.medium_blue,
+                bgcolor: FBPartItemStatusBg[(item.status || "none")],
+                borderColor: FBPartItemStatusBorder[(item.status || "none")],
                 border: 1,
                 borderRadius: 4,
                 padding: 1,

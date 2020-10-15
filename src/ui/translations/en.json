@@ -765,6 +765,7 @@
   "form.builder.procedure.equipment.title": "{title}",
   "form.builder.action.mode": "{mode} {title}",
   "form.builder.edit": "Edit",
+  "form.builder.prev.build.changes": "Show changes from previous build",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.pdf": "Download PDF file",

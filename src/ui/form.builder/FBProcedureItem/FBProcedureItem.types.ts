@@ -1,4 +1,4 @@
-import { FBProcedureProps, FBProviderProps } from "..";
+import { FBPartItemStatus, FBProcedureProps, FBProviderProps } from "..";
 
 export enum FBProcedureItemType {
   attachments = "attachments",
@@ -32,5 +32,5 @@ export interface FBProcedureItemConfig {
   title: string;
   quantity?: number;
   unit?: string;
-  procedureFieldId?: string;
+  status?: FBPartItemStatus;
 }

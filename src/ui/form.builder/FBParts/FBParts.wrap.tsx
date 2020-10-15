@@ -1,7 +1,7 @@
 import { filter, map } from "lodash";
 import { reaction } from "mobx";
 import React from "react";
-import { FB, FBPartsProps, FBPartsState } from "..";
+import { FB, FBFieldName, FBPartsProps, FBPartsState } from "..";
 
 export const withFBParts = <T extends FBPartsProps>(
   Component: React.FunctionComponent<T>,
@@ -41,6 +41,11 @@ export const withFBParts = <T extends FBPartsProps>(
       reaction(
         () => formState?.inputState.get(name)?.value,
         (data) => partsState?.parts.set(name, data)
+      );
+
+      reaction(
+        () => formState?.inputState.get(`${FBFieldName.ProcedureDiff}${name}`)?.value,
+        (data) => partsState?.diffParts.set(name, data)
       );
     }
 
