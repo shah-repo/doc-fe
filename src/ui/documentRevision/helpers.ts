@@ -209,6 +209,7 @@ export const getFBSchemeByDocType = (
       type: "approvals",
       deleteDisabled: true,
       name: `fb-approvals-${FB.uniqid}`,
+      uniqueSchemaItem: true,
     });
   }
 
