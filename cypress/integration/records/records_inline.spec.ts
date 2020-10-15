@@ -245,7 +245,9 @@ context("Record inline Flow", () => {
       });
 
       it("Reload page", () => {
-        cy.reload();
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
+          cy.reload();
+        });
       });
 
       it("Click WIP document", () => {
@@ -287,8 +289,10 @@ context("Record inline Flow", () => {
           });
         });
 
-        it("Reload document", () => {
-          cy.reload();
+        it("Reload page", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
+            cy.reload();
+          });
         });
 
         it("Click WIP document", () => {
@@ -303,8 +307,10 @@ context("Record inline Flow", () => {
           });
         });
 
-        it("Reload document", () => {
-          cy.reload();
+        it("Reload page", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
+            cy.reload();
+          });
         });
 
         it("Click WIP document", () => {
@@ -344,8 +350,10 @@ context("Record inline Flow", () => {
           });
         });
 
-        it("Reload document", () => {
-          cy.reload();
+        it("Reload page", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
+            cy.reload();
+          });
         });
 
         it("Click WIP document", () => {
