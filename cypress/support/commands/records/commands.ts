@@ -19,10 +19,9 @@ Cypress.Commands.add("recCreateRecordFromLandingPage", () => {
 });
 
 Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params: {recordType: string; recordForms: string[]}) => {
-  cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click()
-    .wait(500)
-    .contains(params.recordType)
-    .click();
+  cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
+  cy.wait(500);
+  cy.get("div[id^=react-select]").contains(params.recordType).click();
   cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").click();
   params.recordForms.forEach((item) => {
     cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").contains(item);
@@ -32,7 +31,9 @@ Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params: {recordType
 });
 
 Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
-  cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click().wait(500).contains(params.recordType).click();
+  cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
+  cy.wait(500);
+  cy.get("div[id^=react-select]").contains(params.recordType).click();
   if (params.recordForm) {
     cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").type(params.recordForm + "{downarrow}{enter}");
   }
