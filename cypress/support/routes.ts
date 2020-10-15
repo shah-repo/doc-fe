@@ -46,6 +46,7 @@ export enum CyRoutes {
   PostChangeRequests = "PostChangeRequests",
   PostTaskDone = "PostTaskDone",
   PostRemoteValidatorsHelper = "PostRemoteValidatorsHelper",
+  GetDocDynamicForm = "GetDocDynamicForm"
 }
 
 export const routes: ICyRoutes =   {
@@ -92,6 +93,12 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 25 * 1000,
+    },
+  },
+  GetDocDynamicForm: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions/dynamic_forms",
     },
   },
   PostOrPatchDocRev: {
@@ -175,6 +182,9 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions*",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
     },
   },
   ARPreview: {

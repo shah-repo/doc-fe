@@ -16,7 +16,23 @@ export type DocumentGroupType =
   "PO" |
   "WORK_ORDER" |
   "SUPPLIER" |
-  "PART";
+  "PART" |
+  "ENGINEERING_BUILD";
+
+export enum DOC_GROUP_TYPE {
+  FORM = "FORM",
+  OTHER ="OTHER",
+  RECORD = "RECORD",
+  DAM = "DAM",
+  MPI = "MPI",
+  DYNAMIC_FORM = "DYNAMIC_FORM",
+  POAM = "POAM",
+  PO = "PO",
+  WORK_ORDER = "WORK_ORDER",
+  SUPPLIER = "SUPPLIER",
+  PART = "PART",
+  ENGINEERING_BUILD = "ENGINEERING_BUILD",
+}
 
 export type DocumentGroupOptionsType =
   "FORM" |
@@ -32,7 +48,8 @@ export type DocumentGroupOptionsType =
   "WORK_ORDER" |
   "WO_PARTS" |
   "CHANGE_REQUEST" |
-  "BE_OUTPUT";
+  "BE_OUTPUT" |
+  "CAN_BE_COPIED";
 
 export enum DOC_TYPE_GROUP_OPTION {
   FORM = "FORM",
@@ -46,11 +63,12 @@ export enum DOC_TYPE_GROUP_OPTION {
   DYNAMIC_FORM = "DYNAMIC_FORM",
   POAM = "POAM",
   PO = "PO",
-  WORK_ORDER = "WORK_ORDER",
+  WORK_ORDER = "WORK ORDER",
   WO_PARTS = "WO_PARTS",
   PART = "PART",
   SUPPLIER = "SUPPLIER",
-  RECEIVABLE = "RECEIVABLE",
+  RECEIVE = "RECEIVE",
+  CAN_BE_COPIED = "CAN_BE_COPIED",
 }
 export interface PageDetailsColumn {
   label: Translation;

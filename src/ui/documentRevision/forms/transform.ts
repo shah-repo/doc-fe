@@ -44,6 +44,7 @@ export const toDocumentRevisionFormValues = (
     operators: get(documentRevision, "document.securityList.operators", [])
       .map((operator) => ({ label: operator.name, value: operator.id })),
     renderHTML: documentRevision.renderHTML,
+    schema: documentRevision.schema,
   };
   if (documentRevision.formTemplate) {
     values.formTemplate = {
@@ -60,7 +61,7 @@ export const toDocumentRevisionEditRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
   const data = {
-    ...pick(values, ["formTemplate", "formDocument", "formInput" ]),
+    ...pick(values, ["formTemplate", "formDocument", "formInput", "schema" ]),
     description: values.description,
     name: values.name,
     attachments: values.attachments,

@@ -232,7 +232,10 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     { label: `TYPE: ${documentTypeSearchName || ""}`, key: "type" },
     { label: `OWNER: ${tableCriteria.queryDict.owner || ""}`, key: "owner" },
     { label: `AR ID: ${tableCriteria.queryDict.crId || ""}`, key: "crId" },
-    { label: `STATUS: ${tableCriteria.queryDict["status[]"] || ""}`, key: "status" },
+    {
+      label: `STATUS: ${isString(tableCriteria.queryDict["status[]"]) ?
+        tableCriteria.queryDict["status[]"] : ""}`, key: "status",
+    },
     { label: `EFFECTIVE DATE: ${effectiveDateSearch || ""}`, key: "effectiveDate" },
   ];
 
@@ -244,7 +247,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         documentTitle: e.name,
         type: e.document.documentType.documentTypeAcronym,
         owner: e.owner.user.name,
-        crId: e.changeRequest?.crId,
+        crId: e.changeRequest?.crId || "",
         status: e.status,
         effectiveDate: e.effectiveDate ? getFormattedDateString(e.effectiveDate, MomentFormats.MonthDateYear) : "",
       }));

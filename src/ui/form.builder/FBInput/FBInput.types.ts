@@ -59,7 +59,10 @@ export type FBInputType =
   | "task"
   | "approvers"
   | "blanktplform"
-  | "approvals";
+  | "approvals"
+  | "procedure"
+  | "parts"
+  | "procedurediff";
 
 export type FBInputProps =
   & FBLabelProps
@@ -118,6 +121,11 @@ export type FBInputProps =
     dataCy?: string;
     withState?: boolean;
     bookmarked?: boolean;
+    /**
+     * @cfg {Bool} Whether the type added to the schema must be unique.
+     * El with a type marked as a uniqueSchemaItem can be added to the schema only once.
+     */
+    uniqueSchemaItem?: boolean;
   };
 
 export const OmitInputClones: FBInputType[] = [
@@ -130,4 +138,6 @@ export const OmitInputClones: FBInputType[] = [
   "inlineapproval",
   "approvals",
   "texteditor",
+  "procedure",
+  "procedurediff",
 ];

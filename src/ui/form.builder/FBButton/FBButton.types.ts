@@ -2,7 +2,7 @@ import { ButtonProps } from "@material-ui/core";
 import { FBInputProps } from "..";
 
 export type FBButtonProps =
-  & Pick<FBInputProps, "gutter">
+  & Pick<FBInputProps, "gutter" | "label">
   & Pick<ButtonProps,
     | "variant"
     | "color"
@@ -19,6 +19,5 @@ export type FBButtonProps =
     | "endIcon"
   >
   & {
-    label?: string;
     dataCy?: string;
   };

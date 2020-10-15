@@ -36,14 +36,6 @@ context("Approval request form scenario", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
-            documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
-                group: "OTHER",
-                isQms: true,
-              },
-            ],
           }, sessionId,
         }).then((response) => {
           createdCompany = response;
@@ -294,11 +286,14 @@ context("Approval request form scenario", () => {
       cy.arRejectComfirmationAR();
     });
 
+    it("Verify message is shown if e-signature not met", () => {
+      SystemRequirement("REQ-0880");
+      cy.arVerifySignatureIsNotMet();
+    });
+
     it("Accept Approval Request with password prompt", () => {
       SystemRequirement("REQ-0920");
-
       cy.arApproveAR();
-      cy.wait(6000);
     });
   });
 

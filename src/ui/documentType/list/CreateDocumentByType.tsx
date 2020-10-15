@@ -39,7 +39,6 @@ interface Props {
   categoryName?: string;
   headers: HeaderTableType[];
   tableData: any[];
-  supportExportList: boolean;
 }
 
 let selectedTypeLabel = "";
@@ -86,8 +85,14 @@ export const useHandleCreateDoc = () => {
   };
 
   return (selectedForm: DocumentRevision) => {
+    const outputDocumentTypes = selectedForm?.formTemplate?.outputDocumentTypes || [];
     if (selectedDocumentTypeId) {
       fetchDocIdAsync.start(fetchDocIdAction, selectedDocumentTypeId, fetchDocIdAsync);
+      setForm(selectedForm);
+      return;
+    }
+    if (outputDocumentTypes.length === 1 && !(outputDocumentTypes[0] as any)?.documentTypeAcronym?.startsWith("RC")) {
+      fetchDocIdAsync.start(fetchDocIdAction, (outputDocumentTypes[0] as any)?.id, fetchDocIdAsync);
       setForm(selectedForm);
       return;
     }
@@ -102,7 +107,6 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   isByCategory,
   headers,
   tableData,
-  supportExportList,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();
   const classes = styles();
@@ -123,6 +127,10 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const [forms, setForms] = useState<DocumentTypeByIdForm[]>([]);
   const buttonLabel = isByCategory ? labelName : label;
   const isRecord = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.RECORD;
+  const isSupplier = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.SUPPLIER;
+  const isReceivable = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.RECEIVE;
+  const isWorkOrder = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.WORK_ORDER;
+
   const closeMultipleFormDialog = () => {
     multipleFormDialog.close();
     setForms([]);
@@ -237,10 +245,21 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         const h = headers.map((column) => {
           if (moment(get(e, column.key, ""), moment.ISO_8601, true).isValid()) {
             return {
-              [column.key]: getFormattedDateString(get(e, column.key, ""), MomentFormats.MonthDateYear) || "",
+              [column.key]: getFormattedDateString(get(e, column.key, ""), MomentFormats.MonthDateYear),
             };
           }
-          return { [column.key]: get(e, column.key, "") };
+          if (isSupplier || isReceivable || isWorkOrder) {
+            if (column.key === "owner") {
+              return { [column.key]: get(e, "owner.user.name") || "" };
+            }
+            if (column.key === "docId") {
+              return { [column.key]: get(e, "document.docId") || "" };
+            }
+            if (column.key === "changeRequest") {
+              return { [column.key]: get(e, "changeRequest.crId") || "" };
+            }
+          }
+          return { [column.key]: get(e, column.key) || "" };
         });
         const rows = h.reduce(function(result, current) {
           return Object.assign(result, current);
@@ -261,7 +280,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   return (
     <>
       <Grid item={true} xs={6} style={{ textAlign: "right" }}>
-        { supportExportList && <Button
+        <Button
           variant="outlined"
           color="primary"
           className={classes.exportListbutton}
@@ -274,7 +293,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
             <ExportIcon className={classes.iconSvg} />
           </Box>
           <Text translation="document.revision.export.list" />
-        </Button>}
+        </Button>
         <ExportListDialog
           {...{ headers, data  }}
           dialog={exportDialog}

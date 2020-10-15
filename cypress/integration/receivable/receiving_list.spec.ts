@@ -46,14 +46,6 @@ context("Receivable list test", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
-            documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
-                group: "OTHER",
-                isQms: true,
-              },
-            ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
@@ -506,7 +498,7 @@ context("Receivable list test", () => {
         cy.dlClearFilters();
       });
 
-      it(`Filter list by owner '${"USERS[1].name"}'`, () => {
+      it(`Filter list by owner '${USERS[1].name}'`, () => {
         cy.recFilterByOwner({ owner: USERS[1].name });
       });
 

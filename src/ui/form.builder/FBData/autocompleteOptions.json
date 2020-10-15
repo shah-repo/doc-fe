@@ -1,5 +1,4 @@
-[
-  {
+[{
     "id": "1",
     "path": "/document_revisions",
     "label": "Document revisions",
@@ -148,6 +147,24 @@
     "id": "18",
     "path": "/document_revisions",
     "label": "Document revisions (all versions)",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "19",
+    "path": "/document_revisions?documentTypeCategory=materials",
+    "label": "Materials",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "20",
+    "path": "/document_revisions?documentTypeCategory=equipment",
+    "label": "Equipment",
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
