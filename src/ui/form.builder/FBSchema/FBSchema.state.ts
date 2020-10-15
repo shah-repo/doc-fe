@@ -1,4 +1,4 @@
-import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, size, union, unionBy, uniqWith } from "lodash";
+import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, size, union } from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
@@ -144,15 +144,7 @@ export class FBSchemaState {
       },
     }));
 
-    /** Merge existing and new schema by field name
-     * and filter out duplicate approvals components.
-     */
-    const mergedSchema = uniqWith(
-      unionBy(this.schema, schema, "name"),
-      (x, y) => x.type === y.type && x.type === "approvals",
-    );
-
-    set(this, "schema", mergedSchema);
+    set(this, "schema", schema);
   };
 
   @action public setSchemaItem = (schemaItem: FBSchemaProps) => {
