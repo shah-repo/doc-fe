@@ -8,11 +8,13 @@ export class FBPartsState extends FBProcedureState {
 
   // MARK: @observables
   @observable public parts = new Map<string, FBProcedureValue>();
+  @observable public diffParts = new Map<string, FBProcedureValue>();
 
   // MARK: @computed
   @computed public get materials(): FBProcedureItemConfig[] | undefined {
     let materials: FBProcedureItemConfig[] = [];
-    this.parts.forEach((value) => {
+    const valueParts = !this.diffParts.size ? this.parts : this.diffParts;
+    valueParts.forEach((value) => {
       materials = [...materials, ...value?.materials || []];
     });
     const materialValues = materials.reduce((result, obj) => {
@@ -28,7 +30,8 @@ export class FBPartsState extends FBProcedureState {
 
   @computed public get equipment(): FBProcedureItemConfig[] | undefined {
     let equipment: FBProcedureItemConfig[] = [];
-    this.parts.forEach((value) => {
+    const valueParts = !this.diffParts.size ? this.parts : this.diffParts;
+    valueParts.forEach((value) => {
       equipment = unionBy(equipment, value?.equipment || [], "title");
     });
     return equipment;

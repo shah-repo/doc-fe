@@ -30,6 +30,7 @@ export interface TrainingListData {
 }
 
 export interface TrainingRecordQuery {
+  isValid: boolean;
   revision: number;
   docId: string;
   docRevTitle: string;

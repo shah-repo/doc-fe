@@ -4,8 +4,10 @@ import EditIcon from "@material-ui/icons/Edit";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBButton, FBDialog, FBMapWrapper, FBProcedureItemActionLocale, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemProps, FBProvider, FBText } from "..";
+import { FBButton, FBDialog, FBMapWrapper, FBMediaAlbumField, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemProps, FBProvider, FBText } from "..";
 import Colors from "../../layout/theme/utils/colors";
+import { FBFormMode } from "../FBForm";
+import { FBProcedureItemType } from "./FBProcedureItem.types";
 import { withFBProcedureItem } from "./FBProcedureItem.wrap";
 
 const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
@@ -13,14 +15,14 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   handleRemove,
   getItem,
   dialogState,
-  formState,
   isPreview,
   disabled,
   loading,
   type,
   value = [],
+  name,
 }) => (
-  <FBProvider {...{ dialogState, formState }}>
+  <FBProvider {...{ dialogState }}>
     <FBDialog />
     <Box
       bgcolor={Colors.gray}
@@ -31,21 +33,42 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
     >
       <FBText
         {...{ loading }}
-        boxProps={{ flexGrow: 1, pl: 2, alignItems: "center", display: "flex", py: isPreview ? 1.5 : 0 }}
+        boxProps={{
+          flexGrow: 1,
+          display: "flex",
+          py: 1.7,
+          pl: 2,
+        }}
         locale={FBProcedureItemLocale[type]}
       />
-      {!isPreview && (
+      {!isPreview && !FBProcedureItemOmitAction.includes(type) && (
         <FBButton
           variant="text"
           color="inherit"
           startIcon={<AddCircleIcon />}
-          label={FBProcedureItemActionLocale[type]}
+          label={{
+            locale: "form.builder.action.mode",
+            values: {
+              mode: FBFormMode.add,
+              title: `${FBProcedureItemLocale[type]}|s`,
+            },
+          }}
           onClick={() => onClick?.()}
           {...{ disabled }}
         />
       )}
     </Box>
-    {!loading && (
+    {type === FBProcedureItemType.attachments && (
+      <Box mt={2}>
+        <FBMediaAlbumField
+          name={`${name}.attachments`}
+          isTemplate={false}
+          editorProperties={["copyableValue"]}
+          gutter={false}
+        />
+      </Box>
+    )}
+    {type !== FBProcedureItemType.attachments && !loading && (
       <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
         {(item: FBProcedureItemConfig, index) => (
           <Box
@@ -56,6 +79,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             borderRight={0}
             borderTop={0}
             borderColor={Colors.hint_gray}
+            bgcolor={(item.status || "none") === "none" ? "white" : FBPartItemStatusBg[item.status || ""]}
             p={1.5}
           >
             <FBText

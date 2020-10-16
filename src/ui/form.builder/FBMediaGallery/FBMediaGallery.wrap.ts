@@ -1,5 +1,5 @@
 import React from "react";
-import { FB, FBMediaGalleryProps } from "..";
+import { FB, FBFilePreviewType, FBMediaGalleryProps, FBMediaProps } from "..";
 
 export const withFBMediaGallery = <T extends FBMediaGalleryProps>(
   Component: React.FunctionComponent<T>
@@ -7,6 +7,7 @@ export const withFBMediaGallery = <T extends FBMediaGalleryProps>(
   const Comp = ({
     handleDelete,
     removeMedia,
+    previewType,
     ...props
   }: T) => {
 
@@ -17,9 +18,13 @@ export const withFBMediaGallery = <T extends FBMediaGalleryProps>(
       mediaAlbumState?.setActiveMedia(0);
     };
 
+    previewType = (media: FBMediaProps): FBFilePreviewType | undefined =>
+      mediaAlbumState?.previewType(media);
+
     return Component({
       ...(props as T),
       handleDelete,
+      previewType,
     });
   };
 

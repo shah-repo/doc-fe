@@ -9,9 +9,11 @@ export class FBProcedureState {
   // MARK: @config
   public materialsApi = new FBAutocompleteAsyncState(this.materialsId);
   public equipmentApi = new FBAutocompleteAsyncState(this.equipmentId);
+  public isDiffPreview?: boolean;
 
   // MARK: @observables
   @observable public value?: FBProcedureValue;
+  @observable public diffValue?: FBProcedureValue;
 
   // MARK: @constructor
   public constructor(value?: FBProcedureValue) {
@@ -20,11 +22,11 @@ export class FBProcedureState {
 
   // MARK: @computed
   @computed public get materials(): FBProcedureItemConfig[] | undefined {
-    return this.value?.materials;
+    return this.isDiffPreview ? this.diffValue?.materials : this.value?.materials;
   }
 
   @computed public get equipment(): FBProcedureItemConfig[] | undefined {
-    return this.value?.equipment;
+    return this.isDiffPreview ? this.diffValue?.equipment : this.value?.equipment;
   }
 
   // MARK: @actions
@@ -46,6 +48,8 @@ export class FBProcedureState {
     set(this, "value", value);
   };
 
+  @action setDiffValue = (value?: FBProcedureValue) => set(this, "diffValue", value);
+
   // MARK: @helpers
   public get materialsId(): string {
     return FBAutocompleteAsyncOption.materials;
@@ -64,13 +68,15 @@ export class FBProcedureState {
   };
 
   protected findRevision = (id: string, type: FBProcedureItemType): DocumentRevision | undefined => {
-    const itemId = type === "materials"
+    const itemId = type === FBProcedureItemType.materials
       ? this.materialsId
       : this.equipmentId;
 
     const item = FBAutocompleteAsyncStore.getValue<DocumentRevision>(itemId, id);
     return item;
   };
+
+  public setDiffPreview = (state: boolean) => set(this, "isDiffPreview", state);
 }
 
 export default FBProcedureState;

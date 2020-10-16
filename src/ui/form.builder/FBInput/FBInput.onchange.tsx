@@ -2,6 +2,7 @@ import { at, get, has, isArray, isEmpty, isObject, isString, map, remove, toNumb
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from "..";
+import { FBFieldName } from "../helpers/FBFieldName";
 
 export const withFBOnChange = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>
@@ -81,6 +82,9 @@ export const withFBOnChange = <T extends FBInputProps>(
 
       if (isObject(value)) {
         value = has(value, "includeContext");
+      }
+      if (!value) {
+        formState?.setFieldValue(`${FBFieldName.Context}-${name}`, "");
       }
       inputState?.setIncludeContext(value);
     }

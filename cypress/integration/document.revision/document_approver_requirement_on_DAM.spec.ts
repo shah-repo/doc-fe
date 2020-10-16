@@ -334,7 +334,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Approve & Release Document", () => {
     it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("'Approve and Release' the document", () => {

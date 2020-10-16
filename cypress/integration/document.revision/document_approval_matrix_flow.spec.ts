@@ -281,6 +281,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Add New Document Type", () => {
     it("Click on 'Add Item' button", () => {
+      cy.drOpenCloseSidebarDrawer();
       cy.drAddApprovalMatrixItem();
     });
 
@@ -315,7 +316,6 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save Approval Matrix Item", () => {
       SystemRequirement("REQ-0630", "REQ-0650");
-
       cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
     });
   });
@@ -348,7 +348,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("'Approve and Release' the document", () => {
@@ -466,7 +466,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("'Training Required' should not be checked because of DAM", () => {
@@ -540,6 +540,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Add New Document Type", () => {
     it("Click on 'Add Item' button", () => {
+      cy.drOpenCloseSidebarDrawer();
       cy.wait(1000);
       cy.drAddApprovalMatrixItem();
     });

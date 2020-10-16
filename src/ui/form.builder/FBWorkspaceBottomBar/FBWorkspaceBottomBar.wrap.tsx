@@ -1,9 +1,7 @@
 import { Box } from "@material-ui/core";
-import { find, get } from "lodash";
+import { find, get, unionBy, uniqWith } from "lodash";
 import React from "react";
 import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceTplActions } from "..";
-import FBStore from "../stores/ui/FBStore";
-import { FBInputProps } from "../types/common";
 
 export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
   Component: React.FunctionComponent<T>,
@@ -36,9 +34,12 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
         return alert("Not a valid template.");
       }
 
-      workspaceState?.setSchema(schema);
-      // OLD: to be removed
-      FBStore.setSchema(schema as FBInputProps[]);
+      const mergedSchema = uniqWith(
+        unionBy(workspaceState?.schema, schema, "name"),
+        (x, y) => x.type === y.type && x.uniqueSchemaItem === true,
+      );
+
+      workspaceState?.setSchema(mergedSchema);
     };
 
     importSchema = (event: React.ChangeEvent<HTMLInputElement>) => {

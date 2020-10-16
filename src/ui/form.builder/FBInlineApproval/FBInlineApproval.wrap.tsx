@@ -1,10 +1,12 @@
-import { difference, filter, find, isEmpty, isUndefined, map, some, sortBy, unionBy } from "lodash";
+import { difference, filter, find, isEmpty, isUndefined, map, pick, some, sortBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
-import { FB, FBAutocompleteAsyncOption, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from "..";
+import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from "..";
 import { store } from "../../../state/store";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { FBDialogState } from "../FBDialog/FBDialog.state";
+import { FBInlineApprovalTransitionBody } from "./FBInlineApproval.types";
 
 export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
   Component: React.FunctionComponent<T>,
@@ -12,6 +14,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
   const Comp = ({
     approvalTransition,
     inlineApprovalState,
+    dialogState,
     editorConfig: { approvers, groups, roles } = {},
     currentUser,
     isApproved,
@@ -21,6 +24,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     options,
     name = "",
     loading,
+    onApproveClick,
     ...props
   }: T) => {
 
@@ -48,6 +52,19 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       approvals: fieldApprovals,
       isOwner,
     });
+    dialogState = FB.useRef(FBDialogState);
+
+    onApproveClick = (approvalId: string) => {
+      dialogState?.config({
+        title: "form.builder.password.prompt",
+        open: true,
+        content: (
+          <FBApprovalPasswordForm
+            {...{ approvalTransition, approvalId }}
+          />
+        ),
+      });
+    };
 
     // MARK: @reaction
     // Approvals sync
@@ -168,7 +185,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     // MARK: @methods
     approvalTransition = (transition: FBInlineApprovalTransition, id?: string) => {
       if (!id) { return; }
-      inlineApprovalState?.approvalTransition(transition, id);
+      const passwordBody = pick(formState?.values, "password") as FBInlineApprovalTransitionBody;
+      inlineApprovalState?.approvalTransition(transition, id, passwordBody);
     };
 
     // MARK: @observer
@@ -200,6 +218,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     return Component({
       ...(props as T),
       approvalTransition,
+      dialogState,
       inlineApprovalState,
       currentUser,
       isApproved,
@@ -209,6 +228,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       loading,
       options,
       name,
+      onApproveClick,
     });
   };
 
