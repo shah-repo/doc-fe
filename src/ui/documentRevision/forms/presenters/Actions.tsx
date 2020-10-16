@@ -164,9 +164,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       }
       <HeaderMenu>
         <CancelButton
-          documentStatus={documentRevision?.status}
-          version={documentRevision?.version}
-          docRevId={documentRevision?.id}
+          {...{ documentRevision }}
           setShouldDisplay={props.setCancelButtonDisplay}
         />
         {renderChangeOwnership}
