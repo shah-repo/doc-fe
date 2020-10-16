@@ -53,6 +53,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       isOwner,
     });
     dialogState = FB.useRef(FBDialogState);
+    const shouldShowApprovals = document?.status === "DRAFT" || document?.status === "IN_REVIEW";
 
     onApproveClick = (approvalId: string) => {
       dialogState?.config({
@@ -229,6 +230,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       options,
       name,
       onApproveClick,
+      shouldShowApprovals,
     });
   };
 
