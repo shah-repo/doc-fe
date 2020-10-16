@@ -7,9 +7,11 @@ const applyTransition = (
   id: string,
   transition: FBApprovalsStatusEndpoint,
   handlers: Handlers<any>,
+  password?: string,
 ): ApiAction<any, any> => apiActionWithCallbacks({
   url: `${APPROVALS_ROOT_URL}/${id}/${transition}`,
   method: "post",
+  password,
   handlers,
 });
 

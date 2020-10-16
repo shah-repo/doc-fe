@@ -21,6 +21,7 @@ declare global {
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drCloseApproveAndReleaseDialog(): Chainable<Subject>;
       drClickCreateDocumentWithApiCall(): Chainable<Subject>;
+      drClickCreateDocumentWithApiCallForForms(): Chainable<Subject>;
       drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
@@ -75,6 +76,7 @@ declare global {
       drIsTrainingRequired(params: {shouldBe: boolean}): Chainable<Subject>;
       drApproveAndReleaseNonQMSDocument(): Chainable<Subject>;
       drSelectHistoryTab(): Chainable<Subject>;
+      drOpenCloseSidebarDrawer(): Chainable<Subject>;
       drSelectPermissionTab(): Chainable<Subject>;
       drVerifyDocumentOWner(params: {owner: string}): Chainable<Subject>;
       drChangeOwnerByAdmin(params: {employee: string}): Chainable<Subject>;
@@ -239,6 +241,14 @@ Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
 Cypress.Commands.add("drClickCreateDocumentWithApiCall", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet], () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    });
+  cy.wait(500);
+});
+
+Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
   cy.wait(500);
@@ -456,6 +466,10 @@ Cypress.Commands.add("drIsTrainingRequired", (params: {shouldBe: boolean}) => {
 
 Cypress.Commands.add("drSelectHistoryTab", () => {
   cy.get("[data-cy=\"timeline-icon\"]").click();
+});
+
+Cypress.Commands.add("drOpenCloseSidebarDrawer", () => {
+  cy.get("[aria-label=\"Open drawer\"]>span>svg").click();
 });
 
 Cypress.Commands.add("drSelectPermissionTab", () => {

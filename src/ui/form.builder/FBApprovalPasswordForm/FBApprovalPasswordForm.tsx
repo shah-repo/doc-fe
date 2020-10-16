@@ -7,7 +7,6 @@ import { withFBApprovalPasswordForm } from "./FBApprovalPasswordForm.wrap";
 const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProps> = ({
   formState,
 }) => (
-
   <FBForm {...{ formState }}>
     <FBTextField
       rules="required"

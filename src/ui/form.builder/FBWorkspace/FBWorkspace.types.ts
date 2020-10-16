@@ -4,7 +4,6 @@ import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { Company } from "../../../state/ducks/company";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 
-
 export type FBWorkspaceMode =
 | "none"
 | "design"
@@ -28,6 +27,7 @@ export type FBWorkspaceProps =
   document?: DocumentRevision;
   changeRequest?: ChangeRequest;
   autosave?: boolean;
+  includeProcedureDiff?: boolean;
 };
 
 export interface FBWorkspaceExternalState {

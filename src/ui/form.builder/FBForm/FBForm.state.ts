@@ -1,5 +1,5 @@
 import { flatten } from "flat";
-import { Dictionary, get as lodashGet, isArray, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet } from "lodash";
+import { cloneDeep, Dictionary, get as lodashGet, isArray, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, setWith } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBFormConstructor, FBInputState, FBWorkspaceMode, FBWorkspaceState } from "..";
 import { FBSchemaState } from "../FBSchema";
@@ -41,11 +41,6 @@ export class FBFormState extends FBSchemaState {
     this.validate();
   };
 
-  public setInitialValues = (initialValues: Dictionary<any>) => {
-    this.initialValues = initialValues;
-    this.setValues(initialValues);
-  };
-
   @action public setValues = (values: Dictionary<any>) => {
     this.values = values;
   };
@@ -71,10 +66,7 @@ export class FBFormState extends FBSchemaState {
     forceDefault = false
   ) => {
     if (!fieldName) { return; }
-    this.values = {
-      ...this.values,
-      [fieldName]: value,
-    };
+    setWith(this.values, fieldName, cloneDeep(value));
     if (!withState) { return; }
     this.inputState.get(fieldName)?.setValue(value);
   };

@@ -3,7 +3,7 @@ import { compact, difference, filter, find, isEmpty, isUndefined, map, pick, uni
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBApprovalPasswordForm, FBApprovalPasswordFormActions, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransitionBody, FBRequiredApprover } from "..";
+import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransitionBody, FBRequiredApprover } from "..";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
@@ -21,7 +21,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     disabled,
     documentStatus,
     docId,
-    changeApprovalStatus,
+    approvalTransition,
     groups,
     renderOption,
     isIncluded,
@@ -63,7 +63,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     );
     dialogState = FB.useRef(FBDialogState);
 
-    changeApprovalStatus = (transition: FBApprovalsStatusEndpoint, approvalId?: string) => {
+    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string) => {
       if (!approvalId) { return; }
       const passwordBody = pick(formState?.values, "password") as FBInlineApprovalTransitionBody;
       approvalsState?.applyTransition(transition, approvalId, passwordBody);
@@ -74,19 +74,10 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     }
 
     onApproveClick = (approvalId: string) => {
-      const handleAdd = () => {
-        changeApprovalStatus?.("approve", approvalId);
-        dialogState?.closeDialog();
-      };
-      const handleCancel = () => {
-        dialogState?.closeDialog();
-      };
-
       dialogState?.config({
         title: "form.builder.password.prompt",
         open: true,
-        content: <FBApprovalPasswordForm {...{ formState }} />,
-        actions: <FBApprovalPasswordFormActions {...{ handleAdd, handleCancel }} />,
+        content: <FBApprovalPasswordForm {...{ formState, approvalId, approvalTransition }} />,
       });
     };
 
@@ -207,7 +198,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       disabled,
       documentStatus: document?.status,
       docId: id,
-      changeApprovalStatus,
+      approvalTransition,
       groups,
       renderOption,
       isIncluded,

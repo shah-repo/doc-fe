@@ -4,20 +4,20 @@ import { FBButton, FBSubmitButton } from "..";
 import { FBApprovalPasswordFormProps } from "./FBApprovalPasswordForm.types";
 
 const FBApprovalPasswordFormActions: React.FunctionComponent<FBApprovalPasswordFormProps> = ({
-  handleAdd,
-  handleCancel,
+  onDialogApprove,
+  onDialogClose,
 }) => (
   <Box display="flex" justifyContent="center" mx={3}>
     <FBButton
       variant="outlined"
-      onClick={handleCancel}
+      onClick={onDialogClose}
       label="common.cancel"
     >
     </FBButton>
     <FBSubmitButton
       variant="contained"
       label="common.confirm"
-      onClick={handleAdd}
+      onClick={onDialogApprove}
     />
   </Box>
 );
