@@ -189,6 +189,13 @@ context("Record inline Flow", () => {
       cy.poClickCreatePO();
     });
 
+    it("Select 'History Test Record' on dropdown", () => {
+      SystemRequirement("REQ-0970");
+      cy.recSelectRecordFormFromMultiSelect({
+        recordType: "History Test Record",
+      });
+    });
+
     context("Fill in document attributes", () => {
       it("Enter title 'History Test Record'", () => {
         cy.drEnterDocumentTitle({ name: "History Test Record" });
@@ -227,11 +234,11 @@ context("Record inline Flow", () => {
 
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
-        cy.wrapWithWaitOnApiCall(
-          CyRoutes.PostApprovalsApprove,
-          () => {
-            cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
-          });
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
+        cy.get("input[name=\"password\"]").type("Tester1!");
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
+          cy.get("[data-cy=\"common.confirm\"]").click();
+        });
       });
 
       it("Reload page", () => {
@@ -260,11 +267,11 @@ context("Record inline Flow", () => {
         });
 
         it("Approve first Inline Approval", () => {
-          cy.wrapWithWaitOnApiCall(
-            CyRoutes.PostApprovalsApprove,
-            () => {
-              cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
-            });
+          cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
+          cy.get("input[name=\"password\"]").type("Tester1!");
+          cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
+            cy.get("[data-cy=\"common.confirm\"]").click();
+          });
         });
 
         it("Reload document", () => {
@@ -309,8 +316,10 @@ context("Record inline Flow", () => {
 
         it("Check Inline approval history values", () => {
           cy.fbInlineApprovalHisotryCheck(
+            "Approved",
             "Checked in CheckboxGroup for inline: Blue",
             "Changed RadioBtnGroup for inline from One to Two",
+            "Unchecked in CheckboxGroup for inline: Green",
             "Unchecked in CheckboxGroup for inline: Red",
             "Changed Select field for inline from SelectOne to SelectTwo"
           );
