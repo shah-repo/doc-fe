@@ -3,7 +3,7 @@ import { FBMediaProps } from "../FBMediaAlbum";
 import { FBProviderProps } from "../FBProvider";
 
 export type FBProcedureProps =
-& Pick<FBInputProps, "name" | "gutter" | "stepIndex" | "index" | "disabled" | "loading">
+& Pick<FBInputProps, "name" | "gutter" | "stepIndex" | "index" | "disabled" | "loading" | "autosave">
 & Pick<FBProviderProps, "procedureState">
 & {
   handleAdd?: (isClone?: boolean) => void;
@@ -18,3 +18,5 @@ export interface FBProcedureValue {
   equipment?: FBProcedureItemConfig[];
   attachments?: FBMediaProps[];
 }
+
+export const FBProcedureOmitDiffKey: string[] = ["description", "attachments"];

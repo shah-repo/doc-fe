@@ -53,6 +53,7 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
             locale: "form.builder.step.number",
             values: { number: stepIndex },
           }}
+          autosave
         />
         <Box
           display="flex"
@@ -60,7 +61,7 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
           borderColor={Colors.hint_gray}
           ml={isPreview ? 0 : 1.5}
           mt={1}
-          border={1}
+          border={isPreview ? 0 : 1}
           borderTop={0}
           borderRight={0}
           borderBottom={0}
@@ -74,16 +75,18 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
                 flexDirection="row"
                 mt={5}
               >
-                <Box
-                  width={10}
-                  mr={1}
-                  mt={2.7}
-                  border={0.5}
-                  borderColor={Colors.hint_gray}
-                  borderBottom={0}
-                  borderLeft={0}
-                  borderRight={0}
-                />
+                {!isPreview && (
+                  <Box
+                    width={10}
+                    mr={1}
+                    mt={2.7}
+                    border={0.5}
+                    borderColor={Colors.hint_gray}
+                    borderBottom={0}
+                    borderLeft={0}
+                    borderRight={0}
+                  />
+                )}
                 <Box flexGrow={1}>
                   <FBProcedureItem {...{ type, name, disabled, isPreview }} />
                 </Box>
@@ -92,16 +95,18 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
           </FBMapWrapper>
         </Box>
         <Box display="flex" flexDirection="row" mt={-2.7} ml={isPreview ? 0 : 1.5}>
-          <Box
-            width={10}
-            mr={1}
-            mt={2.7}
-            border={0.5}
-            borderColor={Colors.hint_gray}
-            borderBottom={0}
-            borderLeft={0}
-            borderRight={0}
-          />
+          {!isPreview && (
+            <Box
+              width={10}
+              mr={1}
+              mt={2.7}
+              border={0.5}
+              borderColor={Colors.hint_gray}
+              borderBottom={0}
+              borderLeft={0}
+              borderRight={0}
+            />
+          )}
           <Box flexGrow={1}>
             <FBProcedureItem type={types.pop() as FBProcedureItemType} {...{ name, disabled, isPreview }} />
           </Box>
