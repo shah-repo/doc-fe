@@ -2,7 +2,7 @@ import { find, findLastIndex, get, isEmpty, map, orderBy, some, union, unionBy }
 import moment from "moment";
 import { Document, DocumentRevision, DocumentRevisionStatus, FBFormTemplateProps, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, DOC_TYPE_GROUP_OPTION } from "../../state/ducks/documentRevisions/documentType";
-import { DocumentType } from "../../state/ducks/documentRevisions/documentType/types";
+import { DocumentGroupOptionsType, DocumentType } from "../../state/ducks/documentRevisions/documentType/types";
 import { OptionType } from "../components/forms/fields/Autocomplete/types";
 import { FB, FBSchemaProps } from "../form.builder";
 
@@ -215,3 +215,10 @@ export const getFBSchemeByDocType = (
 
   return finalScheme;
 };
+
+/**
+ * Checks if document is Record
+ * @param groupOptions from DocumentType
+ */
+export const getIsDocumentRecord = (groupOptions: DocumentGroupOptionsType[]) =>
+  groupOptions.includes(DOC_TYPE_GROUP_OPTION.RECORD);
