@@ -171,7 +171,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       key: "status",
       label: "document.revision.list.state",
       columnOptions: {
-        cellDataGetter: ({ rowData }) => (rowData.displayStatus).toUpperCase(),
+        cellDataGetter: ({ rowData }) => (rowData.displayStatus)?.toUpperCase(),
         width: 160,
       },
       cellType: (rowData) => (canEdit(rowData) ? "LINK" : "BASE"),

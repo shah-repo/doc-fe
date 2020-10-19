@@ -212,7 +212,7 @@ Cypress.Commands.add("dlVerifyFilterClear", () => {
   cy.get("input[name=documentTypeId]").should("have.attr", "value", "");
   cy.get("input[name=owner]").should("have.attr", "value", "");
   cy.get("input[name=crId]").should("have.attr", "value", "");
-  cy.get("input[name=\"status[]\"").should("have.attr", "value", "");
+  cy.get("input[name=displayStatus]").should("have.attr", "value", "");
   cy.get("input[name=effectiveDate]").should("have.attr", "value", "");
 });
 
