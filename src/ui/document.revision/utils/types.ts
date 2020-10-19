@@ -1,7 +1,7 @@
 import { RouteComponentProps } from "react-router-dom";
 import { AuthProps } from "../../../state/ducks/auth/types";
 import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { documentsActions } from "../../../state/ducks/documents";
 import { TrainingRecord } from "../../../state/ducks/training";
 import { LoadAsyncState } from "../../../state/types";
@@ -60,6 +60,7 @@ export type DocumentRevisionsUserProps = ActionProps & {
   tableCriteria: TablePanelStateProps;
   tableData: TableDataProps<DocumentRevision>;
   clearFilter?: () => void;
+  statuses: DocumentRevisionStatus[];
 };
 
 export interface RouteParams {

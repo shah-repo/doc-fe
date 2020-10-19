@@ -21,8 +21,7 @@ const documentRevisionSet = (documentRevision: DocumentRevision): DocumentRevisi
 const loadList = (states: DocumentRevisionStatus[] = []): ApiAction<DocumentRevision[]> => {
   const url = states.length === 0
     ? DOCUMENT_REVISION_ROOT_URL
-    : states.reduce((acc, state) => acc + `status%5B%5D=${state}&`, `${DOCUMENT_REVISION_ROOT_URL}?`);
-
+    : states.reduce((acc, state) => acc, `${DOCUMENT_REVISION_ROOT_URL}?`);
   return apiAction({
     url,
     method: "get",
@@ -260,6 +259,19 @@ const copyTo = (id: string, handlers: Handlers): ApiAction<DocumentRevision> => 
   handlers,
 });
 
+const getDocRevStatuses = (
+  handlers: Handlers,
+  category?: string,
+): ApiAction<Partial<DocumentRevisionStatus[]>> => {
+  const url = category === undefined ? `${DOCUMENT_REVISION_ROOT_URL}/statuses` :
+    `${DOCUMENT_REVISION_ROOT_URL}/statuses?category=${category}`;
+  return apiActionWithCallbacks({
+    url,
+    method: "get",
+    handlers,
+  });
+};
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -285,4 +297,5 @@ export default {
   setPrimaryAttachment,
   voidDocument,
   copyTo,
+  getDocRevStatuses,
 };
