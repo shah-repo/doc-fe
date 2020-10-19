@@ -6,6 +6,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FBSchemaProps } from "../../form.builder";
 
 export interface DocumentRevisionFormValues extends FBDocumentRevisionProps {
+  version?: number;
   id?: string;
   description: string;
   name: string;
