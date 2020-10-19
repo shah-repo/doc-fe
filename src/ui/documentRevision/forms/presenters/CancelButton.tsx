@@ -20,11 +20,10 @@ const CancelButton: React.FunctionComponent<Props> = ({
 }) => {
   const dialog = useDialog();
   const async = useAsync();
-
-  const { status, version, id, document: { documentType: { groupOptions } } } = documentRevision;
+  const { status = "", version = 0, id, document } = documentRevision || [];
 
   const canShowCancelButton = status === DocumentRevisionStatus.Draft && version > 1;
-  const isRecord = getIsDocumentRecord(groupOptions || []);
+  const isRecord = getIsDocumentRecord(document?.documentType?.groupOptions || []);
 
   useEffect(() => {
     setShouldDisplay(canShowCancelButton);
