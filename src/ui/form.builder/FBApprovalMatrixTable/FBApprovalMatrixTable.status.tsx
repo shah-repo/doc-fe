@@ -53,7 +53,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
           <TableRow
             key={`fb-approval-matrix-stage-${am.id}-${i}`}
             ref={(el: HTMLDivElement) => {
-              if (!el) return;
+              if (!el) { return; }
               el.style.height = `${cellHeight?.(el.getBoundingClientRect().height, i)}px`;
             }}
           >

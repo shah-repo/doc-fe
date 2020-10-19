@@ -1,6 +1,6 @@
 import { useObserver } from "mobx-react";
 import React from "react";
-import { withResizeDetector } from 'react-resize-detector';
+import { withResizeDetector } from "react-resize-detector";
 import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixTableClasses, FBApprovalMatrixTableProps, FBApprovalMatrixTableState } from "..";
 
 export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
@@ -34,7 +34,7 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
         approvalMatrixTableState.cellHeight[index] = height;
       }
       return approvalMatrixTableState.cellHeight[index];
-    }
+    };
 
     // MARK: @observer
     useObserver(() => {

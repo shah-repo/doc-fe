@@ -34,7 +34,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
           <TableRow
             key={`fb-approval-matrix-am-${am.id}-${index}`}
             ref={(el: HTMLDivElement) => {
-              if (!el) return;
+              if (!el) { return; }
               el.style.height = `${cellHeight?.(el.getBoundingClientRect().height, index)}px`;
             }}
           >
