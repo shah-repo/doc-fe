@@ -19,6 +19,7 @@ export const useFormContext = () => {
         });
         break;
       case "form":
+      case "formDesign":
         formik.setFieldValue("formDocument", {
           id: values.formDocument?.id,
         });

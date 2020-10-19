@@ -90,7 +90,7 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
         option.subRevision,
         option.revisionChangeType,
       );
-      return `${option.document.docId} rev ${versionNumber} - ${option.name}`;
+      return `${option.document?.docId} rev ${versionNumber} - ${option.name}`;
     };
 
     // eslint-disable-next-line react/display-name

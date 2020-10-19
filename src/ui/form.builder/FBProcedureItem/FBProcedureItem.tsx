@@ -4,7 +4,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBButton, FBDialog, FBMapWrapper, FBMediaAlbumField, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemProps, FBProvider, FBText } from "..";
+import { FBButton, FBDialog, FBMapWrapper, FBMediaAlbumField, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemProps, FBProvider, FBText } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { FBFormMode } from "../FBForm";
 import { FBProcedureItemType } from "./FBProcedureItem.types";
@@ -15,7 +15,6 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   handleRemove,
   getItem,
   dialogState,
-  formState,
   isPreview,
   disabled,
   loading,
@@ -23,7 +22,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   value = [],
   name,
 }) => (
-  <FBProvider {...{ dialogState, formState }}>
+  <FBProvider {...{ dialogState }}>
     <FBDialog />
     <Box
       bgcolor={Colors.gray}
@@ -80,7 +79,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             borderRight={0}
             borderTop={0}
             borderColor={Colors.hint_gray}
-            bgcolor="white"
+            bgcolor={(item.status || "none") === "none" ? "white" : FBPartItemStatusBg[item.status || ""]}
             p={1.5}
           >
             <FBText

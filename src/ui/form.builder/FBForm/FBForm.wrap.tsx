@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { FBFormProps, FBFormState } from ".";
 import { FB } from "..";
 
@@ -23,10 +23,6 @@ export const withFBForm = <T extends FBFormProps>(
       workspaceMode,
       workspaceState,
     }));
-
-    useMemo(() => {
-      formState?.setInitialValues(initialValues);
-    }, [initialValues, formState]);
 
     React.useEffect(() => {
       if (!formState) { return; }
