@@ -33,6 +33,9 @@ export const AddDocumentTypeFormContainer: React.FunctionComponent<Props> = ({
   };
 
   const async = useAsync({
+    onSuccess: () => {
+      dialog.close();
+    },
     onError: (error) => {
       toastError(error as string);
     },
