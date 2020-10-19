@@ -180,7 +180,7 @@ Cypress.Commands.add("dlVerifyFilterByArId", (params: {arId: string }) => {
 });
 
 Cypress.Commands.add("dlFilterByStatus", (params: {status: string }) => {
-  cy.get("div[id=\"mui-component-select-status[]\"]").click().wait(500);
+  cy.get("div[id=\"mui-component-select-displayStatus\"]").click().wait(500);
   cy.get("ul[role=listbox]>li").contains(params.status).click().wait(500);
 });
 
