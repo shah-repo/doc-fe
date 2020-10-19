@@ -11,6 +11,8 @@ import { documentVersionPath } from "../../document.revision/utils/paths";
 import { FBInlineApprovalTransition } from "../../form.builder";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
+import useDialog from "../../hooks/useDialog";
+import { DocumentRevisionApprovalDialog } from "./DocumentRevisionApprovalDialog";
 import { styles } from "./PendingAction.styles";
 
 interface Props {
@@ -30,6 +32,7 @@ export const DocumentRevisionApproval: React.FunctionComponent<Props> = ({
     { id: "dashboard.title.approval.request" },
     { docId: documentRevision.document.docId, name: documentRevision.owner.user.name },
   ));
+  const passwordDialog = useDialog();
 
   const applyTransition = useActionCreator(approvalsActions.applyTransition);
   const async = useAsync({
@@ -41,12 +44,13 @@ export const DocumentRevisionApproval: React.FunctionComponent<Props> = ({
     },
   });
 
-  const changeApprovalStatus = (transition: FBInlineApprovalTransition, approvalId?: string) => {
+  const changeApprovalStatus = (transition: FBInlineApprovalTransition, approvalId?: string, password?: string) => {
     async.start(
       applyTransition,
       approvalId,
       transition,
       async,
+      password,
     );
   };
 
@@ -71,27 +75,34 @@ export const DocumentRevisionApproval: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <Grid container className={classes.containerWrap}>
-      <Grid item xs={9}>
-        {linkRenderer()}
+    <>
+      <Grid container className={classes.containerWrap}>
+        <Grid item xs={9}>
+          {linkRenderer()}
+        </Grid>
+        <Grid item xs={3} className={classes.itemWrap}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => changeApprovalStatus("reject", approval.id)}
+          >
+            <Text translation="transition.action.reject"/>
+          </Button>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => passwordDialog.open()}
+          >
+            <Text translation="transition.action.approve"/>
+          </Button>
+        </Grid>
       </Grid>
-      <Grid item xs={3} className={classes.itemWrap}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          onClick={() => changeApprovalStatus("reject", approval.id)}
-        >
-          <Text translation="transition.action.reject"/>
-        </Button>
-        <Button
-          variant="outlined"
-          color="secondary"
-          onClick={() => changeApprovalStatus("approve", approval.id)}
-        >
-          <Text translation="transition.action.approve"/>
-        </Button>
-      </Grid>
-    </Grid>
+      <DocumentRevisionApprovalDialog
+        asyncState={async.asyncState}
+        approvalId={approval.id}
+        {...{ changeApprovalStatus, passwordDialog }}
+      />
+    </>
   );
 };
 

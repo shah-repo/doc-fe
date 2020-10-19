@@ -188,7 +188,7 @@ export function TablePanel<T extends any>({
         }
         setIsLoading(false);
         let responseMessage = "";
-        const isUnauthorizedRequest = exception.response.status === 401;
+        const isUnauthorizedRequest = exception.response?.status === 401;
 
         if (isUnauthorizedRequest) {
           dispatch(authActions.logoutUser());

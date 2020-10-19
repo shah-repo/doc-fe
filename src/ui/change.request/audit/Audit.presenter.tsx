@@ -23,6 +23,15 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
 
+      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
+       * TODO: this if statement should be deleted
+      */
+      if (audit[groupId].filter((change) =>
+        change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
+      ).length === 0) {
+        return null;
+      }
+
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer} data-cy={`audit-${key}`}>
@@ -45,10 +54,15 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         attachments.push(change);
       } else if (change.field.includes("referenceTo")) {
         references.push(change);
-      // } else if (change.field.includes("approvals")) {
-      //   // This is a hack to not display approvers twice in history
-      //   // Until BE removes field approvals
-      //   return;
+        // } else if (change.field.includes("approvals")) {
+        //   // This is a hack to not display approvers twice in history
+        //   // Until BE removes field approvals
+        //   return;
+        /** Temporary solution until BE adds additional info (who was abandoned) to audit.
+       * TODO: this condition should be deleted
+      */
+      } else if (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned) {
+        return;
       } else if (change.field !== "effectiveDate" || change.nextValue !== "null") {
         singleFields.push(
           <Box mb={1} key={`${change.groupId}-${index}`}>

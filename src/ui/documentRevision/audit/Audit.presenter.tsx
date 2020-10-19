@@ -30,10 +30,19 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
       const { owner, ownerUser, ownerThirdParty } = change;
-      const { name } = ((owner && owner.user) || ownerUser || ownerThirdParty);
+      const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
       const hasOnlyFBChanges = audit[groupId].every((change) => change.field.includes("formInput"));
 
       if (hasOnlyFBChanges) {
+        return null;
+      }
+
+      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
+       * TODO: this if statement should be deleted
+      */
+      if (audit[groupId].filter((change) =>
+        change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
+      ).length === 0) {
         return null;
       }
 
@@ -63,21 +72,20 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         newReferences.push(change);
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_DELETED") {
         deletedReferences.push(change);
-      } else if (change.field.includes("formInput")) {
+      } else if (change.field.includes("formInput")
+      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
+       * TODO: this condition should be deleted
+      */
+        || (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned)
+      ) {
         return;
       } else {
         singleFields.push((
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
-              <Text dataCy={`change-key-${groupKey}-${key}`}
-                message={
-                  change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned
-                    ? `documentRevision.audit.approvers.removed.by`
-                    : `documentRevision.audit.${change.field}.${change.type}`
-                }
-                values={{
-                  owner: change.owner?.user.name,
-                }}
+              <Text
+                dataCy={`change-key-${groupKey}-${key}`}
+                message={`documentRevision.audit.${change.field}.${change.type}`}
               />
             </Box>
             <div className={classes.auditValue}>

@@ -1,7 +1,7 @@
-import { get } from "lodash";
+import { cloneDeep, get } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBDialogState, FBFormMode, FBFormState, FBProcedureForm, FBProcedureFormActions, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemProps, FBProcedureItemType } from "..";
+import { FB, FBDialogState, FBFormMode, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemProps, FBProcedureItemType } from "..";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBProcedureItem = <T extends FBProcedureItemProps>(
@@ -9,13 +9,10 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
 ) => {
   const Comp = ({
     onClick,
-    handleAdd,
-    handleCancel,
     handleRemove,
     getItem,
     loading,
     dialogState,
-    formState,
     name,
     type,
     value,
@@ -25,7 +22,6 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     // MARK: @config
     const { procedureState } = FB.useStores();
     dialogState = FB.useRef(FBDialogState);
-    formState = FB.useRef<FBFormState>(FBFormState, {});
 
     // MARK: @reactions
 
@@ -42,19 +38,10 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
             title: `${FBProcedureItemLocale[type]}|s`,
           },
         },
-        content: <FBProcedureForm {...{ formState, type }} initialValues={part} />,
-        actions: <FBProcedureFormActions {...{ handleAdd, handleCancel }} />,
+        content: <FBProcedureForm {...{ type }} initialValues={cloneDeep(part)} />,
       });
     };
 
-    handleAdd = () => {
-      const formValue = formState?.getValues() as FBProcedureItemConfig;
-      procedureState?.addItem(formValue, type);
-      formState?.reset();
-      handleCancel?.();
-    };
-
-    handleCancel = () => dialogState?.closeDialog();
     handleRemove = (id: string) => procedureState?.removeItem(id, type);
     getItem = (id: string): string => procedureState?.getItem(id, type) || "";
 
@@ -76,7 +63,6 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
       handleRemove,
       getItem,
       dialogState,
-      formState,
       loading,
       name,
       type,
