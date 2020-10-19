@@ -18,6 +18,7 @@ import {
   FBSnackbarState,
   FBTaskState,
   FBWorkspaceState,
+  FBApprovalMatrixTableState,
 } from "..";
 import { FBApprovalMatrixState } from "../FBApprovalMatrix";
 import { FBPartsState } from "../FBParts";
@@ -47,6 +48,7 @@ export interface FBProviderProps {
   poReceiveState?: FBPOReceiveState;
   purchaseOrderState?: FBPurchaseOrderState;
   approvalMatrixFieldState?: FBApprovalMatrixFieldState;
+  approvalMatrixTableState?: FBApprovalMatrixTableState;
   taskState?: FBTaskState;
   approversState?: FBApproversState;
   approvalsState?: FBApprovalsState;
