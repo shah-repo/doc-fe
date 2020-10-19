@@ -24,6 +24,7 @@ declare global {
       fbAddApproverToInlineDialog(params: { approverName: string }): Chainable<Subject>;
       fbSelectCustomControl(): Chainable<Subject>;
       fbClickAddNewHiddenBtn(): Chainable<Subject>;
+      fbSelectCustomFieldToAdd(params: { name: string }): Chainable<Subject>;
     }
   }
 }
@@ -58,6 +59,10 @@ Cypress.Commands.add("fbAddNewFieldButton", (params: { name: string }) => {
 
 Cypress.Commands.add("fbAddLabelName", (params: { name: string }) => {
   cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(params.name);
+});
+
+Cypress.Commands.add("fbSelectCustomFieldToAdd", (params: { name: string }) => {
+  cy.get("button[data-cy^=\"form.builder\"]").contains(params.name).click().wait(500);
 });
 
 Cypress.Commands.add("fbSelectApprovalMatrix", () => cy.get("button[data-cy=\"form.builder.approvalMatrix\"]").click());
