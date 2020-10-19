@@ -12,10 +12,26 @@ export const enumToOptions = (values: any): any => {
   })
   ); };
 
+const stringifyJSON = (value: any) => {
+  if (!value) {
+    return null;
+  }
+  return JSON.stringify(value, null, 2);
+};
+
+const parseJSON = (value: any) => {
+  if (!value) {
+    return null;
+  }
+  return JSON.parse(value);
+};
+
 export const toDocumentTypeBody = (values: any) => ({
   ...values,
   group: values.group.value,
   hiddenForCreationForUsersWithoutTags: toArray(values.hiddenForCreationForUsersWithoutTags),
+  schema: parseJSON(values.schema),
+  fieldsConfig: parseJSON(values.fieldsConfig),
 });
 
 export const toDocumentTypeIntialValues = (documentType: DocumentType) => ({
@@ -30,6 +46,6 @@ export const toDocumentTypeIntialValues = (documentType: DocumentType) => ({
   hiddenForCreationForUsersWithoutTags: enumToOptions(documentType.hiddenForCreationForUsersWithoutTags),
   group: enumToOptions([documentType.group]),
   category: documentType.category,
-  schema: documentType.schema,
-  fieldsConfig: documentType.fieldsConfig,
+  schema: stringifyJSON(documentType.schema),
+  fieldsConfig: stringifyJSON(documentType.fieldsConfig),
 });
