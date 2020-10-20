@@ -53,6 +53,12 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     ],
   },
   {
+    label: "Equipment",
+    type: "CATEGORY",
+    category: "Equipment",
+    icon: "/navigation_icons/document-menu.svg",
+  },
+  {
     label: "Purchase Orders",
     type: "CATEGORY",
     icon: "/navigation_icons/receipt_list.svg",
