@@ -8,6 +8,7 @@ export const withFBApprovalPasswordForm = (
   const Comp = ({
     approvalTransition,
     approvalId,
+    ...props
   }) => {
     const { dialogState, formState } = FB.useStores();
 
@@ -29,6 +30,7 @@ export const withFBApprovalPasswordForm = (
     }, []);
 
     return Component({
+      ...(props),
       formState,
     });
   };

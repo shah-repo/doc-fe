@@ -1,3 +1,4 @@
+import { Box } from "@material-ui/core";
 import React from "react";
 import { FBTextField } from "..";
 import FBForm from "../components/form/FBForm";
@@ -6,6 +7,7 @@ import { withFBApprovalPasswordForm } from "./FBApprovalPasswordForm.wrap";
 
 const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProps> = ({
   formState,
+  children,
 }) => (
   <FBForm {...{ formState }}>
     <FBTextField
@@ -16,6 +18,9 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
       }}
       label="form.builder.password"
     />
+    <Box display="flex" justifyContent="center">
+      {children}
+    </Box>
   </FBForm>
 );
 

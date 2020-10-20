@@ -77,7 +77,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       dialogState?.config({
         title: "form.builder.password.prompt",
         open: true,
-        content: <FBApprovalPasswordForm {...{ formState, approvalId, approvalTransition }} />,
+        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
       });
     };
 
