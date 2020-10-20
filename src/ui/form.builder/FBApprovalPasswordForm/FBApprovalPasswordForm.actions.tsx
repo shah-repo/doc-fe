@@ -7,13 +7,12 @@ const FBApprovalPasswordFormActions: React.FunctionComponent<FBApprovalPasswordF
   onDialogApprove,
   onDialogClose,
 }) => (
-  <Box>
+  <Box display="flex" justifyContent="center">
     <FBButton
       variant="outlined"
       onClick={onDialogClose}
       label="common.cancel"
-    >
-    </FBButton>
+    />
     <FBSubmitButton
       variant="contained"
       label="common.confirm"

@@ -18,7 +18,7 @@ const FBApprovalPasswordForm: React.FunctionComponent<FBApprovalPasswordFormProp
       }}
       label="form.builder.password"
     />
-    <Box display="flex" justifyContent="center">
+    <Box display="flex" justifyContent="center" mx={0}>
       {children}
     </Box>
   </FBForm>

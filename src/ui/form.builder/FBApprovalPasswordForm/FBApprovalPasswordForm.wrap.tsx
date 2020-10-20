@@ -14,7 +14,7 @@ export const withFBApprovalPasswordForm = (
 
     const onDialogCancel = () => {
       dialogState?.closeDialog();
-      formState?.reset();
+      formState?.setFieldValue("password", null);
     };
 
     const onDialogApprove = () => {
