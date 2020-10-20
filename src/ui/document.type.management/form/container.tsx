@@ -1,7 +1,7 @@
 import { Formik, FormikProps } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType, documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { toastError } from "../../components/notifications";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -9,7 +9,7 @@ import { toDocumentTypeBody, toDocumentTypeIntialValues } from "../transform";
 import DocumentTypeFormPresenter from "./presenter";
 
 interface Props {
-  documentType: any;
+  documentType: DocumentType;
 }
 
 export const DocumentTypeFormContainer: React.FunctionComponent<Props> = ({
@@ -24,11 +24,11 @@ export const DocumentTypeFormContainer: React.FunctionComponent<Props> = ({
 
   const { id } = documentType;
   const initialValues = toDocumentTypeIntialValues(documentType);
-  const transitionLabel = "Delete";
+  const transitionLabel =  "common.delete";
 
   const updateDocumentTypeAction = useActionCreator(documentTypeActions.updateDocumentType);
 
-  const onSubmit = (values: Partial<DocumentType>) => {
+  const onSubmit = (values) => {
     async.start(
       updateDocumentTypeAction,
       id,

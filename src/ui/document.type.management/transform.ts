@@ -1,32 +1,30 @@
-import { DocumentType } from "../../state/ducks/documentRevisions/documentType";
 import { toArray } from "../group.management/utils/transform";
 
-export const enumToOptions = (values: any): any => {
+export const enumToOptions = (values): any => {
   if (values === null) {
     return [];
   }
-
   return Object.values(values).map((value) => ({
     label: value,
     value,
   })
   ); };
 
-const stringifyJSON = (value: any) => {
+const stringifyJSON = (value) => {
   if (!value) {
     return null;
   }
   return JSON.stringify(value, null, 2);
 };
 
-const parseJSON = (value: any) => {
+const parseJSON = (value) => {
   if (!value) {
     return null;
   }
   return JSON.parse(value);
 };
 
-export const toDocumentTypeBody = (values: any) => ({
+export const toDocumentTypeBody = (values) => ({
   ...values,
   group: values.group.value,
   hiddenForCreationForUsersWithoutTags: toArray(values.hiddenForCreationForUsersWithoutTags),
@@ -34,7 +32,7 @@ export const toDocumentTypeBody = (values: any) => ({
   fieldsConfig: parseJSON(values.fieldsConfig),
 });
 
-export const toDocumentTypeIntialValues = (documentType: DocumentType) => ({
+export const toDocumentTypeIntialValues = (documentType) => ({
   documentTypeName: documentType.documentTypeName,
   documentTypeAcronym: documentType.documentTypeAcronym,
   privateNumberPool: documentType.privateNumberPool,

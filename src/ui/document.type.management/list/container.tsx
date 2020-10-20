@@ -1,7 +1,7 @@
 import { Box, Button } from "@material-ui/core";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
-import { makeStyles } from "@material-ui/core/styles";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -12,28 +12,38 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import { sortBy } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { GroupTag } from "../../../state/ducks/auth/types";
 import { DocumentType, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import Text from "../../components/Text";
+import { HOME_URL } from "../../constants/urls";
 import useDialog from "../../hooks/useDialog";
+import useGetHasTag from "../../hooks/useGetHasTag";
 import Colors from "../../layout/theme/utils/colors";
 import AddDocumentTypeFormContainer from "../add.document.type/container";
 import DocumentTypeFormContainer from "../form/container";
 
-const styles = makeStyles({
-  root: {
-    margin: "75px",
+const styles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      margin: theme.spacing(9.5),
+    },
+    header: {
+      height: theme.spacing(7.5),
+      fontSize: theme.spacing(2),
+      fontWeight: "bold",
+    },
+    row: {
+      height: theme.spacing(6),
+      fontSize: theme.spacing(2.5),
+      fontWeight: "bold",
+      backgroundColor: Colors.light_gray,
+    },
+    cell: {
+      padding: theme.spacing(0),
+    },
   },
-  header: {
-    height: "60px",
-    fontSize: "16px",
-    fontWeight: "bold",
-  },
-  row: {
-    height: "50px",
-    fontSize: "14px",
-    fontWeight: "bold",
-    backgroundColor: Colors.light_gray,
-  },
-});
+  ));
 
 function Row(props: { row: DocumentType }) {
   const { row } = props;
@@ -48,12 +58,12 @@ function Row(props: { row: DocumentType }) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell   component="th" scope="row">
+        <TableCell component="th" scope="row">
           {row.documentTypeName}
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell className={classes.cell} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <DocumentTypeFormContainer documentType={row}/>
           </Collapse>
@@ -66,21 +76,29 @@ function Row(props: { row: DocumentType }) {
 
 export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
   const classes = styles();
-  const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeList);
   const dialog = useDialog();
+
+  const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeList);
+  const canManageDocumentType = useGetHasTag(GroupTag.DOCUMENT_TYPE_MANAGEMENT);
+
+  if (!canManageDocumentType) {
+    return <Redirect to={HOME_URL} />;
+  }
 
   return (
     <Box className={classes.root}>
       <Box display="flex" justifyContent="flex-end">
         <Button onClick={dialog.open} variant="outlined">
-          Add Document Type
+          <Text translation={"common.add.document.type"} />
         </Button>
       </Box>
       <Table >
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell className={classes.header}> Document types </TableCell>
+            <TableCell className={classes.header}>
+              <Text translation={"common.document.types"} />
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

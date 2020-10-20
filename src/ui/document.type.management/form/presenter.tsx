@@ -7,12 +7,14 @@ import AutocompleteField from "../../components/forms/fields/Autocomplete/Autoco
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import InputField from "../../components/forms/fields/Input";
 import FormWrapper from "../../components/forms/FormWrapper";
+import Text from "../../components/Text";
+import { Translation } from "../../translations/types";
 import { enumToOptions } from "../transform";
 import styles from "./styles";
 
 interface Props extends FormikProps<DocumentType> {
   handleTransition: () => void;
-  transitionLabel: string;
+  transitionLabel: Translation;
 }
 
 export const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
@@ -41,7 +43,7 @@ export const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
     </Field>;
 
   return (
-    <Grid container style={{ display: "flex", justifyContent: "center" }}>
+    <Grid container className={classes.gridWrapper}>
       <FormWrapper
         dirty={dirty}
         resetForm={resetForm}
@@ -57,7 +59,7 @@ export const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
           label="Document Type Acronym"
           inputProps={{ id: "documentTypeAcronym" }}
         />
-        <Grid item xs={12} style={{ display: "flex" }}>
+        <Grid item xs={12} className={classes.gridWrapper}>
           <CheckboxField
             name="privateNumberPool"
             label="Private Number Pool"
@@ -105,10 +107,10 @@ export const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
         {autoSizerRenderer({ label: "Fields Config", name: "fieldsConfig" })}
         <Box display="flex" justifyContent="flex-end" mt={6}>
           <Button type="submit" variant="outlined">
-            Save
+            <Text translation={"common.save"} />
           </Button>
           <Button onClick={handleTransition} variant="outlined">
-            {transitionLabel}
+            <Text translation={transitionLabel} />
           </Button>
         </Box>
       </FormWrapper>

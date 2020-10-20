@@ -3,6 +3,7 @@ import { Formik, FormikProps } from "formik";
 import React from "react";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { toastError } from "../../components/notifications";
+import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { DialogHandler } from "../../hooks/useDialog";
@@ -32,6 +33,7 @@ export const AddDocumentTypeFormContainer: React.FunctionComponent<Props> = ({
     fieldsConfig: null,
   };
 
+  const addDocumentTypeAction = useActionCreator(documentTypeActions.addDocumentType);
   const async = useAsync({
     onSuccess: () => {
       dialog.close();
@@ -40,8 +42,6 @@ export const AddDocumentTypeFormContainer: React.FunctionComponent<Props> = ({
       toastError(error as string);
     },
   });
-  const addDocumentTypeAction = useActionCreator(documentTypeActions.addDocumentType);
-
   const onSubmit = (values: any) => {
     async.start(
       addDocumentTypeAction,
@@ -53,7 +53,7 @@ export const AddDocumentTypeFormContainer: React.FunctionComponent<Props> = ({
   const render = (props: FormikProps<any>) => (
     <DocumentTypeFormPresenter
       handleTransition={dialog.close}
-      transitionLabel={"Close"}
+      transitionLabel={"common.close"}
       {...props}
     />
   );
@@ -65,7 +65,7 @@ export const AddDocumentTypeFormContainer: React.FunctionComponent<Props> = ({
       maxWidth="md"
     >
       <DialogTitle>
-        Add a document type
+        <Text translation={"common.add.document.type"} />
       </DialogTitle>
       <DialogContent>
         <Formik
@@ -76,9 +76,7 @@ export const AddDocumentTypeFormContainer: React.FunctionComponent<Props> = ({
           {render}
         </Formik>
       </DialogContent>
-
     </Dialog>
-
   );
 };
 

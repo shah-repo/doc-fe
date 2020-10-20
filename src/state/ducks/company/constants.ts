@@ -110,11 +110,11 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     icon: "/navigation_icons/user-management.svg",
     restrictedToUsersWithTags: [GroupTag.USER_MANAGEMENT],
   },
-  // TODO: UPDATE ICON AND TAGS!!!!!!!!!!
   {
     label: "Document Type Management",
     type: "LINK",
     path: DOCUMENT_TYPE_MANAGEMENT_URL,
-    icon: "/navigation_icons/user-management.svg",
+    icon: "/navigation_icons/document.svg",
+    restrictedToUsersWithTags: [GroupTag.DOCUMENT_TYPE_MANAGEMENT],
   },
 ];

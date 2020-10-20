@@ -14,5 +14,9 @@ export default makeStyles((theme: Theme) =>
       color: Colors.dark_gray,
       fontFamily: "Open Sans, sans-serif",
     },
+    gridWrapper: {
+      display: "flex",
+      justifyContent: "center",
+    },
   })
 );
