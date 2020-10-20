@@ -46,7 +46,10 @@ export enum CyRoutes {
   PostChangeRequests = "PostChangeRequests",
   PostTaskDone = "PostTaskDone",
   PostRemoteValidatorsHelper = "PostRemoteValidatorsHelper",
-  GetDocDynamicForm = "GetDocDynamicForm"
+  GetDocDynamicForm = "GetDocDynamicForm",
+  UploadAttachmentMediaUpload = "UploadAttachmentMediaUpload",
+  PostApprovals = "PostApprovals",
+  GetFileUploadCandidates = "GetFileUploadCandidates"
 }
 
 export const routes: ICyRoutes =   {
@@ -136,6 +139,15 @@ export const routes: ICyRoutes =   {
       responseTimeout: 10 * 1000,
     },
   },
+  GetFileUploadCandidates: {
+    requestConfig: {
+      method: "GET",
+      url: "api/v1/documents/file_upload_candidates*",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+    },
+  },
   CompanyMine: {
     requestConfig: {
       method: "GET",
@@ -152,6 +164,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/attachments/upload",
+    },
+  },
+  UploadAttachmentMediaUpload: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/documents/file_upload_candidates",
     },
   },
   Login: {
@@ -263,6 +281,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/approvals/*/approve",
+    },
+  },
+  PostApprovals: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/approvals",
     },
   },
   GetGroupsApprovalRoles: {
