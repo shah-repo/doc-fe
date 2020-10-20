@@ -277,7 +277,7 @@ Cypress.Commands.add("drSetDocTypeId", (params: { docId: string }) => {
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.get("#clearFilter").click().wait(500);
   cy.get("#name").type(params.title).wait(500);
-  cy.get("[id=\"mui-component-select-status[]\"]").click().wait(300);
+  cy.get("[id=\"mui-component-select-displayStatus\"]").click().wait(300);
   cy.get("li[data-value]").contains(params.status).click().wait(500);
   cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
 });

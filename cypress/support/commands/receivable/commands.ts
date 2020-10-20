@@ -107,7 +107,7 @@ Cypress.Commands.add("recVerifyFilterByOwner", (params: {owner: string }) => {
 });
 
 Cypress.Commands.add("recFilterByState", (params: {state: string}) => {
-  cy.get("div[id=\"mui-component-select-status[]\"]").click().wait(300);
+  cy.get("div[id=\"mui-component-select-displayStatus\"]").click().wait(300);
   cy.get("ul[role=listbox]>li").contains(params.state).click().wait(300);
 });
 
