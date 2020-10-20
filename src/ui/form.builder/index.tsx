@@ -24,6 +24,7 @@ export { default as FBApprovalMatrixRolesActions } from "./FBApprovalMatrixRoles
 export * from "./FBApprovalMatrixRolesActions/FBApprovalMatrixRolesActions.types";
 export { default as FBApprovalMatrixTable } from "./FBApprovalMatrixTable/FBApprovalMatrixTable";
 export { default as FBApprovalMatrixTableInfo } from "./FBApprovalMatrixTable/FBApprovalMatrixTable.info";
+export { default as FBApprovalMatrixTableState } from "./FBApprovalMatrixTable/FBApprovalMatrixTable.state";
 export { default as FBApprovalMatrixTableStatus } from "./FBApprovalMatrixTable/FBApprovalMatrixTable.status";
 export * from "./FBApprovalMatrixTable/FBApprovalMatrixTable.styles";
 export * from "./FBApprovalMatrixTable/FBApprovalMatrixTable.types";

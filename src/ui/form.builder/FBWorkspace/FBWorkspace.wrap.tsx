@@ -1,5 +1,4 @@
 
-import { isUndefined } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
@@ -55,7 +54,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     const { parent } = document || {};
     includeProcedureDiff = (
       formGroup === "ENGINEERING_BUILD" &&
-      !isUndefined(parent)
+      Boolean(parent)
     );
 
     React.useEffect(() => {
