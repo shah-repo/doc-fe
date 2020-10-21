@@ -119,7 +119,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Approve and Release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Navigates to document list", () => {
@@ -182,7 +182,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Approve and Release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Open new document", () => {
@@ -214,7 +214,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Approve and Release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 });
