@@ -145,12 +145,8 @@ export const getDocRevIdToRedirect = (
   return sortedList[0].id;
 };
 
-export const canChangeDocumentOwner = (status: DocumentRevisionStatus, currentEmployeeId: string, ownerId: string, isCompanyAdmin: boolean) => {
-  console.log((status === DocumentRevisionStatus.Draft || status === DocumentRevisionStatus.PendingChange) &&
-  ownerId === currentEmployeeId, isCompanyAdmin);
-  return ((status === DocumentRevisionStatus.Draft || status === DocumentRevisionStatus.PendingChange) &&
+export const canChangeDocumentOwner = (status: DocumentRevisionStatus, currentEmployeeId: string, ownerId: string, isCompanyAdmin: boolean) => ((status === DocumentRevisionStatus.Draft || status === DocumentRevisionStatus.PendingChange) &&
     ownerId === currentEmployeeId) || isCompanyAdmin;
-};
 
 export const getIsLastVersionObsolete = (formDocuments: Document) => some(formDocuments.documentRevisions, ["status", DocumentRevisionStatus.Obsolete ]);
 
