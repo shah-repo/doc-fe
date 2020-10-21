@@ -98,7 +98,7 @@ context("Check DAM enforcement rules for document types", () => {
         cy.arGetArDocumentByName({
           sessionId: adminEmployeeLoginResponse.sessionId,
           employeeId: adminEmployee.id,
-          name: "Initial AR Form",
+          name: "AR Form",
         }).then((response) => {
           initialArDocument = response;
           cy.drCreateDocumentRevision({
@@ -263,7 +263,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Approve and release form", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
 
@@ -301,7 +301,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Approve and release form", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
 
@@ -354,7 +354,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Approve and release form", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
 
@@ -392,7 +392,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Approve and release form", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
   });
@@ -447,7 +447,7 @@ context("Check DAM enforcement rules for document types", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -511,7 +511,7 @@ context("Check DAM enforcement rules for document types", () => {
     });
 
     it("Approve and Release the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 

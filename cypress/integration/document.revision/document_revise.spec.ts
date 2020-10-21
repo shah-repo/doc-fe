@@ -98,7 +98,7 @@ context("Document revise test", () => {
         cy.arGetArDocumentByName({
           sessionId: loginResponse.sessionId,
           employeeId: secondEmployee.id,
-          name: "Initial AR Form",
+          name: "AR Form",
         }).then((response) => {
           initialArDocument = response;
         }).then(() => {
@@ -107,7 +107,7 @@ context("Document revise test", () => {
               attachments: [],
               description: "<p>Test Doc Rev Description1</p>",
               document: {
-                docId: "CP-00004",
+                docId: "CP-00003",
                 documentType: {
                   id: componentSpecificationDocumentType[0].id,
                 },
@@ -160,7 +160,7 @@ context("Document revise test", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Navigate to document list", () => {
@@ -186,7 +186,7 @@ context("Document revise test", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Navigate to document list", () => {
@@ -222,10 +222,6 @@ context("Document revise test", () => {
 
       it("Click Create a Approval Request button", () => {
         cy.cmpClickCreateApprovalRequest();
-      });
-
-      it("Choose newly AR Form template", () => {
-        cy.arSelectARForm({ formTitle: "Initial AR Form" });
       });
 
       it("Enter title AR title: 'AR for Upgrade to Next Revision Level'", () => {
@@ -300,10 +296,6 @@ context("Document revise test", () => {
 
       it("Click Create a Approval Request button", () => {
         cy.cmpClickCreateApprovalRequest();
-      });
-
-      it("Choose newly AR Form template", () => {
-        cy.arSelectARForm({ formTitle: "Initial AR Form" });
       });
 
       it("Enter title AR title: 'AR for Upgrade to Obsolete'", () => {

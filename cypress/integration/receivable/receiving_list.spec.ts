@@ -81,7 +81,7 @@ context("Receivable list test", () => {
         cy.arGetArDocumentByName({
           sessionId: loginResponse.sessionId,
           employeeId: adminEmployee.id,
-          name: "Initial AR Form",
+          name: "AR Form",
         }).then((response) => {
           initialArDocument = response;
           cy.drCreateDocumentRevision({
@@ -456,7 +456,7 @@ context("Receivable list test", () => {
     });
 
     it("Approve and release", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
