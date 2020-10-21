@@ -70,6 +70,9 @@ export { default as FBDocumentRevisionsForm } from "./FBDocumentRevisions/FBDocu
 export { default as FBDocumentRevisionsItem } from "./FBDocumentRevisions/FBDocumentRevisions.item";
 export { default as FBDocumentRevisionsState } from "./FBDocumentRevisions/FBDocumentRevisions.state";
 export * from "./FBDocumentRevisions/FBDocumentRevisions.types";
+export { default as FBEBPart } from "./FBEBPart/FBEBPart";
+export { default as FBEBPartState } from "./FBEBPart/FBEBPart.state";
+export * from "./FBEBPart/FBEBPart.types";
 export { default as FBEditor } from "./FBEditor/FBEditor";
 export { default as FBEditorState } from "./FBEditor/FBEditor.state";
 export * from "./FBEditor/FBEditor.types";
