@@ -199,6 +199,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
         { approvers, effectiveDate },
         async,
       );
+      return;
     }
     async.start(
       releaseAction,
