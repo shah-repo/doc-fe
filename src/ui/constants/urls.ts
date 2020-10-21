@@ -42,6 +42,7 @@ export const SLACK_USER_URL = `${SLACK_ROOT_URL}/user`;
 
 export const DOCUMENT_BY_TYPE_ROOT_URL = "/document_by_type";
 export const DOCUMENT_BY_TYPE_LIST_URL = `${DOCUMENT_BY_TYPE_ROOT_URL}/:docTypeId`;
+export const DOCUMENT_TYPE_MANAGEMENT_URL = "/document_type_management";
 
 export const DOCUMENT_BY_CATEGORY_ROOT_URL = "/document_by_category";
 export const DOCUMENT_BY_CATEGORY_LIST_URL = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/:categoryName`;

@@ -339,6 +339,8 @@
   "common.work.in.progress": "Work In Progress",
   "common.due.by": "Due by",
   "common.server.automation": "Server Automation",
+  "common.document.types": "Document Types",
+  "common.add.document.type": "Add Document Type",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
