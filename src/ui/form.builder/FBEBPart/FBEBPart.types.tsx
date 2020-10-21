@@ -1,4 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface FBEBPartProps {
+import { FBInputProps, FBProviderProps } from "..";
 
-}
+export type FBEBPartProps =
+& Pick<FBProviderProps, "dialogState">
+& Pick<FBInputProps, "name">
+& {
+  onAddClick(): void;
+};

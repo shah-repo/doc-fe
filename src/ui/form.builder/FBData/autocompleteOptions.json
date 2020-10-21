@@ -170,5 +170,14 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": ""
+  },
+  {
+    "id": "21",
+    "path": "/document_revisions?documentTypeCategory=Equipment&documentTypeCategory=Materials",
+    "label": "Parts",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
   }
 ]
