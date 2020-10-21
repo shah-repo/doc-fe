@@ -5,6 +5,7 @@ import * as generateUuid from "uuid/v4";
 import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableInfoHead, FBApprovalMatrixTableProps, FBCheckbox, FBDocTypeGroup, FBMapWrapper, FBSelect, FBTableCell, FBTextField } from "..";
 
 const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTableProps> = ({
+  cellHeight,
   approvalData: { approvalMatrix = [] } = {},
   classes,
   mode,
@@ -30,7 +31,13 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
         collection={approvalMatrix}
       >
         {(am: FBApprovalMatrixItem, index) => (
-          <TableRow key={`fb-approval-matrix-am-${am.id}-${index}`}>
+          <TableRow
+            key={`fb-approval-matrix-am-${am.id}-${index}`}
+            ref={(el: HTMLDivElement) => {
+              if (!el) { return; }
+              el.style.height = `${cellHeight?.(el.getBoundingClientRect().height, index)}px`;
+            }}
+          >
             <FBTableCell
               label={am.docType.acronym}
               align="center"

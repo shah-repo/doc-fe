@@ -494,7 +494,7 @@ context("Check DAM enforcement rules for document types", () => {
     });
 
     it("Check all checkboxes for 'Approvals Numeric'", () => {
-      cy.get("div:nth-child(2)>table > tbody > tr> td:nth-child(1)")
+      cy.get("div:nth-child(2) > div> table > tbody > tr > td:nth-child(1)")
         .each(($el) => {
           cy.wrap($el).click();
         });

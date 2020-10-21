@@ -134,7 +134,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           }
         />
       )}
-      {isEmpty(values.approvals) && (
+      {!selectedInvalid && isEmpty(values.approvals) && (
         <DatePickerField
           label="transition.action.effective.date"
           name="effectiveDate"

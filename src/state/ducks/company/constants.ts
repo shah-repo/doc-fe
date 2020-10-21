@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, USER_MANAGEMENT_ROOT_URL } from "../../../ui/constants/urls";
+import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, USER_MANAGEMENT_ROOT_URL } from "../../../ui/constants/urls";
 import { GroupTag } from "../auth/types";
 import { NavigationItem } from "./types";
 
@@ -51,6 +51,12 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
         icon: "/navigation_icons/text-paper.svg",
       },
     ],
+  },
+  {
+    label: "Equipment",
+    type: "CATEGORY",
+    category: "Equipment",
+    icon: "/navigation_icons/document-menu.svg",
   },
   {
     label: "Purchase Orders",
@@ -109,5 +115,12 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     path: USER_MANAGEMENT_ROOT_URL,
     icon: "/navigation_icons/user-management.svg",
     restrictedToUsersWithTags: [GroupTag.USER_MANAGEMENT],
+  },
+  {
+    label: "Document Type Management",
+    type: "LINK",
+    path: DOCUMENT_TYPE_MANAGEMENT_URL,
+    icon: "/navigation_icons/document.svg",
+    restrictedToUsersWithTags: [GroupTag.DOCUMENT_TYPE_MANAGEMENT],
   },
 ];

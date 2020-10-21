@@ -4,7 +4,7 @@ import { cloneDeep, filter, get, isEmpty } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -213,13 +213,7 @@ DocumentRevisionFormContainerProps
   // if it's really necessary maybe it can be loaded through the DataFetcherContainer
   // it will be loaded only once instead every time this component is mounted
   const loadAction = () =>
-    loadDocumentRevisions([
-      DocumentRevisionStatus.Released,
-      DocumentRevisionStatus.Deprecated,
-      DocumentRevisionStatus.Obsolete,
-      DocumentRevisionStatus.PendingChange,
-      DocumentRevisionStatus.Draft,
-    ]);
+    loadDocumentRevisions();
 
   return (
     <AsyncGate

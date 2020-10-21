@@ -82,6 +82,7 @@ export interface Precalc {
 }
 
 export interface DocumentRevision extends FBDocumentRevisionProps {
+  displayStatus: DocumentRevisionStatus;
   children?: DocumentRevision[];
   parent?: DocumentRevision;
   precalc: Precalc;

@@ -1,4 +1,5 @@
-[{
+[
+  {
     "id": "1",
     "path": "/document_revisions",
     "label": "Document revisions",
@@ -154,7 +155,7 @@
   },
   {
     "id": "19",
-    "path": "/document_revisions?documentTypeCategory=materials",
+    "path": "/document_revisions?documentTypeCategory=Materials",
     "label": "Materials",
     "valueKey": "id",
     "labelKey": "name",
@@ -163,7 +164,7 @@
   },
   {
     "id": "20",
-    "path": "/document_revisions?documentTypeCategory=equipment",
+    "path": "/document_revisions?documentTypeCategory=Equipment",
     "label": "Equipment",
     "valueKey": "id",
     "labelKey": "name",
