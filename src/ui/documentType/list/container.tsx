@@ -1,11 +1,11 @@
 import { get, isEmpty } from "lodash";
 import moment from "moment";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { documentTypeSelectors, PageDetailsColumn } from "../../../state/ducks/documentRevisions/documentType";
 import { pageDetailsSelectors } from "../../../state/ducks/pageDetails";
@@ -13,9 +13,11 @@ import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import Date from "../../components/Date";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
-import { canEditDocumentRevision, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
+import { canEditDocumentRevision } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
 import { generateVersionNumber } from "../../documentRevision/helpers";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import { RouteParams } from "../utils/types";
 import { columnSearchConfiguration, getStaticColumns } from "./helpers";
 import DocumentByTypeListPresenter from "./presenter";
@@ -42,6 +44,15 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const { categoryName, docTypeId } = match.params;
   const currentUsersName = useSelector(authSelectors.currentUserName);
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
+
+  const getStatusesAction = useActionCreator(documentRevisionsActions.getDocRevStatuses);
+  const [statuses, saveStatuses] = useState<DocumentRevisionStatus[]>([]);
+  const async = useAsync({
+    onSuccess: (response: DocumentRevisionStatus[] = []) => {
+      saveStatuses(response);
+    },
+  });
+  const getStatuses = () => async.start(getStatusesAction, async, categoryName);
 
   /** If true, documents are filtered by category. If false, documents are filtered by type. */
   const isByCategory = match.path.includes(DOCUMENT_BY_CATEGORY_LIST_URL);
@@ -70,7 +81,6 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
           {
             ...tableCriteria,
             queryDict: {
-              "status[]": documentRevisionQueryStatus(),
               owner,
             },
           },
@@ -80,6 +90,11 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docTypeId]);
+
+  useEffect(() => {
+    getStatuses();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoryName]);
 
   if ((!isByCategory && !documentType) || (isByCategory && !documentCategory)) {
     return <Redirect to={HOME_URL} />;
@@ -99,7 +114,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
 
   const columns: TableColumnProps<DocumentRevision>[] = pageDetailColumns.map(
     (column: PageDetailsColumn) => {
-      const [omitSearch, searchOptions] = columnSearchConfiguration(column.valuePath, tableCriteria);
+      const [omitSearch, searchOptions] = columnSearchConfiguration(column.valuePath, tableCriteria, statuses);
       return {
         key: column.valuePath as keyof DocumentRevision,
         // version is a hack need to insert inside configuration 20.19
@@ -122,6 +137,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     cellHrefRenderer,
     tableCriteria,
     canEdit,
+    statuses,
   );
 
   return (

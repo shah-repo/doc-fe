@@ -171,7 +171,7 @@ context("Record inline Flow", () => {
       });
 
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
   });
@@ -334,7 +334,7 @@ context("Record inline Flow", () => {
         });
 
         it("Try approve and release it", () => {
-          cy.drApproveAndReleaseDocument();
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
           cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").click();
         });
 
@@ -363,7 +363,7 @@ context("Record inline Flow", () => {
 
       context("Approve and Release document and verify record is in alpha", () => {
         it("Approve and release it", () => {
-          cy.drApproveAndReleaseDocument();
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
 
         it("Verify record is in alpha state", () => {

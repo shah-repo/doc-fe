@@ -81,7 +81,7 @@ context("Create receivable test", () => {
         cy.arGetArDocumentByName({
           sessionId: loginResponse.sessionId,
           employeeId: adminEmployee.id,
-          name: "Initial AR Form",
+          name: "AR Form",
         }).then((response) => {
           initialArDocument = response;
           cy.drCreateDocumentRevision({
@@ -477,7 +477,7 @@ context("Create receivable", () => {
 
       it("Click 'Create document' on empty receivable form", () => {
         // SystemRequirement("REQ-1860");
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
   });

@@ -30,7 +30,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     formState?.inputState.set(`${FBFieldName.ProcedureDiff}${name}`, inputState);
 
     // MARK: @reactions
-    // Value sync with the form
+    // Form sync
     React.useEffect(() => reaction(
       () => procedureState?.value,
       (data) => formState?.setFieldValue(name, {
@@ -39,6 +39,13 @@ export const withFBProcedure = <T extends FBProcedureProps>(
       }, true), {
         fireImmediately: true,
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    // Autosave trigger
+    React.useEffect(() => reaction(
+      () => procedureState?.value,
+      () => formState?.setFieldAutosave(name)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 

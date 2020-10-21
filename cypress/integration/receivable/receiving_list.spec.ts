@@ -81,7 +81,7 @@ context("Receivable list test", () => {
         cy.arGetArDocumentByName({
           sessionId: loginResponse.sessionId,
           employeeId: adminEmployee.id,
-          name: "Initial AR Form",
+          name: "AR Form",
         }).then((response) => {
           initialArDocument = response;
           cy.drCreateDocumentRevision({
@@ -456,7 +456,7 @@ context("Receivable list test", () => {
     });
 
     it("Approve and release", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -509,7 +509,7 @@ context("Receivable list test", () => {
 
       it("Verify receivable counter on document list", () => {
         // SystemRequirement("REQ-1760");
-        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+        cy.dlVerifyDocCounter({ docCounterNumber: 3 });
       });
     });
 

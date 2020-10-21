@@ -1,6 +1,5 @@
-import { isString } from "lodash";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TableSearchFieldProps } from "../../components/table/search/types";
@@ -10,7 +9,7 @@ import { Translation } from "../../translations/types";
 
 export const shouldShowStaticColumns = (documentTypeName) => documentTypeName !== "Purchase Order";
 
-export const columnSearchConfiguration = (valuePath: string, tableCriteria: TablePanelStateProps): [boolean, Partial<TableSearchFieldProps>] => {
+export const columnSearchConfiguration = (valuePath: string, tableCriteria: TablePanelStateProps, statuses: DocumentRevisionStatus[]): [boolean, Partial<TableSearchFieldProps>] => {
   let omitSearch = true;
   let searchOptions: Partial<TableSearchFieldProps> = { dataKey: valuePath };
   if (valuePath.startsWith("precalc") || valuePath.startsWith("formInput")) {
@@ -50,12 +49,10 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
 
   if (valuePath === "status") {
     omitSearch = false;
-    searchOptions.dataKey = "status[]";
+    searchOptions.dataKey = "displayStatus";
     searchOptions.searchType = "select";
-    searchOptions.selectOptions = documentRevisionStatusOption();
-    searchOptions.defaultValue = tableCriteria?.queryDict && isString(tableCriteria.queryDict["status[]"])
-      ? tableCriteria.queryDict["status[]"]
-      : undefined;
+    searchOptions.selectOptions = documentRevisionStatusOption(statuses);
+    searchOptions.defaultValue = tableCriteria.queryDict.displayStatus;
   }
 
   return [omitSearch, searchOptions];
@@ -80,6 +77,7 @@ export const getStaticColumns = (
   cellHrefRenderer,
   tableCriteria,
   canEdit,
+  statuses,
 ): TableColumnProps<DocumentRevision>[] => [
   {
     key: "docId",
@@ -117,15 +115,16 @@ export const getStaticColumns = (
   {
     key: "status",
     label: "common.state",
-    columnOptions: { width: 160 },
+    columnOptions: {
+      cellDataGetter: ({ rowData }) => (rowData.displayStatus).toUpperCase(),
+      width: 160,
+    },
     cellType: (rowData) => (canEdit(rowData) ? "LINK" : "BASE"),
     searchOptions: {
-      dataKey: "status[]",
-      defaultValue: isString(tableCriteria.queryDict?.["status[]"])
-        ? tableCriteria.queryDict?.["status[]"]
-        : undefined,
+      dataKey: "displayStatus",
+      defaultValue: tableCriteria.queryDict?.displayStatus,
       searchType: "select",
-      selectOptions: documentRevisionStatusOption(),
+      selectOptions: documentRevisionStatusOption(statuses),
     },
   },
   {

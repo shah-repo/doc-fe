@@ -78,6 +78,41 @@ const getPOApprovalMatrix = (handlers: Handlers): ApiAction<ApprovalMatrix> => a
   handlers,
 });
 
+const updateDocumentType = (
+  id: string,
+  body: DocumentType,
+  handlers: Handlers
+): ApiAction<DocumentType[]> => apiActionWithCallbacks({
+  url: `${DOCUMENT_TYPE_ROOT_URL}/${id}`,
+  method: "patch",
+  data: body,
+  onSuccess: (m, dispatch) => {
+    dispatch(loadList());
+  },
+  handlers,
+});
+
+const deleteDocumentType = (id: string): ApiAction<DocumentType[]> => apiAction({
+  url: `${DOCUMENT_TYPE_ROOT_URL}/remove/${id}`,
+  method: "delete",
+  onSuccess: (m, dispatch) => {
+    dispatch(loadList());
+  },
+});
+
+const addDocumentType = (
+  body: DocumentType,
+  handlers: Handlers,
+): ApiAction<DocumentType[]> => apiActionWithCallbacks({
+  url: `${DOCUMENT_TYPE_ROOT_URL}/add`,
+  method: "post",
+  data: body,
+  onSuccess: (m, dispatch) => {
+    dispatch(loadList());
+  },
+  handlers,
+});
+
 export default {
   loadList,
   getDocTypeIds,
@@ -85,4 +120,7 @@ export default {
   getPOApprovalMatrix,
   getDocTypeByGroup,
   getDocTypesByCategory,
+  updateDocumentType,
+  deleteDocumentType,
+  addDocumentType,
 };

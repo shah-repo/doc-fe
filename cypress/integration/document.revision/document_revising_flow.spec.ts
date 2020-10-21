@@ -126,7 +126,7 @@ context("Document Revising Flow", () => {
     });
 
     it("Approves and releases document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Clicks on revise document", () => {
