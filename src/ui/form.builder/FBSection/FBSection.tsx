@@ -1,8 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { FBSectionProps } from ".";
-import { FBInput } from "..";
-import Text from "../../components/Text";
+import { FBInput, FBText } from "..";
 import Colors from "../../layout/theme/utils/colors";
 
 const FBSection: React.FunctionComponent<FBSectionProps> = ({
@@ -11,6 +10,7 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
   bookmarked = true,
   stepIndex,
   children,
+  loading,
   index,
   name,
 }) => (
@@ -20,18 +20,21 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
       color="primary.contrastText"
       py={1.5}
       px={2}
-      fontSize="h6.fontSize"
-      fontWeight={100}
+      fontSize="body1.fontSize"
+      fontWeight="fontWeightBold"
       borderRadius={4}
       id={name}
       style={{ scrollMarginTop: 50 }}
     >
       {label && (
-        <Box component="span" style={{ textTransform: "uppercase" }}>
-          <Text message={(label as string)}>
-            {(txt: string) => txt}
-          </Text>
-        </Box>
+        <FBText
+          locale={label as string}
+          boxProps={{
+            component: "span",
+            style: { textTransform: "uppercase" },
+          }}
+          {...{ loading }}
+        />
       )}
       {stepIndex && ` #${stepIndex}`}
       {children}

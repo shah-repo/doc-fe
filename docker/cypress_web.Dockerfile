@@ -1,4 +1,4 @@
-FROM node:10.19.0
+FROM node:14.10.0
 # RUN npm install -g yarn@1.22.4
 
 WORKDIR /opt/app

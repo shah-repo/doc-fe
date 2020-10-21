@@ -4,6 +4,7 @@ import React from "react";
 import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
 import { FBEditorAction } from "../FBEditorAction";
 import { FBEditorApprovalField } from "../FBEditorApprovalField";
+import { FBEditorApprovals } from "../FBEditorApprovals";
 import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
 import { FBEditorEmpty } from "../FBEditorEmpty";
@@ -53,6 +54,7 @@ export class FBEditorState {
     "task",
     "blanktplform",
     "approvals",
+    "procedure",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -75,7 +77,7 @@ export class FBEditorState {
     "approvals",
   ];
 
-  public static pickStepIndex: FBInputType[] = ["stepsection", "teststep"];
+  public static pickStepIndex: FBInputType[] = ["stepsection", "teststep", "procedure"];
 
   public static pickCustomHandler: FBInputType[] = ["teststep"];
 
@@ -118,7 +120,9 @@ export class FBEditorState {
     documentRevisions: FBEditorEmpty,
     poApprovalMatrix: FBEditorLabel,
     task: FBEditorLabel,
-    approvals: FBEditorLabel,
+    approvals: FBEditorApprovals,
+    procedure: FBEditorEmpty,
+    parts: FBEditorEmpty,
   };
 
   @observable public mode?: FBEditorMode = "config";

@@ -1,11 +1,15 @@
 import { FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixFieldProps } from "..";
+import { FBProviderProps } from "../FBProvider";
 
 export type FBApprovalMatrixTableProps =
 & Pick<FBApprovalMatrixFieldProps, "name">
+& Pick<FBProviderProps, "approvalMatrixTableState">
 & {
+  cellHeight?: (height: number, index: number) => number;
   approvalData?: FBApprovalMatrixFieldData;
   mode?: FBApprovalMatrixFieldMode;
-  classes?: Record<"root" | "tableInfo" | "tableStatus", string>;
+  classes?: Record<"tableInfo" | "tableStatus", string>;
+  width?: number;
 };
 
 export enum FBApprovalMatrixTableRoleHead {

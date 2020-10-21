@@ -13,7 +13,7 @@ import AlertDialog from "../app/alert.dialog/AlertDialog";
 import { toastInfo } from "../components/notifications";
 import Text from "../components/Text";
 import DownloadHTML from "../document.revision/summary/download.html";
-import { documentNewVersionPath } from "../document.revision/utils/paths";
+import { documentNewVersionPath, documentVersionPath } from "../document.revision/utils/paths";
 import { useHandleCreateDoc } from "../documentType/list/CreateDocumentByType";
 import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
@@ -53,6 +53,9 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   );
   const isRecord = (documentRevision.document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
   const isStatusInReview = documentRevision.status === DocumentRevisionStatus.InReview;
+  const isStatusReleased = documentRevision.status === DocumentRevisionStatus.Released;
+  const canCopy = (documentRevision.document.documentType.groupOptions || []).includes(
+    DOC_TYPE_GROUP_OPTION.CAN_BE_COPIED);
   const inlineApprovalFields = documentRevision?.formDocument?.formTemplate?.schema
   .filter((field) => (field.type === "inlineapproval" as string));
 
@@ -127,12 +130,39 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
     }
   };
 
+  const asyncCopyTo = useAsync({
+    onSuccess: (documentRevision: any) => {
+      history.push({
+        pathname: documentVersionPath(documentRevision.id, documentRevision.document.id),
+      });
+    },
+  });
+  const copyTo = useActionCreator(documentRevisionsActions.copyTo);
+  const copyToAction = () => {
+    asyncCopyTo.start(
+      copyTo,
+      documentRevision.id,
+      asyncCopyTo,
+    );
+  };
+
+
+  const renderCopyButton = () => (
+    <Button
+      color="secondary"
+      variant="outlined"
+      onClick={copyToAction}
+      data-cy="PreviewControlsContainer-copy-to" >
+      <Text translation="documentRevision.copy.to" />
+    </Button>
+  );
+
   const renderOutputButton = () => {
     const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
       && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
         .find((type) => type.documentTypeName === "Approval Request");
 
-    if (hasAccess && canCreateOutput(documentRevision)) {
+    if (hasAccess && canCreateOutput(documentRevision) && !isAR) {
       return (
         <Button
           color="secondary"
@@ -141,7 +171,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
           id="PreviewControlsContainer-createNew"
           data-cy="PreviewControlsContainer-createNew"
         >
-          <Text translation={isAR ? "changeRequest.create" : "common.create.new"} />
+          <Text translation={"common.create.new"} />
         </Button>
       );
     }
@@ -200,6 +230,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   return (
     <>
       {!isLastVersionObsolete() && renderCloneButton()}
+      {isStatusReleased && canCopy && renderCopyButton()}
       {renderOutputButton()}
       {renderNoAccessWarning()}
       {isRecord && isStatusInReview && !isInlineApproval && isUserDocumentOwner &&

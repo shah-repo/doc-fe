@@ -5,11 +5,11 @@ import { FBLabel, FBMediaAlbum, FBMediaAlbumFieldProps, FBMediaAlbumFieldSocket,
 import { withFBMediaAlbumField } from "./FBMediaAlbumField.wrap";
 
 const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
-  mediaAlbumFieldState,
   setMediaFieldMode,
   onFileUploadChange,
-  actionsDisabled,
   removeMedia,
+  mediaAlbumFieldState,
+  actionsDisabled,
   isTemplate,
   qrValue = "",
   collection,

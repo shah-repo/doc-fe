@@ -1,4 +1,4 @@
-import { isString, kebabCase, size, union } from "lodash";
+import { filter, isString, kebabCase, size, union } from "lodash";
 import React from "react";
 import { FBEditorActionsProps } from ".";
 import { FB, FBData, FBSchemaProps } from "..";
@@ -24,7 +24,18 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
     function additionalSchema() {
       if (!type) { return; }
-      const additionalSchema = FBData.additionalSchema(type);
+      let additionalSchema = FBData.additionalSchema(type);
+
+      // Filter out uniqueInSchema els if type is already in the scheme
+      additionalSchema = filter(additionalSchema, (schemaItem) => {
+        const { type, uniqueSchemaItem } = schemaItem;
+        const isUnique = (
+          Boolean(uniqueSchemaItem) &&
+          (workspaceState?.getItemsByType(type).length || 0) > 0
+        );
+        return !isUnique;
+      });
+
       if (!workspaceState?.getSchemaItemAt(index) && additionalSchema) {
         workspaceState?.setSchema(union(workspaceState.getSchema(), additionalSchema));
         index = index + size(additionalSchema);
@@ -40,8 +51,16 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     handleAdd = () => {
       if (!type) { return; }
       const formValues: FBSchemaProps = formState?.getValues() as FBSchemaProps;
-      const { options, validators, label, editorProperties } = formValues;
-      if (isOutput) {
+      const { options, validators, label, editorProperties, uniqueSchemaItem } = formValues;
+
+      // If schema item type is unique and we have already added it into scheme
+      const isUnique = (
+        uniqueSchemaItem &&
+        (workspaceState?.getItemsByType(type).length || 0) > 0
+      );
+      if (isUnique && !formValues.name) { return dialogState?.closeDialog(); }
+
+      if (isOutput && !workspaceState?.isMode("formDesign")) {
         handleAddOutput(formValues);
         return;
       }

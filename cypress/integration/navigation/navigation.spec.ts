@@ -1,6 +1,7 @@
 import path from "path";
 import { GroupTag, NavigationItems } from "../../../src/state/ducks/auth/types";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -23,9 +24,11 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
 
     it("Logs admin in default company with default navigation", () => {
-      cy.authLogin({
-        email: CONFIG.SUPERADMIN_EMAIL,
-        password: CONFIG.SUPERADMIN_PASSWORD,
+      cy.wrapWithWaitOnApiCall(CyRoutes.IOTCredentials, () => {
+        cy.authLogin({
+          email: CONFIG.SUPERADMIN_EMAIL,
+          password: CONFIG.SUPERADMIN_PASSWORD,
+        });
       });
     });
 

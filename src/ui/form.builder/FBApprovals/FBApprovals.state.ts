@@ -1,7 +1,7 @@
 import { filter, isEmpty, map } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { FBApprovalsConstructor } from ".";
-import { FBInlineApprovalBody, FBInlineApprovalTransition } from "..";
+import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody } from "..";
 import { Approval } from "../../../state/ducks/common";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
@@ -15,7 +15,7 @@ export class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | 
   private isOwner?: boolean;
 
   public approvalApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalBody>(FBEndpoint.Approvals);
-  public transitionApi = new FBRequest<FBInlineApprovalBody, null>();
+  public transitionApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>();
 
   public constructor({ id, approvals, isOwner }: FBApprovalsConstructor) {
     super();
@@ -66,9 +66,16 @@ export class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | 
     this.approvalApi.post();
   };
 
-  public applyTransition = (transition: FBInlineApprovalTransition, id?: string) => {
+  public applyTransition = (
+    transition: FBInlineApprovalTransition,
+    id?: string,
+    body?: FBInlineApprovalTransitionBody,
+  ) => {
     if (!id) { return; }
     this.transitionApi.setTemplateUrl(FBEndpoint.ApprovalsTransition, { id, transition });
+    if (body) {
+      this.transitionApi.setBody(body);
+    }
     this.transitionApi.post();
   };
 }

@@ -50,6 +50,7 @@ const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemPr
           gutter={false}
           disabled={true}
           freeSolo={true}
+          shouldReloadOnInit
           {...{ getOptionLabel }}
         />
       </Box>

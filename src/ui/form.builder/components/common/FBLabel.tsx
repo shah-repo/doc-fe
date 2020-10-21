@@ -8,7 +8,6 @@ import { FBLabelFontSize, FBLabelProps } from "../../types/common";
 const FBLabel: React.FunctionComponent<FBLabelProps> = ({
   label,
   error,
-  labelValues,
   fontSize = "md",
   loading,
   ...boxProps
@@ -20,7 +19,7 @@ const FBLabel: React.FunctionComponent<FBLabelProps> = ({
       fontWeight={300}
       {...boxProps}
     >
-      <Text message={label as string} values={labelValues} />
+      <Text message={label as string} />
       {loading && (
         <Box ml={1} component="span">
           <CircularProgress size={15} />

@@ -4,7 +4,7 @@ import { cloneDeep, filter, get, isEmpty } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -102,7 +102,7 @@ DocumentRevisionFormContainerProps
   const isAlphaReleased = revisionStage === 3;
   const isRecord = (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
 
-  const cleanInitialValues = useMemo(() => {
+  const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
     const { outputRevision } = initialValues;
     const securityGroups: any[] = [];
@@ -160,8 +160,12 @@ DocumentRevisionFormContainerProps
   const FBContainer = React.useRef(null);
   const { group: formGroup } = cleanInitialValues.document?.documentType || {};
   const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
-  const { schema: originScheme = [] } =
-  cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
+  let { schema: originScheme = [] } = (
+    (cleanInitialValues)?.formTemplate ||
+    (cleanInitialValues)?.formDocument?.formTemplate ||
+    {}
+  );
+  originScheme = cleanInitialValues?.schema || originScheme;
   const isOutput =  Boolean(outputGroup && !isEmpty(outputGroup));
   const formInput = useMemo(() =>
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
@@ -170,7 +174,7 @@ DocumentRevisionFormContainerProps
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";
   } else if (outputGroup) {
-    mode = "form";
+    mode = (formGroup === "ENGINEERING_BUILD") ? "formDesign" : "form";
   }
   const showAdministrativeAndVoidChange = isOutput && isAlphaReleased && isRecord;
 
@@ -209,13 +213,7 @@ DocumentRevisionFormContainerProps
   // if it's really necessary maybe it can be loaded through the DataFetcherContainer
   // it will be loaded only once instead every time this component is mounted
   const loadAction = () =>
-    loadDocumentRevisions([
-      DocumentRevisionStatus.Released,
-      DocumentRevisionStatus.Deprecated,
-      DocumentRevisionStatus.Obsolete,
-      DocumentRevisionStatus.PendingChange,
-      DocumentRevisionStatus.Draft,
-    ]);
+    loadDocumentRevisions();
 
   return (
     <AsyncGate

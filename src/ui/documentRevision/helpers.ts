@@ -4,7 +4,7 @@ import { Document, DocumentRevision, DocumentRevisionStatus, FBFormTemplateProps
 import { DocumentTypeByIdState, DOC_TYPE_GROUP_OPTION } from "../../state/ducks/documentRevisions/documentType";
 import { DocumentType } from "../../state/ducks/documentRevisions/documentType/types";
 import { OptionType } from "../components/forms/fields/Autocomplete/types";
-import { FBSchemaProps } from "../form.builder";
+import { FB, FBSchemaProps } from "../form.builder";
 
 export const canEditDocumentRevision = (
   documentRevision: DocumentRevision,
@@ -184,6 +184,7 @@ export const getFBSchemeByDocType = (
   documentTypesById: DocumentTypeByIdState,
   originScheme?: FBSchemaProps[],
 ): FBSchemaProps[] => {
+
   const outputTypes = map(formValue.outputDocumentTypes as OptionType[], "value");
   const outputTypesWithGroups = outputTypes?.map((docType) => documentTypesById[docType]);
 
@@ -207,6 +208,8 @@ export const getFBSchemeByDocType = (
       label: "form.builder.approvals",
       type: "approvals",
       deleteDisabled: true,
+      name: `fb-approvals-${FB.uniqid}`,
+      uniqueSchemaItem: true,
     });
   }
 

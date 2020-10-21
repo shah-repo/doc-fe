@@ -35,6 +35,8 @@ export enum RevisionChangeType {
 }
 
 export interface DocumentRevisionDocument {
+  children: DocumentRevision[];
+  parent: DocumentRevision;
   id: string;
   docId: string;
   documentType: Partial<DocumentType>;
@@ -80,6 +82,9 @@ export interface Precalc {
 }
 
 export interface DocumentRevision extends FBDocumentRevisionProps {
+  displayStatus: DocumentRevisionStatus;
+  children?: DocumentRevision[];
+  parent?: DocumentRevision;
   precalc: Precalc;
   id: string;
   docId?: string;
@@ -114,6 +119,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   primaryAttachment?: Attachment;
   approvals?: Approval[];
   updatedAt?: string;
+  schema?: FBSchemaProps[];
 }
 
 export const RevisionStageOptions = [

@@ -3,7 +3,7 @@
   "REACT_APP_AWS_COGNITO_CLIENT_ID": "2hh1tdeau8uenunso6ltf79h7m",
   "REACT_APP_FRONTEND_URL": "https://sandbox.enlil.io",
   "REACT_APP_SIGNUP_DOMAIN_URL": "https://shifamed-doc-sandbox.auth.us-west-2.amazoncognito.com",
-  "REACT_APP_THEME": "PRODUCTION_THEME",
+  "REACT_APP_THEME": "SANDBOX_THEME",
   "REACT_APP_AWS_BUCKET_PUBLIC": "doc-be-sandbox2-public",
   "REACT_APP_AWS_REGION": "us-west-2",
   "REACT_APP_HELLOSIGN_TEST_MODE": "0",
