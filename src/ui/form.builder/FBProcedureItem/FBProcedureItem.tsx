@@ -45,6 +45,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
         <FBButton
           variant="text"
           color="inherit"
+          dataCy= {`${FBProcedureItemLocale[type]}.btn`}
           startIcon={<AddCircleIcon />}
           label={{
             locale: "form.builder.action.mode",
