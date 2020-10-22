@@ -175,7 +175,7 @@ context("Record inline Flow", () => {
       });
 
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
   });
@@ -250,9 +250,9 @@ context("Record inline Flow", () => {
       });
 
       context("Change textfield and approve again", () => {
-        it("Enter text 'Second entry' in textfield for inline", () => {
+        it("Enter text 'Second entry' in textfield for inline with bold tag to check if tags persist in history", () => {
           SystemRequirement("REQ-1080");
-          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", Second entry");
+          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", <b> Second entry </b>");
         });
 
         it("Enter description 'History Test Inline Record description'", () => {
