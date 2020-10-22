@@ -751,6 +751,7 @@ context("Validators tests", () => {
     // No need to check if validation pop-up is shown.
     // If doc status is released that means there were no validation errors.
     it("Check document status is released", () => {
+      cy.wait(2000);
       cy.drCheckDocumentStatus({ status: "Released" });
     });
   });

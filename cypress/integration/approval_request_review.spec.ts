@@ -257,13 +257,13 @@ context("Approval request form scenario", () => {
       cy.arSelectARForm({ formTitle: approvalRequestFormName });
     });
 
-    it.skip("Document One already used, it must not be added again.", () => {
-      SystemRequirement("REQ-0860");
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: sampleDocOneTitle });
-      cy.arIsProposedDocumentEmpty();
-      cy.get("[data-cy=\"FBButton-label\"]").click().wait(1000);
-    });
+    // it.skip("Document One already used, it must not be added again.", () => {
+    //   SystemRequirement("REQ-0860");
+    //   cy.arClickAddDocument();
+    //   cy.arChoseSpecificProposedDocument({ name: sampleDocOneTitle });
+    //   cy.arIsProposedDocumentEmpty();
+    //   cy.get("[data-cy=\"FBButton-label\"]").click().wait(1000);
+    // });
   });
 
   context("User prompted to enter their user password when approving or rejecting an AR", () => {

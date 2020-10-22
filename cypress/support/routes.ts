@@ -51,7 +51,8 @@ export enum CyRoutes {
   PostApprovals = "PostApprovals",
   GetFileUploadCandidates = "GetFileUploadCandidates",
   GetRequiredApproversDocRev = "GetRequiredApproversDocRev",
-  ReleaseDocRevWithoutAr = "ReleaseDocRevWithoutAr"
+  ReleaseDocRevWithoutAr = "ReleaseDocRevWithoutAr",
+  GetDocumentType = "GetDocumentType"
 }
 
 export const routes: ICyRoutes =   {
@@ -196,6 +197,12 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 10 * 1000,
+    },
+  },
+  GetDocumentType: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_type*",
     },
   },
   ChangeRequestApprove: {

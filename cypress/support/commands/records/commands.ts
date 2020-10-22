@@ -18,7 +18,9 @@ declare global {
 }
 
 Cypress.Commands.add("recCreateRecordFromLandingPage", () => {
-  cy.get("[id=\"DocumentByTypeListPresenter-openDocRev\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+    cy.get("[id=\"DocumentByTypeListPresenter-openDocRev\"]").click();
+  });
 });
 
 Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params: {recordType: string; recordForms: string[]}) => {
@@ -34,12 +36,17 @@ Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params: {recordType
 });
 
 Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
-  cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
-  cy.wait(500);
-  cy.get("div[id^=react-select]").contains(params.recordType).click();
-  if (params.recordForm) {
-    cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").type(params.recordForm + "{downarrow}{enter}");
-  }
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.EmployeesGet,
+    CyRoutes.DocPreview,
+    CyRoutes.GetRequiredApproversDocRev], () => {
+    cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
+    cy.wait(500);
+    cy.get("div[id^=react-select]").contains(params.recordType).click();
+    if (params.recordForm) {
+      cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").type(params.recordForm + "{downarrow}{enter}");
+    }
+  });
 });
 
 Cypress.Commands.add("recCheckRevisionStage", (params: {stage: string}) => {
