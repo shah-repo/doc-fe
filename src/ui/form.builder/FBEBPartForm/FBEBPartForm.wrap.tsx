@@ -1,21 +1,20 @@
 import React from "react";
-import { FB, FBEBPartDialogActions } from "..";
-import { FBEBPartDialogProps } from "./FBEBPartDialog.types";
+import { FB, FBEBPartFormActions, FBEBPartFormProps, FBFormState } from "..";
 
-export const withFBEBPartDialog = (
-  Component: React.FunctionComponent<FBEBPartDialogProps>,
+export const withFBEBPartForm = (
+  Component: React.FunctionComponent<FBEBPartFormProps>,
 ) => {
   const Comp = ({
-    name,
     ...props
   }) => {
 
     // MARK: @config
-    const { formState, dialogState } = FB.useStores();
+    const { dialogState } = FB.useStores();
+    const formState = FB.useRef(FBFormState, {});
 
     React.useEffect(() => {
       dialogState?.setActions(
-        <FBEBPartDialogActions {...{ onDialogConfirm, onDialogClose }} />
+        <FBEBPartFormActions {...{ onDialogConfirm, onDialogClose }} />
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -28,16 +27,15 @@ export const withFBEBPartDialog = (
 
     const onDialogClose = () => {
       dialogState?.closeDialog();
-      formState?.setFieldValue(`fb-ebpart-title-${name}`, null);
+      formState?.setFieldValue("name", null);
     };
 
     return Component({
       ...(props),
       formState,
       dialogState,
-      name,
     });
   };
-  Comp.displayName = "withFBEBPartDialog";
+  Comp.displayName = "withFBEBPartForm";
   return Comp;
 };

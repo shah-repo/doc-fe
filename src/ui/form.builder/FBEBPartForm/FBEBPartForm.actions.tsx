@@ -2,7 +2,7 @@ import { Box } from "@material-ui/core";
 import React from "react";
 import { FBButton, FBSubmitButton } from "..";
 
-const FBEBPartDialogActions: React.FunctionComponent<any> = ({
+const FBEBPartFormActions: React.FunctionComponent<any> = ({
   onDialogConfirm,
   onDialogClose,
 }) => (
@@ -20,4 +20,4 @@ const FBEBPartDialogActions: React.FunctionComponent<any> = ({
   </Box>
 );
 
-export default FBEBPartDialogActions;
+export default FBEBPartFormActions;

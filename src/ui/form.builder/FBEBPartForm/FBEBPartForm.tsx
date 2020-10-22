@@ -1,19 +1,17 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBTextField } from "..";
+import { FBEBPartFormProps, FBTextField } from "..";
 import FBForm from "../components/form/FBForm";
-import { FBEBPartDialogProps } from "./FBEBPartDialog.types";
-import { withFBEBPartDialog } from "./FBEBPartDialog.wrap";
+import { withFBEBPartForm } from "./FBEBPartForm.wrap";
 
-const FBEBPartDialog: React.FunctionComponent<FBEBPartDialogProps> = ({
+const FBEBPartForm: React.FunctionComponent<FBEBPartFormProps> = ({
   formState,
-  name,
   children,
 }) => (
   <FBForm {...{ formState }}>
     <FBTextField
       rules="required"
-      name={`fb-ebpart-title-${name}`}
+      name="name"
       label="form.builder.title"
     />
     <Box display="flex" justifyContent="center" mx={0}>
@@ -22,4 +20,4 @@ const FBEBPartDialog: React.FunctionComponent<FBEBPartDialogProps> = ({
   </FBForm>
 );
 
-export default withFBEBPartDialog(FBEBPartDialog);
+export default withFBEBPartForm(FBEBPartForm);

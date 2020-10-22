@@ -1,9 +1,9 @@
 import { FBFormProps, FBInputProps, FBProviderProps } from "..";
 
-export type FBEBPartDialogProps =
+export type FBEBPartFormProps =
 & Pick<FBFormProps, "formState">
 & Pick<FBProviderProps, "dialogState">
-& Pick<FBInputProps, "name" | "children">
+& Pick<FBInputProps, "children">
 & {
   onDialogClose?(): any;
   onDialogConfirm?(): any;

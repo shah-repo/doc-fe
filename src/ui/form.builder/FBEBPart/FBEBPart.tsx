@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBEBPartProps, FBInput, FBProvider } from "..";
 import { withFBEBPart } from "./FBEBPart.wrap";
@@ -10,20 +10,24 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
 }) => (
   <FBProvider {...{ dialogState }}>
     <FBInput type="ebpart">
-      <Grid>
-        <FBAutocompleteAsync
-          label="form.builder.part"
-          placeholder="form.builder.select.existing.part"
-          optionId={FBAutocompleteAsyncOption.materials}
-          // optionId={FBAutocompleteAsyncOption.materialsAndEquipment}
-          name={`fb-ebpart-${name}`}
-        />
-        <FBButton
-          variant="contained"
-          label="form.builder.create.new.part"
-          onClick={onAddClick}
-        />
-      </Grid>
+      <Box display="flex">
+        <Box flexGrow={1}>
+          <FBAutocompleteAsync
+            label="form.builder.part"
+            placeholder="form.builder.select.existing.part"
+            optionId={FBAutocompleteAsyncOption.materials}
+            // optionId={FBAutocompleteAsyncOption.materialsAndEquipment}
+            name={`fb-ebpart-${name}`}
+          />
+        </Box>
+        <Box mt={4}>
+          <FBButton
+            variant="contained"
+            label="form.builder.create.new.part"
+            onClick={onAddClick}
+          />
+        </Box>
+      </Box>
     </FBInput>
   </FBProvider>
 );

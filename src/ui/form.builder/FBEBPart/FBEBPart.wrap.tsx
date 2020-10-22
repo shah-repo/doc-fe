@@ -1,6 +1,5 @@
 import React from "react";
-import { FB, FBDialogState, FBEBPartDialog } from "..";
-import { FBEBPartProps } from "./FBEBPart.types";
+import { FB, FBDialogState, FBEBPartForm, FBEBPartProps } from "..";
 
 export const withFBEBPart = <T extends FBEBPartProps>(
   Component: React.FunctionComponent<T>,
@@ -19,7 +18,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
       dialogState?.config({
         title: "form.builder.create.new.part",
         open: true,
-        content: <FBEBPartDialog { ...{ name }}  />,
+        content: <FBEBPartForm { ...{ name }}  />,
       });
     };
 
