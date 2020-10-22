@@ -209,6 +209,11 @@ export interface ApproveAndReleaseRequest {
   formDocument: Id;
 }
 
+export interface FinalizeAndReleaseRequest {
+  approvers: Id[];
+  effectiveDate?: string;
+}
+
 export interface CreateAndReleaseRequest {
   releasedDocumentRevision: DocumentRevision;
   releaseDto: CreateAndReleaseRequest;

@@ -32,6 +32,9 @@ export enum DOC_GROUP_TYPE {
   SUPPLIER = "SUPPLIER",
   PART = "PART",
   ENGINEERING_BUILD = "ENGINEERING_BUILD",
+  CHANGE_REQUEST = "CHANGE_REQUEST",
+  WO_PARTS = "WO_PARTS",
+  RECEIVABLE = "RECEIVABLE",
 }
 
 export type DocumentGroupOptionsType =
@@ -69,6 +72,7 @@ export enum DOC_TYPE_GROUP_OPTION {
   SUPPLIER = "SUPPLIER",
   RECEIVE = "RECEIVE",
   CAN_BE_COPIED = "CAN_BE_COPIED",
+  RECEIVABLE = "RECEIVABLE",
 }
 export interface PageDetailsColumn {
   label: Translation;
@@ -98,6 +102,11 @@ export interface DocumentType {
   schema?: FBSchemaProps[];
   fieldsConfig?: FieldConfig;
   hiddenForCreationForUsersWithoutTags?: GroupTag[];
+  privateNumberPool?: boolean;
+  canRedLine?: boolean;
+  needsSignature?: boolean;
+  startingNumber?: string;
+  category?: string;
 }
 
 export interface DocumentForms {

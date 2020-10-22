@@ -64,6 +64,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const classes = styles();
   const dialog = useDialog();
   const releaseAction = useActionCreator(documentRevisionsActions.approveAndRelease);
+  const finalizeAction = useActionCreator(documentRevisionsActions.finalizeAndRelease);
   const releaseNonQmsAction = useActionCreator(documentRevisionsActions.approveAndReleaseNonQms);
   const async = useAsync<any>({ onSuccess: dialog.close });
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
@@ -187,6 +188,15 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
           documentType: { id: documentType },
           formDocument: { id: formDocument },
         },
+        async,
+      );
+      return;
+    }
+    if (isRecord && isInlineApproval) {
+      async.start(
+        finalizeAction,
+        id,
+        { approvers, effectiveDate },
         async,
       );
       return;

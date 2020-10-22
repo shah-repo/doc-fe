@@ -118,7 +118,7 @@ context("PO test", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -215,7 +215,7 @@ context("PO test", () => {
 
     it("Enter Supplier Part Number", () => {
       // SystemRequirement("REQ-1410");
-      cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
+      cy.poEnterSupplierPartNumber({ partNumber: "PRT-0003" });
     });
 
     it("Enter number of Units", () => {
@@ -237,10 +237,10 @@ context("PO test", () => {
       cy.poAddPOButtonClick();
     });
 
-    it.skip("Check currency options dropdown", () => {
-      // SystemRequirement("REQ-1320");
-      cy.poCheckCurrency();
-    });
+    // it.skip("Check currency options dropdown", () => {
+    //   // SystemRequirement("REQ-1320");
+    //   cy.poCheckCurrency();
+    // });
 
     it("Select Currency 'USD'", () => {
       cy.poSelectCurrency({ currencyValue: "USD" });
@@ -271,7 +271,7 @@ context("PO test", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -344,10 +344,10 @@ context("PO test", () => {
       cy.poAddPOButtonClick();
     });
 
-    it.skip("Check currency options dropdown", () => {
-      // SystemRequirement("REQ-1320");
-      cy.poCheckCurrency();
-    });
+    // it.skip("Check currency options dropdown", () => {
+    //   // SystemRequirement("REQ-1320");
+    //   cy.poCheckCurrency();
+    // });
 
     it("Select Currency 'EUR'", () => {
       cy.poSelectCurrency({ currencyValue: "EUR" });
@@ -401,7 +401,7 @@ context("PO test", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -455,7 +455,7 @@ context("PO test", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Click on 'Purchase Order' on sidebar", () => {
@@ -516,7 +516,7 @@ context("PO test", () => {
       // SystemRequirement("REQ-1150");
       cy.filterPO({
         docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
-        partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
+        partNumber: "PRT-0003", amount: "10", owner: "tester", issueDate: "10/10/2020",
       }).wait(2000);
     });
 
@@ -528,13 +528,13 @@ context("PO test", () => {
       cy.navigToPurchaseOrder();
     });
 
-    it.skip("Check if all filter values persist after changing landing page", () => {
-      // SystemRequirement("REQ-1170");
-      cy.filterCheckIfPOFilterPersists({
-        docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
-        partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
-      });
-    });
+    // it.skip("Check if all filter values persist after changing landing page", () => {
+    //   // SystemRequirement("REQ-1170");
+    //   cy.filterCheckIfPOFilterPersists({
+    //     docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
+    //     partNumber: "PRT-0003", amount: "10", owner: "tester", issueDate: "10/10/2020",
+    //   });
+    // });
 
     it("Clear filter", () => {
       // SystemRequirement("REQ-1190");
