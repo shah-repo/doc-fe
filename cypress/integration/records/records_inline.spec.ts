@@ -129,9 +129,7 @@ context("Record inline Flow", () => {
       });
 
       it("Add textfield", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
-          cy.fbClickAddNewHiddenBtn();
-        });
+        cy.fbClickAddNewHiddenBtn();
         cy.fbSelectTextField();
         cy.fbAddLabelName({ name: "Textfield for inline" });
         cy.fbAddField();
@@ -221,7 +219,7 @@ context("Record inline Flow", () => {
       });
 
       it("Save record", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Check inline record creation default to numeric revision", () => {
@@ -251,7 +249,12 @@ context("Record inline Flow", () => {
       });
 
       it("Click WIP document", () => {
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
+        cy.wrapWithWaitOnApiCalls([
+          CyRoutes.EmployeesGet,
+          CyRoutes.DocPreview,
+          CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
+        });
       });
 
       it("Check system creates new major revision after inline approve", () => {
@@ -267,11 +270,7 @@ context("Record inline Flow", () => {
         });
 
         it("Save record", () => {
-          cy.wrapWithWaitOnApiCall(
-            CyRoutes.PatchDocRev,
-            () => {
-              cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
-            });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Verify system asks for another approval afer changing section", () => {
@@ -296,7 +295,12 @@ context("Record inline Flow", () => {
         });
 
         it("Click WIP document", () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.EmployeesGet,
+            CyRoutes.DocPreview,
+            CyRoutes.GetRequiredApproversDocRev], () => {
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
+          });
         });
 
         it("Approve second Inline Approval", () => {
@@ -314,7 +318,12 @@ context("Record inline Flow", () => {
         });
 
         it("Click WIP document", () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.EmployeesGet,
+            CyRoutes.DocPreview,
+            CyRoutes.GetRequiredApproversDocRev], () => {
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
+          });
         });
 
       });
@@ -326,15 +335,11 @@ context("Record inline Flow", () => {
         });
 
         it("Save record", () => {
-          cy.wrapWithWaitOnApiCall(
-            CyRoutes.PatchDocRev,
-            () => {
-              cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
-            });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Try approve and release it", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.recApproveAndReleaseInlineRecord();
           cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").click();
         });
 
@@ -357,13 +362,18 @@ context("Record inline Flow", () => {
         });
 
         it("Click WIP document", () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.EmployeesGet,
+            CyRoutes.DocPreview,
+            CyRoutes.GetRequiredApproversDocRev], () => {
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
+          });
         });
       });
 
       context("Approve and Release document and verify record is in alpha", () => {
         it("Approve and release it", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.recApproveAndReleaseInlineRecord();
         });
 
         it("Verify record is in alpha state", () => {

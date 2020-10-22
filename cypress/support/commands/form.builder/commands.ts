@@ -1,6 +1,8 @@
 /* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
 
+import { CyRoutes } from "../../routes";
+
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export { };
@@ -36,7 +38,9 @@ Cypress.Commands.add("fbAddNewFieldOption", () => {
 Cypress.Commands.add("fbAddNewField", () => cy.get("button[data-cy=\"form.builder.add.field\"]").click());
 
 Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {
-  cy.get("button[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
+    cy.get("button[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+  });
 });
 
 Cypress.Commands.add("fbAddApproverToInlineDialog", (params: { approverName: string }) => {
@@ -66,7 +70,7 @@ Cypress.Commands.add("fbSelectCustomFieldToAdd", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("fbSelectApprovalMatrix", () => cy.get("button[data-cy=\"form.builder.approvalMatrix\"]").click());
-Cypress.Commands.add("fbSelectTextField", () => cy.get("button[data-cy=\"form.builder.textfield\"]").click());
+Cypress.Commands.add("fbSelectTextField", () => cy.get("button[data-cy=\"form.builder.textfield\"]").click().wait(500));
 
 Cypress.Commands.add("fbSelectInlineApproval", () => {
   cy.wait(500);

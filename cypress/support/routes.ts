@@ -49,7 +49,9 @@ export enum CyRoutes {
   GetDocDynamicForm = "GetDocDynamicForm",
   UploadAttachmentMediaUpload = "UploadAttachmentMediaUpload",
   PostApprovals = "PostApprovals",
-  GetFileUploadCandidates = "GetFileUploadCandidates"
+  GetFileUploadCandidates = "GetFileUploadCandidates",
+  GetRequiredApproversDocRev = "GetRequiredApproversDocRev",
+  ReleaseDocRevWithoutAr = "ReleaseDocRevWithoutAr"
 }
 
 export const routes: ICyRoutes =   {
@@ -110,6 +112,15 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 25 * 1000,
+    },
+  },
+  ReleaseDocRevWithoutAr: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/document_revisions/release_without_ar/*",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
     },
   },
   ReleaseDocRev: {
@@ -275,6 +286,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/change_requests/available_approvers",
+    },
+  },
+  GetRequiredApproversDocRev: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions/required_approvers*",
     },
   },
   PostApprovalsApprove: {

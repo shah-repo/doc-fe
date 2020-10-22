@@ -55,7 +55,7 @@ context("Procedure and parts flow test", () => {
                 group: "OTHER",
                 isQms: true,
                 needsSignature: true,
-                category: "equipment",
+                category: "Equipment",
               },
               {
                 documentTypeName: "Material",
@@ -63,7 +63,7 @@ context("Procedure and parts flow test", () => {
                 group: "OTHER",
                 isQms: true,
                 needsSignature: true,
-                category: "materials",
+                category: "Materials",
               },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -99,7 +99,7 @@ context("Procedure and parts flow test", () => {
         cy.arGetArDocumentByName({
           sessionId: loginResponse.sessionId,
           employeeId: secondEmployee.id,
-          name: "Initial AR Form",
+          name: "AR Form",
         }).then((response) => {
           initialArDocument = response;
           cy.drCreateDocumentRevision({
@@ -236,7 +236,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
   });
@@ -274,7 +274,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
   });
@@ -322,7 +322,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
   });
@@ -384,10 +384,6 @@ context("Procedure and parts flow test", () => {
     });
 
     context("Create procedure and release it", () => {
-      it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
       it("Submit for approval", () => {
         cy.pmSubmitForApproval();
       });
