@@ -9,6 +9,7 @@ import { withFBInlineApproval } from "./FBInlineApproval.wrap";
 const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   onApproveClick,
   approvalTransition,
+  requestAllApprovals,
   dialogState,
   inlineApprovalState,
   label = "form.builder.approvers",
@@ -23,6 +24,7 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   loading,
   name,
   shouldShowApprovals,
+  shouldShowRequestAllApprovals,
   ...props
 }) => (
   <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
@@ -83,18 +85,6 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
                 {approval.status && approval.status !== "DRAFT" && (
                   <Box color={Colors.gray}> | {FBInlineApprovalStatusIdent[approval.status]}</Box>
                 )}
-                {approval.canRequest && (
-                  <>
-                    <Box pl={0.5}>|</Box>
-                    <FBButton
-                      style={{ margin: 0 }}
-                      label="form.builder.request.approval"
-                      variant="text"
-                      color="primary"
-                      onClick={() => approvalTransition?.("pending", approval.id)}
-                    />
-                  </>
-                )}
                 {currentUser === approval.approver?.user.id
               && (
                 <Box flexGrow={1} textAlign="right">
@@ -110,6 +100,15 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
               </Box>
             )}
           </FBMapWrapper>
+          <Box flexGrow={1} textAlign="right">
+            {shouldShowRequestAllApprovals && <FBButton
+              style={{ margin: 0 }}
+              label="form.builder.request.approval"
+              variant="text"
+              color="primary"
+              onClick={() => requestAllApprovals?.(name)}
+            />}
+          </Box>
         </Box>
       )}
     </FBInput>
