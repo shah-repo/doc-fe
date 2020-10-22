@@ -53,9 +53,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       approvals: fieldApprovals,
       isOwner,
     });
-    const shouldShowRequestAllApprovals = isOwner &&
-      !isEmpty(inlineApprovalState.getApprovals?.filter((approval) => approval.fieldId === name));
-
+    const shouldShowRequestAllApprovals = isOwner && !isEmpty(inlineApprovalState.getApprovals);
     dialogState = FB.useRef(FBDialogState);
     const shouldShowApprovals = document?.status === "DRAFT" || document?.status === "IN_REVIEW";
 
