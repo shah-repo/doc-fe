@@ -172,7 +172,7 @@ context("Validators tests", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -507,7 +507,7 @@ context("Validators tests", () => {
     });
 
     it("Approve and Release", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
   });
@@ -558,7 +558,7 @@ context("Validators tests", () => {
 
   context("Validation errors should prevent from releasing document", () => {
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Check returned errors are not empty", () => {
@@ -698,7 +698,7 @@ context("Validators tests", () => {
   context(`Test ${requiredDocStatusFieldLabel} (required document status) Field`, () => {
     it("Add incorrect document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type("initial AR Form{downarrow}{enter}");
+        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type("AR Form{downarrow}{enter}");
       });
     });
 
@@ -720,7 +720,7 @@ context("Validators tests", () => {
   context(`Test ${requiredDocTypeFieldLabel} (required document type) Field`, () => {
     it("Add incorrect document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type("initial AR Form{downarrow}{enter}");
+        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type("AR Form{downarrow}{enter}");
       });
     });
 
@@ -743,7 +743,7 @@ context("Validators tests", () => {
 
   context("Release document", () => {
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 

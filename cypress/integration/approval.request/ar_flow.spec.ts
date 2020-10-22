@@ -196,7 +196,7 @@ context("Approval request form", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 

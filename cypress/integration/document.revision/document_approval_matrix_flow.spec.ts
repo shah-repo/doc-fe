@@ -217,7 +217,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -352,7 +352,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -481,7 +481,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -607,7 +607,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Approve and Release the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -702,7 +702,11 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drSelectTemplateReleaseDocument({ template: "Initial AR Form" });
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.ReleaseDocRev,
+        () => {
+          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+        });
     });
   });
 

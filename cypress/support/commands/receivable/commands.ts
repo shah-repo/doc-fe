@@ -135,7 +135,7 @@ Cypress.Commands.add("recVerifyFilterClear", () => {
   cy.get("input[name=docId]").should("have.attr", "value", "");
   cy.get("input[name=owner]").should("have.attr", "value", "");
   cy.get("input[name=crId]").should("have.attr", "value", "");
-  cy.get("input[name=\"status[]\"").should("have.attr", "value", "");
+  cy.get("input[name=\"displayStatus\"").should("have.attr", "value", "");
 });
 
 Cypress.Commands.add("recCheckNumberOfAvailablePo", (params: {numberOfOpenPOs: integer}) => {
