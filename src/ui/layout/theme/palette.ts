@@ -99,6 +99,6 @@ export const sandboxPalette: Palette = {
   } as PaletteColor,
   background: {
     ...defaultPalette.background,
-    default: "5D666F",
+    default: "#5D666F",
   },
 };

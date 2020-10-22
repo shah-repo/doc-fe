@@ -33,8 +33,14 @@ const getFormattedRowValue = (path: any, rowData: any) => {
     rowData.subRevision,
     rowData.revisionChangeType,
   );
-  const ifRevision = path.startsWith("precalc.revision") ? versionNumber : value;
-  return isDate ? <Date value={value} /> : ifRevision;
+  let override = value;
+  if (path.startsWith("precalc.revision")) {
+    override = versionNumber;
+  }
+  if (path === "status") {
+    override = rowData.displayStatus;
+  }
+  return isDate ? <Date value={value} /> : override;
 };
 
 export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({

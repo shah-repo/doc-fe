@@ -218,10 +218,10 @@ context("Approval request landing page test", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it.skip("Verify default filter status is draft or in review", () => {
-      // SystemRequirement("REQ-0780");
-      cy.alVerifyStartingFilter();
-    });
+    // it.skip("Verify default filter status is draft or in review", () => {
+    //   // SystemRequirement("REQ-0780");
+    //   cy.alVerifyStartingFilter();
+    // });
   });
 
   context("Prepare approval request", () => {

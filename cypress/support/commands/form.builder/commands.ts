@@ -1,6 +1,8 @@
 /* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
 
+import { CyRoutes } from "../../routes";
+
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export { };
@@ -34,6 +36,7 @@ declare global {
       fbInlineApprovalHisotryCheck(...list: string[]): Chainable<Subject>;
       fbSelectRadioButtonValue(params: { value: string }): Chainable<Subject>;
       fbSelectFieldValue(params: { value: string }): Chainable<Subject>;
+      fbSelectCustomFieldToAdd(params: { name: string }): Chainable<Subject>;
     }
   }
 }
@@ -45,7 +48,9 @@ Cypress.Commands.add("fbAddNewFieldOption", () => {
 Cypress.Commands.add("fbAddNewField", () => cy.get("button[data-cy=\"form.builder.add.field\"]").click());
 
 Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {
-  cy.get("button[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
+    cy.get("button[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+  });
 });
 
 Cypress.Commands.add("fbAddApproverToInlineDialog", (params: { approverName: string }) => {
@@ -72,6 +77,10 @@ Cypress.Commands.add("fbAddLabelName", (params: { name: string }) => {
 
 Cypress.Commands.add("fbGroupName", (params: { name: string }) => {
   cy.get("[name=\"label\"]").type(params.name);
+});
+
+Cypress.Commands.add("fbSelectCustomFieldToAdd", (params: { name: string }) => {
+  cy.get("button[data-cy^=\"form.builder\"]").contains(params.name).click().wait(500);
 });
 
 Cypress.Commands.add("fbSelectCheckboxValue", (...list: string[]) => {
