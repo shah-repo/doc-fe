@@ -98,7 +98,7 @@ context("Check DAM enforcement rules for document types", () => {
         cy.arGetArDocumentByName({
           sessionId: adminEmployeeLoginResponse.sessionId,
           employeeId: adminEmployee.id,
-          name: "Initial AR Form",
+          name: "AR Form",
         }).then((response) => {
           initialArDocument = response;
           cy.drCreateDocumentRevision({
@@ -263,7 +263,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Approve and release form", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
 
@@ -301,7 +301,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Approve and release form", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
 
@@ -354,7 +354,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Approve and release form", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
 
@@ -392,7 +392,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Approve and release form", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
   });
@@ -447,7 +447,7 @@ context("Check DAM enforcement rules for document types", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -489,11 +489,12 @@ context("Check DAM enforcement rules for document types", () => {
 
   context("Select 'Role One' is needed for 'Approvals Numeric' on all document types", () => {
     it("Click edit DAM", () => {
+      cy.drOpenCloseSidebarDrawer();
       cy.drClickDAMEditBtn();
     });
 
     it("Check all checkboxes for 'Approvals Numeric'", () => {
-      cy.get("div:nth-child(2)>table > tbody > tr> td:nth-child(1)")
+      cy.get("div:nth-child(2) > div> table > tbody > tr > td:nth-child(1)")
         .each(($el) => {
           cy.wrap($el).click();
         });
@@ -506,11 +507,11 @@ context("Check DAM enforcement rules for document types", () => {
 
   context("'Approve & Release' Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Approve and Release the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -650,7 +651,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
     });
 
-    context("Test 'Engineering Build' approvals for 'OTHER' internal type", () => {
+    context("Test 'Clinical Protocol' approvals for 'OTHER' internal type", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
       });
@@ -659,12 +660,16 @@ context("Check DAM enforcement rules for document types", () => {
         cy.cmpClickCreateNewDocument();
       });
 
+      it("Fill document name", () => {
+        cy.drEnterDocumentTitle({ name: "Clinical Protocol approvals" });
+      });
+
       it("Fill document description", () => {
         cy.drEnterDocumentDescription({ description: "Test approvals" });
       });
 
       it("Select document type", () => {
-        cy.drSelectDocumentType({ documentType: "Engineering Build" });
+        cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
       });
 
       it("Select 'Numeric' revision stage", () => {

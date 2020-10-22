@@ -3,6 +3,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import moment from "moment";
 import React from "react";
+import { useIntl } from "react-intl";
 import { FBAuditPOCalculation, FBAuditPOItem } from ".";
 import { FB, FBApprovalAuditProps, FBApprovalAuditState, FBAuditData, FBFieldName } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
@@ -35,6 +36,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
       documentId,
       isOutput,
     });
+    const intl = useIntl();
 
     function underApproval(): string[] | undefined {
       if (!name) { return; }
@@ -55,17 +57,23 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
       const underApprovalFields = underApproval();
       const grouped = groupBy(audits, (audit) => {
         const fieldName = audit.field.split(".")[1]?.split("[")[0];
-        const { type, label } = workspaceState?.getSchemaItem(fieldName) || {};
+        const cleanFieldName = fieldName?.replace(`${FBFieldName.Context}-`, "");
+        let { type, label } = workspaceState?.getSchemaItem(cleanFieldName) || {};
+        if (fieldName?.includes(FBFieldName.Context)) {
+          type = "textfield";
+          label += " " + intl.formatMessage({ id: "form.builder.note" });
+        }
         if (!type) { return "none"; }
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const isOmitted = FBApprovalAuditState.omitAudit.includes(type);
-        if (!underApprovalFields?.includes(fieldName) || isOmitted) {
+        if (!underApprovalFields?.includes(cleanFieldName) || isOmitted) {
           return "none";
         }
+        const { groupId, nextValue, previousValue } = audit;
         if (type === "checkboxgroup" || type === "autocomplete") {
-          return audit.groupId + "." + fieldName + "." + type + "." + label + "." + audit.nextValue;
+          return `${groupId}.${fieldName}.${type}.${label}.${nextValue}.${previousValue}`;
         }
-        return audit.groupId + "." + fieldName + "." + type + "." + label;
+        return `${groupId}.${fieldName}.${type}.${label}`;
       });
 
       const mapped = map(grouped, (v, k) => {
@@ -80,18 +88,36 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
 
           if (nextValue === "[]") { return; } // checkgroup
           if (prevValue !== "undefined" && prevValue !== "") {
-            if (moment(prevValue, moment.ISO_8601, true).isValid()) {
-              prevValue = getFormattedDateString(prevValue, MomentFormats.MonthDateYearAlt);
-            }
-            prevValue = <span> from <b>{prevValue}</b></span>;
+            // Date string
+            moment(prevValue, moment.ISO_8601, true).isValid() && (
+              prevValue = getFormattedDateString(prevValue, MomentFormats.MonthDateYearAlt)
+            );
+            // Other option
+            (prevValue === "includeContext") && (
+              prevValue = intl.formatMessage({ id: "form.builder.other" })
+            );
+            // None option
+            (prevValue === "includeNone") && (
+              prevValue = intl.formatMessage({ id: "form.builder.none" })
+            );
+            prevValue = <span> from <b>{FB.stripTags(prevValue)}</b></span>;
           } else {
             prevValue = "";
           }
-
-          if (moment(nextValue, moment.ISO_8601, true).isValid()) {
-            nextValue = getFormattedDateString(nextValue, MomentFormats.MonthDateYearAlt);
-          }
-          return (<span>Changed {label} {prevValue} to <b>{nextValue}</b></span>);
+          // Date string
+          (moment(nextValue, moment.ISO_8601, true).isValid()) && (
+            nextValue = getFormattedDateString(nextValue, MomentFormats.MonthDateYearAlt)
+          );
+          // Other option
+          (nextValue === "includeContext") && (
+            nextValue = intl.formatMessage({ id: "form.builder.other" })
+          );
+          // None option
+          (nextValue === "includeNone") && (
+            nextValue = intl.formatMessage({ id: "form.builder.none" })
+          );
+          isEmpty(nextValue) && (nextValue = intl.formatMessage({ id: "form.builder.none" }));
+          return (<span>Changed {label} {prevValue} to <b>{FB.stripTags(nextValue)}</b></span>);
         }
 
         function isCheck() {
@@ -139,17 +165,21 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         }
 
         function isCheckGroup() {
-          const { previousValue, nextValue } = v[0];
+          let { previousValue, nextValue } = v[0];
           if (previousValue === "undefined" && nextValue === "[]") { return; }
           if (nextValue === "undefined" || nextValue === "false") {
-            return (<span>Unchecked in {label}: {previousValue}</span>);
+            (previousValue === "includeContext") && (
+              previousValue = intl.formatMessage({ id: "form.builder.other" })
+            );
+            return (<span>Unchecked in {label}: <b>{previousValue}</b></span>);
           }
+          (nextValue === "includeContext") && (
+            nextValue = intl.formatMessage({ id: "form.builder.other" })
+          );
           return (<span>Checked in {label}: <b>{nextValue}</b></span>);
         }
 
         function isFileupload() {
-
-
           const fields = ["name", "type"];
           const r = v.reduce((merged, clearValue, index) => {
             const { type: auditType = "" } = clearValue;

@@ -1,5 +1,7 @@
+import { map } from "lodash";
 import * as React from "react";
-import { FormattedMessage } from "react-intl";
+import { useMemo } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import { Props } from "react-intl/lib/components/message";
 import { isTranslation, Translation } from "../translations/types";
 
@@ -15,9 +17,11 @@ const Text: React.FunctionComponent<TextProps> = ({
   message = "",
   translation = "translation.unknown",
   dataCy = "",
+  values = {},
   ...props
 }: TextProps) => {
-  const [hasTranslation, text] = React.useMemo(() => {
+  const intl = useIntl();
+  const [hasTranslation, text] = useMemo(() => {
     const stringToCheck = message || translation;
     if (!stringToCheck || typeof stringToCheck !== "string") {
       return [false, stringToCheck];
@@ -36,11 +40,19 @@ const Text: React.FunctionComponent<TextProps> = ({
     return [false, stringToCheck];
   }, [message, translation]);
 
+  // For values locale
+  useMemo(() => {
+    map(values, (value, key) => {
+      if (!isTranslation(value as string)) { return; }
+      values[key] =  intl.formatMessage({ id: value as string });
+    });
+  }, [values, intl]);
+
   if (hasTranslation && dataCy !== "") {
-    return <div data-cy={dataCy}><FormattedMessage id={text} {...props} /></div>;
+    return <div data-cy={dataCy}><FormattedMessage id={text} {...props} {...{ values }} /></div>;
   }
   else if (hasTranslation) {
-    return <FormattedMessage id={text} {...props} />;
+    return <FormattedMessage id={text} {...props} {...{ values }} />;
   }
 
   if (dataCy !== "") {

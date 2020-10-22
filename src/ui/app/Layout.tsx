@@ -6,15 +6,17 @@ import ChangeRequestCreateContainer from "../change.request/ChangeRequestCreate.
 import ChangeRequestContainer from "../change.request/Container";
 import ChangeRequestListContainer from "../change.request/list/container";
 import WatermarkFooterContainer from "../components/watermarkFooter/container";
-import { CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL, CHANGE_REQUEST_ROOT_URL, DOCUMENT_BY_CATEGORY_LIST_URL, DOCUMENT_BY_TYPE_LIST_URL, DOCUMENT_REVISION_CREATE_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_REVISION_ROOT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, SLACK_ROOT_URL, TRAINING_DETAIL_URL, USER_MANAGEMENT_ROOT_URL, TRAINING_URL } from "../constants/urls";
+import { CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL, CHANGE_REQUEST_ROOT_URL, DOCUMENT_BY_CATEGORY_LIST_URL, DOCUMENT_BY_TYPE_LIST_URL, DOCUMENT_REVISION_CREATE_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, SLACK_ROOT_URL, TRAINING_DETAIL_URL, TRAINING_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
+import { DocumentTypeManagementContainer } from "../document.type.management/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import DocumentTypeListContainer from "../documentType/list/container";
 import GroupManagementListContainer from "../group.management/list/container";
 import RemoteValidatorsLoader from "../remoteValidators/RemoteValidators";
 import SlackContainer from "../slack/Container";
+import TrainingListContainer from "../training/list/container";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
 import UserManagementListContainer from "../user.management/list/container";
 import DataFetcherContainer from "./DataFetcher.container";
@@ -23,7 +25,6 @@ import styles from "./Layout.styles";
 import Navigation from "./Navigation";
 import PingServer from "./PingServer";
 import SocketsContainer from "./sockets/container";
-import TrainingListContainer from "../training/list/container";
 
 type Props = WithStyles<typeof styles>;
 
@@ -92,6 +93,10 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => (
         <Route
           path={DOCUMENT_BY_CATEGORY_LIST_URL}
           component={DocumentTypeListContainer}
+        />
+        <Route
+          path={DOCUMENT_TYPE_MANAGEMENT_URL}
+          component={DocumentTypeManagementContainer}
         />
         <Redirect to={{ pathname: HOME_URL }} />
       </Switch>

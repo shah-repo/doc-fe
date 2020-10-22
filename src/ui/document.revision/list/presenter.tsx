@@ -1,5 +1,5 @@
 import { Box, Button, Grid, WithStyles, withStyles } from "@material-ui/core";
-import { isEmpty, isString, set } from "lodash";
+import { isEmpty, set } from "lodash";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
@@ -17,7 +17,7 @@ import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import useDialog from "../../hooks/useDialog";
-import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionQueryStatus, documentRevisionStatusOption } from "../utils/helpers";
+import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import ExportListDialog from "./ExportListDialog/ExportListDialog";
@@ -34,8 +34,10 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   tableCriteria,
   tableData,
   clearFilter,
+  statuses,
 }) => {
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
+  const dialog = useDialog();
 
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
     rowData.document.documentType.documentTypeName || "";
@@ -48,13 +50,42 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   };
 
   const customQuerySet = (queryDict: TableSearchQueryType) => {
-    if (!queryDict["status[]"]) {
-      queryDict["status[]"] = documentRevisionQueryStatus();
-    }
-
     queryDict.description = queryDict.name;
 
     return queryDict;
+  };
+
+  const customDataSet = (data: DocumentRevision[]) => {
+
+    /** Temp fix - disabling filtering by document type name.
+     * Remove .map and uncomment .reduce to enable filtering. */
+    const customData = data
+      .map((docRev) => {
+        set(docRev, "description", stripTags(docRev.description));
+        set(
+          docRev,
+          "document.documentType.documentTypeAcronym",
+          removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
+        );
+        return docRev;
+      });
+
+    /*    const customData = data.reduce<DocumentRevision[]>((acc, docRev) => {
+        if (docRev.document.documentType.documentTypeName
+         && DOCUMENT_LIST_TYPE_NAMES.includes(docRev.document.documentType.documentTypeName)) {
+          set(docRev, "description", stripTags(docRev.description));
+          set(
+            docRev,
+            "document.documentType.documentTypeAcronym",
+            removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
+          );
+          acc.push(docRev);
+        }
+        return acc;
+      }, []); */
+    // REQ - show data without RECORD documents
+    const dataWithoutRecords = customData.filter((e) => e.document.documentType.group !== "RECORD");
+    return dataWithoutRecords;
   };
 
   const columns: TableColumnProps<DocumentRevision>[] = [
@@ -139,17 +170,18 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "status",
       label: "document.revision.list.state",
-      columnOptions: { width: 160 },
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => (rowData.displayStatus)?.toUpperCase(),
+        width: 160,
+      },
       cellType: (rowData) => (canEdit(rowData) ? "LINK" : "BASE"),
       onSelect: ({ rowData }) => () =>
         editDocumentRevision(rowData.id, rowData.document.id),
       searchOptions: {
-        dataKey: "status[]",
-        defaultValue: isString(tableCriteria.queryDict["status[]"])
-          ? tableCriteria.queryDict["status[]"]
-          : undefined,
+        dataKey: "displayStatus",
+        defaultValue: tableCriteria.queryDict.displayStatus,
         searchType: "select",
-        selectOptions: documentRevisionStatusOption(),
+        selectOptions: documentRevisionStatusOption(statuses),
       },
     },
     {
@@ -186,50 +218,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     // },
   ];
 
-  const customDataSet = (data: DocumentRevision[]) => {
-
-    /** Temp fix - disabling filtering by document type name.
-     * Remove .map and uncomment .reduce to enable filtering. */
-    const customData = data
-      .map((docRev) => {
-        set(docRev, "description", stripTags(docRev.description));
-        set(
-          docRev,
-          "document.documentType.documentTypeAcronym",
-          removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
-        );
-        return docRev;
-      });
-
-    /*    const customData = data.reduce<DocumentRevision[]>((acc, docRev) => {
-        if (docRev.document.documentType.documentTypeName
-         && DOCUMENT_LIST_TYPE_NAMES.includes(docRev.document.documentType.documentTypeName)) {
-          set(docRev, "description", stripTags(docRev.description));
-          set(
-            docRev,
-            "document.documentType.documentTypeAcronym",
-            removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
-          );
-          acc.push(docRev);
-        }
-        return acc;
-      }, []); */
-    // REQ - show data without RECORD documents
-    const dataWithoutRecords = customData.filter((e) => e.document.documentType.group !== "RECORD");
-    return dataWithoutRecords;
-  };
-
-  const data = tableData.map((e) => ({
-    docId: e.document.docId,
-    displayRevision: e.displayRevision,
-    documentTitle: e.name,
-    type: e.document.documentType.documentTypeAcronym,
-    owner: e.owner.user.name,
-    crId: e.changeRequest?.crId,
-    status: e.status,
-    effectiveDate: e.effectiveDate ? getFormattedDateString(e.effectiveDate, MomentFormats.MonthDateYear) : "",
-  }));
-
   const documentTypeSearchName = documentTypeOptions.find((e) =>
     e.value === tableCriteria.queryDict.documentTypeId)?.text;
   const effectiveDateSearch = documentRevisionEffectiveDateOption().find((e) =>
@@ -242,11 +230,28 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     { label: `TYPE: ${documentTypeSearchName || ""}`, key: "type" },
     { label: `OWNER: ${tableCriteria.queryDict.owner || ""}`, key: "owner" },
     { label: `AR ID: ${tableCriteria.queryDict.crId || ""}`, key: "crId" },
-    { label: `STATUS: ${tableCriteria.queryDict["status[]"] || ""}`, key: "status" },
+    { label: `STATUS: ${tableCriteria.queryDict.displayStatus || ""}`, key: "status" },
     { label: `EFFECTIVE DATE: ${effectiveDateSearch || ""}`, key: "effectiveDate" },
   ];
 
-  const dialog = useDialog();
+  const renderTableData = () => {
+    if (!isEmpty(tableData)) {
+      return tableData.map((e) => ({
+        docId: e.document.docId,
+        displayRevision: e.displayRevision,
+        documentTitle: e.name,
+        type: e.document.documentType.documentTypeAcronym,
+        owner: e.owner.user.name,
+        crId: e.changeRequest?.crId || "",
+        status: e.displayStatus.toUpperCase(),
+        effectiveDate: e.effectiveDate ? getFormattedDateString(e.effectiveDate, MomentFormats.MonthDateYear) : "",
+      }));
+    }
+    const defaultEmptyColumn = headers.map((column) => ({ [column.key]: "" }));
+    return [Object.assign({}, ...defaultEmptyColumn)];
+  };
+
+  const data = dialog.isOpen ? renderTableData() : [];
 
   return (
     <Grid container={true} className={classes.root}>
@@ -263,10 +268,9 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           id="ListPresenter-export-list"
           data-cy="document.revision.export.list"
           onClick={dialog.open}
-          disabled={isEmpty(data)}
         >
           <Box marginRight={1}>
-            <ExportIcon className={classes.iconSvg} style={{ opacity: isEmpty(data) ? 0.5 : "initial" }}/>
+            <ExportIcon className={classes.iconSvg} />
           </Box>
           <Text translation="document.revision.export.list" />
         </Button>

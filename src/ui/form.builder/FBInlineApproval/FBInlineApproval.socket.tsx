@@ -1,9 +1,7 @@
-import { IconButton } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
 import { get, maxBy } from "lodash";
 import { reaction } from "mobx";
 import React from "react";
-import { FB, FBApprovalSocketMsg, FBApprovalSocketProps, FBButton, FBFieldName, FBInlineApprovalState } from "..";
+import { FB, FBApprovalSocketProps, FBFieldName, FBInlineApprovalState } from "..";
 import { IotService } from "../../../common/utils/iot/mqttClient";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import useMqttSubscription from "../../hooks/useMqttSubscription";
@@ -11,7 +9,7 @@ import useMqttSubscription from "../../hooks/useMqttSubscription";
 const FBInlineApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = ({
   name,
 }) => {
-  const { snackbarState, workspaceState } = FB.useStores();
+  const { workspaceState } = FB.useStores();
   const { id, documentId } = workspaceState || {};
   const inlineApprovalState: FBInlineApprovalState = get(FB.useStores(), `${FBFieldName.ApprovalState}-${name}`);
   const iotService = IotService.getInstance();
@@ -31,7 +29,7 @@ const FBInlineApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = (
   const subscribe = () => {
     iotService.subscribeToTopic(
       `+/document_revisions/${id}/updated`,
-      notify
+      reload
     );
   };
 
@@ -41,29 +39,8 @@ const FBInlineApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = (
     );
   };
 
-  const snackbarAction = () => (
-    <>
-      <FBButton
-        label="form.builder.reload"
-        variant="text"
-        color="secondary"
-        size="small"
-        // TODO: replace merged document into workspace context and force rerender entire workspace
-        onClick={() => inlineApprovalState?.getDocument(documentId)}
-      />
-      <IconButton  size="small" onClick={() => snackbarState?.setOpen(false)}>
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </>
-  );
-  const notify = (resp: string) => {
-    const { data: { message = "" } = {} } = JSON.parse(resp) as Partial<FBApprovalSocketMsg>;
-
-    snackbarState?.config({
-      open: true,
-      message,
-      action: snackbarAction(),
-    });
+  const reload = (resp: string) => {
+    inlineApprovalState?.getDocument(documentId);
   };
   useMqttSubscription(subscribe, unsubscribe);
   return null;

@@ -98,7 +98,7 @@ Cypress.Commands.add("poEnterDocumentDescription", (params: {description: string
 
 Cypress.Commands.add("poSelectPartNumber", () => {
   cy.get("[name=\"partNumber\"]").click().wait(300);
-  cy.get("ul[role=listbox] > li").contains("PRT-00004 - 1").click();
+  cy.get("ul[role=listbox] > li").contains("PRT-00003 - 1").click();
 });
 
 Cypress.Commands.add("poEnterQuantityOrdered", (params: {quantity: string}) => {
@@ -251,8 +251,6 @@ Cypress.Commands.add("poAMCheckApprovalIconIfItsGray", () => {
 });
 
 Cypress.Commands.add("poAMApproveButton", () => {
-  cy.get("#FormList-selectForm").click();
-  cy.get("#FormList-selectForm>div:nth-child(3)>div>div:nth-child(1)").click();
   cy.get("#ApproveAndRelease-submit").click();
 });
 

@@ -1,21 +1,24 @@
 import { map } from "lodash";
 import React from "react";
-import { FB, FBAutocompleteAsyncOption, FBProcedureFormProps, FBProcedureItemType } from "..";
+import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormProps, FBProcedureItemConfig, FBProcedureItemType } from "..";
 
 export const withFBProcedureForm = <T extends FBProcedureFormProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    formState,
     disabledOptions,
+    initialValues,
     optionId,
     type,
     ...props
   }: T) => {
 
     // MARK: @config
-    const { procedureState } = FB.useStores();
+    const { procedureState, dialogState } = FB.useStores();
+    formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
 
-    const config: Record<FBProcedureItemType, (() => void)> = {
+    const config: Partial<Record<keyof typeof FBProcedureItemType, (() => void)>> = {
       materials: () => {
         optionId = FBAutocompleteAsyncOption.materials;
         disabledOptions = map(procedureState?.value?.materials, "title");
@@ -25,11 +28,27 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         disabledOptions = map(procedureState?.value?.equipment, "title");
       },
     };
-    config[type]();
+    config[type]?.();
+
+    React.useEffect(() => {
+      dialogState?.setActions(
+        <FBProcedureFormActions {...{ handleAdd, handleCancel }} />
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // MARK: @reactions
 
     // MARK: @helpers
+    function handleAdd() {
+      const formValue = formState?.getValues() as FBProcedureItemConfig;
+      procedureState?.addItem(formValue, type);
+      handleCancel?.();
+    }
+
+    function handleCancel() {
+      dialogState?.closeDialog();
+    }
 
     // MARK: @methods
 
@@ -37,7 +56,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
 
     return Component({
       ...(props as T),
+      formState,
       disabledOptions,
+      initialValues,
       optionId,
       type,
     });

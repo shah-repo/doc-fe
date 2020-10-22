@@ -9,15 +9,17 @@ export interface FBInlineApprovalValue {
 
 export type FBInlineApprovalProps =
 & Omit<FBInputProps, "editorConfig">
-& Pick<FBProviderProps, "inlineApprovalState">
+& Pick<FBProviderProps, "inlineApprovalState" | "dialogState">
 & {
   approvalTransition?: (transition: FBInlineApprovalTransition, id?: string) => any;
+  onApproveClick?: (approvalId: string) => void;
   editorConfig?: FBInlineApprovalValue;
   approvals?: FBInlineApprovalBody[];
   currentUser?: string;
   isApproved?: boolean;
   isPreview?: boolean;
   isOutput?: boolean;
+  shouldShowApprovals?: boolean;
 };
 
 export type FBInlineApprovalOptions = FBEmployee & {
@@ -46,6 +48,10 @@ export interface FBInlineApprovalBody {
   status?: FBInlineApprovalStatus;
   approver?: FBEmployee;
   canRequest?: boolean;
+}
+
+export interface FBInlineApprovalTransitionBody {
+  password: string;
 }
 
 export interface FBInlineApprovalConstructor {

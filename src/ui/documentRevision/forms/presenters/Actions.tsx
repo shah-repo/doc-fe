@@ -35,7 +35,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     .filter((field) => (field.type === "inlineapproval" as string));
 
   const isInlineApproval = Boolean(inlineApprovalFields && inlineApprovalFields.length > 0);
-  const isRecord = values.document?.documentType?.group === "RECORD";
+  const isRecord = values.document?.documentType?.groupOptions?.includes("RECORD");
 
   /** Function that checks if a form section is approved.
    * @param fieldName Unique name of the form field.
@@ -61,7 +61,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
     return (
-      (documentRevision?.document?.documentType.group === "RECORD") &&
+      (documentRevision?.document?.documentType.group === "ENGINEERING_BUILD") &&
       Boolean(differenceBy(workspaceState?.schema || [],  documentSchema, "name").length)
     );
   }
@@ -76,6 +76,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         });
         break;
       case "form":
+      case "formDesign":
         formik.setFieldValue("formDocument", {
           id: values.formDocument?.id,
         });
@@ -150,11 +151,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
             documentName={docInfo.name}
             docRevId={values.id as string}
             owner={documentRevision?.owner}
+            isRecord={isRecord as boolean}
             {
               ...{
                 documentTypeId,
                 revisionStage,
-                isRecord,
                 isInlineApproval,
               }
             }
@@ -163,9 +164,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       }
       <HeaderMenu>
         <CancelButton
-          documentStatus={documentRevision?.status}
-          version={documentRevision?.version}
-          docRevId={documentRevision?.id}
+          {...{ documentRevision }}
           setShouldDisplay={props.setCancelButtonDisplay}
         />
         {renderChangeOwnership}

@@ -123,7 +123,7 @@ context("Non-QMS Document Creation Flow", () => {
 
     it("Approves and releases document", () => {
       SystemRequirement("REQ-0900");
-      cy.drApproveAndReleaseNonQMSDocument();
+      cy.drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom();
     });
   });
 });

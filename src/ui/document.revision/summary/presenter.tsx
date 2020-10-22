@@ -1,8 +1,9 @@
-import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
+import { Box, Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
 import { flatten, isEmpty } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
@@ -10,6 +11,7 @@ import { documentTypeSelectors, DOC_GROUP_TYPE, DOC_TYPE_GROUP_OPTION } from "..
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
+import SummaryInfo from "../../common/summary/SummaryInfo";
 import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
@@ -61,7 +63,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
   useScrollIntoView();
   const onSubmit = () => void 0;
   const { formInput } = dataProp || {};
-  const { schema } = formTemplate || formDocument?.formTemplate || {};
+  let { schema } = formTemplate || formDocument?.formTemplate || {};
+  schema = dataProp.schema || schema;
   const { docId } = formDocument?.document || {};
   const FBIsOutput = Boolean(docId && !isEmpty(docId));
   const FBIsActive = formInput || formTemplate || formDocument;
@@ -73,6 +76,10 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
   const isRecord = (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
   const isEB = document.documentType.group === DOC_GROUP_TYPE.ENGINEERING_BUILD;
+  const inlineApprovalFields = formDocument?.formTemplate?.schema
+  .filter((field) => (field.type === "inlineapproval" as string));
+
+  const isInlineApproval = Boolean(inlineApprovalFields && inlineApprovalFields.length > 0);
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
@@ -94,6 +101,22 @@ export const Presenter: React.FunctionComponent<Props> = ({
     }
     return false;
   };
+
+  const renderReleaseDetails = () => (
+    <Box p={5} >
+      <Typography variant="h6" style={{ paddingBottom: 8 }}>
+        <Text message="Release Details" />
+      </Typography>
+      <SummaryInfo
+        label={"record.released.by"}
+        value={dataProp.owner.user.name}
+      />
+      <SummaryInfo
+        label={"document.revision.released.date"}
+        value={getFormattedDateString(dataProp.releasedAt, MomentFormats.MonthDateYear)}
+      />
+    </Box>
+  );
 
   const contentRenderer = () => (
     <Box className={classes.boxContainer}>
@@ -168,6 +191,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           />
         </Box>
       )}
+      {isRecord && isInlineApproval && renderReleaseDetails()}
       {FBIsOutput && (
         <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
       )}

@@ -58,9 +58,9 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         uniqueSchemaItem &&
         (workspaceState?.getItemsByType(type).length || 0) > 0
       );
-      if (isUnique) { return; }
+      if (isUnique && !formValues.name) { return dialogState?.closeDialog(); }
 
-      if (isOutput) {
+      if (isOutput && !workspaceState?.isMode("formDesign")) {
         handleAddOutput(formValues);
         return;
       }

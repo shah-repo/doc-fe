@@ -21,7 +21,6 @@ const THIRD_USER = USERS[13];
 const INDIVIDUAL_USER = USERS[14];
 const IMPORTER_USER = USERS[15];
 
-const ARForm = "Initial AR Form";
 const ARDocument = "AR Document";
 const FormDAM = "Form DAM";
 const DAMDocument = "DAM Document";
@@ -140,7 +139,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -334,11 +333,11 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Approve & Release Document", () => {
     it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -417,10 +416,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Click Create a Approval Request button", () => {
       cy.cmpClickCreateApprovalRequest();
-    });
-
-    it("Choose newly AR Form template", () => {
-      cy.arSelectARForm({ formTitle: ARForm });
     });
 
     it(`Enter title AR title: ${ARDocument}`, () => {

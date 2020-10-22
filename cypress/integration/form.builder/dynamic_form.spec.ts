@@ -1,4 +1,5 @@
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -118,7 +119,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Approve and Release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Navigates to document list", () => {
@@ -181,7 +182,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Approve and Release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Open new document", () => {
@@ -205,11 +206,15 @@ context("Dynamic Form Test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        });
+      cy.wait(500);
     });
 
     it("Approve and Release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 });
