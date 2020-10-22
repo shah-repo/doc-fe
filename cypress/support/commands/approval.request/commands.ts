@@ -89,7 +89,6 @@ Cypress.Commands.add("arVerifySignatureIsNotMet", (params: {title: string }) => 
   cy.get("[data-cy=\"transition.action.password\"]").type("wrongPassword");
   cy.get("[data-cy=\"passwordConfirm\"]").click();
   cy.checkToastMessage({ exists: true });
-  cy.get("[data-cy=\"reject.request\"]").click();
 });
 
 Cypress.Commands.add("arCheckImplementationTaskStatus", (params: {status: string }) => {
@@ -212,7 +211,8 @@ Cypress.Commands.add("arVoidAR", () => {
 });
 
 Cypress.Commands.add("arIsProposedDocumentEmpty", () => {
-  cy.get("[data-cy=\"proposedDocumentRevision\"] input").should("be.empty");
+  cy.get("input[data-cy=\"proposedDocumentRevision\"]").click();
+  cy.get("div.MuiAutocomplete-noOptions").should("have.text", "No options");
 });
 
 Cypress.Commands.add("arRejectComfirmationAR", () => {
