@@ -30,8 +30,16 @@ export const documentRevisionIdMask = (
   return type + pad.substring(0, pad.length - countStr.length) + countStr;
 };
 
-export const documentRevisionStatusOption = () => {
+export const documentRevisionStatusOption = (statuses?: DocumentRevisionStatus[]) => {
   const options: SelectOption[] = [];
+  if (statuses) {
+    const obj = statuses.reduce((o, key) => ({ ...o, [key]: key }), {});
+    Object.keys(obj).forEach((key) => {
+      const keyName = obj[key as keyof typeof DocumentRevisionStatus];
+      options.push({ value: keyName, text: keyName });
+    });
+    return orderBy(options, ["text"], ["asc"]);
+  }
   Object.keys(DocumentRevisionStatus).forEach((key) => {
     // TODO: Change DocumentRevisionStatus enum into key = value, value = text
     const keyName = DocumentRevisionStatus[key as keyof typeof DocumentRevisionStatus];

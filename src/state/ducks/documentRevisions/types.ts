@@ -82,6 +82,7 @@ export interface Precalc {
 }
 
 export interface DocumentRevision extends FBDocumentRevisionProps {
+  displayStatus: DocumentRevisionStatus;
   children?: DocumentRevision[];
   parent?: DocumentRevision;
   precalc: Precalc;
@@ -206,6 +207,11 @@ export interface ApproveAndReleaseRequest {
   effectiveDate?: string;
   documentType: Id;
   formDocument: Id;
+}
+
+export interface FinalizeAndReleaseRequest {
+  approvers: Id[];
+  effectiveDate?: string;
 }
 
 export interface CreateAndReleaseRequest {

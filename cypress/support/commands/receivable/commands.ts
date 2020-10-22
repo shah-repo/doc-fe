@@ -107,7 +107,7 @@ Cypress.Commands.add("recVerifyFilterByOwner", (params: {owner: string }) => {
 });
 
 Cypress.Commands.add("recFilterByState", (params: {state: string}) => {
-  cy.get("div[id=\"mui-component-select-status[]\"]").click().wait(300);
+  cy.get("div[id=\"mui-component-select-displayStatus\"]").click().wait(300);
   cy.get("ul[role=listbox]>li").contains(params.state).click().wait(300);
 });
 
@@ -135,7 +135,7 @@ Cypress.Commands.add("recVerifyFilterClear", () => {
   cy.get("input[name=docId]").should("have.attr", "value", "");
   cy.get("input[name=owner]").should("have.attr", "value", "");
   cy.get("input[name=crId]").should("have.attr", "value", "");
-  cy.get("input[name=\"status[]\"").should("have.attr", "value", "");
+  cy.get("input[name=\"displayStatus\"").should("have.attr", "value", "");
 });
 
 Cypress.Commands.add("recCheckNumberOfAvailablePo", (params: {numberOfOpenPOs: integer}) => {

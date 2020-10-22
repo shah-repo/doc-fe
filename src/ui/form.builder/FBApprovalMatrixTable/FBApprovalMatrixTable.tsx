@@ -10,14 +10,17 @@ const FBApprovalMatrixTable: React.FunctionComponent<FBApprovalMatrixTableProps>
   classes,
   mode,
   name,
+  cellHeight,
 }) =>  (
   <Box display="flex" flexDirection="row">
-    <Box width="100%">
-      <FBApprovalMatrixTableInfo {...{ classes, approvalData, mode, name }} />
+    <Box width="65%">
+      <FBApprovalMatrixTableInfo {...{ classes, approvalData, mode, name, cellHeight }} />
     </Box>
     {approvalRoles && !isEmpty(approvalRoles) && (
-      <Box width="65%"style={{ overflowX: "auto", overflowY: "hidden" }}>
-        <FBApprovalMatrixTableStatus {...{ classes, approvalData, mode, name }} />
+      <Box width="35%"style={{ overflowX: "auto", overflowY: "hidden" }}>
+        <Box width="500%">
+          <FBApprovalMatrixTableStatus {...{ classes, approvalData, mode, name, cellHeight }} />
+        </Box>
       </Box>
     )}
   </Box>

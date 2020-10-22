@@ -180,7 +180,7 @@ Cypress.Commands.add("dlVerifyFilterByArId", (params: {arId: string }) => {
 });
 
 Cypress.Commands.add("dlFilterByStatus", (params: {status: string }) => {
-  cy.get("div[id=\"mui-component-select-status[]\"]").click().wait(500);
+  cy.get("div[id=\"mui-component-select-displayStatus\"]").click().wait(500);
   cy.get("ul[role=listbox]>li").contains(params.status).click().wait(500);
 });
 
@@ -212,7 +212,7 @@ Cypress.Commands.add("dlVerifyFilterClear", () => {
   cy.get("input[name=documentTypeId]").should("have.attr", "value", "");
   cy.get("input[name=owner]").should("have.attr", "value", "");
   cy.get("input[name=crId]").should("have.attr", "value", "");
-  cy.get("input[name=\"status[]\"").should("have.attr", "value", "");
+  cy.get("input[name=displayStatus]").should("have.attr", "value", "");
   cy.get("input[name=effectiveDate]").should("have.attr", "value", "");
 });
 

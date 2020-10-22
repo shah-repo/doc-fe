@@ -6,7 +6,7 @@ import { Audit, AuditActionPayload } from "../audit/types";
 import { Group } from "../auth/types";
 import { documentsActions } from "../documents";
 import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET } from "./constants";
-import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, SecurityList } from "./types";
+import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, FinalizeAndReleaseRequest, SecurityList } from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
   type: DOCUMENT_REVISION_LIST,
@@ -21,8 +21,7 @@ const documentRevisionSet = (documentRevision: DocumentRevision): DocumentRevisi
 const loadList = (states: DocumentRevisionStatus[] = []): ApiAction<DocumentRevision[]> => {
   const url = states.length === 0
     ? DOCUMENT_REVISION_ROOT_URL
-    : states.reduce((acc, state) => acc + `status%5B%5D=${state}&`, `${DOCUMENT_REVISION_ROOT_URL}?`);
-
+    : states.reduce((acc, state) => acc, `${DOCUMENT_REVISION_ROOT_URL}?`);
   return apiAction({
     url,
     method: "get",
@@ -160,6 +159,21 @@ const approveAndRelease = (
   method: "post",
   data: body,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
+    dispatch(load(id));
+    dispatch(loadDocument(docRev.document.id));
+  },
+  handlers,
+});
+
+const finalizeAndRelease = (
+  id: string,
+  body: FinalizeAndReleaseRequest,
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/release_without_ar/${id}`,
+  method: "post",
+  data: body,
+  onSuccess: (docRev: DocumentRevision, dispatch) => {
     if (docRev.document?.documentType?.group === "RECORD") {
       window.location.href = documentVersionPath(docRev.id, docRev.document.id);
     } else {
@@ -260,6 +274,19 @@ const copyTo = (id: string, handlers: Handlers): ApiAction<DocumentRevision> => 
   handlers,
 });
 
+const getDocRevStatuses = (
+  handlers: Handlers,
+  category?: string,
+): ApiAction<Partial<DocumentRevisionStatus[]>> => {
+  const url = category === undefined ? `${DOCUMENT_REVISION_ROOT_URL}/statuses` :
+    `${DOCUMENT_REVISION_ROOT_URL}/statuses?category=${category}`;
+  return apiActionWithCallbacks({
+    url,
+    method: "get",
+    handlers,
+  });
+};
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -285,4 +312,6 @@ export default {
   setPrimaryAttachment,
   voidDocument,
   copyTo,
+  finalizeAndRelease,
+  getDocRevStatuses,
 };

@@ -1,5 +1,4 @@
 import { FBEmployee, FBGroup, FBId, FBInlineApprovalRole, FBInputProps, FBProviderProps } from "..";
-import { FBDialogState } from "../FBDialog/FBDialog.state";
 
 export interface FBInlineApprovalValue {
   approvers?: string[] | FBEmployee[];
@@ -10,7 +9,7 @@ export interface FBInlineApprovalValue {
 
 export type FBInlineApprovalProps =
 & Omit<FBInputProps, "editorConfig">
-& Pick<FBProviderProps, "inlineApprovalState">
+& Pick<FBProviderProps, "inlineApprovalState" | "dialogState">
 & {
   approvalTransition?: (transition: FBInlineApprovalTransition, id?: string) => any;
   onApproveClick?: (approvalId: string) => void;
@@ -20,7 +19,7 @@ export type FBInlineApprovalProps =
   isApproved?: boolean;
   isPreview?: boolean;
   isOutput?: boolean;
-  dialogState?: FBDialogState;
+  shouldShowApprovals?: boolean;
 };
 
 export type FBInlineApprovalOptions = FBEmployee & {

@@ -4,6 +4,7 @@ import React from "react";
 import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableProps, FBApprovalMatrixTableRoleHead, FBApprovalRole, FBCheckbox, FBMapWrapper, FBTableCell } from "..";
 
 const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTableProps> = ({
+  cellHeight,
   approvalData: { approvalRoles = [], approvalMatrix = [] } = {},
   mode,
   classes,
@@ -19,12 +20,12 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
               label={head}
               colSpan={approvalRoles.length}
               align="center"
-              style={{ borderLeft: "1px solid #f0f0f0", minWidth: "130px" }}
+              style={{ borderLeft: "1px solid #f0f0f0" }}
             />
           )}
         </FBMapWrapper>
       </TableRow>
-      <TableRow className="FBStatus-root" style={{ height: "30px" }}>
+      <TableRow style={{ height: "30px" }}>
         <FBMapWrapper<string[]> collection={values(FBApprovalMatrixTableRoleHead)}>
           {(head: string, index) => (
             <FBMapWrapper<FBApprovalRole[]>
@@ -49,7 +50,13 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
     <TableBody>
       <FBMapWrapper<FBApprovalMatrixItem[]> collection={approvalMatrix}>
         {(am: FBApprovalMatrixItem, i) => (
-          <TableRow key={`fb-approval-matrix-stage-${am.id}-${i}`}>
+          <TableRow
+            key={`fb-approval-matrix-stage-${am.id}-${i}`}
+            ref={(el: HTMLDivElement) => {
+              if (!el) { return; }
+              el.style.height = `${cellHeight?.(el.getBoundingClientRect().height, i)}px`;
+            }}
+          >
             <FBMapWrapper<string[]> collection={keys(FBApprovalMatrixTableRoleHead)}>
               {(key: string, index) => (
                 <FBMapWrapper<boolean[]>

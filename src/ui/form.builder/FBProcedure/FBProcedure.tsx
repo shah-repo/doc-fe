@@ -53,6 +53,7 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
             locale: "form.builder.step.number",
             values: { number: stepIndex },
           }}
+          autosave
         />
         <Box
           display="flex"

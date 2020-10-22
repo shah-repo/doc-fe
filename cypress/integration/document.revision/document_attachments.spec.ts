@@ -7,7 +7,6 @@ let loginResponse;
 let multipleCompanies;
 
 const approvalRequestTitle = "Approval request from newly created form";
-const approvalRequestFormName = "Inline Approve Form";
 
 context("Document Attachment Flow", () => {
   context("[API]Prepare company", () => {
@@ -95,9 +94,9 @@ context("Document Attachment Flow", () => {
       cy.drSelectDocumentType({ documentType: "Component Specification" });
     });
 
-    it("Checks if document type id is 'CS-00003'", () => {
+    it("Checks if document type id is 'CS-00002'", () => {
       SystemRequirement("REQ-0320");
-      cy.drCheckIfDocumentIdMatches({ docId: "CS-00003" });
+      cy.drCheckIfDocumentIdMatches({ docId: "CS-00002" });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -136,7 +135,7 @@ context("Document Attachment Flow", () => {
       });
 
       it("Approves and releases document", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         cy.wait(2000);
       });
 
@@ -162,7 +161,7 @@ context("Document Attachment Flow", () => {
       });
 
       it("Approves and releases document", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         cy.wait(2000);
       });
 
@@ -175,7 +174,7 @@ context("Document Attachment Flow", () => {
       });
 
       it("Approves and releases document", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         cy.wait(2000);
       });
 
@@ -209,7 +208,7 @@ context("Document Attachment Flow", () => {
       });
 
       it("Approves and releases document", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         cy.wait(2000);
       });
 
@@ -275,10 +274,6 @@ context("Document Attachment Flow", () => {
       cy.cmpClickCreateApprovalRequest();
     });
 
-    it("Choose 'Inline Approve Form'", () => {
-      cy.arSelectARForm({ formTitle: approvalRequestFormName });
-    });
-
     it("Enter title AR title: " + approvalRequestTitle, () => {
       cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
     });
@@ -289,7 +284,7 @@ context("Document Attachment Flow", () => {
 
     it("Add created document revision", () => {
       cy.arClickAddDocument().wait(500);
-      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
+      cy.arChoseSpecificProposedDocument({ name: "CP-00003" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
@@ -308,8 +303,8 @@ context("Document Attachment Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it("Click on specific document 'CP-00004'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP-00004" });
+    it("Click on specific document 'CP-00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00003" });
     });
 
     it("Download all attachments with redline document in Pending Change state", () => {
@@ -338,8 +333,8 @@ context("Document Attachment Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it("Click on specific document 'CP-00004'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP-00004" });
+    it("Click on specific document 'CP-00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00003" });
     });
 
     it("Download all attachments with redline document in 'In Review' state", () => {
@@ -369,8 +364,8 @@ context("Document Attachment Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it("Click on specific document 'CP-00004'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP-00004" });
+    it("Click on specific document 'CP-00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00003" });
     });
 
     // should use only download redline attachment not download all...

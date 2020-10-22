@@ -134,7 +134,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           }
         />
       )}
-      {isEmpty(values.approvals) && (
+      {!selectedInvalid && isEmpty(values.approvals) && (
         <DatePickerField
           label="transition.action.effective.date"
           name="effectiveDate"
@@ -144,7 +144,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           validate={validator(required)}
         />
       )}
-      {templateOptions.length > 1 && (
+      {!(isRecord && isInlineApproval) && templateOptions.length > 1 && (
         <AutocompleteField
           name="formDocument"
           size="sm"

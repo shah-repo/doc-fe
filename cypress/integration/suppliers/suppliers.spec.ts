@@ -93,7 +93,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Approve and release document", () => {
-    cy.drApproveAndReleaseDocument();
+    cy.drApproveAndReleaseDocumentWithoutSelectingForm();
   });
 
   it("Navigate to supplier list", () => {
@@ -121,7 +121,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Approve and release document", () => {
-    cy.drApproveAndReleaseDocument();
+    cy.drApproveAndReleaseDocumentWithoutSelectingForm();
   });
 
   it("Navigate to supplier list", () => {
@@ -181,7 +181,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Approve and release document", () => {
-    cy.drApproveAndReleaseDocument();
+    cy.drApproveAndReleaseDocumentWithoutSelectingForm();
   });
 
   it("Navigate to supplier list", () => {
