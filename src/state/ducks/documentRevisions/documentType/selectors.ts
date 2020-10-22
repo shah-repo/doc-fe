@@ -55,7 +55,8 @@ const getDocumentTypeOptionsForDocumentList = createSelector(
   allIds, byId,
   (ids, documentTypes) =>
     orderBy(
-      ids.filter((id) => documentTypes[id].group !== FBDocTypeGroup.RECORD
+      ids.filter((id) => documentTypes[id].group !== FBDocTypeGroup.RECORD &&
+      documentTypes[id].active
         /** Temp fix - disabling filtering by document type name */
         //  FBDocTypeGroup.OTHER ||
         //  documentTypes[id].group === FBDocTypeGroup.POAM ||
