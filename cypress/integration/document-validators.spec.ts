@@ -713,7 +713,12 @@ context("Validators tests", () => {
 
     it(`fill in '${requiredDocStatusFieldLabel}' with draft CS Document`, () => {
       cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).clear();
-      cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type(`${documentRevisionName}{downarrow}{enter}`);
+      cy.wrapWithWaitOnApiCalls(
+        [
+          CyRoutes.PostRemoteValidatorsHelper,
+          CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type(`${documentRevisionName}{downarrow}{enter}`);
+        });
     });
   });
 
@@ -735,15 +740,20 @@ context("Validators tests", () => {
 
     it(`fill in '${requiredDocTypeFieldLabel}' with our CS Document`, () => {
       cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).clear();
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostRemoteValidatorsHelper, () => {
-        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type(`${csDocTitle}{downarrow}{enter}`);
-      });
+      cy.wrapWithWaitOnApiCalls(
+        [
+          CyRoutes.PostRemoteValidatorsHelper,
+          CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type(`${csDocTitle}{downarrow}{enter}`);
+        });
     });
   });
 
   context("Release document", () => {
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.DocPreview], () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
     });
   });
 
@@ -751,7 +761,6 @@ context("Validators tests", () => {
     // No need to check if validation pop-up is shown.
     // If doc status is released that means there were no validation errors.
     it("Check document status is released", () => {
-      cy.wait(2000);
       cy.drCheckDocumentStatus({ status: "Released" });
     });
   });
