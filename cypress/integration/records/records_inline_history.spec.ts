@@ -314,6 +314,10 @@ context("Record inline Flow", () => {
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
         });
 
+        it("Count number of elements in approval history", () => {
+          cy.get("[data-cy*=\"fb-approval-history\"]").should("have.length", 6);
+        });
+
         it("Check Inline approval history values", () => {
           cy.fbInlineApprovalHisotryCheck(
             "Approved",
