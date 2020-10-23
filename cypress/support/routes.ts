@@ -53,7 +53,9 @@ export enum CyRoutes {
   GetRequiredApproversDocRev = "GetRequiredApproversDocRev",
   ReleaseDocRevWithoutAr = "ReleaseDocRevWithoutAr",
   GetDocumentType = "GetDocumentType",
-  PostRejectCR = "PostRejectCR"
+  PostRejectCR = "PostRejectCR",
+  GetSpecificDocumentType = "GetSpecificDocumentType",
+  PostWithdrawChangeRequests = "PostWithdrawChangeRequests"
 }
 
 export const routes: ICyRoutes =   {
@@ -215,6 +217,12 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_type*",
     },
   },
+  GetSpecificDocumentType: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_type/*",
+    },
+  },
   ChangeRequestApprove: {
     requestConfig: {
       method: "POST",
@@ -333,6 +341,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/change_requests",
+    },
+  },
+  PostWithdrawChangeRequests: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/change_requests/*/withdrawn",
     },
   },
   PostTaskDone: {

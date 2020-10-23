@@ -100,9 +100,11 @@ Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description
 });
 
 Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
-  cy.get("div[data-cy=\"field-select-form\"]>#FormList-selectForm").click();
-  cy.get("div[id^=react-select]").contains(params.formTitle).click();
-  cy.get("[data-cy=\"create.approval.request.continue\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
+    cy.get("div[data-cy=\"field-select-form\"]>#FormList-selectForm").click();
+    cy.get("div[id^=react-select]").contains(params.formTitle).click();
+    cy.get("[data-cy=\"create.approval.request.continue\"]").click();
+  });
 });
 
 Cypress.Commands.add("arClickAddDocument", () => {
@@ -137,7 +139,7 @@ Cypress.Commands.add("arClickAddBtnOnAddDocumentsDialog", () => {
 
 Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string }) => {
   cy.get("[data-cy=\"approvers\"]").click();
-  cy.get("[data-cy=\"approvers\"]").type(`${params.approver}{downarrow}{enter}`);
+  cy.get("ul[role=\"listbox\"]>li").contains(params.approver).click();
 });
 
 Cypress.Commands.add("arClickCreateApprovalRequestAfterCompletingForm", () => {
@@ -196,7 +198,14 @@ Cypress.Commands.add("arCheckTitleInEditableAndMatches", (params: { name: string
 Cypress.Commands.add("arWithdrawSubmission", () => {
   cy.get("[data-cy=\"HeaderMenuButton\"]").click();
   cy.get("[data-cy=\"change.request.withdraw.alert\"]").click();
-  cy.get("[data-cy=\"AlertDialog-continueButton\"]", { timeout: 1000 }).click();
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.PostWithdrawChangeRequests,
+    CyRoutes.EmployeesGet,
+    CyRoutes.ARPreview,
+    CyRoutes.DocRevPreview,
+    CyRoutes.DocRevPreview], () => {
+    cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+  });
 });
 
 Cypress.Commands.add("arCloseARFromMenu", () => {
@@ -221,7 +230,13 @@ Cypress.Commands.add("arRejectComfirmationAR", () => {
 });
 
 Cypress.Commands.add("arSelectFirstDocument", () => {
-  cy.get(".MuiTableCell-root a:nth-child(1)").first().click().wait(3000);
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.ARPreview,
+    CyRoutes.GetRequiredApproversDocRev,
+    CyRoutes.DocRevGet], () => {
+    cy.get(".MuiTableCell-root a:nth-child(1)").first().click();
+  });
+  cy.wait(3000);
 });
 
 Cypress.Commands.add("arApproverRoleStatus", (params: {roleName: string; enabled: boolean}) => {
