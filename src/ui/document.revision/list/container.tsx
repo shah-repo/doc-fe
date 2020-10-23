@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
-import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import { documentTypeActions, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -27,7 +27,8 @@ export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
       saveStatuses(response);
     },
   });
-  const getStatuses = () => async.start(getStatusesAction, async);
+  const notGroupOptions = [DOC_TYPE_GROUP_OPTION.RECORD];
+  const getStatuses = () => async.start(getStatusesAction, async, documentRevisionQueryStatus(), notGroupOptions);
 
   const edit = (documentRevisionId: string, documentId: string) =>
     history.push(documentEditPath(documentRevisionId, documentId));
