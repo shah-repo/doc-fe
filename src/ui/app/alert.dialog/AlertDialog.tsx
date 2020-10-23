@@ -7,7 +7,7 @@ import { Translation } from "../../translations/types";
 import { styles } from "./AlertDialog.styles";
 
 interface Props {
-  confirmAction: () => void;
+  confirmAction: (values?) => void;
   cancelAction?: () => void;
   message: Translation;
   dialog: DialogHandler;
