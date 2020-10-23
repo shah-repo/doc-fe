@@ -250,7 +250,7 @@ context("Record inline Flow", () => {
       });
 
       context("Change textfield and approve again", () => {
-        it("Enter text 'Second entry' in textfield for inline with bold tag to check if tags persist in history", () => {
+        it("Enter text 'Second entry' in textfield for inline with bold tag to check if tags shows in history", () => {
           SystemRequirement("REQ-1080");
           cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", <b> Second entry </b>");
         });
@@ -272,14 +272,6 @@ context("Record inline Flow", () => {
           cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
-        });
-
-        it("Reload document", () => {
-          cy.reload();
-        });
-
-        it("Click WIP document", () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
         });
 
         it("Reload document", () => {
