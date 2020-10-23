@@ -1,5 +1,5 @@
 import React from "react";
-import { FB, FBApprovalPasswordFormActions } from "..";
+import { FB, FBApprovalPasswordFormActions, FBFormState } from "..";
 import { FBApprovalPasswordFormProps } from "./FBApprovalPasswordForm.types";
 
 export const withFBApprovalPasswordForm = (
@@ -10,7 +10,8 @@ export const withFBApprovalPasswordForm = (
     approvalId,
     ...props
   }) => {
-    const { dialogState, formState } = FB.useStores();
+    const { dialogState } = FB.useStores();
+    const formState = FB.useRef(FBFormState, {});
 
     const onDialogCancel = () => {
       dialogState?.closeDialog();
