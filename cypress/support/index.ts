@@ -30,6 +30,7 @@ import "./commands/document.revision/commands";
 import "./commands/filters/commands";
 import "./commands/form.builder/commands";
 import "./commands/group.management/commands";
+import "./commands/imap/commands";
 import "./commands/navigation/commands";
 import "./commands/parts.materials/commands";
 import "./commands/purchase.order/commands";

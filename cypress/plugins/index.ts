@@ -1,4 +1,5 @@
 import { rename } from "fs";
+import { getEmail } from "../support/commands/imap/imap";
 import { allowedCharacters } from "../utils/context/constants";
 
 // ***********************************************************
@@ -31,6 +32,7 @@ export default (on, config) => {
       if (value != null) { shouldSkip = value; }
       return shouldSkip;
     },
+    mail: getEmail,
   });
 
   on("after:screenshot", (details) => {

@@ -11,7 +11,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 
-context("Record inline Flow", () => {
+context("Record inline history Flow", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
