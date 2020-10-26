@@ -1,9 +1,11 @@
 import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import { flatten } from "lodash";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { getStartOfDayDateString, TIME_ZONE } from "../../../../../common/utils/date";
 import { getHasPermission } from "../../../../../common/utils/selectors";
 import { Group, Permission } from "../../../../../state/ducks/auth/types";
 import { ChangeRequest, changeRequestsActions } from "../../../../../state/ducks/changeRequest";
@@ -178,7 +180,9 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     const approvers = !values.approvals || values.approvals.length === 0 ?
       undefined :
       values.approvals.map((approver) => ({ id: approver.value }));
-    const effectiveDate = values.effectiveDate !== "" ? values.effectiveDate : undefined;
+    const effectiveDate = values.effectiveDate !== ""
+      ? values.effectiveDate
+      : undefined;
 
     if (!isQms) {
       async.start(
@@ -194,11 +198,13 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       );
       return;
     }
-    if (isRecord && isInlineApproval) {
+    if (isRecord) {
       async.start(
         finalizeAction,
         id,
-        { approvers, effectiveDate },
+        {
+          effectiveDate: getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString()),
+        },
         async,
       );
       return;
