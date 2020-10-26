@@ -256,7 +256,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       <Button
         color="secondary"
         variant="outlined"
-        onClick={isRecord && isInlineApproval ? alertDialog.open :  openDialog}
+        onClick={isRecord ? alertDialog.open :  openDialog}
         id="ApproveAndRelease-button"
         data-cy="ApproveAndRelease-button"
       >
