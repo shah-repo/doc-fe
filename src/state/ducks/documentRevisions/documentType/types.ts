@@ -107,6 +107,7 @@ export interface DocumentType {
   needsSignature?: boolean;
   startingNumber?: string;
   category?: string;
+  active?: boolean;
 }
 
 export interface DocumentForms {

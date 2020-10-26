@@ -155,3 +155,5 @@ export const toDocumentRevisionFormValuesForOutput = (
   FBDRStore.setValues((values as unknown) as DocumentRevision);
   return (values as unknown) as DocumentRevisionFormValues;
 };
+
+export const getActiveDocumentTypes = (documentTypes: DocumentType[]) => documentTypes.filter((type) => type.active);
