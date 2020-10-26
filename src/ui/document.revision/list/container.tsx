@@ -25,7 +25,6 @@ export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
   const async = useAsync({
     onSuccess: (response: DocumentRevisionStatus[] = []) => {
       saveStatuses(response);
-      // const keys = Object.keys(tableCriteria.queryDict); const key = keys[0];
       if (!response.includes("Released" as DocumentRevisionStatus)) {
         setSearchStatus(documentRevisionQueryStatus(),
           tableCriteria.queryDict.displayStatus !== "Released" ?
