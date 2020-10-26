@@ -41,5 +41,5 @@ export enum FBAutocompleteAsyncOption {
   documentRevisions = "18",
   materials = "19",
   equipment = "20",
-  materialsAndEquipment = "21",
+  availableParts = "21",
 }

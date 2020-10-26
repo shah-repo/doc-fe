@@ -173,8 +173,8 @@
   },
   {
     "id": "21",
-    "path": "/document_revisions?documentTypeCategory=Equipment&documentTypeCategory=Materials",
-    "label": "Parts",
+    "path": "/document_revisions/available_parts",
+    "label": "Available Parts",
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",

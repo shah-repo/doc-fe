@@ -15,6 +15,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
 
     // MARK: @methods
     const onAddClick = () => {
+      console.log("test");
       dialogState?.config({
         title: "form.builder.create.new.part",
         open: true,

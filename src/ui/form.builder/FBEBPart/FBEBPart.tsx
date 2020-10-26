@@ -15,8 +15,8 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
           <FBAutocompleteAsync
             label="form.builder.part"
             placeholder="form.builder.select.existing.part"
+            // optionId={FBAutocompleteAsyncOption.availableParts}
             optionId={FBAutocompleteAsyncOption.materials}
-            // optionId={FBAutocompleteAsyncOption.materialsAndEquipment}
             name={`fb-ebpart-${name}`}
           />
         </Box>

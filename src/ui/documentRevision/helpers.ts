@@ -211,7 +211,11 @@ export const getFBSchemeByDocType = (
       uniqueSchemaItem: true,
     });
   }
-
+  finalScheme.push({
+    type: "ebpart",
+    name: `fb-ebpart-${FB.uniqid}`,
+    uniqueSchemaItem: true,
+  });
   return finalScheme;
 };
 
