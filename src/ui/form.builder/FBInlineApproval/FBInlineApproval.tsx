@@ -100,15 +100,16 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
               </Box>
             )}
           </FBMapWrapper>
-          <Box flexGrow={1} textAlign="right">
-            {shouldShowRequestAllApprovals && <FBButton
-              style={{ margin: 0 }}
-              label="form.builder.request.approval"
-              variant="text"
-              color="primary"
-              onClick={() => requestAllApprovals?.(name)}
-            />}
-          </Box>
+          {shouldShowRequestAllApprovals &&
+            <Box flexGrow={1} textAlign="right">
+              <FBButton
+                style={{ margin: 0 }}
+                label="form.builder.request.approval"
+                variant="text"
+                color="primary"
+                onClick={() => requestAllApprovals?.(name)}
+              />
+            </Box>}
         </Box>
       )}
     </FBInput>
