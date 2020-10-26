@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Nullable } from "../../state/ducks/common";
-import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import SummaryInfo from "../common/summary/SummaryInfo";
 import DateFormatter from "../components/Date";
 import Text from "../components/Text";
@@ -50,7 +50,6 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const { status } = documentRevision;
   const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
   let verPrefix = "common.revision";
-  let stateLabel = statusLabel;
   let recordDateLabel = "common.updated" as Translation;
 
   const isSelected = selectedDocumentRevision === documentRevision.id;
@@ -58,40 +57,17 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isReleased = status === DocumentRevisionStatus.Released;
   const isDeprecated = status === DocumentRevisionStatus.Deprecated;
   const isAlphaReleased = documentRevision.revisionStage === 3;
-  const isNumericRelease = documentRevision.revisionStage === 1;
-  const isObsolete = documentRevision.revisionChangeType === RevisionChangeType.Obsolete;
-  const isInReview = status === DocumentRevisionStatus.InReview;
   const isVoided = status === DocumentRevisionStatus.Obsolete || status === DocumentRevisionStatus.Voided;
 
 
   if (isRecord) {
     if (isReleased) {
       recordDateLabel = "document.revision.released.date";
-      stateLabel = "common.released";
-    }
-    if (!isInlineApproval && (!isObsolete || isInReview)) {
-      stateLabel = status;
-    }
-    if (!isInlineApproval && isDeprecated) {
-      stateLabel = "common.archived";
-    }
-    if (isDraft && documentRevision.subRevision === 0 && !isObsolete) {
-      stateLabel = "common.wip";
     }
     if (isReleased || ((isDeprecated || isDraft) && isInlineApproval && isAlphaReleased)) {
       verPrefix = "common.revision";
     }
-    if (isDeprecated && isInlineApproval && isAlphaReleased) {
-      stateLabel = "common.archived";
-    }
-    if ((isDeprecated || isReleased) && isInlineApproval && isNumericRelease) {
-      stateLabel = "common.archived";
-    }
-    if (isReleased && isInlineApproval && isNumericRelease) {
-      stateLabel = "common.last.signed";
-    }
     if (isVoided) {
-      stateLabel = "common.voided";
       recordDateLabel = "record.voided.date";
     }
   }
@@ -119,7 +95,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           {
             isStatusVisible &&
             <>
-              &nbsp; - <Text message={stateLabel} />
+              &nbsp; - <Text message={statusLabel} />
             </>
           }
         </div>
