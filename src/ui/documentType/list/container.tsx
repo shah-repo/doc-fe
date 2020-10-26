@@ -70,9 +70,12 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     ? `documentsByCategoryList-${categoryName}`
     : `documentsByTypeList-${documentType?.documentTypeAcronym}`;
 
-  const queryUrl = DOCUMENT_REVISION_ROOT_URL + (isByCategory
+  const docRevRootUrl = DOCUMENT_REVISION_ROOT_URL + (isByCategory
     ? `?documentTypeCategory=${categoryName}`
     : `?documentTypeId=${documentType?.id}`);
+
+  const queryUrl = documentRevisionQueryStatus().reduce((acc, state) =>  acc + `status%5B%5D=${state}&`,
+    `${docRevRootUrl}&`);
 
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
