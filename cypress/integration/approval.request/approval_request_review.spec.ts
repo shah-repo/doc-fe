@@ -239,15 +239,53 @@ context("Approval request form scenario", () => {
     });
   });
 
-  context("Verify owner can withdraw approval request", () => {
-    it("Withdraw Submission", () => {
-      SystemRequirement("REQ-0890");
-      cy.arWithdrawSubmission().wait(3000);
+  context("Verify owner can withdraw approval request and that dashboard notifications are not shown", () => {
+    context("Withdraw AR", () => {
+      it("Withdraw Submission", () => {
+        SystemRequirement("REQ-0890");
+        cy.arWithdrawSubmission();
+      });
     });
 
-    it("Sending for review again", () => {
-      SystemRequirement("REQ-0890");
-      cy.arClickSendToReview();
+    context("Verify dashboard notification are not shown", () => {
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: USERS[20].email,
+          password: "Tester1!",
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
+
+      it("Verify there is no dashboard notifications", () => {
+        SystemRequirement("REQ-2190");
+        cy.cmpVerifyNoPendingActions();
+      });
+    });
+
+    context("Send AR to review again", () => {
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: USERS[21].email,
+          password: "Tester1!",
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
+
+      it("Navigate to AR", () => {
+        cy.navigToApprovalRequestList();
+        cy.arSelectFirstDocument();
+      });
+
+      it("Sending for review again", () => {
+        SystemRequirement("REQ-0890");
+        cy.arClickSendToReview();
+      });
     });
   });
 
@@ -276,40 +314,62 @@ context("Approval request form scenario", () => {
   });
 
   context("Reject AR and verify email notification", () => {
-    it("Logout existing user", () => {
-      cy.authLogout();
-    });
+    context("Reject AR", () => {
+      it("Logout existing user", () => {
+        cy.authLogout();
+      });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[20].email,
-        password: "Tester1!",
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: USERS[20].email,
+          password: "Tester1!",
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
+
+      it("Rejecting request gives prompt", () => {
+        cy.arRejectComfirmationAR();
+      });
+
+      it("Verify message is shown if e-signature not met", () => {
+        SystemRequirement("REQ-0880");
+        cy.arVerifySignatureIsNotMet();
+      });
+
+      it("Reject AR from dashboard", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostRejectCR, CyRoutes.ARPreview, CyRoutes.GetPendingActions], () => {
+          cy.poRejectAR({ password: "Tester1!" });
+        });
+        cy.wait(4000);
       });
     });
 
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Rejecting request gives prompt", () => {
-      cy.arRejectComfirmationAR();
-    });
-
-    it("Verify message is shown if e-signature not met", () => {
-      SystemRequirement("REQ-0880");
-      cy.arVerifySignatureIsNotMet();
-    });
-
-    it("Reject AR from dashboard", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRejectCR, CyRoutes.ARPreview, CyRoutes.GetPendingActions], () => {
-        cy.poRejectAR({ password: "Tester1!" });
+    context("Verify email notifications for rejected AR", () => {
+      it("Verify email notification for rejected AR is sent to owner '" + USERS[21].email + "'", () => {
+        SystemRequirement("REQ-2190");
+        cy.imapVerifyRejectedAREmailNotification({ userEmail: USERS[21].email, arId: "ARID: AR00002" });
       });
-      cy.wait(4000);
     });
 
-    it("Verify email notification for rejected AR is sent to owner '" + USERS[21].email + "'", () => {
-      SystemRequirement("REQ-2190");
-      cy.imapVerifyRejectedAREmailNotification({ userEmail: USERS[21].email, arId: "ARID: AR00002" });
+    context("Verify dashboard notification are not shown", () => {
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: USERS[22].email,
+          password: "Tester1!",
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
+
+      it("Verify there is no dashboard notifications", () => {
+        SystemRequirement("REQ-2190");
+        cy.cmpVerifyNoPendingActions();
+      });
     });
   });
 
