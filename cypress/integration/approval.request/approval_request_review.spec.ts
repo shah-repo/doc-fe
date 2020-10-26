@@ -308,6 +308,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Verify email notification for rejected AR is sent to owner '" + USERS[21].email + "'", () => {
+      SystemRequirement("REQ-2190");
       cy.imapVerifyRejectedAREmailNotification({ userEmail: USERS[21].email, arId: "ARID: AR00002" });
     });
   });
