@@ -195,6 +195,9 @@ export const routes: ICyRoutes =   {
       method: "POST",
       url: "/api/v1/documents/file_upload_candidates",
     },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+    },
   },
   Login: {
     requestConfig: {
