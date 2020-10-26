@@ -49,7 +49,7 @@ export class FBControlPickerState {
         "instructionsmediaupload",
         "evidencemediaupload",
         "testRequirement",
-        "procedure",
+        "ebpart",
       ],
       approvals: [
         "approvals",
