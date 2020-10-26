@@ -13,7 +13,7 @@ import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import Date from "../../components/Date";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
-import { canEditDocumentRevision } from "../../document.revision/utils/helpers";
+import { canEditDocumentRevision, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
 import { generateVersionNumber } from "../../documentRevision/helpers";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -33,8 +33,14 @@ const getFormattedRowValue = (path: any, rowData: any) => {
     rowData.subRevision,
     rowData.revisionChangeType,
   );
-  const ifRevision = path.startsWith("precalc.revision") ? versionNumber : value;
-  return isDate ? <Date value={value} /> : ifRevision;
+  let override = value;
+  if (path.startsWith("precalc.revision")) {
+    override = versionNumber;
+  }
+  if (path === "status") {
+    override = rowData.displayStatus;
+  }
+  return isDate ? <Date value={value} /> : override;
 };
 
 export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
@@ -52,7 +58,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
       saveStatuses(response);
     },
   });
-  const getStatuses = () => async.start(getStatusesAction, async, categoryName);
+  const getStatuses = () => async.start(getStatusesAction, async, documentRevisionQueryStatus(), [], categoryName);
 
   /** If true, documents are filtered by category. If false, documents are filtered by type. */
   const isByCategory = match.path.includes(DOCUMENT_BY_CATEGORY_LIST_URL);

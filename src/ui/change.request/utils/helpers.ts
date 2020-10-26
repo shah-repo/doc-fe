@@ -7,14 +7,13 @@ export const canEditChangeRequest = ({ dataProp, currentUserEmail }: ChangeReque
 );
 
 export const canChangeCROwner = (state: ChangeRequestStatus, currentEmployeeId: string, ownerId: string, isCompanyAdmin: boolean) =>
-  (
+  ((
     state === ChangeRequestStatus.Draft ||
     state === ChangeRequestStatus.InReview ||
     state === ChangeRequestStatus.Implementation ||
     state === ChangeRequestStatus.Approved
   )
-  &&
-  (currentEmployeeId === ownerId || isCompanyAdmin);
+  && currentEmployeeId === ownerId) || isCompanyAdmin;
 export const canEditApprovers = ({ dataProp, currentUserEmail }: ChangeRequestUserProps) => canEditChangeRequest({ dataProp, currentUserEmail }) ||
     (currentUserEmail === dataProp.owner.user.email && dataProp.state === ChangeRequestStatus.InReview);
 

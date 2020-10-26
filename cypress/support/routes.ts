@@ -46,7 +46,13 @@ export enum CyRoutes {
   PostChangeRequests = "PostChangeRequests",
   PostTaskDone = "PostTaskDone",
   PostRemoteValidatorsHelper = "PostRemoteValidatorsHelper",
-  GetDocDynamicForm = "GetDocDynamicForm"
+  GetDocDynamicForm = "GetDocDynamicForm",
+  UploadAttachmentMediaUpload = "UploadAttachmentMediaUpload",
+  PostApprovals = "PostApprovals",
+  GetFileUploadCandidates = "GetFileUploadCandidates",
+  GetRequiredApproversDocRev = "GetRequiredApproversDocRev",
+  ReleaseDocRevWithoutAr = "ReleaseDocRevWithoutAr",
+  GetDocumentType = "GetDocumentType"
 }
 
 export const routes: ICyRoutes =   {
@@ -109,6 +115,15 @@ export const routes: ICyRoutes =   {
       responseTimeout: 25 * 1000,
     },
   },
+  ReleaseDocRevWithoutAr: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/document_revisions/release_without_ar/*",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+    },
+  },
   ReleaseDocRev: {
     requestConfig: {
       method: "POST",
@@ -136,6 +151,15 @@ export const routes: ICyRoutes =   {
       responseTimeout: 10 * 1000,
     },
   },
+  GetFileUploadCandidates: {
+    requestConfig: {
+      method: "GET",
+      url: "api/v1/documents/file_upload_candidates*",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+    },
+  },
   CompanyMine: {
     requestConfig: {
       method: "GET",
@@ -154,6 +178,12 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/attachments/upload",
     },
   },
+  UploadAttachmentMediaUpload: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/documents/file_upload_candidates",
+    },
+  },
   Login: {
     requestConfig: {
       method: "POST",
@@ -167,6 +197,12 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 10 * 1000,
+    },
+  },
+  GetDocumentType: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_type*",
     },
   },
   ChangeRequestApprove: {
@@ -259,10 +295,22 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/change_requests/available_approvers",
     },
   },
+  GetRequiredApproversDocRev: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions/required_approvers*",
+    },
+  },
   PostApprovalsApprove: {
     requestConfig: {
       method: "POST",
       url: "/api/v1/approvals/*/approve",
+    },
+  },
+  PostApprovals: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/approvals",
     },
   },
   GetGroupsApprovalRoles: {

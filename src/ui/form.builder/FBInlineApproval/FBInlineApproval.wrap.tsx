@@ -30,6 +30,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
+    dialogState = FB.useRef(FBDialogState);
     const {
       id,
       document,
@@ -214,6 +215,14 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       if (!id) { return; }
       const passwordBody = pick(formState?.values, "password") as FBInlineApprovalTransitionBody;
       inlineApprovalState?.approvalTransition(transition, id, passwordBody);
+    };
+
+    onApproveClick = (approvalId: string) => {
+      dialogState?.config({
+        title: "form.builder.password.prompt",
+        open: true,
+        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
+      });
     };
 
     // MARK: @observer
