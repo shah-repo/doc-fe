@@ -94,7 +94,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     // On requestApprovalTransition
     React.useEffect(() => reaction(
       () => inlineApprovalState?.requestApprovalApi.data,
-      (data) => concatApprovalsArray(data)
+      (data) => concatApprovals(data)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -169,16 +169,9 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       inlineApprovalState?.setOptions(options as FBInlineApprovalOptions[]);
     }
 
-    function concatApprovals(approval?: FBInlineApprovalBody) {
+    function concatApprovals(approval?: FBInlineApprovalBody | FBInlineApprovalBody[]) {
       if (!approval) { return; }
-      const stateApprovals = filter(inlineApprovalState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
-      inlineApprovalState?.setApprovals(unionBy(stateApprovals, [approval], "id"));
-    }
-
-    function concatApprovalsArray(approval?: FBInlineApprovalBody[] ) {
-      if (!approval) { return; }
-      // eslint-disable-next-line array-callback-return
-      return approval.map((app) => {
+      return [approval].flat().map((app) => {
         const stateApprovals = filter(inlineApprovalState?.approvals, (a) => a.approver?.id !== app?.approver?.id);
         inlineApprovalState?.setApprovals(unionBy(stateApprovals, [app], "id"));
       });
