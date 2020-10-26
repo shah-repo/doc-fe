@@ -109,7 +109,8 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
                 color="primary"
                 onClick={() => requestAllApprovals?.(name)}
               />
-            </Box>}
+            </Box>
+          }
         </Box>
       )}
     </FBInput>
