@@ -15,6 +15,7 @@ import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import { DocumentCloneType } from "../../Clone.container";
 import { getFBSchemeByDocType } from "../../helpers";
+import { getActiveDocumentTypes } from "../transform";
 
 interface Props {
   isdocRevStatusDraft: boolean;
@@ -58,7 +59,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   };
 
   const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
-  const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeFormOptions);
+  const documentTypes = getActiveDocumentTypes(useSelector(documentTypeSelectors.getDocumentTypeFormOptions));
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 

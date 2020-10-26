@@ -94,9 +94,9 @@ context("Document Creation Flow", () => {
       cy.drSelectDocumentType({ documentType: "Component Specification" });
     });
 
-    it("Checks if document type id is 'CS-00003'", () => {
+    it("Checks if document type id is 'CS-00002'", () => {
       SystemRequirement("REQ-0320");
-      cy.drCheckIfDocumentIdMatches({ docId: "CS-00003" });
+      cy.drCheckIfDocumentIdMatches({ docId: "CS-00002" });
     });
 
     it("Set document type id manually to 'CS-00999'", () => {
@@ -106,12 +106,12 @@ context("Document Creation Flow", () => {
 
     it("Select reference for document", () => {
       SystemRequirement("REQ-0180");
-      cy.drSelectReferences( "Initial AR Form", "Inline Approve Form" );
+      cy.drSelectReferences( "AR Form");
     });
 
     it("Remove reference for document", () => {
       SystemRequirement("REQ-0190");
-      cy.drRemoveReferences( 1 );
+      cy.drRemoveReferences( 0 );
     });
 
     it("'Training Required' should be unchecked initially", () => {
@@ -284,7 +284,7 @@ context("Document Creation Flow", () => {
 
     context("Check training for next revision", () => {
       it("Approve and Release document", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
 
       it("Revise document", () => {
@@ -349,8 +349,8 @@ context("Document Creation Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it("Click on specific document 'CP-00003'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP-00003" });
+    it("Click on specific document 'CP-00002'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00002" });
     });
 
     it("Verify owner", () => {
@@ -372,8 +372,8 @@ context("Document Creation Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it("Click on specific document 'CP-00003'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP-00003" });
+    it("Click on specific document 'CP-00002'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00002" });
     });
 
     it("Change owner of document by admin", () => {
@@ -396,12 +396,12 @@ context("Document Creation Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it("Click on specific document 'CP-00003'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP-00003" });
+    it("Click on specific document 'CP-00002'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00002" });
     });
 
     it("Approves and releases document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Clicks on revise document", () => {

@@ -57,6 +57,7 @@ declare global {
       cmpSelectCompany(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpClickCreateNewDocument(): Chainable<Subject>;
       cmpClickCreateApprovalRequest(): Chainable<Subject>;
+      cmpVerifyNoPendingActions(): Chainable<Subject>;
     }
   }
 }
@@ -120,6 +121,10 @@ Cypress.Commands.add("cmpClickCreateNewDocument", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
     cy.get("[data-cy=\"document.revision.create\"]").click();
   });
+});
+
+Cypress.Commands.add("cmpVerifyNoPendingActions", () => {
+  cy.get("[data-cy=\"dashboard.noPendingActions\"]").should("exist");
 });
 
 Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {

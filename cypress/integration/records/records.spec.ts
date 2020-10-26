@@ -134,7 +134,7 @@ context("Records flow", () => {
         });
 
         it("Approve and Release document", () => {
-          cy.drApproveAndReleaseDocument();
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
     });
@@ -183,7 +183,7 @@ context("Records flow", () => {
         });
 
         it("Approve and Release document", () => {
-          cy.drApproveAndReleaseDocument();
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
     });

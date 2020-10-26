@@ -81,7 +81,7 @@ context("Document list test", () => {
             attachments: [],
             description: "<p>Test Doc Rev Description1</p>",
             document: {
-              docId: "CP-00004",
+              docId: "CP-00003",
               documentType: {
                 id: componentSpecificationDocumentType[0].id,
               },
@@ -115,7 +115,7 @@ context("Document list test", () => {
           attachments: [],
           description: "<p>Test Doc Rev Description2</p>",
           document: {
-            docId: "CP-00005",
+            docId: "CP-00004",
             documentType: {
               id: componentSpecificationDocumentType[0].id,
             },
@@ -174,7 +174,7 @@ context("Document list test", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Navigate to document list", () => {
@@ -242,7 +242,7 @@ context("Document list test", () => {
     it("Check only documents are shown on document list", () => {
       SystemRequirement("REQ-0050");
       // SystemRequirement("REQ-0510");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
     });
   });
 
@@ -254,12 +254,12 @@ context("Document list test", () => {
       });
 
       it("Filter list by docId", () => {
-        cy.dlFilterByDocId({ docId: "CP-00004" });
+        cy.dlFilterByDocId({ docId: "CP-00003" });
       });
 
       it("Verify filter by docId", () => {
         SystemRequirement("REQ-0060");
-        cy.dlVerifyFilterByDocId({ docId: "CP-00004" });
+        cy.dlVerifyFilterByDocId({ docId: "CP-00003" });
       });
 
       it("Verify document counter on document list", () => {
@@ -284,7 +284,7 @@ context("Document list test", () => {
 
       it("Verify document counter on document list", () => {
         SystemRequirement("REQ-0110");
-        cy.dlVerifyDocCounter({ docCounterNumber: 4 });
+        cy.dlVerifyDocCounter({ docCounterNumber: 3 });
       });
     });
 
@@ -354,12 +354,12 @@ context("Document list test", () => {
       });
 
       it("Filter list by AR ID", () => {
-        cy.dlFilterByArId({ arId: "AR99998" });
+        cy.dlFilterByArId({ arId: "AR99999" });
       });
 
       it("Verify filter by AR ID", () => {
         SystemRequirement("REQ-0060");
-        cy.dlVerifyFilterByArId({ arId: "AR99998" });
+        cy.dlVerifyFilterByArId({ arId: "AR99999" });
       });
 
       it("Verify document counter on document list", () => {
@@ -384,7 +384,7 @@ context("Document list test", () => {
 
       it("Verify document counter on document list", () => {
         SystemRequirement("REQ-0110");
-        cy.dlVerifyDocCounter({ docCounterNumber: 3 });
+        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
       });
     });
 

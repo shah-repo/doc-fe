@@ -98,7 +98,7 @@ context("Document revise test", () => {
         cy.arGetArDocumentByName({
           sessionId: loginResponse.sessionId,
           employeeId: secondEmployee.id,
-          name: "Initial AR Form",
+          name: "AR Form",
         }).then((response) => {
           initialArDocument = response;
         }).then(() => {
@@ -107,7 +107,7 @@ context("Document revise test", () => {
               attachments: [],
               description: "<p>Test Doc Rev Description1</p>",
               document: {
-                docId: "CP-00004",
+                docId: "CP-00003",
                 documentType: {
                   id: componentSpecificationDocumentType[0].id,
                 },
@@ -160,7 +160,7 @@ context("Document revise test", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Navigate to document list", () => {
@@ -176,7 +176,7 @@ context("Document revise test", () => {
 
   context("Verify 'Next Revision' change is shown on document list", () => {
     it("Navigate to created document", () => {
-      cy.arSelectFirstDocument();
+      cy.dlSelectFirstDocument();
     });
 
     it("Revise document with 'Next Revision' option", () => {
@@ -186,7 +186,7 @@ context("Document revise test", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Navigate to document list", () => {
@@ -205,7 +205,7 @@ context("Document revise test", () => {
   context("Verify 'Upgrade to Next Revision Level' change is shown on document list", () => {
     context("Revise document to 'Upgrade to Next Revision Level'", () => {
       it("Navigate to created document", () => {
-        cy.arSelectFirstDocument();
+        cy.dlSelectFirstDocument();
       });
 
       it("Revise document with 'Next Revision' option", () => {
@@ -222,10 +222,6 @@ context("Document revise test", () => {
 
       it("Click Create a Approval Request button", () => {
         cy.cmpClickCreateApprovalRequest();
-      });
-
-      it("Choose newly AR Form template", () => {
-        cy.arSelectARForm({ formTitle: "Initial AR Form" });
       });
 
       it("Enter title AR title: 'AR for Upgrade to Next Revision Level'", () => {
@@ -283,7 +279,7 @@ context("Document revise test", () => {
   context("Verify 'Obsolete' change is shown on document list", () => {
     context("Revise document to 'Obsolete'", () => {
       it("Navigate to created document", () => {
-        cy.arSelectFirstDocument();
+        cy.dlSelectFirstDocument();
       });
 
       it("Revise document with 'Obsolete' option", () => {
@@ -300,10 +296,6 @@ context("Document revise test", () => {
 
       it("Click Create a Approval Request button", () => {
         cy.cmpClickCreateApprovalRequest();
-      });
-
-      it("Choose newly AR Form template", () => {
-        cy.arSelectARForm({ formTitle: "Initial AR Form" });
       });
 
       it("Enter title AR title: 'AR for Upgrade to Obsolete'", () => {
