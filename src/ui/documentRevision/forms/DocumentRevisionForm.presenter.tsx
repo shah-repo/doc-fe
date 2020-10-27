@@ -18,7 +18,7 @@ import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import FormHeader from "../../document.revision/header/FormHeader";
 import BuildsContainer from "../../document.revision/summary/builds.container";
-import { FB } from "../../form.builder";
+import { FB, FBEBPart } from "../../form.builder";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
@@ -242,6 +242,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             type,
           }}
         />
+        {isEB && (
+          <FBEBPart name={`fb-ebpart-${FB.uniqid}`} />
+        )}
         {isEB && documentRevision?.parent &&
         <BuildsContainer
           dataProp={flatten([documentRevision.parent])}
