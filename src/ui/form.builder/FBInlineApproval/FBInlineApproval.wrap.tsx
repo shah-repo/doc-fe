@@ -174,6 +174,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       return [approval].flat().map((app) => {
         const stateApprovals = filter(inlineApprovalState?.approvals, (a) => a.approver?.id !== app?.approver?.id);
         inlineApprovalState?.setApprovals(unionBy(stateApprovals, [app], "id"));
+        return app;
       });
     }
 
