@@ -5,6 +5,9 @@ import { withFBEBPart } from "./FBEBPart.wrap";
 
 const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
   onAddClick,
+  loading,
+  disabled,
+  ...props
 }) => (
   <FBProvider>
     <FBInput type="ebpart">
@@ -15,6 +18,10 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
             placeholder="form.builder.select.existing.part"
             optionId={FBAutocompleteAsyncOption.availableParts}
             name="childrenParts"
+            gutter={false}
+            withState
+            disabled={disabled || loading}
+            {...{ loading }}
           />
         </Box>
         <Box mt={4}>
@@ -22,6 +29,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
             variant="contained"
             label="form.builder.create.new.part"
             onClick={onAddClick}
+            disabled={disabled || loading}
           />
         </Box>
       </Box>
