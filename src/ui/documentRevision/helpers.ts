@@ -2,7 +2,7 @@ import { find, findLastIndex, get, isEmpty, map, orderBy, some, union, unionBy }
 import moment from "moment";
 import { Document, DocumentRevision, DocumentRevisionStatus, FBFormTemplateProps, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, DOC_TYPE_GROUP_OPTION } from "../../state/ducks/documentRevisions/documentType";
-import { DocumentGroupOptionsType, DocumentType } from "../../state/ducks/documentRevisions/documentType/types";
+import { DocumentGroupOptionsType, DocumentGroupType, DocumentType, DOC_GROUP_TYPE } from "../../state/ducks/documentRevisions/documentType/types";
 import { OptionType } from "../components/forms/fields/Autocomplete/types";
 import { FB, FBSchemaProps } from "../form.builder";
 
@@ -230,4 +230,13 @@ export const getIsDocumentRecord = (groupOptions?: DocumentGroupOptionsType[]) =
 export const getIsDocumentPart = (groupOptions?: DocumentGroupOptionsType[]) => {
   if (!groupOptions) { return false; }
   return groupOptions.includes(DOC_TYPE_GROUP_OPTION.PART);
+};
+
+/**
+ * Checks if document is Engineering Build
+ * @param group from DocumentType
+ */
+export const getIsDocumentEB = (group?: DocumentGroupType) => {
+  if (!group) { return false; }
+  return group === DOC_GROUP_TYPE.ENGINEERING_BUILD;
 };

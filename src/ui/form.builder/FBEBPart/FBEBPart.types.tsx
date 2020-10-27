@@ -1,7 +1,7 @@
-import { FBInputProps, FBProviderProps } from "..";
+import { FBFormProps, FBInputProps } from "..";
 
 export type FBEBPartProps =
-& Pick<FBProviderProps, "dialogState">
+& Pick<FBFormProps, "formState">
 & Pick<FBInputProps, "name">
 & {
   onAddClick(): void;

@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import { cloneDeep, filter, get, isEmpty } from "lodash";
+import { cloneDeep, filter, get, isEmpty, set } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
@@ -17,6 +17,7 @@ import { FBWorkspace, FBWorkspaceMode } from "../../form.builder";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
 import { DocumentCloneType } from "../Clone.container";
+import { getIsDocumentEB } from "../helpers";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -172,6 +173,9 @@ DocumentRevisionFormContainerProps
   const formInput = useMemo(() =>
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
   , [cleanInitialValues]);
+  if (getIsDocumentEB(documentRevision?.document?.documentType?.group)) {
+    set(formInput || {}, "childrenParts", initialValues.childrenParts);
+  }
   let mode: Partial<FBWorkspaceMode> = "none";
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";

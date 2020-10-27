@@ -245,6 +245,7 @@
   "common.references": "References",
   "common.previous.build": "Previous Build",
   "common.next.build": "Next Build",
+  "common.part.of": "Part of",
   "common.upload.files": "Upload files",
   "common.download.all.files": "Download All",
   "common.add.attachment": "Add attachment",

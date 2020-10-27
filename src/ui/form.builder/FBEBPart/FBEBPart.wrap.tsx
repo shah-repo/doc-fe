@@ -10,7 +10,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
   }) => {
 
     // MARK: @config
-    const { workspaceState } = FB.useStores();
+    const { workspaceState, formState } = FB.useStores();
     const { id: documentId } = workspaceState || {};
 
     // MARK: @methods
@@ -21,6 +21,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     return Component({
       ...(props as T),
       onAddClick,
+      formState,
     });
   };
 

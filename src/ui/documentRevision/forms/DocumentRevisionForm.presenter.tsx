@@ -6,7 +6,7 @@ import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState, DOC_GROUP_TYPE, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeByIdState, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
 import { default as AutocompleteField } from "../../components/forms/fields/Autocomplete/Autocomplete";
@@ -23,6 +23,7 @@ import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
+import { getIsDocumentEB } from "../helpers";
 import styles from "./DocumentRevisionForm.styles";
 import Description from "./presenters/Description";
 import DocIdInput from "./presenters/DocIdInput";
@@ -177,8 +178,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   }, [isdocRevStatusDraft, values.document, values.name]);
 
   const documentTypeId = values.document?.documentType?.id;
-  const isEB = documentRevision?.document.documentType.group === DOC_GROUP_TYPE.ENGINEERING_BUILD;
-
+  const isEB = getIsDocumentEB(documentRevision?.document.documentType.group);
   return (
     <Grid
       item={true}
@@ -243,22 +243,29 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           }}
         />
         {isEB && (
-          <FBEBPart name={`fb-ebpart-${FB.uniqid}`} />
+          <FBEBPart name="childrenParts" />
         )}
-        {isEB && documentRevision?.parent &&
-        <BuildsContainer
-          dataProp={flatten([documentRevision.parent])}
-          label="common.previous.build"
-          isDraft={isdocRevStatusDraft || isRevised}
-        />
-        }
-        {isEB && documentRevision?.children &&
-        <BuildsContainer
-          dataProp={documentRevision.children}
-          label="common.next.build"
-          isDraft={isdocRevStatusDraft || isRevised}
-        />
-        }
+        {documentRevision?.parentParts && (
+          <BuildsContainer
+            dataProp={flatten([documentRevision?.parentParts])}
+            label="common.part.of"
+            isDraft={isdocRevStatusDraft || isRevised}
+          />
+        )}
+        {isEB && documentRevision?.parent && (
+          <BuildsContainer
+            dataProp={flatten([documentRevision.parent])}
+            label="common.previous.build"
+            isDraft={isdocRevStatusDraft || isRevised}
+          />
+        )}
+        {isEB && documentRevision?.children && (
+          <BuildsContainer
+            dataProp={documentRevision.children}
+            label="common.next.build"
+            isDraft={isdocRevStatusDraft || isRevised}
+          />
+        )}
         <RevisionStage {...{ isDisabled }}/>
         <AutocompleteField
           name="referenceTo"

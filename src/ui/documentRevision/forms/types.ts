@@ -26,7 +26,7 @@ export interface DocumentRevisionFormValues extends FBDocumentRevisionProps {
   outputDocumentTypes?: OptionType[];
   schema?: FBSchemaProps[];
   parentParts?: { id: string };
-  childrenParts?: {id: string}[];
+  childrenParts?: { id: string }[];
 }
 
 export interface SecurityId {

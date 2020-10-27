@@ -45,6 +45,10 @@ export const toDocumentRevisionFormValues = (
       .map((operator) => ({ label: operator.name, value: operator.id })),
     renderHTML: documentRevision.renderHTML,
     schema: documentRevision.schema,
+    parentParts: documentRevision.parentParts,
+    // there can currently be only one child part
+    childrenParts: documentRevision.childrenParts?.[0],
+
   };
   if (documentRevision.formTemplate) {
     values.formTemplate = {
