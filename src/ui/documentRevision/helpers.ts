@@ -218,9 +218,10 @@ export const getFBSchemeByDocType = (
  * Checks if document is Record
  * @param groupOptions from DocumentType
  */
-<<<<<<< HEAD
-export const getIsDocumentRecord = (groupOptions: DocumentGroupOptionsType[]) =>
-  groupOptions.includes(DOC_TYPE_GROUP_OPTION.RECORD);
+export const getIsDocumentRecord = (groupOptions?: DocumentGroupOptionsType[]) => {
+  if (!groupOptions) { return false; }
+  return groupOptions.includes(DOC_TYPE_GROUP_OPTION.RECORD);
+};
 
 /**
  * Checks if document is Part
@@ -229,9 +230,4 @@ export const getIsDocumentRecord = (groupOptions: DocumentGroupOptionsType[]) =>
 export const getIsDocumentPart = (groupOptions?: DocumentGroupOptionsType[]) => {
   if (!groupOptions) { return false; }
   return groupOptions.includes(DOC_TYPE_GROUP_OPTION.PART);
-=======
-export const getIsDocumentRecord = (groupOptions?: DocumentGroupOptionsType[]) => {
-  if (!groupOptions) { return false; }
-  return groupOptions.includes(DOC_TYPE_GROUP_OPTION.RECORD);
->>>>>>> develop
 };
