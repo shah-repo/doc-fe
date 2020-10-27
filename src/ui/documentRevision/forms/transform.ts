@@ -61,7 +61,7 @@ export const toDocumentRevisionEditRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
   const data = {
-    ...pick(values, ["formTemplate", "formDocument", "formInput", "schema" ]),
+    ...pick(values, ["formTemplate", "formDocument", "formInput", "schema", "parentParts" ]),
     description: values.description,
     name: values.name,
     attachments: values.attachments,
