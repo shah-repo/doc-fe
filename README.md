@@ -157,6 +157,7 @@ Run script:
 Optional environment variables:
 
 *NUMBER_OF_WORKERS* - number of workers :grin: , defaults to 4. Go as high as you can without having (too many?) specs failing due to timeouts or you system becomes unbearably slow.
+*CYPRESS_BROWSER* - browser to use. Defaults to 'chrome'. Options are 'chrome', 'chromium', 'firefox', 'electron'
 
 Example
 ```
