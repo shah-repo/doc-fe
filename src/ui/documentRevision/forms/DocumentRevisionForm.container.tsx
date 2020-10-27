@@ -50,6 +50,7 @@ interface OwnProps {
   canChangeOwnerShip?: boolean;
   type?: DocumentCloneType;
   isNewVersion?: boolean;
+  isCreatePart?: boolean;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
@@ -93,6 +94,7 @@ DocumentRevisionFormContainerProps
   canChangeOwnerShip = false,
   type,
   isNewVersion,
+  isCreatePart,
 }) => {
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
@@ -192,20 +194,25 @@ DocumentRevisionFormContainerProps
     >
       <DocumentRevisionFormPresenter
         {...props}
-        asyncState={asyncState}
-        documentRevisions={documentRevisions}
-        documentRevision={documentRevision}
-        availableReferences={availableReferences}
-        showRevisionTypeChange={showRevisionTypeChange}
-        proposedDocId={proposedDocId}
-        setDocId={setDocId}
-        doNotPrompt={doNotPrompt}
-        onDirtyFlagChange={onDirtyFlagChange}
-        documentTypesById={documentTypesById}
-        canChangeOwnerShip={canChangeOwnerShip}
-        type={type}
-        isNewVersion={isNewVersion}
-        {...{ FBContainer, bannerPortal, showAdministrativeAndVoidChange }}
+        {...{
+          asyncState,
+          documentRevisions,
+          documentRevision,
+          availableReferences,
+          showRevisionTypeChange,
+          proposedDocId,
+          setDocId,
+          doNotPrompt,
+          onDirtyFlagChange,
+          documentTypesById,
+          canChangeOwnerShip,
+          type,
+          isNewVersion,
+          isCreatePart,
+          FBContainer,
+          bannerPortal,
+          showAdministrativeAndVoidChange,
+        }}
       />
     </FBWorkspace>
   );

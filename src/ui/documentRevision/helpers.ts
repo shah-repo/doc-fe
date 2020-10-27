@@ -211,11 +211,6 @@ export const getFBSchemeByDocType = (
       uniqueSchemaItem: true,
     });
   }
-  finalScheme.push({
-    type: "ebpart",
-    name: `fb-ebpart-${FB.uniqid}`,
-    uniqueSchemaItem: true,
-  });
   return finalScheme;
 };
 
@@ -225,3 +220,12 @@ export const getFBSchemeByDocType = (
  */
 export const getIsDocumentRecord = (groupOptions: DocumentGroupOptionsType[]) =>
   groupOptions.includes(DOC_TYPE_GROUP_OPTION.RECORD);
+
+/**
+ * Checks if document is Part
+ * @param groupOptions from DocumentType
+ */
+export const getIsDocumentPart = (groupOptions?: DocumentGroupOptionsType[]) => {
+  if (!groupOptions) { return false; }
+  return groupOptions.includes(DOC_TYPE_GROUP_OPTION.PART);
+};

@@ -8,15 +8,14 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
   name,
   onAddClick,
 }) => (
-  <FBProvider {...{ dialogState }}>
+  <FBProvider>
     <FBInput type="ebpart">
       <Box display="flex">
         <Box flexGrow={1}>
           <FBAutocompleteAsync
             label="form.builder.part"
             placeholder="form.builder.select.existing.part"
-            // optionId={FBAutocompleteAsyncOption.availableParts}
-            optionId={FBAutocompleteAsyncOption.materials}
+            optionId={FBAutocompleteAsyncOption.availableParts}
             name={`fb-ebpart-${name}`}
           />
         </Box>
