@@ -4,10 +4,9 @@ import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBEBPartProps
 import { withFBEBPart } from "./FBEBPart.wrap";
 
 const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
-  formState,
   onAddClick,
 }) => (
-  <FBProvider {...{ formState }}>
+  <FBProvider>
     <FBInput type="ebpart">
       <Box display="flex">
         <Box flexGrow={1}>
