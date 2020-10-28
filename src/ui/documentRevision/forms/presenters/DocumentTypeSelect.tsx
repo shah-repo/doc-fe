@@ -1,4 +1,5 @@
 import { useFormikContext } from "formik";
+import { filter } from "lodash";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
@@ -14,7 +15,7 @@ import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustom
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import { DocumentCloneType } from "../../Clone.container";
-import { getFBSchemeByDocType } from "../../helpers";
+import { getFBSchemeByDocType, getIsDocumentPart } from "../../helpers";
 import { getActiveDocumentTypes } from "../transform";
 
 interface Props {
@@ -28,6 +29,7 @@ interface Props {
   isDisabled: boolean;
   documentTypeId?: string;
   setDisableCreateButton: (value: boolean) => void;
+  isCreatePart?: boolean;
 }
 
 const DocumentTypeSelect: React.FunctionComponent<Props> = ({
@@ -38,6 +40,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   isDisabled = false,
   documentTypeId,
   setDisableCreateButton,
+  isCreatePart = false,
 }) => {
   const [isVisible, label, validators] = useDocumentTypeSelect(documentTypeId);
 
@@ -59,7 +62,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   };
 
   const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
-  const documentTypes = getActiveDocumentTypes(useSelector(documentTypeSelectors.getDocumentTypeFormOptions));
+  const activeDocumentTypes = getActiveDocumentTypes(useSelector(documentTypeSelectors.getDocumentTypeFormOptions));
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
@@ -72,6 +75,11 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         ({ value: e.id, text: e.documentTypeName }) as SelectOption
       );
     }
+
+    const documentTypes = isCreatePart
+      ? filter(activeDocumentTypes, (type) => getIsDocumentPart(type.groupOptions))
+      : activeDocumentTypes;
+
     return documentTypes
       .filter((docType) => {
         if (docType.groupOptions?.includes("MUST_BE_OUTPUT")) {
@@ -85,7 +93,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       ).map((docType) =>
         ({ value: docType.id, text: docType.documentTypeName })
       );
-  }, [type, outputDocumentTypes, documentTypes, currentUserTags]);
+  }, [type, outputDocumentTypes, activeDocumentTypes, currentUserTags, isCreatePart]);
 
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>

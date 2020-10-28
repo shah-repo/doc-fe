@@ -7,7 +7,7 @@ import { generateVersionNumber, getIsAdministrativeDefault } from "../helpers";
 import { DocumentRevisionFormValues } from "./types";
 
 
-const getHighestRevision = (revisions: DocumentRevision[]) => maxBy(revisions, "revision");
+export const getHighestRevision = (revisions: DocumentRevision[]) => maxBy(revisions, "revision");
 
 const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateVersionNumber(revision.revision,
   revision.revisionStage,
@@ -45,6 +45,10 @@ export const toDocumentRevisionFormValues = (
       .map((operator) => ({ label: operator.name, value: operator.id })),
     renderHTML: documentRevision.renderHTML,
     schema: documentRevision.schema,
+    parentParts: documentRevision.parentParts,
+    // there can currently be only one child part
+    childrenParts: documentRevision.childrenParts?.[0],
+
   };
   if (documentRevision.formTemplate) {
     values.formTemplate = {
@@ -61,7 +65,7 @@ export const toDocumentRevisionEditRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
   const data = {
-    ...pick(values, ["formTemplate", "formDocument", "formInput", "schema" ]),
+    ...pick(values, ["formTemplate", "formDocument", "formInput", "schema", "parentParts" ]),
     description: values.description,
     name: values.name,
     attachments: values.attachments,

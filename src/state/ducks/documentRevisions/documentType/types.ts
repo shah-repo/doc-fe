@@ -44,6 +44,7 @@ export type DocumentGroupOptionsType =
   "MUST_BE_OUTPUT" |
   "HAVE_OUTPUT" |
   "RECORD" |
+  "PART" |
   "ONE_ITEM" |
   "DYNAMIC_FORM" |
   "POAM" |

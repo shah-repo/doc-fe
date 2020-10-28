@@ -338,15 +338,6 @@ context("Record inline Flow", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
         });
 
-        it("Try approve and release it", () => {
-          cy.recApproveAndReleaseInlineRecord();
-          cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").click();
-        });
-
-        it("Check error message", () => {
-          cy.checkToastMessageContains({ message: inlineApprovalError });
-        });
-
         it("Approve Inline Approval", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
           cy.get("input[name=\"password\"]").type("Tester1!");

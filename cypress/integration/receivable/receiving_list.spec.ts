@@ -508,7 +508,7 @@ context("Receivable list test", () => {
 
       it("Verify receivable counter on document list", () => {
         // SystemRequirement("REQ-1760");
-        cy.dlVerifyDocCounter({ docCounterNumber: 3 });
+        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
       });
     });
 

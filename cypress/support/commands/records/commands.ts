@@ -54,13 +54,11 @@ Cypress.Commands.add("recCheckRevisionStage", (params: {stage: string}) => {
 });
 
 Cypress.Commands.add("recApproveAndReleaseInlineRecord", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
-    cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
-  });
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   cy.wait(500);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRevWithoutAr,
     () => {
-      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+      cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
     });
 });
