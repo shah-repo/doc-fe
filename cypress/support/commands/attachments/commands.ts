@@ -25,6 +25,7 @@ declare global {
       atchCheckRedLineIndicator(params: {fileName: string}): Chainable<Subject>;
       atchNoPrimaryForRedline(params: {fileName: string}): Chainable<Subject>;
       atchDownloadFile(params: {fileName: string}): Chainable<Subject>;
+      atchDownloadAll(): Chainable<Subject>;
     }
   }
 }
@@ -175,6 +176,35 @@ Cypress.Commands.add("atchDownloadFile", (params: {fileName: string }) => {
   }).as("attach");
   cy.get("div[data-cy=\"attachment\"]").contains(params.fileName).rightclick();
   cy.get("div[id=\"simple-menu\"]>div>ul[role=\"menu\"]>li:nth-child(1)").click();
+  cy.get("body").then(($body) => {
+    if ($body.find("form[class^=\"RedlineWarningForm\"]").length > 0) {
+      cy.get("[id=\"passwordConfirm\"]").click();
+      cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
+      cy.get("[data-cy=\"passwordConfirm\"]").click();
+    }
+  });
+  cy.wait("@attach");
+  cy.wait("@attach").then((res) => {
+    const fileUrl = res.response.body.toString();
+    const fileName = fileUrl.split("/")[5].split("?");
+    cy.downloadFile({
+      url: fileUrl,
+      directory: "cypress/downloads",
+      fileName: fileName[0],
+    });
+  });
+});
+
+Cypress.Commands.add("atchDownloadAll", (params: {fileName: string }) => {
+  cy.route2({ pathname: "/api/v1/attachments/*/download*" }, (req) => {
+    req.reply((res) => {
+      if (res.body !== "") {
+        const response = JSON.parse(res.body);
+        res.send(response.url);
+      }
+    });
+  }).as("attach");
+  cy.get("#AttachmentFieldPresenter-downloadAllButton").click();
   cy.get("body").then(($body) => {
     if ($body.find("form[class^=\"RedlineWarningForm\"]").length > 0) {
       cy.get("[id=\"passwordConfirm\"]").click();
