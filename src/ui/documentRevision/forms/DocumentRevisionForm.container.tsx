@@ -1,23 +1,28 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import { cloneDeep, filter, get, isEmpty } from "lodash";
+import { cloneDeep, filter, get, isEmpty, set } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { toastError } from "../../components/notifications";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import { FBWorkspace, FBWorkspaceMode } from "../../form.builder";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
 import { DocumentCloneType } from "../Clone.container";
+import { getIsDocumentEB, getIsDocumentRecord } from "../helpers";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
+import { getHighestRevision } from "./transform";
 import { DocumentRevisionFormValues } from "./types";
 
 interface StateProps {
@@ -50,6 +55,7 @@ interface OwnProps {
   canChangeOwnerShip?: boolean;
   type?: DocumentCloneType;
   isNewVersion?: boolean;
+  isCreatePart?: boolean;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
@@ -93,6 +99,7 @@ DocumentRevisionFormContainerProps
   canChangeOwnerShip = false,
   type,
   isNewVersion,
+  isCreatePart,
 }) => {
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
@@ -100,7 +107,8 @@ DocumentRevisionFormContainerProps
   const bannerPortal = React.useRef(null);
   const { revisionStage } = documentRevision || {};
   const isAlphaReleased = revisionStage === 3;
-  const isRecord = (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
+  const isRecord = getIsDocumentRecord(document?.documentType?.groupOptions);
+  const isEB = getIsDocumentEB(documentRevision?.document?.documentType?.group);
 
   const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
@@ -170,6 +178,35 @@ DocumentRevisionFormContainerProps
   const formInput = useMemo(() =>
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
   , [cleanInitialValues]);
+
+  const loadDocumentAsync = useAsync({
+    onSuccess: (data?: Document) => {
+      const childrenParts = getHighestRevision(data?.documentRevisions || []);
+      set(childrenParts || {}, "document", data);
+      set(formInput || {}, "childrenParts", childrenParts);
+    },
+    onError: (error) => {
+      toastError(error as string);
+    },
+  });
+  const loadDocumentAction = useActionCreator(documentsActions.getDocumentById);
+
+  useEffect(() => {
+    if (isEB) {
+      const childrenParts = initialValues.childrenParts;
+      if (!childrenParts && initialValues.formInput?.childrenPartsForRevise[0]) {
+        loadDocumentAsync.start(
+          loadDocumentAction,
+          initialValues.formInput?.childrenPartsForRevise[0].id,
+          loadDocumentAsync,
+        );
+      } else {
+        set(formInput || {}, "childrenParts", childrenParts);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   let mode: Partial<FBWorkspaceMode> = "none";
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";
@@ -192,20 +229,25 @@ DocumentRevisionFormContainerProps
     >
       <DocumentRevisionFormPresenter
         {...props}
-        asyncState={asyncState}
-        documentRevisions={documentRevisions}
-        documentRevision={documentRevision}
-        availableReferences={availableReferences}
-        showRevisionTypeChange={showRevisionTypeChange}
-        proposedDocId={proposedDocId}
-        setDocId={setDocId}
-        doNotPrompt={doNotPrompt}
-        onDirtyFlagChange={onDirtyFlagChange}
-        documentTypesById={documentTypesById}
-        canChangeOwnerShip={canChangeOwnerShip}
-        type={type}
-        isNewVersion={isNewVersion}
-        {...{ FBContainer, bannerPortal, showAdministrativeAndVoidChange }}
+        {...{
+          asyncState,
+          documentRevisions,
+          documentRevision,
+          availableReferences,
+          showRevisionTypeChange,
+          proposedDocId,
+          setDocId,
+          doNotPrompt,
+          onDirtyFlagChange,
+          documentTypesById,
+          canChangeOwnerShip,
+          type,
+          isNewVersion,
+          isCreatePart,
+          FBContainer,
+          bannerPortal,
+          showAdministrativeAndVoidChange,
+        }}
       />
     </FBWorkspace>
   );

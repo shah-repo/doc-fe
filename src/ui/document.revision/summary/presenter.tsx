@@ -7,7 +7,7 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
-import { documentTypeSelectors, DOC_GROUP_TYPE, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
@@ -15,6 +15,7 @@ import SummaryInfo from "../../common/summary/SummaryInfo";
 import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
+import { getIsDocumentEB, getIsDocumentPart, getIsDocumentRecord } from "../../documentRevision/helpers";
 import { FBSchemaProps, FBWorkspace } from "../../form.builder";
 import { useCRLink, useTitle, useTraining } from "../../hooks/docCustomization/useCustomization";
 import useDescription from "../../hooks/docCustomization/useDescription";
@@ -56,6 +57,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
     formDocument,
     parent,
     children,
+    childrenParts,
+    parentParts,
   },
   canChangeOwnerShip,
   canShowCreateVersionButton,
@@ -74,8 +77,9 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const [isTitleVisible, titleLabel] = useTitle(docTypeId);
   const [isCRLinkVisible] = useCRLink(docTypeId);
   const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
-  const isRecord = (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
-  const isEB = document.documentType.group === DOC_GROUP_TYPE.ENGINEERING_BUILD;
+  const isRecord = getIsDocumentRecord(document?.documentType?.groupOptions);
+  const isEB = getIsDocumentEB(document.documentType.group);
+  const isPart = getIsDocumentPart(document?.documentType?.groupOptions);
   const inlineApprovalFields = formDocument?.formTemplate?.schema
   .filter((field) => (field.type === "inlineapproval" as string));
 
@@ -171,6 +175,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
         )}
         {isEB && children && (
           <BuildsContainer dataProp={children} label="common.next.build" />
+        )}
+        {isPart && parentParts && (
+          <BuildsContainer dataProp={flatten([parentParts])} label="common.part.of" />
+        )}
+        {isEB && childrenParts && (
+          <BuildsContainer dataProp={flatten([childrenParts])} label="form.builder.part" />
         )}
         {attachments && <Attachment
           isAttachmentEmpty={attachments.length < 1}

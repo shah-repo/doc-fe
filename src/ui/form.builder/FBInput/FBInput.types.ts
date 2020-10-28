@@ -62,7 +62,8 @@ export type FBInputType =
   | "approvals"
   | "procedure"
   | "parts"
-  | "procedurediff";
+  | "procedurediff"
+  | "ebpart";
 
 export type FBInputProps =
   & FBLabelProps

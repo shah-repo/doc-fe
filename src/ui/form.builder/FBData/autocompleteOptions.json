@@ -170,5 +170,14 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": ""
+  },
+  {
+    "id": "21",
+    "path": "/document_revisions/available_parts",
+    "label": "Available Parts",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
   }
 ]
