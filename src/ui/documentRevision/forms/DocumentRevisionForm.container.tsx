@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import { cloneDeep, filter, get, isEmpty, set } from "lodash";
+import { cloneDeep, filter, get, isEmpty, omit, set } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
@@ -182,7 +182,7 @@ DocumentRevisionFormContainerProps
   const loadDocumentAsync = useAsync({
     onSuccess: (data?: Document) => {
       const childrenParts = getHighestRevision(data?.documentRevisions || []);
-      set(childrenParts || {}, "document", data);
+      set(childrenParts || {}, "document", omit(data, "documentRevisions"));
       set(formInput || {}, "childrenParts", childrenParts);
     },
     onError: (error) => {
@@ -194,10 +194,10 @@ DocumentRevisionFormContainerProps
   useEffect(() => {
     if (isEB) {
       const childrenParts = initialValues.childrenParts;
-      if (!childrenParts && initialValues.formInput?.childrenPartsForRevise[0]) {
+      if (!childrenParts && initialValues.formInput?.childrenPartsForRevise?.[0]) {
         loadDocumentAsync.start(
           loadDocumentAction,
-          initialValues.formInput?.childrenPartsForRevise[0].id,
+          initialValues.formInput?.childrenPartsForRevise?.[0]?.id,
           loadDocumentAsync,
         );
       } else {
