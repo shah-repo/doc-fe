@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBEBPartProps, FBInput, FBProvider } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBEBPartProps, FBInput, FBProvider, FBText } from "..";
 import { withFBEBPart } from "./FBEBPart.wrap";
 
 const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
@@ -10,11 +10,14 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
   ...props
 }) => (
   <FBProvider>
+    <FBText
+      locale="form.builder.part"
+      boxProps={{ fontWeight: "fontWeightBold", mb: 2, fontSize: "medium" }}
+    />
     <FBInput type="ebpart">
-      <Box display="flex">
+      <Box display="flex" alignItems="center">
         <Box flexGrow={1}>
           <FBAutocompleteAsync
-            label="form.builder.part"
             placeholder="form.builder.select.existing.part"
             optionId={FBAutocompleteAsyncOption.availableParts}
             name="childrenParts"
@@ -24,7 +27,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
             {...{ loading }}
           />
         </Box>
-        <Box mt={4}>
+        <Box>
           <FBButton
             variant="contained"
             label="form.builder.create.new.part"
