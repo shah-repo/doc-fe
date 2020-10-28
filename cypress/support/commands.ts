@@ -1,3 +1,4 @@
+import "cypress-downloadfile/lib/downloadFileCommand";
 import { CONFIG } from "./config";
 import { CyRoutes, CyWaitOptions, routes } from "./routes";
 
@@ -13,6 +14,7 @@ declare global {
        * Custom command to select DOM element by data-cy attribute.
        * @example cy.dataCy('greeting')
       */
+      downloadFile(params: { url: string; directory: string; fileName: string}): Chainable<Subject>;
       createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
       selectCompany(params: { name: string }): Chainable<Subject>;
@@ -77,6 +79,15 @@ Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstra
     },
     timeout: 10 * 1000,
   }).then((response) => response.body);
+});
+
+Cypress.Commands.add("downloadFile", (params: { url: string; directory: string; fileName: string} ) => {
+  cy.getCookies().then((cookies) => cy.task("downloadFile", {
+    url: params.url,
+    directory: params.directory,
+    cookies,
+    fileName: params.fileName,
+  }));
 });
 
 Cypress.Commands.add("myCompanies", (token: string) => {
