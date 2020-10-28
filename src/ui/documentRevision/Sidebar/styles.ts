@@ -47,7 +47,7 @@ export default makeStyles((theme: Theme) =>
       "margin": "8px 13px 13px 11px",
       "paddingTop": "5px",
       "paddingBottom": "5px",
-      "justifyContent": "end",
+      "justifyContent": "unset",
       "&:hover": {
         background: "none",
       },

@@ -8,6 +8,7 @@ import {
   FBInlineApprovalOptions,
   FBInlineApprovalTransition,
   FBInlineApprovalTransitionBody,
+  FBRequestApprovalTransitionBody,
 } from "..";
 import { Document } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
@@ -27,6 +28,7 @@ export class FBInlineApprovalState {
   public rolesApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.approvalRoles);
   public approvalApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalBody>(FBEndpoint.Approvals);
   public transitionApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>();
+  public requestApprovalApi = new FBRequest<FBInlineApprovalBody[], FBRequestApprovalTransitionBody | null>();
   public documentApi: FBRequest<Document, null> = new FBRequest();
 
   // MARK: @constructor
@@ -80,6 +82,16 @@ export class FBInlineApprovalState {
       this.transitionApi.setBody(body);
     }
     this.transitionApi.post();
+  };
+
+  public requestApprovalTransition = (
+    transition: FBInlineApprovalTransition,
+    id: string,
+    body: FBRequestApprovalTransitionBody,
+  ) => {
+    this.requestApprovalApi.setTemplateUrl(FBEndpoint.ApprovalsTransition, { id, transition });
+    this.requestApprovalApi.setBody(body);
+    this.requestApprovalApi.post();
   };
 
   public getDocument = (id?: string) => {

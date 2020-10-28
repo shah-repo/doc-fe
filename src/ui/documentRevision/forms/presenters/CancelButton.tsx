@@ -1,36 +1,37 @@
 import { Button } from "@material-ui/core";
 import * as React from "react";
 import { useEffect } from "react";
-import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
+import { getIsDocumentRecord } from "../../helpers";
 
 interface Props {
-  documentStatus?: DocumentRevisionStatus;
-  version?: number;
-  docRevId?: string;
+  documentRevision: DocumentRevision;
   setShouldDisplay: (value: boolean) => void;
 }
 
 const CancelButton: React.FunctionComponent<Props> = ({
-  documentStatus,
-  version = 0,
-  docRevId,
+  documentRevision,
   setShouldDisplay,
 }) => {
   const dialog = useDialog();
-  const canShowCancelButton = documentStatus === DocumentRevisionStatus.Draft && version > 1;
+  const async = useAsync();
+  const { status = "", version = 0, id, document } = documentRevision || [];
+
+  const canShowCancelButton = status === DocumentRevisionStatus.Draft && version > 1;
+  const isRecord = getIsDocumentRecord(document?.documentType?.groupOptions || []);
+
   useEffect(() => {
     setShouldDisplay(canShowCancelButton);
   }, [canShowCancelButton, setShouldDisplay]);
 
-  const async = useAsync();
   const cancelDraft = useActionCreator(documentRevisionsActions.cancelDraft);
   const handleCancelDraft = () => {
-    async.start(cancelDraft, docRevId, async);
+    async.start(cancelDraft, id, async);
   };
 
   return (
@@ -43,7 +44,7 @@ const CancelButton: React.FunctionComponent<Props> = ({
       }
       <AlertDialog
         confirmAction={handleCancelDraft}
-        message={"document.revision.cancel.draft.alert"}
+        message={isRecord ? "record.cancel.draft.alert" : "document.revision.cancel.draft.alert"}
         {...{ dialog }}
       />
     </>

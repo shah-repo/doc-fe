@@ -29,4 +29,5 @@ export enum FBEndpoint {
   Approvals = "/approvals",
   ApprovalsTransition = "/approvals/${id}/${transition}",
   SetApprovalStatus = "/approvals/${approvalId}/${status}",
+  PatchDocumentRevision = "/document_revisions/${docRevId}",
 }

@@ -15,7 +15,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
   dialogState,
   requestApproval,
   approvals = [],
-  changeApprovalStatus,
+  approvalTransition,
   currentUser,
   disabled,
   docId,
@@ -96,7 +96,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
                 label="common.reject"
                 size="small"
                 style={{ fontSize: "11px" }}
-                onClick={() => changeApprovalStatus("reject", approval.id)}
+                onClick={() => approvalTransition("reject", approval.id)}
               />
               <FBButton
                 {...{ disabled }}

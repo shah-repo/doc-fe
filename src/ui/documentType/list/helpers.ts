@@ -52,7 +52,7 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
     searchOptions.dataKey = "displayStatus";
     searchOptions.searchType = "select";
     searchOptions.selectOptions = documentRevisionStatusOption(statuses);
-    searchOptions.defaultValue = tableCriteria.queryDict.displayStatus;
+    searchOptions.defaultValue = tableCriteria.queryDict?.displayStatus;
   }
 
   return [omitSearch, searchOptions];

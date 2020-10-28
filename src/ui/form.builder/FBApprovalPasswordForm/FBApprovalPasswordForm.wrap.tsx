@@ -1,5 +1,5 @@
 import React from "react";
-import { FB } from "..";
+import { FB, FBApprovalPasswordFormActions, FBFormState } from "..";
 import { FBApprovalPasswordFormProps } from "./FBApprovalPasswordForm.types";
 
 export const withFBApprovalPasswordForm = (
@@ -8,23 +8,31 @@ export const withFBApprovalPasswordForm = (
   const Comp = ({
     approvalTransition,
     approvalId,
+    ...props
   }) => {
-    const { dialogState, formState } = FB.useStores();
+    const { dialogState } = FB.useStores();
+    const formState = FB.useRef(FBFormState, {});
 
-    const onDialogClose = () => {
+    const onDialogCancel = () => {
       dialogState?.closeDialog();
       formState?.setFieldValue("password", null);
     };
 
     const onDialogApprove = () => {
       approvalTransition?.("approve", approvalId);
-      onDialogClose();
+      onDialogCancel();
     };
 
+    React.useEffect(() => {
+      dialogState?.setActions(
+        <FBApprovalPasswordFormActions {...{ onDialogApprove, onDialogCancel }} />
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return Component({
+      ...(props),
       formState,
-      onDialogClose,
-      onDialogApprove,
     });
   };
   Comp.displayName = "withFBApprovalPasswordForm";
