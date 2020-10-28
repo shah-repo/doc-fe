@@ -194,10 +194,10 @@ DocumentRevisionFormContainerProps
   useEffect(() => {
     if (isEB) {
       const childrenParts = initialValues.childrenParts;
-      if (!childrenParts && initialValues.formInput?.childrenPartsForRevise[0]) {
+      if (!childrenParts && initialValues.formInput?.childrenPartsForRevise?.[0]) {
         loadDocumentAsync.start(
           loadDocumentAction,
-          initialValues.formInput?.childrenPartsForRevise[0].id,
+          initialValues.formInput?.childrenPartsForRevise?.[0]?.id,
           loadDocumentAsync,
         );
       } else {
