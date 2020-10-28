@@ -9,12 +9,12 @@ export const withFBEBPart = <T extends FBEBPartProps>(
 ) => {
   const Comp = ({
     name,
-    loading,
-    disabled,
     ...props
   }) => {
 
     // MARK: @config
+    let loading = false;
+    let disabled = false;
     const { workspaceState, formState } = FB.useStores();
     const { id: docRevId } = workspaceState || {};
     const ebPartState = FB.useRef(
@@ -43,6 +43,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         ebPartState.loading ||
           ebPartState?.docRevApi.loading
       );
+      disabled = loading;
     });
 
     return Component({
