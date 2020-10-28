@@ -7,7 +7,7 @@ import { generateVersionNumber, getIsAdministrativeDefault } from "../helpers";
 import { DocumentRevisionFormValues } from "./types";
 
 
-const getHighestRevision = (revisions: DocumentRevision[]) => maxBy(revisions, "revision");
+export const getHighestRevision = (revisions: DocumentRevision[]) => maxBy(revisions, "revision");
 
 const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateVersionNumber(revision.revision,
   revision.revisionStage,

@@ -44,9 +44,7 @@ export const BuildsPresenter: React.FunctionComponent<Props> = ({
         <Tooltip title={docRev.name} data-cy="BuildsLink-tootlip" >
           <Link
             className={classes.link}
-            // temp - TODO - uncomment the following line and delete the one below when BE adds document ID
-            // to={documentVersionPath(docRev.id, docRev.document.id )}
-            to={documentVersionPath(docRev.id, docRev.document?.id || "abcde-fghij-klmno")}
+            to={documentVersionPath(docRev.id, docRev.document?.id )}
             target="_blank"
             data-cy="BuildsPresenter-link"
           >
