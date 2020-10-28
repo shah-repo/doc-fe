@@ -138,12 +138,11 @@ Cypress.Commands.add("poCheckCurrency", () => {
   cy.get("ul[role=listbox] > li").contains("USD").should("exist");
   cy.get("ul[role=listbox] > li").contains("EUR").should("exist");
   cy.get("ul[role=listbox] > li").contains("GBP").should("exist");
-  cy.get("ul[role=listbox] > li").contains("AU").should("exist");
-  cy.get("ul[role=listbox] > li").contains("C").should("exist");
+  cy.get("ul[role=listbox] > li").contains("AUD").should("exist");
+  cy.get("ul[role=listbox] > li").contains("CAD").should("exist");
 });
 
 Cypress.Commands.add("poSelectCurrency", (params: { currencyValue: string }) => {
-  cy.get("[id*=\"currency\"]").click();
   cy.get("ul[role=listbox] > li").contains(params.currencyValue).click().wait(500);
 });
 
