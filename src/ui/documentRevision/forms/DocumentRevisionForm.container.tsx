@@ -197,7 +197,7 @@ DocumentRevisionFormContainerProps
       if (!childrenParts && initialValues.formInput?.childrenPartsForRevise[0]) {
         loadDocumentAsync.start(
           loadDocumentAction,
-          initialValues.formInput?.childrenPartsForRevise[0],
+          initialValues.formInput?.childrenPartsForRevise[0].id,
           loadDocumentAsync,
         );
       } else {
