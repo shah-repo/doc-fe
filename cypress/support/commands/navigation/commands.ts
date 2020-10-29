@@ -78,13 +78,17 @@ Cypress.Commands.add("navigToDocumentList", () => {
 });
 
 Cypress.Commands.add("navigToApprovalRequestList", () => {
-  cy.navigToNestedItem({
-    navigItems: [
-      NavigationItems.DASHBOARD,
-      NavigationItems.DOCUMENT_CONTROL,
-      NavigationItems.APPROVAL_REQUEST,
-    ],
-  });
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.GetChangeRequests,
+    () => {
+      cy.navigToNestedItem({
+        navigItems: [
+          NavigationItems.DASHBOARD,
+          NavigationItems.DOCUMENT_CONTROL,
+          NavigationItems.APPROVAL_REQUEST,
+        ],
+      });
+    });
 });
 
 Cypress.Commands.add("navigToWorkOrders", () => {
