@@ -1,37 +1,18 @@
 import { observable } from "mobx";
+import { EBPartPatchBody, EBPartPostBody, ProposedDocIdBody } from ".";
+import { Document } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
-
-interface EBPartPatchBody {
-  childrenParts: [
-    { id: string }
-  ];
-}
-
-interface EBPartPostBody {
-  description: string;
-  document: {
-    docId: string;
-    documentType: {
-      id: string;
-    };
-  };
-  name: string;
-  revisionStage: number;
-  parentParts: {
-    id: string;
-  };
-}
 
 export class FBEBPartState extends FBRequest<EBPartPatchBody | EBPartPostBody, null> {
   // MARK: @observables
   @observable public childrenParts?: any;
 
   // MARK: @config
-  public existingChildApi = new FBRequest<any, any>(FBEndpoint.PatchDocumentRevision);
-  public newChildApi = new FBRequest<any, any>(FBEndpoint.DocumentRevisionsUrl);
-  public proposedDocIdApi = new FBRequest<any, any>(FBEndpoint.FetchDocId);
-  public documentApi = new FBRequest<any, any>(FBEndpoint.Document);
+  public existingChildApi = new FBRequest<null, EBPartPatchBody>(FBEndpoint.PatchDocumentRevision);
+  public newChildApi = new FBRequest<null, EBPartPostBody>(FBEndpoint.DocumentRevisionsUrl);
+  public proposedDocIdApi = new FBRequest<ProposedDocIdBody, null>(FBEndpoint.FetchDocId);
+  public documentApi = new FBRequest<Document, null>(FBEndpoint.Document);
 
   // MARK: @constructor
   public constructor(childrenParts?: string) {

@@ -8,3 +8,26 @@ export type FBEBPartProps =
 & {
   onAddClick(): void;
 };
+
+export interface EBPartPatchBody {
+  childrenParts: { id: string }[];
+}
+
+export interface EBPartPostBody {
+  description: string;
+  document: {
+    docId: string;
+    documentType: {
+      id: string;
+    };
+  };
+  name: string;
+  revisionStage: number;
+  parentParts: {
+    id: string;
+  };
+}
+
+export interface ProposedDocIdBody {
+  docId: string;
+}
