@@ -11,7 +11,7 @@ import { styles } from "./RevisionTypeChange.styles";
 interface Props {
   documentTypeId?: string;
   isDisabled: boolean;
-  showObsoleteRevisionChange: boolean;
+  isDocRevFirstDraft: boolean;
   showAdministrativeAndVoidChange: boolean;
   isRecord?: boolean;
 }
@@ -19,7 +19,7 @@ interface Props {
 export const RevisionTypeChange: React.FunctionComponent<Props> = ({
   documentTypeId = "",
   isDisabled,
-  showObsoleteRevisionChange,
+  isDocRevFirstDraft,
   showAdministrativeAndVoidChange,
   isRecord,
 }) => {
@@ -66,7 +66,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
           />
         }
         {
-          showObsolete && !showObsoleteRevisionChange &&
+          showObsolete && !isDocRevFirstDraft &&
           <RadioButton
             label={<Text message={ showAdministrativeAndVoidChange ? "common.void" : obsoleteLabel} />}
             value={RevisionChangeType.Obsolete}
@@ -76,7 +76,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
           />
         }
         {
-          showAdministrationChange &&
+          showAdministrationChange && !isDocRevFirstDraft &&
           <RadioButton
             label={<Text message={administrationChangeLabel} />}
             value={RevisionChangeType.AdministrativeChange}

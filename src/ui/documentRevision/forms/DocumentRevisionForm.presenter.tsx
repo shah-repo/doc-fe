@@ -106,9 +106,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const { workspaceState } = FB.useStores();
   const isDisabled: boolean = initialValues.id !== undefined;
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
-  const showObsoleteRevisionChange =
-    documentRevision?.status === DocumentRevisionStatus.Draft &&
-    documentRevision?.version === 1;
 
   FormHeaderContext = React.createContext<FormHeaderContext | undefined>({
     documentRevision,
@@ -125,6 +122,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
   const isdocRevStatusDraft = documentRevision?.status === DocumentRevisionStatus.Draft;
+  const isDocRevFirstDraft = isdocRevStatusDraft && documentRevision?.version === 1;
   const isSubrevision = documentRevision?.subRevision as number > 0;
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
 
@@ -297,7 +295,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         {showRevisionTypeChange && !isRevisionChangeHidden &&
         <RevisionTypeChange {...{
           documentTypeId,
-          showObsoleteRevisionChange,
+          isDocRevFirstDraft,
           showAdministrativeAndVoidChange,
           isRecord,
         }}
