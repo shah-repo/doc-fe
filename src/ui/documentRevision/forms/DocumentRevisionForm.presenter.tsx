@@ -123,8 +123,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
   const isdocRevStatusDraft = documentRevision?.status === DocumentRevisionStatus.Draft;
   const isDocRevFirstDraft = isdocRevStatusDraft && documentRevision?.version === 1;
-  console.log(isDocRevFirstDraft);
-
   const isSubrevision = documentRevision?.subRevision as number > 0;
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
 
