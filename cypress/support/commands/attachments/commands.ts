@@ -22,7 +22,7 @@ declare global {
       atchCheckDisplayedAtLast(params: {fileName: string}): Chainable<Subject>;
       atchCheckRedLineIndicator(params: {fileName: string}): Chainable<Subject>;
       atchNoPrimaryForRedline(params: {fileName: string}): Chainable<Subject>;
-      atchDownloadFile(params: {fileName: string}): Chainable<Subject>;
+      atchDownloadFile(params: {fileName: string; saveFileName: string}): Chainable<Subject>;
       atchDownloadAll(): Chainable<Subject>;
     }
   }
@@ -151,7 +151,7 @@ Cypress.Commands.add("atchNoPrimaryForRedline", (params: {fileName: string }) =>
   cy.get("[data-cy=\"field-name\"]").click({ force: true });
 });
 
-Cypress.Commands.add("atchDownloadFile", (params: {fileName: string }) => {
+Cypress.Commands.add("atchDownloadFile", (params: {fileName: string; saveFileName: string }) => {
   cy.route2({ pathname: "/api/v1/attachments/*/download*" }, (req) => {
     req.reply((res) => {
       if (res.body !== "") {
@@ -172,16 +172,15 @@ Cypress.Commands.add("atchDownloadFile", (params: {fileName: string }) => {
   cy.wait("@attach");
   cy.wait("@attach").then((res) => {
     const fileUrl = res.response.body.toString();
-    const fileName = fileUrl.split("/")[5].split("?");
     cy.downloadFile({
       url: fileUrl,
       directory: "cypress/downloads",
-      fileName: fileName[0],
+      fileName: params.saveFileName,
     });
   });
 });
 
-Cypress.Commands.add("atchDownloadAll", (params: {fileName: string }) => {
+Cypress.Commands.add("atchDownloadAll", () => {
   cy.route2({ pathname: "/api/v1/attachments/*/download*" }, (req) => {
     req.reply((res) => {
       if (res.body !== "") {

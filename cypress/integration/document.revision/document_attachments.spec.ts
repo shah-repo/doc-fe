@@ -294,11 +294,11 @@ context("Document Attachment Flow", () => {
 
     it("Download redline document in Pending Change state", () => {
       SystemRequirement("REQ-0390");
-      cy.atchDownloadFile({ fileName: "image.jpg" });
+      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: "image_0.jpg" });
     });
 
     it("Check size of downloaded file", () => {
-      cy.readFile("cypress/downloads/image.jpg").should("have.length", "32732");
+      cy.readFile("cypress/downloads/image_0.jpg").should("have.length", "32732");
     });
 
     it("Navigate to added document in AR", () => {
@@ -323,11 +323,11 @@ context("Document Attachment Flow", () => {
 
     it("Download redline document in 'In Review' state", () => {
       SystemRequirement("REQ-0390");
-      cy.atchDownloadFile({ fileName: "image.jpg" });
+      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: "image_1.jpg" });
     });
 
     it("Check size of downloaded file", () => {
-      cy.readFile("cypress/downloads/image.jpg").should("have.length", "32732");
+      cy.readFile("cypress/downloads/image_1.jpg").should("have.length", "32732");
     });
 
     it("Navigate to added document in AR", () => {
@@ -353,11 +353,11 @@ context("Document Attachment Flow", () => {
 
     it("Download redline document in 'Approved' state", () => {
       SystemRequirement("REQ-0390");
-      cy.atchDownloadFile({ fileName: "image.jpg" });
+      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: "image_2.jpg" });
     });
 
     it("Check size of downloaded file", () => {
-      cy.readFile("cypress/downloads/image.jpg").should("have.length", "32732");
+      cy.readFile("cypress/downloads/image_2.jpg").should("have.length", "32732");
     });
 
     it("Navigate to approved document in AR", () => {
@@ -382,11 +382,11 @@ context("Document Attachment Flow", () => {
 
     it("Download redline document in 'Released' state", () => {
       SystemRequirement("REQ-0390");
-      cy.atchDownloadFile({ fileName: "image.jpg" });
+      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: "image_3.jpg" });
     });
 
     it("Check size of downloaded file", () => {
-      cy.readFile("cypress/downloads/image.jpg").should("have.length", "32732");
+      cy.readFile("cypress/downloads/image_3.jpg").should("have.length", "32732");
     });
 
   });
