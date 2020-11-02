@@ -23,7 +23,9 @@ export const toDocumentRevisionFormValues = (
     description: documentRevision.description,
     name: documentRevision.name,
     attachments: documentRevision.attachments,
-    referenceTo: documentRevision.referenceTo.map((reference: any) => {
+    // TODO - we need to take a data from response that gives us all informations about document,
+    // currently we are using data from the document list
+    referenceTo: documentRevision.referenceTo?.map((reference: any) => {
       const highestRev = getHighestRevision(reference.documentRevisions);
       return ({
         value: reference.id,
