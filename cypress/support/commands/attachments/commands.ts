@@ -17,8 +17,6 @@ declare global {
       atchCheckDisplayedAttachments(params: {fileNames: string[] }): Chainable<Subject>;
       atchRemoveAttachment(params: {fileName: string }): Chainable<Subject>;
       atchCheckAtributes(params: {fileName: string; attributes: string }): Chainable<Subject>;
-      atchDownloadAllAttachments(): Chainable<Subject>;
-      atchEnterConfirmationPassword(params: {password: string }): Chainable<Subject>;
       attachFiles(files: {name: string; type: string}[]): Chainable<Subject>;
       closeAtchUploadDialog(): Chainable<Subject>;
       atchCheckDisplayedAtLast(params: {fileName: string}): Chainable<Subject>;
@@ -100,18 +98,6 @@ Cypress.Commands.add("atchUploadRedlineAttachment", (params: {fileName: string }
       });
     });
   });
-});
-
-Cypress.Commands.add("atchEnterConfirmationPassword", (params: {password: string }) => {
-  cy.get("[data-cy=\"reject.request\"]").click().wait(1000);
-  // dowload document part is not working in cypress, cypress freezes so we just cancel password confirm
-  // cy.get("[data-cy=\"transition.action.password\"]").type(params.password);
-  // cy.get("[data-cy=\"passwordConfirm\"]").click().wait(10000);
-});
-
-Cypress.Commands.add("atchDownloadAllAttachments", () => {
-  cy.get("[id=\"AttachmentFieldPresenter-downloadAllButton\"]").click();
-  cy.get("[id=\"passwordConfirm\"]").click();
 });
 
 Cypress.Commands.add("atchSetPrimaryAttachment", (params: {fileName: string }) => {
