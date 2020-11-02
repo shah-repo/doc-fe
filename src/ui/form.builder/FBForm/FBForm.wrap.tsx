@@ -25,10 +25,12 @@ export const withFBForm = <T extends FBFormProps>(
     }));
     initialValidation && workspaceMode !== "design" && formState.validate();
 
+
     React.useEffect(() => {
       if (!formState) { return; }
       formState.errorValidation = errorValidation;
-    }, [formState, errorValidation]);
+      formState.workspaceMode = workspaceMode;
+    }, [formState, errorValidation, workspaceMode]);
 
     return Component({
       ...(props as T),
