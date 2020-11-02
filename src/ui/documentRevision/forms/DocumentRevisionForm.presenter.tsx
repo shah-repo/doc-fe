@@ -123,6 +123,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
   const isdocRevStatusDraft = documentRevision?.status === DocumentRevisionStatus.Draft;
   const isDocRevFirstDraft = isdocRevStatusDraft && documentRevision?.version === 1;
+  console.log(isDocRevFirstDraft);
+
   const isSubrevision = documentRevision?.subRevision as number > 0;
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
 
@@ -264,7 +266,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             isDraft={isdocRevStatusDraft || isRevised}
           />
         )}
-        <RevisionStage {...{ isDisabled }}/>
+        <RevisionStage {...{ isDisabled, isDocRevFirstDraft }}/>
         <AutocompleteField
           name="referenceTo"
           label="documentRevision.form.references"
@@ -292,7 +294,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           docRevStatus = {documentRevision?.status}
           documentRevision={documentRevision}
         />
-        {showRevisionTypeChange && !isRevisionChangeHidden &&
+        {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
         <RevisionTypeChange {...{
           documentTypeId,
           isDocRevFirstDraft,

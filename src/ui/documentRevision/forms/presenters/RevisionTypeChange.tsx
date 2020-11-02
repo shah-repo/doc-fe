@@ -35,7 +35,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <Box mt={7}>
+    <Box mt={3}>
       <Typography variant="h6">
         <Text
           message={isRecord ? "document.revision.type.of.update" : revisionSelectLabel}
