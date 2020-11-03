@@ -4,22 +4,22 @@ import { Dictionary, isEmpty } from "lodash";
 import moment from "moment";
 import * as React from "react";
 import * as generateUuid from "uuid/v4";
-import { getStartOfDayDateString, TIME_ZONE } from "../../../../common/utils/date";
-import { Group } from "../../../../state/ducks/auth/types";
-import { Owner } from "../../../../state/ducks/common/types";
-import { AsyncState, AsyncStatus } from "../../../../state/types";
-import Approvers from "../../../change.request/form/approvers";
-import { TemplateOption } from "../../../change.request/form/types";
-import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
-import DatePickerField from "../../../components/forms/fields/DatePickerField";
-import { required, validator } from "../../../components/forms/fields/validators";
-import FormMessage from "../../../components/forms/FormMessage";
-import FormProgress from "../../../components/forms/FormProgress";
-import SubmitButton from "../../../components/forms/SubmitButton";
-import Text from "../../../components/Text";
-import { FBFormState, FBSchemaProps } from "../../../form.builder";
-import Colors from "../../../layout/theme/utils/colors";
-import { ApproveAndReleaseFormValues } from "../types";
+import { getStartOfDayDateString, TIME_ZONE } from "../../../../../common/utils/date";
+import { Group } from "../../../../../state/ducks/auth/types";
+import { Owner } from "../../../../../state/ducks/common/types";
+import { AsyncState, AsyncStatus } from "../../../../../state/types";
+import Approvers from "../../../../change.request/form/approvers";
+import { TemplateOption } from "../../../../change.request/form/types";
+import AutocompleteField from "../../../../components/forms/fields/Autocomplete/Autocomplete";
+import DatePickerField from "../../../../components/forms/fields/DatePickerField";
+import { required, validator } from "../../../../components/forms/fields/validators";
+import FormMessage from "../../../../components/forms/FormMessage";
+import FormProgress from "../../../../components/forms/FormProgress";
+import SubmitButton from "../../../../components/forms/SubmitButton";
+import Text from "../../../../components/Text";
+import { FBFormState, FBSchemaProps } from "../../../../form.builder";
+import Colors from "../../../../layout/theme/utils/colors";
+import { ApproveAndReleaseFormValues } from "../../types";
 import { styles } from "./ApproveAndRelease.styles";
 
 interface Props extends FormikProps<ApproveAndReleaseFormValues> {
@@ -134,7 +134,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           }
         />
       )}
-      {isEmpty(values.approvals) && (
+      {!selectedInvalid && isEmpty(values.approvals) && (
         <DatePickerField
           label="transition.action.effective.date"
           name="effectiveDate"
@@ -144,7 +144,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           validate={validator(required)}
         />
       )}
-      {templateOptions.length > 1 && (
+      {!(isRecord && isInlineApproval) && templateOptions.length > 1 && (
         <AutocompleteField
           name="formDocument"
           size="sm"

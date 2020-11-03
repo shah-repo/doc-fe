@@ -19,6 +19,7 @@ declare global {
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
+      drApproveAndReleaseDocumentWithoutSelectingForm(): Chainable<Subject>;
       drCloseApproveAndReleaseDialog(): Chainable<Subject>;
       drClickCreateDocumentWithApiCall(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForForms(): Chainable<Subject>;
@@ -75,6 +76,7 @@ declare global {
       drCancelDraftButton(): Chainable<Subject>;
       drIsTrainingRequired(params: {shouldBe: boolean}): Chainable<Subject>;
       drApproveAndReleaseNonQMSDocument(): Chainable<Subject>;
+      drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom(): Chainable<Subject>;
       drSelectHistoryTab(): Chainable<Subject>;
       drOpenCloseSidebarDrawer(): Chainable<Subject>;
       drSelectPermissionTab(): Chainable<Subject>;
@@ -132,6 +134,7 @@ Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) =>
   cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
     cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).click();
   });
+  cy.wait(1000);
 });
 
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
@@ -153,7 +156,6 @@ Cypress.Commands.add("drCheckApprovalsEnforcment", () => {
     .click().wait(500);
   cy.get("[data-cy=unchecked]").should("exist");
   cy.get("[data-cy=group-0]").should("have.text", "Role One");
-  cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
   cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
   cy.checkToastMessageContains({ message: "at least one approver from group Role One has to be selected" });
   cy.drCloseApproveAndReleaseDialog();
@@ -173,7 +175,9 @@ Cypress.Commands.add("drVerifyDocumentOWner", (params: { owner: string }) => {
 });
 
 Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion: int }) => {
-  cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(params.docVersion).click().wait(2000);
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevPreview, () => {
+    cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(params.docVersion).click();
+  });
 });
 
 Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
@@ -215,12 +219,24 @@ Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: stri
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`).wait(500);
 });
 
+Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
+    cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+  });
+  cy.wait(500);
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.ReleaseDocRev,
+    () => {
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+    });
+});
+
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   });
   cy.wait(500);
-  cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
+  cy.get("#FormList-selectForm").type("AR Form{enter}");
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {
@@ -230,7 +246,12 @@ Cypress.Commands.add("drApproveAndReleaseDocument", () => {
 
 Cypress.Commands.add("drApproveAndReleaseNonQMSDocument", () => {
   cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
-  cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
+  cy.get("#FormList-selectForm").type("AR Form{enter}");
+  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+});
+
+Cypress.Commands.add("drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom", () => {
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
 });
 
@@ -306,8 +327,10 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
 });
 
 Cypress.Commands.add("drClickReviseDocument", () => {
-  cy.get("[data-cy=\"updateRecord\"]").click();
-  cy.wait(3000);
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApprovers, () => {
+    cy.get("[data-cy=\"updateRecord\"]").click();
+  });
+  // cy.wait(3000);
 });
 
 Cypress.Commands.add("drClickTrainingRequired", () => {
@@ -403,7 +426,11 @@ Cypress.Commands.add("drReleaseDocAfterRoleExistsAndChecked", (params: { group: 
   cy.drApproveAndReleaseDialog();
   cy.get(`[data-cy="group-${params.group}"]`).contains(params.role);
   cy.get(`[data-cy="checked-${params.group}"]`).should("be.visible");
-  cy.drSelectTemplateReleaseDocument({ template: "Initial AR Form", selectDate: true });
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.ReleaseDocRev,
+    () => {
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+    });
 });
 
 Cypress.Commands.add("drNewTypeTrainingSelect", () => {

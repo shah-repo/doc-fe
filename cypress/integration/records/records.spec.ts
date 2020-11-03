@@ -134,7 +134,7 @@ context("Records flow", () => {
         });
 
         it("Approve and Release document", () => {
-          cy.drApproveAndReleaseDocument();
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
     });
@@ -183,7 +183,7 @@ context("Records flow", () => {
         });
 
         it("Approve and Release document", () => {
-          cy.drApproveAndReleaseDocument();
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
     });
@@ -191,7 +191,9 @@ context("Records flow", () => {
 
   context("Check if there are multiple record forms to select", () => {
     it("Navigate to Records", () => {
-      cy.navigToRecords();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+        cy.navigToRecords();
+      });
     });
 
     it("Create new record button click", () => {
@@ -236,12 +238,15 @@ context("Records flow", () => {
     });
 
     it("Select approver'", () => {
-      cy.get("[data-cy*=fb-approvals-]").type(USERS[2].name + "{downarrow}{enter}");
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
+        cy.get("[data-cy*=fb-approvals-]").type(USERS[2].name + "{downarrow}{enter}");
+      });
     });
 
     it("Finalize and release button click'", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
-      cy.wait(1000);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+      });
     });
   });
 

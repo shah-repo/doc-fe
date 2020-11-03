@@ -120,6 +120,9 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   approvals?: Approval[];
   updatedAt?: string;
   schema?: FBSchemaProps[];
+  parentParts?: DocumentRevision;
+  // there can currently be only one child part
+  childrenParts?: DocumentRevision;
 }
 
 export const RevisionStageOptions = [
@@ -207,6 +210,11 @@ export interface ApproveAndReleaseRequest {
   effectiveDate?: string;
   documentType: Id;
   formDocument: Id;
+}
+
+export interface FinalizeAndReleaseRequest {
+  approvers: Id[];
+  effectiveDate?: string;
 }
 
 export interface CreateAndReleaseRequest {

@@ -1,5 +1,4 @@
 import { FBEmployee, FBGroup, FBId, FBInlineApprovalRole, FBInputProps, FBProviderProps } from "..";
-import { FBDialogState } from "../FBDialog/FBDialog.state";
 
 export interface FBInlineApprovalValue {
   approvers?: string[] | FBEmployee[];
@@ -10,9 +9,10 @@ export interface FBInlineApprovalValue {
 
 export type FBInlineApprovalProps =
 & Omit<FBInputProps, "editorConfig">
-& Pick<FBProviderProps, "inlineApprovalState">
+& Pick<FBProviderProps, "inlineApprovalState" | "dialogState">
 & {
   approvalTransition?: (transition: FBInlineApprovalTransition, id?: string) => any;
+  requestAllApprovals?: (id?: string) => any;
   onApproveClick?: (approvalId: string) => void;
   editorConfig?: FBInlineApprovalValue;
   approvals?: FBInlineApprovalBody[];
@@ -20,7 +20,8 @@ export type FBInlineApprovalProps =
   isApproved?: boolean;
   isPreview?: boolean;
   isOutput?: boolean;
-  dialogState?: FBDialogState;
+  shouldShowApprovals?: boolean;
+  shouldShowRequestAllApprovals?: boolean;
 };
 
 export type FBInlineApprovalOptions = FBEmployee & {
@@ -29,7 +30,7 @@ export type FBInlineApprovalOptions = FBEmployee & {
 
 export type FBInlineApprovalType = "MASTER" | "SECTION";
 export type FBInlineApprovalStatus = "DRAFT" | "PENDING" | "ABANDONED" | "APPROVED" | "REJECTED";
-export type FBInlineApprovalTransition = "abandon" | "pending" | "approve" | "reject";
+export type FBInlineApprovalTransition = "abandon" | "pending" | "approve" | "reject" | "pending_by_field";
 
 export enum FBInlineApprovalStatusIdent {
   DRAFT = "Draft",
@@ -53,6 +54,10 @@ export interface FBInlineApprovalBody {
 
 export interface FBInlineApprovalTransitionBody {
   password: string;
+}
+
+export interface FBRequestApprovalTransitionBody {
+  docRev: FBId;
 }
 
 export interface FBInlineApprovalConstructor {

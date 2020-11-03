@@ -10,5 +10,13 @@
   {
     "text": "GBP £",
     "value": "GBP"
+  },
+  {
+    "text": "AUD $",
+    "value": "AUD"
+  },
+  {
+    "text": "CAD $",
+    "value": "CAD"
   }
 ]

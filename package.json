@@ -1,7 +1,7 @@
 {
   "name": "doc-fe",
   "description": "DOC-POC Frontend application",
-  "version": "0.1.0",
+  "version": "20.24.0",
   "private": true,
   "dependencies": {
     "@datadog/browser-rum": "^1.12.7",
@@ -146,6 +146,7 @@
     "eslint-plugin-react": "^7.18.3",
     "eslint-plugin-react-hooks": "^2.4.0",
     "faker": "4.1.0",
+    "imap-simple": "^5.0.0",
     "mocha": "^8.0.1",
     "mochawesome": "^6.1.1",
     "mochawesome-merge": "^4.1.0",

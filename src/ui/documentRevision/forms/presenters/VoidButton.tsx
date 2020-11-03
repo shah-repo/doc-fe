@@ -1,5 +1,5 @@
 import { Box, Button } from "@material-ui/core";
-import React from "react";
+import React, { useMemo } from "react";
 import { DocumentRevision, documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { AsyncStatus } from "../../../../state/types";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
@@ -9,6 +9,7 @@ import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
+import { getIsDocumentRecord } from "../../helpers";
 
 interface Props {
   documentRevision: DocumentRevision | undefined;
@@ -17,8 +18,12 @@ const VoidButton: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
   const dialog = useDialog();
-  const voidAction = useActionCreator(documentRevisionsActions.voidDocument);
   const async = useAsync();
+
+  const isRecord = useMemo(() =>
+    getIsDocumentRecord(documentRevision?.document?.documentType?.groupOptions || []), [documentRevision]);
+
+  const voidAction = useActionCreator(documentRevisionsActions.voidDocument);
   const voidDocument = () => {
     documentRevision
     && async.start(
@@ -45,7 +50,7 @@ const VoidButton: React.FunctionComponent<Props> = ({
       </Button>
       <AlertDialog
         confirmAction={voidDocument}
-        message={"documentRevision.void.alert"}
+        message={isRecord ? "documentRevision.record.void.alert" : "documentRevision.void.alert"}
         {...{ dialog }}
       />
     </>

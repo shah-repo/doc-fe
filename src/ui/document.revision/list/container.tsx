@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
-import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import { documentTypeActions, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -25,9 +25,15 @@ export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
   const async = useAsync({
     onSuccess: (response: DocumentRevisionStatus[] = []) => {
       saveStatuses(response);
+      if (!response.includes("Released" as DocumentRevisionStatus)) {
+        setSearchStatus(documentRevisionQueryStatus(),
+          tableCriteria.queryDict.displayStatus !== "Released" ?
+            tableCriteria.queryDict.displayStatus : undefined);
+      }
     },
   });
-  const getStatuses = () => async.start(getStatusesAction, async);
+  const notGroupOptions = [DOC_TYPE_GROUP_OPTION.RECORD];
+  const getStatuses = () => async.start(getStatusesAction, async, documentRevisionQueryStatus(), notGroupOptions);
 
   const edit = (documentRevisionId: string, documentId: string) =>
     history.push(documentEditPath(documentRevisionId, documentId));
@@ -36,13 +42,17 @@ export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
     history.push(documentPreviewPath(documentRevisionId, documentId));
 
   const dispatch = useDispatch();
-  const setSearchStatus = (status: DocumentRevisionStatus | DocumentRevisionStatus[]) => {
+  const setSearchStatus = (
+    status: DocumentRevisionStatus | DocumentRevisionStatus[],
+    displayStatus?: DocumentRevisionStatus
+  ) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
           queryDict: {
-            displayStatus: status,
+            "status[]": status,
+            displayStatus,
             /** Temp fix - disabling filtering by doc type name */
             // "documentTypeNames[]": DOCUMENT_TABLE_LIST_NAMES,
           },
@@ -53,10 +63,10 @@ export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
   };
 
   useEffect(() => {
-    if (isEmpty(tableCriteria.queryDict)) {
-      setSearchStatus("Released" as DocumentRevisionStatus);
-    }
     getStatuses();
+    if (isEmpty(tableCriteria.queryDict)) {
+      setSearchStatus(documentRevisionQueryStatus(),  "Released" as DocumentRevisionStatus);
+    }
     dispatch(documentTypeActions.loadList());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
