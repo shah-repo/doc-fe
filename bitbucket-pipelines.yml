@@ -212,3 +212,11 @@ pipelines:
           - step: *RUN_LINTER
           - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO
+
+    ENC-5682:
+      - parallel:
+          # - step: *RUN_TESTS
+          # - step: *RUN_LINTER
+          # - step: *RUN_MIGRATION_TEST
+          - step: *BUILD_DEMO
+      - step: *DEPLOY_DEMO
