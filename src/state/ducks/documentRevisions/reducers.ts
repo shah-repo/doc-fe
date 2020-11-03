@@ -68,7 +68,7 @@ export const documentsById = (
           ...state[action.payload.document.id],
           documentRevisions: (state[action.payload.document.id] || { documentRevisions: [] })
             .documentRevisions.map((docRev) => {
-              if (docRev.id !== action.payload.id) {
+              if (docRev.id !== action.payload?.id) {
                 return docRev;
               }
 
