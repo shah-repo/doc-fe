@@ -59,6 +59,7 @@ export interface Props
   isNewVersion?: boolean;
   showAdministrativeAndVoidChange: boolean;
   isCreatePart?: boolean;
+  releasedDocRev?: DocumentRevision;
 }
 
 export interface FormHeaderContext {
@@ -101,6 +102,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   isNewVersion = false,
   showAdministrativeAndVoidChange,
   isCreatePart,
+  releasedDocRev,
 }) => {
   useScrollIntoView();
   const { workspaceState } = FB.useStores();
@@ -116,7 +118,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     asyncState,
     type,
   });
-
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
@@ -298,6 +299,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isDocRevFirstDraft,
           showAdministrativeAndVoidChange,
           isRecord,
+          releasedDocRev,
         }}
         isDisabled={isDisabledInput} />}
         {

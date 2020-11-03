@@ -1,10 +1,10 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { cloneDeep, filter, get, isEmpty, omit, set } from "lodash";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -109,7 +109,7 @@ DocumentRevisionFormContainerProps
   const isAlphaReleased = revisionStage === 3;
   const isRecord = getIsDocumentRecord(document?.documentType?.groupOptions);
   const isEB = getIsDocumentEB(documentRevision?.document?.documentType?.group);
-
+  const [releasedDocRev, setReleasedDocRev] = useState<DocumentRevision>();
   const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
     const { outputRevision } = initialValues;
@@ -181,6 +181,11 @@ DocumentRevisionFormContainerProps
 
   const loadDocumentAsync = useAsync({
     onSuccess: (data?: Document) => {
+      if (!isEB && data) {
+        setReleasedDocRev((data?.documentRevisions).find((doc) => doc.status === DocumentRevisionStatus.Released));
+        return;
+      }
+
       const childrenParts = getHighestRevision(data?.documentRevisions || []);
       set(childrenParts || {}, "document", omit(data, "documentRevisions"));
       set(formInput || {}, "childrenParts", childrenParts);
@@ -192,6 +197,11 @@ DocumentRevisionFormContainerProps
   const loadDocumentAction = useActionCreator(documentsActions.getDocumentById);
 
   useEffect(() => {
+    loadDocumentAsync.start(
+      loadDocumentAction,
+      document.id,
+      loadDocumentAsync,
+    );
     if (isEB) {
       const childrenParts = initialValues.childrenParts;
       if (!childrenParts && initialValues.formInput?.childrenPartsForRevise?.[0]) {
@@ -247,6 +257,7 @@ DocumentRevisionFormContainerProps
           FBContainer,
           bannerPortal,
           showAdministrativeAndVoidChange,
+          releasedDocRev,
         }}
       />
     </FBWorkspace>
