@@ -12,7 +12,7 @@ cat >> $FILE <<EOF
 "Build Number": "$BITBUCKET_BUILD_NUMBER",
 "ECR Image": "$IMAGE_NAME",
 "Date": "$DATE",
-"RELEASE VERSION": $RELEASE_VERSION
+"Release Version": $RELEASE_VERSION
 }
 EOF
 
