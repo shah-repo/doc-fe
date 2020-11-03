@@ -63,7 +63,8 @@ export type FBInputType =
   | "procedure"
   | "parts"
   | "procedurediff"
-  | "ebpart";
+  | "ebpart"
+  | "eqmaintenance";
 
 export type FBInputProps =
   & FBLabelProps

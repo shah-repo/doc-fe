@@ -14,6 +14,7 @@ import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
 import { FBDocumentRevisions } from "../FBDocumentRevisions";
 import { FBEBPart } from "../FBEBPart";
+import { FBEQMaintenance } from "../FBEQMaintenance";
 import { FBFileUpload } from "../FBFileUpload";
 import { FBHelloSign } from "../FBHelloSign";
 import { FBHyperlink } from "../FBHyperlink";
@@ -102,6 +103,7 @@ export class FBSchemaState {
     parts: FBParts,
     procedurediff: FBProcedureDiff,
     ebpart: FBEBPart,
+    eqmaintenance: FBEQMaintenance,
   };
 
   @observable public schema?: FBSchemaProps[];
