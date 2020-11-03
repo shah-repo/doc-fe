@@ -8,9 +8,9 @@ let multipleCompanies;
 
 const approvalRequestTitle = "Approval request from newly created form";
 const saveFileNameOne = (Math.round(Math.random() * 100000)) % 100000;
-const saveFileNameTwo = (Math.round(Math.random() * 1000000)) % 1000000;
-const saveFileNameThree = (Math.round(Math.random() * 10000000)) % 10000000;
-const saveFileNameFour = (Math.round(Math.random() * 10000000)) % 10000000;
+const saveFileNameTwo = (Math.round(Math.random() * 100000)) % 100000;
+const saveFileNameThree = (Math.round(Math.random() * 100000)) % 100000;
+const saveFileNameFour = (Math.round(Math.random() * 100000)) % 100000;
 
 context("Document Attachment Flow", () => {
   context("[API]Prepare company", () => {
