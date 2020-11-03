@@ -19,6 +19,9 @@ export const byId = (
       return merge(state, payloadById);
     }
     case DOCUMENT_REVISION_SET:
+      if (!action.payload) {
+        return state;
+      }
       return { ...state, [action.payload.id]: action.payload };
     default:
       return state;
@@ -36,6 +39,9 @@ export const allIds = (
         ...action.payload.map((documentRevision) => documentRevision.id),
       ]);
     case DOCUMENT_REVISION_SET:
+      if (!action.payload) {
+        return state;
+      }
       return uniq([...state, action.payload.id]);
     default:
       return state;
@@ -50,6 +56,9 @@ export const documentsById = (
 ): DocumentByIdState => {
   switch (action.type) {
     case DOCUMENT_REVISION_SET:
+      if (!action.payload) {
+        return state;
+      }
       if (!action.payload.document) {
         return state;
       }

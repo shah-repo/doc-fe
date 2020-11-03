@@ -14,7 +14,7 @@ const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentR
   payload: documentRevisions,
 });
 
-const documentRevisionSet = (documentRevision: DocumentRevision): DocumentRevisionSetAction => ({
+const documentRevisionSet = (documentRevision?: DocumentRevision): DocumentRevisionSetAction => ({
   type: DOCUMENT_REVISION_SET,
   payload: documentRevision,
 });
@@ -69,8 +69,9 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
   method: "patch",
   data: body,
   onSuccess: (documentRevision, dispatch) => {
+    console.log(body);
     dispatch(loadAudit(id));
-    dispatch(documentRevisionSet(documentRevision));
+    dispatch(documentRevisionSet());
   },
   handlers,
   cancelToken: axios.CancelToken.source(),

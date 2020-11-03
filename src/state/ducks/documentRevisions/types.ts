@@ -162,7 +162,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
 
 export interface DocumentRevisionSetAction {
   type: typeof DOCUMENT_REVISION_SET;
-  payload: DocumentRevision;
+  payload?: DocumentRevision;
 }
 
 export interface DocumentSetAction {
