@@ -7,6 +7,10 @@ let loginResponse;
 let multipleCompanies;
 
 const approvalRequestTitle = "Approval request from newly created form";
+const saveFileNameOne = (Math.round(Math.random() * 100000)) % 100000;
+const saveFileNameTwo = (Math.round(Math.random() * 1000000)) % 1000000;
+const saveFileNameThree = (Math.round(Math.random() * 10000000)) % 10000000;
+const saveFileNameFour = (Math.round(Math.random() * 10000000)) % 10000000;
 
 context("Document Attachment Flow", () => {
   context("[API]Prepare company", () => {
@@ -294,11 +298,11 @@ context("Document Attachment Flow", () => {
 
     it("Download redline document in Pending Change state", () => {
       SystemRequirement("REQ-0390");
-      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: "image_0.jpg" });
+      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: saveFileNameOne + "image.jpg" });
     });
 
     it("Check size of downloaded file", () => {
-      cy.readFile("cypress/downloads/image_0.jpg").should("have.length", "32732");
+      cy.readFile(`cypress/downloads/${saveFileNameOne}image.jpg`).should("have.length", "32732");
     });
 
     it("Navigate to added document in AR", () => {
@@ -323,11 +327,20 @@ context("Document Attachment Flow", () => {
 
     it("Download redline document in 'In Review' state", () => {
       SystemRequirement("REQ-0390");
-      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: "image_1.jpg" });
+      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: saveFileNameTwo + "image.jpg" });
     });
 
-    it("Check size of downloaded file", () => {
-      cy.readFile("cypress/downloads/image_1.jpg").should("have.length", "32732");
+    it("Download non-redline document in 'In Review' state", () => {
+      SystemRequirement("REQ-0390");
+      cy.atchDownloadFile({ fileName: "test.docx", saveFileName: saveFileNameTwo + "test.docx" });
+    });
+
+    it("Check size of downloaded redline file", () => {
+      cy.readFile(`cypress/downloads/${saveFileNameTwo}image.jpg`).should("have.length", "32732");
+    });
+
+    it("Check size of downloaded non-redline file", () => {
+      cy.readFile(`cypress/downloads/${saveFileNameTwo}test.docx`).should("have.length", "11");
     });
 
     it("Navigate to added document in AR", () => {
@@ -353,11 +366,11 @@ context("Document Attachment Flow", () => {
 
     it("Download redline document in 'Approved' state", () => {
       SystemRequirement("REQ-0390");
-      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: "image_2.jpg" });
+      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: saveFileNameThree + "image.jpg" });
     });
 
     it("Check size of downloaded file", () => {
-      cy.readFile("cypress/downloads/image_2.jpg").should("have.length", "32732");
+      cy.readFile(`cypress/downloads/${saveFileNameThree}image.jpg`).should("have.length", "32732");
     });
 
     it("Navigate to approved document in AR", () => {
@@ -382,13 +395,12 @@ context("Document Attachment Flow", () => {
 
     it("Download redline document in 'Released' state", () => {
       SystemRequirement("REQ-0390");
-      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: "image_3.jpg" });
+      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: saveFileNameFour + "image.jpg" });
     });
 
     it("Check size of downloaded file", () => {
-      cy.readFile("cypress/downloads/image_3.jpg").should("have.length", "32732");
+      cy.readFile(`cypress/downloads/${saveFileNameFour}image.jpg`).should("have.length", "32732");
     });
-
   });
 });
 
