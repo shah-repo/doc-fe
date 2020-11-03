@@ -1,4 +1,3 @@
-import { map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -21,12 +20,18 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
     const formValue = formState?.getFieldValue(name) || defaultValue;
     fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState, formValue);
 
-
     useObserver(() => {
-      filePresenters = map(fileUploadState?.files, (file) => (
-        <FBFilePresenter key={`fb-file-presenter-${file.id}`} {...{ file, name, disabled }} />
-      ));
+      filePresenters = fileUploadState?.fetchedFiles.map((file) => (
+        <FBFilePresenter
+          key={`fb-file-presenter-${file.id}`}
+          {...{ file, name, disabled }}
+        />));
     });
+
+    React.useEffect(() => {
+      // Here goes the new endpoint where we are going to pass an array of attachment ids
+      fileUploadState?.files.map((file) => fileUploadState?.getAttachment(file.id));
+    }, [fileUploadState]);
 
     React.useEffect(() => {
       reaction(
