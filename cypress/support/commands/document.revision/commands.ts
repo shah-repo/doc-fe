@@ -134,6 +134,7 @@ Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) =>
   cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
     cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).click();
   });
+  cy.wait(1000);
 });
 
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
@@ -174,7 +175,9 @@ Cypress.Commands.add("drVerifyDocumentOWner", (params: { owner: string }) => {
 });
 
 Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion: int }) => {
-  cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(params.docVersion).click().wait(2000);
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevPreview, () => {
+    cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(params.docVersion).click();
+  });
 });
 
 Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
@@ -324,8 +327,10 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
 });
 
 Cypress.Commands.add("drClickReviseDocument", () => {
-  cy.get("[data-cy=\"updateRecord\"]").click();
-  cy.wait(3000);
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApprovers, () => {
+    cy.get("[data-cy=\"updateRecord\"]").click();
+  });
+  // cy.wait(3000);
 });
 
 Cypress.Commands.add("drClickTrainingRequired", () => {

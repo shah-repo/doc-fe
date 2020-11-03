@@ -188,7 +188,7 @@ Cypress.Commands.add("arApproveAR", () => {
       cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
       cy.get("[data-cy=\"passwordConfirm\"]").click();
     });
-
+  cy.wait(2000);
 });
 
 Cypress.Commands.add("arCheckTitleInEditableAndMatches", (params: { name: string }) => {
