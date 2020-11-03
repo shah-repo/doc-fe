@@ -45,9 +45,6 @@ export const allIds = (
       ]);
     case DOCUMENT_REVISION_SET:
       if (!action.payload?.documentRevision) {
-        if (action.payload?.requestBody && action.payload.docRevId) {
-          return state;
-        }
         return state;
       }
       return uniq([...state, action.payload.documentRevision.id]);
@@ -64,13 +61,7 @@ export const documentsById = (
 ): DocumentByIdState => {
   switch (action.type) {
     case DOCUMENT_REVISION_SET:
-      if (!action.payload?.documentRevision) {
-        if (action.payload?.requestBody && action.payload.docRevId) {
-          return state;
-        }
-        return state;
-      }
-      if (!action.payload.documentRevision.document) {
+      if (!action.payload?.documentRevision?.document) {
         return state;
       }
       return {
