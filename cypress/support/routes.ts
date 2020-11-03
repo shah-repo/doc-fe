@@ -56,7 +56,12 @@ export enum CyRoutes {
   GetDocumentType = "GetDocumentType",
   PostRejectCR = "PostRejectCR",
   GetSpecificDocumentType = "GetSpecificDocumentType",
-  PostWithdrawChangeRequests = "PostWithdrawChangeRequests"
+  PostWithdrawChangeRequests = "PostWithdrawChangeRequests",
+  GetDocTypeGroupOptions = "GetDocTypeGroupOptions",
+  GetDocAudit = "GetDocAudit",
+  GetDocRevDocTypeCategory = "GetDocRevDocTypeCategory",
+  GetDocRevStatusesCategory = "GetDocRevStatusesCategory",
+  PostDocRevInReview = "PostDocRevInReview"
 }
 
 export const routes: ICyRoutes =   {
@@ -76,6 +81,9 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/documents/lot_quantity/*",
+    },
+    callConfig: {
+      responseTimeout: 10 * 1000,
     },
   },
   GroupsGet: {
@@ -109,6 +117,30 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/dynamic_forms",
+    },
+  },
+  PostDocRevInReview: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/document_revisions/in_review/*",
+    },
+  },
+  GetDocRevStatusesCategory: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions/statuses*",
+    },
+  },
+  GetDocRevDocTypeCategory: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions?documentTypeCategory*",
+    },
+  },
+  GetDocTypeGroupOptions: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_type/with_forms?docTypeGroupOption*",
     },
   },
   PostOrPatchDocRev: {
@@ -242,7 +274,7 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions*",
     },
     callConfig: {
-      responseTimeout: 15 * 1000,
+      responseTimeout: 20 * 1000,
     },
   },
   ARPreview: {
@@ -262,11 +294,20 @@ export const routes: ICyRoutes =   {
       method: "GET",
       url: "/api/v1/document_revisions/*",
     },
+    callConfig: {
+      responseTimeout: 10 * 1000,
+    },
   },
   GetDocAggregatedAudit: {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/*/aggregated_audit",
+    },
+  },
+  GetDocAudit: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions/*/audit",
     },
   },
   GetProposedDocId: {
