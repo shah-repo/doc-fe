@@ -237,10 +237,10 @@ context("PO test", () => {
       cy.poAddPOButtonClick();
     });
 
-    // it.skip("Check currency options dropdown", () => {
-    //   // SystemRequirement("REQ-1320");
-    //   cy.poCheckCurrency();
-    // });
+    it("Check currency options dropdown", () => {
+      // SystemRequirement("REQ-1320");
+      cy.poCheckCurrency();
+    });
 
     it("Select Currency 'USD'", () => {
       cy.poSelectCurrency({ currencyValue: "USD" });
@@ -344,10 +344,10 @@ context("PO test", () => {
       cy.poAddPOButtonClick();
     });
 
-    // it.skip("Check currency options dropdown", () => {
-    //   // SystemRequirement("REQ-1320");
-    //   cy.poCheckCurrency();
-    // });
+    it("Check currency options dropdown", () => {
+      // SystemRequirement("REQ-1320");
+      cy.poCheckCurrency();
+    });
 
     it("Select Currency 'EUR'", () => {
       cy.poSelectCurrency({ currencyValue: "EUR" });

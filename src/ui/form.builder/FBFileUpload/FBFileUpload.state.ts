@@ -1,4 +1,4 @@
-import { filter, find, isUndefined, union } from "lodash";
+import { filter, find, isUndefined, omit, union } from "lodash";
 import { action, observable, set } from "mobx";
 import { Attachment } from "../../../state/ducks/attachments";
 
@@ -21,7 +21,7 @@ export class FBFileUploadState {
       return;
     }
     const includes = find(this.files, (f) => f.s3link === file.s3link);
-    isUndefined(includes) && set(this, "files", union(this.files, [file]));
+    isUndefined(includes) && set(this, "files", union(this.files, [omit(file, "company")]));
   };
 
   @action public removeFile = (file: Attachment) => {
