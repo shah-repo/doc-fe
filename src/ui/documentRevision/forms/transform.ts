@@ -47,7 +47,7 @@ export const toDocumentRevisionFormValues = (
     schema: documentRevision.schema,
     parentParts: documentRevision.parentParts,
     // there can currently be only one child part
-    childrenParts: documentRevision.childrenParts?.[0],
+    childrenParts: documentRevision.childrenParts,
 
   };
   if (documentRevision.formTemplate) {

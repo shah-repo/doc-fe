@@ -27,9 +27,11 @@ export class FBInlineApprovalState {
   public groupsApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.groups);
   public rolesApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.approvalRoles);
   public approvalApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalBody>(FBEndpoint.Approvals);
-  public transitionApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>();
-  public requestApprovalApi = new FBRequest<FBInlineApprovalBody[], FBRequestApprovalTransitionBody | null>();
-  public documentApi: FBRequest<Document, null> = new FBRequest();
+  public transitionApi =
+  new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
+  public requestApprovalApi =
+  new FBRequest<FBInlineApprovalBody[], FBRequestApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
+  public documentApi: FBRequest<Document, null> = new FBRequest(FBEndpoint.Document);
 
   // MARK: @constructor
   public constructor(props: FBInlineApprovalConstructor) {
@@ -77,27 +79,29 @@ export class FBInlineApprovalState {
     body?: FBInlineApprovalTransitionBody,
   ) => {
     if (!id) { return; }
-    this.transitionApi.setTemplateUrl(FBEndpoint.ApprovalsTransition, { id, transition });
-    if (body) {
-      this.transitionApi.setBody(body);
-    }
-    this.transitionApi.post();
+    this.transitionApi.set({
+      body,
+      urlValues: { id, transition },
+      method: "post",
+    });
   };
 
   public requestApprovalTransition = (
     transition: FBInlineApprovalTransition,
     id: string,
     body: FBRequestApprovalTransitionBody,
-  ) => {
-    this.requestApprovalApi.setTemplateUrl(FBEndpoint.ApprovalsTransition, { id, transition });
-    this.requestApprovalApi.setBody(body);
-    this.requestApprovalApi.post();
-  };
+  ) => this.requestApprovalApi.set({
+    body,
+    urlValues: { id, transition },
+    method: "post",
+  });
 
   public getDocument = (id?: string) => {
     if (!id) { return; }
-    this.documentApi.setTemplateUrl(FBEndpoint.Document, { id });
-    this.documentApi.fetch();
+    this.documentApi.set({
+      urlValues: { id },
+      method: "get",
+    });
   };
 }
 

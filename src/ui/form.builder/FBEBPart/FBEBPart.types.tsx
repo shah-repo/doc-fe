@@ -1,12 +1,11 @@
-import { FBAutocompleteAsyncProps, FBFormProps, FBInputProps, FBProviderProps } from "..";
+import { FBAutocompleteAsyncProps, FBInputProps, FBProviderProps } from "..";
 
 export type FBEBPartProps =
-& Pick<FBFormProps, "formState">
-& Pick<FBProviderProps, "dialogState">
-& Pick<FBInputProps, "name" | "label" | "disabled">
+& Pick<FBProviderProps, "dialogState" | "ebPartState">
+& Pick<FBInputProps, "name" | "label" | "disabled" | "loading" | "defaultValue">
 & FBAutocompleteAsyncProps
 & {
-  onAddClick(): void;
+  handleAdd?: () => void;
 };
 
 export interface EBPartPatchBody {

@@ -141,4 +141,5 @@ export const OmitInputClones: FBInputType[] = [
   "texteditor",
   "procedure",
   "procedurediff",
+  "ebpart",
 ];

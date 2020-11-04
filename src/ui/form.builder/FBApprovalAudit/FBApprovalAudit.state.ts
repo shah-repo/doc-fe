@@ -1,6 +1,5 @@
 import { action } from "mobx";
 import { FBApprovalAuditConstructor, FBAuditData, FBAutocompleteAsyncState, FBInputType } from "..";
-import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import FBStore from "../FBStore/FBStore";
 
@@ -25,8 +24,10 @@ export class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
   public constructor({ documentId, isOutput }: FBApprovalAuditConstructor) {
     super();
     if (!documentId || !isOutput || FBStore.audit.loading) { return; }
-    FBStore.audit.setTemplateUrl(FBEndpoint.DocumentRevisionAudit, { documentId });
-    FBStore.audit.fetch();
+    FBStore.audit.set({
+      urlValues: { documentId },
+      method: "get",
+    });
   }
 
   public setAutocompleteOptionId = (optionId) => {

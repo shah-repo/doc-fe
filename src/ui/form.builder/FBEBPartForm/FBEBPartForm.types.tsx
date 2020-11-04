@@ -1,12 +1,10 @@
-import { FBAutocompleteProps, FBFormProps, FBInputProps, FBProviderProps } from "..";
+import { FBFormProps, FBInputProps } from "..";
 
 export type FBEBPartFormProps =
 & Pick<FBFormProps, "formState">
-& Pick<FBProviderProps, "dialogState">
-& Pick<FBInputProps, "children" | "disabled">
-& FBAutocompleteProps
+& Pick<FBInputProps, "children" | "disabled" | "loading">
 & {
-  onDialogClose?(): any;
-  onDialogConfirm?(): any;
-  ebId: string;
+  onDialogClose?: () => void;
+  onDialogConfirm?: () => void;
+  ebId?: string;
 };
