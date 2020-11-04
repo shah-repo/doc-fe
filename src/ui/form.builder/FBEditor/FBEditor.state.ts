@@ -26,12 +26,12 @@ export class FBEditorState {
 
   public static omitFinalValidation: FBInputType[] = [
     "section",
-  ];
-
-  public static omitValidation: FBInputType[] = [
     "subsection",
     "stepsection",
     "teststep",
+  ];
+
+  public static omitValidation: FBInputType[] = [
     "hyperlink",
     "action",
     "paragraph",
