@@ -1,8 +1,9 @@
-import { first } from "lodash";
+import { first, omit, set } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBAutocompleteAsyncOption, FBDialogState, FBEBPartForm, FBEBPartProps, FBEBPartState } from "..";
+import { getHighestRevision } from "../../documentRevision/forms/transform";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBEBPart = <T extends FBEBPartProps>(
@@ -25,11 +26,10 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     const { id: ebId } = workspaceState || {};
 
     useEffect(() => {
-      // const { formInput: { childrenPartsForRevise = [] } } = {} } = document || {};
-      // // const childrenPartsForRevise = workspaceState?.document?.formInput?.childrenPartsForRevise?.[0];
-      // if (!childrenParts && childrenPartsForRevise[0]) {
-      //   ebPartState.fetchDocumentById(childrenPartsForRevise.id);
-      // }
+      const { document: { formInput: { childrenPartsForRevise = [] } = {} } = {} } = workspaceState || {};
+      if (!workspaceState?.document?.childrenParts?.length && childrenPartsForRevise?.[0]) {
+        ebPartState.fetchDocumentById(childrenPartsForRevise[0].id);
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -70,15 +70,19 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     ), []);
 
     // on fetch doc by id
-    // React.useEffect(() => reaction(
-    //   () => ebPartState.documentApi.data,
-    //   (data) => {
-    //     const childrenParts = getHighestRevision(data?.documentRevisions || []);
-    //     set(childrenParts || {}, "document", omit(data, "documentRevisions"));
-    //         formState?.setFieldValue("childrenParts", childrenParts);
-    //   },
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // ), []);
+    React.useEffect(() => reaction(
+      () => ebPartState.documentApi.data,
+      (data) => {
+        const childrenParts = getHighestRevision(data?.documentRevisions || []);
+        const { id: partId } = childrenParts || {};
+        set(childrenParts || {}, "document", omit(data, "documentRevisions"));
+        ebPartState.setNewRender(true);
+        FBAutocompleteAsyncStore.add(FBAutocompleteAsyncOption.availableParts, partId, childrenParts);
+        ebPartState?.setChildrenParts(partId);
+
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     // MARK: @observer
     useObserver(() => {
