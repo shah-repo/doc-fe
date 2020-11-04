@@ -1,4 +1,7 @@
 import { FBFormProps } from "..";
 
 export type FBEQMaintenanceProps =
-& Pick<FBFormProps, "formState">;
+& Pick<FBFormProps, "formState">
+& {
+  onAddClick(): void;
+};

@@ -179,5 +179,14 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": ""
+  },
+  {
+    "id": "22",
+    "path": "/document_revisions/available_released_forms?docTypeGroupOption=MAINTENANCE",
+    "label": "Preventative Maintenance Forms",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
   }
 ]

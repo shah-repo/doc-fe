@@ -1,6 +1,8 @@
 import {
   FBApprovalMatrixFieldState,
-  FBApprovalsState,
+
+
+  FBApprovalMatrixTableState, FBApprovalsState,
   FBApproversState,
   FBBookmarkState,
   FBDialogState,
@@ -18,9 +20,9 @@ import {
   FBSnackbarState,
   FBTaskState,
   FBWorkspaceState,
-  FBApprovalMatrixTableState,
 } from "..";
 import { FBApprovalMatrixState } from "../FBApprovalMatrix";
+import { FBEQMaintenanceState } from "../FBEQMaintenance";
 import { FBPartsState } from "../FBParts";
 import { FBPOApprovalMatrixState } from "../FBPOApprovalMatrix";
 import { FBPOReceiveState } from "../FBPOReceive";
@@ -59,4 +61,5 @@ export interface FBProviderProps {
   procedureState?: FBProcedureState;
   procedureDiffState?: FBProcedureDiffState;
   partsState?: FBPartsState;
+  eqMaintenance?: FBEQMaintenanceState;
 }

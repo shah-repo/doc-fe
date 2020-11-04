@@ -75,6 +75,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   match,
 }) => {
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
+
   const initialValues = useMemo(() => {
     if (type === "newVersion") {
       return toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
@@ -91,7 +92,8 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   type = history.location.state ?? false ? "newOutput" : type;
 
   const isCreatePart = match.path.includes("create_part");
-  if (isCreatePart) {
+  const isCreateMaintenance = match.path.includes("create_maintenance");
+  if (isCreatePart || isCreateMaintenance) {
     const { recordId } = match.params;
     initialValues.parentParts = {
       id: recordId,

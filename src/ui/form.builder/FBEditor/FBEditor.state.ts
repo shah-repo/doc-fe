@@ -55,6 +55,7 @@ export class FBEditorState {
     "blanktplform",
     "approvals",
     "procedure",
+    "eqmaintenance",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -123,6 +124,7 @@ export class FBEditorState {
     approvals: FBEditorApprovals,
     procedure: FBEditorEmpty,
     parts: FBEditorEmpty,
+    eqmaintenance: FBEditorEmpty,
   };
 
   @observable public mode?: FBEditorMode = "config";
