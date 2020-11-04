@@ -26,7 +26,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     const { id: ebId } = workspaceState || {};
 
     useEffect(() => {
-      const { document: { formInput: { childrenPartsForRevise = [] } = {} } = {} } = workspaceState || {};
+      const childrenPartsForRevise = workspaceState?.document?.formInput?.childrenPartsForRevise;
       if (!workspaceState?.document?.childrenParts?.length && childrenPartsForRevise?.[0]) {
         ebPartState.fetchDocumentById(childrenPartsForRevise[0].id);
       }
