@@ -16,6 +16,7 @@ import requirementOptions from "./requirementOptions.json";
 import taskSchema from "./taskSchema.json";
 import testStepSchema from "./testStepSchema.json";
 import unitsOptions from "./unitsOptions.json";
+import yesNoOptions from "./yesNoOptions.json";
 
 export class FBData {
   public static get testStepSchema(): FBSchemaProps[]  {
@@ -90,6 +91,10 @@ export class FBData {
 
   public static get closingTaskSchema(): FBSchemaProps[] {
     return closingTaskSchema as FBSchemaProps[];
+  }
+
+  public static get yesNoOptions(): FBOption[] {
+    return yesNoOptions as FBOption[];
   }
 
   public static icons(color?: string): Record<FBIconType, FBIconConfig[]> {

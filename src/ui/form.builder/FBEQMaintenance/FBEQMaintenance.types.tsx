@@ -1,7 +1,9 @@
-import { FBFormProps } from "..";
+import { FBProviderProps } from "..";
+import { FBInputProps } from "../FBInput";
 
 export type FBEQMaintenanceProps =
-& Pick<FBFormProps, "formState">
+& Pick<FBInputProps, "name" | "gutter" | "disabled">
+& Pick<FBProviderProps, "eqMaintenanceState">
 & {
-  onAddClick(): void;
+  handleAdd?: () => void;
 };

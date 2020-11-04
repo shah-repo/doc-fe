@@ -142,4 +142,5 @@ export const OmitInputClones: FBInputType[] = [
   "texteditor",
   "procedure",
   "procedurediff",
+  "eqmaintenance",
 ];
