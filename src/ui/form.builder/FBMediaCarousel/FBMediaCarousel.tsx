@@ -15,11 +15,9 @@ const FBMediaCarousel: React.FunctionComponent<FBMediaCarouselProps> = ({
   handleNext,
   handleBack,
   handleDelete,
-  collection,
   activeMediaPath,
   toolsVisibility,
   actionsDisabled,
-  activeStep,
   previewType,
 }) => (
   <Box
