@@ -1,3 +1,4 @@
+import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
 /* eslint-disable @typescript-eslint/no-namespace */
@@ -14,9 +15,28 @@ declare global {
       usrClickSaveButton(): Chainable;
       usrClickCloseDialogButton(): Chainable;
       usrCheckIfUserIsCreated(params: {email: string}): Chainable;
+      usrAdminPatchEmployee(params: {sessionId: string;
+        employeeId: string;
+        companyId: string;
+        payload: any;}): Chainable;
     }
   }
 }
+
+Cypress.Commands.add("usrAdminPatchEmployee", (params: {
+  sessionId: string;
+  employeeId: string;
+  companyId: string;
+  payload: any;}) => {
+  cy.request({
+    method: "PATCH",
+    url: `${CONFIG.BE_URL}/api/v1/employees/admin_update/${params.employeeId}/company/${params.companyId}`,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer_admin ${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
 
 Cypress.Commands.add("usrNavigateToUserManagement", () => {
   cy.get("[data-cy=\"navigation.userManagement\"]").click();

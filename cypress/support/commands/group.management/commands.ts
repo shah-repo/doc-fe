@@ -1,6 +1,3 @@
-import { GroupTag, GroupType, Permission } from "../../../../src/state/ducks/auth/types";
-import { Id } from "../../../../src/state/ducks/common/types";
-import { Employee } from "../../../../src/state/ducks/company/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 /* eslint-disable max-classes-per-file */
@@ -42,25 +39,15 @@ declare global {
       grpAddParentGroups(...groups: string[]): Chainable<Subject>;
       grpCloseGroupBtn(): Chainable<Subject>;
       grpAddGroup(): Chainable<Subject>;
-      grpAPICreateNewGroup(params: {payload: Group; employeeId: string;  sessionId: string}): Chainable<Subject>;
+      grpAPICreateNewGroup(params: {payload: any; employeeId: string;  sessionId: string}): Chainable<Subject>;
       grpCheckForNumberOfGroupMembersDisplayed(): Chainable;
       grpClearFilter(): Chainable;
+      grpGetGroups(params: {sessionId: string; employeeId: string}): Chainable;
+      grpAdminPatchGroup(params: {sessionId: string; groupId: string; companyId: string; payload: any}): Chainable;
+      grpAdminPostGroup(params: {sessionId: string; companyId: string; payload: any}): Chainable;
+      grpDeleteGroup(params: {sessionId: string;employeeId: string; groupId: string}): Chainable;
     }
   }
-}
-
-interface Group {
-  id?: string;
-  name: string;
-  tags: Nullable<GroupTag[]>;
-  joinedTags?: Nullable<GroupTag[]>;
-  permissions: Permission[];
-  joinedPermissions?: Nullable<Permission[]>;
-  joinedParents?: Group[];
-  parents?: Group[];
-  joinedEmployees?: Employee[];
-  type?: GroupType;
-  employees: Id[];
 }
 
 Cypress.Commands.add("grpGetGroupByName", (params: {sessionId: string; employeeId: string;  groupName: string}) => {
@@ -74,6 +61,58 @@ Cypress.Commands.add("grpGetGroupByName", (params: {sessionId: string; employeeI
       Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
     },
   }).then((response) => response);
+});
+
+Cypress.Commands.add("grpGetGroups", (params: {sessionId: string; employeeId: string;  groupName: string}) => {
+  cy.request({
+    method: "GET",
+    url: `${CONFIG.BE_URL}/api/v1/groups`,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("grpAdminPatchGroup", (params: {
+  sessionId: string;
+  groupId: string;
+  companyId: string;
+  payload: any;}) => {
+  cy.request({
+    method: "PATCH",
+    url: `${CONFIG.BE_URL}/api/v1/groups/admin_update/group/${params.groupId}/company/${params.companyId}`,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer_admin ${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("grpAdminPostGroup", (params: {
+  sessionId: string;
+  companyId: string;
+  payload: any;}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/groups/admin_create/${params.companyId}`,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer_admin ${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("grpDeleteGroup", (params: {
+  sessionId: string;
+  employeeId: string;
+  groupId: string;}) => {
+  cy.request({
+    method: "DELETE",
+    url: `${CONFIG.BE_URL}/api/v1/groups/${params.groupId}`,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
 });
 
 Cypress.Commands.add("grpNavigateToGroupManagement", () => {
@@ -259,7 +298,7 @@ Cypress.Commands.add("grpAddGroup", () => {
 });
 
 Cypress.Commands.add("grpAPICreateNewGroup", (params: {
-  payload: Group;
+  payload: any;
   employeeId: string;
   sessionId: string;
 }) => {
