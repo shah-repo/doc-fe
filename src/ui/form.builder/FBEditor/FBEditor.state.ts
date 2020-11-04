@@ -24,11 +24,14 @@ import { FBEditorTextField } from "../FBEditorTextField";
 
 export class FBEditorState {
 
-  public static omitValidation: FBInputType[] = [
+  public static omitFinalValidation: FBInputType[] = [
     "section",
     "subsection",
     "stepsection",
     "teststep",
+  ];
+
+  public static omitValidation: FBInputType[] = [
     "hyperlink",
     "action",
     "paragraph",

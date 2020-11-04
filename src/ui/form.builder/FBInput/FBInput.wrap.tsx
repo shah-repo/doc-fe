@@ -41,6 +41,7 @@ export const withFBInput = <T extends FBInputProps>(
     autosave = false,
     transform,
     bookmarked,
+    omitFinalValidation = false,
     ...props
   }: T) => {
 
