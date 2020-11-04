@@ -122,7 +122,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   schema?: FBSchemaProps[];
   parentParts?: DocumentRevision;
   // there can currently be only one child part
-  childrenParts?: DocumentRevision;
+  childrenParts?: DocumentRevision[];
 }
 
 export const RevisionStageOptions = [

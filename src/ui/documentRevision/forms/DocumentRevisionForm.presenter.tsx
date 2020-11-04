@@ -58,7 +58,6 @@ export interface Props
   bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
   isNewVersion?: boolean;
   showAdministrativeAndVoidChange: boolean;
-  isCreatePart?: boolean;
 }
 
 export interface FormHeaderContext {
@@ -100,7 +99,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   bannerPortal,
   isNewVersion = false,
   showAdministrativeAndVoidChange,
-  isCreatePart,
 }) => {
   useScrollIntoView();
   const { workspaceState } = FB.useStores();
@@ -224,7 +222,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]}
           isDisabled={isDisabledInput}
           {...{
-            isCreatePart,
             type,
             isdocRevStatusDraft,
             savedocInfo,

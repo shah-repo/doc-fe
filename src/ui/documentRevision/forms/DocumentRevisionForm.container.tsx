@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import { cloneDeep, filter, get, isEmpty, omit, set } from "lodash";
+import { cloneDeep, filter, get, isEmpty } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
@@ -12,17 +12,13 @@ import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { toastError } from "../../components/notifications";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import { FBWorkspace, FBWorkspaceMode } from "../../form.builder";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
 import { DocumentCloneType } from "../Clone.container";
-import { getIsDocumentEB, getIsDocumentRecord } from "../helpers";
+import { getIsDocumentRecord } from "../helpers";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
-import { getHighestRevision } from "./transform";
 import { DocumentRevisionFormValues } from "./types";
 
 interface StateProps {
@@ -55,7 +51,6 @@ interface OwnProps {
   canChangeOwnerShip?: boolean;
   type?: DocumentCloneType;
   isNewVersion?: boolean;
-  isCreatePart?: boolean;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
@@ -99,7 +94,6 @@ DocumentRevisionFormContainerProps
   canChangeOwnerShip = false,
   type,
   isNewVersion,
-  isCreatePart,
 }) => {
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
@@ -108,7 +102,6 @@ DocumentRevisionFormContainerProps
   const { revisionStage } = documentRevision || {};
   const isAlphaReleased = revisionStage === 3;
   const isRecord = getIsDocumentRecord(document?.documentType?.groupOptions);
-  const isEB = getIsDocumentEB(documentRevision?.document?.documentType?.group);
 
   const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
@@ -179,34 +172,6 @@ DocumentRevisionFormContainerProps
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
   , [cleanInitialValues]);
 
-  const loadDocumentAsync = useAsync({
-    onSuccess: (data?: Document) => {
-      const childrenParts = getHighestRevision(data?.documentRevisions || []);
-      set(childrenParts || {}, "document", omit(data, "documentRevisions"));
-      set(formInput || {}, "childrenParts", childrenParts);
-    },
-    onError: (error) => {
-      toastError(error as string);
-    },
-  });
-  const loadDocumentAction = useActionCreator(documentsActions.getDocumentById);
-
-  useEffect(() => {
-    if (isEB) {
-      const childrenParts = initialValues.childrenParts;
-      if (!childrenParts && initialValues.formInput?.childrenPartsForRevise?.[0]) {
-        loadDocumentAsync.start(
-          loadDocumentAction,
-          initialValues.formInput?.childrenPartsForRevise?.[0]?.id,
-          loadDocumentAsync,
-        );
-      } else {
-        set(formInput || {}, "childrenParts", childrenParts);
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   let mode: Partial<FBWorkspaceMode> = "none";
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";
@@ -243,7 +208,6 @@ DocumentRevisionFormContainerProps
           canChangeOwnerShip,
           type,
           isNewVersion,
-          isCreatePart,
           FBContainer,
           bannerPortal,
           showAdministrativeAndVoidChange,
