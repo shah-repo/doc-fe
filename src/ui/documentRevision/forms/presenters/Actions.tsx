@@ -66,6 +66,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const documentTypeId = documentRevision?.document?.documentType?.id;
   const isUserDocumentOwner = React.useContext(isOwnerContext);
   const showVoidButton = documentRevision?.status === DocumentRevisionStatus.Draft && documentRevision?.version === 1;
+  const showVoidButtonOnInlineRecords = documentRevision?.status === DocumentRevisionStatus.Draft &&
+    documentRevision?.revisionStage === 1;
 
   function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -172,10 +174,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         )
       }
       <HeaderMenu>
+        {!(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
         <CancelButton
           {...{ documentRevision }}
           setShouldDisplay={props.setCancelButtonDisplay}
-        />
+        />}
         {renderChangeOwnership}
         <UpgradeToLatestContainer
           documentStatus={documentRevision?.status}
@@ -185,7 +188,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           setShouldDisplay={props.setUpgradeToLastestDisplay}
           type="button"
         />
-        {isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}
+        {!(isRecord && isInlineApproval) &&
+          isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}
+        {isRecord && isInlineApproval &&
+          isUserDocumentOwner && showVoidButtonOnInlineRecords && <VoidButton {...{ documentRevision }}/>}
       </HeaderMenu>
     </div>
   );
