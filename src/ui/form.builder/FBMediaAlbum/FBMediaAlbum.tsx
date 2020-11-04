@@ -3,7 +3,7 @@ import AllOutIcon from "@material-ui/icons/AllOut";
 import AppsIcon from "@material-ui/icons/Apps";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CropFreeIcon from "@material-ui/icons/CropFree";
-import { truncate } from "lodash";
+import { isEmpty, truncate } from "lodash";
 import React from "react";
 import { FBMediaAlbumProps } from ".";
 import { FBMediaCarousel, FBMediaGallery, FBProvider, FBTooltip } from "..";
@@ -83,8 +83,12 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
         </Box>
       </Box>
     </Box>
-    {mode === "carousel" && <FBMediaCarousel {...{ collection, removeMedia, actionsDisabled }} />}
-    {mode === "gallery" && <FBMediaGallery {...{ collection, removeMedia, actionsDisabled }} />}
+    {!actionsDisabled && !isEmpty(collection) && (
+      <>
+        {mode === "carousel" && <FBMediaCarousel {...{ collection, removeMedia, actionsDisabled }} />}
+        {mode === "gallery" && <FBMediaGallery {...{ collection, removeMedia, actionsDisabled }} />}
+      </>
+    )}
   </FBProvider>
 );
 

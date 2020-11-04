@@ -1,4 +1,4 @@
-import { cloneDeep, differenceBy, find, isEqual, keys, map, union, unionBy } from "lodash";
+import { cloneDeep, differenceBy, filter, find, isEmpty, isEqual, keys, map, union, unionBy } from "lodash";
 import { reaction } from "mobx";
 import React from "react";
 import { FB, FBFieldName, FBInputState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureOmitDiffKey, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
@@ -19,7 +19,9 @@ export const withFBProcedure = <T extends FBProcedureProps>(
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
+    const { mode } = workspaceState || {};
     const formValue = formState?.getFieldValue(name) as FBProcedureValue;
+    const attachmentsValue = formState?.getFieldValue(`${name}.attachments`);
     procedureState = FB.useRef(FBProcedureState, formValue);
     isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
     isPreview = workspaceState?.mode === "preview";
@@ -28,6 +30,11 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     procedureState?.setDiffPreview(diffValue);
     const inputState = FB.useRef<FBInputState>(FBInputState, undefined);
     formState?.inputState.set(`${FBFieldName.ProcedureDiff}${name}`, inputState);
+
+    // Omit attachments section if no attachments
+    if ((mode === "preview" || mode === "formPreview") && (!attachmentsValue || isEmpty(attachmentsValue))) {
+      types = filter(types, (type) => type !== "attachments");
+    }
 
     // MARK: @reactions
     // Form sync
