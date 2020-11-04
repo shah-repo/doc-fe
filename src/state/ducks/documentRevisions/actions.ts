@@ -77,6 +77,7 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
   },
   handlers,
   cancelToken: axios.CancelToken.source(),
+  sendNoResponseHeader: true,
 });
 
 const create = (body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
