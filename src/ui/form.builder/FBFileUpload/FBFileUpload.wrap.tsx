@@ -29,8 +29,8 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
     });
 
     React.useEffect(() => {
-      // Here goes the new endpoint where we are going to pass an array of attachment ids
-      fileUploadState?.files.map((file) => fileUploadState?.getAttachment(file.id));
+      const arrayOfFileIds = fileUploadState?.files.map((file) => file.id );
+      fileUploadState?.getAttachments(arrayOfFileIds);
     }, [fileUploadState]);
 
     React.useEffect(() => {

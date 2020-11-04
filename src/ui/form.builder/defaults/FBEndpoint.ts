@@ -5,6 +5,7 @@ export enum FBEndpoint {
   FileUploadCandidates = "/documents/file_upload_candidates",
   AssetUrl = "/attachments/assetUrl",
   AttachmentById = "/attachments/${id}",
+  AttachmentsByIds ="/attachments?ids=${ids}",
   PostInlineApprove = "/document_revisions/${documentId}/inline_approve",
   DynamicControl = "/document_revisions/dynamic_forms",
   FetchDocumentRevision = "/document_revisions/${documentId}",
