@@ -128,7 +128,7 @@ export class FBSchemaState {
   public setValidationSchemaItem = (item: Partial<FBSchemaProps>) => {
     if (!item.name || !item.label) { return; }
     set(this, "validationShema", unionBy(this.validationShema || [], [item], "name"));
-  }
+  };
 
   public getValidationSchema = () => cloneDeep(get(this, "validationShema"));
 

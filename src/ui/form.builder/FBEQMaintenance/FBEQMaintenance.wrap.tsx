@@ -31,7 +31,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       // What are our intentions with this observer?
       pmFormId = formState?.inputState.get("preventativeMaintenanceForm")?.value;
     });
-    
+
     return Component({
       ...(props as T),
       handleAdd,
