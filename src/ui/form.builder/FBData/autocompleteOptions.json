@@ -182,7 +182,7 @@
   },
   {
     "id": "22",
-    "path": "/document_revisions/available_released_forms?docTypeGroupOption=MAINTENANCE",
+    "path": "/document_revisions/forms_group_option?docTypeGroupOption=MAINTENANCE",
     "label": "Preventative Maintenance Forms",
     "valueKey": "id",
     "labelKey": "name",
