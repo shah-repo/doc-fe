@@ -1,4 +1,4 @@
-import { groupBy, keyBy, merge, uniq } from "lodash";
+import { groupBy, keyBy, keys, merge, omit, uniq } from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { AuditByCRIdState } from "../audit/types";
@@ -19,7 +19,15 @@ export const byId = (
       return merge(state, payloadById);
     }
     case DOCUMENT_REVISION_SET:
-      return { ...state, [action.payload.id]: action.payload };
+      if (!action.payload?.documentRevision) {
+        if (action.payload?.requestBody && action.payload.docRevId) {
+          const bodyKeys = keys(action.payload.requestBody);
+          const newBody = merge(omit(state[action.payload.docRevId], bodyKeys), action.payload.requestBody);
+          return { ...state, [action.payload.docRevId]: newBody };
+        }
+        return state;
+      }
+      return { ...state, [action.payload.documentRevision.id]: action.payload.documentRevision };
     default:
       return state;
   }
@@ -36,7 +44,10 @@ export const allIds = (
         ...action.payload.map((documentRevision) => documentRevision.id),
       ]);
     case DOCUMENT_REVISION_SET:
-      return uniq([...state, action.payload.id]);
+      if (!action.payload?.documentRevision) {
+        return state;
+      }
+      return uniq([...state, action.payload.documentRevision.id]);
     default:
       return state;
   }
@@ -50,20 +61,20 @@ export const documentsById = (
 ): DocumentByIdState => {
   switch (action.type) {
     case DOCUMENT_REVISION_SET:
-      if (!action.payload.document) {
+      if (!action.payload?.documentRevision?.document) {
         return state;
       }
       return {
         ...state,
-        [action.payload.document.id]: {
-          ...state[action.payload.document.id],
-          documentRevisions: (state[action.payload.document.id] || { documentRevisions: [] })
+        [action.payload.documentRevision.document.id]: {
+          ...state[action.payload.documentRevision.document.id],
+          documentRevisions: (state[action.payload.documentRevision.document.id] || { documentRevisions: [] })
             .documentRevisions.map((docRev) => {
-              if (docRev.id !== action.payload.id) {
+              if (docRev.id !== action.payload?.documentRevision?.id) {
                 return docRev;
               }
 
-              return merge(docRev, action.payload);
+              return merge(docRev, action.payload.documentRevision);
             }),
         },
       };
