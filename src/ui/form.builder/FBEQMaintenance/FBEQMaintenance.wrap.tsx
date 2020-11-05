@@ -28,11 +28,14 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
 
     // MARK: @observer
     useObserver(() => {
+      // What are our intentions with this observer?
       pmFormId = formState?.inputState.get("preventativeMaintenanceForm")?.value;
     });
+    
     return Component({
       ...(props as T),
       handleAdd,
+      name,
     });
   };
 

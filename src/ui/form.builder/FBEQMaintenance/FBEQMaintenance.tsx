@@ -30,36 +30,47 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
     </FBSection>
     <FBCheckboxGroup
       label="form.builder.eft.requirements"
-      name={`${name}-etf-checkbox`}
+      name={`${name}.requirements`}
       options={FBData.yesNoOptions}
+      applicableValidationSchema
       {...{ disabled }}
     />
     <FBAutocompleteAsync
       label="form.builder.preventative.maintenance.form"
       optionId={FBAutocompleteAsyncOption.preventativeMaintenaceForms}
       name="preventativeMaintenanceForm"
+      validationMode="visibility"
+      rules={`required_if_in:${name}.requirements,Yes`}
       withState
       {...{ disabled }}
     />
     <FBAutocomplete
-      name={`${name}-frequency`}
+      name={`${name}.frequency`}
       label="form.builder.maintenance.frequency"
+      rules={`required_if_in:${name}.requirements,Yes`}
+      validationMode="visibility"
       {...{ disabled }}
     />
     <FBTextEditor
-      name={`${name}-pm-instructions`}
+      name={`${name}.instructions`}
       label="form.builder.pm.instructions"
+      rules={`required_if_in:${name}.requirements,Yes`}
+      validationMode="visibility"
       {...{ disabled }}
     />
     <FBEQMaintenanceHistory />
     <FBFileUpload
-      name={`${name}-attach-manufacturer`}
+      name={`${name}.manufacturer`}
       label="form.builder.attach.manufacturer"
+      rules={`required_if_in:${name}.requirements,Yes,No`}
+      validationMode="visibility"
       {...{ disabled }}
     />
     <FBSelect
-      name={`${name}-drawings-specs`}
+      name={`${name}.specs`}
       label="form.builder.drawings.specs"
+      rules={`required_if_in:${name}.requirements,Yes,No`}
+      validationMode="visibility"
       gutter={false}
       {...{ disabled }}
     />

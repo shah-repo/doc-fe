@@ -1,4 +1,4 @@
-import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, size, union } from "lodash";
+import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, size, union, unionBy } from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
@@ -107,6 +107,7 @@ export class FBSchemaState {
   };
 
   @observable public schema?: FBSchemaProps[];
+  public validationShema?: Partial<FBSchemaProps>[];
 
   public constructor(schema?: FBSchemaProps[]) {
     this.schema = schema;
@@ -123,6 +124,13 @@ export class FBSchemaState {
       ...controlProps,
     });
   };
+
+  public setValidationSchemaItem = (item: Partial<FBSchemaProps>) => {
+    if (!item.name || !item.label) { return; }
+    set(this, "validationShema", unionBy(this.validationShema || [], [item], "name"));
+  }
+
+  public getValidationSchema = () => cloneDeep(get(this, "validationShema"));
 
   @action public getSchema = (): FBSchemaProps[] => cloneDeep(get(this, "schema"));
 

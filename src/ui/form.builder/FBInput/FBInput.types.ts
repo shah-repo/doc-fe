@@ -131,6 +131,10 @@ export type FBInputProps =
      * El with a type marked as a uniqueSchemaItem can be added to the schema only once.
      */
     uniqueSchemaItem?: boolean;
+    /**
+     * @cfg {Bool} Include component into validation schema select option
+     */
+    applicableValidationSchema?: boolean;
   };
 
 export const OmitInputClones: FBInputType[] = [

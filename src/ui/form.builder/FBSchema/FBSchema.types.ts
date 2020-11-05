@@ -39,6 +39,7 @@ export type FBSchemaProps = Pick<FBInputProps,
   | "transform"
   | "bookmarked"
   | "uniqueSchemaItem"
+  | "applicableValidationSchema"
 > & {
   validators?: Dictionary<any>;
 };
