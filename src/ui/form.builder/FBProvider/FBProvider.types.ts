@@ -8,6 +8,7 @@ import {
   FBDocumentRevisionsState,
   FBEditorCustomControlState,
   FBEditorState,
+  FBEQMaintenanceHistoryState,
   FBFieldWrapperState,
   FBFilePresenterState,
   FBFileUploadState,
@@ -19,9 +20,9 @@ import {
   FBSnackbarState,
   FBTaskState,
   FBWorkspaceState,
-  FBEQMaintenanceHistoryState,
 } from "..";
 import { FBApprovalMatrixState } from "../FBApprovalMatrix";
+import { FBEBPartState } from "../FBEBPart";
 import { FBEQMaintenanceState } from "../FBEQMaintenance";
 import { FBPartsState } from "../FBParts";
 import { FBPOApprovalMatrixState } from "../FBPOApprovalMatrix";
@@ -30,6 +31,7 @@ import { FBProcedureState } from "../FBProcedure";
 import { FBProcedureDiffState } from "../FBProcedureDiff";
 import { FBTextEditorState } from "../FBTextEditor";
 import { FBTextEditorOptionsState } from "../FBTextEditorOptions";
+
 
 export interface FBProviderProps {
   workspaceState?: FBWorkspaceState;
@@ -63,4 +65,5 @@ export interface FBProviderProps {
   partsState?: FBPartsState;
   eqMaintenanceState?: FBEQMaintenanceState;
   eqMaintenanceHistoryState?: FBEQMaintenanceHistoryState;
+  ebPartState?: FBEBPartState;
 }

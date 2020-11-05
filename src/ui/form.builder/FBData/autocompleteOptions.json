@@ -182,6 +182,14 @@
   },
   {
     "id": "22",
+    "path": "/document_type?docTypeGroupOption=PART",
+    "label": "Document types",
+    "valueKey": "id",
+    "labelKey": "documentTypeName",
+    "root": ""
+  },
+  {
+    "id": "23",
     "path": "/document_revisions/forms_group_option?docTypeGroupOption=MAINTENANCE",
     "label": "Preventative Maintenance Forms",
     "valueKey": "id",

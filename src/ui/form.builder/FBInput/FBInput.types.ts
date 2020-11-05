@@ -116,6 +116,9 @@ export type FBInputProps =
     actions?: string[];
     hellosignFlowProps?: any;
     showErrorMsg?: boolean;
+    // Field is under validation for validation mode (e.g show/hide)
+    // but should not be included in the next form validation flow (e.g on form save)
+    omitFinalValidation?: boolean;
     validators?: Dictionary<any>;
     forceDefault?: boolean;
     autosave?: boolean;
@@ -143,4 +146,5 @@ export const OmitInputClones: FBInputType[] = [
   "procedure",
   "procedurediff",
   "eqmaintenance",
+  "ebpart",
 ];

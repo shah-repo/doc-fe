@@ -34,16 +34,22 @@ export class FBTaskState extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNot
 
   public removeTask = (task?: FBTaskItem) => {
     if (!task) { return; }
-    this.setTemplateUrl(FBEndpoint.TaskAbandon, { id: task.id });
-    this.setBody(task);
-    this.post();
+    this.set({
+      url: FBEndpoint.TaskAbandon,
+      urlValues: { id: task.id },
+      body: task,
+      method: "post",
+    });
   };
 
   public finishTask = (task?: FBClosingNoteProps) => {
     if (!task) { return; }
-    this.setTemplateUrl(FBEndpoint.TaskDone, { id: task.id });
-    this.setBody(omit(task, "id"));
-    this.post();
+    this.set({
+      url: FBEndpoint.TaskDone,
+      urlValues: { id: task.id },
+      body: omit(task, "id"),
+      method: "post",
+    });
   };
 
   public getTask = (id?: string): FBTaskItem | undefined =>
@@ -84,11 +90,12 @@ export class FBTaskState extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNot
     this.post();
   };
 
-  private updateTask = (task: FBTaskItem) => {
-    this.setTemplateUrl(FBEndpoint.Task, { id: task.id });
-    this.setBody({ ...omit(task, ["id", "type", "partOf"]) });
-    this.patch();
-  };
+  private updateTask = (task: FBTaskItem) => this.set({
+    url: FBEndpoint.Task,
+    urlValues: { id: task.id },
+    body: { ...omit(task, ["id", "type", "partOf"]) },
+    method: "patch",
+  });
 }
 
 export default FBTaskState;

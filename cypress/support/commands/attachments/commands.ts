@@ -17,14 +17,12 @@ declare global {
       atchCheckDisplayedAttachments(params: {fileNames: string[] }): Chainable<Subject>;
       atchRemoveAttachment(params: {fileName: string }): Chainable<Subject>;
       atchCheckAtributes(params: {fileName: string; attributes: string }): Chainable<Subject>;
-      atchDownloadAllAttachments(): Chainable<Subject>;
-      atchEnterConfirmationPassword(params: {password: string }): Chainable<Subject>;
       attachFiles(files: {name: string; type: string}[]): Chainable<Subject>;
       closeAtchUploadDialog(): Chainable<Subject>;
       atchCheckDisplayedAtLast(params: {fileName: string}): Chainable<Subject>;
       atchCheckRedLineIndicator(params: {fileName: string}): Chainable<Subject>;
       atchNoPrimaryForRedline(params: {fileName: string}): Chainable<Subject>;
-      atchDownloadFile(params: {fileName: string}): Chainable<Subject>;
+      atchDownloadFile(params: {fileName: string; saveFileName: string}): Chainable<Subject>;
       atchDownloadAll(): Chainable<Subject>;
     }
   }
@@ -102,18 +100,6 @@ Cypress.Commands.add("atchUploadRedlineAttachment", (params: {fileName: string }
   });
 });
 
-Cypress.Commands.add("atchEnterConfirmationPassword", (params: {password: string }) => {
-  cy.get("[data-cy=\"reject.request\"]").click().wait(1000);
-  // dowload document part is not working in cypress, cypress freezes so we just cancel password confirm
-  // cy.get("[data-cy=\"transition.action.password\"]").type(params.password);
-  // cy.get("[data-cy=\"passwordConfirm\"]").click().wait(10000);
-});
-
-Cypress.Commands.add("atchDownloadAllAttachments", () => {
-  cy.get("[id=\"AttachmentFieldPresenter-downloadAllButton\"]").click();
-  cy.get("[id=\"passwordConfirm\"]").click();
-});
-
 Cypress.Commands.add("atchSetPrimaryAttachment", (params: {fileName: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.SetPrimaryAttachment, () => {
     cy.get(`button[title="${params.fileName}"]`).rightclick();
@@ -165,7 +151,7 @@ Cypress.Commands.add("atchNoPrimaryForRedline", (params: {fileName: string }) =>
   cy.get("[data-cy=\"field-name\"]").click({ force: true });
 });
 
-Cypress.Commands.add("atchDownloadFile", (params: {fileName: string }) => {
+Cypress.Commands.add("atchDownloadFile", (params: {fileName: string; saveFileName: string }) => {
   cy.route2({ pathname: "/api/v1/attachments/*/download*" }, (req) => {
     req.reply((res) => {
       if (res.body !== "") {
@@ -186,16 +172,15 @@ Cypress.Commands.add("atchDownloadFile", (params: {fileName: string }) => {
   cy.wait("@attach");
   cy.wait("@attach").then((res) => {
     const fileUrl = res.response.body.toString();
-    const fileName = fileUrl.split("/")[5].split("?");
     cy.downloadFile({
       url: fileUrl,
       directory: "cypress/downloads",
-      fileName: fileName[0],
+      fileName: params.saveFileName,
     });
   });
 });
 
-Cypress.Commands.add("atchDownloadAll", (params: {fileName: string }) => {
+Cypress.Commands.add("atchDownloadAll", () => {
   cy.route2({ pathname: "/api/v1/attachments/*/download*" }, (req) => {
     req.reply((res) => {
       if (res.body !== "") {

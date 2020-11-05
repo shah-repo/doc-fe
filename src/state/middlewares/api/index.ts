@@ -78,6 +78,10 @@ const apiMiddleware: Middleware = ({
       requestConfig.headers.Authorization = authorization;
     }
 
+    if (action.sendNoResponseHeader) {
+      requestConfig.headers["X-Enlil-Send-No-Response"] = true;
+    }
+
     const { data } = await apiClient.request(requestConfig);
 
     action.onSuccess(data, dispatch);

@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBEditorProps } from ".";
-import { FBEditorProperties, FBEditorValidation, FBForm, FBProvider } from "..";
+import { FBEditorProps, FBEditorState } from ".";
+import { FBCheckbox, FBEditorProperties, FBEditorValidation, FBForm, FBProvider } from "..";
 import { withFBEditor } from "./FBEditor.wrap";
 
 const FBEditor: React.FunctionComponent<FBEditorProps> = ({
@@ -16,6 +16,9 @@ const FBEditor: React.FunctionComponent<FBEditorProps> = ({
     <FBForm initialValues={inputProps}>
       <Box hidden={mode === "validation"}>
         {children}
+        {type && FBEditorState.omitFinalValidation.includes(type) && (
+          <FBCheckbox name="omitFinalValidation" hidden={true} defaultChecked={true} />
+        )}
         <FBEditorProperties
           key={`fb-editor-props-${type}-${index}`}
           {...{ type }}

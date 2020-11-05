@@ -12,7 +12,6 @@ export const CHANGE_REQUEST_UPDATE_URL = `${CHANGE_REQUEST_ROOT_URL}/update`;
 export const CHANGE_REQUEST_PREVIEW_URL = `${CHANGE_REQUEST_ROOT_URL}/preview`;
 
 export const DOCUMENT_REVISION_CREATE_URL = "/document_revision/create";
-export const DOCUMENT_REVISION_CREATE_PART_URL = "/document_revision/create_part/:recordId";
 export const DOCUMENT_REVISION_CREATE_MAINTENANCE_URL = "/document_revision/:pmFormId/create_maintenance/:recordId";
 
 export const DOCUMENT_REVISION_LIST_URL = "/document_revision";

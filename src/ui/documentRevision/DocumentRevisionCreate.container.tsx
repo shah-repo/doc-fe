@@ -78,7 +78,6 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const dispatch = useDispatch();
   const { pmFormId } = match.params;
-  const isCreatePart = match.path.includes("create_part");
   const isCreateMaintenance = match.path.includes("create_maintenance");
 
   const initialValues = useMemo(() => {
@@ -110,19 +109,9 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
       id: recordId,
     };
   }
-  if (isCreatePart) {
-    const { recordId } = match.params;
-    initialValues.parentParts = {
-      id: recordId,
-    };
-  }
-
   const async = useAsync<DocumentRevision>({
     onSuccess: (createdDocumentRevision?) => {
       if (createdDocumentRevision) {
-        if (isCreatePart) {
-          // TODO add logic for refreshing EB if possible
-        }
         setDoNotPrompt(true);
         loadDocument(createdDocumentRevision.document.id);
         history.push(
@@ -157,7 +146,6 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
         proposedDocId,
         type,
         isNewVersion,
-        isCreatePart,
         pmFormId,
       }}
     />

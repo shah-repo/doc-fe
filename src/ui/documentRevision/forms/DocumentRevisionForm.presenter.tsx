@@ -58,7 +58,6 @@ export interface Props
   bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
   isNewVersion?: boolean;
   showAdministrativeAndVoidChange: boolean;
-  isCreatePart?: boolean;
   pmFormId?: string;
 }
 
@@ -101,7 +100,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   bannerPortal,
   isNewVersion = false,
   showAdministrativeAndVoidChange,
-  isCreatePart,
   pmFormId,
 }) => {
   useScrollIntoView();
@@ -228,7 +226,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             initialValues.formDocument?.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]}
           isDisabled={isDisabledInput}
           {...{
-            isCreatePart,
             type,
             isdocRevStatusDraft,
             savedocInfo,
