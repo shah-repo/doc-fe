@@ -13,8 +13,7 @@ export const CHANGE_REQUEST_PREVIEW_URL = `${CHANGE_REQUEST_ROOT_URL}/preview`;
 
 export const DOCUMENT_REVISION_CREATE_URL = "/document_revision/create";
 export const DOCUMENT_REVISION_CREATE_PART_URL = "/document_revision/create_part/:recordId";
-// TO DO: add another parameter for chosen PM form
-export const DOCUMENT_REVISION_CREATE_MAINTENANCE_URL = "/document_revision/create_maintenance/:recordId";
+export const DOCUMENT_REVISION_CREATE_MAINTENANCE_URL = "/document_revision/:pmFormId/create_maintenance/:recordId";
 
 export const DOCUMENT_REVISION_LIST_URL = "/document_revision";
 export const DOCUMENT_REVISION_ROOT_URL = `${DOCUMENT_REVISION_LIST_URL}/:documentId`;

@@ -56,6 +56,7 @@ interface OwnProps {
   type?: DocumentCloneType;
   isNewVersion?: boolean;
   isCreatePart?: boolean;
+  pmFormId?: string;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
@@ -100,6 +101,7 @@ DocumentRevisionFormContainerProps
   type,
   isNewVersion,
   isCreatePart,
+  pmFormId,
 }) => {
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
@@ -109,8 +111,11 @@ DocumentRevisionFormContainerProps
   const isAlphaReleased = revisionStage === 3;
   const isRecord = getIsDocumentRecord(document?.documentType?.groupOptions);
   const isEB = getIsDocumentEB(documentRevision?.document?.documentType?.group);
-
+  const pmForm = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocumentRevision(state, pmFormId || ""),
+  );
   const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
+
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
     const { outputRevision } = initialValues;
     const securityGroups: any[] = [];
@@ -130,6 +135,7 @@ DocumentRevisionFormContainerProps
       ? filter(initialValues.attachments, (file) => file.lineType !== "RED_LINE")
       : initialValues.attachments;
 
+
     return {
       ...initialValues,
       attachments,
@@ -142,10 +148,12 @@ DocumentRevisionFormContainerProps
       retrain,
       renderHTML,
       securityGroups,
-      outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
+      outputDocumentTypes: pmForm ?
+        pmForm.formTemplate?.outputDocumentTypes as OptionType[] :
+        initialValues.formTemplate?.outputDocumentTypes as OptionType[],
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canUpdateHTML, initialValues, groupOptions]);
+  }, [canUpdateHTML, initialValues, groupOptions, pmForm]);
 
   useEffect(() => {
     if (type !== "newVersion" &&
@@ -247,6 +255,7 @@ DocumentRevisionFormContainerProps
           FBContainer,
           bannerPortal,
           showAdministrativeAndVoidChange,
+          pmFormId,
         }}
       />
     </FBWorkspace>

@@ -59,6 +59,7 @@ export interface Props
   isNewVersion?: boolean;
   showAdministrativeAndVoidChange: boolean;
   isCreatePart?: boolean;
+  pmFormId?: string;
 }
 
 export interface FormHeaderContext {
@@ -101,6 +102,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   isNewVersion = false,
   showAdministrativeAndVoidChange,
   isCreatePart,
+  pmFormId,
 }) => {
   useScrollIntoView();
   const { workspaceState } = FB.useStores();
@@ -221,7 +223,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isDisabled={isDisabledInput}
         />
         <DocumentTypeSelect
-          outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]}
+          outputDocumentTypes={pmFormId ?
+            initialValues.outputDocumentTypes as unknown as FBOutputDocumentType[] :
+            initialValues.formDocument?.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]}
           isDisabled={isDisabledInput}
           {...{
             isCreatePart,

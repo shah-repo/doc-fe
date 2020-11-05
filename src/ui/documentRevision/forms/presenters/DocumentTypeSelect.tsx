@@ -2,6 +2,7 @@ import { useFormikContext } from "formik";
 import { filter } from "lodash";
 import * as React from "react";
 import { useSelector } from "react-redux";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { DocumentRevision, FBOutputDocumentType } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType, documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -18,7 +19,7 @@ import { DocumentCloneType } from "../../Clone.container";
 import { getFBSchemeByDocType, getIsDocumentPart } from "../../helpers";
 import { getActiveDocumentTypes } from "../transform";
 
-interface Props {
+interface Props extends RouteComponentProps {
   isdocRevStatusDraft: boolean;
   type?: DocumentCloneType;
   outputDocumentTypes?: FBOutputDocumentType[];
@@ -41,6 +42,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   documentTypeId,
   setDisableCreateButton,
   isCreatePart = false,
+  match,
 }) => {
   const [isVisible, label, validators] = useDocumentTypeSelect(documentTypeId);
 
@@ -68,9 +70,10 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
 
   const isDocTypeDisabled = (type === "newVersion" || isdocRevStatusDraft) || isDisabled;
   const isNewOutput = type === "newOutput";
+  const isCreateMaintenance = match.path.includes("create_maintenance");
 
   const options: SelectOption[] = React.useMemo(() => {
-    if (type === "newOutput" && outputDocumentTypes) {
+    if ((isNewOutput || isCreateMaintenance) && outputDocumentTypes) {
       return outputDocumentTypes.map((e) =>
         ({ value: e.id, text: e.documentTypeName }) as SelectOption
       );
@@ -93,7 +96,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       ).map((docType) =>
         ({ value: docType.id, text: docType.documentTypeName })
       );
-  }, [type, outputDocumentTypes, activeDocumentTypes, currentUserTags, isCreatePart]);
+  }, [outputDocumentTypes, activeDocumentTypes, currentUserTags, isCreatePart, isCreateMaintenance, isNewOutput]);
 
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
@@ -153,4 +156,4 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   );
 };
 
-export default DocumentTypeSelect;
+export default withRouter(DocumentTypeSelect);

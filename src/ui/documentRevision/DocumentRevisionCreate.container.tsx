@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
@@ -32,6 +32,7 @@ interface StateProps {
 
 interface RouteParams {
   recordId: string;
+  pmFormId: string;
 }
 
 export type DocumentRevisionCreateContainerProps =
@@ -75,6 +76,10 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   match,
 }) => {
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
+  const dispatch = useDispatch();
+  const { pmFormId } = match.params;
+  const isCreatePart = match.path.includes("create_part");
+  const isCreateMaintenance = match.path.includes("create_maintenance");
 
   const initialValues = useMemo(() => {
     if (type === "newVersion") {
@@ -91,9 +96,21 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   }, [documentRevision?.id, type, history.location.state]);
   type = history.location.state ?? false ? "newOutput" : type;
 
-  const isCreatePart = match.path.includes("create_part");
-  const isCreateMaintenance = match.path.includes("create_maintenance");
-  if (isCreatePart || isCreateMaintenance) {
+  useEffect(() => {
+    if (!isCreateMaintenance) {
+      return;
+    }
+    dispatch(documentRevisionsActions.load(pmFormId));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCreateMaintenance]);
+
+  if (isCreateMaintenance) {
+    const { recordId } = match.params;
+    initialValues.parentEquipment = {
+      id: recordId,
+    };
+  }
+  if (isCreatePart) {
     const { recordId } = match.params;
     initialValues.parentParts = {
       id: recordId,
@@ -141,6 +158,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
         type,
         isNewVersion,
         isCreatePart,
+        pmFormId,
       }}
     />
   );

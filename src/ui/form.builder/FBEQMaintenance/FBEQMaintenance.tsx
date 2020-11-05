@@ -37,6 +37,8 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
     <FBAutocompleteAsync
       label="form.builder.preventative.maintenance.form"
       optionId={FBAutocompleteAsyncOption.preventativeMaintenaceForms}
+      name="preventativeMaintenanceForm"
+      withState
       {...{ disabled }}
     />
     <FBAutocomplete

@@ -48,6 +48,7 @@ export const toDocumentRevisionFormValues = (
     renderHTML: documentRevision.renderHTML,
     schema: documentRevision.schema,
     parentParts: documentRevision.parentParts,
+    parentEquipment: documentRevision.parentEquipment,
     // there can currently be only one child part
     childrenParts: documentRevision.childrenParts?.[0],
 
@@ -67,7 +68,7 @@ export const toDocumentRevisionEditRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
   const data = {
-    ...pick(values, ["formTemplate", "formDocument", "formInput", "schema", "parentParts" ]),
+    ...pick(values, ["formTemplate", "formDocument", "formInput", "schema", "parentParts", "parentEquipment" ]),
     description: values.description,
     name: values.name,
     attachments: values.attachments,
