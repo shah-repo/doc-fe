@@ -30,15 +30,11 @@ interface StateProps {
   proposedDocId: string;
 }
 
-interface RouteParams {
-  recordId: string;
-}
-
 export type DocumentRevisionCreateContainerProps =
   & StateProps
   & OwnProps
   & DispatchProps
-  & RouteComponentProps<RouteParams>;
+  & RouteComponentProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   proposedDocId: documentsSelectors.getProposedDocId(state),
@@ -72,7 +68,6 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   loadDocument,
   isNewVersion,
   loadDocTypes,
-  match,
 }) => {
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const initialValues = useMemo(() => {
@@ -90,20 +85,9 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   }, [documentRevision?.id, type, history.location.state]);
   type = history.location.state ?? false ? "newOutput" : type;
 
-  const isCreatePart = match.path.includes("create_part");
-  if (isCreatePart) {
-    const { recordId } = match.params;
-    initialValues.parentParts = {
-      id: recordId,
-    };
-  }
-
   const async = useAsync<DocumentRevision>({
     onSuccess: (createdDocumentRevision?) => {
       if (createdDocumentRevision) {
-        if (isCreatePart) {
-          // TODO add logic for refreshing EB if possible
-        }
         setDoNotPrompt(true);
         loadDocument(createdDocumentRevision.document.id);
         history.push(
@@ -138,7 +122,6 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
         proposedDocId,
         type,
         isNewVersion,
-        isCreatePart,
       }}
     />
   );

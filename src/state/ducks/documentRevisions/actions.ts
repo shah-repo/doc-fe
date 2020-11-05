@@ -14,9 +14,12 @@ const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentR
   payload: documentRevisions,
 });
 
-const documentRevisionSet = (documentRevision: DocumentRevision): DocumentRevisionSetAction => ({
+const documentRevisionSet = (
+  documentRevision?: DocumentRevision,
+  requestBody?: any,
+  docRevId?: string): DocumentRevisionSetAction => ({
   type: DOCUMENT_REVISION_SET,
-  payload: documentRevision,
+  payload: { documentRevision, requestBody, docRevId },
 });
 
 const loadList = (states: DocumentRevisionStatus[] = []): ApiAction<DocumentRevision[]> => {
@@ -70,10 +73,11 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
   data: body,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(loadAudit(id));
-    dispatch(documentRevisionSet(documentRevision));
+    dispatch(documentRevisionSet(undefined, body, id));
   },
   handlers,
   cancelToken: axios.CancelToken.source(),
+  sendNoResponseHeader: true,
 });
 
 const create = (body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):

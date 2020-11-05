@@ -46,7 +46,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   const [isTitleVisible] = useTitle(documentTypeId);
   const classes = styles();
   const isStatusReleased = status === DocumentRevisionStatus.Released || status === ChangeRequestStatus.Approved;
-  const isStatusCanceled = status === DocumentRevisionStatus.Canceled || status === ChangeRequestStatus.Voided;
+  const isStatusCanceled = status === DocumentRevisionStatus.Canceled;
   const isDeprecated = status === DocumentRevisionStatus.Deprecated;
   const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
   const isInReview = status === DocumentRevisionStatus.InReview;

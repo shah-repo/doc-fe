@@ -25,6 +25,17 @@ export class FBAutocompleteAsyncStore {
     if (!list) { return; }
     return Array.from(map(by, (i) => list.get(i))) as T[];
   };
+
+  public add = <T>(optionId: string, key?: string, value?: T | undefined) => {
+    if (!optionId || !key || isEmpty(key)) { return; }
+    const list = this.data.get(optionId);
+    list?.set(key, value);
+  };
+
+  public reset = <T>(optionId: string) => {
+    if (!optionId) { return; }
+    this.data.set(optionId, undefined);
+  };
 }
 
 export default new FBAutocompleteAsyncStore();

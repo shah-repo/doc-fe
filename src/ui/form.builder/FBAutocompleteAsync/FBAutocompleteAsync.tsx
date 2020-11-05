@@ -6,11 +6,14 @@ import { withFBAutocompleteAsync } from "./FBAutocompleteAsync.wrap";
 const FBAutocompleteAsync: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
   options,
   defaultValue,
+  forceNewRender,
   ...props
 }) =>  (
   <>
-    {!options && <FBAutocomplete {...props} disabled={true} />}
-    {options && <FBAutocomplete {...props} {...{ options, defaultValue }} />}
+    {!options && !forceNewRender && <FBAutocomplete {...props} disabled={true} />}
+    {!options && forceNewRender && <FBAutocomplete {...props} disabled={true} />}
+    {options && !forceNewRender && <FBAutocomplete {...props} {...{ options, defaultValue }} />}
+    {options && forceNewRender && <FBAutocomplete {...props} {...{ options, defaultValue }} />}
   </>
 );
 
