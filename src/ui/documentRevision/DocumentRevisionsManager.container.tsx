@@ -19,6 +19,7 @@ import DocumentRevisionAuditContainer from "./audit/Audit.container";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
 import DocumentRevisionListContainer from "./DocumentRevisionList.container";
 import { checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
+import { isFormWithInlineApproval } from "./helpers/records";
 import { getDocRevIdToRedirect, shouldRedirectToLatestReleased } from "./helpers/redirect";
 import Bookmarks from "./Sidebar/Bookmarks";
 import RevisionHistory from "./Sidebar/RevisionHistory";
@@ -84,11 +85,9 @@ DocumentRevisionManagerContainerProps
 
   const isInlineApproval =
     !!docRevsWithoutCanceled.find(
-      (e) => e.formDocument?.formTemplate?.schema.some((e) =>
-        (e.type === "approval" || e.type === "inlineapproval" as string))
+      (e) => isFormWithInlineApproval(e.formDocument?.formTemplate?.schema)
     ) ||
-    !!selectedDocument?.formDocument?.formTemplate?.schema.some((e) =>
-      (e.type === "approval" || e.type === "inlineapproval" as string));
+    !!isFormWithInlineApproval(selectedDocument?.formDocument?.formTemplate?.schema);
 
   const isRecord =
     !!docRevsWithoutCanceled.find(

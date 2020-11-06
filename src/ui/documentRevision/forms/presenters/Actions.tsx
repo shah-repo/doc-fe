@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
-import { differenceBy, find, isEmpty, isUndefined, keys, some } from "lodash";
+import { differenceBy, keys } from "lodash";
 import * as React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
-import { ApprovalStatus } from "../../../../state/ducks/common";
 import { RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
@@ -12,6 +11,7 @@ import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
 import { checkIsDocumentRecord } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus";
+import { isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
 import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.presenter";
 import { withActionButton } from "./ActionButton.wrap";
@@ -35,32 +35,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const { workspaceState, formState } = FB.useStores();
 
-  const inlineApprovalFields = documentRevision?.formDocument?.formTemplate?.schema
-    .filter((field) => (field.type === "inlineapproval" as string));
-
-  const isInlineApproval = Boolean(inlineApprovalFields && inlineApprovalFields.length > 0);
+  const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
-
-  /** Function that checks if a form section is approved.
-   * @param fieldName Unique name of the form field.
-  */
-  const isSectionApproved = (fieldName: string) => (
-      documentRevision?.version > 1 &&
-      isEmpty(getFieldApprovals(fieldName)) &&
-      Boolean(formState?.getFieldValue(fieldName))
-  ) ? some(getFieldApprovals(fieldName), (approval) => approval.status === ApprovalStatus.Approved)
-    || !getFieldApprovals(fieldName)?.length
-    : !isUndefined(find(getFieldApprovals(fieldName), { status: ApprovalStatus.Approved }));
-
-  /** Filter approvals by field.
-  * @param fieldName Unique name of the form field.
-  */
-  const getFieldApprovals = (fieldName: string) =>
-    documentRevision.approvals?.filter((app) => app.fieldId === fieldName);
-
-  /** Every form field that is inline approval should have
-   * at least one approval in status approved in order to be considered as approved. */
-  const isApproved = inlineApprovalFields?.every((field) => isSectionApproved(field.name!));
+  const isApproved = isInlineFormApproved(
+    documentRevision,
+    formState,
+    documentRevision?.formDocument?.formTemplate?.schema
+  );
 
   const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
   const formik = useFormikContext();

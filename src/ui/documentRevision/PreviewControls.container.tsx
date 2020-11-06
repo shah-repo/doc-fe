@@ -23,6 +23,7 @@ import { isOwnerContext } from "./forms/DocumentRevisionForm.presenter";
 import { checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
+import { isFormWithInlineApproval } from "./helpers/records";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -58,10 +59,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
   const canCopy = (documentRevision.document.documentType.groupOptions || []).includes(
     DOC_TYPE_GROUP_OPTION.CAN_BE_COPIED);
-  const inlineApprovalFields = documentRevision?.formDocument?.formTemplate?.schema
-  .filter((field) => (field.type === "inlineapproval" as string));
-
-  const isInlineApproval = inlineApprovalFields && inlineApprovalFields.length > 0;
+  const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
   const isUserDocumentOwner = React.useContext(isOwnerContext);
 
 

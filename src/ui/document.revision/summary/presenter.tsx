@@ -20,6 +20,7 @@ import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/Docum
 import { getHighestRevision } from "../../documentRevision/forms/transform";
 import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
+import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
 import { FBSchemaProps, FBWorkspace } from "../../form.builder";
 import { useCRLink, useTitle, useTraining } from "../../hooks/docCustomization/useCustomization";
@@ -87,11 +88,9 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(document.documentType.group);
   const isPart = checkIsDocumentPart(document?.documentType?.groupOptions);
-  const inlineApprovalFields = formDocument?.formTemplate?.schema
-  .filter((field) => (field.type === "inlineapproval" as string));
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
 
-  const isInlineApproval = Boolean(inlineApprovalFields && inlineApprovalFields.length > 0);
+  const isInlineApproval = isFormWithInlineApproval(formDocument?.formTemplate?.schema);
   const isAlphaReleased = isDocumentAlphaReleased(dataProp?.revisionStage);
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
