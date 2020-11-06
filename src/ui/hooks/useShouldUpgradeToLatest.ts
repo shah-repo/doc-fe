@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Document, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
-import { getIsLastVersionObsolete } from "../documentRevision/helpers";
+import { getIsLastVersionObsolete } from "../documentRevision/helpers/documentRevisionStatus";
 
 const useShouldUpgradeToLatest = (
   documentStatus?: DocumentRevisionStatus,

@@ -18,8 +18,8 @@ import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.co
 import DocumentRevisionAuditContainer from "./audit/Audit.container";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
 import DocumentRevisionListContainer from "./DocumentRevisionList.container";
-import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers";
 import { checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
+import { getDocRevIdToRedirect, shouldRedirectToLatestReleased } from "./helpers/redirect";
 import Bookmarks from "./Sidebar/Bookmarks";
 import RevisionHistory from "./Sidebar/RevisionHistory";
 import { SidebarContainer } from "./Sidebar/Sidebar.container";
@@ -191,7 +191,7 @@ DocumentRevisionManagerContainerProps
 
   }, []);
 
-  if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
+  if (shouldRedirectToLatestReleased(documentRevisions, documentRevisionId)) {
     const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
     return (
       <Redirect to={documentVersionPath(docRevIdToRedirect, documentId)} />

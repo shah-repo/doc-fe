@@ -5,7 +5,7 @@ import { DocumentRevision, documentRevisionsSelectors } from "../../state/ducks/
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import DocumentRevisionCreateContainer from "./DocumentRevisionCreate.container";
-import { canCreateNewVersion, canCreateOutput } from "./helpers";
+import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 
 export type DocumentCloneType = "none" | "newVersion" | "newOutput";
 

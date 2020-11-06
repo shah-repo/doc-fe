@@ -10,7 +10,7 @@ import { documentVersionPath } from "../document.revision/utils/paths";
 import { useDocumentStatus } from "../hooks/docCustomization/useCustomization";
 import { Translation } from "../translations/types";
 import { styles } from "./DocumentRevisionList.container.styles";
-import { generateVersionNumber } from "./helpers";
+import { generateRevisionNumber } from "./helpers/generateRevisionNumber";
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -38,7 +38,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     documentRevision.id,
     documentId,
   );
-  const versionNumber = generateVersionNumber(
+  const versionNumber = generateRevisionNumber(
     documentRevision.revision,
     documentRevision.revisionStage,
     documentRevision.subRevision,

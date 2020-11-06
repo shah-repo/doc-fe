@@ -11,7 +11,7 @@ import { OptionType } from "../../../components/forms/fields/Autocomplete/types"
 import { requiredAtLeastOne, validator } from "../../../components/forms/fields/validators";
 import { FB } from "../../../form.builder";
 import useGetHasPermission from "../../../hooks/useGetHasPermission";
-import { getFBSchemeByDocType } from "../../helpers";
+import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import RenderHtmlField from "./RenderHtmlField";
 
 interface Props {

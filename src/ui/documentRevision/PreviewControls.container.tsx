@@ -20,8 +20,9 @@ import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
 import { isOwnerContext } from "./forms/DocumentRevisionForm.presenter";
-import { canCreateNewVersion, canCreateOutput, getIsLastVersionObsolete } from "./helpers";
 import { checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
+import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
+import { getIsLastVersionObsolete } from "./helpers/documentRevisionStatus";
 
 interface OwnProps {
   documentRevision: DocumentRevision;

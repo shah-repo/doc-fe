@@ -14,8 +14,8 @@ import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustom
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import { DocumentCloneType } from "../../Clone.container";
-import { getFBSchemeByDocType } from "../../helpers";
 import { checkIsDocumentForm, checkIsTypeMustBeOutput } from "../../helpers/checkDocumentGroup";
+import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
 
 interface Props {
