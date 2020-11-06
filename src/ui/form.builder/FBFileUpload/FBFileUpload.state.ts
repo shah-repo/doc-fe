@@ -19,8 +19,9 @@ export class FBFileUploadState {
 
   public getAttachment = async (id?: string) => {
     if (!id) { return; }
-    this.attachmentApi.setTemplateUrl(FBEndpoint.AttachmentById, { id });
-    this.attachmentApi.fetch();
+    const urlTpl = template(FBEndpoint.AttachmentById);
+    const url = urlTpl({ id });
+    this.attachmentApi.setUrl(url);
     const data = await this.attachmentApi.fetch();
     set(this, "fetchedFiles", union(this.fetchedFiles, [data]));
   };
