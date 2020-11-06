@@ -16,6 +16,7 @@ import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
 import { canEditDocumentRevision, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
 import { generateVersionNumber } from "../../documentRevision/helpers";
+import { checkIsDocumentPO } from "../../documentRevision/helpers/checkDocumentGroup";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { RouteParams } from "../utils/types";
@@ -80,7 +81,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
 
-  const isPO = documentType?.group === "PO" || documentCategory?.category === "Purchase Order";
+  const isPO = checkIsDocumentPO(documentType?.group) || documentCategory?.category === "Purchase Order";
 
   useEffect(() => {
     if (isEmpty(tableCriteria.queryDict) || isPO) {

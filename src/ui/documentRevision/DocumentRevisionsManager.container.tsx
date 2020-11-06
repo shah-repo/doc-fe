@@ -13,13 +13,13 @@ import { DocumentGroupType } from "../../state/ducks/documentRevisions/documentT
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import { FB, FBBookmarkState, FBProvider } from "../form.builder";
-import { FBDocTypeGroup } from "../form.builder/FBApprovalMatrixTable";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.container";
 import DocumentRevisionAuditContainer from "./audit/Audit.container";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
 import DocumentRevisionListContainer from "./DocumentRevisionList.container";
 import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers";
+import { checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
 import Bookmarks from "./Sidebar/Bookmarks";
 import RevisionHistory from "./Sidebar/RevisionHistory";
 import { SidebarContainer } from "./Sidebar/Sidebar.container";
@@ -92,8 +92,8 @@ DocumentRevisionManagerContainerProps
 
   const isRecord =
     !!docRevsWithoutCanceled.find(
-      (e) => (e.document?.documentType?.groupOptions || []).includes(FBDocTypeGroup.RECORD)) ||
-    (!!selectedDocument?.document?.documentType?.groupOptions?.includes(FBDocTypeGroup.RECORD) || false);
+      (e) => checkIsDocumentRecord(e.document?.documentType?.groupOptions)) ||
+    (!!checkIsDocumentRecord(selectedDocument?.document?.documentType?.groupOptions));
 
   const sidebarList: Sidebar[] = [
     {

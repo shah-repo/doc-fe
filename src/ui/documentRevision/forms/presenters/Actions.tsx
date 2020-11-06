@@ -10,7 +10,7 @@ import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
-import { getIsDocumentRecord } from "../../helpers";
+import { checkIsDocumentRecord } from "../../helpers/checkDocumentGroup";
 import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.presenter";
 import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
@@ -37,7 +37,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     .filter((field) => (field.type === "inlineapproval" as string));
 
   const isInlineApproval = Boolean(inlineApprovalFields && inlineApprovalFields.length > 0);
-  const isRecord = getIsDocumentRecord(values.document?.documentType?.groupOptions);
+  const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
 
   /** Function that checks if a form section is approved.
    * @param fieldName Unique name of the form field.

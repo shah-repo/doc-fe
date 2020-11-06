@@ -5,7 +5,7 @@ import { ChangeRequestStatus } from "../../../../state/ducks/changeRequest";
 import { DocumentRevisionStatus, DocumentRevisionStatusAlias, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentStatus } from "../../../../state/ducks/documents";
-import { FBDocTypeGroup } from "../../../form.builder";
+import { checkIsDocumentRecord } from "../../../documentRevision/helpers/checkDocumentGroup";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
 import Text from "../../Text";
 import { styles } from "./HeaderInfo.styles";
@@ -35,7 +35,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
 }) => {
   const isDraft = status === DocumentStatus.Draft;
   const isAlphaReleased = revisionStage === 3;
-  const isRecord = groupOptions?.includes(FBDocTypeGroup.RECORD);
+  const isRecord = checkIsDocumentRecord(groupOptions);
 
   // we should rename enum for document types, it is not only for FB
   if ( isRecord && isInlineApproval && isDraft && !isAlphaReleased) {

@@ -15,7 +15,7 @@ import SummaryInfo from "../../common/summary/SummaryInfo";
 import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
-import { getIsDocumentEB, getIsDocumentPart, getIsDocumentRecord } from "../../documentRevision/helpers";
+import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBSchemaProps, FBWorkspace } from "../../form.builder";
 import { useCRLink, useTitle, useTraining } from "../../hooks/docCustomization/useCustomization";
 import useDescription from "../../hooks/docCustomization/useDescription";
@@ -77,9 +77,9 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const [isTitleVisible, titleLabel] = useTitle(docTypeId);
   const [isCRLinkVisible] = useCRLink(docTypeId);
   const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
-  const isRecord = getIsDocumentRecord(document?.documentType?.groupOptions);
-  const isEB = getIsDocumentEB(document.documentType.group);
-  const isPart = getIsDocumentPart(document?.documentType?.groupOptions);
+  const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
+  const isEB = checkIsDocumentEB(document.documentType.group);
+  const isPart = checkIsDocumentPart(document?.documentType?.groupOptions);
   const inlineApprovalFields = formDocument?.formTemplate?.schema
   .filter((field) => (field.type === "inlineapproval" as string));
 

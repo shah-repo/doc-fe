@@ -21,6 +21,7 @@ import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
 import { isOwnerContext } from "./forms/DocumentRevisionForm.presenter";
 import { canCreateNewVersion, canCreateOutput, getIsLastVersionObsolete } from "./helpers";
+import { checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -51,7 +52,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const formDocuments: Document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, formDocumentId)
   );
-  const isRecord = (documentRevision.document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
+  const isRecord = checkIsDocumentRecord(documentRevision.document?.documentType?.groupOptions);
   const isStatusInReview = documentRevision.status === DocumentRevisionStatus.InReview;
   const isStatusReleased = documentRevision.status === DocumentRevisionStatus.Released;
   const canCopy = (documentRevision.document.documentType.groupOptions || []).includes(

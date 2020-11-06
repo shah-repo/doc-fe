@@ -17,7 +17,7 @@ import { FBWorkspace, FBWorkspaceMode } from "../../form.builder";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
 import { DocumentCloneType } from "../Clone.container";
-import { getIsDocumentRecord } from "../helpers";
+import { checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -101,7 +101,7 @@ DocumentRevisionFormContainerProps
   const bannerPortal = React.useRef(null);
   const { revisionStage } = documentRevision || {};
   const isAlphaReleased = revisionStage === 3;
-  const isRecord = getIsDocumentRecord(document?.documentType?.groupOptions);
+  const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
 
   const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;

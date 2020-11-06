@@ -1,10 +1,11 @@
 import { find, findLastIndex, get, isEmpty, map, orderBy, some, union, unionBy } from "lodash";
 import moment from "moment";
 import { Document, DocumentRevision, DocumentRevisionStatus, FBFormTemplateProps, RevisionChangeType } from "../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState, DOC_TYPE_GROUP_OPTION } from "../../state/ducks/documentRevisions/documentType";
-import { DocumentGroupOptionsType, DocumentGroupType, DocumentType, DOC_GROUP_TYPE } from "../../state/ducks/documentRevisions/documentType/types";
+import { DocumentTypeByIdState } from "../../state/ducks/documentRevisions/documentType";
+import { DocumentType } from "../../state/ducks/documentRevisions/documentType/types";
 import { OptionType } from "../components/forms/fields/Autocomplete/types";
 import { FB, FBSchemaProps } from "../form.builder";
+import { checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
 
 export const canEditDocumentRevision = (
   documentRevision: DocumentRevision,
@@ -153,7 +154,7 @@ export const getIsLastVersionObsolete = (formDocuments: Document) => some(formDo
 export const getIsAdministrativeDefault = (documentRevision: DocumentRevision) => {
   const docId = documentRevision.formDocument?.document?.docId;
   const isAlphaReleased = documentRevision.revisionStage === 3;
-  const isRecord = (documentRevision.document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
+  const isRecord = checkIsDocumentRecord(documentRevision.document?.documentType?.groupOptions);
   return Boolean(docId && !isEmpty(docId)) && isAlphaReleased && isRecord;
 };
 
@@ -163,7 +164,7 @@ export const getIsAdministrativeDefault = (documentRevision: DocumentRevision) =
  * @param outputTypes Array of output types that will be checked.
  */
 const recordsAsOutputExist = (outputTypes: DocumentType[]) =>
-  some(outputTypes, (type) => type.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.RECORD));
+  some(outputTypes, (type) => checkIsDocumentRecord(type.groupOptions));
 
 /**
    * @method
@@ -212,31 +213,4 @@ export const getFBSchemeByDocType = (
     });
   }
   return finalScheme;
-};
-
-/**
- * Checks if document is Record
- * @param groupOptions from DocumentType
- */
-export const getIsDocumentRecord = (groupOptions?: DocumentGroupOptionsType[]) => {
-  if (!groupOptions) { return false; }
-  return groupOptions.includes(DOC_TYPE_GROUP_OPTION.RECORD);
-};
-
-/**
- * Checks if document is Part
- * @param groupOptions from DocumentType
- */
-export const getIsDocumentPart = (groupOptions?: DocumentGroupOptionsType[]) => {
-  if (!groupOptions) { return false; }
-  return groupOptions.includes(DOC_TYPE_GROUP_OPTION.PART);
-};
-
-/**
- * Checks if document is Engineering Build
- * @param group from DocumentType
- */
-export const getIsDocumentEB = (group?: DocumentGroupType) => {
-  if (!group) { return false; }
-  return group === DOC_GROUP_TYPE.ENGINEERING_BUILD;
 };

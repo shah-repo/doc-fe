@@ -7,7 +7,7 @@ import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import { getIsDocumentRecord } from "../../helpers";
+import { checkIsDocumentRecord } from "../../helpers/checkDocumentGroup";
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -23,7 +23,7 @@ const CancelButton: React.FunctionComponent<Props> = ({
   const { status = "", version = 0, id, document } = documentRevision || [];
 
   const canShowCancelButton = status === DocumentRevisionStatus.Draft && version > 1;
-  const isRecord = getIsDocumentRecord(document?.documentType?.groupOptions || []);
+  const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions || []);
 
   useEffect(() => {
     setShouldDisplay(canShowCancelButton);
