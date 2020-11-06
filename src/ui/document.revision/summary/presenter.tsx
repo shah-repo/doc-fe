@@ -1,13 +1,15 @@
 import { Box, Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
-import { flatten, isEmpty } from "lodash";
-import React from "react";
+import { flatten, isEmpty, omit, set } from "lodash";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { Document } from "../../../state/ducks/documentRevisions/types";
+import { documentsActions } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
@@ -15,10 +17,13 @@ import SummaryInfo from "../../common/summary/SummaryInfo";
 import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
+import { getHighestRevision } from "../../documentRevision/forms/transform";
 import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBSchemaProps, FBWorkspace } from "../../form.builder";
 import { useCRLink, useTitle, useTraining } from "../../hooks/docCustomization/useCustomization";
 import useDescription from "../../hooks/docCustomization/useDescription";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { Translation } from "../../translations/types";
 import SummaryHeader from "../header/SummaryHeader";
@@ -82,6 +87,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const isPart = checkIsDocumentPart(document?.documentType?.groupOptions);
   const inlineApprovalFields = formDocument?.formTemplate?.schema
   .filter((field) => (field.type === "inlineapproval" as string));
+  const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
 
   const isInlineApproval = Boolean(inlineApprovalFields && inlineApprovalFields.length > 0);
 
@@ -105,6 +111,24 @@ export const Presenter: React.FunctionComponent<Props> = ({
     }
     return false;
   };
+
+  const getDocumentById = useActionCreator(documentsActions.getDocumentById);
+  const docByIdAsync = useAsync({
+    onSuccess: (data?: Document) => {
+      const childPart = getHighestRevision(data?.documentRevisions || []);
+      if (!childPart) { return; }
+      set(childPart, "document", omit(data, "documentRevisions"));
+      setDisplayChildrenParts([childPart]);
+    },
+  });
+
+  useEffect(() => {
+    const childrenPartsForRevise = formInput?.childrenPartsForRevise;
+    if (!childrenParts?.length && childrenPartsForRevise?.[0]) {
+      docByIdAsync.start(getDocumentById, childrenPartsForRevise[0].id, docByIdAsync);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const renderReleaseDetails = () => (
     <Box p={5} >
@@ -179,8 +203,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {isPart && parentParts && (
           <BuildsContainer dataProp={flatten([parentParts])} label="common.part.of" />
         )}
-        {isEB && childrenParts && (
-          <BuildsContainer dataProp={flatten([childrenParts])} label="form.builder.part" />
+        {isEB && displayChildrenParts && (
+          <BuildsContainer dataProp={flatten([displayChildrenParts])} label="form.builder.part" />
         )}
         {attachments && <Attachment
           isAttachmentEmpty={attachments.length < 1}

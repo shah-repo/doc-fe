@@ -2,6 +2,7 @@ import { cloneDeep, differenceBy, filter, find, isEmpty, isEqual, keys, map, uni
 import { reaction } from "mobx";
 import React from "react";
 import { FB, FBFieldName, FBInputState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureOmitDiffKey, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
+import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBProcedure = <T extends FBProcedureProps>(
   Component: React.FunctionComponent<T>,
@@ -20,6 +21,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const { mode } = workspaceState || {};
+    const { submitForm } = useFormContext();
     const formValue = formState?.getFieldValue(name) as FBProcedureValue;
     const attachmentsValue = formState?.getFieldValue(`${name}.attachments`);
     procedureState = FB.useRef(FBProcedureState, formValue);
@@ -125,6 +127,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
         formState?.setFieldValue(newName, formState.getFieldValue(name));
       }
       workspaceState?.setSchemaItemAt(newItem, index + 1);
+      submitForm();
     };
 
     // MARK: @observer
