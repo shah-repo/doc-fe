@@ -4,7 +4,7 @@ import { cloneDeep, filter, get, isEmpty } from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -21,6 +21,7 @@ import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
 import { DocumentCloneType } from "../Clone.container";
 import { checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
+import { isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
 import { isDocumentAlphaReleased } from "../helpers/revisionStage";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
@@ -180,7 +181,7 @@ DocumentRevisionFormContainerProps
   const loadDocumentAsync = useAsync({
     onSuccess: (data?: Document) => {
       if (data) {
-        setReleasedDocRev((data?.documentRevisions).find((doc) => doc.status === DocumentRevisionStatus.Released));
+        setReleasedDocRev((data?.documentRevisions).find((doc) => isDocumentRevisionReleased(doc.status)));
         return;
       }
     },

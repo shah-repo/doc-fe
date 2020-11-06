@@ -6,7 +6,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP_OPTION } from "../../state/ducks/documentRevisions/documentType";
-import { DocumentRevisionStatus, DocumentRevisionTransitionResponse, FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
+import { DocumentRevisionTransitionResponse, FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import AlertDialog from "../app/alert.dialog/AlertDialog";
@@ -22,7 +22,7 @@ import useDialog from "../hooks/useDialog";
 import { isOwnerContext } from "./forms/DocumentRevisionForm.presenter";
 import { checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
-import { getIsLastVersionObsolete } from "./helpers/documentRevisionStatus";
+import { getIsLastVersionObsolete, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -54,8 +54,8 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
     documentRevisionsSelectors.getDocument(state, formDocumentId)
   );
   const isRecord = checkIsDocumentRecord(documentRevision.document?.documentType?.groupOptions);
-  const isStatusInReview = documentRevision.status === DocumentRevisionStatus.InReview;
-  const isStatusReleased = documentRevision.status === DocumentRevisionStatus.Released;
+  const isStatusInReview = isDocumentRevisionInReview(documentRevision.status);
+  const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
   const canCopy = (documentRevision.document.documentType.groupOptions || []).includes(
     DOC_TYPE_GROUP_OPTION.CAN_BE_COPIED);
   const inlineApprovalFields = documentRevision?.formDocument?.formTemplate?.schema

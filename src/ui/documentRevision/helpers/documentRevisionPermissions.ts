@@ -1,5 +1,6 @@
 import { get } from "lodash";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { isDocumentRevisionInStatus, isDocumentRevisionPendingChange, isDocumentRevisionReleased } from "./documentRevisionStatus";
 
 export const canEditDocumentRevision = (
   documentRevision: DocumentRevision,
@@ -7,8 +8,10 @@ export const canEditDocumentRevision = (
 ) =>
   documentRevision.owner &&
   currentUserEmail === documentRevision.owner.user.email &&
-  (documentRevision.status === DocumentRevisionStatus.Draft ||
-    documentRevision.status === DocumentRevisionStatus.PendingChange);
+  isDocumentRevisionInStatus(
+    [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange],
+    documentRevision.status
+  );
 
 export const canSubmitDocumentRevision = (
   documentRevision: DocumentRevision,
@@ -16,14 +19,14 @@ export const canSubmitDocumentRevision = (
 ) =>
   documentRevision.owner &&
   currentUserEmail === documentRevision.owner.user.email &&
-  documentRevision.status === DocumentRevisionStatus.PendingChange;
+  isDocumentRevisionPendingChange(documentRevision.status);
 
 export const canCreateNewVersion = (
   documentRevision: DocumentRevision,
   disableCreateNewVersion: boolean,
   canShowCreateVersionButton?: boolean,
 ) =>
-  documentRevision.status === DocumentRevisionStatus.Released &&
+  isDocumentRevisionReleased(documentRevision.status) &&
   !disableCreateNewVersion &&
   canShowCreateVersionButton;
 
@@ -32,7 +35,7 @@ export const canCreateOutput = (documentRevision: DocumentRevision) => {
   return (
     documentType &&
     documentType.group === "FORM" &&
-    documentRevision.status === DocumentRevisionStatus.Released
+    isDocumentRevisionReleased(documentRevision.status)
   );
 };
 
@@ -41,7 +44,10 @@ export const canChangeDocumentOwner = (
   currentEmployeeId: string,
   ownerId: string,
   isCompanyAdmin: boolean) =>
-  ((status === DocumentRevisionStatus.Draft || status === DocumentRevisionStatus.PendingChange) &&
+  (isDocumentRevisionInStatus(
+    [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange],
+    status
+  ) &&
     ownerId === currentEmployeeId)
     || isCompanyAdmin;
 

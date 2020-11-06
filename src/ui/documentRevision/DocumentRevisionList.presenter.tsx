@@ -10,8 +10,9 @@ import { documentVersionPath } from "../document.revision/utils/paths";
 import { useDocumentStatus } from "../hooks/docCustomization/useCustomization";
 import { Translation } from "../translations/types";
 import { styles } from "./DocumentRevisionList.container.styles";
+import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionInStatus, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
 import { generateRevisionNumber } from "./helpers/generateRevisionNumber";
-import { isDocumentAlphaReleased } from "./helpers/revisionStage";
+import { isDocumentAlphaReleased, isDocumentNumericRelease } from "./helpers/revisionStage";
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -55,14 +56,14 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   let recordDateLabel = "common.updated" as Translation;
 
   const isSelected = selectedDocumentRevision === documentRevision.id;
-  const isDraft = status === DocumentRevisionStatus.Draft;
-  const isReleased = status === DocumentRevisionStatus.Released;
-  const isDeprecated = status === DocumentRevisionStatus.Deprecated;
+  const isDraft = isDocumentRevisionInDraft(status);
+  const isReleased = isDocumentRevisionReleased(status);
+  const isDeprecated = isDocumentRevisionDeprecated(status);
   const isAlphaReleased =  isDocumentAlphaReleased(documentRevision.revisionStage);
-  const isNumericRelease = documentRevision.revisionStage === 1;
+  const isNumericRelease = isDocumentNumericRelease(documentRevision.revisionStage);
   const isObsolete = documentRevision.revisionChangeType === RevisionChangeType.Obsolete;
-  const isInReview = status === DocumentRevisionStatus.InReview;
-  const isVoided = status === DocumentRevisionStatus.Obsolete || status === DocumentRevisionStatus.Voided;
+  const isInReview = isDocumentRevisionInReview(status);
+  const isVoided = isDocumentRevisionInStatus([DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided], status);
 
 
   if (isRecord) {

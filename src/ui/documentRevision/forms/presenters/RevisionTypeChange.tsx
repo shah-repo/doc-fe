@@ -9,7 +9,7 @@ import RadioGroup from "../../../components/forms/fields/RadioGroup";
 import { required, validator } from "../../../components/forms/fields/validators";
 import Text from "../../../components/Text";
 import { useAdministrativeChange, useNextRevision, useNextRevisionStage, useObsolete, useRevisionSelect } from "../../../hooks/docCustomization/useCustomization";
-import { versionNumber } from "../../helpers";
+import { versionNumber } from "../../helpers/generateRevisionNumber";
 import { styles } from "./RevisionTypeChange.styles";
 
 interface Props {

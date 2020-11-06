@@ -11,6 +11,7 @@ import { ApplicationState } from "../../../../state/reducers";
 import Text from "../../../components/Text";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
+import { isDocumentRevisionReleased } from "../../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../../layout/theme/utils/colors";
 import FileIcon from "./icon";
 import { styles } from "./utils/styles";
@@ -70,7 +71,7 @@ AttachmentIconProps
   const formDocuments: Document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, formDocumentId)
   );
-  const releasedVersions = formDocuments?.documentRevisions.filter((e) => e.status === DocumentRevisionStatus.Released);
+  const releasedVersions = formDocuments?.documentRevisions.filter((e) => isDocumentRevisionReleased(e.status));
   const lastReleasedDocRevId = releasedVersions?.[releasedVersions.length - 1]?.id;
   const docRevById = useSelector(documentRevisionsSelectors.byId);
   const dispatch = useDispatch();

@@ -1,4 +1,5 @@
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
+import { isDocumentRevisionInDraft } from "./documentRevisionStatus";
 
 const getAlphabetFromNumber = (num: number) => {
   let str = "";
@@ -33,7 +34,7 @@ export const generateRevisionNumber = (
 
   /** Subrevision should only be displayed in the doc revision table if a document is in draft.
    * If revisionStatus parameter is not passed to this function, status condition will be ignored. */
-  const isInDraft = revisionStatus === DocumentRevisionStatus.Draft;
+  const isInDraft = isDocumentRevisionInDraft(revisionStatus);
   const suffix = (isInDraft || !revisionStatus) && subRevision && subRevision > 0
     ? `.${subRevision}`
     : "";

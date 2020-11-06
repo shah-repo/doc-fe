@@ -11,6 +11,8 @@ import { OptionType } from "../../../components/forms/fields/Autocomplete/types"
 import { requiredAtLeastOne, validator } from "../../../components/forms/fields/validators";
 import { FB } from "../../../form.builder";
 import useGetHasPermission from "../../../hooks/useGetHasPermission";
+import { checkIsTypeCanBeOutput, checkIsTypeMustBeOutput } from "../../helpers/checkDocumentGroup";
+import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus";
 import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import RenderHtmlField from "./RenderHtmlField";
 
@@ -46,8 +48,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     () =>
       documentTypes.reduce((acc: OptionType[], document) => {
         if (
-          document.groupOptions?.includes("MUST_BE_OUTPUT") ||
-          document.groupOptions?.includes("CAN_BE_OUTPUT")
+          checkIsTypeMustBeOutput(document.groupOptions) || checkIsTypeCanBeOutput(document.groupOptions)
         ) {
           acc.push({ value: document.id, label: document.documentTypeName });
         }
@@ -57,7 +58,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   );
   const disabled: boolean = (docRevId !== undefined) || isDisabled;
   const isdocRevStatusDraft =
-    status === DocumentRevisionStatus.Draft;
+    isDocumentRevisionInDraft(status);
   const isdocRevVersionOne = version === 1;
   const outputDocEnabled: boolean =
     (isdocRevVersionOne && isdocRevStatusDraft) || !disabled;

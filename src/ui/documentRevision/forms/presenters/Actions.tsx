@@ -4,13 +4,15 @@ import { differenceBy, find, isEmpty, isUndefined, keys, some } from "lodash";
 import * as React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { ApprovalStatus } from "../../../../state/ducks/common";
-import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
+import { RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
 import { checkIsDocumentRecord } from "../../helpers/checkDocumentGroup";
+import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus";
+import { isDocumentNumericRelease } from "../../helpers/revisionStage";
 import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.presenter";
 import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
@@ -65,9 +67,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
   const isUserDocumentOwner = React.useContext(isOwnerContext);
-  const showVoidButton = documentRevision?.status === DocumentRevisionStatus.Draft && documentRevision?.version === 1;
-  const showVoidButtonOnInlineRecords = documentRevision?.status === DocumentRevisionStatus.Draft &&
-    documentRevision?.revisionStage === 1;
+  const showVoidButton = isDocumentRevisionInDraft(documentRevision?.status) && documentRevision?.version === 1;
+  const showVoidButtonOnInlineRecords = isDocumentRevisionInDraft(documentRevision?.status) &&
+     isDocumentNumericRelease(documentRevision?.revisionStage);
 
   function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -154,7 +156,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         )
       }
       {
-        (!isRecord || (isInlineApproval && isApproved && revisionStage === 1)) && (
+        (!isRecord || (isInlineApproval && isApproved && isDocumentNumericRelease(revisionStage))) && (
           <ApproveAndRelease
             id={values.id}
             status={values.status}

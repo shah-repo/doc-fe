@@ -19,6 +19,8 @@ import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { getHighestRevision } from "../../documentRevision/forms/transform";
 import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
+import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
+import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
 import { FBSchemaProps, FBWorkspace } from "../../form.builder";
 import { useCRLink, useTitle, useTraining } from "../../hooks/docCustomization/useCustomization";
 import useDescription from "../../hooks/docCustomization/useDescription";
@@ -90,14 +92,14 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
 
   const isInlineApproval = Boolean(inlineApprovalFields && inlineApprovalFields.length > 0);
-  const isAlphaReleased = dataProp?.revisionStage === 3;
+  const isAlphaReleased = isDocumentAlphaReleased(dataProp?.revisionStage);
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
       documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
 
-  const renderTrainingControl = (status === DocumentRevisionStatus.Released ||
-    status === DocumentRevisionStatus.Approved) && (
+  const renderTrainingControl =
+  isDocumentRevisionInStatus([DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved], status) && (
     <TrainingControl
       dataProp={trainingRecords}
       classes={classes}
@@ -227,7 +229,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         </Box>
       )}
       {isRecord && isInlineApproval && isAlphaReleased &&
-        dataProp?.status === DocumentRevisionStatus.Released && renderReleaseDetails()}
+        isDocumentRevisionReleased(dataProp?.status) && renderReleaseDetails()}
       {FBIsOutput && (
         <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
       )}
