@@ -58,6 +58,7 @@ export interface Props
   bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
   isNewVersion?: boolean;
   showAdministrativeAndVoidChange: boolean;
+  releasedDocRev?: DocumentRevision;
 }
 
 export interface FormHeaderContext {
@@ -99,14 +100,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   bannerPortal,
   isNewVersion = false,
   showAdministrativeAndVoidChange,
+  releasedDocRev,
 }) => {
   useScrollIntoView();
   const { workspaceState } = FB.useStores();
   const isDisabled: boolean = initialValues.id !== undefined;
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
-  const showObsoleteRevisionChange =
-    documentRevision?.status === DocumentRevisionStatus.Draft &&
-    documentRevision?.version === 1;
 
   FormHeaderContext = React.createContext<FormHeaderContext | undefined>({
     documentRevision,
@@ -117,12 +116,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     asyncState,
     type,
   });
-
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
   const isdocRevStatusDraft = documentRevision?.status === DocumentRevisionStatus.Draft;
+  const isDocRevFirstDraft = isdocRevStatusDraft && documentRevision?.version === 1;
   const isSubrevision = documentRevision?.subRevision as number > 0;
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
 
@@ -263,7 +262,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             isDraft={isdocRevStatusDraft || isRevised}
           />
         )}
-        <RevisionStage {...{ isDisabled }}/>
+        <RevisionStage {...{ isDisabled, isDocRevFirstDraft }}/>
         <AutocompleteField
           name="referenceTo"
           label="documentRevision.form.references"
@@ -291,12 +290,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           docRevStatus = {documentRevision?.status}
           documentRevision={documentRevision}
         />
-        {showRevisionTypeChange && !isRevisionChangeHidden &&
+        {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
         <RevisionTypeChange {...{
           documentTypeId,
-          showObsoleteRevisionChange,
+          isDocRevFirstDraft,
           showAdministrativeAndVoidChange,
           isRecord,
+          releasedDocRev,
         }}
         isDisabled={isDisabledInput} />}
         {
