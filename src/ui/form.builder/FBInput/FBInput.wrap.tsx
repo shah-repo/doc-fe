@@ -58,13 +58,14 @@ export const withFBInput = <T extends FBInputProps>(
     // TODO: Autocomplete default set as input
     // then this can be removed and handle through defaultValue
     const validationValue = get(formState?.values, name);
-
+    console.log(validationMode);
     if (isOutput || formState?.workspaceMode !== "design") {
-      (isUndefined(hidden) && validationMode === "visibility") && (hidden =
+      ((isUndefined(hidden) && validationMode === "visibility")) && (hidden =
         !helperText && (!validationValue || isEmpty(validationValue))
       );
 
-      (!disabled && validationMode === "disabled") && (disabled =
+      (!disabled && validationMode === "disabled"  &&
+      formState?.workspaceMode === "formPreview") && (disabled =
         !helperText && (!validationValue || isEmpty(validationValue))
       );
     }
