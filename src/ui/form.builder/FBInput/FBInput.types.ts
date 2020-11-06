@@ -1,4 +1,4 @@
-import { BaseTextFieldProps } from "@material-ui/core";
+import { BaseTextFieldProps, BoxProps } from "@material-ui/core";
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
 import { Dictionary } from "lodash";
 import { FBEditorOptionsProps, FBEditorPropertiesType, FBInlineApprovalRole, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
@@ -130,6 +130,10 @@ export type FBInputProps =
      * El with a type marked as a uniqueSchemaItem can be added to the schema only once.
      */
     uniqueSchemaItem?: boolean;
+    /**
+     * @cfg {Bool} MUI Box props that can be passed to input section.
+     */
+    boxProps?: BoxProps;
   };
 
 export const OmitInputClones: FBInputType[] = [
@@ -145,4 +149,5 @@ export const OmitInputClones: FBInputType[] = [
   "procedure",
   "procedurediff",
   "ebpart",
+  "parts",
 ];
