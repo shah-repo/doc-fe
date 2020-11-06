@@ -11,6 +11,7 @@ import { useDocumentStatus } from "../hooks/docCustomization/useCustomization";
 import { Translation } from "../translations/types";
 import { styles } from "./DocumentRevisionList.container.styles";
 import { generateRevisionNumber } from "./helpers/generateRevisionNumber";
+import { isDocumentAlphaReleased } from "./helpers/revisionStage";
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -57,7 +58,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isDraft = status === DocumentRevisionStatus.Draft;
   const isReleased = status === DocumentRevisionStatus.Released;
   const isDeprecated = status === DocumentRevisionStatus.Deprecated;
-  const isAlphaReleased = documentRevision.revisionStage === 3;
+  const isAlphaReleased =  isDocumentAlphaReleased(documentRevision.revisionStage);
   const isNumericRelease = documentRevision.revisionStage === 1;
   const isObsolete = documentRevision.revisionChangeType === RevisionChangeType.Obsolete;
   const isInReview = status === DocumentRevisionStatus.InReview;

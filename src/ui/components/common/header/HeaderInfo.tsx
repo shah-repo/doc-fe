@@ -6,6 +6,7 @@ import { DocumentRevisionStatus, DocumentRevisionStatusAlias, RevisionChangeType
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentStatus } from "../../../../state/ducks/documents";
 import { checkIsDocumentRecord } from "../../../documentRevision/helpers/checkDocumentGroup";
+import { isDocumentAlphaReleased } from "../../../documentRevision/helpers/revisionStage";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
 import Text from "../../Text";
 import { styles } from "./HeaderInfo.styles";
@@ -34,7 +35,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   subRevision,
 }) => {
   const isDraft = status === DocumentStatus.Draft;
-  const isAlphaReleased = revisionStage === 3;
+  const isAlphaReleased = isDocumentAlphaReleased(revisionStage);
   const isRecord = checkIsDocumentRecord(groupOptions);
 
   // we should rename enum for document types, it is not only for FB

@@ -4,7 +4,9 @@ import { checkIsDocumentRecord } from "./checkDocumentGroup";
 
 export const getIsAdministrativeDefault = (documentRevision: DocumentRevision) => {
   const docId = documentRevision.formDocument?.document?.docId;
-  const isAlphaReleased = documentRevision.revisionStage === 3;
+  const isAlphaReleased = isDocumentAlphaReleased(documentRevision.revisionStage);
   const isRecord = checkIsDocumentRecord(documentRevision.document?.documentType?.groupOptions);
   return Boolean(docId && !isEmpty(docId)) && isAlphaReleased && isRecord;
 };
+
+export const isDocumentAlphaReleased = (revisionStage?: number) => revisionStage === 3;

@@ -100,7 +100,7 @@ DocumentRevisionFormContainerProps
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const bannerPortal = React.useRef(null);
   const { revisionStage } = documentRevision || {};
-  const isAlphaReleased = revisionStage === 3;
+  const isAlphaReleased = isDocumentAlphaReleased(revisionStage);
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
 
   const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
