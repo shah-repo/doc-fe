@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 import { find, findLastIndex, get, isEmpty, map, orderBy, some, union, unionBy } from "lodash";
 import moment from "moment";
 import { Document, DocumentRevision, DocumentRevisionStatus, FBFormTemplateProps, RevisionChangeType } from "../../state/ducks/documentRevisions";
@@ -239,4 +240,78 @@ export const getIsDocumentPart = (groupOptions?: DocumentGroupOptionsType[]) => 
 export const getIsDocumentEB = (group?: DocumentGroupType) => {
   if (!group) { return false; }
   return group === DOC_GROUP_TYPE.ENGINEERING_BUILD;
+};
+
+/**
+ * Generates parameters required for generating version number
+ * It is used for revision change type prediction
+ * @param revisionChangeType selected change for which we generate parameters
+ * @param releasedDocRev released doc rev if there is one
+ * @param numOfStages number of stages from company config
+ * @param isRecord flag is doc a record
+ */
+export const versionNumber = (
+  revisionChangeType: RevisionChangeType,
+  numOfStages: number,
+  releasedDocRev?: DocumentRevision,
+  isRecord?: boolean,
+) => {
+  if (!releasedDocRev) {
+    // this is first document
+    switch (revisionChangeType) {
+      case RevisionChangeType.NextRevision: {
+        return generateVersionNumber(
+          1,
+          1,
+          0,
+          revisionChangeType,
+        );
+      }
+      case RevisionChangeType.NextRevisionStage: {
+        const bumpValue = (numOfStages === 2) ? 2 : 1;
+        return generateVersionNumber(
+          1,
+          1 + bumpValue,
+          0,
+          revisionChangeType,
+        );
+      }
+    }
+    return "";
+  }
+  switch (revisionChangeType) {
+    case RevisionChangeType.Obsolete: {
+      return generateVersionNumber(
+        isRecord ? releasedDocRev.revision : releasedDocRev.revision + 1,
+        releasedDocRev.revisionStage,
+        isRecord ? (releasedDocRev.subRevision || 0 + 1) : 0,
+        revisionChangeType,
+      );
+    }
+    case RevisionChangeType.NextRevision: {
+      return generateVersionNumber(
+        releasedDocRev.revision + 1,
+        releasedDocRev.revisionStage,
+        0,
+        revisionChangeType,
+      );
+    }
+    case RevisionChangeType.NextRevisionStage: {
+      const bumpValue = (numOfStages === 2) ? 2 : 1;
+      return generateVersionNumber(
+        1,
+        releasedDocRev.revisionStage + bumpValue,
+        0,
+        revisionChangeType,
+      );
+    }
+    case RevisionChangeType.AdministrativeChange: {
+      return generateVersionNumber(
+        releasedDocRev.revision,
+        releasedDocRev.revisionStage,
+        releasedDocRev.subRevision || 0 + 1,
+        revisionChangeType,
+      );
+    }
+  }
 };
