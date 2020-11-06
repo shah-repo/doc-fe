@@ -23,7 +23,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     // MARK: @methods
     handleAdd = () => {
       if (!docRevId && !pmFormId) { return; }
-      window.open(`/document_revision/${pmFormId}/create_maintenance/${docRevId}?equipmentSection=${name}`);
+      window.open(`/document_revision/${pmFormId}/create_maintenance/${docRevId}/${name}`);
     };
 
     // MARK: @observer

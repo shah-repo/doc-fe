@@ -31,8 +31,9 @@ interface StateProps {
 }
 
 interface RouteParams {
-  recordId: string;
+  docRevId: string;
   pmFormId: string;
+  equipmentSection: string;
 }
 
 export type DocumentRevisionCreateContainerProps =
@@ -104,10 +105,13 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   }, [isCreateMaintenance]);
 
   if (isCreateMaintenance) {
-    const { recordId } = match.params;
+    console.log(match);
+
+    const { docRevId, equipmentSection } = match.params;
     initialValues.parentEquipment = {
-      id: recordId,
+      id: docRevId,
     };
+    initialValues.equipmentSection = equipmentSection;
   }
   const async = useAsync<DocumentRevision>({
     onSuccess: (createdDocumentRevision?) => {
