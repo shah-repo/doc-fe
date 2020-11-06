@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -30,8 +31,12 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
 
     React.useEffect(() => {
       const arrayOfFileIds = fileUploadState?.files.map((file) => file.id );
+      if (isEmpty(arrayOfFileIds)) {
+        return;
+      }
       fileUploadState?.getAttachments(arrayOfFileIds);
-    }, [fileUploadState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     React.useEffect(() => {
       reaction(
