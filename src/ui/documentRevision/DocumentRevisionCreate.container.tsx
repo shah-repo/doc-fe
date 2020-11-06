@@ -105,13 +105,15 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   }, [isCreateMaintenance]);
 
   if (isCreateMaintenance) {
-    console.log(match);
-
     const { docRevId, equipmentSection } = match.params;
     initialValues.parentEquipment = {
       id: docRevId,
     };
     initialValues.equipmentSection = equipmentSection;
+    initialValues.formTemplate = undefined;
+    initialValues.formDocument = {
+      id: pmFormId,
+    };
   }
   const async = useAsync<DocumentRevision>({
     onSuccess: (createdDocumentRevision?) => {

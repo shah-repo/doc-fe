@@ -107,7 +107,6 @@ DocumentRevisionFormContainerProps
   const pmForm = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, pmFormId || ""),
   );
-
   const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
 
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
@@ -175,17 +174,21 @@ DocumentRevisionFormContainerProps
     (cleanInitialValues)?.formDocument?.formTemplate ||
     {}
   );
-  originScheme = cleanInitialValues?.schema || originScheme;
+  originScheme = pmForm ?  pmForm?.formTemplate?.schema || [] : cleanInitialValues?.schema || originScheme;
+
   const isOutput =  Boolean(outputGroup && !isEmpty(outputGroup));
   const formInput = useMemo(() =>
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
   , [cleanInitialValues]);
 
   let mode: Partial<FBWorkspaceMode> = "none";
+
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";
   } else if (outputGroup) {
     mode = (formGroup === "ENGINEERING_BUILD") ? "formDesign" : "form";
+  } else if (pmForm) {
+    mode = "form";
   }
   const showAdministrativeAndVoidChange = isOutput && isAlphaReleased && isRecord;
 

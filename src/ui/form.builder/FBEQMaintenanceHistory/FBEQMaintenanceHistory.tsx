@@ -2,11 +2,13 @@ import { Box } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBEQMaintenanceHistoryProps } from "..";
+import { FBEQMaintenanceHistoryProps, FBMapWrapper } from "..";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBEQMaintenanceHistory } from "./FBEQMaintenanceHistory.wrap";
 
 const FBEQMaintenanceHistory: React.FunctionComponent<FBEQMaintenanceHistoryProps> = ({
+  maintenanceHistory,
   ...props
 }) => (
   <Box mb={5} fontWeight="fontWeightBold">
@@ -14,14 +16,20 @@ const FBEQMaintenanceHistory: React.FunctionComponent<FBEQMaintenanceHistoryProp
       Maintenance History
       <ArrowDropDownIcon />
     </Box>
-    <Box display="flex" flexDirection="row">
-      <Box color={Colors.medium_blue} mr={0.5}>
-        PM-000020 - Microscope PM
-      </Box>
-      <Box fontWeight="fontWeightRegular">
-        | Bob Jones | Work in Progress
-      </Box>
-    </Box>
+    <FBMapWrapper<DocumentRevision[]> collection={maintenanceHistory}>
+      {(item: DocumentRevision, index) => (
+        <Box display="flex" flexDirection="row">
+          <Box color={Colors.medium_blue} mr={0.5}>
+            {item.document?.docId} - {item.name}
+          </Box>
+          <Box fontWeight="fontWeightRegular">
+            {/* Waiting on BE to add owner */}
+        | Bob Jones | {item.status}
+          </Box>
+        </Box>
+      )}
+    </FBMapWrapper>
+
   </Box>
 );
 

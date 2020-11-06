@@ -1,14 +1,27 @@
+import { template } from "lodash";
+import { observable } from "mobx";
+import { FBEndpoint } from "../defaults/FBEndpoint";
+import FBRequest from "../FBApi/FBApi.request";
 
-export class FBEQMaintenanceHistoryState {
-  // MARK: @observables
+export class FBEQMaintenanceHistoryState extends FBRequest<any, any>  {
+  @observable maintenanceHistory?: any;
 
-  // MARK: @config
+  public constructor(id: string) {
+    super();
+    this.fetchMaintenanceHistory(id);
+  }
 
-  // MARK: @constructor
+  public fetchMaintenanceHistory = (id: string) => {
+    const urlTpl = template(FBEndpoint.HistoryMaintenance);
+    const url = urlTpl({ id });
+    this.setUrl(url);
+    this.fetch();
+  };
 
-  // MARK: @actions
-
-  // MARK: @helpers
+  public onSuccess() {
+    this.maintenanceHistory = this.data;
+    super.onSuccess();
+  }
 }
 
 export default FBEQMaintenanceHistoryState;

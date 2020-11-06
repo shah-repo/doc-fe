@@ -120,14 +120,15 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         ...formik.values as Partial<DocumentRevision>,
         "document.documentType.id": typeId,
       };
-      scheme = getFBSchemeByDocType(
+      // TO DO: This needs clenaup
+      if (!isCreateMaintenance) { scheme = getFBSchemeByDocType(
         formValues,
         documentTypesById,
         workspaceState?.getSchema(),
-      );
+      ); }
     }
-    workspaceState?.setMode(mode);
-    workspaceState?.setSchema(scheme);
+    if (!isCreateMaintenance) { workspaceState?.setMode(mode);
+    workspaceState?.setSchema(scheme); }
   };
 
   if (!isVisible && type !== "newOutput") {

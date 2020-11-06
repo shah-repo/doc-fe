@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import React from "react";
-import { FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBCheckboxGroup, FBData, FBEQMaintenanceHistory, FBFileUpload, FBInput, FBSelect, FBTextEditor } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBCheckboxGroup, FBData, FBEQMaintenanceHistory, FBFileUpload, FBInput, FBSelect, FBTextEditor, FBTextField } from "..";
 import { FBSection } from "../FBSection";
 import { FBEQMaintenanceProps } from "./FBEQMaintenance.types";
 import { withFBEQMaintenance } from "./FBEQMaintenance.wrap";
@@ -10,6 +10,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   handleAdd,
   name,
   disabled,
+  isNewPMDisabled,
   ...props
 }) => (
   <FBInput {...{ name }} {...props} type="eqmaintenance">
@@ -24,7 +25,8 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
           label="form.builder.new.pm"
           style={{ margin: 0 }}
           onClick={handleAdd}
-          {...{ disabled }}
+          disabled={disabled || isNewPMDisabled}
+
         />
       </Box>
     </FBSection>
@@ -44,11 +46,13 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       withState
       {...{ disabled }}
     />
-    <FBAutocomplete
+    {/* This needs to be a number field */}
+    <FBTextField
       name={`${name}.frequency`}
       label="form.builder.maintenance.frequency"
       rules={`required_if_in:${name}.requirements,Yes`}
       validationMode="visibility"
+      withState
       {...{ disabled }}
     />
     <FBTextEditor
@@ -58,7 +62,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       validationMode="visibility"
       {...{ disabled }}
     />
-    <FBEQMaintenanceHistory />
+    <FBEQMaintenanceHistory {...{ name }}/>
     <FBFileUpload
       name={`${name}.manufacturer`}
       label="form.builder.attach.manufacturer"

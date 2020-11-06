@@ -1,3 +1,4 @@
+import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBEQMaintenanceHistoryProps, FBEQMaintenanceHistoryState } from "..";
 
@@ -6,11 +7,15 @@ export const withFBEQMaintenanceHistory = <T extends FBEQMaintenanceHistoryProps
 ) => {
   const Comp = ({
     eqMaintenanceHistoryState,
+    maintenanceHistory,
+    name,
     ...props
   }: T) => {
 
     // MARK: @config
-    eqMaintenanceHistoryState = FB.useRef(FBEQMaintenanceHistoryState);
+    const { workspaceState } = FB.useStores();
+    const { id } = workspaceState || {};
+    eqMaintenanceHistoryState = FB.useRef(FBEQMaintenanceHistoryState, id);
 
     // MARK: @reactions
 
@@ -19,9 +24,17 @@ export const withFBEQMaintenanceHistory = <T extends FBEQMaintenanceHistoryProps
     // MARK: @methods
 
     // MARK: @observer
+    useObserver(() => {
+      maintenanceHistory = eqMaintenanceHistoryState?.maintenanceHistory?.[name || ""];
+    });
+
+    if (!maintenanceHistory) {
+      return null;
+    }
 
     return Component({
       ...(props as T),
+      maintenanceHistory,
     });
   };
 

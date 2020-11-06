@@ -14,6 +14,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
 
     // MARK: @config
     let pmFormId = "";
+    let isNewPMDisabled;
     const { workspaceState, formState } = FB.useStores();
     const { id: docRevId } = workspaceState || {};
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
@@ -32,10 +33,15 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       pmFormId = formState?.inputState.get("preventativeMaintenanceForm")?.value;
     });
 
+    useObserver(() => {
+      isNewPMDisabled = !formState?.inputState.get("preventativeMaintenanceForm")?.value || !formState?.inputState.get(`${name}.frequency`)?.value;
+    });
+
     return Component({
       ...(props as T),
       handleAdd,
       name,
+      isNewPMDisabled,
     });
   };
 

@@ -6,6 +6,7 @@ export type FBEQMaintenanceProps =
 & Pick<FBProviderProps, "eqMaintenanceState">
 & {
   handleAdd?: () => void;
+  isNewPMDisabled: boolean;
 };
 
 export interface FBEQMaintenanceValue {
