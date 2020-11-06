@@ -77,8 +77,8 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
     scheduledForDeletion: true,
   };
   const body: ICreateCompanyBootstrap = {
-    ...payload,
     ...bodyDefaults,
+    ...payload,
   };
   cy.request({
     method: "POST",
