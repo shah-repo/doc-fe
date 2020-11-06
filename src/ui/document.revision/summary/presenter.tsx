@@ -90,6 +90,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
 
   const isInlineApproval = Boolean(inlineApprovalFields && inlineApprovalFields.length > 0);
+  const isAlphaReleased = dataProp?.revisionStage === 3;
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
@@ -133,7 +134,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const renderReleaseDetails = () => (
     <Box p={5} >
       <Typography variant="h6" style={{ paddingBottom: 8 }}>
-        <Text message="Release Details" />
+        <Text translation="document.revision.release.details" />
       </Typography>
       <SummaryInfo
         label={"record.released.by"}
@@ -225,7 +226,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
           />
         </Box>
       )}
-      {isRecord && isInlineApproval && renderReleaseDetails()}
+      {isRecord && isInlineApproval && isAlphaReleased &&
+        dataProp?.status === DocumentRevisionStatus.Released && renderReleaseDetails()}
       {FBIsOutput && (
         <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
       )}
