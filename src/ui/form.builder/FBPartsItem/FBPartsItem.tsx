@@ -5,11 +5,10 @@ import {
   FBConditionalWrapper,
   FBFieldName,
   FBMapWrapper,
-
-
   FBPartItemStatusBg,
-
-  FBPartItemStatusBorder, FBPartsItemProps, FBProcedureItemConfig,
+  FBPartItemStatusBorder,
+  FBPartsItemProps,
+  FBProcedureItemConfig,
   FBProcedureItemLocale,
   FBSection
 } from "..";
@@ -30,7 +29,7 @@ const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
       label={FBProcedureItemLocale[type]}
       name={`${FBFieldName.MaterialSection}${name}`}
       {...{ loading, gutter }}
-      {...!gutter && !isEmpty(collection) && { boxProps: { mb: 5 }}}
+      {...!gutter && !isEmpty(collection) && { boxProps: { mb: 5 } }}
     />
     {!loading && (
       <FBMapWrapper<FBProcedureItemConfig[]> {...{ collection }}>
@@ -66,7 +65,7 @@ const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
                 borderRadius: 4,
                 padding: 1,
                 fontWeight: "bold",
-                mb: (gutter && index === size(collection) -1) ? 5 : 2,
+                mb: (gutter && index === (size(collection) - 1)) ? 5 : 2,
               }}
             />
           </FBConditionalWrapper>

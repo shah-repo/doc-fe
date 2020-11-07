@@ -117,9 +117,13 @@ export class FBMediaAlbumFieldState {
 
     promise
       .then((data: FBMediaProps[]) => {
-        const fieldNameFromSchema = this.fieldName;
+        const fieldNameFromSchema = this.fieldName || "";
         const filesByName = filter(data, { fieldNameFromSchema });
-        !isEmpty(filesByName) && this.setMode("media");
+        if (isEmpty(filesByName)) {
+          FBMediaAlbumFieldStore.setData(this.fieldName || "", []);
+          return this.setLoading(false);
+        }
+        this.setMode("media");
         this.download(filesByName);
       })
       .catch((_error) => this.error(_error));

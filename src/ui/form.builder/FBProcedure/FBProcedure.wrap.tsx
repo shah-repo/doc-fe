@@ -1,8 +1,8 @@
-import { cloneDeep, differenceBy, filter, find, isEmpty, isEqual, keys, map, union, unionBy } from "lodash";
+import { cloneDeep, differenceBy, filter, find, isEqual, keys, map, union, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBFieldName, FBInputState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureOmitDiffKey, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
+import { FB, FBFieldName, FBInputState, FBMediaAlbumFieldStore, FBProcedureItemConfig, FBProcedureItemType, FBProcedureOmitDiffKey, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBProcedure = <T extends FBProcedureProps>(
@@ -27,11 +27,11 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     procedureState = FB.useRef(FBProcedureState, formValue);
     isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
     isPreview = workspaceState?.mode === "preview";
-    types = keys(FBProcedureItemType);
     const diffValue = formState?.inputState.get(FBFieldName.ProcedureDiff)?.value;
     procedureState?.setDiffPreview(diffValue);
     const inputState = FB.useRef<FBInputState>(FBInputState, undefined);
     formState?.inputState.set(`${FBFieldName.ProcedureDiff}${name}`, inputState);
+    types = keys(FBProcedureItemType);
 
     // MARK: @reactions
     // Form sync
@@ -127,13 +127,10 @@ export const withFBProcedure = <T extends FBProcedureProps>(
 
     // MARK: @observer
     useObserver(() => {
-      // Omit attachments section if no attachments
-      const attachValue = formState?.inputState.get(`${name}.attachments`)?.value;
-      const hiddenMedia = Boolean(
-        (mode === "preview" || mode === "formPreview") &&
-        (!attachValue || isEmpty(attachValue))
-      );
-      hiddenMedia && (types = filter(types, (type) => type !== "attachments"));
+      const attach = FBMediaAlbumFieldStore.data.get(`${name}.attachments`);
+      if ((mode === "preview" || mode === "formPreview") && attach?.size === 0) {
+        types = filter(types, (type) => type !== "attachments");
+      }
     });
 
     return Component({

@@ -30,9 +30,9 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
       title = (mode === "carousel")
         ? collection[mediaAlbumState?.activeMedia || 0]?.name
         : "";
-      hiddenContainer = (
+      hiddenContainer = Boolean(
         (workspaceMode === "preview" || workspaceMode === "formPreview") &&
-        !collection || isEmpty(collection)
+        isEmpty(collection)
       );
     });
 
