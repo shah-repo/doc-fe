@@ -1,5 +1,6 @@
 import { cloneDeep, differenceBy, filter, find, isEmpty, isEqual, keys, map, union, unionBy } from "lodash";
 import { reaction } from "mobx";
+import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBFieldName, FBInputState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureOmitDiffKey, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
@@ -23,7 +24,6 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     const { mode } = workspaceState || {};
     const { submitForm } = useFormContext();
     const formValue = formState?.getFieldValue(name) as FBProcedureValue;
-    const attachmentsValue = formState?.getFieldValue(`${name}.attachments`);
     procedureState = FB.useRef(FBProcedureState, formValue);
     isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
     isPreview = workspaceState?.mode === "preview";
@@ -32,11 +32,6 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     procedureState?.setDiffPreview(diffValue);
     const inputState = FB.useRef<FBInputState>(FBInputState, undefined);
     formState?.inputState.set(`${FBFieldName.ProcedureDiff}${name}`, inputState);
-
-    // Omit attachments section if no attachments
-    if ((mode === "preview" || mode === "formPreview") && (!attachmentsValue || isEmpty(attachmentsValue))) {
-      types = filter(types, (type) => type !== "attachments");
-    }
 
     // MARK: @reactions
     // Form sync
@@ -131,6 +126,15 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     };
 
     // MARK: @observer
+    useObserver(() => {
+      // Omit attachments section if no attachments
+      const attachValue = formState?.inputState.get(`${name}.attachments`)?.value;
+      const hiddenMedia = Boolean(
+        (mode === "preview" || mode === "formPreview") &&
+        (!attachValue || isEmpty(attachValue))
+      );
+      hiddenMedia && (types = filter(types, (type) => type !== "attachments"));
+    });
 
     return Component({
       ...(props as T),
