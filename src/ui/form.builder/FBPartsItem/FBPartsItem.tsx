@@ -10,7 +10,7 @@ import {
   FBPartsItemProps,
   FBProcedureItemConfig,
   FBProcedureItemLocale,
-  FBSection
+  FBSection,
 } from "..";
 import { FBText } from "../FBText";
 import { withFBPartsItem } from "./FBPartsItem.wrap";
