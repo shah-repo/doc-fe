@@ -132,9 +132,13 @@ export type FBInputProps =
      */
     uniqueSchemaItem?: boolean;
     /**
-     * @cfg {Bool} Include component into validation schema select option
+     * @cfg {Bool} Include component into validation schema select option.
      */
     applicableValidationSchema?: boolean;
+    /**
+     * @cfg {Bool} Any additional config we want to pass to the input.
+     */
+    editorConfig?: any;
   };
 
 export const OmitInputClones: FBInputType[] = [

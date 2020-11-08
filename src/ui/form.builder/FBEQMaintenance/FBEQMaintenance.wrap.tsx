@@ -34,14 +34,17 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     });
 
     useObserver(() => {
-      isNewPMDisabled = !formState?.inputState.get("preventativeMaintenanceForm")?.value || !formState?.inputState.get(`${name}.frequency`)?.value;
+      isNewPMDisabled = (
+        !formState?.inputState.get("preventativeMaintenanceForm")?.value ||
+        !formState?.inputState.get(`${name}.frequency`)?.value
+      );
     });
 
     return Component({
       ...(props as T),
       handleAdd,
-      name,
       isNewPMDisabled,
+      name,
     });
   };
 

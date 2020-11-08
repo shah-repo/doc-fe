@@ -8,6 +8,7 @@ import { FBEditorApprovals } from "../FBEditorApprovals";
 import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
 import { FBEditorEmpty } from "../FBEditorEmpty";
+import { FBEditorEQMaintenance } from "../FBEditorEQMaintenance";
 import { FBEditorHyperlink } from "../FBEditorHyperlink";
 import { FBEditorInlineApproval } from "../FBEditorInlineApproval";
 import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
@@ -127,7 +128,7 @@ export class FBEditorState {
     approvals: FBEditorApprovals,
     procedure: FBEditorEmpty,
     parts: FBEditorEmpty,
-    eqmaintenance: FBEditorEmpty,
+    eqmaintenance: FBEditorEQMaintenance,
   };
 
   @observable public mode?: FBEditorMode = "config";

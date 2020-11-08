@@ -784,6 +784,7 @@
   "form.builder.drawings.specs": "If the EFT is custom, then cross-reference to Supira drawings or specifications",
   "form.builder.yes": "Yes",
   "form.builder.no": "No",
+  "form.builder.include.fields": "Include fields:",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.pdf": "Download PDF file",

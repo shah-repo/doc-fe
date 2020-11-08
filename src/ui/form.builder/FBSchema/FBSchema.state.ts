@@ -54,6 +54,7 @@ export class FBSchemaState {
     "task",
     "blanktplform",
     "approvals",
+    "eqmaintenance",
   ];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
