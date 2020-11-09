@@ -1,5 +1,5 @@
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { generateVersionNumber } from "../../documentRevision/helpers";
+import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
 
 export const generateDocIdLabel = (docRev?: DocumentRevision) => {
   if (!docRev) {
@@ -11,5 +11,5 @@ export const generateDocIdLabel = (docRev?: DocumentRevision) => {
 
 export const docIdVersion = (docRev: DocumentRevision) => {
   const { revision, subRevision, revisionStage, revisionChangeType } = docRev;
-  return generateVersionNumber(revision, revisionStage, subRevision, revisionChangeType);
+  return generateRevisionNumber(revision, revisionStage, subRevision, revisionChangeType);
 };

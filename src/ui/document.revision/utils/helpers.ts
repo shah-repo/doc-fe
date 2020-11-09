@@ -4,20 +4,16 @@ import "moment-timezone";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
 import { SelectOption } from "../../components/forms/fields/Select";
+import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../documentRevision/helpers/documentRevisionStatus";
 import { CompletedOnDateOptions, ReleasedDateOptions } from "./types";
 
-const isDraft = (documentRevision: DocumentRevision) =>
-  documentRevision.status === DocumentRevisionStatus.Draft;
-
-const isPendingChange = (documentRevision: DocumentRevision) =>
-  documentRevision.status === DocumentRevisionStatus.PendingChange;
 
 export const canEditDocumentRevision = (documentRevision: DocumentRevision) => {
   const owner = get(documentRevision, "owner.user.email");
   const currentUser = store.getState().auth.user.email;
   return (
     currentUser === owner &&
-    (isDraft(documentRevision) || isPendingChange(documentRevision))
+    (isDocumentRevisionInDraft(documentRevision) || isDocumentRevisionPendingChange(documentRevision))
   );
 };
 

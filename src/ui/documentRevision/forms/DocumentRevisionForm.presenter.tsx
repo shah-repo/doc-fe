@@ -5,8 +5,8 @@ import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
+import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
 import { default as AutocompleteField } from "../../components/forms/fields/Autocomplete/Autocomplete";
@@ -23,7 +23,8 @@ import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
-import { getIsDocumentEB } from "../helpers";
+import { checkIsDocumentEB, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
+import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
 import styles from "./DocumentRevisionForm.styles";
 import Description from "./presenters/Description";
 import DocIdInput from "./presenters/DocIdInput";
@@ -120,20 +121,20 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
-  const isdocRevStatusDraft = documentRevision?.status === DocumentRevisionStatus.Draft;
+  const isdocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isDocRevFirstDraft = isdocRevStatusDraft && documentRevision?.version === 1;
   const isSubrevision = documentRevision?.subRevision as number > 0;
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
 
   const hasOutput = useMemo(() => {
     const documentType = documentTypesById[values.document?.documentType?.id || ""];
-    return documentType?.groupOptions?.includes("HAVE_OUTPUT");
+    return checkIsTypeHaveOutput(documentType?.groupOptions);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentTypesById, values.document?.documentType?.id]);
 
   const isRecord = useMemo(() => {
     const documentType = documentTypesById[values.document?.documentType?.id || ""];
-    return documentType?.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.RECORD);
+    return checkIsDocumentRecord(documentType?.groupOptions);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentTypesById, values.document?.documentType?.id]);
   const isRevisionChangeHidden = isRecord && isdocRevStatusDraft && !isSubrevision;
@@ -175,7 +176,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   }, [isdocRevStatusDraft, values.document, values.name]);
 
   const documentTypeId = values.document?.documentType?.id;
-  const isEB = getIsDocumentEB(documentRevision?.document.documentType.group);
+  const isEB = checkIsDocumentEB(documentRevision?.document.documentType.group);
   return (
     <Grid
       item={true}
