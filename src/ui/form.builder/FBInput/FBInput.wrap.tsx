@@ -63,7 +63,9 @@ export const withFBInput = <T extends FBInputProps>(
       (isUndefined(hidden) && validationMode === "visibility") && (hidden =
         !helperText && (!validationValue || isEmpty(validationValue))
       );
-
+      if (formState?.workspaceMode === "formPreview") {
+        hidden = false;
+      }
       (!disabled && validationMode === "disabled") && (disabled =
         !helperText && (!validationValue || isEmpty(validationValue))
       );
