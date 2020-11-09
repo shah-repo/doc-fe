@@ -13,6 +13,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   isNewPMDisabled,
   editorConfig = [],
   label,
+  currentStatus,
   ...props
 }) => (
   <FBInput {...{ name }} {...props} type="eqmaintenance">
@@ -36,7 +37,6 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       label="form.builder.preventative.maintenance.form"
       optionId={FBAutocompleteAsyncOption.preventativeMaintenaceForms}
       name="preventativeMaintenanceForm"
-      validationMode="visibility"
       withState
       {...{ disabled }}
     />
@@ -44,15 +44,16 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
     <FBTextField
       name={`${name}.frequency`}
       label="form.builder.maintenance.frequency"
-      validationMode="visibility"
       withState
       {...{ disabled }}
     />
+    {currentStatus && <Box mb={3}>
+      <b>Current Status:</b> {currentStatus}
+    </Box>}
     {editorConfig.includes("instructions") && (
       <FBTextEditor
         name={`${name}.instructions`}
         label="form.builder.pm.instructions"
-        validationMode="visibility"
         {...{ disabled }}
       />
     )}
@@ -61,7 +62,6 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       <FBFileUpload
         name={`${name}.manufacturer`}
         label="form.builder.attach.manufacturer"
-        validationMode="visibility"
         {...{ disabled }}
       />
     )}
@@ -69,7 +69,6 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       <FBSelect
         name={`${name}.specs`}
         label="form.builder.drawings.specs"
-        validationMode="visibility"
         {...{ disabled }}
       />
     )}

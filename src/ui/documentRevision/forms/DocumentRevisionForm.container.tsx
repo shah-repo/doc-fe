@@ -5,7 +5,7 @@ import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeByIdState, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
@@ -104,6 +104,8 @@ DocumentRevisionFormContainerProps
   const { revisionStage } = documentRevision || {};
   const isAlphaReleased = revisionStage === 3;
   const isRecord = getIsDocumentRecord(document?.documentType?.groupOptions);
+  const isEditableSchema = document?.documentType?.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
+
   const pmForm = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, pmFormId || ""),
   );
@@ -186,7 +188,7 @@ DocumentRevisionFormContainerProps
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";
   } else if (outputGroup) {
-    mode = (formGroup === "ENGINEERING_BUILD") ? "formDesign" : "form";
+    mode = isEditableSchema ? "formDesign" : "form";
   } else if (pmForm) {
     mode = "form";
   }

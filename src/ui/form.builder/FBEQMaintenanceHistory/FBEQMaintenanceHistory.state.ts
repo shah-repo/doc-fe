@@ -8,6 +8,9 @@ export class FBEQMaintenanceHistoryState extends FBRequest<any, any>  {
 
   public constructor(id: string) {
     super();
+    if (!id) {
+      return;
+    }
     this.fetchMaintenanceHistory(id);
   }
 

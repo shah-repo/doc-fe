@@ -3,6 +3,7 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { FBEQMaintenanceHistoryProps, FBMapWrapper } from "..";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBEQMaintenanceHistory } from "./FBEQMaintenanceHistory.wrap";
@@ -23,8 +24,9 @@ const FBEQMaintenanceHistory: React.FunctionComponent<FBEQMaintenanceHistoryProp
             {item.document?.docId} - {item.name}
           </Box>
           <Box fontWeight="fontWeightRegular">
-            {/* Waiting on BE to add owner */}
-        | Bob Jones | {item.status}
+            | {item.owner.user.name}
+            | {item.status}
+            | { item.releasedAt && getFormattedDateString(item.releasedAt, MomentFormats.MonthDateYearAlt)}
           </Box>
         </Box>
       )}

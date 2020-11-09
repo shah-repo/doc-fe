@@ -8,7 +8,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
   const Comp = ({
     handleAdd,
     eqMaintenanceState,
-    name,
+    name = "",
     ...props
   }: T) => {
 
@@ -17,8 +17,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     let isNewPMDisabled;
     const { workspaceState, formState } = FB.useStores();
     const { id: docRevId } = workspaceState || {};
+    const currentStatus = workspaceState?.document?.formInput?.[name]?.status;
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
-
     // MARK: @reactions
 
     // MARK: @methods
@@ -45,6 +45,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       handleAdd,
       isNewPMDisabled,
       name,
+      currentStatus,
     });
   };
 

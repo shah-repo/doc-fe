@@ -5,6 +5,7 @@ import * as React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { ApprovalStatus } from "../../../../state/ducks/common";
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
+import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
@@ -72,7 +73,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
     return (
-      (documentRevision?.document?.documentType.group === "ENGINEERING_BUILD") &&
+      (Boolean(documentRevision?.document?.documentType.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA))) &&
       Boolean(differenceBy(workspaceState?.schema || [],  documentSchema, "name").length)
     );
   }
