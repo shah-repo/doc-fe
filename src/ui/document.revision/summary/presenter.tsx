@@ -91,7 +91,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
 
   const isInlineApproval = isFormWithInlineApproval(formDocument?.formTemplate?.schema);
-  const isAlphaReleased = isDocumentAlphaReleased(dataProp?.revisionStage);
+  const isFirstAlphaReleased = isDocumentAlphaReleased(dataProp?.revisionStage) && dataProp?.subRevision === 0;
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
@@ -227,7 +227,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           />
         </Box>
       )}
-      {isRecord && isInlineApproval && isAlphaReleased &&
+      {isRecord && isInlineApproval && isFirstAlphaReleased &&
         isDocumentRevisionReleased(dataProp?.status) && renderReleaseDetails()}
       {FBIsOutput && (
         <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
