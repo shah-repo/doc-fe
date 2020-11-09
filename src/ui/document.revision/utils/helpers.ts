@@ -9,7 +9,7 @@ import { CompletedOnDateOptions, ReleasedDateOptions } from "./types";
 
 
 export const canEditDocumentRevision = (documentRevision: DocumentRevision) => {
-  const owner = get(documentRevision, "owner.user.email");
+  const owner = get(documentRevision, "owner.user.email", "");
   const currentUser = store.getState().auth.user.email;
   return (
     currentUser === owner &&
