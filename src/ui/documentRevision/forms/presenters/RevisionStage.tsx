@@ -5,7 +5,6 @@ import { companySelectors } from "../../../../state/ducks/company";
 import { RevisionStageOptions } from "../../../../state/ducks/documentRevisions";
 import RadioButton from "../../../components/forms/fields/RadioButton";
 import RadioGroup from "../../../components/forms/fields/RadioGroup";
-import { required, validator } from "../../../components/forms/fields/validators";
 import Text from "../../../components/Text";
 
 interface Props {
@@ -32,7 +31,7 @@ export const RevisionStage: React.FunctionComponent<Props> = ({
       <Typography variant="h6">
         <Text message={"document.revision.stage"}/>
       </Typography>
-      <RadioGroup name="revisionStage" validate={validator(required)}>
+      <RadioGroup name="revisionStage">
         {revStageOptions.map((option) =>
           <RadioButton
             key={`${option.value}-${option.text}`}

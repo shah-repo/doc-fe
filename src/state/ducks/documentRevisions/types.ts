@@ -240,7 +240,7 @@ export interface FBDocumentRevisionProps {
   document?: Partial<DocumentRevisionDocumentRequest>;
   revision?: number;
   subRevision?: number;
-  revisionStage?: number;
+  revisionStage?: string | number;
   revisionChangeType?: RevisionChangeType;
   releasedAt?: string;
   renderHTML?: string;
