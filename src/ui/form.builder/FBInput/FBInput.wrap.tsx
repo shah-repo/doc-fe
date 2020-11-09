@@ -59,13 +59,11 @@ export const withFBInput = <T extends FBInputProps>(
     // then this can be removed and handle through defaultValue
     const validationValue = get(formState?.values, name);
 
-    if (isOutput || formState?.workspaceMode !== "design") {
+    if ((isOutput || formState?.workspaceMode !== "design") && formState?.workspaceMode !== "formPreview") {
       (isUndefined(hidden) && validationMode === "visibility") && (hidden =
         !helperText && (!validationValue || isEmpty(validationValue))
       );
-      if (formState?.workspaceMode === "formPreview") {
-        hidden = false;
-      }
+
       (!disabled && validationMode === "disabled") && (disabled =
         !helperText && (!validationValue || isEmpty(validationValue))
       );
