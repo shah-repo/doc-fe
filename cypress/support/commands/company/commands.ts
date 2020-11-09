@@ -75,6 +75,20 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
     name: `${capitalize(faker.commerce.color())} ${faker.company.companyName()} ${companyNumber}`,
     companyAcronym: `TC${companyNumber}`,
     scheduledForDeletion: true,
+    whiteLabeling: {
+      DEV_THEME: {
+        logo: "https://www.feshfen.com/images/wigs/test.png",
+        avatar: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        imageEmail: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        colors: {
+          defaultBackground: "#4b5dc6",
+          primary: "#eb5055",
+          primaryContrastText: "#000000",
+          secondary: "#414b8b",
+          secondaryContrastText: "#FFFFFF",
+        },
+      },
+    },
   };
   const body: ICreateCompanyBootstrap = {
     ...payload,
