@@ -18,7 +18,10 @@ import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { getHighestRevision } from "../../documentRevision/forms/transform";
-import { getIsDocumentEB, getIsDocumentPart, getIsDocumentRecord } from "../../documentRevision/helpers";
+import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
+import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
+import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
+import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
 import { FBSchemaProps, FBWorkspace } from "../../form.builder";
 import { useCRLink, useTitle, useTraining } from "../../hooks/docCustomization/useCustomization";
 import useDescription from "../../hooks/docCustomization/useDescription";
@@ -82,21 +85,20 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const [isTitleVisible, titleLabel] = useTitle(docTypeId);
   const [isCRLinkVisible] = useCRLink(docTypeId);
   const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
-  const isRecord = getIsDocumentRecord(document?.documentType?.groupOptions);
-  const isEB = getIsDocumentEB(document.documentType.group);
-  const isPart = getIsDocumentPart(document?.documentType?.groupOptions);
-  const inlineApprovalFields = formDocument?.formTemplate?.schema
-  .filter((field) => (field.type === "inlineapproval" as string));
+  const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
+  const isEB = checkIsDocumentEB(document.documentType.group);
+  const isPart = checkIsDocumentPart(document?.documentType?.groupOptions);
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
 
-  const isInlineApproval = Boolean(inlineApprovalFields && inlineApprovalFields.length > 0);
+  const isInlineApproval = isFormWithInlineApproval(formDocument?.formTemplate?.schema);
+  const isFirstAlphaReleased = isDocumentAlphaReleased(dataProp?.revisionStage) && dataProp?.subRevision === 0;
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
       documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
 
-  const renderTrainingControl = (status === DocumentRevisionStatus.Released ||
-    status === DocumentRevisionStatus.Approved) && (
+  const renderTrainingControl =
+  isDocumentRevisionInStatus([DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved], status) && (
     <TrainingControl
       dataProp={trainingRecords}
       classes={classes}
@@ -133,7 +135,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const renderReleaseDetails = () => (
     <Box p={5} >
       <Typography variant="h6" style={{ paddingBottom: 8 }}>
-        <Text message="Release Details" />
+        <Text translation="document.revision.release.details" />
       </Typography>
       <SummaryInfo
         label={"record.released.by"}
@@ -225,7 +227,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
           />
         </Box>
       )}
-      {isRecord && isInlineApproval && renderReleaseDetails()}
+      {isRecord && isInlineApproval && isFirstAlphaReleased &&
+        isDocumentRevisionReleased(dataProp?.status) && renderReleaseDetails()}
       {FBIsOutput && (
         <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
       )}

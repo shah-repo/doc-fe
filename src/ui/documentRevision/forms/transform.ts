@@ -3,13 +3,14 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
-import { generateVersionNumber, getIsAdministrativeDefault } from "../helpers";
+import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
+import { getIsAdministrativeDefault } from "../helpers/revisionStage";
 import { DocumentRevisionFormValues } from "./types";
 
 
 export const getHighestRevision = (revisions: DocumentRevision[]) => maxBy(revisions, "revision");
 
-const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateVersionNumber(revision.revision,
+const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateRevisionNumber(revision.revision,
   revision.revisionStage,
   revision.subRevision,
   revision.revisionChangeType,
@@ -39,6 +40,7 @@ export const toDocumentRevisionFormValues = (
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
     revisionChangeType: documentRevision.revisionChangeType,
+    revisionStage: documentRevision.revisionStage.toString(),
     securityEmployees: get(documentRevision, "document.securityList.securityEmployees", [])
       .map((employee) => ({ label: employee.name, value: employee.id })),
     securityGroups: get(documentRevision, "document.securityList.securityGroups", [])

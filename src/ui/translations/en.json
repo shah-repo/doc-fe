@@ -448,6 +448,7 @@
   "document.revision.list.state": "Status",
   "document.revision.list.type": "Type",
   "document.revision.list.version": "Released version",
+  "document.revision.release.details": "Release Details",
   "document.revision.create": "Create a document",
   "document.revision.export.list": "Export list",
   "document.revision.trainingRequired": "Training Required",

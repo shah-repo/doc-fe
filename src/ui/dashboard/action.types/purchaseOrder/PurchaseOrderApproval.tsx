@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
 import { documentPreviewPath } from "../../../document.revision/utils/paths";
-import { generateVersionNumber } from "../../../documentRevision/helpers";
+import { generateRevisionNumber } from "../../../documentRevision/helpers/generateRevisionNumber";
 import DashboardActionTypeBase from "../DashboardActionTypeBase";
 import PODetailsContainer from "./PODetailsContainer";
 
@@ -19,7 +19,7 @@ export const PurchaseOrderApproval: React.FunctionComponent<Props> = ({
 }) => {
   IndexContetxt = React.createContext(index);
   const intl = useIntl();
-  const [version] = useState(generateVersionNumber(
+  const [version] = useState(generateRevisionNumber(
     documentRevision.revision,
     documentRevision.revisionStage,
     documentRevision.subRevision,

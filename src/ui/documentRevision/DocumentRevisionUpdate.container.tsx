@@ -14,7 +14,7 @@ import { isOperator } from "./DocumentRevisionDisplay.container";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
-import { canEditDocumentRevision } from "./helpers";
+import { canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
 
 interface StateProps {
   currentUserEmail: string;

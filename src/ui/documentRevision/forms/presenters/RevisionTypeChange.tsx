@@ -1,27 +1,32 @@
+/* eslint-disable default-case */
 import { Box, Typography } from "@material-ui/core";
 import React from "react";
-import { RevisionChangeType } from "../../../../state/ducks/documentRevisions";
+import { useSelector } from "react-redux";
+import { companySelectors } from "../../../../state/ducks/company";
+import { DocumentRevision, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import RadioButton from "../../../components/forms/fields/RadioButton";
 import RadioGroup from "../../../components/forms/fields/RadioGroup";
 import { required, validator } from "../../../components/forms/fields/validators";
 import Text from "../../../components/Text";
 import { useAdministrativeChange, useNextRevision, useNextRevisionStage, useObsolete, useRevisionSelect } from "../../../hooks/docCustomization/useCustomization";
+import { versionNumber } from "../../helpers/generateRevisionNumber";
 import { styles } from "./RevisionTypeChange.styles";
 
 interface Props {
   documentTypeId?: string;
   isDisabled: boolean;
-  showObsoleteRevisionChange: boolean;
+  isDocRevFirstDraft: boolean;
   showAdministrativeAndVoidChange: boolean;
   isRecord?: boolean;
+  releasedDocRev?: DocumentRevision;
 }
-
 export const RevisionTypeChange: React.FunctionComponent<Props> = ({
   documentTypeId = "",
   isDisabled,
-  showObsoleteRevisionChange,
+  isDocRevFirstDraft,
   showAdministrativeAndVoidChange,
   isRecord,
+  releasedDocRev,
 }) => {
   const classes = styles();
   const [showRevisionSelect, revisionSelectLabel] = useRevisionSelect(documentTypeId);
@@ -29,31 +34,39 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
   const [showNextRevisionStage, nextRevisionStageLabel] = useNextRevisionStage(documentTypeId);
   const [showObsolete, obsoleteLabel] = useObsolete(documentTypeId);
   const [showAdministrationChange, administrationChangeLabel] = useAdministrativeChange(documentTypeId);
+  const numOfStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
 
   if (!showRevisionSelect) {
     return null;
   }
 
+  const generateVersionPrediction = ( revisionChangeType: RevisionChangeType ) =>
+    versionNumber(revisionChangeType, numOfStages, releasedDocRev, isRecord);
+
   return (
-    <Box mt={7}>
+    <Box mt={3}>
       <Typography variant="h6">
         <Text
           message={isRecord ? "document.revision.type.of.update" : revisionSelectLabel}
         />
       </Typography>
       <RadioGroup name="revisionChangeType" validate={validator(required)}>
-        {
-          showNextRevisionLevel && !showAdministrativeAndVoidChange &&
-          <RadioButton
-            label={<Text message={nextRevisionLevelLabel} />}
-            value={RevisionChangeType.NextRevision}
-            id="RevisionTypeChange-nextRevision"
-            disabled={isDisabled}
-            className={classes.label}
-          />
-        }
-        {
-          showNextRevisionStage && !showAdministrativeAndVoidChange &&
+        <Box>
+          {
+            showNextRevisionLevel && !showAdministrativeAndVoidChange &&
+            <RadioButton
+              label={<Text message={nextRevisionLevelLabel} />}
+              value={RevisionChangeType.NextRevision}
+              id="RevisionTypeChange-nextRevision"
+              disabled={isDisabled}
+              className={classes.label}
+            />
+          }
+          {generateVersionPrediction(RevisionChangeType.NextRevision)}
+        </Box>
+        <Box>
+          {
+            showNextRevisionStage && !showAdministrativeAndVoidChange &&
           <RadioButton
             label={
               <Text message={nextRevisionStageLabel} />
@@ -64,9 +77,12 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
             disabled={isDisabled}
             className={classes.label}
           />
-        }
-        {
-          showObsolete && !showObsoleteRevisionChange &&
+          }
+          {generateVersionPrediction(RevisionChangeType.NextRevisionStage)}
+        </Box>
+        <Box>
+          {
+            showObsolete && !isDocRevFirstDraft &&
           <RadioButton
             label={<Text message={ showAdministrativeAndVoidChange ? "common.void" : obsoleteLabel} />}
             value={RevisionChangeType.Obsolete}
@@ -74,9 +90,12 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
             disabled={isDisabled}
             className={classes.label}
           />
-        }
-        {
-          showAdministrationChange &&
+          }
+          {generateVersionPrediction(RevisionChangeType.Obsolete)}
+        </Box>
+        <Box>
+          {
+            showAdministrationChange && !isDocRevFirstDraft &&
           <RadioButton
             label={<Text message={administrationChangeLabel} />}
             value={RevisionChangeType.AdministrativeChange}
@@ -85,10 +104,11 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
             disabled={isDisabled}
             className={classes.label}
           />
-        }
+          }
+          {generateVersionPrediction(RevisionChangeType.AdministrativeChange)}
+        </Box>
       </RadioGroup>
     </Box>
   );
 };
-
 export default React.memo(RevisionTypeChange);

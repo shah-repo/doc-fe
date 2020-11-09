@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { DocumentRevision, FBOutputDocumentType } from "../../../../state/ducks/documentRevisions";
-import { DocumentGroupOptionsType, documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
+import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
@@ -15,7 +15,8 @@ import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustom
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import { DocumentCloneType } from "../../Clone.container";
-import { getFBSchemeByDocType } from "../../helpers";
+import { checkIsDocumentForm, checkIsTypeMustBeOutput } from "../../helpers/checkDocumentGroup";
+import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
 
 interface Props extends RouteComponentProps {
@@ -78,7 +79,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
 
     return documentTypes
       .filter((docType) => {
-        if (docType.groupOptions?.includes("MUST_BE_OUTPUT")) {
+        if (checkIsTypeMustBeOutput(docType.groupOptions)) {
           return false;
         }
         if ((docType.hiddenForCreationForUsersWithoutTags?.length ?? 0) === 0) {
@@ -111,9 +112,8 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     formik.handleChange(event);
 
     // FB mode
-    const formOption: DocumentGroupOptionsType = "FORM";
     const mode: FBWorkspaceMode = isNewOutput ? "form" :
-      type.groupOptions?.includes(formOption) ? "design" : "none";
+      checkIsDocumentForm(type.groupOptions) ? "design" : "none";
     let scheme: FBSchemaProps[] = [];
     if (mode === "design" && type.group !== "DYNAMIC_FORM") {
       const formValues = {
