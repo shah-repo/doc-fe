@@ -1,4 +1,4 @@
-import { BaseTextFieldProps } from "@material-ui/core";
+import { BaseTextFieldProps, BoxProps } from "@material-ui/core";
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
 import { Dictionary } from "lodash";
 import { FBEditorOptionsProps, FBEditorPropertiesType, FBInlineApprovalRole, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
@@ -139,6 +139,10 @@ export type FBInputProps =
      * @cfg {Bool} Any additional config we want to pass to the input.
      */
     editorConfig?: any;
+    /**
+     * @cfg {Bool} MUI Box props that can be passed to input section.
+     */
+    boxProps?: BoxProps;
   };
 
 export const OmitInputClones: FBInputType[] = [
@@ -155,4 +159,5 @@ export const OmitInputClones: FBInputType[] = [
   "procedurediff",
   "eqmaintenance",
   "ebpart",
+  "parts",
 ];
