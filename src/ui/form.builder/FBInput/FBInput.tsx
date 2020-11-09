@@ -15,6 +15,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   helperText = "",
   disabled,
   includeContext,
+  boxProps,
   loading,
   type,
   hidden,
@@ -22,7 +23,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
 }) => (
   <>
     {!hidden && (
-      <Box mb={gutter ? 5 : 0}>
+      <Box mb={gutter ? 5 : 0} {...boxProps}>
         <FormControl fullWidth {...{ error }}>
           {!includes(FBInputState.omitLabel, type) && label && (
             <FBLabel {...{ error, label, loading }} />

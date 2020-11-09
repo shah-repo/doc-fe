@@ -1,14 +1,17 @@
 import React from "react";
-import { FBPartsItem, FBPartsProps, FBProcedureItemType, FBProvider } from "..";
+import { FBInput, FBPartsItem, FBPartsProps, FBProcedureItemType, FBProvider } from "..";
 import { withFBParts } from "./FBParts.wrap";
 
 const FBParts: React.FunctionComponent<FBPartsProps> = ({
   partsState,
   name,
+  gutter,
 }) => (
   <FBProvider {...{ partsState }}>
-    <FBPartsItem type={FBProcedureItemType.materials} {...{ name }} />
-    <FBPartsItem type={FBProcedureItemType.equipment} {...{ name }} />
+    <FBInput {...{ name, gutter }} type="parts">
+      <FBPartsItem type={FBProcedureItemType.materials} {...{ name }} gutter={true} />
+      <FBPartsItem type={FBProcedureItemType.equipment} {...{ name }} gutter={false} />
+    </FBInput>
   </FBProvider>
 );
 
