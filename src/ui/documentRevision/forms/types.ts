@@ -15,7 +15,6 @@ export interface DocumentRevisionFormValues extends FBDocumentRevisionProps {
   document?: Partial<DocumentRevisionDocument>;
   revisionChangeType?: RevisionChangeType;
   changeRequest?: ChangeRequest;
-  revisionStage?: number;
   retrain?: boolean;
   status?: DocumentRevisionStatus;
   securityEmployees: OptionType[];
