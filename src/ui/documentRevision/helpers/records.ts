@@ -30,13 +30,17 @@ const isInlineSectionApproved = (documentRevision, formState, schema?: FBSchemaP
 /** Function that checks if a form section is approved.
    * @param fieldName Unique name of the form field.
   */
-const isSectionApproved = (fieldName: string, documentRevision: DocumentRevision, formState: FBFormState) => (
-  documentRevision?.version > 1 &&
-  isEmpty(getFieldApprovals(fieldName, documentRevision)) &&
-  Boolean(formState?.getFieldValue(fieldName))
-) ? some(getFieldApprovals(fieldName, documentRevision), (approval) => approval.status === ApprovalStatus.Approved)
-|| !getFieldApprovals(fieldName, documentRevision)?.length
-  : find(getFieldApprovals(fieldName, documentRevision), { status: ApprovalStatus.Approved }) !== undefined;
+const isSectionApproved = (fieldName: string, documentRevision: DocumentRevision, formState: FBFormState) => {
+  const fieldApprovals = getFieldApprovals(fieldName, documentRevision);
+  if (
+    documentRevision?.version > 1 &&
+    isEmpty(fieldApprovals) &&
+    Boolean(formState?.getFieldValue(fieldName))
+  ) {
+    return some(fieldApprovals, (approval) => approval.status === ApprovalStatus.Approved)
+    || !fieldApprovals?.length;
+  }
+  return find(fieldApprovals, { status: ApprovalStatus.Approved }) !== undefined; };
 
 /** Filter approvals by field.
   * @param fieldName Unique name of the form field.
