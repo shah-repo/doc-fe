@@ -55,8 +55,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
+    const groupOptions = documentRevision?.document?.documentType.groupOptions;
     return (
-      (Boolean(documentRevision?.document?.documentType.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA))) &&
+      (Boolean(groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA))) &&
       Boolean(differenceBy(workspaceState?.schema || [],  documentSchema, "name").length)
     );
   }
