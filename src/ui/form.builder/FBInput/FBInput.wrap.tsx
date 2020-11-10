@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { first, get, includes, isBoolean, isEmpty, isEqual, isString, isUndefined } from "lodash";
 import { reaction } from "mobx";
-import React from "react";
+import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
 import { FBOption } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
@@ -42,6 +42,7 @@ export const withFBInput = <T extends FBInputProps>(
     transform,
     bookmarked,
     omitFinalValidation = false,
+    applicableValidationSchema,
     ...props
   }: T) => {
 
@@ -54,6 +55,12 @@ export const withFBInput = <T extends FBInputProps>(
     error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation;
     value = inputState?.value;
     includeContext = inputState?.includeContext;
+
+    // Set validation scheme. This is union of scheme & comps configs.
+    useEffect(() => {
+      if (!applicableValidationSchema) { return; }
+      workspaceState?.setValidationSchemaItem({ name, label, type, ...props });
+    }, []);
 
     // TODO: Autocomplete default set as input
     // then this can be removed and handle through defaultValue
@@ -102,7 +109,7 @@ export const withFBInput = <T extends FBInputProps>(
     const isClone = !includes(OmitInputClones, type) && !isUndefined(child);
 
     if (isClone) {
-      children = React.cloneElement(child as React.ReactElement, {
+      children = cloneElement(child as React.ReactElement, {
         name,
         disabled,
         onChange,
@@ -114,7 +121,7 @@ export const withFBInput = <T extends FBInputProps>(
       });
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (!formState && !inputState) { return; }
       // Input states
       formState!.inputState.set(name, inputState!);
@@ -126,7 +133,7 @@ export const withFBInput = <T extends FBInputProps>(
       rules && (formState!.setFieldRules(name, rules));
     }, [rules]);
 
-    React.useEffect(() => {
+    useEffect(() => {
       reaction(
         () => inputState?.autosaveNextValue,
         (value) => {
@@ -137,7 +144,7 @@ export const withFBInput = <T extends FBInputProps>(
       );
     }, []);
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (!bookmarked) { return; }
       isTranslation(label as string) && (label = intl.formatMessage({ id: label as string }));
       bookmarkState?.addBookmark({ name, label });
@@ -166,6 +173,7 @@ export const withFBInput = <T extends FBInputProps>(
       autosave,
       transform,
       bookmarked,
+      applicableValidationSchema,
     });
   };
 

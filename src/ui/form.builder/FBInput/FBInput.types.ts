@@ -63,7 +63,8 @@ export type FBInputType =
   | "procedure"
   | "parts"
   | "procedurediff"
-  | "ebpart";
+  | "ebpart"
+  | "eqmaintenance";
 
 export type FBInputProps =
   & FBLabelProps
@@ -131,6 +132,14 @@ export type FBInputProps =
      */
     uniqueSchemaItem?: boolean;
     /**
+     * @cfg {Bool} Include component into validation schema select option.
+     */
+    applicableValidationSchema?: boolean;
+    /**
+     * @cfg {Bool} Any additional config we want to pass to the input.
+     */
+    editorConfig?: any;
+    /**
      * @cfg {Bool} MUI Box props that can be passed to input section.
      */
     boxProps?: BoxProps;
@@ -148,6 +157,7 @@ export const OmitInputClones: FBInputType[] = [
   "texteditor",
   "procedure",
   "procedurediff",
+  "eqmaintenance",
   "ebpart",
   "parts",
 ];

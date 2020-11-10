@@ -1,6 +1,7 @@
 import { useFormikContext } from "formik";
 import * as React from "react";
 import { useSelector } from "react-redux";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { DocumentRevision, FBOutputDocumentType } from "../../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -18,7 +19,7 @@ import { checkIsDocumentForm, checkIsTypeMustBeOutput } from "../../helpers/chec
 import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
 
-interface Props {
+interface Props extends RouteComponentProps {
   isdocRevStatusDraft: boolean;
   type?: DocumentCloneType;
   outputDocumentTypes?: FBOutputDocumentType[];
@@ -39,6 +40,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   isDisabled = false,
   documentTypeId,
   setDisableCreateButton,
+  match,
 }) => {
   const [isVisible, label, validators] = useDocumentTypeSelect(documentTypeId);
 
@@ -66,9 +68,10 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
 
   const isDocTypeDisabled = (type === "newVersion" || isdocRevStatusDraft) || isDisabled;
   const isNewOutput = type === "newOutput";
+  const isCreateMaintenance = match.path.includes("create_maintenance");
 
   const options: SelectOption[] = React.useMemo(() => {
-    if (type === "newOutput" && outputDocumentTypes) {
+    if ((isNewOutput || isCreateMaintenance) && outputDocumentTypes) {
       return outputDocumentTypes.map((e) =>
         ({ value: e.id, text: e.documentTypeName }) as SelectOption
       );
@@ -87,7 +90,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       ).map((docType) =>
         ({ value: docType.id, text: docType.documentTypeName })
       );
-  }, [type, outputDocumentTypes, documentTypes, currentUserTags]);
+  }, [isNewOutput, outputDocumentTypes, documentTypes, currentUserTags, isCreateMaintenance]);
 
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
@@ -117,14 +120,15 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         ...formik.values as Partial<DocumentRevision>,
         "document.documentType.id": typeId,
       };
-      scheme = getFBSchemeByDocType(
+      // TO DO: This needs clenaup
+      if (!isCreateMaintenance) { scheme = getFBSchemeByDocType(
         formValues,
         documentTypesById,
         workspaceState?.getSchema(),
-      );
+      ); }
     }
-    workspaceState?.setMode(mode);
-    workspaceState?.setSchema(scheme);
+    if (!isCreateMaintenance) { workspaceState?.setMode(mode);
+    workspaceState?.setSchema(scheme); }
   };
 
   if (!isVisible && type !== "newOutput") {
@@ -146,4 +150,4 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   );
 };
 
-export default DocumentTypeSelect;
+export default withRouter(DocumentTypeSelect);

@@ -73,6 +73,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         ...isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
         ...validators && toStringRules && { rules: toStringRules(validators) },
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+        applicableValidationSchema: true,
       }, index);
       dialogState?.closeDialog();
     };

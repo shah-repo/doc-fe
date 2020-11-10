@@ -45,4 +45,5 @@ export enum FBAutocompleteAsyncOption {
   equipment = "20",
   availableParts = "21",
   partDocumentTypes = "22",
+  preventativeMaintenaceForms = "23",
 }

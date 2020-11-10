@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
@@ -30,11 +30,17 @@ interface StateProps {
   proposedDocId: string;
 }
 
+interface RouteParams {
+  docRevId: string;
+  pmFormId: string;
+  equipmentSection: string;
+}
+
 export type DocumentRevisionCreateContainerProps =
   & StateProps
   & OwnProps
   & DispatchProps
-  & RouteComponentProps;
+  & RouteComponentProps<RouteParams>;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   proposedDocId: documentsSelectors.getProposedDocId(state),
@@ -68,8 +74,13 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   loadDocument,
   isNewVersion,
   loadDocTypes,
+  match,
 }) => {
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
+  const dispatch = useDispatch();
+  const { pmFormId } = match.params;
+  const isCreateMaintenance = match.path.includes("create_maintenance");
+
   const initialValues = useMemo(() => {
     if (type === "newVersion") {
       return toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
@@ -85,6 +96,29 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   }, [documentRevision?.id, type, history.location.state]);
   type = history.location.state ?? false ? "newOutput" : type;
 
+  useEffect(() => {
+    if (!isCreateMaintenance) {
+      return;
+    }
+    dispatch(documentRevisionsActions.load(pmFormId));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCreateMaintenance]);
+
+  if (isCreateMaintenance) {
+    const { docRevId, equipmentSection } = match.params;
+    initialValues.parentEquipment = {
+      id: docRevId,
+    };
+    initialValues.equipmentSection = equipmentSection;
+    initialValues.formTemplate = undefined;
+    initialValues.formInput = {
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      equipment_id: docRevId,
+    };
+    initialValues.formDocument = {
+      id: pmFormId,
+    };
+  }
   const async = useAsync<DocumentRevision>({
     onSuccess: (createdDocumentRevision?) => {
       if (createdDocumentRevision) {
@@ -122,6 +156,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
         proposedDocId,
         type,
         isNewVersion,
+        pmFormId,
       }}
     />
   );

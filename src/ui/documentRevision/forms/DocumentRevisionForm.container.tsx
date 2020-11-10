@@ -5,7 +5,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeByIdState, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
@@ -56,6 +56,7 @@ interface OwnProps {
   canChangeOwnerShip?: boolean;
   type?: DocumentCloneType;
   isNewVersion?: boolean;
+  pmFormId?: string;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
@@ -99,17 +100,23 @@ DocumentRevisionFormContainerProps
   canChangeOwnerShip = false,
   type,
   isNewVersion,
+  pmFormId,
 }) => {
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const bannerPortal = React.useRef(null);
   const { revisionStage } = documentRevision || {};
+  const isEditableSchema = document?.documentType?.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
   const isAlphaReleased = isDocumentAlphaReleased(revisionStage);
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
   const [releasedDocRev, setReleasedDocRev] = useState<DocumentRevision>();
 
+  const pmForm = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocumentRevision(state, pmFormId || ""),
+  );
   const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
+
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
     const { outputRevision } = initialValues;
     const securityGroups: any[] = [];
@@ -129,6 +136,7 @@ DocumentRevisionFormContainerProps
       ? filter(initialValues.attachments, (file) => file.lineType !== "RED_LINE")
       : initialValues.attachments;
 
+
     return {
       ...initialValues,
       attachments,
@@ -141,10 +149,12 @@ DocumentRevisionFormContainerProps
       retrain,
       renderHTML,
       securityGroups,
-      outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
+      outputDocumentTypes: pmForm ?
+        pmForm.formTemplate?.outputDocumentTypes as OptionType[] :
+        initialValues.formTemplate?.outputDocumentTypes as OptionType[],
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canUpdateHTML, initialValues, groupOptions]);
+  }, [canUpdateHTML, initialValues, groupOptions, pmForm]);
 
   useEffect(() => {
     if (type !== "newVersion" &&
@@ -172,7 +182,8 @@ DocumentRevisionFormContainerProps
     (cleanInitialValues)?.formDocument?.formTemplate ||
     {}
   );
-  originScheme = cleanInitialValues?.schema || originScheme;
+  originScheme = pmForm ?  pmForm?.formTemplate?.schema || [] : cleanInitialValues?.schema || originScheme;
+
   const isOutput =  Boolean(outputGroup && !isEmpty(outputGroup));
   const formInput = useMemo(() =>
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
@@ -204,10 +215,13 @@ DocumentRevisionFormContainerProps
   }, []);
 
   let mode: Partial<FBWorkspaceMode> = "none";
+
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";
   } else if (outputGroup) {
-    mode = (formGroup === "ENGINEERING_BUILD") ? "formDesign" : "form";
+    mode = isEditableSchema ? "formDesign" : "form";
+  } else if (pmForm) {
+    mode = "form";
   }
   const showAdministrativeAndVoidChange = isOutput && isAlphaReleased && isRecord;
 
@@ -242,6 +256,7 @@ DocumentRevisionFormContainerProps
           FBContainer,
           bannerPortal,
           showAdministrativeAndVoidChange,
+          pmFormId,
           releasedDocRev,
         }}
       />

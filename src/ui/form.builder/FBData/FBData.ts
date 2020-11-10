@@ -11,11 +11,13 @@ import closingTaskSchema from "./closingTaskSchema.json";
 import currencyOptions from "./currencyOptions.json";
 import editorProperties from "./editorProperties.json";
 import editorPropertiesControl from "./editorPropertiesControl.json";
+import eqMaintenanceOptions from "./eqMaintenanceOptions.json";
 import icons from "./icons.json";
 import requirementOptions from "./requirementOptions.json";
 import taskSchema from "./taskSchema.json";
 import testStepSchema from "./testStepSchema.json";
 import unitsOptions from "./unitsOptions.json";
+import yesNoOptions from "./yesNoOptions.json";
 
 export class FBData {
   public static get testStepSchema(): FBSchemaProps[]  {
@@ -90,6 +92,14 @@ export class FBData {
 
   public static get closingTaskSchema(): FBSchemaProps[] {
     return closingTaskSchema as FBSchemaProps[];
+  }
+
+  public static get yesNoOptions(): FBOption[] {
+    return yesNoOptions as FBOption[];
+  }
+
+  public static get eqMaintenanceOptions(): FBOption[] {
+    return eqMaintenanceOptions as FBOption[];
   }
 
   public static icons(color?: string): Record<FBIconType, FBIconConfig[]> {
