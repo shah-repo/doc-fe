@@ -1,4 +1,5 @@
 import { FBProviderProps } from "..";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBInputProps } from "../FBInput";
 
 export type FBEQMaintenanceProps =
@@ -17,6 +18,6 @@ export interface FBEQMaintenanceValue {
   instructions: string;
   manufacturer: string;
   specs: string;
-  history: any[];
+  history: DocumentRevision[];
   status: string;
 }

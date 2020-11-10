@@ -21,10 +21,6 @@ export class FBEQMaintenanceHistoryState extends FBRequest<any, any>  {
     this.fetch();
   };
 
-  public onSuccess() {
-    this.maintenanceHistory = this.data;
-    super.onSuccess();
-  }
 }
 
 export default FBEQMaintenanceHistoryState;

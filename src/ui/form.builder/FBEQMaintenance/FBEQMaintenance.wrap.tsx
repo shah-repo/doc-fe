@@ -1,24 +1,23 @@
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBEQMaintenanceProps, FBEQMaintenanceState } from "..";
+import { FB, FBEQMaintenanceProps } from "..";
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
     handleAdd,
-    eqMaintenanceState,
     name = "",
     ...props
   }: T) => {
 
     // MARK: @config
-    let pmFormId = "";
     let isNewPMDisabled;
     const { workspaceState, formState } = FB.useStores();
     const { id: docRevId } = workspaceState || {};
-    const currentStatus = workspaceState?.document?.formInput?.[name]?.status;
-    eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
+    const currentStatus = formState?.getFieldValue(`${name}.status`);
+    const pmFormId = formState?.inputState.get("preventativeMaintenanceForm")?.value;
+
     // MARK: @reactions
 
     // MARK: @methods
@@ -28,11 +27,6 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     };
 
     // MARK: @observer
-    useObserver(() => {
-      // What are our intentions with this observer?
-      pmFormId = formState?.inputState.get("preventativeMaintenanceForm")?.value;
-    });
-
     useObserver(() => {
       isNewPMDisabled = (
         !formState?.inputState.get("preventativeMaintenanceForm")?.value ||

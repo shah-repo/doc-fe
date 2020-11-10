@@ -780,6 +780,7 @@
   "form.builder.preventative.maintenance.form": "Preventative Maintenance Form",
   "form.builder.eft.requirements": "Does EFT require preventative maintenance per manufacturer (or Supira's) requirements?",
   "form.builder.maintenance.frequency": "Preventative Maintenance Frequency",
+  "form.builder.maintenance.history": "Maintenance History",
   "form.builder.pm.instructions": "PM Instructions",
   "form.builder.attach.manufacturer": "EFT Off the shelf? If yes, attach manufacturer documentation (e.g. Manual or Catalogue)",
   "form.builder.drawings.specs": "If the EFT is custom, then cross-reference to Supira drawings or specifications",

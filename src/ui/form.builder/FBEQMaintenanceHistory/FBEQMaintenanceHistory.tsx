@@ -2,19 +2,21 @@ import { Box } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBEQMaintenanceHistoryProps, FBMapWrapper } from "..";
+import { FBEQMaintenanceHistoryProps, FBMapWrapper, FBText } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBEQMaintenanceHistory } from "./FBEQMaintenanceHistory.wrap";
 
 const FBEQMaintenanceHistory: React.FunctionComponent<FBEQMaintenanceHistoryProps> = ({
-  maintenanceHistory,
+  maintenanceHistory = [],
   ...props
 }) => (
   <Box mb={5} fontWeight="fontWeightBold">
     <Box display="flex" alignItems="center" mb={1}>
-      Maintenance History
+      <FBText
+        locale={"form.builder.maintenance.history"}
+      />
       <ArrowDropDownIcon />
     </Box>
     <FBMapWrapper<DocumentRevision[]> collection={maintenanceHistory}>
@@ -26,7 +28,7 @@ const FBEQMaintenanceHistory: React.FunctionComponent<FBEQMaintenanceHistoryProp
           <Box fontWeight="fontWeightRegular">
             | {item.owner.user.name}
             | {item.status}
-            | { item.releasedAt && getFormattedDateString(item.releasedAt, MomentFormats.MonthDateYearAlt)}
+            {item.releasedAt && `| ${getFormattedDateString(item.releasedAt, MomentFormats.MonthDateYearAlt)}`}
           </Box>
         </Box>
       )}

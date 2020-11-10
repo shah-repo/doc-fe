@@ -25,7 +25,7 @@ export const withFBEQMaintenanceHistory = <T extends FBEQMaintenanceHistoryProps
 
     // MARK: @observer
     useObserver(() => {
-      maintenanceHistory = eqMaintenanceHistoryState?.maintenanceHistory?.[name || ""];
+      maintenanceHistory = eqMaintenanceHistoryState?.data?.[name || ""];
     });
 
     if (!maintenanceHistory) {
