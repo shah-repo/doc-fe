@@ -416,7 +416,7 @@ context("PO test", () => {
 
     it("Enter description 'New Purchase Order with Service item'", () => {
       // SystemRequirement("REQ-1290");
-      cy.drEnterDocumentDescriptionWithWait({ description: "New Purchase Order with Service item" });
+      cy.drEnterDocumentDescription({ description: "New Purchase Order with Service item" });
     });
 
     it("Approve and release document", () => {

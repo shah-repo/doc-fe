@@ -70,6 +70,9 @@ export const routes: ICyRoutes =   {
       method: "GET",
       url: "/api/v1/employees*",
     },
+    callConfig: {
+      responseTimeout: 10 * 1000,
+    },
   },
   EmployeesPost: {
     requestConfig: {

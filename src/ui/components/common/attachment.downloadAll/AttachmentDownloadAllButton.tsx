@@ -5,6 +5,7 @@ import { AttachmentDownloadResponse, attachmentsActions } from "../../../../stat
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { AsyncStatus } from "../../../../state/types";
 import Text from "../../../components/Text";
+import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionObsolete, isDocumentRevisionReleased } from "../../../documentRevision/helpers/documentRevisionStatus";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
@@ -12,7 +13,6 @@ import { Translation } from "../../../translations/types";
 import PasswordDialog from "../../password/dialog";
 import { Password } from "../../password/types";
 import AttachmentRedLineWarningDialog from "../attachment.redline.warning/dialog";
-import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionObsolete, isDocumentRevisionReleased } from "../../../documentRevision/helpers/documentRevisionStatus";
 
 
 export interface Props {
