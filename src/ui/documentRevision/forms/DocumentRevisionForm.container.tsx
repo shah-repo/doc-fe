@@ -1,11 +1,11 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import { cloneDeep, filter, get, isEmpty, omit, set } from "lodash";
-import React, { useEffect, useMemo } from "react";
+import { cloneDeep, filter, get, isEmpty } from "lodash";
+import React, { useEffect, useMemo, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeByIdState, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
@@ -20,9 +20,10 @@ import useAsync from "../../hooks/useAsync";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
 import { DocumentCloneType } from "../Clone.container";
-import { getIsDocumentEB, getIsDocumentRecord } from "../helpers";
+import { checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
+import { isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
+import { isDocumentAlphaReleased } from "../helpers/revisionStage";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
-import { getHighestRevision } from "./transform";
 import { DocumentRevisionFormValues } from "./types";
 
 interface StateProps {
@@ -55,7 +56,7 @@ interface OwnProps {
   canChangeOwnerShip?: boolean;
   type?: DocumentCloneType;
   isNewVersion?: boolean;
-  isCreatePart?: boolean;
+  pmFormId?: string;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
@@ -99,18 +100,23 @@ DocumentRevisionFormContainerProps
   canChangeOwnerShip = false,
   type,
   isNewVersion,
-  isCreatePart,
+  pmFormId,
 }) => {
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const bannerPortal = React.useRef(null);
   const { revisionStage } = documentRevision || {};
-  const isAlphaReleased = revisionStage === 3;
-  const isRecord = getIsDocumentRecord(document?.documentType?.groupOptions);
-  const isEB = getIsDocumentEB(documentRevision?.document?.documentType?.group);
+  const isEditableSchema = document?.documentType?.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
+  const isAlphaReleased = isDocumentAlphaReleased(revisionStage);
+  const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
+  const [releasedDocRev, setReleasedDocRev] = useState<DocumentRevision>();
 
+  const pmForm = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocumentRevision(state, pmFormId || ""),
+  );
   const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
+
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
     const { outputRevision } = initialValues;
     const securityGroups: any[] = [];
@@ -130,6 +136,7 @@ DocumentRevisionFormContainerProps
       ? filter(initialValues.attachments, (file) => file.lineType !== "RED_LINE")
       : initialValues.attachments;
 
+
     return {
       ...initialValues,
       attachments,
@@ -142,10 +149,12 @@ DocumentRevisionFormContainerProps
       retrain,
       renderHTML,
       securityGroups,
-      outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
+      outputDocumentTypes: pmForm ?
+        pmForm.formTemplate?.outputDocumentTypes as OptionType[] :
+        initialValues.formTemplate?.outputDocumentTypes as OptionType[],
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canUpdateHTML, initialValues, groupOptions]);
+  }, [canUpdateHTML, initialValues, groupOptions, pmForm]);
 
   useEffect(() => {
     if (type !== "newVersion" &&
@@ -173,7 +182,8 @@ DocumentRevisionFormContainerProps
     (cleanInitialValues)?.formDocument?.formTemplate ||
     {}
   );
-  originScheme = cleanInitialValues?.schema || originScheme;
+  originScheme = pmForm ?  pmForm?.formTemplate?.schema || [] : cleanInitialValues?.schema || originScheme;
+
   const isOutput =  Boolean(outputGroup && !isEmpty(outputGroup));
   const formInput = useMemo(() =>
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
@@ -181,9 +191,10 @@ DocumentRevisionFormContainerProps
 
   const loadDocumentAsync = useAsync({
     onSuccess: (data?: Document) => {
-      const childrenParts = getHighestRevision(data?.documentRevisions || []);
-      set(childrenParts || {}, "document", omit(data, "documentRevisions"));
-      set(formInput || {}, "childrenParts", childrenParts);
+      if (data) {
+        setReleasedDocRev((data?.documentRevisions).find((doc) => isDocumentRevisionReleased(doc.status)));
+        return;
+      }
     },
     onError: (error) => {
       toastError(error as string);
@@ -192,26 +203,25 @@ DocumentRevisionFormContainerProps
   const loadDocumentAction = useActionCreator(documentsActions.getDocumentById);
 
   useEffect(() => {
-    if (isEB) {
-      const childrenParts = initialValues.childrenParts;
-      if (!childrenParts && initialValues.formInput?.childrenPartsForRevise?.[0]) {
-        loadDocumentAsync.start(
-          loadDocumentAction,
-          initialValues.formInput?.childrenPartsForRevise?.[0]?.id,
-          loadDocumentAsync,
-        );
-      } else {
-        set(formInput || {}, "childrenParts", childrenParts);
-      }
+    if (!document.id) {
+      return;
     }
+    loadDocumentAsync.start(
+      loadDocumentAction,
+      document.id,
+      loadDocumentAsync,
+    );
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   let mode: Partial<FBWorkspaceMode> = "none";
+
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";
   } else if (outputGroup) {
-    mode = (formGroup === "ENGINEERING_BUILD") ? "formDesign" : "form";
+    mode = isEditableSchema ? "formDesign" : "form";
+  } else if (pmForm) {
+    mode = "form";
   }
   const showAdministrativeAndVoidChange = isOutput && isAlphaReleased && isRecord;
 
@@ -243,10 +253,11 @@ DocumentRevisionFormContainerProps
           canChangeOwnerShip,
           type,
           isNewVersion,
-          isCreatePart,
           FBContainer,
           bannerPortal,
           showAdministrativeAndVoidChange,
+          pmFormId,
+          releasedDocRev,
         }}
       />
     </FBWorkspace>

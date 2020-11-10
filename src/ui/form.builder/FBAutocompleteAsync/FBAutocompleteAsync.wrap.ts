@@ -17,6 +17,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     labelPrefixRoot,
     selectedOptions,
     defaultValue,
+    additionalData,
     freeSolo,
     optionId,
     options,
@@ -63,6 +64,10 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
           : slicedOptions;
       }
     });
+
+    // Add some static additional data to dynamic store list
+    useEffect(() => autocompleteAsyncState?.setAdditionalData(additionalData),
+      [additionalData, autocompleteAsyncState]);
 
     useEffect(() => {
       if (shouldReloadOnInit) {

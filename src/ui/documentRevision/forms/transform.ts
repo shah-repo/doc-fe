@@ -3,13 +3,14 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
-import { generateVersionNumber, getIsAdministrativeDefault } from "../helpers";
+import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
+import { getIsAdministrativeDefault } from "../helpers/revisionStage";
 import { DocumentRevisionFormValues } from "./types";
 
 
 export const getHighestRevision = (revisions: DocumentRevision[]) => maxBy(revisions, "revision");
 
-const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateVersionNumber(revision.revision,
+const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateRevisionNumber(revision.revision,
   revision.revisionStage,
   revision.subRevision,
   revision.revisionChangeType,
@@ -23,7 +24,9 @@ export const toDocumentRevisionFormValues = (
     description: documentRevision.description,
     name: documentRevision.name,
     attachments: documentRevision.attachments,
-    referenceTo: documentRevision.referenceTo.map((reference: any) => {
+    // TODO - we need to take a data from response that gives us all informations about document,
+    // currently we are using data from the document list
+    referenceTo: documentRevision.referenceTo?.map((reference: any) => {
       const highestRev = getHighestRevision(reference.documentRevisions);
       return ({
         value: reference.id,
@@ -37,6 +40,7 @@ export const toDocumentRevisionFormValues = (
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
     revisionChangeType: documentRevision.revisionChangeType,
+    revisionStage: documentRevision.revisionStage.toString(),
     securityEmployees: get(documentRevision, "document.securityList.securityEmployees", [])
       .map((employee) => ({ label: employee.name, value: employee.id })),
     securityGroups: get(documentRevision, "document.securityList.securityGroups", [])
@@ -46,8 +50,10 @@ export const toDocumentRevisionFormValues = (
     renderHTML: documentRevision.renderHTML,
     schema: documentRevision.schema,
     parentParts: documentRevision.parentParts,
+    parentEquipment: documentRevision.parentEquipment,
+    equipmentSection: get(documentRevision.equipmentSection, ""),
     // there can currently be only one child part
-    childrenParts: documentRevision.childrenParts?.[0],
+    childrenParts: documentRevision.childrenParts,
 
   };
   if (documentRevision.formTemplate) {
@@ -65,7 +71,15 @@ export const toDocumentRevisionEditRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
   const data = {
-    ...pick(values, ["formTemplate", "formDocument", "formInput", "schema", "parentParts" ]),
+    ...pick(values, [
+      "formTemplate",
+      "formDocument",
+      "formInput",
+      "schema",
+      "parentParts",
+      "parentEquipment",
+      "equipmentSection",
+    ]),
     description: values.description,
     name: values.name,
     attachments: values.attachments,

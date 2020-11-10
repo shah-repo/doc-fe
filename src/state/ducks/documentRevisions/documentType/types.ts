@@ -53,7 +53,8 @@ export type DocumentGroupOptionsType =
   "WO_PARTS" |
   "CHANGE_REQUEST" |
   "BE_OUTPUT" |
-  "CAN_BE_COPIED";
+  "CAN_BE_COPIED" |
+  "EDITABLE_SCHEMA";
 
 export enum DOC_TYPE_GROUP_OPTION {
   FORM = "FORM",
@@ -74,6 +75,7 @@ export enum DOC_TYPE_GROUP_OPTION {
   RECEIVE = "RECEIVE",
   CAN_BE_COPIED = "CAN_BE_COPIED",
   RECEIVABLE = "RECEIVABLE",
+  EDITABLE_SCHEMA = "EDITABLE_SCHEMA",
 }
 export interface PageDetailsColumn {
   label: Translation;

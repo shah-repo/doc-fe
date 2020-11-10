@@ -23,7 +23,7 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
   }: T) => {
     const { workspaceState, schemaState, formState } = FB.useStores();
     schemaSelectState = FB.useRef<FBSchemaSelectState>(FBSchemaSelectState);
-    options = workspaceState?.getSchema();
+    options = workspaceState?.getValidationSchema();
     defaultValue = formState?.getFieldValue(name);
 
     function setIncludedSchemaItem(value?: FBSchemaProps) {

@@ -1,13 +1,14 @@
 import { Button } from "@material-ui/core";
 import * as React from "react";
 import { useEffect } from "react";
-import { DocumentRevision, documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import { getIsDocumentRecord } from "../../helpers";
+import { checkIsDocumentRecord } from "../../helpers/checkDocumentGroup";
+import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus";
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -22,8 +23,8 @@ const CancelButton: React.FunctionComponent<Props> = ({
   const async = useAsync();
   const { status = "", version = 0, id, document } = documentRevision || [];
 
-  const canShowCancelButton = status === DocumentRevisionStatus.Draft && version > 1;
-  const isRecord = getIsDocumentRecord(document?.documentType?.groupOptions || []);
+  const canShowCancelButton = isDocumentRevisionInDraft(status) && version > 1;
+  const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions || []);
 
   useEffect(() => {
     setShouldDisplay(canShowCancelButton);

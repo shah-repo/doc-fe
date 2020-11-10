@@ -7,32 +7,25 @@ const config = {
     host: "imap.gmail.com",
     port: 993,
     tls: true,
-    authTimeout: 10 * 1000,
+    authTimeout: 15 * 1000,
   },
 };
 
 export function getEmail(email) {
-  return imaps.connect(config).then(function(connection) {
+  return imaps.connect(config).then((connection) => connection.openBox("INBOX").then(() => {
+    const emailsSince = new Date();
+    emailsSince.setTime(Date.now());
+    const searchCriteria = ["ALL", ["TO", email], ["SENTSINCE", emailsSince.toISOString()]];
 
-    return connection.openBox("INBOX").then(function() {
-      const delay = 120 * 1000;
-      const emailsSince = new Date();
-      emailsSince.setTime(Date.now() - delay);
-      const searchCriteria = ["ALL", ["TO", email], ["SENTSINCE", emailsSince.toISOString()]];
+    const fetchOptions = {
+      bodies: ["HEADER", "TEXT"],
+      markSeen: true,
+    };
 
-      const fetchOptions = {
-        bodies: ["HEADER", "TEXT"],
-        markSeen: true,
-      };
-
-      return connection.search(searchCriteria, fetchOptions).then(function(results) {
-        const emailText = results.map(function(res) {
-          return res.parts.filter(function(part) {
-            return part.which === "TEXT";
-          })[0].body;
-        });
-        return emailText[emailText.length - 1];
-      });
+    return connection.search(searchCriteria, fetchOptions).then((results) => {
+      const emailText = results.map((res) => res.parts.filter((part) => part.which === "TEXT")[0].body);
+      return emailText[emailText.length - 1];
     });
-  }).then((result) => result);
+  })).then((result) => result);
 }
+

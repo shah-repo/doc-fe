@@ -1,11 +1,11 @@
 import { Chip, Grid, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
-import { ChangeRequestStatus } from "../../../../state/ducks/changeRequest";
-import { DocumentRevisionStatus, DocumentRevisionStatusAlias, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType";
-import { DocumentStatus } from "../../../../state/ducks/documents";
-import { FBDocTypeGroup } from "../../../form.builder";
+import { checkIsDocumentRecord } from "../../../documentRevision/helpers/checkDocumentGroup";
+import { isDocumentRevisionCanceled, isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
+import { isDocumentAlphaReleased, isDocumentNumericRelease } from "../../../documentRevision/helpers/revisionStage";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
 import Text from "../../Text";
 import { styles } from "./HeaderInfo.styles";
@@ -33,25 +33,27 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   revisionChangeType,
   subRevision,
 }) => {
-  const isDraft = status === DocumentStatus.Draft;
-  const isAlphaReleased = revisionStage === 3;
-  const isRecord = groupOptions?.includes(FBDocTypeGroup.RECORD);
+  const isDraft = isDocumentRevisionInDraft(status);
+  const isAlphaReleased = isDocumentAlphaReleased(revisionStage);
+  const isRecord = checkIsDocumentRecord(groupOptions);
 
-  // we should rename enum for document types, it is not only for FB
-  if ( isRecord && isInlineApproval && isDraft && !isAlphaReleased) {
-    status = DocumentRevisionStatusAlias.Draft;
-  }
   const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
   let stateLabel = statusLabel;
   const [isTitleVisible] = useTitle(documentTypeId);
   const classes = styles();
-  const isStatusReleased = status === DocumentRevisionStatus.Released || status === ChangeRequestStatus.Approved;
-  const isStatusCanceled = status === DocumentRevisionStatus.Canceled || status === ChangeRequestStatus.Voided;
-  const isDeprecated = status === DocumentRevisionStatus.Deprecated;
+  const isStatusReleased = isDocumentRevisionInStatus(
+    [DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved],
+    status as DocumentRevisionStatus,
+  );
+  const isStatusCanceled = isDocumentRevisionCanceled(status);
+  const isDeprecated = isDocumentRevisionDeprecated(status);
   const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
-  const isInReview = status === DocumentRevisionStatus.InReview;
-  const isVoided = status === DocumentRevisionStatus.Obsolete || status === DocumentRevisionStatus.Voided;
-  const isNumericRelease = revisionStage === 1;
+  const isInReview = isDocumentRevisionInReview(status);
+  const isVoided = isDocumentRevisionInStatus(
+    [DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided],
+    status as DocumentRevisionStatus
+  );
+  const isNumericRelease = isDocumentNumericRelease(revisionStage);
 
   const statusIcon =
     <div className={classNames(classes.statusIconDefault, {
