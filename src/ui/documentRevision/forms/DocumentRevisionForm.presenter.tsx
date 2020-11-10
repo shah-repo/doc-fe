@@ -179,6 +179,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const documentTypeId = values.document?.documentType?.id;
   const isEB = checkIsDocumentEB(documentRevision?.document.documentType.group);
+
   return (
     <Grid
       item={true}
@@ -267,7 +268,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             isDraft={isdocRevStatusDraft || isRevised}
           />
         )}
-        <RevisionStage {...{ isDisabled, isDocRevFirstDraft }}/>
+        <RevisionStage {...{ isDisabled, isDocRevFirstDraft, isRecord }}/>
         <AutocompleteField
           name="referenceTo"
           label="documentRevision.form.references"
