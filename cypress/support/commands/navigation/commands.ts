@@ -21,6 +21,7 @@ declare global {
       navigToReceivableList(): Chainable<Subject>;
       navigToWorkOrders(): Chainable<Subject>;
       navigToRecords(): Chainable<Subject>;
+      navigToDocTypeManagement(): Chainable<Subject>;
     }
   }
 }
@@ -47,6 +48,10 @@ Cypress.Commands.add("navigToDashboard", () => {
     () => {
       cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
     }).wait(1000);
+});
+
+Cypress.Commands.add("navigToDocTypeManagement", () => {
+  cy.get("a[href=\"/document_type_management\"]").click().wait(1000);
 });
 
 Cypress.Commands.add("navigToRecords", () => {
