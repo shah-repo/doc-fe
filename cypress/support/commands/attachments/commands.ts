@@ -163,7 +163,7 @@ Cypress.Commands.add("atchDownloadFile", (params: {fileName: string; saveFileNam
   cy.get("div[data-cy=\"attachment\"]").contains(params.fileName).rightclick();
   cy.get("div[id=\"simple-menu\"]>div>ul[role=\"menu\"]>li:nth-child(1)").click();
   cy.get("body").then(($body) => {
-    if ($body.find("form[class^=\"RedlineWarningForm\"]").length > 0) {
+    if ($body.find("[data-cy=\"download.warning\"]").length > 0) {
       cy.get("[id=\"passwordConfirm\"]").click();
       cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
       cy.get("[data-cy=\"passwordConfirm\"]").click();
@@ -191,7 +191,7 @@ Cypress.Commands.add("atchDownloadAll", () => {
   }).as("attach");
   cy.get("#AttachmentFieldPresenter-downloadAllButton").click();
   cy.get("body").then(($body) => {
-    if ($body.find("form[class^=\"RedlineWarningForm\"]").length > 0) {
+    if ($body.find("[data-cy=\"download.warning\"]").length > 0) {
       cy.get("[id=\"passwordConfirm\"]").click();
       cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
       cy.get("[data-cy=\"passwordConfirm\"]").click();
