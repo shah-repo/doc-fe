@@ -7,15 +7,14 @@ const config = {
     host: "imap.gmail.com",
     port: 993,
     tls: true,
-    authTimeout: 10 * 1000,
+    authTimeout: 15 * 1000,
   },
 };
 
 export function getEmail(email) {
   return imaps.connect(config).then((connection) => connection.openBox("INBOX").then(() => {
-    const delay = 120 * 1000;
     const emailsSince = new Date();
-    emailsSince.setTime(Date.now() - delay);
+    emailsSince.setTime(Date.now());
     const searchCriteria = ["ALL", ["TO", email], ["SENTSINCE", emailsSince.toISOString()]];
 
     const fetchOptions = {

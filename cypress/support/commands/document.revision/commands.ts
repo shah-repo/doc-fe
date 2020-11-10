@@ -150,10 +150,6 @@ Cypress.Commands.add("drClickDAMEditBtn", () => {
 Cypress.Commands.add("drCheckApprovalsEnforcment", () => {
   cy.drApproveAndReleaseDialog();
   cy.wait(2000);
-  cy.get("[aria-label=\"change date\"]").click().wait(1000);
-  // eslint-disable-next-line max-len
-  cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]")
-    .click().wait(500);
   cy.get("[data-cy=unchecked]").should("exist");
   cy.get("[data-cy=group-0]").should("have.text", "Role One");
   cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
