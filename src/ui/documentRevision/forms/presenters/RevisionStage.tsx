@@ -10,11 +10,13 @@ import Text from "../../../components/Text";
 interface Props {
   isDisabled: boolean;
   isDocRevFirstDraft: boolean;
+  isRecord: boolean;
 }
 
 export const RevisionStage: React.FunctionComponent<Props> = ({
   isDisabled,
   isDocRevFirstDraft,
+  isRecord,
 }) => {
 
   const numOfRevStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
@@ -22,7 +24,7 @@ export const RevisionStage: React.FunctionComponent<Props> = ({
     RevisionStageOptions.filter((stage) => stage.value !== 2) :
     RevisionStageOptions;
 
-  if (isDisabled && !isDocRevFirstDraft) {
+  if ((isDisabled && !isDocRevFirstDraft) || isRecord) {
     return null;
   }
 
