@@ -111,6 +111,10 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
     };
     initialValues.equipmentSection = equipmentSection;
     initialValues.formTemplate = undefined;
+    initialValues.formInput = {
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      equipment_id: docRevId,
+    };
     initialValues.formDocument = {
       id: pmFormId,
     };
