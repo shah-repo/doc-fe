@@ -23,7 +23,7 @@ import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
-import { checkIsDocumentEB, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
+import { checkIsDocumentEB, checkIsDocumentOtherGroup, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
 import styles from "./DocumentRevisionForm.styles";
 import Description from "./presenters/Description";
@@ -177,6 +177,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const documentTypeId = values.document?.documentType?.id;
   const isEB = checkIsDocumentEB(documentRevision?.document.documentType.group);
+  const isDocumentOtherGroup = checkIsDocumentOtherGroup(documentRevision?.document.documentType.group);
 
   return (
     <Grid
@@ -264,7 +265,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             isDraft={isdocRevStatusDraft || isRevised}
           />
         )}
-        <RevisionStage {...{ isDisabled, isDocRevFirstDraft, isRecord }}/>
+        <RevisionStage {...{ isDisabled, isDocRevFirstDraft, isDocumentOtherGroup }}/>
         <AutocompleteField
           name="referenceTo"
           label="documentRevision.form.references"
