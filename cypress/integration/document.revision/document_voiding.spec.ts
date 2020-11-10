@@ -105,8 +105,8 @@ context("Document Creation Flow", () => {
       cy.drCheckDocumentStatus({ status: "Draft" });
     });
 
-    it("Checks if Revison Change Type contains OBSOLETE option", () => {
-      cy.get("[data-cy=\"field-revisionChangeType\"]");
+    it("Checks if Revison Change Type does not contain OBSOLETE option", () => {
+      cy.get("[data-cy=\"field-revisionStage\"]");
       cy.get("#RevisionTypeChange-obsolete").should("not.exist");
     });
 
