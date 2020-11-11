@@ -19,6 +19,7 @@ const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateRe
 export const toDocumentRevisionFormValues = (
   documentRevision: DocumentRevision,
 ): DocumentRevisionFormValues => {
+  const parentEquipmentId = get(documentRevision, "parentEquipment.id");
   const values: DocumentRevisionFormValues = {
     id: documentRevision.id,
     description: documentRevision.description,
@@ -50,7 +51,7 @@ export const toDocumentRevisionFormValues = (
     renderHTML: documentRevision.renderHTML,
     schema: documentRevision.schema,
     parentParts: documentRevision.parentParts,
-    parentEquipment: { id: get(documentRevision, "parentEquipment.id") },
+    parentEquipment: parentEquipmentId ? { id: parentEquipmentId } : undefined,
     equipmentSection: get(documentRevision.equipmentSection, ""),
     // there can currently be only one child part
     childrenParts: documentRevision.childrenParts,
