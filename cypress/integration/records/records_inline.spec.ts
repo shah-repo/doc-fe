@@ -246,21 +246,6 @@ context("Record inline Flow", () => {
         });
       });
 
-      // it("Reload page", () => {
-      //   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-      //     cy.reload();
-      //   });
-      // });
-
-      // it("Click WIP document", () => {
-      //   cy.wrapWithWaitOnApiCalls([
-      //     CyRoutes.EmployeesGet,
-      //     CyRoutes.DocPreview,
-      //     CyRoutes.GetRequiredApproversDocRev], () => {
-      //     cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
-      //   });
-      // });
-
       it("Check system creates new major revision after inline approve", () => {
         SystemRequirement("REQ-1040");
         cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
@@ -295,21 +280,6 @@ context("Record inline Flow", () => {
           });
         });
 
-        // it("Reload page", () => {
-        //   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-        //     cy.reload();
-        //   });
-        // });
-
-        // it("Click WIP document", () => {
-        //   cy.wrapWithWaitOnApiCalls([
-        //     CyRoutes.EmployeesGet,
-        //     CyRoutes.DocPreview,
-        //     CyRoutes.GetRequiredApproversDocRev], () => {
-        //     cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
-        //   });
-        // });
-
         it("Approve second Inline Approval", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
           cy.get("input[name=\"password\"]").type("Tester1!");
@@ -320,22 +290,6 @@ context("Record inline Flow", () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });
-
-        // it("Reload page", () => {
-        //   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-        //     cy.reload();
-        //   });
-        // });
-
-        // it("Click WIP document", () => {
-        //   cy.wrapWithWaitOnApiCalls([
-        //     CyRoutes.EmployeesGet,
-        //     CyRoutes.DocPreview,
-        //     CyRoutes.GetRequiredApproversDocRev], () => {
-        //     cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
-        //   });
-        // });
-
       });
 
       context("Edit and try to release it ", () => {
@@ -358,21 +312,6 @@ context("Record inline Flow", () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });
-
-        // it("Reload page", () => {
-        //   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-        //     cy.reload();
-        //   });
-        // });
-
-        // it("Click WIP document", () => {
-        //   cy.wrapWithWaitOnApiCalls([
-        //     CyRoutes.EmployeesGet,
-        //     CyRoutes.DocPreview,
-        //     CyRoutes.GetRequiredApproversDocRev], () => {
-        //     cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
-        //   });
-        // });
       });
 
       context("Approve and Release document and verify record is in alpha", () => {

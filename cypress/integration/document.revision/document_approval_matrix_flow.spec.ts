@@ -603,7 +603,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("'Approve & Release' Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Approve and Release the document", () => {
