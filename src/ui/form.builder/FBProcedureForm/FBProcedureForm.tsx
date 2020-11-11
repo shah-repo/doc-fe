@@ -8,6 +8,7 @@ import { FB } from "../helpers";
 import { withFBProcedureForm } from "./FBProcedureForm.wrap";
 
 const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
+  getOptionLabel,
   formState,
   children,
   disabledOptions,
@@ -22,6 +23,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       defaultValue={FB.uniqid}
     />
     <FBAutocompleteAsync
+      {...{ getOptionLabel }}
       name="title"
       label="form.builder.title"
       rules="required"
@@ -34,7 +36,6 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
           <FBQuantityField
             name="quantity"
             label="form.builder.quantity"
-            rules="required|min:1"
           />
         </Box>
         <Box width="50%" ml={1}>
@@ -44,7 +45,6 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
             options={FBData.unitsOptions}
             optionValueKey="value"
             optionLabelKey="text"
-            rules="required"
           />
         </Box>
       </Box>
