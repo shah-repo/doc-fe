@@ -37,7 +37,7 @@ export class FBApprovalState {
     this.approvalRolesValue = approvalRolesValue;
     if (!documentId) { return; }
     this.hasApproved = value;
-    this.postApi.set({ urlValues: { documentId } });
+    this.postApi.set({ urlValues: { documentId }, url: FBEndpoint.PostInlineApprove });
   }
 
   public get approversId(): string {
@@ -55,6 +55,7 @@ export class FBApprovalState {
   public getDocument = (id?: string) => {
     if (!id) { return; }
     this.getDocumentApi.set({
+      url: FBEndpoint.Document,
       urlValues: { id },
       method: "get",
     });
