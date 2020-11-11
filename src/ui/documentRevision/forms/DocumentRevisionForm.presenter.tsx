@@ -178,7 +178,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   }, [isdocRevStatusDraft, values.document, values.name]);
 
   const documentTypeId = values.document?.documentType?.id;
-  const isEB = checkIsDocumentEB(documentRevision?.document.documentType.group);
+  const isEB = checkIsDocumentEB(documentRevision?.document.documentType.groupOptions);
 
   return (
     <Grid

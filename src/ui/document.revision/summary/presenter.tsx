@@ -86,7 +86,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const [isCRLinkVisible] = useCRLink(docTypeId);
   const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
-  const isEB = checkIsDocumentEB(document.documentType.group);
+  const isEB = checkIsDocumentEB(document.documentType.groupOptions);
   const isPart = checkIsDocumentPart(document?.documentType?.groupOptions);
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
 
