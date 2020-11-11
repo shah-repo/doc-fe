@@ -110,6 +110,7 @@ DocumentRevisionUpdateContainerProps
   };
 
   const debouncedSubmit = debounce(onSubmit, 1000);
+
   return (
     <FormContext.Provider value={{ submitOnChange: true }}>
       <DocumentRevisionForm
