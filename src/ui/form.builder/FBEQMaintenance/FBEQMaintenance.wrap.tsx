@@ -32,10 +32,12 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
 
     // Set new pm button disabled status.
     useEffect(() => reaction(
-      () => (
-        formState?.inputState.get("preventativeMaintenanceForm")?.value ||
-        formState?.inputState.get(`${name}.frequency`)?.value
-      ),
+      () => formState?.inputState.get(`${name}.preventativeForm`)?.value,
+      () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+    useEffect(() => reaction(
+      () => formState?.inputState.get(`${name}.frequency`)?.value,
       () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled())
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
