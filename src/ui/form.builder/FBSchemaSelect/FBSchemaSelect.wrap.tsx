@@ -23,7 +23,8 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
   }: T) => {
     const { workspaceState, schemaState, formState } = FB.useStores();
     schemaSelectState = FB.useRef<FBSchemaSelectState>(FBSchemaSelectState);
-    options = workspaceState?.getValidationSchema();
+    // old documents use getSchema(), there is no migration
+    options = workspaceState?.getValidationSchema() || workspaceState?.getSchema();
     defaultValue = formState?.getFieldValue(name);
 
     function setIncludedSchemaItem(value?: FBSchemaProps) {
