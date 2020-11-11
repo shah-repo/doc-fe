@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBEQMaintenanceHistory, FBFileUpload, FBInput, FBSelect, FBTextEditor, FBTextField } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBEQMaintenanceHistory, FBFileUpload, FBInput, FBQuantityField, FBSelect, FBTextEditor } from "..";
 import { FBSection } from "../FBSection";
 import { FBEQMaintenanceProps } from "./FBEQMaintenance.types";
 import { withFBEQMaintenance } from "./FBEQMaintenance.wrap";
@@ -28,7 +28,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
           label="form.builder.new.pm"
           style={{ margin: 0 }}
           onClick={handleAdd}
-          disabled={disabled || isNewPMDisabled}
+          disabled={isNewPMDisabled}
 
         />
       </Box>
@@ -36,12 +36,12 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
     <FBAutocompleteAsync
       label="form.builder.preventative.maintenance.form"
       optionId={FBAutocompleteAsyncOption.preventativeMaintenaceForms}
-      name="preventativeMaintenanceForm"
+      name={`${name}.preventativeForm`}
       withState
       {...{ disabled }}
     />
     {/* This needs to be a number field */}
-    <FBTextField
+    <FBQuantityField
       name={`${name}.frequency`}
       label="form.builder.maintenance.frequency"
       withState
