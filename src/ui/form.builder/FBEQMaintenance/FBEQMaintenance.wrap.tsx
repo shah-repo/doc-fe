@@ -1,24 +1,54 @@
+import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBEQMaintenanceProps } from "..";
+import React, { useEffect } from "react";
+import { FB, FBEQMaintenanceProps, FBEQMaintenanceState } from "..";
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
     handleAdd,
+    eqMaintenanceState,
+    isNewPMDisabled,
+    pmFormId,
     name = "",
     ...props
   }: T) => {
 
     // MARK: @config
-    let isNewPMDisabled;
     const { workspaceState, formState } = FB.useStores();
     const { id: docRevId } = workspaceState || {};
     const currentStatus = formState?.getFieldValue(`${name}.status`);
-    const pmFormId = formState?.inputState.get("preventativeMaintenanceForm")?.value;
+    eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
+    pmFormId = formState?.getFieldValue(`${name}.preventativeForm`);
 
     // MARK: @reactions
+    // Set pm form id on form select
+    useEffect(() => reaction(
+      () => formState?.inputState.get(`${name}.preventativeForm`)?.value,
+      (id) => (pmFormId = id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    // Set new pm button disabled status.
+    useEffect(() => reaction(
+      () => formState?.inputState.get(`${name}.preventativeForm`)?.value,
+      () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+    useEffect(() => reaction(
+      () => formState?.inputState.get(`${name}.frequency`)?.value,
+      () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    // MARK: @helpers
+    function newPMDisabled(): boolean {
+      return !(
+        formState?.getFieldValue(`${name}.preventativeForm`) &&
+        formState?.getFieldValue(`${name}.frequency`)
+      );
+    }
 
     // MARK: @methods
     handleAdd = () => {
@@ -29,8 +59,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     // MARK: @observer
     useObserver(() => {
       isNewPMDisabled = (
-        !formState?.inputState.get("preventativeMaintenanceForm")?.value ||
-        !formState?.inputState.get(`${name}.frequency`)?.value
+        eqMaintenanceState?.newPMDisabled ||
+        newPMDisabled()
       );
     });
 

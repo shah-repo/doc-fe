@@ -50,7 +50,7 @@ export const toDocumentRevisionFormValues = (
     renderHTML: documentRevision.renderHTML,
     schema: documentRevision.schema,
     parentParts: documentRevision.parentParts,
-    parentEquipment: documentRevision.parentEquipment,
+    parentEquipment: { id: get(documentRevision, "parentEquipment.id") },
     equipmentSection: get(documentRevision.equipmentSection, ""),
     // there can currently be only one child part
     childrenParts: documentRevision.childrenParts,
