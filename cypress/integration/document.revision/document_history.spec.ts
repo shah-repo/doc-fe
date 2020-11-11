@@ -278,7 +278,9 @@ context("Check Document History", () => {
     });
 
     it("Add another group permission", () => {
-      cy.drAddGroupFromPermissionTab(groupTwo);
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocSecurity, () => {
+        cy.drAddGroupFromPermissionTab(groupTwo);
+      });
     });
   });
 

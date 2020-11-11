@@ -73,11 +73,14 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
   data: body,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(loadAudit(id));
-    dispatch(documentRevisionSet(undefined, body, id));
+    dispatch(documentRevisionSet(documentRevision));
+    // dispatch(documentRevisionSet(undefined, body, id));
   },
   handlers,
   cancelToken: axios.CancelToken.source(),
-  sendNoResponseHeader: true,
+  // temporarily disabling send-no-response header
+  // should be uncommented later
+  // sendNoResponseHeader: true,
 });
 
 const create = (body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):

@@ -1,5 +1,5 @@
-/* eslint-disable max-classes-per-file */
-// / <reference types="Cypress" />
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
@@ -343,7 +343,7 @@ context("Approval request form scenario", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostRejectCR, CyRoutes.ARPreview, CyRoutes.GetPendingActions], () => {
           cy.poRejectAR({ password: "Tester1!" });
         });
-        cy.wait(4000);
+        cy.wait(10000);
       });
     });
 
@@ -444,7 +444,7 @@ context("Approval request form scenario", () => {
       it("Accept Approval Request with password prompt", () => {
         SystemRequirement("REQ-0920");
         cy.arApproveAR();
-        cy.wait(4000);
+        cy.wait(10000);
       });
     });
 

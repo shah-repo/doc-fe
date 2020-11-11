@@ -8,6 +8,8 @@ export const checkIsDocumentEB = (documentGroup?: DocumentGroupType): boolean =>
   checkDocumentGroup(DOC_GROUP_TYPE.ENGINEERING_BUILD, documentGroup);
 export const checkIsDocumentPO = (documentGroup?: DocumentGroupType): boolean =>
   checkDocumentGroup(DOC_GROUP_TYPE.PO, documentGroup);
+export const checkIsDocumentOtherGroup = (documentGroup?: DocumentGroupType): boolean =>
+  checkDocumentGroup(DOC_GROUP_TYPE.OTHER, documentGroup);
 export const checkIsDocumentForm = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
   checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.FORM, documentGroupOptions);
 export const checkIsTypeHaveOutput = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
