@@ -7,6 +7,7 @@ import { ApplicationState } from "../../state/reducers";
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
+import { FBEndpoint } from "../form.builder/defaults/FBEndpoint";
 import FBStore from "../form.builder/FBStore/FBStore";
 import useAsync from "../hooks/useAsync";
 import useDocumentTitle from "../hooks/useDocumentTitle";
@@ -100,6 +101,7 @@ DocumentRevisionUpdateContainerProps
     // workaround when editing document through CR view. The form is marked dirty when editing FB fields
     promise?.then(() => {
       FBStore.audit.set({
+        url: FBEndpoint.DocumentRevisionAudit,
         urlValues: { documentId: documentRevision.id },
         method: "get",
       });
@@ -108,7 +110,6 @@ DocumentRevisionUpdateContainerProps
   };
 
   const debouncedSubmit = debounce(onSubmit, 1000);
-
   return (
     <FormContext.Provider value={{ submitOnChange: true }}>
       <DocumentRevisionForm
