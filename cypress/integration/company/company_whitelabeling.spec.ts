@@ -4,16 +4,16 @@ import { USERS } from "../../utils/constants/users";
 let createdCompany;
 let loginResponse;
 
-const defaultLogo = "/ta_assets_replaced_logo.png";
-const defaultAvatar = "/ta_assets_replaced_avatar.png";
+const defaultLogo = "/ta_assets_company_logo.png";
+const defaultAvatar = "/ta_assets_company_avatar.png";
 const defaultDefaultBackground = "#4b5dc6";
 const defaultPrimary = "#eb5055";
 const defaultPrimaryContrastText = "#000000";
 const defaultSecondary = "#414b8b";
 const defaultSecondaryContrastText = "#FFFFFF";
 
-const replacedLogo = "/ta_assets_replaced_avatar.png";
-const replacedAvatar = "/ta_assets_replaced_logo.png";
+const replacedLogo = "/ta_assets_company_avatar.png";
+const replacedAvatar = "/ta_assets_company_logo.png";
 const replacedDefaultBackground = "#FFFFFF";
 const replacedPrimary = "#FF0000";
 const replacedPrimaryContrastText = "#00FF00";
