@@ -44,6 +44,7 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
       ...(props as T),
       controls,
       disabled,
+      options,
     });
   };
 
