@@ -8,11 +8,10 @@ import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
-const currentDate = moment().startOf("day").tz("America/Los_Angeles").format("MMMM D, YYYY");
+const currentDate = moment().tz("America/Los_Angeles").format("MMMM D, YYYY");
 
 const NO_PART_TOAST_ERROR_MESSAGE = "can't be RELEASED without linked Parts";
 const NOT_RELEASED_TOAST_ERROR_MESSAGE = "Last docRev for Part linked to EB after copying is not in RELEASED status.";
@@ -43,13 +42,11 @@ context("Parts from EB flow test", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAcronym: `T1${runId}`,
             companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
             importerEmail: USERS[5].email,
             numOfRevStages: 3,
-            name: `Test Company ${runId}`,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
@@ -215,7 +212,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Save the EB", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
 
@@ -235,7 +232,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Save EB", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Submit for Approval", () => {
@@ -298,7 +295,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Save the EB", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
 
@@ -329,7 +326,7 @@ context("Parts from EB flow test", () => {
 
     context("Submit for Approval", () =>  {
       it("Save EB", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Submit for Approval", () => {
@@ -363,11 +360,11 @@ context("Parts from EB flow test", () => {
   context("Copy to EB", () => {
     context("Create the next build of EB", () => {
       it("Click Copy to EB button", () => {
-        cy.get("[data-cy=\"PreviewControlsContainer-copy-to\"]").click();
+        cy.ebClickCopyToEB();
       });
 
       it("Verify that the selected part is copied to the new build", () => {
-        cy.get("[data-cy=\"childrenParts\"]").should("contain.text", NEW_PART_NAME);
+        cy.get("[data-cy=\"childrenParts\"]").should("contains.attr", "value", "PRT-00004 - " + NEW_PART_NAME);
       });
     });
 
@@ -407,7 +404,12 @@ context("Parts from EB flow test", () => {
 
     context("Release the part", () => {
       it("Navigate to the part document", () => {
-        cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").click();
+        cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
+          const link = $el.attr("href");
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApprovers], () => {
+            cy.visit(CONFIG.FE_URL + link);
+          });
+        });
       });
 
       it("Approve and release the part", () => {
@@ -417,8 +419,27 @@ context("Parts from EB flow test", () => {
 
     context("Approve and release the EB", () => {
       it("Navigate to the EB", () => {
-        cy.get("[data-cy=\"BuildsPresenter-link-common.part.of\"]").click();
-        cy.get("[data-cy=\"BuildsPresenter-link-common.next.build\"]").click();
+        cy.get("[data-cy=\"BuildsPresenter-link-common.part.of\"]").then(($el) => {
+          const link = $el.attr("href");
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.GetRequiredApproversDocRev,
+            CyRoutes.GetAvailableApprovers,
+            CyRoutes.DocPreview], () =>
+          {
+            cy.visit(CONFIG.FE_URL + link);
+          });
+        });
+
+        cy.get("[data-cy=\"BuildsPresenter-link-common.next.build\"]").then(($el) => {
+          const link = $el.attr("href");
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.GetRequiredApproversDocRev,
+            CyRoutes.GetAvailableApprovers,
+            CyRoutes.DocPreview], () =>
+          {
+            cy.visit(CONFIG.FE_URL + link);
+          });
+        });
       });
 
       it("Approve record button click", () => {
@@ -437,7 +458,12 @@ context("Parts from EB flow test", () => {
 
     context("Check if a new revision of part has been created", () => {
       it("Navigate to the part document", () => {
-        cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").click();
+        cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
+          const link = $el.attr("href");
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApprovers], () => {
+            cy.visit(CONFIG.FE_URL + link);
+          });
+        });
       });
 
       it("Verify that a new revision has been created", () => {

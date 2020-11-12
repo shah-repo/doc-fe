@@ -352,6 +352,10 @@ export const routes: ICyRoutes =   {
       method: "GET",
       url: "/api/v1/document_revisions/*/required_approvers",
     },
+    callConfig: {
+      responseTimeout: 10 * 1000,
+      requestTimeout: 10 * 1000,
+    },
   },
   PostApproveAR: {
     requestConfig: {

@@ -13,6 +13,7 @@ declare global {
       ebCheckIfPartIsInSummary(params: { partName: string }): Chainable<Subject>;
       ebVerifyNewRevisionCreated(): Chainable<Subject>;
       ebApprove(): Chainable<Subject>;
+      ebClickCopyToEB(): Chainable<Subject>;
     }
   }
 }
@@ -22,8 +23,9 @@ Cypress.Commands.add("ebEnterPartName", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("ebEnterPartDescription", (params: { description: string }) => {
+  cy.xpath("//div[@data-cy=\"description\"]/../div[2]").click();
   cy.get("[data-cy=\"description\"]>div>div>div>div>div[contenteditable]").clear().type(params.description);
-  cy.get("[data-cy=field-description]>label").click().wait(1000);
+  cy.get("[data-cy=\"form.builder.field.description\"]>div").click().wait(1000);
 });
 
 Cypress.Commands.add("ebChoosePartType", (params: {partName: string}) => {
@@ -36,8 +38,19 @@ Cypress.Commands.add("ebCheckIfPartIsInSummary", (params: {partName: string}) =>
 });
 
 Cypress.Commands.add("ebVerifyNewRevisionCreated", () => {
-  cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().should("contain.text", "Revision 2 - Draft");
+  cy.get(" [data-cy=\"DocumentRevisionList-item\"]>a>div").first()
+    .then(($el) => {
+      const text = $el.text();
+      expect(text.replace(/\u00a0/g, " ")).to.contain("Revision 2  - Draft");
+    });
 });
+
+Cypress.Commands.add("ebClickCopyToEB", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+    cy.get("[data-cy=\"PreviewControlsContainer-copy-to\"]").click();
+  });
+});
+
 
 Cypress.Commands.add("ebApprove", () => {
   cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
