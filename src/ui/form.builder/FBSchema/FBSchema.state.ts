@@ -108,7 +108,7 @@ export class FBSchemaState {
   };
 
   @observable public schema?: FBSchemaProps[];
-  public validationShema?: Partial<FBSchemaProps>[];
+  public validationSchema?: Partial<FBSchemaProps>[];
 
   public constructor(schema?: FBSchemaProps[]) {
     this.schema = schema;
@@ -128,10 +128,10 @@ export class FBSchemaState {
 
   public setValidationSchemaItem = (item: Partial<FBSchemaProps>) => {
     if (!item.name || !item.label) { return; }
-    set(this, "validationShema", unionBy(this.validationShema || [], [item], "name"));
+    set(this, "validationSchema", unionBy(this.validationSchema || [], [item], "name"));
   };
 
-  public getValidationSchema = () => cloneDeep(get(this, "validationShema"));
+  public getValidationSchema = () => cloneDeep(get(this, "validationSchema"));
 
   @action public getSchema = (): FBSchemaProps[] => cloneDeep(get(this, "schema"));
 

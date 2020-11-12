@@ -27,7 +27,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       name="title"
       label="form.builder.title"
       rules="required"
-      {...{ optionId, disabledOptions }}
+      {...{ optionId, disabledOptions, getOptionLabel }}
       freeSolo
     />
     {type === FBProcedureItemType.materials && (

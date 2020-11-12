@@ -54,58 +54,66 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
         <Box>
           {
             showNextRevisionLevel && !showAdministrativeAndVoidChange &&
-            <RadioButton
-              label={<Text message={nextRevisionLevelLabel} />}
-              value={RevisionChangeType.NextRevision}
-              id="RevisionTypeChange-nextRevision"
-              disabled={isDisabled}
-              className={classes.label}
-            />
+            <>
+              <RadioButton
+                label={<Text message={nextRevisionLevelLabel} />}
+                value={RevisionChangeType.NextRevision}
+                id="RevisionTypeChange-nextRevision"
+                disabled={isDisabled}
+                className={classes.label}
+              />
+              {generateVersionPrediction(RevisionChangeType.NextRevision)}
+            </>
           }
-          {generateVersionPrediction(RevisionChangeType.NextRevision)}
         </Box>
         <Box>
           {
             showNextRevisionStage && !showAdministrativeAndVoidChange &&
-          <RadioButton
-            label={
-              <Text message={nextRevisionStageLabel} />
-            }
-            data-cy="upgradeNextRevisionStage"
-            value={RevisionChangeType.NextRevisionStage}
-            id="RevisionTypeChange-nextRevisionStage"
-            disabled={isDisabled}
-            className={classes.label}
-          />
+            <>
+              <RadioButton
+                label={
+                  <Text message={nextRevisionStageLabel} />
+                }
+                data-cy="upgradeNextRevisionStage"
+                value={RevisionChangeType.NextRevisionStage}
+                id="RevisionTypeChange-nextRevisionStage"
+                disabled={isDisabled}
+                className={classes.label}
+              />
+              {generateVersionPrediction(RevisionChangeType.NextRevisionStage)}
+            </>
           }
-          {generateVersionPrediction(RevisionChangeType.NextRevisionStage)}
         </Box>
         <Box>
           {
             showObsolete && !isDocRevFirstDraft &&
-          <RadioButton
-            label={<Text message={ showAdministrativeAndVoidChange ? "common.void" : obsoleteLabel} />}
-            value={RevisionChangeType.Obsolete}
-            id="RevisionTypeChange-obsolete"
-            disabled={isDisabled}
-            className={classes.label}
-          />
+            <>
+              <RadioButton
+                label={<Text message={ showAdministrativeAndVoidChange ? "common.void" : obsoleteLabel} />}
+                value={RevisionChangeType.Obsolete}
+                id="RevisionTypeChange-obsolete"
+                disabled={isDisabled}
+                className={classes.label}
+              />
+              {generateVersionPrediction(RevisionChangeType.Obsolete)}
+            </>
           }
-          {generateVersionPrediction(RevisionChangeType.Obsolete)}
         </Box>
         <Box>
           {
             showAdministrationChange && !isDocRevFirstDraft &&
-          <RadioButton
-            label={<Text message={administrationChangeLabel} />}
-            value={RevisionChangeType.AdministrativeChange}
-            id="RevisionTypeChange-administrativeChange"
-            data-cy="RevisionTypeChange-administrativeChange"
-            disabled={isDisabled}
-            className={classes.label}
-          />
+            <>
+              <RadioButton
+                label={<Text message={administrationChangeLabel} />}
+                value={RevisionChangeType.AdministrativeChange}
+                id="RevisionTypeChange-administrativeChange"
+                data-cy="RevisionTypeChange-administrativeChange"
+                disabled={isDisabled}
+                className={classes.label}
+              />
+              {generateVersionPrediction(RevisionChangeType.AdministrativeChange)}
+            </>
           }
-          {generateVersionPrediction(RevisionChangeType.AdministrativeChange)}
         </Box>
       </RadioGroup>
     </Box>
