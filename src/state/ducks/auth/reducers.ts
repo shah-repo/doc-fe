@@ -4,27 +4,14 @@ import { Employee } from "../company";
 import { COMPANY_DEFAULT_STATE } from "../company/reducers";
 import { EditGroupsAction, EditUserInfoAction } from "../tableSearch";
 import { EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
-import { AUTH_USER, LOGOUT_USER, PING_SERVER_GET_ASYNC, SET_CREDENTIALS, SET_EMPLOYEE, USERS_ME_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from "./constants";
-import { AuthUserAction, EditUserMeAction, GroupTag, LogoutUserAction, Permission, SelectEmployeeAction, SetCredentialsAction, UserGroupsAction, UserGroupsState, UserState } from "./types";
+import { AUTH_USER, LOGOUT_USER, PING_SERVER_GET_ASYNC, SET_EMPLOYEE, USERS_ME_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from "./constants";
+import { AuthUserAction, EditUserMeAction, GroupTag, LogoutUserAction, Permission, SelectEmployeeAction, UserGroupsAction, UserGroupsState, UserState } from "./types";
 
 export const DEFAULT_EMPLOYEE = {
   id: "",
   active: true,
   company: COMPANY_DEFAULT_STATE,
   slackUserId: "",
-};
-
-export const DEFAULT_CREDENTIALS = {
-  credentials: {
-    AccessKeyId: "",
-    SecretAccessKey: "",
-    SessionToken: "",
-    Expiration: "",
-  },
-  endpoint: "",
-  environment: "",
-  companyId: "",
-  region: "",
 };
 
 export const USER_DEFAULT_STATE: UserState = {
@@ -37,7 +24,6 @@ export const USER_DEFAULT_STATE: UserState = {
   avatar: "",
   groups: [],
   employee: DEFAULT_EMPLOYEE,
-  iotCredentials: DEFAULT_CREDENTIALS,
 };
 
 type AuthUserActions =
@@ -47,8 +33,7 @@ type AuthUserActions =
   | EditUserMeAction
   | EditUserInfoAction
   | UserGroupsAction
-  | EditGroupsAction
-  | SetCredentialsAction;
+  | EditGroupsAction;
 
 export const user = (
   state: UserState = USER_DEFAULT_STATE,
@@ -69,11 +54,6 @@ export const user = (
         ...state,
         employeeId: action.payload.id,
         employee: action.payload,
-      };
-    case SET_CREDENTIALS:
-      return {
-        ...state,
-        iotCredentials: action.payload,
       };
     case USERS_ME_URL:
       return {

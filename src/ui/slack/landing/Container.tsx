@@ -1,4 +1,3 @@
-import moment from "moment";
 import { parse } from "query-string";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,7 +26,6 @@ export const SlackLandingContainer: React.FunctionComponent<Props> = ({
   const { code } = parse(location.search);
   const postSlackCodeAction = useActionCreator(slackActions.postSlackCode);
   const employeeId = useSelector(authSelectors.currentEmployeeId);
-  const expirationIotDate = useSelector(authSelectors.getExpirationOfCredentials);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const async = useAsync({
@@ -48,9 +46,6 @@ export const SlackLandingContainer: React.FunctionComponent<Props> = ({
 
   const onCounterFinish = () => {
     dispatch(authActions.getSessionDetails(employeeId));
-    if (moment(expirationIotDate).isBefore(new Date())) {
-      dispatch(authActions.getIotCreds);
-    }
     history.push(HOME_URL);
   };
   const goToDashboard = () => {

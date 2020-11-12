@@ -16,9 +16,6 @@ const currentUserName = (state: ApplicationState): string =>
 
 const currentUserId = (state: ApplicationState): string => state.auth.user.id;
 
-const getExpirationOfCredentials = (state: ApplicationState): string =>
-  state.auth.user.iotCredentials.credentials.Expiration;
-
 const currentUserGroups = (state: ApplicationState): Group[] =>
   state.auth.user.groups || [];
 
@@ -107,5 +104,4 @@ export default {
   currentEmployeeTags,
   makeGetHasTag,
   makeGetHasPermission,
-  getExpirationOfCredentials,
 };
