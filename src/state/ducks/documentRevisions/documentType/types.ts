@@ -161,7 +161,6 @@ export enum InputFieldType{
   NEXT_REVISION_STAGE = "J",
   OBSOLETE = "K",
   ADM_CHANGE = "L",
-  ASSIGN_DOCUMENT = "U", // used only on FE, issue https://shifamed.atlassian.net/browse/ENC-5789
   OPERATORS = "U",
 }
 

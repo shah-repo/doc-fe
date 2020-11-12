@@ -5,7 +5,7 @@ import { changeRequestsActions, changeRequestsSelectors } from "../../../../stat
 import { ApplicationState } from "../../../../state/reducers";
 import AsyncGate from "../../../components/AsyncGate";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
-import { useAssignDocument } from "../../../hooks/docCustomization/useCustomization";
+import { useAssignOperatorsToDocument } from "../../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../../hooks/useActionCreator";
 
 interface Props {
@@ -26,7 +26,7 @@ const OperatorAccess: React.FunctionComponent<Props> = ({ documentTypeId }) => {
       currentUserId
     );
   });
-  const [isVisible] = useAssignDocument(documentTypeId);
+  const [isVisible] = useAssignOperatorsToDocument(documentTypeId);
 
   if (!isVisible) {
     return null;
