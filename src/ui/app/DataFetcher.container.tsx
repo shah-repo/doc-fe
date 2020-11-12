@@ -19,7 +19,6 @@ const DataFetcherContainer: React.FunctionComponent = () => {
     dispatch(authActions.loadUserGroups());
     dispatch(userManagementActions.loadCompanyGroups());
     dispatch(changeRequestsActions.loadAvailableApprovers());
-    console.log(moment(), moment(expirationIotDate));
     if (moment().isAfter(expirationIotDate)) {
       dispatch(authActions.getIotCreds());
     }
