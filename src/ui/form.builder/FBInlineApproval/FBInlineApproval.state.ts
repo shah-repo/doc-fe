@@ -81,6 +81,7 @@ export class FBInlineApprovalState {
     if (!id) { return; }
     this.transitionApi.set({
       body,
+      url: FBEndpoint.ApprovalsTransition,
       urlValues: { id, transition },
       method: "post",
     });
@@ -92,6 +93,7 @@ export class FBInlineApprovalState {
     body: FBRequestApprovalTransitionBody,
   ) => this.requestApprovalApi.set({
     body,
+    url: FBEndpoint.ApprovalsTransition,
     urlValues: { id, transition },
     method: "post",
   });
@@ -99,6 +101,7 @@ export class FBInlineApprovalState {
   public getDocument = (id?: string) => {
     if (!id) { return; }
     this.documentApi.set({
+      url: FBEndpoint.Document,
       urlValues: { id },
       method: "get",
     });
