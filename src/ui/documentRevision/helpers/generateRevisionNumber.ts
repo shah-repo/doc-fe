@@ -66,6 +66,10 @@ export const versionNumber = (
   releasedDocRev?: DocumentRevision,
   isRecord?: boolean,
 ) => {
+  if (!revisionChangeType) {
+    // no change
+    return "";
+  }
   if (!releasedDocRev) {
     // this is first document
     switch (revisionChangeType) {
@@ -96,7 +100,7 @@ export const versionNumber = (
       return generateRevisionNumber(
         isRecord ? releasedDocRev.revision : releasedDocRev.revision + 1,
         releasedDocRev.revisionStage,
-        isRecord ? (releasedDocRev.subRevision || 0 + 1) : 0,
+        isRecord ? ((releasedDocRev.subRevision || 0) + 1) : 0,
         revisionChangeType,
       );
     }
@@ -121,7 +125,7 @@ export const versionNumber = (
       return generateRevisionNumber(
         releasedDocRev.revision,
         releasedDocRev.revisionStage,
-        releasedDocRev.subRevision || 0 + 1,
+        (releasedDocRev.subRevision || 0) + 1,
         revisionChangeType,
       );
     }
