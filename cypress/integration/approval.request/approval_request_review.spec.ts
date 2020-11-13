@@ -1,5 +1,6 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
+
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";

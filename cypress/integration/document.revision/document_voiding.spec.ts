@@ -10,7 +10,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 
-context("Document Creation Flow", () => {
+context("Document voiding Flow", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
@@ -106,7 +106,7 @@ context("Document Creation Flow", () => {
     });
 
     it("Checks if Revison Change Type does not contain OBSOLETE option", () => {
-      cy.get("[data-cy=\"field-revisionStage\"]");
+      // cy.get("[data-cy=\"field-revisionStage\"]");
       cy.get("#RevisionTypeChange-obsolete").should("not.exist");
     });
 

@@ -1,3 +1,7 @@
+
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import moment from "moment";
 import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions";
