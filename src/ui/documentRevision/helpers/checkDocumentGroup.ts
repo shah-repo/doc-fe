@@ -13,7 +13,7 @@ const checkDocumentGroupOptions = (
 };
 
 export const checkIsDocumentEditableSchema = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
-export const checkIsDocumentOtherGroup = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DOCUMENT);
+export const checkIsDocumentDocument = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DOCUMENT);
 export const checkIsDocumentRecord = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.RECORD);
 export const checkIsDocumentPart =  checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.PART);
 export const checkIsDocumentEB = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.ENGINEERING_BUILD);
