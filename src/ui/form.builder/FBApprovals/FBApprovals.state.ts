@@ -74,6 +74,7 @@ export class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | 
   ) => {
     if (!id) { return; }
     this.transitionApi.set({
+      url: FBEndpoint.ApprovalsTransition,
       urlValues: { id, transition },
       body,
       method: "post",

@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import path from "path";
 import { GroupTag, NavigationItems } from "../../../src/state/ducks/auth/types";
 import { CONFIG } from "../../support/config";
