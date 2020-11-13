@@ -91,9 +91,9 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
     scheduledForDeletion: true,
     whiteLabeling: {
       DEV_THEME: {
-        logo: "https://www.feshfen.com/images/wigs/test.png",
-        avatar: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
-        imageEmail: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        logo: "/ta_assets_company_logo.png",
+        avatar: "/ta_assets_company_avatar.png",
+        imageEmail: "/ta_assets_company_email.png",
         colors: {
           defaultBackground: "#4b5dc6",
           primary: "#eb5055",
