@@ -72,7 +72,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/employees*",
     },
     callConfig: {
-      responseTimeout: 10 * 1000,
+      responseTimeout: 20 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
   EmployeesPost: {
@@ -162,6 +163,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 25 * 1000,
+      requestTimeout: 15 * 1000,
     },
   },
   ReleaseDocRevWithoutAr: {
@@ -288,6 +290,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 20 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
   ARPreview: {
@@ -300,6 +303,9 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/documents/*",
+    },
+    callConfig: {
+      responseTimeout: 20 * 1000,
     },
   },
   DocRevPreview: {
@@ -381,6 +387,9 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/approvals/*/approve",
+    },
+    callConfig: {
+      responseTimeout: 20 * 1000,
     },
   },
   PostApprovals: {

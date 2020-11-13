@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 
@@ -111,6 +114,39 @@ context("Whitelabeling test", () => {
         payload: {
           whiteLabeling: {
             DEV_THEME: {
+              logo: replacedLogo,
+              avatar: replacedAvatar,
+              colors: {
+                defaultBackground: replacedDefaultBackground,
+                primary: replacedPrimary,
+                primaryContrastText: replacedPrimaryContrastText,
+                secondary: replacedSecondary,
+                secondaryContrastText: replacedSecondaryContrastText,
+              },
+            },
+            DEMO_THEME: {
+              logo: replacedLogo,
+              avatar: replacedAvatar,
+              colors: {
+                defaultBackground: replacedDefaultBackground,
+                primary: replacedPrimary,
+                primaryContrastText: replacedPrimaryContrastText,
+                secondary: replacedSecondary,
+                secondaryContrastText: replacedSecondaryContrastText,
+              },
+            },
+            SANDBOX_THEME: {
+              logo: replacedLogo,
+              avatar: replacedAvatar,
+              colors: {
+                defaultBackground: replacedDefaultBackground,
+                primary: replacedPrimary,
+                primaryContrastText: replacedPrimaryContrastText,
+                secondary: replacedSecondary,
+                secondaryContrastText: replacedSecondaryContrastText,
+              },
+            },
+            PRODUCTION_THEME: {
               logo: replacedLogo,
               avatar: replacedAvatar,
               colors: {
