@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
@@ -278,7 +281,9 @@ context("Check Document History", () => {
     });
 
     it("Add another group permission", () => {
-      cy.drAddGroupFromPermissionTab(groupTwo);
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocSecurity, () => {
+        cy.drAddGroupFromPermissionTab(groupTwo);
+      });
     });
   });
 

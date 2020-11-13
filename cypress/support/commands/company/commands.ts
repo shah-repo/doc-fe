@@ -91,6 +91,42 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
     scheduledForDeletion: true,
     whiteLabeling: {
       DEV_THEME: {
+        logo: "/ta_assets_company_logo.png",
+        avatar: "/ta_assets_company_avatar.png",
+        imageEmail: "/ta_assets_company_email.png",
+        colors: {
+          defaultBackground: "#4b5dc6",
+          primary: "#eb5055",
+          primaryContrastText: "#000000",
+          secondary: "#414b8b",
+          secondaryContrastText: "#FFFFFF",
+        },
+      },
+      DEMO_THEME: {
+        logo: "https://www.feshfen.com/images/wigs/test.png",
+        avatar: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        imageEmail: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        colors: {
+          defaultBackground: "#4b5dc6",
+          primary: "#eb5055",
+          primaryContrastText: "#000000",
+          secondary: "#414b8b",
+          secondaryContrastText: "#FFFFFF",
+        },
+      },
+      SANDBOX_THEME: {
+        logo: "https://www.feshfen.com/images/wigs/test.png",
+        avatar: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        imageEmail: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        colors: {
+          defaultBackground: "#4b5dc6",
+          primary: "#eb5055",
+          primaryContrastText: "#000000",
+          secondary: "#414b8b",
+          secondaryContrastText: "#FFFFFF",
+        },
+      },
+      PRODUCTION_THEME: {
         logo: "https://www.feshfen.com/images/wigs/test.png",
         avatar: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
         imageEmail: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
@@ -162,10 +198,8 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
 });
 
 Cypress.Commands.add("cmpVerifyCompanyAvatar", (params: { name: string; avatarSource: string }) => {
-  cy.get("button[id=\"SwitchCompanyContainer-companies\"]").contains(params.name).parent()
-    .within(() => {
-      cy.get("img").should("have.attr", "src", params.avatarSource);
-    });
+  cy.xpath(`//div[contains(text(),"${params.name}")]/../img`)
+    .should("have.attr", "src", params.avatarSource);
 });
 
 Cypress.Commands.add("cmpClickCreateNewDocument", () => {

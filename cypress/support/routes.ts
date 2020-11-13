@@ -61,7 +61,8 @@ export enum CyRoutes {
   GetDocAudit = "GetDocAudit",
   GetDocRevDocTypeCategory = "GetDocRevDocTypeCategory",
   GetDocRevStatusesCategory = "GetDocRevStatusesCategory",
-  PostDocRevInReview = "PostDocRevInReview"
+  PostDocRevInReview = "PostDocRevInReview",
+  PatchDocSecurity = "PatchDocSecurity"
 }
 
 export const routes: ICyRoutes =   {
@@ -69,6 +70,10 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/employees*",
+    },
+    callConfig: {
+      responseTimeout: 20 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
   EmployeesPost: {
@@ -81,6 +86,15 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/documents/lot_quantity/*",
+    },
+    callConfig: {
+      responseTimeout: 10 * 1000,
+    },
+  },
+  PatchDocSecurity: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/documents/*/update_security",
     },
     callConfig: {
       responseTimeout: 10 * 1000,
@@ -149,6 +163,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 25 * 1000,
+      requestTimeout: 15 * 1000,
     },
   },
   ReleaseDocRevWithoutAr: {
@@ -275,6 +290,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 20 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
   ARPreview: {
@@ -287,6 +303,9 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/documents/*",
+    },
+    callConfig: {
+      responseTimeout: 20 * 1000,
     },
   },
   DocRevPreview: {
@@ -368,6 +387,9 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/approvals/*/approve",
+    },
+    callConfig: {
+      responseTimeout: 20 * 1000,
     },
   },
   PostApprovals: {

@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import { PreventSkipOnFailure } from "../../support";
 import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";

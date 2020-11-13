@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";

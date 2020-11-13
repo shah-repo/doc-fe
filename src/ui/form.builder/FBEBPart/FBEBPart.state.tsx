@@ -33,6 +33,7 @@ export class FBEBPartState {
     if (!docRevId) { return; }
     const childrenParts = childPartId ? [{ id: childPartId }] : [];
     this.existingChildApi.set({
+      url: FBEndpoint.PatchDocumentRevision,
       urlValues: { docRevId },
       body: { childrenParts },
       method: "patch",
@@ -43,11 +44,13 @@ export class FBEBPartState {
     this.newChildApi.set({ body, method: "post" });
 
   public fetchProposedDocId = (documentTypeId: string) => this.proposedDocIdApi.set({
+    url: FBEndpoint.FetchDocId,
     urlValues: { documentTypeId },
     method: "get",
   });
 
   public fetchDocumentById = (id: string) => this.documentApi.set({
+    url: FBEndpoint.Document,
     urlValues: { id },
     method: "get",
   });

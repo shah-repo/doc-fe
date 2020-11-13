@@ -236,17 +236,12 @@ context("Record inline history Flow", () => {
       it("Approve first Inline Approval", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
         cy.get("input[name=\"password\"]").type("Tester1!");
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
+        cy.wrapWithWaitOnApiCalls([
+          CyRoutes.PostApprovalsApprove,
+          CyRoutes.EmployeesGet,
+          CyRoutes.DocPreview], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
-      });
-
-      it("Reload page", () => {
-        cy.reload();
-      });
-
-      it("Click WIP document", () => {
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
       });
 
       context("Change textfield and approve again", () => {
@@ -269,17 +264,12 @@ context("Record inline history Flow", () => {
         it("Approve first Inline Approval", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
           cy.get("input[name=\"password\"]").type("Tester1!");
-          cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostApprovalsApprove,
+            CyRoutes.EmployeesGet,
+            CyRoutes.DocPreview], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
-        });
-
-        it("Reload document", () => {
-          cy.reload();
-        });
-
-        it("Click WIP document", () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
         });
 
         it("Uncheck 'Red' and 'Green' value on checkbox", () => {
