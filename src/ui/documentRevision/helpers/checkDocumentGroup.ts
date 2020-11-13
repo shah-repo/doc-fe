@@ -16,7 +16,8 @@ export const checkIsTypeMustBeOutput = (documentGroupOptions?: DocumentGroupOpti
   checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT, documentGroupOptions);
 export const checkIsTypeCanBeOutput = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
   checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.CAN_BE_OUTPUT, documentGroupOptions);
-
+export const checkIsDocumentEditableSchema = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
+  checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA, documentGroupOptions);
 /** Checks if document has a specific group option.
    * @param groupOption Option that is searched for.
    * @param documentGroupOptions Array of group options a document has.
