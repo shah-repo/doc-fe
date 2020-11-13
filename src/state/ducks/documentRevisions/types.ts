@@ -253,7 +253,7 @@ export interface FBDocumentRevisionProps {
 export interface FBOutputDocumentType {
   id: string;
   documentTypeName?: string;
-  groupOptions?: DocumentGroupOptionsType;
+  groupOptions?: DocumentGroupOptionsType[];
 }
 
 export interface HeaderTableType {
