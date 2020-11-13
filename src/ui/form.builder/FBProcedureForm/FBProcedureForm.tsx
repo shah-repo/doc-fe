@@ -23,6 +23,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       defaultValue={FB.uniqid}
     />
     <FBAutocompleteAsync
+      {...{ getOptionLabel }}
       name="title"
       label="form.builder.title"
       rules="required"

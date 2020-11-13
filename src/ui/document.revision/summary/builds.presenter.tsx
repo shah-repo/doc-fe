@@ -46,7 +46,7 @@ export const BuildsPresenter: React.FunctionComponent<Props> = ({
             className={classes.link}
             to={documentVersionPath(docRev.id, docRev.document?.id )}
             target="_blank"
-            data-cy="BuildsPresenter-link"
+            data-cy={`BuildsPresenter-link-${label}`}
           >
             <Chip
               className={classes.chip}

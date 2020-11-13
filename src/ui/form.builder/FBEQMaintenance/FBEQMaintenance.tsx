@@ -29,7 +29,6 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
           style={{ margin: 0 }}
           onClick={handleAdd}
           disabled={isNewPMDisabled}
-
         />
       </Box>
     </FBSection>
