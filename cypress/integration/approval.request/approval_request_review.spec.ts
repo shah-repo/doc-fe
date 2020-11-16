@@ -188,6 +188,7 @@ context("Approval request form scenario", () => {
 
     it("Click send to review", () => {
       cy.arClickSendToReview();
+      cy.wait(10000);
     });
 
     it("Verify AR status", () => {
