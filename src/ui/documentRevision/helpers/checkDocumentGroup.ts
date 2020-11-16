@@ -22,6 +22,8 @@ export const checkIsTypeMustBeOutput = (documentGroupOptions?: DocumentGroupOpti
   checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT, documentGroupOptions);
 export const checkIsTypeCanBeOutput = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
   checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.CAN_BE_OUTPUT, documentGroupOptions);
+export const checkIsDocumentEquipment = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
+  checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.EQUIPMENT, documentGroupOptions);
 
 /** Checks if document has a specific group option.
    * @param groupOption Option that is searched for.
