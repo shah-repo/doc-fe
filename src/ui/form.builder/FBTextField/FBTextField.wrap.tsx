@@ -15,13 +15,17 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     ...props
   }: T) => {
 
-    const { formState } = FB.useStores();
+    const { formState, workspaceState } = FB.useStores();
+    const { mode } = workspaceState || {};
     const intl = useIntl();
     disabled = (
       disabled ||
       get(props.hellosignFlowProps, "type") === "HS_DEFINED_FIELD" ||
       formState?.getFieldValue("signatureRequestId")
     );
+
+    // Set rows to 3 by default for preview form
+    (mode === "preview" && rows < 2) && (rows = 3);
 
     (isUndefined(multiline)) && (
       multiline = Boolean(rows && (rows as number) > 1)
