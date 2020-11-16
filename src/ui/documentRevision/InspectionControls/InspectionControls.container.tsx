@@ -107,7 +107,7 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
     const createInspectionBody: CreateInspectionBody = {
       lot: { id: docRevId },
       documentType: { id: typeId },
-      // formDocument: { id: formId },
+      formDocument: { id: formId },
       inspectionType,
     };
     createInspectionAsync.start(
