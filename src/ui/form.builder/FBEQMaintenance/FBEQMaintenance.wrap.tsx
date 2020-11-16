@@ -26,6 +26,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     // Set pm form id on form select
     useEffect(() => reaction(
       () => formState?.inputState.get(`${name}.preventativeForm`)?.value,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       (id) => (pmFormId = id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
