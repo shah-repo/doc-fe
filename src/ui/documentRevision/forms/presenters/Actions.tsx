@@ -18,6 +18,7 @@ import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.prese
 import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";
+import ExportToCSVButton from "./export.to.csv/ExportToCSV.button";
 import { SubmitForApproval } from "./SubmitForApproval";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
 import VoidButton from "./VoidButton";
@@ -112,6 +113,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   return (
     <div>
+      <ExportToCSVButton
+        {...{ documentRevision }}
+      />
       <SubmitButton
         asyncState={asyncState}
         label={isDisabled ?
