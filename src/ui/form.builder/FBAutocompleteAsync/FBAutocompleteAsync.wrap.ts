@@ -16,6 +16,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     shouldReloadOnInit = false,
     labelPrefixRoot,
     selectedOptions,
+    includeRevision,
     defaultValue,
     additionalData,
     freeSolo,
@@ -84,8 +85,13 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (freeSolo && !isObject(option)) {
         return option;
       }
-      const { labelPrefixRoot } = autocompleteAsyncState?.optionConfig || {};
-      const optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
+      const { labelPrefixRoot, includeRevision } = autocompleteAsyncState?.optionConfig || {};
+      let optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
+      if (includeRevision) {
+        const revision = get(option, includeRevision);
+        optionLabel = labelPrefixRoot ?
+          `${get(option, labelPrefixRoot)} - ${revision} - ` : "";
+      }
       return `${optionLabel}${get(option, optionLabelKey, "")}`;
     });
 
