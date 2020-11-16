@@ -9,7 +9,7 @@ import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const runId = new Date().valueOf();
-const currentDate = moment(new Date().toLocaleDateString("en-US")).format("MMMM D, YYYY");
+const currentDate = moment().tz("America/Los_Angeles").format("MMMM D, YYYY");
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
