@@ -125,6 +125,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 25 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
   GetDocDynamicForm: {
