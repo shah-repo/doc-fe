@@ -659,6 +659,8 @@
   "form.builder.approve": "Approve",
   "form.builder.blocking": "Blocking",
   "form.builder.copyable.value": "Copyable Value",
+  "form.builder.include.inspection": "Include in Inspection Record",
+  "form.builder.include.fai.inspection": "Include in FAI Inspection Record",
   "form.builder.approvers": "Approvers",
   "form.builder.requestapproval": "Request Approval",
   "form.builder.set.approvers": "Set Approvers",
