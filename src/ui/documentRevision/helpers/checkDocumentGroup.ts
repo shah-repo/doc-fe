@@ -10,6 +10,10 @@ export const checkIsDocumentPO = (documentGroup?: DocumentGroupType): boolean =>
   checkDocumentGroup(DOC_GROUP_TYPE.PO, documentGroup);
 export const checkIsDocumentOtherGroup = (documentGroup?: DocumentGroupType): boolean =>
   checkDocumentGroup(DOC_GROUP_TYPE.OTHER, documentGroup);
+export const checkIsDocumentDAM = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
+  checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.DAM, documentGroupOptions);
+export const checkIsDocumentPOAM = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
+  checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.POAM, documentGroupOptions);
 export const checkIsDocumentForm = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
   checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.FORM, documentGroupOptions);
 export const checkIsTypeHaveOutput = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>

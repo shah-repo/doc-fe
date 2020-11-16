@@ -23,7 +23,7 @@ import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
-import { checkIsDocumentEB, checkIsDocumentOtherGroup, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
+import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
 import styles from "./DocumentRevisionForm.styles";
 import Description from "./presenters/Description";
@@ -179,7 +179,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const documentTypeId = values.document?.documentType?.id;
   const isEB = checkIsDocumentEB(documentRevision?.document.documentType.group);
-  const isDocumentOtherGroup = checkIsDocumentOtherGroup(documentRevision?.document.documentType.group);
+  const isDocumentPOAM = checkIsDocumentPOAM(documentRevision?.document.documentType.groupOptions);
+  const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
+  const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;
 
   return (
     <Grid
@@ -269,7 +271,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             isDraft={isdocRevStatusDraft || isRevised}
           />
         )}
-        <RevisionStage {...{ isDisabled, isDocRevFirstDraft, isDocumentOtherGroup }}/>
+        <RevisionStage {...{ isDisabled, isDocRevFirstDraft, shouldShowRevStageForDocType }}/>
         <AutocompleteField
           name="referenceTo"
           label="documentRevision.form.references"
