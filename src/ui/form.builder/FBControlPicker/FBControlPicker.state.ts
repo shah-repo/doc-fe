@@ -55,7 +55,7 @@ export class FBControlPickerState {
       approvals: [
         "approvals",
         ...this.hasHelloSign ? ["hellosign"] as FBInputType[] : [],
-        "inlineapproval",
+        ...this.hasApproval ? ["inlineapproval"] as FBInputType[] : [],
         ...this.hasRequestApproval ? ["requestapproval"] as FBInputType[] : [],
       ],
       customcontrols: ["customcontrol"],
@@ -80,6 +80,10 @@ export class FBControlPickerState {
 
   private get hasRecPurchaseOrder(): boolean | undefined {
     return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_RECEIVE_PURCHASE_ORDER);
+  }
+  
+  private get hasApproval(): boolean | undefined {
+    return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_INLINE_APPROVAL);
   }
 
   private get hasEquipmentMaintenance(): boolean | undefined {
