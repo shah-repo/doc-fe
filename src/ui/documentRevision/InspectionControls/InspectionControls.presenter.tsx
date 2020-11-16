@@ -37,7 +37,7 @@ export const InspectionControlsPresenter: React.FunctionComponent<InspectionCont
     <>
       { /** FAI */
         renderButton(
-          canCreateInspection,
+          isDocumentReleased && canCreateInspection,
           DOC_TYPE_GROUP_OPTION.FAI_INSPECTION,
           "document.revision.fai",
         )}

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { DocumentRevision, documentRevisionsActions, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
+import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { toastError } from "../../components/notifications/index";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
-import { checkCanTypeCreateInspection, checkIsTypeInspection } from "../helpers/checkDocumentGroup";
+import { checkCanTypeCreateInspection, checkIsTypeFaiInspection, checkIsTypeInspection } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
 import InspectionControlsPresenter from "./InspectionControls.presenter";
 import { CreateInspectionBody, DocTypeOptionType, FormOptionType, InspectionControlsContainerProps, InspectionType, OutputDocumentTypes } from "./InspectionControls.types";
@@ -41,6 +42,10 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
     onSuccess: (data?: DocumentRevision[]) => {
       setDisabled(false);
       if (!data) { return; }
+      if (data.length === 1) {
+        onFormSelect(data[0].id, data[0].formTemplate?.outputDocumentTypes as FBOutputDocumentType[] || []);
+        return;
+      }
       const options: FormOptionType[] = data.map((documentRevision) => ({
         label: `${documentRevision.document.docId} - ${documentRevision.name}`,
         value: documentRevision.id,
@@ -84,7 +89,9 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
   const onFormSelect = (formId: string, outputDocumentTypes: OutputDocumentTypes) => {
     setIsDocTypeInputDisabled(true);
     const docTypeOptions: DocTypeOptionType[] = outputDocumentTypes
-      .filter((type) => checkIsTypeInspection(type.groupOptions))
+      .filter((type) =>
+        (inspectionType === DOC_TYPE_GROUP_OPTION.INSPECTION && checkIsTypeInspection(type.groupOptions))
+        || (inspectionType === DOC_TYPE_GROUP_OPTION.FAI_INSPECTION && checkIsTypeFaiInspection(type.groupOptions)))
       .map((type) => ({
         label: type.documentTypeName || "",
         value: type.id,

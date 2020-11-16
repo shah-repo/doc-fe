@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTitle } from "@material-ui/core";
+import { Button, Dialog, DialogContent, DialogTitle } from "@material-ui/core";
 import React from "react";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import Text from "../../../components/Text";
@@ -36,6 +36,15 @@ export const InspectionDialog: React.FunctionComponent<InspectionDialogProps> = 
         onClick={(option) => onDocTypeSelect(option.value, option.formId)}
         isDisabled={isDocTypeInputDisabled}
       />
+      <Button
+        variant="text"
+        color="secondary"
+        onClick={inspectionDialog.close}
+        id="DocTypeListDialog-cancelButton"
+        data-cy="inspection-tye-cancel"
+      >
+        <Text translation="transition.action.cancel" />
+      </Button>
     </DialogContent>
   </Dialog>
 );
