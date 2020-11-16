@@ -81,7 +81,7 @@ export class FBControlPickerState {
   private get hasRecPurchaseOrder(): boolean | undefined {
     return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_RECEIVE_PURCHASE_ORDER);
   }
-  
+
   private get hasApproval(): boolean | undefined {
     return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_INLINE_APPROVAL);
   }
