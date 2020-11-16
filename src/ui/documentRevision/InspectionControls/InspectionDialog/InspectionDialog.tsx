@@ -4,6 +4,15 @@ import AutocompleteField from "../../../components/forms/fields/Autocomplete/Aut
 import Text from "../../../components/Text";
 import { InspectionDialogProps } from "../InspectionControls.types";
 
+/** For selecting a form and a document type of Inspection/FAI inspection record.
+ * @param onFormSelect Action executed when user chooses a desired form.
+ * @param onDocTypeSelect Action executed when user chooses a desired output document type based on the selected form.
+ * @param inspectionDialog Dialog handler.
+ * @param formOptions Available forms for the chosen inspection type.
+ * @param docTypeOptions Available output document types for the chosen form.
+ * @param isDocTypeInputDisabled Flag that marks whether user can choose a document type
+ *            (should be disabled before a form is chosen)
+ */
 export const InspectionDialog: React.FunctionComponent<InspectionDialogProps> = ({
   onFormSelect,
   onDocTypeSelect,

@@ -12,6 +12,9 @@ import { isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
 import InspectionControlsPresenter from "./InspectionControls.presenter";
 import { CreateInspectionBody, DocTypeOptionType, FormOptionType, InspectionControlsContainerProps, InspectionType, OutputDocumentTypes } from "./InspectionControls.types";
 
+/** Buttons for creating an inspection record - container.
+ * @param documentRevision Document Revision that the inspection record will be created for.
+ */
 export const InspectionControlsContainer: React.FunctionComponent<InspectionControlsContainerProps> = ({
   documentRevision,
 }) => {
