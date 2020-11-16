@@ -11,21 +11,21 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     multiline,
     rows = 1,
     placeholder = "",
+    defaultValue,
     disabled,
+    name,
     ...props
   }: T) => {
 
     const { formState, workspaceState } = FB.useStores();
     const { mode } = workspaceState || {};
+    defaultValue = formState?.getFieldValue(name);
     const intl = useIntl();
     disabled = (
       disabled ||
       get(props.hellosignFlowProps, "type") === "HS_DEFINED_FIELD" ||
       formState?.getFieldValue("signatureRequestId")
     );
-
-    // Set rows to 3 by default for preview form
-    (mode === "preview" && rows < 2) && (rows = 3);
 
     (isUndefined(multiline)) && (
       multiline = Boolean(rows && (rows as number) > 1)
@@ -38,7 +38,10 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       multiline,
       placeholder,
       disabled,
+      defaultValue,
+      name,
       rows,
+      mode,
     });
   };
   return (props: T) => Comp(props);
