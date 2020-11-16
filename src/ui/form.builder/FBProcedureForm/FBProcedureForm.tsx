@@ -8,7 +8,6 @@ import { FB } from "../helpers";
 import { withFBProcedureForm } from "./FBProcedureForm.wrap";
 
 const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
-  getOptionLabel,
   formState,
   children,
   disabledOptions,
@@ -23,11 +22,10 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       defaultValue={FB.uniqid}
     />
     <FBAutocompleteAsync
-      {...{ getOptionLabel }}
       name="title"
       label="form.builder.title"
       rules="required"
-      {...{ optionId, disabledOptions, getOptionLabel }}
+      {...{ optionId, disabledOptions }}
       freeSolo
     />
     {type === FBProcedureItemType.materials && (

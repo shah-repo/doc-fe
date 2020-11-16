@@ -90,7 +90,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (includeRevision) {
         const revision = get(option, includeRevision);
         optionLabel = labelPrefixRoot ?
-          `${get(option, labelPrefixRoot)} - ${revision} - ` : "";
+          `${get(option, labelPrefixRoot)} - rev ${revision} - ` : "";
       }
       return `${optionLabel}${get(option, optionLabelKey, "")}`;
     });
