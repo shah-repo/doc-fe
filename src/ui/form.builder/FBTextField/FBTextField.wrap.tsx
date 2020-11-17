@@ -17,8 +17,8 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     ...props
   }: T) => {
 
-    const { formState, workspaceState } = FB.useStores();
-    const { mode } = workspaceState || {};
+    const { formState } = FB.useStores();
+    const { workspaceMode: mode } = formState || {};
     defaultValue = defaultValue || formState?.getFieldValue(name);
     const intl = useIntl();
     disabled = (
