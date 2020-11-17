@@ -17,13 +17,13 @@ declare global {
       atchCheckDisplayedAttachments(params: {fileNames: string[] }): Chainable<Subject>;
       atchRemoveAttachment(params: {fileName: string }): Chainable<Subject>;
       atchCheckAtributes(params: {fileName: string; attributes: string }): Chainable<Subject>;
-      atchDownloadAllAttachments(): Chainable<Subject>;
-      atchEnterConfirmationPassword(params: {password: string }): Chainable<Subject>;
       attachFiles(files: {name: string; type: string}[]): Chainable<Subject>;
       closeAtchUploadDialog(): Chainable<Subject>;
       atchCheckDisplayedAtLast(params: {fileName: string}): Chainable<Subject>;
       atchCheckRedLineIndicator(params: {fileName: string}): Chainable<Subject>;
       atchNoPrimaryForRedline(params: {fileName: string}): Chainable<Subject>;
+      atchDownloadFile(params: {fileName: string; saveFileName: string}): Chainable<Subject>;
+      atchDownloadAll(): Chainable<Subject>;
     }
   }
 }
@@ -100,18 +100,6 @@ Cypress.Commands.add("atchUploadRedlineAttachment", (params: {fileName: string }
   });
 });
 
-Cypress.Commands.add("atchEnterConfirmationPassword", (params: {password: string }) => {
-  cy.get("[data-cy=\"reject.request\"]").click().wait(1000);
-  // dowload document part is not working in cypress, cypress freezes so we just cancel password confirm
-  // cy.get("[data-cy=\"transition.action.password\"]").type(params.password);
-  // cy.get("[data-cy=\"passwordConfirm\"]").click().wait(10000);
-});
-
-Cypress.Commands.add("atchDownloadAllAttachments", () => {
-  cy.get("[id=\"AttachmentFieldPresenter-downloadAllButton\"]").click();
-  cy.get("[id=\"passwordConfirm\"]").click();
-});
-
 Cypress.Commands.add("atchSetPrimaryAttachment", (params: {fileName: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.SetPrimaryAttachment, () => {
     cy.get(`button[title="${params.fileName}"]`).rightclick();
@@ -161,4 +149,62 @@ Cypress.Commands.add("atchNoPrimaryForRedline", (params: {fileName: string }) =>
   cy.get(`button[title="${params.fileName}"]`).rightclick();
   cy.get("[data-cy=\"set.attachment.as.primary\"]").should("not.be.visible");
   cy.get("[data-cy=\"field-name\"]").click({ force: true });
+});
+
+Cypress.Commands.add("atchDownloadFile", (params: {fileName: string; saveFileName: string }) => {
+  cy.route2({ pathname: "/api/v1/attachments/*/download*" }, (req) => {
+    req.reply((res) => {
+      if (res.body !== "") {
+        const response = JSON.parse(res.body);
+        res.send(response.url);
+      }
+    });
+  }).as("attach");
+  cy.get("div[data-cy=\"attachment\"]").contains(params.fileName).rightclick();
+  cy.get("div[id=\"simple-menu\"]>div>ul[role=\"menu\"]>li:nth-child(1)").click();
+  cy.get("body").then(($body) => {
+    if ($body.find("[data-cy=\"download.warning\"]").length > 0) {
+      cy.get("[id=\"passwordConfirm\"]").click();
+      cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
+      cy.get("[data-cy=\"passwordConfirm\"]").click();
+    }
+  });
+  cy.wait("@attach");
+  cy.wait("@attach").then((res) => {
+    const fileUrl = res.response.body.toString();
+    cy.downloadFile({
+      url: fileUrl,
+      directory: "cypress/downloads",
+      fileName: params.saveFileName,
+    });
+  });
+});
+
+Cypress.Commands.add("atchDownloadAll", () => {
+  cy.route2({ pathname: "/api/v1/attachments/*/download*" }, (req) => {
+    req.reply((res) => {
+      if (res.body !== "") {
+        const response = JSON.parse(res.body);
+        res.send(response.url);
+      }
+    });
+  }).as("attach");
+  cy.get("#AttachmentFieldPresenter-downloadAllButton").click();
+  cy.get("body").then(($body) => {
+    if ($body.find("[data-cy=\"download.warning\"]").length > 0) {
+      cy.get("[id=\"passwordConfirm\"]").click();
+      cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
+      cy.get("[data-cy=\"passwordConfirm\"]").click();
+    }
+  });
+  cy.wait("@attach");
+  cy.wait("@attach").then((res) => {
+    const fileUrl = res.response.body.toString();
+    const fileName = fileUrl.split("/")[5].split("?");
+    cy.downloadFile({
+      url: fileUrl,
+      directory: "cypress/downloads",
+      fileName: fileName[0],
+    });
+  });
 });

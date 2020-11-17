@@ -1,5 +1,6 @@
 import { DocumentRevision, DocumentRevisionStatus, Reference } from "../../../state/ducks/documentRevisions";
-import { generateVersionNumber } from "../../documentRevision/helpers";
+import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
+import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
 import { documentVersionPath } from "./paths";
 import { ReferenceSummary } from "./types";
 
@@ -15,7 +16,7 @@ const handleReferenceForDeprecated = (documentRevisions: DocumentRevision[], dep
     return docRevDeprecatedAfterThisDocument;
   }
 
-  return documentRevisions.find((docRev) => docRev.status === DocumentRevisionStatus.Released);
+  return documentRevisions.find((docRev) =>  isDocumentRevisionReleased(docRev.status));
 };
 
 const getCorrectDocRev = (
@@ -31,13 +32,13 @@ const getCorrectDocRev = (
     return documentRevisions[0];
   }
 
-  if (status === DocumentRevisionStatus.Deprecated || status === DocumentRevisionStatus.Obsolete) {
+  if (
+    isDocumentRevisionInStatus([DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Obsolete], status)) {
     return handleReferenceForDeprecated(documentRevisions, deprecatedAt);
   }
 
-  const released = documentRevisions.find((docRev) => docRev.status === DocumentRevisionStatus.Released ||
-    docRev.status === DocumentRevisionStatus.Obsolete);
-  return released;
+  return documentRevisions.find((docRev) =>
+    isDocumentRevisionInStatus([DocumentRevisionStatus.Released, DocumentRevisionStatus.Obsolete], docRev.status));
 };
 
 export const getReferenceToSummary = (dataProp: Reference[], status: DocumentRevisionStatus, deprecatedAt: string) => {
@@ -55,7 +56,7 @@ export const getReferenceToSummary = (dataProp: Reference[], status: DocumentRev
         url: documentVersionPath(docRev.id, ref.id),
         docId: ref.docId,
         title: docRev.name,
-        revisionStage: generateVersionNumber(
+        revisionStage: generateRevisionNumber(
           docRev.revision,
           docRev.revisionStage,
           docRev.subRevision,
@@ -78,7 +79,7 @@ export const getReferencedBySummary = (dataProp: DocumentRevision[]): ReferenceS
     const { status } = docRev;
     const { id } = docRev.document;
 
-    if (!acc[id] || status === DocumentRevisionStatus.Released) {
+    if (!acc[id] || isDocumentRevisionReleased(status)) {
       acc[id] = docRev;
     }
 
@@ -92,7 +93,7 @@ export const getReferencedBySummary = (dataProp: DocumentRevision[]): ReferenceS
         url: getReferencedByUrl(docRev),
         docId: docRev.document.docId,
         title: docRev.name,
-        revisionStage: generateVersionNumber(
+        revisionStage: generateRevisionNumber(
           docRev.revision,
           docRev.revisionStage,
           docRev.subRevision,

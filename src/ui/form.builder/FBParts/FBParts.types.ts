@@ -1,5 +1,5 @@
 import { FBInputProps, FBProviderProps } from "..";
 
 export type FBPartsProps =
-& Pick<FBInputProps, "name">
+& Pick<FBInputProps, "name" | "gutter" | "name">
 & Pick<FBProviderProps, "partsState">;

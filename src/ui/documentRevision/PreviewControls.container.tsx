@@ -6,7 +6,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP_OPTION } from "../../state/ducks/documentRevisions/documentType";
-import { DocumentRevisionStatus, DocumentRevisionTransitionResponse, FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
+import { DocumentRevisionTransitionResponse, FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import AlertDialog from "../app/alert.dialog/AlertDialog";
@@ -20,7 +20,10 @@ import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
 import { isOwnerContext } from "./forms/DocumentRevisionForm.presenter";
-import { canCreateNewVersion, canCreateOutput, getIsLastVersionObsolete } from "./helpers";
+import { checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
+import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
+import { getIsLastVersionObsolete, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
+import { isFormWithInlineApproval } from "./helpers/records";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -51,15 +54,12 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const formDocuments: Document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, formDocumentId)
   );
-  const isRecord = (documentRevision.document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
-  const isStatusInReview = documentRevision.status === DocumentRevisionStatus.InReview;
-  const isStatusReleased = documentRevision.status === DocumentRevisionStatus.Released;
+  const isRecord = checkIsDocumentRecord(documentRevision.document?.documentType?.groupOptions);
+  const isStatusInReview = isDocumentRevisionInReview(documentRevision.status);
+  const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
   const canCopy = (documentRevision.document.documentType.groupOptions || []).includes(
     DOC_TYPE_GROUP_OPTION.CAN_BE_COPIED);
-  const inlineApprovalFields = documentRevision?.formDocument?.formTemplate?.schema
-  .filter((field) => (field.type === "inlineapproval" as string));
-
-  const isInlineApproval = inlineApprovalFields && inlineApprovalFields.length > 0;
+  const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
   const isUserDocumentOwner = React.useContext(isOwnerContext);
 
 

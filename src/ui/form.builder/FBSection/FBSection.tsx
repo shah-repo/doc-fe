@@ -8,13 +8,19 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
   label,
   gutter = true,
   bookmarked = true,
+  showErrorMsg = false,
+  omitFinalValidation = true,
   stepIndex,
   children,
   loading,
-  index,
   name,
+  ...props
 }) => (
-  <FBInput {...{ gutter, bookmarked, name, label, index }} type="section">
+  <FBInput
+    {...{ gutter, bookmarked, name, label, showErrorMsg, omitFinalValidation }}
+    {...props}
+    type="section"
+  >
     <Box
       bgcolor={Colors.medium_blue}
       color="primary.contrastText"

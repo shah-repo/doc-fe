@@ -10,7 +10,6 @@ const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
-const inlineApprovalError = "cannot be released without every InlineApproval approved";
 
 context("Record inline Flow", () => {
   before(() => {
@@ -205,13 +204,15 @@ context("Record inline Flow", () => {
       });
 
       it("Select approver for first inline", () => {
-        cy.get("[name*=\"fb-ia-inline-field\"] input")
-          .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit],
+          () => {
+            cy.get("[name*=\"fb-ia-inline-field\"] input")
+              .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
+          });
       });
 
       it("Select approver for second inline", () => {
-        cy.wrapWithWaitOnApiCall(
-          CyRoutes.PatchDocRev,
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.get("[name*=\"fb-ia-second-inline-field\"] input")
               .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
@@ -237,23 +238,11 @@ context("Record inline Flow", () => {
       it("Approve first Inline Approval", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
         cy.get("input[name=\"password\"]").type("Tester1!");
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
-          cy.get("[data-cy=\"common.confirm\"]").click();
-        });
-      });
-
-      it("Reload page", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-          cy.reload();
-        });
-      });
-
-      it("Click WIP document", () => {
         cy.wrapWithWaitOnApiCalls([
+          CyRoutes.PostApprovalsApprove,
           CyRoutes.EmployeesGet,
-          CyRoutes.DocPreview,
-          CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
+          CyRoutes.DocPreview], () => {
+          cy.get("[data-cy=\"common.confirm\"]").click();
         });
       });
 
@@ -283,49 +272,24 @@ context("Record inline Flow", () => {
         it("Approve first Inline Approval", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
           cy.get("input[name=\"password\"]").type("Tester1!");
-          cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
-            cy.get("[data-cy=\"common.confirm\"]").click();
-          });
-        });
-
-        it("Reload page", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-            cy.reload();
-          });
-        });
-
-        it("Click WIP document", () => {
           cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostApprovalsApprove,
             CyRoutes.EmployeesGet,
-            CyRoutes.DocPreview,
-            CyRoutes.GetRequiredApproversDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
+            CyRoutes.DocPreview], () => {
+            cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });
 
         it("Approve second Inline Approval", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
           cy.get("input[name=\"password\"]").type("Tester1!");
-          cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostApprovalsApprove,
+            CyRoutes.EmployeesGet,
+            CyRoutes.DocPreview], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });
-
-        it("Reload page", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-            cy.reload();
-          });
-        });
-
-        it("Click WIP document", () => {
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.EmployeesGet,
-            CyRoutes.DocPreview,
-            CyRoutes.GetRequiredApproversDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
-          });
-        });
-
       });
 
       context("Edit and try to release it ", () => {
@@ -341,23 +305,11 @@ context("Record inline Flow", () => {
         it("Approve Inline Approval", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
           cy.get("input[name=\"password\"]").type("Tester1!");
-          cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
-            cy.get("[data-cy=\"common.confirm\"]").click();
-          });
-        });
-
-        it("Reload page", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-            cy.reload();
-          });
-        });
-
-        it("Click WIP document", () => {
           cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostApprovalsApprove,
             CyRoutes.EmployeesGet,
-            CyRoutes.DocPreview,
-            CyRoutes.GetRequiredApproversDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
+            CyRoutes.DocPreview], () => {
+            cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });
       });

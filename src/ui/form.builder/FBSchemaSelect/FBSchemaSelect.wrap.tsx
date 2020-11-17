@@ -23,7 +23,8 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
   }: T) => {
     const { workspaceState, schemaState, formState } = FB.useStores();
     schemaSelectState = FB.useRef<FBSchemaSelectState>(FBSchemaSelectState);
-    options = workspaceState?.getSchema();
+    // old documents use getSchema(), there is no migration
+    options = workspaceState?.getValidationSchema() || workspaceState?.getSchema();
     defaultValue = formState?.getFieldValue(name);
 
     function setIncludedSchemaItem(value?: FBSchemaProps) {
@@ -35,7 +36,7 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
         ...omit(value, ["validationMode"]),
         name: name?.replace("name", "value"),
         ...(type === "checkbox" && { defaultChecked: false }),
-        ...(type === "radiogroup" && { type: "checkboxgroup" }),
+        ...(type === "radiogroup" && { defaultChecked: false }),
         rules: `required_with:${name}`,
       }, index + 1);
     }

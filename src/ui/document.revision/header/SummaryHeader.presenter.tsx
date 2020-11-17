@@ -5,6 +5,7 @@ import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
 import OwnerChangerContainer from "../../components/common/owner.changer/container";
 import { RequestType } from "../../components/common/owner.changer/helpers/types";
+import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
 
 interface Props {
@@ -23,8 +24,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
       revisionStage={documentRevision.revisionStage}
       groupOptions={documentRevision.document.documentType.groupOptions}
       isInlineApproval={
-        documentRevision.formDocument?.formTemplate?.schema
-          .some((e) => (e.type === "approval" || e.type === "inlineapproval" as string))
+        isFormWithInlineApproval(documentRevision.formDocument?.formTemplate?.schema)
       }
       status={documentRevision.status}
       id={documentRevision.document.docId}

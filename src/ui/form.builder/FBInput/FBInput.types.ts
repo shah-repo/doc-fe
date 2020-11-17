@@ -1,4 +1,4 @@
-import { BaseTextFieldProps } from "@material-ui/core";
+import { BaseTextFieldProps, BoxProps } from "@material-ui/core";
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
 import { Dictionary } from "lodash";
 import { FBEditorOptionsProps, FBEditorPropertiesType, FBInlineApprovalRole, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
@@ -63,7 +63,8 @@ export type FBInputType =
   | "procedure"
   | "parts"
   | "procedurediff"
-  | "ebpart";
+  | "ebpart"
+  | "eqmaintenance";
 
 export type FBInputProps =
   & FBLabelProps
@@ -115,6 +116,9 @@ export type FBInputProps =
     actions?: string[];
     hellosignFlowProps?: any;
     showErrorMsg?: boolean;
+    // Field is under validation for validation mode (e.g show/hide)
+    // but should not be included in the next form validation flow (e.g on form save)
+    omitFinalValidation?: boolean;
     validators?: Dictionary<any>;
     forceDefault?: boolean;
     autosave?: boolean;
@@ -127,6 +131,18 @@ export type FBInputProps =
      * El with a type marked as a uniqueSchemaItem can be added to the schema only once.
      */
     uniqueSchemaItem?: boolean;
+    /**
+     * @cfg {Bool} Include component into validation schema select option.
+     */
+    applicableValidationSchema?: boolean;
+    /**
+     * @cfg {Bool} Any additional config we want to pass to the input.
+     */
+    editorConfig?: any;
+    /**
+     * @cfg {Bool} MUI Box props that can be passed to input section.
+     */
+    boxProps?: BoxProps;
   };
 
 export const OmitInputClones: FBInputType[] = [
@@ -141,4 +157,7 @@ export const OmitInputClones: FBInputType[] = [
   "texteditor",
   "procedure",
   "procedurediff",
+  "eqmaintenance",
+  "ebpart",
+  "parts",
 ];

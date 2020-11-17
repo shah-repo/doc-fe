@@ -6,6 +6,7 @@ import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.presenter";
 import DocRevActions from "../../documentRevision/forms/presenters/Actions";
+import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 
 interface Props {
   isCreateDocumentDisabled: boolean;
@@ -20,9 +21,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentD
       <HeaderInfo
         revisionStage={documentRevision.revisionStage}
         groupOptions={documentRevision.document.documentType.groupOptions}
-        isInlineApproval={
-          documentRevision.formDocument?.formTemplate?.schema
-            .some((e) => (e.type === "approval" || e.type === "inlineapproval" as string))
+        isInlineApproval={isFormWithInlineApproval(documentRevision.formDocument?.formTemplate?.schema)
         }
         status={documentRevision.status}
         id={documentRevision.document.docId}

@@ -25,8 +25,11 @@ export class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
   public constructor({ documentId, isOutput }: FBApprovalAuditConstructor) {
     super();
     if (!documentId || !isOutput || FBStore.audit.loading) { return; }
-    FBStore.audit.setTemplateUrl(FBEndpoint.DocumentRevisionAudit, { documentId });
-    FBStore.audit.fetch();
+    FBStore.audit.set({
+      url: FBEndpoint.DocumentRevisionAudit,
+      urlValues: { documentId },
+      method: "get",
+    });
   }
 
   public setAutocompleteOptionId = (optionId) => {
