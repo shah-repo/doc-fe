@@ -19,7 +19,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
 
     const { formState } = FB.useStores();
     const { workspaceMode: mode } = formState || {};
-    defaultValue = formState?.getFieldValue(name);
+    defaultValue = defaultValue || formState?.getFieldValue(name);
     const intl = useIntl();
     disabled = (
       disabled ||
