@@ -218,7 +218,7 @@ export const routes: ICyRoutes =   {
       url: "api/v1/documents/file_upload_candidates*",
     },
     callConfig: {
-      responseTimeout: 15 * 1000,
+      responseTimeout: 25 * 1000,
     },
   },
   CompanyMine: {
