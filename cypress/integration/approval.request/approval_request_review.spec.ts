@@ -221,12 +221,12 @@ context("Approval request form scenario", () => {
 
     it("Check Document's description is non-editable", () => {
       SystemRequirement("REQ-0850");
-      cy.get("[data-cy=\"common.description\"] textarea").should("be.disabled");
+      cy.get("div[name$=\"descriptionOfChange\"]").should("have.attr", "disabled");
     });
 
     it("Check Document's justification is non-editable", () => {
       SystemRequirement("REQ-0850");
-      cy.get("[data-cy=\"cr.justification\"] textarea").should("be.disabled");
+      cy.get("div[name$=\"justificationOfChange\"]").should("have.attr", "disabled");
     });
 
     it("Check 'Add Document' button is disbaled", () => {
