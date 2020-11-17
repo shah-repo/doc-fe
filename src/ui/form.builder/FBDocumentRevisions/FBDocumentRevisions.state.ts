@@ -1,6 +1,6 @@
 import { union } from "lodash";
 import { action, observable, set } from "mobx";
-import { FB, FBDocumentRevisionsValue } from "..";
+import { FBDocumentRevisionsValue } from "..";
 
 export class FBDocumentRevisionsState {
   @observable public value?: FBDocumentRevisionsValue[];
@@ -13,11 +13,7 @@ export class FBDocumentRevisionsState {
     set(this, "value", value);
 
   @action public addDocumentRevision = (item: FBDocumentRevisionsValue) => {
-    const itemWithId = {
-      ...item,
-      id: FB.uniqid,
-    };
-    this.setDocumentRevisions(union(this.value || [], [itemWithId]));
+    this.setDocumentRevisions(union(this.value || [], [item]));
   };
 }
 

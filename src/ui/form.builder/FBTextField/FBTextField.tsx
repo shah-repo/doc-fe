@@ -19,7 +19,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   mode,
   ...props
 }) => (
-  <FBInput {...props} {...{ error }} type={inputType as FBInputType}>
+  <FBInput {...props} {...{ error, defaultValue }} type={inputType as FBInputType}>
     {mode === "preview" && (
       <Box>{defaultValue}</Box>
     )}
