@@ -118,7 +118,10 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
       lot: { id: docRevId },
       documentType: { id: typeId },
       formDocument: { id: formId },
-      inspectionType,
+      // temp
+      inspectionType: inspectionType === DOC_TYPE_GROUP_OPTION.FAI_INSPECTION
+        ? "includeInFaiInspection"
+        : "includeInInspection",
     };
     createInspectionAsync.start(
       createInspectionAction,

@@ -29,7 +29,8 @@ export interface CreateInspectionBody {
   lot: Pick<DocumentRevision, "id">;
   documentType: Pick<DocumentRevision, "id">;
   formDocument: Pick<DocumentRevision, "id">;
-  inspectionType: InspectionType;
+  // inspectionType: InspectionType;
+  inspectionType: "includeInInspection" | "includeInFaiInspection";
 }
 
 export interface FormOptionType extends OptionType {
