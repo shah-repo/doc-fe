@@ -1,6 +1,5 @@
 # Enlil Frontend Service
 
-
 - [Enlil Frontend Service](#enlil-frontend-service)
   * [Runing dev server](#runing-dev-server)
     + [Environment variables](#environment-variables)
