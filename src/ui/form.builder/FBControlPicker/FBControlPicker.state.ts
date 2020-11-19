@@ -50,7 +50,7 @@ export class FBControlPickerState {
         "evidencemediaupload",
         "testRequirement",
         "procedure",
-        "eqmaintenance",
+        ...this.hasEquipmentMaintenance ? ["eqmaintenance"] as FBInputType[] : [],
       ],
       approvals: [
         "approvals",
@@ -84,6 +84,10 @@ export class FBControlPickerState {
 
   private get hasApproval(): boolean | undefined {
     return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_INLINE_APPROVAL);
+  }
+
+  private get hasEquipmentMaintenance(): boolean | undefined {
+    return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_EQUIPMENT_MAINTENANCE);
   }
 
   private get hasRequestApproval(): boolean | undefined {

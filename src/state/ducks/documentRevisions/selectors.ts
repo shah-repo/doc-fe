@@ -100,11 +100,11 @@ const makeGetAvailableReferences = () => createSelector(
     });
 
     return uniqueIds.map((id) => {
-      const { document, revision, name } = docRevs[id];
+      const { document, name, displayRevision } = docRevs[id];
 
       return {
         value: document.id,
-        label: `${document.docId} - ${revision} - ${name}`,
+        label: `${document.docId} - ${displayRevision} - ${name}`,
       };
     });
   },
