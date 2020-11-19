@@ -10,13 +10,13 @@ import Text from "../../../components/Text";
 interface Props {
   isDisabled: boolean;
   isDocRevFirstDraft: boolean;
-  isDocumentOtherGroup: boolean;
+  shouldShowRevStageForDocType: boolean;
 }
 
 export const RevisionStage: React.FunctionComponent<Props> = ({
   isDisabled,
   isDocRevFirstDraft,
-  isDocumentOtherGroup,
+  shouldShowRevStageForDocType,
 }) => {
 
   const numOfRevStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
@@ -24,7 +24,7 @@ export const RevisionStage: React.FunctionComponent<Props> = ({
     RevisionStageOptions.filter((stage) => stage.value !== 2) :
     RevisionStageOptions;
 
-  if (isDisabled && (!isDocRevFirstDraft || !isDocumentOtherGroup)) {
+  if (isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType)) {
     return null;
   }
 
