@@ -32,6 +32,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
       documentTypeId={documentRevision?.document?.documentType.id}
       revisionChangeType={documentRevision?.revisionChangeType}
       subRevision={documentRevision?.subRevision}
+      displayStatus={documentRevision.displayStatus}
     />
     <Grid item={true} xs={6}>
       <Grid container={true} alignItems="flex-end" justify="flex-end">

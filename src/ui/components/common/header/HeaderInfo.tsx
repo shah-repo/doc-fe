@@ -18,6 +18,7 @@ export interface Props {
   revisionStage?: number;
   groupOptions?: DocumentGroupOptionsType[];
   isInlineApproval?: boolean;
+  displayStatus?: string;
 }
 
 export const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -25,9 +26,10 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   name,
   id,
   documentTypeId,
+  displayStatus,
 }) => {
 
-  const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
+  const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, displayStatus || status);
   const [isTitleVisible] = useTitle(documentTypeId);
   const classes = styles();
   const isStatusReleased = isDocumentRevisionInStatus(
