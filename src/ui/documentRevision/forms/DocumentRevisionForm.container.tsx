@@ -188,7 +188,7 @@ DocumentRevisionFormContainerProps
 
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";
-  } else if (outputGroup) {
+  } else if (outputGroup || !isEmpty(originScheme)) {
     mode = isEditableSchema ? "formDesign" : "form";
   } else if (pmForm) {
     mode = "form";
