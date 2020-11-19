@@ -1,7 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBTextField } from "..";
-import FBForm from "../components/form/FBForm";
+import { FBForm, FBTextField } from "..";
 import { FBApprovalPasswordFormProps } from "./FBApprovalPasswordForm.types";
 import { withFBApprovalPasswordForm } from "./FBApprovalPasswordForm.wrap";
 

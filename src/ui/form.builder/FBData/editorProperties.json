@@ -28,5 +28,11 @@
   },
   "copyableValue": {
     "text": "form.builder.copyable.value"
+  },
+  "includeInInspection": {
+    "text": "form.builder.include.inspection"
+  },
+  "includeInFaiInspection": {
+    "text": "form.builder.include.fai.inspection"
   }
 }

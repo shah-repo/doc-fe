@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -15,6 +17,7 @@ let componentSpecificationDocumentType;
 let group;
 const documentRevisionName = "New document for testing document list";
 const secondDocumentRevName = "Second document for testing";
+const currentDate = moment().tz("America/Los_Angeles").format("L");
 
 context("Document list test", () => {
   context("[API]Prepare company", () => {
@@ -399,7 +402,8 @@ context("Document list test", () => {
 
       it("Verify filter by effective date", () => {
         SystemRequirement("REQ-0060");
-        cy.dlVerifyFilterByEffectiveDate({ effectiveDate: (new Date()).toLocaleDateString("en-US") });
+        // cy.dlVerifyFilterByEffectiveDate({ effectiveDate: (new Date()).toLocaleDateString("en-US") });
+        cy.dlVerifyFilterByEffectiveDate({ effectiveDate: currentDate });
       });
     });
 

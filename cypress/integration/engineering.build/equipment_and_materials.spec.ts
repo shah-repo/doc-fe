@@ -1,6 +1,9 @@
+
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -16,8 +19,13 @@ let initialArDocument;
 let group;
 let equipmentDocumentType;
 let materialsDocumentType;
+let partDocumentType;
 let equipmentDocument;
 let materialsDocument;
+
+const NOT_RELEASED_TOAST_ERROR_MESSAGE = "Last docRev for Part linked to EB after copying is not in RELEASED status.";
+const currentDate = moment().tz("America/Los_Angeles").format("MMMM D, YYYY");
+const PART_DOCUMENT_TYPE_NAME = "Part";
 
 context("Procedure and parts flow test", () => {
   before(() => {
@@ -53,17 +61,17 @@ context("Procedure and parts flow test", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
-                documentTypeName: "Equipment",
-                documentTypeAcronym: "ET-",
-                group: "OTHER",
+                documentTypeName: PART_DOCUMENT_TYPE_NAME,
+                documentTypeAcronym: "PRT-",
+                group: "PART",
                 isQms: true,
                 needsSignature: true,
-                category: "Equipment",
+                category: "Parts",
               },
               {
                 documentTypeName: "Material",
                 documentTypeAcronym: "MT-",
-                group: "OTHER",
+                group: "MATERIAL",
                 isQms: true,
                 needsSignature: true,
                 category: "Materials",
@@ -76,6 +84,7 @@ context("Procedure and parts flow test", () => {
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Material");
+          partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PART_DOCUMENT_TYPE_NAME);
           done();
         });
       });
@@ -191,6 +200,37 @@ context("Procedure and parts flow test", () => {
         });
       });
     });
+
+    it("[API]Create part document", () => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Part document</p>",
+          document: {
+            docId: "PRT-00005",
+            documentType: {
+              id: partDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Part document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: secondEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      });
+    });
   });
 
   context("Login second user", () => {
@@ -282,7 +322,7 @@ context("Procedure and parts flow test", () => {
     });
   });
 
-  context("Create document with procedure field", () => {
+  context("Create FORM document with procedure field", () => {
     context("Fill document attributes", () => {
       it("Navigates to document list", () => {
         cy.navigToDocumentList();
@@ -293,11 +333,11 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Enters title 'Form document for procedure'", () => {
-        cy.drEnterDocumentTitle({ name: "Form document for procedure" });
+        cy.drEnterDocumentTitle({ name: "Form document for EB" });
       });
 
       it("Enters description 'Procedure description'", () => {
-        cy.drEnterDocumentDescription({ description: "Procedure description" });
+        cy.drEnterDocumentDescription({ description: "EB form description" });
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -331,17 +371,17 @@ context("Procedure and parts flow test", () => {
   });
 
 
-  context("Create procedure document", () => {
-    it("Click create new document from form", () => {
+  context("Create EB from created FORM document", () => {
+    it("Click create new document from FORM", () => {
       cy.drCreateNewDocumentFromForm();
     });
-    context("Fill procedure document attributes", () => {
+    context("Fill EB document attributes", () => {
       it("Enters title 'Form document for procedure'", () => {
-        cy.drEnterDocumentTitle({ name: "Procedure document" });
+        cy.drEnterDocumentTitle({ name: "EB document" });
       });
 
       it("Enters description 'Procedure description'", () => {
-        cy.drEnterDocumentDescription({ description: "Procedure description" });
+        cy.drEnterDocumentDescription({ description: "EB description" });
       });
 
       it("Add approver to approvals", () => {
@@ -386,26 +426,34 @@ context("Procedure and parts flow test", () => {
       });
     });
 
-    context("Create procedure and release it", () => {
-      it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+    context("Choose a part and approve EB", () => {
+      it("Choose an existing part from the list of available parts", () => {
+        cy.get("[data-cy=\"childrenParts\"]").type("Part document{downarrow}{enter}");
       });
 
-      it("Approve procedure", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
-        cy.get("input[name=\"password\"]").type("Tester1!");
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
-          cy.get("[data-cy=\"common.confirm\"]").click();
+      it("Save EB", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Submit for Approval", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
+      });
+
+      it("Check if the part is displayed in the document summary", () => {
+        cy.ebCheckIfPartIsInSummary({ partName: "Part document" });
+      });
+
+      it("Approve record button click", () => {
+        cy.ebApprove();
       });
     });
   });
 
   context("Copy to EB and verify materials and equipment tracking", () => {
     it("Click copy to EB", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFileUploadCandidates, CyRoutes.GetFileUploadCandidates], () => {
-        cy.get("[data-cy=\"PreviewControlsContainer-copy-to\"]").click();
-      });
+      cy.ebClickCopyToEB();
     });
 
     context("Add materials and equipments", () => {
@@ -466,16 +514,57 @@ context("Procedure and parts flow test", () => {
       });
     });
 
-    context("Create procedure and release it", () => {
+    context("Create EB and release it", () => {
       it("Submit for approval", () => {
         cy.pmSubmitForApproval();
       });
 
-      it("Approve procedure", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
-        cy.get("input[name=\"password\"]").type("Tester1!");
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
-          cy.get("[data-cy=\"common.confirm\"]").click();
+      context("Release the part", () => {
+        it("Navigate to the part document", () => {
+          cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
+            const link = $el.attr("href");
+            cy.wrapWithWaitOnApiCalls([
+              CyRoutes.DocPreview,
+              CyRoutes.EmployeesGet,
+              CyRoutes.GetRequiredApprovers], () =>
+            {
+              cy.visit(CONFIG.FE_URL + link);
+            });
+          });
+        });
+
+        it("Approve and release the part", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
+
+      context("Approve and release the EB", () => {
+        it("Navigate to the EB", () => {
+          cy.get("[data-cy=\"BuildsPresenter-link-common.part.of\"]").then(($el) => {
+            const link = $el.attr("href");
+            cy.wrapWithWaitOnApiCalls([
+              CyRoutes.GetRequiredApproversDocRev,
+              CyRoutes.GetAvailableApprovers,
+              CyRoutes.DocPreview], () =>
+            {
+              cy.visit(CONFIG.FE_URL + link);
+            });
+          });
+
+          cy.get("[data-cy=\"BuildsPresenter-link-common.next.build\"]").then(($el) => {
+            const link = $el.attr("href");
+            cy.wrapWithWaitOnApiCalls([
+              CyRoutes.GetRequiredApproversDocRev,
+              CyRoutes.GetAvailableApprovers,
+              CyRoutes.DocPreview], () =>
+            {
+              cy.visit(CONFIG.FE_URL + link);
+            });
+          });
+        });
+
+        it("Approve record button click", () => {
+          cy.ebApprove();
         });
       });
     });
@@ -544,16 +633,77 @@ context("Procedure and parts flow test", () => {
       });
     });
 
-    context("Create procedure and release it", () => {
+    context("Create EB", () => {
       it("Submit for approval", () => {
         cy.pmSubmitForApproval();
       });
 
-      it("Approve procedure", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
-        cy.get("input[name=\"password\"]").type("Tester1!");
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
+      context("Verify that EB cannot be released unless 1st revision of part is released", () => {
+        it("Try approving the EB", () => {
+          cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
+          cy.get("input[name=\"password\"]").type("Tester1!");
           cy.get("[data-cy=\"common.confirm\"]").click();
+        });
+
+        it("Check for a toast error", () => {
+          cy.checkToastMessageContains({ message: NOT_RELEASED_TOAST_ERROR_MESSAGE });
+        });
+      });
+
+      context("Release the part", () => {
+        it("Navigate to the part document", () => {
+          cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
+            const link = $el.attr("href");
+            cy.wrapWithWaitOnApiCalls([
+              CyRoutes.DocPreview,
+              CyRoutes.EmployeesGet,
+              CyRoutes.GetRequiredApprovers], () =>
+            {
+              cy.visit(CONFIG.FE_URL + link);
+            });
+          });
+        });
+
+        it("Approve and release the part", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
+
+      context("Approve and release the EB", () => {
+        it("Navigate to the EB", () => {
+          cy.get("[data-cy=\"BuildsPresenter-link-common.part.of\"]").then(($el) => {
+            const link = $el.attr("href");
+            cy.wrapWithWaitOnApiCalls([
+              CyRoutes.GetRequiredApproversDocRev,
+              CyRoutes.GetAvailableApprovers,
+              CyRoutes.DocPreview], () =>
+            {
+              cy.visit(CONFIG.FE_URL + link);
+            });
+          });
+
+          cy.get("[data-cy=\"BuildsPresenter-link-common.next.build\"]").then(($el) => {
+            const link = $el.attr("href");
+            cy.wrapWithWaitOnApiCalls([
+              CyRoutes.GetRequiredApproversDocRev,
+              CyRoutes.GetAvailableApprovers,
+              CyRoutes.DocPreview], () =>
+            {
+              cy.visit(CONFIG.FE_URL + link);
+            });
+          });
+        });
+
+        it("Approve record button click", () => {
+          cy.ebApprove();
+        });
+
+        it("Check if Approved date exists", () => {
+          cy.get("[id=\"Presenter-FBWorkspace\"]").contains(currentDate);
+        });
+
+        it("Check if the part is displayed in the document summary", () => {
+          cy.ebCheckIfPartIsInSummary({ partName: "Part document" });
         });
       });
     });
