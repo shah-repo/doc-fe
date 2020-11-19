@@ -39,7 +39,6 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       withState
       {...{ disabled }}
     />
-    {/* This needs to be a number field */}
     <FBQuantityField
       name={`${name}.frequency`}
       label="form.builder.maintenance.frequency"
