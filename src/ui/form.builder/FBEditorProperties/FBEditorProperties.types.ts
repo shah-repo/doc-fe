@@ -10,12 +10,18 @@ export type FBEditorPropertiesType =
 | "reviseDisabled"
 | "approveIsBlocking"
 | "approvalNonVersioned"
-| "copyableValue";
+| "copyableValue"
+| "includeInInspection"
+| "includeInFaiInspection";
 
 export type FBEditorPropertiesProps = Pick<FBInputProps, "type" | "options" | "onChange">;
 
 export const FBEditorPropertiesDefaultValue: Partial<Record<FBInputType, FBEditorPropertiesType[]>> = {
   procedure: ["copyableValue"],
+};
+
+export const FBEditorPropertiesIncludeByType = {
+  part: ["includeInInspection", "includeInFaiInspection" ],
 };
 
 export type FBEditorPropertiesOption =

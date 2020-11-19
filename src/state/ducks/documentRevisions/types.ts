@@ -125,6 +125,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   equipmentSection?: string;
   // there can currently be only one child part
   childrenParts?: DocumentRevision[];
+  outputDocumentTypes?: any;
 }
 
 export const RevisionStageOptions = [
