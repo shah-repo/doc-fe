@@ -2,9 +2,11 @@ import { Box } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { Link } from "react-router-dom";
 import { FBEQMaintenanceHistoryProps, FBMapWrapper, FBText } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { documentVersionPath } from "../../document.revision/utils/paths";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBEQMaintenanceHistory } from "./FBEQMaintenanceHistory.wrap";
 
@@ -23,7 +25,12 @@ const FBEQMaintenanceHistory: React.FunctionComponent<FBEQMaintenanceHistoryProp
       {(item: DocumentRevision, index) => (
         <Box display="flex" flexDirection="row">
           <Box color={Colors.medium_blue} mr={0.5}>
-            {item.document?.docId} - {item.name}
+            <Link
+              to={documentVersionPath(item.id, item.document?.id )}
+              target="_blank"
+            >
+              {item.document?.docId} - {item.name}
+            </Link>
           </Box>
           <Box fontWeight="fontWeightRegular">
             | {item.owner.user.name}
