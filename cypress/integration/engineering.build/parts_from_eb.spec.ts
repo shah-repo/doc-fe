@@ -364,7 +364,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Verify that the selected part is copied to the new build", () => {
-        cy.get("[data-cy=\"childrenParts\"]").should("contains.attr", "value", "PRT-00004 - " + NEW_PART_NAME);
+        cy.get("[data-cy=\"childrenParts\"]").should("contains.attr", "value", "PRT-00004 - rev 1 - " + NEW_PART_NAME);
       });
     });
 
