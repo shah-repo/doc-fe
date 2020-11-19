@@ -1,7 +1,6 @@
 import { Button } from "@material-ui/core";
-import { chunk, uniqBy } from "lodash";
 import * as React from "react";
-import { DocumentRevision, HeaderTableType } from "../../../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../../../state/ducks/documentRevisions";
 import Text from "../../../../components/Text";
 import ExportListDialog from "../../../../document.revision/list/ExportListDialog/ExportListDialog";
 import useDialog from "../../../../hooks/useDialog";
@@ -14,35 +13,40 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
   const dialog = useDialog();
-  const schema = documentRevision.formDocument?.formTemplate?.schema;
-  const input = documentRevision.formInput || {};
-
-  const headers =
-  uniqBy(schema?.map((item) => {
-    switch (item.type) {
-      case "section":
-        return {
-          label: "Sample",
-          key: "sample",
-        };
-      default:
-        return {
-          label: item.label,
-          key: item.label,
-        };
-    }
-  }), "key") as HeaderTableType[];
+  const schema = documentRevision?.formDocument?.formTemplate?.schema;
+  const input = documentRevision?.formInput || {};
 
   const DEFAULT_DATA = [];
+  const arrayOfData: any[] = [];
+
   const valueWithKey = schema?.map((item) => {
     const inputNames = Object.keys(input);
     if (inputNames.includes(item.name as string)) {
       return { ...item, inputValue: input[item.name as string] };
     }
-    return { ...item, inputValue: item.label };
+    return { ...item, inputValue: "" };
   }) || DEFAULT_DATA;
-  const dataSplitedToRows = chunk(valueWithKey, headers.length);
-  const data = dataSplitedToRows.map((item) => item.map((e) => e.inputValue)).map((e) => Object.assign({}, e));
+
+  valueWithKey.forEach((element) => {
+    if (element.type === "section") {
+      arrayOfData.push([]);
+      arrayOfData[arrayOfData.length - 1].push(element);
+      return;
+    }
+    arrayOfData[arrayOfData.length - 1].push(element);
+  });
+
+  const data = arrayOfData.map((e) => Object.fromEntries(
+    e.map((i) => {
+      if (i.type === "section") {
+        return ["Sample",
+          i.label,
+        ];
+      }
+      return [i.label,
+        i.inputValue,
+      ];
+    })));
 
   return (
     <>
@@ -50,7 +54,8 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
         <Text translation="common.export" />
       </Button>
       <ExportListDialog
-        {...{ headers, data, dialog  }}
+        {...{ data, dialog }}
+        useKeysAsHeaders
       />
     </>
   );
