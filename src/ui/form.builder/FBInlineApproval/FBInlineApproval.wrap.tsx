@@ -6,7 +6,7 @@ import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBEmployee, FBIn
 import { store } from "../../../state/store";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBDialogState } from "../FBDialog/FBDialog.state";
-import { FBInlineApprovalTransitionBody, FBRequestApprovalTransitionBody } from "./FBInlineApproval.types";
+import { FBRequestApprovalTransitionBody } from "./FBInlineApproval.types";
 
 export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
   Component: React.FunctionComponent<T>,
@@ -205,10 +205,9 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     }
 
     // MARK: @methods
-    approvalTransition = (transition: FBInlineApprovalTransition, id?: string) => {
-      if (!id) { return; }
-      const passwordBody = pick(formState?.values, "password") as FBInlineApprovalTransitionBody;
-      inlineApprovalState?.approvalTransition(transition, id, passwordBody);
+    approvalTransition = (transition: FBInlineApprovalTransition, id?: string, password?: string) => {
+      if (!id || !password) { return; }
+      inlineApprovalState?.approvalTransition(transition, id, { password });
     };
 
     onApproveClick = (approvalId: string) => {

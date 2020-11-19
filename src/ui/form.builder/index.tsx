@@ -35,6 +35,7 @@ export { default as FBApprovalPasswordForm } from "./FBApprovalPasswordForm/FBAp
 export { default as FBApprovalPasswordFormActions } from "./FBApprovalPasswordForm/FBApprovalPasswordForm.actions";
 export { default as FBApprovals } from "./FBApprovals/FBApprovals";
 export { default as FBApprovalsState } from "./FBApprovals/FBApprovals.state";
+export * from "./FBApprovals/FBApprovals.types";
 export { default as FBApprovers } from "./FBApprovers/FBApprovers";
 export { default as FBApproversState } from "./FBApprovers/FBApprovers.state";
 export * from "./FBApprovers/FBApprovers.types";
