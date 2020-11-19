@@ -1,4 +1,4 @@
-import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 
 /** Checks if document has a specific group option.
    * @param groupOption Option that is searched for.
@@ -25,3 +25,6 @@ export const checkIsTypeCanBeOutput = checkDocumentGroupOptions.bind(this, DOC_T
 export const checkCanTypeCreateInspection = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_CREATE_INSPECTION);
 export const checkIsTypeInspection = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.INSPECTION);
 export const checkIsTypeFaiInspection = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.FAI_INSPECTION);
+export const checkIsDocumentDAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DAM);
+export const checkIsDocumentPOAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.POAM);
+export const checkIsDocumentEquipment = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EQUIPMENT);

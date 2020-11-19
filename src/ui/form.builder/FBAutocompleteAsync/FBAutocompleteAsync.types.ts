@@ -20,6 +20,7 @@ export interface FBAutocompleteAsyncConfig  {
   valueKey?: string;
   root?: string;
   labelPrefixRoot?: string;
+  includeRevision?: string;
 }
 
 export enum FBAutocompleteAsyncOption {

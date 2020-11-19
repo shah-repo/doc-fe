@@ -23,7 +23,7 @@ import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
-import { checkIsDocumentDocument, checkIsDocumentEB, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
+import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
 import { styles } from "./DocumentRevisionForm.styles";
 import Description from "./presenters/Description";
@@ -136,7 +136,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isAttachmentEmpty = !(documentRevision?.attachments.length > 1);
   const documentTypeId = values.document?.documentType?.id;
   const isEB = checkIsDocumentEB(documentRevision?.document.documentType.groupOptions);
-  const isDocument = checkIsDocumentDocument(documentRevision?.document.documentType.groupOptions);
+  const isDocumentPOAM = checkIsDocumentPOAM(documentRevision?.document.documentType.groupOptions);
+  const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
+  const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;
   const outputDocumentTypes = pmFormId ?
     initialValues.outputDocumentTypes :
     initialValues.formDocument?.formTemplate?.outputDocumentTypes;
@@ -179,7 +181,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       });
     }
   }, [isdocRevStatusDraft, values.document, values.name]);
-
 
   return (
     <Grid
@@ -265,7 +266,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             isDraft={isdocRevStatusDraft || isRevised}
           />
         )}
-        <RevisionStage {...{ isDisabled, isDocRevFirstDraft, isDocumentOtherGroup: isDocument }}/>
+        <RevisionStage {...{ isDisabled, isDocRevFirstDraft, shouldShowRevStageForDocType }}/>
         <AutocompleteField
           name="referenceTo"
           label="documentRevision.form.references"

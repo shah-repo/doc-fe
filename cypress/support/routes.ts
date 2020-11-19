@@ -125,6 +125,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 25 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
   GetDocDynamicForm: {
@@ -217,7 +218,7 @@ export const routes: ICyRoutes =   {
       url: "api/v1/documents/file_upload_candidates*",
     },
     callConfig: {
-      responseTimeout: 15 * 1000,
+      responseTimeout: 25 * 1000,
     },
   },
   CompanyMine: {
@@ -357,6 +358,10 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/*/required_approvers",
+    },
+    callConfig: {
+      responseTimeout: 10 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
   PostApproveAR: {
