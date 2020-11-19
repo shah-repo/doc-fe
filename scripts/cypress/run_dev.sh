@@ -23,6 +23,8 @@ export CYPRESS_SCREENSHOTS_FOLDER="cypress/cache/testRunner/screenshots"
 export CYPRESS_VIDEOS_FOLDER="cypress/cache/testRunner/videos"
 export CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL:-"zoran.kovacevic+admin@codecons.com"}
 export CYPRESS_SUPERADMIN_PASSWORD=${CYPRESS_SUPERADMIN_PASSWORD:-"Tester1!"}
+export CYPRESS_TEST_EMAIL=${CYPRESS_TEST_EMAIL:-"enlil.testmail@gmail.com"}
+export CYPRESS_TEST_EMAIL_PASSWORD=${CYPRESS_TEST_EMAIL_PASSWORD:-"shifamed123"}
 
 
 mkdir -p $CYPRESS_SCREENSHOTS_FOLDER
@@ -33,8 +35,6 @@ mkdir -p $CYPRESS_CACHE_FOLDER
 yarn install --frozen-lockfile
 yarn cypress install
 yarn cypress verify
-
-yarn install --frozen-lockfile
 
 ./scripts/cypress/utils/delete_cache.sh
 ./scripts/cypress/utils/patch_director_port_in_cache.sh

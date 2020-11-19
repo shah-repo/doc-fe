@@ -80,6 +80,13 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
   },
   {
+    label: "Inspection",
+    type: "CATEGORY",
+    icon: "/navigation_icons/receipt_list.svg",
+    category: "Lot Inspection",
+    restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
+  },
+  {
     label: "Manufacturing",
     type: "MENU",
     icon: "/navigation_icons/tools.svg",

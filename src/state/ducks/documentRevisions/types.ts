@@ -120,6 +120,11 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   approvals?: Approval[];
   updatedAt?: string;
   schema?: FBSchemaProps[];
+  parentParts?: DocumentRevision;
+  parentEquipment?: Id;
+  equipmentSection?: string;
+  // there can currently be only one child part
+  childrenParts?: DocumentRevision[];
 }
 
 export const RevisionStageOptions = [
@@ -162,7 +167,11 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
 
 export interface DocumentRevisionSetAction {
   type: typeof DOCUMENT_REVISION_SET;
-  payload: DocumentRevision;
+  payload?: {
+    documentRevision?: DocumentRevision;
+    requestBody?: any;
+    docRevId?: string;
+  };
 }
 
 export interface DocumentSetAction {
@@ -233,7 +242,7 @@ export interface FBDocumentRevisionProps {
   document?: Partial<DocumentRevisionDocumentRequest>;
   revision?: number;
   subRevision?: number;
-  revisionStage?: number;
+  revisionStage?: string | number;
   revisionChangeType?: RevisionChangeType;
   releasedAt?: string;
   renderHTML?: string;

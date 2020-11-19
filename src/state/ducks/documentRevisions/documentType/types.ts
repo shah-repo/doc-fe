@@ -5,55 +5,32 @@ import { Nullable } from "../../common";
 import { FBFormTemplateProps } from "../types";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, SET_DOCUMENT_TYPES_BY_CATEGORY } from "./constants";
 
-export type DocumentGroupType =
-  "FORM" |
-  "OTHER" |
-  "RECORD" |
-  "DAM" |
-  "MPI" |
-  "DYNAMIC_FORM" |
-  "POAM" |
-  "PO" |
-  "WORK_ORDER" |
-  "SUPPLIER" |
-  "PART" |
-  "ENGINEERING_BUILD";
-
-export enum DOC_GROUP_TYPE {
+// Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
+export enum DOC_TYPE_GROUP {
   FORM = "FORM",
-  OTHER ="OTHER",
-  RECORD = "RECORD",
-  DAM = "DAM",
+  OTHER = "OTHER",
   MPI = "MPI",
+  RECORD = "RECORD",
+  CHANGE_REQUEST = "CHANGE_REQUEST",
+  DAM = "DAM",
   DYNAMIC_FORM = "DYNAMIC_FORM",
   POAM = "POAM",
   PO = "PO",
   WORK_ORDER = "WORK_ORDER",
+  WO_PARTS = "WO_PARTS",
   SUPPLIER = "SUPPLIER",
   PART = "PART",
-  ENGINEERING_BUILD = "ENGINEERING_BUILD",
-  CHANGE_REQUEST = "CHANGE_REQUEST",
-  WO_PARTS = "WO_PARTS",
   RECEIVABLE = "RECEIVABLE",
+  ENGINEERING_BUILD = "ENGINEERING_BUILD",
+  EQUIPMENT = "EQUIPMENT",
+  MAINTENANCE_RECORD = "MAINTENANCE_RECORD",
+  INSPECTION = "INSPECTION",
+  FAI_INSPECTION = "FAI_INSPECTION",
+  LOT = "LOT",
 }
+export type DocumentGroupType = keyof typeof DOC_TYPE_GROUP;
 
-export type DocumentGroupOptionsType =
-  "FORM" |
-  "DAM" |
-  "CAN_BE_OUTPUT" |
-  "MUST_BE_OUTPUT" |
-  "HAVE_OUTPUT" |
-  "RECORD" |
-  "ONE_ITEM" |
-  "DYNAMIC_FORM" |
-  "POAM" |
-  "PO" |
-  "WORK_ORDER" |
-  "WO_PARTS" |
-  "CHANGE_REQUEST" |
-  "BE_OUTPUT" |
-  "CAN_BE_COPIED";
-
+// Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
 export enum DOC_TYPE_GROUP_OPTION {
   FORM = "FORM",
   DAM = "DAM", // this can only go to DAM group
@@ -66,14 +43,24 @@ export enum DOC_TYPE_GROUP_OPTION {
   DYNAMIC_FORM = "DYNAMIC_FORM",
   POAM = "POAM",
   PO = "PO",
-  WORK_ORDER = "WORK ORDER",
+  WORK_ORDER = "WORK_ORDER",
   WO_PARTS = "WO_PARTS",
   PART = "PART",
   SUPPLIER = "SUPPLIER",
-  RECEIVE = "RECEIVE",
-  CAN_BE_COPIED = "CAN_BE_COPIED",
   RECEIVABLE = "RECEIVABLE",
+  CAN_BE_COPIED = "CAN_BE_COPIED",
+  EQUIPMENT = "EQUIPMENT",
+  MAINTENANCE = "MAINTENANCE",
+  DOCUMENT = "DOCUMENT",
+  EDITABLE_SCHEMA = "EDITABLE_SCHEMA",
+  INSPECTION = "INSPECTION",
+  FAI_INSPECTION = "FAI_INSPECTION",
+  CAN_CREATE_INSPECTION = "CAN_CREATE_INSPECTION",
+  SERIALIZED_CSV = "SERIALIZED_CSV",
+  ENGINEERING_BUILD = "ENGINEERING_BUILD",
 }
+export type DocumentGroupOptionsType = keyof typeof DOC_TYPE_GROUP_OPTION;
+
 export interface PageDetailsColumn {
   label: Translation;
   sourcePath: string;
@@ -160,6 +147,8 @@ export interface IFieldConfigItem {
   label?: string;
 }
 
+
+// Copied from BE repo: src/modules/documentTypes/interfaces/fieldConfig.interface.ts
 export enum InputFieldType{
   TITLE = "C",
   DESCRIPTION = "D",
@@ -172,9 +161,10 @@ export enum InputFieldType{
   NEXT_REVISION_STAGE = "J",
   OBSOLETE = "K",
   ADM_CHANGE = "L",
-  ASSIGN_DOCUMENT = "U"
+  OPERATORS = "U",
 }
 
+// Copied from BE repo: src/modules/documentTypes/interfaces/fieldConfig.interface.ts
 export enum DisplayFieldType{
   STATUS = "A",
   STATUS_DRAFT = "A1",
@@ -184,6 +174,9 @@ export enum DisplayFieldType{
   STATUS_IN_REVIEW = "A5",
   STATUS_PENDING_CHANGE = "A6",
   STATUS_APPROVED = "A7",
+  STATUS_SUBMITTED = "A8",
+  STATUS_CANCELED = "A9",
+  STATUS_VOIDED = "A10",
   DOC_ID = "B",
   APPROVE_RELEASE_BTN = "N",
   VERSIONS = "O",
@@ -195,6 +188,9 @@ export enum DisplayFieldType{
   VERSION_IN_REVIEW = "P5",
   VERSION_PENDING_CHANGE = "P6",
   VERSION_APPROVED = "P7",
+  VERSION_SUBMITTED = "P8",
+  VERSION_CANCELED = "P9",
+  VERSION_VOIDED = "P10",
   CR_ID = "R",
   REVISE_BTN = "S",
   BOOKMARKS = "Q",

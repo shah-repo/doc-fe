@@ -26,6 +26,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   placeholder,
   disabled,
   loading,
+  value,
   ...props
 }) => {
 

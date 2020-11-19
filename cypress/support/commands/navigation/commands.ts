@@ -21,6 +21,7 @@ declare global {
       navigToReceivableList(): Chainable<Subject>;
       navigToWorkOrders(): Chainable<Subject>;
       navigToRecords(): Chainable<Subject>;
+      navigToDocTypeManagement(): Chainable<Subject>;
     }
   }
 }
@@ -49,6 +50,10 @@ Cypress.Commands.add("navigToDashboard", () => {
     }).wait(1000);
 });
 
+Cypress.Commands.add("navigToDocTypeManagement", () => {
+  cy.get("a[href=\"/document_type_management\"]").click().wait(1000);
+});
+
 Cypress.Commands.add("navigToRecords", () => {
   cy.navigToNestedItem({
     navigItems: [
@@ -60,7 +65,9 @@ Cypress.Commands.add("navigToRecords", () => {
 });
 
 Cypress.Commands.add("navigToReceivableList", () => {
-  cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+    cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
+  });
 });
 
 Cypress.Commands.add("navigToDocumentList", () => {
@@ -78,12 +85,17 @@ Cypress.Commands.add("navigToDocumentList", () => {
 });
 
 Cypress.Commands.add("navigToApprovalRequestList", () => {
-  cy.navigToNestedItem({
-    navigItems: [
-      NavigationItems.DASHBOARD,
-      NavigationItems.DOCUMENT_CONTROL,
-      NavigationItems.APPROVAL_REQUEST,
-    ],
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.GetChangeRequests,
+    CyRoutes.GetDocTypeGroupOptions],
+  () => {
+    cy.navigToNestedItem({
+      navigItems: [
+        NavigationItems.DASHBOARD,
+        NavigationItems.DOCUMENT_CONTROL,
+        NavigationItems.APPROVAL_REQUEST,
+      ],
+    });
   });
 });
 
@@ -98,7 +110,9 @@ Cypress.Commands.add("navigToWorkOrders", () => {
 });
 
 Cypress.Commands.add("navigToPurchaseOrder", () => {
-  cy.navigClickOnItem({ navigItem: NavigationItems.PURCHASE_ORDERS });
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+    cy.navigClickOnItem({ navigItem: NavigationItems.PURCHASE_ORDERS });
+  });
 });
 
 Cypress.Commands.add("navigToSuppliers", () => {

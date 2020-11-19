@@ -1,11 +1,9 @@
 import { Chip, Grid, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
-import { ChangeRequestStatus } from "../../../../state/ducks/changeRequest";
-import { DocumentRevisionStatus, DocumentRevisionStatusAlias, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType";
-import { DocumentStatus } from "../../../../state/ducks/documents";
-import { FBDocTypeGroup } from "../../../form.builder";
+import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
 import Text from "../../Text";
 import { styles } from "./HeaderInfo.styles";
@@ -27,25 +25,16 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   name,
   id,
   documentTypeId,
-  revisionStage,
-  groupOptions,
-  isInlineApproval,
-  revisionChangeType,
-  subRevision,
 }) => {
-  const isDraft = status === DocumentStatus.Draft;
-  const isAlphaReleased = revisionStage === 3;
-  const isRecord = groupOptions?.includes(FBDocTypeGroup.RECORD);
 
-  // we should rename enum for document types, it is not only for FB
-  if ( isRecord && isInlineApproval && isDraft && !isAlphaReleased) {
-    status = DocumentRevisionStatusAlias.Draft;
-  }
   const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
   const [isTitleVisible] = useTitle(documentTypeId);
   const classes = styles();
-  const isStatusReleased = status === DocumentRevisionStatus.Released || status === ChangeRequestStatus.Approved;
-  const isStatusCanceled = status === DocumentRevisionStatus.Canceled || status === ChangeRequestStatus.Voided;
+  const isStatusReleased = isDocumentRevisionInStatus(
+    [DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved],
+    status as DocumentRevisionStatus,
+  );
+  const isStatusCanceled = isDocumentRevisionCanceled(status);
 
   const statusIcon =
     <div className={classNames(classes.statusIconDefault, {

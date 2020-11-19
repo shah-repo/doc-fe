@@ -10,7 +10,9 @@ import { documentVersionPath } from "../document.revision/utils/paths";
 import { useDocumentStatus } from "../hooks/docCustomization/useCustomization";
 import { Translation } from "../translations/types";
 import { styles } from "./DocumentRevisionList.container.styles";
-import { generateVersionNumber } from "./helpers";
+import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatus, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
+import { generateRevisionNumber } from "./helpers/generateRevisionNumber";
+import { isDocumentAlphaReleased } from "./helpers/revisionStage";
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -38,7 +40,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     documentRevision.id,
     documentId,
   );
-  const versionNumber = generateVersionNumber(
+  const versionNumber = generateRevisionNumber(
     documentRevision.revision,
     documentRevision.revisionStage,
     documentRevision.subRevision,
@@ -53,11 +55,11 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   let recordDateLabel = "common.updated" as Translation;
 
   const isSelected = selectedDocumentRevision === documentRevision.id;
-  const isDraft = status === DocumentRevisionStatus.Draft;
-  const isReleased = status === DocumentRevisionStatus.Released;
-  const isDeprecated = status === DocumentRevisionStatus.Deprecated;
-  const isAlphaReleased = documentRevision.revisionStage === 3;
-  const isVoided = status === DocumentRevisionStatus.Obsolete || status === DocumentRevisionStatus.Voided;
+  const isDraft = isDocumentRevisionInDraft(status);
+  const isReleased = isDocumentRevisionReleased(status);
+  const isDeprecated = isDocumentRevisionDeprecated(status);
+  const isAlphaReleased =  isDocumentAlphaReleased(documentRevision.revisionStage);
+  const isVoided = isDocumentRevisionInStatus([DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided], status);
 
 
   if (isRecord) {

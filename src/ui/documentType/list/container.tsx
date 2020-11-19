@@ -15,7 +15,8 @@ import { TableColumnProps } from "../../components/table/column/types";
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
 import { canEditDocumentRevision, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
-import { generateVersionNumber } from "../../documentRevision/helpers";
+import { checkIsDocumentPO } from "../../documentRevision/helpers/checkDocumentGroup";
+import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { RouteParams } from "../utils/types";
@@ -27,7 +28,7 @@ type Props = RouteComponentProps<RouteParams>;
 const getFormattedRowValue = (path: any, rowData: any) => {
   const value = get(rowData, path);
   const isDate = moment(value, "YYYY-MM-DDTHH:mm:ss.SSSZ", true).isValid();
-  const versionNumber = generateVersionNumber(
+  const versionNumber = generateRevisionNumber(
     rowData.revision,
     rowData.revisionStage,
     rowData.subRevision,
@@ -70,14 +71,17 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     ? `documentsByCategoryList-${categoryName}`
     : `documentsByTypeList-${documentType?.documentTypeAcronym}`;
 
-  const queryUrl = DOCUMENT_REVISION_ROOT_URL + (isByCategory
+  const docRevRootUrl = DOCUMENT_REVISION_ROOT_URL + (isByCategory
     ? `?documentTypeCategory=${categoryName}`
     : `?documentTypeId=${documentType?.id}`);
+
+  const queryUrl = documentRevisionQueryStatus().reduce((acc, state) =>  acc + `status%5B%5D=${state}&`,
+    `${docRevRootUrl}&`);
 
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
 
-  const isPO = documentType?.group === "PO" || documentCategory?.category === "Purchase Order";
+  const isPO = checkIsDocumentPO(documentType?.groupOptions);
 
   useEffect(() => {
     if (isEmpty(tableCriteria.queryDict) || isPO) {

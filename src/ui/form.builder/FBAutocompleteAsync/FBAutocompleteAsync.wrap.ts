@@ -16,7 +16,9 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     shouldReloadOnInit = false,
     labelPrefixRoot,
     selectedOptions,
+    includeRevision,
     defaultValue,
+    additionalData,
     freeSolo,
     optionId,
     options,
@@ -64,6 +66,10 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       }
     });
 
+    // Add some static additional data to dynamic store list
+    useEffect(() => autocompleteAsyncState?.setAdditionalData(additionalData),
+      [additionalData, autocompleteAsyncState]);
+
     useEffect(() => {
       if (shouldReloadOnInit) {
         autocompleteAsyncState?.load(true);
@@ -79,8 +85,13 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (freeSolo && !isObject(option)) {
         return option;
       }
-      const { labelPrefixRoot } = autocompleteAsyncState?.optionConfig || {};
-      const optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
+      const { labelPrefixRoot, includeRevision } = autocompleteAsyncState?.optionConfig || {};
+      let optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
+      if (includeRevision) {
+        const revision = get(option, includeRevision);
+        optionLabel = labelPrefixRoot ?
+          `${get(option, labelPrefixRoot)} - rev ${revision} - ` : "";
+      }
       return `${optionLabel}${get(option, optionLabelKey, "")}`;
     });
 

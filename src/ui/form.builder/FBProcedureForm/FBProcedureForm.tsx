@@ -34,7 +34,6 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
           <FBQuantityField
             name="quantity"
             label="form.builder.quantity"
-            rules="required|min:1"
           />
         </Box>
         <Box width="50%" ml={1}>
@@ -44,7 +43,6 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
             options={FBData.unitsOptions}
             optionValueKey="value"
             optionLabelKey="text"
-            rules="required"
           />
         </Box>
       </Box>

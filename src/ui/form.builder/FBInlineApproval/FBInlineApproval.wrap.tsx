@@ -6,7 +6,7 @@ import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBEmployee, FBIn
 import { store } from "../../../state/store";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBDialogState } from "../FBDialog/FBDialog.state";
-import { FBInlineApprovalTransitionBody } from "./FBInlineApproval.types";
+import { FBRequestApprovalTransitionBody } from "./FBInlineApproval.types";
 
 export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
   Component: React.FunctionComponent<T>,
@@ -46,6 +46,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
     isPreview = workspaceState?.mode === "preview";
     const fieldApprovals = useMemo(() => filter(docApprovals, { fieldId: name }), [docApprovals, name]);
+
     const authUser = store.getState().auth.user;
     const isOwner = authUser.id === userId;
     currentUser = authUser.id;
@@ -53,6 +54,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       approvals: fieldApprovals,
       isOwner,
     });
+    const shouldShowRequestAllApprovals = isOwner && !isEmpty(inlineApprovalState.getApprovals);
     dialogState = FB.useRef(FBDialogState);
     const shouldShowApprovals = document?.status === "DRAFT" || document?.status === "IN_REVIEW";
 
@@ -85,6 +87,13 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     // On transition
     React.useEffect(() => reaction(
       () => inlineApprovalState?.transitionApi.data,
+      (data) => concatApprovals(data)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    // On requestApprovalTransition
+    React.useEffect(() => reaction(
+      () => inlineApprovalState?.requestApprovalApi.data,
       (data) => concatApprovals(data)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -160,10 +169,13 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       inlineApprovalState?.setOptions(options as FBInlineApprovalOptions[]);
     }
 
-    function concatApprovals(approval?: FBInlineApprovalBody) {
+    function concatApprovals(approval?: FBInlineApprovalBody | FBInlineApprovalBody[]) {
       if (!approval) { return; }
-      const stateApprovals = filter(inlineApprovalState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
-      inlineApprovalState?.setApprovals(unionBy(stateApprovals, [approval], "id"));
+      return [approval].flat().map((app) => {
+        const stateApprovals = filter(inlineApprovalState?.approvals, (a) => a.approver?.id !== app?.approver?.id);
+        inlineApprovalState?.setApprovals(unionBy(stateApprovals, [app], "id"));
+        return app;
+      });
     }
 
     function addApprover(ids?: string[]) {
@@ -184,11 +196,18 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       });
     }
 
-    // MARK: @methods
-    approvalTransition = (transition: FBInlineApprovalTransition, id?: string) => {
+    function requestAllApprovals(id?: string) {
       if (!id) { return; }
-      const passwordBody = pick(formState?.values, "password") as FBInlineApprovalTransitionBody;
-      inlineApprovalState?.approvalTransition(transition, id, passwordBody);
+      const body = {
+        docRev: pick(workspaceState?.document, "id"),
+      } as FBRequestApprovalTransitionBody;
+      inlineApprovalState?.requestApprovalTransition("pending_by_field", id, body);
+    }
+
+    // MARK: @methods
+    approvalTransition = (transition: FBInlineApprovalTransition, id?: string, password?: string) => {
+      if (!id || !password) { return; }
+      inlineApprovalState?.approvalTransition(transition, id, { password });
     };
 
     onApproveClick = (approvalId: string) => {
@@ -228,6 +247,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     return Component({
       ...(props as T),
       approvalTransition,
+      requestAllApprovals,
       dialogState,
       inlineApprovalState,
       currentUser,
@@ -240,6 +260,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       name,
       onApproveClick,
       shouldShowApprovals,
+      shouldShowRequestAllApprovals,
     });
   };
 

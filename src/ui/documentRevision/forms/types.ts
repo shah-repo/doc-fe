@@ -15,7 +15,6 @@ export interface DocumentRevisionFormValues extends FBDocumentRevisionProps {
   document?: Partial<DocumentRevisionDocument>;
   revisionChangeType?: RevisionChangeType;
   changeRequest?: ChangeRequest;
-  revisionStage?: number;
   retrain?: boolean;
   status?: DocumentRevisionStatus;
   securityEmployees: OptionType[];
@@ -25,6 +24,10 @@ export interface DocumentRevisionFormValues extends FBDocumentRevisionProps {
   renderHTML?: string;
   outputDocumentTypes?: OptionType[];
   schema?: FBSchemaProps[];
+  parentParts?: { id: string };
+  parentEquipment?: {id: string};
+  childrenParts?: { id: string }[];
+  equipmentSection?: string;
 }
 
 export interface SecurityId {

@@ -1,7 +1,7 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
-export default (theme: Theme) =>
+export const styles =  makeStyles((theme: Theme) =>
   createStyles({
     container: {
       margin: "auto",
@@ -16,4 +16,5 @@ export default (theme: Theme) =>
       paddingTop: theme.spacing(3),
       textAlign: "center",
     },
-  });
+  })
+);

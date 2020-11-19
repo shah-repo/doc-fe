@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
@@ -158,7 +161,9 @@ context("PO test", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poClickCreatePO();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.LotQuantity], () => {
+        cy.poClickCreatePO();
+      });
     });
 
     it("Check for PO ID uniqueness - ID should be PO-00001", () => {
@@ -184,13 +189,15 @@ context("PO test", () => {
 
     it("Uploads text.docx", () => {
       // SystemRequirement("REQ-1350");
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.atchUploadAttachment({ fileName: "test.docx" });
       });
     });
 
     it("Click on 'Add item' button", () => {
-      cy.poAddNewFieldItem();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.CompanyMine, CyRoutes.DocRevGet], () => {
+        cy.poAddNewFieldItem();
+      });
     });
 
     it("Select Part Number", () => {
@@ -234,20 +241,25 @@ context("PO test", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.poAddPOButtonClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.poAddPOButtonClick();
+        });
     });
 
-    // it.skip("Check currency options dropdown", () => {
-    //   // SystemRequirement("REQ-1320");
-    //   cy.poCheckCurrency();
-    // });
+    it("Check currency options dropdown", () => {
+      // SystemRequirement("REQ-1320");
+      cy.poCheckCurrency();
+    });
 
     it("Select Currency 'USD'", () => {
       cy.poSelectCurrency({ currencyValue: "USD" });
     });
 
     it("Enter Shipping Cost", () => {
-      cy.poShippingCost({ number: "2" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.poShippingCost({ number: "2" });
+      });
     });
 
     it("Check Subtotal value", () => {
@@ -281,7 +293,9 @@ context("PO test", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poClickCreatePO();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.LotQuantity], () => {
+        cy.poClickCreatePO();
+      });
     });
 
     it("Check for PO ID uniqueness - ID should be PO-00002", () => {
@@ -341,13 +355,16 @@ context("PO test", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.poAddPOButtonClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.poAddPOButtonClick();
+        });
     });
 
-    // it.skip("Check currency options dropdown", () => {
-    //   // SystemRequirement("REQ-1320");
-    //   cy.poCheckCurrency();
-    // });
+    it("Check currency options dropdown", () => {
+      // SystemRequirement("REQ-1320");
+      cy.poCheckCurrency();
+    });
 
     it("Select Currency 'EUR'", () => {
       cy.poSelectCurrency({ currencyValue: "EUR" });
@@ -359,7 +376,9 @@ context("PO test", () => {
     });
 
     it("Enter Shipping Cost", () => {
-      cy.poShippingCost({ number: "2" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.poShippingCost({ number: "2" });
+      });
     });
 
     it("Check Subtotal value", () => {
@@ -386,7 +405,10 @@ context("PO test", () => {
 
     it("Click on 'Add' inside PO dialog box to check if all line item details are optional", () => {
       // SystemRequirement("REQ-1400");
-      cy.poAddPOButtonClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.poAddPOButtonClick();
+        });
     });
 
     it("Check line item IDs if they are unique, should be '1' and '2'", () => {
@@ -397,7 +419,7 @@ context("PO test", () => {
 
     it("Enter description 'New Purchase Order with Service item'", () => {
       // SystemRequirement("REQ-1290");
-      cy.poEnterDocumentDescription({ description: "New Purchase Order with Service item" });
+      cy.drEnterDocumentDescription({ description: "New Purchase Order with Service item" });
     });
 
     it("Approve and release document", () => {
@@ -463,7 +485,9 @@ context("PO test", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poClickCreatePO();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+        cy.poClickCreatePO();
+      });
     });
 
     it("Check if two options are available when two forms with PO exist", () => {

@@ -24,6 +24,7 @@ export enum CyRoutes {
   PostOrPatchDocRev = "PostOrPatchDocRev",
   Login = "Login",
   GetDocumentTypes = "GetDocumentTypes",
+  GetChangeRequests = "GetChangeRequests",
   ChangeRequestApprove = "ChangeRequestApprove",
   ARPreview = "ARPreview",
   GroupsPost = "GroupsPost",
@@ -52,7 +53,16 @@ export enum CyRoutes {
   GetFileUploadCandidates = "GetFileUploadCandidates",
   GetRequiredApproversDocRev = "GetRequiredApproversDocRev",
   ReleaseDocRevWithoutAr = "ReleaseDocRevWithoutAr",
-  GetDocumentType = "GetDocumentType"
+  GetDocumentType = "GetDocumentType",
+  PostRejectCR = "PostRejectCR",
+  GetSpecificDocumentType = "GetSpecificDocumentType",
+  PostWithdrawChangeRequests = "PostWithdrawChangeRequests",
+  GetDocTypeGroupOptions = "GetDocTypeGroupOptions",
+  GetDocAudit = "GetDocAudit",
+  GetDocRevDocTypeCategory = "GetDocRevDocTypeCategory",
+  GetDocRevStatusesCategory = "GetDocRevStatusesCategory",
+  PostDocRevInReview = "PostDocRevInReview",
+  PatchDocSecurity = "PatchDocSecurity"
 }
 
 export const routes: ICyRoutes =   {
@@ -60,6 +70,10 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/employees*",
+    },
+    callConfig: {
+      responseTimeout: 20 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
   EmployeesPost: {
@@ -72,6 +86,18 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/documents/lot_quantity/*",
+    },
+    callConfig: {
+      responseTimeout: 10 * 1000,
+    },
+  },
+  PatchDocSecurity: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/documents/*/update_security",
+    },
+    callConfig: {
+      responseTimeout: 10 * 1000,
     },
   },
   GroupsGet: {
@@ -99,6 +125,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 25 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
   GetDocDynamicForm: {
@@ -107,18 +134,52 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/dynamic_forms",
     },
   },
+  PostDocRevInReview: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/document_revisions/in_review/*",
+    },
+  },
+  GetDocRevStatusesCategory: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions/statuses*",
+    },
+  },
+  GetDocRevDocTypeCategory: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions?documentTypeCategory*",
+    },
+  },
+  GetDocTypeGroupOptions: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_type/with_forms?docTypeGroupOption*",
+    },
+  },
   PostOrPatchDocRev: {
     requestConfig: {
       url: "/api/v1/document_revisions/*",
     },
     callConfig: {
       responseTimeout: 25 * 1000,
+      requestTimeout: 15 * 1000,
     },
   },
   ReleaseDocRevWithoutAr: {
     requestConfig: {
       method: "POST",
       url: "/api/v1/document_revisions/release_without_ar/*",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+    },
+  },
+  PostRejectCR: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/change_requests/*/reject",
     },
     callConfig: {
       responseTimeout: 15 * 1000,
@@ -157,7 +218,7 @@ export const routes: ICyRoutes =   {
       url: "api/v1/documents/file_upload_candidates*",
     },
     callConfig: {
-      responseTimeout: 15 * 1000,
+      responseTimeout: 25 * 1000,
     },
   },
   CompanyMine: {
@@ -183,6 +244,9 @@ export const routes: ICyRoutes =   {
       method: "POST",
       url: "/api/v1/documents/file_upload_candidates",
     },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+    },
   },
   Login: {
     requestConfig: {
@@ -205,6 +269,12 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_type*",
     },
   },
+  GetSpecificDocumentType: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_type/*",
+    },
+  },
   ChangeRequestApprove: {
     requestConfig: {
       method: "POST",
@@ -220,7 +290,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions*",
     },
     callConfig: {
-      responseTimeout: 15 * 1000,
+      responseTimeout: 20 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
   ARPreview: {
@@ -234,17 +305,29 @@ export const routes: ICyRoutes =   {
       method: "GET",
       url: "/api/v1/documents/*",
     },
+    callConfig: {
+      responseTimeout: 20 * 1000,
+    },
   },
   DocRevPreview: {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/*",
     },
+    callConfig: {
+      responseTimeout: 10 * 1000,
+    },
   },
   GetDocAggregatedAudit: {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/*/aggregated_audit",
+    },
+  },
+  GetDocAudit: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions/*/audit",
     },
   },
   GetProposedDocId: {
@@ -276,6 +359,10 @@ export const routes: ICyRoutes =   {
       method: "GET",
       url: "/api/v1/document_revisions/*/required_approvers",
     },
+    callConfig: {
+      responseTimeout: 10 * 1000,
+      requestTimeout: 10 * 1000,
+    },
   },
   PostApproveAR: {
     requestConfig: {
@@ -306,6 +393,9 @@ export const routes: ICyRoutes =   {
       method: "POST",
       url: "/api/v1/approvals/*/approve",
     },
+    callConfig: {
+      responseTimeout: 20 * 1000,
+    },
   },
   PostApprovals: {
     requestConfig: {
@@ -319,10 +409,22 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/groups/approval_roles",
     },
   },
+  GetChangeRequests: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/change_requests*",
+    },
+  },
   PostChangeRequests: {
     requestConfig: {
       method: "POST",
       url: "/api/v1/change_requests",
+    },
+  },
+  PostWithdrawChangeRequests: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/change_requests/*/withdrawn",
     },
   },
   PostTaskDone: {

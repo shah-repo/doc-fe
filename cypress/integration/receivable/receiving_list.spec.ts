@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import { GroupTag, NavigationItems } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -508,7 +511,7 @@ context("Receivable list test", () => {
 
       it("Verify receivable counter on document list", () => {
         // SystemRequirement("REQ-1760");
-        cy.dlVerifyDocCounter({ docCounterNumber: 3 });
+        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
       });
     });
 

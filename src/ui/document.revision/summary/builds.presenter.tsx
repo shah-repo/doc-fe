@@ -44,13 +44,13 @@ export const BuildsPresenter: React.FunctionComponent<Props> = ({
         <Tooltip title={docRev.name} data-cy="BuildsLink-tootlip" >
           <Link
             className={classes.link}
-            to={documentVersionPath(docRev.id, docRev.document.id)}
+            to={documentVersionPath(docRev.id, docRev.document?.id )}
             target="_blank"
-            data-cy="BuildsPresenter-link"
+            data-cy={`BuildsPresenter-link-${label}`}
           >
             <Chip
               className={classes.chip}
-              label={`${docRev.document.docId} - ${stripTags(docRev.description)}`}
+              label={`${docRev.document?.docId} - ${stripTags(docRev.name)}`}
             />
           </Link>
         </Tooltip>

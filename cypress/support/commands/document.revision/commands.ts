@@ -42,6 +42,7 @@ declare global {
       checkToastMessageIsEqual(params: { message: string }): Chainable<Subject>;
       checkToastMessageContains(params: { message: string }): Chainable<Subject>;
       drCheckApprovalsEnforcment(): Chainable<Subject>;
+      drVerifyFirstDocumentRevisionList(params: { revision: string }): Chainable<Subject>;
 
       /* Document Approval Matrix */
 
@@ -134,6 +135,7 @@ Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) =>
   cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
     cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).click();
   });
+  cy.wait(1000);
 });
 
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
@@ -146,13 +148,17 @@ Cypress.Commands.add("drClickDAMEditBtn", () => {
   cy.get("[data-cy=\"EditBtnDAM\"]").click();
 });
 
+Cypress.Commands.add("drVerifyFirstDocumentRevisionList", (params: {revision: string}) => {
+  cy.get(" [data-cy=\"DocumentRevisionList-item\"]>a>div").first()
+    .then(($el) => {
+      const text = $el.text();
+      expect(text.replace(/\u00a0/g, " ")).to.contain(params.revision);
+    });
+});
+
 Cypress.Commands.add("drCheckApprovalsEnforcment", () => {
   cy.drApproveAndReleaseDialog();
   cy.wait(2000);
-  cy.get("[aria-label=\"change date\"]").click().wait(1000);
-  // eslint-disable-next-line max-len
-  cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]")
-    .click().wait(500);
   cy.get("[data-cy=unchecked]").should("exist");
   cy.get("[data-cy=group-0]").should("have.text", "Role One");
   cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
@@ -174,7 +180,9 @@ Cypress.Commands.add("drVerifyDocumentOWner", (params: { owner: string }) => {
 });
 
 Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion: int }) => {
-  cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(params.docVersion).click().wait(2000);
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevPreview, () => {
+    cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(params.docVersion).click();
+  });
 });
 
 Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
@@ -324,8 +332,10 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
 });
 
 Cypress.Commands.add("drClickReviseDocument", () => {
-  cy.get("[data-cy=\"updateRecord\"]").click();
-  cy.wait(3000);
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApprovers, () => {
+    cy.get("[data-cy=\"updateRecord\"]").click();
+  });
+  // cy.wait(3000);
 });
 
 Cypress.Commands.add("drClickTrainingRequired", () => {

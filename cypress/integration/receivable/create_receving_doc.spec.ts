@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { PurchaseOrderItem } from "../../support/commands/purchase.order/commands";
@@ -366,118 +369,117 @@ context("Create receivable test", () => {
       });
     });
   });
-});
 
-
-context("Login user", () => {
-  context("Login user when he doesn't have privileges", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: ADMIN_USER.email,
-        password: "Tester1!",
+  context("Login user", () => {
+    context("Login user when he doesn't have privileges", () => {
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: ADMIN_USER.email,
+          password: "Tester1!",
+        });
       });
-    });
 
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-  });
-});
-
-context("Create receivable", () => {
-  context("Navigate to receivables list and click create", () => {
-    it("Navigate to receivable list", () => {
-      cy.navigToReceivableList();
-    });
-
-    it("Click create receivable", () => {
-      cy.recCreateNew();
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
     });
   });
 
-  context("Fill out receivable document form", () => {
-    context("Check list of open PO-s", () => {
-      it("Check there is two open PO-s available to select", () => {
-        // SystemRequirement("REQ-1790");
-        cy.recCheckNumberOfAvailablePo({ numberOfOpenPOs: 2 });
-      });
-    });
-
-    context("Check for search and selecting PO", () => {
-      it("Search for API PO document and select it", () => {
-        // SystemRequirement("REQ-1800");
-        cy.recSelectPo({ poTitle: "API PO document 2" });
-      });
-    });
-
-    context("Check selected PO is loaded and displayed in receivable", () => {
-      it("Verify PO 'API PO document 2' is displayed", () => {
-        // SystemRequirement("REQ-1810");
-        const poItems: PurchaseOrderItem[] = [{
-          index: 1,
-          partNumber: "",
-          descritpion: "",
-          ordered: 5,
-          received: 0,
-          units: "hours",
-          dateRequired: "",
-          unitPrice: "$40.00",
-          totalPrice: "$200.00",
-        },
-        {
-          index: 2,
-          partNumber: "",
-          descritpion: "",
-          ordered: 6,
-          received: 0,
-          units: "hours",
-          dateRequired: "",
-          unitPrice: "$30.00",
-          totalPrice: "$180.00",
-        }];
-        cy.recVerifyPOIsDisplayed({ loadedPoItems: poItems });
-      });
-    });
-
-    context("Verify receivable creation", () => {
-      it("Verify adding attachments", () => {
-        // SystemRequirement("REQ-1980");
-        cy.atchUploadAttachment({ fileName: "test.docx" });
-      });
-
-      it("Fill custom text field added in receivable form", () => {
-        // SystemRequirement("REQ-1880");
-        cy.get("input[type=textfield]").type("Custom field");
-      });
-
-      it("Click 'Create document' ", () => {
-        // SystemRequirement("REQ-1770");
-        cy.recClickCreateDocumentWithApiCall();
-      });
-
-      it("Verify receivable status is 'Draft'", () => {
-        // SystemRequirement("REQ-1870");
-        cy.drCheckDocumentStatus({ status: "Draft" });
-      });
-
-      it("Verify owner change", () => {
-        // SystemRequirement("REQ-1990");
-        cy.drChangeOwnerFromMenu({ employee: SECOND_USER.name });
-      });
-    });
-
-    context("Verify receivable can be created without selecting PO document", () => {
-      it("Navigate to receiving", () => {
+  context("Create receivable", () => {
+    context("Navigate to receivables list and click create", () => {
+      it("Navigate to receivable list", () => {
         cy.navigToReceivableList();
       });
 
-      it("Click 'Add new receiving'", () => {
+      it("Click create receivable", () => {
         cy.recCreateNew();
       });
+    });
 
-      it("Click 'Create document' on empty receivable form", () => {
-        // SystemRequirement("REQ-1860");
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    context("Fill out receivable document form", () => {
+      context("Check list of open PO-s", () => {
+        it("Check there is two open PO-s available to select", () => {
+          // SystemRequirement("REQ-1790");
+          cy.recCheckNumberOfAvailablePo({ numberOfOpenPOs: 2 });
+        });
+      });
+
+      context("Check for search and selecting PO", () => {
+        it("Search for API PO document and select it", () => {
+          // SystemRequirement("REQ-1800");
+          cy.recSelectPo({ poTitle: "API PO document 2" });
+        });
+      });
+
+      context("Check selected PO is loaded and displayed in receivable", () => {
+        it("Verify PO 'API PO document 2' is displayed", () => {
+          // SystemRequirement("REQ-1810");
+          const poItems: PurchaseOrderItem[] = [{
+            index: 1,
+            partNumber: "",
+            descritpion: "",
+            ordered: 5,
+            received: 0,
+            units: "hours",
+            dateRequired: "",
+            unitPrice: "$40.00",
+            totalPrice: "$200.00",
+          },
+          {
+            index: 2,
+            partNumber: "",
+            descritpion: "",
+            ordered: 6,
+            received: 0,
+            units: "hours",
+            dateRequired: "",
+            unitPrice: "$30.00",
+            totalPrice: "$180.00",
+          }];
+          cy.recVerifyPOIsDisplayed({ loadedPoItems: poItems });
+        });
+      });
+
+      context("Verify receivable creation", () => {
+        it("Verify adding attachments", () => {
+          // SystemRequirement("REQ-1980");
+          cy.atchUploadAttachment({ fileName: "test.docx" });
+        });
+
+        it("Fill custom text field added in receivable form", () => {
+          // SystemRequirement("REQ-1880");
+          cy.get("input[type=textfield]").type("Custom field");
+        });
+
+        it("Click 'Create document' ", () => {
+          // SystemRequirement("REQ-1770");
+          cy.recClickCreateDocumentWithApiCall();
+        });
+
+        it("Verify receivable status is 'Draft'", () => {
+          // SystemRequirement("REQ-1870");
+          cy.drCheckDocumentStatus({ status: "Draft" });
+        });
+
+        it("Verify owner change", () => {
+          // SystemRequirement("REQ-1990");
+          cy.drChangeOwnerFromMenu({ employee: SECOND_USER.name });
+        });
+      });
+
+      context("Verify receivable can be created without selecting PO document", () => {
+        it("Navigate to receiving", () => {
+          cy.navigToReceivableList();
+        });
+
+        it("Click 'Add new receiving'", () => {
+          cy.recCreateNew();
+        });
+
+        it("Click 'Create document' on empty receivable form", () => {
+          // SystemRequirement("REQ-1860");
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
       });
     });
   });

@@ -2,7 +2,7 @@ import { Box, Button, Grid, InputLabel, TextareaAutosize } from "@material-ui/co
 import { Field, FormikProps } from "formik";
 import React from "react";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import { DocumentType, DOC_GROUP_TYPE } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType";
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import InputField from "../../components/forms/fields/Input";
@@ -96,7 +96,7 @@ export const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
           name="group"
           label="Group"
           autocompleteProps={{ id: "group" }}
-          options={enumToOptions(DOC_GROUP_TYPE)}
+          options={enumToOptions(DOC_TYPE_GROUP)}
         />
         <InputField
           name="category"

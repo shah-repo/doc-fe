@@ -3,13 +3,16 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
-import { generateVersionNumber, getIsAdministrativeDefault } from "../helpers";
+import { checkIsDocumentDAM, checkIsDocumentPOAM, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
+import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
+import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
+import { getIsAdministrativeDefault } from "../helpers/revisionStage";
 import { DocumentRevisionFormValues } from "./types";
 
 
-const getHighestRevision = (revisions: DocumentRevision[]) => maxBy(revisions, "revision");
+export const getHighestRevision = (revisions: DocumentRevision[]) => maxBy(revisions, "revision");
 
-const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateVersionNumber(revision.revision,
+const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateRevisionNumber(revision.revision,
   revision.revisionStage,
   revision.subRevision,
   revision.revisionChangeType,
@@ -18,12 +21,15 @@ const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateVe
 export const toDocumentRevisionFormValues = (
   documentRevision: DocumentRevision,
 ): DocumentRevisionFormValues => {
+  const parentEquipmentId = get(documentRevision, "parentEquipment.id");
   const values: DocumentRevisionFormValues = {
     id: documentRevision.id,
     description: documentRevision.description,
     name: documentRevision.name,
     attachments: documentRevision.attachments,
-    referenceTo: documentRevision.referenceTo.map((reference: any) => {
+    // TODO - we need to take a data from response that gives us all informations about document,
+    // currently we are using data from the document list
+    referenceTo: documentRevision.referenceTo?.map((reference: any) => {
       const highestRev = getHighestRevision(reference.documentRevisions);
       return ({
         value: reference.id,
@@ -45,6 +51,12 @@ export const toDocumentRevisionFormValues = (
       .map((operator) => ({ label: operator.name, value: operator.id })),
     renderHTML: documentRevision.renderHTML,
     schema: documentRevision.schema,
+    parentParts: documentRevision.parentParts,
+    parentEquipment: parentEquipmentId ? { id: parentEquipmentId } : undefined,
+    equipmentSection: get(documentRevision.equipmentSection, ""),
+    // there can currently be only one child part
+    childrenParts: documentRevision.childrenParts,
+
   };
   if (documentRevision.formTemplate) {
     values.formTemplate = {
@@ -53,6 +65,17 @@ export const toDocumentRevisionFormValues = (
         .map((e) => ({ label: e.documentTypeName, value: e.id })),
     };
   }
+
+  const isDocumentRecord = checkIsDocumentRecord(documentRevision?.document.documentType.groupOptions);
+  const isDocumentPOAM = checkIsDocumentPOAM(documentRevision?.document.documentType.groupOptions);
+  const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
+  const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isDocumentRecord;
+  const isdocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
+  const isDocRevFirstDraft = isdocRevStatusDraft && documentRevision?.version === 1;
+  if (shouldShowRevStageForDocType && isDocRevFirstDraft) {
+    values.revisionStage = documentRevision.revisionStage.toString();
+  }
+
   FBDRStore.setValues(documentRevision);
   return values;
 };
@@ -61,7 +84,15 @@ export const toDocumentRevisionEditRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
   const data = {
-    ...pick(values, ["formTemplate", "formDocument", "formInput", "schema" ]),
+    ...pick(values, [
+      "formTemplate",
+      "formDocument",
+      "formInput",
+      "schema",
+      "parentParts",
+      "parentEquipment",
+      "equipmentSection",
+    ]),
     description: values.description,
     name: values.name,
     attachments: values.attachments,

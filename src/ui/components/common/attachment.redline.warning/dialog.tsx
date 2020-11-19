@@ -42,7 +42,7 @@ export const AttachmentRedLineWarningDialog: React.FunctionComponent<Props> = ({
       open={isDialogOpen}
       onSubmit={preventPropagation}
     >
-      <DialogContent>
+      <DialogContent data-cy={"download.warning"}>
         <FormContext.Provider value={{ submitOnChange: false }}>
           <Formik
             initialValues={{ password: "" }}

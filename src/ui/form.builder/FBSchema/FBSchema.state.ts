@@ -1,4 +1,4 @@
-import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, size, union } from "lodash";
+import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, size, union, unionBy } from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
@@ -13,6 +13,8 @@ import { FBButton } from "../FBButton";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
 import { FBDocumentRevisions } from "../FBDocumentRevisions";
+import { FBEBPart } from "../FBEBPart";
+import { FBEQMaintenance } from "../FBEQMaintenance";
 import { FBFileUpload } from "../FBFileUpload";
 import { FBHelloSign } from "../FBHelloSign";
 import { FBHyperlink } from "../FBHyperlink";
@@ -52,6 +54,7 @@ export class FBSchemaState {
     "task",
     "blanktplform",
     "approvals",
+    "eqmaintenance",
   ];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
@@ -100,9 +103,12 @@ export class FBSchemaState {
     procedure: FBProcedure,
     parts: FBParts,
     procedurediff: FBProcedureDiff,
+    ebpart: FBEBPart,
+    eqmaintenance: FBEQMaintenance,
   };
 
   @observable public schema?: FBSchemaProps[];
+  public validationSchema?: Partial<FBSchemaProps>[];
 
   public constructor(schema?: FBSchemaProps[]) {
     this.schema = schema;
@@ -119,6 +125,13 @@ export class FBSchemaState {
       ...controlProps,
     });
   };
+
+  public setValidationSchemaItem = (item: Partial<FBSchemaProps>) => {
+    if (!item.name || !item.label) { return; }
+    set(this, "validationSchema", unionBy(this.validationSchema || [], [item], "name"));
+  };
+
+  public getValidationSchema = () => cloneDeep(get(this, "validationSchema"));
 
   @action public getSchema = (): FBSchemaProps[] => cloneDeep(get(this, "schema"));
 

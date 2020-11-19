@@ -1,5 +1,5 @@
-/* eslint-disable max-classes-per-file */
-// / <reference types="Cypress" />
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
 
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -176,7 +176,7 @@ context("Document revise test", () => {
 
   context("Verify 'Next Revision' change is shown on document list", () => {
     it("Navigate to created document", () => {
-      cy.arSelectFirstDocument();
+      cy.dlSelectFirstDocument();
     });
 
     it("Revise document with 'Next Revision' option", () => {
@@ -205,7 +205,7 @@ context("Document revise test", () => {
   context("Verify 'Upgrade to Next Revision Level' change is shown on document list", () => {
     context("Revise document to 'Upgrade to Next Revision Level'", () => {
       it("Navigate to created document", () => {
-        cy.arSelectFirstDocument();
+        cy.dlSelectFirstDocument();
       });
 
       it("Revise document with 'Next Revision' option", () => {
@@ -279,7 +279,7 @@ context("Document revise test", () => {
   context("Verify 'Obsolete' change is shown on document list", () => {
     context("Revise document to 'Obsolete'", () => {
       it("Navigate to created document", () => {
-        cy.arSelectFirstDocument();
+        cy.dlSelectFirstDocument();
       });
 
       it("Revise document with 'Obsolete' option", () => {

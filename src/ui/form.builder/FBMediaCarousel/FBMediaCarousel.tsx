@@ -15,11 +15,9 @@ const FBMediaCarousel: React.FunctionComponent<FBMediaCarouselProps> = ({
   handleNext,
   handleBack,
   handleDelete,
-  collection,
   activeMediaPath,
   toolsVisibility,
   actionsDisabled,
-  activeStep,
   previewType,
 }) => (
   <Box
@@ -42,7 +40,15 @@ const FBMediaCarousel: React.FunctionComponent<FBMediaCarouselProps> = ({
     {previewType === "image" && (
       <LazyLoad height={350}>
         <Img
-          style={{ objectFit: "cover", width: "100%", height: "350px" }}
+          style={{
+            maxHeight: "100%",
+            maxWidth: "100%",
+            position: "relative",
+            top: "50%",
+            msTransform: "translateY(-50%)",
+            WebkitTransform: "translateY(-50%)",
+            transform: "translateY(-50%)",
+          }}
           src={activeMediaPath}
           loader={
             <Box height="100%" display="flex" alignItems="center">

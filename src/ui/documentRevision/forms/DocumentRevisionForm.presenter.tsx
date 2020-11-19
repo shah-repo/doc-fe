@@ -1,12 +1,12 @@
-import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { flatten, isEmpty } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState, DOC_GROUP_TYPE, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
+import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
 import { default as AutocompleteField } from "../../components/forms/fields/Autocomplete/Autocomplete";
@@ -18,12 +18,14 @@ import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import FormHeader from "../../document.revision/header/FormHeader";
 import BuildsContainer from "../../document.revision/summary/builds.container";
-import { FB } from "../../form.builder";
+import { FB, FBEBPart } from "../../form.builder";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
-import styles from "./DocumentRevisionForm.styles";
+import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
+import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
+import { styles } from "./DocumentRevisionForm.styles";
 import Description from "./presenters/Description";
 import DocIdInput from "./presenters/DocIdInput";
 import DocumentSecurity from "./presenters/DocumentSecurity";
@@ -37,9 +39,7 @@ import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import UpgradeToLatestContainer from "./presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { DocumentRevisionFormValues } from "./types";
 
-export interface Props
-  extends WithStyles<typeof styles>,
-  FormikProps<DocumentRevisionFormValues> {
+export interface Props extends FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
@@ -57,6 +57,8 @@ export interface Props
   bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
   isNewVersion?: boolean;
   showAdministrativeAndVoidChange: boolean;
+  pmFormId?: string;
+  releasedDocRev?: DocumentRevision;
 }
 
 export interface FormHeaderContext {
@@ -68,13 +70,12 @@ export interface FormHeaderContext {
   asyncState: AsyncState;
   type?: DocumentCloneType;
 }
+
 export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
 export let isOwnerContext = React.createContext<boolean>(false);
 export let documentTypeContext = React.createContext<string | undefined>(undefined);
 
-
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
-  classes,
   asyncState,
   initialValues,
   availableReferences,
@@ -98,15 +99,52 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   bannerPortal,
   isNewVersion = false,
   showAdministrativeAndVoidChange,
+  pmFormId,
+  releasedDocRev,
 }) => {
   useScrollIntoView();
+  const classes = styles();
   const { workspaceState } = FB.useStores();
-  const isDisabled: boolean = initialValues.id !== undefined;
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
-  const showObsoleteRevisionChange =
-    documentRevision?.status === DocumentRevisionStatus.Draft &&
-    documentRevision?.version === 1;
+  const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
 
+
+  const hasOutput = useMemo(() => {
+    const documentType = documentTypesById[values.document?.documentType?.id || ""];
+    return checkIsTypeHaveOutput(documentType?.groupOptions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentTypesById, values.document?.documentType?.id]);
+
+  const isRecord = useMemo(() => {
+    const documentType = documentTypesById[values.document?.documentType?.id || ""];
+    return checkIsDocumentRecord(documentType?.groupOptions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentTypesById, values.document?.documentType?.id]);
+
+  const isCurrentUserOperator = React.useContext(isOperator);
+  const email = useSelector(authSelectors.currentUserEmail);
+  const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
+  const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
+  const isdocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
+  const isDocRevFirstDraft = isdocRevStatusDraft && documentRevision?.version === 1;
+  const isSubrevision = documentRevision?.subRevision as number > 0;
+  const isRevisionChangeHidden = isRecord && isdocRevStatusDraft && !isSubrevision;
+  const isRevised = values.outputRevision;
+  const isDisabled: boolean = initialValues.id !== undefined;
+  const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
+  const docRevId = documentRevision?.id;
+  const isAttachmentEmpty = !(documentRevision?.attachments.length > 1);
+  const documentTypeId = values.document?.documentType?.id;
+  const isEB = checkIsDocumentEB(documentRevision?.document.documentType.groupOptions);
+  const isDocumentPOAM = checkIsDocumentPOAM(documentRevision?.document.documentType.groupOptions);
+  const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
+  const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;
+  const outputDocumentTypes = pmFormId ?
+    initialValues.outputDocumentTypes :
+    initialValues.formDocument?.formTemplate?.outputDocumentTypes;
+
+  isOwnerContext = React.createContext(isOwner);
+  documentTypeContext = React.createContext(documentType);
   FormHeaderContext = React.createContext<FormHeaderContext | undefined>({
     documentRevision,
     canChangeOwnerShip,
@@ -117,53 +155,23 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     type,
   });
 
-  const isCurrentUserOperator = React.useContext(isOperator);
-  const email = useSelector(authSelectors.currentUserEmail);
-  const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
-  const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
-  const isdocRevStatusDraft = documentRevision?.status === DocumentRevisionStatus.Draft;
-  const isSubrevision = documentRevision?.subRevision as number > 0;
-  const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
-
-  const hasOutput = useMemo(() => {
-    const documentType = documentTypesById[values.document?.documentType?.id || ""];
-    return documentType?.groupOptions?.includes("HAVE_OUTPUT");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentTypesById, values.document?.documentType?.id]);
-
-  const isRecord = useMemo(() => {
-    const documentType = documentTypesById[values.document?.documentType?.id || ""];
-    return documentType?.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.RECORD);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentTypesById, values.document?.documentType?.id]);
-  const isRevisionChangeHidden = isRecord && isdocRevStatusDraft && !isSubrevision;
-  const isRevised = values.outputRevision;
-
-  const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
-  const docRevId = documentRevision?.id;
-  const isAttachmentEmpty = !(documentRevision?.attachments.length > 1);
-  isOwnerContext = React.createContext(isOwner);
-  documentTypeContext = React.createContext(documentType);
-
   useEffect(() => {
     if (!values.id && !values.document?.documentType?.id && setDocId) {
       setDocId("");
     }
   }, [setDocId, values.document, values.id]);
+
   useEffect(() => {
     if (proposedDocId) {
       setFieldValue("document.docId", proposedDocId);
     }
   }, [proposedDocId, setFieldValue]);
+
   useEffect(() => {
     if (isEmpty(values.document?.documentType?.id)) {
       setFieldValue("document.docId", "");
     }
   }, [values.document, setFieldValue]);
-
-  // const openReference = (documentId: string) => {
-  //   window.open(documentDetailsPath(documentId), "_blank");
-  // };
 
   useEffect(() => {
     if (isdocRevStatusDraft) {
@@ -173,9 +181,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       });
     }
   }, [isdocRevStatusDraft, values.document, values.name]);
-
-  const documentTypeId = values.document?.documentType?.id;
-  const isEB = documentRevision?.document.documentType.group === DOC_GROUP_TYPE.ENGINEERING_BUILD;
 
   return (
     <Grid
@@ -219,7 +224,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isDisabled={isDisabledInput}
         />
         <DocumentTypeSelect
-          outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]}
+          outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
           isDisabled={isDisabledInput}
           {...{
             type,
@@ -239,21 +244,29 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             type,
           }}
         />
-        {isEB && documentRevision?.parent &&
-        <BuildsContainer
-          dataProp={flatten([documentRevision.parent])}
-          label="common.previous.build"
-          isDraft={isdocRevStatusDraft || isRevised}
-        />
-        }
-        {isEB && documentRevision?.children &&
-        <BuildsContainer
-          dataProp={documentRevision.children}
-          label="common.next.build"
-          isDraft={isdocRevStatusDraft || isRevised}
-        />
-        }
-        <RevisionStage {...{ isDisabled }}/>
+        {isEB && <FBEBPart name="childrenParts" />}
+        {documentRevision?.parentParts && (
+          <BuildsContainer
+            dataProp={flatten([documentRevision?.parentParts])}
+            label="common.part.of"
+            isDraft={isdocRevStatusDraft || isRevised}
+          />
+        )}
+        {isEB && documentRevision?.parent && (
+          <BuildsContainer
+            dataProp={flatten([documentRevision.parent])}
+            label="common.previous.build"
+            isDraft={isdocRevStatusDraft || isRevised}
+          />
+        )}
+        {isEB && documentRevision?.children && (
+          <BuildsContainer
+            dataProp={documentRevision.children}
+            label="common.next.build"
+            isDraft={isdocRevStatusDraft || isRevised}
+          />
+        )}
+        <RevisionStage {...{ isDisabled, isDocRevFirstDraft, shouldShowRevStageForDocType }}/>
         <AutocompleteField
           name="referenceTo"
           label="documentRevision.form.references"
@@ -263,7 +276,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             closeMenuOnSelect: false,
           }}
           options={availableReferences}
-          // onClick={openReference}
           isDisabled={isDisabledInput}
         />
         <References document={initialValues.document} />
@@ -281,14 +293,18 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           docRevStatus = {documentRevision?.status}
           documentRevision={documentRevision}
         />
-        {showRevisionTypeChange && !isRevisionChangeHidden &&
-        <RevisionTypeChange {...{
-          documentTypeId,
-          showObsoleteRevisionChange,
-          showAdministrativeAndVoidChange,
-          isRecord,
-        }}
-        isDisabled={isDisabledInput} />}
+        {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
+        <RevisionTypeChange
+          isDisabled={isDisabledInput}
+          {...{
+            documentTypeId,
+            isDocRevFirstDraft,
+            showAdministrativeAndVoidChange,
+            isRecord,
+            releasedDocRev,
+          }}
+        />
+        }
         {
           (!values.status || type === "newOutput") &&
           <DocumentSecurity documentTypeId={documentTypeId as string} />
@@ -321,4 +337,4 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(observer(DocumentRevisionFormPresenter));
+export default (observer(DocumentRevisionFormPresenter));

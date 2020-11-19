@@ -5,6 +5,7 @@ import { AttachmentDownloadResponse, attachmentsActions } from "../../../../stat
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { AsyncStatus } from "../../../../state/types";
 import Text from "../../../components/Text";
+import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionObsolete, isDocumentRevisionReleased } from "../../../documentRevision/helpers/documentRevisionStatus";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
@@ -85,11 +86,11 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
 
   const warningPasswordText = (): Translation => {
 
-    if (docRevStatus === DocumentRevisionStatus.Obsolete) {
+    if (isDocumentRevisionObsolete(docRevStatus)) {
       return "common.attachment.redline.warning.download.obsoletedAll";
     }
 
-    if (docRevStatus === DocumentRevisionStatus.Deprecated) {
+    if (isDocumentRevisionDeprecated(docRevStatus)) {
       return "common.attachment.redline.warning.download.deprecatedAll";
     }
 
@@ -103,10 +104,10 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
   };
 
   const handleAllDownload = (documentRevisionId: string, password: string | undefined) => () => {
-    if (docRevStatus === DocumentRevisionStatus.Draft) {
+    if (isDocumentRevisionInDraft(docRevStatus)) {
       setIsDownloading(true);
       async.start(downloadAllAttachments, documentRevisionId, async);
-    } else if (!containsRedline && docRevStatus === DocumentRevisionStatus.Released) {
+    } else if (!containsRedline && isDocumentRevisionReleased(docRevStatus)) {
       setIsDownloading(true);
       async.start(downloadAllAttachments, documentRevisionId, async);
     } else {
