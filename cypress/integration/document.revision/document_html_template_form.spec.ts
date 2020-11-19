@@ -44,6 +44,8 @@ context("Document HTML template form", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          const employee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          employeeId = employee.id;
           done();
         });
       });
@@ -71,17 +73,7 @@ context("Document HTML template form", () => {
     });
 
     it("Selects company", () => {
-      cy.route2({ method: "GET", pathname: "/api/v1/company/mine" }, (req) => {
-        req.reply((res) => {
-          if (res.body !== "") {
-            const response = JSON.parse(res.body);
-            const employee = response.employees.find((employee) => employee.user.email === USERS[2].email);
-            employeeId = employee.id;
-          }
-        });
-      }).as("response");
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-      cy.wait("@response");
     });
   });
 
