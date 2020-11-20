@@ -10,12 +10,14 @@ export type FBEditorPropertiesType =
 | "reviseDisabled"
 | "approveIsBlocking"
 | "approvalNonVersioned"
-| "copyableValue";
+| "copyableValue"
+| "deleteDisabled";
 
 export type FBEditorPropertiesProps = Pick<FBInputProps, "type" | "options" | "onChange">;
 
 export const FBEditorPropertiesDefaultValue: Partial<Record<FBInputType, FBEditorPropertiesType[]>> = {
   procedure: ["copyableValue"],
+  eqmaintenance: ["deleteDisabled"],
 };
 
 export type FBEditorPropertiesOption =

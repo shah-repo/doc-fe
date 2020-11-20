@@ -28,5 +28,8 @@
   },
   "copyableValue": {
     "text": "form.builder.copyable.value"
+  },
+  "deleteDisabled": {
+    "text": "form.builder.delete.disabled"
   }
 }
