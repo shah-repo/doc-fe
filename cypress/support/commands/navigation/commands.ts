@@ -110,7 +110,7 @@ Cypress.Commands.add("navigToWorkOrders", () => {
 });
 
 Cypress.Commands.add("navigToPurchaseOrder", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevStatusesCategory, () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.PURCHASE_ORDERS });
   });
 });
