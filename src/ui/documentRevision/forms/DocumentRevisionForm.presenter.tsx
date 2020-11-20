@@ -25,6 +25,7 @@ import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
+import { isDocumentAlphaReleased } from "../helpers/revisionStage";
 import { styles } from "./DocumentRevisionForm.styles";
 import Description from "./presenters/Description";
 import DocIdInput from "./presenters/DocIdInput";
@@ -123,9 +124,15 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
+  // helpers
+  const isdocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
+  const isEB = checkIsDocumentEB(documentRevision?.document.documentType.groupOptions);
+  const isDocumentPOAM = checkIsDocumentPOAM(documentRevision?.document.documentType.groupOptions);
+  const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
+  const isAlphaReleased = isDocumentAlphaReleased(documentRevision.revisionStage);
+
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
-  const isdocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isDocRevFirstDraft = isdocRevStatusDraft && documentRevision?.version === 1;
   const isSubrevision = documentRevision?.subRevision as number > 0;
   const isRevisionChangeHidden = isRecord && isdocRevStatusDraft && !isSubrevision;
@@ -135,9 +142,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments.length > 1);
   const documentTypeId = values.document?.documentType?.id;
-  const isEB = checkIsDocumentEB(documentRevision?.document.documentType.groupOptions);
-  const isDocumentPOAM = checkIsDocumentPOAM(documentRevision?.document.documentType.groupOptions);
-  const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
+
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;
   const outputDocumentTypes = pmFormId ?
     initialValues.outputDocumentTypes :
@@ -302,6 +307,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             showAdministrativeAndVoidChange,
             isRecord,
             releasedDocRev,
+            isAlphaReleased,
           }}
         />
         }
