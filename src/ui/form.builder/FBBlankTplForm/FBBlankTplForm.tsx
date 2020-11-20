@@ -8,7 +8,7 @@ const FBBlankTplForm: React.FunctionComponent<FBBlankTplFormProps> = ({
   name,
   ...props
 }) => (
-  <FBInput type="blanktplform">
+  <FBInput type="blanktplform" {...props}>
     <FBSection {...{ label }} name={`fb-btf-section-${name}`} />
     <FBFileUpload {...props} {...{ name }} gutter={false} withState autosave />
   </FBInput>
