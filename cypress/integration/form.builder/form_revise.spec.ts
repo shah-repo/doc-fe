@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -123,7 +124,9 @@ context("FORM document revise test", () => {
       });
 
       it("Approve and release FORM document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
       });
 
       it("Verify revision status is 'Revision 1  - Released'", () => {
@@ -142,7 +145,9 @@ context("FORM document revise test", () => {
     });
 
     it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
     });
 
     it("Verify revision status is 'Revision 2  - Released'", () => {
@@ -164,7 +169,9 @@ context("FORM document revise test", () => {
     });
 
     it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
     });
 
     it("Verify revision status is 'Revision 2.1  - Released'", () => {
@@ -186,7 +193,9 @@ context("FORM document revise test", () => {
     });
 
     it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
     });
 
     it("Verify revision status is 'Revision OBS  - Obsolete'", () => {

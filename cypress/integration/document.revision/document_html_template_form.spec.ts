@@ -150,6 +150,10 @@ context("Document HTML template form", () => {
       });
     });
 
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
     it("Approve and Release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
@@ -172,7 +176,7 @@ context("Document HTML template form", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Approve and Release document", () => {
