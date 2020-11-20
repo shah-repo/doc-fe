@@ -3,141 +3,174 @@
     "multiple",
     "includeQRScan",
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "select": [
     "includeNone",
     "includeContext",
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "checkbox": [
     "includeContext",
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "radio": [
     "includeContext",
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "checkboxgroup": [
     "includeContext",
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "radiogroup": [
     "includeContext",
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "approval": [
     "approveIsBlocking",
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "inlineapproval": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "textfield": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "texteditor": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "datepicker": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "hyperlink": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "fileupload": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "quantity": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "timer": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "purchaseorder": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "poreceive": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "instructionsmediaupload": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "evidencemediaupload": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "testRequirement": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "requestapproval": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "checkpoint": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "createlabel": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "selectrequirement": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "selectdocument": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "instructionsdocument": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "approvalMatrix": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "poApprovalMatrix": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "documentRevisions": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "task": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "procedure": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "parts": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ],
   "eqmaintenance": [
     "reviseDisabled",
+    "deleteDisabled",
     "copyableValue"
   ]
 }
