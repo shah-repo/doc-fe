@@ -10,7 +10,7 @@ import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
-import { checkIsDocumentRecord } from "../../helpers/checkDocumentGroup";
+import { checkIsDocumentRecord, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus";
 import { isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
@@ -39,6 +39,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
+  const serializedCSV = hasSerializedCSV(values.document?.documentType?.groupOptions);
   const isApproved = isInlineFormApproved(
     documentRevision,
     formState,
@@ -113,9 +114,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   return (
     <div>
+      {serializedCSV &&
       <ExportToCSVButton
         {...{ documentRevision }}
-      />
+      />}
       <SubmitButton
         asyncState={asyncState}
         label={isDisabled ?
