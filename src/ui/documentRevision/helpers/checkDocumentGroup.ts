@@ -1,4 +1,4 @@
-import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 
 /** Checks if document has a specific group option.
    * @param groupOption Option that is searched for.
@@ -23,3 +23,6 @@ export const checkIsTypeHaveOutput = checkDocumentGroupOptions.bind(this, DOC_TY
 export const checkIsTypeMustBeOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT);
 export const checkIsTypeCanBeOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_BE_OUTPUT);
 export const hasSerializedCSV = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.SERIALIZED_CSV);
+export const checkIsDocumentDAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DAM);
+export const checkIsDocumentPOAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.POAM);
+export const checkIsDocumentEquipment = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EQUIPMENT);

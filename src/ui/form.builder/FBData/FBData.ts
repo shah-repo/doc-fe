@@ -98,8 +98,12 @@ export class FBData {
     return yesNoOptions as FBOption[];
   }
 
-  public static get eqMaintenanceOptions(): FBOption[] {
-    return eqMaintenanceOptions as FBOption[];
+  public static get eqMaintenanceFieldOptions(): FBOption[] {
+    return eqMaintenanceOptions.fields as FBOption[];
+  }
+
+  public static get eqMaintenanceTypeOptions(): FBOption[] {
+    return eqMaintenanceOptions.type as FBOption[];
   }
 
   public static icons(color?: string): Record<FBIconType, FBIconConfig[]> {

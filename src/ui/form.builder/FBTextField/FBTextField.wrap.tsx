@@ -11,11 +11,15 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     multiline,
     rows = 1,
     placeholder = "",
+    defaultValue,
     disabled,
+    name,
     ...props
   }: T) => {
 
     const { formState } = FB.useStores();
+    const { workspaceMode: mode } = formState || {};
+    defaultValue = defaultValue || formState?.getFieldValue(name);
     const intl = useIntl();
     disabled = (
       disabled ||
@@ -34,7 +38,10 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       multiline,
       placeholder,
       disabled,
+      defaultValue,
+      name,
       rows,
+      mode,
     });
   };
   return (props: T) => Comp(props);

@@ -177,9 +177,9 @@ Cypress.Commands.add("poCheckForSpecificPOItemValue", (params: {itemValue: strin
 });
 
 Cypress.Commands.add("poCheckMessageForConversionSite", () => {
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains("Exchange rate according to ").should("exist");
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains("fixer.io").should("exist");
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains("as of").should("exist");
+  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").should("contain.text", "Exchange rate according to ");
+  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").should("contain.text", "fixer.io");
+  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").should("contain.text", "as of");
 });
 
 Cypress.Commands.add("poConvertedToDollarsMessage", () => {

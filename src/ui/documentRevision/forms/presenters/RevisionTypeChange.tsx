@@ -19,6 +19,7 @@ interface Props {
   showAdministrativeAndVoidChange: boolean;
   isRecord?: boolean;
   releasedDocRev?: DocumentRevision;
+  isAlphaReleased: boolean;
 }
 export const RevisionTypeChange: React.FunctionComponent<Props> = ({
   documentTypeId = "",
@@ -27,6 +28,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
   showAdministrativeAndVoidChange,
   isRecord,
   releasedDocRev,
+  isAlphaReleased,
 }) => {
   const classes = styles();
   const [showRevisionSelect, revisionSelectLabel] = useRevisionSelect(documentTypeId);
@@ -68,7 +70,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
         </Box>
         <Box>
           {
-            showNextRevisionStage && !showAdministrativeAndVoidChange &&
+            showNextRevisionStage && !showAdministrativeAndVoidChange && !isAlphaReleased &&
             <>
               <RadioButton
                 label={

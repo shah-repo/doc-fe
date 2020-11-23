@@ -12,8 +12,9 @@ export class FBDocumentRevisionsState {
   @action public setDocumentRevisions = (value?: FBDocumentRevisionsValue[]) =>
     set(this, "value", value);
 
-  @action public addDocumentRevision = (item: FBDocumentRevisionsValue) =>
+  @action public addDocumentRevision = (item: FBDocumentRevisionsValue) => {
     this.setDocumentRevisions(union(this.value || [], [item]));
+  };
 }
 
 export default FBDocumentRevisionsState;

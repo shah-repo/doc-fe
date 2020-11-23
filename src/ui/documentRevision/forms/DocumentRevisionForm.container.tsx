@@ -73,7 +73,7 @@ DocumentRevisionFormContainerProps
   const loadDocumentAction = useActionCreator(documentsActions.getDocumentById);
   const [releasedDocRev, setReleasedDocRev] = useState<DocumentRevision>();
 
-  const docId = initialValues.document?.docId || "";
+  const docId = initialValues.document?.id || "";
   const documentType = initialValues.document?.documentType;
   const documentTypeAcronym = initialValues.document?.documentType?.documentTypeAcronym;
   const { revisionStage } = documentRevision || {};
@@ -188,7 +188,7 @@ DocumentRevisionFormContainerProps
 
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";
-  } else if (outputGroup) {
+  } else if (outputGroup || !isEmpty(originScheme)) {
     mode = isEditableSchema ? "formDesign" : "form";
   } else if (pmForm) {
     mode = "form";

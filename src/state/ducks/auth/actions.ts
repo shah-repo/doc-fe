@@ -232,11 +232,16 @@ const getIotCreds = (): ApiAction =>
     method: "get",
     includeAuthorization: true,
     onSuccess: (iotCredentials, dispatch) => {
-      const iotService = IotService.getInstance();
-      iotService.updateMqttClient(iotCredentials);
+      setIotCreds(iotCredentials);
       dispatch(setCredentials(iotCredentials));
     },
   });
+
+/** Helper */
+export const setIotCreds = (iotCredentials) => {
+  const iotService = IotService.getInstance();
+  iotService.updateMqttClient(iotCredentials);
+};
 
 const pingServer = (): ApiAction =>
   apiAction({

@@ -1,4 +1,4 @@
-import { FBEmployee, FBGroup, FBId, FBInlineApprovalRole, FBInputProps, FBProviderProps } from "..";
+import { FBApprovalsProps, FBEmployee, FBGroup, FBId, FBInlineApprovalRole, FBInputProps, FBProviderProps } from "..";
 
 export interface FBInlineApprovalValue {
   approvers?: string[] | FBEmployee[];
@@ -10,8 +10,10 @@ export interface FBInlineApprovalValue {
 export type FBInlineApprovalProps =
 & Omit<FBInputProps, "editorConfig">
 & Pick<FBProviderProps, "inlineApprovalState" | "dialogState">
+& Pick<FBApprovalsProps, "approvalTransition">
 & {
-  approvalTransition?: (transition: FBInlineApprovalTransition, id?: string) => any;
+  // Please use one method definition and pick it from the type directly to avoid multi changes
+  // approvalTransition?: (transition: FBInlineApprovalTransition, id?: string) => any;
   requestAllApprovals?: (id?: string) => any;
   onApproveClick?: (approvalId: string) => void;
   editorConfig?: FBInlineApprovalValue;

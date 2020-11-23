@@ -36,8 +36,6 @@ yarn install --frozen-lockfile
 yarn cypress install
 yarn cypress verify
 
-yarn install --frozen-lockfile
-
 ./scripts/cypress/utils/delete_cache.sh
 ./scripts/cypress/utils/patch_director_port_in_cache.sh
 ./scripts/cypress/utils/generate_requirements_json_file.sh
