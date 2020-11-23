@@ -143,6 +143,10 @@ export type FBInputProps =
      * @cfg {Bool} MUI Box props that can be passed to input section.
      */
     boxProps?: BoxProps;
+    /**
+     * @cfg {String} Validation attribute name. Use this prop for non labeled controls.
+     */
+    validationAttribute?: string;
   };
 
 export const OmitInputClones: FBInputType[] = [

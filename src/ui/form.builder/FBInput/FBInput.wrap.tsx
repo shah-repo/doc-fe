@@ -43,6 +43,7 @@ export const withFBInput = <T extends FBInputProps>(
     bookmarked,
     omitFinalValidation = false,
     applicableValidationSchema,
+    validationAttribute,
     ...props
   }: T) => {
 
@@ -127,7 +128,7 @@ export const withFBInput = <T extends FBInputProps>(
       formState!.inputState.set(name, inputState!);
 
       // Validation settings
-      let attr = (label as string) || placeholder || name;
+      let attr = (label as string) || placeholder || validationAttribute || name;
       isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));
       formState?.setValidationAttributeName(name, attr);
       rules && (formState!.setFieldRules(name, rules));
@@ -174,6 +175,7 @@ export const withFBInput = <T extends FBInputProps>(
       transform,
       bookmarked,
       applicableValidationSchema,
+      validationAttribute,
     });
   };
 
