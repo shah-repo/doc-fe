@@ -57,7 +57,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         label,
         editorProperties,
         uniqueSchemaItem,
-        placeholder
+        placeholder,
       } = formValues;
 
       // If schema item type is unique and we have already added it into scheme
