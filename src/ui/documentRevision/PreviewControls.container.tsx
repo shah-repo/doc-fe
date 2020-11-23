@@ -22,7 +22,7 @@ import useDialog from "../hooks/useDialog";
 import { isOwnerContext } from "./forms/DocumentRevisionForm.presenter";
 import { checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
-import { getIsLastVersionObsolete, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
+import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
 import { isFormWithInlineApproval } from "./helpers/records";
 
 interface OwnProps {
@@ -57,6 +57,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const isRecord = checkIsDocumentRecord(documentRevision.document?.documentType?.groupOptions);
   const isStatusInReview = isDocumentRevisionInReview(documentRevision.status);
   const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
+  const isStatusDraft = isDocumentRevisionInDraft(documentRevision.status);
   const canCopy = (documentRevision.document.documentType.groupOptions || []).includes(
     DOC_TYPE_GROUP_OPTION.CAN_BE_COPIED);
   const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
@@ -230,7 +231,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   return (
     <>
       {!isLastVersionObsolete() && renderCloneButton()}
-      {isStatusReleased && canCopy && renderCopyButton()}
+      {(isStatusReleased || isStatusDraft) && canCopy && renderCopyButton()}
       {renderOutputButton()}
       {renderNoAccessWarning()}
       {isRecord && isStatusInReview && !isInlineApproval && isUserDocumentOwner &&
