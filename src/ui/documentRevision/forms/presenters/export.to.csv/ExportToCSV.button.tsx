@@ -62,10 +62,10 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
   }) || [];
 
   valueWithKey.forEach((element) => {
-    if (element.label === "form.builder.procedure" || element.label === "form.builder.section") {
+    if (element.type === "section" && !element.inspectionSection) {
       return;
     }
-    if (element.type === "section") {
+    if (element.type === "section" && element.inspectionSection) {
       itemsGroupedInSections.push([]);
     }
     itemsGroupedInSections[itemsGroupedInSections.length - 1]?.push(element);
@@ -75,10 +75,13 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
     const itemsUnderExport = sectionItems.filter((item) => !includes(omitExportFields, item.type));
     return Object.fromEntries(
       itemsUnderExport.map((item) => {
-        if (item.type === "section") {
+        if (item.type === "section" && item.inspectionSection) {
           return ["Sample",
             item.label,
           ];
+        }
+        if (item.type === "section" && !item.inspectionSection) {
+          return [];
         }
         if (item.type === "checkboxgroup") {
           return [item.label,
@@ -87,7 +90,7 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
         }
         if (item.type === "datepicker") {
           return [item.label,
-            getFormattedDateString(item.inputValue, MomentFormats.MonthDateYear),
+            item.inputValue ? getFormattedDateString(item.inputValue, MomentFormats.MonthDateYear) : "",
           ];
         }
         return [item.label,
