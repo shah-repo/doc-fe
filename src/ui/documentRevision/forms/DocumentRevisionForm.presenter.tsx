@@ -142,6 +142,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments.length > 1);
   const documentTypeId = values.document?.documentType?.id;
+  const showOutputInfo = workspaceState?.mode === "form" || workspaceState?.mode === "formDesign";
 
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;
   const outputDocumentTypes = pmFormId ?
@@ -337,7 +338,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <div ref={FBContainer} />
           </Box>
         }
-        {workspaceState?.mode === "form" && <DocumentRevisionOutputInfo formDocument={initialValues.formDocument} />}
+        {showOutputInfo && <DocumentRevisionOutputInfo formDocument={initialValues.formDocument} />}
       </FormWrapper>
     </Grid>
   );
