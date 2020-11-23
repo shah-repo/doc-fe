@@ -19,7 +19,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const { id: docRevId } = workspaceState || {};
-    const isTypePM = editorConfig.type.includes("preventativeMaintenance");
+    const isTypePM = editorConfig.type?.includes("preventativeMaintenance");
     const currentStatus = formState?.getFieldValue(`${name}.status`);
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     pmFormId = formState?.getFieldValue(`${name}.preventativeForm`);
