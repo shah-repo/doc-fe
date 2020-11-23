@@ -129,7 +129,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isEB = checkIsDocumentEB(documentRevision?.document.documentType.groupOptions);
   const isDocumentPOAM = checkIsDocumentPOAM(documentRevision?.document.documentType.groupOptions);
   const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
-  const isAlphaReleased = isDocumentAlphaReleased(documentRevision.revisionStage);
+  const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
 
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
