@@ -10,14 +10,15 @@ import Text from "../../components/Text";
 import { withFBMediaCarousel } from "./FBMediaCarousel.wrap";
 
 const FBMediaCarousel: React.FunctionComponent<FBMediaCarouselProps> = ({
-  activeMediaPath,
-  toolsVisibility,
   onMouseOver,
   onMouseLeave,
   handleNext,
   handleBack,
   handleDelete,
+  activeMediaPath,
+  toolsVisibility,
   actionsDisabled,
+  previewType,
 }) => (
   <Box
     position="relative"
@@ -29,17 +30,41 @@ const FBMediaCarousel: React.FunctionComponent<FBMediaCarouselProps> = ({
     bgcolor="#f6f7f7"
     {...{ onMouseOver, onMouseLeave }}
   >
-    <LazyLoad height={350}>
-      <Img
-        style={{ objectFit: "cover", width: "100%", height: "350px" }}
-        src={activeMediaPath}
-        loader={
-          <Box height="100%" display="flex" alignItems="center">
-            <CircularProgress />
-          </Box>
-        }
-      />
-    </LazyLoad>
+    {previewType === "video" && (
+      <LazyLoad height={350}>
+        <video controls={true} width="100%" height="95%" src={activeMediaPath}>
+          <Text translation="file.viewer.video.not.supported" />
+        </video>
+      </LazyLoad>
+    )}
+    {previewType === "image" && (
+      <LazyLoad height={350}>
+        <Img
+          style={{
+            maxHeight: "100%",
+            maxWidth: "100%",
+            position: "relative",
+            top: "50%",
+            msTransform: "translateY(-50%)",
+            WebkitTransform: "translateY(-50%)",
+            transform: "translateY(-50%)",
+          }}
+          src={activeMediaPath}
+          loader={
+            <Box height="100%" display="flex" alignItems="center">
+              <CircularProgress />
+            </Box>
+          }
+        />
+      </LazyLoad>
+    )}
+    {previewType === "pdf" && (
+      <LazyLoad height={350}>
+        <object width="100%" height="100%" type="application/pdf" data={activeMediaPath}>
+          <Text translation="common.file.not.loaded" />
+        </object>
+      </LazyLoad>
+    )}
     {!actionsDisabled && (
       <Box position="absolute" top={4} right={0} visibility={toolsVisibility} color="white">
         <IconButton

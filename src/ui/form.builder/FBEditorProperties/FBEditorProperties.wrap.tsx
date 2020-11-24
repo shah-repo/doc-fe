@@ -1,6 +1,6 @@
-import { at } from "lodash";
+import { at, map } from "lodash";
 import React from "react";
-import { FB, FBData, FBEditorPropertiesProps } from "..";
+import { FB, FBData, FBEditorPropertiesDefaultValue, FBEditorPropertiesProps } from "..";
 
 export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
   Component: React.FunctionComponent<T>,
@@ -21,6 +21,15 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
       // *NOTE: Mobile support until mobile switches to editor props
       formState?.setFieldValue(valueName, checked);
     };
+
+    // We need to refactor this. All disabled props will have to be handled from editor properties
+    // reviseDisabled, outputDisabled ...
+    // Refactoring will require predefined schemes migration as well
+    // This is a hack for default checked props
+    const defaultChecked = FBEditorPropertiesDefaultValue[type ?? ""];
+    map(defaultChecked, (key) => {
+      formState?.setFieldValue(key, true);
+    });
 
     return Component({
       ...(props as T),

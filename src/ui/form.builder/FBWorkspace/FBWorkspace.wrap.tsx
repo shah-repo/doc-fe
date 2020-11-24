@@ -35,6 +35,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     changeRequest,
     autosave,
     schema,
+    includeProcedureDiff,
     ...props
   }: T) => {
 
@@ -47,6 +48,14 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
     workspaceState && (workspaceState.document = document);
+    const { group: formGroup } = document?.document?.documentType || {};
+    // We should include document type in FB
+    // We can't ignore that FB is not standalone package anymore
+    const { parent } = document || {};
+    includeProcedureDiff = (
+      formGroup === "ENGINEERING_BUILD" &&
+      Boolean(parent)
+    );
 
     React.useEffect(() => {
       workspaceState && (workspaceState.schema = schema);
@@ -82,6 +91,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       workspaceState,
       snackbarState,
       autosave,
+      includeProcedureDiff,
     });
   };
 

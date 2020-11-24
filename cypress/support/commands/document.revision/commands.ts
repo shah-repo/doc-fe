@@ -19,8 +19,10 @@ declare global {
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
+      drApproveAndReleaseDocumentWithoutSelectingForm(): Chainable<Subject>;
       drCloseApproveAndReleaseDialog(): Chainable<Subject>;
       drClickCreateDocumentWithApiCall(): Chainable<Subject>;
+      drClickCreateDocumentWithApiCallForForms(): Chainable<Subject>;
       drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
@@ -74,7 +76,9 @@ declare global {
       drCancelDraftButton(): Chainable<Subject>;
       drIsTrainingRequired(params: {shouldBe: boolean}): Chainable<Subject>;
       drApproveAndReleaseNonQMSDocument(): Chainable<Subject>;
+      drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom(): Chainable<Subject>;
       drSelectHistoryTab(): Chainable<Subject>;
+      drOpenCloseSidebarDrawer(): Chainable<Subject>;
       drSelectPermissionTab(): Chainable<Subject>;
       drVerifyDocumentOWner(params: {owner: string}): Chainable<Subject>;
       drChangeOwnerByAdmin(params: {employee: string}): Chainable<Subject>;
@@ -130,6 +134,7 @@ Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) =>
   cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
     cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).click();
   });
+  cy.wait(1000);
 });
 
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
@@ -145,13 +150,8 @@ Cypress.Commands.add("drClickDAMEditBtn", () => {
 Cypress.Commands.add("drCheckApprovalsEnforcment", () => {
   cy.drApproveAndReleaseDialog();
   cy.wait(2000);
-  cy.get("[aria-label=\"change date\"]").click().wait(1000);
-  // eslint-disable-next-line max-len
-  cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]")
-    .click().wait(500);
   cy.get("[data-cy=unchecked]").should("exist");
   cy.get("[data-cy=group-0]").should("have.text", "Role One");
-  cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
   cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
   cy.checkToastMessageContains({ message: "at least one approver from group Role One has to be selected" });
   cy.drCloseApproveAndReleaseDialog();
@@ -171,7 +171,9 @@ Cypress.Commands.add("drVerifyDocumentOWner", (params: { owner: string }) => {
 });
 
 Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion: int }) => {
-  cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(params.docVersion).click().wait(2000);
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevPreview, () => {
+    cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(params.docVersion).click();
+  });
 });
 
 Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
@@ -213,16 +215,24 @@ Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: stri
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`).wait(500);
 });
 
+Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
+    cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+  });
+  cy.wait(500);
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.ReleaseDocRev,
+    () => {
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+    });
+});
+
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   });
   cy.wait(500);
-  cy.get("[aria-label=\"change date\"]").click().wait(500);
-  cy.get("[class=\"MuiButtonBase-root MuiIconButton-root MuiPickersDay-day MuiPickersDay-current MuiPickersDay-daySelected\"]")
-    .click()
-    .wait(500);
-  cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
+  cy.get("#FormList-selectForm").type("AR Form{enter}");
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {
@@ -232,7 +242,12 @@ Cypress.Commands.add("drApproveAndReleaseDocument", () => {
 
 Cypress.Commands.add("drApproveAndReleaseNonQMSDocument", () => {
   cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
-  cy.get("#FormList-selectForm").type("Initial AR Form{enter}");
+  cy.get("#FormList-selectForm").type("AR Form{enter}");
+  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+});
+
+Cypress.Commands.add("drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom", () => {
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
 });
 
@@ -245,6 +260,15 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCall", () => {
     [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
+  cy.wait(500);
+});
+
+Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    });
+  cy.wait(500);
 });
 
 Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
@@ -270,7 +294,7 @@ Cypress.Commands.add("drSetDocTypeId", (params: { docId: string }) => {
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.get("#clearFilter").click().wait(500);
   cy.get("#name").type(params.title).wait(500);
-  cy.get("[id=\"mui-component-select-status[]\"]").click().wait(300);
+  cy.get("[id=\"mui-component-select-displayStatus\"]").click().wait(300);
   cy.get("li[data-value]").contains(params.status).click().wait(500);
   cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
 });
@@ -299,8 +323,10 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
 });
 
 Cypress.Commands.add("drClickReviseDocument", () => {
-  cy.get("[data-cy=\"updateRecord\"]").click();
-  cy.wait(3000);
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApprovers, () => {
+    cy.get("[data-cy=\"updateRecord\"]").click();
+  });
+  // cy.wait(3000);
 });
 
 Cypress.Commands.add("drClickTrainingRequired", () => {
@@ -350,7 +376,7 @@ Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
 });
 
 Cypress.Commands.add("drAddAnotherRoleBtn", () => {
-  cy.get("[data-cy=\"form.builder.add.another.role\"]").click();
+  cy.get("button[data-cy=\"form.builder.add.another.role\"]").click();
 });
 
 Cypress.Commands.add("drEnterApprovalRole", (params: { name: string }) => {
@@ -371,9 +397,9 @@ Cypress.Commands.add("drEnterApprovingUsers", (...employees: string[]) => {
   });
 });
 
-Cypress.Commands.add("drAddApprovalRole", () => cy.get("[data-cy=\"common.add\"]").click());
+Cypress.Commands.add("drAddApprovalRole", () => cy.get("button[data-cy=\"common.add\"]").click());
 
-Cypress.Commands.add("drAddApprovalMatrixItem", () => cy.get("[data-cy=\"form.builder.add.item\"]").click({ force: true }));
+Cypress.Commands.add("drAddApprovalMatrixItem", () => cy.get("button[data-cy=\"form.builder.add.item\"]").click({ force: true }));
 
 Cypress.Commands.add("drAddAMItemValue", (params: { identity: string; value: string }) => cy.get(`[data-cy="${params.identity}"] input`).type(params.value, { force: true }));
 
@@ -396,7 +422,11 @@ Cypress.Commands.add("drReleaseDocAfterRoleExistsAndChecked", (params: { group: 
   cy.drApproveAndReleaseDialog();
   cy.get(`[data-cy="group-${params.group}"]`).contains(params.role);
   cy.get(`[data-cy="checked-${params.group}"]`).should("be.visible");
-  cy.drSelectTemplateReleaseDocument({ template: "Initial AR Form", selectDate: true });
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.ReleaseDocRev,
+    () => {
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+    });
 });
 
 Cypress.Commands.add("drNewTypeTrainingSelect", () => {
@@ -459,6 +489,10 @@ Cypress.Commands.add("drIsTrainingRequired", (params: {shouldBe: boolean}) => {
 
 Cypress.Commands.add("drSelectHistoryTab", () => {
   cy.get("[data-cy=\"timeline-icon\"]").click();
+});
+
+Cypress.Commands.add("drOpenCloseSidebarDrawer", () => {
+  cy.get("[aria-label=\"Open drawer\"]>span>svg").click();
 });
 
 Cypress.Commands.add("drSelectPermissionTab", () => {

@@ -5,7 +5,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBAutocompleteAsyncOption, FBDialogState, FBDocumentRevisionsActions, FBDocumentRevisionsForm, FBDocumentRevisionsProps, FBDocumentRevisionsState, FBDocumentRevisionsValue, FBFormState } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { generateVersionNumber } from "../../documentRevision/helpers";
+import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
@@ -84,13 +84,13 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     }
 
     const getOptionLabel = (option: DocumentRevision) => {
-      const versionNumber = generateVersionNumber(
+      const versionNumber = generateRevisionNumber(
         option.revision,
         option.revisionStage,
         option.subRevision,
         option.revisionChangeType,
       );
-      return `${option.document.docId} rev ${versionNumber} - ${option.name}`;
+      return `${option.document?.docId} rev ${versionNumber} - ${option.name}`;
     };
 
     // eslint-disable-next-line react/display-name

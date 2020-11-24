@@ -1,6 +1,15 @@
 import { filter, map, uniqBy } from "lodash";
 import { action, computed, observable, set } from "mobx";
-import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalOptions, FBInlineApprovalTransition } from "..";
+import {
+  FBAutocompleteAsyncOption,
+  FBAutocompleteAsyncState,
+  FBInlineApprovalBody,
+  FBInlineApprovalConstructor,
+  FBInlineApprovalOptions,
+  FBInlineApprovalTransition,
+  FBInlineApprovalTransitionBody,
+  FBRequestApprovalTransitionBody,
+} from "..";
 import { Document } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
@@ -18,8 +27,11 @@ export class FBInlineApprovalState {
   public groupsApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.groups);
   public rolesApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.approvalRoles);
   public approvalApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalBody>(FBEndpoint.Approvals);
-  public transitionApi = new FBRequest<FBInlineApprovalBody, null>();
-  public documentApi: FBRequest<Document, null> = new FBRequest();
+  public transitionApi =
+  new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
+  public requestApprovalApi =
+  new FBRequest<FBInlineApprovalBody[], FBRequestApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
+  public documentApi: FBRequest<Document, null> = new FBRequest(FBEndpoint.Document);
 
   // MARK: @constructor
   public constructor(props: FBInlineApprovalConstructor) {
@@ -61,16 +73,38 @@ export class FBInlineApprovalState {
     this.approvalApi.post();
   };
 
-  public approvalTransition = (transition: FBInlineApprovalTransition, id?: string, ) => {
+  public approvalTransition = (
+    transition: FBInlineApprovalTransition,
+    id?: string,
+    body?: FBInlineApprovalTransitionBody,
+  ) => {
     if (!id) { return; }
-    this.transitionApi.setTemplateUrl(FBEndpoint.ApprovalsTransition, { id, transition });
-    this.transitionApi.post();
+    this.transitionApi.set({
+      body,
+      url: FBEndpoint.ApprovalsTransition,
+      urlValues: { id, transition },
+      method: "post",
+    });
   };
+
+  public requestApprovalTransition = (
+    transition: FBInlineApprovalTransition,
+    id: string,
+    body: FBRequestApprovalTransitionBody,
+  ) => this.requestApprovalApi.set({
+    body,
+    url: FBEndpoint.ApprovalsTransition,
+    urlValues: { id, transition },
+    method: "post",
+  });
 
   public getDocument = (id?: string) => {
     if (!id) { return; }
-    this.documentApi.setTemplateUrl(FBEndpoint.Document, { id });
-    this.documentApi.fetch();
+    this.documentApi.set({
+      url: FBEndpoint.Document,
+      urlValues: { id },
+      method: "get",
+    });
   };
 }
 

@@ -1,4 +1,7 @@
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -28,14 +31,6 @@ context("Create company via API and create Suppliers document", () => {
           remoteValidatorBundleName: "default",
           slackIntegrationEnabled: false,
           users: [USERS[2], USERS[3], USERS[4]],
-          documentTypes: [
-            {
-              documentTypeName: "Clinical Protocol",
-              documentTypeAcronym: "CP",
-              group: "OTHER",
-              isQms: true,
-            },
-          ],
           acctCodes: ["code 1"],
           addresses: ["Address 1"],
         }, sessionId: loginResponse.sessionId as unknown as string,
@@ -101,7 +96,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Approve and release document", () => {
-    cy.drApproveAndReleaseDocument();
+    cy.drApproveAndReleaseDocumentWithoutSelectingForm();
   });
 
   it("Navigate to supplier list", () => {
@@ -129,7 +124,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Approve and release document", () => {
-    cy.drApproveAndReleaseDocument();
+    cy.drApproveAndReleaseDocumentWithoutSelectingForm();
   });
 
   it("Navigate to supplier list", () => {
@@ -189,7 +184,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Approve and release document", () => {
-    cy.drApproveAndReleaseDocument();
+    cy.drApproveAndReleaseDocumentWithoutSelectingForm();
   });
 
   it("Navigate to supplier list", () => {

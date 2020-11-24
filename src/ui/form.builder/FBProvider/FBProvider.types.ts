@@ -1,5 +1,6 @@
 import {
   FBApprovalMatrixFieldState,
+  FBApprovalMatrixTableState,
   FBApprovalsState,
   FBApproversState,
   FBBookmarkState,
@@ -7,6 +8,7 @@ import {
   FBDocumentRevisionsState,
   FBEditorCustomControlState,
   FBEditorState,
+  FBEQMaintenanceHistoryState,
   FBFieldWrapperState,
   FBFilePresenterState,
   FBFileUploadState,
@@ -20,10 +22,16 @@ import {
   FBWorkspaceState,
 } from "..";
 import { FBApprovalMatrixState } from "../FBApprovalMatrix";
+import { FBEBPartState } from "../FBEBPart";
+import { FBEQMaintenanceState } from "../FBEQMaintenance";
+import { FBPartsState } from "../FBParts";
 import { FBPOApprovalMatrixState } from "../FBPOApprovalMatrix";
 import { FBPOReceiveState } from "../FBPOReceive";
+import { FBProcedureState } from "../FBProcedure";
+import { FBProcedureDiffState } from "../FBProcedureDiff";
 import { FBTextEditorState } from "../FBTextEditor";
 import { FBTextEditorOptionsState } from "../FBTextEditorOptions";
+
 
 export interface FBProviderProps {
   workspaceState?: FBWorkspaceState;
@@ -44,6 +52,7 @@ export interface FBProviderProps {
   poReceiveState?: FBPOReceiveState;
   purchaseOrderState?: FBPurchaseOrderState;
   approvalMatrixFieldState?: FBApprovalMatrixFieldState;
+  approvalMatrixTableState?: FBApprovalMatrixTableState;
   taskState?: FBTaskState;
   approversState?: FBApproversState;
   approvalsState?: FBApprovalsState;
@@ -51,4 +60,10 @@ export interface FBProviderProps {
   inlineApprovalState?: FBInlineApprovalState;
   textEditorState?: FBTextEditorState;
   textEditorOptionsState?: FBTextEditorOptionsState;
+  procedureState?: FBProcedureState;
+  procedureDiffState?: FBProcedureDiffState;
+  partsState?: FBPartsState;
+  eqMaintenanceState?: FBEQMaintenanceState;
+  eqMaintenanceHistoryState?: FBEQMaintenanceHistoryState;
+  ebPartState?: FBEBPartState;
 }

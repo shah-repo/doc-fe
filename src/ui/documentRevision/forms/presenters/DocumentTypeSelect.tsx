@@ -1,9 +1,10 @@
 import { useFormikContext } from "formik";
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { DocumentRevision, FBOutputDocumentType } from "../../../../state/ducks/documentRevisions";
-import { DocumentGroupOptionsType, documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
+import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
@@ -11,10 +12,14 @@ import { filterSecurityGroupsForQms } from "../../../documentType/list/helpers";
 import { FB, FBSchemaProps } from "../../../form.builder";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
 import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
+import useActionCreator from "../../../hooks/useActionCreator";
+import useAsync from "../../../hooks/useAsync";
 import { DocumentCloneType } from "../../Clone.container";
-import { getFBSchemeByDocType } from "../../helpers";
+import { checkIsDocumentForm, checkIsTypeMustBeOutput } from "../../helpers/checkDocumentGroup";
+import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
+import { getActiveDocumentTypes } from "../transform";
 
-interface Props {
+interface Props extends RouteComponentProps {
   isdocRevStatusDraft: boolean;
   type?: DocumentCloneType;
   outputDocumentTypes?: FBOutputDocumentType[];
@@ -24,6 +29,7 @@ interface Props {
   }>>;
   isDisabled: boolean;
   documentTypeId?: string;
+  setDisableCreateButton: (value: boolean) => void;
 }
 
 const DocumentTypeSelect: React.FunctionComponent<Props> = ({
@@ -33,33 +39,47 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   savedocInfo,
   isDisabled = false,
   documentTypeId,
+  setDisableCreateButton,
+  match,
 }) => {
   const [isVisible, label, validators] = useDocumentTypeSelect(documentTypeId);
 
   const { workspaceState } = FB.useStores();
   const formik = useFormikContext();
-  const dispatch = useDispatch();
 
-  const loadDocumentProposedId = (documentTypeId: string) =>
-    dispatch(documentsActions.loadDocumentProposedId(documentTypeId));
+  const loadProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
+  const asyncDocumentProposedId = useAsync({
+    onSuccess: () => {
+      setDisableCreateButton(false);
+    },
+
+  });
+  const loadDocumentProposedId = (id: string) => {
+    // Disable create button sets the flag for temporary disabling
+    // of create button until correct doc id is generated
+    setDisableCreateButton(true);
+    asyncDocumentProposedId.start(loadProposedIdAction, id, asyncDocumentProposedId);
+  };
 
   const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
-  const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeFormOptions);
+  const documentTypes = getActiveDocumentTypes(useSelector(documentTypeSelectors.getDocumentTypeFormOptions));
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
   const isDocTypeDisabled = (type === "newVersion" || isdocRevStatusDraft) || isDisabled;
   const isNewOutput = type === "newOutput";
+  const isCreateMaintenance = match.path.includes("create_maintenance");
 
   const options: SelectOption[] = React.useMemo(() => {
-    if (type === "newOutput" && outputDocumentTypes) {
+    if ((isNewOutput || isCreateMaintenance) && outputDocumentTypes) {
       return outputDocumentTypes.map((e) =>
         ({ value: e.id, text: e.documentTypeName }) as SelectOption
       );
     }
+
     return documentTypes
       .filter((docType) => {
-        if (docType.groupOptions?.includes("MUST_BE_OUTPUT")) {
+        if (checkIsTypeMustBeOutput(docType.groupOptions)) {
           return false;
         }
         if ((docType.hiddenForCreationForUsersWithoutTags?.length ?? 0) === 0) {
@@ -70,7 +90,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       ).map((docType) =>
         ({ value: docType.id, text: docType.documentTypeName })
       );
-  }, [type, outputDocumentTypes, documentTypes, currentUserTags]);
+  }, [isNewOutput, outputDocumentTypes, documentTypes, currentUserTags, isCreateMaintenance]);
 
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
@@ -92,23 +112,23 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     formik.handleChange(event);
 
     // FB mode
-    const formOption: DocumentGroupOptionsType = "FORM";
     const mode: FBWorkspaceMode = isNewOutput ? "form" :
-      type.groupOptions?.includes(formOption) ? "design" : "none";
+      checkIsDocumentForm(type.groupOptions) ? "design" : "none";
     let scheme: FBSchemaProps[] = [];
     if (mode === "design" && type.group !== "DYNAMIC_FORM") {
       const formValues = {
         ...formik.values as Partial<DocumentRevision>,
         "document.documentType.id": typeId,
       };
-      scheme = getFBSchemeByDocType(
+      // TO DO: This needs clenaup
+      if (!isCreateMaintenance) { scheme = getFBSchemeByDocType(
         formValues,
         documentTypesById,
         workspaceState?.getSchema(),
-      );
+      ); }
     }
-    workspaceState?.setMode(mode);
-    workspaceState?.setSchema(scheme);
+    if (!isCreateMaintenance) { workspaceState?.setMode(mode);
+    workspaceState?.setSchema(scheme); }
   };
 
   if (!isVisible && type !== "newOutput") {
@@ -130,4 +150,4 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   );
 };
 
-export default DocumentTypeSelect;
+export default withRouter(DocumentTypeSelect);

@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import faker from "faker";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -151,7 +154,7 @@ context("Approval request landing page test", () => {
       cy.arGetArDocumentByName({
         sessionId: loginResponse.sessionId,
         employeeId: secondEmployee.id,
-        name: "Initial AR Form",
+        name: "AR Form",
       }).then((response) => {
         initialArDocument = response;
         cy.arCreateApprovalRequest({
@@ -218,10 +221,10 @@ context("Approval request landing page test", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it.skip("Verify default filter status is draft or in review", () => {
-      // SystemRequirement("REQ-0780");
-      cy.alVerifyStartingFilter();
-    });
+    // it.skip("Verify default filter status is draft or in review", () => {
+    //   // SystemRequirement("REQ-0780");
+    //   cy.alVerifyStartingFilter();
+    // });
   });
 
   context("Prepare approval request", () => {
@@ -257,7 +260,7 @@ context("Approval request landing page test", () => {
 
     it("Check only approval requests are shown on approval list", () => {
       SystemRequirement("REQ-0760");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
     });
   });
 
@@ -268,12 +271,12 @@ context("Approval request landing page test", () => {
       });
 
       it("Filter list by AR ID", () => {
-        cy.alFilterByArId({ arId: "AR99998" });
+        cy.alFilterByArId({ arId: "AR99999" });
       });
 
       it("Verify filter by AR ID", () => {
         SystemRequirement("REQ-0770", "REQ-0750");
-        cy.alVerifyFilterByArId({ arId: "AR99998" });
+        cy.alVerifyFilterByArId({ arId: "AR99999" });
       });
 
       it("Verify approval counter on document list", () => {
@@ -338,7 +341,7 @@ context("Approval request landing page test", () => {
 
       it("Verify approval counter on document list", () => {
         SystemRequirement("REQ-0820");
-        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       });
     });
 

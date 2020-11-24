@@ -1,5 +1,5 @@
 import { BoxProps } from "@material-ui/core";
-import { FBMediaAlbumFieldProps, FBMediaAlbumState } from "..";
+import { FBMediaAlbumFieldProps, FBMediaAlbumState, FBWorkspaceMode } from "..";
 
 export type FBMediaAlbumMode = "carousel" | "gallery";
 
@@ -33,6 +33,8 @@ export type FBMediaAlbumProps =
   & {
     setMediaMode?: () => any;
     mediaAlbumState?: FBMediaAlbumState;
+    workspaceMode?: FBWorkspaceMode;
     mode?: FBMediaAlbumMode;
     title?: string;
+    hiddenContainer?: boolean;
   };

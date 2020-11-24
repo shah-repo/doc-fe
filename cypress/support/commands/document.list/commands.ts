@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import { integerType } from "aws-sdk/clients/iam";
+import { CyRoutes } from "../../routes";
 
 export { };
 
@@ -38,6 +39,7 @@ declare global {
       dlVerifyFilterClear(): Chainable<Subject>;
       dlVerifyDocCounter(params: {docCounterNumber: integerType }): Chainable<Subject>;
       dlVerifyDescriptionOnHover(params: {description: string }): Chainable<Subject>;
+      dlSelectFirstDocument(): Chainable<Subject>;
     }
   }
 }
@@ -180,7 +182,7 @@ Cypress.Commands.add("dlVerifyFilterByArId", (params: {arId: string }) => {
 });
 
 Cypress.Commands.add("dlFilterByStatus", (params: {status: string }) => {
-  cy.get("div[id=\"mui-component-select-status[]\"]").click().wait(500);
+  cy.get("div[id=\"mui-component-select-displayStatus\"]").click().wait(500);
   cy.get("ul[role=listbox]>li").contains(params.status).click().wait(500);
 });
 
@@ -212,7 +214,7 @@ Cypress.Commands.add("dlVerifyFilterClear", () => {
   cy.get("input[name=documentTypeId]").should("have.attr", "value", "");
   cy.get("input[name=owner]").should("have.attr", "value", "");
   cy.get("input[name=crId]").should("have.attr", "value", "");
-  cy.get("input[name=\"status[]\"").should("have.attr", "value", "");
+  cy.get("input[name=displayStatus]").should("have.attr", "value", "");
   cy.get("input[name=effectiveDate]").should("have.attr", "value", "");
 });
 
@@ -224,4 +226,10 @@ Cypress.Commands.add("dlVerifyDescriptionOnHover", (params: {description: string
   cy.get("div[aria-rowindex=1]>div.ReactVirtualized__Table__rowColumn:nth-child(3)>div>a>div>div")
     .trigger("mouseover");
   cy.get("div[role=tooltip]>div").should("have.text", params.description);
+});
+
+Cypress.Commands.add("dlSelectFirstDocument", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.DocPreview], () => {
+    cy.get("div[aria-rowindex=1]>div.ReactVirtualized__Table__rowColumn:nth-child(3)>div>a>div>div").click();
+  });
 });

@@ -1,4 +1,4 @@
-import { FBApprovalsState, FBAutocompleteAsyncProps, FBFormState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalTransition, FBInputProps, FBRequiredApprover } from "..";
+import { FBApprovalsState, FBAutocompleteAsyncProps, FBDialogState, FBFormState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalTransition, FBInputProps, FBRequiredApprover } from "..";
 import { DocumentStatus } from "../../../state/ducks/documents";
 
 export enum FBApprovalsStatusEndpoint {
@@ -12,10 +12,11 @@ export type FBApprovalsProps =
 & Pick<FBInputProps, "name" | "label" | "disabled" | "value">
 & FBAutocompleteAsyncProps
 & {
+  onApproveClick?: (approvalId: string) => void;
   requestApproval?: (id?: string) => any;
   approvals?: FBInlineApprovalBody[];
   approvalsState?: FBApprovalsState;
-  changeApprovalStatus(transition: FBInlineApprovalTransition, approvalId?: string): void;
+  approvalTransition(transition: FBInlineApprovalTransition, approvalId?: string, password?: string): void;
   docId?: string;
   documentStatus: DocumentStatus;
   formState?: FBFormState;
@@ -24,8 +25,10 @@ export type FBApprovalsProps =
   ownerId?: string;
   currentUser?: string;
   inlineApprovalExists?: boolean;
+  dialogState?: FBDialogState;
 };
 
 export type FBApprovalsConstructor = FBInlineApprovalConstructor & {
   id: string[];
 };
+

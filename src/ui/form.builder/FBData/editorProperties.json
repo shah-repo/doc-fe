@@ -25,5 +25,11 @@
   },
   "approvalNonVersioned": {
     "text": "form.builder.approval.non.versioned"
+  },
+  "copyableValue": {
+    "text": "form.builder.copyable.value"
+  },
+  "deleteDisabled": {
+    "text": "form.builder.delete.disabled"
   }
 }

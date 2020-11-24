@@ -12,6 +12,7 @@ export const CHANGE_REQUEST_UPDATE_URL = `${CHANGE_REQUEST_ROOT_URL}/update`;
 export const CHANGE_REQUEST_PREVIEW_URL = `${CHANGE_REQUEST_ROOT_URL}/preview`;
 
 export const DOCUMENT_REVISION_CREATE_URL = "/document_revision/create";
+export const DOCUMENT_REVISION_CREATE_MAINTENANCE_URL = "/document_revision/:pmFormId/create_maintenance/:docRevId/:equipmentSection";
 
 export const DOCUMENT_REVISION_LIST_URL = "/document_revision";
 export const DOCUMENT_REVISION_ROOT_URL = `${DOCUMENT_REVISION_LIST_URL}/:documentId`;
@@ -42,6 +43,7 @@ export const SLACK_USER_URL = `${SLACK_ROOT_URL}/user`;
 
 export const DOCUMENT_BY_TYPE_ROOT_URL = "/document_by_type";
 export const DOCUMENT_BY_TYPE_LIST_URL = `${DOCUMENT_BY_TYPE_ROOT_URL}/:docTypeId`;
+export const DOCUMENT_TYPE_MANAGEMENT_URL = "/document_type_management";
 
 export const DOCUMENT_BY_CATEGORY_ROOT_URL = "/document_by_category";
 export const DOCUMENT_BY_CATEGORY_LIST_URL = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/:categoryName`;

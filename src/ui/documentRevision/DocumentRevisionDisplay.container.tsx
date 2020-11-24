@@ -11,7 +11,7 @@ import HelloSignAllSignedRefreshSockets from "../document.revision/HelloSignAllS
 import SummaryPresenter from "../document.revision/summary/presenter";
 import CloneContainer from "./Clone.container";
 import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
-import { canChangeDocumentOwner, canEditDocumentRevision } from "./helpers";
+import { canChangeDocumentOwner, canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
 
 interface StateProps {
   currentUserEmail: string;

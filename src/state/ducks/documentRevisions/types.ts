@@ -35,6 +35,8 @@ export enum RevisionChangeType {
 }
 
 export interface DocumentRevisionDocument {
+  children: DocumentRevision[];
+  parent: DocumentRevision;
   id: string;
   docId: string;
   documentType: Partial<DocumentType>;
@@ -80,6 +82,9 @@ export interface Precalc {
 }
 
 export interface DocumentRevision extends FBDocumentRevisionProps {
+  displayStatus: DocumentRevisionStatus;
+  children?: DocumentRevision[];
+  parent?: DocumentRevision;
   precalc: Precalc;
   id: string;
   docId?: string;
@@ -114,6 +119,12 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   primaryAttachment?: Attachment;
   approvals?: Approval[];
   updatedAt?: string;
+  schema?: FBSchemaProps[];
+  parentParts?: DocumentRevision;
+  parentEquipment?: Id;
+  equipmentSection?: string;
+  // there can currently be only one child part
+  childrenParts?: DocumentRevision[];
 }
 
 export const RevisionStageOptions = [
@@ -156,7 +167,11 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
 
 export interface DocumentRevisionSetAction {
   type: typeof DOCUMENT_REVISION_SET;
-  payload: DocumentRevision;
+  payload?: {
+    documentRevision?: DocumentRevision;
+    requestBody?: any;
+    docRevId?: string;
+  };
 }
 
 export interface DocumentSetAction {
@@ -203,6 +218,11 @@ export interface ApproveAndReleaseRequest {
   formDocument: Id;
 }
 
+export interface FinalizeAndReleaseRequest {
+  approvers: Id[];
+  effectiveDate?: string;
+}
+
 export interface CreateAndReleaseRequest {
   releasedDocumentRevision: DocumentRevision;
   releaseDto: CreateAndReleaseRequest;
@@ -222,7 +242,7 @@ export interface FBDocumentRevisionProps {
   document?: Partial<DocumentRevisionDocumentRequest>;
   revision?: number;
   subRevision?: number;
-  revisionStage?: number;
+  revisionStage?: string | number;
   revisionChangeType?: RevisionChangeType;
   releasedAt?: string;
   renderHTML?: string;

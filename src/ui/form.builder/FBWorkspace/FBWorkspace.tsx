@@ -2,7 +2,8 @@ import { Portal } from "@material-ui/core";
 import { isUndefined } from "lodash";
 import React from "react";
 import { FBWorkspaceMemo, FBWorkspaceProps } from ".";
-import { FBConditionalWrapper, FBDialog, FBForm, FBProvider, FBSnackbar } from "..";
+import { FBConditionalWrapper, FBDialog, FBFieldName, FBForm, FBProvider, FBSnackbar } from "..";
+import { FBProcedureDiff } from "../FBProcedureDiff";
 import { withFBWorkspace } from "./FBWorkspace.wrap";
 
 const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
@@ -17,11 +18,12 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   mode = "none",
   initialValues,
   includeTransport,
+  includeProcedureDiff,
 }) => (
   <FBProvider {...{ workspaceState, dialogState, snackbarState }}>
     <FBSnackbar autoHideDuration={6000}/>
     <FBDialog />
-    <FBForm {...{ initialValues }} workspaceMode={mode}>
+    <FBForm {...{ initialValues }} workspaceMode={mode} initialValidation={true}>
       {children}
       {active && (
         <>
@@ -33,6 +35,9 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
               </Portal>
             )}
           >
+            {includeProcedureDiff && (
+              <FBProcedureDiff name={FBFieldName.ProcedureDiff} />
+            )}
             <FBWorkspaceMemo {...{ isStarter, schema, mode, includeTransport }} />
           </FBConditionalWrapper>
         </>

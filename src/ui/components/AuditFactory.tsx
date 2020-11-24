@@ -94,6 +94,17 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
     case "securityGroups":
       returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Group).name}</div>);
       break;
+    case "state":
+      // Added for closing AR in the future because there is no owner
+      if (audit.nextValue === "CLOSED" && !audit.owner) {
+        returnValue = (<div data-cy={dataCy}>
+          {(audit.nextValue as string)}{"-"}
+          <Text translation={"common.server.automation"} />
+        </div>);
+        break;
+      }
+      returnValue = (<div data-cy={dataCy}>{(audit.nextValue as string)}</div>);
+      break;
     default:
       returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
   }

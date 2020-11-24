@@ -3,8 +3,10 @@ import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { Id } from "../../../state/ducks/common/types";
 import { DocumentRevisionDocument, DocumentRevisionStatus, FBDocumentRevisionProps, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { FBSchemaProps } from "../../form.builder";
 
 export interface DocumentRevisionFormValues extends FBDocumentRevisionProps {
+  version?: number;
   id?: string;
   description: string;
   name: string;
@@ -13,7 +15,6 @@ export interface DocumentRevisionFormValues extends FBDocumentRevisionProps {
   document?: Partial<DocumentRevisionDocument>;
   revisionChangeType?: RevisionChangeType;
   changeRequest?: ChangeRequest;
-  revisionStage?: number;
   retrain?: boolean;
   status?: DocumentRevisionStatus;
   securityEmployees: OptionType[];
@@ -22,6 +23,11 @@ export interface DocumentRevisionFormValues extends FBDocumentRevisionProps {
   outputRevision?: boolean;
   renderHTML?: string;
   outputDocumentTypes?: OptionType[];
+  schema?: FBSchemaProps[];
+  parentParts?: { id: string };
+  parentEquipment?: {id: string};
+  childrenParts?: { id: string }[];
+  equipmentSection?: string;
 }
 
 export interface SecurityId {

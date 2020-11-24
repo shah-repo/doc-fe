@@ -52,7 +52,7 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
   );
   const renderNoPendingActions = pendingActions.length === 0 && (
     <Typography className={classes.noPendingActions}>
-      <Text translation="dashboard.noPendingActions" />
+      <Text translation="dashboard.noPendingActions" dataCy="dashboard.noPendingActions"/>
     </Typography>
   );
 

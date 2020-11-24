@@ -4,11 +4,12 @@
 import moment from "moment";
 import "moment-timezone";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const runId = new Date().valueOf();
-const currentDate = moment(new Date().toLocaleDateString("en-US")).format("MMMM D, YYYY");
+const currentDate = moment().tz("America/Los_Angeles").format("MMMM D, YYYY");
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
@@ -49,12 +50,6 @@ context("Records flow", () => {
             slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
               {
                 documentTypeName: "Record Document",
                 documentTypeAcronym: "RD-",
@@ -130,7 +125,7 @@ context("Records flow", () => {
 
       it("Verify approvals field is automatically added", () => {
         SystemRequirement("REQ-0980");
-        cy.get("div[name=\"fb-approvals-\"]").should("exist");
+        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       context("Creates document and releases it", () => {
@@ -139,7 +134,7 @@ context("Records flow", () => {
         });
 
         it("Approve and Release document", () => {
-          cy.drApproveAndReleaseDocument();
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
     });
@@ -179,7 +174,7 @@ context("Records flow", () => {
 
       it("Verify approvals field is automatically added", () => {
         SystemRequirement("REQ-0980");
-        cy.get("div[name=\"fb-approvals-\"]").should("exist");
+        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       context("Creates document and releases it", () => {
@@ -188,7 +183,7 @@ context("Records flow", () => {
         });
 
         it("Approve and Release document", () => {
-          cy.drApproveAndReleaseDocument();
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
     });
@@ -196,7 +191,9 @@ context("Records flow", () => {
 
   context("Check if there are multiple record forms to select", () => {
     it("Navigate to Records", () => {
-      cy.navigToRecords();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+        cy.navigToRecords();
+      });
     });
 
     it("Create new record button click", () => {
@@ -205,7 +202,10 @@ context("Records flow", () => {
 
     it("Check if multiple record forms exist", () => {
       SystemRequirement("REQ-0970");
-      cy.recCheckIfMultilpeFormsAreAvailable( "Approval Record", "Lot History Record" );
+      cy.recCheckIfMultilpeFormsAreAvailable({
+        recordType: "Record Document",
+        recordForms: ["Approval Record", "Lot History Record"],
+      });
     });
   });
 
@@ -219,7 +219,7 @@ context("Records flow", () => {
     });
 
     it("Select 'Approval Record' form", () => {
-      cy.recSelectRecordFormFromMultiSelect({ recordForm: "Approval Record" });
+      cy.recSelectRecordFormFromMultiSelect({ recordType: "Record Document", recordForm: "Approval Record" });
     });
 
     it("Check if revision is in alpha revision stage", () => {
@@ -238,18 +238,25 @@ context("Records flow", () => {
     });
 
     it("Select approver'", () => {
-      cy.get("[data-cy*=fb-approvals-]").type(USERS[2].name + "{downarrow}{enter}");
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
+        cy.get("[data-cy*=fb-approvals-]").type(USERS[2].name + "{downarrow}{enter}");
+      });
     });
 
     it("Finalize and release button click'", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
-      cy.wait(1000);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+      });
     });
   });
 
   context("Approve form and close it", () => {
     it("Approve record button click", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
+      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
+        cy.get("[data-cy=\"common.confirm\"]").click();
+      });
     });
 
     it("Reload document", () => {

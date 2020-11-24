@@ -5,15 +5,18 @@ import { companySelectors } from "../../../../state/ducks/company";
 import { RevisionStageOptions } from "../../../../state/ducks/documentRevisions";
 import RadioButton from "../../../components/forms/fields/RadioButton";
 import RadioGroup from "../../../components/forms/fields/RadioGroup";
-import { required, validator } from "../../../components/forms/fields/validators";
 import Text from "../../../components/Text";
 
 interface Props {
   isDisabled: boolean;
+  isDocRevFirstDraft: boolean;
+  shouldShowRevStageForDocType: boolean;
 }
 
 export const RevisionStage: React.FunctionComponent<Props> = ({
   isDisabled,
+  isDocRevFirstDraft,
+  shouldShowRevStageForDocType,
 }) => {
 
   const numOfRevStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
@@ -21,16 +24,16 @@ export const RevisionStage: React.FunctionComponent<Props> = ({
     RevisionStageOptions.filter((stage) => stage.value !== 2) :
     RevisionStageOptions;
 
-  if (isDisabled) {
+  if (isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType)) {
     return null;
   }
 
   return (
-    <Box mt={7}>
+    <Box mt={3}>
       <Typography variant="h6">
         <Text message={"document.revision.stage"}/>
       </Typography>
-      <RadioGroup name="revisionStage" validate={validator(required)}>
+      <RadioGroup name="revisionStage">
         {revStageOptions.map((option) =>
           <RadioButton
             key={`${option.value}-${option.text}`}

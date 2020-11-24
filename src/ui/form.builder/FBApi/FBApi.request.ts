@@ -1,12 +1,13 @@
-import { first, get, has, isArray, isEmpty, isUndefined, join, template } from "lodash";
+import { first, get, has, isArray, isEmpty, isString, isUndefined, join, template } from "lodash";
 import { action, observable, set } from "mobx";
-import apiClient from ".";
+import apiClient, { FBRequestSet, FBRequestTemplateUrl } from ".";
+import { store } from "../../../state/store";
 import { ApiActionMethod } from "../../../state/types";
 import { toastError } from "../../components/notifications";
 
 export default class FBRequest<Data, Body> {
   @observable public data: Data | undefined;
-  @observable public body: Body | undefined;
+  @observable public body: Body & { password?: string } | undefined;
   @observable public loading = false;
   public method?: ApiActionMethod;
   public url = "";
@@ -16,13 +17,22 @@ export default class FBRequest<Data, Body> {
     this.url = url;
   }
 
-  @action public setTemplateUrl = (url: string, values: Record<string, any>) => {
+  private setTemplateUrl = (config: Record<string, any> | FBRequestTemplateUrl) => {
+    let url = this.url;
+    let values = config;
+    if (has(config, "values")) {
+      url = config.url;
+      values = config.values;
+    }
     const urlTpl = template(url);
     const urlStr = urlTpl(values);
     this.setUrl(urlStr);
   };
 
-  @action public setUrl = (url: string) => {
+  public setUrl = (url: string | Record<string, any> | FBRequestTemplateUrl) => {
+    if (!isString(url)) {
+      return this.setTemplateUrl(url);
+    }
     set(this, "url", url);
   };
 
@@ -49,6 +59,14 @@ export default class FBRequest<Data, Body> {
 
   @action public prepareData = (data: Data): Data | undefined => data;
 
+  public set = (set: FBRequestSet<Body>) => {
+    const { url, urlValues, body, method } = set;
+    url && this.setUrl(url);
+    urlValues && this.setUrl(urlValues);
+    body && this.setBody(body);
+    method && this.start(method);
+  };
+
   protected onSuccess() {
     this.setLoading(false);
   }
@@ -66,6 +84,13 @@ export default class FBRequest<Data, Body> {
   @action private start = (method: ApiActionMethod) => {
     this.setLoading(true);
     let promise: Promise<any> | undefined;
+
+    const headers = this.body?.password ? {
+      Authorization: `bearer_password ${
+        store.getState().auth.user.employeeId
+      }:${store.getState().auth.user.sessionId}:${this.body?.password}`,
+    } : undefined;
+
     switch (method) {
       case "get":
         this.method = "get";
@@ -73,7 +98,7 @@ export default class FBRequest<Data, Body> {
         break;
       case "post":
         this.method = "post";
-        promise = apiClient().post(this.url, this.body).promise;
+        promise = apiClient().post(this.url, this.body, { headers }).promise;
         break;
       case "patch":
         this.method = "patch";

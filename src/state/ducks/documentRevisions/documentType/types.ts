@@ -16,7 +16,26 @@ export type DocumentGroupType =
   "PO" |
   "WORK_ORDER" |
   "SUPPLIER" |
-  "PART";
+  "PART" |
+  "ENGINEERING_BUILD";
+
+export enum DOC_GROUP_TYPE {
+  FORM = "FORM",
+  OTHER ="OTHER",
+  RECORD = "RECORD",
+  DAM = "DAM",
+  MPI = "MPI",
+  DYNAMIC_FORM = "DYNAMIC_FORM",
+  POAM = "POAM",
+  PO = "PO",
+  WORK_ORDER = "WORK_ORDER",
+  SUPPLIER = "SUPPLIER",
+  PART = "PART",
+  ENGINEERING_BUILD = "ENGINEERING_BUILD",
+  CHANGE_REQUEST = "CHANGE_REQUEST",
+  WO_PARTS = "WO_PARTS",
+  RECEIVABLE = "RECEIVABLE",
+}
 
 export type DocumentGroupOptionsType =
   "FORM" |
@@ -25,6 +44,7 @@ export type DocumentGroupOptionsType =
   "MUST_BE_OUTPUT" |
   "HAVE_OUTPUT" |
   "RECORD" |
+  "PART" |
   "ONE_ITEM" |
   "DYNAMIC_FORM" |
   "POAM" |
@@ -32,7 +52,10 @@ export type DocumentGroupOptionsType =
   "WORK_ORDER" |
   "WO_PARTS" |
   "CHANGE_REQUEST" |
-  "BE_OUTPUT";
+  "BE_OUTPUT" |
+  "CAN_BE_COPIED" |
+  "EDITABLE_SCHEMA" |
+  "EQUIPMENT";
 
 export enum DOC_TYPE_GROUP_OPTION {
   FORM = "FORM",
@@ -46,11 +69,15 @@ export enum DOC_TYPE_GROUP_OPTION {
   DYNAMIC_FORM = "DYNAMIC_FORM",
   POAM = "POAM",
   PO = "PO",
-  WORK_ORDER = "WORK_ORDER",
+  WORK_ORDER = "WORK ORDER",
   WO_PARTS = "WO_PARTS",
   PART = "PART",
   SUPPLIER = "SUPPLIER",
+  RECEIVE = "RECEIVE",
+  CAN_BE_COPIED = "CAN_BE_COPIED",
   RECEIVABLE = "RECEIVABLE",
+  EDITABLE_SCHEMA = "EDITABLE_SCHEMA",
+  EQUIPMENT = "EQUIPMENT"
 }
 export interface PageDetailsColumn {
   label: Translation;
@@ -80,6 +107,12 @@ export interface DocumentType {
   schema?: FBSchemaProps[];
   fieldsConfig?: FieldConfig;
   hiddenForCreationForUsersWithoutTags?: GroupTag[];
+  privateNumberPool?: boolean;
+  canRedLine?: boolean;
+  needsSignature?: boolean;
+  startingNumber?: string;
+  category?: string;
+  active?: boolean;
 }
 
 export interface DocumentForms {

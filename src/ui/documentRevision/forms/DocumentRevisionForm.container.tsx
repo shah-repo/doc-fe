@@ -1,10 +1,10 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { cloneDeep, filter, get, isEmpty } from "lodash";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -12,11 +12,17 @@ import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { toastError } from "../../components/notifications";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import { FBWorkspace, FBWorkspaceMode } from "../../form.builder";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
 import { DocumentCloneType } from "../Clone.container";
+import { checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
+import { isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
+import { isDocumentAlphaReleased } from "../helpers/revisionStage";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -50,6 +56,7 @@ interface OwnProps {
   canChangeOwnerShip?: boolean;
   type?: DocumentCloneType;
   isNewVersion?: boolean;
+  pmFormId?: string;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
@@ -93,16 +100,23 @@ DocumentRevisionFormContainerProps
   canChangeOwnerShip = false,
   type,
   isNewVersion,
+  pmFormId,
 }) => {
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const bannerPortal = React.useRef(null);
   const { revisionStage } = documentRevision || {};
-  const isAlphaReleased = revisionStage === 3;
-  const isRecord = (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
+  const isEditableSchema = document?.documentType?.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
+  const isAlphaReleased = isDocumentAlphaReleased(revisionStage);
+  const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
+  const [releasedDocRev, setReleasedDocRev] = useState<DocumentRevision>();
 
-  const cleanInitialValues = useMemo(() => {
+  const pmForm = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocumentRevision(state, pmFormId || ""),
+  );
+  const cleanInitialValues: DocumentRevisionFormValues = useMemo(() => {
+
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
     const { outputRevision } = initialValues;
     const securityGroups: any[] = [];
@@ -122,6 +136,7 @@ DocumentRevisionFormContainerProps
       ? filter(initialValues.attachments, (file) => file.lineType !== "RED_LINE")
       : initialValues.attachments;
 
+
     return {
       ...initialValues,
       attachments,
@@ -134,10 +149,12 @@ DocumentRevisionFormContainerProps
       retrain,
       renderHTML,
       securityGroups,
-      outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
+      outputDocumentTypes: pmForm ?
+        pmForm.formTemplate?.outputDocumentTypes as OptionType[] :
+        initialValues.formTemplate?.outputDocumentTypes as OptionType[],
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canUpdateHTML, initialValues, groupOptions]);
+  }, [canUpdateHTML, initialValues, groupOptions, pmForm]);
 
   useEffect(() => {
     if (type !== "newVersion" &&
@@ -160,16 +177,50 @@ DocumentRevisionFormContainerProps
   const FBContainer = React.useRef(null);
   const { group: formGroup } = cleanInitialValues.document?.documentType || {};
   const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
-  const { schema: originScheme = [] } =
-  cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
+  let { schema: originScheme = [] } = (
+    (cleanInitialValues)?.formTemplate ||
+    (cleanInitialValues)?.formDocument?.formTemplate ||
+    {}
+  );
+  originScheme = pmForm ?  pmForm?.formTemplate?.schema || [] : cleanInitialValues?.schema || originScheme;
+
   const isOutput =  Boolean(outputGroup && !isEmpty(outputGroup));
   const formInput = useMemo(() =>
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
   , [cleanInitialValues]);
+
+  const loadDocumentAsync = useAsync({
+    onSuccess: (data?: Document) => {
+      if (data) {
+        setReleasedDocRev((data?.documentRevisions).find((doc) => isDocumentRevisionReleased(doc.status)));
+        return;
+      }
+    },
+    onError: (error) => {
+      toastError(error as string);
+    },
+  });
+  const loadDocumentAction = useActionCreator(documentsActions.getDocumentById);
+
+  useEffect(() => {
+    if (!document.id) {
+      return;
+    }
+    loadDocumentAsync.start(
+      loadDocumentAction,
+      document.id,
+      loadDocumentAsync,
+    );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   let mode: Partial<FBWorkspaceMode> = "none";
+
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";
   } else if (outputGroup) {
+    mode = isEditableSchema ? "formDesign" : "form";
+  } else if (pmForm) {
     mode = "form";
   }
   const showAdministrativeAndVoidChange = isOutput && isAlphaReleased && isRecord;
@@ -188,20 +239,26 @@ DocumentRevisionFormContainerProps
     >
       <DocumentRevisionFormPresenter
         {...props}
-        asyncState={asyncState}
-        documentRevisions={documentRevisions}
-        documentRevision={documentRevision}
-        availableReferences={availableReferences}
-        showRevisionTypeChange={showRevisionTypeChange}
-        proposedDocId={proposedDocId}
-        setDocId={setDocId}
-        doNotPrompt={doNotPrompt}
-        onDirtyFlagChange={onDirtyFlagChange}
-        documentTypesById={documentTypesById}
-        canChangeOwnerShip={canChangeOwnerShip}
-        type={type}
-        isNewVersion={isNewVersion}
-        {...{ FBContainer, bannerPortal, showAdministrativeAndVoidChange }}
+        {...{
+          asyncState,
+          documentRevisions,
+          documentRevision,
+          availableReferences,
+          showRevisionTypeChange,
+          proposedDocId,
+          setDocId,
+          doNotPrompt,
+          onDirtyFlagChange,
+          documentTypesById,
+          canChangeOwnerShip,
+          type,
+          isNewVersion,
+          FBContainer,
+          bannerPortal,
+          showAdministrativeAndVoidChange,
+          pmFormId,
+          releasedDocRev,
+        }}
       />
     </FBWorkspace>
   );
@@ -209,13 +266,7 @@ DocumentRevisionFormContainerProps
   // if it's really necessary maybe it can be loaded through the DataFetcherContainer
   // it will be loaded only once instead every time this component is mounted
   const loadAction = () =>
-    loadDocumentRevisions([
-      DocumentRevisionStatus.Released,
-      DocumentRevisionStatus.Deprecated,
-      DocumentRevisionStatus.Obsolete,
-      DocumentRevisionStatus.PendingChange,
-      DocumentRevisionStatus.Draft,
-    ]);
+    loadDocumentRevisions();
 
   return (
     <AsyncGate

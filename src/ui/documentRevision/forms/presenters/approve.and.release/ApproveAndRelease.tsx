@@ -1,27 +1,30 @@
 import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import { flatten } from "lodash";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { getHasPermission } from "../../../../common/utils/selectors";
-import { Group, Permission } from "../../../../state/ducks/auth/types";
-import { ChangeRequest, changeRequestsActions } from "../../../../state/ducks/changeRequest";
-import { Owner } from "../../../../state/ducks/common/types";
-import { documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
-import { documentTypeActions, DocumentTypeById } from "../../../../state/ducks/documentRevisions/documentType";
-import { ApplicationState } from "../../../../state/reducers";
-import { toChangeRequestEditRequestBody } from "../../../change.request/form/transform";
-import { TemplateOption } from "../../../change.request/form/types";
-import { changeRequestEditPath } from "../../../change.request/utils/paths";
-import { FormContext } from "../../../components/forms/FormContext";
-import Text from "../../../components/Text";
-import { FB } from "../../../form.builder";
-import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
-import useDialog from "../../../hooks/useDialog";
-import { ApproveAndReleaseFormValues } from "../types";
+import { getStartOfDayDateString, TIME_ZONE } from "../../../../../common/utils/date";
+import { getHasPermission } from "../../../../../common/utils/selectors";
+import { Group, Permission } from "../../../../../state/ducks/auth/types";
+import { ChangeRequest, changeRequestsActions } from "../../../../../state/ducks/changeRequest";
+import { Owner } from "../../../../../state/ducks/common/types";
+import { documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions";
+import { documentTypeActions, DocumentTypeById } from "../../../../../state/ducks/documentRevisions/documentType";
+import { ApplicationState } from "../../../../../state/reducers";
+import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
+import { toChangeRequestEditRequestBody } from "../../../../change.request/form/transform";
+import { TemplateOption } from "../../../../change.request/form/types";
+import { changeRequestEditPath } from "../../../../change.request/utils/paths";
+import { FormContext } from "../../../../components/forms/FormContext";
+import Text from "../../../../components/Text";
+import { FB } from "../../../../form.builder";
+import { useApproveAndRelease } from "../../../../hooks/docCustomization/useCustomization";
+import useActionCreator from "../../../../hooks/useActionCreator";
+import useAsync from "../../../../hooks/useAsync";
+import useDialog from "../../../../hooks/useDialog";
+import { ApproveAndReleaseFormValues } from "../../types";
 import ApproveAndReleaseForm from "./ApproveAndReleaseForm";
 
 interface Props {
@@ -63,7 +66,9 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const [isVisible, label] = useApproveAndRelease(documentTypeId);
   const classes = styles();
   const dialog = useDialog();
+  const alertDialog = useDialog();
   const releaseAction = useActionCreator(documentRevisionsActions.approveAndRelease);
+  const finalizeAction = useActionCreator(documentRevisionsActions.finalizeAndRelease);
   const releaseNonQmsAction = useActionCreator(documentRevisionsActions.approveAndReleaseNonQms);
   const async = useAsync<any>({ onSuccess: dialog.close });
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
@@ -175,7 +180,9 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     const approvers = !values.approvals || values.approvals.length === 0 ?
       undefined :
       values.approvals.map((approver) => ({ id: approver.value }));
-    const effectiveDate = values.effectiveDate !== "" ? values.effectiveDate : undefined;
+    const effectiveDate = values.effectiveDate !== ""
+      ? values.effectiveDate
+      : undefined;
 
     if (!isQms) {
       async.start(
@@ -186,6 +193,17 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
           effectiveDate,
           documentType: { id: documentType },
           formDocument: { id: formDocument },
+        },
+        async,
+      );
+      return;
+    }
+    if (isRecord) {
+      async.start(
+        finalizeAction,
+        id,
+        {
+          effectiveDate: getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString()),
         },
         async,
       );
@@ -244,7 +262,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       <Button
         color="secondary"
         variant="outlined"
-        onClick={openDialog}
+        onClick={isRecord ? alertDialog.open :  openDialog}
         id="ApproveAndRelease-button"
         data-cy="ApproveAndRelease-button"
       >
@@ -283,6 +301,11 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
           </DialogContent>
         </Dialog>
       }
+      <AlertDialog
+        message="record.release.alert"
+        dialog={alertDialog}
+        confirmAction={onSubmit}
+      />
     </>
   );
 };

@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -36,7 +39,7 @@ context("Document Revising Flow", () => {
             documentTypes: [
               {
                 documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
+                documentTypeAcronym: "CP-",
                 group: "OTHER",
                 isQms: true,
               },
@@ -74,7 +77,7 @@ context("Document Revising Flow", () => {
             attachments: [],
             description: "<p>Test Doc Rev Description</p>",
             document: {
-              docId: "CS-00004",
+              docId: "CP-00004",
               documentType: {
                 id: componentSpecificationDocumentType[0].id,
               },
@@ -126,7 +129,7 @@ context("Document Revising Flow", () => {
     });
 
     it("Approves and releases document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Clicks on revise document", () => {

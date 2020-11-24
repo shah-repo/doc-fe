@@ -3,7 +3,7 @@ import React from "react";
 import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions";
 import Date from "../../components/Date";
 import Text from "../../components/Text";
-import { generateVersionNumber } from "../helpers";
+import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
 
 interface Props {
   formDocument?: FBDocumentRevisionProps;
@@ -14,7 +14,7 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({
 }) => {
 
   const { revision, subRevision, revisionStage, revisionChangeType, releasedAt } = formDocument || {};
-  const version = generateVersionNumber(revision, revisionStage, subRevision, revisionChangeType);
+  const version = generateRevisionNumber(revision, revisionStage as number, subRevision, revisionChangeType);
 
   const docId = formDocument?.document?.docId;
 

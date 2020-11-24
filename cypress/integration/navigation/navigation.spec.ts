@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import path from "path";
 import { GroupTag, NavigationItems } from "../../../src/state/ducks/auth/types";
 import { CONFIG } from "../../support/config";
@@ -10,23 +13,59 @@ let docTypeId;
 let adminEmployee;
 
 context(`Test: ${path.basename(__filename)}`, () => {
-  context("Check navigation bar for default company", () => {
-    it("[API] API login as admin with default company", (done: any) => {
+  context("[API] Create company to test navigation", () => {
+    it("[API] Creates company", (done: any) => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
+      }).then((response) => {
+        loginResponse = response;
+
+        cy.cmpCreateCompany({
+          specFilePath: __filename,
+          payload: {
+            companyAdminEmail: USERS[1].email,
+            helloSignIntegrationEnabled: false,
+            helloSignTestMode: false,
+            importerEmail: USERS[5].email,
+            numOfRevStages: 3,
+            numOfDocDigits: 5,
+            remoteValidatorBundleName: "default",
+            slackIntegrationEnabled: false,
+            users: [USERS[2], USERS[3], USERS[4]],
+            acctCodes: ["code 1"],
+            addresses: ["Address 1"],
+          }, sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdCompany = response;
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          done();
+        });
+      });
+    });
+
+    it("[API] Login admin tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[1].email,
+        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
+  });
 
-    it("Logs admin in default company with default navigation", () => {
+  context("Check navigation for default user", () => {
+    it("Logs default user in", () => {
       cy.authLogin({
-        email: CONFIG.SUPERADMIN_EMAIL,
-        password: CONFIG.SUPERADMIN_PASSWORD,
+        email: USERS[2].email,
+        password: "Tester1!",
       });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
     it("Click to expand Document Control", () => {
@@ -56,62 +95,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
   });
 
-  context("Create company and checks admin navigation bar", () => {
-    it("[API] Creates company", (done: any) => {
-      cy.authApiLogin({
-        email: CONFIG.SUPERADMIN_EMAIL,
-        password: CONFIG.SUPERADMIN_PASSWORD,
-      }).then((response) => {
-        loginResponse = response;
-
-        cy.cmpCreateCompany({
-          specFilePath: __filename,
-          payload: {
-            companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
-            importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
-            users: [USERS[2], USERS[3], USERS[4]],
-            acctCodes: ["code 1"],
-            addresses: ["Address 1"],
-            documentTypes: [
-              {
-                documentTypeName: "Testing docType",
-                documentTypeAcronym: "TDT",
-                isQms: true,
-                group: "OTHER",
-              },
-            ],
-          }, sessionId: loginResponse.sessionId as unknown as string,
-        }).then((response) => {
-          createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          createdCompany.documentTypes.forEach((item: { documentTypeName: string; id: any }) => {
-            if (item.documentTypeName === "Testing docType")
-            {
-              docTypeId = item.id;
-            }
-          });
-          done();
-        });
-      });
-    });
-
-    it("[API] API login with company admin", (done: any) => {
-      cy.authApiLogin({
-        email: USERS[1].email,
-        password: "Tester1!",
-      }).then((response) => {
-        loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
-        done();
-      });
-    });
-
+  context("Check navigation for admin user", () => {
     it("Logs in with company admin", () => {
       cy.authLogin({
         email: USERS[1].email,

@@ -1,4 +1,4 @@
-import { isEmpty, isEqual } from "lodash";
+import { get, isEmpty, isEqual } from "lodash";
 import { toJS } from "mobx";
 import React from "react";
 import { AsyncStatus } from "../../../state/types";
@@ -57,8 +57,18 @@ const getFormInputDiff = (transformedValues, transformedInitialValues) => {
 export const compareValuesToSubmit = (initialValues, values, transformMethod) => {
   const transformedInitialValues = transformMethod(initialValues);
   const transformedValues = transformMethod(values);
-  const diff = getDiff(transformedValues, transformedInitialValues);
+  let diff = getDiff(transformedValues, transformedInitialValues);
   const formInputDiff = getFormInputDiff(transformedValues, transformedInitialValues);
+  // Added in case maintenance is created outside of EQ Maintenance
+  const equipmentId = get(transformedValues, "formInput.equipment_id");
+  if (!isEmpty(equipmentId)) {
+    diff = {
+      ...diff,
+      parentEquipment: {
+        id: equipmentId,
+      },
+    };
+  }
 
   const hasKeysNotInValuesFormInput = transformedInitialValues?.formInput ?
     Object.keys(transformedInitialValues.formInput).some((k) => !(k in transformedValues.formInput)) :

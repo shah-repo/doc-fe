@@ -1,4 +1,8 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -117,7 +121,7 @@ context("PO test", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -157,7 +161,9 @@ context("PO test", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poClickCreatePO();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.LotQuantity], () => {
+        cy.poClickCreatePO();
+      });
     });
 
     it("Check for PO ID uniqueness - ID should be PO-00001", () => {
@@ -183,11 +189,15 @@ context("PO test", () => {
 
     it("Uploads text.docx", () => {
       // SystemRequirement("REQ-1350");
-      cy.atchUploadAttachment({ fileName: "test.docx" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
+        cy.atchUploadAttachment({ fileName: "test.docx" });
+      });
     });
 
     it("Click on 'Add item' button", () => {
-      cy.poAddNewFieldItem();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.CompanyMine, CyRoutes.DocRevGet], () => {
+        cy.poAddNewFieldItem();
+      });
     });
 
     it("Select Part Number", () => {
@@ -212,7 +222,7 @@ context("PO test", () => {
 
     it("Enter Supplier Part Number", () => {
       // SystemRequirement("REQ-1410");
-      cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
+      cy.poEnterSupplierPartNumber({ partNumber: "PRT-0003" });
     });
 
     it("Enter number of Units", () => {
@@ -231,10 +241,13 @@ context("PO test", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.poAddPOButtonClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.poAddPOButtonClick();
+        });
     });
 
-    it.skip("Check currency options dropdown", () => {
+    it("Check currency options dropdown", () => {
       // SystemRequirement("REQ-1320");
       cy.poCheckCurrency();
     });
@@ -244,7 +257,9 @@ context("PO test", () => {
     });
 
     it("Enter Shipping Cost", () => {
-      cy.poShippingCost({ number: "2" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.poShippingCost({ number: "2" });
+      });
     });
 
     it("Check Subtotal value", () => {
@@ -268,7 +283,7 @@ context("PO test", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -278,7 +293,9 @@ context("PO test", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poClickCreatePO();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.LotQuantity], () => {
+        cy.poClickCreatePO();
+      });
     });
 
     it("Check for PO ID uniqueness - ID should be PO-00002", () => {
@@ -338,10 +355,13 @@ context("PO test", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.poAddPOButtonClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.poAddPOButtonClick();
+        });
     });
 
-    it.skip("Check currency options dropdown", () => {
+    it("Check currency options dropdown", () => {
       // SystemRequirement("REQ-1320");
       cy.poCheckCurrency();
     });
@@ -356,7 +376,9 @@ context("PO test", () => {
     });
 
     it("Enter Shipping Cost", () => {
-      cy.poShippingCost({ number: "2" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.poShippingCost({ number: "2" });
+      });
     });
 
     it("Check Subtotal value", () => {
@@ -383,7 +405,10 @@ context("PO test", () => {
 
     it("Click on 'Add' inside PO dialog box to check if all line item details are optional", () => {
       // SystemRequirement("REQ-1400");
-      cy.poAddPOButtonClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.poAddPOButtonClick();
+        });
     });
 
     it("Check line item IDs if they are unique, should be '1' and '2'", () => {
@@ -394,11 +419,11 @@ context("PO test", () => {
 
     it("Enter description 'New Purchase Order with Service item'", () => {
       // SystemRequirement("REQ-1290");
-      cy.poEnterDocumentDescription({ description: "New Purchase Order with Service item" });
+      cy.drEnterDocumentDescription({ description: "New Purchase Order with Service item" });
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -452,7 +477,7 @@ context("PO test", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Click on 'Purchase Order' on sidebar", () => {
@@ -460,7 +485,9 @@ context("PO test", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poClickCreatePO();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+        cy.poClickCreatePO();
+      });
     });
 
     it("Check if two options are available when two forms with PO exist", () => {
@@ -513,7 +540,7 @@ context("PO test", () => {
       // SystemRequirement("REQ-1150");
       cy.filterPO({
         docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
-        partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
+        partNumber: "PRT-0003", amount: "10", owner: "tester", issueDate: "10/10/2020",
       }).wait(2000);
     });
 
@@ -525,13 +552,13 @@ context("PO test", () => {
       cy.navigToPurchaseOrder();
     });
 
-    it.skip("Check if all filter values persist after changing landing page", () => {
-      // SystemRequirement("REQ-1170");
-      cy.filterCheckIfPOFilterPersists({
-        docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
-        partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
-      });
-    });
+    // it.skip("Check if all filter values persist after changing landing page", () => {
+    //   // SystemRequirement("REQ-1170");
+    //   cy.filterCheckIfPOFilterPersists({
+    //     docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
+    //     partNumber: "PRT-0003", amount: "10", owner: "tester", issueDate: "10/10/2020",
+    //   });
+    // });
 
     it("Clear filter", () => {
       // SystemRequirement("REQ-1190");

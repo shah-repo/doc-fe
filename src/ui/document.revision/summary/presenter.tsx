@@ -1,25 +1,37 @@
-import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
+import { Box, Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
-import { isEmpty } from "lodash";
-import React from "react";
+import { flatten, isEmpty, omit, set } from "lodash";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
-import { documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { Document } from "../../../state/ducks/documentRevisions/types";
+import { documentsActions } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
+import SummaryInfo from "../../common/summary/SummaryInfo";
 import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
+import { getHighestRevision } from "../../documentRevision/forms/transform";
+import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
+import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
+import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
+import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
 import { FBSchemaProps, FBWorkspace } from "../../form.builder";
 import { useCRLink, useTitle, useTraining } from "../../hooks/docCustomization/useCustomization";
 import useDescription from "../../hooks/docCustomization/useDescription";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { Translation } from "../../translations/types";
 import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
+import BuildsContainer from "./builds.container";
 import ChangeRequestLink from "./changeRequestLink";
 import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
@@ -51,6 +63,10 @@ export const Presenter: React.FunctionComponent<Props> = ({
     trainingRecords,
     formTemplate,
     formDocument,
+    parent,
+    children,
+    childrenParts,
+    parentParts,
   },
   canChangeOwnerShip,
   canShowCreateVersionButton,
@@ -58,7 +74,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
   useScrollIntoView();
   const onSubmit = () => void 0;
   const { formInput } = dataProp || {};
-  const { schema } = formTemplate || formDocument?.formTemplate || {};
+  let { schema } = formTemplate || formDocument?.formTemplate || {};
+  schema = dataProp.schema || schema;
   const { docId } = formDocument?.document || {};
   const FBIsOutput = Boolean(docId && !isEmpty(docId));
   const FBIsActive = formInput || formTemplate || formDocument;
@@ -68,14 +85,20 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const [isTitleVisible, titleLabel] = useTitle(docTypeId);
   const [isCRLinkVisible] = useCRLink(docTypeId);
   const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
-  const isRecord = (document?.documentType?.groupOptions || []).includes(DOC_TYPE_GROUP_OPTION.RECORD);
+  const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
+  const isEB = checkIsDocumentEB(document.documentType.group);
+  const isPart = checkIsDocumentPart(document?.documentType?.groupOptions);
+  const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
+
+  const isInlineApproval = isFormWithInlineApproval(formDocument?.formTemplate?.schema);
+  const isFirstAlphaReleased = isDocumentAlphaReleased(dataProp?.revisionStage) && dataProp?.subRevision === 0;
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
       documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
 
-  const renderTrainingControl = (status === DocumentRevisionStatus.Released ||
-    status === DocumentRevisionStatus.Approved) && (
+  const renderTrainingControl =
+  isDocumentRevisionInStatus([DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved], status) && (
     <TrainingControl
       dataProp={trainingRecords}
       classes={classes}
@@ -90,6 +113,40 @@ export const Presenter: React.FunctionComponent<Props> = ({
     }
     return false;
   };
+
+  const getDocumentById = useActionCreator(documentsActions.getDocumentById);
+  const docByIdAsync = useAsync({
+    onSuccess: (data?: Document) => {
+      const childPart = getHighestRevision(data?.documentRevisions || []);
+      if (!childPart) { return; }
+      set(childPart, "document", omit(data, "documentRevisions"));
+      setDisplayChildrenParts([childPart]);
+    },
+  });
+
+  useEffect(() => {
+    const childrenPartsForRevise = formInput?.childrenPartsForRevise;
+    if (!childrenParts?.length && childrenPartsForRevise?.[0]) {
+      docByIdAsync.start(getDocumentById, childrenPartsForRevise[0].id, docByIdAsync);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const renderReleaseDetails = () => (
+    <Box p={5} >
+      <Typography variant="h6" style={{ paddingBottom: 8 }}>
+        <Text translation="document.revision.release.details" />
+      </Typography>
+      <SummaryInfo
+        label={"record.released.by"}
+        value={dataProp.owner.user.name}
+      />
+      <SummaryInfo
+        label={"document.revision.released.date"}
+        value={getFormattedDateString(dataProp.releasedAt, MomentFormats.MonthDateYear)}
+      />
+    </Box>
+  );
 
   const contentRenderer = () => (
     <Box className={classes.boxContainer}>
@@ -139,6 +196,18 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {document.referencedBy && (
           <ReferencedByContainer dataProp={document.referencedBy} />
         )}
+        {isEB && parent && (
+          <BuildsContainer dataProp={flatten([parent])} label="common.previous.build" />
+        )}
+        {isEB && children && (
+          <BuildsContainer dataProp={children} label="common.next.build" />
+        )}
+        {isPart && parentParts && (
+          <BuildsContainer dataProp={flatten([parentParts])} label="common.part.of" />
+        )}
+        {isEB && displayChildrenParts && (
+          <BuildsContainer dataProp={flatten([displayChildrenParts])} label="form.builder.part" />
+        )}
         {attachments && <Attachment
           isAttachmentEmpty={attachments.length < 1}
           docRevId = {id}
@@ -158,6 +227,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
           />
         </Box>
       )}
+      {isRecord && isInlineApproval && isFirstAlphaReleased &&
+        isDocumentRevisionReleased(dataProp?.status) && renderReleaseDetails()}
       {FBIsOutput && (
         <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
       )}

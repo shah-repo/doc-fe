@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import { RevisionChangeType } from "../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../support/commands/company/commands";
 import { CONFIG } from "../support/config";
@@ -172,7 +175,7 @@ context("Validators tests", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -254,7 +257,7 @@ context("Validators tests", () => {
 
   context("Add 'Required' validation on 'Text Field'", () => {
     it("open add field dialogue", () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").click();
+      cy.fbAddNewField();
     });
 
     it("create 'Text Field'", () => {
@@ -282,7 +285,7 @@ context("Validators tests", () => {
   context("Add 'Required If' validation on 'Text Field'", () => {
 
     it("open add field dialogue", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").click({ force: true });
+      cy.fbClickAddNewHiddenBtn();
     });
 
     it("create 'Text Field'", () => {
@@ -389,7 +392,7 @@ context("Validators tests", () => {
   context("Add 'Required Without' validation on 'Text Field'", () => {
 
     it("open add field dialogue", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+      cy.get("button[data-cy=\"fb-control-btn\"]").last().click({ force: true });
     });
 
     it("create 'Text Field'", () => {
@@ -507,7 +510,7 @@ context("Validators tests", () => {
     });
 
     it("Approve and Release", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
   });
@@ -548,13 +551,17 @@ context("Validators tests", () => {
 
   context("Validation errors on custom fields should not prevent from saving document", () => {
     it("saving the document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        });
+      cy.wait(500);
     });
   });
 
   context("Validation errors should prevent from releasing document", () => {
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Check returned errors are not empty", () => {
@@ -694,7 +701,7 @@ context("Validators tests", () => {
   context(`Test ${requiredDocStatusFieldLabel} (required document status) Field`, () => {
     it("Add incorrect document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type("initial AR Form{downarrow}{enter}");
+        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type("AR Form{downarrow}{enter}");
       });
     });
 
@@ -709,14 +716,19 @@ context("Validators tests", () => {
 
     it(`fill in '${requiredDocStatusFieldLabel}' with draft CS Document`, () => {
       cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).clear();
-      cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type(`${documentRevisionName}{downarrow}{enter}`);
+      cy.wrapWithWaitOnApiCalls(
+        [
+          CyRoutes.PostRemoteValidatorsHelper,
+          CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type(`${documentRevisionName}{downarrow}{enter}`);
+        });
     });
   });
 
   context(`Test ${requiredDocTypeFieldLabel} (required document type) Field`, () => {
     it("Add incorrect document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type("initial AR Form{downarrow}{enter}");
+        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type("AR Form{downarrow}{enter}");
       });
     });
 
@@ -731,15 +743,20 @@ context("Validators tests", () => {
 
     it(`fill in '${requiredDocTypeFieldLabel}' with our CS Document`, () => {
       cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).clear();
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostRemoteValidatorsHelper, () => {
-        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type(`${csDocTitle}{downarrow}{enter}`);
-      });
+      cy.wrapWithWaitOnApiCalls(
+        [
+          CyRoutes.PostRemoteValidatorsHelper,
+          CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type(`${csDocTitle}{downarrow}{enter}`);
+        });
     });
   });
 
   context("Release document", () => {
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.DocPreview], () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
     });
   });
 

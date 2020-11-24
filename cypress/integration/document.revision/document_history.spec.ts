@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
@@ -14,7 +17,6 @@ const groupTwo = "User Management";
 const documentId = { value: "00004", fullId: "FM-00004" };
 const reference = {
   value: "FM-00001 - 1 - Initial AR Form", valueCode: "FM-00001",
-  new: "FM-00002 - 1 - Inline Approve Form", newCode: "FM-00002",
 };
 const formTitle = { value: "My Form", newValue: "My Form Edited", newChunk: " Edited" };
 const formDescription = { value: "Description", newValue: "Description Edited" };
@@ -51,7 +53,6 @@ const history = [
     owner,
     actions: [
       { key: "Attachments removed", value: "test_image.jpg" },
-      { key: "New reference to", value: reference.newCode },
       { key: "Description changed", value: `${formDescription.newValue}` },
     ],
   },
@@ -73,7 +74,6 @@ const history = [
       { key: "New name", value: formTitle.value },
       { key: "New description", value: `${formDescription.value}` },
       { key: "Attachment added", value: `test_image.jpg` },
-      { key: "New reference to", value: reference.valueCode },
     ],
   },
 ];
@@ -220,12 +220,6 @@ context("Check Document History", () => {
       cy.drRemoveReferences(0);
     });
 
-    it("Add reference for document", () => {
-      cy.drSelectReferences( reference.new );
-      // auto-save
-      cy.wait(5 * 1000);
-    });
-
     it("Unmark 'Training Required'", () => {
       cy.drClickTrainingRequired();
     });
@@ -236,20 +230,13 @@ context("Check Document History", () => {
 
     it("Upload test.docx", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
-      // auto-save
-      cy.wait(5 * 1000);
     });
 
     it("add another output document type: Lots", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Lots" });
-    });
-  });
-
-  context("Save document", () => {
-    it("Save document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.drSelectOutputDocumentType({ documentType: "Lots" });
+        });
     });
   });
 
@@ -294,7 +281,9 @@ context("Check Document History", () => {
     });
 
     it("Add another group permission", () => {
-      cy.drAddGroupFromPermissionTab(groupTwo);
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocSecurity, () => {
+        cy.drAddGroupFromPermissionTab(groupTwo);
+      });
     });
   });
 
@@ -331,7 +320,7 @@ context("Check Document History", () => {
 
   context("Approve and Release document", () => {
     it("Approves and releases document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 

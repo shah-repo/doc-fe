@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -7,7 +10,10 @@ let loginResponse;
 let multipleCompanies;
 
 const approvalRequestTitle = "Approval request from newly created form";
-const approvalRequestFormName = "Inline Approve Form";
+const saveFileNameOne = (Math.round(Math.random() * 100000)) % 100000;
+const saveFileNameTwo = (Math.round(Math.random() * 100000)) % 100000;
+const saveFileNameThree = (Math.round(Math.random() * 100000)) % 100000;
+const saveFileNameFour = (Math.round(Math.random() * 100000)) % 100000;
 
 context("Document Attachment Flow", () => {
   context("[API]Prepare company", () => {
@@ -32,7 +38,7 @@ context("Document Attachment Flow", () => {
             documentTypes: [
               {
                 documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
+                documentTypeAcronym: "CP-",
                 group: "OTHER",
                 isQms: true,
               },
@@ -95,9 +101,9 @@ context("Document Attachment Flow", () => {
       cy.drSelectDocumentType({ documentType: "Component Specification" });
     });
 
-    it("Checks if document type id is 'CS-00003'", () => {
+    it("Checks if document type id is 'CS-00002'", () => {
       SystemRequirement("REQ-0320");
-      cy.drCheckIfDocumentIdMatches({ docId: "CS-00003" });
+      cy.drCheckIfDocumentIdMatches({ docId: "CS-00002" });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -136,17 +142,13 @@ context("Document Attachment Flow", () => {
       });
 
       it("Approves and releases document", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         cy.wait(2000);
       });
 
       it("Download all attachments with redline document", () => {
         SystemRequirement("REQ-0390");
-        cy.atchDownloadAllAttachments();
-      });
-
-      it("Enter password to confirm download", () => {
-        cy.atchEnterConfirmationPassword({ password: "Tester1!" });
+        cy.atchDownloadAll();
       });
 
       it("Revise document", () => {
@@ -162,7 +164,7 @@ context("Document Attachment Flow", () => {
       });
 
       it("Approves and releases document", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         cy.wait(2000);
       });
 
@@ -175,7 +177,7 @@ context("Document Attachment Flow", () => {
       });
 
       it("Approves and releases document", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         cy.wait(2000);
       });
 
@@ -185,11 +187,7 @@ context("Document Attachment Flow", () => {
 
       it("Download all attachments without redline document on Superseded version", () => {
         SystemRequirement("REQ-0380");
-        cy.atchDownloadAllAttachments();
-      });
-
-      it("Enter password to confirm download", () => {
-        cy.atchEnterConfirmationPassword({ password: "Tester1!" });
+        cy.atchDownloadAll();
       });
 
       it("Select Superseded version of document without redline attachments", () => {
@@ -209,23 +207,16 @@ context("Document Attachment Flow", () => {
       });
 
       it("Approves and releases document", () => {
-        cy.drApproveAndReleaseDocument();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         cy.wait(2000);
       });
 
       it("Download all attachments without redline document on Obsolete version", () => {
         SystemRequirement("REQ-0380");
-        cy.atchDownloadAllAttachments().wait(2000);
-      });
-
-      it("Enter password to confirm download", () => {
-        cy.atchEnterConfirmationPassword({ password: "Tester1!" });
+        cy.atchDownloadAll().wait(2000);
       });
     });
   });
-
-  // remove comments and lines for password
-  // when Pending change download of redline document is fixed - should not require a password
 
   context("Check Pending Change and In Review for downloading redline document", () => {
     it("Navigates to document list", () => {
@@ -275,10 +266,6 @@ context("Document Attachment Flow", () => {
       cy.cmpClickCreateApprovalRequest();
     });
 
-    it("Choose 'Inline Approve Form'", () => {
-      cy.arSelectARForm({ formTitle: approvalRequestFormName });
-    });
-
     it("Enter title AR title: " + approvalRequestTitle, () => {
       cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
     });
@@ -289,7 +276,7 @@ context("Document Attachment Flow", () => {
 
     it("Add created document revision", () => {
       cy.arClickAddDocument().wait(500);
-      cy.arChoseSpecificProposedDocument({ name: "CP00004" });
+      cy.arChoseSpecificProposedDocument({ name: "CP-00003" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
@@ -308,18 +295,17 @@ context("Document Attachment Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it("Click on specific document 'CP00004'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP00004" });
+    it("Click on specific document 'CP-00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00003" });
     });
 
-    it("Download all attachments with redline document in Pending Change state", () => {
+    it("Download redline document in Pending Change state", () => {
       SystemRequirement("REQ-0390");
-      cy.atchDownloadAllAttachments();
+      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: saveFileNameOne + "image.jpg" });
     });
 
-    // this should not be here - document in 'Pending Change' state should not have password
-    it("Enter password to confirm download", () => {
-      cy.atchEnterConfirmationPassword({ password: "Tester1!" });
+    it("Check size of downloaded file", () => {
+      cy.readFile(`cypress/downloads/${saveFileNameOne}image.jpg`).should("have.length", "32732");
     });
 
     it("Navigate to added document in AR", () => {
@@ -338,18 +324,26 @@ context("Document Attachment Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it("Click on specific document 'CP00004'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP00004" });
+    it("Click on specific document 'CP-00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00003" });
     });
 
-    it("Download all attachments with redline document in 'In Review' state", () => {
+    it("Download redline document in 'In Review' state", () => {
       SystemRequirement("REQ-0390");
-      cy.atchDownloadAllAttachments();
+      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: saveFileNameTwo + "image.jpg" });
     });
 
-    // this should not be here - document in 'In Review' state should not have password
-    it("Enter password to confirm download", () => {
-      cy.atchEnterConfirmationPassword({ password: "Tester1!" });
+    it("Download non-redline document in 'In Review' state", () => {
+      SystemRequirement("REQ-0390");
+      cy.atchDownloadFile({ fileName: "test.docx", saveFileName: saveFileNameTwo + "test.docx" });
+    });
+
+    it("Check size of downloaded redline file", () => {
+      cy.readFile(`cypress/downloads/${saveFileNameTwo}image.jpg`).should("have.length", "32732");
+    });
+
+    it("Check size of downloaded non-redline file", () => {
+      cy.readFile(`cypress/downloads/${saveFileNameTwo}test.docx`).should("have.length", "11");
     });
 
     it("Navigate to added document in AR", () => {
@@ -369,19 +363,46 @@ context("Document Attachment Flow", () => {
       cy.navigToDocumentList();
     });
 
-    it("Click on specific document 'CP00004'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP00004" });
+    it("Click on specific document 'CP-00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00003" });
     });
 
-    // should use only download redline attachment not download all...
-    it("Download all attachments with redline document in 'Approved' state", () => {
+    it("Download redline document in 'Approved' state", () => {
       SystemRequirement("REQ-0390");
-      cy.atchDownloadAllAttachments();
+      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: saveFileNameThree + "image.jpg" });
     });
 
-    // this should not be here - document in 'Approved' state should not have password
-    it("Enter password to confirm download", () => {
-      cy.atchEnterConfirmationPassword({ password: "Tester1!" });
+    it("Check size of downloaded file", () => {
+      cy.readFile(`cypress/downloads/${saveFileNameThree}image.jpg`).should("have.length", "32732");
+    });
+
+    it("Navigate to approved document in AR", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Filter approval by name and status, and select it", () => {
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Approved" });
+    });
+
+    it("Close AR", () => {
+      cy.arCloseAR();
+    });
+
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on specific document 'CP-00003'", () => {
+      cy.drClickOnSpecificDocFromList({ item: "CP-00003" });
+    });
+
+    it("Download redline document in 'Released' state", () => {
+      SystemRequirement("REQ-0390");
+      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: saveFileNameFour + "image.jpg" });
+    });
+
+    it("Check size of downloaded file", () => {
+      cy.readFile(`cypress/downloads/${saveFileNameFour}image.jpg`).should("have.length", "32732");
     });
   });
 });

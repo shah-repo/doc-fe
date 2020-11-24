@@ -8,5 +8,14 @@
     "type": "section",
     "name": "fb-requestapproval-section-${id}",
     "label": "form.builder.section"
+  }],
+  "procedure": [{
+    "type": "parts",
+    "name": "fb-parts-${id}",
+    "uniqueSchemaItem": true
+  }, {
+    "type": "section",
+    "name": "fb-procedure-section-${id}",
+    "label": "form.builder.procedure"
   }]
 }

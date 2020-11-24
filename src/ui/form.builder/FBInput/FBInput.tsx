@@ -9,13 +9,13 @@ import { withFBInput } from "./FBInput.wrap";
 const FBInput: React.FunctionComponent<FBInputProps> = ({
   label,
   error,
-  labelValues,
   gutter = true,
   showErrorMsg = true,
   children,
   helperText = "",
   disabled,
   includeContext,
+  boxProps,
   loading,
   type,
   hidden,
@@ -23,10 +23,10 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
 }) => (
   <>
     {!hidden && (
-      <Box mb={gutter ? 5 : 0}>
+      <Box mb={gutter ? 5 : 0} {...boxProps}>
         <FormControl fullWidth {...{ error }}>
           {!includes(FBInputState.omitLabel, type) && label && (
-            <FBLabel {...{ error, label, labelValues, loading }} />
+            <FBLabel {...{ error, label, loading }} />
           )}
           {children}
         </FormControl>
@@ -41,6 +41,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
               label="form.builder.note"
               {...{ disabled }}
               name={`${FBFieldName.Context}-${name}`}
+              autosave
             />
           </Box>
         )}

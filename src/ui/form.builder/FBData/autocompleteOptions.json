@@ -95,7 +95,7 @@
   },
   {
     "id": "12",
-    "path": "/document_revisions?documentTypeAcronym=PO-&status%5B%5D=RELEASED",
+    "path": "/document_revisions?docTypeGroups%5B%5D=PO&status%5B%5D=RELEASED",
     "label": "Purchase Order list",
     "valueKey": "id",
     "labelKey": "name",
@@ -148,6 +148,50 @@
     "id": "18",
     "path": "/document_revisions",
     "label": "Document revisions (all versions)",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "19",
+    "path": "/document_revisions?docTypeGroupOptions%5B%5D=MATERIAL&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED",
+    "label": "Materials",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "20",
+    "path": "/document_revisions?documentTypeCategory=Equipment",
+    "label": "Equipment",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "21",
+    "path": "/document_revisions/available_parts",
+    "label": "Available Parts",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "22",
+    "path": "/document_type?docTypeGroupOption=PART",
+    "label": "Document types",
+    "valueKey": "id",
+    "labelKey": "documentTypeName",
+    "root": ""
+  },
+  {
+    "id": "23",
+    "path": "/document_revisions/forms_group_option?docTypeGroupOption=MAINTENANCE",
+    "label": "Preventative Maintenance Forms",
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",

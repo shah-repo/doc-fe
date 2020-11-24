@@ -18,8 +18,8 @@ export class FBApprovalState {
   public groupsValue?: string[];
   public approvalRolesValue?: string[];
 
-  public postApi: FBRequest<any, FBApprovalApi> = new FBRequest();
-  public getDocumentApi: FBRequest<Document, null> = new FBRequest();
+  public postApi: FBRequest<any, FBApprovalApi> = new FBRequest(FBEndpoint.PostInlineApprove);
+  public getDocumentApi: FBRequest<Document, null> = new FBRequest(FBEndpoint.Document);
   public approversApi = new FBAutocompleteAsyncState(this.approversId);
   public groupsApi = new FBAutocompleteAsyncState(this.groupsId);
   public approvalRolesApi = new FBAutocompleteAsyncState(this.approvalRolesId);
@@ -37,7 +37,7 @@ export class FBApprovalState {
     this.approvalRolesValue = approvalRolesValue;
     if (!documentId) { return; }
     this.hasApproved = value;
-    this.postApi.setTemplateUrl(FBEndpoint.PostInlineApprove, { documentId });
+    this.postApi.set({ urlValues: { documentId }, url: FBEndpoint.PostInlineApprove });
   }
 
   public get approversId(): string {
@@ -54,8 +54,11 @@ export class FBApprovalState {
 
   public getDocument = (id?: string) => {
     if (!id) { return; }
-    this.getDocumentApi.setTemplateUrl(FBEndpoint.Document, { id });
-    this.getDocumentApi.fetch();
+    this.getDocumentApi.set({
+      url: FBEndpoint.Document,
+      urlValues: { id },
+      method: "get",
+    });
   };
 
   @computed public get isApproved(): boolean {

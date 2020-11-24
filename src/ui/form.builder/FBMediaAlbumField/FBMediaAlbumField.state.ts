@@ -1,5 +1,5 @@
 import axios from "axios";
-import { filter, find, get, isEmpty, isUndefined, pick, size, sortBy, union } from "lodash";
+import { filter, find, get, isEmpty, isUndefined, pick, size, sortBy, union, uniqBy } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { apiClient, FBMediaAlbumFieldConstructor, FBMediaAlbumFieldMode, FBMediaAlbumFieldStore, FBMediaFile, FBMediaProps, FBMediaUrlProps, FBWorkspaceState } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
@@ -39,7 +39,7 @@ export class FBMediaAlbumFieldState {
   @computed public get collection(): FBMediaProps[] {
     const fieldImgs = FBMediaAlbumFieldStore.data.get(this.fieldName || "");
     if (fieldImgs) {
-      return sortBy(Array.from(fieldImgs.values()), "order");
+      return sortBy(uniqBy(Array.from(fieldImgs.values()), "name"), "order");
     }
     return [];
   }
@@ -117,9 +117,13 @@ export class FBMediaAlbumFieldState {
 
     promise
       .then((data: FBMediaProps[]) => {
-        const fieldNameFromSchema = this.fieldName;
+        const fieldNameFromSchema = this.fieldName || "";
         const filesByName = filter(data, { fieldNameFromSchema });
-        !isEmpty(filesByName) && this.setMode("media");
+        if (isEmpty(filesByName)) {
+          FBMediaAlbumFieldStore.setData(this.fieldName || "", []);
+          return this.setLoading(false);
+        }
+        this.setMode("media");
         this.download(filesByName);
       })
       .catch((_error) => this.error(_error));

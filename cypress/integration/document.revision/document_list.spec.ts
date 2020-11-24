@@ -1,6 +1,8 @@
-/* eslint-disable max-classes-per-file */
-// / <reference types="Cypress" />
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -15,6 +17,7 @@ let componentSpecificationDocumentType;
 let group;
 const documentRevisionName = "New document for testing document list";
 const secondDocumentRevName = "Second document for testing";
+const currentDate = moment().tz("America/Los_Angeles").format("L");
 
 context("Document list test", () => {
   context("[API]Prepare company", () => {
@@ -81,7 +84,7 @@ context("Document list test", () => {
             attachments: [],
             description: "<p>Test Doc Rev Description1</p>",
             document: {
-              docId: "CP-00004",
+              docId: "CP-00003",
               documentType: {
                 id: componentSpecificationDocumentType[0].id,
               },
@@ -115,7 +118,7 @@ context("Document list test", () => {
           attachments: [],
           description: "<p>Test Doc Rev Description2</p>",
           document: {
-            docId: "CP-00005",
+            docId: "CP-00004",
             documentType: {
               id: componentSpecificationDocumentType[0].id,
             },
@@ -174,7 +177,7 @@ context("Document list test", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Navigate to document list", () => {
@@ -242,7 +245,7 @@ context("Document list test", () => {
     it("Check only documents are shown on document list", () => {
       SystemRequirement("REQ-0050");
       // SystemRequirement("REQ-0510");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
     });
   });
 
@@ -254,12 +257,12 @@ context("Document list test", () => {
       });
 
       it("Filter list by docId", () => {
-        cy.dlFilterByDocId({ docId: "CP-00004" });
+        cy.dlFilterByDocId({ docId: "CP-00003" });
       });
 
       it("Verify filter by docId", () => {
         SystemRequirement("REQ-0060");
-        cy.dlVerifyFilterByDocId({ docId: "CP-00004" });
+        cy.dlVerifyFilterByDocId({ docId: "CP-00003" });
       });
 
       it("Verify document counter on document list", () => {
@@ -284,7 +287,7 @@ context("Document list test", () => {
 
       it("Verify document counter on document list", () => {
         SystemRequirement("REQ-0110");
-        cy.dlVerifyDocCounter({ docCounterNumber: 4 });
+        cy.dlVerifyDocCounter({ docCounterNumber: 3 });
       });
     });
 
@@ -354,12 +357,12 @@ context("Document list test", () => {
       });
 
       it("Filter list by AR ID", () => {
-        cy.dlFilterByArId({ arId: "AR99998" });
+        cy.dlFilterByArId({ arId: "AR99999" });
       });
 
       it("Verify filter by AR ID", () => {
         SystemRequirement("REQ-0060");
-        cy.dlVerifyFilterByArId({ arId: "AR99998" });
+        cy.dlVerifyFilterByArId({ arId: "AR99999" });
       });
 
       it("Verify document counter on document list", () => {
@@ -384,7 +387,7 @@ context("Document list test", () => {
 
       it("Verify document counter on document list", () => {
         SystemRequirement("REQ-0110");
-        cy.dlVerifyDocCounter({ docCounterNumber: 3 });
+        cy.dlVerifyDocCounter({ docCounterNumber: 2 });
       });
     });
 
@@ -399,7 +402,8 @@ context("Document list test", () => {
 
       it("Verify filter by effective date", () => {
         SystemRequirement("REQ-0060");
-        cy.dlVerifyFilterByEffectiveDate({ effectiveDate: (new Date()).toLocaleDateString("en-US") });
+        // cy.dlVerifyFilterByEffectiveDate({ effectiveDate: (new Date()).toLocaleDateString("en-US") });
+        cy.dlVerifyFilterByEffectiveDate({ effectiveDate: currentDate });
       });
     });
 

@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -80,7 +83,7 @@ context("Approval request implementation tasks", () => {
             attachments: [],
             description: "<p>Test Doc Rev Description</p>",
             document: {
-              docId: "CS-00004",
+              docId: "CP-00004",
               documentType: {
                 id: componentSpecificationDocumentType[0].id,
               },
@@ -164,7 +167,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -193,7 +196,7 @@ context("Approval request implementation tasks", () => {
 
     it("Add created document revision", () => {
       cy.arClickAddDocument().wait(500);
-      cy.arChoseSpecificProposedDocument({ name: "CS-00004" });
+      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();

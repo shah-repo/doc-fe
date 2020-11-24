@@ -2,100 +2,175 @@
   "autocomplete": [
     "multiple",
     "includeQRScan",
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "select": [
     "includeNone",
     "includeContext",
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "checkbox": [
     "includeContext",
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "radio": [
     "includeContext",
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "checkboxgroup": [
     "includeContext",
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "radiogroup": [
     "includeContext",
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "approval": [
     "approveIsBlocking",
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "inlineapproval": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "textfield": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "texteditor": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "datepicker": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "hyperlink": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "fileupload": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "quantity": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "timer": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "purchaseorder": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "poreceive": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "instructionsmediaupload": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "evidencemediaupload": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "testRequirement": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "requestapproval": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "checkpoint": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "createlabel": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "selectrequirement": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "selectdocument": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "instructionsdocument": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "approvalMatrix": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "poApprovalMatrix": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "documentRevisions": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ],
   "task": [
-    "reviseDisabled"
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
+  ],
+  "procedure": [
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
+  ],
+  "parts": [
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
+  ],
+  "eqmaintenance": [
+    "reviseDisabled",
+    "deleteDisabled",
+    "copyableValue"
   ]
 }

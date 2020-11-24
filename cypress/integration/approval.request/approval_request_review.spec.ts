@@ -1,8 +1,10 @@
-/* eslint-disable max-classes-per-file */
-// / <reference types="Cypress" />
-import { CONFIG } from "../support/config";
-import { USERS } from "../utils/constants/users";
-import { SystemRequirement } from "../utils/context/systemRequirement";
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
+import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
+import { USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let sessionId;
@@ -25,25 +27,17 @@ context("Approval request form scenario", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[20].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: USERS[5].email,
+            importerEmail: USERS[24].email,
             numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[21], USERS[22], USERS[23]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
-            documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
-                group: "OTHER",
-                isQms: true,
-              },
-            ],
           }, sessionId,
         }).then((response) => {
           createdCompany = response;
@@ -54,7 +48,7 @@ context("Approval request form scenario", () => {
 
     it("[API]Tester Login to get companies", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[21].email,
         password: "Tester1!",
       }).then((response: any) => {
         multipleCompanies = response.employees.length > 1 ? true : false;
@@ -66,7 +60,7 @@ context("Approval request form scenario", () => {
   context("Log in user and select company", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[21].email,
         password: "Tester1!",
       });
     });
@@ -113,7 +107,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocument();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -165,7 +159,6 @@ context("Approval request form scenario", () => {
 
     it("Choose newly AR Form template", () => {
       cy.arSelectARForm({ formTitle: approvalRequestFormName });
-      cy.wait(5000);
     });
 
     it("Enter Approval Request title", () => {
@@ -184,10 +177,10 @@ context("Approval request form scenario", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Add first approver to approval request on approver list",
-      () => {
-        cy.arAddApproverOnApproverList({ approver: USERS[1].email });
-      });
+    it("Add approvers to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: USERS[20].email });
+      cy.arAddApproverOnApproverList({ approver: USERS[22].email });
+    });
 
     it("Click Create Approval Request", () => {
       cy.arClickCreateApprovalRequestAfterCompletingForm();
@@ -195,11 +188,22 @@ context("Approval request form scenario", () => {
 
     it("Click send to review", () => {
       cy.arClickSendToReview();
+      cy.wait(10000);
     });
 
     it("Verify AR status", () => {
       SystemRequirement("REQ-0020");
       cy.arVerifyStatus({ status: "In Review" });
+    });
+
+    it("Verify notification email is received on user '" + USERS[20].email + "'", () => {
+      SystemRequirement("REQ-2140");
+      cy.imapVerifyInReviewAREmailNotification({ userEmail: USERS[20].email, arId: "ARID: AR00002" });
+    });
+
+    it("Verify notification email is received on user '" + USERS[22].email + "'", () => {
+      SystemRequirement("REQ-2140");
+      cy.imapVerifyInReviewAREmailNotification({ userEmail: USERS[22].email, arId: "ARID: AR00002" });
     });
   });
 
@@ -217,12 +221,12 @@ context("Approval request form scenario", () => {
 
     it("Check Document's description is non-editable", () => {
       SystemRequirement("REQ-0850");
-      cy.get("[data-cy=\"common.description\"] textarea").should("be.disabled");
+      cy.get("div[name$=\"descriptionOfChange\"]").should("have.attr", "disabled");
     });
 
     it("Check Document's justification is non-editable", () => {
       SystemRequirement("REQ-0850");
-      cy.get("[data-cy=\"cr.justification\"] textarea").should("be.disabled");
+      cy.get("div[name$=\"justificationOfChange\"]").should("have.attr", "disabled");
     });
 
     it("Check 'Add Document' button is disbaled", () => {
@@ -237,15 +241,53 @@ context("Approval request form scenario", () => {
     });
   });
 
-  context("Verify owner can withdraw approval request", () => {
-    it("Withdraw Submission", () => {
-      SystemRequirement("REQ-0890");
-      cy.arWithdrawSubmission().wait(3000);
+  context("Verify owner can withdraw approval request and that dashboard notifications are not shown", () => {
+    context("Withdraw AR", () => {
+      it("Withdraw Submission", () => {
+        SystemRequirement("REQ-0890");
+        cy.arWithdrawSubmission();
+      });
     });
 
-    it("Sending for review again", () => {
-      SystemRequirement("REQ-0890");
-      cy.arClickSendToReview();
+    context("Verify dashboard notification are not shown", () => {
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: USERS[20].email,
+          password: "Tester1!",
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
+
+      it("Verify there is no dashboard notifications", () => {
+        SystemRequirement("REQ-2190");
+        cy.cmpVerifyNoPendingActions();
+      });
+    });
+
+    context("Send AR to review again", () => {
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: USERS[21].email,
+          password: "Tester1!",
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
+
+      it("Navigate to AR", () => {
+        cy.navigToApprovalRequestList();
+        cy.arSelectFirstDocument();
+      });
+
+      it("Sending for review again", () => {
+        SystemRequirement("REQ-0890");
+        cy.arClickSendToReview();
+      });
     });
   });
 
@@ -265,23 +307,78 @@ context("Approval request form scenario", () => {
       cy.arSelectARForm({ formTitle: approvalRequestFormName });
     });
 
-    it.skip("Document One already used, it must not be added again.", () => {
+    it("Document One already used, it must not be added again.", () => {
       SystemRequirement("REQ-0860");
       cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: sampleDocOneTitle });
       cy.arIsProposedDocumentEmpty();
-      cy.get("[data-cy=\"FBButton-label\"]").click().wait(1000);
+      cy.get("[data-cy=\"form.builder.cancel\"]").click().wait(1000);
     });
   });
 
-  context("User prompted to enter their user password when approving or rejecting an AR", () => {
-    it("Logout existing user", () => {
-      cy.authLogout();
+  context("Reject AR and verify email notification", () => {
+    context("Reject AR", () => {
+      it("Logout existing user", () => {
+        cy.authLogout();
+      });
+
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: USERS[20].email,
+          password: "Tester1!",
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
+
+      it("Rejecting request gives prompt", () => {
+        cy.arRejectComfirmationAR();
+      });
+
+      it("Verify message is shown if e-signature not met", () => {
+        SystemRequirement("REQ-0880");
+        cy.arVerifySignatureIsNotMet();
+      });
+
+      it("Reject AR from dashboard", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostRejectCR, CyRoutes.ARPreview, CyRoutes.GetPendingActions], () => {
+          cy.poRejectAR({ password: "Tester1!" });
+        });
+        cy.wait(10000);
+      });
     });
 
+    context("Verify email notifications for rejected AR", () => {
+      it("Verify email notification for rejected AR is sent to owner '" + USERS[21].email + "'", () => {
+        SystemRequirement("REQ-2190");
+        cy.imapVerifyRejectedAREmailNotification({ userEmail: USERS[21].email, arId: "ARID: AR00002" });
+      });
+    });
+
+    context("Verify dashboard notification are not shown", () => {
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: USERS[22].email,
+          password: "Tester1!",
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
+
+      it("Verify there is no dashboard notifications", () => {
+        SystemRequirement("REQ-2190");
+        cy.cmpVerifyNoPendingActions();
+      });
+    });
+  });
+
+  context("Send to review again and approve", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[21].email,
         password: "Tester1!",
       });
     });
@@ -290,15 +387,73 @@ context("Approval request form scenario", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Rejecting request gives prompt", () => {
-      cy.arRejectComfirmationAR();
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
     });
 
-    it("Accept Approval Request with password prompt", () => {
-      SystemRequirement("REQ-0920");
+    it("Select first document", () => {
+      cy.arSelectFirstDocument();
+    });
 
-      cy.arApproveAR();
-      cy.wait(6000);
+    it("Add approvers to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: USERS[20].email });
+      cy.wait(200);
+      cy.arAddApproverOnApproverList({ approver: USERS[21].email });
+      cy.wait(200);
+      cy.arAddApproverOnApproverList({ approver: USERS[22].email });
+    });
+
+    it("Save Approval Request", () => {
+      cy.arSaveApiCall();
+    });
+
+    it("Click send to review", () => {
+      cy.arClickSendToReview();
+    });
+  });
+
+  context("Approve AR and verify email notifications are received", () => {
+    context("Approve AR with first approver", () => {
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: USERS[20].email,
+          password: "Tester1!",
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
+
+      it("Accept Approval Request with password prompt", () => {
+        SystemRequirement("REQ-0920");
+        cy.arApproveAR();
+      });
+    });
+
+    context("Approve AR with second approver", () => {
+      it("Logs user in", () => {
+        cy.authLogin({
+          email: USERS[22].email,
+          password: "Tester1!",
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
+
+      it("Accept Approval Request with password prompt", () => {
+        SystemRequirement("REQ-0920");
+        cy.arApproveAR();
+        cy.wait(10000);
+      });
+    });
+
+    context("Verify email notification", () => {
+      it("Verify email notification for approved AR is sent to owner'" + USERS[21].email + "'", () => {
+        cy.imapVerifyApprovedAREmailNotification({ userEmail: USERS[21].email, arId: "ARID: AR00002" });
+      });
     });
   });
 
@@ -309,6 +464,10 @@ context("Approval request form scenario", () => {
 
     it("Select first document", () => {
       cy.arSelectFirstDocument();
+    });
+
+    it("Verify AR status is 'Approved'", () => {
+      cy.arVerifyStatus({ status: "Approved" });
     });
 
     it("Open history drawer", () => {

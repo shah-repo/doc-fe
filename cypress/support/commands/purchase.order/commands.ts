@@ -98,7 +98,7 @@ Cypress.Commands.add("poEnterDocumentDescription", (params: {description: string
 
 Cypress.Commands.add("poSelectPartNumber", () => {
   cy.get("[name=\"partNumber\"]").click().wait(300);
-  cy.get("ul[role=listbox] > li").contains("PRT-00004 - 1").click();
+  cy.get("ul[role=listbox] > li").contains("PRT-00003 - 1").click();
 });
 
 Cypress.Commands.add("poEnterQuantityOrdered", (params: {quantity: string}) => {
@@ -138,12 +138,11 @@ Cypress.Commands.add("poCheckCurrency", () => {
   cy.get("ul[role=listbox] > li").contains("USD").should("exist");
   cy.get("ul[role=listbox] > li").contains("EUR").should("exist");
   cy.get("ul[role=listbox] > li").contains("GBP").should("exist");
-  cy.get("ul[role=listbox] > li").contains("AU").should("exist");
-  cy.get("ul[role=listbox] > li").contains("C").should("exist");
+  cy.get("ul[role=listbox] > li").contains("AUD").should("exist");
+  cy.get("ul[role=listbox] > li").contains("CAD").should("exist");
 });
 
 Cypress.Commands.add("poSelectCurrency", (params: { currencyValue: string }) => {
-  cy.get("[id*=\"currency\"]").click();
   cy.get("ul[role=listbox] > li").contains(params.currencyValue).click().wait(500);
 });
 
@@ -251,8 +250,6 @@ Cypress.Commands.add("poAMCheckApprovalIconIfItsGray", () => {
 });
 
 Cypress.Commands.add("poAMApproveButton", () => {
-  cy.get("#FormList-selectForm").click();
-  cy.get("#FormList-selectForm>div:nth-child(3)>div>div:nth-child(1)").click();
   cy.get("#ApproveAndRelease-submit").click();
 });
 

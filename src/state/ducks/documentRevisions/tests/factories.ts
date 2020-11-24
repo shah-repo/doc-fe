@@ -25,6 +25,7 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
   revisionStage: faker.random.number(10),
   revisionChangeType: RevisionChangeType.NextRevision,
   owner: getOwner(),
+  displayStatus: DocumentRevisionStatus.Draft,
   status: DocumentRevisionStatus.Draft,
   displayRevision: faker.random.number(10) as unknown as string,
   attachments: [],
@@ -34,6 +35,8 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
     id: faker.random.uuid(),
     docId: faker.random.alphaNumeric(),
     referencedBy: [],
+    children: [],
+    parent: {} as DocumentRevision,
     documentType: {
       id: faker.random.uuid(),
       documentTypeAcronym: faker.random.word(),

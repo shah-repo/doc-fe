@@ -3,6 +3,7 @@ import { createSelector } from "reselect";
 import { stripTags, stripTagsFromObject } from "../../../common/utils/helpers";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { DocumentRevisionFormValues } from "../../../ui/documentRevision/forms/types";
+import { isDocumentRevisionInStatus, isDocumentRevisionPendingChange, isDocumentRevisionReleased } from "../../../ui/documentRevision/helpers/documentRevisionStatus";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 import { Audit, AuditGroupType } from "../audit/types";
@@ -51,10 +52,10 @@ const makeGetDisableCreateNewVersion = () => createSelector(
   (documentRevisions) =>
     some(
       documentRevisions,
-      (docRev) =>
-        docRev.status === DocumentRevisionStatus.Draft ||
-          docRev.status === DocumentRevisionStatus.PendingChange ||
-          docRev.status === DocumentRevisionStatus.InReview,
+      (docRev) => isDocumentRevisionInStatus(
+        [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange, DocumentRevisionStatus.InReview],
+        docRev.status,
+      ),
     ),
 );
 
@@ -75,11 +76,11 @@ const makeGetAvailableReferences = () => createSelector(
         return false;
       }
 
-      if (status === DocumentRevisionStatus.Released) {
+      if (isDocumentRevisionReleased(status)) {
         return true;
       }
 
-      if (status === DocumentRevisionStatus.PendingChange) {
+      if (isDocumentRevisionPendingChange(status)) {
         if (
           changeRequest &&
             currentDocRev.changeRequest &&
@@ -92,29 +93,18 @@ const makeGetAvailableReferences = () => createSelector(
       return false;
     });
 
-    // if two doc revs from same to document, take the one with the higher version number
+    // filter all doc revs from same document
     const uniqueIds = filteredIds.filter((id) => {
       const docRev = docRevs[id];
-
-      const skipId = some(filteredIds, (filteredId) => {
-        const filteredDocRev = docRevs[filteredId];
-
-        if (filteredDocRev.document.id === docRev.document.id) {
-          return filteredDocRev.version > docRev.version;
-        }
-
-        return false;
-      });
-
-      return !skipId;
+      return currentDocRev.document?.id !== docRev.document.id;
     });
 
     return uniqueIds.map((id) => {
-      const { document, revision, name } = docRevs[id];
+      const { document, name, displayRevision } = docRevs[id];
 
       return {
         value: document.id,
-        label: `${document.docId} - ${revision} - ${name}`,
+        label: `${document.docId} - ${displayRevision} - ${name}`,
       };
     });
   },
