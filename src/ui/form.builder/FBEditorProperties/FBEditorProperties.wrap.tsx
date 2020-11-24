@@ -18,13 +18,15 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     const { formState, workspaceState } = FB.useStores();
     type && (options = FBData.editorPropertiesByType(type));
 
-    const docTypeId = workspaceState?.document?.document.documentType.id;
-    const outputDocumentTypes = workspaceState?.document?.outputDocumentTypes?.map((type) =>
-    workspaceState?.externalState?.documentType?.byId[type.value]);
+    const { document: docRev, externalState } = workspaceState || {};
+    const docTypeId = docRev?.document.documentType.id;
+    const documentTypesById = externalState?.documentType?.byId;
+    const outputDocumentTypes = docRev?.outputDocumentTypes?.map((type) =>
+      documentTypesById[type.value]);
 
     map(FBEditorPropertiesOmitByGroup, (v: string[], k: DocumentGroupOptionsType) => {
       if (!docTypeId) { return; }
-      const docGroupOptions = workspaceState?.externalState?.documentType?.byId[docTypeId].groupOptions;
+      const docGroupOptions = documentTypesById[docTypeId].groupOptions;
       const isDocumentForm = checkIsDocumentForm(docGroupOptions);
       const isOutputInGroup = some(outputDocumentTypes, (type) =>
         checkDocumentGroupOptions(k, type.groupOptions));
