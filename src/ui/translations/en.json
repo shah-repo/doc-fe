@@ -727,6 +727,7 @@
   "form.builder.download.clean.copy": "Download generated clean copy of file {fileShortName}",
   "form.builder.add.approvers": "Add Approvers",
   "form.builder.revise.disabled": "Revision Disabled",
+  "form.builder.delete.disabled": "Deletion Disabled",
   "form.builder.send": "Send",
   "form.builder.edit.matrix": "Edit matrix",
   "form.builder.fullscreen.mode": "Fullscreen Mode",
