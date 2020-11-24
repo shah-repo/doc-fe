@@ -19,16 +19,16 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     type && (options = FBData.editorPropertiesByType(type));
 
     const docTypeId = workspaceState?.document?.document.documentType.id;
-    const outputDocumentTypes = workspaceState?.document?.outputDocumentTypes.map((type) =>
+    const outputDocumentTypes = workspaceState?.document?.outputDocumentTypes?.map((type) =>
     workspaceState?.externalState?.documentType?.byId[type.value]);
 
-    map(FBEditorPropertiesOmitByGroup, (v, k) => {
+    map(FBEditorPropertiesOmitByGroup, (v: string[], k: DocumentGroupOptionsType) => {
       if (!docTypeId) { return; }
       const docGroupOptions = workspaceState?.externalState?.documentType?.byId[docTypeId].groupOptions;
       const isDocumentForm = checkIsDocumentForm(docGroupOptions);
       const isOutputInGroup = some(outputDocumentTypes, (type) =>
-        checkDocumentGroupOptions(k as DocumentGroupOptionsType, type.groupOptions));
-      const isDocumentInGroup = checkDocumentGroupOptions(k as DocumentGroupOptionsType, docGroupOptions);
+        checkDocumentGroupOptions(k, type.groupOptions));
+      const isDocumentInGroup = checkDocumentGroupOptions(k, docGroupOptions);
       if (!(isDocumentForm && isOutputInGroup) && !isDocumentInGroup) {
         options = filter(options, (option) => !v.includes(get(option, "value"))) as FBOption[];
       }
