@@ -19,7 +19,8 @@ export const withFBApprovalPasswordForm = (
     };
 
     const onDialogApprove = () => {
-      approvalTransition?.("approve", approvalId);
+      const password = formState?.getFieldValue("password");
+      approvalTransition?.("approve", approvalId, password);
       onDialogCancel();
     };
 

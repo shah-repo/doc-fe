@@ -51,7 +51,14 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     handleAdd = () => {
       if (!type) { return; }
       const formValues: FBSchemaProps = formState?.getValues() as FBSchemaProps;
-      const { options, validators, label, editorProperties, uniqueSchemaItem } = formValues;
+      const {
+        options,
+        validators,
+        label,
+        editorProperties,
+        uniqueSchemaItem,
+        placeholder,
+      } = formValues;
 
       // If schema item type is unique and we have already added it into scheme
       const isUnique = (
@@ -74,6 +81,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         ...validators && toStringRules && { rules: toStringRules(validators) },
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         applicableValidationSchema: true,
+        validationAttribute: (label as string) || placeholder,
       }, index);
       dialogState?.closeDialog();
     };

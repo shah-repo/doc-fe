@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBEQMaintenanceHistory, FBFileUpload, FBInput, FBQuantityField, FBSelect, FBTextEditor } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBEQMaintenanceHistory, FBInput, FBQuantityField, FBTextEditor } from "..";
 import { FBSection } from "../FBSection";
 import { FBEQMaintenanceProps } from "./FBEQMaintenance.types";
 import { withFBEQMaintenance } from "./FBEQMaintenance.wrap";
@@ -14,6 +14,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   editorConfig = [],
   label,
   currentStatus,
+  isTypePM,
   ...props
 }) => (
   <FBInput {...{ name }} {...props} type="eqmaintenance">
@@ -33,23 +34,22 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       </Box>
     </FBSection>
     <FBAutocompleteAsync
-      label="form.builder.preventative.maintenance.form"
+      label={isTypePM ? "form.builder.preventative.maintenance.form" : "form.builder.calibration.form"}
       optionId={FBAutocompleteAsyncOption.preventativeMaintenaceForms}
       name={`${name}.preventativeForm`}
       withState
       {...{ disabled }}
     />
-    {/* This needs to be a number field */}
     <FBQuantityField
       name={`${name}.frequency`}
-      label="form.builder.maintenance.frequency"
+      label={isTypePM ? "form.builder.maintenance.frequency" : "form.builder.calibration.frequency"}
       withState
       {...{ disabled }}
     />
     {currentStatus && <Box mb={3}>
       <b>Current Status:</b> {currentStatus}
     </Box>}
-    {editorConfig.includes("instructions") && (
+    {editorConfig?.fields?.includes("instructions") && (
       <FBTextEditor
         name={`${name}.instructions`}
         label="form.builder.pm.instructions"
@@ -57,20 +57,6 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       />
     )}
     <FBEQMaintenanceHistory {...{ name }}/>
-    {editorConfig.includes("manufacturer") && (
-      <FBFileUpload
-        name={`${name}.manufacturer`}
-        label="form.builder.attach.manufacturer"
-        {...{ disabled }}
-      />
-    )}
-    {editorConfig.includes("specs") && (
-      <FBSelect
-        name={`${name}.specs`}
-        label="form.builder.drawings.specs"
-        {...{ disabled }}
-      />
-    )}
   </FBInput>
 );
 export default withFBEQMaintenance(FBEQMaintenance);

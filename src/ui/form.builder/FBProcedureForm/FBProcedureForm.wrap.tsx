@@ -1,14 +1,11 @@
-import { isObject, map } from "lodash";
+import { map } from "lodash";
 import React from "react";
 import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormProps, FBProcedureItemConfig, FBProcedureItemType } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
 
 export const withFBProcedureForm = <T extends FBProcedureFormProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    getOptionLabel,
     formState,
     disabledOptions,
     initialValues,
@@ -53,23 +50,10 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       dialogState?.closeDialog();
     }
 
-    // MARK: @methods
-    getOptionLabel = (option: DocumentRevision) => {
-      if (!isObject(option)) { return option; }
-      const versionNumber = generateRevisionNumber(
-        option.revision,
-        option.revisionStage,
-        option.subRevision,
-        option.revisionChangeType,
-      );
-      return `${option.document?.docId} rev ${versionNumber} - ${option.name}`;
-    };
-
     // MARK: @observer
 
     return Component({
       ...(props as T),
-      getOptionLabel,
       formState,
       disabledOptions,
       initialValues,

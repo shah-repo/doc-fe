@@ -6,7 +6,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "2",
@@ -41,7 +42,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "6",
@@ -50,7 +52,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "7",
@@ -59,7 +62,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "8",
@@ -91,7 +95,8 @@
     "valueKey": "id",
     "labelKey": "document.docId",
     "labelPrefixRoot": "",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "12",
@@ -100,7 +105,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "13",
@@ -124,7 +130,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "16",
@@ -133,7 +140,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "17",
@@ -151,7 +159,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "19",
@@ -160,7 +169,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "20",
@@ -169,7 +179,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "21",
@@ -178,7 +189,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "22",
@@ -195,6 +207,7 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   }
 ]

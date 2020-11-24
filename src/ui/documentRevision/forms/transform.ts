@@ -3,6 +3,8 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
+import { checkIsDocumentDAM, checkIsDocumentPOAM, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
+import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
 import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
 import { getIsAdministrativeDefault } from "../helpers/revisionStage";
 import { DocumentRevisionFormValues } from "./types";
@@ -41,7 +43,6 @@ export const toDocumentRevisionFormValues = (
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
     revisionChangeType: documentRevision.revisionChangeType,
-    revisionStage: documentRevision.revisionStage.toString(),
     securityEmployees: get(documentRevision, "document.securityList.securityEmployees", [])
       .map((employee) => ({ label: employee.name, value: employee.id })),
     securityGroups: get(documentRevision, "document.securityList.securityGroups", [])
@@ -64,6 +65,17 @@ export const toDocumentRevisionFormValues = (
         .map((e) => ({ label: e.documentTypeName, value: e.id })),
     };
   }
+
+  const isDocumentRecord = checkIsDocumentRecord(documentRevision?.document.documentType.groupOptions);
+  const isDocumentPOAM = checkIsDocumentPOAM(documentRevision?.document.documentType.groupOptions);
+  const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
+  const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isDocumentRecord;
+  const isdocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
+  const isDocRevFirstDraft = isdocRevStatusDraft && documentRevision?.version === 1;
+  if (shouldShowRevStageForDocType && isDocRevFirstDraft) {
+    values.revisionStage = documentRevision.revisionStage.toString();
+  }
+
   FBDRStore.setValues(documentRevision);
   return values;
 };
@@ -92,6 +104,7 @@ export const toDocumentRevisionEditRequestBody = (
       .map((reference) => ({
         id: reference.value,
       })),
+    revisionStage: Number(values.revisionStage),
     revisionChangeType: values.revisionChangeType,
     retrain: values.retrain,
     renderHTML: values.renderHTML ? values.renderHTML.replace(/(\r\n|\n|\r)/gm, "") : values.renderHTML,
