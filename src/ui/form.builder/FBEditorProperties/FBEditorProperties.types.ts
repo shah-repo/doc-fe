@@ -1,4 +1,5 @@
 import { FBInputProps } from "..";
+import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { FBInputType } from "../FBInput";
 import { FBOption } from "../FBOption";
 
@@ -20,8 +21,8 @@ export const FBEditorPropertiesDefaultValue: Partial<Record<FBInputType, FBEdito
   procedure: ["copyableValue"],
 };
 
-export const FBEditorPropertiesIncludeByType = {
-  part: ["includeInInspection", "includeInFaiInspection" ],
+export const FBEditorPropertiesOmitByGroup = {
+  [DOC_TYPE_GROUP_OPTION.PART]: ["includeInInspection", "includeInFaiInspection" ],
 };
 
 export type FBEditorPropertiesOption =

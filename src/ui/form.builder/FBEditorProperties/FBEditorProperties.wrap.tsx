@@ -1,7 +1,8 @@
-import { at, some } from "lodash";
+import { at, filter, get, map, some } from "lodash";
 import React from "react";
-import { FB, FBData, FBEditorPropertiesProps } from "..";
-import { checkIsDocumentForm, checkIsDocumentPart } from "../../documentRevision/helpers/checkDocumentGroup";
+import { FB, FBData, FBEditorPropertiesOmitByGroup, FBEditorPropertiesProps, FBOption } from "..";
+import { DocumentGroupOptionsType } from "../../../state/ducks/documentRevisions/documentType/types";
+import { checkDocumentGroupOptions, checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
 
 export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
   Component: React.FunctionComponent<T>,
@@ -20,15 +21,18 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     const docTypeId = workspaceState?.document?.document.documentType.id;
     const outputDocumentTypes = workspaceState?.document?.outputDocumentTypes.map((type) =>
     workspaceState?.externalState?.documentType?.byId[type.value]);
-    const isOutputPart = some(outputDocumentTypes, (type) => checkIsDocumentPart(type.groupOptions));
-    if (docTypeId) {
-      const groupOptions = workspaceState?.externalState?.documentType?.byId[docTypeId].groupOptions;
-      const isDocumentForm = checkIsDocumentForm(groupOptions);
-      const isDocumentPart = checkIsDocumentPart(groupOptions);
-      if ((isDocumentForm && isOutputPart) || isDocumentPart) {
-        console.log("yes");
+
+    map(FBEditorPropertiesOmitByGroup, (v, k) => {
+      if (!docTypeId) { return; }
+      const docGroupOptions = workspaceState?.externalState?.documentType?.byId[docTypeId].groupOptions;
+      const isDocumentForm = checkIsDocumentForm(docGroupOptions);
+      const isOutputInGroup = some(outputDocumentTypes, (type) =>
+        checkDocumentGroupOptions(k as DocumentGroupOptionsType, type.groupOptions));
+      const isDocumentInGroup = checkDocumentGroupOptions(k as DocumentGroupOptionsType, docGroupOptions);
+      if (!(isDocumentForm && isOutputInGroup) && !isDocumentInGroup) {
+        options = filter(options, (option) => !v.includes(get(option, "value"))) as FBOption[];
       }
-    }
+    });
 
     onChange = (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       const [valueName, checked] = at(ev.target, ["value", "checked"]);
