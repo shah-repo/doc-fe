@@ -25,3 +25,4 @@ export const checkIsTypeCanBeOutput = checkDocumentGroupOptions.bind(this, DOC_T
 export const checkIsDocumentDAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DAM);
 export const checkIsDocumentPOAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.POAM);
 export const checkIsDocumentEquipment = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EQUIPMENT);
+export const checkCanBeCopied = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_BE_COPIED);
