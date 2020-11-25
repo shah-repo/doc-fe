@@ -22,6 +22,7 @@ import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
 import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
 import { FBEditorTextEditor } from "../FBEditorTextEditor";
 import { FBEditorTextField } from "../FBEditorTextField";
+import FBEditorTextFieldWithRange from "../FBEditorTextFieldWithRange/FBEditorTextFieldWithRange";
 
 export class FBEditorState {
 
@@ -129,6 +130,7 @@ export class FBEditorState {
     procedure: FBEditorEmpty,
     parts: FBEditorEmpty,
     eqmaintenance: FBEditorEQMaintenance,
+    textfieldwithrange: FBEditorTextFieldWithRange,
   };
 
   @observable public mode?: FBEditorMode = "config";

@@ -286,6 +286,8 @@ export { default as FBTextEditorOptionsState } from "./FBTextEditorOptions/FBTex
 export * from "./FBTextEditorOptions/FBTextEditorOptions.types";
 export { default as FBTextField } from "./FBTextField/FBTextField";
 export * from "./FBTextField/FBTextField.types";
+export { default as FBTextFieldWithRange } from "./FBTextFieldWithRange/FBTextFieldWithRange";
+export { default as FBTextFieldWithRangeState } from "./FBTextFieldWithRange/FBTextFieldWithRange.state";
 export { default as FBTimerField } from "./FBTimerField/FBTimerField";
 export * from "./FBTimerField/FBTimerField.types";
 export { default as FBTooltip } from "./FBTooltip/FBTooltip";

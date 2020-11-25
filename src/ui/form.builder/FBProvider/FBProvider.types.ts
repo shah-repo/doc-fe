@@ -31,6 +31,7 @@ import { FBProcedureState } from "../FBProcedure";
 import { FBProcedureDiffState } from "../FBProcedureDiff";
 import { FBTextEditorState } from "../FBTextEditor";
 import { FBTextEditorOptionsState } from "../FBTextEditorOptions";
+import { FBTextFieldWithRangeState } from "../FBTextFieldWithRange/FBTextFieldWithRange.state";
 
 
 export interface FBProviderProps {
@@ -66,4 +67,5 @@ export interface FBProviderProps {
   eqMaintenanceState?: FBEQMaintenanceState;
   eqMaintenanceHistoryState?: FBEQMaintenanceHistoryState;
   ebPartState?: FBEBPartState;
+  textFieldWithRangeState?: FBTextFieldWithRangeState;
 }
