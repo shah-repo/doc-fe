@@ -9,14 +9,16 @@ import { styles } from "./ExportListDialog.styles";
 
 interface Props {
   dialog: DialogHandler;
-  headers: HeaderTableType[];
+  headers?: HeaderTableType[];
   data: any[];
+  useKeysAsHeaders?: boolean;
 }
 
 const ExportListDialog: React.FunctionComponent<Props> = ({
   dialog,
   headers,
   data,
+  useKeysAsHeaders = false,
 }) => {
   const classes = styles();
   const [fileName, saveFileName] = useState("");
@@ -26,10 +28,11 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
     quoteStrings: "\"",
     decimalSeparator: ".",
     showLabels: true,
-    headers: headers.map((e) => e.label ),
+    headers: headers?.map((e) => e.label ),
     filename: fileName === "" ? "DocumentList" : fileName,
     useTextFile: false,
     useBom: true,
+    useKeysAsHeaders,
   };
 
   const csvExporter = new ExportToCsv(options);
