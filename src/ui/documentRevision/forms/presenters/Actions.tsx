@@ -11,7 +11,7 @@ import { RequestType } from "../../../components/common/owner.changer/helpers/ty
 import CopyEBButton from "../../../components/forms/CopyEBButton";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
-import { checkCanBeCopied, checkIsDocumentRecord } from "../../helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkIsDocumentRecord, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
@@ -19,6 +19,7 @@ import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.prese
 import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";
+import ExportToCSVButton from "./export.to.csv/ExportToCSV.button";
 import { SubmitForApproval } from "./SubmitForApproval";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
 import VoidButton from "./VoidButton";
@@ -39,6 +40,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
+  const serializedCSV = hasSerializedCSV(values.document?.documentType?.groupOptions);
   const isApproved = isInlineFormApproved(
     documentRevision,
     formState,
@@ -50,12 +52,12 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
   const isUserDocumentOwner = React.useContext(isOwnerContext);
-  const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
+  const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const showVoidButton = isStatusInDraft && documentRevision?.version === 1;
   const showVoidButtonOnInlineRecords = isStatusInDraft &&
      isDocumentNumericRelease(documentRevision?.revisionStage);
-  const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
-  const canCopy = checkCanBeCopied(documentRevision.document?.documentType?.groupOptions);
+  const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
+  const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
 
   function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -116,6 +118,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   return (
     <div>
+      {serializedCSV &&
+      <ExportToCSVButton
+        {...{ documentRevision }}
+      />}
       {(isStatusReleased || isStatusInDraft) && canCopy &&
         <CopyEBButton
           {...{ documentRevision }}
