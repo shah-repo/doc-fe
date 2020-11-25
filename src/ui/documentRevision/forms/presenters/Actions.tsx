@@ -8,10 +8,11 @@ import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
+import CopyEBButton from "../../../components/forms/CopyEBButton";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
-import { checkIsDocumentRecord, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
-import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus";
+import { checkCanBeCopied, checkIsDocumentRecord, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
+import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
 import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.presenter";
@@ -51,9 +52,12 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
   const isUserDocumentOwner = React.useContext(isOwnerContext);
-  const showVoidButton = isDocumentRevisionInDraft(documentRevision?.status) && documentRevision?.version === 1;
-  const showVoidButtonOnInlineRecords = isDocumentRevisionInDraft(documentRevision?.status) &&
+  const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
+  const showVoidButton = isStatusInDraft && documentRevision?.version === 1;
+  const showVoidButtonOnInlineRecords = isStatusInDraft &&
      isDocumentNumericRelease(documentRevision?.revisionStage);
+  const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
+  const canCopy = checkCanBeCopied(documentRevision.document?.documentType?.groupOptions);
 
   function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -118,6 +122,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       <ExportToCSVButton
         {...{ documentRevision }}
       />}
+      {(isStatusReleased || isStatusInDraft) && canCopy &&
+        <CopyEBButton
+          {...{ documentRevision }}
+        />}
       <SubmitButton
         asyncState={asyncState}
         label={isDisabled ?
