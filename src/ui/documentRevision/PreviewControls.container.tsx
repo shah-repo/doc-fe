@@ -5,24 +5,24 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
-import { DOC_TYPE_GROUP_OPTION } from "../../state/ducks/documentRevisions/documentType";
 import { DocumentRevisionTransitionResponse, FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import AlertDialog from "../app/alert.dialog/AlertDialog";
+import CopyEBButton from "../components/forms/CopyEBButton";
 import { toastInfo } from "../components/notifications";
 import Text from "../components/Text";
 import DownloadHTML from "../document.revision/summary/download.html";
-import { documentNewVersionPath, documentVersionPath } from "../document.revision/utils/paths";
+import { documentNewVersionPath } from "../document.revision/utils/paths";
 import { useHandleCreateDoc } from "../documentType/list/CreateDocumentByType";
 import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
 import { isOwnerContext } from "./forms/DocumentRevisionForm.presenter";
-import { checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
-import { getIsLastVersionObsolete, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
+import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
 import { isFormWithInlineApproval } from "./helpers/records";
 
 interface OwnProps {
@@ -57,8 +57,8 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const isRecord = checkIsDocumentRecord(documentRevision.document?.documentType?.groupOptions);
   const isStatusInReview = isDocumentRevisionInReview(documentRevision.status);
   const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
-  const canCopy = (documentRevision.document.documentType.groupOptions || []).includes(
-    DOC_TYPE_GROUP_OPTION.CAN_BE_COPIED);
+  const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
+  const canCopy = checkCanBeCopied(documentRevision.document?.documentType?.groupOptions);
   const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
   const isUserDocumentOwner = React.useContext(isOwnerContext);
 
@@ -129,33 +129,6 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
       );
     }
   };
-
-  const asyncCopyTo = useAsync({
-    onSuccess: (documentRevision: any) => {
-      history.push({
-        pathname: documentVersionPath(documentRevision.id, documentRevision.document.id),
-      });
-    },
-  });
-  const copyTo = useActionCreator(documentRevisionsActions.copyTo);
-  const copyToAction = () => {
-    asyncCopyTo.start(
-      copyTo,
-      documentRevision.id,
-      asyncCopyTo,
-    );
-  };
-
-
-  const renderCopyButton = () => (
-    <Button
-      color="secondary"
-      variant="outlined"
-      onClick={copyToAction}
-      data-cy="PreviewControlsContainer-copy-to" >
-      <Text translation="documentRevision.copy.to" />
-    </Button>
-  );
 
   const renderOutputButton = () => {
     const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
@@ -230,7 +203,10 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   return (
     <>
       {!isLastVersionObsolete() && renderCloneButton()}
-      {isStatusReleased && canCopy && renderCopyButton()}
+      {(isStatusReleased || isStatusInDraft) && canCopy &&
+        <CopyEBButton
+          {...{ documentRevision }}
+        />}
       {renderOutputButton()}
       {renderNoAccessWarning()}
       {isRecord && isStatusInReview && !isInlineApproval && isUserDocumentOwner &&
