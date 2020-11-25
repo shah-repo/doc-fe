@@ -208,5 +208,11 @@
     "copyableValue",
     "includeInInspection",
     "includeInFaiInspection"
+  ],
+  "textfieldwithrange": [
+    "reviseDisabled",
+    "copyableValue",
+    "includeInInspection",
+    "includeInFaiInspection"
   ]
 }

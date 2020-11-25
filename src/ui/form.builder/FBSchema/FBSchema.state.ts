@@ -42,7 +42,7 @@ import { FBTask } from "../FBTask";
 import { FBTestRequirement } from "../FBTestRequirement";
 import { FBTextEditor } from "../FBTextEditor";
 import { FBTextField } from "../FBTextField";
-import FBTextFieldWithRange from "../FBTextFieldWithRange/FBTextFieldWithRange.wrap";
+import { FBTextFieldWithRange } from "../FBTextFieldWithRange";
 import { FBTimerField } from "../FBTimerField";
 
 export class FBSchemaState {

@@ -489,6 +489,7 @@
   "form.builder.lists": "Lists",
   "form.builder.approvals": "Approvals",
   "form.builder.textfield": "Text field",
+  "form.builder.textfieldwithrange": "Text field with range",
   "form.builder.checkbox": "Checkbox",
   "form.builder.checkboxgroup": "Checkbox group",
   "form.builder.datepicker": "Date picker",
