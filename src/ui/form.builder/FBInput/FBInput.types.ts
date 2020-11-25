@@ -64,7 +64,8 @@ export type FBInputType =
   | "parts"
   | "procedurediff"
   | "ebpart"
-  | "eqmaintenance";
+  | "eqmaintenance"
+  | "textfieldwithrange";
 
 export type FBInputProps =
   & FBLabelProps
