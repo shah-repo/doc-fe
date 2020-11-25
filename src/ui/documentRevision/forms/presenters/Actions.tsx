@@ -52,12 +52,12 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
   const isUserDocumentOwner = React.useContext(isOwnerContext);
-  const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
+  const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const showVoidButton = isStatusInDraft && documentRevision?.version === 1;
   const showVoidButtonOnInlineRecords = isStatusInDraft &&
      isDocumentNumericRelease(documentRevision?.revisionStage);
-  const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
-  const canCopy = checkCanBeCopied(documentRevision.document?.documentType?.groupOptions);
+  const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
+  const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
 
   function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
