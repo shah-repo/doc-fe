@@ -65,7 +65,8 @@ export type FBInputType =
   | "procedurediff"
   | "ebpart"
   | "eqmaintenance"
-  | "textfieldwithrange";
+  | "textfieldwithrange"
+  | "range";
 
 export type FBInputProps =
   & FBLabelProps
@@ -166,4 +167,5 @@ export const OmitInputClones: FBInputType[] = [
   "eqmaintenance",
   "ebpart",
   "parts",
+  "range",
 ];

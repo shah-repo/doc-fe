@@ -1,5 +1,5 @@
 import { flatten } from "flat";
-import { cloneDeep, Dictionary, get as lodashGet, isArray, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, setWith } from "lodash";
+import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, setWith } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBFormConstructor, FBInputState, FBWorkspaceMode, FBWorkspaceState } from "..";
 import { FBSchemaState } from "../FBSchema";
@@ -125,6 +125,10 @@ export class FBFormState extends FBSchemaState {
 
     const rules = flatten(this.getRules());
     const values = omitBy(this.values, (v) => isString(v) && isEmpty(v));
+    map(values, (v, k) => {
+      if (!isBoolean(v)) { return; }
+      values[k] = `${v}`;
+    });
     // *TODO: unify validators format
     let validator: any;
     try {

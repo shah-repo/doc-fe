@@ -1,3 +1,3 @@
-export { default as FBEditorProperties } from "./FBEditorTextFieldWithRange";
+export { default as FBEditorTextFieldWithRange } from "./FBEditorTextFieldWithRange";
 export * from "./FBEditorTextFieldWithRange.types";
 

@@ -16,7 +16,7 @@ const FBPassValue: React.FunctionComponent<FBPassValueProps> = ({
           isTypePercentage ? (
             <FBTextField />
           ) : (
-            <FBRange isVisible />
+            <FBRange name="range" />
           )
         }
       </Box>

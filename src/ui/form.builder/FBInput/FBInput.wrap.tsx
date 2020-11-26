@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { first, get, includes, isBoolean, isEmpty, isEqual, isString, isUndefined } from "lodash";
+import { first, get, includes, isBoolean, isEqual, isString, isUndefined } from "lodash";
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
@@ -69,11 +69,11 @@ export const withFBInput = <T extends FBInputProps>(
 
     if ((isOutput || formState?.workspaceMode !== "design") && formState?.workspaceMode !== "formPreview") {
       (isUndefined(hidden) && validationMode === "visibility") && (hidden =
-        !helperText && (!validationValue || isEmpty(validationValue))
+        !helperText && (!validationValue || validationValue === "")
       );
 
       (!disabled && validationMode === "disabled") && (disabled =
-        !helperText && (!validationValue || isEmpty(validationValue))
+        !helperText && (!validationValue || validationValue === "")
       );
     }
 

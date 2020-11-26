@@ -1,15 +1,49 @@
+import { reaction } from "mobx";
 import React from "react";
-import { FBRangeProps } from ".";
+import { FB, FBInputProps } from "..";
 
-export const withFBRange = <T extends FBRangeProps>(
+export const withFBRange = <T extends FBInputProps>(
   Component: React.FunctionComponent,
 ) => {
   const Comp = ({
-    isVisible,
+    name,
+    ...props
   }) => {
+    
     // MARK: @config
+    const { formState } = FB.useStores();
 
     // MARK: @reactions
+    // Handle value
+    React.useEffect(() => reaction(
+      () => formState?.inputState.get(`${name}.from`)?.value,
+      (from: number) => {
+        if (!formState?.inputState.get(`${name}.to`)?.value) {
+          formState?.setFieldValue(name, undefined);
+          return;
+        }
+        formState.setFieldValue(name, {
+          from,
+          to: formState?.inputState.get(`${name}.to`)?.value,
+        })
+      },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    React.useEffect(() => reaction(
+      () => formState?.inputState.get(`${name}.to`)?.value,
+      (to: number) => {
+        if (!formState?.inputState.get(`${name}.from`)?.value) {
+          formState?.setFieldValue(name, undefined);
+          return;
+        }
+        formState.setFieldValue(name, {
+          from: formState?.inputState.get(`${name}.from`)?.value,
+          to,
+        })
+      },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     // MARK: @helpers
 
@@ -18,10 +52,11 @@ export const withFBRange = <T extends FBRangeProps>(
     // MARK: @observer
 
 
-    if (!isVisible) {
-      return null;
-    }
-    return Component({});
+    
+    return Component({
+      ...(props as T),
+      name,
+    });
   };
 
   Comp.displayName = "withFBRange";

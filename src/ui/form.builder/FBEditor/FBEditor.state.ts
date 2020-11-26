@@ -22,7 +22,7 @@ import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
 import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
 import { FBEditorTextEditor } from "../FBEditorTextEditor";
 import { FBEditorTextField } from "../FBEditorTextField";
-import FBEditorTextFieldWithRange from "../FBEditorTextFieldWithRange/FBEditorTextFieldWithRange";
+import { FBEditorTextFieldWithRange } from "../FBEditorTextFieldWithRange";
 
 export class FBEditorState {
 
