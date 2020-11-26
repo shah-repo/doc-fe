@@ -260,7 +260,6 @@ pipelines:
           - export CYPRESS_SCREENSHOTS_FOLDER="test-results/some_ci_build_id/reports/screenshots"
           - export DIR_VIDEOS_REPORT="test-results/some_ci_build_id/reports/videos"
           - export CYPRESS_VIDEOS_FOLDER="test-results/some_ci_build_id/reports/videos"
-          -
           - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
           - mv cypress_docker.json cypress.json
           - yarn install --frozen-lockfile
