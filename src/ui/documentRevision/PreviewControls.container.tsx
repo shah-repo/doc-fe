@@ -13,6 +13,7 @@ import CopyEBButton from "../components/forms/CopyEBButton";
 import { toastInfo } from "../components/notifications";
 import Text from "../components/Text";
 import DownloadHTML from "../document.revision/summary/download.html";
+import PDFSocket from "../document.revision/summary/pdf.socket";
 import { documentNewVersionPath } from "../document.revision/utils/paths";
 import { useHandleCreateDoc } from "../documentType/list/CreateDocumentByType";
 import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
@@ -212,6 +213,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
       {isRecord && isStatusInReview && !isInlineApproval && isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
       <DownloadHTML pdf={documentRevision.pdf} />
+      <PDFSocket {...{ documentRevision }}/>
     </>
   );
 };
