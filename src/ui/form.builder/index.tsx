@@ -114,6 +114,8 @@ export { default as FBEditorSelectRequirement } from "./FBEditorSelectRequiremen
 export { default as FBEditorTestRequirement } from "./FBEditorTestRequirement/FBEditorTestRequirement";
 export { default as FBEditorTextEditor } from "./FBEditorTextEditor/FBEditorTextEditor";
 export { default as FBEditorTextField } from "./FBEditorTextField/FBEditorTextField";
+export { default as FBEditorTextFieldWithRange } from "./FBEditorTextFieldWithRange/FBEditorTextFieldWithRange";
+export * from "./FBEditorTextFieldWithRange/FBEditorTextFieldWithRange.types";
 export { default as FBEditorTitle } from "./FBEditorTitle/FBEditorTitle";
 export { default as FBEditorTitleState } from "./FBEditorTitle/FBEditorTitle.state";
 export * from "./FBEditorTitle/FBEditorTitle.types";
@@ -232,6 +234,7 @@ export { default as FBQuantityField } from "./FBQuantityField/FBQuantityField";
 export { default as FBRadio } from "./FBRadio/FBRadio";
 export { default as FBRadioGroup } from "./FBRadioGroup/FBRadioGroup";
 export * from "./FBRadioGroup/FBRadioGroup.types";
+export { default as FBRange } from "./FBRange/FBRange";
 export { default as FBRequestApproval } from "./FBRequestApproval/FBRequestApproval";
 export { default as FBRequestApprovalField } from "./FBRequestApproval/FBRequestApproval.field";
 export * from "./FBRequestApproval/FBRequestApproval.types";
