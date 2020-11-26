@@ -231,15 +231,15 @@ pipelines:
         CYPRESS_BE_URL: "https://api.dev.enlil.io"
         CYPRESS_FE_URL: "https://dev.enlil.io"
         CYPRESS_BROWSER: "chrome"
-        NUMBER_OF_WORKERS: 2
+        NUMBER_OF_WORKERS: "2"
         REPORT_TITLE: "generated_specs"
         CYPRESS_INTEGRATION_FOLDER: "cypress/integration/group.management"
-        CYPRESS_SKIP_ON_RUN_FAILURE: true
-        CYPRESS_TAKE_SCREENSHOT_AFTER_EACH: false
-        CYPRESS_SCREENSHOT_OF_RUN_FAILURE: true
+        CYPRESS_SKIP_ON_RUN_FAILURE: "true"
+        CYPRESS_TAKE_SCREENSHOT_AFTER_EACH: "false"
+        CYPRESS_SCREENSHOT_OF_RUN_FAILURE: "true"
         CYPRESS_SUPERADMIN_EMAIL: "zoran.kovacevic+admin@codecons.com"
         CYPRESS_SUPERADMIN_PASSWORD: "Tester1!"
-        CYPRESS_VIDEO: false
+        CYPRESS_VIDEO: "false"
         DIR_JSON: "test-results/some_ci_build_id/json"
         DIR_REPORTS: "test-results/some_ci_build_id/reports"
         DIR_SCREENSHOTS: "test-results/some_ci_build_id/reports/screenshots"
