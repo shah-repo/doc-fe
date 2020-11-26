@@ -226,6 +226,27 @@ pipelines:
       - step: *DEPLOY_DEMO
     
     ENC-5912:
+      - variables:
+          CI_BUILD_ID: "some_ci_build_id"
+          CYPRESS_BE_URL: "https://api.dev.enlil.io"
+          CYPRESS_FE_URL: "https://dev.enlil.io"
+          CYPRESS_BROWSER: "chrome"
+          NUMBER_OF_WORKERS: 2
+          REPORT_TITLE: "generated_specs"
+          CYPRESS_INTEGRATION_FOLDER: "cypress/integration/group.management"
+          CYPRESS_SKIP_ON_RUN_FAILURE: true
+          CYPRESS_TAKE_SCREENSHOT_AFTER_EACH: false
+          CYPRESS_SCREENSHOT_OF_RUN_FAILURE: true
+          CYPRESS_SUPERADMIN_EMAIL: "zoran.kovacevic+admin@codecons.com"
+          CYPRESS_SUPERADMIN_PASSWORD: "Tester1!"
+          CYPRESS_VIDEO: false
+          DIR_JSON: "test-results/some_ci_build_id/json"
+          DIR_REPORTS: "test-results/some_ci_build_id/reports"
+          DIR_SCREENSHOTS: "test-results/some_ci_build_id/reports/screenshots"
+          DIR_SCREENSHOTS_REPORT: "test-results/some_ci_build_id/reports/screenshots"
+          CYPRESS_SCREENSHOTS_FOLDER: "test-results/some_ci_build_id/reports/screenshots"
+          DIR_VIDEOS_REPORT: "test-results/some_ci_build_id/reports/videos"
+          CYPRESS_VIDEOS_FOLDER: "test-results/some_ci_build_id/reports/videos"
       - step:
         image:
           name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs1
@@ -248,26 +269,4 @@ pipelines:
           - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
           - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
-      - variables:
-          CI_BUILD_ID: "some_ci_build_id"
-          CYPRESS_BE_URL: "https://api.dev.enlil.io"
-          CYPRESS_FE_URL: "https://dev.enlil.io"
-          CYPRESS_BROWSER: "chrome"
-          NUMBER_OF_WORKERS: 2
-          REPORT_TITLE: "generated_specs"
-          CYPRESS_INTEGRATION_FOLDER: "cypress/integration/group.management"
-          CYPRESS_SKIP_ON_RUN_FAILURE: true
-          CYPRESS_TAKE_SCREENSHOT_AFTER_EACH: false
-          CYPRESS_SCREENSHOT_OF_RUN_FAILURE: true
-          CYPRESS_SUPERADMIN_EMAIL: "zoran.kovacevic+admin@codecons.com"
-          CYPRESS_SUPERADMIN_PASSWORD: "Tester1!"
-          CYPRESS_VIDEO: false
-          DIR_JSON: "test-results/some_ci_build_id/json"
-          DIR_REPORTS: "test-results/some_ci_build_id/reports"
-          DIR_SCREENSHOTS: "test-results/some_ci_build_id/reports/screenshots"
-          DIR_SCREENSHOTS_REPORT: "test-results/some_ci_build_id/reports/screenshots"
-          CYPRESS_SCREENSHOTS_FOLDER: "test-results/some_ci_build_id/reports/screenshots"
-          DIR_VIDEOS_REPORT: "test-results/some_ci_build_id/reports/videos"
-          CYPRESS_VIDEOS_FOLDER: "test-results/some_ci_build_id/reports/videos"
-
-
+      
