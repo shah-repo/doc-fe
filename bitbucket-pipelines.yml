@@ -242,7 +242,7 @@ pipelines:
           artifacts:
             - test-results/**
           script:
-            - ./scripts/cypress/utils/variables_pipeline.sh
+            - source ./scripts/cypress/utils/variables_pipeline.sh
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - mv cypress_docker.json cypress.json
             - yarn install --frozen-lockfile
