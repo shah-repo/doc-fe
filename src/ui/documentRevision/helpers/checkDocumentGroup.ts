@@ -4,7 +4,7 @@ import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "../../../state/
    * @param groupOption Option that is searched for.
    * @param documentGroupOptions Array of group options a document has.
    */
-const checkDocumentGroupOptions = (
+export const checkDocumentGroupOptions = (
   groupOption: DocumentGroupOptionsType,
   documentGroupOptions?: DocumentGroupOptionsType[],
 ): boolean => {
