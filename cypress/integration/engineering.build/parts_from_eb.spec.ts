@@ -357,10 +357,10 @@ context("Parts from EB flow test", () => {
     });
   });
 
-  context("Copy to EB", () => {
+  context("Clone EB", () => {
     context("Create the next build of EB", () => {
-      it("Click Copy to EB button", () => {
-        cy.ebClickCopyToEB();
+      it("Click Clone EB button", () => {
+        cy.ebClickClone();
       });
 
       it("Verify that the selected part is copied to the new build", () => {

@@ -13,7 +13,7 @@ declare global {
       ebCheckIfPartIsInSummary(params: { partName: string }): Chainable<Subject>;
       ebVerifyNewRevisionCreated(): Chainable<Subject>;
       ebApprove(): Chainable<Subject>;
-      ebClickCopyToEB(): Chainable<Subject>;
+      ebClickClone(): Chainable<Subject>;
     }
   }
 }
@@ -45,7 +45,7 @@ Cypress.Commands.add("ebVerifyNewRevisionCreated", () => {
     });
 });
 
-Cypress.Commands.add("ebClickCopyToEB", () => {
+Cypress.Commands.add("ebClickClone", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy=\"PreviewControlsContainer-copy-to\"]").click();
   });
