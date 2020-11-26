@@ -18,7 +18,6 @@ import "cypress-file-upload";
 import "cypress-localstorage-commands";
 import "cypress-promise/register";
 import "cypress-xpath";
-import { readdirSync, readFileSync, rmdirSync, unlinkSync } from "fs";
 import { addScreenshotToContext } from "../utils/context/screenshotsToContext";
 import "./commands";
 import "./commands/approval.request/commands";
@@ -139,25 +138,4 @@ if (CONFIG.SKIP_ON_RUN_FAILURE) {
   before(() => {
     cy.task("resetShouldSkipFlag");
   });
-}
-
-
-export function deleteResultsIfExist(fileName: string) {
-  if (!CONFIG.RESULTS_DIR) {
-    return;
-  }
-  const files = readdirSync(`${CONFIG.RESULTS_DIR}/json`).filter((x) => x.includes("generated_specs"));
-  for (const resultFile of files) {
-    const content = JSON.parse(readFileSync(resultFile).toString());
-    if (content.stats.failures > 0) {
-      const fileNameInResult = content.results[0].file;
-      if (fileName.endsWith(fileNameInResult)) {
-        console.log("unlinkSync", fileName);
-        unlinkSync(fileName);
-        const file = fileName.split("/").reverse()[0];
-        console.log("rmdirSync", `${CONFIG.RESULTS_DIR}/reports/screenshots/${file}`);
-        rmdirSync(`${CONFIG.RESULTS_DIR}/reports/screenshots/${file}`, { recursive: true });
-      }
-    }
-  }
 }
