@@ -45,6 +45,11 @@ declare global {
       grpAPICreateNewGroup(params: {payload: Group; employeeId: string;  sessionId: string}): Chainable<Subject>;
       grpCheckForNumberOfGroupMembersDisplayed(): Chainable;
       grpClearFilter(): Chainable;
+      grpPatchGroup(params: {
+        groupId: string;
+        payload: any;
+        employeeId: string;
+        sessionId: string;}): Chainable<Subject>;
     }
   }
 }
@@ -279,4 +284,21 @@ Cypress.Commands.add("grpCheckForNumberOfGroupMembersDisplayed", () => {
   cy.get(".ReactVirtualized__Table__row > div:nth-child(2) > div > div > div").each((element) => {
     expect(element.text()).to.match(hasFifteenOrLess || hasZero);
   });
+});
+
+Cypress.Commands.add("grpPatchGroup", (params: {
+  groupId: string;
+  employeeId: string;
+  sessionId: string;
+  payload: any; }) =>
+{
+  cy.request({
+    method: "PATCH",
+    url: `${CONFIG.BE_URL}/api/v1/groups/${params.groupId}`,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+    body: params.payload,
+  }).then((response) => response ? response.body : {})
+    .then((response) => JSON.stringify(response));
 });

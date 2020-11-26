@@ -18,6 +18,7 @@ let multipleCompanies;
 let adminEmployee;
 let secondEmployee;
 let thirdEmployee;
+let developersGroup;
 
 context("PO approval test", () => {
   context("Create company via API and create Purchase Order Form document", () => {
@@ -79,6 +80,28 @@ context("PO approval test", () => {
           employeeId: adminEmployee.id,
           sessionId: loginResponse.sessionId,
         }).then(() => done());
+      });
+    });
+
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Developers",
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        developersGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: developersGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: secondEmployee.id }, { id: thirdEmployee.id }],
+        },
       });
     });
 
