@@ -1,7 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import { PreventSkipOnFailure } from "../../support";
+import { deleteResultsIfExist, PreventSkipOnFailure } from "../../support";
 import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -9,6 +9,10 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
+
+before(() => {
+  deleteResultsIfExist(__filename);
+});
 
 context("Group Creation Flow", () => {
   context("[API]Prepare company", () => {

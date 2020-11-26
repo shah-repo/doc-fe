@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { plainToClass } from "class-transformer";
-import { IsBoolean, IsDefined, IsEmail, IsString, validateSync } from "class-validator";
+import { IsBoolean, IsDefined, IsEmail, IsOptional, IsString, validateSync } from "class-validator";
 
 export class ConfigEnv {
   private static instance: ConfigEnv;
@@ -22,6 +22,7 @@ export class ConfigEnv {
       SKIP_ON_RUN_FAILURE: Cypress.env("SKIP_ON_RUN_FAILURE"),
       SUPERADMIN_EMAIL: Cypress.env("SUPERADMIN_EMAIL"),
       SUPERADMIN_PASSWORD: Cypress.env("SUPERADMIN_PASSWORD"),
+      RESULTS_DIR: Cypress.env("RESULTS_DIR"),
     });
 
     const errors = validateSync(configEnv, {
@@ -67,6 +68,10 @@ export class ConfigEnv {
   @IsDefined()
   @IsString()
   SUPERADMIN_PASSWORD!: string;
+
+  @IsOptional()
+  @IsString()
+  RESULTS_DIR!: string;
 }
 
 
