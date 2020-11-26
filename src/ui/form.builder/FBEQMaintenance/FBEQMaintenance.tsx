@@ -44,7 +44,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       optionId={FBAutocompleteAsyncOption.preventativeMaintenaceForms}
       name={`${name}.preventativeForm`}
       validationMode="visibility"
-      rules={`required_if_in:${name}.requirements,Yes`}
+      rules={`required_if:${name}.requirements,Yes`}
       withState
       {...{ disabled }}
     />
@@ -52,7 +52,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       name={`${name}.frequency`}
       label={isTypePM ? "form.builder.maintenance.frequency" : "form.builder.calibration.frequency"}
       validationMode="visibility"
-      rules={`required_if_in:${name}.requirements,Yes`}
+      rules={`required_if:${name}.requirements,Yes`}
       withState
       {...{ disabled }}
     />
@@ -60,7 +60,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       name={`${name}.justification`}
       label="common.justifications"
       validationMode="visibility"
-      rules={`required_if_in:${name}.requirements,No`}
+      rules={`required_if:${name}.requirements,No`}
       {...{ disabled }}
     />
     {currentStatus && <Box mb={3}>
