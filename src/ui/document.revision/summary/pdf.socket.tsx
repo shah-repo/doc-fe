@@ -31,8 +31,8 @@ const PDFSocket: React.FunctionComponent<Props> = ({
   const unsubscribe = () => {
     iotService.unsubscribeFromTopic(`+/document_revisions/${docRevId}/pdf`);
   };
-  useMqttSubscription(subscribe, unsubscribe);
 
+  useMqttSubscription(subscribe, unsubscribe);
 
   return null;
 };
