@@ -1,10 +1,13 @@
+import { Box } from "@material-ui/core";
 import React from "react";
-import { FBCheckbox, FBEditor, FBEditorPlaceholder, FBEditorProps, FBEditorTextFieldWithRangeProps, FBForm, FBRange, FBTextField } from "..";
+import { FBAutocomplete, FBCheckbox, FBEditor, FBEditorPlaceholder, FBEditorProps, FBEditorTextFieldWithRangeProps, FBForm, FBPassValue, FBRange, FBTextField } from "..";
 import { withFBEditorTextFieldWithRange } from "./FBEditorTextFieldWithRange.wrap";
 
 const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorProps & FBEditorTextFieldWithRangeProps> = ({
   isRangeVisible,
   isInspectionVisible,
+  isPassValueVisible,
+  aqlOptions,
   children,
   inputProps: { type } = {},
   inputProps,
@@ -27,28 +30,41 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorProps & FBEdit
         withState
         gutter={false}
       />
-      <FBRange isVisible={isRangeVisible} />
+      <Box marginLeft={2}>
+        <FBRange isVisible={isRangeVisible} />
+      </Box>
       <FBCheckbox
         label="form.builder.critical.to.quality"
         name="criticalToQuality"
+        gutter={false}
       />
       <FBCheckbox
         label="form.builder.inspection"
         name="inspection"
         withState
-        gutter={false}
+        gutter={!isInspectionVisible}
       />
       {isInspectionVisible && (
-        <>
+        <Box marginLeft={2}>
           <FBCheckbox
             label="form.builder.pass.value"
             name="passValue"
+            withState
+            gutter={!isPassValueVisible}
+          />
+          <Box marginLeft={4}>
+            <FBPassValue isVisible={isPassValueVisible} />
+          </Box>
+          <FBAutocomplete
+            label="form.builder.aql"
+            name="aql"
+            options={aqlOptions}
           />
           <FBCheckbox
             label="form.builder.fai"
             name="fai"
           />
-        </>
+        </Box>
       )}
       {children}
     </FBForm>

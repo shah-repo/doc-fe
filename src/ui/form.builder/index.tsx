@@ -196,6 +196,8 @@ export { default as FBPartsState } from "./FBParts/FBParts.state";
 export * from "./FBParts/FBParts.types";
 export { default as FBPartsItem } from "./FBPartsItem/FBPartsItem";
 export * from "./FBPartsItem/FBPartsItem.types";
+export { default as FBPassValue } from "./FBPassValue/FBPassValue";
+export * from "./FBPassValue/FBPassValue.types";
 export { default as FBPOApprovalMatrix } from "./FBPOApprovalMatrix/FBPOApprovalMatrix";
 export { default as FBPOReceive } from "./FBPOReceive/FBPOReceive";
 export { default as FBPOReceiveState } from "./FBPOReceive/FBPOReceive.state";
