@@ -25,7 +25,6 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
   const handleClick = (employee: Employee) => () => {
     dispatch(companyActions.selectCompany(employee.company));
     dispatch(authActions.selectEmployee(employee));
-    dispatch(authActions.getIotCreds());
     dispatch(authActions.clearNonAuthData());
     dispatch(tableSearchActions.clearAllTables());
     history.push(HOME_URL);

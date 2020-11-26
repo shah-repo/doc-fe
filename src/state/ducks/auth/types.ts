@@ -1,6 +1,6 @@
 import { Nullable } from "../common";
 import { Employee } from "../company";
-import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, USERS_ME_URL, USER_GROUPS } from "./constants";
+import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_EMPLOYEE, SIGNUP_URL, USERS_ME_URL, USER_GROUPS } from "./constants";
 
 export interface LoginRequestBody {
   email: string;
@@ -40,7 +40,6 @@ export interface AuthResponse {
   sessionId: string;
   employees: Employee[];
   avatar: string | null;
-  iotCredentials: IotCredentials;
 }
 
 export interface Token {
@@ -113,22 +112,6 @@ export interface UserState {
   avatar: string | null;
   groups: Group[];
   employee: Employee;
-  iotCredentials: IotCredentials;
-}
-
-export interface IotCredentials {
-  credentials: Credentials;
-  endpoint: string;
-  environment: string;
-  companyId: string;
-  region: string;
-}
-
-export interface Credentials {
-  AccessKeyId: string;
-  SecretAccessKey: string;
-  SessionToken: string;
-  Expiration: string;
 }
 
 export interface AuthProps {
@@ -148,11 +131,6 @@ export interface UserGroupsState {
 export interface SelectEmployeeAction {
   type: typeof SET_EMPLOYEE;
   payload: Employee;
-}
-
-export interface SetCredentialsAction {
-  type: typeof SET_CREDENTIALS;
-  payload: any;
 }
 
 export interface EmployeeEditRequestBody {
