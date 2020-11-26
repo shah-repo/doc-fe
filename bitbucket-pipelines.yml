@@ -229,7 +229,7 @@ pipelines:
       - step:
           name: Cypress specs
           image:
-            name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs1
+            name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs2
             aws:
               access-key: $AWS_ACCESS_KEY_ID
               secret-key: $AWS_SECRET_ACCESS_KEY
@@ -243,10 +243,10 @@ pipelines:
             - test-results/**
           script:
             - source ./scripts/cypress/utils/variables_pipeline.sh
-            - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - mv cypress_docker.json cypress.json
             - yarn install --frozen-lockfile
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
+            - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
