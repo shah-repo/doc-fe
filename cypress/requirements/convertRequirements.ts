@@ -1,5 +1,6 @@
 import csv from "csvtojson";
 import fs from "fs";
+import { resolve } from "path";
 
 const INPUT =  "list.csv";
 const OUTPUT = "cache/generated.json";
@@ -16,8 +17,9 @@ csv()
       result[item[REQ_HEADER_TEXT]] = item;
     });
     fs.writeFileSync(
-      [__dirname, "..", OUTPUT].join("/"),
+      resolve(__dirname, "..", OUTPUT),
       JSON.stringify(result, null, 2),
       { encoding: "UTF-8" }
     );
+    console.log("DONE!!!!!!", resolve(__dirname, "..", OUTPUT))
   });
