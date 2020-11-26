@@ -451,9 +451,9 @@ context("Procedure and parts flow test", () => {
     });
   });
 
-  context("Copy to EB and verify materials and equipment tracking", () => {
-    it("Click copy to EB", () => {
-      cy.ebClickCopyToEB();
+  context("Clone EB and verify materials and equipment tracking", () => {
+    it("Click Clone EB", () => {
+      cy.ebClickClone();
     });
 
     context("Add materials and equipments", () => {
@@ -570,8 +570,8 @@ context("Procedure and parts flow test", () => {
     });
   });
 
-  context("Copy to EB and verify materials and equipment tracking", () => {
-    it("Click copy to EB", () => {
+  context("Clone EB and verify materials and equipment tracking", () => {
+    it("Click clone EB", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetFileUploadCandidates, CyRoutes.GetFileUploadCandidates], () => {
         cy.get("[data-cy=\"PreviewControlsContainer-copy-to\"]").click();
       });

@@ -384,7 +384,7 @@
   "document.email.sent": "An email with your request has been sent.",
   "document.title": "Document Title",
   "documentRevision.revise": "Revise Document",
-  "documentRevision.copy.to": "Copy to EB",
+  "documentRevision.clone.eb": "Clone EB",
   "documentRevision.revise.PO": "Revise PO",
   "documentRevision.revise.RC": "Update Record",
   "documentRevision.revise.SUP": "Update Record",

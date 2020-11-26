@@ -120,7 +120,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   approvals?: Approval[];
   updatedAt?: string;
   schema?: FBSchemaProps[];
-  parentParts?: DocumentRevision;
+  parentParts?: DocumentRevision[];
   parentEquipment?: Id;
   equipmentSection?: string;
   // there can currently be only one child part

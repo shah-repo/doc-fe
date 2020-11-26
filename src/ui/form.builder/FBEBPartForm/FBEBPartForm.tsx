@@ -35,7 +35,7 @@ const FBEBPartForm: React.FunctionComponent<FBEBPartFormProps> = ({
     <FBTextField hidden name="revisionStage" defaultValue={1} />
     <FBTextField hidden name="document.docId" />
     <FBTextField hidden name="document.securityList" defaultValue={[]} />
-    <FBTextField hidden name="parentParts.id" defaultValue={ebId}/>
+    <FBTextField hidden name="parentParts" defaultValue={[{ id: ebId }]}/>
     <Box display="flex" justifyContent="center" mx={0}>
       {children}
     </Box>
