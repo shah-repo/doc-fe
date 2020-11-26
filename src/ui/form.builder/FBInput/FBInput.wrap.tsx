@@ -71,7 +71,7 @@ export const withFBInput = <T extends FBInputProps>(
       (isUndefined(hidden) && validationMode === "visibility") && (hidden =
         !helperText && (!validationValue || validationValue === "")
       );
-      
+
       (!disabled && validationMode === "disabled") && (disabled =
         !helperText && (!validationValue || isEmpty(validationValue))
       );
