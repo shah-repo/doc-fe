@@ -13,6 +13,7 @@ import { DocumentRevision, documentRevisionsActions, HeaderTableType } from "../
 import { DocumentType, documentTypeActions, DocumentTypeById, DocumentTypeByIdForm, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedId, documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
@@ -21,7 +22,7 @@ import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
 import { useCreateDocumentByTypeButton } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
+import useAsync, { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import FormListDialog from "../dialogs/FormListDialog/FormListDialog.presenter";
 import { MultipleFormTemplateDialog } from "../dialogs/MultipleFormTemplateDialog";
@@ -43,7 +44,7 @@ interface Props {
 
 let selectedTypeLabel = "";
 let selectedDocumentTypeId: string;
-
+export let docIdAsyncContext = React.createContext<AsyncState>(ASYNC_DEFAULT_STATE);
 export const useHandleCreateDoc = () => {
   const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
@@ -55,6 +56,7 @@ export const useHandleCreateDoc = () => {
       createDoc(data?.docId as string);
     }, onError: () => redirect(),
   });
+  docIdAsyncContext = React.createContext(fetchDocIdAsync.asyncState);
   const createDocAction = useActionCreator(documentRevisionsActions.create);
   const createDocAsync = useAsync<DocumentRevision>({
     onSuccess: (documentRevision) => {
