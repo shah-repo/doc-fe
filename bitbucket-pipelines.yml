@@ -5,7 +5,7 @@ definitions:
   services:
     sorry-cypress-director:
       image:
-        name: agoldis/sorry-cypress-director:latest
+        name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:sorry-cypress-director1
       memory: 512
       variables:
         EXECUTION_DRIVER: "../execution/in-memory"
