@@ -774,6 +774,8 @@
   "form.builder.eqmaintenance": "Equipment Maintenance",
   "form.builder.preventative.maintenance": "Preventative Maintenance",
   "form.builder.calibration": "Calibration",
+  "form.builder.pm.required": "Preventative Maintenance required?",
+  "form.builder.calibration.required": "Calibration required?",
   "form.builder.attachments": "Attachments",
   "form.builder.unit": "Unit",
   "form.builder.procedure.materials.title": "{title} | Qty: {quantity} {unit}",
