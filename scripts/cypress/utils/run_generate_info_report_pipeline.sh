@@ -9,4 +9,4 @@ export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH="false"
 export REPORT_TITLE="generated_info"
 export CYPRESS_VIDEO="false"
 
-CI_BUILD_ID="info_$CI_BUILD_ID" ./scripts/cypress/utils/run_node.sh 2>/dev/null || true
+CI_BUILD_ID="info_$CI_BUILD_ID" ./scripts/cypress/utils/run_node_pipeline.sh 2>/dev/null || true

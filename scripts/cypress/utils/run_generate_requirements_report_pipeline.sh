@@ -9,4 +9,4 @@ export CYPRESS_SCREENSHOT_OF_RUN_FAILURE="false"
 export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH="false"
 export REPORT_TITLE="generated_requirements"
 
-./scripts/cypress/utils/run_node.sh 2>/dev/null || true
+./scripts/cypress/utils/run_node_pipeline.sh 2>/dev/null || true

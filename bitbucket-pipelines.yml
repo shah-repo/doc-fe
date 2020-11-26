@@ -245,6 +245,8 @@ pipelines:
             - export CI_BUILD_ID="some_ci_build_id"
             - export CYPRESS_BE_URL="https://api.dev.enlil.io"
             - export CYPRESS_FE_URL="https://dev.enlil.io"
+            - export CYPRESS_BASE_URL="https://dev.enlil.io"
+            - export CYPRESS_KONFIG_ENV="development"
             - export CYPRESS_BROWSER="chrome"
             - export NUMBER_OF_WORKERS="2"
             - export REPORT_TITLE="generated_specs"
