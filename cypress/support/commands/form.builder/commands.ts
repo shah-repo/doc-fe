@@ -44,10 +44,14 @@ declare global {
 }
 
 Cypress.Commands.add("fbAddNewFieldOption", () => {
+  cy.unClick();
   cy.contains("Add a Field").click();
 });
 
-Cypress.Commands.add("fbAddNewField", () => cy.get("button[data-cy=\"form.builder.add.field\"]").click());
+Cypress.Commands.add("fbAddNewField", () => {
+  cy.unClick();
+  cy.get("button[data-cy=\"form.builder.add.field\"]").click();
+});
 
 Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
