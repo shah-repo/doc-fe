@@ -9,7 +9,7 @@ export const withFBRange = <T extends FBInputProps>(
     name,
     ...props
   }) => {
-    
+
     // MARK: @config
     const { formState } = FB.useStores();
 
@@ -25,7 +25,7 @@ export const withFBRange = <T extends FBInputProps>(
         formState.setFieldValue(name, {
           from,
           to: formState?.inputState.get(`${name}.to`)?.value,
-        })
+        });
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -40,7 +40,7 @@ export const withFBRange = <T extends FBInputProps>(
         formState.setFieldValue(name, {
           from: formState?.inputState.get(`${name}.from`)?.value,
           to,
-        })
+        });
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -52,7 +52,6 @@ export const withFBRange = <T extends FBInputProps>(
     // MARK: @observer
 
 
-    
     return Component({
       ...(props as T),
       name,
