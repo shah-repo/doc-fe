@@ -248,7 +248,7 @@ pipelines:
           - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
           - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
-        variables:
+      - variables:
           CI_BUILD_ID: "some_ci_build_id"
           CYPRESS_BE_URL: "https://api.dev.enlil.io"
           CYPRESS_FE_URL: "https://dev.enlil.io"
