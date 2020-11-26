@@ -1,3 +1,3 @@
 export interface FBRangeProps {
-  isVisible: boolean;
+  isVisible?: boolean;
 }
