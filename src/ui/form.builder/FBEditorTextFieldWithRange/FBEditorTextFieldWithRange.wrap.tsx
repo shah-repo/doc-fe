@@ -77,7 +77,7 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
 
     // MARK: @observer
     useObserver(() => {
-      isRangeVisible = formState.inputState.get("range")?.value;
+      // isRangeVisible = formState.inputState.get("range")?.value;
       isInspectionVisible = formState.inputState.get("inspection")?.value;
       isPassValueVisible = formState.inputState.get("passValue")?.value;
     });
