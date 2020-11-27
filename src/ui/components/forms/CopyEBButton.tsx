@@ -8,39 +8,39 @@ import { documentVersionPath } from "../../document.revision/utils/paths";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 
-export interface CopyEBButtonProps extends ButtonProps {
+export interface CloneEBButtonProps extends ButtonProps {
   documentRevision: DocumentRevision;
 }
 
-const CopyEBButton: React.FunctionComponent<CopyEBButtonProps> = ({
+const CloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
   documentRevision,
 }) => {
   const history = useHistory();
-  const asyncCopyTo = useAsync({
+  const asyncClone = useAsync({
     onSuccess: (documentRevision: any) => {
       history.push({
         pathname: documentVersionPath(documentRevision.id, documentRevision.document.id),
       });
     },
   });
-  const copyTo = useActionCreator(documentRevisionsActions.copyTo);
-  const copyToAction = () => {
-    asyncCopyTo.start(
-      copyTo,
+  const cloneEB = useActionCreator(documentRevisionsActions.cloneEB);
+  const cloneAction = () => {
+    asyncClone.start(
+      cloneEB,
       documentRevision.id,
-      asyncCopyTo,
+      asyncClone,
     );
   };
   return (
     <Button
       variant="contained"
       color="secondary"
-      data-cy="CopyEBButton"
-      onClick={copyToAction}
+      data-cy="CloneEBButton"
+      onClick={cloneAction}
     >
-      <Text translation="documentRevision.copy.to" />
+      <Text translation="documentRevision.clone.eb" />
     </Button>
   );
 };
 
-export default CopyEBButton;
+export default CloneEBButton;

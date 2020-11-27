@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import moment from "moment";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,7 +22,7 @@ const DataFetcherContainer: React.FunctionComponent = () => {
     dispatch(authActions.loadUserGroups());
     dispatch(userManagementActions.loadCompanyGroups());
     dispatch(changeRequestsActions.loadAvailableApprovers());
-    if (moment().isAfter(moment(expirationIotDate))) {
+    if (moment().isAfter(moment(expirationIotDate)) || isEmpty(expirationIotDate)) {
       dispatch(authActions.getIotCreds());
     } else {
       setIotCreds(iotCredentials);
