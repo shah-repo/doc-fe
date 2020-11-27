@@ -37,9 +37,9 @@ declare global {
       grpAssignUser(params: { name: string }): Chainable;
       grpRemoveUser(params: { item: int }): Chainable;
       grpSaveGroup(): Chainable;
-      grpSaveGroupWithoutAPIWait(): Chainable;
-      grpSelectGroup(params: { name: string }): Chainable;
+      grpSaveGroupPatch(): Chainable;
       grpSelectGroupWithoutClosingDialog(params: { name: string }): Chainable;
+      grpSelectGroup(params: { name: string }): Chainable;
       grpCloseDialog(): Chainable;
       grpSelectUnofficial(): Chainable;
       grpTypeMembers(...names: string[]): Chainable<Subject>;
@@ -233,8 +233,10 @@ Cypress.Commands.add("grpSaveGroup", () => {
   cy.get("#DialogContent-close").click();
 });
 
-Cypress.Commands.add("grpSaveGroupWithoutAPIWait", () => {
-  cy.get("#Group-createGroup").click();
+Cypress.Commands.add("grpSaveGroupPatch", () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPatch, () => {
+    cy.get("#Group-createGroup").click();
+  });
 });
 
 Cypress.Commands.add("grpSelectGroup", (params: {name: string}) => {

@@ -72,6 +72,27 @@ context("Group Permissions Flow", () => {
     it("Check that group management is not visible", () => {
       cy.get("[data-cy=\"navigation.groupManagement\"]").should("not.exist");
     });
+
+    it("Navigates to document list", () => {
+      // SystemRequirement("REQ-0140");
+      cy.navigToDocumentList();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("fill in document type: Form", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Click 'Add field'", () => {
+      cy.fbAddNewFieldOption();
+    });
+
+    it("Check if specific fields are shown in list", () => {
+      cy.fbCheckFieldsDoesntExist("purchaseorder", "poreceive", "requestapproval");
+    });
   });
 
   context("Login company admin", () => {
@@ -140,7 +161,7 @@ context("Group Permissions Flow", () => {
     });
 
     it("Saves the group", () => {
-      cy.grpSaveGroupWithoutAPIWait();
+      cy.grpSaveGroupPatch();
     });
 
     it("Navigates to 'Group management'", () => {
@@ -159,7 +180,7 @@ context("Group Permissions Flow", () => {
     });
 
     it("Saves the group", () => {
-      cy.grpSaveGroupWithoutAPIWait();
+      cy.grpSaveGroupPatch();
     });
   });
 
@@ -177,7 +198,7 @@ context("Group Permissions Flow", () => {
     });
 
     it("Saves the group", () => {
-      cy.grpSaveGroupWithoutAPIWait();
+      cy.grpSaveGroupPatch();
     });
 
     it("Filters groups by name and selects 'Developers'", () => {
@@ -190,7 +211,7 @@ context("Group Permissions Flow", () => {
     });
 
     it("Saves the group", () => {
-      cy.grpSaveGroupWithoutAPIWait();
+      cy.grpSaveGroupPatch();
     });
   });
 
