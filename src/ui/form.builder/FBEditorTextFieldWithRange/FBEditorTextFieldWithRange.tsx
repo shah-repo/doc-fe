@@ -1,9 +1,9 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBAutocomplete, FBCheckbox, FBEditor, FBEditorPlaceholder, FBEditorProps, FBEditorTextFieldWithRangeProps, FBPassValue, FBRange, FBTextField } from "..";
+import { FBAutocomplete, FBCheckbox, FBEditor, FBEditorPlaceholder, FBEditorTextFieldWithRangeProps, FBPassValue, FBRange, FBTextField } from "..";
 import { withFBEditorTextFieldWithRange } from "./FBEditorTextFieldWithRange.wrap";
 
-const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorProps & FBEditorTextFieldWithRangeProps> = ({
+const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithRangeProps> = ({
   formState,
   isRangeVisible,
   isInspectionVisible,
@@ -16,13 +16,13 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorProps & FBEdit
 }) => (
   <FBEditor {...props} {...{ inputProps, formState }}>
     <FBTextField
-      key={`fb-editor-field-${type}`}
+      key="label"
       dataCy={`fb-editor-field-${type}`}
       label="form.builder.label"
       name="label"
       rules="required"
     />
-    <FBEditorPlaceholder key={`fb-editor-placeholder-${type}`} />
+    <FBEditorPlaceholder key="placeholder" />
     <FBCheckbox
       label="form.builder.range"
       name="rangeOption"
