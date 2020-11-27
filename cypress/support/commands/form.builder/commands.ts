@@ -39,6 +39,7 @@ declare global {
       fbSelectCustomFieldToAdd(params: { name: string }): Chainable<Subject>;
       fbEnterPlaceholder(params: { placeholder: string }): Chainable<Subject>;
       fbEnterLabel(params: { label: string }): Chainable<Subject>;
+      fbCheckFields(...list: string[]): Chainable<Subject>;
     }
   }
 }
@@ -96,6 +97,12 @@ Cypress.Commands.add("fbSelectCustomFieldToAdd", (params: { name: string }) => {
 Cypress.Commands.add("fbSelectCheckboxValue", (...list: string[]) => {
   list.forEach((item) => {
     cy.get("[type=\"checkbox\"]").check(item).wait(200);
+  });
+});
+
+Cypress.Commands.add("fbCheckFields", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get(`[data-cy="form.builder.${item}"]`).should("exist");
   });
 });
 
