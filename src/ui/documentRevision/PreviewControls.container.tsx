@@ -25,6 +25,7 @@ import { checkCanBeCopied, checkIsDocumentRecord } from "./helpers/checkDocument
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
 import { isFormWithInlineApproval } from "./helpers/records";
+import InspectionControlsContainer from "./InspectionControls/InspectionControls.container";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -212,6 +213,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
       {renderNoAccessWarning()}
       {isRecord && isStatusInReview && !isInlineApproval && isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
+      <InspectionControlsContainer {...{ documentRevision }} />
       <DownloadHTML pdf={documentRevision.pdf} />
       <PDFSocket {...{ documentRevision }}/>
     </>
