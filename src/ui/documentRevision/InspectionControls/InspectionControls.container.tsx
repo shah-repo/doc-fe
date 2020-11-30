@@ -7,10 +7,10 @@ import { documentVersionPath } from "../../document.revision/utils/paths";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
-import { checkCanTypeCreateInspection, checkIsTypeFaiInspection, checkIsTypeInspection } from "../helpers/checkDocumentGroup";
+import { checkCanTypeCreateInspection, checkIsTypeFaiInspection } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
 import InspectionControlsPresenter from "./InspectionControls.presenter";
-import { CreateInspectionBody, DocTypeOptionType, FormOptionType, InspectionControlsContainerProps, InspectionType, OutputDocumentTypes } from "./InspectionControls.types";
+import { CreateInspectionBody, DocTypeOptionType, FormOptionType, InspectionControlsContainerProps, OutputDocumentTypes } from "./InspectionControls.types";
 
 /** Buttons for creating an inspection record - container.
  * @param documentRevision Document Revision that the inspection record will be created for.
@@ -34,7 +34,6 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
   const [isDocTypeInputDisabled, setIsDocTypeInputDisabled] = useState<boolean>(true);
   const [formOptions, setFormOptions] = useState<FormOptionType[]>([]);
   const [docTypeOptions, setDocTypeOptions] = useState<DocTypeOptionType[]>([]);
-  const [inspectionType, setInspectionType] = useState<InspectionType | null>(null);
 
   // MARK: @actions
   const fetchAvailableFormsAction = useActionCreator(documentRevisionsActions.fetchAvailableForms);
@@ -75,14 +74,15 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
   });
 
   // MARK: @methods
-  /** Method executed on FAI or Inspection button click.
-   * @param inspectionType FAI or INSPECTION, based on the clicked button.
-   */
-  const onButtonClick = (inspectionType: InspectionType) => {
+  /** Method executed on FAI button click. */
+  const onButtonClick = () => {
     setIsDocTypeInputDisabled(true);
     setDisabled(true);
-    setInspectionType(inspectionType);
-    fetchAvailableFormsAsync.start(fetchAvailableFormsAction, inspectionType, fetchAvailableFormsAsync);
+    fetchAvailableFormsAsync.start(
+      fetchAvailableFormsAction,
+      DOC_TYPE_GROUP_OPTION.FAI_INSPECTION,
+      fetchAvailableFormsAsync,
+    );
   };
 
   /** Method executed when a form is selected from autocomplete.
@@ -92,9 +92,7 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
   const onFormSelect = (formId: string, outputDocumentTypes: OutputDocumentTypes) => {
     setIsDocTypeInputDisabled(true);
     const docTypeOptions: DocTypeOptionType[] = outputDocumentTypes
-      .filter((type) =>
-        (inspectionType === DOC_TYPE_GROUP_OPTION.INSPECTION && checkIsTypeInspection(type.groupOptions))
-        || (inspectionType === DOC_TYPE_GROUP_OPTION.FAI_INSPECTION && checkIsTypeFaiInspection(type.groupOptions)))
+      .filter((type) => checkIsTypeFaiInspection(type.groupOptions))
       .map((type) => ({
         label: type.documentTypeName || "",
         value: type.id,
@@ -113,15 +111,10 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
   * @param formId Id of the form that will be used as a template for inspection.
   */
   const onDocTypeSelect = (typeId: string, formId: string) => {
-    if (!inspectionType) { return; }
     const createInspectionBody: CreateInspectionBody = {
       lot: { id: docRevId },
       documentType: { id: typeId },
       formDocument: { id: formId },
-      // temp
-      inspectionType: inspectionType === DOC_TYPE_GROUP_OPTION.FAI_INSPECTION
-        ? "includeInFaiInspection"
-        : "includeInInspection",
     };
     createInspectionAsync.start(
       createInspectionAction,

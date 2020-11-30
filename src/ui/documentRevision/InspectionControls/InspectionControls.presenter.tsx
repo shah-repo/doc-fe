@@ -1,10 +1,7 @@
 import { Button } from "@material-ui/core";
 import React from "react";
-import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import Text from "../../components/Text";
-import { Translation } from "../../translations/types";
-import { InspectionControlsPresenterProps, InspectionType } from "./InspectionControls.types";
-import { InspectionDialog } from "./InspectionDialog/InspectionDialog";
+import { InspectionControlsPresenterProps } from "./InspectionControls.types";
 
 /** Buttons for creating an inspection record - presenter.
  * @param onButtonClick Action executed when user clicks on FAI or Inspection button.
@@ -19,39 +16,18 @@ export const InspectionControlsPresenter: React.FunctionComponent<InspectionCont
   disabled,
   ...props
 }) => {
-  const renderButton = (shouldRender: boolean, inspectionType: InspectionType, label: Translation) => {
-    if (!shouldRender) { return null; }
-    return (
-      <Button
-        variant="contained"
-        color="primary"
-        data-cy={`PreviewControlsContainer-inspection-${label}`}
-        onClick={() => onButtonClick(inspectionType)}
-        {...{ disabled }}
-      >
-        <Text translation={label} />
-      </Button>
-    );
-  };
+  if (!isDocumentReleased || !canCreateInspection) { return null; }
 
   return (
-    <>
-      { /** FAI */
-        renderButton(
-          isDocumentReleased && canCreateInspection,
-          DOC_TYPE_GROUP_OPTION.FAI_INSPECTION,
-          "document.revision.fai",
-        )}
-      { // we currently don't need this
-      // { /** INSPECTION */
-      //   renderButton(
-      //     isDocumentReleased && canCreateInspection,
-      //     DOC_TYPE_GROUP_OPTION.INSPECTION,
-      //     "document.revision.inspection",
-      //   )}
-      }
-      <InspectionDialog { ...(props) } />
-    </>
+    <Button
+      variant="contained"
+      color="primary"
+      data-cy={`PreviewControlsContainer-inspection-FAI`}
+      onClick={() => onButtonClick()}
+      {...{ disabled }}
+    >
+      <Text translation={"document.revision.fai"} />
+    </Button>
   );
 };
 
