@@ -4,7 +4,6 @@ import { FBProviderProps } from "../FBProvider";
 export type FBDocumentRevisionsProps =
 & Pick<FBInputProps, "name" | "disabled" | "gutter" | "index">
 & Pick<FBProviderProps, "docRevState" | "dialogState" | "formState">
-& Pick<FBAutocompleteProps, "getOptionLabel">
 & {
   handleForm: () => void;
   handleAdd: () => void;
@@ -17,7 +16,6 @@ export type FBDocumentRevisionsProps =
 export type FBDocumentRevisionsItemProps =
 & Pick<FBInputProps, "name" | "disabled" | "index">
 & Pick<FBDocumentRevisionsProps, "handleOpen" | "remove">
-& Pick<FBAutocompleteProps, "getOptionLabel">
 & {
   id: string;
 };
@@ -33,7 +31,7 @@ export interface FBDocumentRevisionsValue {
 
 export type FBDocumentRevisionsFormProps =
 & Pick<FBProviderProps, "formState">
-& Pick<FBAutocompleteProps, "disabledOptions" | "renderOption" | "getOptionLabel">;
+& Pick<FBAutocompleteProps, "disabledOptions" | "renderOption" >;
 
 export type FBDocumentRevisionsActionsProps =
 & Pick<FBDocumentRevisionsProps, "handleAdd" | "handleCancel">;

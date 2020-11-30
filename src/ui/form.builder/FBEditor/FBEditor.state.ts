@@ -8,6 +8,7 @@ import { FBEditorApprovals } from "../FBEditorApprovals";
 import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
 import { FBEditorEmpty } from "../FBEditorEmpty";
+import { FBEditorEQMaintenance } from "../FBEditorEQMaintenance";
 import { FBEditorHyperlink } from "../FBEditorHyperlink";
 import { FBEditorInlineApproval } from "../FBEditorInlineApproval";
 import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
@@ -24,11 +25,15 @@ import { FBEditorTextField } from "../FBEditorTextField";
 
 export class FBEditorState {
 
-  public static omitValidation: FBInputType[] = [
+  public static omitFinalValidation: FBInputType[] = [
     "section",
     "subsection",
     "stepsection",
     "teststep",
+    "blanktplform",
+  ];
+
+  public static omitValidation: FBInputType[] = [
     "hyperlink",
     "action",
     "paragraph",
@@ -52,9 +57,9 @@ export class FBEditorState {
     "approvalMatrix",
     "poApprovalMatrix",
     "task",
-    "blanktplform",
     "approvals",
     "procedure",
+    "eqmaintenance",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -123,6 +128,7 @@ export class FBEditorState {
     approvals: FBEditorApprovals,
     procedure: FBEditorEmpty,
     parts: FBEditorEmpty,
+    eqmaintenance: FBEditorEQMaintenance,
   };
 
   @observable public mode?: FBEditorMode = "config";

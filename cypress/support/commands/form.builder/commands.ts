@@ -37,6 +37,10 @@ declare global {
       fbSelectRadioButtonValue(params: { value: string }): Chainable<Subject>;
       fbSelectFieldValue(params: { value: string }): Chainable<Subject>;
       fbSelectCustomFieldToAdd(params: { name: string }): Chainable<Subject>;
+      fbEnterPlaceholder(params: { placeholder: string }): Chainable<Subject>;
+      fbEnterLabel(params: { label: string }): Chainable<Subject>;
+      fbCheckFields(...list: string[]): Chainable<Subject>;
+      fbCheckFieldsDoesntExist(...list: string[]): Chainable<Subject>;
     }
   }
 }
@@ -67,6 +71,14 @@ Cypress.Commands.add("fbEnterPOLabelName", (params: { name: string }) => {
   cy.get("[class=\"MuiInputBase-root MuiOutlinedInput-root MuiInputBase-formControl\"]").type(params.name).click();
 });
 
+Cypress.Commands.add("fbEnterLabel", (params: { label: string }) => {
+  cy.get("input[name=\"label\"]").type(params.label).click();
+});
+
+Cypress.Commands.add("fbEnterPlaceholder", (params: { placeholder: string }) => {
+  cy.get("[data-cy=\"placeholder\"]>div>input").type(params.placeholder).click();
+});
+
 Cypress.Commands.add("fbAddNewFieldButton", (params: { name: string }) => {
   cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").click();
 });
@@ -86,6 +98,18 @@ Cypress.Commands.add("fbSelectCustomFieldToAdd", (params: { name: string }) => {
 Cypress.Commands.add("fbSelectCheckboxValue", (...list: string[]) => {
   list.forEach((item) => {
     cy.get("[type=\"checkbox\"]").check(item).wait(200);
+  });
+});
+
+Cypress.Commands.add("fbCheckFields", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get(`[data-cy="form.builder.${item}"]`).should("exist");
+  });
+});
+
+Cypress.Commands.add("fbCheckFieldsDoesntExist", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get(`[data-cy="form.builder.${item}"]`).should("not.exist");
   });
 });
 

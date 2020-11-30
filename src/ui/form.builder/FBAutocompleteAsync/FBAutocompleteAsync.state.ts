@@ -1,4 +1,4 @@
-import { filter, find, groupBy, isArray, last, map, sortBy } from "lodash";
+import { filter, find, groupBy, isArray, last, map, sortBy, union } from "lodash";
 import { action, computed, set } from "mobx";
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncOption, FBData } from "..";
 import FBRequest from "../FBApi/FBApi.request";
@@ -6,11 +6,14 @@ import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
 
 export class FBAutocompleteAsyncState extends FBRequest<any, any> {
   private optionId: string | undefined;
+  public additionalData?: any[];
 
   public constructor(optionId?: string) {
     super();
     this.setOptionId(optionId);
   }
+
+  public setAdditionalData = (data?: any[]) => set(this, "additionalData", data);
 
   @computed public get optionConfig(): FBAutocompleteAsyncConfig | undefined {
     if (!this.optionId) {
@@ -71,11 +74,11 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
       case FBAutocompleteAsyncOption.POList:
       case FBAutocompleteAsyncOption.suppliers:
         return map(
-          groupBy(data, "document.docId"), (recs) => last(sortBy(recs, "version"))
+          groupBy(union(data, this.additionalData), "document.docId"), (recs) => last(sortBy(recs, "version"))
         );
       case FBAutocompleteAsyncOption.officialGroups:
-        return filter(data, { isOfficial: true });
-      default: return data;
+        return filter(union(data, this.additionalData), { isOfficial: true });
+      default: return union(data, this.additionalData);
     }
   };
 

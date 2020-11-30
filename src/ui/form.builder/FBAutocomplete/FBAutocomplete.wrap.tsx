@@ -1,5 +1,5 @@
 import { createFilterOptions } from "@material-ui/lab/Autocomplete";
-import { filter, find, get, includes, isEmpty, map } from "lodash";
+import { filter, find, get, includes, isEmpty, isUndefined, map } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FBAutocompleteProps } from ".";
@@ -86,6 +86,9 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     const stringify = (option: OptionType) => (getOptionLabel && getOptionLabel(option)) || "";
     filterOptions = createFilterOptions({ ignoreAccents: false, stringify });
 
+    if (isUndefined(defaultValue)) {
+      defaultValue = "";
+    }
     return Component({
       ...(props as T),
       onInputChange,
@@ -102,6 +105,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       multiple,
       optionId,
       freeSolo,
+      value: defaultValue,
       name,
     });
   };

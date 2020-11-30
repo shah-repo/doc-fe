@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Nullable } from "../../state/ducks/common";
-import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import SummaryInfo from "../common/summary/SummaryInfo";
 import DateFormatter from "../components/Date";
 import Text from "../components/Text";
@@ -10,7 +10,9 @@ import { documentVersionPath } from "../document.revision/utils/paths";
 import { useDocumentStatus } from "../hooks/docCustomization/useCustomization";
 import { Translation } from "../translations/types";
 import { styles } from "./DocumentRevisionList.container.styles";
-import { generateVersionNumber } from "./helpers";
+import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatus, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
+import { generateRevisionNumber } from "./helpers/generateRevisionNumber";
+import { isDocumentAlphaReleased } from "./helpers/revisionStage";
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -38,7 +40,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     documentRevision.id,
     documentId,
   );
-  const versionNumber = generateVersionNumber(
+  const versionNumber = generateRevisionNumber(
     documentRevision.revision,
     documentRevision.revisionStage,
     documentRevision.subRevision,
@@ -47,51 +49,27 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     isRecord,
   );
 
-  const { status } = documentRevision;
-  const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
+  const { displayStatus, status } = documentRevision;
+  const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, displayStatus);
   let verPrefix = "common.revision";
-  let stateLabel = statusLabel;
   let recordDateLabel = "common.updated" as Translation;
 
   const isSelected = selectedDocumentRevision === documentRevision.id;
-  const isDraft = status === DocumentRevisionStatus.Draft;
-  const isReleased = status === DocumentRevisionStatus.Released;
-  const isDeprecated = status === DocumentRevisionStatus.Deprecated;
-  const isAlphaReleased = documentRevision.revisionStage === 3;
-  const isNumericRelease = documentRevision.revisionStage === 1;
-  const isObsolete = documentRevision.revisionChangeType === RevisionChangeType.Obsolete;
-  const isInReview = status === DocumentRevisionStatus.InReview;
-  const isVoided = status === DocumentRevisionStatus.Obsolete || status === DocumentRevisionStatus.Voided;
+  const isDraft = isDocumentRevisionInDraft(status);
+  const isReleased = isDocumentRevisionReleased(status);
+  const isDeprecated = isDocumentRevisionDeprecated(status);
+  const isAlphaReleased =  isDocumentAlphaReleased(documentRevision.revisionStage);
+  const isVoided = isDocumentRevisionInStatus([DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided], status);
 
 
   if (isRecord) {
     if (isReleased) {
       recordDateLabel = "document.revision.released.date";
-      stateLabel = "common.released";
-    }
-    if (!isInlineApproval && (!isObsolete || isInReview)) {
-      stateLabel = status;
-    }
-    if (!isInlineApproval && isDeprecated) {
-      stateLabel = "common.archived";
-    }
-    if (isDraft && documentRevision.subRevision === 0 && !isObsolete) {
-      stateLabel = "common.wip";
     }
     if (isReleased || ((isDeprecated || isDraft) && isInlineApproval && isAlphaReleased)) {
       verPrefix = "common.revision";
     }
-    if (isDeprecated && isInlineApproval && isAlphaReleased) {
-      stateLabel = "common.archived";
-    }
-    if ((isDeprecated || isReleased) && isInlineApproval && isNumericRelease) {
-      stateLabel = "common.archived";
-    }
-    if (isReleased && isInlineApproval && isNumericRelease) {
-      stateLabel = "common.last.signed";
-    }
     if (isVoided) {
-      stateLabel = "common.voided";
       recordDateLabel = "record.voided.date";
     }
   }
@@ -119,7 +97,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           {
             isStatusVisible &&
             <>
-              &nbsp; - <Text message={stateLabel} />
+              &nbsp; - <Text message={statusLabel} />
             </>
           }
         </div>

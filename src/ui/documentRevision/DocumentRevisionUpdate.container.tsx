@@ -15,7 +15,7 @@ import { isOperator } from "./DocumentRevisionDisplay.container";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
-import { canEditDocumentRevision } from "./helpers";
+import { canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
 
 interface StateProps {
   currentUserEmail: string;
@@ -100,8 +100,11 @@ DocumentRevisionUpdateContainerProps
     );
     // workaround when editing document through CR view. The form is marked dirty when editing FB fields
     promise?.then(() => {
-      FBStore.audit.setTemplateUrl(FBEndpoint.DocumentRevisionAudit, { documentId: documentRevision.id });
-      FBStore.audit.fetch();
+      FBStore.audit.set({
+        url: FBEndpoint.DocumentRevisionAudit,
+        urlValues: { documentId: documentRevision.id },
+        method: "get",
+      });
       helpers.resetForm();
     });
   };

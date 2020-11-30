@@ -15,7 +15,8 @@ export class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | 
   private isOwner?: boolean;
 
   public approvalApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalBody>(FBEndpoint.Approvals);
-  public transitionApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>();
+  public transitionApi =
+  new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
 
   public constructor({ id, approvals, isOwner }: FBApprovalsConstructor) {
     super();
@@ -72,11 +73,12 @@ export class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | 
     body?: FBInlineApprovalTransitionBody,
   ) => {
     if (!id) { return; }
-    this.transitionApi.setTemplateUrl(FBEndpoint.ApprovalsTransition, { id, transition });
-    if (body) {
-      this.transitionApi.setBody(body);
-    }
-    this.transitionApi.post();
+    this.transitionApi.set({
+      url: FBEndpoint.ApprovalsTransition,
+      urlValues: { id, transition },
+      body,
+      method: "post",
+    });
   };
 }
 

@@ -4,6 +4,8 @@ export enum FBEndpoint {
   PrivateUpload = "/attachments/private_upload_url",
   FileUploadCandidates = "/documents/file_upload_candidates",
   AssetUrl = "/attachments/assetUrl",
+  AttachmentById = "/attachments/${id}",
+  AttachmentsByIds ="/attachments?ids=${ids}",
   PostInlineApprove = "/document_revisions/${documentId}/inline_approve",
   DynamicControl = "/document_revisions/dynamic_forms",
   FetchDocumentRevision = "/document_revisions/${documentId}",
@@ -30,4 +32,5 @@ export enum FBEndpoint {
   ApprovalsTransition = "/approvals/${id}/${transition}",
   SetApprovalStatus = "/approvals/${approvalId}/${status}",
   PatchDocumentRevision = "/document_revisions/${docRevId}",
+  HistoryMaintenance = "/document_revisions/history_maintenance/${id}",
 }

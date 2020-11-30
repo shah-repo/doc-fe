@@ -228,7 +228,7 @@ context("Record inline history Flow", () => {
       });
 
       it("Save record", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
 
@@ -236,23 +236,21 @@ context("Record inline history Flow", () => {
       it("Approve first Inline Approval", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
         cy.get("input[name=\"password\"]").type("Tester1!");
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
+        cy.wrapWithWaitOnApiCalls([
+          CyRoutes.PostApprovalsApprove,
+          CyRoutes.EmployeesGet,
+          CyRoutes.DocPreview], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
-      });
-
-      it("Reload page", () => {
-        cy.reload();
-      });
-
-      it("Click WIP document", () => {
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
       });
 
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline with bold tag to check if tags shows in history", () => {
           SystemRequirement("REQ-1080");
-          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", <b> Second entry </b>");
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+            cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", <b> Second entry </b>");
+            cy.unClick();
+          });
         });
 
         it("Enter description 'History Test Inline Record description'", () => {
@@ -268,18 +266,13 @@ context("Record inline history Flow", () => {
 
         it("Approve first Inline Approval", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
-          cy.get("input[name=\"password\"]").type("Tester1!");
-          cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
+          cy.get("input[name=\"password\"]").clear().type("Tester1!");
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostApprovalsApprove,
+            CyRoutes.EmployeesGet,
+            CyRoutes.DocPreview], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
-        });
-
-        it("Reload document", () => {
-          cy.reload();
-        });
-
-        it("Click WIP document", () => {
-          cy.get("[data-cy=\"DocumentRevisionList-item\"]").first().click();
         });
 
         it("Uncheck 'Red' and 'Green' value on checkbox", () => {

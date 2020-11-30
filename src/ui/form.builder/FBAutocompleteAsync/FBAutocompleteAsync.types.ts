@@ -8,6 +8,8 @@ export type FBAutocompleteAsyncProps =
   autocompleteAsyncState?: FBAutocompleteAsyncState;
   selectedOptions?: string[];
   shouldReloadOnInit?: boolean;
+  additionalData?: any[]; // TODO: make autocomplete async generic type by data
+  forceNewRender?: boolean;
 };
 
 export interface FBAutocompleteAsyncConfig  {
@@ -18,6 +20,7 @@ export interface FBAutocompleteAsyncConfig  {
   valueKey?: string;
   root?: string;
   labelPrefixRoot?: string;
+  includeRevision?: string;
 }
 
 export enum FBAutocompleteAsyncOption {
@@ -42,4 +45,6 @@ export enum FBAutocompleteAsyncOption {
   materials = "19",
   equipment = "20",
   availableParts = "21",
+  partDocumentTypes = "22",
+  preventativeMaintenaceForms = "23",
 }

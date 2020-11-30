@@ -1,6 +1,6 @@
-import { first, get, has, isArray, isEmpty, isUndefined, join, template } from "lodash";
+import { first, get, has, isArray, isEmpty, isString, isUndefined, join, template } from "lodash";
 import { action, observable, set } from "mobx";
-import apiClient from ".";
+import apiClient, { FBRequestSet, FBRequestTemplateUrl } from ".";
 import { store } from "../../../state/store";
 import { ApiActionMethod } from "../../../state/types";
 import { toastError } from "../../components/notifications";
@@ -17,13 +17,22 @@ export default class FBRequest<Data, Body> {
     this.url = url;
   }
 
-  @action public setTemplateUrl = (url: string, values: Record<string, any>) => {
+  private setTemplateUrl = (config: Record<string, any> | FBRequestTemplateUrl) => {
+    let url = this.url;
+    let values = config;
+    if (has(config, "values")) {
+      url = config.url;
+      values = config.values;
+    }
     const urlTpl = template(url);
     const urlStr = urlTpl(values);
     this.setUrl(urlStr);
   };
 
-  @action public setUrl = (url: string) => {
+  public setUrl = (url: string | Record<string, any> | FBRequestTemplateUrl) => {
+    if (!isString(url)) {
+      return this.setTemplateUrl(url);
+    }
     set(this, "url", url);
   };
 
@@ -49,6 +58,14 @@ export default class FBRequest<Data, Body> {
   @action public delete = () => this.start("delete");
 
   @action public prepareData = (data: Data): Data | undefined => data;
+
+  public set = (set: FBRequestSet<Body>) => {
+    const { url, urlValues, body, method } = set;
+    url && this.setUrl(url);
+    urlValues && this.setUrl(urlValues);
+    body && this.setBody(body);
+    method && this.start(method);
+  };
 
   protected onSuccess() {
     this.setLoading(false);

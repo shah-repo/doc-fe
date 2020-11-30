@@ -1,0 +1,18 @@
+{
+  "fields": [
+    {
+      "text": "form.builder.pm.instructions",
+      "value": "instructions"
+    }
+  ],
+  "type": [
+    {
+      "text": "form.builder.preventative.maintenance",
+      "value": "preventativeMaintenance"
+    },
+    {
+      "text": "form.builder.calibration",
+      "value": "calibration"
+    }
+  ]
+}

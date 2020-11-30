@@ -1,5 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
+import { CONFIG } from "../../config";
+
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export { };
@@ -11,6 +13,7 @@ declare global {
       imapVerifyInReviewAREmailNotification(params: {userEmail: string; arId: string}): Chainable;
       imapVerifyRejectedAREmailNotification(params: {userEmail: string; arId: string}): Chainable;
       imapVerifyApprovedAREmailNotification(params: {userEmail: string; arId: string}): Chainable;
+      imapGetActivationLink(params: {userEmail: string}): Chainable;
     }
   }
 }
@@ -44,5 +47,14 @@ Cypress.Commands.add("imapVerifyApprovedAREmailNotification", (params: { userEma
     const emailBody = emailText.substring(startingPosition, endingPosition);
     expect(emailBody).to.contain(`Your approval request <b>${params.arId}</b> is approved.`);
     expect(emailBody).to.contain("Please click on the button below to view it.");
+  });
+});
+
+Cypress.Commands.add("imapGetActivationLink", (params: { userEmail: string}) => {
+  cy.imapGetTextFromLastEmail({ userEmail: params.userEmail }).should((emailText) => {
+    const startingPosition = emailText.search("/new_user");
+    const endingPosition = emailText.search("\" target");
+    const activationLink = emailText.substring(startingPosition, endingPosition);
+    cy.visit(CONFIG.FE_URL + activationLink);
   });
 });

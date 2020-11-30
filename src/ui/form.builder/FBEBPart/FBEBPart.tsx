@@ -1,38 +1,41 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBEBPartProps, FBInput, FBProvider, FBText } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBEBPartProps, FBInput, FBProvider } from "..";
 import { withFBEBPart } from "./FBEBPart.wrap";
 
 const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
-  onAddClick,
+  handleAdd,
+  ebPartState,
+  dialogState,
+  defaultValue,
+  additionalData,
   loading,
   disabled,
+  forceNewRender,
+  name,
+  // formState,
   ...props
 }) => (
-  <FBProvider>
-    <FBText
-      locale="form.builder.part"
-      boxProps={{ fontWeight: "fontWeightBold", mb: 2, fontSize: "medium" }}
-    />
+  <FBProvider {...{ dialogState, ebPartState }}>
+    <FBDialog />
     <FBInput type="ebpart">
-      <Box display="flex" alignItems="center">
+      <Box display="flex" alignItems="flex-end">
         <Box flexGrow={1}>
           <FBAutocompleteAsync
+            label="form.builder.part"
             placeholder="form.builder.select.existing.part"
             optionId={FBAutocompleteAsyncOption.availableParts}
-            name="childrenParts"
             gutter={false}
             withState
-            disabled={disabled || loading}
-            {...{ loading }}
+            {...{ disabled, loading, name, defaultValue, additionalData, forceNewRender }}
           />
         </Box>
         <Box>
           <FBButton
             variant="contained"
             label="form.builder.create.new.part"
-            onClick={onAddClick}
-            disabled={disabled || loading}
+            onClick={handleAdd}
+            {...{ disabled }}
           />
         </Box>
       </Box>

@@ -1,5 +1,7 @@
 DATE=`date '+%Y-%m-%d %H:%M:%S %Z %z'`
 FILE="./src/data/buildInfo.json"
+RELEASE_VERSION=$(cat package.json | jq '.version')
+
 rm -rf $FILE
 cat >> $FILE <<EOF 
 {
@@ -9,7 +11,8 @@ cat >> $FILE <<EOF
 "Commit Hash": "$BITBUCKET_COMMIT",
 "Build Number": "$BITBUCKET_BUILD_NUMBER",
 "ECR Image": "$IMAGE_NAME",
-"Date": "$DATE"
+"Date": "$DATE",
+"Release Version": $RELEASE_VERSION
 }
 EOF
 

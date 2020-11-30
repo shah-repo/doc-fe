@@ -1,14 +1,14 @@
+import { isEmpty, size } from "lodash";
 import React from "react";
 import { Link } from "react-router-dom";
 import {
   FBConditionalWrapper,
   FBFieldName,
   FBMapWrapper,
-
-
   FBPartItemStatusBg,
-
-  FBPartItemStatusBorder, FBPartsItemProps, FBProcedureItemConfig,
+  FBPartItemStatusBorder,
+  FBPartsItemProps,
+  FBProcedureItemConfig,
   FBProcedureItemLocale,
   FBSection,
 } from "..";
@@ -22,12 +22,14 @@ const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
   loading,
   name,
   type,
+  gutter,
 }) => (
   <>
     <FBSection
       label={FBProcedureItemLocale[type]}
       name={`${FBFieldName.MaterialSection}${name}`}
-      {...{ loading }}
+      {...{ loading, gutter }}
+      {...!gutter && !isEmpty(collection) && { boxProps: { mb: 5 } }}
     />
     {!loading && (
       <FBMapWrapper<FBProcedureItemConfig[]> {...{ collection }}>
@@ -53,7 +55,7 @@ const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
               locale={`form.builder.procedure.${type}.title`}
               values={{
                 title: getItem?.(item.title),
-                quantity: item.quantity,
+                quantity: item.quantity || "form.builder.none",
                 unit: item.unit,
               }}
               boxProps={{
@@ -63,13 +65,12 @@ const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
                 borderRadius: 4,
                 padding: 1,
                 fontWeight: "bold",
-                mb: 2,
+                mb: (gutter && index === (size(collection) - 1)) ? 5 : 2,
               }}
             />
           </FBConditionalWrapper>
         )}
       </FBMapWrapper>
-
     )}
   </>
 );

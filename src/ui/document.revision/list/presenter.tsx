@@ -16,6 +16,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
+import { checkIsDocumentEquipment, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import useDialog from "../../hooks/useDialog";
 import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
@@ -56,36 +57,21 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   };
 
   const customDataSet = (data: DocumentRevision[]) => {
-
-    /** Temp fix - disabling filtering by document type name.
-     * Remove .map and uncomment .reduce to enable filtering. */
-    const customData = data
-      .map((docRev) => {
+    const customData = data.reduce<DocumentRevision[]>((acc, docRev) => {
+      if (!checkIsDocumentRecord(docRev.document.documentType.groupOptions)
+      && !checkIsDocumentEquipment(docRev.document.documentType.groupOptions)
+      && !checkIsDocumentPart(docRev.document.documentType.groupOptions)) {
         set(docRev, "description", stripTags(docRev.description));
         set(
           docRev,
           "document.documentType.documentTypeAcronym",
           removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
         );
-        return docRev;
-      });
-
-    /*    const customData = data.reduce<DocumentRevision[]>((acc, docRev) => {
-        if (docRev.document.documentType.documentTypeName
-         && DOCUMENT_LIST_TYPE_NAMES.includes(docRev.document.documentType.documentTypeName)) {
-          set(docRev, "description", stripTags(docRev.description));
-          set(
-            docRev,
-            "document.documentType.documentTypeAcronym",
-            removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
-          );
-          acc.push(docRev);
-        }
-        return acc;
-      }, []); */
-    // REQ - show data without RECORD documents
-    const dataWithoutRecords = customData.filter((e) => e.document.documentType.group !== "RECORD");
-    return dataWithoutRecords;
+        acc.push(docRev);
+      }
+      return acc;
+    }, []);
+    return customData;
   };
 
   const columns: TableColumnProps<DocumentRevision>[] = [

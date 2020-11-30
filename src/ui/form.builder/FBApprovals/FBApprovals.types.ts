@@ -16,7 +16,7 @@ export type FBApprovalsProps =
   requestApproval?: (id?: string) => any;
   approvals?: FBInlineApprovalBody[];
   approvalsState?: FBApprovalsState;
-  approvalTransition(transition: FBInlineApprovalTransition, approvalId?: string): void;
+  approvalTransition(transition: FBInlineApprovalTransition, approvalId?: string, password?: string): void;
   docId?: string;
   documentStatus: DocumentStatus;
   formState?: FBFormState;
@@ -31,3 +31,4 @@ export type FBApprovalsProps =
 export type FBApprovalsConstructor = FBInlineApprovalConstructor & {
   id: string[];
 };
+

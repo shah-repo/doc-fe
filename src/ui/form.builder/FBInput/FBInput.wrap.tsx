@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { first, get, includes, isBoolean, isEmpty, isEqual, isString, isUndefined } from "lodash";
 import { reaction } from "mobx";
-import React from "react";
+import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
 import { FBOption } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
@@ -41,6 +41,9 @@ export const withFBInput = <T extends FBInputProps>(
     autosave = false,
     transform,
     bookmarked,
+    omitFinalValidation = false,
+    applicableValidationSchema,
+    validationAttribute,
     ...props
   }: T) => {
 
@@ -54,13 +57,19 @@ export const withFBInput = <T extends FBInputProps>(
     value = inputState?.value;
     includeContext = inputState?.includeContext;
 
+    // Set validation scheme. This is union of scheme & comps configs.
+    useEffect(() => {
+      if (!applicableValidationSchema) { return; }
+      workspaceState?.setValidationSchemaItem({ name, label, type, ...props });
+    }, []);
+
     // TODO: Autocomplete default set as input
     // then this can be removed and handle through defaultValue
     const validationValue = get(formState?.values, name);
 
-    if (isOutput || formState?.workspaceMode !== "design") {
+    if ((isOutput || formState?.workspaceMode !== "design") && formState?.workspaceMode !== "formPreview") {
       (isUndefined(hidden) && validationMode === "visibility") && (hidden =
-        !helperText && (!validationValue || isEmpty(validationValue))
+        !helperText && (!validationValue || validationValue === "")
       );
 
       (!disabled && validationMode === "disabled") && (disabled =
@@ -101,7 +110,7 @@ export const withFBInput = <T extends FBInputProps>(
     const isClone = !includes(OmitInputClones, type) && !isUndefined(child);
 
     if (isClone) {
-      children = React.cloneElement(child as React.ReactElement, {
+      children = cloneElement(child as React.ReactElement, {
         name,
         disabled,
         onChange,
@@ -113,19 +122,19 @@ export const withFBInput = <T extends FBInputProps>(
       });
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (!formState && !inputState) { return; }
       // Input states
       formState!.inputState.set(name, inputState!);
 
       // Validation settings
-      let attr = (label as string) || placeholder || name;
+      let attr = (label as string) || placeholder || validationAttribute || name;
       isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));
       formState?.setValidationAttributeName(name, attr);
       rules && (formState!.setFieldRules(name, rules));
     }, [rules]);
 
-    React.useEffect(() => {
+    useEffect(() => {
       reaction(
         () => inputState?.autosaveNextValue,
         (value) => {
@@ -136,7 +145,7 @@ export const withFBInput = <T extends FBInputProps>(
       );
     }, []);
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (!bookmarked) { return; }
       isTranslation(label as string) && (label = intl.formatMessage({ id: label as string }));
       bookmarkState?.addBookmark({ name, label });
@@ -165,6 +174,8 @@ export const withFBInput = <T extends FBInputProps>(
       autosave,
       transform,
       bookmarked,
+      applicableValidationSchema,
+      validationAttribute,
     });
   };
 

@@ -9,7 +9,7 @@ import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import { getIsDocumentRecord } from "../../helpers";
+import { checkIsDocumentRecord } from "../../helpers/checkDocumentGroup";
 
 interface Props {
   documentRevision: DocumentRevision | undefined;
@@ -21,7 +21,7 @@ const VoidButton: React.FunctionComponent<Props> = ({
   const async = useAsync();
 
   const isRecord = useMemo(() =>
-    getIsDocumentRecord(documentRevision?.document?.documentType?.groupOptions || []), [documentRevision]);
+    checkIsDocumentRecord(documentRevision?.document?.documentType?.groupOptions || []), [documentRevision]);
 
   const voidAction = useActionCreator(documentRevisionsActions.voidDocument);
   const voidDocument = () => {

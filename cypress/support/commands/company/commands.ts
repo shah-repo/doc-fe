@@ -1,6 +1,7 @@
 import * as CRC32 from "crc-32";
 import faker from "faker";
 import { Company } from "../../../../src/state/ducks/company/types";
+import { HEX2RGB } from "../../../utils/context/converers";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
@@ -52,12 +53,25 @@ declare global {
         sessionId: string;
         specFilePath: string;
       }): Chainable<Subject>;
-      cmpUpdateCompany(params: { employeeId: string; sessionId: string;
+      cmpUpdateCompany(params: {
+        employeeId: string;
+        sessionId: string;
+        payload: Partial<Company>;}): Chainable<Subject>;
+      cmpAdminUpdateCompany(params: {
+        companyId: string;
+        sessionId: string;
         payload: Partial<Company>;}): Chainable<Subject>;
       cmpSelectCompany(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpClickCreateNewDocument(): Chainable<Subject>;
       cmpClickCreateApprovalRequest(): Chainable<Subject>;
       cmpVerifyNoPendingActions(): Chainable<Subject>;
+      cmpVerifyCompanyAvatar(params: { name: string; avatarSource: string }): Chainable<Subject>;
+      cmpVerifyCompanyLogo(params: { logoSource: string}): Chainable<Subject>;
+      cmpVerifyDefaultBackgroundColor(params: { color: string}): Chainable<Subject>;
+      cmpVerifySecondaryColor(params: { color: string}): Chainable<Subject>;
+      cmpVerifySecondaryContrastText(params: { color: string}): Chainable<Subject>;
+      cmpVerifyPrimaryContrastText(params: { color: string}): Chainable<Subject>;
+      cmpVerifyPrimaryColor(params: { color: string}): Chainable<Subject>;
     }
   }
 }
@@ -75,6 +89,56 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
     name: `${capitalize(faker.commerce.color())} ${faker.company.companyName()} ${companyNumber}`,
     companyAcronym: `TC${companyNumber}`,
     scheduledForDeletion: true,
+    whiteLabeling: {
+      DEV_THEME: {
+        logo: "/ta_assets_company_logo.png",
+        avatar: "/ta_assets_company_avatar.png",
+        imageEmail: "/ta_assets_company_email.png",
+        colors: {
+          defaultBackground: "#4b5dc6",
+          primary: "#eb5055",
+          primaryContrastText: "#000000",
+          secondary: "#414b8b",
+          secondaryContrastText: "#FFFFFF",
+        },
+      },
+      DEMO_THEME: {
+        logo: "https://www.feshfen.com/images/wigs/test.png",
+        avatar: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        imageEmail: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        colors: {
+          defaultBackground: "#4b5dc6",
+          primary: "#eb5055",
+          primaryContrastText: "#000000",
+          secondary: "#414b8b",
+          secondaryContrastText: "#FFFFFF",
+        },
+      },
+      SANDBOX_THEME: {
+        logo: "https://www.feshfen.com/images/wigs/test.png",
+        avatar: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        imageEmail: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        colors: {
+          defaultBackground: "#4b5dc6",
+          primary: "#eb5055",
+          primaryContrastText: "#000000",
+          secondary: "#414b8b",
+          secondaryContrastText: "#FFFFFF",
+        },
+      },
+      PRODUCTION_THEME: {
+        logo: "https://www.feshfen.com/images/wigs/test.png",
+        avatar: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        imageEmail: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        colors: {
+          defaultBackground: "#4b5dc6",
+          primary: "#eb5055",
+          primaryContrastText: "#000000",
+          secondary: "#414b8b",
+          secondaryContrastText: "#FFFFFF",
+        },
+      },
+    },
   };
   const body: ICreateCompanyBootstrap = {
     ...bodyDefaults,
@@ -106,6 +170,22 @@ Cypress.Commands.add("cmpUpdateCompany", (
   }).then((response) => response.body);
 });
 
+Cypress.Commands.add("cmpAdminUpdateCompany", (
+  params: {
+    companyId: string;
+    sessionId: string;
+    payload: Partial<Company>;
+  }) => {
+  cy.request({
+    method: "PATCH",
+    url: `${CONFIG.BE_URL}/api/v1/company/${params.companyId}`,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer_admin ${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
 Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: boolean }) => {
   if (params.multiple) {
     cy.wrapWithWaitOnApiCalls([
@@ -115,6 +195,11 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
       cy.get("#root").contains(params.name).click();
     });
   }
+});
+
+Cypress.Commands.add("cmpVerifyCompanyAvatar", (params: { name: string; avatarSource: string }) => {
+  cy.xpath(`//div[contains(text(),"${params.name}")]/../img`)
+    .should("have.attr", "src", params.avatarSource);
 });
 
 Cypress.Commands.add("cmpClickCreateNewDocument", () => {
@@ -129,6 +214,30 @@ Cypress.Commands.add("cmpVerifyNoPendingActions", () => {
 
 Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
   cy.get("[data-cy=\"change.request.create\"]").click();
+});
+
+Cypress.Commands.add("cmpVerifyCompanyLogo", (params:  {logoSource: string}) => {
+  cy.get("img[alt=\"Company logo\"]").should("have.attr", "src", params.logoSource);
+});
+
+Cypress.Commands.add("cmpVerifyDefaultBackgroundColor", (params:  {color: string}) => {
+  cy.get("tr>th:nth-child(1)").should("have.css", "background-color", HEX2RGB(params.color));
+});
+
+Cypress.Commands.add("cmpVerifySecondaryColor", (params:  {color: string}) => {
+  cy.get("a[href=\"/document_revision\"]>span").should("have.css", "color", HEX2RGB(params.color));
+});
+
+Cypress.Commands.add("cmpVerifySecondaryContrastText", (params:  {color: string}) => {
+  cy.get("a[href=\"/\"]>span").should("have.css", "color", HEX2RGB(params.color));
+});
+
+Cypress.Commands.add("cmpVerifyPrimaryContrastText", (params:  {color: string}) => {
+  cy.get("[data-cy=\"document.revision.create\"]").should("have.css", "color", HEX2RGB(params.color));
+});
+
+Cypress.Commands.add("cmpVerifyPrimaryColor", (params:  {color: string}) => {
+  cy.get("[id=\"Header-userName\"]").should("have.css", "color", HEX2RGB(params.color));
 });
 
 export function cmpFilterDocumentTypeIdByName(companyResponse: Company, documentTypeName: string) {

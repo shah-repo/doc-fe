@@ -1,9 +1,9 @@
 import { Box } from "@material-ui/core";
-import { compact, difference, filter, find, isEmpty, isUndefined, map, pick, unionBy } from "lodash";
+import { compact, difference, filter, find, isEmpty, isUndefined, map, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBInlineApprovalTransitionBody, FBRequiredApprover } from "..";
+import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBRequiredApprover } from "..";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
@@ -63,10 +63,9 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     );
     dialogState = FB.useRef(FBDialogState);
 
-    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string) => {
-      if (!approvalId) { return; }
-      const passwordBody = pick(formState?.values, "password") as FBInlineApprovalTransitionBody;
-      approvalsState?.applyTransition(transition, approvalId, passwordBody);
+    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
+      if (!approvalId || !password) { return; }
+      approvalsState?.applyTransition(transition, approvalId, { password });
     };
 
     function includesApprover(group: FBRequiredApprover, approver: string): boolean {

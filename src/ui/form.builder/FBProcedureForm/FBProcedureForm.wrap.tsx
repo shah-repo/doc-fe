@@ -50,8 +50,6 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       dialogState?.closeDialog();
     }
 
-    // MARK: @methods
-
     // MARK: @observer
 
     return Component({

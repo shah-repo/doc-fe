@@ -3,7 +3,7 @@ import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/typ
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 import { Nullable } from "../common";
-import { Group, GroupTag, Permission } from "./types";
+import { Group, GroupTag, IotCredentials, Permission } from "./types";
 
 const isAuthenticated = (state: ApplicationState): boolean =>
   Boolean(state.auth.user.sessionId && state.auth.user.employeeId);
@@ -15,6 +15,12 @@ const currentUserName = (state: ApplicationState): string =>
   state.auth.user.name;
 
 const currentUserId = (state: ApplicationState): string => state.auth.user.id;
+
+const getExpirationOfCredentials = (state: ApplicationState): string =>
+  state.auth.user.iotCredentials.credentials.Expiration;
+
+const getCredentials = (state: ApplicationState): IotCredentials =>
+  state.auth.user.iotCredentials;
 
 const currentUserGroups = (state: ApplicationState): Group[] =>
   state.auth.user.groups || [];
@@ -104,4 +110,6 @@ export default {
   currentEmployeeTags,
   makeGetHasTag,
   makeGetHasPermission,
+  getExpirationOfCredentials,
+  getCredentials,
 };

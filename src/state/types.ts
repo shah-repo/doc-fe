@@ -18,6 +18,7 @@ export interface ApiAction<Response = any, Body = any> extends Action {
   onFailure: (error: any,  dispatch: Dispatch) => void;
   onCompleted: (dispatch: Dispatch) => void;
   cancelToken?: CancelTokenSource;
+  sendNoResponseHeader?: boolean;
 }
 
 export interface ActionWithPayload<P> extends Action {

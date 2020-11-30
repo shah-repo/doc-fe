@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
@@ -227,20 +230,13 @@ context("Check Document History", () => {
 
     it("Upload test.docx", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
-      // auto-save
-      cy.wait(5 * 1000);
     });
 
     it("add another output document type: Lots", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Lots" });
-    });
-  });
-
-  context("Save document", () => {
-    it("Save document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.drSelectOutputDocumentType({ documentType: "Lots" });
+        });
     });
   });
 
@@ -285,7 +281,9 @@ context("Check Document History", () => {
     });
 
     it("Add another group permission", () => {
-      cy.drAddGroupFromPermissionTab(groupTwo);
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocSecurity, () => {
+        cy.drAddGroupFromPermissionTab(groupTwo);
+      });
     });
   });
 
