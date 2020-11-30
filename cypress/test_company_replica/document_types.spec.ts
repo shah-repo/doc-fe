@@ -252,13 +252,6 @@ export const documentTypes = [
     startingNumber: 0,
   },
   {
-    documentTypeName: "Equipment",
-    documentTypeAcronym: "EQ-",
-    group: "OTHER",
-    privateNumberPool: true,
-    startingNumber: 0,
-  },
-  {
     documentTypeName: "Impact Assessment",
     documentTypeAcronym: "IA-",
     group: "OTHER",
@@ -317,7 +310,7 @@ export const documentTypes = [
   {
     documentTypeName: "Component Specifications",
     documentTypeAcronym: "CS-",
-    group: "WO_PARTS",
+    group: "PART",
     privateNumberPool: false,
     startingNumber: 1,
   },
