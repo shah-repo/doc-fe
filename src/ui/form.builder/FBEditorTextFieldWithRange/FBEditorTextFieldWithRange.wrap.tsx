@@ -1,6 +1,6 @@
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBEditorTextFieldWithRangeProps, FBFormState } from "..";
+import { FB, FBEditorTextFieldWithRangeProps } from "..";
 
 export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRangeProps>(
   Component: React.FunctionComponent<T>,
@@ -13,12 +13,8 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
   }: T) => {
   // MARK: @config
     isRangeVisible = false;
-    const formState = FB.useRef<FBFormState>(FBFormState, {
-      range: false,
-      inspection: false,
-      passValue: false,
-      typeOfPassValue: "value",
-    });
+    const { formState } = FB.useStores();
+    console.log(formState);
 
 
     /** Hardcoded from clickable - where should we get these from? */
@@ -78,8 +74,8 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
     // MARK: @observer
     useObserver(() => {
       // isRangeVisible = formState.inputState.get("range")?.value;
-      isInspectionVisible = formState.inputState.get("inspection")?.value;
-      isPassValueVisible = formState.inputState.get("passValue")?.value;
+      isInspectionVisible = formState?.inputState.get("inspection")?.value;
+      isPassValueVisible = formState?.inputState.get("passValue")?.value;
     });
 
     return Component({

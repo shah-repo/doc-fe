@@ -49,12 +49,15 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
       <Box marginLeft={2}>
         <FBCheckbox
           label="form.builder.pass.value"
-          name="passValue"
+          name="passValueOption"
           withState
           gutter={!isPassValueVisible}
         />
         <Box marginLeft={4}>
-          <FBPassValue isVisible={isPassValueVisible} />
+          <FBPassValue
+            isVisible={isPassValueVisible}
+            rules="required_if:passValueOption,true"
+          />
         </Box>
         <FBAutocomplete
           label="form.builder.aql"
