@@ -1,4 +1,4 @@
-import { Button, Grid } from "@material-ui/core";
+import { Button, FormControlLabel, Grid, Switch } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
@@ -22,6 +22,9 @@ interface Props extends WithStyles<typeof styles> {
   handleOpenMenu: (event: React.MouseEvent<HTMLButtonElement>) => void;
   anchorEl: Nullable<HTMLElement>;
   handleCloseMenu: () => void;
+  toggleCustomLabels: () => void;
+  customLabelsValue: boolean;
+  canToggleCustomLabels: boolean;
 }
 
 const Header: React.FunctionComponent<Props> = ({
@@ -32,6 +35,9 @@ const Header: React.FunctionComponent<Props> = ({
   avatar,
   handleOpenMenu,
   handleCloseMenu,
+  toggleCustomLabels,
+  customLabelsValue,
+  canToggleCustomLabels,
   anchorEl,
 }) => (
   <AppBar position="fixed" color="primary" className={classes.appBar}>
@@ -41,7 +47,14 @@ const Header: React.FunctionComponent<Props> = ({
         alignItems="flex-end"
         justify="flex-end"
       >
-        <Grid item={true} xs={6}>
+        {/* backend is not done yet, need add tag */}
+        {!canToggleCustomLabels &&
+        <FormControlLabel
+          control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
+          label="Show customizable labels"
+        />
+        }
+        <Grid item={true} className={classes.wrapContainer}>
           <Grid container={true} justify="flex-end" alignItems="center">
             <ClickAwayListener onClickAway={handleCloseMenu} mouseEvent="onClick">
               <Button
