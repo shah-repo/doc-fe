@@ -42,12 +42,14 @@ export const InspectionControlsPresenter: React.FunctionComponent<InspectionCont
           DOC_TYPE_GROUP_OPTION.FAI_INSPECTION,
           "document.revision.fai",
         )}
-      { /** INSPECTION */
-        renderButton(
-          isDocumentReleased && canCreateInspection,
-          DOC_TYPE_GROUP_OPTION.INSPECTION,
-          "document.revision.inspection",
-        )}
+      { // we currently don't need this
+      // { /** INSPECTION */
+      //   renderButton(
+      //     isDocumentReleased && canCreateInspection,
+      //     DOC_TYPE_GROUP_OPTION.INSPECTION,
+      //     "document.revision.inspection",
+      //   )}
+      }
       <InspectionDialog { ...(props) } />
     </>
   );
