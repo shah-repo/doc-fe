@@ -6,7 +6,6 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    passValue,
     ...props
   }: T) => {
 
