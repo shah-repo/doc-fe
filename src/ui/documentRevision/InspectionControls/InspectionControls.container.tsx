@@ -37,7 +37,7 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
 
   // MARK: @actions
   const fetchAvailableFormsAction = useActionCreator(documentRevisionsActions.fetchAvailableForms);
-  const createInspectionAction = useActionCreator(documentRevisionsActions.createInspection);
+  const createFaiInspectionAction = useActionCreator(documentRevisionsActions.createFaiInspection);
 
   // MARK: @async
   const fetchAvailableFormsAsync = useAsync({
@@ -117,7 +117,7 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
       formDocument: { id: formId },
     };
     createInspectionAsync.start(
-      createInspectionAction,
+      createFaiInspectionAction,
       createInspectionBody,
       createInspectionAsync,
     );
