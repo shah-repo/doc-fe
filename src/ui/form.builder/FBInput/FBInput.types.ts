@@ -66,7 +66,8 @@ export type FBInputType =
   | "ebpart"
   | "eqmaintenance"
   | "textfieldwithrange"
-  | "range";
+  | "range"
+  | "passpercentage";
 
 export type FBInputProps =
   & FBLabelProps
@@ -150,6 +151,16 @@ export type FBInputProps =
      * @cfg {String} Validation attribute name. Use this prop for non labeled controls.
      */
     validationAttribute?: string;
+    /**
+     * @cfg {Bool} Flag for control inputs which values we need to generate control's
+     * value but we need to omit it from form values.
+     */
+    omitFormValue?: boolean;
+    // /**
+    //  * @cfg {Bool} true to force form validation on input render if its default value
+    //  * is validation relation.
+    //  */
+    // validateDefaultValue?: boolean;
   };
 
 export const OmitInputClones: FBInputType[] = [
@@ -168,4 +179,5 @@ export const OmitInputClones: FBInputType[] = [
   "ebpart",
   "parts",
   "range",
+  "passpercentage",
 ];
