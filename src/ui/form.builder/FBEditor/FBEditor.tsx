@@ -5,6 +5,7 @@ import { FBCheckbox, FBEditorProperties, FBEditorValidation, FBForm, FBProvider 
 import { withFBEditor } from "./FBEditor.wrap";
 
 const FBEditor: React.FunctionComponent<FBEditorProps> = ({
+  formState,
   inputProps: { type, index } = {},
   inputProps,
   editorState,
@@ -13,7 +14,7 @@ const FBEditor: React.FunctionComponent<FBEditorProps> = ({
   mode,
 }) => (
   <FBProvider {...{ editorState }}>
-    <FBForm initialValues={inputProps}>
+    <FBForm initialValues={inputProps} {...{ formState }}>
       <Box hidden={mode === "validation"}>
         {children}
         {type && FBEditorState.omitFinalValidation.includes(type) && (

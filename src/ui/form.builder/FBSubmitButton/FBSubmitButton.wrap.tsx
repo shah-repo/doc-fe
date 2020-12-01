@@ -14,7 +14,7 @@ export const withFBSubmitButton = <T extends FBButtonProps>(
     const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       formState?.validate((valid) => {
         valid && props.onClick && props.onClick(event);
-      });
+      }, true);
     };
 
     return Component({
