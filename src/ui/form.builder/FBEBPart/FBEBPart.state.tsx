@@ -29,13 +29,12 @@ export class FBEBPartState {
   // MARK: @helpers
   public setNewRender = (state: boolean) => set(this, "forceNewRender", state);
 
-  public addExistingPartChild = (docRevId?: string, childPartId?: string) => {
+  public addExistingPartChild = (docRevId?: string, body?: EBPartPatchBody) => {
     if (!docRevId) { return; }
-    const childrenParts = childPartId ? [{ id: childPartId }] : [];
     this.existingChildApi.set({
       url: FBEndpoint.PatchDocumentRevision,
       urlValues: { docRevId },
-      body: { childrenParts },
+      body,
       method: "patch",
     });
   };

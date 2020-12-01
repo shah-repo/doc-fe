@@ -6,10 +6,18 @@ export type FBEBPartProps =
 & FBAutocompleteAsyncProps
 & {
   handleAdd?: () => void;
+  partType?: "document" | "documentRevision";
 };
 
 export interface EBPartPatchBody {
-  childrenParts: { id: string }[];
+  childrenParts: EBPartRequestBody[];
+  formInput?: {
+    childrenPartsForRevise?: EBPartRequestBody[];
+  };
+}
+
+export interface EBPartRequestBody {
+  id: string;
 }
 
 export interface EBPartPostBody {

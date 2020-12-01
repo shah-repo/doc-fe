@@ -15,6 +15,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     disabled = false,
     defaultValue,
     forceNewRender,
+    partType,
     name,
     ...props
   }: T) => {
@@ -24,11 +25,13 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     const { document: { childrenParts: additionalData = [] } = {} } = workspaceState || {};
     const ebPartState = FB.useRef(FBEBPartState, first(additionalData)?.id);
     const { id: ebId } = workspaceState || {};
+    partType = "documentRevision";
 
     useEffect(() => {
       const childrenPartsForRevise = workspaceState?.document?.formInput?.childrenPartsForRevise;
       if (!workspaceState?.document?.childrenParts?.length && childrenPartsForRevise?.[0]) {
         ebPartState.fetchDocumentById(childrenPartsForRevise[0].id);
+        formState?.setFieldValue("partType", "document");
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -53,7 +56,21 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     // on existing part autocomplete change
     React.useEffect(() => reaction(
       () => formState?.inputState.get("childrenParts")?.value,
-      (childPartId: string) => ebPartState.addExistingPartChild(ebId, childPartId),
+      (childPartId: string) => {
+        const type = formState?.inputState.get("partType")?.value;
+        const body = type === "document" ? {
+          formInput: {
+            childrenPartsForRevise: [{ id: childPartId }],
+          },
+          childrenParts: [],
+        } : {
+          childrenParts: [{ id: childPartId }],
+        };
+        ebPartState.addExistingPartChild(
+          ebId,
+          body,
+        );
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -92,6 +109,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         ebPartState?.documentApi.loading
       );
       disabled = disabled || loading;
+      partType = formState?.inputState.get("partType")?.value;
     });
 
     return Component({
@@ -104,6 +122,8 @@ export const withFBEBPart = <T extends FBEBPartProps>(
       disabled,
       forceNewRender: ebPartState?.forceNewRender,
       name,
+      partType,
+      formState,
     });
   };
 
