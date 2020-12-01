@@ -4,9 +4,11 @@ import { FormikProps } from "formik";
 import React from "react";
 import { DocumentType, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType";
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
+import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
 import Text from "../../components/Text";
 import { DialogHandler } from "../../hooks/useDialog";
+import { docIdAsyncContext } from "../list/CreateDocumentByType";
 import { styles } from "./FormListDialog/FormListDialog.styles";
 
 export interface DocumentTypeDialogProps extends FormikProps<any> {
@@ -35,7 +37,7 @@ export const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDia
   const handleSelect = (id: string) => {
     handleSelection(id);
   };
-
+  const docIdAsyncState = React.useContext(docIdAsyncContext);
   return (
     <Dialog
       open={dialog.isOpen}
@@ -66,6 +68,7 @@ export const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDia
           initialValues={initialValues}
           resetForm={resetForm}
         >
+          <FormProgress asyncState={docIdAsyncState} />
           <AutocompleteField
             name="selectType"
             size="sm"
