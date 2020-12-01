@@ -106,7 +106,7 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
     // MARK: @observer
 
     return Component({
-      ...(props as T),
+      ...(props),
       formState,
       aqlOptions,
     });
