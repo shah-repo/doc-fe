@@ -62,6 +62,16 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
 
     // MARK: @reactions
     useEffect(() => reaction(
+      () => formState?.inputState.get("rangeOption")?.value,
+      (value: boolean) => {
+        if (value) { return; }
+        formState?.setFieldError("editorConfig.range", "");
+        formState?.setFieldValue("editorConfig.range", undefined, true);
+      },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    useEffect(() => reaction(
       () => formState?.inputState.get("passValue")?.value,
       (value: boolean) => {
         // Setting the pass type default value since defaultValue prop
