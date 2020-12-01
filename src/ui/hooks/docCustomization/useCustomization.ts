@@ -4,6 +4,8 @@ import { DisplayFieldType, documentTypeSelectors, FieldType, InputFieldType } fr
 import { required, validator } from "../../components/forms/fields/validators";
 import { UIConfig } from "./types";
 
+const configureStatus = (status: string) => status.replace(" ", "_").toUpperCase();
+
 export const useAdministrativeChange = (documentTypeId = "",): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.ADM_CHANGE, "documentRevision.form.administrativeChange");
 export const useApproveAndRelease = (documentTypeId = "",): UIConfig =>
@@ -15,9 +17,9 @@ export const useDocId = (documentTypeId = ""): UIConfig =>
 export const useDocumentHistory = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType.VERSIONS, "document.revision.docVersion");
 export const useDocumentStatus = (documentTypeId = "", status: string): UIConfig =>
-  useCustomization(documentTypeId, DisplayFieldType[`STATUS_${status}`], status);
+  useCustomization(documentTypeId, DisplayFieldType[`STATUS_${configureStatus(status)}`], status);
 export const useDocumentVersion = (documentTypeId = "", status: string): UIConfig =>
-  useCustomization(documentTypeId, DisplayFieldType[`VERSION_${status}`], status);
+  useCustomization(documentTypeId, DisplayFieldType[`VERSION_${configureStatus(status)}`], status);
 export const useDocumentTypeSelect = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.DOC_TYPE, "document.type");
 export const useNextRevision = (documentTypeId = ""): UIConfig =>
@@ -49,15 +51,14 @@ const useCustomization = (
   const customLabelsValue = useSelector(authSelectors.isCustomLabelsOn);
   const config = documentType?.fieldsConfig?.[fieldType];
   const isVisible = customLabelsValue ? true : config?.visible ?? defaultVisibility;
-  // if config undefined are we going to show defaultLabel ???
   const label = customLabelsValue ? `<label: ${fieldType}>` : config?.label ?? defaultLabel;
   const validation = config?.required ?? true ? validator(required) : undefined;
   const tooltipConfig = {
     labelName: fieldType,
-    defaultLabel: config?.label,
-    overriddenLabel: defaultLabel,
-    visibilityFlag: config?.visible,
-    requiredFlag: config?.required,
+    defaultLabel,
+    overriddenLabel: config?.label || defaultLabel,
+    visibilityFlag: config?.visible.toString(),
+    requiredFlag: config?.required?.toString(),
   };
 
   return [isVisible, label, tooltipConfig, validation];

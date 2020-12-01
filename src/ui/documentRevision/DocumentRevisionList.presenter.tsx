@@ -50,8 +50,9 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     isRecord,
   );
 
-  const { displayStatus, status } = documentRevision;
-  const [isStatusVisible, statusLabel, tooltipConfig] = useDocumentStatus(documentTypeId, displayStatus);
+  const { status } = documentRevision;
+
+  const [isStatusVisible, statusLabel, tooltipConfig] = useDocumentStatus(documentTypeId, status);
   let verPrefix = "common.revision";
   let recordDateLabel = "common.updated" as Translation;
 

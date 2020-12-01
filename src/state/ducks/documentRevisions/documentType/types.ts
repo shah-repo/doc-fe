@@ -150,8 +150,8 @@ export interface TooltipLabelConfig {
   labelName: string;
   defaultLabel?: string;
   overriddenLabel: string;
-  visibilityFlag?: boolean;
-  requiredFlag?: boolean;
+  visibilityFlag?: string;
+  requiredFlag?: string;
 }
 
 

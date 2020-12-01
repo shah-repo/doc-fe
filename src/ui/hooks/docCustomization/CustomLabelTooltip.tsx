@@ -33,12 +33,13 @@ const CustomLabelTooltip: React.FunctionComponent<CustomLabelTooltipProps> = ({
                   values={{ overriddenLabel: tooltipConfig?.overriddenLabel }}
                 />
               </Typography>
-              <Typography color="inherit">
+              {tooltipConfig?.requiredFlag && <Typography color="inherit">
                 <Text translation="tooltip.required.flag" values={{ requiredFlag: tooltipConfig?.requiredFlag }}/>
-              </Typography>
-              <Typography color="inherit">
+              </Typography>}
+              {tooltipConfig?.visibilityFlag && <Typography color="inherit">
                 <Text translation="tooltip.visibility.flag" values={{ visibilityFlag: tooltipConfig?.visibilityFlag }}/>
               </Typography>
+              }
             </React.Fragment>
           }
         >

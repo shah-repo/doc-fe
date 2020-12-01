@@ -30,7 +30,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   displayStatus,
 }) => {
 
-  const [isStatusVisible, statusLabel, tooltipConfig] = useDocumentStatus(documentTypeId, displayStatus || status);
+  const [isStatusVisible, statusLabel, tooltipConfig] = useDocumentStatus(documentTypeId, status);
   const [isTitleVisible] = useTitle(documentTypeId);
   const classes = styles();
   const isStatusReleased = isDocumentRevisionInStatus(
