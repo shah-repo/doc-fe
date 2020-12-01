@@ -47,8 +47,7 @@ const Header: React.FunctionComponent<Props> = ({
         alignItems="flex-end"
         justify="flex-end"
       >
-        {/* backend is not done yet, need add tag */}
-        {!canToggleCustomLabels &&
+        {canToggleCustomLabels &&
         <FormControlLabel
           control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
           label="Show customizable labels"
