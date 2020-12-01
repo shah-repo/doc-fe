@@ -4,6 +4,7 @@ import React from "react";
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType";
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
+import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
 import Text from "../../Text";
 import { styles } from "./HeaderInfo.styles";
@@ -29,7 +30,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   displayStatus,
 }) => {
 
-  const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, displayStatus || status);
+  const [isStatusVisible, statusLabel, tooltipConfig] = useDocumentStatus(documentTypeId, displayStatus || status);
   const [isTitleVisible] = useTitle(documentTypeId);
   const classes = styles();
   const isStatusReleased = isDocumentRevisionInStatus(
@@ -48,13 +49,15 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
     <Grid item xs={6} className={classes.itemWrap} >
       {
         isStatusVisible &&
-        <Chip
-          label={<Text message={statusLabel} />}
-          id="HeaderInfo-status"
-          data-cy="HeaderInfo-status"
-          className={classNames(classes.statusDefault)}
-          icon={statusIcon}
-        />
+          <CustomLabelTooltip {...{ tooltipConfig }}>
+            <Chip
+              label={<Text message={statusLabel} />}
+              id="HeaderInfo-status"
+              data-cy="HeaderInfo-status"
+              className={classNames(classes.statusDefault)}
+              icon={statusIcon}
+            />
+          </CustomLabelTooltip>
       }
       <Typography variant="h6" id="HeaderInfo-docId" className={classes.id} component="span">
         {id}

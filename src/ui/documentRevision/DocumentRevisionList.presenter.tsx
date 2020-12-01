@@ -7,6 +7,7 @@ import SummaryInfo from "../common/summary/SummaryInfo";
 import DateFormatter from "../components/Date";
 import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import CustomLabelTooltip from "../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus } from "../hooks/docCustomization/useCustomization";
 import { Translation } from "../translations/types";
 import { styles } from "./DocumentRevisionList.container.styles";
@@ -50,7 +51,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   );
 
   const { displayStatus, status } = documentRevision;
-  const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, displayStatus);
+  const [isStatusVisible, statusLabel, tooltipConfig] = useDocumentStatus(documentTypeId, displayStatus);
   let verPrefix = "common.revision";
   let recordDateLabel = "common.updated" as Translation;
 
@@ -96,9 +97,11 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           {versionNumber}
           {
             isStatusVisible &&
-            <>
+            <CustomLabelTooltip {...{ tooltipConfig }}>
+              <>
               &nbsp; - <Text message={statusLabel} />
-            </>
+              </>
+            </CustomLabelTooltip>
           }
         </div>
       </NavLink>

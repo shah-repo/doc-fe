@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { authSelectors } from "../../../state/ducks/auth";
 import { DisplayFieldType, documentTypeSelectors, FieldType, InputFieldType } from "../../../state/ducks/documentRevisions/documentType";
 import { required, validator } from "../../components/forms/fields/validators";
 import { UIConfig } from "./types";
@@ -45,12 +46,21 @@ const useCustomization = (
   defaultVisibility = true,
 ): UIConfig => {
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
+  const customLabelsValue = useSelector(authSelectors.isCustomLabelsOn);
   const config = documentType?.fieldsConfig?.[fieldType];
-  const isVisible = config?.visible ?? defaultVisibility;
-  const label = config?.label ?? defaultLabel;
+  const isVisible = customLabelsValue ? true : config?.visible ?? defaultVisibility;
+  // if config undefined are we going to show defaultLabel ???
+  const label = customLabelsValue ? `<label: ${fieldType}>` : config?.label ?? defaultLabel;
   const validation = config?.required ?? true ? validator(required) : undefined;
+  const tooltipConfig = {
+    labelName: fieldType,
+    defaultLabel: config?.label,
+    overriddenLabel: defaultLabel,
+    visibilityFlag: config?.visible,
+    requiredFlag: config?.required,
+  };
 
-  return [isVisible, label, validation];
+  return [isVisible, label, tooltipConfig, validation];
 };
 
 export default useCustomization;
