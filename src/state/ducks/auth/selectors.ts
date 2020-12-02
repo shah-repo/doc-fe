@@ -28,6 +28,9 @@ const currentUserGroups = (state: ApplicationState): Group[] =>
 const currentEmployeeId = (state: ApplicationState): string =>
   state.auth.user.employeeId;
 
+const isCustomLabelsOn = (state: ApplicationState): boolean =>
+  state.auth.user.customLabels;
+
 const currentSlackUserId = (state: ApplicationState): string =>
   state.auth.user.employee.slackUserId;
 
@@ -112,4 +115,5 @@ export default {
   makeGetHasPermission,
   getExpirationOfCredentials,
   getCredentials,
+  isCustomLabelsOn,
 };

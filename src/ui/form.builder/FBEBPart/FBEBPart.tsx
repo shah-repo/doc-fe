@@ -26,6 +26,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
             placeholder="form.builder.select.existing.part"
             optionId={FBAutocompleteAsyncOption.availableParts}
             gutter={false}
+            shouldReloadOnInit
             withState
             {...{ disabled, loading, name, defaultValue, additionalData, forceNewRender }}
           />

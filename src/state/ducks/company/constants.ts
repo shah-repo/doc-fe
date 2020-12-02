@@ -79,6 +79,14 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     category: "Receive",
     restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
   },
+  // TODO remove
+  {
+    label: "Part",
+    type: "CATEGORY",
+    icon: "/navigation_icons/receipt_list.svg",
+    category: "Parts",
+    restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
+  },
   {
     label: "Inspection",
     type: "CATEGORY",
