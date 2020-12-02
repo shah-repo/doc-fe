@@ -31,4 +31,7 @@ export default (theme: Theme) =>
         boxShadow: "none",
       },
     },
+    wrapContainer: {
+      marginLeft: theme.spacing(2),
+    },
   });

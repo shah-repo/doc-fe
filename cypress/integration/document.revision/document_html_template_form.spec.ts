@@ -11,6 +11,9 @@ let customFieldId;
 let docRevisionId;
 let baererSessionId;
 let employeeId;
+let developersGroup;
+let adminEmployee;
+let adminSessionId;
 
 context("Document HTML template form", () => {
   context("[API]Prepare company", () => {
@@ -45,9 +48,22 @@ context("Document HTML template form", () => {
         }).then((response) => {
           createdCompany = response;
           const employee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           employeeId = employee.id;
           done();
         });
+      });
+    });
+
+    it("[API]Login admin tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[1].email,
+        password: "Tester1!",
+      }).then((response) => {
+        loginResponse = response;
+        adminSessionId = loginResponse.sessionId;
+        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
+        done();
       });
     });
 
@@ -60,6 +76,30 @@ context("Document HTML template form", () => {
         baererSessionId = loginResponse.sessionId;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
+      });
+    });
+  });
+
+  context("[API]Add employee to developers group", () => {
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Developers",
+        sessionId: adminSessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        developersGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: developersGroup.body[0].id,
+        sessionId: adminSessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: employeeId }],
+        },
       });
     });
   });

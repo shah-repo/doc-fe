@@ -43,11 +43,13 @@ export const canChangeDocumentOwner = (
   status: DocumentRevisionStatus,
   currentEmployeeId: string,
   ownerId: string,
-  isCompanyAdmin: boolean) =>
+  isCompanyAdmin: boolean,
+  hasChangeOwnershipPermission: boolean
+) =>
   (isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange],
     status
-  ) &&
-    ownerId === currentEmployeeId)
-    || isCompanyAdmin;
+  ) && ownerId === currentEmployeeId)
+    || isCompanyAdmin
+    || hasChangeOwnershipPermission;
 
