@@ -15,6 +15,7 @@ import { checkCanBeCopied, checkIsDocumentRecord, hasSerializedCSV } from "../..
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
+import InspectionControlsContainer from "../../InspectionControls/InspectionControls.container";
 import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.presenter";
 import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
@@ -137,6 +138,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         data-cy={"DocumentRevisionForm-submit"}
         disabled={isCreateDocumentDisabled}
       />
+      <InspectionControlsContainer {...{ documentRevision }} />
       {
         isRecord && (!isInlineApproval || revisionStage !== 1) && (
           <SubmitForApproval

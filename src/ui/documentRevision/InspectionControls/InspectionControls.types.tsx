@@ -5,7 +5,7 @@ import { DialogHandler } from "../../hooks/useDialog";
 export interface InspectionControlsPresenterProps extends InspectionDialogProps {
   onButtonClick(): void;
   canCreateInspection: boolean;
-  isDocumentReleased: boolean;
+  isDocumentDraft: boolean;
   disabled: boolean;
 }
 

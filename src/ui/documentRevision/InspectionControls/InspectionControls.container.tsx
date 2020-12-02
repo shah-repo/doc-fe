@@ -8,7 +8,7 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import { checkCanTypeCreateInspection, checkIsTypeFaiInspection } from "../helpers/checkDocumentGroup";
-import { isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
+import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
 import InspectionControlsPresenter from "./InspectionControls.presenter";
 import { CreateInspectionBody, DocTypeOptionType, FormOptionType, InspectionControlsContainerProps, OutputDocumentTypes } from "./InspectionControls.types";
 
@@ -25,7 +25,7 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
     document: { documentType: { groupOptions: docRevGroupOptions } },
   } = documentRevision;
   const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
-  const isDocumentReleased = isDocumentRevisionReleased(docRevStatus);
+  const isDocumentDraft = isDocumentRevisionInDraft(docRevStatus);
   const inspectionDialog = useDialog();
   const history = useHistory();
 
@@ -127,7 +127,7 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
     <InspectionControlsPresenter
       {...{
         canCreateInspection,
-        isDocumentReleased,
+        isDocumentDraft,
         onButtonClick,
         disabled,
         inspectionDialog,
