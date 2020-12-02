@@ -59,11 +59,8 @@ export class FBEditorState {
     "task",
     "approvals",
     "procedure",
-<<<<<<< HEAD
     "eqmaintenance",
     "textfieldwithrange",
-=======
->>>>>>> develop
   ];
 
   public static pickDefaultValue: FBInputType[] = [
