@@ -52,7 +52,6 @@ export class FBEditorState {
     "createlabel",
     "poreceive",
     "approval",
-    "inlineapproval",
     "requestapproval",
     "hellosign",
     "approvalMatrix",
@@ -60,8 +59,11 @@ export class FBEditorState {
     "task",
     "approvals",
     "procedure",
+<<<<<<< HEAD
     "eqmaintenance",
     "textfieldwithrange",
+=======
+>>>>>>> develop
   ];
 
   public static pickDefaultValue: FBInputType[] = [

@@ -734,6 +734,7 @@
   "form.builder.download.clean.copy": "Download generated clean copy of file {fileShortName}",
   "form.builder.add.approvers": "Add Approvers",
   "form.builder.revise.disabled": "Revision Disabled",
+  "form.builder.delete.disabled": "Deletion Disabled",
   "form.builder.send": "Send",
   "form.builder.edit.matrix": "Edit matrix",
   "form.builder.fullscreen.mode": "Fullscreen Mode",
@@ -918,5 +919,10 @@
   "file.type.XLS": "Microsoft Excel File",
   "file.type.DOCX": "Microsoft Word File",
   "file.type.DOC": "Microsoft Word File",
-  "file.type": "{type} File"
+  "file.type": "{type} File",
+  "tooltip.label.name": "Label Name: {labelName}",
+  "tooltip.overridden.label": "Overridden Label: {overriddenLabel}",
+  "tooltip.default.label": "Default Label: {defaultLabel}",
+  "tooltip.required.flag": "Required Flag Status: {requiredFlag}",
+  "tooltip.visibility.flag": "Visibility Flag Status: {visibilityFlag}"
 }

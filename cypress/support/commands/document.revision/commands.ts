@@ -190,6 +190,7 @@ Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
   list.forEach((item) => {
     cy.get("[class=\"circle_remove\"]").eq(item).click({ force: true });
   });
+  cy.get("[data-cy=field-referenceTo] h5").click();
 });
 
 Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {

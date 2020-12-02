@@ -143,6 +143,15 @@ export interface IFieldConfigItem {
   visible: boolean;
   required?: boolean;
   label?: string;
+  tooltipConfig?: TooltipLabelConfig;
+}
+
+export interface TooltipLabelConfig {
+  labelName: string;
+  defaultLabel?: string;
+  overriddenLabel: string;
+  visibilityFlag?: string;
+  requiredFlag?: string;
 }
 
 
