@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-import React from "react";
-import { FB, FBEditorTextFieldWithRangeProps } from "..";
-=======
 import { reaction } from "mobx";
 import React, { useEffect } from "react";
 import { FB, FBEditorTextFieldWithRangeProps, FBFormState } from "..";
->>>>>>> b07cd145fabbc7753600562bbd3c309c37f34508
 
 export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRangeProps>(
   Component: React.FunctionComponent<T>,
