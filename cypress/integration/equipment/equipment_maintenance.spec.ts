@@ -339,26 +339,75 @@ context("Equipment maintenance test", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
+    it("Approve and release equipment maintenance document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Fill new preventative mainenance form", () => {
     it("Click 'NEW PM'", () => {
       cy.url().then((url: any) => {
-        url = url.split("/").pop();
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdMaintenanceRecordFormDocument.id}/create_maintenance/${url}/pm-ki5wtk5l`;
-        // const newPMUrl = CONFIG.FE_URL + "/document_revision/" + createdMaintenanceRecordFormDocument.id +
-        //   "/create_maintenance/" + url + "pm-ki5wtk5l";
+        const docIdFromUrl = url.split("/").pop();
+        // eslint-disable-next-line max-len
+        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdMaintenanceRecordFormDocument.id}/create_maintenance/${docIdFromUrl}/pm-ki5wtk5l`;
         cy.wrapWithWaitOnApiCalls([CyRoutes.GroupsGet, CyRoutes.GetAvailableApprovers], () => {
           cy.visit(newPMUrl);
         });
       });
     });
-  });
 
-  context("Fill new preventative mainenance form", () => {
     it("Enter title 'Preventative maintenance document'", () => {
       cy.drEnterDocumentTitle({ name: "Preventative maintenance document" });
     });
 
     it("Enter description 'Preventative maintenance'", () => {
       cy.drEnterDocumentDescription({ description: "Preventative maintenance" });
+    });
+
+    it("Select document type 'Maintenance Record'", () => {
+      cy.drSelectDocumentType({ documentType: "Maintenance Record" });
+    });
+
+    it("Select revision stage 'Numeric'", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it(`Select maintainer '${ADMIN_USER.name}'`, () => {
+      cy.get("[data-cy=\"equipment_maintainer\"]").click();
+      cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).click();
+    });
+
+    it("Create 'Preventative maintenance document'", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Add an Approval'", () => {
+      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+    });
+
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve record", () => {
+      cy.ebApprove();
+    });
+  });
+
+  context("Check equipment maintenance history on equipment maintenance document", () => {
+    it("Navig to equipment", () => {
+      cy.navigToEquipment();
+    });
+
+    it("Select 'Equipment maintenance document'", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+        cy.get("div[aria-rowindex=\"1\"]").click();
+      });
+    });
+
+    it("Check preventative maintenance document existance", () => {
+      cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
+        .contains("MR-00001 - Preventative maintenance document");
     });
   });
 });
