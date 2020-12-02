@@ -39,21 +39,15 @@ declare global {
       fbSelectCustomFieldToAdd(params: { name: string }): Chainable<Subject>;
       fbEnterPlaceholder(params: { placeholder: string }): Chainable<Subject>;
       fbEnterLabel(params: { label: string }): Chainable<Subject>;
-      fbCheckFields(...list: string[]): Chainable<Subject>;
-      fbCheckFieldsDoesntExist(...list: string[]): Chainable<Subject>;
     }
   }
 }
 
 Cypress.Commands.add("fbAddNewFieldOption", () => {
-  cy.unClick();
   cy.contains("Add a Field").click();
 });
 
-Cypress.Commands.add("fbAddNewField", () => {
-  cy.unClick();
-  cy.get("button[data-cy=\"form.builder.add.field\"]").click();
-});
+Cypress.Commands.add("fbAddNewField", () => cy.get("button[data-cy=\"form.builder.add.field\"]").click());
 
 Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
@@ -102,18 +96,6 @@ Cypress.Commands.add("fbSelectCustomFieldToAdd", (params: { name: string }) => {
 Cypress.Commands.add("fbSelectCheckboxValue", (...list: string[]) => {
   list.forEach((item) => {
     cy.get("[type=\"checkbox\"]").check(item).wait(200);
-  });
-});
-
-Cypress.Commands.add("fbCheckFields", (...list: string[]) => {
-  list.forEach((item) => {
-    cy.get(`[data-cy="form.builder.${item}"]`).should("exist");
-  });
-});
-
-Cypress.Commands.add("fbCheckFieldsDoesntExist", (...list: string[]) => {
-  list.forEach((item) => {
-    cy.get(`[data-cy="form.builder.${item}"]`).should("not.exist");
   });
 });
 

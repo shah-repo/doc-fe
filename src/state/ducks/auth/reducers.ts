@@ -4,8 +4,8 @@ import { Employee } from "../company";
 import { COMPANY_DEFAULT_STATE } from "../company/reducers";
 import { EditGroupsAction, EditUserInfoAction } from "../tableSearch";
 import { EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
-import { AUTH_USER, LOGOUT_USER, PING_SERVER_GET_ASYNC, SET_CREDENTIALS, SET_EMPLOYEE, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from "./constants";
-import { AuthUserAction, EditUserMeAction, GroupTag, LogoutUserAction, Permission, SelectEmployeeAction, SetCredentialsAction, ToggleCustomLabelsAction, UserGroupsAction, UserGroupsState, UserState } from "./types";
+import { AUTH_USER, LOGOUT_USER, PING_SERVER_GET_ASYNC, SET_CREDENTIALS, SET_EMPLOYEE, USERS_ME_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from "./constants";
+import { AuthUserAction, EditUserMeAction, GroupTag, LogoutUserAction, Permission, SelectEmployeeAction, SetCredentialsAction, UserGroupsAction, UserGroupsState, UserState } from "./types";
 
 export const DEFAULT_EMPLOYEE = {
   id: "",
@@ -38,7 +38,6 @@ export const USER_DEFAULT_STATE: UserState = {
   groups: [],
   employee: DEFAULT_EMPLOYEE,
   iotCredentials: DEFAULT_CREDENTIALS,
-  customLabels: false,
 };
 
 type AuthUserActions =
@@ -49,8 +48,7 @@ type AuthUserActions =
   | EditUserInfoAction
   | UserGroupsAction
   | EditGroupsAction
-  | SetCredentialsAction
-  | ToggleCustomLabelsAction;
+  | SetCredentialsAction;
 
 export const user = (
   state: UserState = USER_DEFAULT_STATE,
@@ -76,11 +74,6 @@ export const user = (
       return {
         ...state,
         iotCredentials: action.payload,
-      };
-    case TOGGLE_CUSTOM_LABELS:
-      return {
-        ...state,
-        customLabels: action.payload,
       };
     case USERS_ME_URL:
       return {

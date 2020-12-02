@@ -21,7 +21,6 @@ const FBPOReceive: React.FunctionComponent<FBPOReceiveProps> = ({
         {...props}
         {...{ name }}
         optionId={FBAutocompleteAsyncOption.POList}
-        shouldReloadOnInit
       />
       {loading && (
         <Box display="flex" justifyContent="center">

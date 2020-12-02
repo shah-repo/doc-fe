@@ -51,7 +51,7 @@ export const toDocumentRevisionFormValues = (
       .map((operator) => ({ label: operator.name, value: operator.id })),
     renderHTML: documentRevision.renderHTML,
     schema: documentRevision.schema,
-    parentParts: documentRevision.parentParts?.map((parentPart) => ({ id: parentPart.id })),
+    parentParts: documentRevision.parentParts,
     parentEquipment: parentEquipmentId ? { id: parentEquipmentId } : undefined,
     equipmentSection: get(documentRevision.equipmentSection, ""),
     // there can currently be only one child part

@@ -1,9 +1,8 @@
 import { get } from "lodash";
 import React, { useCallback, useEffect, useMemo } from "react";
-import { connect, useSelector } from "react-redux";
-import { getHasPermission } from "../../common/utils/selectors";
+import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
-import { GroupTag, Permission } from "../../state/ducks/auth/types";
+import { GroupTag } from "../../state/ducks/auth/types";
 import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
@@ -86,22 +85,20 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
   const operators = get(selectedDocument, "document.operators", []);
   const availableOperators = operators.map((operator) => operator.user.email);
   const isCurrentUserOperator = availableOperators.includes(currentUserEmail);
-  const hasChangeOwnershipPermission = useSelector(getHasPermission(Permission.DOCUMENT_OWNER_CHANGE));
+
   isOperator = React.createContext(isCurrentUserOperator);
 
   const canChangeOwnerShip = useMemo(() => {
     if (!documentRevision) {
       return false;
     }
-
     return canChangeDocumentOwner(
       documentRevision.status,
       currentEmployeeId,
       documentRevision.owner.id,
       isCompanyAdmin,
-      hasChangeOwnershipPermission,
     );
-  }, [currentEmployeeId, documentRevision, isCompanyAdmin, hasChangeOwnershipPermission]);
+  }, [currentEmployeeId, documentRevision, isCompanyAdmin]);
 
   const canEdit =
     documentRevision &&

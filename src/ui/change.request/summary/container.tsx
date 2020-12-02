@@ -48,14 +48,7 @@ export const Container: React.FunctionComponent<Props> = ({
   const intl = useIntl();
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
-  const hasOwnershipTag = useGetHasTag(GroupTag.OWNERSHIP_CHANGE);
-
-  const canChangeOwnerShip = canChangeCROwner(
-    dataProp.state,
-    currentEmployeeId,
-    dataProp.owner.id,
-    isCompanyAdmin,
-    hasOwnershipTag);
+  const canChangeOwnerShip = canChangeCROwner(dataProp.state, currentEmployeeId, dataProp.owner.id, isCompanyAdmin);
   const canEdit = canEditApprovers({ dataProp, currentUserEmail });
   const save = useActionCreator(changeRequestsActions.save);
   /*   const loadGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);

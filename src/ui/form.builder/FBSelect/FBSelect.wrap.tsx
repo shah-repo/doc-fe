@@ -38,9 +38,6 @@ export const withFBSelect = <T extends FBSelectProps>(
       ...(props as T),
       menuItems,
       defaultValue,
-      optionValueKey,
-      optionLabelKey,
-      options,
       name,
     });
   };

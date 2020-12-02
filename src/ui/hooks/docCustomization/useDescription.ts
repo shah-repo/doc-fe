@@ -14,15 +14,8 @@ const useDescription = (
   const isVisible = config?.visible ?? true;
   const label = config?.label ?? "common.description";
   const validation = config?.required ?? true ? validators : undefined;
-  const tooltipConfig = {
-    labelName: InputFieldType.DESCRIPTION,
-    defaultLabel: config?.label,
-    overriddenLabel: label,
-    visibilityFlag: config?.visible.toString(),
-    requiredFlag: config?.required?.toString(),
-  };
 
-  return [isVisible, label, tooltipConfig, validation];
+  return [isVisible, label, validation];
 };
 
 export default useDescription;

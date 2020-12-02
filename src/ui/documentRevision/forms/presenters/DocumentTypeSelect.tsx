@@ -11,7 +11,6 @@ import SelectField, { SelectOption } from "../../../components/forms/fields/Sele
 import { filterSecurityGroupsForQms } from "../../../documentType/list/helpers";
 import { FB, FBSchemaProps } from "../../../form.builder";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
-import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -43,10 +42,11 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   setDisableCreateButton,
   match,
 }) => {
-  const [isVisible, label, tooltipConfig, validators] = useDocumentTypeSelect(documentTypeId);
+  const [isVisible, label, validators] = useDocumentTypeSelect(documentTypeId);
 
   const { workspaceState } = FB.useStores();
   const formik = useFormikContext();
+
   const loadProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
   const asyncDocumentProposedId = useAsync({
     onSuccess: () => {
@@ -136,19 +136,17 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <CustomLabelTooltip {...{ tooltipConfig }}>
-      <SelectField
-        name="document.documentType.id"
-        label={label}
-        selectProps={{
-          inputProps: { id: "documentType", disabled: isDocTypeDisabled },
-          onChange: handleTypeChange,
-        }}
-        options={options}
-        validate={validators}
-        includeEmpty={false}
-      />
-    </CustomLabelTooltip>
+    <SelectField
+      name="document.documentType.id"
+      label={label}
+      selectProps={{
+        inputProps: { id: "documentType", disabled: isDocTypeDisabled },
+        onChange: handleTypeChange,
+      }}
+      options={options}
+      validate={validators}
+      includeEmpty={false}
+    />
   );
 };
 

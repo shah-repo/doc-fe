@@ -8,7 +8,6 @@ import RadioButton from "../../../components/forms/fields/RadioButton";
 import RadioGroup from "../../../components/forms/fields/RadioGroup";
 import { required, validator } from "../../../components/forms/fields/validators";
 import Text from "../../../components/Text";
-import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useAdministrativeChange, useNextRevision, useNextRevisionStage, useObsolete, useRevisionSelect } from "../../../hooks/docCustomization/useCustomization";
 import { versionNumber } from "../../helpers/generateRevisionNumber";
 import { styles } from "./RevisionTypeChange.styles";
@@ -32,17 +31,11 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
   isAlphaReleased,
 }) => {
   const classes = styles();
-  const [showRevisionSelect, revisionSelectLabel, revisionTooltipConfig] = useRevisionSelect(documentTypeId);
-  const [showNextRevisionLevel, nextRevisionLevelLabel, revisionLevelTooltipConfig] = useNextRevision(documentTypeId);
-  const [
-    showNextRevisionStage,
-    nextRevisionStageLabel,
-    revisionStageTooltipConfig] = useNextRevisionStage(documentTypeId);
-  const [showObsolete, obsoleteLabel, obsoleteTooltipConfig] = useObsolete(documentTypeId);
-  const [
-    showAdministrationChange,
-    administrationChangeLabel,
-    administrationTooltipConfig] = useAdministrativeChange(documentTypeId);
+  const [showRevisionSelect, revisionSelectLabel] = useRevisionSelect(documentTypeId);
+  const [showNextRevisionLevel, nextRevisionLevelLabel] = useNextRevision(documentTypeId);
+  const [showNextRevisionStage, nextRevisionStageLabel] = useNextRevisionStage(documentTypeId);
+  const [showObsolete, obsoleteLabel] = useObsolete(documentTypeId);
+  const [showAdministrationChange, administrationChangeLabel] = useAdministrativeChange(documentTypeId);
   const numOfStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
 
   if (!showRevisionSelect) {
@@ -54,84 +47,74 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
 
   return (
     <Box mt={3}>
-      <CustomLabelTooltip tooltipConfig={revisionTooltipConfig}>
-        <Typography variant="h6">
-          <Text
-            message={isRecord ? "document.revision.type.of.update" : revisionSelectLabel}
-          />
-        </Typography>
-      </CustomLabelTooltip>
+      <Typography variant="h6">
+        <Text
+          message={isRecord ? "document.revision.type.of.update" : revisionSelectLabel}
+        />
+      </Typography>
       <RadioGroup name="revisionChangeType" validate={validator(required)}>
         <Box>
           {
             showNextRevisionLevel && !showAdministrativeAndVoidChange &&
-            <CustomLabelTooltip tooltipConfig={revisionLevelTooltipConfig}>
-              <>
-                <RadioButton
-                  label={<Text message={nextRevisionLevelLabel} />}
-                  value={RevisionChangeType.NextRevision}
-                  id="RevisionTypeChange-nextRevision"
-                  disabled={isDisabled}
-                  className={classes.label}
-                />
-                {generateVersionPrediction(RevisionChangeType.NextRevision)}
-              </>
-            </CustomLabelTooltip>
+            <>
+              <RadioButton
+                label={<Text message={nextRevisionLevelLabel} />}
+                value={RevisionChangeType.NextRevision}
+                id="RevisionTypeChange-nextRevision"
+                disabled={isDisabled}
+                className={classes.label}
+              />
+              {generateVersionPrediction(RevisionChangeType.NextRevision)}
+            </>
           }
         </Box>
         <Box>
           {
             showNextRevisionStage && !showAdministrativeAndVoidChange && !isAlphaReleased &&
-            <CustomLabelTooltip tooltipConfig={revisionStageTooltipConfig}>
-              <>
-                <RadioButton
-                  label={
-                    <Text message={nextRevisionStageLabel} />
-                  }
-                  data-cy="upgradeNextRevisionStage"
-                  value={RevisionChangeType.NextRevisionStage}
-                  id="RevisionTypeChange-nextRevisionStage"
-                  disabled={isDisabled}
-                  className={classes.label}
-                />
-                {generateVersionPrediction(RevisionChangeType.NextRevisionStage)}
-              </>
-            </CustomLabelTooltip>
+            <>
+              <RadioButton
+                label={
+                  <Text message={nextRevisionStageLabel} />
+                }
+                data-cy="upgradeNextRevisionStage"
+                value={RevisionChangeType.NextRevisionStage}
+                id="RevisionTypeChange-nextRevisionStage"
+                disabled={isDisabled}
+                className={classes.label}
+              />
+              {generateVersionPrediction(RevisionChangeType.NextRevisionStage)}
+            </>
           }
         </Box>
         <Box>
           {
             showObsolete && !isDocRevFirstDraft &&
-            <CustomLabelTooltip tooltipConfig={obsoleteTooltipConfig }>
-              <>
-                <RadioButton
-                  label={<Text message={ showAdministrativeAndVoidChange ? "common.void" : obsoleteLabel} />}
-                  value={RevisionChangeType.Obsolete}
-                  id="RevisionTypeChange-obsolete"
-                  disabled={isDisabled}
-                  className={classes.label}
-                />
-                {generateVersionPrediction(RevisionChangeType.Obsolete)}
-              </>
-            </CustomLabelTooltip>
+            <>
+              <RadioButton
+                label={<Text message={ showAdministrativeAndVoidChange ? "common.void" : obsoleteLabel} />}
+                value={RevisionChangeType.Obsolete}
+                id="RevisionTypeChange-obsolete"
+                disabled={isDisabled}
+                className={classes.label}
+              />
+              {generateVersionPrediction(RevisionChangeType.Obsolete)}
+            </>
           }
         </Box>
         <Box>
           {
             showAdministrationChange && !isDocRevFirstDraft &&
-            <CustomLabelTooltip tooltipConfig={administrationTooltipConfig}>
-              <>
-                <RadioButton
-                  label={<Text message={administrationChangeLabel} />}
-                  value={RevisionChangeType.AdministrativeChange}
-                  id="RevisionTypeChange-administrativeChange"
-                  data-cy="RevisionTypeChange-administrativeChange"
-                  disabled={isDisabled}
-                  className={classes.label}
-                />
-                {generateVersionPrediction(RevisionChangeType.AdministrativeChange)}
-              </>
-            </CustomLabelTooltip>
+            <>
+              <RadioButton
+                label={<Text message={administrationChangeLabel} />}
+                value={RevisionChangeType.AdministrativeChange}
+                id="RevisionTypeChange-administrativeChange"
+                data-cy="RevisionTypeChange-administrativeChange"
+                disabled={isDisabled}
+                className={classes.label}
+              />
+              {generateVersionPrediction(RevisionChangeType.AdministrativeChange)}
+            </>
           }
         </Box>
       </RadioGroup>

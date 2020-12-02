@@ -15,10 +15,9 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   label,
   currentStatus,
   isTypePM,
-  rules,
   ...props
 }) => (
-  <FBInput {...{ name, rules }} {...props} type="eqmaintenance">
+  <FBInput {...{ name }} {...props} type="eqmaintenance">
     <FBSection
       {...{ label }}
       name={`${name}-section`}

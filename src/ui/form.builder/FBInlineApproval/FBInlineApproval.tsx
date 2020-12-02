@@ -25,13 +25,12 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   name,
   shouldShowApprovals,
   shouldShowRequestAllApprovals,
-  rules,
   ...props
 }) => (
   <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
     <FBDialog />
     <FBInlineApprovalSocket {...{ name }} />
-    <FBInput {...props} {...{ name, rules }} type="inlineapproval">
+    <FBInput {...props} {...{ name }} type="inlineapproval">
       <Box
         py={1}
         mb={4}

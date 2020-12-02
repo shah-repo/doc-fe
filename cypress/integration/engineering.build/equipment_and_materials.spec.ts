@@ -570,9 +570,11 @@ context("Procedure and parts flow test", () => {
     });
   });
 
-  context("Copy to EB and verify materials and equipment tracking", () => {
-    it("Click copy to EB", () => {
-      cy.ebClickClone();
+  context("Clone EB and verify materials and equipment tracking", () => {
+    it("Click clone EB", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFileUploadCandidates, CyRoutes.GetFileUploadCandidates], () => {
+        cy.get("[data-cy=\"PreviewControlsContainer-copy-to\"]").click();
+      });
     });
 
     context("Add materials and equipments", () => {

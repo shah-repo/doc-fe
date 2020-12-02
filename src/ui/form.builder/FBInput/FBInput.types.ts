@@ -98,7 +98,7 @@ export type FBInputProps =
     inputState?: FBInputState;
     editorProperties?: FBEditorPropertiesType[];
     includeContext?: boolean;
-    rules?: any;
+    rules?: string;
     validationMode?: FBEditorValidationMode;
     includeSelectedSchema?: boolean;
     paragraph?: string;

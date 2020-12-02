@@ -7,13 +7,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let adminLoginResponse;
 let multipleCompanies;
-let secondEmployee;
-let thirdEmployee;
-let fourthEmployee;
-let adminEmployee;
-let developersGroup;
 
 context("Group Landing Page Flow", () => {
   context("[API]Prepare company", () => {
@@ -39,10 +33,6 @@ context("Group Landing Page Flow", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
-          fourthEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           done();
         });
       });
@@ -56,41 +46,6 @@ context("Group Landing Page Flow", () => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1;
         done();
-      });
-    });
-
-    context("[API]Add employee to developers group", () => {
-      it("[API]Login admin tester", (done: any) => {
-        cy.authApiLogin({
-          email: USERS[1].email,
-          password: "Tester1!",
-        }).then((response) => {
-          adminLoginResponse = response;
-          multipleCompanies = loginResponse.employees.length > 1;
-          done();
-        });
-      });
-
-      it("[API]Get group", (done: any) => {
-        cy.grpGetGroupByName({
-          groupName: "Developers",
-          sessionId: adminLoginResponse.sessionId,
-          employeeId: adminEmployee.id,
-        }).then((response) => {
-          developersGroup = response;
-          done();
-        });
-      });
-
-      it("[API]Patch group", () => {
-        cy.grpPatchGroup({
-          groupId: developersGroup.body[0].id,
-          sessionId: adminLoginResponse.sessionId,
-          employeeId: adminEmployee.id,
-          payload: {
-            employees: [{ id: secondEmployee.id }, { id: thirdEmployee.id }, { id: fourthEmployee.id }],
-          },
-        });
       });
     });
   });

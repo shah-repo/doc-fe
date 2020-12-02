@@ -20,12 +20,6 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
     omitSearch = false;
     searchOptions.dataKey = "docId";
   }
-
-  if (valuePath === "changeRequest.crId") {
-    omitSearch = false;
-    searchOptions.dataKey = "crId";
-  }
-
   if (valuePath === "owner.user.name") {
     omitSearch = false;
     searchOptions.dataKey = "owner";
@@ -53,7 +47,7 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
   }
   searchOptions.defaultValue = tableCriteria.queryDict?.[searchOptions.dataKey as string];
 
-  if (valuePath === "displayStatus" || valuePath === "status") {
+  if (valuePath === "status") {
     omitSearch = false;
     searchOptions.dataKey = "displayStatus";
     searchOptions.searchType = "select";

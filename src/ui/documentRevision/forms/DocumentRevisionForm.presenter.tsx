@@ -23,7 +23,7 @@ import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
-import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
+import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
 import { isDocumentAlphaReleased } from "../helpers/revisionStage";
 import { styles } from "./DocumentRevisionForm.styles";
@@ -130,7 +130,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDocumentPOAM = checkIsDocumentPOAM(documentRevision?.document.documentType.groupOptions);
   const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
-  const isPart = checkIsDocumentPart(documentRevision?.document.documentType.groupOptions);
 
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
@@ -252,7 +251,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           }}
         />
         {isEB && <FBEBPart name="childrenParts" />}
-        {isPart && documentRevision?.parentParts && (
+        {documentRevision?.parentParts && (
           <BuildsContainer
             dataProp={flatten([documentRevision?.parentParts])}
             label="common.part.of"

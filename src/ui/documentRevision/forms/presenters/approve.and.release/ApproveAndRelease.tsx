@@ -20,7 +20,6 @@ import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import { FormContext } from "../../../../components/forms/FormContext";
 import Text from "../../../../components/Text";
 import { FB } from "../../../../form.builder";
-import CustomLabelTooltip from "../../../../hooks/docCustomization/CustomLabelTooltip";
 import { useApproveAndRelease } from "../../../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
@@ -64,7 +63,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   isRecord,
   isInlineApproval,
 }) => {
-  const [isVisible, label, tooltipConfig] = useApproveAndRelease(documentTypeId);
+  const [isVisible, label] = useApproveAndRelease(documentTypeId);
   const classes = styles();
   const dialog = useDialog();
   const alertDialog = useDialog();
@@ -260,17 +259,15 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <CustomLabelTooltip {...{ tooltipConfig }}>
-        <Button
-          color="secondary"
-          variant="outlined"
-          onClick={isRecord ? alertDialog.open :  openDialog}
-          id="ApproveAndRelease-button"
-          data-cy="ApproveAndRelease-button"
-        >
-          <Text message={isRecord ? "record.finalize.and.release" : label} />
-        </Button>
-      </CustomLabelTooltip>
+      <Button
+        color="secondary"
+        variant="outlined"
+        onClick={isRecord ? alertDialog.open :  openDialog}
+        id="ApproveAndRelease-button"
+        data-cy="ApproveAndRelease-button"
+      >
+        <Text message={isRecord ? "record.finalize.and.release" : label} />
+      </Button>
       {
         dialog.isOpen &&
         <Dialog

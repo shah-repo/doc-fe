@@ -7,7 +7,6 @@ import {
   documentRevisionsSelectors,
 } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
-import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus } from "../../hooks/docCustomization/useCustomization";
 import AuditPresenter from "./Audit.presenter";
 
@@ -49,12 +48,10 @@ export const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
     }
   }, [documentRevisionId, loadAudit]);
 
-  const [isStatusVisible, statusLabel, tooltipConfig] = useDocumentStatus(documentTypeId, selectedDocument?.status);
+  const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, selectedDocument?.status);
   const versionNumber = selectedDocument.displayRevision;
 
-  return  <CustomLabelTooltip {...{ tooltipConfig }}>
-    <AuditPresenter {...{ audit, versionNumber, isStatusVisible }} statusLabel={statusLabel as string}/>
-  </CustomLabelTooltip>;
+  return <AuditPresenter {...{ audit, versionNumber, isStatusVisible }} statusLabel={statusLabel as string}/>;
 };
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
