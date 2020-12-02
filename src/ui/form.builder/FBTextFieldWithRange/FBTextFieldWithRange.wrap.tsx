@@ -1,23 +1,42 @@
 import React from "react";
+import { FBRangeValue } from "../FBInspection/FBRange.types";
+import { FBPassValueRange, FBTextFieldWithRangeProps } from "./FBTextFieldWithRange.types";
 
-export const withFBTextFieldWithRange = (
-  Component: React.FunctionComponent,
+export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
+  Component: React.FunctionComponent<T>,
 ) => {
-  const Comp = (
+  const Comp = ({
+    editorConfig,
     ...props
-  ) =>
+  }: T) => {
   // MARK: @config
+    const { aql, fai, pass, range } = editorConfig;
 
-  // MARK: @reactions
+    // MARK: @reactions
 
-  // MARK: @helpers
+    // MARK: @helpers
 
-  // MARK: @methods
+    // MARK: @methods
+    const calculatePassValue = (passRange: FBPassValueRange): FBRangeValue | undefined => {
+      if (passRange.type === "value") { return passRange.value; }
+      if (!passRange.percentage) { return; }
+      const { decrease, increase, value } = passRange.percentage;
+      if (!decrease || !increase || !value ) { return; }
+      const from = Number(value) * (1 - decrease / 100);
+      const to = Number(value) * (1 + increase / 100);
+      return { from, to };
+    };
 
-  // MARK: @observer
+    // MARK: @observer
 
-    Component({})
-  ;
+    return Component({
+      ...(props as T),
+      aql,
+      fai,
+      pass: calculatePassValue(pass),
+      range,
+    });
+  };
 
   Comp.displayName = "withFBTextFieldWithRange";
   return Comp;
