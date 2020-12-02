@@ -12,6 +12,7 @@ const FBPassPercentage: React.FunctionComponent<FBInputProps> = ({
     type="passpercentage"
     name={`${name}`}
     boxProps={{ display: "flex", flexDirection: "column" }}
+    gutter={false}
   >
     <FBTextField
       name={`${name}.value`}

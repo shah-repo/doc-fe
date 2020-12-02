@@ -63,6 +63,7 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
           omitFinalValidation
           showErrorMsg={false}
           withState
+          gutter={false}
         />
         <FBPassPercentage
           name="editorConfig.pass.percentage"
@@ -81,6 +82,7 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
           omitFinalValidation
           showErrorMsg={false}
           withState
+          gutter={false}
           options={[
             {
               text: "Percentage",
@@ -93,6 +95,24 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
           ]}
         />
       </Box>
+      <FBSelect
+        boxProps={{ mt: 5 }}
+        label="form.builder.aql"
+        name="editorConfig.aql"
+        options={aqlOptions}
+        validationMode="visibility"
+        rules="required_if:editorConfig.inspection,true"
+        omitFinalValidation
+        showErrorMsg={false}
+      />
+      <FBCheckbox
+        label="form.builder.fai"
+        name="editorConfig.fai"
+        validationMode="visibility"
+        rules="required_if:editorConfig.inspection,true"
+        omitFinalValidation
+        showErrorMsg={false}
+      />
     </Box>
     {children}
   </FBEditor>
