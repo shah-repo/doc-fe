@@ -2,8 +2,9 @@ import { FormControl, FormHelperText } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import { includes, isEmpty } from "lodash";
 import React from "react";
-import { FBFieldName, FBInputProps, FBInputState, FBLabel, FBTextField } from "..";
+import { FBFieldName, FBInputProps, FBInputState, FBLabel, FBTextField, OmitInputClones } from "..";
 import Text from "../../components/Text";
+import { FBConditionalWrapper } from "../FBConditionalWrapper";
 import { withFBInput } from "./FBInput.wrap";
 
 const FBInput: React.FunctionComponent<FBInputProps> = ({
@@ -24,12 +25,19 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   <>
     {!hidden && (
       <Box mb={gutter ? 5 : 0} {...boxProps}>
-        <FormControl fullWidth {...{ error }}>
-          {!includes(FBInputState.omitLabel, type) && label && (
-            <FBLabel {...{ error, label, loading }} />
+        <FBConditionalWrapper
+          condition={type && !OmitInputClones.includes(type)}
+          wrapper={(wrapperChildren) => (
+            <FormControl fullWidth {...{ error }}>
+              {!includes(FBInputState.omitLabel, type) && label && (
+                <FBLabel {...{ error, label, loading }} />
+              )}
+              {wrapperChildren}
+            </FormControl>
           )}
+        >
           {children}
-        </FormControl>
+        </FBConditionalWrapper>
         {!isEmpty(helperText) && showErrorMsg && (
           <FormHelperText {...{ error }}>
             <Text message={helperText as string} />

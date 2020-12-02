@@ -16,6 +16,7 @@ export const withFBOnChange = <T extends FBInputProps>(
     inputState,
     transform,
     withState,
+    omitFormValue,
     ...props
   }: T) => {
 
@@ -44,7 +45,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       if (!name) { return; }
       isString(formValue) && transform && (formValue = setTranform?.(formValue));
       // TODO: refactor with state opt
-      formState?.setFieldValue(name, formValue, state || withState, forceDefault);
+      formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
       if (type && !FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);
       }
@@ -84,7 +85,7 @@ export const withFBOnChange = <T extends FBInputProps>(
         value = has(value, "includeContext");
       }
       if (!value) {
-        formState?.setFieldValue(`${FBFieldName.Context}-${name}`, "");
+        formState?.setFieldValue(`${FBFieldName.Context}-${name}`, "", withState, omitFormValue);
       }
       inputState?.setIncludeContext(value);
     }
@@ -173,6 +174,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       inputState,
       transform,
       withState,
+      omitFormValue,
       type,
       name,
     }));

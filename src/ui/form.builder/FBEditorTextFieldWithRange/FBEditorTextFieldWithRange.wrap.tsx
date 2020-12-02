@@ -1,21 +1,21 @@
-import { useObserver } from "mobx-react";
+<<<<<<< HEAD
 import React from "react";
 import { FB, FBEditorTextFieldWithRangeProps } from "..";
+=======
+import { reaction } from "mobx";
+import React, { useEffect } from "react";
+import { FB, FBEditorTextFieldWithRangeProps, FBFormState } from "..";
+>>>>>>> b07cd145fabbc7753600562bbd3c309c37f34508
 
 export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRangeProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    isInspectionVisible,
-    isRangeVisible,
-    isPassValueVisible,
     ...props
   }: T) => {
-  // MARK: @config
-    isRangeVisible = false;
-    const { formState } = FB.useStores();
-    console.log(formState);
 
+    // MARK: @config
+    const formState = FB.useRef<FBFormState>(FBFormState, {});
 
     /** Hardcoded from clickable - where should we get these from? */
     const aqlOptions = [
@@ -66,24 +66,53 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
     ];
 
     // MARK: @reactions
+    useEffect(() => reaction(
+      () => formState?.inputState.get("rangeOption")?.value,
+      (value: boolean) => {
+        if (value) { return; }
+        formState?.setFieldError("editorConfig.range", "");
+        formState?.setFieldValue("editorConfig.range", undefined, true);
+      },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    useEffect(() => reaction(
+      () => formState?.inputState.get("passValue")?.value,
+      (value: boolean) => {
+        // Setting the pass type default value since defaultValue prop
+        // does not trigger validation
+        // TODO: implement initial validation on demand
+        if (value) {
+          formState?.setFieldValue("editorConfig.pass.type", "value", true);
+          return;
+        }
+        formState?.setFieldValue("editorConfig.pass.type", undefined, true);
+      },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    useEffect(() => reaction(
+      () => formState?.inputState.get("editorConfig.pass.type")?.value,
+      (value: string) => {
+        // Depends on control validation. If all fields are required
+        // in pass percentage control then this can be removed
+        formState?.setFieldError("editorConfig.pass.percentage", "");
+        formState?.setFieldError("editorConfig.pass.value", "");
+        // Clear data
+        formState?.setFieldValue("editorConfig.pass", { type: value });
+      },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     // MARK: @helpers
 
     // MARK: @methods
 
     // MARK: @observer
-    useObserver(() => {
-      // isRangeVisible = formState.inputState.get("range")?.value;
-      isInspectionVisible = formState?.inputState.get("inspection")?.value;
-      isPassValueVisible = formState?.inputState.get("passValue")?.value;
-    });
 
     return Component({
-      ...(props as T),
+      ...(props),
       formState,
-      isRangeVisible,
-      isInspectionVisible,
-      isPassValueVisible,
       aqlOptions,
     });
   };

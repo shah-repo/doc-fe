@@ -1,13 +1,10 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBAutocomplete, FBCheckbox, FBEditor, FBEditorPlaceholder, FBEditorTextFieldWithRangeProps, FBPassValue, FBRange, FBTextField } from "..";
+import { FBCheckbox, FBEditor, FBEditorPlaceholder, FBEditorTextFieldWithRangeProps, FBPassPercentage, FBRange, FBSelect, FBTextField } from "..";
 import { withFBEditorTextFieldWithRange } from "./FBEditorTextFieldWithRange.wrap";
 
 const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithRangeProps> = ({
   formState,
-  isRangeVisible,
-  isInspectionVisible,
-  isPassValueVisible,
   aqlOptions,
   children,
   inputProps: { type } = {},
@@ -22,54 +19,81 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
       name="label"
       rules="required"
     />
-    <FBEditorPlaceholder key="placeholder" />
-    <FBCheckbox
-      label="form.builder.range"
-      name="rangeOption"
-      withState
-      gutter={false}
-    />
-    <FBRange
-      name="range"
-      validationMode="visibility"
-      rules="required_if:rangeOption,true"
-    />
-    <FBCheckbox
-      label="form.builder.critical.to.quality"
-      name="criticalToQuality"
-      gutter={false}
-    />
-    <FBCheckbox
-      label="form.builder.inspection"
-      name="inspection"
-      withState
-      gutter={!isInspectionVisible}
-    />
-    {isInspectionVisible && (
-      <Box marginLeft={2}>
-        <FBCheckbox
-          label="form.builder.pass.value"
-          name="passValueOption"
+    <FBEditorPlaceholder key={`fb-editor-placeholder-${type}`} />
+    <Box mb={5}>
+      <FBCheckbox
+        label="form.builder.range"
+        name="rangeOption"
+        withState
+        gutter={false}
+        omitFormValue
+      />
+      <FBRange
+        name="editorConfig.range"
+        validationMode="visibility"
+        rules="required_if:rangeOption,true"
+      />
+      <FBCheckbox
+        label="form.builder.critical.to.quality"
+        name="editorConfig.criticalToQuality"
+        gutter={false}
+      />
+      <FBCheckbox
+        label="form.builder.inspection"
+        name="editorConfig.inspection"
+        gutter={false}
+      />
+      <FBCheckbox
+        label="form.builder.pass.value"
+        name="passValue"
+        gutter={false}
+        validationMode="visibility"
+        rules="required_if:editorConfig.inspection,true"
+        omitFinalValidation
+        showErrorMsg={false}
+        omitFormValue
+        withState
+      />
+      <Box display="flex">
+        <FBRange
+          name="editorConfig.pass.value"
+          boxProps={{ flexGrow: 1 }}
+          validationMode="visibility"
+          rules="required_if:editorConfig.pass.type,value"
+          omitFinalValidation
+          showErrorMsg={false}
           withState
-          gutter={!isPassValueVisible}
         />
-        <Box marginLeft={4}>
-          <FBPassValue
-            isVisible={isPassValueVisible}
-            rules="required_if:passValueOption,true"
-          />
-        </Box>
-        <FBAutocomplete
-          label="form.builder.aql"
-          name="aql"
-          options={aqlOptions}
+        <FBPassPercentage
+          name="editorConfig.pass.percentage"
+          validationMode="visibility"
+          rules="required_if:editorConfig.pass.type,percentage"
+          omitFinalValidation
+          showErrorMsg={false}
+          gutter={false}
+          withState
         />
-        <FBCheckbox
-          label="form.builder.fai"
-          name="fai"
+        <FBSelect
+          name="editorConfig.pass.type"
+          boxProps={{ minWidth: "27%", ml: 2 }}
+          validationMode="visibility"
+          rules="required_if:passValue,true"
+          omitFinalValidation
+          showErrorMsg={false}
+          withState
+          options={[
+            {
+              text: "Percentage",
+              value: "percentage",
+            },
+            {
+              text: "Value",
+              value: "value",
+            },
+          ]}
         />
       </Box>
-    )}
+    </Box>
     {children}
   </FBEditor>
 );

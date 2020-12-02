@@ -11,7 +11,8 @@ export class FBFormState extends FBSchemaState {
   public initialValues: Dictionary<any> = {};
   public workspaceMode?: FBWorkspaceMode;
   public values: Dictionary<any> = {};
-
+  public validationValues: Dictionary<any> = {};
+  private finalValidationRulse: Dictionary<string> = {};
 
   // TO BBE REMOVED!
   public workspaceState?: FBWorkspaceState;
@@ -59,14 +60,26 @@ export class FBFormState extends FBSchemaState {
     return lodashGet(this.values, fieldName) || lodashGet(this.initialValues, fieldName);
   };
 
+  private setValidationValue = (fieldName: string, value: any) => {
+    if (isBoolean(value)) {
+      // validatorjs doesn't validate boolean values
+      value = `${value}`;
+    }
+    setWith(this.validationValues, fieldName, value);
+  };
+
   @action public setFieldValue = (
     fieldName: string | undefined,
     value: any,
     withState = false,
-    forceDefault = false
+    omitFormValue = false,
   ) => {
     if (!fieldName) { return; }
-    setWith(this.values, fieldName, cloneDeep(value));
+    value = cloneDeep(value);
+    if (!omitFormValue) {
+      setWith(this.values, fieldName, value);
+    }
+    this.setValidationValue(fieldName, value);
     if (!withState) { return; }
     this.inputState.get(fieldName)?.setValue(value);
   };
@@ -111,6 +124,13 @@ export class FBFormState extends FBSchemaState {
     lodashSet(this.rules, fieldName, rules);
   };
 
+  @action public setFieldFinalValidationRules = (fieldName: string, rules: string | undefined) => {
+    if (isUndefined(rules)) {
+      return;
+    }
+    lodashSet(this.finalValidationRulse, fieldName, rules);
+  };
+
   @action public setValidationAttributeName = (fieldName: string, attrName: string) => {
     this.validationAttributeNames = {
       ...this.validationAttributeNames,
@@ -118,17 +138,14 @@ export class FBFormState extends FBSchemaState {
     };
   };
 
-  @action public validate = (callback?: (valid: boolean) => any) => {
+  @action public validate = (callback?: (valid: boolean) => any, final = false) => {
     if (isUndefined(this.Validator)) {
       return;
     }
 
-    const rules = flatten(this.getRules());
-    const values = omitBy(this.values, (v) => isString(v) && isEmpty(v));
-    map(values, (v, k) => {
-      if (!isBoolean(v)) { return; }
-      values[k] = `${v}`;
-    });
+    const rules = final ? flatten(this.finalValidationRulse) : flatten(this.getRules());
+    const values = omitBy(this.validationValues, (v) => isString(v) && isEmpty(v));
+
     // *TODO: unify validators format
     let validator: any;
     try {
@@ -141,16 +158,11 @@ export class FBFormState extends FBSchemaState {
     }
     this.registerValidator(validator);
     validator.setAttributeNames(this.validationAttributeNames);
-
+    this.errors.clear();
     validator.checkAsync(
       // passes
-      () => {
-        this.errors.clear();
-        callback && callback(true);
-      },
-      // failed
-      () => {
-        this.errors.clear();
+      () => callback && callback(true),
+      () => { // failed
         const errors = validator.errors.all();
         map(errors, (v, k) => this.setFieldError(k, join(v, "\n")));
         callback && callback(false);
