@@ -10,14 +10,15 @@ const FBTextFieldWithRange: React.FunctionComponent<FBTextFieldWithRangeProps> =
   pass,
   aql,
   fai,
+  rules,
   ...props
 }) => (
   <Box mb={5}>
     <FBTextField
       { ...props }
       gutter={false}
-      rules=""
-      // TODO validation
+      type="number"
+      { ...{ rules }}
     />
     <Box mt={1} style={{ color: "gray" }} display="flex">
       {range && <FBText

@@ -27,6 +27,20 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       return { from, to };
     };
 
+    const getRules = (): string => {
+      if (!range) { return ""; }
+      if (range.from && range.to) {
+        return `between:${range?.from},${range?.to}`;
+      }
+      if (range.from && !range.to) {
+        return `min:${range?.from}`;
+      }
+      if (!range.from && range.to) {
+        return `max:${range?.to}`;
+      }
+      return "";
+    };
+
     // MARK: @observer
 
     return Component({
@@ -35,6 +49,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
       fai,
       pass: calculatePassValue(pass),
       range,
+      rules: getRules(),
     });
   };
 
