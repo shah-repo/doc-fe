@@ -51,6 +51,7 @@ declare global {
       grpAdminPostGroup(params: {sessionId: string; companyId: string; payload: any}): Chainable;
       grpDeleteGroup(params: {sessionId: string;employeeId: string; groupId: string}): Chainable;
       grpAddTag(params: {tag: string}): Chainable;
+      grpAddPermission(params: {permission: string}): Chainable;
       grpPatchGroup(params: {
         groupId: string;
         payload: any;
@@ -132,6 +133,11 @@ Cypress.Commands.add("grpNavigateToGroupManagement", () => {
 Cypress.Commands.add("grpAddTag", (params: {tag: string}) => {
   cy.get("#Group-addTags").type(params.tag);
   cy.get("#Group-addTags>div>div>div[id^=react-select]").contains(params.tag).click();
+});
+
+Cypress.Commands.add("grpAddPermission", (params: {permission: string}) => {
+  cy.get("#Group-permissions").type(params.permission);
+  cy.get("#Group-permissions>div>div>div[id^=react-select]").contains(params.permission).click();
 });
 
 Cypress.Commands.add("grpVerifyGroupNameIsPresentOnFirstGroup", () => {
