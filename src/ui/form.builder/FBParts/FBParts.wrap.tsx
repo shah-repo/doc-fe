@@ -45,7 +45,12 @@ export const withFBParts = <T extends FBPartsProps>(
 
       reaction(
         () => formState?.inputState.get(`${FBFieldName.ProcedureDiff}${name}`)?.value,
-        (data) => partsState?.diffParts.set(name, data)
+        (data) => {
+          if (!data) {
+            return partsState?.diffParts.clear();
+          }
+          partsState?.diffParts.set(name, data);
+        }
       );
     }
 
