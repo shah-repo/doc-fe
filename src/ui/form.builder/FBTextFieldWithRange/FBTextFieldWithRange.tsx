@@ -24,14 +24,16 @@ const FBTextFieldWithRange: React.FunctionComponent<FBTextFieldWithRangeProps> =
       {range && <FBText
         locale="form.builder.allowed.range"
         values={{
-          ...range,
+          from: range.from || "N/A",
+          to: range.to || "N/A",
           suffix: pass || aql || fai ? <>,&nbsp;</> : "",
         }}
       />}
       {pass && <FBText
         locale="form.builder.expected.value"
         values={{
-          ...pass,
+          from: pass.from || "N/A",
+          to: pass.to || "N/A",
           suffix: aql || fai ? <>,&nbsp;</> : "",
         }}
       />}

@@ -17,7 +17,8 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
     // MARK: @helpers
 
     // MARK: @methods
-    const calculatePassValue = (passRange: FBPassValueRange): FBRangeValue | undefined => {
+    const calculatePassValue = (passRange?: FBPassValueRange): FBRangeValue | undefined => {
+      if (!passRange) { return; }
       if (passRange.type === "value") { return passRange.value; }
       if (!passRange.percentage) { return; }
       const { decrease, increase, value } = passRange.percentage;
