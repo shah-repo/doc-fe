@@ -22,8 +22,9 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
   const {
     id: docRevId,
     status: docRevStatus,
-    document: { documentType: { groupOptions: docRevGroupOptions } },
-  } = documentRevision;
+    document,
+  } = documentRevision || {};
+  const docRevGroupOptions = document?.documentType?.groupOptions;
   const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
   const isDocumentDraft = isDocumentRevisionInDraft(docRevStatus);
   const inspectionDialog = useDialog();
