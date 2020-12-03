@@ -72,6 +72,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       if (!editorProperties || isEmpty(editorProperties)) {
         return;
       }
+      const formValue = formState?.getFieldValue(`${FBFieldName.Context}-${name}`);
 
       if (isString(value)) {
         value = (value as FBEditorPropertiesType) === "includeContext";
@@ -84,8 +85,8 @@ export const withFBOnChange = <T extends FBInputProps>(
       if (isObject(value)) {
         value = has(value, "includeContext");
       }
-      if (!value) {
-        formState?.setFieldValue(`${FBFieldName.Context}-${name}`, "", withState, omitFormValue);
+      if (!value && formValue) {
+        formState?.setFieldValue(`${FBFieldName.Context}-${name}`, undefined);
       }
       inputState?.setIncludeContext(value);
     }
