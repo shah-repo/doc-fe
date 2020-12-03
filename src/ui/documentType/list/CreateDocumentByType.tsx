@@ -20,6 +20,7 @@ import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
+import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useCreateDocumentByTypeButton } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync, { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
@@ -122,7 +123,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   const formIds = useSelector(documentTypeSelectors.formIds);
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypesByCategory);
-  const [isVisible, label] = useCreateDocumentByTypeButton(documentTypeId);
+  const [isVisible, label, tooltipConfig] = useCreateDocumentByTypeButton(documentTypeId);
 
   const [errorMessage, setErrorMessage] = useState<string>();
   const [initialValues, setInitialValues] = useState<MultipleFormInitialValues>({ selectType: [] });
@@ -300,18 +301,20 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
           {...{ headers, data  }}
           dialog={exportDialog}
         />
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={handleAddButtonClick}
-          id="DocumentByTypeListPresenter-openDocRev"
-        >
-          <Text
-            message={buttonLabel}
-            values={{ name: labelName }}
-          />
-        </Button>
+        <CustomLabelTooltip {...{ tooltipConfig }}>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={handleAddButtonClick}
+            id="DocumentByTypeListPresenter-openDocRev"
+          >
+            <Text
+              message={buttonLabel}
+              values={{ name: labelName }}
+            />
+          </Button>
+        </CustomLabelTooltip>
       </Grid>
       {
         errorMessage && (
