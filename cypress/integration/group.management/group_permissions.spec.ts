@@ -96,6 +96,11 @@ context("Group Permissions Flow", () => {
   });
 
   context("Login company admin", () => {
+    it("Logout", () => {
+      cy.get("[data-cy=\"dialog-close\"]").click();
+      cy.authLogout();
+    });
+
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
@@ -216,6 +221,10 @@ context("Group Permissions Flow", () => {
   });
 
   context(`Login first user ${USERS[2].name}`, () => {
+    it("Logout", () => {
+      cy.authLogout();
+    });
+
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[2].email,
@@ -241,6 +250,10 @@ context("Group Permissions Flow", () => {
   });
 
   context(`Login second user ${USERS[3].name}`, () => {
+    it("Logout", () => {
+      cy.authLogout();
+    });
+
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[3].email,
