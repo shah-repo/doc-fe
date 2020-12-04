@@ -491,7 +491,6 @@ context("Approval request form scenario", () => {
       cy.navigToDashboard();
     });
 
-
     it("Verify there is no dashboard notifications", () => {
       SystemRequirement("REQ-2200");
       cy.cmpVerifyNoPendingActions();
