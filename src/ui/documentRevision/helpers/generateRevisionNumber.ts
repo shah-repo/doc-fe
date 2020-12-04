@@ -28,8 +28,8 @@ export const generateRevisionNumber = (
   if (revisionChangeType === RevisionChangeType.Void) {
     return "Void";
   }
-  if (revisionChangeType === RevisionChangeType.Obsolete && !isRecord) {
-    return "OBS";
+  if (revisionChangeType === RevisionChangeType.Obsolete) {
+    return isRecord ? "Void" : "OBS";
   }
 
   /** Subrevision should only be displayed in the doc revision table if a document is in draft.
