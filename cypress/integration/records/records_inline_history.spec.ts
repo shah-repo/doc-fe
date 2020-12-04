@@ -304,6 +304,7 @@ context("Record inline history Flow", () => {
         });
 
         it("Check Inline approval history values", () => {
+          SystemRequirement("REQ-1000");
           cy.fbInlineApprovalHisotryCheck(
             "Approved",
             "Checked in CheckboxGroup for inline: Blue",
@@ -319,3 +320,4 @@ context("Record inline history Flow", () => {
 });
 
 export { };
+
