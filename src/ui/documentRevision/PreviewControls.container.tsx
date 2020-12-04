@@ -214,7 +214,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
         />}
       {renderOutputButton()}
       {renderNoAccessWarning()}
-      {isRecord && isStatusInReview && !isInlineApproval && isUserDocumentOwner &&
+      {isRecord && isStatusInReview && isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
       <InspectionControlsContainer {...{ documentRevision }} />
       <DownloadHTML pdf={documentRevision.pdf} />
