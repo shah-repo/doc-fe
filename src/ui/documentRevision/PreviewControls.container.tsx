@@ -25,7 +25,6 @@ import { isOwnerContext } from "./forms/DocumentRevisionForm.presenter";
 import { checkCanBeCopied, checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
-import { isFormWithInlineApproval } from "./helpers/records";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -61,7 +60,6 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
   const canCopy = checkCanBeCopied(documentRevision.document?.documentType?.groupOptions);
-  const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
   const isUserDocumentOwner = React.useContext(isOwnerContext);
 
 
@@ -213,7 +211,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
         />}
       {renderOutputButton()}
       {renderNoAccessWarning()}
-      {isRecord && isStatusInReview && !isInlineApproval && isUserDocumentOwner &&
+      {isRecord && isStatusInReview && isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
       <DownloadHTML pdf={documentRevision.pdf} />
       <PDFSocket {...{ documentRevision }}/>

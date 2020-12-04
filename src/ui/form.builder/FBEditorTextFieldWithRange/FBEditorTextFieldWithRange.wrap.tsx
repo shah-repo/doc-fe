@@ -6,11 +6,16 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    inputProps,
     ...props
   }: T) => {
 
     // MARK: @config
-    const formState = FB.useRef<FBFormState>(FBFormState, {});
+    const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: inputProps });
+    if (inputProps?.editorConfig.range.from || inputProps?.editorConfig.range.to) {
+      formState?.setFieldValue("rangeOption", true);
+    }
+
 
     /** Hardcoded from clickable - where should we get these from? */
     const aqlOptions = [
@@ -64,7 +69,8 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
     useEffect(() => reaction(
       () => formState?.inputState.get("rangeOption")?.value,
       (value: boolean) => {
-        if (value) { return; }
+        if (value) {
+          formState?.setFieldValue("editorConfig.range", true, true); }
         formState?.setFieldError("editorConfig.range", "");
         formState?.setFieldValue("editorConfig.range", undefined, true);
       },
@@ -106,7 +112,7 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
     // MARK: @observer
 
     return Component({
-      ...(props),
+      ...(props as T),
       formState,
       aqlOptions,
     });
