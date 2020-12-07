@@ -485,6 +485,16 @@ context("Approval request form scenario", () => {
         cy.wrap($time).should("not.be.empty");
       });
     });
+
+    it("Navigate to dashboard", () => {
+      SystemRequirement("REQ-2200");
+      cy.navigToDashboard();
+    });
+
+    it("Verify there is no dashboard notifications", () => {
+      SystemRequirement("REQ-2200");
+      cy.cmpVerifyNoPendingActions();
+    });
   });
 
 });
