@@ -63,7 +63,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       rules={`required_if:${name}.requirements,No`}
       {...{ disabled }}
     />
-    {currentStatus && <Box mb={3}>
+    {currentStatus && <Box mb={3} data-cy="maintenance.status">
       <b>Current Status:</b> {currentStatus}
     </Box>}
     {editorConfig?.fields?.includes("instructions") && (

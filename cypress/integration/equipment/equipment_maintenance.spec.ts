@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -335,6 +337,19 @@ context("Equipment maintenance test", () => {
       cy.get("[name*=\"frequency\"]").eq(0).type("10");
     });
 
+    it("Select document 'Yes' for calibration required", () => {
+      cy.get("[value=\"Yes\"]").eq(1).click();
+    });
+
+    it("Select 'Maintenance record form' for calibration required", () => {
+      cy.get("[data-cy*=\"preventativeForm\"]").eq(1).click();
+      cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").click();
+    });
+
+    it("Select calibration frequency", () => {
+      cy.get("[name*=\"frequency\"]").eq(1).type("5");
+    });
+
     it("Save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
@@ -344,8 +359,8 @@ context("Equipment maintenance test", () => {
     });
   });
 
-  context("Fill new preventative mainenance form", () => {
-    it("Click 'NEW PM'", () => {
+  context("Fill new preventative maintenance form", () => {
+    it("Click 'NEW PM' on preventative maintenace section", () => {
       cy.url().then((url: any) => {
         const docIdFromUrl = url.split("/").pop();
         // eslint-disable-next-line max-len
@@ -407,7 +422,90 @@ context("Equipment maintenance test", () => {
 
     it("Check preventative maintenance document existance", () => {
       cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
+        .eq(0)
         .contains("MR-00001 - Preventative maintenance document");
+    });
+
+    it("Check preventative maintenance status is in complience for next 10 days", () => {
+      const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles").add(10, "days").format("ddd MMM D YYYY");
+      cy.get("[data-cy=\"maintenance.status\"]")
+        .eq(0)
+        .contains(`In Compliance - Due Date: ${prevMaintenanceComplianceDate}`);
+    });
+  });
+
+  context("Fill new calbration form", () => {
+    it("Click 'NEW PM' on calibration section", () => {
+      cy.url().then((url: any) => {
+        const docIdFromUrl = url.split("/").pop();
+        // eslint-disable-next-line max-len
+        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdMaintenanceRecordFormDocument.id}/create_maintenance/${docIdFromUrl}/calibration-ki5wtyj0`;
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GroupsGet, CyRoutes.GetAvailableApprovers], () => {
+          cy.visit(newPMUrl);
+        });
+      });
+    });
+
+    it("Enter title 'Calibration document'", () => {
+      cy.drEnterDocumentTitle({ name: "Calibration document" });
+    });
+
+    it("Enter description 'Calibration'", () => {
+      cy.drEnterDocumentDescription({ description: "Calibration" });
+    });
+
+    it("Select document type 'Maintenance Record'", () => {
+      cy.drSelectDocumentType({ documentType: "Maintenance Record" });
+    });
+
+    it("Select revision stage 'Numeric'", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it(`Select maintainer '${ADMIN_USER.name}'`, () => {
+      cy.get("[data-cy=\"equipment_maintainer\"]").click();
+      cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).click();
+    });
+
+    it("Create 'Calibration document'", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Add an Approval", () => {
+      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+    });
+
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve record", () => {
+      cy.ebApprove();
+    });
+  });
+
+  context("Check equipment calibration history on maintenance document", () => {
+    it("Navig to Equipment", () => {
+      cy.navigToEquipment();
+    });
+
+    it("Select 'Equipment maintenance document'", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+        cy.get("div[aria-rowindex=\"1\"]").click();
+      });
+    });
+
+    it("Check Calibration document existance", () => {
+      cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
+        .eq(1)
+        .contains("MR-00002 - Calibration document");
+    });
+
+    it("Check calibration status is in complience for next 5 days", () => {
+      const calibrationComplianceDate = moment().tz("America/Los_Angeles").add(5, "days").format("ddd MMM D YYYY");
+      cy.get("[data-cy=\"maintenance.status\"]")
+        .eq(1)
+        .contains(`In Compliance - Due Date: ${calibrationComplianceDate}`);
     });
   });
 });
