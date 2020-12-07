@@ -1,12 +1,13 @@
 import axios from "axios";
 import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
+import { CreateInspectionBody } from "../../../ui/documentRevision/InspectionControls/InspectionControls.types";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { Audit, AuditActionPayload } from "../audit/types";
 import { Group } from "../auth/types";
 import { documentsActions } from "../documents";
-import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET } from "./constants";
-import { DocumentGroupOptionsType } from "./documentType";
+import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET } from "./constants";
+import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "./documentType";
 import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, FinalizeAndReleaseRequest, SecurityList } from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
@@ -303,6 +304,30 @@ const getDocRevStatuses = (
   });
 };
 
+const fetchAvailableForms = (
+  docTypeGroupOption: DOC_TYPE_GROUP_OPTION,
+  handlers: Handlers,
+): ApiAction<DocumentRevision[]> =>
+  apiActionWithCallbacks({
+    url: DOCUMENT_REVISION_FORMS_URL,
+    params: {
+      docTypeGroupOption,
+    },
+    method: "get",
+    handlers,
+  });
+
+const createFaiInspection = (
+  data: CreateInspectionBody,
+  handlers: Handlers,
+): ApiAction<DocumentRevision> =>
+  apiActionWithCallbacks({
+    url: DOCUMENT_REVISION_FAI_INSPECTION_URL,
+    method: "post",
+    data,
+    handlers,
+  });
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -330,4 +355,6 @@ export default {
   cloneEB,
   finalizeAndRelease,
   getDocRevStatuses,
+  fetchAvailableForms,
+  createFaiInspection,
 };

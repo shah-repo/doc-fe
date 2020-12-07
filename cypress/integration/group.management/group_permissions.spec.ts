@@ -96,6 +96,11 @@ context("Group Permissions Flow", () => {
   });
 
   context("Login company admin", () => {
+    it("Logout", () => {
+      cy.get("[data-cy=\"dialog-close\"]").click();
+      cy.authLogout();
+    });
+
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
@@ -215,7 +220,47 @@ context("Group Permissions Flow", () => {
     });
   });
 
+  context(`Add permissions for ${USERS[3].name} to change document ownership`, () => {
+    it("Navigates to Group management", () => {
+      cy.grpNavigateToGroupManagement();
+    });
+
+    it("Clicks on 'Add Group'", () => {
+      cy.grpClickAddGroup();
+    });
+
+    it("Selects the 'official' options", () => {
+      cy.grpSelectOfficial();
+    });
+
+    it("Enters group name", () => {
+      cy.grpEnterGroupName({ name: "Ownership Group" });
+    });
+
+    it("Assigns user to the group", () => {
+      SystemRequirement("REQ-2510");
+      cy.grpAssignUser({ name: USERS[3].name });
+    });
+
+    it("Assigns permissions to the group", () => {
+      cy.grpAddPermission({ permission: "DOCUMENT_OWNER_CHANGE" });
+    });
+
+    it("Assigns tags to the group", () => {
+      SystemRequirement("REQ-2510");
+      cy.grpAddTag({ tag: "OWNERSHIP_CHANGE" });
+    });
+
+    it("Saves the group", () => {
+      cy.grpSaveGroup();
+    });
+  });
+
   context(`Login first user ${USERS[2].name}`, () => {
+    it("Logout", () => {
+      cy.authLogout();
+    });
+
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[2].email,
@@ -241,6 +286,10 @@ context("Group Permissions Flow", () => {
   });
 
   context(`Login second user ${USERS[3].name}`, () => {
+    it("Logout", () => {
+      cy.authLogout();
+    });
+
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[3].email,
@@ -278,8 +327,23 @@ context("Group Permissions Flow", () => {
       cy.drClickOnSpecificDocFromList({ item: "AR Form" });
     });
 
-    it("Check if 'Request Access' button exists", () => {
-      cy.get("#PreviewControlsContainer-access").should("exist");
+    it("Check if 'Request Access' and 'Change Owner' button exists on document", () => {
+      cy.get("#PreviewControlsContainer-access").should("be.visible");
+      cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
+    });
+
+    it("Navigate to AR list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Filter approval by name and status, and select it", () => {
+      cy.arFilterARListByNameAndStatus({ title: "AR Form", status: "Closed" });
+    });
+
+    it("Check if 'Change Owner' button exists on AR", () => {
+      SystemRequirement("REQ-2520");
+      cy.get("#HeaderMenuButton").click();
+      cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
     });
   });
 });

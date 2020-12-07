@@ -27,7 +27,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
         <FBButton
           variant="text"
           endIcon={<AddCircleIcon />}
-          label="form.builder.new.pm"
+          label={isTypePM ? "form.builder.new.pm" : "form.builder.new.calibration"}
           style={{ margin: 0 }}
           onClick={handleAdd}
           disabled={isNewPMDisabled}

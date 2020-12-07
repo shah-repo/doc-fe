@@ -788,6 +788,7 @@
   "form.builder.edit": "Edit",
   "form.builder.prev.build.changes": "Show changes from previous build",
   "form.builder.new.pm": "New PM",
+  "form.builder.new.calibration": "New Cal",
   "form.builder.preventative.maintenance.form": "Preventative Maintenance Form",
   "form.builder.calibration.form": "Calibration Form",
   "form.builder.eft.requirements": "Does EFT require preventative maintenance per manufacturer (or Supira's) requirements?",
