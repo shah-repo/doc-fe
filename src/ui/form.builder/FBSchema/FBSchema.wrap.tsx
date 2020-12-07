@@ -15,7 +15,6 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
   }: T) => {
 
     !schemaState && (schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema));
-    schemaState.schema = schema;
     const { workspaceState, formState } = FB.useStores();
     const { isOutput, id, document: { outputRevision = false } = {} } = workspaceState || {};
 
