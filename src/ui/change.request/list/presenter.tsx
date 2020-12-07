@@ -1,6 +1,6 @@
 import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
-import { stripTagsFromObject } from "../../../common/utils/helpers";
+import { convertHtmlEntities, stripTags, stripTagsFromObject } from "../../../common/utils/helpers";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -27,6 +27,9 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   const canEdit = (data: ChangeRequest) =>
     canEditChangeRequest({ dataProp: data, currentUserEmail });
 
+  const textEditorTooltipRenderer = (rowData: ChangeRequest) =>
+    convertHtmlEntities(stripTags(rowData.description || ""));
+
   const cellHrefRenderer = (rowData: ChangeRequest): string => {
     if (canEdit(rowData)) {
       return changeRequestEditPath(rowData.id);
@@ -50,7 +53,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       label: "cr.title",
       cellHref: cellHrefRenderer,
       columnOptions: { flexGrow: 2 },
-      tooltipKey: "description",
+      tooltipKey: textEditorTooltipRenderer,
       searchOptions: {
         defaultValue: tableCriteria.queryDict?.title,
       },
