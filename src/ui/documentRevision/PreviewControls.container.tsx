@@ -25,6 +25,7 @@ import { isOwnerContext } from "./forms/DocumentRevisionForm.presenter";
 import { checkCanBeCopied, checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
+import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -213,6 +214,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
       {renderNoAccessWarning()}
       {isRecord && isStatusInReview && isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
+      <InspectionControlsContainer {...{ documentRevision }} />
       <DownloadHTML pdf={documentRevision.pdf} />
       <PDFSocket {...{ documentRevision }}/>
     </>
