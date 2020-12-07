@@ -106,7 +106,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const onFormClick = () => {
     setFBValue();
     if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
-      formik.setFieldValue("attachments", []);
+      formik.setFieldValue("attachmeserializedCSVnts", []);
       formik.setFieldValue("name", "Void");
       formik.setFieldValue("description", "Void");
       formik.setFieldValue("referenceTo", null);
@@ -119,7 +119,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   return (
     <div>
-      {serializedCSV &&
+      {(isStatusReleased || isStatusInDraft) && serializedCSV &&
       <ExportToCSVButton
         {...{ documentRevision }}
       />}

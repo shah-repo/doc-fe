@@ -182,7 +182,7 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
           data-cy="document.revision.export.list"
           onClick={dialog.open}
         >
-          <Box mr={1}>Abbie Valencia
+          <Box mr={1}>
             <ExportIcon className={classes.iconSvg} />
           </Box>
           <Text translation="document.revision.export.list" />
