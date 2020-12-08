@@ -1,8 +1,13 @@
 {
+  "section": [
+    "inspectionSection"
+  ],
   "autocomplete": [
     "multiple",
     "includeQRScan",
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
@@ -10,166 +15,230 @@
     "includeNone",
     "includeContext",
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "checkbox": [
     "includeContext",
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "radio": [
     "includeContext",
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "checkboxgroup": [
     "includeContext",
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "radiogroup": [
     "includeContext",
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "approval": [
     "approveIsBlocking",
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "inlineapproval": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "textfield": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "texteditor": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "datepicker": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "hyperlink": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "fileupload": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "quantity": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "timer": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "purchaseorder": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "poreceive": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "instructionsmediaupload": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "evidencemediaupload": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "testRequirement": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "requestapproval": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "checkpoint": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "createlabel": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "selectrequirement": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "selectdocument": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "instructionsdocument": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "approvalMatrix": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "poApprovalMatrix": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "documentRevisions": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "task": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "procedure": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "parts": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ],
   "eqmaintenance": [
     "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
   ]

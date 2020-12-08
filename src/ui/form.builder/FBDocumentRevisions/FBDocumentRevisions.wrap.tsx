@@ -1,11 +1,9 @@
-import { Box } from "@material-ui/core";
 import { cloneDeep, debounce, filter, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBAutocompleteAsyncOption, FBDialogState, FBDocumentRevisionsActions, FBDocumentRevisionsForm, FBDocumentRevisionsProps, FBDocumentRevisionsState, FBDocumentRevisionsValue, FBFormState } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
@@ -83,30 +81,13 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
       return parentFormState?.getFieldValue(`${name}.${index}.proposedDocumentRevision.id`);
     }
 
-    const getOptionLabel = (option: DocumentRevision) => {
-      const versionNumber = generateRevisionNumber(
-        option.revision,
-        option.revisionStage,
-        option.subRevision,
-        option.revisionChangeType,
-      );
-      return `${option.document?.docId} rev ${versionNumber} - ${option.name}`;
-    };
-
-    // eslint-disable-next-line react/display-name
-    const renderOption = (option: DocumentRevision) => (
-      <Box display="flex" key={`fb-document-revision-${option.id}`}>
-        {getOptionLabel(option)}
-      </Box>
-    );
-
     handleForm = () => {
       formState?.reset();
       dialogState?.config({
         open: true,
         title: "form.builder.add.document",
         content: <FBDocumentRevisionsForm
-          {...{ formState, getOptionLabel, renderOption }}
+          {...{ formState }}
           disabledOptions={disabledOptions()}
         />,
         actions: <FBDocumentRevisionsActions {...{ handleAdd, handleCancel }} />,
@@ -146,7 +127,6 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
       handleForm,
       handleOpen,
       remove,
-      getOptionLabel,
       dialogState,
       collection,
       index,

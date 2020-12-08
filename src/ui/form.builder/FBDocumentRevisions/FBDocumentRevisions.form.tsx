@@ -3,7 +3,6 @@ import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBDocumentRevisionsForm
 
 const FBDocumentRevisionsForm: React.FunctionComponent<FBDocumentRevisionsFormProps> = ({
   renderOption,
-  getOptionLabel,
   formState,
   disabledOptions,
   children,
@@ -16,7 +15,7 @@ const FBDocumentRevisionsForm: React.FunctionComponent<FBDocumentRevisionsFormPr
       optionId={FBAutocompleteAsyncOption.DRAFTdocumentRevisions}
       optionValueType="id"
       rules="required"
-      {...{ disabledOptions, renderOption, getOptionLabel }}
+      {...{ disabledOptions, renderOption }}
       shouldReloadOnInit
     />
     <FBTextField

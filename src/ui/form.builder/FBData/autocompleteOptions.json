@@ -6,7 +6,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "2",
@@ -41,7 +42,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "6",
@@ -50,7 +52,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "7",
@@ -59,7 +62,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "8",
@@ -91,7 +95,8 @@
     "valueKey": "id",
     "labelKey": "document.docId",
     "labelPrefixRoot": "",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "12",
@@ -100,7 +105,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "13",
@@ -119,21 +125,23 @@
   },
   {
     "id": "15",
-    "path": "/document_revisions?docTypeGroups%5B%5D=WO_PARTS",
+    "path": "/document_revisions?docTypeGroups%5B%5D=PART",
     "label": "Part Number in WO",
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "16",
-    "path": "/document_revisions?docTypeGroups%5B%5D=FORM&docTypeGroups%5B%5D=SUPPLIER&docTypeGroups%5B%5D=OTHER&docTypeGroups%5B%5D=MPI&docTypeGroups%5B%5D=DYNAMIC_FORM&docTypeGroups%5B%5D=POAM&docTypeGroups%5B%5D=PO&docTypeGroups%5B%5D=WORK_ORDER&docTypeGroups%5B%5D=PART&docTypeGroups%5B%5D=DAM&docTypeGroups%5B%5D=WO_PARTS&status%5B%5D=DRAFT",
+    "path": "/document_revisions?docTypeGroups%5B%5D=FORM&docTypeGroups%5B%5D=SUPPLIER&docTypeGroups%5B%5D=OTHER&docTypeGroups%5B%5D=MPI&docTypeGroups%5B%5D=DYNAMIC_FORM&docTypeGroups%5B%5D=POAM&docTypeGroups%5B%5D=PO&docTypeGroups%5B%5D=WORK_ORDER&docTypeGroups%5B%5D=PART&docTypeGroups%5B%5D=DAM&status%5B%5D=DRAFT",
     "label": "Document Revisions In Draft without Records",
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "17",
@@ -151,7 +159,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "19",
@@ -160,7 +169,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "20",
@@ -169,7 +179,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "21",
@@ -178,7 +189,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "22",
@@ -195,6 +207,7 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   }
 ]

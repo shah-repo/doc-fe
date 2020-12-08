@@ -30,6 +30,7 @@ export class FBEditorState {
     "subsection",
     "stepsection",
     "teststep",
+    "blanktplform",
   ];
 
   public static omitValidation: FBInputType[] = [
@@ -50,16 +51,13 @@ export class FBEditorState {
     "createlabel",
     "poreceive",
     "approval",
-    "inlineapproval",
     "requestapproval",
     "hellosign",
     "approvalMatrix",
     "poApprovalMatrix",
     "task",
-    "blanktplform",
     "approvals",
     "procedure",
-    "eqmaintenance",
   ];
 
   public static pickDefaultValue: FBInputType[] = [

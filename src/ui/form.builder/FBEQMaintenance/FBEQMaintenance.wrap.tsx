@@ -12,12 +12,14 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     isNewPMDisabled,
     pmFormId,
     name = "",
+    editorConfig,
     ...props
   }: T) => {
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const { id: docRevId } = workspaceState || {};
+    const isTypePM = editorConfig.type?.includes("preventativeMaintenance");
     const currentStatus = formState?.getFieldValue(`${name}.status`);
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     pmFormId = formState?.getFieldValue(`${name}.preventativeForm`);
@@ -26,6 +28,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     // Set pm form id on form select
     useEffect(() => reaction(
       () => formState?.inputState.get(`${name}.preventativeForm`)?.value,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       (id) => (pmFormId = id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -70,6 +73,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       isNewPMDisabled,
       name,
       currentStatus,
+      editorConfig,
+      isTypePM,
     });
   };
 

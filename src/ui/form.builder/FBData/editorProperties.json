@@ -29,6 +29,15 @@
   "copyableValue": {
     "text": "form.builder.copyable.value"
   },
+  "includeInInspection": {
+    "text": "form.builder.include.inspection"
+  },
+  "inspectionSection": {
+    "text": "form.builder.inspection.section"
+  },
+  "includeInFaiInspection": {
+    "text": "form.builder.include.fai.inspection"
+  },
   "deleteDisabled": {
     "text": "form.builder.delete.disabled"
   }

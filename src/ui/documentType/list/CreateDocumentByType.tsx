@@ -13,15 +13,17 @@ import { DocumentRevision, documentRevisionsActions, HeaderTableType } from "../
 import { DocumentType, documentTypeActions, DocumentTypeById, DocumentTypeByIdForm, documentTypeSelectors, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedId, documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
+import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useCreateDocumentByTypeButton } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
+import useAsync, { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import FormListDialog from "../dialogs/FormListDialog/FormListDialog.presenter";
 import { MultipleFormTemplateDialog } from "../dialogs/MultipleFormTemplateDialog";
@@ -43,7 +45,7 @@ interface Props {
 
 let selectedTypeLabel = "";
 let selectedDocumentTypeId: string;
-
+export let docIdAsyncContext = React.createContext<AsyncState>(ASYNC_DEFAULT_STATE);
 export const useHandleCreateDoc = () => {
   const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
@@ -55,6 +57,7 @@ export const useHandleCreateDoc = () => {
       createDoc(data?.docId as string);
     }, onError: () => redirect(),
   });
+  docIdAsyncContext = React.createContext(fetchDocIdAsync.asyncState);
   const createDocAction = useActionCreator(documentRevisionsActions.create);
   const createDocAsync = useAsync<DocumentRevision>({
     onSuccess: (documentRevision) => {
@@ -120,7 +123,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   const formIds = useSelector(documentTypeSelectors.formIds);
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypesByCategory);
-  const [isVisible, label] = useCreateDocumentByTypeButton(documentTypeId);
+  const [isVisible, label, tooltipConfig] = useCreateDocumentByTypeButton(documentTypeId);
 
   const [errorMessage, setErrorMessage] = useState<string>();
   const [initialValues, setInitialValues] = useState<MultipleFormInitialValues>({ selectType: [] });
@@ -128,7 +131,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const buttonLabel = isByCategory ? labelName : label;
   const isRecord = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.RECORD;
   const isSupplier = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.SUPPLIER;
-  const isReceivable = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.RECEIVE;
+  const isReceivable = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.RECEIVABLE;
   const isWorkOrder = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.WORK_ORDER;
 
   const closeMultipleFormDialog = () => {
@@ -297,19 +300,22 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         <ExportListDialog
           {...{ headers, data  }}
           dialog={exportDialog}
+          customFileName="DocumentList"
         />
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={handleAddButtonClick}
-          id="DocumentByTypeListPresenter-openDocRev"
-        >
-          <Text
-            message={buttonLabel}
-            values={{ name: labelName }}
-          />
-        </Button>
+        <CustomLabelTooltip {...{ tooltipConfig }}>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={handleAddButtonClick}
+            id="DocumentByTypeListPresenter-openDocRev"
+          >
+            <Text
+              message={buttonLabel}
+              values={{ name: labelName }}
+            />
+          </Button>
+        </CustomLabelTooltip>
       </Grid>
       {
         errorMessage && (

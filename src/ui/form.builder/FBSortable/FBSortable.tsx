@@ -13,7 +13,7 @@ const FBSortable: React.FunctionComponent<FBSortableProps> = ({
     </ul>
   ));
 
-  return <SortableList {...props} axis="y" lockAxis="y" pressDelay={400} />;
+  return <SortableList {...props} axis="y" lockAxis="y" pressDelay={200} />;
 };
 
 export default withFBSortable(FBSortable);

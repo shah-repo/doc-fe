@@ -23,6 +23,7 @@ import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../do
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
 import { FBSchemaProps, FBWorkspace } from "../../form.builder";
+import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useCRLink, useTitle, useTraining } from "../../hooks/docCustomization/useCustomization";
 import useDescription from "../../hooks/docCustomization/useDescription";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -82,11 +83,11 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const docTypeId = dataProp?.document?.documentType?.id;
   const [isTrainingVisible] = useTraining(docTypeId);
   const [isDescriptionVisible] = useDescription(docTypeId);
-  const [isTitleVisible, titleLabel] = useTitle(docTypeId);
+  const [isTitleVisible, titleLabel, tooltipConfig] = useTitle(docTypeId);
   const [isCRLinkVisible] = useCRLink(docTypeId);
   const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
-  const isEB = checkIsDocumentEB(document.documentType.group);
+  const isEB = checkIsDocumentEB(document.documentType.groupOptions);
   const isPart = checkIsDocumentPart(document?.documentType?.groupOptions);
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
 
@@ -167,7 +168,9 @@ export const Presenter: React.FunctionComponent<Props> = ({
         }
         {
           isTitleVisible &&
-          <SummaryField label={titleLabel} value={name} />
+          <CustomLabelTooltip {...{ tooltipConfig }}>
+            <SummaryField label={titleLabel} value={name} />
+          </CustomLabelTooltip>
         }
         {
           isTrainingVisible && !isRecord &&

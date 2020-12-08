@@ -3,9 +3,8 @@ import classNames from "classnames";
 import React from "react";
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType";
-import { checkIsDocumentRecord } from "../../../documentRevision/helpers/checkDocumentGroup";
-import { isDocumentRevisionCanceled, isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
-import { isDocumentAlphaReleased, isDocumentNumericRelease } from "../../../documentRevision/helpers/revisionStage";
+import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
+import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
 import Text from "../../Text";
 import { styles } from "./HeaderInfo.styles";
@@ -20,6 +19,7 @@ export interface Props {
   revisionStage?: number;
   groupOptions?: DocumentGroupOptionsType[];
   isInlineApproval?: boolean;
+  displayStatus?: string;
 }
 
 export const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -27,18 +27,10 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   name,
   id,
   documentTypeId,
-  revisionStage,
-  groupOptions,
-  isInlineApproval,
-  revisionChangeType,
-  subRevision,
+  displayStatus,
 }) => {
-  const isDraft = isDocumentRevisionInDraft(status);
-  const isAlphaReleased = isDocumentAlphaReleased(revisionStage);
-  const isRecord = checkIsDocumentRecord(groupOptions);
 
-  const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
-  let stateLabel = statusLabel;
+  const [isStatusVisible, statusLabel, tooltipConfig] = useDocumentStatus(documentTypeId, status);
   const [isTitleVisible] = useTitle(documentTypeId);
   const classes = styles();
   const isStatusReleased = isDocumentRevisionInStatus(
@@ -46,14 +38,6 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
     status as DocumentRevisionStatus,
   );
   const isStatusCanceled = isDocumentRevisionCanceled(status);
-  const isDeprecated = isDocumentRevisionDeprecated(status);
-  const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
-  const isInReview = isDocumentRevisionInReview(status);
-  const isVoided = isDocumentRevisionInStatus(
-    [DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided],
-    status as DocumentRevisionStatus
-  );
-  const isNumericRelease = isDocumentNumericRelease(revisionStage);
 
   const statusIcon =
     <div className={classNames(classes.statusIconDefault, {
@@ -61,47 +45,19 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
       [classes.statusIconCanceled]: isStatusCanceled,
     })} />;
 
-  if (isRecord) {
-    if (isStatusReleased) {
-      stateLabel = "common.released";
-    }
-    if (!isInlineApproval && (!isObsolete || isInReview)) {
-      stateLabel = status;
-    }
-    if (!isInlineApproval && isDeprecated) {
-      stateLabel = "common.archived";
-    }
-    if (isDraft && subRevision === 0 && !isObsolete) {
-      stateLabel = "common.wip";
-    }
-    if (isDeprecated && isInlineApproval && isAlphaReleased) {
-      stateLabel = "common.archived";
-    }
-    if ((isDeprecated || isStatusReleased) && isInlineApproval && isNumericRelease) {
-      stateLabel = "common.archived";
-    }
-    if (isVoided) {
-      stateLabel = "common.voided";
-    }
-    if (isStatusReleased && isInlineApproval && isNumericRelease) {
-      stateLabel = "common.last.signed";
-    }
-    if (isStatusCanceled) {
-      stateLabel = "common.canceled";
-    }
-  }
-
   return (
     <Grid item xs={6} className={classes.itemWrap} >
       {
         isStatusVisible &&
-        <Chip
-          label={<Text message={stateLabel} />}
-          id="HeaderInfo-status"
-          data-cy="HeaderInfo-status"
-          className={classNames(classes.statusDefault)}
-          icon={statusIcon}
-        />
+          <CustomLabelTooltip {...{ tooltipConfig }}>
+            <Chip
+              label={<Text message={statusLabel} />}
+              id="HeaderInfo-status"
+              data-cy="HeaderInfo-status"
+              className={classNames(classes.statusDefault)}
+              icon={statusIcon}
+            />
+          </CustomLabelTooltip>
       }
       <Typography variant="h6" id="HeaderInfo-docId" className={classes.id} component="span">
         {id}

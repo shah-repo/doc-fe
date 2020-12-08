@@ -18,6 +18,7 @@ declare global {
       drEnterDocumentDescriptionWithWait(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
+      drEnterHtmlText(params: { htmlText: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drApproveAndReleaseDocumentWithoutSelectingForm(): Chainable<Subject>;
       drCloseApproveAndReleaseDialog(): Chainable<Subject>;
@@ -42,6 +43,7 @@ declare global {
       checkToastMessageIsEqual(params: { message: string }): Chainable<Subject>;
       checkToastMessageContains(params: { message: string }): Chainable<Subject>;
       drCheckApprovalsEnforcment(): Chainable<Subject>;
+      drVerifyFirstDocumentRevisionList(params: { revision: string }): Chainable<Subject>;
 
       /* Document Approval Matrix */
 
@@ -147,6 +149,14 @@ Cypress.Commands.add("drClickDAMEditBtn", () => {
   cy.get("[data-cy=\"EditBtnDAM\"]").click();
 });
 
+Cypress.Commands.add("drVerifyFirstDocumentRevisionList", (params: {revision: string}) => {
+  cy.get(" [data-cy=\"DocumentRevisionList-item\"]>a>div").first()
+    .then(($el) => {
+      const text = $el.text();
+      expect(text.replace(/\u00a0/g, " ")).to.contain(params.revision);
+    });
+});
+
 Cypress.Commands.add("drCheckApprovalsEnforcment", () => {
   cy.drApproveAndReleaseDialog();
   cy.wait(2000);
@@ -180,6 +190,7 @@ Cypress.Commands.add("drRemoveReferences", (...list: int[]) => {
   list.forEach((item) => {
     cy.get("[class=\"circle_remove\"]").eq(item).click({ force: true });
   });
+  cy.get("[data-cy=field-referenceTo] h5").click();
 });
 
 Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
@@ -213,6 +224,11 @@ Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
   cy.get("[data-cy=\"field-outputDocumentTypes\"]").type(`${params.documentType}{enter}`).wait(500);
+});
+
+Cypress.Commands.add("drEnterHtmlText", (params: { htmlText: string }) => {
+  cy.get("[data-cy=\"field-renderHTML\"]").click();
+  cy.get("[data-cy=\"field-renderHTML\"]").type(`${params.htmlText}{enter}`).wait(500);
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", () => {

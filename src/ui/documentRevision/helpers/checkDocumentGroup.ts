@@ -1,35 +1,10 @@
-import { DocumentGroupOptionsType, DocumentGroupType, DOC_GROUP_TYPE, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
-
-export const checkIsDocumentRecord = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
-  checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.RECORD, documentGroupOptions);
-export const checkIsDocumentPart = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
-  checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.PART, documentGroupOptions);
-export const checkIsDocumentEB = (documentGroup?: DocumentGroupType): boolean =>
-  checkDocumentGroup(DOC_GROUP_TYPE.ENGINEERING_BUILD, documentGroup);
-export const checkIsDocumentPO = (documentGroup?: DocumentGroupType): boolean =>
-  checkDocumentGroup(DOC_GROUP_TYPE.PO, documentGroup);
-export const checkIsDocumentOtherGroup = (documentGroup?: DocumentGroupType): boolean =>
-  checkDocumentGroup(DOC_GROUP_TYPE.OTHER, documentGroup);
-export const checkIsDocumentDAM = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
-  checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.DAM, documentGroupOptions);
-export const checkIsDocumentPOAM = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
-  checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.POAM, documentGroupOptions);
-export const checkIsDocumentForm = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
-  checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.FORM, documentGroupOptions);
-export const checkIsTypeHaveOutput = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
-  checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.HAVE_OUTPUT, documentGroupOptions);
-export const checkIsTypeMustBeOutput = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
-  checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT, documentGroupOptions);
-export const checkIsTypeCanBeOutput = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
-  checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.CAN_BE_OUTPUT, documentGroupOptions);
-export const checkIsDocumentEquipment = (documentGroupOptions?: DocumentGroupOptionsType[]): boolean =>
-  checkDocumentGroupOptions(DOC_TYPE_GROUP_OPTION.EQUIPMENT, documentGroupOptions);
+import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 
 /** Checks if document has a specific group option.
    * @param groupOption Option that is searched for.
    * @param documentGroupOptions Array of group options a document has.
    */
-const checkDocumentGroupOptions = (
+export const checkDocumentGroupOptions = (
   groupOption: DocumentGroupOptionsType,
   documentGroupOptions?: DocumentGroupOptionsType[],
 ): boolean => {
@@ -37,16 +12,21 @@ const checkDocumentGroupOptions = (
   return documentGroupOptions.includes(groupOption);
 };
 
-/** Checks if document is of a specific group.
- * @param group Group that is checked.
- * @param documentGroup Group that document is a part of.
- */
-const checkDocumentGroup = (
-  group: DocumentGroupType,
-  documentGroup?: DocumentGroupType,
-): boolean => {
-  if (!group) { return false; }
-  return group === documentGroup;
-};
-
-export default { checkDocumentGroupOptions, checkDocumentGroup };
+export const checkIsDocumentEditableSchema = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
+export const checkIsDocumentDocument = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DOCUMENT);
+export const checkIsDocumentRecord = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.RECORD);
+export const checkIsDocumentPart =  checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.PART);
+export const checkIsDocumentEB = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.ENGINEERING_BUILD);
+export const checkIsDocumentPO = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.PO);
+export const checkIsDocumentForm = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.FORM);
+export const checkIsTypeHaveOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.HAVE_OUTPUT);
+export const checkIsTypeMustBeOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT);
+export const checkIsTypeCanBeOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_BE_OUTPUT);
+export const hasSerializedCSV = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.SERIALIZED_CSV);
+export const checkCanTypeCreateInspection = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_CREATE_INSPECTION);
+export const checkIsTypeInspection = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.INSPECTION);
+export const checkIsTypeFaiInspection = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.FAI_INSPECTION);
+export const checkIsDocumentDAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DAM);
+export const checkIsDocumentPOAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.POAM);
+export const checkIsDocumentEquipment = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EQUIPMENT);
+export const checkCanBeCopied = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_BE_COPIED);

@@ -35,6 +35,7 @@ export const DownloadHTML: React.FunctionComponent<Props> = ({
   return (
     <AsyncButton
       label="common.download.html"
+      data-cy="downloadHtml"
       onClick={handleClick}
       asyncState={async.asyncState}
       color="secondary"

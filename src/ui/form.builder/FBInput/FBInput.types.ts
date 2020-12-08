@@ -95,7 +95,7 @@ export type FBInputProps =
     inputState?: FBInputState;
     editorProperties?: FBEditorPropertiesType[];
     includeContext?: boolean;
-    rules?: string;
+    rules?: any;
     validationMode?: FBEditorValidationMode;
     includeSelectedSchema?: boolean;
     paragraph?: string;
@@ -143,6 +143,11 @@ export type FBInputProps =
      * @cfg {Bool} MUI Box props that can be passed to input section.
      */
     boxProps?: BoxProps;
+    inspectionSection?: boolean;
+    /**
+     * @cfg {String} Validation attribute name. Use this prop for non labeled controls.
+     */
+    validationAttribute?: string;
   };
 
 export const OmitInputClones: FBInputType[] = [
