@@ -293,17 +293,15 @@ context("Equipment maintenance test", () => {
   });
 
   context("Login user", () => {
-    context("Login user when he doesn't have privileges", () => {
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: ADMIN_USER.email,
-          password: "Tester1!",
-        });
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: ADMIN_USER.email,
+        password: "Tester1!",
       });
+    });
 
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-      });
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
   });
 
