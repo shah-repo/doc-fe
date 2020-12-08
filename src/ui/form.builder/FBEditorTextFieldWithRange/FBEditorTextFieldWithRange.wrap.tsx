@@ -12,8 +12,74 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
 
     // MARK: @config
     const formState = FB.useRef<FBFormState>(FBFormState, { initialValues: inputProps });
-    if (inputProps?.editorConfig.range.from || inputProps?.editorConfig.range.to) {
+    if (inputProps?.editorConfig?.range?.from || inputProps?.editorConfig?.range?.to) {
       formState?.setFieldValue("rangeOption", true);
+      formState?.setFieldValue(
+        "editorConfig.range.from",
+        inputProps.editorConfig?.range?.from,
+        true);
+      formState?.setFieldValue(
+        "editorConfig.range.to",
+        inputProps.editorConfig?.range?.to,
+        true);
+    }
+    if (inputProps?.editorConfig.inspection) {
+      formState?.setFieldValue("editorConfig.inspection", true);
+      formState?.setFieldValue(
+        "passValue",
+        inputProps?.editorConfig?.pass,
+        true,
+      );
+      formState?.setFieldValue(
+        "editorConfig.aql",
+        inputProps?.editorConfig?.aql,
+        true
+      );
+      formState?.setFieldValue(
+        "editorConfig.fai",
+        inputProps?.editorConfig?.fai,
+        true
+      );
+      const passType = inputProps?.editorConfig?.pass?.type;
+      if (passType) {
+        formState?.setFieldValue(
+          "editorConfig.pass.type",
+          passType,
+          true,
+        );
+        formState?.setFieldValue(
+          `"editorConfig.pass${passType}`,
+          true,
+          true,
+        );
+        if (passType === "value") {
+          formState?.setFieldValue(
+            "editorConfig.pass.value.from",
+            inputProps.editorConfig?.pass?.value?.from,
+            true);
+          formState?.setFieldValue(
+            "editorConfig.pass.value.to",
+            inputProps.editorConfig?.pass?.value?.to,
+            true);
+        }
+        if (passType === "percentage") {
+          formState?.setFieldValue(
+            "editorConfig.pass.percentage.value",
+            inputProps.editorConfig?.pass?.percentage?.value,
+            true
+          );
+          formState?.setFieldValue(
+            "editorConfig.pass.percentage.increase",
+            inputProps.editorConfig?.pass?.percentage?.increase,
+            true
+          );
+          formState?.setFieldValue(
+            "editorConfig.pass.percentage.decrease",
+            inputProps.editorConfig?.pass?.percentage?.decrease,
+            true
+          );
+        }
+      }
     }
 
 
@@ -69,8 +135,7 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
     useEffect(() => reaction(
       () => formState?.inputState.get("rangeOption")?.value,
       (value: boolean) => {
-        if (value) {
-          formState?.setFieldValue("editorConfig.range", true, true); }
+        if (value) { return; }
         formState?.setFieldError("editorConfig.range", "");
         formState?.setFieldValue("editorConfig.range", undefined, true);
       },
