@@ -1,4 +1,3 @@
-
 export class FBTextFieldWithRangeState {
   // MARK: @observables
 

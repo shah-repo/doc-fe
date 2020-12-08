@@ -2,9 +2,8 @@ import { FormControl, FormHelperText } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import { includes, isEmpty } from "lodash";
 import React from "react";
-import { FBFieldName, FBInputProps, FBInputState, FBLabel, FBTextField, OmitInputClones } from "..";
+import { FBConditionalWrapper, FBFieldName, FBInputProps, FBInputState, FBLabel, FBTextField, OmitInputClones } from "..";
 import Text from "../../components/Text";
-import { FBConditionalWrapper } from "../FBConditionalWrapper";
 import { withFBInput } from "./FBInput.wrap";
 
 const FBInput: React.FunctionComponent<FBInputProps> = ({

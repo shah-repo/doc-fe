@@ -1,8 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBTextField } from "..";
-import FBText from "../FBText/FBText";
-import { FBTextFieldWithRangeProps } from "./FBTextFieldWithRange.types";
+import { FBText, FBTextField, FBTextFieldWithRangeProps } from "..";
 import { withFBTextFieldWithRange } from "./FBTextFieldWithRange.wrap";
 
 const FBTextFieldWithRange: React.FunctionComponent<FBTextFieldWithRangeProps> = ({
