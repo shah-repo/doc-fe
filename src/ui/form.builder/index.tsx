@@ -294,6 +294,7 @@ export { default as FBTextField } from "./FBTextField/FBTextField";
 export * from "./FBTextField/FBTextField.types";
 export { default as FBTextFieldWithRange } from "./FBTextFieldWithRange/FBTextFieldWithRange";
 export { default as FBTextFieldWithRangeState } from "./FBTextFieldWithRange/FBTextFieldWithRange.state";
+export * from "./FBTextFieldWithRange/FBTextFieldWithRange.types";
 export { default as FBTimerField } from "./FBTimerField/FBTimerField";
 export * from "./FBTimerField/FBTimerField.types";
 export { default as FBTooltip } from "./FBTooltip/FBTooltip";

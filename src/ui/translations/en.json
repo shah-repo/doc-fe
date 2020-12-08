@@ -810,6 +810,8 @@
   "form.builder.allowed.range": "Allowed Range: {from}-{to}{suffix}",
   "form.builder.expected.value": "Expected value: {from}-{to}{suffix}",
   "form.builder.aql.value": "AQL: {value}{suffix}",
+  "form.builder.percentage": "Percentage",
+  "form.builder.value": "Value",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.pdf": "Download PDF file",

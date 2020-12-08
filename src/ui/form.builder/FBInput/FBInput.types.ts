@@ -181,3 +181,8 @@ export const OmitInputClones: FBInputType[] = [
   "range",
   "passpercentage",
 ];
+
+export interface FBInputConstructor {
+  value: any;
+  hidden?: boolean;
+}

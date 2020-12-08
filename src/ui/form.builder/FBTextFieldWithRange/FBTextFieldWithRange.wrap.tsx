@@ -1,6 +1,5 @@
 import React from "react";
-import { FBRangeValue } from "../FBInspection/FBRange.types";
-import { FBPassValueRange, FBTextFieldWithRangeProps } from "./FBTextFieldWithRange.types";
+import { FBPassValueRange, FBRangeValue, FBTextFieldWithRangeProps } from "..";
 
 export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
   Component: React.FunctionComponent<T>,

@@ -60,6 +60,7 @@ export const withFBInput = <T extends FBInputProps>(
     error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
     value = inputState?.value;
     includeContext = inputState?.includeContext;
+    hidden = inputState?.hidden;
 
     // Set validation scheme. This is union of scheme & comps configs.
     useEffect(() => {
@@ -100,7 +101,7 @@ export const withFBInput = <T extends FBInputProps>(
         },
         default() {
           isString(initialValue) && transform && (defaultValue = setTranform?.(initialValue));
-          return formState.getFieldValue(name, (isUndefined(defaultValue)) ? defaultChecked : defaultValue );
+          return formState.getFieldValue(name, (isUndefined(defaultValue)) ? defaultChecked : defaultValue);
         },
       };
       const transDefault = (value[type || ""] || value.default)();

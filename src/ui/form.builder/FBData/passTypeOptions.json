@@ -1,0 +1,10 @@
+[
+  {
+    "text": "form.builder.percentage",
+    "value": "${value0}"
+  },
+  {
+    "text": "form.builder.value",
+    "value": "${value1}"
+  }
+]

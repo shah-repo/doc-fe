@@ -1,4 +1,9 @@
-import { FBEditorProps, FBOption, FBPassPercentageValue, FBRangeValue } from "..";
+import { FBEditorProps, FBPassPercentageValue, FBRangeValue } from "..";
+
+export enum FBPassType {
+  percentage = "percentage",
+  value = "value",
+}
 
 export interface FBPassValue {
   type?: string;
@@ -7,6 +12,8 @@ export interface FBPassValue {
 }
 
 export interface FBEditorTextFieldWithRangeConfig {
+  rangeOption?: boolean;
+  passValue?: boolean;
   range?: FBRangeValue;
   criticalToQuality?: boolean;
   inspection?: boolean;
@@ -16,6 +23,5 @@ export interface FBEditorTextFieldWithRangeConfig {
 export type FBEditorTextFieldWithRangeProps =
 & FBEditorProps
 & {
-  aqlOptions: FBOption[];
   editorConfig?: FBEditorTextFieldWithRangeConfig;
 };

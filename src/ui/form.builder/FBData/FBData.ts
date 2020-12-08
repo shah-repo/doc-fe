@@ -1,11 +1,12 @@
 import { map, template } from "lodash";
-import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBIconConfig, FBInputType, FBOption } from "..";
+import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBIconConfig, FBInputType, FBOption, FBPassType } from "..";
 import { FBIconType } from "../FBIcon";
 import { FBCurrencyOption } from "../FBPurchaseOrderTable";
 import { FBSchemaProps } from "../FBSchema";
 import actionOptions from "./actionOptions.json";
 import additionalSchema from "./additionalSchema.json";
 import approvalMatrixRoleSchema from "./approvalMatrixRoleSchema.json";
+import aqlOptions from "./aqlOptions.json";
 import autocompleteOptions from "./autocompleteOptions.json";
 import closingTaskSchema from "./closingTaskSchema.json";
 import currencyOptions from "./currencyOptions.json";
@@ -13,6 +14,7 @@ import editorProperties from "./editorProperties.json";
 import editorPropertiesControl from "./editorPropertiesControl.json";
 import eqMaintenanceOptions from "./eqMaintenanceOptions.json";
 import icons from "./icons.json";
+import passTypeOptions from "./passTypeOptions.json";
 import requirementOptions from "./requirementOptions.json";
 import taskSchema from "./taskSchema.json";
 import testStepSchema from "./testStepSchema.json";
@@ -94,8 +96,22 @@ export class FBData {
     return closingTaskSchema as FBSchemaProps[];
   }
 
+  public static get passTypeOptions(): FBOption[] {
+    const tplKeys: Record<string, string> = {};
+    map(Object.values(FBPassType), (key, index) => {
+      tplKeys[`value${index}`] = `${key}`;
+    });
+    const compiled = template(JSON.stringify(passTypeOptions));
+    const parsed = JSON.parse(compiled(tplKeys));
+    return parsed;
+  }
+
   public static get yesNoOptions(): FBOption[] {
     return yesNoOptions as FBOption[];
+  }
+
+  public static get aqlOptions(): FBOption[] {
+    return aqlOptions as FBOption[];
   }
 
   public static get eqMaintenanceFieldOptions(): FBOption[] {

@@ -17,12 +17,18 @@ export const withFBOnChange = <T extends FBInputProps>(
     transform,
     withState,
     omitFormValue,
+    hidden,
     ...props
   }: T) => {
 
     const { formState, schemaState, workspaceState } = FB.useStores();
-    const { value: inputValue } = formState?.inputState.get(name || "") || {};
-    inputState = FB.useRef<FBInputState>(FBInputState, inputValue);
+    const inputValue = withState
+      ? formState?.getFieldValue(name)
+      : formState?.getInputState(name || "")?.value;
+    inputState = FB.useRef<FBInputState>(FBInputState, {
+      value: inputValue,
+      hidden,
+    });
 
     React.useEffect(() => {
       const defaultValue = formState?.getFieldValue(name);
@@ -178,6 +184,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       omitFormValue,
       type,
       name,
+      hidden,
     }));
   };
 
