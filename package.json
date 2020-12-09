@@ -1,7 +1,7 @@
 {
   "name": "doc-fe",
   "description": "DOC-POC Frontend application",
-  "version": "20.25.1",
+  "version": "20.25.3",
   "private": true,
   "dependencies": {
     "@datadog/browser-rum": "^1.12.7",
