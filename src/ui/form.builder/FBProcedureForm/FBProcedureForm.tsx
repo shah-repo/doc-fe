@@ -21,6 +21,25 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       name="id"
       defaultValue={FB.uniqid}
     />
+    {type === FBProcedureItemType.materials &&
+    <>
+      <FBAutocompleteAsync
+        name="part"
+        label="form.builder.part"
+        rules="required"
+        {...{ optionId, disabledOptions }}
+      />
+      <FBAutocompleteAsync
+        name="partLot"
+        label="form.builder.part.lot"
+        rules="required"
+        {...{ disabledOptions }}
+        optionId="24"
+        freeSolo
+      />
+    </>
+    }
+    {type === FBProcedureItemType.equipment &&
     <FBAutocompleteAsync
       name="title"
       label="form.builder.title"
@@ -28,6 +47,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       {...{ optionId, disabledOptions }}
       freeSolo
     />
+    }
     {type === FBProcedureItemType.materials && (
       <Box display="flex">
         <Box width="50%" mr={1}>

@@ -767,6 +767,7 @@
   "form.builder.request.approval": "Request approval",
   "form.builder.request.approve": "Approve",
   "form.builder.part": "Part",
+  "form.builder.part.lot": "Part Lot",
   "form.builder.select.existing.part": "Select an existing part",
   "form.builder.create.new.part": "Create a new part",
   "form.builder.procedure": "Procedure",
