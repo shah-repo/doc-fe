@@ -10,6 +10,10 @@ export class FBPartsState extends FBProcedureState {
   @observable public parts = new Map<string, FBProcedureValue>();
   @observable public diffParts = new Map<string, FBProcedureValue>();
 
+  getNumberOfDigits(number: number): number {
+    return (number.toString().split(".")[1] || "").length;
+  }
+
   // MARK: @computed
   @computed public get materials(): FBProcedureItemConfig[] | undefined {
     let materials: FBProcedureItemConfig[] = [];
@@ -19,9 +23,18 @@ export class FBPartsState extends FBProcedureState {
     });
     const materialValues = materials.reduce((result, obj) => {
       const { title, unit } = obj;
-      result[`${title}-${unit}`] = {
+      const key = `${title}-${unit}`;
+      const currentQuantity = result[key]?.quantity || 0;
+      const quantityToAdd = obj.quantity || 0;
+
+      const numberOfDigits = Math.max(
+        this.getNumberOfDigits(currentQuantity),
+        this.getNumberOfDigits(quantityToAdd)
+      );
+
+      result[key] = {
         ...obj,
-        quantity: (result[`${title}-${unit}`]?.quantity || 0) + obj.quantity,
+        quantity: parseFloat((currentQuantity + quantityToAdd).toFixed(numberOfDigits)),
       };
       return result;
     }, {});
