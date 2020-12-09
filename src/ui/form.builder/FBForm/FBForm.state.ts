@@ -25,7 +25,7 @@ export class FBFormState extends FBSchemaState {
     this.schema = schema;
     this.initialValues = initialValues || {};
     this.values = initialValues || {};
-    map(flatten(initialValues), (value, key) => {
+    map(flatten(initialValues || {}), (value, key) => {
       this.validationValues[key] = value;
     });
     this.validationValues = unflatten(this.validationValues);
