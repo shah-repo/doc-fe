@@ -39,6 +39,7 @@ export const withFBEditorValidation = <T extends FBEditorValidationProps>(
         formState?.omitFieldValue(name + ".value");
         formState?.omitFieldValue(name + ".name");
       }
+      formState?.getInputState(`${name}.name`)?.setHidden(!value);
       const schemaSelectItem = schemaState?.getSchemaItem(name + ".value");
       schemaSelectItem && schemaState && (schemaState.removeSchemaItem(schemaSelectItem));
     };

@@ -35,10 +35,10 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
       fieldWrapperState?.setMarkDownActive(!fieldWrapperState.markDownVisible);
 
     // MARK: @helpers
-    function hasValidationRelation(fieldName: string, fieldRules: string): Boolean {
+    function hasValidationRelation(fieldName: string, fieldRules: string): boolean {
       const scheme = workspaceState?.getSchema() || [];
-      var relatedValidationItem: FBSchemaProps | undefined;
-      for(const schemeItem of scheme) {
+      let relatedValidationItem: FBSchemaProps | undefined;
+      for (const schemeItem of scheme) {
         const { name, rules = "" } = schemeItem || {};
         if (name && name !== fieldName && (rules.includes(fieldName) || fieldRules.includes(name))) {
           relatedValidationItem = schemeItem;
@@ -50,7 +50,7 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
           relatedValidationItem.label ||
           relatedValidationItem.placeholder ||
           relatedValidationItem.name
-        )
+        );
         // TODO: Check for copy and do translation
         alert( `Field can't be removed because it has validation relation with the field: ${relatedValidationLabel}!`);
         return true;
