@@ -66,7 +66,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     ? availableReferences.filter((ref) => !ref.deleteDisabled)
     : availableReferences;
 
-  const defaultValue = documentReferences.map((ref) => {
+  const defaultValue = documentReferences?.map((ref) => {
     if (!ref.documentRevisions) { return { label: "", value: ref.id, deleteDisabled: false }; }
     const {
       highestRev,
@@ -111,7 +111,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         )}
         renderOption={(option) => option.label}
         renderTags={(value, getTagProps) => (
-          value.map((option, index) => (
+          value?.map((option, index) => (
             <Chip
               {...getTagProps({ index })}
               key={option.value}
