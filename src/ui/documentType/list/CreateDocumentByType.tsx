@@ -44,7 +44,7 @@ interface Props {
 }
 
 let selectedTypeLabel = "";
-let selectedDocumentTypeId: string;
+let selectedDocumentTypeId = "";
 export let docIdAsyncContext = React.createContext<AsyncState>(ASYNC_DEFAULT_STATE);
 export const useHandleCreateDoc = () => {
   const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
@@ -92,6 +92,9 @@ export const useHandleCreateDoc = () => {
     if (selectedDocumentTypeId) {
       fetchDocIdAsync.start(fetchDocIdAction, selectedDocumentTypeId, fetchDocIdAsync);
       setForm(selectedForm);
+      // setting to initial value in case creating new ouput is immediately
+      // after creating doc by type, otherwise wrong value for id is set
+      selectedDocumentTypeId = "";
       return;
     }
     if (outputDocumentTypes.length === 1 && !(outputDocumentTypes[0] as any)?.documentTypeAcronym?.startsWith("RC")) {
@@ -138,6 +141,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     multipleFormDialog.close();
     setForms([]);
   };
+
   if (!isByCategory && documentTypeId) {
     selectedDocumentTypeId = documentTypeId;
   }
