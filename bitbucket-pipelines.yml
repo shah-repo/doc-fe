@@ -238,7 +238,7 @@ pipelines:
             - sorry-cypress-director
           caches:
             - node
-          size: 1x
+          size: 2x
           artifacts:
             - test-results/**
           script:
