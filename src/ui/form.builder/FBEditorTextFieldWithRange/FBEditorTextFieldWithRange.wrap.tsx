@@ -7,7 +7,6 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
 ) => {
   const Comp = ({
     inputProps,
-    inputProps: { editorConfig: { rangeOption = false } = {} } = {},
     ...props
   }: T) => {
 
@@ -88,6 +87,7 @@ export const withFBEditorTextFieldWithRange = <T extends FBEditorTextFieldWithRa
     return Component({
       ...(props as T),
       formState,
+      inputProps,
     });
   };
 

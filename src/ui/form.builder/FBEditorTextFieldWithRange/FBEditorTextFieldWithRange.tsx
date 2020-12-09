@@ -10,7 +10,7 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
   inputProps,
   ...props
 }) => (
-  <FBEditor {...props} {...{ inputProps, formState }}>
+  <FBEditor {...props} {...{ inputProps, formState, type }}>
     <FBTextField
       key="label"
       dataCy={`fb-editor-field-${type}`}
