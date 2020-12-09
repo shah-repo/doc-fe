@@ -25,7 +25,7 @@ export const withFBCheckboxGroup = <T extends FBCheckboxGroupProps>(
   }: T) => {
 
     const { formState } = FB.useStores();
-    const formValue = formState?.getFieldValue(name, defaultValue);
+    const formValue = formState?.getFieldValue(name);
     const intl = useIntl();
 
     controls = map(options as FBOption[], (option, index) => {
