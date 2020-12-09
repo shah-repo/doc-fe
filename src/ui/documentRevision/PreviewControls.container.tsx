@@ -25,7 +25,7 @@ import { isOwnerContext } from "./forms/DocumentRevisionForm.presenter";
 import { checkCanBeCopied, checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
-import InspectionControlsContainer from "./InspectionControls/InspectionControls.container";
+import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
 
 interface OwnProps {
   documentRevision: DocumentRevision;

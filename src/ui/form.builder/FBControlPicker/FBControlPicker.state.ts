@@ -51,6 +51,7 @@ export class FBControlPickerState {
         "testRequirement",
         "procedure",
         ...this.hasEquipmentMaintenance ? ["eqmaintenance"] as FBInputType[] : [],
+        "textfieldwithrange",
       ],
       approvals: [
         "approvals",

@@ -241,5 +241,12 @@
     "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
+  ],
+  "textfieldwithrange": [
+    "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
+    "deleteDisabled",
+    "copyableValue"
   ]
 }

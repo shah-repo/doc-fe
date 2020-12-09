@@ -42,6 +42,7 @@ import { FBTask } from "../FBTask";
 import { FBTestRequirement } from "../FBTestRequirement";
 import { FBTextEditor } from "../FBTextEditor";
 import { FBTextField } from "../FBTextField";
+import { FBTextFieldWithRange } from "../FBTextFieldWithRange";
 import { FBTimerField } from "../FBTimerField";
 
 export class FBSchemaState {
@@ -105,6 +106,7 @@ export class FBSchemaState {
     procedurediff: FBProcedureDiff,
     ebpart: FBEBPart,
     eqmaintenance: FBEQMaintenance,
+    textfieldwithrange: FBTextFieldWithRange,
   };
 
   @observable public schema?: FBSchemaProps[];

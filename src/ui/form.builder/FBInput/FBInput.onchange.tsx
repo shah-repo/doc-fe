@@ -16,12 +16,19 @@ export const withFBOnChange = <T extends FBInputProps>(
     inputState,
     transform,
     withState,
+    omitFormValue,
+    hidden,
     ...props
   }: T) => {
 
     const { formState, schemaState, workspaceState } = FB.useStores();
-    const { value: inputValue } = formState?.inputState.get(name || "") || {};
-    inputState = FB.useRef<FBInputState>(FBInputState, inputValue);
+    const inputValue = withState
+      ? formState?.getFieldValue(name)
+      : formState?.getInputState(name || "")?.value;
+    inputState = FB.useRef<FBInputState>(FBInputState, {
+      value: inputValue,
+      hidden,
+    });
 
     React.useEffect(() => {
       const defaultValue = formState?.getFieldValue(name);
@@ -44,7 +51,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       if (!name) { return; }
       isString(formValue) && transform && (formValue = setTranform?.(formValue));
       // TODO: refactor with state opt
-      formState?.setFieldValue(name, formValue, state || withState, forceDefault);
+      formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
       if (type && !FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);
       }
@@ -71,6 +78,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       if (!editorProperties || isEmpty(editorProperties)) {
         return;
       }
+      const formValue = formState?.getFieldValue(`${FBFieldName.Context}-${name}`);
 
       if (isString(value)) {
         value = (value as FBEditorPropertiesType) === "includeContext";
@@ -83,8 +91,8 @@ export const withFBOnChange = <T extends FBInputProps>(
       if (isObject(value)) {
         value = has(value, "includeContext");
       }
-      if (!value) {
-        formState?.setFieldValue(`${FBFieldName.Context}-${name}`, "");
+      if (!value && formValue) {
+        formState?.setFieldValue(`${FBFieldName.Context}-${name}`, undefined);
       }
       inputState?.setIncludeContext(value);
     }
@@ -173,8 +181,10 @@ export const withFBOnChange = <T extends FBInputProps>(
       inputState,
       transform,
       withState,
+      omitFormValue,
       type,
       name,
+      hidden,
     }));
   };
 
