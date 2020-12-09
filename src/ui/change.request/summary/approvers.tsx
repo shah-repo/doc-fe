@@ -5,6 +5,7 @@ import { Approval, ApprovalStatus, DataProps } from "../../../state/ducks/common
 import SummaryField from "../../common/summary/base";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
+import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 
 export type Props = DataProps<Approval[]>;
 
@@ -18,12 +19,14 @@ export const Approvers: React.FunctionComponent<Props> = ({ dataProp }) => {
     .filter((approval) => approval.status !== ApprovalStatus.Abandoned)
     .map((approval, index) => {
       const { approver, status, reviewedAt } = approval;
+      // using isDraft in case submission is withdrawn and reviewedAt exists
+      const isDraft = isDocumentRevisionInDraft(status);
       const value = (
         <Box>
           <Typography id="userName" variant="h5" component="span">{approver.user.name}</Typography>
           <Typography id="statusdate" variant="h5" component="span">
             {` | ${status}`}
-            {reviewedAt && (
+            {!isDraft && reviewedAt && (
               <span>
                 {"| "}
                 <DateTime value={reviewedAt} />

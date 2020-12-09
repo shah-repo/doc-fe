@@ -22,6 +22,7 @@ declare global {
       navigToWorkOrders(): Chainable<Subject>;
       navigToRecords(): Chainable<Subject>;
       navigToDocTypeManagement(): Chainable<Subject>;
+      navigToEquipment(): Chainable<Subject>;
     }
   }
 }
@@ -67,6 +68,12 @@ Cypress.Commands.add("navigToRecords", () => {
 Cypress.Commands.add("navigToReceivableList", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
+  });
+});
+
+Cypress.Commands.add("navigToEquipment", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+    cy.navigClickOnItem({ navigItem: NavigationItems.EQUIPMENT });
   });
 });
 
