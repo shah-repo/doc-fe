@@ -47,6 +47,7 @@ export const withFBInput = <T extends FBInputProps>(
     withState,
     omitFormValue,
     showErrorMsg = true,
+    deleted,
     ...props
   }: T) => {
 
@@ -188,6 +189,7 @@ export const withFBInput = <T extends FBInputProps>(
       showErrorMsg,
       withState,
       omitFormValue,
+      deleted,
     });
   };
 
