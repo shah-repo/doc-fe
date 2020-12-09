@@ -63,9 +63,9 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     );
     dialogState = FB.useRef(FBDialogState);
 
-    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
-      if (!approvalId || !password) { return; }
-      approvalsState?.applyTransition(transition, approvalId, { password });
+    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string) => {
+      if (!approvalId) { return; }
+      approvalsState?.applyTransition(transition, approvalId);
     };
 
     function includesApprover(group: FBRequiredApprover, approver: string): boolean {
