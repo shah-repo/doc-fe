@@ -398,8 +398,6 @@ context("Approval request form scenario", () => {
     it("Add approvers to approval request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[20].email });
       cy.wait(200);
-      cy.arAddApproverOnApproverList({ approver: USERS[21].email });
-      cy.wait(200);
       cy.arAddApproverOnApproverList({ approver: USERS[22].email });
     });
 
