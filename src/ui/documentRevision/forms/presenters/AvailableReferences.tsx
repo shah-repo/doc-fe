@@ -93,7 +93,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         {...{ onChange, options, defaultValue, disabled }}
         renderInput={(params: RenderInputParams) => (
           <Box display="flex">
-            <Box width="100%">
+            <Box width="100%" data-cy="referenceTo">
               <TextField
                 {...params}
                 fullWidth
