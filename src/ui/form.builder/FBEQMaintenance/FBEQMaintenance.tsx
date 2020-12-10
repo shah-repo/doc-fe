@@ -55,6 +55,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       validationMode="visibility"
       rules={`required_if:${name}.requirements,Yes`}
       withState
+      placeholder="form.builder.units.days"
       {...{ disabled }}
     />
     <FBTextEditor
