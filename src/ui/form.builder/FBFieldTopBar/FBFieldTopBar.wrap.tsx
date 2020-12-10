@@ -28,7 +28,7 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
       if (documentId && !isEmpty(documentId)) {
         inputProps = { ...inputProps, deleted: true };
       }
-      workspaceState?.removeSchemaItem(inputProps);
+      workspaceState?.setSchemaItem(inputProps!);
     };
 
     const markDownSchemaItem = () =>
