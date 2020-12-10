@@ -101,6 +101,15 @@ export const withFBEBPart = <T extends FBEBPartProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    // on type radio button change
+    React.useEffect(() => reaction(
+      () => formState?.inputState.get("partType")?.value,
+      (value) => {
+        formState?.setFieldValue(name, undefined, true);
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
     // MARK: @observer
     useObserver(() => {
       loading = (
