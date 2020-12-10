@@ -66,6 +66,9 @@ export const withFBEBPart = <T extends FBEBPartProps>(
           childrenParts: [],
         } : {
           childrenParts: [{ id: childPartId }],
+          formInput: {
+            childrenPartsForRevise: [],
+          },
         };
         ebPartState.addExistingPartChild(
           ebId,
@@ -106,9 +109,8 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get("partType")?.value,
       () => {
-        console.log("test");
-        ebPartState.setNewRender(true);
         formState?.setFieldValue(name, undefined, true);
+        console.log(name, formState?.values);
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);

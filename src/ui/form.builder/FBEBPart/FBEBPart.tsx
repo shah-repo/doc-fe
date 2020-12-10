@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBAutocompleteAsync, FBButton, FBDialog, FBEBPartProps, FBInput, FBProvider, FBRadioGroup } from "..";
+import { FBAutocompleteAsync, FBButton, FBData, FBDialog, FBEBPartProps, FBInput, FBProvider, FBRadioGroup } from "..";
 import { withFBEBPart } from "./FBEBPart.wrap";
 
 const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
@@ -25,14 +25,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
       name="partType"
       gutter={false}
       withState
-      options={[{
-        text: "Specific document revision",
-        value: "documentRevision",
-      },
-      {
-        text: "Document",
-        value: "document",
-      }]}
+      options={FBData.partTypeOptions}
     />
     <FBInput type="ebpart">
       <Box display="flex" alignItems="flex-end">
@@ -43,27 +36,23 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
             gutter={false}
             shouldReloadOnInit
             withState
-            {...{ optionId, disabled, loading, name, defaultValue, additionalData, forceNewRender }}
+            {...{
+              optionId,
+              disabled,
+              loading,
+              name,
+              defaultValue,
+              additionalData,
+              forceNewRender,
+            }}
           />
-          {/* {partType === "document" && (
-            <FBEBPartAutocomplete
-              autocompleteOption={FBAutocompleteAsyncOption.availablePartDocuments}
-              {...{ disabled, loading, name, defaultValue, additionalData, forceNewRender }}
-            />
-          )}
-          {partType === "documentRevision" && (
-            <FBEBPartAutocomplete
-              autocompleteOption={FBAutocompleteAsyncOption.availableParts}
-              {...{ disabled, loading, name, defaultValue, additionalData, forceNewRender }}
-            />
-          )} */}
         </Box>
         <Box>
           <FBButton
             variant="contained"
             label="form.builder.create.new.part"
             onClick={handleAdd}
-            {...{ disabled }}
+            disabled={disabled || partType === "document"}
           />
         </Box>
       </Box>
