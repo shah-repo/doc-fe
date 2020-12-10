@@ -141,7 +141,7 @@ Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) =>
 
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[id=\"referenceTo\"]").click().type(item + "{downarrow}{enter}");
+    cy.get("[data-cy=\"referenceTo\"]").click().type(item + "{downarrow}{enter}");
   });
 });
 
