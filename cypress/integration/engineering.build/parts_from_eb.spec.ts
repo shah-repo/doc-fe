@@ -13,7 +13,6 @@ let loginResponse;
 let multipleCompanies;
 const currentDate = moment().tz("America/Los_Angeles").format("MMMM D, YYYY");
 
-const NO_PART_TOAST_ERROR_MESSAGE = "can't be RELEASED without linked Parts";
 const NOT_RELEASED_TOAST_ERROR_MESSAGE = "Last docRev for Part linked to EB after copying is not in RELEASED status.";
 const PART_DOCUMENT_TYPE_NAME = "Part";
 const EXISTING_PART_NAME = "Test Part";
@@ -213,16 +212,6 @@ context("Parts from EB flow test", () => {
 
       it("Save the EB", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
-      });
-    });
-
-    context("Verify that EB cannot be sent to review without a children part", () => {
-      it("Submit for approval", () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
-      });
-
-      it("Check for the toast error", () => {
-        cy.checkToastMessageContains({ message: NO_PART_TOAST_ERROR_MESSAGE });
       });
     });
 
