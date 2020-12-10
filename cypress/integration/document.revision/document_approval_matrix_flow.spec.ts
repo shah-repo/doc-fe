@@ -274,8 +274,9 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save role", () => {
       SystemRequirement("REQ-0590");
-
-      cy.drAddApprovalRole();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drAddApprovalRole();
+      });
     });
   });
 
@@ -316,7 +317,9 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save Approval Matrix Item", () => {
       SystemRequirement("REQ-0630", "REQ-0650");
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+      });
     });
   });
 
