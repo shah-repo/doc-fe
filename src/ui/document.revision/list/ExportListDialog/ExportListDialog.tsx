@@ -12,6 +12,7 @@ interface Props {
   headers?: HeaderTableType[];
   data: any[];
   useKeysAsHeaders?: boolean;
+  customFileName: string;
 }
 
 const ExportListDialog: React.FunctionComponent<Props> = ({
@@ -19,6 +20,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   headers,
   data,
   useKeysAsHeaders = false,
+  customFileName,
 }) => {
   const classes = styles();
   const [fileName, saveFileName] = useState("");
@@ -29,7 +31,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
     decimalSeparator: ".",
     showLabels: true,
     headers: headers?.map((e) => e.label ),
-    filename: fileName === "" ? "DocumentList" : fileName,
+    filename: fileName === "" ? customFileName : fileName,
     useTextFile: false,
     useBom: true,
     useKeysAsHeaders,

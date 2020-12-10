@@ -265,6 +265,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         </Button>
         <ExportListDialog
           {...{ dialog, headers, data  }}
+          customFileName="DocumentList"
         />
         <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
           <Button
