@@ -119,7 +119,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   return (
     <div>
-      {serializedCSV &&
+      {(isStatusReleased || isStatusInDraft) && serializedCSV &&
       <ExportToCSVButton
         {...{ documentRevision }}
       />}

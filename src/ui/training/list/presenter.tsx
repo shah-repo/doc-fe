@@ -190,6 +190,7 @@ export const TrainingListPresenter: React.FunctionComponent<Props> = ({
         <ExportListDialog
           {...{ dialog, headers }}
           data={exportedData}
+          customFileName="TrainingList"
         />
       </Grid>
       <Grid item={true} className={classes.item}>
