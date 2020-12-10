@@ -99,6 +99,7 @@ export class FBFormState extends FBSchemaState {
     }
     this.initialValues = omit(this.initialValues, fieldName);
     this.values = omit(this.getValues(), fieldName);
+    this.validationValues = omit(this.validationValues, fieldName);
   };
 
   @action public setRules = (rules: Dictionary<string>) =>

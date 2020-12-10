@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { flatten, isEmpty } from "lodash";
+import { flatten, isEmpty, map } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
@@ -60,6 +60,7 @@ export interface Props extends FormikProps<DocumentRevisionFormValues> {
   showAdministrativeAndVoidChange: boolean;
   pmFormId?: string;
   releasedDocRev?: DocumentRevision;
+  input?: any;
 }
 
 export interface FormHeaderContext {
@@ -102,10 +103,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   showAdministrativeAndVoidChange,
   pmFormId,
   releasedDocRev,
+  input,
 }) => {
   useScrollIntoView();
   const classes = styles();
-  const { workspaceState } = FB.useStores();
+  const { workspaceState, formState } = FB.useStores();
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
 
@@ -161,6 +163,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     asyncState,
     type,
   });
+
+  useEffect(() => {
+    map(input, (v, k) => {
+      formState?.setFieldValue(String(k), v, true);
+    });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [input]);
 
   useEffect(() => {
     if (!values.id && !values.document?.documentType?.id && setDocId) {

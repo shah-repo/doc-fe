@@ -35,13 +35,16 @@ export const withFBSortable = <T extends FBSortableProps>(
       </li>
     ));
 
-    const items = useObserver(() => map(workspaceState?.getSchema(), (schemaItem, index: number) => (
-      <SortableItem
-        key={`fb-sortable-item-${index}`}
-        value={{ ...schemaItem, index }}
-        {...{ index }}
-      />
-    )));
+    const items = useObserver(() => map(workspaceState?.getSchema(), (schemaItem, index: number) => {
+      if (schemaItem.deleted) { return; }
+      return (
+        <SortableItem
+          key={`fb-sortable-item-${index}`}
+          value={{ ...schemaItem, index }}
+          {...{ index }}
+        />
+      );
+    }));
 
     const onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
       const schema = workspaceState?.schema;
