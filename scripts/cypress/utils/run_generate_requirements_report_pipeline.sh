@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-./scripts/cypress/utils/delete_reran_spec.h
+./scripts/cypress/utils/delete_reran_specs.sh
 
 yarn --silent mochawesome-merge \"$DIR_JSON/generated_specs*.json\" > "$DIR_JSON/merged_specs.json" 
 cp "$DIR_JSON/merged_specs.json" cypress/cache/merged_specs.json
