@@ -156,6 +156,10 @@ export type FBInputProps =
      * value but we need to omit it from form values.
      */
     omitFormValue?: boolean;
+    /**
+     * @cfg {Bool} Item is deleted. It will not be visible but will remain in scheme.
+     */
+    deleted?: boolean;
     // /**
     //  * @cfg {Bool} true to force form validation on input render if its default value
     //  * is validation relation.

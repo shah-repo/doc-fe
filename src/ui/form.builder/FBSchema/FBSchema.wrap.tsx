@@ -15,7 +15,6 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
   }: T) => {
 
     !schemaState && (schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema));
-    schemaState.schema = schema;
     const { workspaceState, formState } = FB.useStores();
     const { isOutput, id, document: { outputRevision = false } = {} } = workspaceState || {};
 
@@ -60,7 +59,8 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       }
       return map(schema, (schemaItem, index) => {
         const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
-        const { disabled, reviseDisabled, outputDisabled } = schemaItem || {};
+        const { deleted, disabled, reviseDisabled, outputDisabled } = schemaItem || {};
+        if (deleted) { return; }
         return controlRenderer({
           autosave: isUnderWorkspace && workspaceState?.autosave,
           ...schemaItem,

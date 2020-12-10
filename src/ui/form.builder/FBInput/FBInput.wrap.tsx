@@ -47,6 +47,7 @@ export const withFBInput = <T extends FBInputProps>(
     withState,
     omitFormValue,
     showErrorMsg = true,
+    deleted,
     ...props
   }: T) => {
 
@@ -97,7 +98,7 @@ export const withFBInput = <T extends FBInputProps>(
         autocompleteasync() { return; },
         autocomplete() { return; },
         datepicker() {
-          return inputState && (inputState.value = formState.getFieldValue(name, ""));
+          return inputState && (inputState.value = formState.getFieldValue(name) || "");
         },
         default() {
           isString(initialValue) && transform && (defaultValue = setTranform?.(initialValue));
@@ -188,6 +189,7 @@ export const withFBInput = <T extends FBInputProps>(
       showErrorMsg,
       withState,
       omitFormValue,
+      deleted,
     });
   };
 
