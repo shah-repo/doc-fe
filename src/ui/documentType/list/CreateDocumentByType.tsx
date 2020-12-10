@@ -20,6 +20,7 @@ import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
+import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useCreateDocumentByTypeButton } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync, { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
@@ -43,7 +44,7 @@ interface Props {
 }
 
 let selectedTypeLabel = "";
-let selectedDocumentTypeId: string;
+let selectedDocumentTypeId = "";
 export let docIdAsyncContext = React.createContext<AsyncState>(ASYNC_DEFAULT_STATE);
 export const useHandleCreateDoc = () => {
   const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
@@ -91,6 +92,9 @@ export const useHandleCreateDoc = () => {
     if (selectedDocumentTypeId) {
       fetchDocIdAsync.start(fetchDocIdAction, selectedDocumentTypeId, fetchDocIdAsync);
       setForm(selectedForm);
+      // setting to initial value in case creating new ouput is immediately
+      // after creating doc by type, otherwise wrong value for id is set
+      selectedDocumentTypeId = "";
       return;
     }
     if (outputDocumentTypes.length === 1 && !(outputDocumentTypes[0] as any)?.documentTypeAcronym?.startsWith("RC")) {
@@ -122,7 +126,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   const formIds = useSelector(documentTypeSelectors.formIds);
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypesByCategory);
-  const [isVisible, label] = useCreateDocumentByTypeButton(documentTypeId);
+  const [isVisible, label, tooltipConfig] = useCreateDocumentByTypeButton(documentTypeId);
 
   const [errorMessage, setErrorMessage] = useState<string>();
   const [initialValues, setInitialValues] = useState<MultipleFormInitialValues>({ selectType: [] });
@@ -137,6 +141,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     multipleFormDialog.close();
     setForms([]);
   };
+
   if (!isByCategory && documentTypeId) {
     selectedDocumentTypeId = documentTypeId;
   }
@@ -299,19 +304,22 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         <ExportListDialog
           {...{ headers, data  }}
           dialog={exportDialog}
+          customFileName="DocumentList"
         />
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={handleAddButtonClick}
-          id="DocumentByTypeListPresenter-openDocRev"
-        >
-          <Text
-            message={buttonLabel}
-            values={{ name: labelName }}
-          />
-        </Button>
+        <CustomLabelTooltip {...{ tooltipConfig }}>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={handleAddButtonClick}
+            id="DocumentByTypeListPresenter-openDocRev"
+          >
+            <Text
+              message={buttonLabel}
+              values={{ name: labelName }}
+            />
+          </Button>
+        </CustomLabelTooltip>
       </Grid>
       {
         errorMessage && (

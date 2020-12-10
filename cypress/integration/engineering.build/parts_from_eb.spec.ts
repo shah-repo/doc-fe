@@ -216,16 +216,6 @@ context("Parts from EB flow test", () => {
       });
     });
 
-    context("Verify that EB cannot be sent to review without a children part", () => {
-      it("Submit for approval", () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
-      });
-
-      it("Check for the toast error", () => {
-        cy.checkToastMessageContains({ message: NO_PART_TOAST_ERROR_MESSAGE });
-      });
-    });
-
     context("Choose a part and submit for approval", () => {
       it("Choose an existing part from the list of available parts", () => {
         cy.get("[data-cy=\"childrenParts\"]").type(EXISTING_PART_NAME + "{downarrow}{enter}");

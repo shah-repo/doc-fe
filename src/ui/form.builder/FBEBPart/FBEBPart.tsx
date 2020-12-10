@@ -20,6 +20,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
   <FBProvider {...{ dialogState, ebPartState }}>
     <FBDialog />
     <FBRadioGroup
+      omitFormValue
       defaultValue="documentRevision"
       label="Part Type"
       name="partType"

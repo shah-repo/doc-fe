@@ -7,7 +7,9 @@
     "integration",
     "requirements",
     "info",
-    "utils"
+    "utils",
+    "test_company_replica/spec/make_test_company_replica.spec.ts",
+    "test_company_replica"
     // "./../src"
   ],
   "compilerOptions": {

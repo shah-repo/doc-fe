@@ -1,6 +1,6 @@
 import { cloneDeep } from "lodash";
 import { action, observable, set } from "mobx";
-import { FBInputType } from ".";
+import { FBInputConstructor, FBInputType } from ".";
 
 export class FBInputState {
   public static omitLabel: FBInputType[] = ["checkbox", "radio", "hyperlink", "section"];
@@ -11,9 +11,11 @@ export class FBInputState {
   @observable public includeContext = false;
   @observable public children: React.ReactElement | undefined;
   @observable public autosaveNextValue?: any;
+  @observable public hidden?: boolean;
 
-  public constructor(value?: any) {
+  public constructor({ value, hidden }: FBInputConstructor) {
     this.value = value;
+    this.hidden = hidden;
   }
 
   @action public setChildren = (children: React.ReactElement) => {
@@ -31,6 +33,10 @@ export class FBInputState {
 
   @action public setValue = (value: any) => {
     set(this, "value", value);
+  };
+
+  @action public setHidden = (state: boolean) => {
+    set(this, "hidden", state);
   };
 }
 

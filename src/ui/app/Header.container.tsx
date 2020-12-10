@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { authActions, authSelectors } from "../../state/ducks/auth";
+import { GroupTag } from "../../state/ducks/auth/types";
 import { LOGIN_URL } from "../constants/urls";
 import FBStore from "../form.builder/stores/ui/FBStore";
+import useGetHasTag from "../hooks/useGetHasTag";
 import HeaderPresenter from "./Header.presenter";
 
 type Props = RouteComponentProps;
@@ -21,7 +23,6 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   location,
   history,
 }) => {
-
   const [showUserProfile, setUserProfile] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -32,6 +33,8 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   };
   const email = useSelector(authSelectors.currentUserEmail);
   const name = useSelector(authSelectors.currentUserName);
+  const canToggleCustomLabels = useGetHasTag(GroupTag.LABEL_TOOLTIPS);
+
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(authActions.logout());
@@ -45,6 +48,7 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   const closeUserProfile = () => setUserProfile(false);
 
   const hasMultipleCompanies = useSelector(authSelectors.hasMultipleCompanies);
+  const customLabelsValue = useSelector(authSelectors.isCustomLabelsOn);
   const avatar = useSelector(authSelectors.currentEmployeeAvatar);
 
   /** Handles click on the Switch Company button. */
@@ -60,6 +64,10 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
     handleSwitchCompany,
   });
 
+  const toggleCustomLabels = () => {
+    dispatch(authActions.toggleCustomLabels(!customLabelsValue));
+  };
+
   return (
     <HeaderPresenter
       {...{
@@ -71,6 +79,9 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
         handleOpenMenu,
         handleCloseMenu,
         anchorEl,
+        customLabelsValue,
+        toggleCustomLabels,
+        canToggleCustomLabels,
       }}
     />
   );

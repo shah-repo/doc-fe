@@ -6,14 +6,23 @@ export const canEditChangeRequest = ({ dataProp, currentUserEmail }: ChangeReque
   currentUserEmail === dataProp.owner.user.email && dataProp.state === ChangeRequestStatus.Draft
 );
 
-export const canChangeCROwner = (state: ChangeRequestStatus, currentEmployeeId: string, ownerId: string, isCompanyAdmin: boolean) =>
+export const canChangeCROwner = (
+  state: ChangeRequestStatus,
+  currentEmployeeId: string,
+  ownerId: string,
+  isCompanyAdmin: boolean,
+  hasOwnerShipTag: boolean
+) =>
   ((
     state === ChangeRequestStatus.Draft ||
     state === ChangeRequestStatus.InReview ||
     state === ChangeRequestStatus.Implementation ||
     state === ChangeRequestStatus.Approved
   )
-  && currentEmployeeId === ownerId) || isCompanyAdmin;
+  && currentEmployeeId === ownerId) ||
+  isCompanyAdmin ||
+  hasOwnerShipTag;
+
 export const canEditApprovers = ({ dataProp, currentUserEmail }: ChangeRequestUserProps) => canEditChangeRequest({ dataProp, currentUserEmail }) ||
     (currentUserEmail === dataProp.owner.user.email && dataProp.state === ChangeRequestStatus.InReview);
 

@@ -58,15 +58,19 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get("childrenParts")?.value,
       (childPartId: string) => {
+        console.log(childPartId);
+        if (!childPartId) { return; }
         const type = formState?.inputState.get("partType")?.value;
         const body = type === "document" ? {
           formInput: {
+            // ...formState?.getValues(),
             childrenPartsForRevise: [{ id: childPartId }],
           },
           childrenParts: [],
         } : {
           childrenParts: [{ id: childPartId }],
           formInput: {
+            // ...formState?.getValues(),
             childrenPartsForRevise: [],
           },
         };
@@ -109,7 +113,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get("partType")?.value,
       () => {
-        formState?.setFieldValue(name, undefined, true);
+        formState?.setFieldValue(name, "", true);
         console.log(name, formState?.values);
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -15,7 +15,7 @@
     "name": "validators.required_if.name",
     "label": "Required if field",
     "includeSelectedSchema": true,
-    "rules": "required_with:validators.required_if",
+    "rules": "required_if:validators.required_if,true",
     "validationMode": "visibility"
   },
   {
@@ -29,7 +29,7 @@
     "name": "validators.required_if_in.name",
     "label": "Required if field",
     "includeSelectedSchema": true,
-    "rules": "required_with:validators.required_if_in",
+    "rules": "required_if:validators.required_if_in,true",
     "validationMode": "visibility"
   },
   {
@@ -43,7 +43,7 @@
     "name": "validators.required_with.name",
     "label": "Required with",
     "multiple": true,
-    "rules": "required_with:validators.required_with",
+    "rules": "required_if:validators.required_with,true",
     "validationMode": "visibility"
   },
   {
@@ -57,7 +57,7 @@
     "name": "validators.required_without.name",
     "label": "Required without",
     "multiple": true,
-    "rules": "required_with:validators.required_without",
+    "rules": "required_if:validators.required_without,true",
     "validationMode": "visibility"
   }, {
     "type": "checkbox",
@@ -68,7 +68,7 @@
     "type": "autocomplete",
     "name": "validators.required_document_status.name",
     "label": "Document Status",
-    "rules": "required_with:validators.required_document_status",
+    "rules": "required_if:validators.required_document_status,true",
     "validationMode": "visibility",
     "options": [{
       "value": "DRAFT",
@@ -106,7 +106,7 @@
     "type": "autocomplete",
     "name": "validators.required_document_type.name",
     "label": "Document Type",
-    "rules": "required_with:validators.required_document_type",
+    "rules": "required_if:validators.required_document_type,true",
     "validationMode": "visibility",
     "optionId": "4"
   }

@@ -48,7 +48,9 @@ Cypress.Commands.add("pmAddMaterialDocumentToProcedure", (params: {
   cy.get("[name=\"quantity\"]").type(params.numberOfMaterial.toString());
   cy.get("[data-cy=\"unit\"]").click();
   cy.get("ul[role=\"listbox\"]>li").contains(params.typeOfMaterial).click();
-  cy.get("[data-cy=\"form.builder.save\"]").click();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+    cy.get("[data-cy=\"form.builder.save\"]").click();
+  });
 });
 
 Cypress.Commands.add("pmAddFreeTextMaterial", (params: {
@@ -60,20 +62,26 @@ Cypress.Commands.add("pmAddFreeTextMaterial", (params: {
   cy.get("[name=\"quantity\"]").type(params.numberOfMaterial.toString());
   cy.get("[data-cy=\"unit\"]").click();
   cy.get("ul[role=\"listbox\"]>li").contains(params.typeOfMaterial).click();
-  cy.get("[data-cy=\"form.builder.save\"]").click();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+    cy.get("[data-cy=\"form.builder.save\"]").click();
+  });
 });
 
 Cypress.Commands.add("pmAddEquipmentDocument", (params: {equipmentDoc: string}) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").click();
   cy.get("[data-cy=\"title\"]").click();
   cy.get("ul[role=\"listbox\"]>li").contains(params.equipmentDoc).click();
-  cy.get("[data-cy=\"form.builder.save\"]").click();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+    cy.get("[data-cy=\"form.builder.save\"]").click();
+  });
 });
 
 Cypress.Commands.add("pmAddFreeTextEquipment", (params: {equipment: string}) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").click();
   cy.get("[data-cy=\"title\"]").type(params.equipment);
-  cy.get("[data-cy=\"form.builder.save\"]").click();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+    cy.get("[data-cy=\"form.builder.save\"]").click();
+  });
 });
 
 Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {

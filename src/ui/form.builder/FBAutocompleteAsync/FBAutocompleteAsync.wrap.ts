@@ -91,6 +91,9 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (freeSolo && !isObject(option)) {
         return option;
       }
+      if (!freeSolo && !isObject(option)) {
+        option = defaultValue;
+      }
       const { labelPrefixRoot, includeRevision } = autocompleteAsyncState?.optionConfig || {};
       let optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
       if (includeRevision) {

@@ -28,6 +28,7 @@ export enum CyRoutes {
   ChangeRequestApprove = "ChangeRequestApprove",
   ARPreview = "ARPreview",
   GroupsPost = "GroupsPost",
+  GroupsPatch = "GroupsPatch",
   DocPreview = "DocPreview",
   DocRevGet = "DocRevGet",
   LotQuantity = "LotQuantity",
@@ -116,6 +117,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/groups",
+    },
+  },
+  GroupsPatch: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/groups/*",
     },
   },
   PatchDocRev: {

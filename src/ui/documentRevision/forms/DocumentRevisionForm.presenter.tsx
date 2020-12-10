@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { flatten, isEmpty } from "lodash";
+import { flatten, isEmpty, map } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
@@ -9,7 +9,6 @@ import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/doc
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
-import { default as AutocompleteField } from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
@@ -27,6 +26,7 @@ import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocu
 import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
 import { isDocumentAlphaReleased } from "../helpers/revisionStage";
 import { styles } from "./DocumentRevisionForm.styles";
+import AvailableReferencesField from "./presenters/AvailableReferences";
 import Description from "./presenters/Description";
 import DocIdInput from "./presenters/DocIdInput";
 import DocumentSecurity from "./presenters/DocumentSecurity";
@@ -60,6 +60,7 @@ export interface Props extends FormikProps<DocumentRevisionFormValues> {
   showAdministrativeAndVoidChange: boolean;
   pmFormId?: string;
   releasedDocRev?: DocumentRevision;
+  input?: any;
 }
 
 export interface FormHeaderContext {
@@ -102,10 +103,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   showAdministrativeAndVoidChange,
   pmFormId,
   releasedDocRev,
+  input,
 }) => {
   useScrollIntoView();
   const classes = styles();
-  const { workspaceState } = FB.useStores();
+  const { workspaceState, formState } = FB.useStores();
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
 
@@ -161,6 +163,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     asyncState,
     type,
   });
+
+  useEffect(() => {
+    map(input, (v, k) => {
+      formState?.setFieldValue(String(k), v, true);
+    });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [input]);
 
   useEffect(() => {
     if (!values.id && !values.document?.documentType?.id && setDocId) {
@@ -274,16 +284,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           />
         )}
         <RevisionStage {...{ isDisabled, isDocRevFirstDraft, shouldShowRevStageForDocType }}/>
-        <AutocompleteField
+        <AvailableReferencesField
+          availableReferences={availableReferences}
+          documentReferences={documentRevision?.referenceTo}
           name="referenceTo"
           label="documentRevision.form.references"
-          autocompleteProps={{
-            id: "referenceTo",
-            isMulti: true,
-            closeMenuOnSelect: false,
-          }}
-          options={availableReferences}
-          isDisabled={isDisabledInput}
+          disabled={isDisabledInput}
+          documentGroupOptions={documentRevision?.document.documentType.groupOptions}
         />
         <References document={initialValues.document} />
         <RetrainField

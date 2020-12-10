@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { first, get, includes, isBoolean, isEmpty, isEqual, isString, isUndefined } from "lodash";
+import { first, get, includes, isBoolean, isEqual, isString, isUndefined } from "lodash";
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
@@ -19,9 +19,9 @@ export const withFBInput = <T extends FBInputProps>(
   const Comp = ({
     setTranform,
     optionsToString,
-    inputState,
     onChange,
     onBlur,
+    inputState,
     name = "",
     children,
     disabled,
@@ -44,6 +44,10 @@ export const withFBInput = <T extends FBInputProps>(
     omitFinalValidation = false,
     applicableValidationSchema,
     validationAttribute,
+    withState,
+    omitFormValue,
+    showErrorMsg = true,
+    deleted,
     ...props
   }: T) => {
 
@@ -51,11 +55,13 @@ export const withFBInput = <T extends FBInputProps>(
     const { isOutput } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
+    const initialValue = defaultValue;
     defaultValue = setDefaultValue();
     helperText = formState?.errors.get(name) || helperText;
-    error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation;
+    error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
     value = inputState?.value;
     includeContext = inputState?.includeContext;
+    hidden = inputState?.hidden;
 
     // Set validation scheme. This is union of scheme & comps configs.
     useEffect(() => {
@@ -65,7 +71,7 @@ export const withFBInput = <T extends FBInputProps>(
 
     // TODO: Autocomplete default set as input
     // then this can be removed and handle through defaultValue
-    const validationValue = get(formState?.values, name);
+    const validationValue = get(formState?.validationValues, name);
 
     if ((isOutput || formState?.workspaceMode !== "design") && formState?.workspaceMode !== "formPreview") {
       (isUndefined(hidden) && validationMode === "visibility") && (hidden =
@@ -73,7 +79,7 @@ export const withFBInput = <T extends FBInputProps>(
       );
 
       (!disabled && validationMode === "disabled") && (disabled =
-        !helperText && (!validationValue || isEmpty(validationValue))
+        !helperText && (!validationValue || validationValue === "")
       );
     }
 
@@ -86,17 +92,17 @@ export const withFBInput = <T extends FBInputProps>(
             return;
           }
           const value = optionsToString?.(options);
-          formState?.setFieldValue(name, value);
+          formState?.setFieldValue(name, value, withState, omitFormValue);
           return value;
         },
         autocompleteasync() { return; },
         autocomplete() { return; },
         datepicker() {
-          return inputState && (inputState.value = formState.getFieldValue(name, ""));
+          return inputState && (inputState.value = formState.getFieldValue(name) || "");
         },
         default() {
-          isString(defaultValue) && transform && (defaultValue = setTranform?.(defaultValue));
-          return formState.getFieldValue(name, (isUndefined(defaultValue)) ? defaultChecked : defaultValue );
+          isString(initialValue) && transform && (defaultValue = setTranform?.(initialValue));
+          return formState.getFieldValue(name, (isUndefined(defaultValue)) ? defaultChecked : defaultValue);
         },
       };
       const transDefault = (value[type || ""] || value.default)();
@@ -107,7 +113,7 @@ export const withFBInput = <T extends FBInputProps>(
     }
 
     const child = first(React.Children.toArray(children));
-    const isClone = !includes(OmitInputClones, type) && !isUndefined(child);
+    const isClone = !includes(OmitInputClones, type) && !isUndefined(child) && !hidden;
 
     if (isClone) {
       children = cloneElement(child as React.ReactElement, {
@@ -131,7 +137,11 @@ export const withFBInput = <T extends FBInputProps>(
       let attr = (label as string) || placeholder || validationAttribute || name;
       isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));
       formState?.setValidationAttributeName(name, attr);
-      rules && (formState!.setFieldRules(name, rules));
+      if (!rules) { return; }
+      formState!.setFieldRules(name, rules);
+      if (!omitFinalValidation) {
+        formState?.setFieldFinalValidationRules(name, rules);
+      }
     }, [rules]);
 
     useEffect(() => {
@@ -153,6 +163,8 @@ export const withFBInput = <T extends FBInputProps>(
 
     return Component({
       ...(props as T),
+      onChange,
+      onBlur,
       includeContext,
       validationMode,
       helperText,
@@ -160,8 +172,6 @@ export const withFBInput = <T extends FBInputProps>(
       disabled,
       defaultValue,
       type,
-      onChange,
-      onBlur,
       name,
       error,
       inputState,
@@ -176,6 +186,10 @@ export const withFBInput = <T extends FBInputProps>(
       bookmarked,
       applicableValidationSchema,
       validationAttribute,
+      showErrorMsg,
+      withState,
+      omitFormValue,
+      deleted,
     });
   };
 
