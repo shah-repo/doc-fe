@@ -1,7 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBAutocompleteAsyncOption, FBButton, FBDialog, FBEBPartProps, FBInput, FBProvider, FBRadioGroup } from "..";
-import FBEBPartAutocomplete from "../FBEBPartAutocomplete/FBEBPartAutocomplete";
+import { FBAutocompleteAsync, FBButton, FBDialog, FBEBPartProps, FBInput, FBProvider, FBRadioGroup } from "..";
 import { withFBEBPart } from "./FBEBPart.wrap";
 
 const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
@@ -15,6 +14,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
   forceNewRender,
   name,
   partType = "documentRevision",
+  optionId,
   ...props
 }) => (
   <FBProvider {...{ dialogState, ebPartState }}>
@@ -37,7 +37,15 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
     <FBInput type="ebpart">
       <Box display="flex" alignItems="flex-end">
         <Box flexGrow={1}>
-          {partType === "document" && (
+          <FBAutocompleteAsync
+            label="form.builder.part"
+            placeholder="form.builder.select.existing.part"
+            gutter={false}
+            shouldReloadOnInit
+            withState
+            {...{ optionId, disabled, loading, name, defaultValue, additionalData, forceNewRender }}
+          />
+          {/* {partType === "document" && (
             <FBEBPartAutocomplete
               autocompleteOption={FBAutocompleteAsyncOption.availablePartDocuments}
               {...{ disabled, loading, name, defaultValue, additionalData, forceNewRender }}
@@ -48,7 +56,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
               autocompleteOption={FBAutocompleteAsyncOption.availableParts}
               {...{ disabled, loading, name, defaultValue, additionalData, forceNewRender }}
             />
-          )}
+          )} */}
         </Box>
         <Box>
           <FBButton

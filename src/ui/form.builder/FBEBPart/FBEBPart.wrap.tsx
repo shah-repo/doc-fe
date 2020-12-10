@@ -17,6 +17,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     forceNewRender,
     partType,
     name,
+    optionId,
     ...props
   }: T) => {
     // MARK: @config
@@ -104,7 +105,9 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     // on type radio button change
     React.useEffect(() => reaction(
       () => formState?.inputState.get("partType")?.value,
-      (value) => {
+      () => {
+        console.log("test");
+        ebPartState.setNewRender(true);
         formState?.setFieldValue(name, undefined, true);
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -118,7 +121,11 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         ebPartState?.documentApi.loading
       );
       disabled = disabled || loading;
-      partType = formState?.inputState.get("partType")?.value;
+      if (formState?.inputState.get("partType")?.value === "document") {
+        optionId = FBAutocompleteAsyncOption.availablePartDocuments;
+      } else {
+        optionId = FBAutocompleteAsyncOption.availableParts;
+      }
     });
 
     return Component({
@@ -133,6 +140,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
       name,
       partType,
       formState,
+      optionId,
     });
   };
 

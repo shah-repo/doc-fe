@@ -54,6 +54,7 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!this.optionId) {
       return;
     }
+    console.log(this.optionId);
     const isLoading = FBAutocompleteAsyncStore.loading.get(this.optionId);
     const hasData = Boolean(FBAutocompleteAsyncStore.data.get(this.optionId));
     if (force || (!hasData && !isLoading)) {
