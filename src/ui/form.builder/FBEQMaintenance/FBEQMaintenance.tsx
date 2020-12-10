@@ -68,13 +68,13 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
     {currentStatus && <Box mb={3} data-cy="maintenance.status">
       <b>Current Status:</b> {currentStatus}
     </Box>}
-    {editorConfig?.fields?.includes("instructions") && (
-      <FBTextEditor
-        name={`${name}.instructions`}
-        label="form.builder.pm.instructions"
-        {...{ disabled }}
-      />
-    )}
+    <FBTextEditor
+      name={`${name}.instructions`}
+      label="form.builder.pm.instructions"
+      validationMode="visibility"
+      rules={`required_if:${name}.requirements,Yes`}
+      {...{ disabled }}
+    />
     <FBEQMaintenanceHistory {...{ name }}/>
   </FBInput>
 );
