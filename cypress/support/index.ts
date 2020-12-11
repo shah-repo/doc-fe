@@ -79,6 +79,12 @@ Cypress.on("test:after:run", (test, runnable: any ) => {
   }
 });
 
+before(() => {
+  if (CONFIG.RUN_ENVIRONMENT === "pipeline") {
+    const dir = `${CONFIG.SCREENSHOTS_FOLDER}/${Cypress.spec.name}`;
+    cy.task("deleteScreenshotsFolder", dir);
+  }
+});
 
 if (CONFIG.TAKE_SCREENSHOT_AFTER_EACH) {
   const oldIt = it;

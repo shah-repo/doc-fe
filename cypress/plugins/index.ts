@@ -1,5 +1,5 @@
 import { downloadFile } from "cypress-downloadfile/lib/addPlugin";
-import { rename } from "fs";
+import { rename, rmdirSync } from "fs";
 import { getEmail } from "../support/commands/imap/imap";
 import { allowedCharacters } from "../utils/context/constants";
 
@@ -35,6 +35,10 @@ export default (on, config) => {
     },
     mail: getEmail,
     downloadFile,
+    deleteScreenshotsFolder(dir) {
+      rmdirSync(dir, { recursive: true });
+      return null;
+    },
   });
 
   on("after:screenshot", (details) => {

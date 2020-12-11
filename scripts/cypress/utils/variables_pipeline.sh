@@ -23,3 +23,4 @@ export DIR_SCREENSHOTS_REPORT="test-results/some_ci_build_id/reports/screenshots
 export CYPRESS_SCREENSHOTS_FOLDER="test-results/some_ci_build_id/reports/screenshots"
 export DIR_VIDEOS_REPORT="test-results/some_ci_build_id/reports/videos"
 export CYPRESS_VIDEOS_FOLDER="test-results/some_ci_build_id/reports/videos"
+export CYPRESS_RUN_ENVIRONMENT="pipeline"

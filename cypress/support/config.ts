@@ -22,6 +22,8 @@ export class ConfigEnv {
       SKIP_ON_RUN_FAILURE: Cypress.env("SKIP_ON_RUN_FAILURE"),
       SUPERADMIN_EMAIL: Cypress.env("SUPERADMIN_EMAIL"),
       SUPERADMIN_PASSWORD: Cypress.env("SUPERADMIN_PASSWORD"),
+      RUN_ENVIRONMENT: Cypress.env("RUN_ENVIRONMENT"),
+      SCREENSHOTS_FOLDER: Cypress.env("SCREENSHOTS_FOLDER"),
     });
 
     const errors = validateSync(configEnv, {
@@ -67,6 +69,14 @@ export class ConfigEnv {
   @IsDefined()
   @IsString()
   SUPERADMIN_PASSWORD!: string;
+
+  @IsDefined()
+  @IsString()
+  RUN_ENVIRONMENT!: string;
+
+  @IsDefined()
+  @IsString()
+  SCREENSHOTS_FOLDER!: string;
 }
 
 
