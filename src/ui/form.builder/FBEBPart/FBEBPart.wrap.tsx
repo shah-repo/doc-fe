@@ -26,7 +26,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     const { document: { childrenParts: additionalData = [] } = {} } = workspaceState || {};
     const ebPartState = FB.useRef(FBEBPartState, first(additionalData)?.id);
     const { id: ebId } = workspaceState || {};
-    partType = "documentRevision";
+    formState?.setFieldValue("partType", "documentRevision");
 
     useEffect(() => {
       const childrenPartsForRevise = workspaceState?.document?.formInput?.childrenPartsForRevise;
@@ -58,19 +58,16 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get("childrenParts")?.value,
       (childPartId: string) => {
-        console.log(childPartId);
-        if (!childPartId) { return; }
+        const childrenParts = childPartId && childPartId !== "" ? [{ id: childPartId }] : [];
         const type = formState?.inputState.get("partType")?.value;
         const body = type === "document" ? {
           formInput: {
-            // ...formState?.getValues(),
-            childrenPartsForRevise: [{ id: childPartId }],
+            childrenPartsForRevise: childrenParts,
           },
           childrenParts: [],
         } : {
-          childrenParts: [{ id: childPartId }],
+          childrenParts,
           formInput: {
-            // ...formState?.getValues(),
             childrenPartsForRevise: [],
           },
         };
@@ -114,7 +111,6 @@ export const withFBEBPart = <T extends FBEBPartProps>(
       () => formState?.inputState.get("partType")?.value,
       () => {
         formState?.setFieldValue(name, "", true);
-        console.log(name, formState?.values);
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);

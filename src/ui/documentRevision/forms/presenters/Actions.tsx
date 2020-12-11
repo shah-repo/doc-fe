@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
-import { differenceBy, keys } from "lodash";
+import { differenceBy, keys, omit } from "lodash";
 import * as React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { RevisionChangeType } from "../../../../state/ducks/documentRevisions";
@@ -91,9 +91,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               : null;
             return key;
           });
-          formik.setFieldValue("formInput", newInput);
+          // TEMPORARY FIX FOR BE VALIDATION
+          formik.setFieldValue("formInput", omit(newInput, ["partType"]));
         } else {
-          formik.setFieldValue("formInput", formState?.getValues());
+          // TEMPORARY FIX FOR BE VALIDATION
+          formik.setFieldValue("formInput", omit(formState?.getValues(), ["partType"]));
         }
         if (isOutputSchema()) {
           formik.setFieldValue("schema", workspaceState.schema);
