@@ -208,7 +208,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
     // MARK: @methods
     approvalTransition = (transition: FBInlineApprovalTransition, id?: string, password?: string) => {
-      if (!id || !password) { return; }
+      if (!id) { return; }
       inlineApprovalState?.approvalTransition(transition, id, { password });
     };
 
