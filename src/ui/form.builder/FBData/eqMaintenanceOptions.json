@@ -1,10 +1,4 @@
 {
-  "fields": [
-    {
-      "text": "form.builder.pm.instructions",
-      "value": "instructions"
-    }
-  ],
   "type": [
     {
       "text": "form.builder.preventative.maintenance",
