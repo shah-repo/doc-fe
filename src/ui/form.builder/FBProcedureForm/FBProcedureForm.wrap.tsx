@@ -1,4 +1,4 @@
-import { map } from "lodash";
+import { isEmpty, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -38,8 +38,16 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     config[type]?.();
 
     React.useEffect(() => {
-      procedureFormState?.fetchLot();
-      procedureFormState?.fetchParts();
+      procedureFormState?.fetchParts(true);
+      if (!initialValues) {
+        procedureFormState?.fetchLots();
+        procedureFormState?.fetchParts();
+      }
+      if (!initialValues?.partLot) {
+        procedureFormState?.fetchParts();
+      }
+      procedureFormState?.fetchPartsOfLot(initialValues?.partLot);
+
       dialogState?.setActions(
         <FBProcedureFormActions {...{ handleAdd, handleCancel }} />
       );
@@ -51,23 +59,36 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       () => formState?.inputState.get("title")?.value,
       (value) => {
         if (!value && !formState?.inputState.get("partLot")?.value) {
-          procedureFormState?.fetchLot();
+          procedureFormState?.fetchLots();
           procedureFormState?.fetchParts();
         }
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
+    // if title and partLot empty it will set to default options
     useEffect(() => reaction(
       () => formState?.inputState.get("partLot")?.value,
       (value) => {
         if (!value && !formState?.inputState.get("title")?.value) {
-          procedureFormState?.fetchLot();
+          procedureFormState?.fetchLots();
           procedureFormState?.fetchParts();
         }
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    useEffect(() => reaction(
+      () => procedureFormState?.defaultParts,
+      (value) => {
+        // if freeSolo
+        if (isEmpty(value?.filter((e) => e.id === initialValues?.title))) {
+          procedureFormState?.fetchLots();
+          return;
+        }
+        procedureFormState?.fetchLotsToPart(initialValues?.title);
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     // MARK: @helpers
     function handleAdd() {
@@ -96,6 +117,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       procedureFormState?.fetchPartsOfLot(formValue.partLot);
     }
 
+    // MARK: @observer
     useObserver(() => {
       lotOptions = procedureFormState?.lotsToPart.map((schemaItem: DocumentRevision) => ({
         value: schemaItem.id,
@@ -107,7 +129,6 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       } as SelectOption));
     });
 
-    // MARK: @observer
 
     return Component({
       ...(props as T),

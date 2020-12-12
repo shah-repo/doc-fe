@@ -13,6 +13,7 @@ export class FBProcedureFormState {
   // MARK: @observables
   @observable public lotsToPart: DocumentRevision[] = [];
   @observable public partsOfLot: DocumentRevision[] = [];
+  @observable public defaultParts: DocumentRevision[] = [];
 
   // MARK: @config
 
@@ -39,7 +40,7 @@ export class FBProcedureFormState {
     set(this, "partsOfLot", data);
   };
 
-  public fetchLot = async () => {
+  public fetchLots = async () => {
     const urlTpl = template(FBEndpoint.Lots);
     const url = urlTpl();
     this.getLots.setUrl(url);
@@ -48,14 +49,18 @@ export class FBProcedureFormState {
     set(this, "lotsToPart", data);
   };
 
-  public fetchParts = async () => {
+  public fetchParts = async (defaultParts?: boolean) => {
     const urlTpl = template(FBEndpoint.Parts);
     const url = urlTpl();
     this.getParts.setUrl(url);
     this.getParts.fetch();
     const data = await this.getParts.fetch();
-    set(this, "partsOfLot", data);
+    if (!defaultParts) {
+      set(this, "partsOfLot", data);
+    }
+    set(this, "defaultParts", data);
   };
+
   // MARK: @helpers
 }
 

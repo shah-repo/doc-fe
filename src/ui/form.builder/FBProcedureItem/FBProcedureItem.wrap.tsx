@@ -1,7 +1,7 @@
 import { cloneDeep, get } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBDialogState, FBFormMode, FBProcedureForm, FBProcedureFormState, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemProps, FBProcedureItemType } from "..";
+import { FB, FBDialogState, FBFormMode, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemProps, FBProcedureItemType } from "..";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBProcedureItem = <T extends FBProcedureItemProps>(
@@ -22,7 +22,6 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     // MARK: @config
     const { procedureState } = FB.useStores();
     dialogState = FB.useRef(FBDialogState);
-    const procedureFormState = FB.useRef(FBProcedureFormState);
 
     // MARK: @reactions
 
@@ -30,7 +29,6 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
 
     // MARK: @methods
     onClick = (part?: FBProcedureItemConfig) => {
-      procedureFormState.fetchPartsOfLot(part?.partLot);
       dialogState?.config({
         open: true,
         title: {
