@@ -31,6 +31,8 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
       borderRadius={4}
       id={name}
       style={{ scrollMarginTop: 50 }}
+      display="flex"
+      flexDirection="row"
     >
       {label && (
         <FBText
@@ -42,7 +44,7 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
           {...{ loading }}
         />
       )}
-      {stepIndex && ` #${stepIndex}`}
+      {stepIndex && (<span>&nbsp;#{stepIndex}</span>)}
       {children}
     </Box>
   </FBInput>
