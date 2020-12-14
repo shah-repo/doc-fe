@@ -111,9 +111,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
       () => formState?.getInputState("partType")?.value,
       (value: PartType) => {
         formState?.getInputState("childrenParts")?.setHidden(value !== PartType.DocumentRevision);
-        // formState?.getInputState("createNewPart")?.setHidden(value !== PartType.DocumentRevision);
         formState?.getInputState("childForRevise")?.setHidden(value === PartType.DocumentRevision);
-        // formState?.setFieldValue(name, "");
       },
       { fireImmediately: true }
       // eslint-disable-next-line react-hooks/exhaustive-deps
