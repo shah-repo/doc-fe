@@ -27,7 +27,7 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
       pb={3}
       color={Colors.hint_gray}
       borderBottom={2}
-      mt={-5}
+      mt={isPreview ? 0 : -5}
     >
       {isOutput && (
         <FBProvider {...{ procedureState }}>
