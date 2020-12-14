@@ -28,6 +28,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
   renderOption,
   loading,
   inlineApprovalExists,
+  isAlphaReleased,
   ...props
 }) => (
   <FBProvider {...{ dialogState }}>
@@ -74,7 +75,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
               &nbsp;| {getFormattedDateString(approval.reviewedAt, MomentFormats.DateTime)}
               </Box>
             )}
-            {approval.canRequest && inlineApprovalExists && (
+            {approval.canRequest && inlineApprovalExists && !isAlphaReleased && (
               <>
                 <Box> |</Box>
                 <FBButton

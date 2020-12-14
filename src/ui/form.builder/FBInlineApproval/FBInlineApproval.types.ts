@@ -55,7 +55,7 @@ export interface FBInlineApprovalBody {
 }
 
 export interface FBInlineApprovalTransitionBody {
-  password: string;
+  password?: string;
 }
 
 export interface FBRequestApprovalTransitionBody {

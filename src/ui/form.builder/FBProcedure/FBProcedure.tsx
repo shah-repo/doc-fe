@@ -17,23 +17,22 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
   ...props
 }) => (
   <FBInput {...props } {...{ name }} type="procedure">
-    {!isOutput && (
-      <FBLabel
-        label={{
-          locale: "form.builder.step.number",
-          values: { number: stepIndex },
-        }}
-      />
-    )}
+    <FBLabel
+      label={{
+        locale: "form.builder.step.number",
+        values: { number: stepIndex },
+      }}
+    />
     <Box
       pb={3}
       color={Colors.hint_gray}
       borderBottom={2}
+      mt={-5}
     >
       {isOutput && (
         <FBProvider {...{ procedureState }}>
           {!isPreview && (
-            <Box display="flex" flexDirection="row-reverse" mb={-2.5} zIndex={100}>
+            <Box display="flex" flexDirection="row-reverse" mb={1} mt={2.5}>
               <FBButton
                 label="form.builder.clone.step"
                 style={{ textTransform: "none", margin: 0 }}

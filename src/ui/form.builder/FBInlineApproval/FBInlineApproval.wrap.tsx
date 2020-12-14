@@ -4,7 +4,6 @@ import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
 import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from "..";
 import { store } from "../../../state/store";
-import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBDialogState } from "../FBDialog/FBDialog.state";
 import { FBRequestApprovalTransitionBody } from "./FBInlineApproval.types";
@@ -55,8 +54,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       approvals: fieldApprovals,
       isOwner,
     });
-    const isAlphaReleased = isDocumentAlphaReleased(document?.revisionStage);
-    const shouldShowRequestAllApprovals = isOwner && !isEmpty(inlineApprovalState.getApprovals) && !isAlphaReleased;
+
+    const shouldShowRequestAllApprovals = isOwner && !isEmpty(inlineApprovalState.getApprovals);
     dialogState = FB.useRef(FBDialogState);
     const shouldShowApprovals = document?.status === "DRAFT" || document?.status === "IN_REVIEW";
 
@@ -208,7 +207,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
     // MARK: @methods
     approvalTransition = (transition: FBInlineApprovalTransition, id?: string, password?: string) => {
-      if (!id || !password) { return; }
+      if (!id) { return; }
       inlineApprovalState?.approvalTransition(transition, id, { password });
     };
 

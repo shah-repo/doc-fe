@@ -7,6 +7,7 @@ import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
+import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
 import { FBApprovalsProps, FBApprovalsStatusEndpoint } from "./FBApprovals.types";
 
 export const withFBApprovals = <T extends FBApprovalsProps>(
@@ -43,6 +44,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     const {
       owner: { user: { id: userId = "" } = {} } = {},
     } = document || changeRequest || {};
+    const isAlphaReleased = isDocumentAlphaReleased(document?.revisionStage);
 
     disabled = disabled || isUndefined(id) || loading;
     if (document?.status === DocumentRevisionStatus.InReview
@@ -63,9 +65,9 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     );
     dialogState = FB.useRef(FBDialogState);
 
-    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string) => {
+    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
       if (!approvalId) { return; }
-      approvalsState?.applyTransition(transition, approvalId);
+      approvalsState?.applyTransition(transition, approvalId, { password });
     };
 
     function includesApprover(group: FBRequiredApprover, approver: string): boolean {
@@ -205,6 +207,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       ownerId,
       inlineApprovalExists,
       onApproveClick,
+      isAlphaReleased,
     });
   };
 

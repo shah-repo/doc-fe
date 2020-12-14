@@ -114,10 +114,6 @@ export class FBData {
     return aqlOptions as FBOption[];
   }
 
-  public static get eqMaintenanceFieldOptions(): FBOption[] {
-    return eqMaintenanceOptions.fields as FBOption[];
-  }
-
   public static get eqMaintenanceTypeOptions(): FBOption[] {
     return eqMaintenanceOptions.type as FBOption[];
   }
