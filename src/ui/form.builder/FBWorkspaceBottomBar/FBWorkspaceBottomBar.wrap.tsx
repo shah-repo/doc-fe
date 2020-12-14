@@ -16,8 +16,9 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
   }: T) => {
 
     const { workspaceState, dialogState } = FB.useStores();
-    previewDisabled = workspaceState?.mode !== "design";
-    includeTransport = includeTransport && workspaceState?.mode === "design";
+    previewDisabled = !(workspaceState?.mode === "formPreview" || workspaceState?.mode === "design");
+    includeTransport = includeTransport &&
+      (workspaceState?.mode === "formPreview" || workspaceState?.mode === "design");
 
     const readFile = (file: Blob) => {
       const reader = new FileReader();
