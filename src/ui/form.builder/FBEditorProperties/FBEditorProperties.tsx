@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import React from "react";
 import { FBEditorPropertiesDefaultValue, FBEditorPropertiesProps } from ".";
 import { FBCheckboxGroup, FBFieldName } from "..";
@@ -9,7 +10,7 @@ const FBEditorProperties: React.FunctionComponent<FBEditorPropertiesProps> = ({
   type = "",
 }) => (
   <>
-    {options && (
+    {options && !isEmpty(options) && (
       <FBCheckboxGroup
         name={FBFieldName.EditorProps}
         label="form.builder.properties"
