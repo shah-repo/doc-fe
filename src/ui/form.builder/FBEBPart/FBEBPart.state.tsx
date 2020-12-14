@@ -7,6 +7,7 @@ import FBRequest from "../FBApi/FBApi.request";
 export class FBEBPartState {
   // MARK: @observables
   @observable public childrenParts?: string;
+  @observable public childrenPartsForRevise?: string;
 
   // MARK: @config
   public forceNewRender?: boolean;
@@ -18,8 +19,9 @@ export class FBEBPartState {
   public documentApi = new FBRequest<Document, null>(FBEndpoint.Document);
 
   // MARK: @constructor
-  public constructor(childrenParts?: string) {
-    this.childrenParts = childrenParts;
+  public constructor(children: { childrenParts?: string; childrenPartsForRevise?: string }) {
+    this.childrenParts = children.childrenParts;
+    this.childrenPartsForRevise = children.childrenPartsForRevise;
   }
 
   // MARK: @actions

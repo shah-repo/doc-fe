@@ -92,10 +92,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
             return key;
           });
           // TEMPORARY FIX FOR BE VALIDATION
-          formik.setFieldValue("formInput", omit(newInput, ["partType"]));
+          formik.setFieldValue("formInput", omit(newInput, ["partType", "childForRevise"]));
         } else {
           // TEMPORARY FIX FOR BE VALIDATION
-          formik.setFieldValue("formInput", omit(formState?.getValues(), ["partType"]));
+          formik.setFieldValue("formInput", omit(formState?.getValues(), ["partType", "childForRevise"]));
         }
         if (isOutputSchema()) {
           formik.setFieldValue("schema", workspaceState.schema);

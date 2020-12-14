@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBAutocompleteAsync, FBButton, FBData, FBDialog, FBEBPartProps, FBInput, FBProvider, FBRadioGroup } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBDialog, FBEBPartProps, FBInput, FBProvider, FBRadioGroup } from "..";
 import { withFBEBPart } from "./FBEBPart.wrap";
 
 const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
@@ -8,20 +8,18 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
   ebPartState,
   dialogState,
   defaultValue,
-  additionalData,
   loading,
   disabled,
   forceNewRender,
   name,
-  partType = "documentRevision",
   optionId,
+  childrenParts,
+  childrenPartsForRevise,
   ...props
 }) => (
   <FBProvider {...{ dialogState, ebPartState }}>
     <FBDialog />
     <FBRadioGroup
-      omitFormValue
-      defaultValue="documentRevision"
       label="Part Type"
       name="partType"
       gutter={false}
@@ -29,7 +27,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
       options={FBData.partTypeOptions}
     />
     <FBInput type="ebpart">
-      <Box display="flex" alignItems="flex-end">
+      <Box display="flex" alignItems="flex-end" mt={2.5}>
         <Box flexGrow={1}>
           <FBAutocompleteAsync
             label="form.builder.part"
@@ -37,13 +35,29 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
             gutter={false}
             shouldReloadOnInit
             withState
+            name="childrenParts"
+            optionId={FBAutocompleteAsyncOption.availableParts}
+            additionalData={childrenParts}
             {...{
-              optionId,
               disabled,
               loading,
-              name,
               defaultValue,
-              additionalData,
+              forceNewRender,
+            }}
+          />
+          <FBAutocompleteAsync
+            label="form.builder.scheduled.part"
+            placeholder="form.builder.select.existing.part"
+            gutter={false}
+            shouldReloadOnInit
+            withState
+            name="childForRevise"
+            optionId={FBAutocompleteAsyncOption.availablePartDocuments}
+            additionalData={childrenPartsForRevise}
+            {...{
+              disabled,
+              loading,
+              defaultValue,
               forceNewRender,
             }}
           />
@@ -53,7 +67,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
             variant="contained"
             label="form.builder.create.new.part"
             onClick={handleAdd}
-            disabled={disabled || partType === "document"}
+            disabled={disabled}
           />
         </Box>
       </Box>
