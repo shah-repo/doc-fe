@@ -74,7 +74,7 @@ export class FBWorkspaceState extends FBSchemaState {
   @computed public get isStarter() {
     return (
       (this.mode === "design" || this.mode === "formDesign") &&
-      !size(this.schema)
+      !size(this.schema?.filter((item) => !item.deleted))
     );
   }
 
