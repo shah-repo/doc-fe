@@ -58,6 +58,7 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
               values: { number: stepIndex },
             }}
             autosave
+            boxProps={{ style: { color: Colors.black } }}
           />
           <Box
             display="flex"
