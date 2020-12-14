@@ -1,4 +1,5 @@
 import { pick } from "lodash";
+import { getStartOfDayDateString } from "../../../common/utils/date";
 import { ChangeRequest, ChangeRequestEditRequestBody } from "../../../state/ducks/changeRequest";
 import { reactQuillEmptyString } from "../../components/forms/fields/validators";
 import { ChangeRequestFormValues } from "./types";
@@ -44,7 +45,9 @@ export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues):
     description: values.description,
     formInput: {
       ...values.formInput,
-      effectiveDate: values.formInput?.effectiveDate === "" ? null : values.formInput?.effectiveDate,
+      effectiveDate: values.formInput?.effectiveDate === ""
+        ? null
+        : getStartOfDayDateString(values.formInput?.effectiveDate),
     },
   };
   if (!values.id) {
@@ -60,7 +63,9 @@ export const toChangeRequestUpdateRequestBody = (values: ChangeRequestFormValues
     description: values.description,
     formInput: {
       ...values.formInput,
-      effectiveDate: values.formInput?.effectiveDate === "" ? null : values.formInput?.effectiveDate,
+      effectiveDate: values.formInput?.effectiveDate === ""
+        ? null
+        : getStartOfDayDateString(values.formInput?.effectiveDate),
     },
   };
   if (!values.id) {

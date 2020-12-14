@@ -769,6 +769,7 @@
   "form.builder.request.approve": "Approve",
   "form.builder.part": "Part",
   "form.builder.scheduled.part": "Scheduled Part",
+  "form.builder.part.lot": "Part Lot",
   "form.builder.select.existing.part": "Select an existing part",
   "form.builder.create.new.part": "Create a new part",
   "form.builder.procedure": "Procedure",

@@ -30,6 +30,7 @@ export type FBProcedureItemProps =
 export interface FBProcedureItemConfig {
   id: string;
   title: string;
+  partLot?: string;
   quantity?: number;
   unit?: string;
   status?: FBPartItemStatus;
