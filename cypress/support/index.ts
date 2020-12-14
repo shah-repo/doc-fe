@@ -81,7 +81,7 @@ Cypress.on("test:after:run", (test, runnable: any ) => {
 
 before(() => {
   if (CONFIG.RUN_ENVIRONMENT === "pipeline") {
-    const dir = `${CONFIG.SCREENSHOTS_FOLDER}/${Cypress.spec.name}`;
+    const dir = `${CONFIG.DIR_SCREENSHOTS}/${Cypress.spec.name}`;
     console.log(dir);
     cy.task("deleteScreenshotsFolder", dir);
   }

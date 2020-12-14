@@ -23,7 +23,7 @@ export class ConfigEnv {
       SUPERADMIN_EMAIL: Cypress.env("SUPERADMIN_EMAIL"),
       SUPERADMIN_PASSWORD: Cypress.env("SUPERADMIN_PASSWORD"),
       RUN_ENVIRONMENT: Cypress.env("RUN_ENVIRONMENT"),
-      SCREENSHOTS_FOLDER: Cypress.env("SCREENSHOTS_FOLDER"),
+      DIR_SCREENSHOTS: Cypress.env("DIR_SCREENSHOTS"),
     });
 
     const errors = validateSync(configEnv, {
@@ -76,7 +76,7 @@ export class ConfigEnv {
 
   @IsDefined()
   @IsString()
-  SCREENSHOTS_FOLDER!: string;
+  DIR_SCREENSHOTS!: string;
 }
 
 
