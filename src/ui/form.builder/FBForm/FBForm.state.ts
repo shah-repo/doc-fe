@@ -63,6 +63,7 @@ export class FBFormState extends FBSchemaState {
       return defaultValue;
     }
     if (isUndefined(lodashGet(this.values, fieldName)) && !isUndefined(defaultValue)) {
+      this.setValidationValue(fieldName, defaultValue);
       lodashSet(this.initialValues, fieldName, defaultValue);
       lodashSet(this.values, fieldName, defaultValue);
     }
