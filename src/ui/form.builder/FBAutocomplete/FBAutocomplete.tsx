@@ -1,7 +1,7 @@
 import { Box, Chip, IconButton, TextField, Typography } from "@material-ui/core";
 import CachedIcon from "@material-ui/icons/Cached";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
-import { get } from "lodash";
+import { get, isEmpty } from "lodash";
 import React from "react";
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
 import { ApprovalStatus } from "../../../state/ducks/documents";
@@ -47,7 +47,40 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         type="autocomplete"
         disabled={props.name === "approvers" ? false : disabled}
       >
-        <Autocomplete
+        {/* hack forautocomplete, options are rendered after componenet is already shown */}
+        {isEmpty(options) &&
+      <Autocomplete
+        renderInput={(params: RenderInputParams) => (
+          <Box display="flex">
+            <Box width="100%">
+              <TextField
+                {...params}
+                {...!params.InputProps.startAdornment && { placeholder }}
+                onChange={onInputChange}
+                fullWidth
+                variant="outlined"
+                InputProps={{
+                  ...params.InputProps,
+                  ...(refresh) && { style: { paddingRight: "33px" } },
+                }}
+                inputProps={{
+                  ...params.inputProps,
+                  "style": { padding: "10.5px 0" },
+                  "data-cy": props.name,
+                }}
+              />
+            </Box>
+            {refresh && (
+              <Box ml={-4} display="flex" alignItems="center">
+                <IconButton size="small" onClick={refresh} {...{ disabled }}>
+                  <CachedIcon fontSize="small" />
+                </ IconButton>
+              </Box>
+            )}
+          </Box>
+        )}
+      />}
+        {options && options?.length > 0 && <Autocomplete
           {...{
             getOptionDisabled,
             getOptionLabel,
@@ -106,6 +139,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             </FBMapWrapper>
           )}
         />
+        }
       </FBInput>
     </>
   );
