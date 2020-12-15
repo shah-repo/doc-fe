@@ -135,14 +135,20 @@ export class FBFormState extends FBSchemaState {
     if (isUndefined(rules)) {
       return;
     }
-    lodashSet(this.rules, fieldName, rules);
+    this.rules = {
+      ...this.rules,
+      [fieldName]: rules,
+    };
   };
 
   @action public setFieldFinalValidationRules = (fieldName: string, rules: string | undefined) => {
     if (isUndefined(rules)) {
       return;
     }
-    lodashSet(this.finalValidationRulse, fieldName, rules);
+    this.finalValidationRulse = {
+      ...this.finalValidationRulse,
+      [fieldName]: rules,
+    };
   };
 
   @action public setValidationAttributeName = (fieldName: string, attrName: string) => {
@@ -157,7 +163,7 @@ export class FBFormState extends FBSchemaState {
       return;
     }
 
-    const rules = final ? flatten(this.finalValidationRulse) : flatten(this.getRules());
+    const rules = final ? this.finalValidationRulse : this.getRules();
     const values = omitBy(this.validationValues, (v) => isString(v) && isEmpty(v));
 
     // *TODO: unify validators format

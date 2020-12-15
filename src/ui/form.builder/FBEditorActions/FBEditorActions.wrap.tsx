@@ -1,4 +1,4 @@
-import { filter, isString, kebabCase, size, union } from "lodash";
+import { compact, filter, isString, kebabCase, size, union } from "lodash";
 import React from "react";
 import { FBEditorActionsProps } from ".";
 import { FB, FBData, FBSchemaProps } from "..";
@@ -65,9 +65,10 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         uniqueSchemaItem &&
         (workspaceState?.getItemsByType(type).length || 0) > 0
       );
-      let rules = validators && toStringRules && toStringRules(validators);
-      if (type === "eqmaintenance" ) {
-        rules += ",eq_maintenance_required";
+      let rules = validators && toStringRules?.(validators);
+      if (type === "eqmaintenance") {
+        const eqRules = [rules, "eq_maintenance_required"];
+        rules = compact(eqRules).join(",");
       }
       if (isUnique && !formValues.name) { return dialogState?.closeDialog(); }
 
