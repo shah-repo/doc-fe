@@ -87,7 +87,7 @@ export const withFBInput = <T extends FBInputProps>(
       if (!formState) { return; }
       const value = {
         editoroptions() {
-          const options: FBOption[] | undefined = formState?.getFieldValue(name);
+          const options: FBOption[] | undefined = formState?.getFieldValue(name, undefined, omitFormValue);
           if (isString(options)) {
             return;
           }
@@ -98,11 +98,11 @@ export const withFBInput = <T extends FBInputProps>(
         autocompleteasync() { return; },
         autocomplete() { return; },
         datepicker() {
-          return inputState && (inputState.value = formState.getFieldValue(name) || "");
+          return inputState && (inputState.value = formState.getFieldValue(name, undefined, omitFormValue) || "");
         },
         default() {
           isString(initialValue) && transform && (defaultValue = setTranform?.(initialValue));
-          return formState.getFieldValue(name, (isUndefined(defaultValue)) ? defaultChecked : defaultValue);
+          return formState.getFieldValue(name, (isUndefined(defaultValue)) ? defaultChecked : defaultValue, omitFormValue);
         },
       };
       const transDefault = (value[type || ""] || value.default)();

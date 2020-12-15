@@ -58,14 +58,20 @@ export class FBFormState extends FBSchemaState {
   @action public getFieldValue = (
     fieldName: string | undefined,
     defaultValue: any = undefined,
+    omitFormValue = false,
   ): any => {
     if (!fieldName) {
       return defaultValue;
     }
     if (isUndefined(lodashGet(this.values, fieldName)) && !isUndefined(defaultValue)) {
       this.setValidationValue(fieldName, defaultValue);
-      lodashSet(this.initialValues, fieldName, defaultValue);
-      lodashSet(this.values, fieldName, defaultValue);
+      this.initialValues = {
+        ...this.initialValues,
+        [fieldName]: defaultValue,
+      };
+      if (!omitFormValue) {
+        lodashSet(this.values, fieldName, defaultValue);
+      }
     }
     return lodashGet(this.values, fieldName) || lodashGet(this.initialValues, fieldName);
   };
