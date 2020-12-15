@@ -41,6 +41,11 @@ declare global {
       fbEnterLabel(params: { label: string }): Chainable<Subject>;
       fbCheckFields(...list: string[]): Chainable<Subject>;
       fbCheckFieldsDoesntExist(...list: string[]): Chainable<Subject>;
+      fbEditHiddenBtn(): Chainable<Subject>;
+      fbEnterNameValue(params: { name: string, value: string }): Chainable<Subject>;
+      fbVerifyOptions(...list: string[]): Chainable<Subject>;
+      fbVerifyCheckboxValue(...list: string[]): Chainable<Subject>;
+      fbVerifyNameValue(params: { name: string, value: string }): Chainable<Subject>;
     }
   }
 }
@@ -168,3 +173,25 @@ Cypress.Commands.add("fbSelectAutoComplete", () => cy.get("button[data-cy=\"form
 Cypress.Commands.add("fbOpenValidation", () => cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").click());
 
 Cypress.Commands.add("fbAddField", () => cy.get("[data-cy=\"fb-editor-actions-add\"]").click().wait(500));
+
+Cypress.Commands.add("fbEditHiddenBtn", () => cy.get("[data-cy=\"edit-schema-item\"]").click({ force: true }).wait(500));
+
+Cypress.Commands.add("fbEnterNameValue", (params: { name: string, value: string }) => {
+  cy.get(`input[name="${params.name}"]`).clear().type(params.value).click();
+});
+
+Cypress.Commands.add("fbVerifyCheckboxValue", (...list: string[]) => {
+  list.forEach(function(item) {
+    cy.get(`input[value="${item}"]`).should('be.checked');
+  });
+});
+
+Cypress.Commands.add("fbVerifyOptions", (...list: string[]) => {
+  list.forEach(function(item) {
+    cy.get("[data-cy=\"options\"]").should('contain', item);
+  });
+});
+
+Cypress.Commands.add("fbVerifyNameValue", (params: { name: string, value: string }) => {
+  cy.get(`input[name="${params.name}"]`).should("have.value", params.value);
+});
