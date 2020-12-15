@@ -46,7 +46,6 @@ interface OwnProps {
   type?: DocumentCloneType;
   isNewVersion?: boolean;
   pmFormId?: string;
-  input?: any;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps;
@@ -68,7 +67,6 @@ DocumentRevisionFormContainerProps
   type,
   isNewVersion,
   pmFormId,
-  input,
 }) => {
   const bannerPortal = React.useRef(null);
   const loadAction =  useActionCreator(documentRevisionsActions.loadList);
@@ -229,7 +227,6 @@ DocumentRevisionFormContainerProps
           showAdministrativeAndVoidChange,
           pmFormId,
           releasedDocRev,
-          input,
         }}
       />
     </FBWorkspace>
