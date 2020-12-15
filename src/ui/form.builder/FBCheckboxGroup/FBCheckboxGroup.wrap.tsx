@@ -39,7 +39,7 @@ export const withFBCheckboxGroup = <T extends FBCheckboxGroupProps>(
       return (
         <FormControlLabel
           key={`${value}-${index}`}
-          control={<Checkbox {...{ disabled, value, onChange, defaultChecked }} />}
+          control={<Checkbox disabled={disabled || option.disabled} {...{ value, onChange, defaultChecked }} />}
           label={<Text {...{ message }} />}
         />
       );

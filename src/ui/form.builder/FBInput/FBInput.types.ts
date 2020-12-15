@@ -106,7 +106,10 @@ export type FBInputProps =
     isTemplate?: boolean;
     includeQRScan?: boolean;
     designDisabled?: boolean;
+    // field in (output) document with schema
     deleteDisabled?: boolean;
+    // field in form
+    deleteInFormDisabled?: boolean;
     instructionsDocument?: string;
     reviseDisabled?: boolean;
     outputDisabled?: boolean;
