@@ -61,15 +61,11 @@ DocumentRevisionUpdateContainerProps
   useDocumentTitle(docId);
   const status = documentRevision ? documentRevision.status : undefined;
   documentRevisionStatusContextFromCR = React.createContext(status);
-  const [input, setInput] = React.useState({});
 
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const async = useAsync<DocumentRevision>({
-    onSuccess: (data) => {
+    onSuccess: () => {
       setDoNotPrompt(true);
-      if (data?.formInput) {
-        setInput(data.formInput);
-      }
     },
   });
 
@@ -127,7 +123,6 @@ DocumentRevisionUpdateContainerProps
         canChangeOwnerShip={canChangeOwnerShip}
         showRevisionTypeChange
         isNewVersion={isNewVersion}
-        {...{ input }}
       />
     </FormContext.Provider>
   );
