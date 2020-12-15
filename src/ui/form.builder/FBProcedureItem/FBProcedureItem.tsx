@@ -91,12 +91,13 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
                 unit: item.unit,
               }}
               boxProps={{
+                color: Colors.black,
                 flexGrow: 1,
               }}
             />
             {!isPreview && (
               <>
-                <Box color={Colors.gray}>
+                <Box>
                   <IconButton
                     color="inherit"
                     size="small"
