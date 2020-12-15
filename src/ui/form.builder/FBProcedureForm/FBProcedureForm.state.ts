@@ -11,8 +11,8 @@ export class FBProcedureFormState {
   public getParts: FBRequest<Document, null> = new FBRequest(FBEndpoint.Parts);
 
   // MARK: @observables
-  @observable public lotsToPart: DocumentRevision[] = [];
-  @observable public partsOfLot: DocumentRevision[] = [];
+  @observable public lotsToPart: DocumentRevision[] | undefined = undefined;
+  @observable public partsOfLot: DocumentRevision[] | undefined = undefined;
   @observable public defaultParts: DocumentRevision[] = [];
 
   // MARK: @config

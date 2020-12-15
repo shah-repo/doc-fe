@@ -21,6 +21,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
   partOptions,
   handleChangeOfPart,
   handleChangeOfLot,
+  disabled,
 }) => (
   <FBForm {...{ formState, initialValues }} >
     <FBTextField
@@ -39,6 +40,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
         onChange={handleChangeOfPart}
         freeSolo
         withState
+        {...{ disabled }}
       />
       <FBAutocomplete
         name="partLot"
@@ -47,6 +49,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
         options={lotOptions}
         onChange={handleChangeOfLot}
         withState
+        {...{ disabled }}
       />
     </>
     }
