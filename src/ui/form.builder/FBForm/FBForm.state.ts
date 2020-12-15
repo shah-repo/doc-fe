@@ -75,7 +75,10 @@ export class FBFormState extends FBSchemaState {
       // validatorjs doesn't validate boolean values
       value = `${value}`;
     }
-    setWith(this.validationValues, fieldName, value);
+    this.validationValues = {
+      ...this.validationValues,
+      [fieldName]: value,
+    };
   };
 
   @action public setFieldValue = (
