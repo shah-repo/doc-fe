@@ -122,6 +122,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
           ))
         )}
         multiple
+        disableClearable
       />
     </Field>
   ); };
