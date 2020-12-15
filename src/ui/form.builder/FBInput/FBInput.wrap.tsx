@@ -75,11 +75,11 @@ export const withFBInput = <T extends FBInputProps>(
 
     if ((isOutput || formState?.workspaceMode !== "design") && formState?.workspaceMode !== "formPreview") {
       (isUndefined(hidden) && validationMode === "visibility") && (hidden =
-        !helperText && (!validationValue || validationValue === "" || size(validationValue) === 0)
+        !helperText && (isUndefined(validationValue) || validationValue === "" || size(validationValue) === 0)
       );
 
       (!disabled && validationMode === "disabled") && (disabled =
-        !helperText && (!validationValue || validationValue === "" || size(validationValue) === 0)
+        !helperText && (isUndefined(validationValue) || validationValue === "" || size(validationValue) === 0)
       );
     }
 
