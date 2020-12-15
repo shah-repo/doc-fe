@@ -23,7 +23,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       {...{ label }}
       name={`${name}-section`}
     >
-      <Box display="flex" flexDirection="row-reverse" mt={-3.5}>
+      <Box display="flex" flexDirection="row-reverse">
         <FBButton
           variant="text"
           endIcon={<AddCircleIcon />}
