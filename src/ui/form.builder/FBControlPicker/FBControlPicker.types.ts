@@ -18,4 +18,4 @@ export type FBControlPickerType =
 | "instructions"
 | "actions";
 
-export type FBControlPickerDataProps = Record<FBControlPickerType, FBInputType[]>;
+export type FBControlPickerDataProps = Partial<Record<FBControlPickerType, FBInputType[]>>;
