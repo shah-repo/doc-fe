@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { first, get, includes, isBoolean, isEqual, isString, isUndefined } from "lodash";
+import { first, get, includes, isBoolean, isEqual, isString, isUndefined, size } from "lodash";
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
@@ -75,11 +75,11 @@ export const withFBInput = <T extends FBInputProps>(
 
     if ((isOutput || formState?.workspaceMode !== "design") && formState?.workspaceMode !== "formPreview") {
       (isUndefined(hidden) && validationMode === "visibility") && (hidden =
-        !helperText && (isUndefined(validationValue) || validationValue === "")
+        !helperText && (isUndefined(validationValue) || validationValue === "" || size(validationValue) === 0)
       );
 
       (!disabled && validationMode === "disabled") && (disabled =
-        !helperText && (isUndefined(validationValue) || validationValue === "")
+        !helperText && (isUndefined(validationValue) || validationValue === "" || size(validationValue) === 0)
       );
     }
 
@@ -121,7 +121,7 @@ export const withFBInput = <T extends FBInputProps>(
         disabled,
         onChange,
         onBlur,
-        value,
+        ...(type !== "autocomplete" && { value }),
         ...(type === "textfield" && { error }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
         ...( workspaceState?.mode === "preview" && { className: FBClasses.inputPreview }),
