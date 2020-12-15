@@ -26,6 +26,15 @@ export class FBControlPickerState {
   };
 
   public get pickers(): FBControlPickerDataProps {
+    const isEQ = this.workspaceState?.document?.document?.documentType
+        ?.groupOptions?.includes("EQUIPMENT");
+    if (isEQ) {
+      return {
+        inputs: [
+          ...this.hasEquipmentMaintenance ? ["eqmaintenance"] as FBInputType[] : [],
+        ],
+      };
+    }
     return {
       section: ["section", "subsection", "stepsection", "teststep"],
       inputs: [
