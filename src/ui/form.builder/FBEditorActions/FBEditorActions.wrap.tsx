@@ -65,6 +65,10 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         uniqueSchemaItem &&
         (workspaceState?.getItemsByType(type).length || 0) > 0
       );
+      let rules = validators && toStringRules && toStringRules(validators);
+      if (type === "eqmaintenance" ) {
+        rules += ",eq_maintenance_required";
+      }
       if (isUnique && !formValues.name) { return dialogState?.closeDialog(); }
 
       if (isOutput && !workspaceState?.isMode("formDesign")) {
@@ -72,13 +76,14 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         return;
       }
       additionalSchema();
+
       workspaceState?.setSchemaItemAt({
         index,
         type,
         name: `${kebabCase(label as string)}-${FB.uniqid}`,
         ...formValues,
         ...isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
-        ...validators && toStringRules && { rules: toStringRules(validators) },
+        ...rules && { rules },
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         applicableValidationSchema: true,
         validationAttribute: (label as string) || placeholder,
