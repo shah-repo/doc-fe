@@ -18,6 +18,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     type,
     lotOptions,
     partOptions,
+    disabled,
     ...props
   }: T) => {
     // MARK: @config
@@ -119,16 +120,16 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
 
     // MARK: @observer
     useObserver(() => {
-      lotOptions = procedureFormState?.lotsToPart.map((schemaItem: DocumentRevision) => ({
+      lotOptions = procedureFormState?.lotsToPart?.map((schemaItem: DocumentRevision) => ({
         value: schemaItem.id,
         text: `${schemaItem.document.docId} - rev ${schemaItem.revision} - ${schemaItem.name}`,
       } as SelectOption));
-      partOptions = procedureFormState?.partsOfLot.map((schemaItem: DocumentRevision) => ({
+      partOptions = procedureFormState?.partsOfLot?.map((schemaItem: DocumentRevision) => ({
         value: schemaItem.id,
         text: `${schemaItem.document.docId} - rev ${schemaItem.revision} - ${schemaItem.name}`,
       } as SelectOption));
+      disabled = !procedureFormState?.partsOfLot || !procedureFormState.lotsToPart;
     });
-
 
     return Component({
       ...(props as T),
@@ -141,6 +142,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       partOptions,
       handleChangeOfPart,
       handleChangeOfLot,
+      disabled,
     });
   };
 
