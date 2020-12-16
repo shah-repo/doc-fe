@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, FBOutputDocumentType, RevisionChangeType } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
 import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
@@ -104,18 +104,9 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCreateMaintenance]);
 
-  const formDocument = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, pmFormId),
-  );
-
-  // TODO I guess its ok to use only first doc type?
-  const docType = (formDocument?.formTemplate?.outputDocumentTypes || [])[0] as FBOutputDocumentType;
-
   if (isCreateMaintenance) {
-
     const { docRevId, equipmentSection } = match.params;
-    initialValues.name = `Record from '${formDocument?.name}'`;
-    initialValues.description = `Record from '${formDocument?.name}'`;
+
     initialValues.parentEquipment = {
       id: docRevId,
     };
@@ -128,15 +119,8 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
     initialValues.formDocument = {
       id: pmFormId,
     };
-
-    if ((docType)?.id) {
-      initialValues.document = initialValues.document || {};
-      initialValues.document.docId = undefined;
-      initialValues.document.documentType = initialValues.document.documentType || {};
-      initialValues.document.documentType = docType;
-    }
-
   }
+
   const async = useAsync<DocumentRevision>({
     onSuccess: (createdDocumentRevision?) => {
       if (createdDocumentRevision) {
@@ -159,13 +143,6 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
     loadDocTypes();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (isCreateMaintenance && docType) {
-      loadDocumentProposedId(docType?.id);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isCreateMaintenance, docType?.id ]);
 
   return (
     <DocumentRevisionForm
