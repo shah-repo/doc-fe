@@ -1,10 +1,10 @@
 [
   {
-    "text": "Specific document revision",
+    "text": "Existing Revision",
     "value": "documentRevision"
   },
   {
-    "text": "Document",
+    "text": "New Revision",
     "value": "document"
   }
 ]
