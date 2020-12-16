@@ -46,6 +46,7 @@ export type FBSchemaProps = Pick<FBInputProps,
   | "deleteDisabled"
   | "hidden"
   | "deleted"
+  | "deleteInFormDisabled"
 > & {
   validators?: Dictionary<any>;
 };
