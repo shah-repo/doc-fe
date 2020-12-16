@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { first, get, includes, isBoolean, isEqual, isString, isUndefined, size } from "lodash";
+import { first, get, includes, isArray, isBoolean, isEqual, isString, isUndefined, size } from "lodash";
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
@@ -74,13 +74,15 @@ export const withFBInput = <T extends FBInputProps>(
     const validationValue = get(formState?.validationValues, name);
 
     if ((isOutput || formState?.workspaceMode !== "design") && formState?.workspaceMode !== "formPreview") {
-      (isUndefined(hidden) && validationMode === "visibility") && (hidden =
-        !helperText && (isUndefined(validationValue) || validationValue === "" || size(validationValue) === 0)
+      const isUnderMode = (
+        !helperText && (
+          isUndefined(validationValue) ||
+          validationValue === "" ||
+          (isArray(validationValue) && size(validationValue) === 0)
+        )
       );
-
-      (!disabled && validationMode === "disabled") && (disabled =
-        !helperText && (isUndefined(validationValue) || validationValue === "" || size(validationValue) === 0)
-      );
+      (isUndefined(hidden) && validationMode === "visibility") && (hidden = isUnderMode);
+      (!disabled && validationMode === "disabled") && (disabled = isUnderMode);
     }
 
     function setDefaultValue(): any {
