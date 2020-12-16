@@ -790,7 +790,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Click 'Save' document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Check approvals enfocment", () => {
