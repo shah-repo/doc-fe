@@ -20,6 +20,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     defaultValue,
     additionalData,
     omitFormValue,
+    forceNewRender,
     freeSolo,
     optionId,
     options,
@@ -64,6 +65,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
           ? autocompleteAsyncState?.sliceValue(selectedOptions)
           : slicedOptions;
       }
+      forceNewRender = formState?.getInputState(name || "")?.forceRender;
     });
 
     // Add some static additional data to dynamic store list
@@ -118,6 +120,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       selectedOptions,
       defaultValue,
       omitFormValue,
+      forceNewRender,
       freeSolo,
       multiple,
       name,

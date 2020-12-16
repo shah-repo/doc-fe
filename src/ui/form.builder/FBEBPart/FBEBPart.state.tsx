@@ -10,7 +10,6 @@ export class FBEBPartState {
   @observable public childrenPartsForRevise?: string;
 
   // MARK: @config
-  public forceNewRender?: boolean;
 
   // MARK: @api
   public existingChildApi = new FBRequest<null, EBPartPatchBody>(FBEndpoint.PatchDocumentRevision);
@@ -29,8 +28,6 @@ export class FBEBPartState {
     set(this, "childrenParts", childrenParts);
 
   // MARK: @helpers
-  public setNewRender = (state: boolean) => set(this, "forceNewRender", state);
-
   public addExistingPartChild = (docRevId?: string, body?: EBPartPatchBody) => {
     if (!docRevId) { return; }
     this.existingChildApi.set({
@@ -41,8 +38,9 @@ export class FBEBPartState {
     });
   };
 
-  public addNewPartChild = (body: EBPartPostBody) =>
+  public addNewPartChild = (body: EBPartPostBody) => {
     this.newChildApi.set({ body, method: "post" });
+  }
 
   public fetchProposedDocId = (documentTypeId: string) => this.proposedDocIdApi.set({
     url: FBEndpoint.FetchDocId,

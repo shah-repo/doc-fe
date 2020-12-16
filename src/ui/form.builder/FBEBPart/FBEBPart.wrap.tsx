@@ -13,7 +13,6 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     loading = false,
     disabled = false,
     defaultValue,
-    forceNewRender,
     partTypeDefaultValue,
     childForReviseValue,
     childrenPartsValue,
@@ -106,8 +105,9 @@ export const withFBEBPart = <T extends FBEBPartProps>(
       (data) => {
         // formState?.setFieldValue("partType", "documentRevision", true);
         const { id: partId } = data || {};
-        ebPartState.setNewRender(true);
         FBAutocompleteAsyncStore.add(FBAutocompleteAsyncOption.availableParts, partId, data);
+        formState?.setFieldValue("childrenParts", partId);
+        formState?.getInputState("childrenParts")?.setRender();
         ebPartState?.setChildrenParts(partId);
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -142,7 +142,6 @@ export const withFBEBPart = <T extends FBEBPartProps>(
       childrenPartsForRevise,
       loading,
       disabled,
-      forceNewRender: ebPartState?.forceNewRender,
       partTypeDefaultValue,
       childForReviseValue,
       childrenPartsValue,

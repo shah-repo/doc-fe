@@ -7,10 +7,8 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
   handleAdd,
   ebPartState,
   dialogState,
-  defaultValue,
   loading,
   disabled,
-  forceNewRender,
   childrenParts,
   childrenPartsForRevise,
   partTypeDefaultValue,
@@ -46,7 +44,6 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
             {...{
               disabled,
               loading,
-              forceNewRender,
             }}
           />
           <FBAutocompleteAsync
@@ -64,7 +61,6 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
             {...{
               disabled,
               loading,
-              forceNewRender,
             }}
           />
         </Box>
