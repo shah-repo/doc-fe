@@ -2,6 +2,7 @@ import { isEmpty } from "lodash";
 import React from "react";
 import { FBFieldTopBarProps } from ".";
 import { FB } from "..";
+import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
 import { withFBEditorHelper } from "../FBEditor/FBEditor.helper";
 import { FBSchemaProps } from "../FBSchema";
 
@@ -16,7 +17,14 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
   }: T) => {
 
     const { fieldWrapperState, workspaceState } = FB.useStores();
-    const { documentId } = workspaceState || {};
+    const { documentId, document } = workspaceState || {};
+    const { documentType } = document?.document || {};
+    const isDocumentForm = checkIsDocumentForm(documentType?.groupOptions);
+    const { deleteDisabled, deleteInFormDisabled } = inputProps || {};
+    inputProps = {
+      ...inputProps,
+      deleteDisabled: (isDocumentForm && deleteInFormDisabled) || (!isDocumentForm && deleteDisabled),
+    };
 
     const editSchemaItem = () => {
       openEditor && type && openEditor(inputProps)();

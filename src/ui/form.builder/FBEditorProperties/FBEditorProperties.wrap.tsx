@@ -11,6 +11,7 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     onChange,
     options,
     type,
+    inputProps,
     ...props
   }: T) => {
 
@@ -18,15 +19,14 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     type && (options = FBData.editorPropertiesByType(type));
 
     const { document: docRev, externalState } = workspaceState || {};
-    const docTypeId = docRev?.document.documentType.id;
+    const docTypeId = docRev?.document.documentType.id || "";
     const documentTypesById = externalState?.documentType?.byId;
+    const docGroupOptions = documentTypesById[docTypeId]?.groupOptions;
     const outputDocumentTypes = docRev?.outputDocumentTypes?.map((type) =>
       documentTypesById[type.value]);
+    const isDocumentForm = checkIsDocumentForm(docGroupOptions);
 
     map(FBEditorPropertiesOmitByGroup, (v: string[], k: DocumentGroupOptionsType) => {
-      if (!docTypeId) { return; }
-      const docGroupOptions = documentTypesById[docTypeId].groupOptions;
-      const isDocumentForm = checkIsDocumentForm(docGroupOptions);
       const isOutputInGroup = some(outputDocumentTypes, (type) =>
         checkDocumentGroupOptions(k, type.groupOptions));
       const isDocumentInGroup = checkDocumentGroupOptions(k, docGroupOptions);
@@ -34,6 +34,16 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
         options = filter(options, (option) => !v.includes(get(option, "value"))) as FBOption[];
       }
     });
+
+    options = map(options as FBOption[], (option) => {
+      const isOptionDeleteDisabled = option.value === "deleteDisabled";
+      const { deleteDisabled, deleteInFormDisabled } = inputProps || {};
+      return ({
+        ...option,
+        disabled: isOptionDeleteDisabled
+        && ((isDocumentForm && deleteInFormDisabled) || (!isDocumentForm && deleteDisabled)),
+      });
+    }) as FBOption[];
 
     onChange = (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       const [valueName, checked] = at(ev.target, ["value", "checked"]);
