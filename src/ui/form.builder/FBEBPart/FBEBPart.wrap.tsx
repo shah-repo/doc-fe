@@ -89,7 +89,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
           childrenParts: [],
           formInput: {
             ...formState?.getValues(),
-            childrenPartsForRevise
+            childrenPartsForRevise,
           },
         };
         ebPartState.addExistingPartChild(
@@ -131,6 +131,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         ebPartState?.documentApi.loading
       );
       disabled = disabled || loading;
+      partType = formState?.getInputState("partType")?.value;
     });
 
     return Component({
@@ -147,6 +148,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
       childrenPartsValue,
       name,
       formState,
+      partType,
     });
   };
 

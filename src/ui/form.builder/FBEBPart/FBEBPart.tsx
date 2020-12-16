@@ -14,6 +14,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
   partTypeDefaultValue,
   childForReviseValue,
   childrenPartsValue,
+  partType,
 }) => (
   <FBProvider {...{ dialogState, ebPartState }}>
     <FBDialog />
@@ -69,7 +70,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
             variant="contained"
             label="form.builder.create.new.part"
             onClick={handleAdd}
-            disabled={disabled}
+            disabled={disabled || partType === "document"}
           />
         </Box>
       </Box>
