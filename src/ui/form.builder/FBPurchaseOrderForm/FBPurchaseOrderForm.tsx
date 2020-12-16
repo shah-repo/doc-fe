@@ -39,6 +39,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
           name="partNumber"
           optionId="11"
           onChange={handlePartTitle}
+          rules="required"
           {...{ getOptionDisabled, getOptionLabel }}
         />
         <FBTextField
