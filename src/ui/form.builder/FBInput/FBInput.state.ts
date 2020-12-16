@@ -12,6 +12,7 @@ export class FBInputState {
   @observable public children: React.ReactElement | undefined;
   @observable public autosaveNextValue?: any;
   @observable public hidden?: boolean;
+  @observable public forceRender?: boolean = false;
 
   public constructor({ value, hidden }: FBInputConstructor) {
     this.value = value;
@@ -37,6 +38,10 @@ export class FBInputState {
 
   @action public setHidden = (state: boolean) => {
     set(this, "hidden", state);
+  };
+
+  @action public setRender = () => {
+    set(this, "forceRender", !this.forceRender);
   };
 }
 
