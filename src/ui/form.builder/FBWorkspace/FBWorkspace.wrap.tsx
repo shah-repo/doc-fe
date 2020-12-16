@@ -1,8 +1,9 @@
 
+import { differenceBy, filter, map } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
-import { FB, FBInlineApprovalBody, FBSchemaProps, FBSnackbarState } from "..";
+import { FB, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState } from "..";
 import { store } from "../../../state/store";
 import { FBDialogState } from "../FBDialog";
 
@@ -39,6 +40,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     ...props
   }: T) => {
 
+    const { bookmarkState } = FB.useStores();
     let workspaceSchema: FBSchemaProps[] = [];
     workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
       schema,
@@ -58,6 +60,10 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     );
 
     React.useEffect(() => {
+      const schemaDiff = differenceBy(workspaceState?.schema, schema || [], "name");
+      const sections = filter(schemaDiff, (schemaItem) =>
+        schemaItem.type && FBSectionTypes.includes(schemaItem.type));
+      bookmarkState?.removeBookmarks(map(sections, "name"));
       workspaceState && (workspaceState.schema = schema);
     }, [schema, workspaceState]);
 
