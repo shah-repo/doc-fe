@@ -30,7 +30,6 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
     onDialogConfirm = () => {
       const formValue = formState.getValues();
       ebPartState?.addNewPartChild(formValue as EBPartPostBody);
-      ebPartState?.setNewRender(false);
       onDialogClose?.();
     };
 

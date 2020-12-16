@@ -11,6 +11,9 @@ export type FBEBPartProps =
   partType?: "document" | "documentRevision";
   childrenParts?: DocumentRevision[];
   childrenPartsForRevise?: Document[];
+  partTypeDefaultValue?: string;
+  childForReviseValue?: string;
+  childrenPartsValue?: string;
 };
 
 export interface EBPartPatchBody {
