@@ -16,7 +16,7 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
     ...props
   }: T) => {
 
-    const { fieldWrapperState, workspaceState } = FB.useStores();
+    const { fieldWrapperState, workspaceState, bookmarkState } = FB.useStores();
     const { documentId, document } = workspaceState || {};
     const { documentType } = document?.document || {};
     const isDocumentForm = checkIsDocumentForm(documentType?.groupOptions);
@@ -35,6 +35,9 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
       if (hasValidationRelation(name, rules)) { return; }
       if (documentId && !isEmpty(documentId)) {
         inputProps = { ...inputProps, deleted: true };
+      }
+      if (inputProps?.type === "section") {
+        bookmarkState?.removeBookmark(inputProps?.name as string);
       }
       workspaceState?.removeSchemaItem(inputProps);
     };

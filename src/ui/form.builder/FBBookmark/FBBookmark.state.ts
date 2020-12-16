@@ -23,6 +23,11 @@ export class FBBookmarkState {
     const newBookmarks = filter(this.bookmarks, (bookmark) => !names.includes(bookmark.name || ""));
     set(this, "bookmarks", newBookmarks);
   };
+
+  @action public removeBookmark = (name: string) => {
+    if (!name) { return; }
+    set(this, "bookmarks", filter(this.bookmarks, (bookmark) => bookmark.name !== name));
+  };
 }
 
 export default FBBookmarkState;
