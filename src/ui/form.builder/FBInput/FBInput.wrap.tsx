@@ -102,7 +102,11 @@ export const withFBInput = <T extends FBInputProps>(
         },
         default() {
           isString(initialValue) && transform && (defaultValue = setTranform?.(initialValue));
-          return formState.getFieldValue(name, (isUndefined(defaultValue)) ? defaultChecked : defaultValue, omitFormValue);
+          return formState.getFieldValue(
+            name,
+            (isUndefined(defaultValue)) ? defaultChecked : defaultValue,
+            omitFormValue
+          );
         },
       };
       const transDefault = (value[type || ""] || value.default)();

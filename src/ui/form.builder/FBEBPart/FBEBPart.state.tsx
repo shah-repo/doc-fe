@@ -40,7 +40,7 @@ export class FBEBPartState {
 
   public addNewPartChild = (body: EBPartPostBody) => {
     this.newChildApi.set({ body, method: "post" });
-  }
+  };
 
   public fetchProposedDocId = (documentTypeId: string) => this.proposedDocIdApi.set({
     url: FBEndpoint.FetchDocId,
