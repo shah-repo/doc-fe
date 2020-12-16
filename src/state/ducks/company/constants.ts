@@ -68,10 +68,10 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
   {
     label: "Supplier Management",
     type: "MENU",
-    icon: "/navigation_icons/tools.svg",
+    icon: "/navigation_icons/supplier-menu.svg",
     menu: [
       {
-        icon: "/navigation_icons/delivery.svg",
+        icon: "/navigation_icons/supplier-list.svg",
         type: "CATEGORY",
         label: "Supplier List",
         category: "Supplier",
