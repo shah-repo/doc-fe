@@ -20,7 +20,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
   <FBProvider {...{ dialogState, ebPartState }}>
     <FBDialog />
     <FBRadioGroup
-      label="Part Type"
+      label="form.builder.part.revision"
       name="partType"
       gutter={false}
       withState
@@ -46,7 +46,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
             }}
           />
           <FBAutocompleteAsync
-            label="form.builder.scheduled.part"
+            label="form.builder.part"
             placeholder="form.builder.select.existing.part"
             gutter={false}
             shouldReloadOnInit
