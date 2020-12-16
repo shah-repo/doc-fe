@@ -44,9 +44,6 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         procedureFormState?.fetchLots();
         procedureFormState?.fetchParts();
       }
-      if (!initialValues?.partLot) {
-        procedureFormState?.fetchParts();
-      }
       procedureFormState?.fetchPartsOfLot(initialValues?.partLot);
 
       dialogState?.setActions(
@@ -104,7 +101,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
 
     function handleChangeOfPart() {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
-      if (!formValue.title) {
+      // freeSolo or empty
+      if (!formValue.title ||
+        isEmpty(procedureFormState?.defaultParts.filter((e) => e.id === formValue?.title))) {
         return;
       }
       procedureFormState?.fetchLotsToPart(formValue.title);
