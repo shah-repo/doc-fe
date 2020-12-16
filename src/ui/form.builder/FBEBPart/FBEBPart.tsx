@@ -70,7 +70,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
             variant="contained"
             label="form.builder.create.new.part"
             onClick={handleAdd}
-            disabled={disabled || partType === "document"}
+            disabled={disabled || partType === PartType.Document}
           />
         </Box>
       </Box>
