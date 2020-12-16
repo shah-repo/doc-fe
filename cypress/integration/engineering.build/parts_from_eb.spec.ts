@@ -303,11 +303,15 @@ context("Parts from EB flow test", () => {
         });
 
         it("Choose a document type", () => {
-          cy.ebChoosePartType({ partName: PART_DOCUMENT_TYPE_NAME });
+          cy.wrapWithWaitOnApiCall(CyRoutes.GetProposedDocId, () => {
+            cy.ebChoosePartType({ partName: PART_DOCUMENT_TYPE_NAME });
+          });
         });
 
         it("Create the part", () => {
-          cy.get("[data-cy=\"common.confirm\"]").click();
+          cy.wrapWithWaitOnApiCall(CyRoutes.PostDocRev, () => {
+            cy.get("[data-cy=\"common.confirm\"]").click();
+          });
         });
       });
 
@@ -315,7 +319,11 @@ context("Parts from EB flow test", () => {
 
     context("Submit for Approval", () =>  {
       it("Save EB", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCalls(
+          [CyRoutes.PatchDocRev], () => {
+            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+          });
+        cy.wait(500);
       });
 
       it("Submit for Approval", () => {

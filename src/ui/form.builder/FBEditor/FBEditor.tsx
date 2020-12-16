@@ -22,7 +22,7 @@ const FBEditor: React.FunctionComponent<FBEditorProps> = ({
         )}
         <FBEditorProperties
           key={`fb-editor-props-${type}-${index}`}
-          {...{ type }}
+          {...{ type, inputProps }}
         />
       </Box>
       {underValidation && (

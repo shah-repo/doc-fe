@@ -15,7 +15,7 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
   const dialog = useDialog();
-  const schema = documentRevision?.formDocument?.formTemplate?.schema;
+  const schema = documentRevision?.schema || documentRevision?.formDocument?.formTemplate?.schema;
   const input = documentRevision?.formInput || {};
   const omitExportFields = [
     "subsection",

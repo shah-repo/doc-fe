@@ -1,11 +1,11 @@
 import { Box, IconButton } from "@material-ui/core";
+import ReplayIcon from "@material-ui/icons/Replay";
 import { Provider } from "mobx-react";
 import React from "react";
 import { FBButton, FBDialog, FBInput, FBSection, FBTooltip } from "..";
 import { FBPOApprovalMatrixFieldProps, FBPOApprovalMatrixTableProps } from "./FBPOApprovalMatrix.types";
 import { withFBPOApprovalMatrix } from "./FBPOApprovalMatrix.wrap";
 import FBPOApprovalMatrixTable from "./table/FBPOApprovalMatrixTable";
-import ReplayIcon from "@material-ui/icons/Replay";
 
 const FBPOApprovalMatrix: React.FunctionComponent<FBPOApprovalMatrixFieldProps> = ({
   handleAdd,
@@ -21,7 +21,7 @@ const FBPOApprovalMatrix: React.FunctionComponent<FBPOApprovalMatrixFieldProps> 
     <FBInput {...{ name, autosave }} disabled={props.disabled} type="poApprovalMatrix">
       <Box mt={3}>
         <FBSection name={`fb-poam-section-${name}`} label={props.label}>
-          <Box display="flex" flexDirection="row-reverse" mt={-3.5}>
+          <Box display="flex" flexDirection="row-reverse">
             <IconButton color="inherit" size="small" onClick={handleRevert} >
               <FBTooltip title='Revert to initial'>
                 <ReplayIcon />

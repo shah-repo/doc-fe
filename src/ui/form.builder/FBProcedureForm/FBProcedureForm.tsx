@@ -1,11 +1,14 @@
-import { Box } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { FBAutocomplete, FBAutocompleteAsync, FBData, FBForm, FBProcedureFormProps, FBTextField } from "..";
+import Text from "../../components/Text";
+import { FBFileUpload } from "../FBFileUpload";
 import { FBProcedureItemType } from "../FBProcedureItem";
 import { FBQuantityField } from "../FBQuantityField";
 import { FB } from "../helpers";
 import { withFBProcedureForm } from "./FBProcedureForm.wrap";
+
 
 const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
   formState,
@@ -18,6 +21,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
   partOptions,
   handleChangeOfPart,
   handleChangeOfLot,
+  disabled,
 }) => (
   <FBForm {...{ formState, initialValues }} >
     <FBTextField
@@ -36,6 +40,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
         onChange={handleChangeOfPart}
         freeSolo
         withState
+        {...{ disabled }}
       />
       <FBAutocomplete
         name="partLot"
@@ -44,6 +49,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
         options={lotOptions}
         onChange={handleChangeOfLot}
         withState
+        {...{ disabled }}
       />
     </>
     }
@@ -57,23 +63,29 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
     />
     }
     {type === FBProcedureItemType.materials && (
-      <Box display="flex">
-        <Box width="50%" mr={1}>
-          <FBQuantityField
-            name="quantity"
-            label="form.builder.quantity"
-          />
+      <>
+        <Box display="flex">
+          <Box width="50%" mr={1}>
+            <FBQuantityField
+              name="quantity"
+              label="form.builder.quantity"
+            />
+          </Box>
+          <Box width="50%" ml={1}>
+            <FBAutocomplete
+              label="form.builder.unit"
+              name="unit"
+              options={FBData.unitsOptions}
+              optionValueKey="value"
+              optionLabelKey="text"
+            />
+          </Box>
         </Box>
-        <Box width="50%" ml={1}>
-          <FBAutocomplete
-            label="form.builder.unit"
-            name="unit"
-            options={FBData.unitsOptions}
-            optionValueKey="value"
-            optionLabelKey="text"
-          />
-        </Box>
-      </Box>
+        <Typography variant="h6" style={{ marginBottom: 16 }} >
+          <Text message="common.attachments"/>
+        </Typography>
+        <FBFileUpload name="attachments" />
+      </>
     )}
     {children}
   </FBForm>

@@ -335,6 +335,11 @@ context("Equipment maintenance test", () => {
       cy.get("[name*=\"frequency\"]").eq(0).type("10");
     });
 
+    it("Type preventative maintenance instruction", () => {
+      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]").eq(0)
+      .type("Instructions for preventative maintenance");
+    });
+
     it("Select document 'Yes' for calibration required", () => {
       cy.get("[value=\"Yes\"]").eq(1).click();
     });
@@ -346,6 +351,12 @@ context("Equipment maintenance test", () => {
 
     it("Select calibration frequency", () => {
       cy.get("[name*=\"frequency\"]").eq(1).type("5");
+    });
+
+    it("Type preventative maintenance instruction", () => {
+      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]").eq(1)
+      .click()
+      .type("Instructions for calibration");
     });
 
     it("Save document", () => {

@@ -355,6 +355,7 @@ context("Procedure and parts flow test", () => {
       it("Add procedure field", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectCustomFieldToAdd({ name: "Procedure" });
+        cy.get("[value=\"copyableValue\"]").check();
         cy.fbAddField();
       });
     });
@@ -453,7 +454,9 @@ context("Procedure and parts flow test", () => {
 
   context("Clone EB and verify materials and equipment tracking", () => {
     it("Click Clone EB", () => {
-      cy.ebClickClone();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {{
+        cy.ebClickClone();
+      }});
     });
 
     context("Add materials and equipments", () => {
