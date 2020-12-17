@@ -85,6 +85,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
       () => formState?.inputState.get("childForRevise")?.value,
       (childPartId: string) => {
         const childrenPartsForRevise = childPartId && childPartId !== "" ? [{ id: childPartId }] : [];
+        formState?.setFieldValue("childrenPartsForRevise", childrenPartsForRevise);
         const body = {
           childrenParts: [],
           formInput: {
