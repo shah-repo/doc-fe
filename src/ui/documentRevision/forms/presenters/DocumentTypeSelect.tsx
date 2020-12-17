@@ -1,5 +1,4 @@
 import { useFormikContext } from "formik";
-import { isEmpty } from "lodash";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -130,7 +129,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     }
     if (!isCreateMaintenance) {
       workspaceState?.setMode(mode);
-      if (isNewOutput && isEmpty(scheme)) {
+      if (isNewOutput) {
         return;
       }
       workspaceState?.setSchema(scheme); }
