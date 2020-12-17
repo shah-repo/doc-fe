@@ -73,7 +73,7 @@ DocumentRevisionFormContainerProps
   const loadDocumentAction = useActionCreator(documentsActions.getDocumentById);
   const [releasedDocRev, setReleasedDocRev] = useState<DocumentRevision>();
 
-  const docId = initialValues.document?.docId || "";
+  const docId = initialValues.document?.docId;
   const documentType = initialValues.document?.documentType;
   const documentTypeAcronym = initialValues.document?.documentType?.documentTypeAcronym;
   const { revisionStage } = documentRevision || {};
@@ -134,7 +134,7 @@ DocumentRevisionFormContainerProps
   }, [canUpdateHTML, initialValues, groupOptions, pmForm]);
 
   useEffect(() => {
-    if (type !== "newVersion" && docId && loadDocumentProposedId && documentTypeAcronym) {
+    if (type !== "newVersion" && !docId && loadDocumentProposedId && documentTypeAcronym) {
       loadDocumentProposedId(documentType?.id as string);
     }
     if (setDocId && docId) {
