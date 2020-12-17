@@ -127,8 +127,12 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         workspaceState?.getSchema(),
       ); }
     }
-    if (!isCreateMaintenance) { workspaceState?.setMode(mode);
-    workspaceState?.setSchema(scheme); }
+    if (!isCreateMaintenance) {
+      workspaceState?.setMode(mode);
+      if (isNewOutput) {
+        return;
+      }
+      workspaceState?.setSchema(scheme); }
   };
 
   if (!isVisible && type !== "newOutput") {

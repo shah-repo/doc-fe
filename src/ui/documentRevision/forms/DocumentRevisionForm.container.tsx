@@ -73,7 +73,7 @@ DocumentRevisionFormContainerProps
   const loadDocumentAction = useActionCreator(documentsActions.getDocumentById);
   const [releasedDocRev, setReleasedDocRev] = useState<DocumentRevision>();
 
-  const docId = initialValues.document?.id || "";
+  const docId = initialValues.document?.docId;
   const documentType = initialValues.document?.documentType;
   const documentTypeAcronym = initialValues.document?.documentType?.documentTypeAcronym;
   const { revisionStage } = documentRevision || {};
@@ -81,7 +81,8 @@ DocumentRevisionFormContainerProps
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const documentTypesById = useSelector(documentTypeSelectors.byId);
-  let document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, docId));
+  let document = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocument(state, initialValues.document?.id || ""));
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const pmForm = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, pmFormId || ""),);
@@ -133,7 +134,7 @@ DocumentRevisionFormContainerProps
   }, [canUpdateHTML, initialValues, groupOptions, pmForm]);
 
   useEffect(() => {
-    if (type !== "newVersion" && docId && loadDocumentProposedId && documentTypeAcronym) {
+    if (type !== "newVersion" && !docId && loadDocumentProposedId && documentTypeAcronym) {
       loadDocumentProposedId(documentType?.id as string);
     }
     if (setDocId && docId) {
