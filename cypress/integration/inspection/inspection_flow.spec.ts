@@ -1129,7 +1129,7 @@ context("Inspection flow", () => {
     });
 
     it("Enter quantity received", () => {
-      cy.get("[name=\"lot_quantity\"]").type("6");
+      cy.get("[name=\"lot_quantity\"]").type("12");
     });
 
     it("Check 100% override", () => {
@@ -1200,11 +1200,11 @@ context("Inspection flow", () => {
       });
 
       it("Fill 'Rework' textfield", () => {
-        cy.get("[name=lot_summary_rework]").type("1");
+        cy.get("[name=lot_summary_rework]").type("4");
       });
 
       it("Fill 'Use As Is' textfield", () => {
-        cy.get("[name=lot_summary_use_as_is]").type("1");
+        cy.get("[name=lot_summary_use_as_is]").type("2");
       });
 
       it("Fill 'Return To Vendor' textfield", () => {
@@ -1212,7 +1212,7 @@ context("Inspection flow", () => {
       });
 
       it("Fill 'Restricted Use' textfield", () => {
-        cy.get("[name=lot_summary_restricted_use]").type("1");
+        cy.get("[name=lot_summary_restricted_use]").type("3");
       });
     });
 
@@ -1236,6 +1236,74 @@ context("Inspection flow", () => {
 
       it("Check status is 'Released'", () => {
         cy.drCheckDocumentStatus({ status: "Released" });
+      });
+
+      it("Check referenced by parts", () => {
+        cy.get("[data-cy=\"common.referenced.by\"]")
+          .should("contain.text", "SAL-00004 - A - <p>Inspection Document description</p> - 3 Restricted Use");
+        cy.get("[data-cy=\"common.referenced.by\"]")
+          .should("contain.text", "SAL-00003 - A - <p>Inspection Document description</p> - 2 Use as Is");
+        cy.get("[data-cy=\"common.referenced.by\"]")
+          .should("contain.text", "SAL-00002 - A - <p>Inspection Document description</p> - 4 Rework");
+      });
+    });
+
+    context("Check created parts to verify correct quantity", () => {
+      context("Verify created record for 'Restricted Use'", () => {
+        it("Navigate to records", () => {
+          cy.navigToRecords();
+        });
+
+        it("Clear filter", () => {
+          cy.dlClearFilters();
+        });
+
+        it("Open 'Restricted Use' record", () => {
+          cy.dlFilterByDocId({ docId: "SAL-00004" });
+          cy.dlSelectFirstDocument();
+        });
+
+        it("Verify quantity value", () => {
+          cy.get("[name=\"lot_quantity\"]").should("have.attr", "value", "3");
+        });
+      });
+
+      context("Verify created record for 'Use as is'", () => {
+        it("Navigate to records", () => {
+          cy.navigToRecords();
+        });
+
+        it("Clear filter", () => {
+          cy.dlClearFilters();
+        });
+
+        it("Open 'Restricted Use' record", () => {
+          cy.dlFilterByDocId({ docId: "SAL-00003" });
+          cy.dlSelectFirstDocument();
+        });
+
+        it("Verify quantity value", () => {
+          cy.get("[name=\"lot_quantity\"]").should("have.attr", "value", "2");
+        });
+      });
+
+      context("Verify created record for 'Rework'", () => {
+        it("Navigate to records", () => {
+          cy.navigToRecords();
+        });
+
+        it("Clear filter", () => {
+          cy.dlClearFilters();
+        });
+
+        it("Open 'Restricted Use' record", () => {
+          cy.dlFilterByDocId({ docId: "SAL-00002" });
+          cy.dlSelectFirstDocument();
+        });
+
+        it("Verify quantity value", () => {
+          cy.get("[name=\"lot_quantity\"]").should("have.attr", "value", "4");
+        });
       });
     });
   });
