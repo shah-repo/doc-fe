@@ -1107,7 +1107,7 @@ context("Inspection flow", () => {
     });
   });
 
-  context("Create Inspection Form", () => {
+  context("Create Inspection document", () => {
     it("Create inspection from Form", () => {
       cy.drCreateNewDocumentFromForm();
     });
@@ -1120,36 +1120,123 @@ context("Inspection flow", () => {
       cy.drEnterDocumentDescription({ description: "Inspection Document description" });
     });
 
+    it("Change document type", () => {
+      cy.drSelectDocumentType({ documentType: "Subassembly Lot" });
+    });
+
     it("Add reference to part", () => {
       cy.drSelectReferences("New Part for Inspection");
     });
 
     it("Enter quantity received", () => {
-      cy.get("[name=\"lot_quantity\"]").type("5");
+      cy.get("[name=\"lot_quantity\"]").type("6");
     });
 
     it("Check 100% override", () => {
       cy.get("[value=\"100% Inspection Override\"]").check();
     });
 
-    it("Change document type", () => {
-      cy.drSelectDocumentType({ documentType: "Finished Good Lot" });
-    });
-
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Add approvals", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    context("Fill samples with values", () => {
+      it("Insert height for 'SAMPLE-1'", () => {
+        cy.get("input[name^=height]").eq(0).type("30");
+      });
+
+      it("Insert width for 'SAMPLE-1'", () => {
+        cy.get("input[name^=width]").eq(0).type("30");
+      });
+
+      it("Insert height for 'SAMPLE-2'", () => {
+        cy.get("input[name^=height]").eq(1).type("40");
+      });
+
+      it("Insert width for 'SAMPLE-2'", () => {
+        cy.get("input[name^=width]").eq(1).type("40");
+      });
+
+      it("Insert height for 'SAMPLE-3'", () => {
+        cy.get("input[name^=height]").eq(2).type("50");
+      });
+
+      it("Insert width for 'SAMPLE-3'", () => {
+        cy.get("input[name^=width]").eq(2).type("50");
+      });
+
+      it("Insert height for 'SAMPLE-4'", () => {
+        cy.get("input[name^=height]").eq(3).type("60");
+      });
+
+      it("Insert width for 'SAMPLE-4'", () => {
+        cy.get("input[name^=width]").eq(3).type("60");
+      });
+
+      it("Insert height for 'SAMPLE-5'", () => {
+        cy.get("input[name^=height]").eq(4).type("70");
+      });
+
+      it("Insert width for 'SAMPLE-5'", () => {
+        cy.get("input[name^=width]").eq(4).type("70");
+      });
+
+      it("Insert height for 'SAMPLE-6'", () => {
+        cy.get("input[name^=height]").eq(5).type("80");
+      });
+
+      it("Insert width for 'SAMPLE-6'", () => {
+        cy.get("input[name^=width]").eq(5).type("80");
+      });
     });
 
-    it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+    context("Fill lot summary", () => {
+      it("Fill 'Accepted' textfield", () => {
+        cy.get("[name=lot_summary_accepted]").type("1");
+      });
+
+      it("Fill 'Scrapped' textfield", () => {
+        cy.get("[name=lot_summary_scrapped]").type("1");
+      });
+
+      it("Fill 'Rework' textfield", () => {
+        cy.get("[name=lot_summary_rework]").type("1");
+      });
+
+      it("Fill 'Use As Is' textfield", () => {
+        cy.get("[name=lot_summary_use_as_is]").type("1");
+      });
+
+      it("Fill 'Return To Vendor' textfield", () => {
+        cy.get("[name=lot_summary_return_to_vendor]").type("1");
+      });
+
+      it("Fill 'Restricted Use' textfield", () => {
+        cy.get("[name=lot_summary_restricted_use]").type("1");
+      });
     });
 
-    it("Approve inspection document", () => {
-      cy.ebApprove();
+
+    context("Release Inspection document", () => {
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Add approvals", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      });
+
+      it("Submit for approval", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Approve inspection document", () => {
+        cy.ebApprove();
+      });
+
+      it("Check status is 'Released'", () => {
+        cy.drCheckDocumentStatus({ status: "Released" });
+      });
     });
   });
 });
