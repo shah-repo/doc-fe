@@ -35,7 +35,6 @@ export const getFBSchemeByDocType = (
 
   const outputTypes = map(formValue.outputDocumentTypes as OptionType[], "value");
   const outputTypesWithGroups = outputTypes?.map((docType) => documentTypesById[docType]);
-
   const tplType = get(formValue, "document.documentType.id") || "";
   const documentTypes = union([tplType], outputTypes);
 
@@ -46,7 +45,7 @@ export const getFBSchemeByDocType = (
     const typeScheme = map(rec.schema, ((schemaItem) => ({
       ...schemaItem,
       ...find(originScheme, { name: schemaItem.name }),
-      deleteDisabled: true,
+      deleteDisabled: schemaItem.deleteInFormDisabled,
     })));
     return unionBy(scheme, typeScheme, "name");
   }, [] as FBSchemaProps[]);

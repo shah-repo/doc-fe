@@ -1,4 +1,4 @@
-import { filter, find, groupBy, isArray, last, map, sortBy, union } from "lodash";
+import { filter, find, get, groupBy, isArray, last, map, sortBy, union } from "lodash";
 import { action, computed, set } from "mobx";
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncOption, FBData } from "..";
 import FBRequest from "../FBApi/FBApi.request";
@@ -78,6 +78,11 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
         );
       case FBAutocompleteAsyncOption.officialGroups:
         return filter(union(data, this.additionalData), { isOfficial: true });
+      case FBAutocompleteAsyncOption.availablePartDocuments:
+        return map(data, (doc) => ({
+          ...doc,
+          documentRevisions: get(doc, "documentRevisions[0]"),
+        }));
       default: return union(data, this.additionalData);
     }
   };

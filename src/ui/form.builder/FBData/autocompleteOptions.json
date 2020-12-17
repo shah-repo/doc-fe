@@ -225,7 +225,7 @@
     "path": "/documents/available_parts",
     "label": "Available Part Documents",
     "valueKey": "id",
-    "labelKey": "documentRevisions[0].name",
+    "labelKey": "documentRevisions.name",
     "labelPrefixRoot": "docId",
     "root": ""
   }
