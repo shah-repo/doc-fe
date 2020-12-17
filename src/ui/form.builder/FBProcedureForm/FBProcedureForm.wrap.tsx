@@ -44,6 +44,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         procedureFormState?.fetchLots();
         procedureFormState?.fetchParts();
       }
+      if (!initialValues?.partLot) {
+        procedureFormState?.fetchParts();
+      }
       procedureFormState?.fetchPartsOfLot(initialValues?.partLot);
 
       dialogState?.setActions(
