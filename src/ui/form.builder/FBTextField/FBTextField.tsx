@@ -28,7 +28,13 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
         data-cy={dataCy ? dataCy : props.name}
         label=""
         variant="outlined"
-        {...{ type, rows, error, multiline, inputProps, InputProps, style, onBlur, placeholder }}
+        inputProps={{
+          ...inputProps,
+          ...(type === "number") && {
+            onWheel: (e) => { e.currentTarget.blur(); }
+          }
+        }}
+        {...{ type, rows, error, multiline, InputProps, style, onBlur, placeholder }}
       />
     )}
   </FBInput>
