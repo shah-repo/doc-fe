@@ -1,6 +1,5 @@
 import { DocumentRevision, DocumentRevisionStatus, Reference } from "../../../state/ducks/documentRevisions";
 import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
-import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
 import { documentVersionPath } from "./paths";
 import { ReferenceSummary } from "./types";
 
@@ -56,12 +55,6 @@ export const getReferenceToSummary = (dataProp: Reference[], status: DocumentRev
         url: documentVersionPath(docRev.id, ref.id),
         docId: ref.docId,
         title: docRev.name,
-        revisionStage: generateRevisionNumber(
-          docRev.revision,
-          docRev.revisionStage,
-          docRev.subRevision,
-          docRev.revisionChangeType,
-        ),
       },
     );
   });
@@ -93,12 +86,6 @@ export const getReferencedBySummary = (dataProp: DocumentRevision[]): ReferenceS
         url: getReferencedByUrl(docRev),
         docId: docRev.document.docId,
         title: docRev.name,
-        revisionStage: generateRevisionNumber(
-          docRev.revision,
-          docRev.revisionStage,
-          docRev.subRevision,
-          docRev.revisionChangeType,
-        ),
       },
     );
   });
