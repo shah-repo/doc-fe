@@ -46,6 +46,11 @@ declare global {
       fbVerifyOptions(...list: string[]): Chainable<Subject>;
       fbVerifyCheckboxValue(...list: string[]): Chainable<Subject>;
       fbVerifyNameValue(params: { name: string, value: string }): Chainable<Subject>;
+      fbEnterParagraph(params: { paragraph: string }): Chainable<Subject>;
+      fbVerifyParagraphValue(params: { paragraph: string }): Chainable<Subject>;
+      fbVerifyRadioButtonValue(params: { name: string }): Chainable<Subject>;
+      fbSelectCheckboxName(...list: string[]): Chainable<Subject>;
+      fbVerifyCheckboxName(...list: string[]): Chainable<Subject>;
     }
   }
 }
@@ -174,7 +179,7 @@ Cypress.Commands.add("fbOpenValidation", () => cy.get("button[data-cy=\"fb-edito
 
 Cypress.Commands.add("fbAddField", () => cy.get("[data-cy=\"fb-editor-actions-add\"]").click().wait(500));
 
-Cypress.Commands.add("fbEditHiddenBtn", () => cy.get("[data-cy=\"edit-schema-item\"]").click({ force: true }).wait(500));
+Cypress.Commands.add("fbEditHiddenBtn", () => cy.get("[data-cy=\"edit-schema-item\"]").first().click({ force: true }).wait(500));
 
 Cypress.Commands.add("fbEnterNameValue", (params: { name: string, value: string }) => {
   cy.get(`input[name="${params.name}"]`).clear().type(params.value).click();
@@ -194,4 +199,29 @@ Cypress.Commands.add("fbVerifyOptions", (...list: string[]) => {
 
 Cypress.Commands.add("fbVerifyNameValue", (params: { name: string, value: string }) => {
   cy.get(`input[name="${params.name}"]`).should("have.value", params.value);
+});
+
+Cypress.Commands.add("fbVerifyRadioButtonValue", (params: { name: string }) => {
+   cy.get(`input[name="${params.name}"]`).should('be.checked');
+});
+
+Cypress.Commands.add("fbEnterParagraph", (params: { paragraph: string }) => {
+  cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]").clear().type(params.paragraph);
+  cy.get("[data-cy=form.builder.create.field]").click().wait(1000);
+});
+
+Cypress.Commands.add("fbVerifyParagraphValue", (params: { paragraph: string }) => {
+  cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]").should("have.text", params.paragraph);
+});
+
+Cypress.Commands.add("fbSelectCheckboxName", (...list: string[]) => {
+  list.forEach((name) => {
+    cy.get(`input[name="${name}"]`).check().wait(200);
+  });
+});
+
+Cypress.Commands.add("fbVerifyCheckboxName", (...list: string[]) => {
+  list.forEach(function(name) {
+    cy.get(`input[name="${name}"]`).should('be.checked');
+  });
 });
