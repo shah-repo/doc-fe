@@ -4,7 +4,7 @@ import { DisplayFieldType, documentTypeSelectors, FieldType, InputFieldType } fr
 import { required, validator } from "../../components/forms/fields/validators";
 import { UIConfig } from "./types";
 
-const configureStatus = (status: string) => status.replace(" ", "_").toUpperCase();
+const configureStatus = (status: string) => status && status.replace(" ", "_").toUpperCase();
 
 export const useAdministrativeChange = (documentTypeId = "",): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.ADM_CHANGE, "documentRevision.form.administrativeChange");
