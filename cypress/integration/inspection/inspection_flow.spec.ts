@@ -1140,6 +1140,10 @@ context("Inspection flow", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
+    it("Add 'Expiry Date'", () => {
+      cy.poAddDateRequired();
+    });
+
     context("Fill samples with values", () => {
       it("Insert height for 'SAMPLE-1'", () => {
         cy.get("input[name^=height]").eq(0).type("30");
