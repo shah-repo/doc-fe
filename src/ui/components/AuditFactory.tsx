@@ -36,6 +36,10 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
     auditValue = previousValue;
   }
 
+  if (auditValue === "includeNone") {
+    auditValue = "None";
+  }
+
   if (!auditValue || auditValue === "undefined") {
     return <Fragment>N/A</Fragment>;
   }
