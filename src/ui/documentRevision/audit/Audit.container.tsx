@@ -50,7 +50,7 @@ export const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
   }, [documentRevisionId, loadAudit]);
 
   const [isStatusVisible, statusLabel, tooltipConfig] = useDocumentStatus(documentTypeId, selectedDocument?.status);
-  const versionNumber = selectedDocument.displayRevision;
+  const versionNumber = selectedDocument?.displayRevision;
 
   return  <CustomLabelTooltip {...{ tooltipConfig }}>
     <AuditPresenter {...{ audit, versionNumber, isStatusVisible }} statusLabel={statusLabel as string}/>
