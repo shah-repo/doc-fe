@@ -55,6 +55,7 @@ export const getReferenceToSummary = (dataProp: Reference[], status: DocumentRev
         url: documentVersionPath(docRev.id, ref.id),
         docId: ref.docId,
         title: docRev.name,
+        displayRevision: docRev.displayRevision,
       },
     );
   });
@@ -86,6 +87,7 @@ export const getReferencedBySummary = (dataProp: DocumentRevision[]): ReferenceS
         url: getReferencedByUrl(docRev),
         docId: docRev.document.docId,
         title: docRev.name,
+        displayRevision: docRev.displayRevision,
       },
     );
   });
