@@ -39,7 +39,7 @@ export const ReferencePresenter: React.FunctionComponent<Props> = ({
           <Link className={classes.link} to={reference.url} target="_blank" id="ReferencePresenter-link">
             <Chip
               className={classes.chip}
-              label={`${reference.docId} - ${reference.revisionStage} - ${reference.title}`}
+              label={`${reference.docId} - ${reference.displayRevision} - ${reference.title}`}
             />
           </Link>
         </Tooltip>
