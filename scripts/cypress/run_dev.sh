@@ -14,8 +14,6 @@ export ENLIL_COMPOSE_EXPOSE_FE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+2))"
 
 export CYPRESS_BE_URL=${CYPRESS_BE_URL:-"http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_PORT"}
 export CYPRESS_FE_URL=${CYPRESS_FE_URL:-"http://localhost:$ENLIL_COMPOSE_EXPOSE_FE_PORT"}
-export CYPRESS_BE_URL="https://api.demo.enlil.io"
-            export CYPRESS_FE_URL="https://demo.enlil.io"
 export CYPRESS_BASE_URL=$CYPRESS_FE_URL
 export CYPRESS_KONFIG_ENV="development"
 export CYPRESS_SCREENSHOT_OF_RUN_FAILURE=${CYPRESS_SCREENSHOT_OF_RUN_FAILURE:-false}
