@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik";
-import { differenceBy } from "lodash";
+import { isEqual } from "lodash";
 import React, { useContext } from "react";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { FB } from "../../form.builder";
@@ -16,7 +16,7 @@ export const useFormContext = () => {
     const { schema: documentSchema = [] } = values?.formDocument?.formTemplate || {};
     return (
       (values?.document?.documentType.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA)) &&
-      Boolean(differenceBy(workspaceState?.schema || [],  documentSchema, "name").length)
+      !isEqual(JSON.stringify(workspaceState?.schema), JSON.stringify(documentSchema))
     );
   }
 
