@@ -88,6 +88,7 @@ Cypress.Commands.add("arVerifySignatureIsNotMet", (params: {title: string }) => 
   cy.get("button[aria-label=approve]").first().click();
   cy.get("[data-cy=\"transition.action.password\"]").type("wrongPassword");
   cy.get("[data-cy=\"passwordConfirm\"]").click();
+  cy.wait(2000);
   cy.checkToastMessage({ exists: true });
 });
 

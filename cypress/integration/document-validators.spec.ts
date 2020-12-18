@@ -12,7 +12,7 @@ let loginResponse;
 let multipleCompanies;
 let createdCompany;
 let secondEmployee;
-let componentSpecificationDocumentType;
+let clinicalProtocolType;
 let group;
 
 const documentRevisionName = "New document for testing validators";
@@ -66,12 +66,19 @@ context("Validators tests", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
-            documentTypes: [],
+            documentTypes: [
+              {
+                documentTypeName: "Clinical Protocol",
+                documentTypeAcronym: "CP-",
+                group: "OTHER",
+                isQms: true,
+              },
+            ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
+          clinicalProtocolType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           done();
         });
       });
@@ -100,9 +107,9 @@ context("Validators tests", () => {
             attachments: [],
             description: "<p>Test Doc Rev Description</p>",
             document: {
-              docId: "CS-00099",
+              docId: "CP-00099",
               documentType: {
-                id: componentSpecificationDocumentType[0].id,
+                id: clinicalProtocolType[0].id,
               },
               securityList: {
                 operators: [],
@@ -152,7 +159,7 @@ context("Validators tests", () => {
     });
   });
 
-  context("Create a Component Specification Doc", () => {
+  context("Create a Clinical Protocol Doc", () => {
     it("type a title", () => {
       cy.drEnterDocumentTitle({ name: `${csDocTitle}{enter}` });
     });
@@ -161,8 +168,8 @@ context("Validators tests", () => {
       cy.drEnterDocumentDescription({ description: "Desription" });
     });
 
-    it("fill in document type as Component Specification", () => {
-      cy.drSelectDocumentType({ documentType: "Component Specification" });
+    it("fill in document type as Clinical Protocol", () => {
+      cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
       cy.get("h6").contains("Document Type").click();
     });
 
@@ -245,9 +252,9 @@ context("Validators tests", () => {
   });
 
   context("Adds Output Document Type and revision Stage", () => {
-    it("fill in output document type as Component Specification", () => {
+    it("fill in output document type as Clinical Protocol", () => {
       cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
-      cy.get("[data-cy=\"field-outputDocumentTypes\"]").type("Component Specification{enter}");
+      cy.get("[data-cy=\"field-outputDocumentTypes\"]").type("Clinical Protocol{enter}");
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -485,8 +492,8 @@ context("Validators tests", () => {
       cy.get("[data-cy=\"fb-control-required_document_type:value\"]").click();
     });
 
-    it("select Component Specification", () => {
-      cy.get("[data-cy=\"validators.required_document_type.name\"]").type("Component Specification{downarrow}{enter}");
+    it("select Clinical Protocol", () => {
+      cy.get("[data-cy=\"validators.required_document_type.name\"]").type("Clinical Protocol{downarrow}{enter}");
     });
 
     it("Add autocomplete", () => {
@@ -565,7 +572,7 @@ context("Validators tests", () => {
     });
 
     it("Check returned errors are not empty", () => {
-      cy.checkToastMessage({ exists: true });
+      cy.checkToastMessageIsNotEmpty({ exists: true });
     });
 
     it("Cancel release of document", () => {

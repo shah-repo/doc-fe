@@ -251,6 +251,7 @@ Cypress.Commands.add("poAMCheckApprovalIconIfItsGray", () => {
 
 Cypress.Commands.add("poAMApproveButton", () => {
   cy.get("#ApproveAndRelease-submit").click();
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("poAMCheckIfApproverHasApprovalSign", () => {

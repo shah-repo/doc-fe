@@ -20,9 +20,10 @@ declare global {
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drEnterHtmlText(params: { htmlText: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
-      drApproveAndReleaseDocumentWithoutSelectingForm(): Chainable<Subject>;
+      drApproveAndReleaseDocumentWithoutSelectingForm(params?: { toastifyExists: boolean }): Chainable<Subject>;
       drCloseApproveAndReleaseDialog(): Chainable<Subject>;
-      drClickCreateDocumentWithApiCall(): Chainable<Subject>;
+      drClickCreateDocumentWithApiCall(params?: { toastifyExists: boolean }): Chainable<Subject>;
+      drClickCreateSupplierWithApiCall(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForForms(): Chainable<Subject>;
       drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
@@ -40,6 +41,7 @@ declare global {
       drDocumentFieldError(params: { field: string; message: string }): Chainable<Subject>;
       closeAllAlertMessages(): Chainable<Subject>;
       checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
+      checkToastMessageIsNotEmpty(params: { exists: boolean }): Chainable<Subject>;
       checkToastMessageIsEqual(params: { message: string }): Chainable<Subject>;
       checkToastMessageContains(params: { message: string }): Chainable<Subject>;
       drCheckApprovalsEnforcment(): Chainable<Subject>;
@@ -231,7 +233,7 @@ Cypress.Commands.add("drEnterHtmlText", (params: { htmlText: string }) => {
   cy.get("[data-cy=\"field-renderHTML\"]").type(`${params.htmlText}{enter}`).wait(500);
 });
 
-Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", () => {
+Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params: { toastifyExists: boolean }) => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   });
@@ -241,6 +243,20 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", () => {
     () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
     });
+  if (params === undefined)
+  {
+    cy.checkToastMessage({ exists: false });
+  }
+  else {
+    if (params.toastifyExists)
+    {
+      cy.checkToastMessage({ exists: true });
+    }
+    else
+    {
+      cy.checkToastMessage({ exists: false });
+    }
+  }
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
@@ -254,28 +270,55 @@ Cypress.Commands.add("drApproveAndReleaseDocument", () => {
     () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
     });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("drApproveAndReleaseNonQMSDocument", () => {
   cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   cy.get("#FormList-selectForm").type("AR Form{enter}");
   cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom", () => {
   cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
   cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").click();
+  cy.checkToastMessage({ exists: false });
 });
 
-Cypress.Commands.add("drClickCreateDocumentWithApiCall", () => {
+Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExists: boolean }) => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
+  if (params === undefined)
+  {
+    cy.checkToastMessage({ exists: false });
+  }
+  else {
+    if (params.toastifyExists)
+    {
+      cy.checkToastMessage({ exists: true });
+    }
+    else
+    {
+      cy.checkToastMessage({ exists: false });
+    }
+  }
+  cy.wait(500);
+});
+
+Cypress.Commands.add("drClickCreateSupplierWithApiCall", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    });
+  cy.checkToastMessage({ exists: false });
   cy.wait(500);
 });
 
@@ -284,11 +327,13 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
     [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
+  cy.checkToastMessage({ exists: false });
   cy.wait(500);
 });
 
 Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
@@ -372,6 +417,10 @@ Cypress.Commands.add("drDocumentFieldError", (params: { field: string; message: 
 });
 
 Cypress.Commands.add("checkToastMessage", (params: { exists: boolean }) => {
+  cy.get(".Toastify").find(".Toastify__toast Toastify__toast--error", { timeout: 10000 }).should((params.exists ? "exist" : "not.exist"));
+});
+
+Cypress.Commands.add("checkToastMessageIsNotEmpty", (params: { exists: boolean }) => {
   cy.get(".Toastify").should((params.exists ? "not." : "") + "be.empty");
 });
 

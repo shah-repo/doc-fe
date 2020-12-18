@@ -245,6 +245,7 @@ context("PO test", () => {
         [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.poAddPOButtonClick();
         });
+      cy.checkToastMessage({ exists: false });
     });
 
     it("Check currency options dropdown", () => {
@@ -359,6 +360,7 @@ context("PO test", () => {
         [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.poAddPOButtonClick();
         });
+      cy.checkToastMessage({ exists: false });
     });
 
     it("Check currency options dropdown", () => {
@@ -409,6 +411,7 @@ context("PO test", () => {
         [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.poAddPOButtonClick();
         });
+      cy.checkToastMessage({ exists: false });
     });
 
     it("Check line item IDs if they are unique, should be '1' and '2'", () => {

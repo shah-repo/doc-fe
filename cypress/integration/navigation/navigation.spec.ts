@@ -107,20 +107,21 @@ context(`Test: ${path.basename(__filename)}`, () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Click to expand Document Control", () => {
-      cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
-      cy.navigClickOnItem({ navigItem: NavigationItems.MANUFACTURING });
-    });
-
     it("Check navigation to see if admin navigation is shown", () => {
       cy.navigListExistsCheck(
         NavigationItems.DASHBOARD,
         NavigationItems.USER_MANAGEMENT,
         NavigationItems.GROUP_MANAGEMENT,
         NavigationItems.PURCHASE_ORDERS,
-        NavigationItems.SUPPLIERS,
+        NavigationItems.INSPECTION,
+        NavigationItems.DOCUMENT_TYPE_MANAGEMENT,
         NavigationItems.RECEIVING,
       );
+
+      it("Click to expand Document Control", () => {
+        cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+        cy.navigClickOnItem({ navigItem: NavigationItems.MANUFACTURING });
+      });
 
       cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
 
@@ -129,12 +130,17 @@ context(`Test: ${path.basename(__filename)}`, () => {
         NavigationItems.APPROVAL_REQUEST,
       );
 
-
       cy.navigClickOnItem({ navigItem: NavigationItems.MANUFACTURING });
 
       cy.navigListExistsCheck(
         NavigationItems.WORK_ORDERS,
         NavigationItems.LOTS,
+      );
+
+      cy.navigClickOnItem({ navigItem: NavigationItems.SUPPLIER_MANAGEMENT });
+
+      cy.navigListExistsCheck(
+        NavigationItems.SUPPLIER_LIST,
       );
     });
   });
