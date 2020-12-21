@@ -31,8 +31,8 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
         inputProps={{
           ...inputProps,
           ...(type === "number") && {
-            onWheel: (e) => { e.currentTarget.blur(); }
-          }
+            onWheel: (e) => { e.currentTarget.blur(); },
+          },
         }}
         {...{ type, rows, error, multiline, InputProps, style, onBlur, placeholder }}
       />
