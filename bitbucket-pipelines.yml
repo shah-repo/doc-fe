@@ -199,7 +199,7 @@ pipelines:
           - step: *BUILD_DEV
       - step: *DEPLOY_DEV
 
-    sandbox:
+    release/20.25.3:
       - parallel:
           - step: *RUN_TESTS
           - step: *RUN_LINTER
