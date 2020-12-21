@@ -19,8 +19,6 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
   type,
   lotOptions,
   partOptions,
-  handleChangeOfPart,
-  handleChangeOfLot,
   disabled,
 }) => (
   <FBForm {...{ formState, initialValues }} >
@@ -37,7 +35,6 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
         rules="required"
         {...{ disabledOptions }}
         options={partOptions}
-        onChange={handleChangeOfPart}
         freeSolo
         withState
         {...{ disabled }}
@@ -47,7 +44,6 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
         label="form.builder.part.lot"
         {...{ disabledOptions }}
         options={lotOptions}
-        onChange={handleChangeOfLot}
         withState
         {...{ disabled }}
       />

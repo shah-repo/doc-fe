@@ -79,12 +79,6 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    useEffect(() => {
-      autocompleteAsyncState?.setOptionId(optionId);
-      autocompleteAsyncState?.load(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [optionId]);
-
     (optionId && options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
 
     refresh = () => autocompleteAsyncState?.load(true);
