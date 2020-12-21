@@ -77,6 +77,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         return;
       }
       additionalSchema();
+      formValues.rules = rules;
 
       workspaceState?.setSchemaItemAt({
         index,
@@ -84,7 +85,6 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         name: `${kebabCase(label as string)}-${FB.uniqid}`,
         ...formValues,
         ...isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
-        ...rules && { rules },
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         applicableValidationSchema: true,
         validationAttribute: (label as string) || placeholder,
