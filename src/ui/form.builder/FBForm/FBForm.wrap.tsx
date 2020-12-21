@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FBFormProps, FBFormState } from ".";
 import { FB } from "..";
 
@@ -25,12 +25,15 @@ export const withFBForm = <T extends FBFormProps>(
     }));
     initialValidation && workspaceMode !== "design" && formState.validate();
 
-
-    React.useEffect(() => {
+    useEffect(() => {
       if (!formState) { return; }
       formState.errorValidation = errorValidation;
       formState.workspaceMode = workspaceMode;
     }, [formState, errorValidation, workspaceMode]);
+
+    useEffect(() => {
+      formState?.setValues(initialValues);
+    }, [initialValues]);
 
     return Component({
       ...(props as T),
