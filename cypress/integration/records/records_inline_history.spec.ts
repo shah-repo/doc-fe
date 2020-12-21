@@ -289,7 +289,7 @@ context("Record inline history Flow", () => {
           });
         });
 
-        it("Select 'One' value on radiobutton", () => {
+        it("Select 'Two' value on radiobutton", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
             cy.fbSelectRadioButtonValue({ value: "Two" });
             cy.unClick();
