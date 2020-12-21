@@ -39,16 +39,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     config[type]?.();
 
     React.useEffect(() => {
-      procedureFormState?.fetchParts(true);
-      if (!initialValues) {
-        procedureFormState?.fetchLots();
-        procedureFormState?.fetchParts();
+      if (initialValues?.partLot) {
+        procedureFormState?.fetchPartsOfLot(initialValues?.partLot);
       }
-      if (!initialValues?.partLot) {
-        procedureFormState?.fetchParts();
-      }
-      procedureFormState?.fetchPartsOfLot(initialValues?.partLot);
-
       dialogState?.setActions(
         <FBProcedureFormActions {...{ handleAdd, handleCancel }} />
       );
@@ -59,6 +52,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     useEffect(() => reaction(
       () => formState?.inputState.get("title")?.value,
       (value) => {
+        handleChangeOfPart();
         if (!value && !formState?.inputState.get("partLot")?.value) {
           procedureFormState?.fetchLots();
           procedureFormState?.fetchParts();
@@ -70,6 +64,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     useEffect(() => reaction(
       () => formState?.inputState.get("partLot")?.value,
       (value) => {
+        handleChangeOfLot();
         if (!value && !formState?.inputState.get("title")?.value) {
           procedureFormState?.fetchLots();
           procedureFormState?.fetchParts();
@@ -86,7 +81,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
           procedureFormState?.fetchLots();
           return;
         }
-        procedureFormState?.fetchLotsToPart(initialValues?.title);
+        // procedureFormState?.fetchLotsToPart(initialValues?.title);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -146,8 +141,6 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       type,
       lotOptions,
       partOptions,
-      handleChangeOfPart,
-      handleChangeOfLot,
       disabled,
     });
   };
