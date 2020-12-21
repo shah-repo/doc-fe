@@ -1244,11 +1244,11 @@ context("Inspection flow", () => {
 
       it("Check referenced by parts", () => {
         cy.get("[data-cy=\"common.referenced.by\"]")
-          .should("contain.text", "SAL-00004 - A - <p>Inspection Document description</p> - 3 Restricted Use");
+          .should("contain.text", "SAL-00004 - A - Inspection Document - 3 Restricted Use");
         cy.get("[data-cy=\"common.referenced.by\"]")
-          .should("contain.text", "SAL-00003 - A - <p>Inspection Document description</p> - 2 Use as Is");
+          .should("contain.text", "SAL-00003 - A - Inspection Document - 2 Use as Is");
         cy.get("[data-cy=\"common.referenced.by\"]")
-          .should("contain.text", "SAL-00002 - A - <p>Inspection Document description</p> - 4 Rework");
+          .should("contain.text", "SAL-00002 - A - Inspection Document - 4 Rework");
       });
     });
 

@@ -433,7 +433,7 @@ export const routes: ICyRoutes =   {
   PostDocRev: {
     requestConfig: {
       method: "POST",
-      url: "/api/v1/document_revisions"
+      url: "/api/v1/document_revisions",
     },
   },
   PostChangeRequests: {
