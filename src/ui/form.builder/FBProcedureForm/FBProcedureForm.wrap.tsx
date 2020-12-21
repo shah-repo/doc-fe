@@ -118,6 +118,10 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         return;
       }
       procedureFormState?.fetchPartsOfLot(formValue.partLot);
+      if (isEmpty(partOptions)) {
+        return;
+      }
+      formState?.setFieldValue("title", partOptions?.[0], true);
     }
 
     // MARK: @observer
