@@ -429,11 +429,9 @@ context("Procedure and parts flow test", () => {
 
     context("Choose a part and approve EB", () => {
       it("Choose an existing part from the list of available parts", () => {
-        cy.get("[data-cy=\"childrenParts\"]").type("Part document{downarrow}{enter}");
-      });
-
-      it("Save EB", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=\"childrenParts\"]").type("Part document{downarrow}{enter}");
+        });
       });
 
       it("Submit for Approval", () => {
@@ -454,9 +452,7 @@ context("Procedure and parts flow test", () => {
 
   context("Clone EB and verify materials and equipment tracking", () => {
     it("Click Clone EB", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {{
-        cy.ebClickClone();
-      }});
+      cy.ebClickClone();
     });
 
     context("Add materials and equipments", () => {

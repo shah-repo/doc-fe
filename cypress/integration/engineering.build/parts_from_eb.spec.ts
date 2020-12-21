@@ -217,11 +217,9 @@ context("Parts from EB flow test", () => {
 
     context("Choose a part and submit for approval", () => {
       it("Choose an existing part from the list of available parts", () => {
-        cy.get("[data-cy=\"childrenParts\"]").type(EXISTING_PART_NAME + "{downarrow}{enter}");
-      });
-
-      it("Save EB", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=\"childrenParts\"]").type(EXISTING_PART_NAME + "{downarrow}{enter}");
+        });
       });
 
       it("Submit for Approval", () => {
@@ -361,7 +359,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Verify that the selected part is copied to the new build", () => {
-        cy.get("[data-cy=\"childrenParts\"]").should("contains.attr", "value", "PRT-00004 - rev 1 - " + NEW_PART_NAME);
+        cy.get("[data-cy=\"childForRevise\"]").should("contains.attr", "value", "PRT-00004 - " + NEW_PART_NAME);
       });
     });
 

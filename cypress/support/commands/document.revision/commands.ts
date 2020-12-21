@@ -44,6 +44,7 @@ declare global {
       checkToastMessageContains(params: { message: string }): Chainable<Subject>;
       drCheckApprovalsEnforcment(): Chainable<Subject>;
       drVerifyFirstDocumentRevisionList(params: { revision: string }): Chainable<Subject>;
+      drClickCreateSupplierWithApiCall(): Chainable<Subject>;
 
       /* Document Approval Matrix */
 
@@ -254,6 +255,14 @@ Cypress.Commands.add("drApproveAndReleaseDocument", () => {
     () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
     });
+});
+
+Cypress.Commands.add("drClickCreateSupplierWithApiCall", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    });
+  cy.wait(500);
 });
 
 Cypress.Commands.add("drApproveAndReleaseNonQMSDocument", () => {

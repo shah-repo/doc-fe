@@ -213,7 +213,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Save DAM And Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("'Approve and Release' the document", () => {
@@ -691,7 +691,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
