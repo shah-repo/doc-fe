@@ -32,7 +32,8 @@ export const withFBForm = <T extends FBFormProps>(
     }, [formState, errorValidation, workspaceMode]);
 
     useEffect(() => {
-      formState?.setValues(initialValues);
+      if (!formState) { return; }
+      formState.initialValues = initialValues;
     }, [initialValues]);
 
     return Component({
