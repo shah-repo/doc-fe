@@ -41,6 +41,7 @@
     "moment": "2.24.0",
     "moment-timezone": "0.5.27",
     "mqtt-pattern": "1.2.0",
+    "patch-package": "^6.2.2",
     "qrcode.react": "1.0.0",
     "query-string": "6.9.0",
     "react": "16.12.0",
@@ -90,7 +91,8 @@
     "test": "react-scripts --max_old_space_size=500 --expose-gc test --logHeapUsage",
     "eject": "react-scripts eject",
     "lint": "eslint -c .eslintrc.js --ext .ts --ext .tsx  src",
-    "lint:fix": "yarn lint --fix"
+    "lint:fix": "yarn lint --fix",
+    "postinstall": "patch-package"
   },
   "eslintConfig": {
     "extends": "react-app"
