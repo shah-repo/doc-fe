@@ -260,6 +260,7 @@ Cypress.Commands.add("poAMCheckIfApproverHasApprovalSign", () => {
 
 Cypress.Commands.add("poAMCheckForAlertMessage", () => {
   cy.get("[class=\"Toastify__toast-body\"]").contains("at least one approver from group").contains("has to be selected").should("exist");
+  cy.closeAllAlertMessages();
 });
 
 Cypress.Commands.add("poRejectAR", (params: {password: string}) => {

@@ -46,7 +46,6 @@ declare global {
       checkToastMessageContains(params: { message: string }): Chainable<Subject>;
       drCheckApprovalsEnforcment(): Chainable<Subject>;
       drVerifyFirstDocumentRevisionList(params: { revision: string }): Chainable<Subject>;
-      drClickCreateSupplierWithApiCall(): Chainable<Subject>;
 
       /* Document Approval Matrix */
 
@@ -167,6 +166,7 @@ Cypress.Commands.add("drCheckApprovalsEnforcment", () => {
   cy.get("[data-cy=group-0]").should("have.text", "Role One");
   cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
   cy.checkToastMessageContains({ message: "at least one approver from group Role One has to be selected" });
+  cy.closeAllAlertMessages();
   cy.drCloseApproveAndReleaseDialog();
 });
 
@@ -272,14 +272,6 @@ Cypress.Commands.add("drApproveAndReleaseDocument", () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
     });
   cy.checkToastMessage({ exists: false });
-});
-
-Cypress.Commands.add("drClickCreateSupplierWithApiCall", () => {
-  cy.wrapWithWaitOnApiCalls(
-    [CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
-    });
-  cy.wait(500);
 });
 
 Cypress.Commands.add("drApproveAndReleaseNonQMSDocument", () => {
@@ -426,7 +418,9 @@ Cypress.Commands.add("drDocumentFieldError", (params: { field: string; message: 
 });
 
 Cypress.Commands.add("checkToastMessage", (params: { exists: boolean }) => {
-  cy.get(".Toastify").find(".Toastify__toast Toastify__toast--error", { timeout: 10000 }).should((params.exists ? "exist" : "not.exist"));
+  cy.get(".Toastify")
+    .find("div.Toastify__toast.Toastify__toast--error", { timeout: 3000 })
+    .should((params.exists ? "exist" : "not.exist"));
 });
 
 Cypress.Commands.add("checkToastMessageIsNotEmpty", (params: { exists: boolean }) => {

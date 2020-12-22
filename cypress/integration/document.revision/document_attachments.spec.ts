@@ -125,7 +125,7 @@ context("Document Attachment Flow", () => {
 
       it("Verify upload error message is shown", () => {
         SystemRequirement("REQ-0230");
-        cy.checkToastMessageIsNotEmpty({ exists: true });
+        cy.checkToastMessage({ exists: true });
         cy.checkToastMessageIsEqual({ message: "Upload failed" });
         cy.closeAllAlertMessages();
       });

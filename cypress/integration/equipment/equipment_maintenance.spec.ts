@@ -439,7 +439,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Check preventative maintenance status is in complience for next 10 days", () => {
-      const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles").add(10, "days").format("ddd MMM D YYYY");
+      const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
+        .add(10, "days")
+        .format("ddd MMM DD YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(0)
         .contains(`In Compliance - Due Date: ${prevMaintenanceComplianceDate}`);
@@ -518,7 +520,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Check calibration status is in complience for next 5 days", () => {
-      const calibrationComplianceDate = moment().tz("America/Los_Angeles").add(5, "days").format("ddd MMM D YYYY");
+      const calibrationComplianceDate = moment().tz("America/Los_Angeles")
+        .add(5, "days")
+        .format("ddd MMM DD YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(1)
         .contains(`In Compliance - Due Date: ${calibrationComplianceDate}`);
