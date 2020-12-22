@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-template-curly-in-string */
 
 export enum FBEndpoint {
@@ -33,4 +34,8 @@ export enum FBEndpoint {
   SetApprovalStatus = "/approvals/${approvalId}/${status}",
   PatchDocumentRevision = "/document_revisions/${docRevId}",
   HistoryMaintenance = "/document_revisions/history_maintenance/${id}",
+  LotsToPart = "/document_revisions/lots_of_part/${id}",
+  PartsOfLot = "/document_revisions/parts_of_lot/${id}",
+  Lots = "/document_revisions?docTypeGroupOptions%5B%5D=CAN_CREATE_INSPECTION&docTypeGroupOptions%5B%5D=ENGINEERING_BUILD&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED",
+  Parts = "/document_revisions?docTypeGroupOptions%5B%5D=MATERIAL&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED"
 }

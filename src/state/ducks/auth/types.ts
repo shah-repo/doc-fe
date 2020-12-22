@@ -248,11 +248,16 @@ export enum NavigationItems{
   DOCUMENT_CONTROL = "documentControl",
   USER_MANAGEMENT = "userManagement",
   GROUP_MANAGEMENT = "groupManagement",
+  EQUIPMENT = "equipment",
   TESTING_NAVIG_ITEM = "testingNavigationItem",
   PURCHASE_ORDERS = "purchaseOrders",
-  SUPPLIERS = "suppliers",
+  SUPPLIER_LIST = "supplierList",
   RECEIVING = "receiving",
   MANUFACTURING = "manufacturing",
   WORK_ORDERS = "workOrders",
   LOTS = "lots",
+  PARTS = "parts",
+  INSPECTION = "inspection",
+  DOCUMENT_TYPE_MANAGEMENT = "documentTypeManagement",
+  SUPPLIER_MANAGEMENT = "supplierManagement"
 }

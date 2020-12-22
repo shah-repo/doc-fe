@@ -43,6 +43,10 @@ export type FBSchemaProps = Pick<FBInputProps,
   | "editorConfig"
   | "inspectionSection"
   | "validationAttribute"
+  | "deleteDisabled"
+  | "hidden"
+  | "deleted"
+  | "deleteInFormDisabled"
 > & {
   validators?: Dictionary<any>;
 };

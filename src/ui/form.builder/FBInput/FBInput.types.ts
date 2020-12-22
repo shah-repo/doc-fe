@@ -64,7 +64,10 @@ export type FBInputType =
   | "parts"
   | "procedurediff"
   | "ebpart"
-  | "eqmaintenance";
+  | "eqmaintenance"
+  | "textfieldwithrange"
+  | "range"
+  | "passpercentage";
 
 export type FBInputProps =
   & FBLabelProps
@@ -103,7 +106,14 @@ export type FBInputProps =
     isTemplate?: boolean;
     includeQRScan?: boolean;
     designDisabled?: boolean;
+    /**
+     * @cfg {Bool} Whether the field can be deleted in the output document.
+     */
     deleteDisabled?: boolean;
+    /**
+     * @cfg {Bool} Whether the field can be deleted in the form.
+     */
+    deleteInFormDisabled?: boolean;
     instructionsDocument?: string;
     reviseDisabled?: boolean;
     outputDisabled?: boolean;
@@ -148,6 +158,20 @@ export type FBInputProps =
      * @cfg {String} Validation attribute name. Use this prop for non labeled controls.
      */
     validationAttribute?: string;
+    /**
+     * @cfg {Bool} Flag for control inputs which values we need to generate control's
+     * value but we need to omit it from form values.
+     */
+    omitFormValue?: boolean;
+    /**
+     * @cfg {Bool} Item is deleted. It will not be visible but will remain in scheme.
+     */
+    deleted?: boolean;
+    // /**
+    //  * @cfg {Bool} true to force form validation on input render if its default value
+    //  * is validation relation.
+    //  */
+    // validateDefaultValue?: boolean;
   };
 
 export const OmitInputClones: FBInputType[] = [
@@ -165,4 +189,11 @@ export const OmitInputClones: FBInputType[] = [
   "eqmaintenance",
   "ebpart",
   "parts",
+  "range",
+  "passpercentage",
 ];
+
+export interface FBInputConstructor {
+  value: any;
+  hidden?: boolean;
+}

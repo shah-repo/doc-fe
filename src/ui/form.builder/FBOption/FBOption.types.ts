@@ -1,6 +1,7 @@
 export interface FBOption {
   text: string;
   value: string;
+  disabled?: boolean;
 }
 
 export type FBOptionValueType =  "object" | "key" | "id";

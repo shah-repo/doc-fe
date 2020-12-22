@@ -113,8 +113,8 @@ const makeGetAvailableReferences = () => createSelector(
       return {
         value: document.id,
         label: `${document.docId} - ${displayRevision} - ${name}`,
-        deleteDisabled: (isReferencePart && canCurrentRevCreateInspection) ||
-        (canReferenceCreateInspection && isCurrentRevFai),
+        deleteDisabled: ((isReferencePart && canCurrentRevCreateInspection) ||
+        (canReferenceCreateInspection && isCurrentRevFai)) && currentDocRev.id,
       };
     });
   },

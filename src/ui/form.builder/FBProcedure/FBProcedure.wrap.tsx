@@ -29,7 +29,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     isPreview = workspaceState?.mode === "preview";
     const diffValue = formState?.inputState.get(FBFieldName.ProcedureDiff)?.value;
     procedureState?.setDiffPreview(diffValue);
-    const inputState = FB.useRef<FBInputState>(FBInputState, undefined);
+    const inputState = FB.useRef<FBInputState>(FBInputState, {});
     formState?.inputState.set(`${FBFieldName.ProcedureDiff}${name}`, inputState);
     types = keys(FBProcedureItemType);
 

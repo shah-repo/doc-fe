@@ -16,7 +16,8 @@ export type FBEditorPropertiesType =
 | "includeInFaiInspection"
 | "deleteDisabled";
 
-export type FBEditorPropertiesProps = Pick<FBInputProps, "type" | "options" | "onChange">;
+export type FBEditorPropertiesProps = Pick<FBInputProps, "type" | "options" | "onChange"> & {
+  inputProps?: Partial<FBInputProps>;};
 
 export const FBEditorPropertiesDefaultValue: Partial<Record<FBInputType, FBEditorPropertiesType[]>> = {
   procedure: ["copyableValue"],

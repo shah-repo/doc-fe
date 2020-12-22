@@ -37,5 +37,6 @@ export enum FBDocTypeGroup {
   POAM = "POAM",
   PO = "PO",
   WORK_ORDER = "WORK ORDER",
-  DAM = "DAM"
+  DAM = "DAM",
+  PART_LOT = "PART_LOT"
 }

@@ -44,7 +44,7 @@ interface Props {
 }
 
 let selectedTypeLabel = "";
-let selectedDocumentTypeId: string;
+let selectedDocumentTypeId = "";
 export let docIdAsyncContext = React.createContext<AsyncState>(ASYNC_DEFAULT_STATE);
 export const useHandleCreateDoc = () => {
   const selectedDocumentType = useSelector(documentTypeSelectors.byId)[selectedDocumentTypeId];
@@ -65,6 +65,7 @@ export const useHandleCreateDoc = () => {
       history.push(path);
     }, onError: (msg) => redirect(),
   });
+
   const createDoc = (docId: string) => {
     const formValues = toDocumentRevisionFormValuesForOutput(form as DocumentRevision, selectedDocumentType);
     const outputDocumentTypes = form?.formTemplate?.outputDocumentTypes || [];
@@ -79,6 +80,9 @@ export const useHandleCreateDoc = () => {
     };
 
     createDocAsync.start(createDocAction, data, createDocAsync);
+    // setting to initial value in case creating new ouput is immediately
+    // after creating doc by type, otherwise wrong value for id is set
+    selectedDocumentTypeId = "";
   };
   const redirect = (selectedForm = form) => {
     history.push({
@@ -138,6 +142,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     multipleFormDialog.close();
     setForms([]);
   };
+
   if (!isByCategory && documentTypeId) {
     selectedDocumentTypeId = documentTypeId;
   }

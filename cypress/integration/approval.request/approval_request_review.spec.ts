@@ -398,8 +398,6 @@ context("Approval request form scenario", () => {
     it("Add approvers to approval request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[20].email });
       cy.wait(200);
-      cy.arAddApproverOnApproverList({ approver: USERS[21].email });
-      cy.wait(200);
       cy.arAddApproverOnApproverList({ approver: USERS[22].email });
     });
 
@@ -484,6 +482,16 @@ context("Approval request form scenario", () => {
       cy.get("[data-cy=\"audit-time-0\"]").should("have.attr", "datetime").then(($time) => {
         cy.wrap($time).should("not.be.empty");
       });
+    });
+
+    it("Navigate to dashboard", () => {
+      SystemRequirement("REQ-2200");
+      cy.navigToDashboard();
+    });
+
+    it("Verify there is no dashboard notifications", () => {
+      SystemRequirement("REQ-2200");
+      cy.cmpVerifyNoPendingActions();
     });
   });
 

@@ -4,13 +4,17 @@ import { DocumentType } from "../../../state/ducks/documentRevisions/documentTyp
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
 import { checkIsDocumentDAM, checkIsDocumentPOAM, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
-import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
+import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
 import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
 import { getIsAdministrativeDefault } from "../helpers/revisionStage";
 import { DocumentRevisionFormValues } from "./types";
 
 
-export const getHighestRevision = (revisions: DocumentRevision[]) => maxBy(revisions, "revision");
+export const getHighestRevision = (revisions: DocumentRevision[]) => {
+  const highestStage = maxBy(revisions, "revisionStage")?.revisionStage;
+  const revs = revisions.filter((rev) => rev.revisionStage === highestStage && isDocumentRevisionReleased(rev.status));
+  return maxBy(revs, "revision");
+};
 
 const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateRevisionNumber(revision.revision,
   revision.revisionStage,
@@ -69,9 +73,11 @@ export const toDocumentRevisionFormValues = (
   const isDocumentRecord = checkIsDocumentRecord(documentRevision?.document.documentType.groupOptions);
   const isDocumentPOAM = checkIsDocumentPOAM(documentRevision?.document.documentType.groupOptions);
   const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
+
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isDocumentRecord;
   const isdocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isDocRevFirstDraft = isdocRevStatusDraft && documentRevision?.version === 1;
+
   if (shouldShowRevStageForDocType && isDocRevFirstDraft) {
     values.revisionStage = documentRevision.revisionStage.toString();
   }
@@ -155,9 +161,12 @@ export const toDocumentRevisionFormValuesWithRevisionChange = (
   );
   const isAdministrativeDefault = getIsAdministrativeDefault(documentRevision);
 
-  values.revisionChangeType = isAdministrativeDefault ?
-    RevisionChangeType.AdministrativeChange :
-    RevisionChangeType.NextRevision;
+  if (isAdministrativeDefault) {
+    values.revisionChangeType = RevisionChangeType.AdministrativeChange;
+  } else {
+    values.revisionChangeType = RevisionChangeType.NextRevision;
+  }
+
   values.outputRevision = true;
   FBDRStore.setValues({
     ...values,

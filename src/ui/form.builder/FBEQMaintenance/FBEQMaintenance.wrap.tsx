@@ -2,6 +2,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBEQMaintenanceProps, FBEQMaintenanceState } from "..";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
   Component: React.FunctionComponent<T>
@@ -18,9 +19,11 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
-    const { id: docRevId } = workspaceState || {};
+    const { id: docRevId, document: { status = "" } = {} } = workspaceState || {};
+    const isEqStatusDraft = status === DocumentRevisionStatus.Draft;
     const isTypePM = editorConfig.type?.includes("preventativeMaintenance");
     const currentStatus = formState?.getFieldValue(`${name}.status`);
+
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     pmFormId = formState?.getFieldValue(`${name}.preventativeForm`);
 
@@ -50,7 +53,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       return !(
         formState?.getFieldValue(`${name}.preventativeForm`) &&
         formState?.getFieldValue(`${name}.frequency`)
-      );
+      ) || isEqStatusDraft;
     }
 
     // MARK: @methods

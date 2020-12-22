@@ -66,10 +66,20 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
   },
   {
-    label: "Suppliers",
-    type: "CATEGORY",
-    icon: "/navigation_icons/delivery.svg",
-    category: "Supplier",
+    label: "Supplier Management",
+    type: "MENU",
+    icon: "/navigation_icons/supplier-menu.svg",
+    menu: [
+      {
+        icon: "/navigation_icons/supplier-list.svg",
+        type: "CATEGORY",
+        label: "Supplier List",
+        category: "Supplier",
+        restrictedToUsersWithTags: [
+          GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+        ],
+      },
+    ],
     restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
   },
   {

@@ -223,8 +223,8 @@ context("Record inline history Flow", () => {
       });
 
       it("Select approver for first inline", () => {
-        cy.get("[name*=\"fb-ia-inline-field\"] input")
-          .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
+        cy.get("[name*=\"fb-ia-inline-field\"] input").click();
+        cy.get("ul[role=listbox]>li").contains(USERS[2].email).click();
       });
 
       it("Save record", () => {
@@ -276,23 +276,31 @@ context("Record inline history Flow", () => {
         });
 
         it("Uncheck 'Red' and 'Green' value on checkbox", () => {
-          cy.fbUnSelectCheckboxValue( "Red", "Green" );
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+            cy.fbUnSelectCheckboxValue( "Red", "Green" );
+            cy.unClick();
+          });
         });
 
         it("Check 'Blue' value on checkbox", () => {
-          cy.fbSelectCheckboxValue( "Blue" );
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+            cy.fbSelectCheckboxValue( "Blue" );
+            cy.unClick();
+          });
         });
 
-        it("Select 'One' value on radiobutton", () => {
-          cy.fbSelectRadioButtonValue({ value: "Two" });
+        it("Select 'Two' value on radiobutton", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+            cy.fbSelectRadioButtonValue({ value: "Two" });
+            cy.unClick();
+          });
         });
 
-        it("Select 'SelectOne' value on select field", () => {
-          cy.fbSelectFieldValue({ value: "SelectTwo" });
-        });
-
-        it("Select 'SelectOne' value on select field", () => {
-          cy.fbSelectFieldValue({ value: "SelectTwo" });
+        it("Select 'SelectTwo' value on select field", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+            cy.fbSelectFieldValue({ value: "SelectTwo" });
+            cy.unClick();
+          });
         });
 
         it("Save record", () => {
@@ -304,6 +312,7 @@ context("Record inline history Flow", () => {
         });
 
         it("Check Inline approval history values", () => {
+          SystemRequirement("REQ-1000");
           cy.fbInlineApprovalHisotryCheck(
             "Approved",
             "Checked in CheckboxGroup for inline: Blue",
@@ -313,9 +322,79 @@ context("Record inline history Flow", () => {
             "Changed Select field for inline from SelectOne to SelectTwo"
           );
         });
+
+        it("Check record status is in 'Draft'", () => {
+          cy.drCheckDocumentStatus({ status: "Draft" });
+        });
+      });
+
+      context("Check inline approval history on released document", () => {
+        it("Approve first Inline Approval", () => {
+          cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
+          cy.get("input[name=\"password\"]").clear().type("Tester1!");
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostApprovalsApprove,
+            CyRoutes.EmployeesGet,
+            CyRoutes.DocPreview], () => {
+            cy.get("[data-cy=\"common.confirm\"]").click();
+          });
+        });
+
+        it("Navigate to released document", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetDocAggregatedAudit], () => {
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).click();
+          });
+        });
+
+        it("Count number of elements in approval history", () => {
+          cy.get("[data-cy*=\"fb-approval-history\"]").should("have.length", 7);
+        });
+
+        it("Check Inline approval history values", () => {
+          SystemRequirement("REQ-1000");
+          cy.fbInlineApprovalHisotryCheck(
+            "Approved",
+            "Checked in CheckboxGroup for inline: Blue",
+            "Changed RadioBtnGroup for inline from One to Two",
+            "Unchecked in CheckboxGroup for inline: Green",
+            "Unchecked in CheckboxGroup for inline: Red",
+            "Changed Select field for inline from SelectOne to SelectTwo",
+            "Approved"
+          );
+        });
+
+        it("Check record status is in 'Released'", () => {
+          cy.drCheckDocumentStatus({ status: "Released" });
+        });
+      });
+
+      context("Check inline approval history on released Superseded document", () => {
+        it("Navigate to Superseded document", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetDocAggregatedAudit], () => {
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(2).click();
+          });
+        });
+
+        it("Count number of elements in approval history", () => {
+          cy.get("[data-cy*=\"fb-approval-history\"]").should("have.length", 3);
+        });
+
+        it("Check Inline approval history values", () => {
+          SystemRequirement("REQ-1000");
+          cy.fbInlineApprovalHisotryCheck(
+            "Approved",
+            "Changed Textfield for inline from First entry to First entry, Second entry",
+            "Approved",
+          );
+        });
+
+        it("Check record status is in 'Superseded'", () => {
+          cy.drCheckDocumentStatus({ status: "Superseded" });
+        });
       });
     });
   });
 });
 
 export { };
+

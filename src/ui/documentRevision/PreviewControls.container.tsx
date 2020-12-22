@@ -4,6 +4,7 @@ import { useIntl } from "react-intl";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
+import { authSelectors } from "../../state/ducks/auth";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { DocumentRevisionTransitionResponse, FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../state/ducks/documents";
@@ -21,12 +22,10 @@ import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
-import { isOwnerContext } from "./forms/DocumentRevisionForm.presenter";
 import { checkCanBeCopied, checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
-import { isFormWithInlineApproval } from "./helpers/records";
-import InspectionControlsContainer from "./InspectionControls/InspectionControls.container";
+import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -57,14 +56,13 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const formDocuments: Document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, formDocumentId)
   );
+  const email = useSelector(authSelectors.currentUserEmail);
+  const isUserDocumentOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isRecord = checkIsDocumentRecord(documentRevision.document?.documentType?.groupOptions);
   const isStatusInReview = isDocumentRevisionInReview(documentRevision.status);
   const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
   const canCopy = checkCanBeCopied(documentRevision.document?.documentType?.groupOptions);
-  const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
-  const isUserDocumentOwner = React.useContext(isOwnerContext);
-
 
   const isLastVersionObsolete = () => {
     if (selectedDocument.document.documentType.group === "RECORD") {
@@ -214,7 +212,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
         />}
       {renderOutputButton()}
       {renderNoAccessWarning()}
-      {isRecord && isStatusInReview && !isInlineApproval && isUserDocumentOwner &&
+      {isRecord && isStatusInReview && isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
       <InspectionControlsContainer {...{ documentRevision }} />
       <DownloadHTML pdf={documentRevision.pdf} />

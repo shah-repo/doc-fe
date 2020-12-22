@@ -3,6 +3,7 @@ import React from "react";
 import { FBControlPickerDataProps, FBInputType, FBWorkspaceExternalState, FBWorkspaceState } from "..";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { store } from "../../../state/store";
+import { checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBEditorCustomControl } from "../FBEditorCustomControl";
 
 export class FBControlPickerState {
@@ -26,6 +27,16 @@ export class FBControlPickerState {
   };
 
   public get pickers(): FBControlPickerDataProps {
+
+    const isEQ = checkIsDocumentEquipment(
+      this.workspaceState?.document?.document?.documentType?.groupOptions);
+    if (isEQ) {
+      return {
+        inputs: [
+          ...this.hasEquipmentMaintenance ? ["eqmaintenance"] as FBInputType[] : [],
+        ],
+      };
+    }
     return {
       section: ["section", "subsection", "stepsection", "teststep"],
       inputs: [
@@ -51,6 +62,7 @@ export class FBControlPickerState {
         "testRequirement",
         "procedure",
         ...this.hasEquipmentMaintenance ? ["eqmaintenance"] as FBInputType[] : [],
+        "textfieldwithrange",
       ],
       approvals: [
         "approvals",

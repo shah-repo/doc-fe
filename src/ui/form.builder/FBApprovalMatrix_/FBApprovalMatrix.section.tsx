@@ -18,7 +18,7 @@ const FBApprovalMatrixSection: React.FunctionComponent<FBApprovalMatrixProps> = 
     name={`fb-am-section-${name}`}
     label="form.builder.approvalMatrix"
   >
-    <Box display="flex" flexDirection="row-reverse" mt={-3.5}>
+    <Box display="flex" flexDirection="row-reverse">
       {!dialogState?.open && (
         <IconButton color="inherit" size="small" disabled={workspaceMode === "design"} onClick={handleFullScreen} >
           <FBTooltip title='form.builder.fullscreen.mode'>
