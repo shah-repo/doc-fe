@@ -58,7 +58,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
 
   useEffect(() => {
     setValue(convertHtmlToDraft(field.value));
-  }, [field.value]);
+  }, []);
 
   useEffect(() => {
     if (!value) {
