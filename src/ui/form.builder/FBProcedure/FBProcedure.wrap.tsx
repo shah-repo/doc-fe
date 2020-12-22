@@ -59,7 +59,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
       (checked) => {
         const diffInput = `${FBFieldName.ProcedureDiff}${name}`;
         if (!checked) {
-          return formState?.setFieldValue(diffInput, undefined, true);
+          return formState?.setFieldValue(diffInput, undefined, true, true);
         }
         const diffCollection = getDiffValue();
         procedureState?.setDiffValue(diffCollection);
