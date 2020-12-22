@@ -21,7 +21,7 @@ import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
 
 interface Props extends RouteComponentProps {
-  isdocRevStatusDraft: boolean;
+  isDocRevStatusDraft: boolean;
   type?: DocumentCloneType;
   outputDocumentTypes?: FBOutputDocumentType[];
   savedocInfo: React.Dispatch<React.SetStateAction<{
@@ -34,7 +34,7 @@ interface Props extends RouteComponentProps {
 }
 
 const DocumentTypeSelect: React.FunctionComponent<Props> = ({
-  isdocRevStatusDraft,
+  isDocRevStatusDraft,
   type,
   outputDocumentTypes = [],
   savedocInfo,
@@ -66,7 +66,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
-  const isDocTypeDisabled = (type === "newVersion" || isdocRevStatusDraft) || isDisabled;
+  const isDocTypeDisabled = (type === "newVersion" || isDocRevStatusDraft) || isDisabled;
   const isNewOutput = type === "newOutput";
   const isCreateMaintenance = match.path.includes("create_maintenance");
 
@@ -127,8 +127,12 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         workspaceState?.getSchema(),
       ); }
     }
-    if (!isCreateMaintenance) { workspaceState?.setMode(mode);
-    workspaceState?.setSchema(scheme); }
+    if (!isCreateMaintenance) {
+      workspaceState?.setMode(mode);
+      if (isNewOutput) {
+        return;
+      }
+      workspaceState?.setSchema(scheme); }
   };
 
   if (!isVisible && type !== "newOutput") {

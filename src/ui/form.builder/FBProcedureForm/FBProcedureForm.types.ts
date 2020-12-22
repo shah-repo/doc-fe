@@ -13,6 +13,7 @@ export type FBProcedureFormProps =
   partOptions?: SelectOption[];
   lotOptions?: SelectOption[];
   procedureFormState?: FBProcedureFormState;
+  disabled?: boolean;
 };
 
 export interface FBProcedureFormActionsProps {

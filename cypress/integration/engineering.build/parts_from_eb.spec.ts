@@ -217,11 +217,9 @@ context("Parts from EB flow test", () => {
 
     context("Choose a part and submit for approval", () => {
       it("Choose an existing part from the list of available parts", () => {
-        cy.get("[data-cy=\"childrenParts\"]").type(EXISTING_PART_NAME + "{downarrow}{enter}");
-      });
-
-      it("Save EB", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=\"childrenParts\"]").type(EXISTING_PART_NAME + "{downarrow}{enter}");
+        });
       });
 
       it("Submit for Approval", () => {
@@ -303,11 +301,15 @@ context("Parts from EB flow test", () => {
         });
 
         it("Choose a document type", () => {
-          cy.ebChoosePartType({ partName: PART_DOCUMENT_TYPE_NAME });
+          cy.wrapWithWaitOnApiCall(CyRoutes.GetProposedDocId, () => {
+            cy.ebChoosePartType({ partName: PART_DOCUMENT_TYPE_NAME });
+          });
         });
 
         it("Create the part", () => {
-          cy.get("[data-cy=\"common.confirm\"]").click();
+          cy.wrapWithWaitOnApiCall(CyRoutes.PostDocRev, () => {
+            cy.get("[data-cy=\"common.confirm\"]").click();
+          });
         });
       });
 
@@ -315,7 +317,11 @@ context("Parts from EB flow test", () => {
 
     context("Submit for Approval", () =>  {
       it("Save EB", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCalls(
+          [CyRoutes.PatchDocRev], () => {
+            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+          });
+        cy.wait(500);
       });
 
       it("Submit for Approval", () => {
@@ -353,7 +359,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Verify that the selected part is copied to the new build", () => {
-        cy.get("[data-cy=\"childrenParts\"]").should("contains.attr", "value", "PRT-00004 - rev 1 - " + NEW_PART_NAME);
+        cy.get("[data-cy=\"childForRevise\"]").should("contains.attr", "value", "PRT-00004 - " + NEW_PART_NAME);
       });
     });
 

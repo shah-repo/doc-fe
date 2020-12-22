@@ -335,6 +335,11 @@ context("Equipment maintenance test", () => {
       cy.get("[name*=\"frequency\"]").eq(0).type("10");
     });
 
+    it("Type preventative maintenance instruction", () => {
+      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]")
+        .type("Instructions for preventative maintenance");
+    });
+
     it("Select document 'Yes' for calibration required", () => {
       cy.get("[value=\"Yes\"]").eq(1).click();
     });
@@ -346,6 +351,11 @@ context("Equipment maintenance test", () => {
 
     it("Select calibration frequency", () => {
       cy.get("[name*=\"frequency\"]").eq(1).type("5");
+    });
+
+    it("Type preventative maintenance instruction", () => {
+      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy,\"calibration\")]/../div[2]")
+        .type("Instructions for calibration");
     });
 
     it("Save document", () => {
@@ -404,6 +414,10 @@ context("Equipment maintenance test", () => {
 
     it("Approve record", () => {
       cy.ebApprove();
+    });
+
+    it("Verify status is 'Released'", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
     });
   });
 
@@ -480,6 +494,10 @@ context("Equipment maintenance test", () => {
     it("Approve record", () => {
       cy.ebApprove();
     });
+
+    it("Verify status is 'Released'", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
+    });
   });
 
   context("Check equipment calibration history on maintenance document", () => {
@@ -504,6 +522,10 @@ context("Equipment maintenance test", () => {
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(1)
         .contains(`In Compliance - Due Date: ${calibrationComplianceDate}`);
+    });
+
+    it("Verify status is 'Released'", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
     });
   });
 });

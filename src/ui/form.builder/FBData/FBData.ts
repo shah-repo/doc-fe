@@ -14,6 +14,7 @@ import editorProperties from "./editorProperties.json";
 import editorPropertiesControl from "./editorPropertiesControl.json";
 import eqMaintenanceOptions from "./eqMaintenanceOptions.json";
 import icons from "./icons.json";
+import partTypeOptions from "./partTypeOptions.json";
 import passTypeOptions from "./passTypeOptions.json";
 import requirementOptions from "./requirementOptions.json";
 import taskSchema from "./taskSchema.json";
@@ -116,6 +117,10 @@ export class FBData {
 
   public static get eqMaintenanceTypeOptions(): FBOption[] {
     return eqMaintenanceOptions.type as FBOption[];
+  }
+
+  public static get partTypeOptions(): FBOption[] {
+    return partTypeOptions;
   }
 
   public static icons(color?: string): Record<FBIconType, FBIconConfig[]> {

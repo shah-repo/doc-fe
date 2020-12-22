@@ -43,6 +43,7 @@ Cypress.Commands.add("pmAddMaterialDocumentToProcedure", (params: {
   numberOfMaterial: integerType;
   typeOfMaterial: string;}) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").click();
+  cy.wait(8000);
   cy.get("[data-cy=\"title\"]").click();
   cy.get("ul[role=\"listbox\"]>li").contains(params.materialDoc).click();
   cy.get("[name=\"quantity\"]").type(params.numberOfMaterial.toString());
@@ -58,6 +59,7 @@ Cypress.Commands.add("pmAddFreeTextMaterial", (params: {
   numberOfMaterial: integerType;
   typeOfMaterial: string;}) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").click();
+  cy.wait(8000);
   cy.get("[data-cy=\"title\"]").type(params.material);
   cy.get("[name=\"quantity\"]").type(params.numberOfMaterial.toString());
   cy.get("[data-cy=\"unit\"]").click();

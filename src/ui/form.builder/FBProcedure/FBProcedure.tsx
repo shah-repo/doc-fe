@@ -17,17 +17,18 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
   ...props
 }) => (
   <FBInput {...props } {...{ name }} type="procedure">
-    <FBLabel
-      label={{
-        locale: "form.builder.step.number",
-        values: { number: stepIndex },
-      }}
-    />
+    {!isOutput && (
+      <FBLabel
+        label={{
+          locale: "form.builder.step.number",
+          values: { number: stepIndex },
+        }}
+      />
+    )}
     <Box
       pb={3}
       color={Colors.hint_gray}
       borderBottom={2}
-      mt={-5}
     >
       {isOutput && (
         <FBProvider {...{ procedureState }}>
@@ -58,6 +59,7 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
               values: { number: stepIndex },
             }}
             autosave
+            boxProps={{ style: { color: Colors.black } }}
           />
           <Box
             display="flex"

@@ -355,6 +355,7 @@ context("Procedure and parts flow test", () => {
       it("Add procedure field", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectCustomFieldToAdd({ name: "Procedure" });
+        cy.get("[value=\"copyableValue\"]").check();
         cy.fbAddField();
       });
     });
@@ -428,11 +429,9 @@ context("Procedure and parts flow test", () => {
 
     context("Choose a part and approve EB", () => {
       it("Choose an existing part from the list of available parts", () => {
-        cy.get("[data-cy=\"childrenParts\"]").type("Part document{downarrow}{enter}");
-      });
-
-      it("Save EB", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=\"childrenParts\"]").type("Part document{downarrow}{enter}");
+        });
       });
 
       it("Submit for Approval", () => {

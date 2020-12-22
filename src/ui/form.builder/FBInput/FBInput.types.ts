@@ -106,7 +106,14 @@ export type FBInputProps =
     isTemplate?: boolean;
     includeQRScan?: boolean;
     designDisabled?: boolean;
+    /**
+     * @cfg {Bool} Whether the field can be deleted in the output document.
+     */
     deleteDisabled?: boolean;
+    /**
+     * @cfg {Bool} Whether the field can be deleted in the form.
+     */
+    deleteInFormDisabled?: boolean;
     instructionsDocument?: string;
     reviseDisabled?: boolean;
     outputDisabled?: boolean;

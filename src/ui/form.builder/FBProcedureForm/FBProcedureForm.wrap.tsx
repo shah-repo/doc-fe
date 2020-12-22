@@ -18,6 +18,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     type,
     lotOptions,
     partOptions,
+    disabled,
     ...props
   }: T) => {
     // MARK: @config
@@ -38,16 +39,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     config[type]?.();
 
     React.useEffect(() => {
-      procedureFormState?.fetchParts(true);
-      if (!initialValues) {
-        procedureFormState?.fetchLots();
-        procedureFormState?.fetchParts();
+      if (initialValues?.partLot) {
+        procedureFormState?.fetchPartsOfLot(initialValues?.partLot);
       }
-      if (!initialValues?.partLot) {
-        procedureFormState?.fetchParts();
-      }
-      procedureFormState?.fetchPartsOfLot(initialValues?.partLot);
-
       dialogState?.setActions(
         <FBProcedureFormActions {...{ handleAdd, handleCancel }} />
       );
@@ -58,6 +52,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     useEffect(() => reaction(
       () => formState?.inputState.get("title")?.value,
       (value) => {
+        handleChangeOfPart();
         if (!value && !formState?.inputState.get("partLot")?.value) {
           procedureFormState?.fetchLots();
           procedureFormState?.fetchParts();
@@ -69,6 +64,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     useEffect(() => reaction(
       () => formState?.inputState.get("partLot")?.value,
       (value) => {
+        handleChangeOfLot();
         if (!value && !formState?.inputState.get("title")?.value) {
           procedureFormState?.fetchLots();
           procedureFormState?.fetchParts();
@@ -85,7 +81,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
           procedureFormState?.fetchLots();
           return;
         }
-        procedureFormState?.fetchLotsToPart(initialValues?.title);
+        // procedureFormState?.fetchLotsToPart(initialValues?.title);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -103,7 +99,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
 
     function handleChangeOfPart() {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
-      if (!formValue.title) {
+      // freeSolo or empty
+      if (!formValue.title ||
+        isEmpty(procedureFormState?.defaultParts.filter((e) => e.id === formValue?.title))) {
         return;
       }
       procedureFormState?.fetchLotsToPart(formValue.title);
@@ -115,20 +113,24 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         return;
       }
       procedureFormState?.fetchPartsOfLot(formValue.partLot);
+      if (isEmpty(partOptions)) {
+        return;
+      }
+      formState?.setFieldValue("title", partOptions?.[0], true);
     }
 
     // MARK: @observer
     useObserver(() => {
-      lotOptions = procedureFormState?.lotsToPart.map((schemaItem: DocumentRevision) => ({
+      lotOptions = procedureFormState?.lotsToPart?.map((schemaItem: DocumentRevision) => ({
         value: schemaItem.id,
         text: `${schemaItem.document.docId} - rev ${schemaItem.revision} - ${schemaItem.name}`,
       } as SelectOption));
-      partOptions = procedureFormState?.partsOfLot.map((schemaItem: DocumentRevision) => ({
+      partOptions = procedureFormState?.partsOfLot?.map((schemaItem: DocumentRevision) => ({
         value: schemaItem.id,
         text: `${schemaItem.document.docId} - rev ${schemaItem.revision} - ${schemaItem.name}`,
       } as SelectOption));
+      disabled = !procedureFormState?.partsOfLot || !procedureFormState.lotsToPart;
     });
-
 
     return Component({
       ...(props as T),
@@ -139,8 +141,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       type,
       lotOptions,
       partOptions,
-      handleChangeOfPart,
-      handleChangeOfLot,
+      disabled,
     });
   };
 

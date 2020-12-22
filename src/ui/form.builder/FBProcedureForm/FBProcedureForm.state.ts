@@ -5,19 +5,27 @@ import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
 export class FBProcedureFormState {
-  public getLotsToPart: FBRequest<Document, null> = new FBRequest(FBEndpoint.LotsToPart);
-  public getPartsOfLot: FBRequest<Document, null> = new FBRequest(FBEndpoint.PartsOfLot);
-  public getLots: FBRequest<Document, null> = new FBRequest(FBEndpoint.Lots);
-  public getParts: FBRequest<Document, null> = new FBRequest(FBEndpoint.Parts);
+  public getLotsToPart: FBRequest<DocumentRevision[], null> = new FBRequest(FBEndpoint.LotsToPart);
+  public getPartsOfLot: FBRequest<DocumentRevision[], null> = new FBRequest(FBEndpoint.PartsOfLot);
+  public getLots: FBRequest<DocumentRevision[], null> = new FBRequest(FBEndpoint.Lots);
+  public getParts: FBRequest<DocumentRevision[], null> = new FBRequest(FBEndpoint.Parts);
 
   // MARK: @observables
-  @observable public lotsToPart: DocumentRevision[] = [];
-  @observable public partsOfLot: DocumentRevision[] = [];
+  @observable public lotsToPart: DocumentRevision[] | undefined = undefined;
+  @observable public partsOfLot: DocumentRevision[] | undefined = undefined;
   @observable public defaultParts: DocumentRevision[] = [];
 
   // MARK: @config
 
   // MARK: @constructor
+  public constructor() {
+    if (!this.partsOfLot) {
+      this.fetchParts(true);
+    }
+    if (!this.lotsToPart) {
+      this.fetchLots();
+    }
+  }
 
   // MARK: @actions
   public fetchLotsToPart = async (id?: string) => {
@@ -59,6 +67,7 @@ export class FBProcedureFormState {
       set(this, "partsOfLot", data);
     }
     set(this, "defaultParts", data);
+    set(this, "partsOfLot", data);
   };
 
   // MARK: @helpers

@@ -3,7 +3,7 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
-import { checkIsDocumentDAM, checkIsDocumentPOAM, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
+import { checkIsDocumentDAM, checkIsDocumentEquipment, checkIsDocumentPOAM, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
 import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
 import { getIsAdministrativeDefault } from "../helpers/revisionStage";
@@ -154,10 +154,17 @@ export const toDocumentRevisionFormValuesWithRevisionChange = (
     documentRevision,
   );
   const isAdministrativeDefault = getIsAdministrativeDefault(documentRevision);
+  const isDocumentEquipment = checkIsDocumentEquipment(documentRevision?.document.documentType.groupOptions);
 
-  values.revisionChangeType = isAdministrativeDefault ?
-    RevisionChangeType.AdministrativeChange :
-    RevisionChangeType.NextRevision;
+  if (isAdministrativeDefault) {
+    values.revisionChangeType = RevisionChangeType.AdministrativeChange;
+  } else if (isDocumentEquipment) {
+    // If document is EQ we hide menu and set default value to alpha
+    values.revisionChangeType = RevisionChangeType.NextRevisionStage;
+  } else {
+    values.revisionChangeType = RevisionChangeType.NextRevision;
+  }
+
   values.outputRevision = true;
   FBDRStore.setValues({
     ...values,

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { first, get, includes, isBoolean, isEqual, isString, isUndefined } from "lodash";
+import { first, get, includes, isArray, isBoolean, isEqual, isString, isUndefined, size } from "lodash";
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
@@ -74,20 +74,22 @@ export const withFBInput = <T extends FBInputProps>(
     const validationValue = get(formState?.validationValues, name);
 
     if ((isOutput || formState?.workspaceMode !== "design") && formState?.workspaceMode !== "formPreview") {
-      (isUndefined(hidden) && validationMode === "visibility") && (hidden =
-        !helperText && (!validationValue || validationValue === "")
+      const isUnderMode = (
+        !helperText && (
+          isUndefined(validationValue) ||
+          validationValue === "" ||
+          (isArray(validationValue) && size(validationValue) === 0)
+        )
       );
-
-      (!disabled && validationMode === "disabled") && (disabled =
-        !helperText && (!validationValue || validationValue === "")
-      );
+      (isUndefined(hidden) && validationMode === "visibility") && (hidden = isUnderMode);
+      (!disabled && validationMode === "disabled") && (disabled = isUnderMode);
     }
 
     function setDefaultValue(): any {
       if (!formState) { return; }
       const value = {
         editoroptions() {
-          const options: FBOption[] | undefined = formState?.getFieldValue(name);
+          const options: FBOption[] | undefined = formState?.getFieldValue(name, undefined, omitFormValue);
           if (isString(options)) {
             return;
           }
@@ -98,11 +100,15 @@ export const withFBInput = <T extends FBInputProps>(
         autocompleteasync() { return; },
         autocomplete() { return; },
         datepicker() {
-          return inputState && (inputState.value = formState.getFieldValue(name) || "");
+          return inputState && (inputState.value = formState.getFieldValue(name, undefined, omitFormValue) || "");
         },
         default() {
           isString(initialValue) && transform && (defaultValue = setTranform?.(initialValue));
-          return formState.getFieldValue(name, (isUndefined(defaultValue)) ? defaultChecked : defaultValue);
+          return formState.getFieldValue(
+            name,
+            (isUndefined(defaultValue)) ? defaultChecked : defaultValue,
+            omitFormValue
+          );
         },
       };
       const transDefault = (value[type || ""] || value.default)();
@@ -121,7 +127,7 @@ export const withFBInput = <T extends FBInputProps>(
         disabled,
         onChange,
         onBlur,
-        value,
+        ...(type !== "autocomplete" && { value }),
         ...(type === "textfield" && { error }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
         ...( workspaceState?.mode === "preview" && { className: FBClasses.inputPreview }),

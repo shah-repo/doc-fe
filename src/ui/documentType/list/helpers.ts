@@ -36,7 +36,7 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
       dataKey: "effectiveDate",
       searchType: "select",
       selectOptions: documentRevisionEffectiveDateOption(),
-      defaultValue: tableCriteria.queryDict.effectiveDate,
+      defaultValue: tableCriteria.queryDict?.effectiveDate,
     };
   }
   if (valuePath === "releasedAt") {

@@ -65,6 +65,7 @@ export const useHandleCreateDoc = () => {
       history.push(path);
     }, onError: (msg) => redirect(),
   });
+
   const createDoc = (docId: string) => {
     const formValues = toDocumentRevisionFormValuesForOutput(form as DocumentRevision, selectedDocumentType);
     const outputDocumentTypes = form?.formTemplate?.outputDocumentTypes || [];
@@ -79,6 +80,9 @@ export const useHandleCreateDoc = () => {
     };
 
     createDocAsync.start(createDocAction, data, createDocAsync);
+    // setting to initial value in case creating new ouput is immediately
+    // after creating doc by type, otherwise wrong value for id is set
+    selectedDocumentTypeId = "";
   };
   const redirect = (selectedForm = form) => {
     history.push({
@@ -92,9 +96,6 @@ export const useHandleCreateDoc = () => {
     if (selectedDocumentTypeId) {
       fetchDocIdAsync.start(fetchDocIdAction, selectedDocumentTypeId, fetchDocIdAsync);
       setForm(selectedForm);
-      // setting to initial value in case creating new ouput is immediately
-      // after creating doc by type, otherwise wrong value for id is set
-      selectedDocumentTypeId = "";
       return;
     }
     if (outputDocumentTypes.length === 1 && !(outputDocumentTypes[0] as any)?.documentTypeAcronym?.startsWith("RC")) {

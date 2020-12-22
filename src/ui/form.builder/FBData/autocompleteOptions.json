@@ -219,5 +219,14 @@
     "labelPrefixRoot": "document.docId",
     "root": "",
     "includeRevision": "displayRevision"
+  },
+  {
+    "id": "25",
+    "path": "/documents/available_parts",
+    "label": "Available Part Documents",
+    "valueKey": "id",
+    "labelKey": "documentRevisions.name",
+    "labelPrefixRoot": "docId",
+    "root": ""
   }
 ]
