@@ -3,7 +3,7 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
-import { checkIsDocumentDAM, checkIsDocumentEquipment, checkIsDocumentPOAM, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
+import { checkIsDocumentDAM, checkIsDocumentPOAM, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
 import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
 import { getIsAdministrativeDefault } from "../helpers/revisionStage";
@@ -69,9 +69,11 @@ export const toDocumentRevisionFormValues = (
   const isDocumentRecord = checkIsDocumentRecord(documentRevision?.document.documentType.groupOptions);
   const isDocumentPOAM = checkIsDocumentPOAM(documentRevision?.document.documentType.groupOptions);
   const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
+
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isDocumentRecord;
   const isdocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isDocRevFirstDraft = isdocRevStatusDraft && documentRevision?.version === 1;
+
   if (shouldShowRevStageForDocType && isDocRevFirstDraft) {
     values.revisionStage = documentRevision.revisionStage.toString();
   }
@@ -154,13 +156,9 @@ export const toDocumentRevisionFormValuesWithRevisionChange = (
     documentRevision,
   );
   const isAdministrativeDefault = getIsAdministrativeDefault(documentRevision);
-  const isDocumentEquipment = checkIsDocumentEquipment(documentRevision?.document.documentType.groupOptions);
 
   if (isAdministrativeDefault) {
     values.revisionChangeType = RevisionChangeType.AdministrativeChange;
-  } else if (isDocumentEquipment) {
-    // If document is EQ we hide menu and set default value to alpha
-    values.revisionChangeType = RevisionChangeType.NextRevisionStage;
   } else {
     values.revisionChangeType = RevisionChangeType.NextRevision;
   }

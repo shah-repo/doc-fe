@@ -137,7 +137,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
   const isDocRevFirstDraft = (isDocRevStatusDraft || isDocRevStatusInPendingChange) && documentRevision?.version === 1;
   const isSubrevision = documentRevision?.subRevision as number > 0;
-  const isRevisionChangeHidden = (isRecord && isDocRevStatusDraft && !isSubrevision) || isDocumentEquipment;
+  const isRevisionChangeHidden = isRecord && isDocRevStatusDraft && !isSubrevision;
   const isRevised = values.outputRevision;
   const isDisabled: boolean = initialValues.id !== undefined;
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
@@ -273,7 +273,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             isDraft={isDocRevStatusDraft || isRevised}
           />
         )}
-        <RevisionStage {...{ isDisabled, isDocRevFirstDraft, shouldShowRevStageForDocType }}/>
+        <RevisionStage {...{ isDisabled, isDocRevFirstDraft, shouldShowRevStageForDocType, isDocumentEquipment }}/>
         <AvailableReferencesField
           availableReferences={availableReferences}
           documentReferences={documentRevision?.referenceTo}
