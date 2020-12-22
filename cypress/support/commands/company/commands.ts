@@ -25,6 +25,7 @@ interface IdocumentTypeDto {
   startingNumber?: number;
   needsSignature?: boolean;
   category?: string;
+  schema?: any;
 }
 
 export interface ICreateCompanyBootstrap {

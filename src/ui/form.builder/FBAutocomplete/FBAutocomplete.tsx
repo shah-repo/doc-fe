@@ -50,6 +50,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         {/* hack forautocomplete, options are rendered after componenet is already shown */}
         {isEmpty(options) &&
       <Autocomplete
+        value={defaultValue}
         renderInput={(params: RenderInputParams) => (
           <Box display="flex">
             <Box width="100%">

@@ -320,7 +320,7 @@ context("Validators tests", () => {
     });
 
     it(`Make '${requiredIfFieldLabel}' field required, if '${requiredFieldLabel}' 
-    field text equals '${requiredIfFieldValue}': Add text field`, () => {
+field text equals '${requiredIfFieldValue}': Add text field`, () => {
       cy.fbAddField();
     });
 
@@ -357,7 +357,7 @@ context("Validators tests", () => {
     });
 
     it(`Make '${requiredIfInFieldLabel}' field required, if '${requiredIfFieldLabel}' 
-    field text includes '${requiredIfInFieldValues.split(",").join(" or ")}': Add text field`, () => {
+field text includes '${requiredIfInFieldValues.split(",").join(" or ")}': Add text field`, () => {
       cy.fbAddField();
     });
 
@@ -390,7 +390,7 @@ context("Validators tests", () => {
     });
 
     it(`Make '${requiredWithFieldLabel}' field required, if '${requiredIfInFieldLabel}' 
-    field is not empty': Add text field`, () => {
+field is not empty': Add text field`, () => {
       cy.fbAddField();
     });
 
@@ -424,7 +424,7 @@ context("Validators tests", () => {
     });
 
     it(`Make '${requiredWithoutFieldLabel}' field required, if '${requiredWithFieldLabel}' 
-    field is empty: Add text field`, () => {
+field is empty: Add text field`, () => {
       cy.fbAddField();
     });
 
@@ -778,4 +778,5 @@ context("Validators tests", () => {
 
 // for TS error "All files must be modules when the '--isolatedModules' flag is provided" uncomment line below
 export { };
+
 

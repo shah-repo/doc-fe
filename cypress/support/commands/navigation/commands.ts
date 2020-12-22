@@ -23,6 +23,7 @@ declare global {
       navigToRecords(): Chainable<Subject>;
       navigToDocTypeManagement(): Chainable<Subject>;
       navigToEquipment(): Chainable<Subject>;
+      navigToParts(): Chainable<Subject>;
     }
   }
 }
@@ -61,6 +62,16 @@ Cypress.Commands.add("navigToRecords", () => {
       NavigationItems.DASHBOARD,
       NavigationItems.DOCUMENT_CONTROL,
       NavigationItems.RECORDS,
+    ],
+  });
+});
+
+Cypress.Commands.add("navigToParts", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.MANUFACTURING,
+      NavigationItems.PARTS,
     ],
   });
 });

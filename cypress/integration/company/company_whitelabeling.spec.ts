@@ -43,7 +43,8 @@ context("Whitelabeling test", () => {
             slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [],
-          }, sessionId: loginResponse.sessionId as unknown as string,
+          },
+          sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
           done();
