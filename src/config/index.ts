@@ -118,7 +118,6 @@ class Config {
   }
 
   public static get consoleToastsEnabled(): boolean {
-    console.log({ [`${this.get("CONSOLE_TOAST")}`]: this.get("CONSOLE_TOAST") });
     return this.get("CONSOLE_TOAST") === "true";
   }
 }
