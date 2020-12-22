@@ -107,6 +107,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         // formState?.setFieldValue("partType", "documentRevision", true);
         const { id: partId } = data || {};
         FBAutocompleteAsyncStore.add(FBAutocompleteAsyncOption.availableParts, partId, data);
+        FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.availablePartDocuments)?.clear();
         formState?.setFieldValue("childrenParts", partId);
         formState?.getInputState("childrenParts")?.setRender();
         ebPartState?.setChildrenParts(partId);
