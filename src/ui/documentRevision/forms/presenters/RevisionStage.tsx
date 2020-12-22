@@ -12,14 +12,12 @@ interface Props {
   isDisabled: boolean;
   isDocRevFirstDraft: boolean;
   shouldShowRevStageForDocType: boolean;
-  isDocumentEquipment: boolean;
 }
 
 export const RevisionStage: React.FunctionComponent<Props> = ({
   isDisabled,
   isDocRevFirstDraft,
   shouldShowRevStageForDocType,
-  isDocumentEquipment,
 }) => {
 
   const numOfRevStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
@@ -27,7 +25,7 @@ export const RevisionStage: React.FunctionComponent<Props> = ({
     RevisionStageOptions.filter((stage) => stage.value !== 2) :
     RevisionStageOptions;
 
-  if (isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType || isDocumentEquipment)) {
+  if (isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType)) {
     return null;
   }
 
