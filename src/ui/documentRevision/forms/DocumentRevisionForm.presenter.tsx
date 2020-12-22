@@ -22,7 +22,7 @@ import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
-import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
+import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../helpers/documentRevisionStatus";
 import { isDocumentAlphaReleased } from "../helpers/revisionStage";
 import { styles } from "./DocumentRevisionForm.styles";
@@ -109,7 +109,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
 
-
   const hasOutput = useMemo(() => {
     const documentType = documentTypesById[values.document?.documentType?.id || ""];
     return checkIsTypeHaveOutput(documentType?.groupOptions);
@@ -132,12 +131,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
   const isPart = checkIsDocumentPart(documentRevision?.document.documentType.groupOptions);
+  const isDocumentEquipment = checkIsDocumentEquipment(documentRevision?.document.documentType.groupOptions);
 
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
   const isDocRevFirstDraft = (isDocRevStatusDraft || isDocRevStatusInPendingChange) && documentRevision?.version === 1;
   const isSubrevision = documentRevision?.subRevision as number > 0;
-  const isRevisionChangeHidden = isRecord && isDocRevStatusDraft && !isSubrevision;
+  const isRevisionChangeHidden = (isRecord && isDocRevStatusDraft && !isSubrevision) || isDocumentEquipment;
   const isRevised = values.outputRevision;
   const isDisabled: boolean = initialValues.id !== undefined;
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;

@@ -67,7 +67,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get("childrenParts")?.value,
       (childPartId: string) => {
-        if (!childPartId || childPartId !== ebPartState.childrenParts) { return; }
+        if (!childPartId || (childPartId !== ebPartState.childrenParts && ebPartState.childrenParts)) { return; }
         const childrenParts = childPartId && childPartId !== "" ? [{ id: childPartId }] : [];
         const body = {
           formInput: omit(formState?.getValues(), "childrenPartsForRevise"),
@@ -85,6 +85,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
       () => formState?.inputState.get("childForRevise")?.value,
       (childPartId: string) => {
         const childrenPartsForRevise = childPartId && childPartId !== "" ? [{ id: childPartId }] : [];
+        formState?.setFieldValue("childrenPartsForRevise", childrenPartsForRevise);
         const body = {
           childrenParts: [],
           formInput: {
