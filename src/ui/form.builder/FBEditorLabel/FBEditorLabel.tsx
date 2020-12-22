@@ -1,6 +1,6 @@
 import { InputAdornment } from "@material-ui/core";
 import React from "react";
-import { FBConditionalWrapper, FBEditor, FBEditorProps, FBInput, FBTextField } from "..";
+import { FBConditionalWrapper, FBEditor, FBEditorProps, FBTextField } from "..";
 import Text from "../../components/Text";
 
 const FBEditorLabel: React.FunctionComponent<FBEditorProps> = ({
@@ -31,7 +31,7 @@ const FBEditorLabel: React.FunctionComponent<FBEditorProps> = ({
             InputProps: {
               endAdornment: (
                 <InputAdornment position="end">
-                  <FBInput defaultValue={stepIndex} name="stepIndex"/>
+                  <FBTextField defaultValue={stepIndex} name="stepIndex" hidden />
                   {`#${stepIndex}`}
                 </InputAdornment>
               ),
