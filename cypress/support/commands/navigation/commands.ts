@@ -134,7 +134,13 @@ Cypress.Commands.add("navigToPurchaseOrder", () => {
 });
 
 Cypress.Commands.add("navigToSuppliers", () => {
-  cy.navigClickOnItem({ navigItem: NavigationItems.SUPPLIERS });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.SUPPLIER_MANAGEMENT,
+      NavigationItems.SUPPLIER_LIST,
+    ],
+  });
 });
 
 
