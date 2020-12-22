@@ -1,0 +1,29 @@
+.Toastify-console-log-common {
+  color: white !important;
+  font-weight: 300;
+}
+.Toastify-console-log-common h4 {
+  margin: 0 0 0.3em 0;
+}
+
+.Toastify-console-log-common p {
+  margin: 0 0 0.3em 0;
+  overflow-wrap: anywhere;
+  font-size: small;
+}
+
+.Toastify-console-log-log {
+  background: #0088ff !important;
+}
+
+.Toastify-console-log-info {
+  background: #44ff00 !important;
+}
+
+.Toastify-console-log-warn {
+  background: #ff5e00 !important;
+}
+
+.Toastify-console-log-error {
+  background: #ff0044 !important;
+}
