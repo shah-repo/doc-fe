@@ -4,13 +4,17 @@ import { DocumentType } from "../../../state/ducks/documentRevisions/documentTyp
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
 import { checkIsDocumentDAM, checkIsDocumentEquipment, checkIsDocumentPOAM, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
-import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
+import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
 import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
 import { getIsAdministrativeDefault } from "../helpers/revisionStage";
 import { DocumentRevisionFormValues } from "./types";
 
 
-export const getHighestRevision = (revisions: DocumentRevision[]) => maxBy(revisions, "revision");
+export const getHighestRevision = (revisions: DocumentRevision[]) => {
+  const highestStage = maxBy(revisions, "revisionStage")?.revisionStage;
+  const revs = revisions.filter((rev) => rev.revisionStage === highestStage && isDocumentRevisionReleased(rev.status));
+  return maxBy(revs, "revision");
+};
 
 const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateRevisionNumber(revision.revision,
   revision.revisionStage,
