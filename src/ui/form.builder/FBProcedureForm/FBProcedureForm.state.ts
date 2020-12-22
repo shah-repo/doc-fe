@@ -11,11 +11,6 @@ export class FBProcedureFormState {
   public partsApi: FBRequest<DocumentRevision[], null> = new FBRequest();
   public lotsApi: FBRequest<DocumentRevision[], null> = new FBRequest();
 
-  // @observable public defaultParts: DocumentRevision[] = [];
-
-  // @observable public partLot?: DocumentRevision[];
-
-  // MARK: @config
 
   // MARK: @constructor
 

@@ -41,9 +41,6 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     config[type]?.();
 
     React.useEffect(() => {
-      // if (initialValues?.partLot) {
-      //   procedureFormState?.fetchPartsOfLot(initialValues?.partLot);
-      // }
       dialogState?.setActions(
         <FBProcedureFormActions {...{ handleAdd, handleCancel }} />
       );
