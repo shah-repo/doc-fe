@@ -83,6 +83,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     );
 
     onInputChange = (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      // setField doesn't work here, the same problem prefilled with first option
       if (!freeSolo) { return; }
       const { target: { value = "" } = {} } = ev;
       formState?.setFieldValue(name, value);
