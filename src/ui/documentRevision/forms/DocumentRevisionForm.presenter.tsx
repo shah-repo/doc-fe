@@ -137,7 +137,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
   const isDocRevFirstDraft = (isDocRevStatusDraft || isDocRevStatusInPendingChange) && documentRevision?.version === 1;
   const isSubrevision = documentRevision?.subRevision as number > 0;
-  const isRevisionChangeHidden = (isRecord && isDocRevStatusDraft && !isSubrevision) || isDocumentEquipment;
+  const isRevisionChangeHidden = isRecord && isDocRevStatusDraft && !isSubrevision;
   const isRevised = values.outputRevision;
   const isDisabled: boolean = initialValues.id !== undefined;
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
@@ -145,7 +145,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isAttachmentEmpty = !(documentRevision?.attachments.length > 1);
   const documentTypeId = values.document?.documentType?.id;
   const showOutputInfo = workspaceState?.mode === "form" || workspaceState?.mode === "formDesign";
-  const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;
+  const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord && !isDocumentEquipment;
   const outputDocumentTypes = pmFormId ?
     initialValues.outputDocumentTypes :
     initialValues.formDocument?.formTemplate?.outputDocumentTypes;

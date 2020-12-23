@@ -24,7 +24,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     // MARK: @config
     const { procedureState, dialogState } = FB.useStores();
     formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
-    procedureFormState = FB.useRef(FBProcedureFormState);
+    procedureFormState = FB.useRef<FBProcedureFormState>(FBProcedureFormState, {
+      initialValues,
+    });
 
     const config: Partial<Record<keyof typeof FBProcedureItemType, (() => void)>> = {
       materials: () => {
@@ -39,9 +41,6 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     config[type]?.();
 
     React.useEffect(() => {
-      if (initialValues?.partLot) {
-        procedureFormState?.fetchPartsOfLot(initialValues?.partLot);
-      }
       dialogState?.setActions(
         <FBProcedureFormActions {...{ handleAdd, handleCancel }} />
       );
@@ -73,19 +72,6 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    useEffect(() => reaction(
-      () => procedureFormState?.defaultParts,
-      (value) => {
-        // if freeSolo
-        if (isEmpty(value?.filter((e) => e.id === initialValues?.title))) {
-          procedureFormState?.fetchLots();
-          return;
-        }
-        // procedureFormState?.fetchLotsToPart(initialValues?.title);
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
     // MARK: @helpers
     function handleAdd() {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
@@ -113,10 +99,6 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         return;
       }
       procedureFormState?.fetchPartsOfLot(formValue.partLot);
-      if (isEmpty(partOptions)) {
-        return;
-      }
-      formState?.setFieldValue("title", partOptions?.[0], true);
     }
 
     // MARK: @observer
