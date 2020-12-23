@@ -26,7 +26,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     // MARK: @config
     const { procedureState, dialogState } = FB.useStores();
     formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
-    procedureFormState = FB.useRef(FBProcedureFormState);
+    procedureFormState = FB.useRef<FBProcedureFormState>(FBProcedureFormState, {
+      initialValues,
+    });
 
     const config: Partial<Record<keyof typeof FBProcedureItemType, (() => void)>> = {
       materials: () => {

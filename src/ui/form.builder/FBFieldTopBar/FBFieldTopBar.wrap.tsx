@@ -35,6 +35,8 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
       if (hasValidationRelation(name, rules)) { return; }
       if (documentId && !isEmpty(documentId)) {
         inputProps = { ...inputProps, deleted: true };
+        workspaceState?.setSchemaItem(inputProps);
+        return;
       }
       if (inputProps?.type === "section") {
         bookmarkState?.removeBookmark(inputProps?.name as string);

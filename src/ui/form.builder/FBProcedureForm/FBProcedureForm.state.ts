@@ -3,6 +3,7 @@ import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
 export class FBProcedureFormState {
+
   // MARK: @config
   public parts?: string[];
   public lots?: string[];
@@ -10,7 +11,6 @@ export class FBProcedureFormState {
   // MARK: @observables
   public partsApi: FBRequest<DocumentRevision[], null> = new FBRequest();
   public lotsApi: FBRequest<DocumentRevision[], null> = new FBRequest();
-
 
   // MARK: @constructor
 

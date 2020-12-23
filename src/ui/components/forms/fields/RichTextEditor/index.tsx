@@ -58,22 +58,23 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
 
   useEffect(() => {
     setValue(convertHtmlToDraft(field.value));
-  }, [field.value]);
+  }, []);
 
-  useEffect(() => {
-    if (!value) {
-      return;
-    }
+  // ENC-1934 - in case of pointer run
+  // useEffect(() => {
+  //   if (!value) {
+  //     return;
+  //   }
 
-    const html = draftToHtml(convertToRaw(value.getCurrentContent())).trim();
+  //   const html = draftToHtml(convertToRaw(value.getCurrentContent())).trim();
 
-    // workaround for assessment description
-    // field value is set to undefined if attachment is added
-    // that's why we have to update the editor value as well
-    if (!field.value && html && html !== "<p></p>") {
-      setValue(convertHtmlToDraft(""));
-    }
-  }, [field.value]);
+  //   // workaround for assessment description
+  //   // field value is set to undefined if attachment is added
+  //   // that's why we have to update the editor value as well
+  //   if (!field.value && html && html !== "<p></p>") {
+  //     setValue(convertHtmlToDraft(""));
+  //   }
+  // }, [field.value]);
 
   const [debouncedUpdate] = useDebounce(value, 200);
   useEffect(() => {

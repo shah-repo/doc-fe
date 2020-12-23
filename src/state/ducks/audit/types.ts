@@ -1,3 +1,4 @@
+import { FBSchemaProps } from "../../../ui/form.builder";
 import { Attachment } from "../attachments";
 import { Group, User } from "../auth/types";
 import { ChangeRequest } from "../changeRequest";
@@ -23,11 +24,13 @@ export interface Audit {
   | ChangeRequest
   | DocumentType
   | Group;
+  previousValue?: Audit["nextValue"];
   timestamp: string;
   groupId: string;
   owner: Owner;
   ownerUser?: Owner;
   ownerThirdParty?: Owner;
+  fbSchemaItem?: FBSchemaProps;
 }
 
 export interface AuditActionPayload {
