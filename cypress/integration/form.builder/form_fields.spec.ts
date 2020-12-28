@@ -122,7 +122,7 @@ context("FORM Field test", () => {
         });
 
         it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -146,21 +146,21 @@ context("FORM Field test", () => {
     context("Verify TextField attributes", () => {
       it("Verify TextField label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify TextField placeholder", () => {
         cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
+      });
 
       it("Verify TextField rows", () => {
         cy.fbVerifyNameValue({ name: "rows", value: "2" });
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Checkbox Group' test", () => {
     context("Create FORM document", () => {
@@ -197,7 +197,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
         });
-      })
+      });
 
       context("Fill in Checkbox group attributes", () => {
         it("Enter label 'test label'", () => {
@@ -209,7 +209,7 @@ context("FORM Field test", () => {
         });
 
         it("Check 'Include Other', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["includeContext", "reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -233,17 +233,17 @@ context("FORM Field test", () => {
     context("Verify Checkbox Group attributes", () => {
       it("Verify label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify options", () => {
         cy.fbVerifyOptions("SelectOne", "SelectTwo", "SelectThree");
-      })
+      });
 
       it("Verify checkboxes 'Include Other', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Autocomplete' test", () => {
     context("Create FORM document", () => {
@@ -280,7 +280,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
@@ -296,7 +296,7 @@ context("FORM Field test", () => {
         });
 
         it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -320,21 +320,21 @@ context("FORM Field test", () => {
     context("Verify Autocomplete attributes", () => {
       it("Verify Autocomplete label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify Autocomplete placeholder", () => {
         cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
+      });
 
       it("Verify Autocomplete options 'Document revisions' ", () => {
         cy.get("[data-cy=\"optionId\"]").should("have.value", 'Document revisions');
-      })
+      });
 
       it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Text Editor' test", () => {
     context("Create FORM document", () => {
@@ -371,7 +371,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
         });
-      })
+      });
 
       context("Fill in Text Editor attributes", () => {
         it("Enter label 'test label'", () => {
@@ -383,7 +383,7 @@ context("FORM Field test", () => {
         });
 
         it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -407,17 +407,17 @@ context("FORM Field test", () => {
     context("Verify Text Editor attributes", () => {
       it("Verify label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify options", () => {
         cy.fbVerifyOptions("SelectOne", "SelectTwo", "SelectThree");
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Date Picker' test", () => {
     context("Create FORM document", () => {
@@ -462,7 +462,7 @@ context("FORM Field test", () => {
         });
 
         it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -486,13 +486,13 @@ context("FORM Field test", () => {
     context("Verify Date Picker attributes", () => {
       it("Verify label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Hyperlink' test", () => {
     context("Create FORM document", () => {
@@ -529,7 +529,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Hyperlink" });
         });
-      })
+      });
 
       context("Fill in Hyperlink attributes", () => {
         it("Enter label 'test label'", () => {
@@ -541,7 +541,7 @@ context("FORM Field test", () => {
         });
 
         it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -565,17 +565,17 @@ context("FORM Field test", () => {
     context("Verify Hyperlink attributes", () => {
       it("Verify Hyperlink label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify Hyperlink linkUrl", () => {
         cy.fbVerifyNameValue({ name: "linkUrl", value: "google.com" });
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Select Field' test", () => {
     context("Create FORM document", () => {
@@ -612,7 +612,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
         });
-      })
+      });
 
       context("Fill in Select Field attributes", () => {
         it("Enter label 'test label'", () => {
@@ -628,7 +628,7 @@ context("FORM Field test", () => {
         });
 
         it("Check 'Include None', 'Include Other', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["includeNone", "includeContext", "reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("includeNone", "includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -652,21 +652,21 @@ context("FORM Field test", () => {
     context("Verify Select Field attributes", () => {
       it("Verify label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify placeholder", () => {
         cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
+      });
 
       it("Verify options", () => {
         cy.fbVerifyOptions("SelectOne", "SelectTwo", "SelectThree");
-      })
+      });
 
       it("Verify checkboxes 'Include None', 'Include Other', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("includeNone", "includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Radio Button group' test", () => {
     context("Create FORM document", () => {
@@ -703,7 +703,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
         });
-      })
+      });
 
       context("Fill in Radio Button group attributes", () => {
         it("Enter label 'test label'", () => {
@@ -715,7 +715,7 @@ context("FORM Field test", () => {
         });
 
         it("Check 'Include Other', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["includeContext", "reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -739,17 +739,17 @@ context("FORM Field test", () => {
     context("Verify Radio Button group attributes", () => {
       it("Verify label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify options", () => {
         cy.fbVerifyOptions("SelectOne", "SelectTwo", "SelectThree");
-      })
+      });
 
       it("Verify checkboxes 'Include Other', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Paragraph' test", () => {
     context("Create FORM document", () => {
@@ -786,11 +786,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Paragraph" });
         });
-      })
+      });
 
       context("Fill in Paragraph attributes", () => {
         it("Enter paragraph", () => {
-          cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("testing")
+          cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("testing");
         });
 
         it("Click 'Add' button", () => {
@@ -813,10 +813,10 @@ context("FORM Field test", () => {
 
     context("Verify Paragraph attributes", () => {
       it("Verify paragraph", () => {
-        cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]").should('have.text', 'testing')
-      })
-    })
-  })
+        cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]").should('have.text', 'testing');
+      });
+    });
+  });
 
   context("FORM Input 'File Upload' test", () => {
     context("Create FORM document", () => {
@@ -853,7 +853,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
         });
-      })
+      });
 
       context("Fill in File Upload attributes", () => {
         it("Enter label 'test label'", () => {
@@ -861,7 +861,7 @@ context("FORM Field test", () => {
         });
 
         it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -885,13 +885,13 @@ context("FORM Field test", () => {
     context("Verify File Upload attributes", () => {
       it("Verify label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Blank Template Form' test", () => {
     context("Create FORM document", () => {
@@ -928,7 +928,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
         });
-      })
+      });
 
       context("Fill in Blank Template Form attributes", () => {
         it("Enter label 'test Blank Template Form'", () => {
@@ -956,9 +956,9 @@ context("FORM Field test", () => {
     context("Verify Blank Template Form attributes", () => {
       it("Verify label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test Blank Template Form" });
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Quantity' test", () => {
     context("Create FORM document", () => {
@@ -995,7 +995,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
         });
-      })
+      });
 
       context("Fill in Quantity attributes", () => {
         it("Enter label 'test quantity'", () => {
@@ -1003,7 +1003,7 @@ context("FORM Field test", () => {
         });
 
         it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -1027,13 +1027,13 @@ context("FORM Field test", () => {
     context("Verify Quantity attributes", () => {
       it("Verify label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test quantity" });
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Timer' test", () => {
     context("Create FORM document", () => {
@@ -1070,7 +1070,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Timer" });
         });
-      })
+      });
 
       context("Fill in Timer attributes", () => {
         it("Enter label 'test timer'", () => {
@@ -1078,7 +1078,7 @@ context("FORM Field test", () => {
         });
 
         it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -1102,13 +1102,13 @@ context("FORM Field test", () => {
     context("Verify Timer attributes", () => {
       it("Verify label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test timer" });
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Approval Matrix' test", () => {
     context("Create FORM document", () => {
@@ -1149,7 +1149,7 @@ context("FORM Field test", () => {
 
       context("Fill in Approval Matrix attributes", () => {
         it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -1173,9 +1173,9 @@ context("FORM Field test", () => {
     context("Verify Approval Matrix attributes", () => {
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'PO Approval Matrix' test", () => {
     context("Create FORM document", () => {
@@ -1212,7 +1212,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "PO Approval Matrix" });
         });
-      })
+      });
 
       context("Fill in PO Approval Matrix attributes", () => {
         it("Enter label 'test label'", () => {
@@ -1220,7 +1220,7 @@ context("FORM Field test", () => {
         });
 
         it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -1244,13 +1244,13 @@ context("FORM Field test", () => {
     context("Verify PO Approval Matrix attributes", () => {
       it("Verify label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Instructions Media upload' test", () => {
     context("Create FORM document", () => {
@@ -1287,7 +1287,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Instructions Media upload" });
         });
-      })
+      });
 
       context("Fill in Instructions Media upload attributes", () => {
         it("Enter label 'test label'", () => {
@@ -1295,7 +1295,7 @@ context("FORM Field test", () => {
         });
 
         it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -1319,13 +1319,13 @@ context("FORM Field test", () => {
     context("Verify Instructions Media upload attributes", () => {
       it("Verify label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Evidence Media upload' test", () => {
     context("Create FORM document", () => {
@@ -1362,7 +1362,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Evidence Media upload" });
         });
-      })
+      });
 
       context("Fill in Evidence Media upload attributes", () => {
         it("Enter label 'test label'", () => {
@@ -1370,7 +1370,7 @@ context("FORM Field test", () => {
         });
 
         it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -1398,9 +1398,9 @@ context("FORM Field test", () => {
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Test Requirement' test", () => {
     context("Create FORM document", () => {
@@ -1437,7 +1437,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Test Requirement" });
         });
-      })
+      });
 
       context("Fill in Test Requirement attributes", () => {
         it("Enter label 'test label'", () => {
@@ -1473,17 +1473,17 @@ context("FORM Field test", () => {
     context("Verify Test Requirement attributes", () => {
       it("Verify Test Requirement label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify Test Requirement options 'Document revisions' ", () => {
         cy.get("[data-cy=\"testRequirement\"]").should("have.value", 'Visual Alarm Indicator - The system shall use color as a visual indication of alarm type');
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Procedure' test", () => {
     context("Create FORM document", () => {
@@ -1520,7 +1520,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
         });
-      })
+      });
 
       context("Fill in Procedure attributes", () => {
         it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
@@ -1548,9 +1548,9 @@ context("FORM Field test", () => {
     context("Verify Procedure attributes", () => {
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Input 'Text field with range' test", () => {
     context("Create FORM document", () => {
@@ -1587,7 +1587,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
         });
-      })
+      });
 
       context("Fill in Text field with range attributes", () => {
         it("Enter label 'test label'", () => {
@@ -1627,21 +1627,21 @@ context("FORM Field test", () => {
     context("Verify Text field with range attributes", () => {
       it("Verify label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify placeholder", () => {
         cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
+      });
 
       it("Verify checkboxes 'Range', 'Critical to quality', 'Inspection'", () => {
         cy.fbVerifyCheckboxName("editorConfig.rangeOption", "editorConfig.criticalToQuality", "editorConfig.inspection");
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Section 'Section' test", () => {
     context("Create FORM document", () => {
@@ -1710,13 +1710,13 @@ context("FORM Field test", () => {
     context("Verify Section attributes", () => {
       it("Verify Section label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify checkboxes 'Inspection Section'", () => {
         cy.fbVerifyCheckboxValue("inspectionSection");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Section 'Subsection' test", () => {
     context("Create FORM document", () => {
@@ -1753,7 +1753,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Subsection" });
         });
-      })
+      });
 
       context("Fill in Subsection attributes", () => {
         it("Enter label 'test label'", () => {
@@ -1781,9 +1781,9 @@ context("FORM Field test", () => {
     context("Verify Subsection attributes", () => {
       it("Verify Subsection label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Section 'Step' test", () => {
     context("Create FORM document", () => {
@@ -1820,7 +1820,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Step" });
         });
-      })
+      });
 
       context("Fill in Step attributes", () => {
         it("Enter label 'test step label'", () => {
@@ -1848,9 +1848,9 @@ context("FORM Field test", () => {
     context("Verify Step attributes", () => {
       it("Verify Step label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test step label" });
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Section 'Test Step' test", () => {
     context("Create FORM document", () => {
@@ -1887,7 +1887,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Test Step" });
         });
-      })
+      });
 
       context("Create FORM document", () => {
         it("Click create document", () => {
@@ -1905,9 +1905,9 @@ context("FORM Field test", () => {
     context("Verify Test Step attributes", () => {
       it("Verify Step label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "Step" });
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Approval 'Approvals' test", () => {
     context("Create FORM document", () => {
@@ -1972,9 +1972,9 @@ context("FORM Field test", () => {
     context("Verify Approvals attributes", () => {
       it("Verify approval", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test approval" });
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Approval 'Inline Approval' test", () => {
     context("Create FORM document", () => {
@@ -2027,7 +2027,7 @@ context("FORM Field test", () => {
         })
 
         it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["reviseDisabled", "deleteDisabled", "copyableValue"]);
+          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         });
 
         it("Click 'Add' button", () => {
@@ -2051,21 +2051,21 @@ context("FORM Field test", () => {
     context("Verify Inline Approval attributes", () => {
       it("Verify approval", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test approval" });
-      })
+      });
 
       it("Verify Approvers", () => {
-        cy.get("[data-cy=\"editorConfig.approvers\"]").parent().should("contain", USERS[1].email)
+        cy.get("[data-cy=\"editorConfig.approvers\"]").parent().should("contain", USERS[1].email);
       });
 
       it("Verify Groups", () => {
-        cy.get("[data-cy=\"editorConfig.groups\"]").parent().should("contain", 'Everyone')
-      })
+        cy.get("[data-cy=\"editorConfig.groups\"]").parent().should("contain", 'Everyone');
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Actions 'Action Button' test", () => {
     context("Create FORM document", () => {
@@ -2102,7 +2102,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Action Button" });
         });
-      })
+      });
 
       context("Fill in Action Button attributes", () => {
         it("Select checkboxes", () => {
@@ -2130,9 +2130,9 @@ context("FORM Field test", () => {
     context("Verify Action Button attributes", () => {
       it("Verify checkboxes", () => {
         cy.fbVerifyCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Buttons 'Checkpoint' test", () => {
     context("Create FORM document", () => {
@@ -2201,13 +2201,13 @@ context("FORM Field test", () => {
     context("Verify Checkpoint attributes", () => {
       it("Verify label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test checkpoint" });
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Buttons 'Create a Label' test", () => {
     context("Create FORM document", () => {
@@ -2244,7 +2244,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Create a Label" });
         });
-      })
+      });
 
       context("Fill in 'Create a Label' attributes", () => {
         it("Enter label 'test label'", () => {
@@ -2276,13 +2276,13 @@ context("FORM Field test", () => {
     context("Verify 'Create a Label' attributes", () => {
       it("Verify label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Buttons 'Implementation Task' test", () => {
     context("Create FORM document", () => {
@@ -2319,7 +2319,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Implementation Task" });
         });
-      })
+      });
 
       context("Fill in 'Implementation Task' attributes", () => {
         it("Enter label 'test label'", () => {
@@ -2351,13 +2351,13 @@ context("FORM Field test", () => {
     context("Verify 'Implementation Task' attributes", () => {
       it("Verify label", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Instructions 'MPI' test", () => {
     context("Create FORM document", () => {
@@ -2394,7 +2394,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "MPI" });
         });
-      })
+      });
 
       context("Fill in MPI attributes", () => {
         it("Enter label 'test mpi'", () => {
@@ -2430,17 +2430,17 @@ context("FORM Field test", () => {
     context("Verify MPI attributes", () => {
       it("Verify label 'test mpi'", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test mpi" });
-      })
+      });
 
       it("Verify Document option ", () => {
         cy.get("[data-cy=\"instructionsDocument\"]").should("have.value", 'FM-00001 - rev 1 - AR Form');
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Instructions 'Select Document(s)' test", () => {
     context("Create FORM document", () => {
@@ -2477,7 +2477,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Select Document" });
         });
-      })
+      });
 
       context("Fill in Select Document(s) attributes", () => {
         it("Enter label 'test label'", () => {
@@ -2513,17 +2513,17 @@ context("FORM Field test", () => {
     context("Verify Select Document(s) attributes", () => {
       it("Verify label 'test label'", () => {
         cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
+      });
 
       it("Verify Option ", () => {
         cy.get("[data-cy=\"options\"]").parent().should("contain", 'AR Form');
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+      });
+    });
+  });
 
   context("FORM Instructions 'Select Requirement(s)' test", () => {
     context("Create FORM document", () => {
@@ -2560,7 +2560,7 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Select Requirement" });
         });
-      })
+      });
 
       context("Fill in Select Requirement(s) attributes", () => {
         it("Enter label 'test label'", () => {
@@ -2600,2195 +2600,11 @@ context("FORM Field test", () => {
 
       it("Verify Option ", () => {
         cy.get("[data-cy=\"options\"]").parent().should("contain", 'Visual Alarm Indicator - The system shall use color as a visual indication of alarm type');
-      })
+      });
 
       it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Document revisions' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Document revisions' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
       });
     });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Document revisions' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Document revisions');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Approval requests' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Approval requests' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Approval requests{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Approval requests' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Approval requests');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Approvers' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Approvers' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Approvers{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Approvers' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Approvers');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Document types' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Document types' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Document types{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Document types' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Document types');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Supplier list' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Supplier list' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Supplier list{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Supplier list' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Supplier list');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - TL numbers list' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'TL numbers list' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("TL numbers list{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'TL numbers list' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'TL numbers list');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - CSL numbers list' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'CSL numbers list' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("CSL numbers list{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'CSL numbers list' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'CSL numbers list');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Company addresses' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Company addresses' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Company addresses{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Company addresses' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Company addresses');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - GL codes' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'GL codes' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("GL codes{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'GL codes' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'GL codes');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Groups' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Groups' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Groups{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Groups' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Groups');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Parts' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Parts' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Parts{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Parts' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Parts');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Purchase Order list' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Purchase Order list' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Purchase Order list{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Purchase Order list' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Purchase Order list');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Employees' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Employees' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Employees{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Employees' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Employees');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Official Groups' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Official Groups' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Official Groups{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Official Groups' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Official Groups');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Part Number in WO' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Part Number in WO' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Part Number in WO{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Part Number in WO' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Part Number in WO');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Document Revisions In Draft without Records' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Document Revisions In Draft without Records' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Document Revisions In Draft without Records{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Document Revisions In Draft without Records' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Document Revisions In Draft without Records');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Approval Roles' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Approval Roles' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Approval Roles{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Approval Roles' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Approval Roles');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Document revisions (all versions)' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Document revisions (all versions)' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Document revisions (all versions){downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Document revisions (all versions)' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Document revisions (all versions)');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Materials' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Materials' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Materials{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Materials' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Materials');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Equipment' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Equipment' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Equipment{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Equipment' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Equipment');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Available Parts' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Available Parts' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Available Parts{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Available Parts' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Available Parts');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Document types' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Document types' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Document types{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Document types' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Document types');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Preventative Maintenance Forms' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Preventative Maintenance Forms' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Preventative Maintenance Forms{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Preventative Maintenance Forms' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Preventative Maintenance Forms');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
-
-  context("FORM Input 'Autocomplete - Lots' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      })
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Lots' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Lots{downarrow}{enter}");
-        });
-
-        it("Check 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue(["multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue"]);
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      })
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      })
-
-      it("Verify Autocomplete options 'Lots' ", () => {
-        cy.get("[data-cy=\"optionId\"]").should("have.value", 'Lots');
-      })
-
-      it("Verify checkboxes 'Multi Select', 'Include QR Scan', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      })
-    })
-  })
+  });
 });

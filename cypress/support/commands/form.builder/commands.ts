@@ -51,6 +51,17 @@ declare global {
       fbVerifyRadioButtonValue(params: { name: string }): Chainable<Subject>;
       fbSelectCheckboxName(...list: string[]): Chainable<Subject>;
       fbVerifyCheckboxName(...list: string[]): Chainable<Subject>;
+      fbMouseOverByName(params: { name: string }): Chainable<Subject>;
+      fbMouseOverByLabel(params: { label: string }): Chainable<Subject>;
+      fbClickButton(params: { el: string }): Chainable<Subject>;
+      fbVerifyElementVisibile(params: { name: string, el: string }): Chainable<Subject>;
+      fbVerifyElementNotVisibile(params: { name: string, el: string }): Chainable<Subject>;
+      fbVerifyElementVisibileByLabel(params: { label: string, el: string }): Chainable<Subject>;
+      fbVerifyElementNotVisibileByLabel(params: { label: string, el: string }): Chainable<Subject>;
+      fbVerifyElementClass(params: { name: string, el: string, class: string }): Chainable<Subject>;
+      fbVerifyElementClassByLabel(params: { label: string, el: string, class: string }): Chainable<Subject>;
+      fbVerifyElementContainText(params: { name: string, label: string, text: string }): Chainable<Subject>;
+      fbVerifyElementNotContainText(params: { name: string, label: string, text: string }): Chainable<Subject>;
     }
   }
 }
@@ -224,4 +235,48 @@ Cypress.Commands.add("fbVerifyCheckboxName", (...list: string[]) => {
   list.forEach(function(name) {
     cy.get(`input[name="${name}"]`).should('be.checked');
   });
+});
+
+Cypress.Commands.add("fbClickButton", (params: { el: string }) => {
+  cy.get(`[data-cy="${params.el}"]`).click();
+});
+
+Cypress.Commands.add("fbMouseOverByName", (params: { name: string }) => {
+   cy.get(`input[name^="${params.name}"`).parent().trigger('mouseover');
+});
+
+Cypress.Commands.add("fbMouseOverByLabel", (params: { label: string }) => {
+  cy.contains(params.label).parent().trigger('mouseover');
+});
+
+Cypress.Commands.add("fbVerifyElementVisibile", (params: { name: string, el: string }) => {
+  cy.get(`input[name^="${params.name}"`).parentsUntil('li').find(`[data-cy=${params.el}]`).should('be.visible');
+});
+
+Cypress.Commands.add("fbVerifyElementNotVisibile", (params: { name: string, el: string }) => {
+  cy.get(`input[name^="${params.name}"`).parentsUntil('li').find(`[data-cy=${params.el}]`).should('not.be.visible');
+});
+
+Cypress.Commands.add("fbVerifyElementVisibileByLabel", (params: { label: string, el: string }) => {
+  cy.contains(params.label).parentsUntil('li').find(`[data-cy=${params.el}]`).should('be.visible');
+});
+
+Cypress.Commands.add("fbVerifyElementNotVisibileByLabel", (params: { label: string, el: string }) => {
+  cy.contains(params.label).parentsUntil('li').find(`[data-cy=${params.el}]`).should('not.be.visible');
+});
+
+Cypress.Commands.add("fbVerifyElementClass", (params: { name: string, el: string, class: string }) => {
+  cy.get(`input[name^="${params.name}"`).parentsUntil('li').find(`[data-cy=${params.el}]`).should("have.class", params.class);
+});
+
+Cypress.Commands.add("fbVerifyElementClassByLabel", (params: { label: string, el: string, class: string }) => {
+  cy.contains(params.label).parentsUntil('li').find(`[data-cy=${params.el}]`).should("have.class", params.class);
+});
+
+Cypress.Commands.add("fbVerifyElementContainText", (params: { name: string, label: string, text: string }) => {
+  cy.contains(params.label).parentsUntil('li').find(`[name^=\"${params.name}\"]`).should('contain', params.text);
+});
+
+Cypress.Commands.add("fbVerifyElementNotContainText", (params: { name: string, label: string, text: string }) => {
+  cy.contains(params.label).parentsUntil('li').find(`[name^=\"${params.name}\"]`).should('not.contain', params.text);
 });
