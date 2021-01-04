@@ -366,6 +366,7 @@ context("Parts from EB flow test", () => {
     context("Submit for Approval", () => {
       it("Save the EB", () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        cy.checkToastMessage({ exists: false });
       });
 
       it("Add an Approval", () => {

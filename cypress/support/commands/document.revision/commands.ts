@@ -441,6 +441,7 @@ Cypress.Commands.add("closeAllAlertMessages", () => {
 
 Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
   cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]", { timeout: 50 * 1000 }).click();
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("drAddAnotherRoleBtn", () => {
@@ -488,6 +489,7 @@ Cypress.Commands.add("drUpgradeRevisionLevel", () => cy.get(`[data-cy="upgradeNe
 
 Cypress.Commands.add("drReleaseDocAfterRoleExistsAndChecked", (params: { group: number; role: string }) => {
   cy.drApproveAndReleaseDialog();
+  cy.wait(5000);
   cy.get(`[data-cy="group-${params.group}"]`).contains(params.role);
   cy.get(`[data-cy="checked-${params.group}"]`).should("be.visible");
   cy.wrapWithWaitOnApiCall(
@@ -495,6 +497,7 @@ Cypress.Commands.add("drReleaseDocAfterRoleExistsAndChecked", (params: { group: 
     () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
     });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("drNewTypeTrainingSelect", () => {

@@ -84,6 +84,7 @@ Cypress.Commands.add("usrClickSaveButton", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGet], () => {
     cy.get("#AddEmployeeFormPresenter-submitForm").click();
   });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("usrClickCloseDialogButton", () => {

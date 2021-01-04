@@ -244,6 +244,7 @@ context("Record inline Flow", () => {
           CyRoutes.DocPreview], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
+        cy.checkToastMessage({ exists: false });
       });
 
       it("Check system creates new major revision after inline approve", () => {
@@ -278,6 +279,7 @@ context("Record inline Flow", () => {
             CyRoutes.DocPreview], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
+          cy.checkToastMessage({ exists: false });
         });
 
         it("Approve second Inline Approval", () => {
@@ -289,6 +291,7 @@ context("Record inline Flow", () => {
             CyRoutes.DocPreview], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
+          cy.checkToastMessage({ exists: false });
         });
       });
 
