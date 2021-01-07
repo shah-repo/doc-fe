@@ -1,4 +1,3 @@
-import { int } from "aws-sdk/clients/datapipeline";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 /* eslint-disable max-classes-per-file */
@@ -32,7 +31,7 @@ declare global {
       grpSelectOfficial(): Chainable;
       grpEnterGroupName(params: { name: string }): Chainable;
       grpAssignUser(params: { name: string }): Chainable;
-      grpRemoveUser(params: { item: int }): Chainable;
+      grpRemoveUser(params: { name: string }): Chainable;
       grpSaveGroup(): Chainable;
       grpSaveGroupPatch(): Chainable;
       grpSelectGroupWithoutClosingDialog(params: { name: string }): Chainable;
@@ -272,8 +271,8 @@ Cypress.Commands.add("grpAssignUser", (params: { name: string }) => {
   cy.get("#Group-members>div>div>div[id^=react-select]").contains(params.name).click();
 });
 
-Cypress.Commands.add("grpRemoveUser", (params: { item: int }) => {
-  cy.get("[class=\"circle_remove\"]").eq(params.item).click({ force: true });
+Cypress.Commands.add("grpRemoveUser", (params: { name: string }) => {
+  cy.xpath(`//div[@id="Group-members"]//div[text()="${params.name}"]/../div[2]`).click();
 });
 
 Cypress.Commands.add("grpSaveGroup", () => {
@@ -307,7 +306,9 @@ Cypress.Commands.add("grpSelectGroupWithoutClosingDialog", (params: {name: strin
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsGet, () => {
     cy.get("#groupName").type(params.name);
   });
-  cy.get(".ReactVirtualized__Table__rowColumn").contains(params.name).click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GroupGet, () => {
+    cy.get(".ReactVirtualized__Table__rowColumn").contains(params.name).click();
+  });
 });
 
 Cypress.Commands.add("grpCloseDialog", () => {

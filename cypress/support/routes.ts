@@ -65,7 +65,8 @@ export enum CyRoutes {
   PostDocRevInReview = "PostDocRevInReview",
   PatchDocSecurity = "PatchDocSecurity",
   GetRevisionDocTypeGroupOptions = "GetRevisionDocTypeGroupOptions",
-  PostDocRev = "PostDocRev"
+  PostDocRev = "PostDocRev",
+  GroupGet = "GroupGet"
 }
 
 export const routes: ICyRoutes =   {
@@ -107,6 +108,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/groups*",
+    },
+  },
+  GroupGet: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/groups/*",
     },
   },
   GroupsGetClearFilter: {
