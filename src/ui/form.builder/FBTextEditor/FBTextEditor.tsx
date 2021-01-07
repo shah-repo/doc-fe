@@ -63,6 +63,7 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
               overflow: "hidden",
               visibility: isPreview ? "hidden" : "visible",
             }}
+            // fix for extra lines when pasting multiline content
             stripPastedStyles={true}
           />
         </Box>
