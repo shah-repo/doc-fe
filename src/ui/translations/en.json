@@ -780,7 +780,7 @@
   "form.builder.equipment|s": "Equipment",
   "form.builder.materials": "Materials",
   "form.builder.materials|s": "Material",
-  "form.builder.eqmaintenance": "Equipment Maintenance",
+  "form.builder.eqmaintenance": "Equipment",
   "form.builder.preventative.maintenance": "Preventative Maintenance",
   "form.builder.calibration": "Calibration",
   "form.builder.pm.required": "Preventative Maintenance required?",
