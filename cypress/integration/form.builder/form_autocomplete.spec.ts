@@ -302,7 +302,7 @@ context("FORM Field test", () => {
     });
 
     context("Verify Autocomplete 'Approvers'", () => {
-      it("Verify autocomplete 'Document types'", () => {
+      it("Verify autocomplete 'Approvers'", () => {
         cy.request({
           method: "GET",
           url: `${CONFIG.BE_URL}/api/v1/change_requests/available_approvers`,
@@ -1845,7 +1845,7 @@ context("FORM Field test", () => {
           if(response.body.length > 0 ){
             cy.get(".MuiAutocomplete-popper ul li")
             .each(($li, index, $lis) => {
-              expect($li).to.have.text(`${response.body[index].document.docId} - ${response.body[index].documentRevisions[0].name}`);
+              expect($li).to.have.text(`${response.body[index].docId} - ${response.body[index].documentRevisions[0].name}`);
             })
             .then(($lis) => {
               expect($lis).to.have.length(response.body.length);

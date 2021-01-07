@@ -62,6 +62,7 @@ declare global {
       fbVerifyElementClassByLabel(params: { label: string, el: string, class: string }): Chainable<Subject>;
       fbVerifyElementContainText(params: { name: string, label: string, text: string }): Chainable<Subject>;
       fbVerifyElementNotContainText(params: { name: string, label: string, text: string }): Chainable<Subject>;
+      fbEnterNameData(params: { name: string, data: string }): Chainable<Subject>;
     }
   }
 }
@@ -279,4 +280,8 @@ Cypress.Commands.add("fbVerifyElementContainText", (params: { name: string, labe
 
 Cypress.Commands.add("fbVerifyElementNotContainText", (params: { name: string, label: string, text: string }) => {
   cy.contains(params.label).parentsUntil('li').find(`[name^=\"${params.name}\"]`).should('not.contain', params.text);
+});
+
+Cypress.Commands.add("fbEnterNameData", (params: { name: string, data: string }) => {
+  cy.get(`[name="${params.name}"]`).clear().type(params.data);
 });
