@@ -63,6 +63,7 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
               overflow: "hidden",
               visibility: isPreview ? "hidden" : "visible",
             }}
+            stripPastedStyles={true}
           />
         </Box>
         <FBConditionalWrapper
