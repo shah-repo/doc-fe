@@ -3,6 +3,7 @@ import { Formik, FormikProps } from "formik";
 import { flatten } from "lodash";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { getStartOfDayDateString, TIME_ZONE } from "../../../../../common/utils/date";
@@ -64,6 +65,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   isRecord,
   isInlineApproval,
 }) => {
+  const intl = useIntl();
   const [isVisible, label, tooltipConfig] = useApproveAndRelease(documentTypeId);
   const classes = styles();
   const dialog = useDialog();
@@ -83,6 +85,8 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const documentRevision = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, docRevId));
   const history = useHistory();
+  const docId = documentRevision.document.docId;
+  const title = documentRevision.name;
 
   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
@@ -151,8 +155,8 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   });
 
   const initialValuesAR = (values: any): any => ({
-    title: documentRevision.name,
-    description: documentRevision.name,
+    title: intl.formatMessage({ id: "documentRevision.releasing" }, { docId, title }),
+    description: intl.formatMessage({ id: "documentRevision.releasing" }, { docId, title }),
     documentType: { id: documentType },
     formDocument: {
       id: values.formDocument.value,
@@ -163,9 +167,9 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
         .concat(owner?.id).filter((id) => id)
         .map((id) => ({ id })),
       documentRevisions: [{
-        descriptionOfChange: values.formDocument.label,
+        descriptionOfChange: intl.formatMessage({ id: "common.numeric.release" }),
         id: FB.uniqid,
-        justificationOfChange: values.formDocument.label,
+        justificationOfChange: intl.formatMessage({ id: "common.numeric.release" }),
         proposedDocumentRevision: { id: docRevId },
       }],
       effectiveDate: values.effectiveDate,
