@@ -12,7 +12,6 @@ const FBTextFieldWithRange: React.FunctionComponent<FBTextFieldWithRangeProps> =
   criticalToQuality,
   includeInFaiInspection,
   rules,
-  name,
   ...props
 }) => (
   <Box mb={5}>
@@ -41,7 +40,7 @@ const FBTextFieldWithRange: React.FunctionComponent<FBTextFieldWithRangeProps> =
       type="number"
       { ...{ rules }}
       InputProps={{
-        endAdornment: <FBOutOfRange {...{ pass }} parentName={name} />,
+        endAdornment: <FBOutOfRange {...{ pass }} parentName={props.name} />,
       }}
       withState
     />

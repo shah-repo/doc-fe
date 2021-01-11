@@ -9,7 +9,7 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
     includeInFaiInspection,
     ...props
   }: T) => {
-  // MARK: @config
+    // MARK: @config
     const { aql, pass, range, criticalToQuality } = editorConfig;
     // MARK: @reactions
 
