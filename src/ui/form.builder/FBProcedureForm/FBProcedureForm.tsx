@@ -1,7 +1,7 @@
 import { Box, Typography } from "@material-ui/core";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBAutocomplete, FBAutocompleteAsync, FBData, FBForm, FBProcedureFormProps, FBTextField } from "..";
+import { FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBData, FBForm, FBProcedureFormProps, FBTextField } from "..";
 import Text from "../../components/Text";
 import { FBFileUpload } from "../FBFileUpload";
 import { FBProcedureItemType } from "../FBProcedureItem";
@@ -11,15 +11,16 @@ import { withFBProcedureForm } from "./FBProcedureForm.wrap";
 
 
 const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
+  lotFilterOptions,
+  partFilterOptions,
   formState,
   children,
   disabledOptions,
   initialValues,
+  partLoading,
+  lotLoading,
   optionId,
   type,
-  lotOptions,
-  partOptions,
-  disabled,
 }) => (
   <FBForm {...{ formState, initialValues }} >
     <FBTextField
@@ -29,23 +30,27 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
     />
     {type === FBProcedureItemType.materials &&
     <>
-      <FBAutocomplete
+      <FBAutocompleteAsync
         name="title"
         label="form.builder.part"
         rules="required"
+        optionId={FBAutocompleteAsyncOption.ebParts}
+        filterOptions={lotFilterOptions}
+        loading={partLoading}
+        disabled={partLoading}
         {...{ disabledOptions }}
-        options={partOptions}
         freeSolo
         withState
-        {...{ disabled }}
       />
-      <FBAutocomplete
+      <FBAutocompleteAsync
         name="partLot"
         label="form.builder.part.lot"
+        optionId={FBAutocompleteAsyncOption.ebLots}
+        filterOptions={partFilterOptions}
+        loading={lotLoading}
+        disabled={lotLoading}
         {...{ disabledOptions }}
-        options={lotOptions}
         withState
-        {...{ disabled }}
       />
     </>
     }

@@ -228,5 +228,25 @@
     "labelKey": "documentRevisions.name",
     "labelPrefixRoot": "docId",
     "root": ""
+  },
+  {
+    "id": "26",
+    "path": "/document_revisions?docTypeGroupOptions%5B%5D=MATERIAL&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED",
+    "label": "EB Parts",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": "",
+    "includeRevision": "displayRevision"
+  },
+  {
+    "id": "27",
+    "path": "/document_revisions?docTypeGroupOptions%5B%5D=CAN_CREATE_INSPECTION&docTypeGroupOptions%5B%5D=ENGINEERING_BUILD&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED",
+    "label": "EB Lots",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": "",
+    "includeRevision": "displayRevision"
   }
 ]
