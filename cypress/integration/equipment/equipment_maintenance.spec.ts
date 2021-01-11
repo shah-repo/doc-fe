@@ -362,8 +362,74 @@ context("Equipment maintenance test", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
-    it("Approve and release equipment maintenance document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    context("Approve and release equipment maintenance document", () => {
+      it("Navigate to approval request list", () => {
+        cy.navigToApprovalRequestList();
+      });
+
+      it("Click Create a Approval Request button", () => {
+        cy.cmpClickCreateApprovalRequest();
+      });
+
+      it("Enter title AR title: ", () => {
+        cy.arEnterApprovalRequestTitle({ title: "Approval request for equipment document" });
+      });
+
+      it("Enter description 'AR from New form template for approval request'", () => {
+        cy.arEnterApprovalRequestDescription({ description: "equipment document AR" });
+      });
+
+      it("Add created document revision", () => {
+        cy.arClickAddDocument().wait(500);
+        cy.arChoseSpecificProposedDocument({ name: "EQ-00001" });
+        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
+        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
+        cy.arClickAddBtnOnAddDocumentsDialog();
+      });
+
+      it("Add first approver to approval request on approver list", () => {
+        cy.arAddApproverOnApproverList({ approver: USERS[1].email });
+      });
+
+      it("Click Create Approval Request", () => {
+        cy.arClickCreateApprovalRequestAfterCompletingForm();
+      });
+
+      it("Click 'Send To Review'", () => {
+        cy.arClickSendToReview();
+      });
+
+      it("Verify AR status is 'In Review'", () => {
+        cy.arVerifyStatus({ status: "In Review" });
+      });
+
+      it("Approve AR", () => {
+        cy.arApproveAR();
+      });
+
+      it("Check approval request status is 'Approved'", () => {
+        cy.arVerifyStatus({ status: "Approved" });
+      });
+
+      it("Close AR", () => {
+        cy.arCloseAR();
+      });
+
+      it("Check approval request status is 'Closed'", () => {
+        cy.arVerifyStatus({ status: "Closed" });
+      });
+
+      context("Navig to released 'Equipment maintenance document'", () => {
+        it("Navig to equipment", () => {
+          cy.navigToEquipment();
+        });
+
+        it("Select 'Equipment maintenance document'", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+            cy.get("div[aria-rowindex=\"1\"]").click();
+          });
+        });
+      });
     });
   });
 
@@ -439,7 +505,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Check preventative maintenance status is in complience for next 10 days", () => {
-      const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles").add(10, "days").format("ddd MMM D YYYY");
+      const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
+        .add(10, "days")
+        .format("ddd MMM DD YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(0)
         .contains(`In Compliance - Due Date: ${prevMaintenanceComplianceDate}`);
@@ -518,7 +586,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Check calibration status is in complience for next 5 days", () => {
-      const calibrationComplianceDate = moment().tz("America/Los_Angeles").add(5, "days").format("ddd MMM D YYYY");
+      const calibrationComplianceDate = moment().tz("America/Los_Angeles")
+        .add(5, "days")
+        .format("ddd MMM DD YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(1)
         .contains(`In Compliance - Due Date: ${calibrationComplianceDate}`);

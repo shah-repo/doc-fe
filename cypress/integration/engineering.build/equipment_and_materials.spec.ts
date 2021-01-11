@@ -278,8 +278,62 @@ context("Procedure and parts flow test", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
-      it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      context("Create Approval Request for equipment document", () => {
+        it("Navigate to approval request list", () => {
+          cy.navigToApprovalRequestList();
+        });
+
+        it("Click Create a Approval Request button", () => {
+          cy.cmpClickCreateApprovalRequest();
+        });
+
+        it("Enter title AR title: ", () => {
+          cy.arEnterApprovalRequestTitle({ title: "Approval request for equipment document" });
+        });
+
+        it("Enter description 'AR from New form template for approval request'", () => {
+          cy.arEnterApprovalRequestDescription({ description: "equipment document AR" });
+        });
+
+        it("Add created document revision", () => {
+          cy.arClickAddDocument().wait(500);
+          cy.arChoseSpecificProposedDocument({ name: "EQ-00001" });
+          cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
+          cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
+          cy.arClickAddBtnOnAddDocumentsDialog();
+        });
+
+        it("Add first approver to approval request on approver list", () => {
+          cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+        });
+
+        it("Click Create Approval Request", () => {
+          cy.arClickCreateApprovalRequestAfterCompletingForm();
+        });
+
+        it("Click 'Send To Review'", () => {
+          cy.arClickSendToReview();
+        });
+
+        it("Verify AR status is 'In Review'", () => {
+          cy.arVerifyStatus({ status: "In Review" });
+        });
+
+        it("Approve AR", () => {
+          cy.arApproveAR();
+        });
+
+        it("Check approval request status is 'Approved'", () => {
+          cy.arVerifyStatus({ status: "Approved" });
+        });
+
+        it("Close AR", () => {
+          cy.arCloseAR();
+        });
+
+        it("Check approval request status is 'Closed'", () => {
+          cy.arVerifyStatus({ status: "Closed" });
+        });
       });
     });
   });
