@@ -7,10 +7,10 @@ import "./consoleToaster.css";
 const recentlySeenMessages = new Set<string>();
 
 function wrapConsoleCall(callback, options: {class: string; title: string}) {
-  const x = callback;
+  // const x = callback;
 
   return function(...args) {
-    const message = (args && args.length && args[0]) || "Unknown warning in console!!";
+    const message: string = (args && args.length && args[0].toString()) || "Unknown warning in console!!";
 
     if (!recentlySeenMessages.has(message)) {
       toast(
@@ -33,7 +33,7 @@ function wrapConsoleCall(callback, options: {class: string; title: string}) {
       }, 10 * 1000);
     }
 
-    x(...args);
+    callback(...args);
   };
 }
 
@@ -41,6 +41,6 @@ if (Config.consoleToastsEnabled) {
   console.error = wrapConsoleCall(console.error, { class: "Toastify-console-log-error", title: "Console Error" });
   console.warn = wrapConsoleCall(console.warn, { class: "Toastify-console-log-warn", title: "Console Warn" });
   console.info = wrapConsoleCall(console.info, { class: "Toastify-console-log-info", title: "Console Info" });
-  console.log = wrapConsoleCall(console.log, { class: "Toastify-console-log-log", title: "Console Log" });
+  // console.log = wrapConsoleCall(console.log, { class: "Toastify-console-log-log", title: "Console Log" });
 }
 
