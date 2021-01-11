@@ -70,12 +70,8 @@ export class ConfigEnv {
   @IsString()
   SUPERADMIN_PASSWORD!: string;
 
-  @IsDefined()
-  @IsString()
   RUN_ENVIRONMENT!: string;
 
-  @IsDefined()
-  @IsString()
   DIR_SCREENSHOTS!: string;
 }
 
