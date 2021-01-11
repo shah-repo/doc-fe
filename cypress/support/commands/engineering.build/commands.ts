@@ -58,4 +58,5 @@ Cypress.Commands.add("ebApprove", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
     cy.get("[data-cy=\"common.confirm\"]").click();
   });
+  cy.checkToastMessage({ exists: false });
 });

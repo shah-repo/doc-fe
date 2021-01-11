@@ -280,12 +280,14 @@ Cypress.Commands.add("grpSaveGroup", () => {
     cy.get("#Group-createGroup").click();
   });
   cy.get("#DialogContent-close").click();
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("grpSaveGroupPatch", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPatch, () => {
     cy.get("#Group-createGroup").click();
   });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("grpSelectGroup", (params: {name: string}) => {
@@ -337,6 +339,7 @@ Cypress.Commands.add("grpAddGroup", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPost, () => {
     cy.get("[data-cy=\"Group-createGroup\"]").click();
   });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("grpAPICreateNewGroup", (params: {

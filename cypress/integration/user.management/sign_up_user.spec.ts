@@ -89,6 +89,7 @@ context("Sign up user flow", () => {
     context("Create user", () => {
       it("Clicks the save button", () => {
         cy.usrClickSaveButton();
+        cy.checkToastMessage({ exists: false });
         cy.wait(10000);
       });
     });

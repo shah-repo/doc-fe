@@ -246,6 +246,7 @@ context("Approval request form scenario", () => {
       it("Withdraw Submission", () => {
         SystemRequirement("REQ-0890");
         cy.arWithdrawSubmission();
+        cy.checkToastMessage({ exists: false });
       });
     });
 
@@ -339,6 +340,7 @@ context("Approval request form scenario", () => {
       it("Verify message is shown if e-signature not met", () => {
         SystemRequirement("REQ-0880");
         cy.arVerifySignatureIsNotMet();
+        cy.closeAllAlertMessages();
       });
 
       it("Reject AR from dashboard", () => {
@@ -393,16 +395,6 @@ context("Approval request form scenario", () => {
 
     it("Select first document", () => {
       cy.arSelectFirstDocument();
-    });
-
-    it("Add approvers to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[20].email });
-      cy.wait(200);
-      cy.arAddApproverOnApproverList({ approver: USERS[22].email });
-    });
-
-    it("Save Approval Request", () => {
-      cy.arSaveApiCall();
     });
 
     it("Click send to review", () => {
