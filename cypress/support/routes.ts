@@ -261,6 +261,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 15 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
   Login: {
