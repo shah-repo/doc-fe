@@ -130,7 +130,9 @@ export const withFBEBPart = <T extends FBEBPartProps>(
       loading = (
         ebPartState?.newChildApi.loading ||
         ebPartState?.existingChildApi.loading ||
-        ebPartState?.documentApi.loading
+        ebPartState?.documentApi.loading ||
+        ebPartState?.documentTypeApi.loading ||
+        ebPartState?.loading
       );
       disabled = disabled || loading;
       partType = formState?.getInputState("partType")?.value;

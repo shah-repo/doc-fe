@@ -1,4 +1,4 @@
-import { FBFormProps, FBInputProps } from "..";
+import { FBFormProps, FBInputProps, FBOption } from "..";
 
 export type FBEBPartFormProps =
 & Pick<FBFormProps, "formState">
@@ -7,4 +7,6 @@ export type FBEBPartFormProps =
   onDialogClose?: () => void;
   onDialogConfirm?: () => void;
   ebId?: string;
+  formOptions?: FBOption[];
+  formAutocompleteDisabled?: boolean;
 };

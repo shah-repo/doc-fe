@@ -12,6 +12,8 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
     disabled,
     loading,
     ebId,
+    formOptions,
+    formAutocompleteDisabled,
     ...props
   }: T) => {
 
@@ -39,7 +41,11 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
     // on document type autocomplete change
     React.useEffect(() => reaction(
       () => formState?.inputState.get("document.documentType.id")?.value,
-      (data) => ebPartState?.fetchProposedDocId(data),
+      (data) => {
+        formState.setFieldValue("formDocument.id", undefined, true);
+        ebPartState?.fetchProposedDocId(data);
+        ebPartState?.fetchFormsForDocType(data);
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -52,8 +58,16 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
 
     // MARK: @observer
     useObserver(() => {
-      loading = ebPartState?.proposedDocIdApi.loading;
+      loading = ebPartState?.proposedDocIdApi.loading
+        || ebPartState?.documentTypeApi.loading
+        || ebPartState?.loading;
       disabled = disabled || loading;
+      formAutocompleteDisabled = !FB.isUUID(formState?.getInputState("document.documentType.id")?.value);
+
+      formOptions = ebPartState?.formOptions;
+      if (formOptions?.length === 1) {
+        formState.setFieldValue("formDocument.id", formOptions[0].value, true);
+      }
     });
 
     return Component({
@@ -62,6 +76,8 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
       ebId,
       disabled,
       loading,
+      formOptions,
+      formAutocompleteDisabled,
     });
   };
 
