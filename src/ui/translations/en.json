@@ -808,6 +808,7 @@
   "form.builder.from": "From",
   "form.builder.to": "To",
   "form.builder.critical.to.quality": "Critical to quality",
+  "form.builder.out.of.range": "Out of range",
   "form.builder.inspection": "Inspection",
   "form.builder.pass.value": "Pass Value",
   "form.builder.aql": "AQL",

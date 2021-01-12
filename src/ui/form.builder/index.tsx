@@ -190,6 +190,8 @@ export * from "./FBMediaGallery/FBMediaGallery.types";
 export { default as FBMediaQR } from "./FBMediaQR/FBMediaQR";
 export * from "./FBMediaQR/FBMediaQR.types";
 export * from "./FBOption/FBOption.types";
+export { default as FBOutOfRange } from "./FBOutOfRange/FBOutOfRange";
+export * from "./FBOutOfRange/FBOutOfRange.types";
 export { default as FBParagraph } from "./FBParagraph/FBParagraph";
 export * from "./FBParagraph/FBParagraph.types";
 export { default as FBParts } from "./FBParts/FBParts";
