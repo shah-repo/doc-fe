@@ -35,7 +35,10 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     const {
       valueKey: optionValueKey = "value",
       labelKey: optionLabelKey = "text",
-    } = autocompleteAsyncState?.optionConfig || {};
+    } = autocompleteAsyncState?.optionConfig || {
+      valueKey: props.optionValueKey,
+      labelKey: props.optionLabelKey,
+    };
     // TODO: handle autocomplete default value from input wrap
     // and discard value prop
     const formValue = formState?.getFieldValue(name, defaultValue, omitFormValue) || value;
@@ -79,10 +82,11 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    (optionId && options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
-
-    refresh = () => autocompleteAsyncState?.load(true);
-
+    if (optionId) {
+      (options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
+      refresh = () => autocompleteAsyncState?.load(true);
+    }
+    
     !getOptionLabel && (getOptionLabel = (option) => {
       if (freeSolo && !isObject(option)) {
         return option;
