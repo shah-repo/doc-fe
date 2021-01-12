@@ -277,14 +277,14 @@ const subassemblySchema = [
     applicableValidationSchema: true,
   },
   {
-    name: "icq-required",
+    name: "iqc-required",
     type: "checkboxgroup",
     index: 7,
-    label: "ICQ Required",
+    label: "IQC Required",
     options: [
       {
-        text: "ICQ Required",
-        value: "ICQ Required",
+        text: "IQC Required",
+        value: "IQC Required",
       },
     ],
     applicableOn: [
@@ -292,7 +292,7 @@ const subassemblySchema = [
     ],
     validationMode: "default",
     editorProperties: [],
-    validationAttribute: "ICQ Required",
+    validationAttribute: "IQC Required",
     applicableValidationSchema: true,
   },
   {
@@ -868,14 +868,14 @@ context("Inspection flow", () => {
                       applicableValidationSchema: true,
                     },
                     {
-                      name: "icq-required",
+                      name: "iqc-required",
                       type: "checkboxgroup",
                       index: 7,
-                      label: "ICQ Required",
+                      label: "IQC Required",
                       options: [
                         {
-                          text: "ICQ Required",
-                          value: "ICQ Required",
+                          text: "IQC Required",
+                          value: "IQC Required",
                         },
                       ],
                       applicableOn: [
@@ -883,7 +883,7 @@ context("Inspection flow", () => {
                       ],
                       deleteDisabled: true,
                       editorProperties: [],
-                      validationAttribute: "ICQ Required",
+                      validationAttribute: "IQC Required",
                       applicableValidationSchema: true,
                     },
                     {
@@ -983,8 +983,8 @@ context("Inspection flow", () => {
         cy.get("[name=\"serialized\"][value=\"No\"]").check();
       });
 
-      it("Select 'ICQ Required'", () => {
-        cy.get("[value=\"ICQ Required\"]").check();
+      it("Select 'IQC Required'", () => {
+        cy.get("[value=\"IQC Required\"]").check();
       });
 
       it("Select 'Limited Shelf Life'", () => {
@@ -1314,4 +1314,3 @@ context("Inspection flow", () => {
 });
 
 export { };
-
