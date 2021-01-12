@@ -6,11 +6,11 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
 ) => {
   const Comp = ({
     editorConfig,
+    includeInFaiInspection,
     ...props
   }: T) => {
-  // MARK: @config
-    const { aql, fai, pass, range } = editorConfig;
-
+    // MARK: @config
+    const { aql, pass, range, criticalToQuality } = editorConfig;
     // MARK: @reactions
 
     // MARK: @helpers
@@ -46,7 +46,8 @@ export const withFBTextFieldWithRange = <T extends FBTextFieldWithRangeProps>(
     return Component({
       ...(props as T),
       aql,
-      fai,
+      criticalToQuality,
+      includeInFaiInspection,
       pass: calculatePassValue(pass),
       range,
       rules: getRules(),
