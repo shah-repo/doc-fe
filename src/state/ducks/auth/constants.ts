@@ -2,7 +2,9 @@ export const AUTH_USER = "auth/AUTH_USER";
 export const LOGOUT_USER = "auth/LOGOUT_USER";
 export const USER_GROUPS = "auth/USER_GROUPS";
 export const SET_EMPLOYEE = "auth/SET_EMPLOYEE";
+export const SET_CREDENTIALS = "auth/SET_CREDENTIALS";
 export const CLEAR_NON_AUTH_DATA = "auth/CLEAR_NON_AUTH_DATA";
+export const TOGGLE_CUSTOM_LABELS = "auth/TOGGLE_CUSTOM_LABELS";
 
 export const USER_GROUPS_GET_ASYNC = "auth/USER_GROUPS_GET_ASYNC";
 export const PING_SERVER_GET_ASYNC = "auth/PING_SERVER_GET_ASYNC";

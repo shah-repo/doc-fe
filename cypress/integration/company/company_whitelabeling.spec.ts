@@ -7,16 +7,16 @@ import { USERS } from "../../utils/constants/users";
 let createdCompany;
 let loginResponse;
 
-const defaultLogo = "https://www.feshfen.com/images/wigs/test.png";
-const defaultAvatar = "https://dummyimage.com/300x400/000/ffffff&text=Automated";
+const defaultLogo = "/ta_assets_company_logo.png";
+const defaultAvatar = "/ta_assets_company_avatar.png";
 const defaultDefaultBackground = "#4b5dc6";
 const defaultPrimary = "#eb5055";
 const defaultPrimaryContrastText = "#000000";
 const defaultSecondary = "#414b8b";
 const defaultSecondaryContrastText = "#FFFFFF";
 
-const replacedLogo = "https://dummyimage.com/300x400/000/ffffff&text=Automated";
-const replacedAvatar = "https://www.feshfen.com/images/wigs/test.png";
+const replacedLogo = "/ta_assets_company_avatar.png";
+const replacedAvatar = "/ta_assets_company_logo.png";
 const replacedDefaultBackground = "#FFFFFF";
 const replacedPrimary = "#FF0000";
 const replacedPrimaryContrastText = "#00FF00";
@@ -43,7 +43,8 @@ context("Whitelabeling test", () => {
             slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [],
-          }, sessionId: loginResponse.sessionId as unknown as string,
+          },
+          sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
           done();

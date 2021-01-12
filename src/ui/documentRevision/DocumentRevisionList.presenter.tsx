@@ -2,17 +2,18 @@ import classNames from "classnames";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Nullable } from "../../state/ducks/common";
-import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import SummaryInfo from "../common/summary/SummaryInfo";
 import DateFormatter from "../components/Date";
 import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import CustomLabelTooltip from "../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus } from "../hooks/docCustomization/useCustomization";
 import { Translation } from "../translations/types";
 import { styles } from "./DocumentRevisionList.container.styles";
-import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionInStatus, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
+import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatus, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
 import { generateRevisionNumber } from "./helpers/generateRevisionNumber";
-import { isDocumentAlphaReleased, isDocumentNumericRelease } from "./helpers/revisionStage";
+import { isDocumentAlphaReleased } from "./helpers/revisionStage";
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -50,9 +51,9 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   );
 
   const { status } = documentRevision;
-  const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
+
+  const [isStatusVisible, statusLabel, tooltipConfig] = useDocumentStatus(documentTypeId, status);
   let verPrefix = "common.revision";
-  let stateLabel = statusLabel;
   let recordDateLabel = "common.updated" as Translation;
 
   const isSelected = selectedDocumentRevision === documentRevision.id;
@@ -60,40 +61,17 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   const isReleased = isDocumentRevisionReleased(status);
   const isDeprecated = isDocumentRevisionDeprecated(status);
   const isAlphaReleased =  isDocumentAlphaReleased(documentRevision.revisionStage);
-  const isNumericRelease = isDocumentNumericRelease(documentRevision.revisionStage);
-  const isObsolete = documentRevision.revisionChangeType === RevisionChangeType.Obsolete;
-  const isInReview = isDocumentRevisionInReview(status);
   const isVoided = isDocumentRevisionInStatus([DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.Voided], status);
 
 
   if (isRecord) {
     if (isReleased) {
       recordDateLabel = "document.revision.released.date";
-      stateLabel = "common.released";
-    }
-    if (!isInlineApproval && (!isObsolete || isInReview)) {
-      stateLabel = status;
-    }
-    if (!isInlineApproval && isDeprecated) {
-      stateLabel = "common.archived";
-    }
-    if (isDraft && documentRevision.subRevision === 0 && !isObsolete) {
-      stateLabel = "common.wip";
     }
     if (isReleased || ((isDeprecated || isDraft) && isInlineApproval && isAlphaReleased)) {
       verPrefix = "common.revision";
     }
-    if (isDeprecated && isInlineApproval && isAlphaReleased) {
-      stateLabel = "common.archived";
-    }
-    if ((isDeprecated || isReleased) && isInlineApproval && isNumericRelease) {
-      stateLabel = "common.archived";
-    }
-    if (isReleased && isInlineApproval && isNumericRelease) {
-      stateLabel = "common.last.signed";
-    }
     if (isVoided) {
-      stateLabel = "common.voided";
       recordDateLabel = "record.voided.date";
     }
   }
@@ -120,9 +98,11 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           {versionNumber}
           {
             isStatusVisible &&
-            <>
-              &nbsp; - <Text message={stateLabel} />
-            </>
+            <CustomLabelTooltip {...{ tooltipConfig }}>
+              <>
+              &nbsp; - <Text message={statusLabel} />
+              </>
+            </CustomLabelTooltip>
           }
         </div>
       </NavLink>

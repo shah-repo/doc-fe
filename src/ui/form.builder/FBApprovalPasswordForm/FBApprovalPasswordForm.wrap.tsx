@@ -13,7 +13,7 @@ export const withFBApprovalPasswordForm = (
     const { dialogState } = FB.useStores();
     const formState = FB.useRef(FBFormState, {});
 
-    const onDialogCancel = () => {
+    const onDialogClose = () => {
       dialogState?.closeDialog();
       formState?.setFieldValue("password", null);
     };
@@ -21,12 +21,12 @@ export const withFBApprovalPasswordForm = (
     const onDialogApprove = () => {
       const password = formState?.getFieldValue("password");
       approvalTransition?.("approve", approvalId, password);
-      onDialogCancel();
+      onDialogClose();
     };
 
     React.useEffect(() => {
       dialogState?.setActions(
-        <FBApprovalPasswordFormActions {...{ onDialogApprove, onDialogCancel }} />
+        <FBApprovalPasswordFormActions {...{ onDialogApprove, onDialogClose }} />
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

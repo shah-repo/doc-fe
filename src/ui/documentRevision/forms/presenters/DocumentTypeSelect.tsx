@@ -11,6 +11,7 @@ import SelectField, { SelectOption } from "../../../components/forms/fields/Sele
 import { filterSecurityGroupsForQms } from "../../../documentType/list/helpers";
 import { FB, FBSchemaProps } from "../../../form.builder";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
+import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -20,7 +21,7 @@ import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
 
 interface Props extends RouteComponentProps {
-  isdocRevStatusDraft: boolean;
+  isDocRevStatusDraft: boolean;
   type?: DocumentCloneType;
   outputDocumentTypes?: FBOutputDocumentType[];
   savedocInfo: React.Dispatch<React.SetStateAction<{
@@ -33,7 +34,7 @@ interface Props extends RouteComponentProps {
 }
 
 const DocumentTypeSelect: React.FunctionComponent<Props> = ({
-  isdocRevStatusDraft,
+  isDocRevStatusDraft,
   type,
   outputDocumentTypes = [],
   savedocInfo,
@@ -42,11 +43,10 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   setDisableCreateButton,
   match,
 }) => {
-  const [isVisible, label, validators] = useDocumentTypeSelect(documentTypeId);
+  const [isVisible, label, tooltipConfig, validators] = useDocumentTypeSelect(documentTypeId);
 
   const { workspaceState } = FB.useStores();
   const formik = useFormikContext();
-
   const loadProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
   const asyncDocumentProposedId = useAsync({
     onSuccess: () => {
@@ -66,7 +66,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
-  const isDocTypeDisabled = (type === "newVersion" || isdocRevStatusDraft) || isDisabled;
+  const isDocTypeDisabled = (type === "newVersion" || isDocRevStatusDraft) || isDisabled;
   const isNewOutput = type === "newOutput";
   const isCreateMaintenance = match.path.includes("create_maintenance");
 
@@ -127,8 +127,12 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         workspaceState?.getSchema(),
       ); }
     }
-    if (!isCreateMaintenance) { workspaceState?.setMode(mode);
-    workspaceState?.setSchema(scheme); }
+    if (!isCreateMaintenance) {
+      workspaceState?.setMode(mode);
+      if (isNewOutput) {
+        return;
+      }
+      workspaceState?.setSchema(scheme); }
   };
 
   if (!isVisible && type !== "newOutput") {
@@ -136,17 +140,19 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <SelectField
-      name="document.documentType.id"
-      label={label}
-      selectProps={{
-        inputProps: { id: "documentType", disabled: isDocTypeDisabled },
-        onChange: handleTypeChange,
-      }}
-      options={options}
-      validate={validators}
-      includeEmpty={false}
-    />
+    <CustomLabelTooltip {...{ tooltipConfig }}>
+      <SelectField
+        name="document.documentType.id"
+        label={label}
+        selectProps={{
+          inputProps: { id: "documentType", disabled: isDocTypeDisabled },
+          onChange: handleTypeChange,
+        }}
+        options={options}
+        validate={validators}
+        includeEmpty={false}
+      />
+    </CustomLabelTooltip>
   );
 };
 

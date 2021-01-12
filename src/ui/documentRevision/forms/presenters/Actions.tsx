@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
-import { differenceBy, keys } from "lodash";
+import { isEqual, keys, omit } from "lodash";
 import * as React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { RevisionChangeType } from "../../../../state/ducks/documentRevisions";
@@ -8,16 +8,19 @@ import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
+import CopyEBButton from "../../../components/forms/CopyEBButton";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
-import { checkIsDocumentRecord } from "../../helpers/checkDocumentGroup";
-import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus";
+import { checkCanBeCopied, checkIsDocumentRecord, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
+import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
+import InspectionControlsContainer from "../../InspectionControls/InspectionControls.container";
 import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.presenter";
 import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";
+import ExportToCSVButton from "./export.to.csv/ExportToCSV.button";
 import { SubmitForApproval } from "./SubmitForApproval";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
 import VoidButton from "./VoidButton";
@@ -38,6 +41,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
+  const serializedCSV = hasSerializedCSV(values.document?.documentType?.groupOptions);
   const isApproved = isInlineFormApproved(
     documentRevision,
     formState,
@@ -49,16 +53,19 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
   const isUserDocumentOwner = React.useContext(isOwnerContext);
-  const showVoidButton = isDocumentRevisionInDraft(documentRevision?.status) && documentRevision?.version === 1;
-  const showVoidButtonOnInlineRecords = isDocumentRevisionInDraft(documentRevision?.status) &&
+  const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
+  const showVoidButton = isStatusInDraft && documentRevision?.version === 1;
+  const showVoidButtonOnInlineRecords = isStatusInDraft &&
      isDocumentNumericRelease(documentRevision?.revisionStage);
+  const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
+  const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
 
   function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
     const { groupOptions } = documentRevision?.document?.documentType || {};
     return (
       (Boolean(groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA))) &&
-      Boolean(differenceBy(workspaceState?.schema || [],  documentSchema, "name").length)
+      !isEqual(JSON.stringify(workspaceState?.schema), JSON.stringify(documentSchema))
     );
   }
 
@@ -84,9 +91,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               : null;
             return key;
           });
-          formik.setFieldValue("formInput", newInput);
+          // TEMPORARY FIX FOR BE VALIDATION
+          formik.setFieldValue("formInput", omit(newInput, ["partType", "childForRevise"]));
         } else {
-          formik.setFieldValue("formInput", formState?.getValues());
+          // TEMPORARY FIX FOR BE VALIDATION
+          formik.setFieldValue("formInput", omit(formState?.getValues(), ["partType", "childForRevise"]));
         }
         if (isOutputSchema()) {
           formik.setFieldValue("schema", workspaceState.schema);
@@ -112,6 +121,14 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   return (
     <div>
+      {(isStatusReleased || isStatusInDraft) && serializedCSV &&
+      <ExportToCSVButton
+        {...{ documentRevision }}
+      />}
+      {(isStatusReleased || isStatusInDraft) && canCopy &&
+        <CopyEBButton
+          {...{ documentRevision }}
+        />}
       <SubmitButton
         asyncState={asyncState}
         label={isDisabled ?
@@ -123,6 +140,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         data-cy={"DocumentRevisionForm-submit"}
         disabled={isCreateDocumentDisabled}
       />
+      <InspectionControlsContainer {...{ documentRevision }} />
       {
         isRecord && (!isInlineApproval || revisionStage !== 1) && (
           <SubmitForApproval

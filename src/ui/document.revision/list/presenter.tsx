@@ -4,7 +4,7 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { stripTags } from "../../../common/utils/helpers";
+import { convertHtmlEntities, stripTags } from "../../../common/utils/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../common/utils/helpers";
@@ -16,7 +16,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
-import { checkIsDocumentEquipment, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentEquipment, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import useDialog from "../../hooks/useDialog";
 import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
@@ -43,6 +43,9 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
     rowData.document.documentType.documentTypeName || "";
 
+  const textEditorTooltipRenderer = (rowData: DocumentRevision) =>
+    convertHtmlEntities(stripTags(rowData.description || ""));
+
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
     if (canEdit(rowData)) {
       return documentEditPath(rowData.id, rowData.document.id);
@@ -59,7 +62,8 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   const customDataSet = (data: DocumentRevision[]) => {
     const customData = data.reduce<DocumentRevision[]>((acc, docRev) => {
       if (!checkIsDocumentRecord(docRev.document.documentType.groupOptions)
-      && !checkIsDocumentEquipment(docRev.document.documentType.groupOptions)) {
+      && !checkIsDocumentEquipment(docRev.document.documentType.groupOptions)
+      && !checkIsDocumentPart(docRev.document.documentType.groupOptions)) {
         set(docRev, "description", stripTags(docRev.description));
         set(
           docRev,
@@ -106,7 +110,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "name",
       label: "document.revision.list.name",
-      tooltipKey: "description",
+      tooltipKey: textEditorTooltipRenderer,
       cellHref: cellHrefRenderer,
       searchOptions: {
         defaultValue: tableCriteria.queryDict.name,
@@ -261,6 +265,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         </Button>
         <ExportListDialog
           {...{ dialog, headers, data  }}
+          customFileName="DocumentList"
         />
         <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
           <Button

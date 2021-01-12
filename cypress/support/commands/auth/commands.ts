@@ -20,6 +20,9 @@ declare global {
       authEnterEmail(params: {value: string}): Chainable<Subject>;
       authEnterPassword(params: {value: string}): Chainable<Subject>;
       authSubmitLoginError(params: {show: boolean; message?: string}): Chainable<Subject>;
+      authEnterSignUpPassword(params: {password: string}): Chainable<Subject>;
+      authEnterSignUpConfirmPassword(params: {password: string}): Chainable<Subject>;
+      authClickSignIn(): Chainable<Subject>;
     }
   }
 }
@@ -95,4 +98,19 @@ Cypress.Commands.add("authSubmitLoginError", (params: {show: boolean; message: s
 Cypress.Commands.add("authLogout", () => {
   cy.get("[data-cy=\"UserMenuButton\"]", { timeout: 50 * 1000 }).click();
   cy.get("[data-cy=\"header.logout\"]").click();
+});
+
+Cypress.Commands.add("authEnterSignUpPassword", (params: {password: string}) => {
+  cy.get("[name=\"password\"]").type(params.password);
+});
+
+Cypress.Commands.add("authEnterSignUpConfirmPassword", (params: {password: string}) => {
+  cy.get("[name=\"confirmPass\"]").type(params.password);
+});
+
+Cypress.Commands.add("authClickSignIn", () => {
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.Login, () => {
+      cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").click();
+    });
 });

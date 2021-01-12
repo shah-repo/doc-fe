@@ -6,7 +6,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "2",
@@ -41,7 +42,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "6",
@@ -50,7 +52,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "7",
@@ -59,7 +62,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "8",
@@ -91,7 +95,8 @@
     "valueKey": "id",
     "labelKey": "document.docId",
     "labelPrefixRoot": "",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "12",
@@ -100,7 +105,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "13",
@@ -119,12 +125,13 @@
   },
   {
     "id": "15",
-    "path": "/document_revisions?docTypeGroups%5B%5D=WO_PARTS",
+    "path": "/document_revisions?docTypeGroups%5B%5D=PART",
     "label": "Part Number in WO",
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "16",
@@ -133,7 +140,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "17",
@@ -151,7 +159,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "19",
@@ -160,7 +169,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "20",
@@ -169,7 +179,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "21",
@@ -178,7 +189,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
-    "root": ""
+    "root": "",
+    "includeRevision": "displayRevision"
   },
   {
     "id": "22",
@@ -195,6 +207,26 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
+    "root": "",
+    "includeRevision": "displayRevision"
+  },
+  {
+    "id": "24",
+    "path": "/document_revisions?docTypeGroupOptions%5B%5D=CAN_CREATE_INSPECTION&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED",
+    "label": "Lots",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": "",
+    "includeRevision": "displayRevision"
+  },
+  {
+    "id": "25",
+    "path": "/documents/available_parts",
+    "label": "Available Part Documents",
+    "valueKey": "id",
+    "labelKey": "documentRevisions.name",
+    "labelPrefixRoot": "docId",
     "root": ""
   }
 ]

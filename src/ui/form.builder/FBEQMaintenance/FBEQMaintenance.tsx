@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBEQMaintenanceHistory, FBFileUpload, FBInput, FBQuantityField, FBSelect, FBTextEditor } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBEQMaintenanceHistory, FBInput, FBQuantityField, FBRadioGroup, FBTextEditor } from "..";
 import { FBSection } from "../FBSection";
 import { FBEQMaintenanceProps } from "./FBEQMaintenance.types";
 import { withFBEQMaintenance } from "./FBEQMaintenance.wrap";
@@ -14,63 +14,68 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   editorConfig = [],
   label,
   currentStatus,
+  isTypePM,
+  rules,
   ...props
 }) => (
-  <FBInput {...{ name }} {...props} type="eqmaintenance">
+  <FBInput {...{ name, rules }} {...props} type="eqmaintenance">
     <FBSection
       {...{ label }}
       name={`${name}-section`}
     >
-      <Box display="flex" flexDirection="row-reverse" mt={-3.5}>
+      <Box display="flex" flexDirection="row-reverse">
         <FBButton
           variant="text"
           endIcon={<AddCircleIcon />}
-          label="form.builder.new.pm"
+          label={isTypePM ? "form.builder.new.pm" : "form.builder.new.calibration"}
           style={{ margin: 0 }}
           onClick={handleAdd}
           disabled={isNewPMDisabled}
         />
       </Box>
     </FBSection>
+    <FBRadioGroup
+      label={isTypePM ? "form.builder.pm.required" : "form.builder.calibration.required"}
+      name={`${name}.requirements`}
+      options={FBData.yesNoOptions}
+      {...{ disabled }}
+    />
     <FBAutocompleteAsync
-      label="form.builder.preventative.maintenance.form"
+      label={isTypePM ? "form.builder.preventative.maintenance.form" : "form.builder.calibration.form"}
       optionId={FBAutocompleteAsyncOption.preventativeMaintenaceForms}
       name={`${name}.preventativeForm`}
+      validationMode="visibility"
+      rules={`required_if:${name}.requirements,Yes`}
       withState
       {...{ disabled }}
     />
-    {/* This needs to be a number field */}
     <FBQuantityField
       name={`${name}.frequency`}
-      label="form.builder.maintenance.frequency"
+      label={isTypePM ? "form.builder.maintenance.frequency" : "form.builder.calibration.frequency"}
+      validationMode="visibility"
+      rules={`required_if:${name}.requirements,Yes`}
       withState
+      placeholder="form.builder.units.days"
       {...{ disabled }}
     />
-    {currentStatus && <Box mb={3}>
+    <FBTextEditor
+      name={`${name}.justification`}
+      label="common.justifications"
+      validationMode="visibility"
+      rules={`required_if:${name}.requirements,No`}
+      {...{ disabled }}
+    />
+    {currentStatus && <Box mb={3} data-cy="maintenance.status">
       <b>Current Status:</b> {currentStatus}
     </Box>}
-    {editorConfig.includes("instructions") && (
-      <FBTextEditor
-        name={`${name}.instructions`}
-        label="form.builder.pm.instructions"
-        {...{ disabled }}
-      />
-    )}
+    <FBTextEditor
+      name={`${name}.instructions`}
+      label="form.builder.pm.instructions"
+      validationMode="visibility"
+      rules={`required_if:${name}.requirements,Yes`}
+      {...{ disabled }}
+    />
     <FBEQMaintenanceHistory {...{ name }}/>
-    {editorConfig.includes("manufacturer") && (
-      <FBFileUpload
-        name={`${name}.manufacturer`}
-        label="form.builder.attach.manufacturer"
-        {...{ disabled }}
-      />
-    )}
-    {editorConfig.includes("specs") && (
-      <FBSelect
-        name={`${name}.specs`}
-        label="form.builder.drawings.specs"
-        {...{ disabled }}
-      />
-    )}
   </FBInput>
 );
 export default withFBEQMaintenance(FBEQMaintenance);

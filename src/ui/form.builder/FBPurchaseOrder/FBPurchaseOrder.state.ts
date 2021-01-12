@@ -74,7 +74,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     try {
       const data = await this.exchangeRate.fetch();
       set(this.calculation, "currency", currency);
-      set(this.calculation, "exchangeRate", data.rate.toFixed(2));
+      set(this.calculation, "exchangeRate", parseFloat(data.rate.toFixed(2)));
       set(this.calculation, "dateOfExchangeRate", moment().format("LL"));
       this.calculateCost();
     } catch (e) {

@@ -254,7 +254,7 @@ context("Record inline Flow", () => {
 
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline", () => {
-          SystemRequirement("REQ-1080");
+          SystemRequirement("REQ-1080", "REQ-1100");
           cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", Second entry");
         });
 
@@ -263,7 +263,7 @@ context("Record inline Flow", () => {
         });
 
         it("Verify system asks for another approval afer changing section", () => {
-          SystemRequirement("REQ-1050");
+          SystemRequirement("REQ-1050", "REQ-0990", "REQ-1100");
           cy.get("[data-cy^=\"form.builder.approval.pending\"]")
             .first()
             .should("have.text", "Inline approval pending");
@@ -314,9 +314,30 @@ context("Record inline Flow", () => {
         });
       });
 
-      context("Approve and Release document and verify record is in alpha", () => {
+      context("Approve and Release document", () => {
         it("Approve and release it", () => {
           cy.recApproveAndReleaseInlineRecord();
+        });
+      });
+
+      context("Check only last record is shown on list and that it is in alpha state", () => {
+        it("Navigate to records", () => {
+          cy.navigToRecords();
+        });
+
+        it("Clear filters", () => {
+          SystemRequirement("REQ-1110");
+          cy.dlClearFilters();
+        });
+
+        it("Check if there is only one record in list", () => {
+          SystemRequirement("REQ-1110");
+          cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+        });
+
+        it("Filter record by name and status, and select it", () => {
+          SystemRequirement("REQ-0120");
+          cy.drFilterDocListByNameAndStatus({ title: "Record Document Revision", status: "Released" });
         });
 
         it("Verify record is in alpha state", () => {

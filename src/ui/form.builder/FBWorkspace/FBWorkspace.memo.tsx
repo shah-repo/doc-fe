@@ -7,10 +7,11 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   schema,
   mode = "none",
   includeTransport = true,
+  workspaceState,
 }) => (
   <>
     {isStarter && <FBStarter />}
-    {!isStarter && size(schema) > 0 && <FBSchema {...{ schema }} workspaceMode={mode} />}
+    {!isStarter && size(schema) > 0 && <FBSchema {...{ schema }} schemaState={workspaceState} workspaceMode={mode} />}
     <FBWorkspaceBottomBar {...{ includeTransport }} />
   </>
 );

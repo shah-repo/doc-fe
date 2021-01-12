@@ -22,6 +22,8 @@ declare global {
       navigToWorkOrders(): Chainable<Subject>;
       navigToRecords(): Chainable<Subject>;
       navigToDocTypeManagement(): Chainable<Subject>;
+      navigToEquipment(): Chainable<Subject>;
+      navigToParts(): Chainable<Subject>;
     }
   }
 }
@@ -64,9 +66,25 @@ Cypress.Commands.add("navigToRecords", () => {
   });
 });
 
+Cypress.Commands.add("navigToParts", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.MANUFACTURING,
+      NavigationItems.PARTS,
+    ],
+  });
+});
+
 Cypress.Commands.add("navigToReceivableList", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
+  });
+});
+
+Cypress.Commands.add("navigToEquipment", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+    cy.navigClickOnItem({ navigItem: NavigationItems.EQUIPMENT });
   });
 });
 
@@ -110,13 +128,19 @@ Cypress.Commands.add("navigToWorkOrders", () => {
 });
 
 Cypress.Commands.add("navigToPurchaseOrder", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevStatusesCategory, () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.PURCHASE_ORDERS });
   });
 });
 
 Cypress.Commands.add("navigToSuppliers", () => {
-  cy.navigClickOnItem({ navigItem: NavigationItems.SUPPLIERS });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.SUPPLIER_MANAGEMENT,
+      NavigationItems.SUPPLIER_LIST,
+    ],
+  });
 });
 
 

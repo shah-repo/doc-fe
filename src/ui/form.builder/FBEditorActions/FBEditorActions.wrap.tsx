@@ -1,4 +1,4 @@
-import { filter, isString, kebabCase, size, union } from "lodash";
+import { compact, filter, isString, kebabCase, size, union } from "lodash";
 import React from "react";
 import { FBEditorActionsProps } from ".";
 import { FB, FBData, FBSchemaProps } from "..";
@@ -51,13 +51,25 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     handleAdd = () => {
       if (!type) { return; }
       const formValues: FBSchemaProps = formState?.getValues() as FBSchemaProps;
-      const { options, validators, label, editorProperties, uniqueSchemaItem } = formValues;
+      const {
+        options,
+        validators,
+        label,
+        editorProperties,
+        uniqueSchemaItem,
+        placeholder,
+      } = formValues;
 
       // If schema item type is unique and we have already added it into scheme
       const isUnique = (
         uniqueSchemaItem &&
         (workspaceState?.getItemsByType(type).length || 0) > 0
       );
+      let rules = validators && toStringRules?.(validators);
+      if (type === "eqmaintenance") {
+        const eqRules = [rules, "eq_maintenance_required"];
+        rules = compact(eqRules).join(",");
+      }
       if (isUnique && !formValues.name) { return dialogState?.closeDialog(); }
 
       if (isOutput && !workspaceState?.isMode("formDesign")) {
@@ -65,15 +77,17 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         return;
       }
       additionalSchema();
+      formValues.rules = rules;
+
       workspaceState?.setSchemaItemAt({
         index,
         type,
         name: `${kebabCase(label as string)}-${FB.uniqid}`,
         ...formValues,
         ...isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
-        ...validators && toStringRules && { rules: toStringRules(validators) },
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         applicableValidationSchema: true,
+        validationAttribute: (label as string) || placeholder,
       }, index);
       dialogState?.closeDialog();
     };

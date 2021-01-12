@@ -34,12 +34,12 @@ export const ReferencePresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
   const referencesRenderer = () =>
     dataProp.map((reference: Model, index) => (
-      <Box marginLeft={2} component="span" key={reference.id}>
+      <Box marginLeft={2} component="span" key={reference.id} data-cy={label}>
         <Tooltip title={reference.title} id="ChangeRequestLink-tootlip" >
           <Link className={classes.link} to={reference.url} target="_blank" id="ReferencePresenter-link">
             <Chip
               className={classes.chip}
-              label={`${reference.docId} - ${reference.revisionStage} - ${reference.title}`}
+              label={`${reference.docId} - ${reference.displayRevision} - ${reference.title}`}
             />
           </Link>
         </Tooltip>

@@ -1,5 +1,5 @@
 import { createFilterOptions } from "@material-ui/lab/Autocomplete";
-import { filter, find, get, includes, isEmpty, isUndefined, map } from "lodash";
+import { filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FBAutocompleteProps } from ".";
@@ -31,7 +31,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     freeSolo,
     ...props
   }: T) => {
-
     const { formState } = FB.useStores();
     const formValue = formState?.getFieldValue(name) || defaultValue;
     const intl = useIntl();
@@ -63,6 +62,12 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     (!optionId && options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
 
     !getOptionLabel && (getOptionLabel = (option) => {
+      if (freeSolo && isString(defaultValue) && isString(option)) {
+        return option;
+      }
+      if (!isObject(option)) {
+        option = defaultValue;
+      }
       let optionText = get(option, optionLabelKey);
       if (isTranslation(optionText)) {
         optionText = intl.formatMessage({ id: optionText });
@@ -78,6 +83,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     );
 
     onInputChange = (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      // setField doesn't work here, the same problem prefilled with first option
       if (!freeSolo) { return; }
       const { target: { value = "" } = {} } = ev;
       formState?.setFieldValue(name, value);

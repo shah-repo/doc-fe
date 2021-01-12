@@ -3,13 +3,14 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBInputProps } from "../FBInput";
 
 export type FBEQMaintenanceProps =
-& Pick<FBInputProps, "name" | "gutter" | "disabled" | "label" | "editorConfig">
+& Pick<FBInputProps, "name" | "gutter" | "disabled" | "label" | "editorConfig" | "rules">
 & Pick<FBProviderProps, "eqMaintenanceState">
 & {
   handleAdd?: () => void;
   isNewPMDisabled?: boolean;
   currentStatus: string;
   pmFormId?: string;
+  isTypePM?: boolean;
 };
 
 export interface FBEQMaintenanceValue {

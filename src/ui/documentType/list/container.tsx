@@ -15,7 +15,7 @@ import { TableColumnProps } from "../../components/table/column/types";
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
 import { canEditDocumentRevision, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
-import { checkIsDocumentPO } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentPO, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -33,6 +33,8 @@ const getFormattedRowValue = (path: any, rowData: any) => {
     rowData.revisionStage,
     rowData.subRevision,
     rowData.revisionChangeType,
+    undefined,
+    checkIsDocumentRecord(rowData?.document?.documentType?.groupOptions)
   );
   let override = value;
   if (path.startsWith("precalc.revision")) {
@@ -81,7 +83,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
 
-  const isPO = checkIsDocumentPO(documentType?.group) || documentCategory?.category === "Purchase Order";
+  const isPO = checkIsDocumentPO(documentType?.groupOptions);
 
   useEffect(() => {
     if (isEmpty(tableCriteria.queryDict) || isPO) {

@@ -1,6 +1,5 @@
 import React from "react";
-import { FBData, FBEditor, FBEditorLabel, FBEditorProps } from "..";
-import { FBCheckboxGroup } from "../FBCheckboxGroup";
+import { FBData, FBEditor, FBEditorLabel, FBEditorProps, FBRadioGroup } from "..";
 
 const FBEditorEQMaintenance: React.FunctionComponent<FBEditorProps> = ({
   children,
@@ -9,10 +8,11 @@ const FBEditorEQMaintenance: React.FunctionComponent<FBEditorProps> = ({
 }) => (
   <FBEditor {...props} {...{ inputProps }}>
     <FBEditorLabel {...props} {...{ inputProps }} standalone={true} />
-    <FBCheckboxGroup
-      label="form.builder.include.fields"
-      name="editorConfig"
-      options={FBData.eqMaintenanceOptions}
+    <FBRadioGroup
+      label="form.builder.choose.form"
+      name="editorConfig.type"
+      options={FBData.eqMaintenanceTypeOptions}
+      rules="required"
     />
     {children}
   </FBEditor>

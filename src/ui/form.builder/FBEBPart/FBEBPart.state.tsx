@@ -7,9 +7,9 @@ import FBRequest from "../FBApi/FBApi.request";
 export class FBEBPartState {
   // MARK: @observables
   @observable public childrenParts?: string;
+  @observable public childrenPartsForRevise?: string;
 
   // MARK: @config
-  public forceNewRender?: boolean;
 
   // MARK: @api
   public existingChildApi = new FBRequest<null, EBPartPatchBody>(FBEndpoint.PatchDocumentRevision);
@@ -18,8 +18,9 @@ export class FBEBPartState {
   public documentApi = new FBRequest<Document, null>(FBEndpoint.Document);
 
   // MARK: @constructor
-  public constructor(childrenParts?: string) {
-    this.childrenParts = childrenParts;
+  public constructor(children: { childrenParts?: string; childrenPartsForRevise?: string }) {
+    this.childrenParts = children.childrenParts;
+    this.childrenPartsForRevise = children.childrenPartsForRevise;
   }
 
   // MARK: @actions
@@ -27,21 +28,19 @@ export class FBEBPartState {
     set(this, "childrenParts", childrenParts);
 
   // MARK: @helpers
-  public setNewRender = (state: boolean) => set(this, "forceNewRender", state);
-
-  public addExistingPartChild = (docRevId?: string, childPartId?: string) => {
+  public addExistingPartChild = (docRevId?: string, body?: EBPartPatchBody) => {
     if (!docRevId) { return; }
-    const childrenParts = childPartId ? [{ id: childPartId }] : [];
     this.existingChildApi.set({
       url: FBEndpoint.PatchDocumentRevision,
       urlValues: { docRevId },
-      body: { childrenParts },
+      body,
       method: "patch",
     });
   };
 
-  public addNewPartChild = (body: EBPartPostBody) =>
+  public addNewPartChild = (body: EBPartPostBody) => {
     this.newChildApi.set({ body, method: "post" });
+  };
 
   public fetchProposedDocId = (documentTypeId: string) => this.proposedDocIdApi.set({
     url: FBEndpoint.FetchDocId,

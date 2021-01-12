@@ -1,25 +1,32 @@
-import { isObject, map } from "lodash";
-import React from "react";
-import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormProps, FBProcedureItemConfig, FBProcedureItemType } from "..";
+import { isEmpty, map } from "lodash";
+import { reaction } from "mobx";
+import { useObserver } from "mobx-react";
+import React, { useEffect } from "react";
+import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormProps, FBProcedureFormState, FBProcedureItemConfig, FBProcedureItemType } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
+import { SelectOption } from "../../components/forms/fields/Select";
 
 export const withFBProcedureForm = <T extends FBProcedureFormProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    getOptionLabel,
     formState,
     disabledOptions,
+    procedureFormState,
     initialValues,
     optionId,
     type,
+    lotOptions,
+    partOptions,
+    disabled,
     ...props
   }: T) => {
-
     // MARK: @config
     const { procedureState, dialogState } = FB.useStores();
     formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
+    procedureFormState = FB.useRef<FBProcedureFormState>(FBProcedureFormState, {
+      initialValues,
+    });
 
     const config: Partial<Record<keyof typeof FBProcedureItemType, (() => void)>> = {
       materials: () => {
@@ -41,6 +48,29 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     }, []);
 
     // MARK: @reactions
+    useEffect(() => reaction(
+      () => formState?.inputState.get("title")?.value,
+      (value) => {
+        handleChangeOfPart();
+        if (!value && !formState?.inputState.get("partLot")?.value) {
+          procedureFormState?.fetchLots();
+          procedureFormState?.fetchParts();
+        }
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+    // if title and partLot empty it will set to default options
+    useEffect(() => reaction(
+      () => formState?.inputState.get("partLot")?.value,
+      (value) => {
+        handleChangeOfLot();
+        if (!value && !formState?.inputState.get("title")?.value) {
+          procedureFormState?.fetchLots();
+          procedureFormState?.fetchParts();
+        }
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     // MARK: @helpers
     function handleAdd() {
@@ -53,28 +83,47 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       dialogState?.closeDialog();
     }
 
-    // MARK: @methods
-    getOptionLabel = (option: DocumentRevision) => {
-      if (!isObject(option)) { return option; }
-      const versionNumber = generateRevisionNumber(
-        option.revision,
-        option.revisionStage,
-        option.subRevision,
-        option.revisionChangeType,
-      );
-      return `${option.document?.docId} rev ${versionNumber} - ${option.name}`;
-    };
+    function handleChangeOfPart() {
+      const formValue = formState?.getValues() as FBProcedureItemConfig;
+      // freeSolo or empty
+      if (!formValue.title ||
+        isEmpty(procedureFormState?.defaultParts.filter((e) => e.id === formValue?.title))) {
+        return;
+      }
+      procedureFormState?.fetchLotsToPart(formValue.title);
+    }
+
+    function handleChangeOfLot() {
+      const formValue = formState?.getValues() as FBProcedureItemConfig;
+      if (!formValue.partLot) {
+        return;
+      }
+      procedureFormState?.fetchPartsOfLot(formValue.partLot);
+    }
 
     // MARK: @observer
+    useObserver(() => {
+      lotOptions = procedureFormState?.lotsToPart?.map((schemaItem: DocumentRevision) => ({
+        value: schemaItem.id,
+        text: `${schemaItem.document.docId} - rev ${schemaItem.revision} - ${schemaItem.name}`,
+      } as SelectOption));
+      partOptions = procedureFormState?.partsOfLot?.map((schemaItem: DocumentRevision) => ({
+        value: schemaItem.id,
+        text: `${schemaItem.document.docId} - rev ${schemaItem.revision} - ${schemaItem.name}`,
+      } as SelectOption));
+      disabled = !procedureFormState?.partsOfLot || !procedureFormState.lotsToPart;
+    });
 
     return Component({
       ...(props as T),
-      getOptionLabel,
       formState,
       disabledOptions,
       initialValues,
       optionId,
       type,
+      lotOptions,
+      partOptions,
+      disabled,
     });
   };
 

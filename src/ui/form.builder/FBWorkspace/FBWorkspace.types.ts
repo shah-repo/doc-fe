@@ -39,6 +39,9 @@ export interface FBWorkspaceExternalState {
     user: UserState;
     groups: UserGroupsState;
   };
+  documentType?: {
+    byId: any;
+  };
 }
 
 export type FBWorkspaceConstructor = Pick<FBWorkspaceProps, "schema" | "mode" | "autosave">;

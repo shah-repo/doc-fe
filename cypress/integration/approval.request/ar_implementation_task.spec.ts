@@ -271,11 +271,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Approved" });
-    });
-
-    it("Close AR", () => {
-      cy.arCloseAR();
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Closed" });
     });
 
     it("Check approval request status is 'Closed'", () => {

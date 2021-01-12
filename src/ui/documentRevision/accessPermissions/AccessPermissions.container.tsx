@@ -6,7 +6,7 @@ import { changeRequestsSelectors } from "../../../state/ducks/changeRequest";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
-import { useAssignDocument } from "../../hooks/docCustomization/useCustomization";
+import { useAssignOperatorsToDocument } from "../../hooks/docCustomization/useCustomization";
 import AccessPermissionsPresenter from "./AccessPermissions.presenter";
 
 interface OwnProps {
@@ -39,7 +39,7 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
   const securityEmployees = get(selectedDocument, "document.securityEmployees", []);
   const operators = get(selectedDocument, "document.operators", []);
 
-  const [isVisible] = useAssignDocument(documentTypeId);
+  const [isVisible] = useAssignOperatorsToDocument(documentTypeId);
 
   return (
     <AccessPermissionsPresenter

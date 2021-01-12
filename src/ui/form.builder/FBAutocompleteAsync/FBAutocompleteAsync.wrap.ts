@@ -16,8 +16,11 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     shouldReloadOnInit = false,
     labelPrefixRoot,
     selectedOptions,
+    includeRevision,
     defaultValue,
     additionalData,
+    omitFormValue,
+    forceNewRender,
     freeSolo,
     optionId,
     options,
@@ -27,7 +30,6 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     value,
     ...props
   }: T) => {
-
     const { formState } = FB.useStores();
     autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, optionId);
     const {
@@ -36,7 +38,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     } = autocompleteAsyncState?.optionConfig || {};
     // TODO: handle autocomplete default value from input wrap
     // and discard value prop
-    const formValue = formState?.getFieldValue(name, defaultValue) || value;
+    const formValue = formState?.getFieldValue(name, defaultValue, omitFormValue) || value;
 
     function getDefault() {
       const objectValue: Record<FBOptionValueType, () => any> = {
@@ -63,6 +65,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
           ? autocompleteAsyncState?.sliceValue(selectedOptions)
           : slicedOptions;
       }
+      forceNewRender = formState?.getInputState(name || "")?.forceRender;
     });
 
     // Add some static additional data to dynamic store list
@@ -84,8 +87,16 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (freeSolo && !isObject(option)) {
         return option;
       }
-      const { labelPrefixRoot } = autocompleteAsyncState?.optionConfig || {};
-      const optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
+      if (!freeSolo && !isObject(option)) {
+        option = defaultValue;
+      }
+      const { labelPrefixRoot, includeRevision } = autocompleteAsyncState?.optionConfig || {};
+      let optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
+      if (includeRevision) {
+        const revision = get(option, includeRevision);
+        optionLabel = labelPrefixRoot ?
+          `${get(option, labelPrefixRoot)} - rev ${revision} - ` : "";
+      }
       return `${optionLabel}${get(option, optionLabelKey, "")}`;
     });
 
@@ -102,6 +113,8 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       optionValueType,
       selectedOptions,
       defaultValue,
+      omitFormValue,
+      forceNewRender,
       freeSolo,
       multiple,
       name,

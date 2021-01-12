@@ -213,7 +213,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Save DAM And Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("'Approve and Release' the document", () => {
@@ -274,8 +274,9 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save role", () => {
       SystemRequirement("REQ-0590");
-
-      cy.drAddApprovalRole();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drAddApprovalRole();
+      });
     });
   });
 
@@ -316,7 +317,9 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save Approval Matrix Item", () => {
       SystemRequirement("REQ-0630", "REQ-0650");
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+      });
     });
   });
 
@@ -415,6 +418,7 @@ context("Document Approval Matrix Flow", () => {
   context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
+      cy.wait(2000);
     });
 
     it("'Training Required' should be checked because of DAM", () => {
@@ -431,7 +435,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
-      cy.wait(5000);
+      cy.wait(8000);
       cy.drReleaseDocAfterRoleExistsAndChecked({ group: 0, role: roleOne });
     });
   });
@@ -670,10 +674,11 @@ context("Document Approval Matrix Flow", () => {
   context("Save document, Check Group Role is enforced and Release Document", () => {
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
+      cy.wait(2000);
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
-      cy.wait(5000);
+      cy.wait(8000);
       cy.drReleaseDocAfterRoleExistsAndChecked({ group: 0, role: roleOne });
     });
   });
@@ -688,7 +693,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 

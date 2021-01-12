@@ -1,14 +1,12 @@
-[
-  {
-    "text": "form.builder.pm.instructions",
-    "value": "instructions"
-  },
-  {
-    "text": "form.builder.attach.manufacturer",
-    "value": "manufacturer"
-  },
-  {
-    "text": "form.builder.drawings.specs",
-    "value": "specs"
-  }
-]
+{
+  "type": [
+    {
+      "text": "form.builder.preventative.maintenance",
+      "value": "preventativeMaintenance"
+    },
+    {
+      "text": "form.builder.calibration",
+      "value": "calibration"
+    }
+  ]
+}

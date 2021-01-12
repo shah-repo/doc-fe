@@ -38,7 +38,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
             {includeProcedureDiff && (
               <FBProcedureDiff name={FBFieldName.ProcedureDiff} />
             )}
-            <FBWorkspaceMemo {...{ isStarter, schema, mode, includeTransport }} />
+            <FBWorkspaceMemo {...{ isStarter, schema, mode, includeTransport, workspaceState }} />
           </FBConditionalWrapper>
         </>
       )}

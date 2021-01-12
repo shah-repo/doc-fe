@@ -28,6 +28,7 @@ export enum CyRoutes {
   ChangeRequestApprove = "ChangeRequestApprove",
   ARPreview = "ARPreview",
   GroupsPost = "GroupsPost",
+  GroupsPatch = "GroupsPatch",
   DocPreview = "DocPreview",
   DocRevGet = "DocRevGet",
   LotQuantity = "LotQuantity",
@@ -62,7 +63,9 @@ export enum CyRoutes {
   GetDocRevDocTypeCategory = "GetDocRevDocTypeCategory",
   GetDocRevStatusesCategory = "GetDocRevStatusesCategory",
   PostDocRevInReview = "PostDocRevInReview",
-  PatchDocSecurity = "PatchDocSecurity"
+  PatchDocSecurity = "PatchDocSecurity",
+  GetRevisionDocTypeGroupOptions = "GetRevisionDocTypeGroupOptions",
+  PostDocRev = "PostDocRev"
 }
 
 export const routes: ICyRoutes =   {
@@ -118,6 +121,12 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/groups",
     },
   },
+  GroupsPatch: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/groups/*",
+    },
+  },
   PatchDocRev: {
     requestConfig: {
       method: "PATCH",
@@ -158,13 +167,19 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_type/with_forms?docTypeGroupOption*",
     },
   },
+  GetRevisionDocTypeGroupOptions: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions?docTypeGroupOptions*",
+    },
+  },
   PostOrPatchDocRev: {
     requestConfig: {
       url: "/api/v1/document_revisions/*",
     },
     callConfig: {
       responseTimeout: 25 * 1000,
-      requestTimeout: 15 * 1000,
+      requestTimeout: 20 * 1000,
     },
   },
   ReleaseDocRevWithoutAr: {
@@ -246,6 +261,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 15 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
   Login: {
@@ -413,6 +429,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/change_requests*",
+    },
+  },
+  PostDocRev: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/document_revisions",
     },
   },
   PostChangeRequests: {

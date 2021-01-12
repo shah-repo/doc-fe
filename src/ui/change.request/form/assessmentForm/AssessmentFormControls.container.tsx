@@ -29,13 +29,19 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
   const currentUserEmail = useSelector(authSelectors.currentUserEmail);
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
+  const hasOwnershipTag = useGetHasTag(GroupTag.OWNERSHIP_CHANGE);
 
   const canChangeOwnerShip = React.useMemo(() => {
     if (!changeRequest) {
       return false;
     }
-    return canChangeCROwner(changeRequest.state, currentEmployeeId, changeRequest?.owner.id, isCompanyAdmin);
-  }, [changeRequest, currentEmployeeId, isCompanyAdmin]);
+    return canChangeCROwner(
+      changeRequest.state,
+      currentEmployeeId,
+      changeRequest?.owner.id,
+      isCompanyAdmin,
+      hasOwnershipTag);
+  }, [changeRequest, currentEmployeeId, isCompanyAdmin, hasOwnershipTag]);
 
   if (!changeRequest) {
     return null;

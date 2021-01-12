@@ -4,13 +4,26 @@ import { DocumentType } from "../../../state/ducks/documentRevisions/documentTyp
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
 import { checkIsDocumentDAM, checkIsDocumentPOAM, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
-import { isDocumentRevisionInDraft } from "../helpers/documentRevisionStatus";
+import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
 import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
 import { getIsAdministrativeDefault } from "../helpers/revisionStage";
 import { DocumentRevisionFormValues } from "./types";
 
+const getRevisionsInHighestStage = (revisions: DocumentRevision[]) => {
+  const highestStage = maxBy(revisions, "revisionStage")?.revisionStage;
+  const revs = revisions.filter((rev) => rev.revisionStage === highestStage);
+  return revs;
+};
 
-export const getHighestRevision = (revisions: DocumentRevision[]) => maxBy(revisions, "revision");
+export const getHighestRevision = (revisions: DocumentRevision[]) => {
+  const revs = getRevisionsInHighestStage(revisions);
+  return maxBy(revs, "revision");
+};
+
+export const getHighestReleasedRevision = (revisions: DocumentRevision[]) => {
+  const revs = getRevisionsInHighestStage(revisions).filter((rev) => isDocumentRevisionReleased(rev.status));
+  return maxBy(revs, "revision");
+};
 
 const getRevisionNumber = (revision?: DocumentRevision) => revision ? generateRevisionNumber(revision.revision,
   revision.revisionStage,
@@ -30,7 +43,7 @@ export const toDocumentRevisionFormValues = (
     // TODO - we need to take a data from response that gives us all informations about document,
     // currently we are using data from the document list
     referenceTo: documentRevision.referenceTo?.map((reference: any) => {
-      const highestRev = getHighestRevision(reference.documentRevisions);
+      const highestRev = getHighestReleasedRevision(reference.documentRevisions);
       return ({
         value: reference.id,
         label: `${reference.docId} - ${getRevisionNumber(highestRev)} - ${highestRev?.name}`,
@@ -51,7 +64,7 @@ export const toDocumentRevisionFormValues = (
       .map((operator) => ({ label: operator.name, value: operator.id })),
     renderHTML: documentRevision.renderHTML,
     schema: documentRevision.schema,
-    parentParts: documentRevision.parentParts,
+    parentParts: documentRevision.parentParts?.map((parentPart) => ({ id: parentPart.id })),
     parentEquipment: parentEquipmentId ? { id: parentEquipmentId } : undefined,
     equipmentSection: get(documentRevision.equipmentSection, ""),
     // there can currently be only one child part
@@ -69,9 +82,11 @@ export const toDocumentRevisionFormValues = (
   const isDocumentRecord = checkIsDocumentRecord(documentRevision?.document.documentType.groupOptions);
   const isDocumentPOAM = checkIsDocumentPOAM(documentRevision?.document.documentType.groupOptions);
   const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
+
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isDocumentRecord;
   const isdocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isDocRevFirstDraft = isdocRevStatusDraft && documentRevision?.version === 1;
+
   if (shouldShowRevStageForDocType && isDocRevFirstDraft) {
     values.revisionStage = documentRevision.revisionStage.toString();
   }
@@ -155,9 +170,12 @@ export const toDocumentRevisionFormValuesWithRevisionChange = (
   );
   const isAdministrativeDefault = getIsAdministrativeDefault(documentRevision);
 
-  values.revisionChangeType = isAdministrativeDefault ?
-    RevisionChangeType.AdministrativeChange :
-    RevisionChangeType.NextRevision;
+  if (isAdministrativeDefault) {
+    values.revisionChangeType = RevisionChangeType.AdministrativeChange;
+  } else {
+    values.revisionChangeType = RevisionChangeType.NextRevision;
+  }
+
   values.outputRevision = true;
   FBDRStore.setValues({
     ...values,
