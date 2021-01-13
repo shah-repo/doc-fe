@@ -73,8 +73,6 @@ export class ConfigEnv {
 
   DIR_SCREENSHOTS!: string;
 
-  @IsDefined()
-  @IsString()
   TEST_COMPANY_REPLICA_NAME!: string;
 }
 
