@@ -6,14 +6,12 @@ definitions:
     sorry-cypress-director:
       image:
         name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:sorry-cypress-director1
-      memory: 1024
       variables:
         EXECUTION_DRIVER: "../execution/in-memory"
         SCREENSHOTS_DRIVER: "../screenshots/dummy.driver"
       ports:
         - 1234:1234
     docker:
-      memory: 1024
   caches:
 
   steps:
@@ -238,7 +236,7 @@ pipelines:
             - sorry-cypress-director
           caches:
             - node
-          size: 1x
+          size: 2x
           artifacts:
             - test-results/**
           script:
