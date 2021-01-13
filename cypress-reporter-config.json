@@ -2,7 +2,8 @@
   "reporterEnabled": "mochawesome, mocha-junit-reporter",
   "mochaJunitReporterReporterOptions": {
     "mochaFile": "test-results/some_ci_build_id/json/junit/results-[hash].xml",
-    "testsuitesTitle": true
+    "testsuitesTitle": true,
+    "jenkinsMode": true
   },
   "mochawesomeReporterOptions": {
     "reportDir": "test-results/some_ci_build_id/json",
