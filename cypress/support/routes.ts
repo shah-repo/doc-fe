@@ -141,7 +141,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 25 * 1000,
-      requestTimeout: 10 * 1000,
+      requestTimeout: 15 * 1000,
     },
   },
   GetDocDynamicForm: {
@@ -338,7 +338,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/*",
     },
     callConfig: {
-      responseTimeout: 10 * 1000,
+      requestTimeout: 15 * 1000,
+      responseTimeout: 20 * 1000,
     },
   },
   GetDocAggregatedAudit: {
