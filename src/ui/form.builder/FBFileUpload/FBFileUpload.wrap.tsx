@@ -3,6 +3,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBFilePresenter, FBFileUploadProps, FBFileUploadState } from "..";
+import FBFileViewPresenter from "../FBFilePresenter/FBFileViewPresenter";
 
 export const withFBFileUpload = <T extends FBFileUploadProps>(
   Component: React.FunctionComponent<T>,
@@ -14,6 +15,8 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
     name,
     defaultValue,
     withState,
+    viewMode = false,
+    attachmentIds,
     ...props
   }: T) => {
 
@@ -22,11 +25,20 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
     fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState, formValue);
 
     useObserver(() => {
-      filePresenters = fileUploadState?.fetchedFiles.map((file) => (
-        <FBFilePresenter
-          key={`fb-file-presenter-${file.id}`}
-          {...{ file, name, disabled }}
-        />));
+      filePresenters = fileUploadState?.fetchedFiles.map((file) => {
+        if (viewMode) {
+          return (
+            <FBFileViewPresenter
+              key={`fb-file-presenter-${file.id}`}
+              {...{ file, name, disabled }}
+            />);
+        }
+        return (
+          <FBFilePresenter
+            key={`fb-file-presenter-${file.id}`}
+            {...{ file, name, disabled }}
+          />);
+      });
     });
 
     React.useEffect(() => {
@@ -37,6 +49,13 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
       fileUploadState?.getAttachments(arrayOfFileIds);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    React.useEffect(() => {
+      if (viewMode) {
+        fileUploadState?.getAttachments(attachmentIds);
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [attachmentIds]);
 
     React.useEffect(() => {
       reaction(
@@ -55,6 +74,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
       filePresenters,
       disabled,
       withState,
+      viewMode,
       name,
     });
   };
