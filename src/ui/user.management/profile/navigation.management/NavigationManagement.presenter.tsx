@@ -32,7 +32,7 @@ export const NavigationManagementPresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
 
   return (
-    <Box minWidth="500px" maxWidth="700px">
+    <Box>
       <FormWrapper
         {...{ dirty, initialValues, resetForm }}
       >

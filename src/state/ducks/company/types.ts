@@ -74,6 +74,7 @@ export interface CompanyMineRequest {
   acctCodes?: string[];
   helloSignIntegrationEnabled?: boolean;
   navigation?: NavigationItem[];
+  numOfRevStages?: number;
 }
 
 export type SelectCompanyState = Company;

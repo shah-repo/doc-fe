@@ -34,3 +34,11 @@ export const toNavigationIntialValues = (navigationItems) => {
 export const toNavigationBodyValues = (values) => ({
   navigation: parseJSON(values.navigation),
 });
+
+export const toNumRevisionStageInitialValues = (numOfRevStages) => ({
+  numOfRevStages: numOfRevStages.toString(),
+});
+
+export const toNumRevisionStageBodyValues = (values) => ({
+  numOfRevStages: Number(values.numOfRevStages),
+});
