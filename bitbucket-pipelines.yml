@@ -233,7 +233,7 @@ pipelines:
             aws:
               access-key: $AWS_ACCESS_KEY_ID
               secret-key: $AWS_SECRET_ACCESS_KEY
-          max-time: 20
+          max-time: 40
           services:
             - sorry-cypress-director
           caches:
