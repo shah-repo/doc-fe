@@ -26,6 +26,7 @@ export enum DOC_TYPE_GROUP {
   INSPECTION = "INSPECTION",
   FAI_INSPECTION = "FAI_INSPECTION",
   LOT = "LOT",
+  PART_LOT = "PART_LOT"
 }
 export type DocumentGroupType = keyof typeof DOC_TYPE_GROUP;
 

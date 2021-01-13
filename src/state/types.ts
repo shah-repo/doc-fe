@@ -21,7 +21,7 @@ export interface ApiAction<Response = any, Body = any> extends Action {
   sendNoResponseHeader?: boolean;
 }
 
-export interface ActionWithPayload<P> extends Action {
+interface ActionWithPayload<P> extends Action {
   payload: P;
 }
 
