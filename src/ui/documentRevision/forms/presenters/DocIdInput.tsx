@@ -6,6 +6,7 @@ import { DocumentProposedIdSetAction, documentsSelectors } from "../../../../sta
 import { AsyncStatus } from "../../../../state/types";
 import InputField from "../../../components/forms/fields/Input";
 import { toastError } from "../../../components/notifications";
+import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocId } from "../../../hooks/docCustomization/useCustomization";
 import { DocumentCloneType } from "../../Clone.container";
 
@@ -32,7 +33,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
       toastError(loadProposedDocIdState.message);
     }
   }, [loadProposedDocIdState]);
-  const [isVisible, label, validators] = useDocId(documentTypeId);
+  const [isVisible, label, tooltipConfig, validators] = useDocId(documentTypeId);
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     const { documentType } = document;
@@ -59,17 +60,19 @@ const DocIdInput: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <InputField
-      name="document.docId"
-      label={label}
-      inputProps={{
-        id: "document.docId",
-        value: document.docId,
-        disabled: isDisabled,
-        onChange: handleDocIdChange,
-      }}
-      validate={validators}
-    />
+    <CustomLabelTooltip {...{ tooltipConfig }}>
+      <InputField
+        name="document.docId"
+        label={label}
+        inputProps={{
+          id: "document.docId",
+          value: document.docId,
+          disabled: isDisabled,
+          onChange: handleDocIdChange,
+        }}
+        validate={validators}
+      />
+    </CustomLabelTooltip>
   );
 };
 

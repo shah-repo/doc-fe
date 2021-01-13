@@ -26,6 +26,12 @@ export class FB {
     if (!value) { return ""; }
     return value.replace(/(<([^>]+)>)/ig, "");
   }
+
+  public static isUUID(uuid: string): boolean {
+    const reUUID4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    const reUUID = /^([a-f\d]{8}(-[a-f\d]{4}){3}-[a-f\d]{12}?)$/i;
+    return reUUID4.test(uuid) || reUUID.test(uuid);
+  }
 }
 
 export default FB;

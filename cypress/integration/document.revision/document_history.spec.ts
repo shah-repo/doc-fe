@@ -53,6 +53,11 @@ const history = [
     owner,
     actions: [
       { key: "Attachments removed", value: "test_image.jpg" },
+    ],
+  },
+  {
+    owner,
+    actions: [
       { key: "Description changed", value: `${formDescription.newValue}` },
     ],
   },
@@ -217,7 +222,9 @@ context("Check Document History", () => {
     });
 
     it("Remove reference for document", () => {
-      cy.drRemoveReferences(0);
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drRemoveReferences(0);
+      });
     });
 
     it("Unmark 'Training Required'", () => {
@@ -225,7 +232,9 @@ context("Check Document History", () => {
     });
 
     it("Remove attachment test_image.jpg", () => {
-      cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
+      });
     });
 
     it("Upload test.docx", () => {

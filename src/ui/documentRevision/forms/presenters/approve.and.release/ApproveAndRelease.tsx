@@ -3,6 +3,7 @@ import { Formik, FormikProps } from "formik";
 import { flatten } from "lodash";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { getStartOfDayDateString, TIME_ZONE } from "../../../../../common/utils/date";
@@ -20,6 +21,7 @@ import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import { FormContext } from "../../../../components/forms/FormContext";
 import Text from "../../../../components/Text";
 import { FB } from "../../../../form.builder";
+import CustomLabelTooltip from "../../../../hooks/docCustomization/CustomLabelTooltip";
 import { useApproveAndRelease } from "../../../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
@@ -63,7 +65,8 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   isRecord,
   isInlineApproval,
 }) => {
-  const [isVisible, label] = useApproveAndRelease(documentTypeId);
+  const intl = useIntl();
+  const [isVisible, label, tooltipConfig] = useApproveAndRelease(documentTypeId);
   const classes = styles();
   const dialog = useDialog();
   const alertDialog = useDialog();
@@ -82,6 +85,8 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const documentRevision = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, docRevId));
   const history = useHistory();
+  const docId = documentRevision?.document?.docId || "";
+  const title = documentRevision?.name;
 
   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
@@ -150,8 +155,8 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   });
 
   const initialValuesAR = (values: any): any => ({
-    title: documentRevision.name,
-    description: documentRevision.name,
+    title: intl.formatMessage({ id: "documentRevision.releasing" }, { docId, title }),
+    description: intl.formatMessage({ id: "documentRevision.releasing" }, { docId, title }),
     documentType: { id: documentType },
     formDocument: {
       id: values.formDocument.value,
@@ -162,9 +167,9 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
         .concat(owner?.id).filter((id) => id)
         .map((id) => ({ id })),
       documentRevisions: [{
-        descriptionOfChange: values.formDocument.label,
+        descriptionOfChange: intl.formatMessage({ id: "common.numeric.release" }),
         id: FB.uniqid,
-        justificationOfChange: values.formDocument.label,
+        justificationOfChange: intl.formatMessage({ id: "common.numeric.release" }),
         proposedDocumentRevision: { id: docRevId },
       }],
       effectiveDate: values.effectiveDate,
@@ -259,15 +264,17 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <Button
-        color="secondary"
-        variant="outlined"
-        onClick={isRecord ? alertDialog.open :  openDialog}
-        id="ApproveAndRelease-button"
-        data-cy="ApproveAndRelease-button"
-      >
-        <Text message={isRecord ? "record.finalize.and.release" : label} />
-      </Button>
+      <CustomLabelTooltip {...{ tooltipConfig }}>
+        <Button
+          color="secondary"
+          variant="outlined"
+          onClick={isRecord ? alertDialog.open :  openDialog}
+          id="ApproveAndRelease-button"
+          data-cy="ApproveAndRelease-button"
+        >
+          <Text message={isRecord ? "record.finalize.and.release" : label} />
+        </Button>
+      </CustomLabelTooltip>
       {
         dialog.isOpen &&
         <Dialog

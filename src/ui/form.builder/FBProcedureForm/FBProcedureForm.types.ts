@@ -1,9 +1,30 @@
 import { FBAutocompleteAsyncProps, FBFormProps, FBProcedureItemProps } from "..";
+import { SelectOption } from "../../components/forms/fields/Select";
+import { FBAutocompleteProps } from "../FBAutocomplete";
+import FBProcedureFormState from "./FBProcedureForm.state";
+
+export enum FBProcedureFormFilterType {
+  parts = "title",
+  lots = "partLot",
+}
 
 export type FBProcedureFormProps =
 & Pick<FBFormProps, "formState" | "children" | "initialValues">
 & Pick<FBProcedureItemProps, "type">
-& Pick<FBAutocompleteAsyncProps, "optionId" | "disabledOptions">;
+& Pick<FBAutocompleteAsyncProps, "optionId" | "disabledOptions">
+& {
+  handleChangeOfPart?: () => void;
+  handleChangeOfLot?: () => void;
+  handleReloading?: () => void;
+  lotFilterOptions?: FBAutocompleteProps["filterOptions"];
+  partFilterOptions?: FBAutocompleteProps["filterOptions"];
+  partOptions?: SelectOption[];
+  lotOptions?: SelectOption[];
+  procedureFormState?: FBProcedureFormState;
+  disabled?: boolean;
+  partLoading?: boolean;
+  lotLoading?: boolean;
+};
 
 export interface FBProcedureFormActionsProps {
   handleAdd?: () => void;

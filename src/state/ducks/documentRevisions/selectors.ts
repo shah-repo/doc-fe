@@ -3,6 +3,7 @@ import { createSelector } from "reselect";
 import { stripTags, stripTagsFromObject } from "../../../common/utils/helpers";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { DocumentRevisionFormValues } from "../../../ui/documentRevision/forms/types";
+import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInStatus, isDocumentRevisionPendingChange, isDocumentRevisionReleased } from "../../../ui/documentRevision/helpers/documentRevisionStatus";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
@@ -99,12 +100,21 @@ const makeGetAvailableReferences = () => createSelector(
       return currentDocRev.document?.id !== docRev.document.id;
     });
 
+    const isCurrentRevFai =
+      checkIsTypeFaiInspection(currentDocRev.document?.documentType?.groupOptions);
+    const canCurrentRevCreateInspection =
+      checkCanTypeCreateInspection(currentDocRev.document?.documentType?.groupOptions);
+
     return uniqueIds.map((id) => {
       const { document, name, displayRevision } = docRevs[id];
+      const isReferencePart = checkIsDocumentPart(document.documentType.groupOptions);
+      const canReferenceCreateInspection = checkCanTypeCreateInspection(document.documentType.groupOptions);
 
       return {
         value: document.id,
         label: `${document.docId} - ${displayRevision} - ${name}`,
+        deleteDisabled: ((isReferencePart && canCurrentRevCreateInspection) ||
+        (canReferenceCreateInspection && isCurrentRevFai)) && currentDocRev.id,
       };
     });
   },

@@ -35,13 +35,16 @@ export const withFBSortable = <T extends FBSortableProps>(
       </li>
     ));
 
-    const items = useObserver(() => map(workspaceState?.getSchema(), (schemaItem, index: number) => (
-      <SortableItem
-        key={`fb-sortable-item-${index}`}
-        value={{ ...schemaItem, index }}
-        {...{ index }}
-      />
-    )));
+    const items = useObserver(() => map(workspaceState?.getSchema(), (schemaItem, index: number) => {
+      if (schemaItem.deleted) { return; }
+      return (
+        <SortableItem
+          key={`fb-sortable-item-${index}`}
+          value={{ ...schemaItem, index }}
+          {...{ index }}
+        />
+      );
+    }));
 
     const onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
       const schema = workspaceState?.schema;
@@ -52,9 +55,17 @@ export const withFBSortable = <T extends FBSortableProps>(
       workspaceState?.setSchema(newSchema);
     };
 
-    const shouldCancelStart = (e: { buttons: number; ctrlKey: boolean; button: number }) =>
-      (e.buttons === 1 && e.ctrlKey === true) || // macOS trackpad ctrl click
-      (e.buttons === 2 && e.button === 2);
+    const shouldCancelStart = (e: { buttons: number; ctrlKey: boolean; button: number; target: HTMLElement }) => {
+      // Limit sort to a sort icon click
+      if (workspaceState?.mode === "formDesign" && e.target.nodeName !== "svg") {
+        return true;
+      }
+      return (
+        (e.buttons === 1 && e.ctrlKey === true) || // macOS trackpad ctrl click
+        (e.buttons === 2 && e.button === 2)
+      );
+    };
+
 
     return Component({
       ...(props),

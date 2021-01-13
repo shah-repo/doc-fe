@@ -78,7 +78,7 @@ export interface ReferenceSummary {
   url: string;
   docId?: string;
   title: string;
-  revisionStage?: string;
+  displayRevision?: string;
 }
 
 export interface BuildsSummary {

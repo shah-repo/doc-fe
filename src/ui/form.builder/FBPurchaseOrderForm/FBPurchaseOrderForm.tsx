@@ -39,6 +39,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
           name="partNumber"
           optionId="11"
           onChange={handlePartTitle}
+          rules="required_without:serviceId"
           {...{ getOptionDisabled, getOptionLabel }}
         />
         <FBTextField
@@ -55,10 +56,12 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         <FBTextField
           label="form.builder.field.service.id"
           name="serviceId"
+          rules="required_without:partNumber"
         />
         <FBTextField
           label="form.builder.field.description"
           name="description"
+          rules="required"
         />
       </>
     }
@@ -67,7 +70,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         <FBQuantityField
           label="form.builder.field.qunatity.ordered"
           name="order"
-
+          rules="required|min:1"
           onChange={handleTotal}
         />
       </Box>
@@ -75,6 +78,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         <FBAutocomplete
           label="form.builder.field.units"
           name="units"
+          rules="required"
           options={type === "service" ? FBData.serviceUnitsOptions : FBData.productUnitsOptions}
           optionValueKey="value"
           optionLabelKey="text"
@@ -89,12 +93,14 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
     <FBDatePicker
       label="form.builder.field.date.required"
       name="date"
+      rules="required"
     />
     {
       type === "product" &&
       <FBTextField
         label="form.builder.field.supplier.part.number"
         name="description"
+        rules="required"
         rows="3"
       />
     }
@@ -102,8 +108,8 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       type="number"
       label="form.builder.field.unit.price"
       name="unitPrice"
+      rules="required|min:0"
       onChange={handleTotal}
-      rules="min:0"
     />
     {
       type === "product" &&

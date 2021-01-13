@@ -47,7 +47,7 @@ Cypress.Commands.add("ebVerifyNewRevisionCreated", () => {
 
 Cypress.Commands.add("ebClickClone", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get("[data-cy=\"PreviewControlsContainer-copy-to\"]").click();
+    cy.get("[data-cy=\"CloneEBButton\"]").click();
   });
 });
 
@@ -58,4 +58,5 @@ Cypress.Commands.add("ebApprove", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
     cy.get("[data-cy=\"common.confirm\"]").click();
   });
+  cy.checkToastMessage({ exists: false });
 });

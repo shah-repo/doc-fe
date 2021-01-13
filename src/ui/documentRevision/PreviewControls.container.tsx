@@ -4,6 +4,7 @@ import { useIntl } from "react-intl";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
+import { authSelectors } from "../../state/ducks/auth";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { DocumentRevisionTransitionResponse, FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../state/ducks/documents";
@@ -16,15 +17,15 @@ import DownloadHTML from "../document.revision/summary/download.html";
 import PDFSocket from "../document.revision/summary/pdf.socket";
 import { documentNewVersionPath } from "../document.revision/utils/paths";
 import { useHandleCreateDoc } from "../documentType/list/CreateDocumentByType";
+import CustomLabelTooltip from "../hooks/docCustomization/CustomLabelTooltip";
 import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
-import { isOwnerContext } from "./forms/DocumentRevisionForm.presenter";
 import { checkCanBeCopied, checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
-import { isFormWithInlineApproval } from "./helpers/records";
+import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -47,7 +48,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();
-  const [showRevise, reviseLabel] = useReviseDocument(documentRevision.document?.documentType?.id);
+  const [showRevise, reviseLabel, tooltipConfig] = useReviseDocument(documentRevision.document?.documentType?.id);
   const intl = useIntl();
   const dispatch = useDispatch();
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
@@ -55,14 +56,13 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const formDocuments: Document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, formDocumentId)
   );
+  const email = useSelector(authSelectors.currentUserEmail);
+  const isUserDocumentOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isRecord = checkIsDocumentRecord(documentRevision.document?.documentType?.groupOptions);
   const isStatusInReview = isDocumentRevisionInReview(documentRevision.status);
   const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
   const canCopy = checkCanBeCopied(documentRevision.document?.documentType?.groupOptions);
-  const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
-  const isUserDocumentOwner = React.useContext(isOwnerContext);
-
 
   const isLastVersionObsolete = () => {
     if (selectedDocument.document.documentType.group === "RECORD") {
@@ -119,14 +119,16 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const renderCloneButton = () => {
     if (hasAccess && canCreate() && showRevise) {
       return (
-        <Button
-          color="secondary"
-          variant="outlined"
-          onClick={cloneDocument}
-          id="PreviewControlsContainer-revise"
-          data-cy="updateRecord" >
-          <Text message={reviseLabel} />
-        </Button>
+        <CustomLabelTooltip {...{ tooltipConfig }}>
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={cloneDocument}
+            id="PreviewControlsContainer-revise"
+            data-cy="updateRecord" >
+            <Text message={reviseLabel} />
+          </Button>
+        </CustomLabelTooltip>
       );
     }
   };
@@ -210,8 +212,9 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
         />}
       {renderOutputButton()}
       {renderNoAccessWarning()}
-      {isRecord && isStatusInReview && !isInlineApproval && isUserDocumentOwner &&
+      {isRecord && isStatusInReview && isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
+      <InspectionControlsContainer {...{ documentRevision }} />
       <DownloadHTML pdf={documentRevision.pdf} />
       <PDFSocket {...{ documentRevision }}/>
     </>

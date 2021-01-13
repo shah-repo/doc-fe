@@ -37,5 +37,8 @@
   },
   "includeInFaiInspection": {
     "text": "form.builder.include.fai.inspection"
+  },
+  "deleteDisabled": {
+    "text": "form.builder.delete.disabled"
   }
 }

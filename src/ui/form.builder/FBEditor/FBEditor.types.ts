@@ -1,4 +1,4 @@
-import { FBEditorState, FBFormProps, FBInputProps } from "..";
+import { FBEditorState, FBFormProps, FBInputProps, FBProviderProps } from "..";
 
 export type FBEditorMode = "config" | "validation";
 
@@ -9,6 +9,7 @@ export interface FBEditorModeProps {
 
 export type FBEditorProps =
 & Pick<FBFormProps, "children">
+& Pick<FBProviderProps, "formState">
 & {
   mode?: FBEditorMode;
   editorState?: FBEditorState;

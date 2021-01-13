@@ -48,6 +48,7 @@ export const FormListPresenter: React.FunctionComponent<Props> = ({
         <ExportListDialog
           {...{ headers, data  }}
           dialog={exportDialog}
+          customFileName="DocumentList"
         />
         <Button
           variant="contained"

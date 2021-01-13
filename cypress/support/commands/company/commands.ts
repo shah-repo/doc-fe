@@ -25,6 +25,7 @@ interface IdocumentTypeDto {
   startingNumber?: number;
   needsSignature?: boolean;
   category?: string;
+  schema?: any;
 }
 
 export interface ICreateCompanyBootstrap {
@@ -103,9 +104,9 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
         },
       },
       DEMO_THEME: {
-        logo: "https://www.feshfen.com/images/wigs/test.png",
-        avatar: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
-        imageEmail: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        logo: "/ta_assets_company_logo.png",
+        avatar: "/ta_assets_company_avatar.png",
+        imageEmail: "/ta_assets_company_email.png",
         colors: {
           defaultBackground: "#4b5dc6",
           primary: "#eb5055",
@@ -115,9 +116,9 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
         },
       },
       SANDBOX_THEME: {
-        logo: "https://www.feshfen.com/images/wigs/test.png",
-        avatar: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
-        imageEmail: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        logo: "/ta_assets_company_logo.png",
+        avatar: "/ta_assets_company_avatar.png",
+        imageEmail: "/ta_assets_company_email.png",
         colors: {
           defaultBackground: "#4b5dc6",
           primary: "#eb5055",
@@ -127,9 +128,9 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
         },
       },
       PRODUCTION_THEME: {
-        logo: "https://www.feshfen.com/images/wigs/test.png",
-        avatar: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
-        imageEmail: "https://dummyimage.com/300x400/000/ffffff&text=Automated",
+        logo: "/ta_assets_company_logo.png",
+        avatar: "/ta_assets_company_avatar.png",
+        imageEmail: "/ta_assets_company_email.png",
         colors: {
           defaultBackground: "#4b5dc6",
           primary: "#eb5055",
@@ -141,8 +142,8 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
     },
   };
   const body: ICreateCompanyBootstrap = {
-    ...payload,
     ...bodyDefaults,
+    ...payload,
   };
   cy.request({
     method: "POST",
@@ -206,6 +207,7 @@ Cypress.Commands.add("cmpClickCreateNewDocument", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
     cy.get("[data-cy=\"document.revision.create\"]").click();
   });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("cmpVerifyNoPendingActions", () => {
@@ -214,6 +216,7 @@ Cypress.Commands.add("cmpVerifyNoPendingActions", () => {
 
 Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
   cy.get("[data-cy=\"change.request.create\"]").click();
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("cmpVerifyCompanyLogo", (params:  {logoSource: string}) => {
@@ -244,4 +247,44 @@ export function cmpFilterDocumentTypeIdByName(companyResponse: Company, document
   return companyResponse.documentTypes.filter((type) => type.documentTypeName === documentTypeName);
 }
 
+export function cmpAddNewEmployeeIds(employees, insertedUsers) {
+  insertedUsers.forEach((user) => {
+    employees.forEach((employee) => {
+      if (user.email === employee.user.email) {
+        user.newId = employee.id;
+      }
+    });
+  });
+}
 
+export function cmpChangeGroupEmployeeIds(employees, groups) {
+  groups.forEach((group) => {
+    group.employees.forEach((groupEmployee) => {
+      const newEmployee = employees.find((insertedEmployee) => groupEmployee.id === insertedEmployee.oldId);
+      groupEmployee.id = newEmployee.newId;
+    });
+  });
+}
+
+export function cmpChangeGroupIds(oldGroups, newGroups) {
+  oldGroups.forEach((oldGroup) => {
+    const newGroup = newGroups.find((newGroup) => newGroup.name === oldGroup.name);
+    oldGroup.newId = newGroup.id;
+  });
+}
+
+export function cmpChangeParentGroupIds(groups) {
+  groups.forEach((group) => {
+    let counter = 0;
+    group.parents.forEach((parentGroup) => {
+      const updatedGroup = groups.find((updatedGroup) => updatedGroup.oldId === parentGroup.id);
+      if (!updatedGroup) {
+        group.parents.splice(counter);
+      }
+      else {
+        parentGroup.id = updatedGroup.newId;
+      }
+      counter++;
+    });
+  });
+}

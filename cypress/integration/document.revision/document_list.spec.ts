@@ -17,7 +17,7 @@ let componentSpecificationDocumentType;
 let group;
 const documentRevisionName = "New document for testing document list";
 const secondDocumentRevName = "Second document for testing";
-const currentDate = moment().tz("America/Los_Angeles").format("L");
+const currentDate = moment().tz("America/Los_Angeles").format("l");
 
 context("Document list test", () => {
   context("[API]Prepare company", () => {

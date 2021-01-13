@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { first, get, has, isArray, join } from "lodash";
 import { Action, Dispatch, Middleware, MiddlewareAPI } from "redux";
 import { redirectTo } from "../../../common/redirectHandler";
-import { MAINTENANCE } from "../../../ui/constants/urls";
+import { MAINTENANCE, STATUS } from "../../../ui/constants/urls";
 import apiClient from "../../apiClient";
 import apiXClient from "../../apiXClient";
 import { authActions } from "../../ducks/auth";
@@ -90,7 +90,10 @@ const apiMiddleware: Middleware = ({
     if (axios.isCancel(exception)) {
       return;
     }
-    const redirectToMaintenance = exception?.response?.status === 491 && window.location.pathname !== MAINTENANCE;
+    const redirectToMaintenance = exception?.response?.status === 491 &&
+      window.location.pathname !== MAINTENANCE &&
+      window.location.pathname !== STATUS;
+
     redirectToMaintenance && redirectTo(MAINTENANCE)();
 
     let responseMessage = "";

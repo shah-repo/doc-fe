@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
-import { differenceBy, keys } from "lodash";
+import { isEqual, keys, omit } from "lodash";
 import * as React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { RevisionChangeType } from "../../../../state/ducks/documentRevisions";
@@ -15,6 +15,7 @@ import { checkCanBeCopied, checkIsDocumentRecord, hasSerializedCSV } from "../..
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
+import InspectionControlsContainer from "../../InspectionControls/InspectionControls.container";
 import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.presenter";
 import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
@@ -64,7 +65,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     const { groupOptions } = documentRevision?.document?.documentType || {};
     return (
       (Boolean(groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA))) &&
-      Boolean(differenceBy(workspaceState?.schema || [],  documentSchema, "name").length)
+      !isEqual(JSON.stringify(workspaceState?.schema), JSON.stringify(documentSchema))
     );
   }
 
@@ -90,9 +91,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               : null;
             return key;
           });
-          formik.setFieldValue("formInput", newInput);
+          // TEMPORARY FIX FOR BE VALIDATION
+          formik.setFieldValue("formInput", omit(newInput, ["partType", "childForRevise"]));
         } else {
-          formik.setFieldValue("formInput", formState?.getValues());
+          // TEMPORARY FIX FOR BE VALIDATION
+          formik.setFieldValue("formInput", omit(formState?.getValues(), ["partType", "childForRevise"]));
         }
         if (isOutputSchema()) {
           formik.setFieldValue("schema", workspaceState.schema);
@@ -118,7 +121,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   return (
     <div>
-      {serializedCSV &&
+      {(isStatusReleased || isStatusInDraft) && serializedCSV &&
       <ExportToCSVButton
         {...{ documentRevision }}
       />}
@@ -137,6 +140,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         data-cy={"DocumentRevisionForm-submit"}
         disabled={isCreateDocumentDisabled}
       />
+      <InspectionControlsContainer {...{ documentRevision }} />
       {
         isRecord && (!isInlineApproval || revisionStage !== 1) && (
           <SubmitForApproval

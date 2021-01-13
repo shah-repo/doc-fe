@@ -38,6 +38,7 @@ const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
             condition={Boolean(getItemUrl?.(item.title))}
             wrapper={(child) => (
               <Link
+                key={`fb-part-${type}-${index}`}
                 to={getItemUrl?.(item.title) as string}
                 target="_blank"
                 style={{

@@ -1,4 +1,5 @@
 import { FBPartItemStatus, FBProcedureProps, FBProviderProps } from "..";
+import { Id } from "../../../state/ducks/common/types";
 
 export enum FBProcedureItemType {
   attachments = "attachments",
@@ -30,7 +31,9 @@ export type FBProcedureItemProps =
 export interface FBProcedureItemConfig {
   id: string;
   title: string;
+  partLot?: string;
   quantity?: number;
   unit?: string;
   status?: FBPartItemStatus;
+  attachments?: Id[];
 }

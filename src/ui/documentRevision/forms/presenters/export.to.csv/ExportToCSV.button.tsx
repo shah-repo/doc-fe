@@ -1,5 +1,5 @@
 import { Button } from "@material-ui/core";
-import { includes } from "lodash";
+import { includes, isEmpty } from "lodash";
 import * as React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../../../common/utils/date";
 import { DocumentRevision } from "../../../../../state/ducks/documentRevisions";
@@ -15,7 +15,7 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
   const dialog = useDialog();
-  const schema = documentRevision?.formDocument?.formTemplate?.schema;
+  const schema = documentRevision?.schema || documentRevision?.formDocument?.formTemplate?.schema;
   const input = documentRevision?.formInput || {};
   const omitExportFields = [
     "subsection",
@@ -71,7 +71,7 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
     itemsGroupedInSections[itemsGroupedInSections.length - 1]?.push(element);
   });
 
-  const data = itemsGroupedInSections.map((sectionItems) => {
+  const items = itemsGroupedInSections.map((sectionItems) => {
     const itemsUnderExport = sectionItems.filter((item) => !includes(omitExportFields, item.type));
     return Object.fromEntries(
       itemsUnderExport.map((item) => {
@@ -98,6 +98,9 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
         ];
       })); });
 
+  // by passing only empty array, library will return the error
+  const data = isEmpty(items) ? [""] : items;
+
   return (
     <>
       <Button data-cy="exportCSVButton" variant="outlined" color="secondary" onClick={dialog.open}>
@@ -106,6 +109,7 @@ const ExportToCSVButton: React.FunctionComponent<Props> = ({
       <ExportListDialog
         {...{ data, dialog }}
         useKeysAsHeaders
+        customFileName="FBFieldsList"
       />
     </>
   );

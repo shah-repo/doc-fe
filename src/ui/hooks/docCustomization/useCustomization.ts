@@ -1,7 +1,10 @@
 import { useSelector } from "react-redux";
+import { authSelectors } from "../../../state/ducks/auth";
 import { DisplayFieldType, documentTypeSelectors, FieldType, InputFieldType } from "../../../state/ducks/documentRevisions/documentType";
 import { required, validator } from "../../components/forms/fields/validators";
 import { UIConfig } from "./types";
+
+const configureStatus = (status: string) => status && status.replace(" ", "_").toUpperCase();
 
 export const useAdministrativeChange = (documentTypeId = "",): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.ADM_CHANGE, "documentRevision.form.administrativeChange");
@@ -14,9 +17,9 @@ export const useDocId = (documentTypeId = ""): UIConfig =>
 export const useDocumentHistory = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType.VERSIONS, "document.revision.docVersion");
 export const useDocumentStatus = (documentTypeId = "", status: string): UIConfig =>
-  useCustomization(documentTypeId, DisplayFieldType[`STATUS_${status}`], status);
+  useCustomization(documentTypeId, DisplayFieldType[`STATUS_${configureStatus(status)}`], status);
 export const useDocumentVersion = (documentTypeId = "", status: string): UIConfig =>
-  useCustomization(documentTypeId, DisplayFieldType[`VERSION_${status}`], status);
+  useCustomization(documentTypeId, DisplayFieldType[`VERSION_${configureStatus(status)}`], status);
 export const useDocumentTypeSelect = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.DOC_TYPE, "document.type");
 export const useNextRevision = (documentTypeId = ""): UIConfig =>
@@ -45,12 +48,20 @@ const useCustomization = (
   defaultVisibility = true,
 ): UIConfig => {
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
+  const customLabelsValue = useSelector(authSelectors.isCustomLabelsOn);
   const config = documentType?.fieldsConfig?.[fieldType];
-  const isVisible = config?.visible ?? defaultVisibility;
-  const label = config?.label ?? defaultLabel;
+  const isVisible = customLabelsValue ? true : config?.visible ?? defaultVisibility;
+  const label = customLabelsValue ? `<label: ${fieldType}>` : config?.label ?? defaultLabel;
   const validation = config?.required ?? true ? validator(required) : undefined;
+  const tooltipConfig = {
+    labelName: fieldType,
+    defaultLabel,
+    overriddenLabel: config?.label || defaultLabel,
+    visibilityFlag: config?.visible.toString(),
+    requiredFlag: config?.required?.toString(),
+  };
 
-  return [isVisible, label, validation];
+  return [isVisible, label, tooltipConfig, validation];
 };
 
 export default useCustomization;

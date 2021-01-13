@@ -1,4 +1,4 @@
-import { get, isEmpty, isEqual } from "lodash";
+import { get, isEmpty, isEqual, omit } from "lodash";
 import { toJS } from "mobx";
 import React from "react";
 import { AsyncStatus } from "../../../state/types";
@@ -80,7 +80,9 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
 
   return {
     ...diff,
-    formInput: transformedValues.formInput,
+    // TEMPORARY FIX FOR BE VALIDATION
+    // formInput: transformedValues.formInput,
+    formInput: omit(transformedValues.formInput, ["partType", "childForRevise"]),
   };
 };
 

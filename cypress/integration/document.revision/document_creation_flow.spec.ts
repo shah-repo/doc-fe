@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -215,7 +216,8 @@ context("Document Creation Flow", () => {
         SystemRequirement("REQ-0300");
         cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
           .should("have.text", "Enter the name of users to access the document");
-        cy.get("[data-cy=\"field-securityGroups\"]").contains("Everyone");
+        cy.get("[data-cy=\"field-securityGroups\"]")
+          .contains("Enter the name of the user groups to access the document");
       });
     });
   });
@@ -262,7 +264,9 @@ context("Document Creation Flow", () => {
 
     context("Check primary attachment function", () => {
       it("Set attachment as primary", () => {
-        cy.atchSetPrimaryAttachment({ fileName: "test_image.jpg" });
+        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+          cy.atchSetPrimaryAttachment({ fileName: "test_image.jpg" });
+        });
       });
 
       it("Allow user to only set single attachment to be primary", () => {
