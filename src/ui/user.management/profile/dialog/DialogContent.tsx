@@ -21,6 +21,7 @@ import Addresses from "../AddressesAndCodes/Addresses";
 import ApiTokenContent from "../apiTokenContent/ApiTokenContent";
 import UserGroups from "../groups/UserGroups";
 import { HelloSignAccess } from "../HelloSignAccess";
+import NavigationManagementContainer from "../navigation.management/NavigationManagement.container";
 
 interface OwnProps {
   canManageUsers: boolean;
@@ -256,11 +257,11 @@ export const DialogContent: React.FunctionComponent<Props> = ({
             />
           </div>
         )}
+        <NavigationManagementContainer/>
         <Addresses canUpdateCompany={canUpdateCompany} addresses={companyMine.addresses} />
         <AcctCodes canUpdateCompany={canUpdateCompany} acctCodes={companyMine.acctCodes} />
         {showEditUser && updateProfileButtonsRenderer()}
-        {isDeveloper &&
-          <ApiTokenContent />}
+        {isDeveloper && <ApiTokenContent />}
       </Box>
     </React.Fragment>
   );
