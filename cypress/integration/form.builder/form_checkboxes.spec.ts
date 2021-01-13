@@ -49,7 +49,7 @@ context("FORM Field test", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -62,7 +62,7 @@ context("FORM Field test", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
@@ -5072,6 +5072,1070 @@ context("FORM Field test", () => {
           cy.get(".MuiDialog-container").eq(1).find("[data-cy=\"Name\"]").should("contain", "Name");
           cy.get(".MuiDialog-container").eq(1).find("[data-cy=\"Supplier\"]").should("contain", "Supplier");
         });
+      });
+    });
+  });
+
+  context("Checkbox 'Copyable value' test", () => {
+    context("Create 'Engineering Build' form", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click create document", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it("Enter document title 'eb-title'", () => {
+        cy.drEnterDocumentTitle({ name: 'eb-title' });
+      });
+
+      it("Enter document description 'eb description'", () => {
+        cy.drEnterDocumentDescription({ description: "eb description" });
+      });
+
+      it("Select 'Form' document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Engineering Build' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Engineering Build" });
+        cy.unClick();
+      });
+
+      context("Add Fields with Copyable value Checkbox", () => {
+        it("Add TextField with 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger('mouseover');
+          cy.get("[data-cy=\"form.builder.add.field\"]").click();
+          cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+          cy.fbEnterNameValue({ name:"label", value: "textfield-wi-copy" });
+          cy.fbSelectCheckboxValue("copyableValue");
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByName({ name: "textfield-wi-copy-"} );
+        });
+
+        it("Add TextField without 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+          cy.fbEnterNameValue({ name:"label", value: "textfield-wo-copy" });
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByName({ name: "textfield-wo-copy-"} );
+        });
+
+        it("Add Checkbox group with 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+          cy.fbGroupOptions("option1", "option2");
+          cy.fbEnterNameValue({ name:"label", value: "cbg-wi-copy" });
+          cy.fbSelectCheckboxValue("copyableValue");
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "cbg-wi-copy" });
+        });
+
+        it("Add Checkbox group without 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+          cy.fbEnterNameValue({ name:"label", value: "cbg-wo-copy" });
+          cy.fbGroupOptions("option1", "option2");
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "cbg-wo-copy" });
+        });
+
+        it("Add Text Editor with 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+          cy.fbEnterNameValue({ name:"label", value: "te-wi-copy" });
+          cy.fbSelectCheckboxValue("copyableValue");
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "te-wi-copy"} );
+        });
+
+        it("Add Text Editor without 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+          cy.fbEnterNameValue({ name:"label", value: "te-wo-copy" });
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "te-wo-copy"} );
+        });
+
+        it("Add Select Field with 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
+          cy.fbEnterNameValue({ name:"label", value: "sf-wi-copy" });
+          cy.fbGroupOptions("option1", "option2");
+          cy.fbSelectCheckboxValue("copyableValue");
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "sf-wi-copy"} );
+        });
+
+        it("Add Select Field without 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
+          cy.fbEnterNameValue({ name:"label", value: "sf-wo-copy" });
+          cy.fbGroupOptions("option1", "option2");
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "sf-wo-copy"} );
+        });
+
+        it("Add Radio Button group with 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
+          cy.fbEnterNameValue({ name:"label", value: "rbg-wi-copy" });
+          cy.fbGroupOptions("option1", "option2");
+          cy.fbSelectCheckboxValue("copyableValue");
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "rbg-wi-copy"} );
+        });
+
+        it("Add Radio Button group without 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
+          cy.fbEnterNameValue({ name:"label", value: "rbg-wo-copy" });
+          cy.fbGroupOptions("option1", "option2");
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "rbg-wo-copy"} );
+        });
+
+        it("Add Quantity with 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
+          cy.fbEnterNameValue({ name:"label", value: "q-wi-copy" });
+          cy.fbSelectCheckboxValue("copyableValue");
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "q-wi-copy"} );
+        });
+
+        it("Add Quantity without 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
+          cy.fbEnterNameValue({ name:"label", value: "q-wo-copy" });
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "q-wo-copy"} );
+        });
+
+        it("Add Timer with 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).click();
+          cy.fbEnterNameValue({ name:"label", value: "t-wi-copy" });
+          cy.fbSelectCheckboxValue("copyableValue");
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "t-wi-copy"} );
+        });
+
+        it("Add Timer without 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).click();
+          cy.fbEnterNameValue({ name:"label", value: "t-wo-copy" });
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "t-wo-copy"} );
+        });
+
+        it("Add Text field with range with 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
+          cy.fbEnterNameValue({ name:"label", value: "twr-wi-copy" });
+          cy.fbSelectCheckboxValue("copyableValue");
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "twr-wi-copy"} );
+        });
+
+        it("Add Text field with range without 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
+          cy.fbEnterNameValue({ name:"label", value: "twr-wo-copy" });
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "twr-wo-copy"} );
+        });
+
+        it("Click create document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Approve and release FORM document", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+            cy.fbClickButton({ el: "updateRecord" });
+          });
+        });
+      });
+    });
+
+    context("Create 'Engineering Build' Record", () => {
+      it("Navigate to Record on side bar", () => {
+        cy.fbClickButton({ el: "navigation.records" });
+      });
+
+      it("Click 'Create a Record' button", () => {
+        cy.get("#DocumentByTypeListPresenter-openDocRev").click();
+      });
+
+      it("Select Record Type: 'Engineering Build'", () => {
+        cy.get("#MultipleFormTemplate-selectDocForm").type("Engineering Build{downarrow}{enter}");
+      });
+
+      it("Enter title: 'test title'", () => {
+        cy.get("#Title-field").type("test title");
+      });
+
+      it("Enter description: 'test description'", () => {
+        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("test description");
+      });
+
+      it("Add TextFields value", () => {
+        cy.get("[name^=\"textfield-wi-copy-\"]").type("textfield-wi-copy-value");
+        cy.wait(3000);
+        cy.get("[name^=\"textfield-wo-copy-\"]").type("textfield-wo-copy-value");
+        cy.wait(3000);
+      });
+
+      it("Select Checkboxes group", () => {
+        cy.get("[name^=\"cbg-wi-copy-\"]").find("label").eq(0).click();
+        cy.wait(3000);
+        cy.get("[name^=\"cbg-wo-copy-\"]").find("label").eq(0).click();
+        cy.wait(3000);
+      });
+
+      it("Add TextEditors value", () => {
+        cy.get("[data-cy^=\"te-wi-copy-\"]").find("div[contenteditable]").click({force: true}).clear().type("te-wi-copy-value");
+        cy.wait(3000);
+        cy.get("[data-cy^=\"te-wo-copy-\"]").find("div[contenteditable]").click({force: true}).clear().type("te-wo-copy-value");
+        cy.wait(3000);
+      });
+
+      it("Select 'Select fields' value", () => {
+        cy.get("[id^=mui-component-select-sf-wi-copy-]").click();
+        cy.get("[data-value=\"option1\"]").click();
+        cy.wait(5000);
+        cy.get("[id^=mui-component-select-sf-wo-copy-]").click();
+        cy.get("[data-value=\"option1\"]").click();
+        cy.wait(5000);
+      });
+
+      it("Select Radio button groups value", () => {
+        cy.get("[name^=\"rbg-wi-copy-\"]").eq(0).click();
+        cy.wait(3000);
+        cy.get("[name^=\"rbg-wo-copy-\"]").eq(0).click();
+        cy.wait(3000);
+      });
+
+      it("Add Quantities value", () => {
+        cy.get("[name^=\"q-wi-copy-\"]").type("1");
+        cy.wait(3000);
+        cy.get("[name^=\"q-wo-copy-\"]").type("1");
+        cy.wait(3000);
+      });
+
+      it("Add Timers value", () => {
+        cy.get("[name^=\"t-wi-copy-\"]").type("t-wi-copy-value");
+        cy.wait(3000);
+        cy.get("[name^=\"t-wo-copy-\"]").type("t-wo-copy-value");
+        cy.wait(3000);
+      });
+
+      it("Add 'TextField with range' value", () => {
+        cy.get("[name^=\"twr-wi-copy-\"]").type("2");
+        cy.wait(3000);
+        cy.get("[name^=\"twr-wo-copy-\"]").type("2");
+        cy.wait(3000);
+      });
+
+      it("Click 'Save' button", () => {
+        cy.fbClickButton({ el: "DocumentRevisionForm-submit" });
+      });
+
+      it("Click 'Clone EB' button", () => {
+        cy.fbClickButton({ el: "CloneEBButton" });
+      });
+    });
+
+    context("Verify fields", () => {
+      it("Verify 'TextField' values", () => {
+        cy.get("[name^=\"textfield-wi-copy-\"]").should("have.value", "textfield-wi-copy-value");
+        cy.get("[name^=\"textfield-wo-copy-\"]").should("not.have.value", "textfield-wo-copy-value");
+      });
+
+      it("Verify 'Checkboxes group' values", () => {
+        cy.get("[name^=\"cbg-wi-copy-\"]").find("input").eq(0).should("be.checked");
+        cy.get("[name^=\"cbg-wo-copy-\"]").find("input").eq(0).should("not.be.checked");
+      });
+
+      it("Verify TextEditor with Editor values", () => {
+        cy.get("[data-cy^=\"te-wi-copy-\"]").find("div[contenteditable]").should('have.text', 'te-wi-copy-value');
+        cy.get("[data-cy^=\"te-wo-copy-\"]").find("div[contenteditable]").invoke('val').should('be.empty');
+      });
+
+      it("Verify Select fields values", () => {
+        cy.get("[name^=\"sf-wi-copy-\"]").should("have.value", "option1");
+        cy.get("[name^=\"sf-wo-copy-\"]").invoke('val').should('be.empty');
+      });
+
+      it("Verify Radio button groups values", () => {
+        cy.get("[name^=\"rbg-wi-copy-\"]").eq(0).should("have.value", "option1");
+        cy.get("[name^=\"rbg-wo-copy-\"]").eq(0).should('not.be.checked');
+      });
+
+      it("Verify Quantities values", () => {
+        cy.get("[name^=\"q-wi-copy-\"]").should("have.value", "1");
+        cy.get("[name^=\"q-wo-copy-\"]").invoke('val').should('be.empty');
+      });
+
+      it("Verify Timers values", () => {
+        cy.get("[name^=\"t-wi-copy-\"]").should("have.value", "t-wi-copy-value");
+        cy.get("[name^=\"t-wo-copy-\"]").invoke('val').should('be.empty');
+      });
+
+      it("Verify TextField with range values", () => {
+        cy.get("[name^=\"twr-wi-copy-\"]").should("have.value", "2");
+        cy.get("[name^=\"twr-wo-copy-\"]").invoke('val').should('be.empty');
+      });
+    });
+  });
+
+  context("Checkbox DatePicker & PurchaseOrder 'Copyable value' test", () => {
+    context("Create 'Engineering Build' form", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click create document", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it("Enter document title 'eb-title1'", () => {
+        cy.drEnterDocumentTitle({ name: 'eb-title1' });
+      });
+
+      it("Enter document description 'eb description'", () => {
+        cy.drEnterDocumentDescription({ description: "eb description" });
+      });
+
+      it("Select 'Form' document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Engineering Build' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Engineering Build" });
+        cy.unClick();
+      });
+
+      context("Add Fields with Copyable value Checkbox", () => {
+        it("Add Date picker with 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger('mouseover');
+          cy.get("[data-cy=\"form.builder.add.field\"]").click();
+          cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
+          cy.fbEnterNameValue({ name:"label", value: "dp-wi-copy" });
+          cy.fbSelectCheckboxValue("copyableValue");
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "dp-wi-copy"} );
+        });
+
+        it("Add Date picker without 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
+          cy.fbEnterNameValue({ name:"label", value: "dp-wo-copy" });
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "dp-wo-copy"} );
+        });
+
+        it("Add Purchase Order with 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
+          cy.fbEnterNameValue({ name:"label", value: "po-wi-copy" });
+          cy.fbSelectCheckboxValue("copyableValue");
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "po-wi-copy"} );
+        });
+
+        it("Add Purchase Order without 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
+          cy.fbEnterNameValue({ name:"label", value: "po-wo-copy" });
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "po-wo-copy"} );
+        });
+
+        it("Click create document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Approve and release FORM document", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+            cy.fbClickButton({ el: "updateRecord" });
+          });
+        });
+      });
+    });
+
+    context("Create 'Engineering Build' Record", () => {
+      it("Navigate to Record on side bar", () => {
+        cy.fbClickButton({ el: "navigation.records" });
+      });
+
+      it("Click 'Create a Record' button", () => {
+        cy.get("#DocumentByTypeListPresenter-openDocRev").click();
+      });
+
+      it("Select Record Type: 'Engineering Build'", () => {
+        cy.get("#MultipleFormTemplate-selectDocForm").type("Engineering Build{downarrow}{enter}");
+      });
+
+      it("Select template", () => {
+        cy.get('#field-selectType').parent().then(res => {
+          if(res.find("#MultipleFormTemplate-selectDocType").length > 0){
+            cy.get("#MultipleFormTemplate-selectDocType").click().type("eb-title1{downarrow}{enter}");
+          }
+        });
+      });
+
+      it("Enter title: 'test title1'", () => {
+        cy.get("#Title-field").type("test title1");
+      });
+
+      it("Enter description: 'test description'", () => {
+        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("test description");
+      });
+
+      it("Add Date pickers value", () => {
+        cy.get("[name^=\"dp-wi-copy-\"]").parent().find("button").click();
+        cy.get(".MuiPickersDay-daySelected").click();
+        cy.wait(3000);
+        cy.get("[name^=\"dp-wo-copy-\"]").parent().find("button").click();
+        cy.wait(3000);
+        cy.get(".MuiPickersDay-daySelected").click();
+        cy.wait(5000);
+      });
+
+      it("Add Purchase Orders value", () => {
+        cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wi-copy-\"]").click();
+        cy.get("[data-value=EUR]").click();
+        cy.wait(3000);
+        cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wo-copy-\"]").click();
+        cy.get("[data-value=EUR]").click();
+        cy.wait(3000);
+      });
+
+      it("Click 'Save' button", () => {
+        cy.fbClickButton({ el: "DocumentRevisionForm-submit" });
+      });
+
+      it("Click 'Clone EB' button", () => {
+        cy.fbClickButton({ el: "CloneEBButton" });
+      });
+    });
+
+    context("Verify fields", () => {
+      it("Verify Date pickers values", () => {
+        cy.get("input[name^=\"dp-wi-copy-\"]").invoke('val').should('not.be.empty');
+        cy.get("input[name^=\"dp-wo-copy-\"]").should("have.value", "");
+      });
+
+      it("Verify Purchase Orders values", () => {
+        cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wi-copy-\"]").should("have.text", "EUR €");
+        cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wo-copy-\"]").should("have.text", "USD $");
+      });
+    });
+  });
+
+  context("Checkbox Autocomplete 'Copyable value' test", () => {
+    context("Create 'Engineering Build' form", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click create document", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it("Enter document title 'eb-title3'", () => {
+        cy.drEnterDocumentTitle({ name: 'eb-title3' });
+      });
+
+      it("Enter document description 'eb description'", () => {
+        cy.drEnterDocumentDescription({ description: "eb description" });
+      });
+
+      it("Select 'Form' document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Engineering Build' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Engineering Build" });
+        cy.unClick();
+      });
+
+      context("Add Fields with Copyable value Checkbox", () => {
+        it("Add Autocomplete with 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger('mouseover');
+          cy.get("[data-cy=\"form.builder.add.field\"]").click();
+          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+          cy.fbEnterNameValue({ name:"label", value: "ac-wi-copy" });
+          cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
+          cy.fbSelectCheckboxValue("copyableValue");
+          cy.fbAddNewFieldButton();
+          cy.wait(2000);
+          cy.fbMouseOverByLabel({ label: "ac-wi-copy" });
+        });
+
+        it("Add Autocomplete without 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+          cy.fbEnterNameValue({ name:"label", value: "ac-wo-copy" });
+          cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
+          cy.fbAddNewFieldButton();
+          cy.wait(2000);
+          cy.fbMouseOverByLabel({ label: "ac-wo-copy" });
+        });
+
+        it("Click create document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Approve and release FORM document", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+            cy.fbClickButton({ el: "updateRecord" });
+          });
+        });
+      });
+    });
+
+    context("Create 'Engineering Build' Record", () => {
+      it("Navigate to Record on side bar", () => {
+        cy.fbClickButton({ el: "navigation.records" });
+      });
+
+      it("Click 'Create a Record' button", () => {
+        cy.get("#DocumentByTypeListPresenter-openDocRev").click();
+      });
+
+      it("Select Record Type: 'Engineering Build'", () => {
+        cy.get("#MultipleFormTemplate-selectDocForm").type("Engineering Build{downarrow}{enter}");
+      });
+
+      it("Select template", () => {
+        cy.get('#field-selectType').parent().then(res => {
+          if(res.find("#MultipleFormTemplate-selectDocType").length > 0){
+            cy.get("#MultipleFormTemplate-selectDocType").click().type("eb-title3{downarrow}{enter}");
+          }
+        });
+      });
+
+      it("Enter title: 'test title3'", () => {
+        cy.get("#Title-field").type("test title3");
+      });
+
+      it("Enter description: 'test description'", () => {
+        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("test description");
+      });
+
+      it("Select Autocompletes", () => {
+        cy.get("[data-cy^=\"ac-wi-copy-\"]").click().type("{downarrow}{enter}");
+        cy.wait(3000);
+        cy.get("[data-cy^=\"ac-wo-copy-\"]").click().type("{downarrow}{enter}");
+        cy.wait(3000);
+      });
+
+      it("Click 'Save' button", () => {
+        cy.fbClickButton({ el: "DocumentRevisionForm-submit" });
+      });
+
+      it("Click 'Clone EB' button", () => {
+        cy.fbClickButton({ el: "CloneEBButton" });
+      });
+    });
+
+    context("Verify fields", () => {
+      it("Verify Autocompletes values", () => {
+        cy.get("[data-cy^=\"ac-wi-copy-\"]").invoke('val').should('not.be.empty');
+        cy.get("[data-cy^=\"ac-wo-copy-\"]").should("have.value", "");
+      });
+    });
+  });
+
+  context("Checkbox Approval Matrix with 'Copyable value' test", () => {
+    context("Create 'Engineering Build' form", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click create document", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it("Enter document title 'eb-title4'", () => {
+        cy.drEnterDocumentTitle({ name: 'eb-title4' });
+      });
+
+      it("Enter document description 'eb description'", () => {
+        cy.drEnterDocumentDescription({ description: "eb description" });
+      });
+
+      it("Select 'Form' document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Engineering Build' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Engineering Build" });
+        cy.unClick();
+      });
+
+      context("Add Fields with Copyable value Checkbox", () => {
+        it("Add Approval Matrix with 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger('mouseover');
+          cy.get("[data-cy=\"form.builder.add.field\"]").click();
+          cy.fbSelectItemFromNewFieldList({ field: "Approval Matrix" });
+          cy.fbSelectCheckboxValue("copyableValue");
+          cy.fbAddNewFieldButton();
+          cy.wait(2000);
+        });
+
+        it("Click create document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Approve and release FORM document", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+            cy.fbClickButton({ el: "updateRecord" });
+          });
+        });
+      });
+    });
+
+    context("Create 'Engineering Build' Record", () => {
+      it("Navigate to Record on side bar", () => {
+        cy.fbClickButton({ el: "navigation.records" });
+      });
+
+      it("Click 'Create a Record' button", () => {
+        cy.get("#DocumentByTypeListPresenter-openDocRev").click();
+      });
+
+      it("Select Record Type: 'Engineering Build'", () => {
+        cy.get("#MultipleFormTemplate-selectDocForm").type("Engineering Build{downarrow}{enter}");
+      });
+
+      it("Select template", () => {
+        cy.get('#field-selectType').parent().then(res => {
+          if(res.find("#MultipleFormTemplate-selectDocType").length > 0){
+            cy.get("#MultipleFormTemplate-selectDocType").click().type("eb-title4{downarrow}{enter}");
+          }
+        });
+      });
+
+      it("Enter title: 'test title4'", () => {
+        cy.get("#Title-field").type("test title4");
+      });
+
+      it("Enter description: 'test description'", () => {
+        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("test description");
+      });
+
+      it("Click on 'Add Another Role' button", () => {
+        cy.get("button[data-cy=\"form.builder.add.another.role\"]").click();
+      });
+
+      it("Enter Approval Role 'Role 1'", () => {
+        cy.get("[data-cy=\"name\"]").type("Role 1");
+      });
+
+      it("Click on 'Add' button", () => {
+        cy.get("button[data-cy=\"common.add\"]").click();
+      });
+
+      it("Click 'Save' button", () => {
+        cy.fbClickButton({ el: "DocumentRevisionForm-submit" });
+      });
+
+      it("Click 'Clone EB' button", () => {
+        cy.fbClickButton({ el: "CloneEBButton" });
+      });
+    });
+
+    context("Verify fields", () => {
+      it("Verify Approval Matrix values", () => {
+        cy.get("[data-cy=\"form.builder.approval.role\"]").parentsUntil("MuiFormControl-root").find("input.MuiInputBase-input").invoke('val').should('not.be.empty');
+      });
+
+      it("Verify Approval Matrix fields", () => {
+        cy.contains('Approval Role').should('exist');
+        cy.contains('Approving Users').should('exist');
+        cy.contains('Approving Groups').should('exist');
+      });
+    });
+  });
+
+  context("Checkbox Approval Matrix without 'Copyable value' test", () => {
+    context("Create 'Engineering Build' form", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click create document", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it("Enter document title 'eb-title5'", () => {
+        cy.drEnterDocumentTitle({ name: 'eb-title5' });
+      });
+
+      it("Enter document description 'eb description'", () => {
+        cy.drEnterDocumentDescription({ description: "eb description" });
+      });
+
+      it("Select 'Form' document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Engineering Build' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Engineering Build" });
+        cy.unClick();
+      });
+
+      context("Add Fields without Copyable value Checkbox", () => {
+        it("Add Approval Matrix without 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger('mouseover');
+          cy.get("[data-cy=\"form.builder.add.field\"]").click();
+          cy.fbSelectItemFromNewFieldList({ field: "Approval Matrix" });
+          cy.fbAddNewFieldButton();
+          cy.wait(2000);
+        });
+
+        it("Click create document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Approve and release FORM document", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+            cy.fbClickButton({ el: "updateRecord" });
+          });
+        });
+      });
+    });
+
+    context("Create 'Engineering Build' Record", () => {
+      it("Navigate to Record on side bar", () => {
+        cy.fbClickButton({ el: "navigation.records" });
+      });
+
+      it("Click 'Create a Record' button", () => {
+        cy.get("#DocumentByTypeListPresenter-openDocRev").click();
+      });
+
+      it("Select Record Type: 'Engineering Build'", () => {
+        cy.get("#MultipleFormTemplate-selectDocForm").type("Engineering Build{downarrow}{enter}");
+      });
+
+      it("Select template", () => {
+        cy.get('#field-selectType').parent().then(res => {
+          if(res.find("#MultipleFormTemplate-selectDocType").length > 0){
+            cy.get("#MultipleFormTemplate-selectDocType").click().type("eb-title5{downarrow}{enter}");
+          }
+        });
+      });
+
+      it("Enter title: 'test title5'", () => {
+        cy.get("#Title-field").type("test title5");
+      });
+
+      it("Enter description: 'test description'", () => {
+        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("test description");
+      });
+
+      it("Click on 'Add Another Role' button", () => {
+        cy.get("button[data-cy=\"form.builder.add.another.role\"]").click();
+      });
+
+      it("Enter Approval Role 'Role 2'", () => {
+        cy.get("[data-cy=\"name\"]").type("Role 2");
+      });
+
+      it("Click on 'Add' button", () => {
+        cy.get("button[data-cy=\"common.add\"]").click();
+      });
+
+      it("Click 'Save' button", () => {
+        cy.fbClickButton({ el: "DocumentRevisionForm-submit" });
+      });
+
+      it("Click 'Clone EB' button", () => {
+        cy.fbClickButton({ el: "CloneEBButton" });
+      });
+    });
+
+    context("Verify fields", () => {
+      it("Verify Approval Matrix fields", () => {
+        cy.contains('Approval Role').should('not.exist');
+        cy.contains('Approving Users').should('not.exist');
+        cy.contains('Approving Groups').should('not.exist');
+      });
+    });
+  });
+
+  context("Checkbox Procedure 'Copyable value' test", () => {
+    context("Create 'Engineering Build' form", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click create document", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it("Enter document title 'eb-title7'", () => {
+        cy.drEnterDocumentTitle({ name: 'eb-title7' });
+      });
+
+      it("Enter document description 'eb description'", () => {
+        cy.drEnterDocumentDescription({ description: "eb description" });
+      });
+
+      it("Select 'Form' document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Engineering Build' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Engineering Build" });
+        cy.unClick();
+      });
+
+      context("Add Fields with Copyable value Checkbox", () => {
+        it("Add Procedure with 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger('mouseover');
+          cy.get("[data-cy=\"form.builder.add.field\"]").click();
+          cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "Step #1"} );
+        });
+
+        it("Add Procedure without 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
+          cy.fbUnSelectCheckboxValue("copyableValue");
+          cy.fbAddNewFieldButton();
+        });
+
+        it("Click create document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Approve and release FORM document", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+            cy.fbClickButton({ el: "updateRecord" });
+          });
+        });
+      });
+    });
+
+    context("Create 'Engineering Build' Record", () => {
+      it("Navigate to Record on side bar", () => {
+        cy.fbClickButton({ el: "navigation.records" });
+      });
+
+      it("Click 'Create a Record' button", () => {
+        cy.get("#DocumentByTypeListPresenter-openDocRev").click();
+      });
+
+      it("Select Record Type: 'Engineering Build'", () => {
+        cy.get("#MultipleFormTemplate-selectDocForm").type("Engineering Build{downarrow}{enter}");
+      });
+
+      it("Select template", () => {
+        cy.get('#field-selectType').parent().then(res => {
+          if(res.find("#MultipleFormTemplate-selectDocType").length > 0){
+            cy.get("#MultipleFormTemplate-selectDocType").click().type("eb-title7{downarrow}{enter}");
+          }
+        });
+      });
+
+      it("Enter title: 'test title7'", () => {
+        cy.get("#Title-field").type("test title7");
+      });
+
+      it("Enter description: 'test description'", () => {
+        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("test description");
+      });
+
+      it("Enter Step #1 description", () => {
+        cy.contains("Step #1").parentsUntil(".MuiFormControl-fullWidth").parent().find("div[contenteditable]").click({force: true}).clear().type("step1 description")
+      });
+
+      it("Enter Step #2 description", () => {
+        cy.contains("Step #2").parentsUntil(".MuiFormControl-fullWidth").parent().find("div[contenteditable]").click({force: true}).clear().type("step2 description")
+      });
+
+      it("Click 'Save' button", () => {
+        cy.fbClickButton({ el: "DocumentRevisionForm-submit" });
+        cy.wait(5000);
+      });
+
+      it("Click 'Clone EB' button", () => {
+        cy.fbClickButton({ el: "CloneEBButton" });
+        cy.wait(5000);
+      });
+    });
+
+    context("Verify fields", () => {
+      it("Verify Procedure", () => {
+        cy.contains("Step #1").parentsUntil(".MuiFormControl-fullWidth").parent().find("div").eq(-1).invoke('text').should('not.be.empty');
+        cy.contains("Step #2").parentsUntil(".MuiFormControl-fullWidth").parent().find("div").eq(-1).invoke('text').should('be.empty');
+      });
+    });
+  });
+
+  context("Checkbox Equipment Maintenance 'Copyable value' test", () => {
+    context("Create 'Engineering Build' form", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click create document", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it("Enter document title 'eb-title8'", () => {
+        cy.drEnterDocumentTitle({ name: 'eb-title8' });
+      });
+
+      it("Enter document description 'eb description'", () => {
+        cy.drEnterDocumentDescription({ description: "eb description" });
+      });
+
+      it("Select 'Form' document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Engineering Build' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Engineering Build" });
+        cy.unClick();
+      });
+
+      context("Add Fields with Copyable value Checkbox", () => {
+        it("Add Equipment Maintenance with 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger('mouseover');
+          cy.get("[data-cy=\"form.builder.add.field\"]").click();
+          cy.fbSelectItemFromNewFieldList({ field: "Equipment Maintenance" });
+          cy.fbEnterNameValue({ name:"label", value: "em-wi-copy" });
+          // cy.contains("Preventative Maintenance").click();
+          cy.get("input[value=\"preventativeMaintenance\"]").click();
+          cy.fbSelectCheckboxValue("copyableValue");
+          cy.fbAddNewFieldButton();
+          cy.fbMouseOverByLabel({ label: "em-wi-copy"} );
+        });
+
+        it("Add Equipment Maintenance without 'Copyable Value' checkbox", () => {
+          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+          cy.fbSelectItemFromNewFieldList({ field: "Equipment Maintenance" });
+          cy.fbEnterNameValue({ name:"label", value: "em-wo-copy" });
+          // cy.contains("Preventative Maintenance").click();
+          cy.get("input[value=\"preventativeMaintenance\"]").click();
+          cy.fbAddNewFieldButton();
+        });
+
+        it("Click create document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Approve and release FORM document", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+            cy.fbClickButton({ el: "updateRecord" });
+          });
+        });
+      });
+    });
+
+    context("Create 'Engineering Build' Record", () => {
+      it("Navigate to Record on side bar", () => {
+        cy.fbClickButton({ el: "navigation.records" });
+      });
+
+      it("Click 'Create a Record' button", () => {
+        cy.get("#DocumentByTypeListPresenter-openDocRev").click();
+      });
+
+      it("Select Record Type: 'Engineering Build'", () => {
+        cy.get("#MultipleFormTemplate-selectDocForm").type("Engineering Build{downarrow}{enter}");
+      });
+
+      it("Select template", () => {
+        cy.get('#field-selectType').parent().then(res => {
+          if(res.find("#MultipleFormTemplate-selectDocType").length > 0){
+            cy.get("#MultipleFormTemplate-selectDocType").click().type("eb-title8{downarrow}{enter}");
+          }
+        });
+      });
+
+      it("Enter title: 'test title8'", () => {
+        cy.get("#Title-field").type("test title8");
+      });
+
+      it("Enter description: 'test description'", () => {
+        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("test description");
+      });
+
+      it("Select radio button of with copyableValue checkbox Equipment Maintenance", () => {
+        cy.get("input[name^=\"em-wi-copy-\"]").eq(-1).click();
+      });
+
+      it("Enter Justification of with copyableValue checkbox Equipment Maintenance", () => {
+        cy.get("[data-cy^=\"em-wi-copy-\"]").find("div[contenteditable]").click({force: true}).clear().type("Justification1");
+      });
+
+      it("Select radio button of without copyableValue checkbox Equipment Maintenance", () => {
+        cy.get("input[name^=\"em-wo-copy-\"]").eq(-1).click();
+      });
+
+      it("Enter Justification of without copyableValue checkbox Equipment Maintenance", () => {
+        cy.get("[data-cy^=\"em-wo-copy-\"]").find("div[contenteditable]").click({force: true}).clear().type("Justification2");
+      });
+
+      it("Click 'Save' button", () => {
+        cy.fbClickButton({ el: "DocumentRevisionForm-submit" });
+        cy.wait(5000);
+      });
+
+      it("Click 'Clone EB' button", () => {
+        cy.fbClickButton({ el: "CloneEBButton" });
+        cy.wait(5000);
+      });
+    });
+
+    context("Verify fields", () => {
+      it("Verify Equipment Maintenance", () => {
+        cy.get("[data-cy^=\"em-wi-copy-\"]").find("div[contenteditable]").parent().find("div").eq(-1).invoke('text').should('not.be.empty');
+        cy.get("input[name^=\"em-wo-copy-\"]").eq(-1).should('not.be.checked');
       });
     });
   });
