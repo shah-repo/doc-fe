@@ -236,6 +236,10 @@ context("FORM Field test", () => {
         it("Verify created 'Purchase Order' in the list", () => {
           cy.get(".MuiAutocomplete-popper ul li").should("contain", purchaseOrderNo);
         });
+
+        it("Verify count in the list", () => {
+          cy.get(".MuiAutocomplete-popper ul li").should('have.length', 1);
+        });
       });
     });
   });

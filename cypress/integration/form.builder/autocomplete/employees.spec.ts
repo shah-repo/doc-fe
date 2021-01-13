@@ -208,6 +208,19 @@ context("FORM Field test", () => {
         it("Verify created 'Employees' in the list", () => {
           cy.get(".MuiAutocomplete-popper ul li").should("contain", `${approverName}`);
         });
+
+        it("Verify count in the list", () => {
+          cy.get(".MuiAutocomplete-popper ul li").should('have.length', 6);
+        });
+
+        it("Verify Users name in the list", () => {
+          cy.get(".MuiAutocomplete-popper ul li").eq(0).should('have.text', USERS[10].name);
+          cy.get(".MuiAutocomplete-popper ul li").eq(1).should('have.text', USERS[1].name);
+          cy.get(".MuiAutocomplete-popper ul li").eq(2).should('have.text', USERS[2].name);
+          cy.get(".MuiAutocomplete-popper ul li").eq(3).should('have.text', USERS[3].name);
+          cy.get(".MuiAutocomplete-popper ul li").eq(4).should('have.text', USERS[4].name);
+          cy.get(".MuiAutocomplete-popper ul li").eq(5).should('have.text', USERS[5].name);
+        });
       });
     });
   });

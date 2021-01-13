@@ -102,7 +102,7 @@ context("FORM Field test", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
-      it("Select 'Purchase Order' output document type", () => {
+      it("Select 'Lot' output document type", () => {
         cy.drSelectOutputDocumentType({ documentType: "Lots" });
       });
 
@@ -144,9 +144,14 @@ context("FORM Field test", () => {
         cy.get("#HeaderInfo-docId").then((lot) => { lotsNo = lot.text() });
       });
 
-      it("Click 'Accept Lot' & 'confirm' button", () => {
-        cy.fbClickButton({ el: "ApproveAndRelease-button" });
-        cy.fbClickButton({ el: "ApproveAndRelease-submit" });
+      it("Click 'Accept Lot & confirm' button", () => {
+        cy.wrapWithWaitOnApiCalls(
+          [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet], () => {
+            cy.fbClickButton({ el: "ApproveAndRelease-button" });
+            cy.wait(1000);
+            cy.fbClickButton({ el: "ApproveAndRelease-submit" });
+
+          });
       });
 
       it("Reload company", () => {
@@ -241,6 +246,10 @@ context("FORM Field test", () => {
 
         it("Verify created 'Lots' in the list", () => {
           cy.get(".MuiAutocomplete-popper ul li").should("contain", lotsNo).and("contain", lotsTitle);
+        });
+
+        it("Verify count in the list", () => {
+          cy.get(".MuiAutocomplete-popper ul li").should('have.length', 1);
         });
       });
     });

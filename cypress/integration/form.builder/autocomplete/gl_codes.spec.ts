@@ -187,6 +187,10 @@ context("FORM Field test", () => {
         it("Verify created 'GL code' in the list", () => {
           cy.get(".MuiAutocomplete-popper ul li").should("contain", acctCode);
         });
+
+        it("Verify count in the list", () => {
+          cy.get(".MuiAutocomplete-popper ul li").should('have.length', 1);
+        });
       });
     });
   });

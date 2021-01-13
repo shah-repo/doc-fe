@@ -199,6 +199,10 @@ context("FORM Field test", () => {
         it("Verify created 'Available Part Documents' in the list", () => {
           cy.get(".MuiAutocomplete-popper ul li").should("contain", partsName);
         });
+
+        it("Verify count in the list", () => {
+          cy.get(".MuiAutocomplete-popper ul li").should('have.length', 1);
+        });
       });
     });
   });

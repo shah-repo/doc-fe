@@ -11,6 +11,8 @@ let loginResponse;
 let multipleCompanies;
 let secondEmployee;
 const approvalRequestTitle = `ApprovalRequest${Cypress.moment().format('X')}`;
+let arDocCount = 0;
+let initialArDocument;
 
 context("FORM Field test", () => {
   context("[API]Prepare company", () => {
@@ -161,6 +163,19 @@ context("FORM Field test", () => {
             cy.fbClickButton({ el: "FBWorkspace-clickView" });
           });
         });
+
+        context("Get AR Doc count", () => {
+          it("[API]Get AR", () => {
+            cy.arGetArDocumentByName({
+              sessionId: loginResponse.sessionId,
+              employeeId: secondEmployee.id,
+              name: "AR Form",
+            }).then((response) => {
+              initialArDocument = response;
+              arDocCount = initialArDocument.length;
+            });
+          });
+        });
       });
 
       context("Verify Autocomplete 'Approval requests'", () => {
@@ -190,6 +205,10 @@ context("FORM Field test", () => {
 
         it("Verify created 'Approval requests' in the list", () => {
           cy.get(".MuiAutocomplete-popper ul li").should("contain", approvalRequestTitle);
+        });
+
+        it("Verify count in the list", () => {
+          cy.get(".MuiAutocomplete-popper ul li").should('have.length', (arDocCount + 1));
         });
       });
     });

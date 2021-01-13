@@ -263,6 +263,10 @@ context("FORM Field test", () => {
         it("Verify created 'Approval Roles' in the list", () => {
           cy.get(".MuiAutocomplete-popper ul li").should("contain", arTitle);
         });
+
+        it("Verify count in the list", () => {
+          cy.get(".MuiAutocomplete-popper ul li").should('have.length', 1);
+        });
       });
     });
   });

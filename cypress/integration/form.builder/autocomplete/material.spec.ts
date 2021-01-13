@@ -199,6 +199,10 @@ context("FORM Field test", () => {
         it("Verify created 'Material' in the list", () => {
           cy.get(".MuiAutocomplete-popper ul li").should("contain", materialTitle);
         });
+
+        it("Verify count in the list", () => {
+          cy.get(".MuiAutocomplete-popper ul li").should('have.length', 1);
+        });
       });
     });
   });
