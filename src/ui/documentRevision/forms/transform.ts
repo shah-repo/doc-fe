@@ -9,10 +9,19 @@ import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
 import { getIsAdministrativeDefault } from "../helpers/revisionStage";
 import { DocumentRevisionFormValues } from "./types";
 
+const getRevisionsInHighestStage = (revisions: DocumentRevision[]) => {
+  const highestStage = maxBy(revisions, "revisionStage")?.revisionStage;
+  const revs = revisions.filter((rev) => rev.revisionStage === highestStage);
+  return revs;
+};
 
 export const getHighestRevision = (revisions: DocumentRevision[]) => {
-  const highestStage = maxBy(revisions, "revisionStage")?.revisionStage;
-  const revs = revisions.filter((rev) => rev.revisionStage === highestStage && isDocumentRevisionReleased(rev.status));
+  const revs = getRevisionsInHighestStage(revisions);
+  return maxBy(revs, "revision");
+};
+
+export const getHighestReleasedRevision = (revisions: DocumentRevision[]) => {
+  const revs = getRevisionsInHighestStage(revisions).filter((rev) => isDocumentRevisionReleased(rev.status));
   return maxBy(revs, "revision");
 };
 
@@ -34,7 +43,7 @@ export const toDocumentRevisionFormValues = (
     // TODO - we need to take a data from response that gives us all informations about document,
     // currently we are using data from the document list
     referenceTo: documentRevision.referenceTo?.map((reference: any) => {
-      const highestRev = getHighestRevision(reference.documentRevisions);
+      const highestRev = getHighestReleasedRevision(reference.documentRevisions);
       return ({
         value: reference.id,
         label: `${reference.docId} - ${getRevisionNumber(highestRev)} - ${highestRev?.name}`,
