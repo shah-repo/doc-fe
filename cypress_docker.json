@@ -13,6 +13,8 @@
   "experimentalNetworkStubbing": true,
   "modifyObstructiveCode": false,
   "env": {
-    "TEST_COMPANY_REPLICA_NAME": "test"
+    "TEST_COMPANY_REPLICA_NAME": "test",
+    "CYPRESS_TEST_EMAIL": "enlil.testmail@gmail.com",
+    "CYPRESS_TEST_EMAIL_PASSWORD": "shifamed123"
   }
 }
