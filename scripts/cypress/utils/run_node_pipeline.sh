@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+export CYPRESS_TEST_EMAIL="enlil.testmail@gmail.com"
+export CYPRESS_TEST_EMAIL_PASSWORD="shifamed123"
+
 DEBUG=cypress:* yarn cypress run \
   --parallel --record --key 9e6e4a3d-c43a-4e60-8984-fa2ae0a90a76 \
   --reporter cypress-multi-reporters --reporter-options configFile=cypress-reporter-config.json \

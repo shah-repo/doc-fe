@@ -33,7 +33,9 @@ export default (on, config) => {
       if (value != null) { shouldSkip = value; }
       return shouldSkip;
     },
-    mail: getEmail,
+    mail(email) {
+      return getEmail(email);
+    },
     downloadFile,
     deleteScreenshotsFolder(dir) {
       rmdirSync(dir, { recursive: true });
