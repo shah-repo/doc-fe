@@ -36,6 +36,12 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
       onDialogClose?.();
     };
 
+    const setFormDocument = (value?: string) => {
+      formState?.setFieldValue("formDocument.id", value);
+      formState?.getInputState("formDocument.id")?.setRender();
+      formState?.validate();
+    };
+
     onDialogClose = () => dialogState?.closeDialog();
 
     // MARK: @reactions
@@ -43,10 +49,7 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get("document.documentType.id")?.value,
       (data) => {
-        formState?.setFieldValue("formDocument.id", undefined);
-        formState?.getInputState("formDocument.id")?.setRender();
-        formState?.validate();
-
+        setFormDocument(undefined);
         if (!data || !FB.isUUID(data)) { return; }
         ebPartState?.fetchProposedDocId(data);
         ebPartState?.fetchDocumentType(data);
@@ -69,9 +72,7 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
 
         // auto select first form if it's the only one
         if (forms?.length === 1) {
-          formState?.setFieldValue("formDocument.id", first(forms)?.id);
-          formState?.getInputState("formDocument.id")?.setRender();
-          formState?.validate();
+          setFormDocument(first(forms)?.id);
         }
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
