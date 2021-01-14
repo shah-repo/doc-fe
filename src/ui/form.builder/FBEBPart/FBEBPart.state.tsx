@@ -1,16 +1,14 @@
 import { action, observable, set } from "mobx";
 import { EBPartPatchBody, EBPartPostBody, ProposedDocIdBody } from ".";
-import { FBOption } from "..";
 import { DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType/types";
 import { Document, DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBEBPartState extends FBRequest<null | DocumentRevision | ProposedDocIdBody | Document | DocumentTypeById, EBPartPatchBody | EBPartPostBody | null> {
+export class FBEBPartState {
   // MARK: @observables
   @observable public childrenParts?: string;
   @observable public childrenPartsForRevise?: string;
-  @observable public formOptions?: FBOption[];
 
   // MARK: @config
 
@@ -23,7 +21,6 @@ export class FBEBPartState extends FBRequest<null | DocumentRevision | ProposedD
 
   // MARK: @constructor
   public constructor(children: { childrenParts?: string; childrenPartsForRevise?: string }) {
-    super();
     this.childrenParts = children.childrenParts;
     this.childrenPartsForRevise = children.childrenPartsForRevise;
   }
@@ -62,29 +59,13 @@ export class FBEBPartState extends FBRequest<null | DocumentRevision | ProposedD
     method: "get",
   });
 
-  public fetchFormsForDocType = async (documentTypeId: string) => {
-    this.setFormOptions([]);
+  public fetchDocumentType = (documentTypeId: string) => {
     if (!documentTypeId) { return; }
     this.documentTypeApi.set({
       url: FBEndpoint.FetchDocumentType,
       urlValues: { documentTypeId },
+      method: "get",
     });
-    this.loading = true;
-    const data = await this.documentTypeApi.fetch();
-    if (!data?.forms) {
-      this.loading = false;
-      return;
-    }
-    this.setFormOptions(data.forms);
-  };
-
-  private setFormOptions = (forms: DocumentRevision[]) => {
-    if (!forms) { return; }
-    this.formOptions = forms?.map((form) => ({
-      value: form.id,
-      text: form.name,
-    }));
-    this.loading = false;
   };
 }
 

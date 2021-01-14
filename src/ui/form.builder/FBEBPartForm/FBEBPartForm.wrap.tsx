@@ -1,3 +1,4 @@
+import { first } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -42,9 +43,13 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get("document.documentType.id")?.value,
       (data) => {
-        formState.setFieldValue("formDocument.id", undefined, true);
+        formState?.setFieldValue("formDocument.id", undefined);
+        formState?.getInputState("formDocument.id")?.setRender();
+        formState?.validate();
+
+        if (!data || !FB.isUUID(data)) { return; }
         ebPartState?.fetchProposedDocId(data);
-        ebPartState?.fetchFormsForDocType(data);
+        ebPartState?.fetchDocumentType(data);
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -56,18 +61,33 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    // on fetch document type
+    React.useEffect(() => reaction(
+      () => ebPartState?.documentTypeApi.data,
+      (data) => {
+        const forms = data?.forms;
+
+        // auto select first form if it's the only one
+        if (forms?.length === 1) {
+          formState?.setFieldValue("formDocument.id", first(forms)?.id);
+          formState?.getInputState("formDocument.id")?.setRender();
+          formState?.validate();
+        }
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
     // MARK: @observer
     useObserver(() => {
       loading = ebPartState?.proposedDocIdApi.loading
-        || ebPartState?.documentTypeApi.loading
-        || ebPartState?.loading;
+      || ebPartState?.documentTypeApi.loading;
       disabled = disabled || loading;
+
+      // disable Choose a Form Autocomplete if document type isn't selected
       formAutocompleteDisabled = !FB.isUUID(formState?.getInputState("document.documentType.id")?.value);
 
-      formOptions = ebPartState?.formOptions;
-      if (formOptions?.length === 1) {
-        formState.setFieldValue("formDocument.id", formOptions[0].value, true);
-      }
+      // map forms from fetched document type
+      formOptions = ebPartState?.documentTypeApi.data?.forms;
     });
 
     return Component({
