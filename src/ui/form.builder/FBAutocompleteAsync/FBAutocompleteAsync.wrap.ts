@@ -58,6 +58,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     }
 
     useObserver(() => {
+      forceNewRender = formState?.getInputState(name || "")?.forceRender;
       if (!optionId) {
         return;
       }
@@ -86,7 +87,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       (options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
       refresh = () => autocompleteAsyncState?.load(true);
     }
-    
+
     !getOptionLabel && (getOptionLabel = (option) => {
       if (freeSolo && !isObject(option)) {
         return option;
