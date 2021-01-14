@@ -68,10 +68,6 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
         name="editorConfig.aql"
         options={FBData.aqlOptions}
       />
-      <FBCheckbox
-        label="form.builder.fai"
-        name="editorConfig.fai"
-      />
     </Box>
     {children}
   </FBEditor>

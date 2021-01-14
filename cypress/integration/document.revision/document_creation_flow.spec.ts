@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -263,7 +264,9 @@ context("Document Creation Flow", () => {
 
     context("Check primary attachment function", () => {
       it("Set attachment as primary", () => {
-        cy.atchSetPrimaryAttachment({ fileName: "test_image.jpg" });
+        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+          cy.atchSetPrimaryAttachment({ fileName: "test_image.jpg" });
+        });
       });
 
       it("Allow user to only set single attachment to be primary", () => {

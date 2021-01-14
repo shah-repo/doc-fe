@@ -257,6 +257,7 @@ context("Records flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
+      cy.checkToastMessage({ exists: false });
     });
 
     it("Reload document", () => {

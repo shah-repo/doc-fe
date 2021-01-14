@@ -88,6 +88,7 @@ Cypress.Commands.add("arVerifySignatureIsNotMet", (params: {title: string }) => 
   cy.get("button[aria-label=approve]").first().click();
   cy.get("[data-cy=\"transition.action.password\"]").type("wrongPassword");
   cy.get("[data-cy=\"passwordConfirm\"]").click();
+  cy.wait(2000);
   cy.checkToastMessage({ exists: true });
 });
 
@@ -119,6 +120,7 @@ Cypress.Commands.add("arCloseAR", () => {
     [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
       cy.get("[data-cy=AlertDialog-continueButton]").click();
     });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("arChoseSpecificProposedDocument", (params: { name: string }) => {
@@ -147,6 +149,7 @@ Cypress.Commands.add("arClickCreateApprovalRequestAfterCompletingForm", () => {
     [CyRoutes.PostChangeRequests, CyRoutes.DocRevPreview], () => {
       cy.get("[data-cy=\"navigation.createChangeRequest\"]").click();
     });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("arClickSendToReview", () => {
@@ -155,6 +158,7 @@ Cypress.Commands.add("arClickSendToReview", () => {
     () => {
       cy.get("[data-cy=\"transitionButton\"]").click();
     });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("arSaveApiCall", () => {
@@ -162,6 +166,7 @@ Cypress.Commands.add("arSaveApiCall", () => {
     [CyRoutes.PatchAR], () => {
       cy.get("[data-cy=\"common.save\"]").click();
     });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("arVerifyStatus", (params: { status: string }) => {
@@ -188,6 +193,7 @@ Cypress.Commands.add("arApproveAR", () => {
       cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
       cy.get("[data-cy=\"passwordConfirm\"]").click();
     });
+  cy.checkToastMessage({ exists: false });
   cy.wait(2000);
 });
 
@@ -217,6 +223,7 @@ Cypress.Commands.add("arVoidAR", () => {
   cy.get("[data-cy=\"HeaderMenuButton\"]").click();
   cy.get("[id=\"void\"]").click();
   cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("arIsProposedDocumentEmpty", () => {

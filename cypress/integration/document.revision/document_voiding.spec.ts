@@ -115,6 +115,7 @@ context("Document voiding Flow", () => {
         cy.get("#HeaderMenuButton").click();
         cy.get("#void").click();
         cy.get("#AlertDialog-continueButton").click();
+        cy.checkToastMessage({ exists: false });
       });
     });
   });

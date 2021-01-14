@@ -572,7 +572,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Check returned errors are not empty", () => {
-      cy.checkToastMessage({ exists: true });
+      cy.checkToastMessageIsNotEmpty({ exists: true });
     });
 
     it("Cancel release of document", () => {

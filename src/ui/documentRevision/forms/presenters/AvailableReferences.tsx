@@ -11,7 +11,7 @@ import { DocumentRevisionsByIdState } from "../../../../state/ducks/documentRevi
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import Text from "../../../components/Text";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
-import { getHighestRevision } from "../transform";
+import { getHighestReleasedRevision } from "../transform";
 
 interface AvailableReferencesProps extends FieldOwnProps {
   disabled?: boolean;
@@ -25,7 +25,7 @@ FormikFieldProps &
 Partial<TypographyProps>;
 
 const getReferenceValues = (documentRevisions: DocumentRevision[], docRevsById: DocumentRevisionsByIdState) => {
-  const highestRev = getHighestRevision(documentRevisions);
+  const highestRev = getHighestReleasedRevision(documentRevisions);
   const docType = docRevsById[highestRev?.id || ""]?.document?.documentType;
   const isReferencePart = checkIsDocumentPart(docType?.groupOptions);
   const canReferenceCreateInspection = checkCanTypeCreateInspection(docType?.groupOptions);

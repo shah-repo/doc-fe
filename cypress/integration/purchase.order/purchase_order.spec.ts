@@ -245,6 +245,7 @@ context("PO test", () => {
         [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.poAddPOButtonClick();
         });
+      cy.checkToastMessage({ exists: false });
     });
 
     it("Check currency options dropdown", () => {
@@ -359,6 +360,7 @@ context("PO test", () => {
         [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.poAddPOButtonClick();
         });
+      cy.checkToastMessage({ exists: false });
     });
 
     it("Check currency options dropdown", () => {
@@ -397,6 +399,7 @@ context("PO test", () => {
         [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.poConvertedToDollarsMessage();
         });
+      cy.checkToastMessage({ exists: false });
     });
   });
 

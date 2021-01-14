@@ -199,7 +199,7 @@ context("Group Permissions Flow", () => {
     });
 
     it(`Remove permissions for  'Everyone' for ${USERS[3].name}`, () => {
-      cy.grpRemoveUser({ item: 1 });
+      cy.grpRemoveUser({ name: USERS[3].name });
     });
 
     it("Saves the group", () => {

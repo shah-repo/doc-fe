@@ -1,5 +1,6 @@
 import { Box } from "@material-ui/core";
 import React, { Fragment } from "react";
+import { useIntl } from "react-intl";
 import { getFormattedDateString, MomentFormats } from "../../common/utils/date";
 import { Attachment } from "../../state/ducks/attachments";
 import { Audit } from "../../state/ducks/audit";
@@ -27,6 +28,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
   audit, dataCy,
 }) => {
   let returnValue;
+  const intl = useIntl();
   const isFBField = audit.field.includes("formInput");
   const { nextValue, previousValue } = audit;
   const { type = "" } = audit.fbSchemaItem || {};
@@ -37,7 +39,11 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
   }
 
   if (auditValue === "includeNone") {
-    auditValue = "None";
+    auditValue = intl.formatMessage({ id: "form.builder.none" });
+  }
+
+  if (`${auditValue}`.includes("includeContext")) {
+    auditValue = intl.formatMessage({ id: "form.builder.other" });
   }
 
   if (!auditValue || auditValue === "undefined") {

@@ -12,6 +12,7 @@
   "defaultCommandTimeout": 30000,
   "trashAssetsBeforeRuns": false,
   "experimentalNetworkStubbing": true,
+  "modifyObstructiveCode": false,
   "env": {
     "TEST_COMPANY_REPLICA_NAME": "test"
   }
