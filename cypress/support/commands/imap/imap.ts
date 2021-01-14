@@ -2,8 +2,8 @@ import * as imaps from "imap-simple";
 
 const config = {
   imap: {
-    user: process.env.CYPRESS_TEST_EMAIL,
-    password: process.env.CYPRESS_TEST_EMAIL_PASSWORD,
+    user: "enlil.testmail@gmail.com",
+    password: "shifamed123",
     host: "imap.gmail.com",
     port: 993,
     tls: true,
