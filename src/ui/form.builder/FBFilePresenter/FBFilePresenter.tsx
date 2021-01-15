@@ -1,4 +1,5 @@
-import { Box, CircularProgress, IconButton } from "@material-ui/core";
+import { Box, CircularProgress, IconButton, Typography } from "@material-ui/core";
+import { AttachFile } from "@material-ui/icons";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import React from "react";
 import { FBAttachmentIcon, FBContextMenu, FBDialog, FBFilePresenterProps, FBProvider, FBTooltip } from "..";
@@ -22,10 +23,11 @@ const FBFilePresenter: React.FunctionComponent<FBFilePresenterProps> = ({
   fileSize,
   fileDescription,
   fileColor,
+  mode = "icon",
 }) =>  (
   <FBProvider {...{ dialogState }}>
     <FBDialog />
-    <FBContextMenu
+    {mode === "icon" && <FBContextMenu
       {...{ menuItems }}
       boxProps={{
         p: 2,
@@ -77,7 +79,49 @@ const FBFilePresenter: React.FunctionComponent<FBFilePresenterProps> = ({
           <RemoveCircleOutlineIcon fontSize="small" />
         </IconButton>
       </Box>
-    </FBContextMenu>
+    </FBContextMenu>}
+    {mode === "raw" &&
+      <FBContextMenu
+        {...{ menuItems }}
+        boxProps={{
+          p: 0.25,
+          mr: 1,
+          mb: 2,
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          borderRadius: 4,
+          bgcolor: Colors.background_blue,
+        }}
+      >
+        {loading && (
+          <Box display="flex" width={46} height={46} alignItems="center" textAlign="center">
+            <CircularProgress size={20} />
+          </Box>
+        )}
+        {!loading && (
+          <FBTooltip title={fileName}>
+            <Box
+              onClick={() => handleIconClick?.()}
+              display="inline-flex"
+              alignItems="center"
+              mr={1}
+              pt={0.5}
+            >
+              <AttachFile color="primary" height={20} width={20} />
+              <Typography
+                id="FBFileViewPresenter-fileName"
+                variant="caption"
+                color="primary"
+                noWrap={true}
+              >
+                {fileName}
+              </Typography>
+            </Box>
+          </FBTooltip>
+        )}
+      </FBContextMenu>
+    }
   </FBProvider>
 );
 

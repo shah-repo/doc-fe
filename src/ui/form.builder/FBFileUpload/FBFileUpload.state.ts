@@ -1,4 +1,4 @@
-import { filter, isEmpty, isUndefined, template, union } from "lodash";
+import { filter, isUndefined, template, union } from "lodash";
 import { action, observable, set } from "mobx";
 import { Attachment } from "../../../state/ducks/attachments";
 import { Id } from "../../../state/ducks/common";
@@ -24,19 +24,6 @@ export class FBFileUploadState {
     this.attachmentApi.setUrl(url);
     const data = await this.attachmentApi.fetch();
     set(this, "fetchedFiles", union(this.fetchedFiles, [data]));
-  };
-
-  public getAttachments = async (ids?: string[]) => {
-    if (!ids || isEmpty(ids)) {
-      set(this, "fetchedFiles", []);
-      return;
-    }
-    const urlTpl = template(FBEndpoint.AttachmentsByIds);
-    const url = urlTpl({ ids });
-    this.attachmentsbyIdsApi.setUrl(url);
-    this.attachmentsbyIdsApi.fetch();
-    const data = await this.attachmentsbyIdsApi.fetch();
-    set(this, "fetchedFiles", data);
   };
 
   @action public addFile = (file: Attachment | undefined) => {

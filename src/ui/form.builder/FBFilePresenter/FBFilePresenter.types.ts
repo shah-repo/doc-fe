@@ -33,6 +33,8 @@ export enum FBFilePresenterColor {
   "XD" = "#6F0A58",
 }
 
+export type FBFilePresenterMode = "raw" | "icon";
+
 export type FBFilePresenterProps =
 & Pick<FBInputProps, "name" | "disabled">
 & Pick<FBContextMenuProps, "menuItems">
@@ -51,4 +53,5 @@ export type FBFilePresenterProps =
   fileDescription?: string;
   fileColor?: string;
   loading?: boolean;
+  mode?: FBFilePresenterMode;
 };

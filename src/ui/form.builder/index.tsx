@@ -145,6 +145,9 @@ export { default as FBFilePresenterState } from "./FBFilePresenter/FBFilePresent
 export * from "./FBFilePresenter/FBFilePresenter.types";
 export { default as FBFilePreview } from "./FBFilePreview/FBFilePreview";
 export * from "./FBFilePreview/FBFilePreview.types";
+export { default as FBFilesPresenter } from "./FBFilesPresenter/FBFilesPresenter";
+export { default as FBFilesPresenterState } from "./FBFilesPresenter/FBFilesPresenter.state";
+export * from "./FBFilesPresenter/FBFilesPresenter.types";
 export { default as FBFileUpload } from "./FBFileUpload/FBFileUpload";
 export { default as FBFileUploadState } from "./FBFileUpload/FBFileUpload.state";
 export * from "./FBFileUpload/FBFileUpload.types";
