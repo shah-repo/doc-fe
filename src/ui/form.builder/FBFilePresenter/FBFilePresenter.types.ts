@@ -55,3 +55,5 @@ export type FBFilePresenterProps =
   loading?: boolean;
   mode?: FBFilePresenterMode;
 };
+
+export type FBFilePresenterModeProps = Omit<FBFilePresenterProps, "dialogState" | "mode">;

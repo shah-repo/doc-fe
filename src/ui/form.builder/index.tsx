@@ -141,6 +141,8 @@ export { default as FBFileField } from "./FBFileField/FBFileField";
 export { default as FBFileFieldState } from "./FBFileField/FBFileField.state";
 export * from "./FBFileField/FBFileField.types";
 export { default as FBFilePresenter } from "./FBFilePresenter/FBFilePresenter";
+export { default as FBFilePresenterIcon } from "./FBFilePresenter/FBFilePresenter.icon";
+export { default as FBFilePresenterRaw } from "./FBFilePresenter/FBFilePresenter.raw";
 export { default as FBFilePresenterState } from "./FBFilePresenter/FBFilePresenter.state";
 export * from "./FBFilePresenter/FBFilePresenter.types";
 export { default as FBFilePreview } from "./FBFilePreview/FBFilePreview";
