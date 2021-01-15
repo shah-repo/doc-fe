@@ -108,11 +108,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Document revisions' as options", () => {
@@ -140,16 +140,17 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.contain.text(response.body[index].document.docId);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
+              .each(($li, index, $lis) => {
+                expect($li).to.contain.text(response.body[index].document.docId);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
           } else {
             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
           }
@@ -193,11 +194,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Approval requests' as options", () => {
@@ -225,16 +226,17 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.contain.text(response.body[index].crId);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
+              .each(($li, index, $lis) => {
+                expect($li).to.contain.text(response.body[index].crId);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
           } else {
             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
           }
@@ -278,11 +280,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Approvers' as options", () => {
@@ -310,16 +312,18 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.optionalApprovers.length > 0 ){
+          if (response.body.optionalApprovers.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(`${response.body.optionalApprovers[index].user.name} - ${response.body.optionalApprovers[index].user.email}`);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.optionalApprovers.length);
-            })
+              .each(($li, index, $lis) => {
+                const res = response.body.optionalApprovers[index];
+                expect($li).to.have.text(`${res.user.name} - ${res.user.email}`);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.optionalApprovers.length);
+              });
           } else {
             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
           }
@@ -363,11 +367,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Document types' as options", () => {
@@ -395,16 +399,17 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(response.body[index].documentTypeName);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
+              .each(($li, index, $lis) => {
+                expect($li).to.have.text(response.body[index].documentTypeName);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
           } else {
             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
           }
@@ -448,11 +453,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Supplier list' as options", () => {
@@ -480,19 +485,21 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(`${response.body[index].document.docId} - rev ${response.body[index].displayRevision} - ${response.body[index].name}`);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                const res = response.body[index];
+                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -533,11 +540,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'TL numbers list' as options", () => {
@@ -565,19 +572,21 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(`${response.body[index].document.docId} - rev ${response.body[index].displayRevision} - ${response.body[index].name}`);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                const res = response.body[index];
+                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -618,11 +627,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Company addresses' as options", () => {
@@ -650,19 +659,20 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(response.body[index].addresses);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                expect($li).to.have.text(response.body[index].addresses);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -703,11 +713,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'GL codes' as options", () => {
@@ -735,19 +745,20 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(response.body[index].acctCodes);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                expect($li).to.have.text(response.body[index].acctCodes);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -788,11 +799,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Groups' as options", () => {
@@ -820,19 +831,20 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(response.body[index].name);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                expect($li).to.have.text(response.body[index].name);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -873,11 +885,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Parts' as options", () => {
@@ -905,19 +917,20 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(response.body[index].document.docId);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                expect($li).to.have.text(response.body[index].document.docId);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -958,11 +971,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Purchase Order list' as options", () => {
@@ -990,19 +1003,21 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(`${response.body[index].document.docId} - rev ${response.body[index].displayRevision} - ${response.body[index].name}`);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                const res = response.body[index];
+                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -1043,11 +1058,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Employees' as options", () => {
@@ -1075,19 +1090,20 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(response.body[index].user.name);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                expect($li).to.have.text(response.body[index].user.name);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -1128,11 +1144,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Official Groups' as options", () => {
@@ -1160,19 +1176,20 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(response.body[index].name);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                expect($li).to.have.text(response.body[index].name);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -1213,11 +1230,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Part Number in WO' as options", () => {
@@ -1245,19 +1262,21 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(`${response.body[index].document.docId} - rev ${response.body[index].displayRevision} - ${response.body[index].name}`);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                const res = response.body[index];
+                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -1298,11 +1317,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Document Revisions In Draft without Records' as options", () => {
@@ -1330,19 +1349,21 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(`${response.body[index].document.docId} - rev ${response.body[index].displayRevision} - ${response.body[index].name}`);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                const res = response.body[index];
+                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -1383,11 +1404,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Approval Roles' as options", () => {
@@ -1415,19 +1436,20 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(response.body[index].name);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                expect($li).to.have.text(response.body[index].name);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -1468,11 +1490,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Document revisions (all versions)' as options", () => {
@@ -1500,19 +1522,21 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(`${response.body[index].document.docId} - rev ${response.body[index].displayRevision} - ${response.body[index].name}`);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                const res = response.body[index];
+                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -1553,11 +1577,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Materials' as options", () => {
@@ -1585,19 +1609,21 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(`${response.body[index].document.docId} - rev ${response.body[index].displayRevision} - ${response.body[index].name}`);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                const res = response.body[index];
+                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -1638,11 +1664,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Available Parts' as options", () => {
@@ -1670,19 +1696,21 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(`${response.body[index].document.docId} - rev ${response.body[index].displayRevision} - ${response.body[index].name}`);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                const res = response.body[index];
+                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -1723,11 +1751,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Lots' as options", () => {
@@ -1755,19 +1783,21 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(`${response.body[index].document.docId} - rev ${response.body[index].displayRevision} - ${response.body[index].name}`);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                const res = response.body[index];
+                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -1808,11 +1838,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Available Part Documents' as options", () => {
@@ -1840,19 +1870,21 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .each(($li, index, $lis) => {
-              expect($li).to.have.text(`${response.body[index].docId} - ${response.body[index].documentRevisions[0].name}`);
-            })
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .each(($li, index, $lis) => {
+                const res = response.body[index];
+                expect($li).to.have.text(`${res.docId} - ${res.documentRevisions[0].name}`);
+              })
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -1893,11 +1925,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'CSL numbers list' as options", () => {
@@ -1925,16 +1957,17 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -1975,11 +2008,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Equipment' as options", () => {
@@ -2007,16 +2040,17 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });
@@ -2057,11 +2091,11 @@ context("FORM Field test", () => {
           cy.fbAddNewField();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         });
-      })
+      });
 
       context("Fill in Autocomplete attributes", () => {
         it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name:"label", value: "test label" });
+          cy.fbEnterNameValue({ name: "label", value: "test label" });
         });
 
         it("Select 'Preventative Maintenance Forms' as options", () => {
@@ -2089,16 +2123,17 @@ context("FORM Field test", () => {
             Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
           },
         }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
 
-          if(response.body.length > 0 ){
+          if (response.body.length > 0 ) {
             cy.get(".MuiAutocomplete-popper ul li")
-            .then(($lis) => {
-              expect($lis).to.have.length(response.body.length);
-            })
-           } else {
-             cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-           }
+              .then(($lis) => {
+                expect($lis).to.have.length(response.body.length);
+              });
+          } else {
+            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+          }
         });
       });
     });

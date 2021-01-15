@@ -9,7 +9,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 let secondEmployee;
-const groupName = `Group ${Cypress.moment().format('X')}`;
+const groupName = `Group ${Cypress.moment().format("X")}`;
 
 context("FORM Field test", () => {
   context("[API]Prepare company", () => {
@@ -88,7 +88,7 @@ context("FORM Field test", () => {
         cy.get("input[value=\"unofficial\"]").click();
       });
 
-      it("Enter Group Name "+ groupName, () => {
+      it("Enter Group Name " + groupName, () => {
         cy.get("#Group-groupName").type(groupName);
       });
 
@@ -140,11 +140,11 @@ context("FORM Field test", () => {
             cy.fbAddNewField();
             cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
           });
-        })
+        });
 
         context("Fill in Autocomplete attributes", () => {
           it("Enter label 'test label'", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label" });
+            cy.fbEnterNameValue({ name: "label", value: "test label" });
           });
 
           it("Select 'Groupss' as options", () => {
@@ -172,19 +172,20 @@ context("FORM Field test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+            cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+              .find("[data-cy^=\"test-label-\"]").click();
 
-            if(response.body.length > 0 ){
+            if (response.body.length > 0 ) {
               cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                expect($li).to.have.text(response.body[index].name);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              })
-             } else {
-               cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-             }
+                .each(($li, index, $lis) => {
+                  expect($li).to.have.text(response.body[index].name);
+                })
+                .then(($lis) => {
+                  expect($lis).to.have.length(response.body.length);
+                });
+            } else {
+              cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+            }
           });
         });
 
@@ -193,7 +194,7 @@ context("FORM Field test", () => {
         });
 
         it("Verify count in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").should('have.length', 9);
+          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 9);
         });
       });
     });

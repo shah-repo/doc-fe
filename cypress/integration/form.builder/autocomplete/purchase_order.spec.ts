@@ -92,7 +92,7 @@ context("FORM Field test", () => {
       });
 
       it("Enter document title 'po title'", () => {
-        cy.drEnterDocumentTitle({ name: 'po title' });
+        cy.drEnterDocumentTitle({ name: "po title" });
       });
 
       it("Enter document description 'Purchase Order document description'", () => {
@@ -135,7 +135,7 @@ context("FORM Field test", () => {
       });
 
       it("Get purchase order no", () => {
-        cy.get("#HeaderInfo-docId").then((po) => { purchaseOrderNo = po.text() });
+        cy.get("#HeaderInfo-docId").then((po) => { purchaseOrderNo = po.text(); });
       });
 
       it("Click 'Add Approver' & 'confirm' button", () => {
@@ -185,11 +185,11 @@ context("FORM Field test", () => {
             cy.fbAddNewField();
             cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
           });
-        })
+        });
 
         context("Fill in Autocomplete attributes", () => {
           it("Enter label 'test label'", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label" });
+            cy.fbEnterNameValue({ name: "label", value: "test label" });
           });
 
           it("Select 'Purchase Order' as options", () => {
@@ -217,19 +217,21 @@ context("FORM Field test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+            cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+              .find("[data-cy^=\"test-label-\"]").click();
 
-            if(response.body.length > 0 ){
+            if (response.body.length > 0 ) {
               cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                expect($li).to.have.text(`${response.body[index].document.docId} - rev ${response.body[index].displayRevision} - ${response.body[index].name}`);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              })
-             } else {
-               cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-             }
+                .each(($li, index, $lis) => {
+                  const res = response.body[index];
+                  expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
+                })
+                .then(($lis) => {
+                  expect($lis).to.have.length(response.body.length);
+                });
+            } else {
+              cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+            }
           });
         });
 
@@ -238,7 +240,7 @@ context("FORM Field test", () => {
         });
 
         it("Verify count in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").should('have.length', 1);
+          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 1);
         });
       });
     });

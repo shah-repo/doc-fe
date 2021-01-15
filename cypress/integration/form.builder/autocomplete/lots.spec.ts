@@ -10,7 +10,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 let secondEmployee;
-const lotsTitle = `Lots ${Cypress.moment().format('X')}`;
+const lotsTitle = `Lots ${Cypress.moment().format("X")}`;
 let lotsNo;
 
 context("FORM Field test", () => {
@@ -87,7 +87,7 @@ context("FORM Field test", () => {
       });
 
       it("Enter document title 'Lots title'", () => {
-        cy.drEnterDocumentTitle({ name: 'Lots title' });
+        cy.drEnterDocumentTitle({ name: "Lots title" });
       });
 
       it("Enter document description 'Lots document description'", () => {
@@ -120,7 +120,7 @@ context("FORM Field test", () => {
 
     context("Create 'Lots'", () => {
       it("Click on 'Lots' in Manufacturing on sidebar", () => {
-        cy.fbClickButton({ el: "navigation.manufacturing"});
+        cy.fbClickButton({ el: "navigation.manufacturing" });
         cy.fbClickButton({ el: "navigation.lots" });
       });
 
@@ -128,7 +128,7 @@ context("FORM Field test", () => {
         cy.get("#DocumentByTypeListPresenter-openDocRev").click();
       });
 
-      it("Enter Lot title "+ lotsTitle, () => {
+      it("Enter Lot title " + lotsTitle, () => {
         cy.get("#Title-field").type(lotsTitle);
       });
 
@@ -141,7 +141,7 @@ context("FORM Field test", () => {
       });
 
       it("Get lots no", () => {
-        cy.get("#HeaderInfo-docId").then((lot) => { lotsNo = lot.text() });
+        cy.get("#HeaderInfo-docId").then((lot) => { lotsNo = lot.text(); });
       });
 
       it("Click 'Accept Lot & confirm' button", () => {
@@ -196,11 +196,11 @@ context("FORM Field test", () => {
             cy.fbAddNewField();
             cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
           });
-        })
+        });
 
         context("Fill in Autocomplete attributes", () => {
           it("Enter label 'test label'", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label" });
+            cy.fbEnterNameValue({ name: "label", value: "test label" });
           });
 
           it("Select 'Lots' as options", () => {
@@ -228,19 +228,21 @@ context("FORM Field test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-\"]").click();
+            cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+              .find("[data-cy^=\"test-label-\"]").click();
 
-            if(response.body.length > 0 ){
+            if (response.body.length > 0 ) {
               cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                expect($li).to.have.text(`${response.body[index].document.docId} - rev ${response.body[index].displayRevision} - ${response.body[index].name}`);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              })
-             } else {
-               cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-             }
+                .each(($li, index, $lis) => {
+                  const res = response.body[index];
+                  expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
+                })
+                .then(($lis) => {
+                  expect($lis).to.have.length(response.body.length);
+                });
+            } else {
+              cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
+            }
           });
         });
 
@@ -249,7 +251,7 @@ context("FORM Field test", () => {
         });
 
         it("Verify count in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").should('have.length', 1);
+          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 1);
         });
       });
     });

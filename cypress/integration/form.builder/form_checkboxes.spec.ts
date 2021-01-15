@@ -110,7 +110,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -120,13 +120,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Text field", () => {
-            cy.fbMouseOverByName({ name: "test-label-1-"} );
+            cy.fbMouseOverByName({ name: "test-label-1-" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Text field" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Revision Disabled' checkbox", () => {
@@ -152,13 +152,13 @@ context("FORM Field test", () => {
 
       context("Verify TextField checkbox property", () => {
         it("Verify TextField without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByName({ name: "test-label-1-"} );
+          cy.fbMouseOverByName({ name: "test-label-1-" } );
           cy.fbVerifyElementVisibile({ name: "test-label-1-", el: "edit-schema-item" });
           cy.fbVerifyElementVisibile({ name: "test-label-1-", el: "remove-schema-item" });
         });
 
         it("Verify TextField with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByName({ name: "test-label-2-"} )
+          cy.fbMouseOverByName({ name: "test-label-2-" } );
           cy.fbVerifyElementNotVisibile({ name: "test-label-2-", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibile({ name: "test-label-2-", el: "remove-schema-item" });
         });
@@ -202,23 +202,23 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
             cy.fbAddNewFieldButton();
           });
-        })
+        });
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Text field", () => {
-            cy.fbMouseOverByName({ name: "test-label-1-"} );
+            cy.fbMouseOverByName({ name: "test-label-1-" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Text field" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Deletion Disabled' checkbox", () => {
@@ -237,7 +237,10 @@ context("FORM Field test", () => {
         });
 
         it("Verify TextField with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClass({ name: "test-label-2-", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClass({
+            name: "test-label-2-", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -281,7 +284,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Enter options", () => {
@@ -301,7 +304,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Enter options", () => {
@@ -366,7 +369,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Enter options", () => {
@@ -380,13 +383,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Checkbox Group", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Enter options", () => {
@@ -416,13 +419,13 @@ context("FORM Field test", () => {
 
       context("Verify Checkbox Group checkbox property", () => {
         it("Verify Checkbox Group without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Checkbox Group with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -466,7 +469,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Enter options", () => {
@@ -476,17 +479,17 @@ context("FORM Field test", () => {
           it("Click 'Add' button", () => {
             cy.fbAddNewFieldButton();
           });
-        })
+        });
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Checkbox Group", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Enter options", () => {
@@ -505,11 +508,17 @@ context("FORM Field test", () => {
 
       context("Verify Checkbox Group checkbox property", () => {
         it("Verify Checkbox Group without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Checkbox Group with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -553,7 +562,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Select 'Document revisions' as options", () => {
@@ -567,13 +576,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Multi Select' checkbox ", () => {
           it("Add Autocomplete", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Select 'Document revisions' as options", () => {
@@ -600,20 +609,22 @@ context("FORM Field test", () => {
         });
 
         it("Verify Autocomplete without 'Multi Select' checkbox", () => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-1-\"]")
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-1-\"]")
             .click()
             .type("{downarrow}{enter}")
             .should("not.have.value", "");
         });
 
         it("Verify Autocomplete with 'Multi Select' checkbox", () => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[data-cy^=\"test-label-2-\"]")
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-2-\"]")
             .click()
             .type("{downarrow}{enter}")
             .click()
             .type("{downarrow}{downarrow}{enter}")
             .should("have.value", "")
-            .parent().get('.MuiAutocomplete-tag').should(($tag) => {
+            .parent().get(".MuiAutocomplete-tag").should(($tag) => {
               expect($tag).to.have.length(2);
             });
         });
@@ -657,7 +668,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Select 'Document revisions' as options", () => {
@@ -671,13 +682,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Include QR Scan' checkbox ", () => {
           it("Add Autocomplete", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Select 'Document revisions' as options", () => {
@@ -707,11 +718,12 @@ context("FORM Field test", () => {
 
       context("Verify Autocomplete checkbox property", () => {
         it("Verify Autocomplete without 'Include QR Scan' checkbox", () => {
-          cy.contains("test label1").parentsUntil('li').find(".MuiTypography-root").should('not.contain', "Scan QR code");
+          cy.contains("test label1").parentsUntil("li").find(".MuiTypography-root")
+            .should("not.contain", "Scan QR code");
         });
 
         it("Verify Autocomplete with 'Include QR Scan' checkbox", () => {
-          cy.contains("test label2").parentsUntil('li').find(".MuiTypography-root").should('contain', "Scan QR code");
+          cy.contains("test label2").parentsUntil("li").find(".MuiTypography-root").should("contain", "Scan QR code");
         });
       });
     });
@@ -753,7 +765,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Select 'Document revisions' as options", () => {
@@ -767,13 +779,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Autocomplete", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Select 'Document revisions' as options", () => {
@@ -803,13 +815,13 @@ context("FORM Field test", () => {
 
       context("Verify Autocomplete checkbox property", () => {
         it("Verify Autocomplete without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Autocomplete with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -853,7 +865,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Select 'Document revisions' as options", () => {
@@ -867,13 +879,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Autocomplete", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Select 'Document revisions' as options", () => {
@@ -892,11 +904,17 @@ context("FORM Field test", () => {
 
       context("Verify Autocomplete checkbox property", () => {
         it("Verify Autocomplete without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Autocomplete with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -940,7 +958,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Enter options", () => {
@@ -954,13 +972,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Text Editor", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Enter options", () => {
@@ -990,13 +1008,13 @@ context("FORM Field test", () => {
 
       context("Verify Text Editor checkbox property", () => {
         it("Verify Text Editor without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Text Editor with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -1040,7 +1058,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Enter options", () => {
@@ -1054,13 +1072,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Text Editor", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Enter options", () => {
@@ -1079,11 +1097,17 @@ context("FORM Field test", () => {
 
       context("Verify Text Editor checkbox property", () => {
         it("Verify Text Editor without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Text Editor with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -1127,7 +1151,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -1137,13 +1161,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Date picker", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Revision Disabled' checkbox", () => {
@@ -1169,13 +1193,13 @@ context("FORM Field test", () => {
 
       context("Verify Date picker checkbox property", () => {
         it("Verify Date picker without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Date picker with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -1219,7 +1243,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -1229,13 +1253,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Date picker", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Deletion Disabled' checkbox", () => {
@@ -1250,11 +1274,17 @@ context("FORM Field test", () => {
 
       context("Verify Date picker checkbox property", () => {
         it("Verify Date picker without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Date picker with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -1298,7 +1328,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Enter linkUrl 'google.com'", () => {
@@ -1312,13 +1342,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Hyperlink", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Hyperlink" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Enter linkUrl 'google.com'", () => {
@@ -1348,13 +1378,13 @@ context("FORM Field test", () => {
 
       context("Verify Hyperlink checkbox property", () => {
         it("Verify Hyperlink without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Hyperlink with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -1398,7 +1428,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Enter linkUrl 'google.com'", () => {
@@ -1412,13 +1442,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Hyperlink", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Hyperlink" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Enter linkUrl 'google.com'", () => {
@@ -1437,11 +1467,17 @@ context("FORM Field test", () => {
 
       context("Verify Hyperlink checkbox property", () => {
         it("Verify Hyperlink without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Hyperlink with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -1485,7 +1521,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Enter options", () => {
@@ -1499,13 +1535,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Include None' checkbox ", () => {
           it("Add Select Field", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Enter options", () => {
@@ -1532,13 +1568,15 @@ context("FORM Field test", () => {
         });
 
         it("Verify Select Field without 'Include None' checkbox", () => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[id^=mui-component-select-test-label-1-]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[id^=mui-component-select-test-label-1-]").click();
           cy.get("[id^=menu-test-label-1-] ul").should("not.contain", "None");
           cy.get("[id^=menu-test-label-1-] ul").click();
         });
 
         it("Verify Select Field with 'Include None' checkbox", () => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[id^=mui-component-select-test-label-2-]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[id^=mui-component-select-test-label-2-]").click();
           cy.get("[id^=menu-test-label-2-] ul").should("contain", "None");
         });
       });
@@ -1581,7 +1619,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Enter options", () => {
@@ -1595,13 +1633,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Include Other' checkbox ", () => {
           it("Add Select Field", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Enter options", () => {
@@ -1628,13 +1666,15 @@ context("FORM Field test", () => {
         });
 
         it("Verify Select Field without 'Include Other' checkbox", () => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[id^=mui-component-select-test-label-1-]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[id^=mui-component-select-test-label-1-]").click();
           cy.get("[id^=menu-test-label-1-] ul").should("not.contain", "Other");
           cy.get("[id^=menu-test-label-1-] ul").click();
         });
 
         it("Verify Select Field with 'Include Other' checkbox", () => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root').find("[id^=mui-component-select-test-label-2-]").click();
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[id^=mui-component-select-test-label-2-]").click();
           cy.get("[id^=menu-test-label-2-] ul").should("contain", "Other");
         });
       });
@@ -1677,7 +1717,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Enter options", () => {
@@ -1691,13 +1731,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Select Field", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Enter options", () => {
@@ -1727,13 +1767,13 @@ context("FORM Field test", () => {
 
       context("Verify Select Field checkbox property", () => {
         it("Verify Select Field without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Select Field with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -1777,7 +1817,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Enter options", () => {
@@ -1787,17 +1827,17 @@ context("FORM Field test", () => {
           it("Click 'Add' button", () => {
             cy.fbAddNewFieldButton();
           });
-        })
+        });
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Select Field", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Enter options", () => {
@@ -1816,11 +1856,17 @@ context("FORM Field test", () => {
 
       context("Verify Select Field checkbox property", () => {
         it("Verify Select Field without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Select Field with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -1864,7 +1910,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Enter options", () => {
@@ -1884,7 +1930,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Enter options", () => {
@@ -1903,11 +1949,11 @@ context("FORM Field test", () => {
 
       context("Verify Radio Button group checkbox property", () => {
         it("Verify Radio Button group without 'Include Other' checkbox", () => {
-          cy.contains("test label1").parentsUntil('li').should('not.contain', "Other");
+          cy.contains("test label1").parentsUntil("li").should("not.contain", "Other");
         });
 
         it("Verify Radio Button group with 'Include Other' checkbox", () => {
-          cy.contains("test label2").parentsUntil('li').should('contain', "Other");
+          cy.contains("test label2").parentsUntil("li").should("contain", "Other");
         });
       });
     });
@@ -1949,7 +1995,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Enter options", () => {
@@ -1963,13 +2009,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Radio Button group", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Enter options", () => {
@@ -1999,13 +2045,13 @@ context("FORM Field test", () => {
 
       context("Verify Radio Button group checkbox property", () => {
         it("Verify Radio Button group without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Radio Button group with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -2049,7 +2095,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Enter options", () => {
@@ -2059,17 +2105,17 @@ context("FORM Field test", () => {
           it("Click 'Add' button", () => {
             cy.fbAddNewFieldButton();
           });
-        })
+        });
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Radio Button group", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Enter options", () => {
@@ -2088,11 +2134,17 @@ context("FORM Field test", () => {
 
       context("Verify Radio Button group checkbox property", () => {
         it("Verify Radio Button group without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Radio Button group with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -2136,7 +2188,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -2146,13 +2198,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add File Upload", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Revision Disabled' checkbox", () => {
@@ -2178,13 +2230,13 @@ context("FORM Field test", () => {
 
       context("Verify File Upload checkbox property", () => {
         it("Verify File Upload without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify File Upload with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -2228,7 +2280,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -2238,13 +2290,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add File Upload", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Deletion Disabled' checkbox", () => {
@@ -2259,11 +2311,17 @@ context("FORM Field test", () => {
 
       context("Verify File Upload checkbox property", () => {
         it("Verify File Upload without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify File Upload with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -2307,7 +2365,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -2317,13 +2375,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Quantity", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Revision Disabled' checkbox", () => {
@@ -2349,13 +2407,13 @@ context("FORM Field test", () => {
 
       context("Verify Quantity checkbox property", () => {
         it("Verify Quantity without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Quantity with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -2399,7 +2457,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -2409,13 +2467,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Quantity", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Deletion Disabled' checkbox", () => {
@@ -2430,11 +2488,17 @@ context("FORM Field test", () => {
 
       context("Verify Quantity checkbox property", () => {
         it("Verify Quantity without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Quantity with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -2478,7 +2542,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -2488,13 +2552,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Timer", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.get(`button[data-cy="form.builder.timer"]`).click();
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Revision Disabled' checkbox", () => {
@@ -2520,13 +2584,13 @@ context("FORM Field test", () => {
 
       context("Verify Timer checkbox property", () => {
         it("Verify Timer without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Timer with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -2570,7 +2634,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -2580,13 +2644,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Timer", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.get(`button[data-cy="form.builder.timer"]`).click();
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Deletion Disabled' checkbox", () => {
@@ -2601,11 +2665,17 @@ context("FORM Field test", () => {
 
       context("Verify Timer checkbox property", () => {
         it("Verify Timer without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Timer with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -2671,7 +2741,7 @@ context("FORM Field test", () => {
 
       context("Verify Approval Matrix checkbox property", () => {
         it("Verify Approval Matrix with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "Approval Roles"} )
+          cy.fbMouseOverByLabel({ label: "Approval Roles" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "Approval Roles", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "Approval Roles", el: "remove-schema-item" });
         });
@@ -2726,7 +2796,10 @@ context("FORM Field test", () => {
 
       context("Verify Approval Matrix checkbox property", () => {
         it("Verify Approval Matrix with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "Approval Roles", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "Approval Roles", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -2770,7 +2843,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -2780,13 +2853,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add PO Approval Matrix", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "PO Approval Matrix" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Revision Disabled' checkbox", () => {
@@ -2812,13 +2885,13 @@ context("FORM Field test", () => {
 
       context("Verify PO Approval Matrix checkbox property", () => {
         it("Verify PO Approval Matrix without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify PO Approval Matrix with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -2862,7 +2935,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -2872,13 +2945,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add PO Approval Matrix", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "PO Approval Matrix" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Deletion Disabled' checkbox", () => {
@@ -2893,11 +2966,17 @@ context("FORM Field test", () => {
 
       context("Verify PO Approval Matrix checkbox property", () => {
         it("Verify PO Approval Matrix without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify PO Approval Matrix with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -2941,7 +3020,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -2951,13 +3030,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Instructions Media upload", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Instructions Media upload" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Revision Disabled' checkbox", () => {
@@ -2983,13 +3062,13 @@ context("FORM Field test", () => {
 
       context("Verify Instructions Media upload checkbox property", () => {
         it("Verify Instructions Media upload without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Instructions Media upload with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -3033,7 +3112,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -3043,13 +3122,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Instructions Media upload", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Instructions Media upload" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Deletion Disabled' checkbox", () => {
@@ -3064,11 +3143,17 @@ context("FORM Field test", () => {
 
       context("Verify Instructions Media upload checkbox property", () => {
         it("Verify Instructions Media upload without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Instructions Media upload with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -3112,7 +3197,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -3122,13 +3207,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Evidence Media upload", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Evidence Media upload" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Revision Disabled' checkbox", () => {
@@ -3154,13 +3239,13 @@ context("FORM Field test", () => {
 
       context("Verify Evidence Media upload checkbox property", () => {
         it("Verify Evidence Media upload without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Evidence Media upload with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -3204,7 +3289,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -3214,13 +3299,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Evidence Media upload", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Evidence Media upload" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Deletion Disabled' checkbox", () => {
@@ -3235,11 +3320,17 @@ context("FORM Field test", () => {
 
       context("Verify Evidence Media upload checkbox property", () => {
         it("Verify Evidence Media upload without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Evidence Media upload with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -3283,11 +3374,12 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Select 'Document revisions' as options", () => {
-            cy.get("[data-cy=\"testRequirement\"]").type("Visual Alarm Indicator - The system shall use color as a visual indication of alarm type{downarrow}{enter}");
+            cy.get("[data-cy=\"testRequirement\"]")
+              .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -3297,17 +3389,18 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Test Requirement", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Test Requirement" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Select 'Document revisions' as options", () => {
-            cy.get("[data-cy=\"testRequirement\"]").type("Visual Alarm Indicator - The system shall use color as a visual indication of alarm type{downarrow}{enter}");
+            cy.get("[data-cy=\"testRequirement\"]")
+              .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
           });
 
           it("Check 'Revision Disabled' checkbox", () => {
@@ -3333,13 +3426,13 @@ context("FORM Field test", () => {
 
       context("Verify Test Requirement checkbox property", () => {
         it("Verify Test Requirement without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Test Requirement with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -3383,11 +3476,12 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Select 'Document revisions' as options", () => {
-            cy.get("[data-cy=\"testRequirement\"]").type("Visual Alarm Indicator - The system shall use color as a visual indication of alarm type{downarrow}{enter}");
+            cy.get("[data-cy=\"testRequirement\"]")
+              .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -3397,17 +3491,18 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Test Requirement", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Test Requirement" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Select 'Document revisions' as options", () => {
-            cy.get("[data-cy=\"testRequirement\"]").type("Visual Alarm Indicator - The system shall use color as a visual indication of alarm type{downarrow}{enter}");
+            cy.get("[data-cy=\"testRequirement\"]")
+              .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
           });
 
           it("Check 'Deletion Disabled' checkbox", () => {
@@ -3422,11 +3517,17 @@ context("FORM Field test", () => {
 
       context("Verify Test Requirement checkbox property", () => {
         it("Verify Test Requirement without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Test Requirement with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -3492,7 +3593,7 @@ context("FORM Field test", () => {
 
       context("Verify Procedure checkbox property", () => {
         it("Verify Procedure with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "Step #1"} )
+          cy.fbMouseOverByLabel({ label: "Step #1" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "Step #1", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "Step #1", el: "remove-schema-item" });
         });
@@ -3547,7 +3648,10 @@ context("FORM Field test", () => {
 
       context("Verify Procedure checkbox property", () => {
         it("Verify Procedure with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "Step #1", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "Step #1", el: "remove-schema-item", class:
+            "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -3591,7 +3695,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -3601,13 +3705,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Text field with range", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Revision Disabled' checkbox", () => {
@@ -3633,13 +3737,13 @@ context("FORM Field test", () => {
 
       context("Verify Text field with range checkbox property", () => {
         it("Verify Text field with range without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Text field with range with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -3683,7 +3787,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -3693,13 +3797,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Text field with range", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Deletion Disabled' checkbox", () => {
@@ -3714,11 +3818,17 @@ context("FORM Field test", () => {
 
       context("Verify Text field with range checkbox property", () => {
         it("Verify Text field with range without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Text field with range with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -3762,7 +3872,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Select Approvers", () => {
@@ -3771,7 +3881,7 @@ context("FORM Field test", () => {
 
           it("Select Groups", () => {
             cy.get("[data-cy=\"editorConfig.groups\"]").type("Everyone{downarrow}{enter}");
-          })
+          });
 
           it("Click 'Add' button", () => {
             cy.fbAddNewFieldButton();
@@ -3780,13 +3890,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Inline Approval", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Select Approvers", () => {
@@ -3795,7 +3905,7 @@ context("FORM Field test", () => {
 
           it("Select Groups", () => {
             cy.get("[data-cy=\"editorConfig.groups\"]").type("Everyone{downarrow}{enter}");
-          })
+          });
 
           it("Check 'Revision Disabled' checkbox", () => {
             cy.fbSelectCheckboxValue("reviseDisabled");
@@ -3820,13 +3930,13 @@ context("FORM Field test", () => {
 
       context("Verify Inline Approval checkbox property", () => {
         it("Verify Inline Approval without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Inline Approval with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -3870,7 +3980,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Select Approvers", () => {
@@ -3879,7 +3989,7 @@ context("FORM Field test", () => {
 
           it("Select Groups", () => {
             cy.get("[data-cy=\"editorConfig.groups\"]").type("Everyone{downarrow}{enter}");
-          })
+          });
 
           it("Click 'Add' button", () => {
             cy.fbAddNewFieldButton();
@@ -3888,13 +3998,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Inline Approval", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Select Approvers", () => {
@@ -3903,7 +4013,7 @@ context("FORM Field test", () => {
 
           it("Select Groups", () => {
             cy.get("[data-cy=\"editorConfig.groups\"]").type("Everyone{downarrow}{enter}");
-          })
+          });
 
           it("Check 'Deletion Disabled' checkbox", () => {
             cy.fbSelectCheckboxValue("deleteDisabled");
@@ -3917,11 +4027,17 @@ context("FORM Field test", () => {
 
       context("Verify Inline Approval checkbox property", () => {
         it("Verify Inline Approval without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Inline Approval with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -3965,7 +4081,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -3975,13 +4091,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Checkpoint", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Checkpoint" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Revision Disabled' checkbox", () => {
@@ -4007,13 +4123,13 @@ context("FORM Field test", () => {
 
       context("Verify Checkpoint checkbox property", () => {
         it("Verify Checkpoint without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Checkpoint with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -4057,7 +4173,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -4067,13 +4183,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Checkpoint", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Checkpoint" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Deletion Disabled' checkbox", () => {
@@ -4088,11 +4204,17 @@ context("FORM Field test", () => {
 
       context("Verify Checkpoint checkbox property", () => {
         it("Verify Checkpoint without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Checkpoint with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -4136,7 +4258,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -4146,13 +4268,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Create a Label", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Checkpoint" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Revision Disabled' checkbox", () => {
@@ -4178,13 +4300,13 @@ context("FORM Field test", () => {
 
       context("Verify Create a Label checkbox property", () => {
         it("Verify Create a Label without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Create a Label with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -4228,7 +4350,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -4238,13 +4360,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Create a Label", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Checkpoint" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Deletion Disabled' checkbox", () => {
@@ -4259,11 +4381,17 @@ context("FORM Field test", () => {
 
       context("Verify Create a Label checkbox property", () => {
         it("Verify Create a Label without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Create a Label with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -4307,7 +4435,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -4317,13 +4445,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Implementation Task", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Checkpoint" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Revision Disabled' checkbox", () => {
@@ -4349,13 +4477,13 @@ context("FORM Field test", () => {
 
       context("Verify Implementation Task checkbox property", () => {
         it("Verify Implementation Task without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Implementation Task with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -4399,7 +4527,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Click 'Add' button", () => {
@@ -4409,13 +4537,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Implementation Task", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Checkpoint" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Check 'Deletion Disabled' checkbox", () => {
@@ -4430,11 +4558,17 @@ context("FORM Field test", () => {
 
       context("Verify Implementation Task checkbox property", () => {
         it("Verify Implementation Task without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Implementation Task with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -4478,7 +4612,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Select Options", () => {
@@ -4492,13 +4626,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add MPI", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "MPI" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Select Options", () => {
@@ -4528,13 +4662,13 @@ context("FORM Field test", () => {
 
       context("Verify MPI checkbox property", () => {
         it("Verify MPI without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify MPI with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -4578,7 +4712,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Select Options", () => {
@@ -4592,13 +4726,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add MPI", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "MPI" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Select Options", () => {
@@ -4617,11 +4751,17 @@ context("FORM Field test", () => {
 
       context("Verify MPI checkbox property", () => {
         it("Verify MPI without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify MPI with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -4665,7 +4805,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Select Options", () => {
@@ -4679,13 +4819,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Select Document(s)", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Select Document" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Select Options", () => {
@@ -4715,13 +4855,13 @@ context("FORM Field test", () => {
 
       context("Verify Select Document(s) checkbox property", () => {
         it("Verify Select Document(s) without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Select Document(s) with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -4765,7 +4905,7 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Select Options", () => {
@@ -4779,13 +4919,13 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Select Document(s)", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Select Document" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Select Options", () => {
@@ -4804,11 +4944,17 @@ context("FORM Field test", () => {
 
       context("Verify Select Document(s) checkbox property", () => {
         it("Verify Select Document(s) without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Select Document(s) with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -4852,11 +4998,12 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Select Options", () => {
-            cy.get("[data-cy=\"options\"]").type("Visual Alarm Indicator - The system shall use color as a visual indication of alarm type{downarrow}{enter}");
+            cy.get("[data-cy=\"options\"]")
+              .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -4866,17 +5013,18 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Revision Disabled' checkbox ", () => {
           it("Add Select Requirement(s)", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Select Requirement" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Select Options", () => {
-            cy.get("[data-cy=\"options\"]").type("Visual Alarm Indicator - The system shall use color as a visual indication of alarm type{downarrow}{enter}");
+            cy.get("[data-cy=\"options\"]")
+              .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
           });
 
           it("Check 'Revision Disabled' checkbox", () => {
@@ -4902,13 +5050,13 @@ context("FORM Field test", () => {
 
       context("Verify Select Requirement(s) checkbox property", () => {
         it("Verify Select Requirement(s) without 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label1"} );
+          cy.fbMouseOverByLabel({ label: "test label1" } );
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "edit-schema-item" });
           cy.fbVerifyElementVisibileByLabel({ label: "test label1", el: "remove-schema-item" });
         });
 
         it("Verify Select Requirement(s) with 'Revision Disabled' checkbox", () => {
-          cy.fbMouseOverByLabel({ label: "test label2"} )
+          cy.fbMouseOverByLabel({ label: "test label2" } );
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "edit-schema-item" });
           cy.fbVerifyElementNotVisibileByLabel({ label: "test label2", el: "remove-schema-item" });
         });
@@ -4952,11 +5100,12 @@ context("FORM Field test", () => {
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label1" });
+            cy.fbEnterNameValue({ name: "label", value: "test label1" });
           });
 
           it("Select Options", () => {
-            cy.get("[data-cy=\"options\"]").type("Visual Alarm Indicator - The system shall use color as a visual indication of alarm type{downarrow}{enter}");
+            cy.get("[data-cy=\"options\"]")
+              .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -4966,17 +5115,18 @@ context("FORM Field test", () => {
 
         context("Add form fields with 'Deletion Disabled' checkbox ", () => {
           it("Add Select Requirement(s)", () => {
-            cy.fbMouseOverByLabel({ label: "test label1"} );
+            cy.fbMouseOverByLabel({ label: "test label1" } );
             cy.fbClickButton({ el: "form.builder.add.field" });
             cy.fbSelectItemFromNewFieldList({ field: "Select Requirement" });
           });
 
           it("Enter label", () => {
-            cy.fbEnterNameValue({ name:"label", value: "test label2" });
+            cy.fbEnterNameValue({ name: "label", value: "test label2" });
           });
 
           it("Select Options", () => {
-            cy.get("[data-cy=\"options\"]").type("Visual Alarm Indicator - The system shall use color as a visual indication of alarm type{downarrow}{enter}");
+            cy.get("[data-cy=\"options\"]")
+              .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
           });
 
           it("Check 'Deletion Disabled' checkbox", () => {
@@ -4991,11 +5141,17 @@ context("FORM Field test", () => {
 
       context("Verify Select Requirement(s) checkbox property", () => {
         it("Verify Select Requirement(s) without 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label1", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label1", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorError",
+          });
         });
 
         it("Verify Select Requirement(s) with 'Deletion Disabled' checkbox", () => {
-          cy.fbVerifyElementClassByLabel({ label: "test label2", el: "remove-schema-item", class: "MuiSvgIcon-colorDisabled" });
+          cy.fbVerifyElementClassByLabel({
+            label: "test label2", el: "remove-schema-item",
+            class: "MuiSvgIcon-colorDisabled",
+          });
         });
       });
     });
@@ -5056,16 +5212,16 @@ context("FORM Field test", () => {
         });
 
         it("Verify 'Send Email' checkbox", () => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root')
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
             .find("[data-cy=\"fb-control-btn\"]").eq(0)
             .click();
           cy.get(".MuiDialog-container").eq(1).find("[data-cy=\"Email\"]").should("contain", "Email");
           cy.get(".MuiDialog-container").eq(1).find("[data-cy=\"Name\"]").should("contain", "Name");
-          cy.fbClickButton({ el: "form.builder.cancel" })
+          cy.fbClickButton({ el: "form.builder.cancel" });
         });
 
         it("Verify 'Send Email with Supplier' checkbox", () => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil('.MuiDialog-root')
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
             .find("[data-cy=\"fb-control-btn\"]").eq(1)
             .click();
           cy.get(".MuiDialog-container").eq(1).find("[data-cy=\"Email\"]").should("contain", "Email");
@@ -5087,7 +5243,7 @@ context("FORM Field test", () => {
       });
 
       it("Enter document title 'eb-title'", () => {
-        cy.drEnterDocumentTitle({ name: 'eb-title' });
+        cy.drEnterDocumentTitle({ name: "eb-title" });
       });
 
       it("Enter document description 'eb description'", () => {
@@ -5109,28 +5265,28 @@ context("FORM Field test", () => {
 
       context("Add Fields with Copyable value Checkbox", () => {
         it("Add TextField with 'Copyable Value' checkbox", () => {
-          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger('mouseover');
+          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger("mouseover");
           cy.get("[data-cy=\"form.builder.add.field\"]").click();
           cy.fbSelectItemFromNewFieldList({ field: "Text field" });
-          cy.fbEnterNameValue({ name:"label", value: "textfield-wi-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "textfield-wi-copy" });
           cy.fbSelectCheckboxValue("copyableValue");
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByName({ name: "textfield-wi-copy-"} );
+          cy.fbMouseOverByName({ name: "textfield-wi-copy-" } );
         });
 
         it("Add TextField without 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Text field" });
-          cy.fbEnterNameValue({ name:"label", value: "textfield-wo-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "textfield-wo-copy" });
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByName({ name: "textfield-wo-copy-"} );
+          cy.fbMouseOverByName({ name: "textfield-wo-copy-" } );
         });
 
         it("Add Checkbox group with 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
           cy.fbGroupOptions("option1", "option2");
-          cy.fbEnterNameValue({ name:"label", value: "cbg-wi-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "cbg-wi-copy" });
           cy.fbSelectCheckboxValue("copyableValue");
           cy.fbAddNewFieldButton();
           cy.fbMouseOverByLabel({ label: "cbg-wi-copy" });
@@ -5139,7 +5295,7 @@ context("FORM Field test", () => {
         it("Add Checkbox group without 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
-          cy.fbEnterNameValue({ name:"label", value: "cbg-wo-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "cbg-wo-copy" });
           cy.fbGroupOptions("option1", "option2");
           cy.fbAddNewFieldButton();
           cy.fbMouseOverByLabel({ label: "cbg-wo-copy" });
@@ -5148,107 +5304,107 @@ context("FORM Field test", () => {
         it("Add Text Editor with 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
-          cy.fbEnterNameValue({ name:"label", value: "te-wi-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "te-wi-copy" });
           cy.fbSelectCheckboxValue("copyableValue");
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "te-wi-copy"} );
+          cy.fbMouseOverByLabel({ label: "te-wi-copy" } );
         });
 
         it("Add Text Editor without 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
-          cy.fbEnterNameValue({ name:"label", value: "te-wo-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "te-wo-copy" });
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "te-wo-copy"} );
+          cy.fbMouseOverByLabel({ label: "te-wo-copy" } );
         });
 
         it("Add Select Field with 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
-          cy.fbEnterNameValue({ name:"label", value: "sf-wi-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "sf-wi-copy" });
           cy.fbGroupOptions("option1", "option2");
           cy.fbSelectCheckboxValue("copyableValue");
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "sf-wi-copy"} );
+          cy.fbMouseOverByLabel({ label: "sf-wi-copy" } );
         });
 
         it("Add Select Field without 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
-          cy.fbEnterNameValue({ name:"label", value: "sf-wo-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "sf-wo-copy" });
           cy.fbGroupOptions("option1", "option2");
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "sf-wo-copy"} );
+          cy.fbMouseOverByLabel({ label: "sf-wo-copy" } );
         });
 
         it("Add Radio Button group with 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
-          cy.fbEnterNameValue({ name:"label", value: "rbg-wi-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "rbg-wi-copy" });
           cy.fbGroupOptions("option1", "option2");
           cy.fbSelectCheckboxValue("copyableValue");
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "rbg-wi-copy"} );
+          cy.fbMouseOverByLabel({ label: "rbg-wi-copy" } );
         });
 
         it("Add Radio Button group without 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
-          cy.fbEnterNameValue({ name:"label", value: "rbg-wo-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "rbg-wo-copy" });
           cy.fbGroupOptions("option1", "option2");
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "rbg-wo-copy"} );
+          cy.fbMouseOverByLabel({ label: "rbg-wo-copy" } );
         });
 
         it("Add Quantity with 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
-          cy.fbEnterNameValue({ name:"label", value: "q-wi-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "q-wi-copy" });
           cy.fbSelectCheckboxValue("copyableValue");
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "q-wi-copy"} );
+          cy.fbMouseOverByLabel({ label: "q-wi-copy" } );
         });
 
         it("Add Quantity without 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
-          cy.fbEnterNameValue({ name:"label", value: "q-wo-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "q-wo-copy" });
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "q-wo-copy"} );
+          cy.fbMouseOverByLabel({ label: "q-wo-copy" } );
         });
 
         it("Add Timer with 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).click();
-          cy.fbEnterNameValue({ name:"label", value: "t-wi-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "t-wi-copy" });
           cy.fbSelectCheckboxValue("copyableValue");
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "t-wi-copy"} );
+          cy.fbMouseOverByLabel({ label: "t-wi-copy" } );
         });
 
         it("Add Timer without 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).click();
-          cy.fbEnterNameValue({ name:"label", value: "t-wo-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "t-wo-copy" });
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "t-wo-copy"} );
+          cy.fbMouseOverByLabel({ label: "t-wo-copy" } );
         });
 
         it("Add Text field with range with 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
-          cy.fbEnterNameValue({ name:"label", value: "twr-wi-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "twr-wi-copy" });
           cy.fbSelectCheckboxValue("copyableValue");
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "twr-wi-copy"} );
+          cy.fbMouseOverByLabel({ label: "twr-wi-copy" } );
         });
 
         it("Add Text field with range without 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
-          cy.fbEnterNameValue({ name:"label", value: "twr-wo-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "twr-wo-copy" });
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "twr-wo-copy"} );
+          cy.fbMouseOverByLabel({ label: "twr-wo-copy" } );
         });
 
         it("Click create document", () => {
@@ -5282,7 +5438,8 @@ context("FORM Field test", () => {
       });
 
       it("Enter description: 'test description'", () => {
-        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("test description");
+        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
+          .click({ force: true }).clear().type("test description");
       });
 
       it("Add TextFields value", () => {
@@ -5300,9 +5457,11 @@ context("FORM Field test", () => {
       });
 
       it("Add TextEditors value", () => {
-        cy.get("[data-cy^=\"te-wi-copy-\"]").find("div[contenteditable]").click({force: true}).clear().type("te-wi-copy-value");
+        cy.get("[data-cy^=\"te-wi-copy-\"]").find("div[contenteditable]")
+          .click({ force: true }).clear().type("te-wi-copy-value");
         cy.wait(3000);
-        cy.get("[data-cy^=\"te-wo-copy-\"]").find("div[contenteditable]").click({force: true}).clear().type("te-wo-copy-value");
+        cy.get("[data-cy^=\"te-wo-copy-\"]").find("div[contenteditable]")
+          .click({ force: true }).clear().type("te-wo-copy-value");
         cy.wait(3000);
       });
 
@@ -5364,33 +5523,33 @@ context("FORM Field test", () => {
       });
 
       it("Verify TextEditor with Editor values", () => {
-        cy.get("[data-cy^=\"te-wi-copy-\"]").find("div[contenteditable]").should('have.text', 'te-wi-copy-value');
-        cy.get("[data-cy^=\"te-wo-copy-\"]").find("div[contenteditable]").invoke('val').should('be.empty');
+        cy.get("[data-cy^=\"te-wi-copy-\"]").find("div[contenteditable]").should("have.text", "te-wi-copy-value");
+        cy.get("[data-cy^=\"te-wo-copy-\"]").find("div[contenteditable]").invoke("val").should("be.empty");
       });
 
       it("Verify Select fields values", () => {
         cy.get("[name^=\"sf-wi-copy-\"]").should("have.value", "option1");
-        cy.get("[name^=\"sf-wo-copy-\"]").invoke('val').should('be.empty');
+        cy.get("[name^=\"sf-wo-copy-\"]").invoke("val").should("be.empty");
       });
 
       it("Verify Radio button groups values", () => {
         cy.get("[name^=\"rbg-wi-copy-\"]").eq(0).should("have.value", "option1");
-        cy.get("[name^=\"rbg-wo-copy-\"]").eq(0).should('not.be.checked');
+        cy.get("[name^=\"rbg-wo-copy-\"]").eq(0).should("not.be.checked");
       });
 
       it("Verify Quantities values", () => {
         cy.get("[name^=\"q-wi-copy-\"]").should("have.value", "1");
-        cy.get("[name^=\"q-wo-copy-\"]").invoke('val').should('be.empty');
+        cy.get("[name^=\"q-wo-copy-\"]").invoke("val").should("be.empty");
       });
 
       it("Verify Timers values", () => {
         cy.get("[name^=\"t-wi-copy-\"]").should("have.value", "t-wi-copy-value");
-        cy.get("[name^=\"t-wo-copy-\"]").invoke('val').should('be.empty');
+        cy.get("[name^=\"t-wo-copy-\"]").invoke("val").should("be.empty");
       });
 
       it("Verify TextField with range values", () => {
         cy.get("[name^=\"twr-wi-copy-\"]").should("have.value", "2");
-        cy.get("[name^=\"twr-wo-copy-\"]").invoke('val').should('be.empty');
+        cy.get("[name^=\"twr-wo-copy-\"]").invoke("val").should("be.empty");
       });
     });
   });
@@ -5406,7 +5565,7 @@ context("FORM Field test", () => {
       });
 
       it("Enter document title 'eb-title1'", () => {
-        cy.drEnterDocumentTitle({ name: 'eb-title1' });
+        cy.drEnterDocumentTitle({ name: "eb-title1" });
       });
 
       it("Enter document description 'eb description'", () => {
@@ -5428,38 +5587,38 @@ context("FORM Field test", () => {
 
       context("Add Fields with Copyable value Checkbox", () => {
         it("Add Date picker with 'Copyable Value' checkbox", () => {
-          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger('mouseover');
+          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger("mouseover");
           cy.get("[data-cy=\"form.builder.add.field\"]").click();
           cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
-          cy.fbEnterNameValue({ name:"label", value: "dp-wi-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "dp-wi-copy" });
           cy.fbSelectCheckboxValue("copyableValue");
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "dp-wi-copy"} );
+          cy.fbMouseOverByLabel({ label: "dp-wi-copy" } );
         });
 
         it("Add Date picker without 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
-          cy.fbEnterNameValue({ name:"label", value: "dp-wo-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "dp-wo-copy" });
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "dp-wo-copy"} );
+          cy.fbMouseOverByLabel({ label: "dp-wo-copy" } );
         });
 
         it("Add Purchase Order with 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
-          cy.fbEnterNameValue({ name:"label", value: "po-wi-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "po-wi-copy" });
           cy.fbSelectCheckboxValue("copyableValue");
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "po-wi-copy"} );
+          cy.fbMouseOverByLabel({ label: "po-wi-copy" } );
         });
 
         it("Add Purchase Order without 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
-          cy.fbEnterNameValue({ name:"label", value: "po-wo-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "po-wo-copy" });
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "po-wo-copy"} );
+          cy.fbMouseOverByLabel({ label: "po-wo-copy" } );
         });
 
         it("Click create document", () => {
@@ -5489,8 +5648,8 @@ context("FORM Field test", () => {
       });
 
       it("Select template", () => {
-        cy.get('#field-selectType').parent().then(res => {
-          if(res.find("#MultipleFormTemplate-selectDocType").length > 0){
+        cy.get("#field-selectType").parent().then((res) => {
+          if (res.find("#MultipleFormTemplate-selectDocType").length > 0) {
             cy.get("#MultipleFormTemplate-selectDocType").click().type("eb-title1{downarrow}{enter}");
           }
         });
@@ -5501,7 +5660,8 @@ context("FORM Field test", () => {
       });
 
       it("Enter description: 'test description'", () => {
-        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("test description");
+        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
+          .click({ force: true }).clear().type("test description");
       });
 
       it("Add Date pickers value", () => {
@@ -5534,7 +5694,7 @@ context("FORM Field test", () => {
 
     context("Verify fields", () => {
       it("Verify Date pickers values", () => {
-        cy.get("input[name^=\"dp-wi-copy-\"]").invoke('val').should('not.be.empty');
+        cy.get("input[name^=\"dp-wi-copy-\"]").invoke("val").should("not.be.empty");
         cy.get("input[name^=\"dp-wo-copy-\"]").should("have.value", "");
       });
 
@@ -5556,7 +5716,7 @@ context("FORM Field test", () => {
       });
 
       it("Enter document title 'eb-title3'", () => {
-        cy.drEnterDocumentTitle({ name: 'eb-title3' });
+        cy.drEnterDocumentTitle({ name: "eb-title3" });
       });
 
       it("Enter document description 'eb description'", () => {
@@ -5578,10 +5738,10 @@ context("FORM Field test", () => {
 
       context("Add Fields with Copyable value Checkbox", () => {
         it("Add Autocomplete with 'Copyable Value' checkbox", () => {
-          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger('mouseover');
+          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger("mouseover");
           cy.get("[data-cy=\"form.builder.add.field\"]").click();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-          cy.fbEnterNameValue({ name:"label", value: "ac-wi-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "ac-wi-copy" });
           cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
           cy.fbSelectCheckboxValue("copyableValue");
           cy.fbAddNewFieldButton();
@@ -5592,7 +5752,7 @@ context("FORM Field test", () => {
         it("Add Autocomplete without 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-          cy.fbEnterNameValue({ name:"label", value: "ac-wo-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "ac-wo-copy" });
           cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
           cy.fbAddNewFieldButton();
           cy.wait(2000);
@@ -5626,8 +5786,8 @@ context("FORM Field test", () => {
       });
 
       it("Select template", () => {
-        cy.get('#field-selectType').parent().then(res => {
-          if(res.find("#MultipleFormTemplate-selectDocType").length > 0){
+        cy.get("#field-selectType").parent().then((res) => {
+          if (res.find("#MultipleFormTemplate-selectDocType").length > 0) {
             cy.get("#MultipleFormTemplate-selectDocType").click().type("eb-title3{downarrow}{enter}");
           }
         });
@@ -5638,7 +5798,8 @@ context("FORM Field test", () => {
       });
 
       it("Enter description: 'test description'", () => {
-        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("test description");
+        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
+          .click({ force: true }).clear().type("test description");
       });
 
       it("Select Autocompletes", () => {
@@ -5659,7 +5820,7 @@ context("FORM Field test", () => {
 
     context("Verify fields", () => {
       it("Verify Autocompletes values", () => {
-        cy.get("[data-cy^=\"ac-wi-copy-\"]").invoke('val').should('not.be.empty');
+        cy.get("[data-cy^=\"ac-wi-copy-\"]").invoke("val").should("not.be.empty");
         cy.get("[data-cy^=\"ac-wo-copy-\"]").should("have.value", "");
       });
     });
@@ -5676,7 +5837,7 @@ context("FORM Field test", () => {
       });
 
       it("Enter document title 'eb-title4'", () => {
-        cy.drEnterDocumentTitle({ name: 'eb-title4' });
+        cy.drEnterDocumentTitle({ name: "eb-title4" });
       });
 
       it("Enter document description 'eb description'", () => {
@@ -5698,7 +5859,7 @@ context("FORM Field test", () => {
 
       context("Add Fields with Copyable value Checkbox", () => {
         it("Add Approval Matrix with 'Copyable Value' checkbox", () => {
-          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger('mouseover');
+          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger("mouseover");
           cy.get("[data-cy=\"form.builder.add.field\"]").click();
           cy.fbSelectItemFromNewFieldList({ field: "Approval Matrix" });
           cy.fbSelectCheckboxValue("copyableValue");
@@ -5733,8 +5894,8 @@ context("FORM Field test", () => {
       });
 
       it("Select template", () => {
-        cy.get('#field-selectType').parent().then(res => {
-          if(res.find("#MultipleFormTemplate-selectDocType").length > 0){
+        cy.get("#field-selectType").parent().then((res) => {
+          if (res.find("#MultipleFormTemplate-selectDocType").length > 0) {
             cy.get("#MultipleFormTemplate-selectDocType").click().type("eb-title4{downarrow}{enter}");
           }
         });
@@ -5745,7 +5906,8 @@ context("FORM Field test", () => {
       });
 
       it("Enter description: 'test description'", () => {
-        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("test description");
+        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
+          .click({ force: true }).clear().type("test description");
       });
 
       it("Click on 'Add Another Role' button", () => {
@@ -5771,13 +5933,14 @@ context("FORM Field test", () => {
 
     context("Verify fields", () => {
       it("Verify Approval Matrix values", () => {
-        cy.get("[data-cy=\"form.builder.approval.role\"]").parentsUntil("MuiFormControl-root").find("input.MuiInputBase-input").invoke('val').should('not.be.empty');
+        cy.get("[data-cy=\"form.builder.approval.role\"]").parentsUntil("MuiFormControl-root")
+          .find("input.MuiInputBase-input").invoke("val").should("not.be.empty");
       });
 
       it("Verify Approval Matrix fields", () => {
-        cy.contains('Approval Role').should('exist');
-        cy.contains('Approving Users').should('exist');
-        cy.contains('Approving Groups').should('exist');
+        cy.contains("Approval Role").should("exist");
+        cy.contains("Approving Users").should("exist");
+        cy.contains("Approving Groups").should("exist");
       });
     });
   });
@@ -5793,7 +5956,7 @@ context("FORM Field test", () => {
       });
 
       it("Enter document title 'eb-title5'", () => {
-        cy.drEnterDocumentTitle({ name: 'eb-title5' });
+        cy.drEnterDocumentTitle({ name: "eb-title5" });
       });
 
       it("Enter document description 'eb description'", () => {
@@ -5815,7 +5978,7 @@ context("FORM Field test", () => {
 
       context("Add Fields without Copyable value Checkbox", () => {
         it("Add Approval Matrix without 'Copyable Value' checkbox", () => {
-          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger('mouseover');
+          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger("mouseover");
           cy.get("[data-cy=\"form.builder.add.field\"]").click();
           cy.fbSelectItemFromNewFieldList({ field: "Approval Matrix" });
           cy.fbAddNewFieldButton();
@@ -5849,8 +6012,8 @@ context("FORM Field test", () => {
       });
 
       it("Select template", () => {
-        cy.get('#field-selectType').parent().then(res => {
-          if(res.find("#MultipleFormTemplate-selectDocType").length > 0){
+        cy.get("#field-selectType").parent().then((res) => {
+          if (res.find("#MultipleFormTemplate-selectDocType").length > 0) {
             cy.get("#MultipleFormTemplate-selectDocType").click().type("eb-title5{downarrow}{enter}");
           }
         });
@@ -5861,7 +6024,8 @@ context("FORM Field test", () => {
       });
 
       it("Enter description: 'test description'", () => {
-        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("test description");
+        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
+          .click({ force: true }).clear().type("test description");
       });
 
       it("Click on 'Add Another Role' button", () => {
@@ -5887,9 +6051,9 @@ context("FORM Field test", () => {
 
     context("Verify fields", () => {
       it("Verify Approval Matrix fields", () => {
-        cy.contains('Approval Role').should('not.exist');
-        cy.contains('Approving Users').should('not.exist');
-        cy.contains('Approving Groups').should('not.exist');
+        cy.contains("Approval Role").should("not.exist");
+        cy.contains("Approving Users").should("not.exist");
+        cy.contains("Approving Groups").should("not.exist");
       });
     });
   });
@@ -5905,7 +6069,7 @@ context("FORM Field test", () => {
       });
 
       it("Enter document title 'eb-title7'", () => {
-        cy.drEnterDocumentTitle({ name: 'eb-title7' });
+        cy.drEnterDocumentTitle({ name: "eb-title7" });
       });
 
       it("Enter document description 'eb description'", () => {
@@ -5927,11 +6091,11 @@ context("FORM Field test", () => {
 
       context("Add Fields with Copyable value Checkbox", () => {
         it("Add Procedure with 'Copyable Value' checkbox", () => {
-          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger('mouseover');
+          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger("mouseover");
           cy.get("[data-cy=\"form.builder.add.field\"]").click();
           cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "Step #1"} );
+          cy.fbMouseOverByLabel({ label: "Step #1" } );
         });
 
         it("Add Procedure without 'Copyable Value' checkbox", () => {
@@ -5968,8 +6132,8 @@ context("FORM Field test", () => {
       });
 
       it("Select template", () => {
-        cy.get('#field-selectType').parent().then(res => {
-          if(res.find("#MultipleFormTemplate-selectDocType").length > 0){
+        cy.get("#field-selectType").parent().then((res) => {
+          if (res.find("#MultipleFormTemplate-selectDocType").length > 0) {
             cy.get("#MultipleFormTemplate-selectDocType").click().type("eb-title7{downarrow}{enter}");
           }
         });
@@ -5980,15 +6144,18 @@ context("FORM Field test", () => {
       });
 
       it("Enter description: 'test description'", () => {
-        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("test description");
+        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
+          .click({ force: true }).clear().type("test description");
       });
 
       it("Enter Step #1 description", () => {
-        cy.contains("Step #1").parentsUntil(".MuiFormControl-fullWidth").parent().find("div[contenteditable]").click({force: true}).clear().type("step1 description")
+        cy.contains("Step #1").parentsUntil(".MuiFormControl-fullWidth").parent()
+          .find("div[contenteditable]").click({ force: true }).clear().type("step1 description");
       });
 
       it("Enter Step #2 description", () => {
-        cy.contains("Step #2").parentsUntil(".MuiFormControl-fullWidth").parent().find("div[contenteditable]").click({force: true}).clear().type("step2 description")
+        cy.contains("Step #2").parentsUntil(".MuiFormControl-fullWidth").parent()
+          .find("div[contenteditable]").click({ force: true }).clear().type("step2 description");
       });
 
       it("Click 'Save' button", () => {
@@ -6004,8 +6171,10 @@ context("FORM Field test", () => {
 
     context("Verify fields", () => {
       it("Verify Procedure", () => {
-        cy.contains("Step #1").parentsUntil(".MuiFormControl-fullWidth").parent().find("div").eq(-1).invoke('text').should('not.be.empty');
-        cy.contains("Step #2").parentsUntil(".MuiFormControl-fullWidth").parent().find("div").eq(-1).invoke('text').should('be.empty');
+        cy.contains("Step #1").parentsUntil(".MuiFormControl-fullWidth").parent()
+          .find("div").eq(-1).invoke("text").should("not.be.empty");
+        cy.contains("Step #2").parentsUntil(".MuiFormControl-fullWidth").parent()
+          .find("div").eq(-1).invoke("text").should("be.empty");
       });
     });
   });
@@ -6021,7 +6190,7 @@ context("FORM Field test", () => {
       });
 
       it("Enter document title 'eb-title8'", () => {
-        cy.drEnterDocumentTitle({ name: 'eb-title8' });
+        cy.drEnterDocumentTitle({ name: "eb-title8" });
       });
 
       it("Enter document description 'eb description'", () => {
@@ -6043,21 +6212,21 @@ context("FORM Field test", () => {
 
       context("Add Fields with Copyable value Checkbox", () => {
         it("Add Equipment Maintenance with 'Copyable Value' checkbox", () => {
-          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger('mouseover');
+          cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger("mouseover");
           cy.get("[data-cy=\"form.builder.add.field\"]").click();
           cy.fbSelectItemFromNewFieldList({ field: "Equipment Maintenance" });
-          cy.fbEnterNameValue({ name:"label", value: "em-wi-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "em-wi-copy" });
           // cy.contains("Preventative Maintenance").click();
           cy.get("input[value=\"preventativeMaintenance\"]").click();
           cy.fbSelectCheckboxValue("copyableValue");
           cy.fbAddNewFieldButton();
-          cy.fbMouseOverByLabel({ label: "em-wi-copy"} );
+          cy.fbMouseOverByLabel({ label: "em-wi-copy" } );
         });
 
         it("Add Equipment Maintenance without 'Copyable Value' checkbox", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
           cy.fbSelectItemFromNewFieldList({ field: "Equipment Maintenance" });
-          cy.fbEnterNameValue({ name:"label", value: "em-wo-copy" });
+          cy.fbEnterNameValue({ name: "label", value: "em-wo-copy" });
           // cy.contains("Preventative Maintenance").click();
           cy.get("input[value=\"preventativeMaintenance\"]").click();
           cy.fbAddNewFieldButton();
@@ -6090,8 +6259,8 @@ context("FORM Field test", () => {
       });
 
       it("Select template", () => {
-        cy.get('#field-selectType').parent().then(res => {
-          if(res.find("#MultipleFormTemplate-selectDocType").length > 0){
+        cy.get("#field-selectType").parent().then((res) => {
+          if (res.find("#MultipleFormTemplate-selectDocType").length > 0) {
             cy.get("#MultipleFormTemplate-selectDocType").click().type("eb-title8{downarrow}{enter}");
           }
         });
@@ -6102,7 +6271,8 @@ context("FORM Field test", () => {
       });
 
       it("Enter description: 'test description'", () => {
-        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").click({force: true}).clear().type("test description");
+        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
+          .click({ force: true }).clear().type("test description");
       });
 
       it("Select radio button of with copyableValue checkbox Equipment Maintenance", () => {
@@ -6110,7 +6280,8 @@ context("FORM Field test", () => {
       });
 
       it("Enter Justification of with copyableValue checkbox Equipment Maintenance", () => {
-        cy.get("[data-cy^=\"em-wi-copy-\"]").find("div[contenteditable]").click({force: true}).clear().type("Justification1");
+        cy.get("[data-cy^=\"em-wi-copy-\"]").find("div[contenteditable]")
+          .click({ force: true }).clear().type("Justification1");
       });
 
       it("Select radio button of without copyableValue checkbox Equipment Maintenance", () => {
@@ -6118,7 +6289,8 @@ context("FORM Field test", () => {
       });
 
       it("Enter Justification of without copyableValue checkbox Equipment Maintenance", () => {
-        cy.get("[data-cy^=\"em-wo-copy-\"]").find("div[contenteditable]").click({force: true}).clear().type("Justification2");
+        cy.get("[data-cy^=\"em-wo-copy-\"]").find("div[contenteditable]")
+          .click({ force: true }).clear().type("Justification2");
       });
 
       it("Click 'Save' button", () => {
@@ -6134,8 +6306,9 @@ context("FORM Field test", () => {
 
     context("Verify fields", () => {
       it("Verify Equipment Maintenance", () => {
-        cy.get("[data-cy^=\"em-wi-copy-\"]").find("div[contenteditable]").parent().find("div").eq(-1).invoke('text').should('not.be.empty');
-        cy.get("input[name^=\"em-wo-copy-\"]").eq(-1).should('not.be.checked');
+        cy.get("[data-cy^=\"em-wi-copy-\"]").find("div[contenteditable]").parent()
+          .find("div").eq(-1).invoke("text").should("not.be.empty");
+        cy.get("input[name^=\"em-wo-copy-\"]").eq(-1).should("not.be.checked");
       });
     });
   });
