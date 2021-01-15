@@ -1,14 +1,14 @@
 import { Box, Button, createStyles, InputLabel, makeStyles, RadioGroup, Theme } from "@material-ui/core";
 import { Field, FormikProps } from "formik";
 import React from "react";
-import { AsyncState } from "../../../../../state/types";
-import RadioButton from "../../../../components/forms/fields/RadioButton";
-import FormProgress from "../../../../components/forms/FormProgress";
-import FormWrapper from "../../../../components/forms/FormWrapper";
-import Text from "../../../../components/Text";
-import Colors from "../../../../layout/theme/utils/colors";
+import { AsyncState } from "../../../../state/types";
+import RadioButton from "../../../components/forms/fields/RadioButton";
+import FormProgress from "../../../components/forms/FormProgress";
+import FormWrapper from "../../../components/forms/FormWrapper";
+import Text from "../../../components/Text";
+import Colors from "../../../layout/theme/utils/colors";
 
-interface Props extends FormikProps<DocumentType> {
+interface Props extends FormikProps<any> {
   asyncState: AsyncState;
 }
 

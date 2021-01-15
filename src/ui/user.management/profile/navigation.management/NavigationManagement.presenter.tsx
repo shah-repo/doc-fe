@@ -1,11 +1,15 @@
 import { Box, Button, createStyles, InputLabel, makeStyles, TextareaAutosize, Theme } from "@material-ui/core";
 import { Field, FormikProps } from "formik";
 import React from "react";
+import { AsyncState } from "../../../../state/types";
+import FormProgress from "../../../components/forms/FormProgress";
 import FormWrapper from "../../../components/forms/FormWrapper";
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
 
-type Props = FormikProps<DocumentType>;
+interface Props extends FormikProps<any>{
+  asyncState: AsyncState;
+}
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,6 +32,7 @@ export const NavigationManagementPresenter: React.FunctionComponent<Props> = ({
   dirty,
   resetForm,
   initialValues,
+  asyncState,
 }) => {
   const classes = styles();
 
@@ -51,6 +56,9 @@ export const NavigationManagementPresenter: React.FunctionComponent<Props> = ({
             </>
           )}
         </Field>
+        <Box display="flex" justifyContent="flex-end">
+          <FormProgress asyncState={asyncState} />
+        </Box>
         <Box display="flex" justifyContent="flex-end">
           <Button type="submit" variant="outlined">
             <Text translation={"common.save"} />
