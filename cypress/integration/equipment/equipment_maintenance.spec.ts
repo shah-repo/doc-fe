@@ -577,6 +577,7 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
         cy.get("div[aria-rowindex=\"1\"]").click();
       });
+      cy.wait(5000);
     });
 
     it("Check Calibration document existance", () => {

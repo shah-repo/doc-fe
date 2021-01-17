@@ -103,7 +103,8 @@ Cypress.Commands.add("atchUploadRedlineAttachment", (params: {fileName: string }
 Cypress.Commands.add("atchSetPrimaryAttachment", (params: {fileName: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.SetPrimaryAttachment, () => {
     cy.get(`button[title="${params.fileName}"]`).rightclick();
-    cy.get("[data-cy=\"set.attachment.as.primary\"]", { timeout: 1000 }).click();
+    cy.wait(500);
+    cy.get("[data-cy=\"set.attachment.as.primary\"]").click();
   });
 });
 

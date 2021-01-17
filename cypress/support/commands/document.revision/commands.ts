@@ -244,6 +244,7 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params:
     () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
     });
+  cy.wait(500);
   if (params === undefined)
   {
     cy.checkToastMessage({ exists: false });
@@ -297,6 +298,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExi
     [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
+  cy.wait(500);
   if (params === undefined)
   {
     cy.checkToastMessage({ exists: false });
@@ -311,7 +313,6 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExi
       cy.checkToastMessage({ exists: false });
     }
   }
-  cy.wait(500);
 });
 
 Cypress.Commands.add("drClickCreateSupplierWithApiCall", () => {

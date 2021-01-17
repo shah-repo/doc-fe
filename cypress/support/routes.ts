@@ -66,7 +66,8 @@ export enum CyRoutes {
   PatchDocSecurity = "PatchDocSecurity",
   GetRevisionDocTypeGroupOptions = "GetRevisionDocTypeGroupOptions",
   PostDocRev = "PostDocRev",
-  GroupGet = "GroupGet"
+  GroupGet = "GroupGet",
+  GetDocRevDisplayStatus = "GetDocRevDisplayStatus"
 }
 
 export const routes: ICyRoutes =   {
@@ -160,6 +161,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/statuses*",
+    },
+  },
+  GetDocRevDisplayStatus: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions?displayStatus*",
     },
   },
   GetDocRevDocTypeCategory: {
@@ -346,6 +353,10 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/*/aggregated_audit",
+    },
+    callConfig: {
+      requestTimeout: 15 * 1000,
+      responseTimeout: 20 * 1000,
     },
   },
   GetDocAudit: {

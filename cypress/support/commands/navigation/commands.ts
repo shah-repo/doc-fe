@@ -57,12 +57,14 @@ Cypress.Commands.add("navigToDocTypeManagement", () => {
 });
 
 Cypress.Commands.add("navigToRecords", () => {
-  cy.navigToNestedItem({
-    navigItems: [
-      NavigationItems.DASHBOARD,
-      NavigationItems.DOCUMENT_CONTROL,
-      NavigationItems.RECORDS,
-    ],
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevDocTypeCategory, CyRoutes.GetDocRevStatusesCategory], () => {
+    cy.navigToNestedItem({
+      navigItems: [
+        NavigationItems.DASHBOARD,
+        NavigationItems.DOCUMENT_CONTROL,
+        NavigationItems.RECORDS,
+      ],
+    });
   });
 });
 
@@ -89,17 +91,19 @@ Cypress.Commands.add("navigToEquipment", () => {
 });
 
 Cypress.Commands.add("navigToDocumentList", () => {
-  cy.wrapWithWaitOnApiCall(
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.GetDocRevStatusesCategory,
     CyRoutes.GetDocumentTypes,
-    () => {
-      cy.navigToNestedItem({
-        navigItems: [
-          NavigationItems.DASHBOARD,
-          NavigationItems.DOCUMENT_CONTROL,
-          NavigationItems.DOCUMENT_LIST,
-        ],
-      });
+    CyRoutes.GetDocRevDisplayStatus],
+  () => {
+    cy.navigToNestedItem({
+      navigItems: [
+        NavigationItems.DASHBOARD,
+        NavigationItems.DOCUMENT_CONTROL,
+        NavigationItems.DOCUMENT_LIST,
+      ],
     });
+  });
 });
 
 Cypress.Commands.add("navigToApprovalRequestList", () => {
