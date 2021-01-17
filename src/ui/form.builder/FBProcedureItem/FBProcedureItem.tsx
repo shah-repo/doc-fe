@@ -15,6 +15,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   onClick,
   handleRemove,
   getItem,
+  getLot,
   dialogState,
   isPreview,
   disabled,
@@ -90,6 +91,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
                 locale={`form.builder.procedure.${type}.title`}
                 values={{
                   title: getItem?.(item.title),
+                  lot: getLot?.(item.partLot),
                   quantity: item.quantity || "form.builder.none",
                   unit: item.unit,
                 }}
