@@ -5,7 +5,7 @@ import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { isEmpty } from "lodash";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBButton, FBDialog, FBFileUpload, FBMapWrapper, FBMediaAlbumField, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemProps, FBProvider, FBText } from "..";
+import { FBButton, FBDialog, FBFilesPresenter, FBMapWrapper, FBMediaAlbumField, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemProps, FBProvider, FBText } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { FBFormMode } from "../FBForm";
 import { FBProcedureItemType } from "./FBProcedureItem.types";
@@ -131,11 +131,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
               pt={0}
               pb={0}
             >
-              <FBFileUpload
-                name="viewAttachments"
-                viewMode={true}
-                attachmentIds={item.attachments?.map((e) => e.id)}
-              />
+              <FBFilesPresenter files={item.attachments} mode="raw"/>
             </Box>
           </Box>
         )}
