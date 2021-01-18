@@ -20,6 +20,7 @@ const FBFileUpload: React.FunctionComponent<FBFileUploadProps> = ({
       {!isEmpty(files) && (
         <Box mt={2} display="flex" flexDirection="row" flexWrap="wrap">
           <FBFilesPresenter
+            boxProps={{ mt: 2 }}
             {...{ files }}
           />
         </Box>
