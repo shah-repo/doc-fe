@@ -162,6 +162,8 @@ ENV CYPRESS_CACHE_FOLDER=/opt/app/cypress/cache/cypressLib
 RUN npm install -g "cypress@5.3.0"
 RUN cypress verify
 RUN sed -i -e "s|api_url:.*$|api_url: \"http://localhost:1234\"|g" /opt/app/cypress/cache/cypressLib/*/Cypress/resources/app/packages/server/config/app.yml
+RUN Xvfb :99 &
+RUN DISPLAY=:99
 
 # COPY package*.json ./
 # COPY yarn*.lock ./
