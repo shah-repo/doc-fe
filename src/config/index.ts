@@ -19,6 +19,7 @@ const DEFAULTS = {
   ENV_NAME: "",
   DATADOG_APPLICATION_ID: "",
   DATADOG_CLIENT_TOKEN: "",
+  CONSOLE_TOAST: false,
 };
 
 
@@ -114,6 +115,10 @@ class Config {
 
   public static get isSandbox(): boolean {
     return this.get("ENV_NAME") === "SANDBOX";
+  }
+
+  public static get consoleToastsEnabled(): boolean {
+    return this.get("CONSOLE_TOAST") === "true";
   }
 }
 
