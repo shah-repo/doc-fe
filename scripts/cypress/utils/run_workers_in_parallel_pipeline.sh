@@ -11,7 +11,7 @@ LIST_OF_SPECS=(
   'cypress/integration/document.revision/document_sequential_numbering.spec.ts'
   'cypress/integration/document.revision/document_voiding.spec.ts'
 )
-LIST_OF_SPECS_SERIALIZED=$(printf ",%s" "${LIST_OF_SPECS[@]}")
+export LIST_OF_SPECS_SERIALIZED=$(printf ",%s" "${LIST_OF_SPECS[@]}")
 
 export ENLIL_WORKER_LOG_FILE="$DIR_REPORTS/worker.log"
 
