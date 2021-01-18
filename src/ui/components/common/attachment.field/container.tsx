@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { connect } from "react-redux";
 import { Attachment, attachmentsActions } from "../../../../state/ducks/attachments";
+import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 import { ApplicationState } from "../../../../state/reducers";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
@@ -65,10 +66,15 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       toastError(error as string);
     },
   });
+  
+  const handleUpload = (files: File[], lineType, cleanCopyRequired) => {
 
-  const handleUpload = (files: File[], lineType, cleanCopRequired) => {
     if (files.length === 0) {
       return;
+    }
+
+    if (lineType === LINE_TYPES.RED_LINE) {
+      cleanCopyRequired = true;
     }
 
     const file = files.pop();
@@ -76,8 +82,8 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       return;
     }
     setIsUploading(true);
-    async.start(upload, file, lineType, async, cleanCopRequired);
-    handleUpload(files, lineType, cleanCopRequired);
+    async.start(upload, file, lineType, async, cleanCopyRequired);
+    handleUpload(files, lineType, cleanCopyRequired);
   };
 
   const onChange = (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => {
