@@ -41,6 +41,10 @@
         {
           "name": "REACT_APP_DATADOG_CLIENT_TOKEN",
           "value": ""
+        },
+        {
+          "name": "REACT_APP_CONSOLE_TOAST",
+          "value": ""
         }
       ],
       "logConfiguration": {
