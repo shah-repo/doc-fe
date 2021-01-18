@@ -1,4 +1,3 @@
-import { Box } from "@material-ui/core";
 import { isEmpty } from "lodash";
 import React from "react";
 import { FBFileField, FBFilesPresenter, FBFileUploadProps, FBInput, FBProvider } from "..";
@@ -18,12 +17,10 @@ const FBFileUpload: React.FunctionComponent<FBFileUploadProps> = ({
         <FBFileField key={`fb-attachment-field-${name}`} {...{ name, disabled }} />
       )}
       {!isEmpty(files) && (
-        <Box mt={2} display="flex" flexDirection="row" flexWrap="wrap">
-          <FBFilesPresenter
-            boxProps={{ mt: 2 }}
-            {...{ files }}
-          />
-        </Box>
+        <FBFilesPresenter
+          boxProps={{ mt: 2 }}
+          {...{ files }}
+        />
       )}
     </FBProvider>
   </FBInput>
