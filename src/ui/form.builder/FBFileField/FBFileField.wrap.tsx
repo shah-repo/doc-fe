@@ -4,6 +4,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FBFileFieldProps, FBFileFieldState } from ".";
 import { FB } from "..";
+import { toastError } from "../../components/notifications";
 
 export const withFBAttachmentField = <T extends FBFileFieldProps>(
   Component: React.FunctionComponent<T>,
@@ -29,7 +30,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       });
 
       if (!isEmpty(invalidFiles)) {
-        alert(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ", ")}`);
+        toastError(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ", ")}`);
       }
 
       fileFieldState?.upload(validFiles);

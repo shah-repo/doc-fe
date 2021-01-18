@@ -21,6 +21,7 @@ import useDialog from "../../../hooks/useDialog";
 import { Translation } from "../../../translations/types";
 import { useFormContext } from "../../forms/FormContext";
 import { withFormik } from "../../hoc/formik";
+import { toastError } from "../../notifications";
 import PasswordDialog from "../../password/dialog";
 import { Password } from "../../password/types";
 import { AttachmentRedLineWarningDialog } from "../attachment.redline.warning/dialog";
@@ -92,7 +93,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       setPassword(undefined);
     },
     onError: (message) => {
-      alert(message);
+      message && toastError(message as unknown as string);
       setPassword(undefined);
     },
   });

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FB, FBPOReceiveFormProps } from "..";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import { toastError } from "../../components/notifications";
 import useGetDocTypeByAcronym from "../../hooks/useGetDocTypeByAcronym";
 import FBPOReceiveFormState from "./FBPOReceiveForm.state";
 
@@ -47,7 +48,7 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
         dialogState?.closeDialog();
       } catch (e) {
         if (isString(e.message)) {
-          alert(intl.formatMessage({ id: e.message }));
+          toastError(intl.formatMessage({ id: e.message }));
         }
       }
     };

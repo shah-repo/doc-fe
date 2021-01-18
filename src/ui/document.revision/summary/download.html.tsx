@@ -3,6 +3,7 @@ import { useIntl } from "react-intl";
 import { AttachmentDownloadResponse, attachmentsActions } from "../../../state/ducks/attachments";
 import { PDF } from "../../../state/ducks/documentRevisions";
 import AsyncButton from "../../components/AsyncButton";
+import { toastError } from "../../components/notifications";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 
@@ -20,7 +21,7 @@ export const DownloadHTML: React.FunctionComponent<Props> = ({
       window.open(downloadInfo?.url, "_blank");
     },
     onError: () => {
-      alert(intl.formatMessage({ id: "document.revision.download.html.error" }));
+      toastError(intl.formatMessage({ id: "document.revision.download.html.error" }));
     },
   });
 

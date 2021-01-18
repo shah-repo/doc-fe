@@ -2,6 +2,7 @@ import axios from "axios";
 import { filter, find, get, isEmpty, isUndefined, pick, size, sortBy, union, uniqBy } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { apiClient, FBMediaAlbumFieldConstructor, FBMediaAlbumFieldMode, FBMediaAlbumFieldStore, FBMediaFile, FBMediaProps, FBMediaUrlProps, FBWorkspaceState } from "..";
+import { toastError } from "../../components/notifications";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 
 export class FBMediaAlbumFieldState {
@@ -188,7 +189,7 @@ export class FBMediaAlbumFieldState {
   @action private error = (_error) => {
     this.setLoading(false);
     const { message } = _error;
-    alert(message);
+    toastError(message);
   };
 
   @action private setLoading = (state: boolean) => set(this, "loading", state);

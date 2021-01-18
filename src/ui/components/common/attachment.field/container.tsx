@@ -88,14 +88,14 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
         const type = file.name.split(".").pop();
         if (type === "doc") {
           !isUserAlertedNoDocFiles &&
-           alert(intl.formatMessage({ id: "common.attachment.form.DOCERROR" }));
+           toastError(intl.formatMessage({ id: "common.attachment.form.DOCERROR" }));
           isUserAlertedNoDocFiles = true;
           return false;
         }
 
         if (type !== "docx" && cleanCopyRequired) {
           !isUserAlrtedCleanCopyMismatch &&
-          alert(intl.formatMessage({ id: "common.attachment.form.Create.Clean.Copy.Error" }));
+          toastError(intl.formatMessage({ id: "common.attachment.form.Create.Clean.Copy.Error" }));
           isUserAlrtedCleanCopyMismatch = true;
           return false;
         }

@@ -1,5 +1,6 @@
 import { get } from "lodash";
 import React from "react";
+import { toastError } from "../../../components/notifications";
 import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 import { FBValidatorOptionProps } from "../../types/validation/validatorOption";
 import { withOnChange } from "../common/withOnChange";
@@ -24,7 +25,7 @@ export const withIndicatorOnChange = <T extends FBValidatorOptionProps>(
       onChange && onChange(ev, value);
       const delimiter = get(indicator, "validatorDelimiter");
       if (!delimiter) {
-        return alert("Indicator must have delimiter defined");
+        return toastError("Indicator must have delimiter defined");
       }
       if (indicator?.optionId === "4") {
         value = value.documentTypeAcronym;

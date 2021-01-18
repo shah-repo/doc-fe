@@ -3,6 +3,7 @@ import { camelCase, concat, Dictionary, dropRight, get, includes, isUndefined, j
 import { action, computed, observable, set } from "mobx";
 import Validator from "validatorjs";
 import { FBSchemaProps } from "../..";
+import { toastError } from "../../../components/notifications";
 import { DATA_HELPER_CALLBACK_NAME } from "../../../remoteValidators/interfaces";
 import { FBValidatorConfigProps, FBValidatorTemplate } from "../../types/validation/validatorDialog";
 import FBStore from "./FBStore";
@@ -163,7 +164,7 @@ export class FormBuilderDynamicValidatorStore {
           // eslint-disable-next-line no-eval
           customValFn = eval(Base64.atob(customValidator.fn));
         } catch (error) {
-          alert("An error occurred in validator function body: " + error);
+          toastError("An error occurred in validator function body: " + error);
         }
 
         validator.registerAsyncImplicit(
