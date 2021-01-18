@@ -606,15 +606,16 @@ context("Equipment maintenance test", () => {
 
   context("Check equipment calibration history on maintenance document", () => {
     it("Navig to Equipment", () => {
+      cy.navigToDashboard();
       cy.navigToEquipment();
     });
 
     it("Verify 'CAL DUE DATE'", () => {
-      cy.get("div[aria-rowindex=\"1\"]").should("contain.text", CAL_DUE_DATE);
+      cy.get("div[aria-rowindex=\"1\"]>div:nth-child(6)").should("contain.text", CAL_DUE_DATE);
     });
 
     it("Verify 'PM DUE DATE'", () => {
-      cy.get("div[aria-rowindex=\"1\"]").should("contain.text", PM_DUE_DATE);
+      cy.get("div[aria-rowindex=\"1\"]>div:nth-child(7)").should("contain.text", PM_DUE_DATE);
     });
 
     it("Select 'Equipment maintenance document'", () => {
