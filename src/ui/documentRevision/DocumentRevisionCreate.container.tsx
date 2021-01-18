@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
-import { connect, useDispatch } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, FBOutputDocumentType, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
 import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
@@ -76,10 +76,12 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   loadDocTypes,
   match,
 }) => {
-  const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const dispatch = useDispatch();
   const { pmFormId } = match.params;
+  const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const isCreateMaintenance = match.path.includes("create_maintenance");
+  const pmForm = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocumentRevision(state, pmFormId || ""));
 
   const initialValues = useMemo(() => {
     if (type === "newVersion") {
@@ -106,7 +108,14 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
 
   if (isCreateMaintenance) {
     const { docRevId, equipmentSection } = match.params;
+    const docType = (pmForm?.formTemplate?.outputDocumentTypes || [])[0] as FBOutputDocumentType;
 
+    if (docType) {
+      initialValues.document = {
+        ...initialValues.document,
+        documentType: docType,
+      };
+    }
     initialValues.parentEquipment = {
       id: docRevId,
     };
@@ -159,6 +168,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
         type,
         isNewVersion,
         pmFormId,
+        pmForm,
       }}
     />
   );
