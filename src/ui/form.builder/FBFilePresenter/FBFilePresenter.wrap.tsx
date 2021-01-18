@@ -1,5 +1,4 @@
 import { reaction } from "mobx";
-import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
 import { useIntl } from "react-intl";
 import { FB, FBDialogState, FBFilePresenterColor, FBFilePresenterDownloadType, FBFilePresenterProps, FBFilePresenterState, FBFilePreview } from "..";
@@ -104,11 +103,6 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     onMouseOver = () => filePresenterState?.setToolsVisible(true);
     onMouseLeave = () => filePresenterState?.setToolsVisible(false);
 
-    useObserver(() => {
-      loading = filePresenterState?.loading;
-      toolsVisible = filePresenterState?.toolsVisible;
-    });
-
     // File menu items
     menuItems = [{
       text: "form.builder.download.file",
@@ -127,6 +121,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
 
     return Component({
       ...(props as T),
+      filePresenterState,
       handleDownload,
       handleIconClick,
       handleRemove,

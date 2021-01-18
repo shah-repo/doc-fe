@@ -3,7 +3,7 @@ import { first } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { Fragment } from "react";
 import { Audit } from "../../state/ducks/audit";
-import { FB, FBFileUploadState } from "../form.builder";
+import { FB, FBFilesPresenterState } from "../form.builder";
 
 interface OwnProps {
   audit: Audit;
@@ -17,7 +17,7 @@ export const AuditAttachment: React.FunctionComponent<Props> = ({
   audit, loading,
 }) => {
 
-  const attachmentState = FB.useRef(FBFileUploadState);
+  const attachmentState = FB.useRef(FBFilesPresenterState);
   const { nextValue, previousValue } = audit;
   let auditValue: any = nextValue;
   if (auditValue === "undefined") {
@@ -31,17 +31,17 @@ export const AuditAttachment: React.FunctionComponent<Props> = ({
     } catch {
       auditValue.push(auditValue);
     }
-    attachmentState.getAttachments(auditValue);
+    attachmentState.getFiles(auditValue);
   }, []);
 
   useObserver(() => {
-    loading = attachmentState.attachmentApi.loading;
+    loading = attachmentState.filesApi.loading;
   });
 
   return (
     <Fragment>
       {loading && <CircularProgress size={12} />}
-      {!loading && <div>{first(attachmentState.fetchedFiles)?.name}</div>}
+      {!loading && <div>{first(attachmentState.filesApi.data)?.name}</div>}
     </Fragment>
   );
 };
