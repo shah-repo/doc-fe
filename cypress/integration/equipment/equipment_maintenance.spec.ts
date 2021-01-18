@@ -15,6 +15,12 @@ const SECOND_USER = USERS[3];
 const THIRD_USER = USERS[4];
 const INDIVIDUAL_USER = USERS[5];
 const IMPORTER_USER = USERS[6];
+const CAL_DUE_DATE = moment().tz("America/Los_Angeles")
+  .add(5, "days")
+  .format("l");
+const PM_DUE_DATE = moment().tz("America/Los_Angeles")
+  .add(10, "days")
+  .format("l");
 
 let createdCompany;
 let loginResponse;
@@ -223,6 +229,7 @@ context("Equipment maintenance test", () => {
                   "ON_STATE_TO_IN_REVIEW",
                 ],
                 deleteDisabled: true,
+                deleteInFormDisabled: true,
               },
               {
                 name: "equipment_id",
@@ -236,6 +243,7 @@ context("Equipment maintenance test", () => {
                   "ON_STATE_TO_IN_REVIEW",
                 ],
                 deleteDisabled: true,
+                deleteInFormDisabled: true,
               },
               {
                 name: "equipment_maintainer",
@@ -249,11 +257,24 @@ context("Equipment maintenance test", () => {
                   "ON_STATE_TO_IN_REVIEW",
                 ],
                 deleteDisabled: true,
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "fb-equipment_due_date",
+                type: "datepicker",
+                index: 3,
+                label: "Completion Date",
+                rules: "required",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
               },
               {
                 name: "fb-requipment-maintenance-section",
                 type: "textfield",
-                index: 3,
+                index: 4,
                 label: "Equipment Maintenance Section",
                 rules: "required",
                 hidden: true,
@@ -261,6 +282,7 @@ context("Equipment maintenance test", () => {
                   "ON_STATE_TO_IN_REVIEW",
                 ],
                 deleteDisabled: true,
+                deleteInFormDisabled: true,
               },
               {
                 label: "form.builder.approvals",
@@ -268,7 +290,7 @@ context("Equipment maintenance test", () => {
                 deleteDisabled: true,
                 name: "fb-approvals-ki5yh7ba",
                 uniqueSchemaItem: true,
-                index: 4,
+                index: 5,
               },
             ],
           },
@@ -466,6 +488,13 @@ context("Equipment maintenance test", () => {
       cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).click();
     });
 
+    it("Fill 'Completion Date'", () => {
+      cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").click();
+      cy.wait(500);
+      cy.get("button.MuiPickersDay-current").click();
+      cy.wait(500);
+    });
+
     it("Create 'Preventative maintenance document'", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
@@ -496,6 +525,7 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
         cy.get("div[aria-rowindex=\"1\"]").click();
       });
+      cy.wait(5000);
     });
 
     it("Check preventative maintenance document existance", () => {
@@ -504,13 +534,20 @@ context("Equipment maintenance test", () => {
         .contains("MR-00001 - Preventative maintenance document");
     });
 
+    // it("Check preventative maintenance status is in complience for next 10 days", () => {
+    //   const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
+    //     .add(10, "days")
+    //     .format("ddd MMM DD YYYY");
+    //   cy.get("[data-cy=\"maintenance.status\"]")
+    //     .eq(0)
+    //     .contains(`In Compliance - Due Date: ${prevMaintenanceComplianceDate}`);
+    // });
+
+
     it("Check preventative maintenance status is in complience for next 10 days", () => {
-      const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
-        .add(10, "days")
-        .format("ddd MMM DD YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(0)
-        .contains(`In Compliance - Due Date: ${prevMaintenanceComplianceDate}`);
+        .contains("In Compliance");
     });
   });
 
@@ -547,6 +584,13 @@ context("Equipment maintenance test", () => {
       cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).click();
     });
 
+    it("Fill 'Completion Date'", () => {
+      cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").click();
+      cy.wait(500);
+      cy.get("button.MuiPickersDay-current").click();
+      cy.wait(500);
+    });
+
     it("Create 'Calibration document'", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
@@ -570,7 +614,16 @@ context("Equipment maintenance test", () => {
 
   context("Check equipment calibration history on maintenance document", () => {
     it("Navig to Equipment", () => {
+      cy.navigToDashboard();
       cy.navigToEquipment();
+    });
+
+    it("Verify 'CAL DUE DATE'", () => {
+      cy.get("div[aria-rowindex=\"1\"]>div:nth-child(6)").should("contain.text", CAL_DUE_DATE);
+    });
+
+    it("Verify 'PM DUE DATE'", () => {
+      cy.get("div[aria-rowindex=\"1\"]>div:nth-child(7)").should("contain.text", PM_DUE_DATE);
     });
 
     it("Select 'Equipment maintenance document'", () => {
@@ -586,13 +639,19 @@ context("Equipment maintenance test", () => {
         .contains("MR-00002 - Calibration document");
     });
 
+    // it("Check calibration status is in complience for next 5 days", () => {
+    //   const calibrationComplianceDate = moment().tz("America/Los_Angeles")
+    //     .add(5, "days")
+    //     .format("ddd MMM DD YYYY");
+    //   cy.get("[data-cy=\"maintenance.status\"]")
+    //     .eq(1)
+    //     .contains(`In Compliance - Due Date: ${calibrationComplianceDate}`);
+    // });
+
     it("Check calibration status is in complience for next 5 days", () => {
-      const calibrationComplianceDate = moment().tz("America/Los_Angeles")
-        .add(5, "days")
-        .format("ddd MMM DD YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(1)
-        .contains(`In Compliance - Due Date: ${calibrationComplianceDate}`);
+        .contains("In Compliance");
     });
 
     it("Verify status is 'Released'", () => {

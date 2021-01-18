@@ -53,6 +53,8 @@ definitions:
         artifacts:
           - eslint-results/**
         script:
+          - yarn install --frozen-lockfile
+          - ./aws/bash_scripts/runUnusedExportsCheck.sh
           - ./aws/bash_scripts/runLinter.sh
 
     - step: &RUN_TESTS
@@ -65,6 +67,7 @@ definitions:
           - test-results/**
           - jest-config/**
         script:
+          - yarn install --frozen-lockfile
           - ./aws/bash_scripts/runTests.sh
     #
     # DEV
@@ -215,7 +218,7 @@ pipelines:
           - step: *BUILD_SANDBOX
       - step: *DEPLOY_SANDBOX
 
-    release/20.28.3:
+    release/20.28.4:
       - parallel:
           - step: *RUN_TESTS
           - step: *RUN_LINTER

@@ -10,6 +10,7 @@ import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { Translation } from "../../../translations/types";
+import { toastError } from "../../notifications";
 import PasswordDialog from "../../password/dialog";
 import { Password } from "../../password/types";
 import AttachmentRedLineWarningDialog from "../attachment.redline.warning/dialog";
@@ -74,7 +75,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
     },
     onError: (message) => {
       setIsDownloading(false);
-      alert(message);
+      message && toastError(message as unknown as string);
     },
   });
 

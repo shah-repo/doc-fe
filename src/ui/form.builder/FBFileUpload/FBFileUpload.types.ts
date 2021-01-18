@@ -1,9 +1,10 @@
 import { FBFileUploadState, FBInputProps } from "..";
+import { Id } from "../../../state/ducks/common";
 
 export type FBFileUploadProps =
 & FBInputProps
 & {
-  filePresenters?: React.ReactNode[];
   fileUploadState?: FBFileUploadState;
   readonly?: boolean;
+  files?: Id[];
 };

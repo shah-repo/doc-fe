@@ -6,7 +6,7 @@ import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { FB, FBHelloSignProps, FBHelloSignState } from "..";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { toastInfo } from "../../components/notifications";
+import { toastError, toastInfo } from "../../components/notifications";
 
 export const withFBHelloSign = <T extends FBHelloSignProps>(
   Component: React.FunctionComponent<T>,
@@ -79,7 +79,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       const items = formState?.getValues();
       const filteredItems = pick(items, keys(items).filter((x) => !includes(x, "Generated_From_Template")));
       if (values(filteredItems).some((x) => x === "") || filteredItems === null) {
-        return alert(intl.formatMessage({ id: "form.builder.signature.warning" }));
+        return toastError(intl.formatMessage({ id: "form.builder.signature.warning" }));
       }
       if (!signatureId) {
         helloSignState?.setLoadingMessage(
