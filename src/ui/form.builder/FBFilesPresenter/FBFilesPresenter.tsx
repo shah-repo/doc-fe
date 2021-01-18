@@ -5,9 +5,10 @@ import { withFBFilesPresenter } from "./FBFilesPresenter.wrap";
 
 const FBFilesPresenter: React.FunctionComponent<FBFilesPresenterProps> = ({
   attachments = [],
+  boxProps,
   mode,
 }) => (
-  <Box display="flex" flexDirection="row" flexWrap="wrap">
+  <Box {...{ boxProps }} display="flex" flexDirection="row" flexWrap="wrap">
     <FBMapWrapper<FBAttachment[]> collection={attachments}>
       {(file: FBAttachment, index) => (
         <FBFilePresenter key={index} {...{ file, mode }} />
