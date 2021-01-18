@@ -108,12 +108,12 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
 
   if (isCreateMaintenance) {
     const { docRevId, equipmentSection } = match.params;
-    const docType = (pmForm?.formTemplate?.outputDocumentTypes || [])[0] as FBOutputDocumentType;
-
-    if (docType) {
+    const pmFormOutput = pmForm?.formTemplate?.outputDocumentTypes;
+    // REQ: It only has to be populated if there is one output type
+    if (pmFormOutput?.length === 1) {
       initialValues.document = {
         ...initialValues.document,
-        documentType: docType,
+        documentType: pmFormOutput[0] as FBOutputDocumentType,
       };
     }
     initialValues.parentEquipment = {
