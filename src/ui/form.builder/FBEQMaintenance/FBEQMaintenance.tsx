@@ -38,6 +38,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       label={isTypePM ? "form.builder.pm.required" : "form.builder.calibration.required"}
       name={`${name}.requirements`}
       options={FBData.yesNoOptions}
+      rules="required"
       {...{ disabled }}
     />
     <FBAutocompleteAsync
