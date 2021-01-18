@@ -6,4 +6,5 @@ xvfb-run -a yarn cypress run \
   --reporter cypress-multi-reporters --reporter-options configFile=cypress-reporter-config.json \
   --browser $CYPRESS_BROWSER \
   --headless \
+  --spec ${LIST_OF_SPECS_SERIALIZED:-all} \
   --ci-build-id "$CI_BUILD_ID"

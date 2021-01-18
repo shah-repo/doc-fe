@@ -1,6 +1,14 @@
 #!/bin/bash
 set -e
 
+LIST_OF_SPECS=(
+  'cypress/integration/document.revision/document_sequential_numbering.spec.ts'
+  'cypress/integration/document.revision/document_revising_flow.spec.ts' 
+  'cypress/integration/document.revision/document_history.spec.ts'
+  'cypress/integration/document.revision/document_creation_flow.spec.ts'
+  )
+LIST_OF_SPECS_SERIALIZED=$(printf ",%s" "${LIST_OF_SPECS[@]}")
+
 export ENLIL_WORKER_LOG_FILE="$DIR_REPORTS/worker.log"
 
 # ./scripts/cypress/utils/generate_requirements_json_file.sh
