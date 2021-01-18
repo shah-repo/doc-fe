@@ -27,7 +27,10 @@ export class FBFileUploadState {
   };
 
   public getAttachments = async (ids?: string[]) => {
-    if (!ids || isEmpty(ids)) { return; }
+    if (!ids || isEmpty(ids)) {
+      set(this, "fetchedFiles", []);
+      return;
+    }
     const urlTpl = template(FBEndpoint.AttachmentsByIds);
     const url = urlTpl({ ids });
     this.attachmentsbyIdsApi.setUrl(url);

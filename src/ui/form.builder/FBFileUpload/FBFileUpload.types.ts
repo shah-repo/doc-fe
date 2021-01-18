@@ -6,4 +6,6 @@ export type FBFileUploadProps =
   filePresenters?: React.ReactNode[];
   fileUploadState?: FBFileUploadState;
   readonly?: boolean;
+  viewMode?: boolean;
+  attachmentIds?: string[];
 };
