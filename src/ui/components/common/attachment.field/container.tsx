@@ -66,7 +66,7 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       toastError(error as string);
     },
   });
-  
+
   const handleUpload = (files: File[], lineType, cleanCopyRequired) => {
 
     if (files.length === 0) {
