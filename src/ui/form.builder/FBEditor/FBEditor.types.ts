@@ -17,6 +17,7 @@ export type FBEditorProps =
   includeDefaultValue?: boolean;
   inputProps?: FBInputProps;
   standalone?: boolean;
+  isFormOutput?: boolean;
 };
 
 export interface FBEditorHelperProps {

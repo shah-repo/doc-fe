@@ -1,19 +1,18 @@
-import { isEmpty } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBFilePresenter, FBFileUploadProps, FBFileUploadState } from "..";
+import { FB, FBFileUploadProps, FBFileUploadState } from "..";
 
 export const withFBFileUpload = <T extends FBFileUploadProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     fileUploadState,
-    filePresenters,
     disabled,
     name,
     defaultValue,
     withState,
+    files,
     ...props
   }: T) => {
 
@@ -22,21 +21,8 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
     fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState, formValue);
 
     useObserver(() => {
-      filePresenters = fileUploadState?.fetchedFiles.map((file) => (
-        <FBFilePresenter
-          key={`fb-file-presenter-${file.id}`}
-          {...{ file, name, disabled }}
-        />));
+      files = fileUploadState?.files;
     });
-
-    React.useEffect(() => {
-      const arrayOfFileIds = fileUploadState?.files.map((file) => file.id );
-      if (isEmpty(arrayOfFileIds)) {
-        return;
-      }
-      fileUploadState?.getAttachments(arrayOfFileIds);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     React.useEffect(() => {
       reaction(
@@ -52,7 +38,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
     return Component({
       ...(props as T),
       fileUploadState,
-      filePresenters,
+      files,
       disabled,
       withState,
       name,

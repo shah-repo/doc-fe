@@ -71,9 +71,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     // if title and partLot empty it will set to default options
     useEffect(() => reaction(
       () => formState?.inputState.get("partLot")?.value,
-      (value) => {
-        if (value) {
-          return procedureFormState?.fetchPartsOfLot(value);
+      (id) => {
+        if (id && FB.isUUID(id)) {
+          return procedureFormState?.fetchPartsOfLot(id);
         }
         procedureFormState?.clearParts();
       }

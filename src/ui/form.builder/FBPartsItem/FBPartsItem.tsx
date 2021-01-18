@@ -17,6 +17,7 @@ import { withFBPartsItem } from "./FBPartsItem.wrap";
 
 const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
   getItem,
+  getLot,
   getItemUrl,
   collection = [],
   loading,
@@ -56,6 +57,7 @@ const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
               locale={`form.builder.procedure.${type}.title`}
               values={{
                 title: getItem?.(item.title),
+                lot: getLot?.(item.partLot),
                 quantity: item.quantity || "form.builder.none",
                 unit: item.unit,
               }}

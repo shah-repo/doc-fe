@@ -18,7 +18,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   rules,
   ...props
 }) => (
-  <FBInput {...{ name, rules }} {...props} type="eqmaintenance">
+  <FBInput showErrorMsg={false} {...{ name, rules }} {...props} type="eqmaintenance">
     <FBSection
       {...{ label }}
       name={`${name}-section`}
@@ -38,6 +38,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       label={isTypePM ? "form.builder.pm.required" : "form.builder.calibration.required"}
       name={`${name}.requirements`}
       options={FBData.yesNoOptions}
+      rules="required"
       {...{ disabled }}
     />
     <FBAutocompleteAsync
@@ -65,9 +66,6 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       rules={`required_if:${name}.requirements,No`}
       {...{ disabled }}
     />
-    {currentStatus && <Box mb={3} data-cy="maintenance.status">
-      <b>Current Status:</b> {currentStatus}
-    </Box>}
     <FBTextEditor
       name={`${name}.instructions`}
       label="form.builder.pm.instructions"
@@ -76,6 +74,11 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       {...{ disabled }}
     />
     <FBEQMaintenanceHistory {...{ name }}/>
+    {currentStatus &&
+      <Box mb={3} data-cy="maintenance.status">
+        <b>Current Status:</b> {currentStatus}
+      </Box>
+    }
   </FBInput>
 );
 export default withFBEQMaintenance(FBEQMaintenance);
