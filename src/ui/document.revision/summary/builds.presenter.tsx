@@ -1,4 +1,5 @@
-import { Box, Chip, createStyles, ListItem, makeStyles, Tooltip, Typography } from "@material-ui/core";
+import { Box, createStyles, IconButton, ListItem, makeStyles, Tooltip, Typography } from "@material-ui/core";
+import { HighlightOffOutlined } from "@material-ui/icons";
 import React from "react";
 import { Link } from "react-router-dom";
 import { stripTags } from "../../../common/utils/helpers";
@@ -11,6 +12,8 @@ import { documentVersionPath } from "../utils/paths";
 interface OwnProps {
   label: string;
   isDraft?: boolean;
+  handleRemoveBuild?: (id: string) => void;
+  docRevId?: string;
 }
 
 export type Props = OwnProps & DataProps<DocumentRevision[]>;
@@ -28,6 +31,7 @@ export const styles = makeStyles((theme) =>
     },
     link: {
       textDecoration: "none",
+      marginRight: "8px",
     },
   }));
 
@@ -35,25 +39,56 @@ export const BuildsPresenter: React.FunctionComponent<Props> = ({
   dataProp,
   label,
   isDraft,
+  docRevId,
+  handleRemoveBuild,
 }) => {
   const classes = styles();
 
   const referencesRenderer = () =>
-    dataProp.map((docRev: DocumentRevision, index) => (
-      <Box ml={isDraft ? 0 : 2} component="span" key={docRev.id}>
-        <Tooltip title={docRev.name} data-cy="BuildsLink-tootlip" >
-          <Link
-            className={classes.link}
-            to={documentVersionPath(docRev.id, docRev.document?.id )}
-            target="_blank"
-            data-cy={`BuildsPresenter-link-${label}`}
+    dataProp.map((docRev: any, index) => (
+      <Box component="span" key={`${docRev.id}-${index}`}
+        width="max-content"
+        px={1}
+        py={0.5}
+        mr={2}
+        mb={2}
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        borderRadius={4}
+        border={1}
+        borderColor={Colors.medium_blue}
+        bgcolor={Colors.light_blue}
+      >
+        <Link
+          className={classes.link}
+          to={documentVersionPath(docRev.id, docRev.document?.id )}
+          target="_blank"
+          data-cy={`BuildsPresenter-link-${label}`}
+        >
+          <Tooltip title={docRev.name} data-cy="BuildsLink-tootlip" >
+            <Typography
+              id="BuildsPresenter-buildtext"
+              variant="caption"
+              color="primary"
+              noWrap={true}
+            >
+              {`${docRev.document?.docId} - ${stripTags(docRev.name)}`}
+            </Typography>
+          </Tooltip>
+        </Link>
+        {docRevId && handleRemoveBuild &&
+        <Tooltip id="tooltip-removeBuild" title={<Text translation="common.remove" />}>
+          <IconButton
+            id="removeBuild"
+            aria-label="removeBuild"
+            onClick={() => handleRemoveBuild(docRev.id)}
+            style={{ padding: 0 }}
           >
-            <Chip
-              className={classes.chip}
-              label={`${docRev.document?.docId} - ${stripTags(docRev.name)}`}
-            />
-          </Link>
+            <HighlightOffOutlined fontSize="small" color="primary" />
+          </IconButton>
         </Tooltip>
+        }
       </Box>
     ));
 
@@ -72,7 +107,9 @@ export const BuildsPresenter: React.FunctionComponent<Props> = ({
           <Text message={label} />
         </Typography>
       </ListItem>
-      {referencesRenderer()}
+      <Box display="flex" ml={isDraft ? 0 : 2}>
+        {referencesRenderer()}
+      </Box>
       {!dataProp.length && buildsEmptyRenderer()}
     </Box>
   );
