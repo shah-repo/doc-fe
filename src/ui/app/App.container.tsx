@@ -10,6 +10,7 @@ import Theme from "../layout/theme/provider";
 import messagesEn from "../translations/en.json";
 import "./app.css";
 import AppPresenter from "./App.presenter";
+import "./ConsoleToaster";
 
 const messages = {
   en: messagesEn,

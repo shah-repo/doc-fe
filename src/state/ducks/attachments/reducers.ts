@@ -2,9 +2,9 @@ import { combineReducers } from "redux";
 import { ADD_WATERMARK, CLEAR_WATERMARKS, REMOVE_WATERMARK } from "./constants";
 import { WatermarkActions, WatermarkState } from "./types";
 
-export const WATERMARKS_DEFAULT_STATE: WatermarkState = [];
+const WATERMARKS_DEFAULT_STATE: WatermarkState = [];
 
-export const watermarks = (
+const watermarks = (
   state = WATERMARKS_DEFAULT_STATE,
   action: WatermarkActions,
 ): WatermarkState => {
