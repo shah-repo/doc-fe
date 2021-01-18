@@ -22,8 +22,6 @@ export REACT_APP_THEME=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_THEME 2
 export REACT_APP_HELLOSIGN_TEST_MODE=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_HELLOSIGN_TEST_MODE 2>&1)
 export REACT_APP_HELLOSIGN_CLIENT_ID=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_HELLOSIGN_CLIENT_ID 2>&1)
 
-yarn install --frozen-lockfile
-
 echo "-------- Generate fake server info -------"
 cat >> "${BITBUCKET_CLONE_DIR}/src/data/buildInfo.json" <<EOF 
 {
