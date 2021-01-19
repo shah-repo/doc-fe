@@ -6,6 +6,14 @@ LIST_OF_SPECS=(
   'cypress/integration/approval.request/approval_request_review.spec.ts'
   'cypress/integration/approval.request/approval_request_list.spec.ts'
   'cypress/integration/auth/authentication.spec.ts'
+  'cypress/integration/company/company_whitelabeling.spec.ts'
+  'cypress/integration/document.revision/document_creation_flow.spec.ts'
+  'cypress/integration/document.revision/document_history.spec.ts'
+  'cypress/integration/document.revision/document_html_template_form.spec.ts'
+  'cypress/integration/document.revision/document_non_qms.spec.ts'
+  'cypress/integration/document.revision/document_revising_flow.spec.ts' 
+  'cypress/integration/document.revision/document_sequential_numbering.spec.ts'
+  'cypress/integration/document.revision/document_voiding.spec.ts'
 )
 export LIST_OF_SPECS_SERIALIZED=$(printf ",%s" "${LIST_OF_SPECS[@]}")
 
