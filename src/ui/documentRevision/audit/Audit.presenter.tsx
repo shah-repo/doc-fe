@@ -1,13 +1,15 @@
 import { Box, List, Typography } from "@material-ui/core";
-import { orderBy } from "lodash";
+import { last, orderBy } from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import { MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { ApprovalStatus } from "../../../state/ducks/common";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
-import { FBApprovalAuditState, FBText } from "../../form.builder";
+import { FBApprovalAuditState, FBProcedureValue, FBText } from "../../form.builder";
+import { isTranslation } from "../../translations/types";
 import { styles } from "./Audit.presenter.styles";
 
 interface OwnProps {
@@ -26,6 +28,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   isStatusVisible,
 }) => {
   const classes = styles();
+  const intl = useIntl();
 
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
@@ -60,11 +63,28 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     orderBy(audits, ["field"]).forEach((change: Audit, index) => {
       change.groupKey = groupKey;
       const isFBField = change.field.includes("formInput");
+      const { label, placeholder = "", type: fbType, stepIndex: number = 1 } = change.fbSchemaItem || {};
+      var fbLabel = label || placeholder;
       const isOmittedFB = (
         isFBField &&
         !FBApprovalAuditState.docAudit.includes(change.fbSchemaItem?.type!)
       );
       if (isOmittedFB) { return; }
+
+      switch (fbType) {
+        case "procedure":
+          const valueKey = last(change.field.split(".")) as keyof FBProcedureValue;
+          const stepLabel = intl.formatMessage({ id: "form.builder.step.number" }, { number });
+          var keyLabel = "";
+          if (isTranslation(`form.builder.${valueKey}`)) {
+            keyLabel = intl.formatMessage({ id: `form.builder.${valueKey}` });
+          }
+          fbLabel = `${stepLabel} ${keyLabel}`;
+          break;
+        default:
+          break;
+      }
+
       if (change.field.includes("attachments")) {
         attachments.push(change);
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_NEW") {
@@ -86,7 +106,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               {isFBField && (
                 <FBText
                   locale={`form.builder.audit.${change.type}`}
-                  values={{ label: change.fbSchemaItem?.label || change.fbSchemaItem?.placeholder }}
+                  values={{ label: fbLabel}}
                 />
               )}
             </Box>

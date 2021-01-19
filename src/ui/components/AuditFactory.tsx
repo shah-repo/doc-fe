@@ -15,6 +15,7 @@ import Text from "../components/Text";
 import { Translation } from "../translations/types";
 import AuditAttachment from "./AuditAttachment";
 import AuditAutocomplete from "./AuditAutocomplete";
+import AuditProcedure from "./AuditProcedure";
 import DialogOpener from "./textDiff/DialogOpener";
 
 interface OwnProps {
@@ -46,7 +47,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
     auditValue = intl.formatMessage({ id: "form.builder.other" });
   }
 
-  if (!auditValue || auditValue === "undefined") {
+  if (!auditValue || auditValue === "undefined" || auditValue === "{}") {
     return <Fragment>N/A</Fragment>;
   }
 
@@ -76,6 +77,9 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
           arrayValue.push(auditValue);
         }
         return (<div>{arrayValue.join(", ")}</div>);
+      },
+      procedure() {
+        return <AuditProcedure {...{ audit, dataCy, auditValue }} />
       },
       default() { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };

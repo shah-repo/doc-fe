@@ -34,6 +34,7 @@ export class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
     "autocompleteasync",
     "fileupload",
     "quantity",
+    "procedure",
   ];
 
   public autocompleteApi = new FBAutocompleteAsyncState();
