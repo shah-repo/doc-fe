@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-LIST_OF_SPECS_SERIALIZED=$(find cypress/integration -type f -name "*.ts" | sort | sed -n "$GROUP_OF_SPECS~""$NUMBER_OF_GROUPS_OF_SPECS""p" | sed -n -e 'H;${x;s/\n/,/g;s/^,//;p;}')
+export LIST_OF_SPECS_SERIALIZED=$(find cypress/integration -type f -name "*.ts" | sort | sed -n "$GROUP_OF_SPECS~""$NUMBER_OF_GROUPS_OF_SPECS""p" | sed -n -e 'H;${x;s/\n/,/g;s/^,//;p;}')
 # export LIST_OF_SPECS_SERIALIZED=$(printf ",%s" "${LIST_OF_SPECS[@]}")
 
 export ENLIL_WORKER_LOG_FILE="$DIR_REPORTS/worker.log"
