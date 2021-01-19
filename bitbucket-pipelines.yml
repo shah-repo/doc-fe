@@ -94,6 +94,7 @@ definitions:
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
+            - ./scripts/cypress/utils/exit_1_if_failures.sh
     #
     # DEV
     #
