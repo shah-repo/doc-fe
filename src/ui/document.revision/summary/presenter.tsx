@@ -200,7 +200,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           <ReferencedByContainer dataProp={document.referencedBy} />
         )}
         {isEB && parent && (
-          <BuildsContainer dataProp={flatten([parent])} label="common.previous.build" />
+          <BuildsContainer dataProp={flatten([parent])} label="common.previous.build" docRevId={dataProp.id} />
         )}
         {isEB && children && (
           <BuildsContainer dataProp={children} label="common.next.build" />

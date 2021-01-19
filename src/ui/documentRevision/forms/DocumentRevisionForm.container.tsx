@@ -46,6 +46,7 @@ interface OwnProps {
   type?: DocumentCloneType;
   isNewVersion?: boolean;
   pmFormId?: string;
+  pmForm?: DocumentRevision;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps;
@@ -67,6 +68,7 @@ DocumentRevisionFormContainerProps
   type,
   isNewVersion,
   pmFormId,
+  pmForm,
 }) => {
   const bannerPortal = React.useRef(null);
   const loadAction =  useActionCreator(documentRevisionsActions.loadList);
@@ -84,8 +86,6 @@ DocumentRevisionFormContainerProps
   let document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, initialValues.document?.id || ""));
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
-  const pmForm = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, pmFormId || ""),);
 
   const availableReferences = useGetAvailableReferences(initialValues);
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
