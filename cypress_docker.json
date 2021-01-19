@@ -3,7 +3,6 @@
   "videoUploadOnPasses": false,
   "viewportWidth": 1400,
   "viewportHeight": 900,
-  "video": false,
   "pluginsFile": "cypress/plugins/index.ts",
   "supportFile": "cypress/support/index.ts",
   "projectId": "9v9it2",
@@ -13,8 +12,6 @@
   "experimentalNetworkStubbing": true,
   "modifyObstructiveCode": false,
   "env": {
-    "TEST_COMPANY_REPLICA_NAME": "test",
-    "CYPRESS_TEST_EMAIL": "enlil.testmail@gmail.com",
-    "CYPRESS_TEST_EMAIL_PASSWORD": "shifamed123"
+    "TEST_COMPANY_REPLICA_NAME": "test"
   }
 }
