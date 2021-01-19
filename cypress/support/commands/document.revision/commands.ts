@@ -25,6 +25,7 @@ declare global {
       drClickCreateDocumentWithApiCall(params?: { toastifyExists: boolean }): Chainable<Subject>;
       drClickCreateSupplierWithApiCall(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForForms(): Chainable<Subject>;
+      drClickCreateDocumentWithApiCallForFormsExpectingToastError(): Chainable<Subject>;
       drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
@@ -38,6 +39,7 @@ declare global {
       drSelectOutputDocTypeSecondTime(params: { documentType: string }): Chainable<Subject>;
       drChooseTypeOfRevisionChangeOption(params: { option: string }): Chainable<Subject>;
       drSelectRevisionStageOptions(params: { revisionStageOption: string }): Chainable<Subject>;
+      drAssignDocumentTo(params: { username: string }): Chainable<Subject>;
       drDocumentFieldError(params: { field: string; message: string }): Chainable<Subject>;
       closeAllAlertMessages(): Chainable<Subject>;
       checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
@@ -332,6 +334,15 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
   cy.wait(500);
 });
 
+Cypress.Commands.add("drClickCreateDocumentWithApiCallForFormsExpectingToastError", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    });
+  cy.checkToastMessage({ exists: true });
+  cy.wait(500);
+});
+
 Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
   cy.checkToastMessage({ exists: false });
@@ -406,6 +417,11 @@ Cypress.Commands.add("drCheckTypeOfRevisionChangeOptions", () => {
 Cypress.Commands.add("drSelectRevisionStageOptions", (params: {revisionStageOption: string}) => {
   cy.get("[data-cy^=\"common.\"]");
   cy.get("label").contains(params.revisionStageOption).click();
+});
+
+Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
+  cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").type(`${params.username}{downarrow}{enter}`, { force: true });
+  cy.get("[data-cy='add-user'").eq(2).click().wait(2000);
 });
 
 Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: { option: string }) => {
