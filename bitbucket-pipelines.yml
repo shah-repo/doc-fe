@@ -221,7 +221,7 @@ pipelines:
           - step: *BUILD_SANDBOX
       - step: *DEPLOY_SANDBOX
     
-    run-cypress-ondev:
+    run-cypress-on-dev:
       - step: *RUN_CYPRESS
 
   branches:
