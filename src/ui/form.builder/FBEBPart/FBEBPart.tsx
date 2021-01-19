@@ -37,7 +37,8 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
             shouldReloadOnInit
             withState
             omitFormValue
-            hidden={partTypeDefaultValue === PartType.Document}
+            hidden={partType === PartType.Document
+              || (!partType && partTypeDefaultValue === PartType.Document)}
             name="childrenParts"
             optionId={FBAutocompleteAsyncOption.availableParts}
             additionalData={childrenParts}
@@ -54,7 +55,8 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
             shouldReloadOnInit
             withState
             omitFormValue
-            hidden={partTypeDefaultValue === PartType.DocumentRevision}
+            hidden={partType === PartType.DocumentRevision
+              || (!partType && partTypeDefaultValue === PartType.DocumentRevision)}
             name="childForRevise"
             optionId={FBAutocompleteAsyncOption.availablePartDocuments}
             additionalData={childrenPartsForRevise}
@@ -70,7 +72,9 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
             variant="contained"
             label="form.builder.create.new.part"
             onClick={handleAdd}
-            disabled={disabled || partType === PartType.Document}
+            disabled={disabled
+              || partType === PartType.Document
+              || (!partType && partTypeDefaultValue === PartType.Document)}
           />
         </Box>
       </Box>
