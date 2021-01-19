@@ -27,6 +27,7 @@ export type FBApprovalsProps =
   inlineApprovalExists?: boolean;
   dialogState?: FBDialogState;
   isAlphaReleased?: boolean;
+  owners?: string[];
 };
 
 export type FBApprovalsConstructor = FBInlineApprovalConstructor & {

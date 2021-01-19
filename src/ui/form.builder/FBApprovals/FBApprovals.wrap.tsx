@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { compact, difference, filter, find, isEmpty, isUndefined, map, unionBy } from "lodash";
+import { compact, difference, filter, find, isEmpty, isUndefined, map, unionBy, uniq } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -40,6 +40,11 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       changeRequest,
       id,
     } = workspaceState || {};
+    const inputOwners = workspaceState?.document?.inputOwners;
+    const ownerIds = inputOwners ? uniq(Object.values(inputOwners as any)) : [];
+    const owners = workspaceState?.externalState?.company?.companyMine?.employees?.filter(
+      (e) => ownerIds.includes(e.id)).map((owner) => (
+        `${owner?.user?.name} (${owner?.user?.email})`));
 
     const {
       owner: { user: { id: userId = "" } = {} } = {},
@@ -208,6 +213,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       inlineApprovalExists,
       onApproveClick,
       isAlphaReleased,
+      owners,
     });
   };
 
