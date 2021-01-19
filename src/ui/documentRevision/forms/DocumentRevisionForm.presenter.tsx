@@ -263,6 +263,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <BuildsContainer
             dataProp={flatten([documentRevision.parent])}
             label="common.previous.build"
+            docRevId={docRevId}
             isDraft={isDocRevStatusDraft || isRevised}
           />
         )}
