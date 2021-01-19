@@ -81,7 +81,6 @@ definitions:
             - sorry-cypress-director
           caches:
             - node
-          size: 2x
           artifacts:
             - test-results/**
           script:
