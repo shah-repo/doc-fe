@@ -208,7 +208,9 @@ export class FBSchemaState {
 
   public getItemsByType = (type?: FBInputType): FBSchemaProps[] => {
     if (!type) { return []; }
-    return filter(this.getSchema(), { type });
+    return filter(this.getSchema(), (item) =>
+      !item.deleted && item.type === type
+    );
   };
 }
 

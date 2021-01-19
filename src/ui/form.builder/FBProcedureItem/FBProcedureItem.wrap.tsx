@@ -11,6 +11,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     onClick,
     handleRemove,
     getItem,
+    getLot,
     loading,
     dialogState,
     name,
@@ -44,6 +45,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
 
     handleRemove = (id: string) => procedureState?.removeItem(id, type);
     getItem = (id: string): string => procedureState?.getItem(id, type) || "";
+    getLot = (id?: string): string => procedureState?.getLot(id) || "";
 
     // MARK: @observer
     useObserver(() => {
@@ -51,9 +53,14 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
       // We cannot rely on the state api loading value because of the double initialization issue.
       // This should be removed after refactoring and double initialization issue fixed
       if (type === FBProcedureItemType.attachments) { return; }
-      loading = type === FBProcedureItemType.materials
-        ? !FBAutocompleteAsyncStore.data.get(procedureState?.materialsId || "")
-        : !FBAutocompleteAsyncStore.data.get(procedureState?.equipmentId || "");
+      if (type === FBProcedureItemType.materials) {
+        loading = (
+          !FBAutocompleteAsyncStore.data.get(procedureState?.materialsId || "") ||
+          !FBAutocompleteAsyncStore.data.get(procedureState?.lotsId || "")
+        );
+      } else {
+        loading = !FBAutocompleteAsyncStore.data.get(procedureState?.equipmentId || "");
+      }
       value = get(procedureState, type);
     });
 
@@ -62,6 +69,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
       onClick,
       handleRemove,
       getItem,
+      getLot,
       dialogState,
       loading,
       name,

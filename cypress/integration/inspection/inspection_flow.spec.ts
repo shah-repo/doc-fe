@@ -1021,7 +1021,6 @@ context("Inspection flow", () => {
           cy.get("[name=\"editorConfig.pass.value.to\"]").type("150");
           cy.get("[id$=\"editorConfig.aql\"]").click();
           cy.get("ul[role=listbox]>li").contains("1.0").click();
-          cy.get("[name=\"editorConfig.fai\"]").check();
           cy.get("[value=\"includeInInspection\"]").check();
           cy.get("[value=\"includeInFaiInspection\"]").check();
           cy.fbAddField();
@@ -1042,7 +1041,6 @@ context("Inspection flow", () => {
           cy.get("[name=\"editorConfig.pass.value.to\"]").type("150");
           cy.get("[id$=\"editorConfig.aql\"]").click();
           cy.get("ul[role=listbox]>li").contains("1.0").click();
-          cy.get("[name=\"editorConfig.fai\"]").check();
           cy.get("[value=\"includeInInspection\"]").check();
           cy.get("[value=\"includeInFaiInspection\"]").check();
           cy.fbAddField();

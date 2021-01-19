@@ -44,6 +44,8 @@ definitions:
         artifacts:
           - eslint-results/**
         script:
+          - yarn install --frozen-lockfile
+          - ./aws/bash_scripts/runUnusedExportsCheck.sh
           - ./aws/bash_scripts/runLinter.sh
 
     - step: &RUN_TESTS
@@ -56,6 +58,7 @@ definitions:
           - test-results/**
           - jest-config/**
         script:
+          - yarn install --frozen-lockfile
           - ./aws/bash_scripts/runTests.sh
     #
     # DEV

@@ -24,6 +24,7 @@ export type FBProcedureItemProps =
   onClick?: (part?: FBProcedureItemConfig) => void;
   handleRemove?: (id: string) => void;
   getItem?: (id: string) => string;
+  getLot?: (id?: string) => string;
   type: FBProcedureItemType;
   value?: FBProcedureItemConfig[];
 };

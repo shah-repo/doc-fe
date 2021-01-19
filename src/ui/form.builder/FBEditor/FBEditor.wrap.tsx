@@ -8,11 +8,14 @@ export const withFBEditor = <T extends FBEditorProps>(
 ) => {
   const Comp = ({
     editorState,
+    isFormOutput,
     mode,
     ...props
   }: T) => {
 
+    const { workspaceState } = FB.useStores();
     editorState = FB.useRef<FBEditorState>(FBEditorState);
+    isFormOutput = workspaceState?.mode === "formDesign";
 
     useObserver(() => {
       mode = editorState?.mode;
@@ -21,6 +24,7 @@ export const withFBEditor = <T extends FBEditorProps>(
     return Component({
       ...(props as T),
       editorState,
+      isFormOutput,
       mode,
     });
   };
