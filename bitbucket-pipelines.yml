@@ -69,6 +69,31 @@ definitions:
         script:
           - yarn install --frozen-lockfile
           - ./aws/bash_scripts/runTests.sh
+    - step: &RUN_CYPRESS
+          name: Cypress specs
+          image:
+            name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs_210118_3
+            aws:
+              access-key: $AWS_ACCESS_KEY_ID
+              secret-key: $AWS_SECRET_ACCESS_KEY
+          max-time: 60
+          services:
+            - sorry-cypress-director
+          caches:
+            - node
+          size: 2x
+          artifacts:
+            - test-results/**
+          script:
+            - source ./scripts/cypress/utils/variables_pipeline.sh
+            - mv cypress_docker.json cypress.json
+            - yarn install --frozen-lockfile
+            - ./scripts/cypress/utils/make_results_dir_pipeline.sh
+            - ./scripts/cypress/utils/generate_requirements_json_file.sh
+            - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
+            - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
+            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
+            - ./scripts/cypress/utils/merge_reports_pipeline.sh
     #
     # DEV
     #
@@ -195,6 +220,9 @@ pipelines:
           - step: *RUN_LINTER
           - step: *BUILD_SANDBOX
       - step: *DEPLOY_SANDBOX
+    
+    run-cypress-ondev:
+      - step: *RUN_CYPRESS
 
   branches:
     master:
@@ -226,29 +254,4 @@ pipelines:
       - step: *DEPLOY_DEMO
     
     ENC-5912:
-      - step:
-          name: Cypress specs
-          image:
-            name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs_210118_3
-            aws:
-              access-key: $AWS_ACCESS_KEY_ID
-              secret-key: $AWS_SECRET_ACCESS_KEY
-          max-time: 60
-          services:
-            - sorry-cypress-director
-          caches:
-            - node
-          size: 2x
-          artifacts:
-            - test-results/**
-          script:
-            - source ./scripts/cypress/utils/variables_pipeline.sh
-            - mv cypress_docker.json cypress.json
-            - yarn install --frozen-lockfile
-            - ./scripts/cypress/utils/make_results_dir_pipeline.sh
-            - ./scripts/cypress/utils/generate_requirements_json_file.sh
-            - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
-            - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
-            - ./scripts/cypress/utils/merge_reports_pipeline.sh
-        
+      - step: *RUN_CYPRESS
