@@ -8,12 +8,12 @@ import { withFBEQMaintenance } from "./FBEQMaintenance.wrap";
 
 const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   handleAdd,
+  getCurrentStatus,
   name,
   disabled,
   isNewPMDisabled,
   editorConfig = [],
   label,
-  currentStatus,
   isTypePM,
   rules,
   ...props
@@ -74,11 +74,9 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       {...{ disabled }}
     />
     <FBEQMaintenanceHistory {...{ name }}/>
-    {currentStatus &&
-      <Box mb={3} data-cy="maintenance.status">
-        <b>Current Status:</b> {currentStatus}
-      </Box>
-    }
+    <Box mb={3} data-cy="maintenance.status">
+      {getCurrentStatus && getCurrentStatus()}
+    </Box>
   </FBInput>
 );
 export default withFBEQMaintenance(FBEQMaintenance);

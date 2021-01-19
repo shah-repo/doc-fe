@@ -2,6 +2,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBEQMaintenanceProps, FBEQMaintenanceState } from "..";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
@@ -9,6 +10,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
 ) => {
   const Comp = ({
     handleAdd,
+    getCurrentStatus,
     eqMaintenanceState,
     isNewPMDisabled,
     pmFormId,
@@ -22,7 +24,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     const { id: docRevId, document: { status = "" } = {} } = workspaceState || {};
     const isEqStatusDraft = status === DocumentRevisionStatus.Draft;
     const isTypePM = editorConfig.type?.includes("preventativeMaintenance");
-    const currentStatus = formState?.getFieldValue(`${name}.status`);
+    const complianceStatus = formState?.getFieldValue(`${name}.status`);
+    const complianceDueDate = formState?.getFieldValue(`${name}.complianceDueDate`);
 
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     pmFormId = formState?.getFieldValue(`${name}.preventativeForm`);
@@ -62,6 +65,18 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       window.open(`/document_revision/${pmFormId}/create_maintenance/${docRevId}/${name}`);
     };
 
+    // eslint-disable-next-line react/display-name
+    getCurrentStatus = () => {
+      if (!complianceDueDate) { return null; }
+      return <span>
+        <b>Current Status: </b>
+        {complianceStatus}
+        <span> - Due Date: </span>
+        {getFormattedDateString(complianceDueDate, MomentFormats.MonthDateYearAlt)}
+      </span>;
+    };
+
+
     // MARK: @observer
     useObserver(() => {
       isNewPMDisabled = (
@@ -73,9 +88,9 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     return Component({
       ...(props as T),
       handleAdd,
+      getCurrentStatus,
       isNewPMDisabled,
       name,
-      currentStatus,
       editorConfig,
       isTypePM,
     });
