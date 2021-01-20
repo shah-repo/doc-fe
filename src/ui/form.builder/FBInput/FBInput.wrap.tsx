@@ -63,8 +63,9 @@ export const withFBInput = <T extends FBInputProps>(
     value = inputState?.value;
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
-    isInputOwner = workspaceState?.document?.inputOwners?.[name] === undefined ||
-      workspaceState?.document?.inputOwners?.[name] === workspaceState?.externalState?.auth?.user.employeeId;
+    const inputOwner = workspaceState?.document?.inputOwners?.[name];
+    isInputOwner = inputOwner === undefined ||
+      inputOwner === workspaceState?.externalState?.auth?.user.employeeId;
 
     // Set validation scheme. This is union of scheme & comps configs.
     useEffect(() => {
