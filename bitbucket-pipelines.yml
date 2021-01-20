@@ -206,6 +206,9 @@ pipelines:
           - name: CYPRESS_BE_URL
           - name: CYPRESS_SUPERADMIN_EMAIL
           - name: CYPRESS_SUPERADMIN_PASSWORD
+          - name: COMMIT_FE
+          - name: COMMIT_BE
+          - name: COMMIT_REMOTEJS
       - parallel: *RUN_CYPRESS_IN_PARALLEL
 
   # pull-requests:

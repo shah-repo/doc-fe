@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { plainToClass } from "class-transformer";
-import { IsBoolean, IsDefined, IsEmail, IsString, validateSync } from "class-validator";
+import { IsBoolean, IsDefined, IsEmail, IsString, ValidateIf, validateSync } from "class-validator";
 
 export class ConfigEnv {
   private static instance: ConfigEnv;
@@ -25,6 +25,9 @@ export class ConfigEnv {
       RUN_ENVIRONMENT: Cypress.env("RUN_ENVIRONMENT"),
       DIR_SCREENSHOTS: Cypress.env("DIR_SCREENSHOTS"),
       TEST_COMPANY_REPLICA_NAME: Cypress.env("TEST_COMPANY_REPLICA_NAME"),
+      COMMIT_FE: Cypress.env("COMMIT_FE"),
+      COMMIT_BE: Cypress.env("COMMIT_BE"),
+      COMMIT_REMOTEJS: Cypress.env("COMMIT_REMOTEJS"),
     });
 
     const errors = validateSync(configEnv, {
@@ -74,6 +77,22 @@ export class ConfigEnv {
   DIR_SCREENSHOTS!: string;
 
   TEST_COMPANY_REPLICA_NAME!: string;
+
+
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === "pipeline")
+  @IsDefined()
+  @IsString()
+  COMMIT_FE!: string;
+
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === "pipeline")
+  @IsDefined()
+  @IsString()
+  COMMIT_BE!: string;
+
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === "pipeline")
+  @IsDefined()
+  @IsString()
+  COMMIT_REMOTEJS!: string;
 }
 
 

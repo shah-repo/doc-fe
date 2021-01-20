@@ -145,3 +145,7 @@ if (CONFIG.SKIP_ON_RUN_FAILURE) {
     cy.task("resetShouldSkipFlag");
   });
 }
+
+it("Always runs", () => {
+  expect(true).to.be.true;
+});
