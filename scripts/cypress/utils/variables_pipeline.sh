@@ -5,7 +5,7 @@ export CI_BUILD_ID="some_ci_build_id"
 
 export CYPRESS_KONFIG_ENV="development"
 export CYPRESS_BROWSER="chrome"
-export NUMBER_OF_WORKERS="4"
+export NUMBER_OF_WORKERS="3"
 export REPORT_TITLE="generated_specs"
 export CYPRESS_INTEGRATION_FOLDER="cypress/integration"
 export CYPRESS_SKIP_ON_RUN_FAILURE="true"
