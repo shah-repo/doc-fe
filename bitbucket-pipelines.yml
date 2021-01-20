@@ -339,13 +339,17 @@ pipelines:
     
     run-cypress-on-dev:
       - parallel:
-        - step: <<: *RUN_CYPRESS
+        - step:
+          <<: *RUN_CYPRESS
           name: Cypress specs 1/4
-        - step: <<: *RUN_CYPRESS
+        - step: 
+          <<: *RUN_CYPRESS
           name: Cypress specs 2/4
-        - step: <<: *RUN_CYPRESS
+        - step: 
+          <<: *RUN_CYPRESS
           name: Cypress specs 3/4
-        - step: <<: *RUN_CYPRESS
+        - step: 
+          <<: *RUN_CYPRESS
           name: Cypress specs 4/4
 
   branches:
