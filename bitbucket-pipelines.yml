@@ -96,7 +96,7 @@ definitions:
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
             - ./scripts/cypress/utils/exit_1_if_failures.sh
 
-    -step: &RUN_CYPRESS_IN_PARALLEL
+    - step: &RUN_CYPRESS_IN_PARALLEL
         - parallel:
             - step: 
                 <<:  *COMMON_RUN_CYPRESS
