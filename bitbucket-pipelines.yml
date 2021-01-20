@@ -203,7 +203,10 @@ pipelines:
   custom: 
     run-cypress-on-dev:
       - variables:
-          - name: test123
+          - name: CYPRESS_FE_URL
+          - name: CYPRESS_BE_URL
+          - name: CYPRESS_SUPERADMIN_EMAIL
+          - name: CYPRESS_SUPERADMIN_PASSWORD
       - parallel: *RUN_CYPRESS_IN_PARALLEL
 
   # pull-requests:

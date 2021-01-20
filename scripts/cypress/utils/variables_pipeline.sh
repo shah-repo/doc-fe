@@ -28,9 +28,10 @@ export CYPRESS_DIR_SCREENSHOTS="test-results/$CI_BUILD_ID/reports/screenshots"
 export CYPRESS_TEST_EMAIL="enlil.testmail@gmail.com"
 export CYPRESS_TEST_EMAIL_PASSWORD="shifamed123"
 
-export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
-export CYPRESS_SUPERADMIN_PASSWORD="Tester1!"
+# export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
+# export CYPRESS_SUPERADMIN_PASSWORD="Tester1!"
 
-export CYPRESS_BE_URL="https://api.dev.enlil.io"
-export CYPRESS_FE_URL="https://dev.enlil.io"
-export CYPRESS_BASE_URL="https://dev.enlil.io"
+# export CYPRESS_BE_URL="https://api.dev.enlil.io"
+# export CYPRESS_FE_URL="https://dev.enlil.io"
+
+export CYPRESS_BASE_URL=$CYPRESS_FE_URL
