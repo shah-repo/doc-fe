@@ -399,7 +399,6 @@ Cypress.Commands.add("drClickReviseDocument", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApprovers, () => {
     cy.get("[data-cy=\"updateRecord\"]").click();
   });
-  // cy.wait(3000);
 });
 
 Cypress.Commands.add("drClickTrainingRequired", () => {
