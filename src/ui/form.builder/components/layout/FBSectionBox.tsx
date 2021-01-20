@@ -6,7 +6,7 @@ import Text from "../../../components/Text";
 import { FBPOApprovalMatrixFieldProps } from "../../FBPOApprovalMatrix/FBPOApprovalMatrix.types";
 import { FBFormDefaultProps } from "../../types/common";
 
-export type Props = FBFormDefaultProps & Pick<FBPOApprovalMatrixFieldProps, "handleRevert">;
+type Props = FBFormDefaultProps & Pick<FBPOApprovalMatrixFieldProps, "handleRevert">;
 const FBSectionBox: React.FunctionComponent<Props> = ({
   label,
   handleRevert,

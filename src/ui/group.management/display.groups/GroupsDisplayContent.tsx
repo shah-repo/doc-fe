@@ -10,7 +10,7 @@ interface OwnProps {
   employees: Employee[];
 }
 
-export type Props = OwnProps;
+type Props = OwnProps;
 
 export const GroupsDisplayContent: React.FunctionComponent<Props> = ({
   groupName,

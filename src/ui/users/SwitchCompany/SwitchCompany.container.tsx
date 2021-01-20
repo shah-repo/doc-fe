@@ -13,7 +13,7 @@ import { LoginContainerProps } from "../Login.container";
 import SwitchCompanyPresenter from "./SwitchCompany.presenter";
 import { styles } from "./SwitchCompany.styles";
 
-export type Props = LoginContainerProps;
+type Props = LoginContainerProps;
 
 const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
   employees,
