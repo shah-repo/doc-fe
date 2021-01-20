@@ -4,7 +4,6 @@
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -25,7 +24,6 @@ context("Document Operators Access Test", () => {
 
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
-      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
@@ -102,14 +100,13 @@ context("Document Operators Access Test", () => {
       });
     });
 
-    it("Selects company", () => {
+    it("Select company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
   });
 
   context("Start Part creation flow", () => {
     it("Navigates to document list", () => {
-      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -140,7 +137,6 @@ context("Document Operators Access Test", () => {
 
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
-      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -158,8 +154,7 @@ context("Document Operators Access Test", () => {
       cy.drEnterDocumentDescription({ description: "New Document Revision description" });
     });
 
-    it("Selects 'Form Operators' document type from dropdown", () => {
-      // SystemRequirement("REQ-0490");
+    it("Select 'Form Operators' document type from dropdown", () => {
       cy.drSelectDocumentType({ documentType: "Form Operators" });
     });
 
@@ -205,9 +200,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Click on 'Add a field'", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").contains("Add a Field").click({ force: true });
-      });
+      cy.fbAddNewFieldWhenHidden();
     });
 
     it("Select 'Text Field' field", () => {
@@ -223,9 +216,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Click on 'Add a field'", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").contains("Add a Field").click({ force: true });
-      });
+      cy.fbAddNewFieldWhenHidden();
     });
 
     it("Select 'Text Field' field", () => {
@@ -269,7 +260,7 @@ context("Document Operators Access Test", () => {
       });
     });
 
-    it("Selects company", () => {
+    it("Select company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
   });
@@ -325,7 +316,7 @@ context("Document Operators Access Test", () => {
       });
     });
 
-    it("Selects company", () => {
+    it("Select company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
   });
@@ -373,7 +364,7 @@ context("Document Operators Access Test", () => {
       });
     });
 
-    it("Selects company", () => {
+    it("Select company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
   });
