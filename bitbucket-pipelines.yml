@@ -70,7 +70,7 @@ definitions:
           - yarn install --frozen-lockfile
           - ./aws/bash_scripts/runTests.sh
 
-    - step: &RUN_CYPRESS
+    - step: &COMMON_RUN_CYPRESS
           name: Cypress specs
           image:
             name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs_210118_3
@@ -96,120 +96,20 @@ definitions:
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
             - ./scripts/cypress/utils/exit_1_if_failures.sh
 
-    # - step: &RUN_CYPRESS_1
-    #       name: Cypress specs 1/4
-    #       image:
-    #         name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs_210118_3
-    #         aws:
-    #           access-key: $AWS_ACCESS_KEY_ID
-    #           secret-key: $AWS_SECRET_ACCESS_KEY
-    #       max-time: 60
-    #       size: 2x
-    #       services:
-    #         - sorry-cypress-director
-    #       caches:
-    #         - node
-    #       artifacts:
-    #         - test-results/**
-    #       script:
-    #         - source ./scripts/cypress/utils/variables_pipeline.sh
-    #         - export PIPELINE_STEP_NUMBER=1
-    #         - export PIPELINE_TOTAL_NUMBER_OF_STEPS=4
-    #         - mv cypress_docker.json cypress.json
-    #         - yarn install --frozen-lockfile
-    #         - ./scripts/cypress/utils/make_results_dir_pipeline.sh
-    #         - ./scripts/cypress/utils/generate_requirements_json_file.sh
-    #         - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
-    #         - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-    #         - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
-    #         - ./scripts/cypress/utils/merge_reports_pipeline.sh
-    #         - ./scripts/cypress/utils/exit_1_if_failures.sh
-
-    # - step: &RUN_CYPRESS_2
-    #       name: Cypress specs 2/4
-    #       image:
-    #         name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs_210118_3
-    #         aws:
-    #           access-key: $AWS_ACCESS_KEY_ID
-    #           secret-key: $AWS_SECRET_ACCESS_KEY
-    #       max-time: 60
-    #       size: 2x
-    #       services:
-    #         - sorry-cypress-director
-    #       caches:
-    #         - node
-    #       artifacts:
-    #         - test-results/**
-    #       script:
-    #         - export PIPELINE_STEP_NUMBER=2
-    #         - export PIPELINE_TOTAL_NUMBER_OF_STEPS=4
-    #         - source ./scripts/cypress/utils/variables_pipeline.sh
-    #         - mv cypress_docker.json cypress.json
-    #         - yarn install --frozen-lockfile
-    #         - ./scripts/cypress/utils/make_results_dir_pipeline.sh
-    #         - ./scripts/cypress/utils/generate_requirements_json_file.sh
-    #         - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
-    #         - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-    #         - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
-    #         - ./scripts/cypress/utils/merge_reports_pipeline.sh
-    #         - ./scripts/cypress/utils/exit_1_if_failures.sh
-    # - step: &RUN_CYPRESS_3
-    #       name: Cypress specs 3/4
-    #       image:
-    #         name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs_210118_3
-    #         aws:
-    #           access-key: $AWS_ACCESS_KEY_ID
-    #           secret-key: $AWS_SECRET_ACCESS_KEY
-    #       max-time: 60
-    #       size: 2x
-    #       services:
-    #         - sorry-cypress-director
-    #       caches:
-    #         - node
-    #       artifacts:
-    #         - test-results/**
-    #       script:
-    #         - export PIPELINE_STEP_NUMBER=3
-    #         - export PIPELINE_TOTAL_NUMBER_OF_STEPS=4
-    #         - source ./scripts/cypress/utils/variables_pipeline.sh
-    #         - mv cypress_docker.json cypress.json
-    #         - yarn install --frozen-lockfile
-    #         - ./scripts/cypress/utils/make_results_dir_pipeline.sh
-    #         - ./scripts/cypress/utils/generate_requirements_json_file.sh
-    #         - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
-    #         - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-    #         - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
-    #         - ./scripts/cypress/utils/merge_reports_pipeline.sh
-    #         - ./scripts/cypress/utils/exit_1_if_failures.sh
-
-    # - step: &RUN_CYPRESS_4
-    #       name: Cypress specs 4/4
-    #       image:
-    #         name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs_210118_3
-    #         aws:
-    #           access-key: $AWS_ACCESS_KEY_ID
-    #           secret-key: $AWS_SECRET_ACCESS_KEY
-    #       max-time: 60
-    #       size: 2x
-    #       services:
-    #         - sorry-cypress-director
-    #       caches:
-    #         - node
-    #       artifacts:
-    #         - test-results/**
-    #       script:
-    #         - export PIPELINE_STEP_NUMBER=4
-    #         - export PIPELINE_TOTAL_NUMBER_OF_STEPS=4
-    #         - source ./scripts/cypress/utils/variables_pipeline.sh
-    #         - mv cypress_docker.json cypress.json
-    #         - yarn install --frozen-lockfile
-    #         - ./scripts/cypress/utils/make_results_dir_pipeline.sh
-    #         - ./scripts/cypress/utils/generate_requirements_json_file.sh
-    #         - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
-    #         - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-    #         - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
-    #         - ./scripts/cypress/utils/merge_reports_pipeline.sh
-    #         - ./scripts/cypress/utils/exit_1_if_failures.sh
+    -step: &RUN_CYPRESS_IN_PARALLEL
+        - parallel:
+            - step: 
+                <<:  *COMMON_RUN_CYPRESS
+                name: Cypress specs 1/4
+            - step: 
+                <<:  *COMMON_RUN_CYPRESS
+                name: Cypress specs 2/4
+            - step: 
+                <<:  *COMMON_RUN_CYPRESS
+                name: Cypress specs 3/4
+            - step: 
+                <<:  *COMMON_RUN_CYPRESS
+                name: Cypress specs 4/4
     #
     # DEV
     #
@@ -301,6 +201,22 @@ definitions:
 # Pipelines
 #
 pipelines:
+  custom: 
+    run-cypress-on-dev:
+      - variables:
+        - name: DBName
+      - step: *DUMP_PROD_TO_DEMO
+
+    dump_prod_to_dev:
+      - variables:
+        - name: DBName
+      - step: *DUMP_PROD_TO_DEV
+
+    dump_demo_to_dev:
+      - variables:
+        - name: DBName
+      - step: *DUMP_DEMO_TO_DEV
+
   # pull-requests:
   #   "**":
   #     - parallel:
@@ -338,19 +254,7 @@ pipelines:
       - step: *DEPLOY_SANDBOX
     
     run-cypress-on-dev:
-      - parallel:
-          - step: 
-              <<:  *RUN_CYPRESS
-              name: Cypress specs 1/4
-          - step: 
-              <<:  *RUN_CYPRESS
-              name: Cypress specs 2/4
-          - step: 
-              <<:  *RUN_CYPRESS
-              name: Cypress specs 3/4
-          - step: 
-              <<:  *RUN_CYPRESS
-              name: Cypress specs 4/4
+      - step: *RUN_CYPRESS_IN_PARALLEL
 
   branches:
     master:
