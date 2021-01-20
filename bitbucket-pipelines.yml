@@ -99,6 +99,7 @@ definitions:
         - step: 
             <<:  *COMMON_RUN_CYPRESS
             name: Cypress specs 1/4
+        # TODO: uncomment!!
         # - step: 
         #     <<:  *COMMON_RUN_CYPRESS
         #     name: Cypress specs 2/4
@@ -210,7 +211,7 @@ pipelines:
           - name: COMMIT_BE
           - name: COMMIT_REMOTEJS
       - parallel: *RUN_CYPRESS_IN_PARALLEL
-
+  # TODO: uncomment!!
   # pull-requests:
   #   "**":
   #     - parallel:

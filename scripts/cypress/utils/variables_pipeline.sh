@@ -26,18 +26,17 @@ export CYPRESS_RUN_ENVIRONMENT="pipeline"
 export CYPRESS_TEST_EMAIL="enlil.testmail@gmail.com"
 export CYPRESS_TEST_EMAIL_PASSWORD="shifamed123"
 
+# TODO: Remove
 export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
 export CYPRESS_SUPERADMIN_PASSWORD="Tester1!"
-
 export CYPRESS_BE_URL="https://api.dev.enlil.io"
 export CYPRESS_FE_URL="https://dev.enlil.io"
-
-export CYPRESS_BASE_URL=$CYPRESS_FE_URL
-
 export CYPRESS_COMMIT_FE="2b484b038dbce8da914a2e63605dcf794e796de8"
 export CYPRESS_COMMIT_BE="c5bb9bb53862021462332be0492fcc1f7ae39152"
 export CYPRESS_COMMIT_REMOTEJS="CYPRESS_COMMIT_REMOTEJS"
+# TODO: Remove END
 
+export CYPRESS_BASE_URL=$CYPRESS_FE_URL
 
 cat <<EOF > ./cypress-reporter-config.json
 {
