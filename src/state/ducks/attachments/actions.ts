@@ -1,4 +1,4 @@
-import { apiActionWithCallbacks } from "../../factories";
+import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { authActions } from "../auth";
 import { EmployeeEditRequestBody } from "../auth/types";
@@ -161,6 +161,17 @@ const getAssetUrl = (
   handlers,
 });
 
+const uploadImage = (
+  url: string,
+  file: File,
+): ApiAction => apiAction({
+  url,
+  method: "put",
+  data: file,
+  includeAuthorization: false,
+  contentType: "image/jpeg",
+});
+
 export default {
   upload,
   download,
@@ -175,4 +186,5 @@ export default {
   requestAvatarS3link,
   uploadAvatar,
   getAssetUrl,
+  uploadImage,
 };

@@ -30,7 +30,7 @@ interface StateProps {
   employees: Employee[];
 }
 
-export type Props = OwnProps & DispatchProps & StateProps;
+type Props = OwnProps & DispatchProps & StateProps;
 
 export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
   showUserProfile,

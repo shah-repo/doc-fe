@@ -13,7 +13,7 @@ import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 
-export interface Props {
+interface Props {
   id?: string;
   renderHTML?: Nullable<string>;
   showDownloadButton?: boolean;
