@@ -2,7 +2,7 @@
 set -e
 
 FILES=($DIR_JSON/generated_specs*.json)
-JUNIT_FILES=($DIR_JSON/junit/results-*.xml)
+JUNIT_FILES=($DIR_JUNIT/results-*.xml)
 declare -a LAST_RAN_TESTS
 declare -a REPORTS_TO_DELETE
 declare -a JUNIT_REPORT_TITLES_TO_DELETE
