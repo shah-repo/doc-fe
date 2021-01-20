@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { GroupTag } from "../../../../state/ducks/auth/types";
-import { companyActions, companySelectors } from "../../../../state/ducks/company";
+import { Company, companyActions, companySelectors } from "../../../../state/ducks/company";
 import { HOME_URL } from "../../../constants/urls";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -24,7 +24,14 @@ export const WhiteLabelingManagementContainer: React.FunctionComponent<{}> = ({
   const initialValues = toWhiteLabelingInitialValues(whiteLabeling);
   const canManageWhiteLabeling = useGetHasTag(GroupTag.COMPANY_CONFIG_WHITELABELING);
 
-  const async = useAsync();
+  const async = useAsync({
+    onSuccess: (data?: Company) => {
+      if (!data) {
+        return;
+      }
+      dispatch(companyActions.selectCompany(data));
+    },
+  });
   const asyncS3link = useAsync({
     onSuccess: (data: any) => {
       const url = data.url;
