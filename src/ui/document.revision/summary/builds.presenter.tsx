@@ -12,8 +12,8 @@ import { documentVersionPath } from "../utils/paths";
 interface OwnProps {
   label: string;
   isDraft?: boolean;
-  handleRemoveBuild?: (id: string) => void;
-  docRevId?: string;
+  handleRemoveBuild: () => void;
+  showRemoveButton?: boolean;
 }
 
 export type Props = OwnProps & DataProps<DocumentRevision[]>;
@@ -39,7 +39,7 @@ export const BuildsPresenter: React.FunctionComponent<Props> = ({
   dataProp,
   label,
   isDraft,
-  docRevId,
+  showRemoveButton,
   handleRemoveBuild,
 }) => {
   const classes = styles();
@@ -77,17 +77,17 @@ export const BuildsPresenter: React.FunctionComponent<Props> = ({
             </Typography>
           </Tooltip>
         </Link>
-        {docRevId && handleRemoveBuild &&
-        <Tooltip id="tooltip-removeBuild" title={<Text translation="common.remove" />}>
+        {showRemoveButton &&
+        (<Tooltip id="tooltip-removeBuild" title={<Text translation="common.remove" />}>
           <IconButton
             id="removeBuild"
             aria-label="removeBuild"
-            onClick={() => handleRemoveBuild(docRev.id)}
+            onClick={() => handleRemoveBuild()}
             style={{ padding: 0 }}
           >
             <HighlightOffOutlined fontSize="small" color="primary" />
           </IconButton>
-        </Tooltip>
+        </Tooltip>)
         }
       </Box>
     ));
