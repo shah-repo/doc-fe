@@ -1,19 +1,20 @@
 import { Box } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBEQMaintenanceHistory, FBInput, FBQuantityField, FBRadioGroup, FBTextEditor } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBEQMaintenanceHistory, FBInput, FBQuantityField, FBRadioGroup, FBText, FBTextEditor } from "..";
 import { FBSection } from "../FBSection";
 import { FBEQMaintenanceProps } from "./FBEQMaintenance.types";
 import { withFBEQMaintenance } from "./FBEQMaintenance.wrap";
 
 const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   handleAdd,
+  complianceDueDate,
+  complianceStatus,
   name,
   disabled,
   isNewPMDisabled,
   editorConfig = [],
   label,
-  currentStatus,
   isTypePM,
   rules,
   ...props
@@ -74,9 +75,20 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       {...{ disabled }}
     />
     <FBEQMaintenanceHistory {...{ name }}/>
-    {currentStatus &&
+    {complianceDueDate &&
       <Box mb={3} data-cy="maintenance.status">
-        <b>Current Status:</b> {currentStatus}
+        <FBText
+          boxProps={{ fontWeight: "fontWeightBold", mb: 2 }}
+          locale={"form.builder.current.status"}
+        />
+        {complianceStatus}
+        <span> - </span>
+        <FBText
+          boxProps={{ display: "inline-flex" }}
+          locale={"common.due.date"}
+        />
+        <span>: </span>
+        {complianceDueDate}
       </Box>
     }
   </FBInput>
