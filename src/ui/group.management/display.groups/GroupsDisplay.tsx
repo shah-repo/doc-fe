@@ -10,7 +10,7 @@ interface OwnProps {
   selectedGroup: LoadCompanyGroup;
 }
 
-export type Props = OwnProps;
+type Props = OwnProps;
 
 export const GroupsDisplay: React.FunctionComponent<Props> = ({
   closeDialog,
