@@ -2,6 +2,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBEQMaintenanceProps, FBEQMaintenanceState } from "..";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
@@ -23,7 +24,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     const isEqStatusDraft = status === DocumentRevisionStatus.Draft;
     const isTypePM = editorConfig.type?.includes("preventativeMaintenance");
     const complianceStatus = formState?.getFieldValue(`${name}.status`);
-    const complianceDueDate = formState?.getFieldValue(`${name}.complianceDueDate`);
+    const dueDate = formState?.getFieldValue(`${name}.complianceDueDate`);
+    const complianceDueDate = dueDate && getFormattedDateString(dueDate, MomentFormats.MonthDateYearAlt);
 
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     pmFormId = formState?.getFieldValue(`${name}.preventativeForm`);

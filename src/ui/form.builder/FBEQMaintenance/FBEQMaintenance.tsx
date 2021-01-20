@@ -2,7 +2,6 @@ import { Box } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBEQMaintenanceHistory, FBInput, FBQuantityField, FBRadioGroup, FBText, FBTextEditor } from "..";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { FBSection } from "../FBSection";
 import { FBEQMaintenanceProps } from "./FBEQMaintenance.types";
 import { withFBEQMaintenance } from "./FBEQMaintenance.wrap";
@@ -84,7 +83,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
         />
         {complianceStatus}
         <span> - Due Date: </span>
-        {getFormattedDateString(complianceDueDate, MomentFormats.MonthDateYearAlt)}
+        {complianceDueDate}
       </Box>
     }
   </FBInput>
