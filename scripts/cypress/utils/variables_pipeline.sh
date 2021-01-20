@@ -35,25 +35,6 @@ export CYPRESS_FE_URL="https://dev.enlil.io"
 export CYPRESS_BASE_URL=$CYPRESS_FE_URL
 
 
-
-# echo "
-# {
-#   "reporterEnabled": "mochawesome, mocha-junit-reporter",
-#   "mochaJunitReporterReporterOptions": {
-#     "mochaFile": "test-results/$CI_BUILD_ID/json/junit/results-[hash].xml",
-#     "testsuitesTitle": true
-#   },
-#   "mochawesomeReporterOptions": {
-#     "reportDir": "$DIR_JSON",
-#     "overwrite": false,
-#     "html": false,
-#     "json": true,
-#     "reportFilename": "$REPORT_TITLE"
-#   }
-# }
-# " >> foo.json
-
-
 cat <<EOF > ./cypress-reporter-config.json
 {
   "reporterEnabled": "mochawesome, mocha-junit-reporter",

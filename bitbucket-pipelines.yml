@@ -86,7 +86,6 @@ definitions:
             - test-results/**
           script:
             - source ./scripts/cypress/utils/variables_pipeline.sh
-            - mv cypress_docker.json cypress.json
             - yarn install --frozen-lockfile
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
