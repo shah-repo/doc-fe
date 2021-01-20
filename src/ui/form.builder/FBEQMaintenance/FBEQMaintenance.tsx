@@ -82,7 +82,12 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
           locale={"form.builder.current.status"}
         />
         {complianceStatus}
-        <span> - Due Date: </span>
+        <span> - </span>
+        <FBText
+          boxProps={{ display: "inline-flex" }}
+          locale={"common.due.date"}
+        />
+        <span>: </span>
         {complianceDueDate}
       </Box>
     }
