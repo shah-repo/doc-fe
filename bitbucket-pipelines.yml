@@ -204,18 +204,8 @@ pipelines:
   custom: 
     run-cypress-on-dev:
       - variables:
-        - name: DBName
-      - step: *DUMP_PROD_TO_DEMO
-
-    dump_prod_to_dev:
-      - variables:
-        - name: DBName
-      - step: *DUMP_PROD_TO_DEV
-
-    dump_demo_to_dev:
-      - variables:
-        - name: DBName
-      - step: *DUMP_DEMO_TO_DEV
+        - test1: test123
+      - step: *RUN_CYPRESS_IN_PARALLEL
 
   # pull-requests:
   #   "**":
