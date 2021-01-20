@@ -974,7 +974,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Check if the part is displayed in the document summary", () => {
-          cy.ebCheckIfPartIsInSummary({ partName: "Part document" });
+          cy.ebCheckIfPartIsInSummary({ partName: "PRT-00006 - Part for EB document" });
         });
       });
     });

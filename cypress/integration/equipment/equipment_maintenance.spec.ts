@@ -448,7 +448,7 @@ context("Equipment maintenance test", () => {
 
         it("Select 'Equipment maintenance document'", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
-            cy.get("div[aria-rowindex=\"1\"]").click();
+            cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
           });
         });
       });
@@ -523,7 +523,7 @@ context("Equipment maintenance test", () => {
 
     it("Select 'Equipment maintenance document'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
-        cy.get("div[aria-rowindex=\"1\"]").click();
+        cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
       });
       cy.wait(5000);
     });
@@ -628,7 +628,7 @@ context("Equipment maintenance test", () => {
 
     it("Select 'Equipment maintenance document'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
-        cy.get("div[aria-rowindex=\"1\"]").click();
+        cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
       });
       cy.wait(5000);
     });
