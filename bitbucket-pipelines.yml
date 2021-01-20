@@ -345,6 +345,12 @@ pipelines:
           - step: 
               <<:  *RUN_CYPRESS
               name: Cypress specs 2/4
+          - step: 
+              <<:  *RUN_CYPRESS
+              name: Cypress specs 3/4
+          - step: 
+              <<:  *RUN_CYPRESS
+              name: Cypress specs 4/4
 
   branches:
     master:
