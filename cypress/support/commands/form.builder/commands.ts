@@ -63,6 +63,8 @@ declare global {
       fbVerifyElementContainText(params: { name: string; label: string; text: string }): Chainable<Subject>;
       fbVerifyElementNotContainText(params: { name: string; label: string; text: string }): Chainable<Subject>;
       fbEnterNameData(params: { name: string; data: string }): Chainable<Subject>;
+      fbAddAutocompleteElement(params: { name: string; label: string }): Chainable<Subject>;
+      fbVerifyAutocompleteElementLength(params: { el: string; length: number }): Chainable<Subject>;
     }
   }
 }
@@ -123,7 +125,7 @@ Cypress.Commands.add("fbSelectCustomFieldToAdd", (params: { name: string }) => {
 
 Cypress.Commands.add("fbSelectCheckboxValue", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[type=\"checkbox\"]").check(item).wait(200);
+    cy.get("[type=\"checkbox\"]").check(item, { force: true }).wait(200);
   });
 });
 
@@ -284,4 +286,23 @@ Cypress.Commands.add("fbVerifyElementNotContainText", (params: { name: string; l
 
 Cypress.Commands.add("fbEnterNameData", (params: { name: string; data: string }) => {
   cy.get(`[name="${params.name}"]`).clear().type(params.data);
+});
+
+Cypress.Commands.add("fbAddAutocompleteElement", (params: { name: string; label: string }) => {
+  cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+  cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+  cy.fbEnterNameValue({ name: "label", value: params.label });
+  cy.get("[data-cy=\"optionId\"]").type(`${params.name}{downarrow}{enter}`);
+  cy.fbAddNewFieldButton();
+  cy.wait(1000);
+  cy.contains(params.label).trigger("mouseover");
+});
+
+Cypress.Commands.add("fbVerifyAutocompleteElementLength", (params: { el: string; length: number }) => {
+  cy.get("[data-cy=\"form.builder.form.preview\"]").click();
+  cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+    .find(`[data-cy^="${params.el}-"]`)
+    .click();
+
+  cy.get(".MuiAutocomplete-popper ul li").should("have.length", params.length);
 });

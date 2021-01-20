@@ -1,19 +1,58 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
-let secondEmployee;
+let adminEmployee;
+let approvalRequestDocumentType;
+let initialArDocument;
+let group;
+let equipmentDocumentType;
+let materialsDocumentType;
+let partDocumentType;
+let equipmentDocument;
+let materialsDocument;
+let createdPOFormDocument;
+let formDocumentType;
+let purchaseOrderDocumentType;
+let createdPODocument;
+let supplierDocumentType;
+let maintenanceRecordDocumentType;
+let createdMaintenanceRecordFormDocument;
 
-context("FORM Field test", () => {
+let lotsNo;
+const lotsTitle = "Lots document";
+const lotsFormTitle = "Lots form document";
+const equipmentNo = "ET-00003";
+const equipmentTitle = "Equipment document";
+const materialNo = "MT-00004";
+const materialTitle = "Material document";
+const partNo = "PRT-00005";
+const partTitle = "Part document";
+const poNo = "FM-00003";
+const poTitle = "PO document";
+const poApiNo = "PO-00001";
+const poApiTitle = "API PO document";
+const supplierNo = "SUP-00005";
+const supplierTitle = "Supplier document";
+const maintenanceNo = "FM-00004";
+const maintenanceTitle = "Maintenance document";
+const companyAddress = "test address1";
+const code = "test code";
+const approvalFormTitle = "Approval Form document";
+const approvalTitle = "Approval document";
+const approvalRoleName = "approval role 1";
+
+context("Autocomplete test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
-      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
@@ -38,19 +77,52 @@ context("FORM Field test", () => {
                 group: "OTHER",
                 isQms: true,
               },
+              {
+                documentTypeName: "Part",
+                documentTypeAcronym: "PRT-",
+                group: "PART",
+                isQms: true,
+                needsSignature: true,
+                category: "Parts",
+              },
+              {
+                documentTypeName: "Material",
+                documentTypeAcronym: "MT-",
+                group: "MATERIAL",
+                isQms: true,
+                needsSignature: true,
+                category: "Materials",
+              },
+              {
+                documentTypeName: "Supplier",
+                documentTypeAcronym: "SUP-",
+                group: "SUPPLIER",
+                isQms: true,
+                needsSignature: true,
+                category: "Suppliers",
+              },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
+          materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Material");
+          partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Part");
+          purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
+          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
+          supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Supplier");
+          maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
           done();
         });
       });
     });
 
-    it("[API]Login second tester", (done: any) => {
+    it("[API]Login Admin", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -58,12 +130,436 @@ context("FORM Field test", () => {
         done();
       });
     });
+
+    it("[API]Create equipment document", () => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Equipment document</p>",
+              document: {
+                docId: equipmentNo,
+                documentType: {
+                  id: equipmentDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: equipmentTitle,
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            equipmentDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: equipmentDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            });
+          });
+        });
+      });
+    });
+
+    it("[API]Create materials document", () => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Materials document</p>",
+          document: {
+            docId: materialNo,
+            documentType: {
+              id: materialsDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: materialTitle,
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        materialsDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: materialsDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        });
+      });
+    });
+
+    it("[API]Create part document", () => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Part document</p>",
+          document: {
+            docId: partNo,
+            documentType: {
+              id: partDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: partTitle,
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      });
+    });
+
+    it("[API]Create PO document", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>PO Form document</p>",
+              document: {
+                docId: poNo,
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: poTitle,
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: purchaseOrderDocumentType[0].id,
+                }],
+                schema: [{
+                  index: 0,
+                  type: "purchaseorder",
+                  label: "PO",
+                  name: "po-kdpqvhc7",
+                  applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+                }],
+              },
+
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdPOFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdPOFormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => {
+              cy.poAPICreatePO({
+                payload: {
+                  name: "",
+                  attachments: [],
+                  referenceTo: [],
+                  formDocument: { id: createdPOFormDocument.id },
+                  description: poApiTitle,
+                  revisionChangeType: RevisionChangeType.NextRevision,
+                  document: {
+                    docId: poApiNo,
+                    documentType: {
+                      id: purchaseOrderDocumentType[0].id,
+                    },
+                    securityList: {
+                      operators: [],
+                      securityEmployees: [],
+                      securityGroups: [
+                        {
+                          id: group.body[0].id,
+                        },
+                      ],
+                    },
+                  },
+                  formInput: {
+                    "po-kdpqvhc7": {
+                      items: [{
+                        id: "kdpr51z9",
+                        type: "service",
+                        date: (new Date()).toISOString(),
+                        tax: false,
+                        capitalEquipment: false,
+                        isTraceabilityRequired: false,
+                        description: "office cleaning",
+                        serviceId: "cleaning",
+                        units: "hours",
+                        order: 5,
+                        glCode: "code 1",
+                        unitPrice: 30,
+                        received: 0,
+                        totalAmount: "150.00",
+                        formattedDate: (new Date()).toLocaleDateString("en-US"),
+                        index: 0,
+                      }],
+                      tax: "0.00",
+                      subTotal: "150.00",
+                      totalAmount: "150.00",
+                      shippingCost: "0.00",
+                      currency: "USD",
+                      exchangeRate: 1,
+                      totalInUSD: "150.00",
+                      dateOfExchangeRate: "",
+                    },
+                  },
+                },
+                employeeId: adminEmployee.id,
+                sessionId: loginResponse.sessionId,
+              }).then((response) => {
+                createdPODocument = response;
+                cy.drAPIApproveAndRelease({
+                  documentId: createdPODocument.id,
+                  payload: {
+                    effectiveDate: (new Date()).toISOString(),
+                    documentType: { id: approvalRequestDocumentType[0].id },
+                    formDocument: { id: initialArDocument[0].id },
+                  },
+                  employeeId: adminEmployee.id,
+                  sessionId: loginResponse.sessionId,
+                }).then(() => {
+                  done();
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+
+    it("[API]Create Company Address & Acct codes", (done: any) => {
+      cy.cmpUpdateCompany({
+        employeeId: adminEmployee.id,
+        sessionId: loginResponse.sessionId as unknown as string,
+        payload: {
+          acctCodes: [code],
+          addresses: [companyAddress],
+        },
+      }).then(() => {
+        done();
+      });
+    });
+
+    it("[API]Create supplier document", () => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Supplier document</p>",
+          document: {
+            docId: supplierNo,
+            documentType: {
+              id: supplierDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: supplierTitle,
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      });
+    });
+
+    it("[API]Create Maintenance record form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Maintenance form record</p>",
+          document: {
+            docId: maintenanceNo,
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: maintenanceTitle,
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: maintenanceRecordDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "fb-maintenance-details-section",
+                type: "section",
+                index: 0,
+                label: "Maintenance Details",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+              },
+              {
+                name: "equipment_id",
+                type: "autocomplete",
+                index: 1,
+                label: "Equipment",
+                rules: "required",
+                optionId: "20",
+                placeholder: "[Select revision here]",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+              },
+              {
+                name: "equipment_maintainer",
+                type: "autocomplete",
+                index: 2,
+                label: "Maintainer",
+                rules: "required",
+                optionId: "13",
+                placeholder: "[Select name here]",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+              },
+              {
+                name: "fb-requipment-maintenance-section",
+                type: "textfield",
+                index: 3,
+                label: "Equipment Maintenance Section",
+                rules: "required",
+                hidden: true,
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+              },
+              {
+                label: "form.builder.approvals",
+                type: "approvals",
+                deleteDisabled: true,
+                name: "fb-approvals-ki5yh7ba",
+                uniqueSchemaItem: true,
+                index: 4,
+              },
+            ],
+          },
+
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdMaintenanceRecordFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdMaintenanceRecordFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
   });
 
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
@@ -73,2069 +569,468 @@ context("FORM Field test", () => {
     });
   });
 
-  context("Autocomplete 'Document Revision' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
+  context("Create 'Lots' document", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
+    it("Click create document", () => {
+      cy.cmpClickCreateNewDocument();
+    });
 
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
+    it("Enter document title " + lotsFormTitle, () => {
+      cy.drEnterDocumentTitle({ name: lotsFormTitle });
+    });
 
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
+    it("Enter document description 'Lots form description'", () => {
+      cy.drEnterDocumentDescription({ description: "Lots form description" });
+    });
 
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
 
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
 
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
+    it("Select 'Lot' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Lots" });
+    });
 
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
 
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Document revisions' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
+    it("Approve and release FORM document", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.fbClickButton({ el: "updateRecord" });
       });
     });
 
-    context("Verify Autocomplete 'Document Revision'", () => {
-      it("Verify autocomplete 'Document Revision'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/document_revisions`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
+    it("Click on 'Lots' in Manufacturing on sidebar", () => {
+      cy.fbClickButton({ el: "navigation.manufacturing" });
+      cy.fbClickButton({ el: "navigation.lots" });
+    });
 
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                expect($li).to.contain.text(response.body[index].document.docId);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
+    it("Click on 'Add New Lot' button", () => {
+      cy.get("#DocumentByTypeListPresenter-openDocRev").click();
+    });
+
+    it("Enter Lot title " + lotsTitle, () => {
+      cy.get("#Title-field").type(lotsTitle);
+    });
+
+    it("Enter Quantity '1'", () => {
+      cy.get("[name=\"lot_quantity\"]").type("1");
+    });
+
+    it("Click 'Create document'", () => {
+      cy.fbClickButton({ el: "DocumentRevisionForm-submit" });
+    });
+
+    it("Get lots no", () => {
+      cy.get("#HeaderInfo-docId").then((lot) => { lotsNo = lot.text(); });
+    });
+
+    it("Click 'Accept Lot & confirm' button", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet], () => {
+          cy.fbClickButton({ el: "ApproveAndRelease-button" });
+          cy.wait(1000);
+          cy.fbClickButton({ el: "ApproveAndRelease-submit" });
+
+        });
+    });
+
+    it("Reload company", () => {
+      cy.fbClickButton({ el: "UserMenuButton" });
+      cy.get("#switchCompanyButton").click();
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+  });
+
+  context("Create Approval roles", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click create document", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter document title " + approvalFormTitle, () => {
+      cy.drEnterDocumentTitle({ name: approvalFormTitle });
+    });
+
+    it("Enter document description 'Approval Roles description'", () => {
+      cy.drEnterDocumentDescription({ description: "Approval Roles description" });
+    });
+
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Document Approval Matrix' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Document Approval Matrix" });
+    });
+
+    it("Add Approval Matrix", () => {
+      cy.fbAddNewField();
+      cy.fbSelectItemFromNewFieldList({ field: "Approval Matrix" });
+    });
+
+    it("Click 'Add' button", () => {
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Click Save button", () => {
+      cy.fbClickButton({ el: "DocumentRevisionForm-submit" });
+    });
+
+    it("Approve and release FORM document", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        // cy.fbClickButton({ el: "updateRecord" });
+      });
+    });
+
+    it("Click on 'New' button", () => {
+      cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+    });
+
+    it("Enter AR title " + approvalTitle, () => {
+      cy.drEnterDocumentTitle({ name: approvalTitle });
+    });
+
+    it("Enter description 'test description'", () => {
+      cy.drEnterDocumentDescription({ description: "test description" });
+    });
+
+    it("Click on 'Add Another Role' button", () => {
+      cy.get("button[data-cy=\"form.builder.add.another.role\"]").click();
+    });
+
+    it("Enter Approval Role " + approvalRoleName, () => {
+      cy.get("[data-cy=\"name\"]").type(approvalRoleName);
+    });
+
+    it("Click on 'Add' button", () => {
+      cy.get("button[data-cy=\"common.add\"]").click();
+    });
+
+    it("Click on 'Create Document' button", () => {
+      cy.get("[id=\"DocumentRevisionForm-submit\"]").wait(3000).click();
+    });
+
+    it("Click 'Add Approver' & 'confirm' button", () => {
+      cy.fbClickButton({ el: "ApproveAndRelease-button" });
+      cy.fbClickButton({ el: "ApproveAndRelease-submit" });
+    });
+
+    it("Reload company", () => {
+      cy.fbClickButton({ el: "UserMenuButton" });
+      cy.get("#switchCompanyButton").click();
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+  });
+
+  context("Create FORM document", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click create document", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter document title 'FORM document'", () => {
+      cy.drEnterDocumentTitle({ name: "FORM document" });
+    });
+
+    it("Enter document description 'FORM document description'", () => {
+      cy.drEnterDocumentDescription({ description: "FORM document description" });
+    });
+
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Component Protocol' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+      cy.unClick();
+    });
+
+    context("Add Autocomplete fields", () => {
+      it("Select 'Document revisions'", () => {
+        cy.fbAddAutocompleteElement({ name: "Document Revision", label: "doc-revision" });
+      });
+
+      it("Select 'Approval requests'", () => {
+        cy.fbAddAutocompleteElement({ name: "Approval requests", label: "approval-request" });
+      });
+
+      it("Select 'Approvers'", () => {
+        cy.fbAddAutocompleteElement({ name: "Approvers", label: "approvers" });
+      });
+
+      it("Select 'Document types'", () => {
+        cy.fbAddAutocompleteElement({ name: "Document types", label: "doc-types" });
+      });
+
+      it("Select 'Supplier list'", () => {
+        cy.fbAddAutocompleteElement({ name: "Supplier list", label: "supplier-list" });
+      });
+
+      it("Select 'TL numbers list'", () => {
+        cy.fbAddAutocompleteElement({ name: "TL numbers list", label: "tl-numbers-list" });
+      });
+
+      it("Select 'Company addresses'", () => {
+        cy.fbAddAutocompleteElement({ name: "Company addresses", label: "company-addresses" });
+      });
+
+      it("Select 'GL codes'", () => {
+        cy.fbAddAutocompleteElement({ name: "GL codes", label: "gl-codes" });
+      });
+
+      it("Select 'Groups'", () => {
+        cy.fbAddAutocompleteElement({ name: "Groups", label: "groups" });
+      });
+
+      it("Select 'Parts'", () => {
+        cy.fbAddAutocompleteElement({ name: "Parts", label: "parts" });
+      });
+
+      it("Select 'Purchase Order list'", () => {
+        cy.fbAddAutocompleteElement({ name: "Purchase Order list", label: "purchase-order-list" });
+      });
+
+      it("Select 'Employees'", () => {
+        cy.fbAddAutocompleteElement({ name: "Employees", label: "employees" });
+      });
+
+      it("Select 'Official Groups'", () => {
+        cy.fbAddAutocompleteElement({ name: "Official Groups", label: "official-groups" });
+      });
+
+      it("Select 'Part Number in WO'", () => {
+        cy.fbAddAutocompleteElement({ name: "Part Number in WO", label: "part-number-wo" });
+      });
+
+      it("Select 'Document Revisions In Draft without Records'", () => {
+        cy.fbAddAutocompleteElement({
+          name: "Document Revisions In Draft without Records",
+          label: "doc-revisions-draft",
+        });
+      });
+
+      it("Select 'Approval Roles'", () => {
+        cy.fbAddAutocompleteElement({ name: "Approval Roles", label: "approval-roles" });
+      });
+
+      it("Select 'Document revisions (all versions)'", () => {
+        cy.fbAddAutocompleteElement({ name: "Document revisions (all versions)", label: "doc-revisions-all" });
+      });
+
+      it("Select 'Materials'", () => {
+        cy.fbAddAutocompleteElement({ name: "Materials", label: "materials" });
+      });
+
+      it("Select 'Available Parts'", () => {
+        cy.fbAddAutocompleteElement({ name: "Available Parts", label: "available-parts" });
+      });
+
+      it("Select 'Lots'", () => {
+        cy.fbAddAutocompleteElement({ name: "Lots", label: "lots" });
+      });
+
+      it("Select 'Available Part Documents'", () => {
+        cy.fbAddAutocompleteElement({ name: "Available Part Documents", label: "available-part-doc" });
+      });
+
+      it("Select 'CSL numbers list'", () => {
+        cy.fbAddAutocompleteElement({ name: "CSL numbers list", label: "csl-numbers-list" });
+      });
+
+      it("Select 'Equipment'", () => {
+        cy.fbAddAutocompleteElement({ name: "Equipment", label: "equipment" });
+      });
+
+      it("Select 'Preventative Maintenance Forms'", () => {
+        cy.fbAddAutocompleteElement({
+          name: "Preventative Maintenance Forms",
+          label: "preventative-maintenance-forms",
+        });
+      });
+
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Approve and release FORM document", () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.fbClickButton({ el: "updateRecord" });
         });
       });
     });
   });
 
-  context("Autocomplete 'Approval requests' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Approval requests' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Approval requests{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+  context("Verify Autocomplete list", () => {
+    it("Open Preview dialog", () => {
+      cy.fbClickButton({ el: "FBWorkspace-clickView" });
     });
 
-    context("Verify Autocomplete 'Approval requests'", () => {
-      it("Verify autocomplete 'Approval requests'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/change_requests`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                expect($li).to.contain.text(response.body[index].crId);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Approvers' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Approvers' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Approvers{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Document revisions' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-revision", length: 12 });
     });
 
-    context("Verify Autocomplete 'Approvers'", () => {
-      it("Verify autocomplete 'Approvers'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/change_requests/available_approvers`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.optionalApprovers.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                const res = response.body.optionalApprovers[index];
-                expect($li).to.have.text(`${res.user.name} - ${res.user.email}`);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.optionalApprovers.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Document types' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Document types' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Document types{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Approval requests' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "approval-request", length: 10 });
     });
 
-    context("Verify Autocomplete 'Document types'", () => {
-      it("Verify autocomplete 'Document types'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/document_type`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                expect($li).to.have.text(response.body[index].documentTypeName);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Supplier list' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Supplier list' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Supplier list{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Approvers' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "approvers", length: 5 });
+      cy.get(".MuiAutocomplete-popper ul li").eq(0).should("have.text", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get(".MuiAutocomplete-popper ul li").eq(1).should("have.text", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get(".MuiAutocomplete-popper ul li").eq(2).should("have.text", `${USERS[3].name} - ${USERS[3].email}`);
+      cy.get(".MuiAutocomplete-popper ul li").eq(3).should("have.text", `${USERS[4].name} - ${USERS[4].email}`);
+      cy.get(".MuiAutocomplete-popper ul li").eq(4).should("have.text", `${USERS[5].name} - ${USERS[5].email}`);
     });
 
-    context("Verify Autocomplete 'Supplier list'", () => {
-      it("Verify autocomplete 'Supplier list'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/document_revisions?docTypeGroups%5B%5D=SUPPLIER`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                const res = response.body[index];
-                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'TL numbers list' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'TL numbers list' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("TL numbers list{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Document types' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-types", length: 28 });
     });
 
-    context("Verify Autocomplete 'TL numbers list'", () => {
-      it("Verify autocomplete 'TL numbers list'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/document_revisions?documentTypeAcronym=TL`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                const res = response.body[index];
-                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Company addresses' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Company addresses' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Company addresses{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Supplier list' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "supplier-list", length: 1 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", supplierNo).and("contain", supplierTitle);
     });
 
-    context("Verify Autocomplete 'Company addresses'", () => {
-      it("Verify autocomplete 'Company addresses'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/company/mine`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                expect($li).to.have.text(response.body[index].addresses);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'GL codes' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'GL codes' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("GL codes{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'TL numbers list' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "tl-numbers-list", length: 0 });
     });
 
-    context("Verify Autocomplete 'GL codes'", () => {
-      it("Verify autocomplete 'GL codes'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/company/mine`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                expect($li).to.have.text(response.body[index].acctCodes);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Groups' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Groups' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Groups{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Company addresses' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "company-addresses", length: 1 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", companyAddress);
     });
 
-    context("Verify Autocomplete 'Groups'", () => {
-      it("Verify autocomplete 'Groups'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/groups`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                expect($li).to.have.text(response.body[index].name);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Parts' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Parts' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Parts{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'GL codes' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "gl-codes", length: 1 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", code);
     });
 
-    context("Verify Autocomplete 'Parts'", () => {
-      it("Verify autocomplete 'Parts'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/document_revisions?docTypeGroups%5B%5D=PART`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                expect($li).to.have.text(response.body[index].document.docId);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Purchase Order list' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Purchase Order list' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Purchase Order list{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Groups' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "groups", length: 8 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Owner as approver");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Everyone");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Can be approver");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Company Admin");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "User Management");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Groups Management");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Groups Management Unofficial");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Developers");
     });
 
-    context("Verify Autocomplete 'Purchase Order list'", () => {
-      it("Verify autocomplete 'Purchase Order list'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/document_revisions?docTypeGroups%5B%5D=PO&status%5B%5D=RELEASED`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                const res = response.body[index];
-                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Employees' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Employees' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Employees{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Parts' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "parts", length: 1 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", partNo);
     });
 
-    context("Verify Autocomplete 'Employees'", () => {
-      it("Verify autocomplete 'Employees'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/employees?active=true`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                expect($li).to.have.text(response.body[index].user.name);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Official Groups' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Official Groups' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Official Groups{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Purchase Order list' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "purchase-order-list", length: 1 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", poApiNo);
     });
 
-    context("Verify Autocomplete 'Official Groups'", () => {
-      it("Verify autocomplete 'Official Groups'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/groups`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                expect($li).to.have.text(response.body[index].name);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Part Number in WO' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Part Number in WO' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Part Number in WO{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Employees' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "employees", length: 5 });
+      cy.get(".MuiAutocomplete-popper ul li").eq(0).should("have.text", USERS[1].name);
+      cy.get(".MuiAutocomplete-popper ul li").eq(1).should("have.text", USERS[2].name);
+      cy.get(".MuiAutocomplete-popper ul li").eq(2).should("have.text", USERS[3].name);
+      cy.get(".MuiAutocomplete-popper ul li").eq(3).should("have.text", USERS[4].name);
+      cy.get(".MuiAutocomplete-popper ul li").eq(4).should("have.text", USERS[5].name);
     });
 
-    context("Verify Autocomplete 'Part Number in WO'", () => {
-      it("Verify autocomplete 'Part Number in WO'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/document_revisions?docTypeGroups%5B%5D=PART`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                const res = response.body[index];
-                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Document Revisions In Draft without Records' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Document Revisions In Draft without Records' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Document Revisions In Draft without Records{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Official Groups' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "official-groups", length: 8 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Owner as approver");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Everyone");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Can be approver");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Company Admin");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "User Management");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Groups Management");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Groups Management Unofficial");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Developers");
     });
 
-    context("Verify Autocomplete 'Document Revisions In Draft without Records'", () => {
-      it("Verify autocomplete 'Document Revisions In Draft without Records'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/document_revisions?docTypeGroups%5B%5D=FORM&docTypeGroups%5B%5D=SUPPLIER&docTypeGroups%5B%5D=OTHER&docTypeGroups%5B%5D=MPI&docTypeGroups%5B%5D=DYNAMIC_FORM&docTypeGroups%5B%5D=POAM&docTypeGroups%5B%5D=PO&docTypeGroups%5B%5D=WORK_ORDER&docTypeGroups%5B%5D=PART&docTypeGroups%5B%5D=DAM&docTypeGroups%5B%5D=EQUIPMENT&docTypeGroups%5B%5D=MATERIAL&status%5B%5D=DRAFT`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                const res = response.body[index];
-                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Approval Roles' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Approval Roles' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Approval Roles{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Part Number in WO' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "part-number-wo", length: 1 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", partNo).and("contain", partTitle);
     });
 
-    context("Verify Autocomplete 'Approval Roles'", () => {
-      it("Verify autocomplete 'Approval Roles'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/groups/approval_roles`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                expect($li).to.have.text(response.body[index].name);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Document revisions (all versions)' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Document revisions (all versions)' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Document revisions (all versions){downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Document Revisions In Draft without Records' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-revisions-draft", length: 2 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", supplierNo).and("contain", supplierTitle);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", partNo).and("contain", partTitle);
     });
 
-    context("Verify Autocomplete 'Document revisions (all versions)'", () => {
-      it("Verify autocomplete 'Document revisions (all versions)'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/document_revisions`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                const res = response.body[index];
-                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Materials' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Materials' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Materials{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Approval Roles' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "approval-roles", length: 1 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", approvalRoleName);
     });
 
-    context("Verify Autocomplete 'Materials'", () => {
-      it("Verify autocomplete 'Materials'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/document_revisions?docTypeGroupOptions%5B%5D=MATERIAL&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                const res = response.body[index];
-                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Available Parts' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Available Parts' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Available Parts{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Document revisions (all versions)' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-revisions-all", length: 12 });
     });
 
-    context("Verify Autocomplete 'Available Parts'", () => {
-      it("Verify autocomplete 'Available Parts'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/document_revisions/available_parts`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                const res = response.body[index];
-                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Lots' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Lots' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Lots{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Materials' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "materials", length: 2 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", partNo).and("contain", partTitle);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", materialNo).and("contain", materialTitle);
     });
 
-    context("Verify Autocomplete 'Lots'", () => {
-      it("Verify autocomplete 'Lots'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/document_revisions?docTypeGroupOptions%5B%5D=CAN_CREATE_INSPECTION&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                const res = response.body[index];
-                expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Available Part Documents' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Available Part Documents' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Available Part Documents{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Available Parts' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "available-parts", length: 1 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", partNo).and("contain", partTitle);
     });
 
-    context("Verify Autocomplete 'Available Part Documents'", () => {
-      it("Verify autocomplete 'Available Part Documents'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/documents/available_parts`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .each(($li, index, $lis) => {
-                const res = response.body[index];
-                expect($li).to.have.text(`${res.docId} - ${res.documentRevisions[0].name}`);
-              })
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'CSL numbers list' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'CSL numbers list' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("CSL numbers list{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Lots' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "lots", length: 1 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", lotsNo).and("contain", lotsTitle);
     });
 
-    context("Verify Autocomplete 'CSL numbers list'", () => {
-      it("Verify autocomplete 'CSL numbers list'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/document_revisions?documentTypeAcronym=CSL`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Equipment' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Equipment' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Equipment{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'Available Part Documents' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "available-part-doc", length: 1 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", partNo).and("contain", partTitle);
     });
 
-    context("Verify Autocomplete 'Equipment'", () => {
-      it("Verify autocomplete 'Equipment'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/document_revisions?documentTypeCategory=Equipment`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
-
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
-    });
-  });
-
-  context("Autocomplete 'Preventative Maintenance Forms' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Preventative Maintenance Forms' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Preventative Maintenance Forms{downarrow}{enter}");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Preview FORM document", () => {
-        it("Click Form Review", () => {
-          cy.fbClickButton({ el: "FBWorkspace-clickView" });
-        });
-      });
+    it("Verify count of 'CSL numbers list' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "csl-numbers-list", length: 0 });
     });
 
-    context("Verify Autocomplete 'Preventative Maintenance Forms'", () => {
-      it("Verify autocomplete 'Preventative Maintenance Forms'", () => {
-        cy.request({
-          method: "GET",
-          url: `${CONFIG.BE_URL}/api/v1/document_revisions/forms_group_option?docTypeGroupOption=MAINTENANCE`,
-          headers: {
-            Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-          },
-        }).then((response) => {
-          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
+    it("Verify count of 'Equipment' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "equipment", length: 1 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", equipmentNo).and("contain", equipmentTitle);
+    });
 
-          if (response.body.length > 0 ) {
-            cy.get(".MuiAutocomplete-popper ul li")
-              .then(($lis) => {
-                expect($lis).to.have.length(response.body.length);
-              });
-          } else {
-            cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-          }
-        });
-      });
+    it("Verify count of 'Preventative Maintenance Forms' in the list", () => {
+      cy.fbVerifyAutocompleteElementLength({ el: "preventative-maintenance-forms", length: 1 });
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", maintenanceNo).and("contain", maintenanceTitle);
     });
   });
 });
