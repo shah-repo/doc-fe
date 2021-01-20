@@ -7,7 +7,8 @@ export type FBEQMaintenanceProps =
 & Pick<FBProviderProps, "eqMaintenanceState">
 & {
   handleAdd?: () => void;
-  getCurrentStatus?: () => JSX.Element | null;
+  complianceDueDate?: string;
+  complianceStatus?: string;
   isNewPMDisabled?: boolean;
   pmFormId?: string;
   isTypePM?: boolean;
