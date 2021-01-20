@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+echo "test123 $test123"
+
 export CI_BUILD_ID="some_ci_build_id"
 
 export CYPRESS_KONFIG_ENV="development"

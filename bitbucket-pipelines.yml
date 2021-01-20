@@ -203,7 +203,7 @@ pipelines:
   custom: 
     run-cypress-on-dev:
       - variables:
-          - test1: test123
+          - name: test123
       - parallel: *RUN_CYPRESS_IN_PARALLEL
 
   # pull-requests:
