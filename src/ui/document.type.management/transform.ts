@@ -10,14 +10,14 @@ export const enumToOptions = (values): any => {
   })
   ); };
 
-const stringifyJSON = (value) => {
+export const stringifyJSON = (value) => {
   if (!value) {
     return null;
   }
   return JSON.stringify(value, null, 2);
 };
 
-const parseJSON = (value) => {
+export const parseJSON = (value) => {
   if (!value) {
     return null;
   }
