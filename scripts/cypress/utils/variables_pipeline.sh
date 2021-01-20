@@ -34,6 +34,10 @@ export CYPRESS_FE_URL="https://dev.enlil.io"
 
 export CYPRESS_BASE_URL=$CYPRESS_FE_URL
 
+export CYPRESS_COMMIT_FE="CYPRESS_COMMIT_FE"
+export CYPRESS_COMMIT_BE="CYPRESS_COMMIT_BE"
+export CYPRESS_COMMIT_REMOTEJS="CYPRESS_COMMIT_REMOTEJS"
+
 
 cat <<EOF > ./cypress-reporter-config.json
 {
