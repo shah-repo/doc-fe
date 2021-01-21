@@ -420,7 +420,9 @@ Cypress.Commands.add("drSelectRevisionStageOptions", (params: {revisionStageOpti
 
 Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").type(`${params.username}{downarrow}{enter}`, { force: true });
-  cy.get("[data-cy='add-user'").eq(2).click().wait(2000);
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
+    cy.get("[data-cy='add-user'").eq(2).click();
+  });
 });
 
 Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: { option: string }) => {
@@ -595,7 +597,7 @@ Cypress.Commands.add("drSelectUser", (...users: string[]) => {
 Cypress.Commands.add("drAddUserFromPermissionTab", (...users: string[]) => {
   users.forEach((user) => {
     cy.get(`[id="react-select-2-input"]`).type(`${user}{downarrow}{enter}`, { force: true });
-    cy.get(`[data-cy="add-user"]`).click();
+    cy.get(`[data-cy="add-user"]`).eq(0).click();
   });
 });
 
@@ -609,7 +611,7 @@ Cypress.Commands.add("drSelectGroup", (...groups: string[]) => {
 Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
   groups.forEach((group) => {
     cy.get(`[id="react-select-3-input"]`).type(`${group}{downarrow}{enter}`, { force: true });
-    cy.get(`[data-cy="add-user"]`).click();
+    cy.get(`[data-cy="add-user"]`).eq(1).click();
   });
 });
 
