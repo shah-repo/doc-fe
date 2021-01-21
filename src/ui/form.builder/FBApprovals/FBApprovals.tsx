@@ -116,17 +116,19 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
           </Box>
         )}
       </FBMapWrapper>
-      {showFieldOwnersWarning && (<Box bgcolor={Colors.light_red} display="flex">
-        <ReportProblemOutlinedIcon fontSize="small"/>
-        <Typography variant="h5" style={{ marginLeft: 8 }}>
-          <Text
-            translation="form.builder.owner.input.warning"
-            values={{
-              contributors: owners?.join(", "),
-            }}
-          />
-        </Typography>
-      </Box>)}
+      {showFieldOwnersWarning && (
+        <Box bgcolor={Colors.light_red} display="flex">
+          <ReportProblemOutlinedIcon fontSize="small"/>
+          <Typography variant="h5" style={{ marginLeft: 8 }}>
+            <Text
+              translation="form.builder.owner.input.warning"
+              values={{
+                contributors: owners?.join(", "),
+              }}
+            />
+          </Typography>
+        </Box>
+      )}
     </FBInput>
   </FBProvider>
 );
