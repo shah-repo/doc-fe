@@ -48,7 +48,7 @@ context("FORM Field test", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -61,7 +61,7 @@ context("FORM Field test", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
@@ -71,2549 +71,650 @@ context("FORM Field test", () => {
     });
   });
 
-  context("FORM Input 'TextField' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+  context("Create a form", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click create document", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter document title 'test title'", () => {
+      cy.drEnterDocumentTitle({ name: "test title" });
+    });
+
+    it("Enter document description 'test description'", () => {
+      cy.drEnterDocumentDescription({ description: "test description" });
+    });
+
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Clinical Protocol' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+      cy.unClick();
+    });
+
+    context("Create FORM document with Form fields", () => {
+      it("Add TextField", () => {
+        cy.fbAddNewField();
+        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+        cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
+        cy.fbEnterNameValue({ name: "rows", value: "2" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.get(`[name^="fb-textfield"`).parent().trigger("mouseover");
+      });
+
+      it("Add Checkbox group", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
+        cy.fbGroupOptions("option1", "option2");
+        cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-checkbox-group" });
+      });
+
+      it("Add Autocomplete", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
+        cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
+        cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
+        cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.wait(2000);
+        cy.contains("fb-autocomplete").trigger("mouseover");
+      });
+
+      it("Add Text Editor", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
+        cy.fbGroupOptions("SelectOne", "SelectTwo", "SelectThree");
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-text-editor" } );
+      });
+
+      it("Add Date picker", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-datepicker" } );
+      });
+
+      it("Add Hyperlink", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Hyperlink" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink" });
+        cy.fbEnterNameValue({ name: "linkUrl", value: "google.com" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-hyperlink" } );
+      });
+
+      it("Add Select Field", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
+        cy.fbEnterPlaceholder({ placeholder: "fb-select-field placeholder" });
+        cy.fbGroupOptions("option1", "option2");
+        cy.fbSelectCheckboxValue("includeNone", "includeContext", "reviseDisabled",
+          "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-select-field" } );
+      });
+
+      it("Add Radio Button group", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
+        cy.fbGroupOptions("option1", "option2");
+        cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-radiobutton-group" } );
+      });
+
+      it("Add Paragraph", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Paragraph" });
+        cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
+          .click({ force: true }).clear().type("fb-paragraph");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-paragraph" } );
+      });
+
+      it("Add File Upload", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-fileupload" } );
+      });
+
+      it("Add Blank Template Form", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-blank-template" } );
+      });
+
+      it("Add Quantity", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-quantity" } );
+      });
+
+      it("Add Timer", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).click();
+        cy.fbEnterNameValue({ name: "label", value: "fb-timer" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-timer" } );
+      });
+
+      it("Add Purchase Order", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-purchase-order" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-purchase-order" } );
+      });
+
+      it("Add Receive Purchase Order", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Receive Purchase Order" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-receive-purchase-order" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.wait(2000);
+        cy.fbMouseOverByLabel({ label: "fb-receive-purchase-order" } );
+      });
+
+      it("Add Approval Matrix", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Approval Matrix" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "Approval Roles" } );
+      });
+
+      it("Add PO Approval Matrix", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "PO Approval Matrix" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-po-approval-matrix" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-po-approval-matrix" } );
+      });
+
+      it("Add Instructions Media upload", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Instructions Media upload" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-instructions" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-instructions" } );
+      });
+
+      it("Add Evidence Media upload", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Evidence Media upload" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-evidence" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-evidence" } );
+      });
+
+      it("Add Test Requirement", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Test Requirement" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-test-req" });
+        cy.get("[data-cy=\"testRequirement\"]")
+          .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-test-req" } );
+      });
+
+      it("Add Procedure", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "Step #1" } );
+      });
+
+      it("Add Equipment", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-equipment" });
+        cy.get("input[value=\"preventativeMaintenance\"]").click();
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-equipment" } );
+      });
+
+      it("Add Text field with range", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-range" });
+        cy.fbEnterNameValue({ name: "placeholder", value: "fb-range placeholder" });
+        cy.fbSelectCheckboxName("editorConfig.rangeOption",
+          "editorConfig.criticalToQuality", "editorConfig.inspection");
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-range" } );
+      });
+
+      it("Add Section", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Section" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-section" });
+        cy.fbSelectCheckboxValue("inspectionSection");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-section" } );
+      });
+
+      it("Add Subsection", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Subsection" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-subsection" });
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "FB-SUBSECTION" } );
+      });
+
+      it("Add Step", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Step" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-step" });
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-step" } );
+      });
+
+      it("Add Approvals", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Approvals" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-approvals" });
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-approvals" } );
+      });
+
+      it("Add Inline Approval", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-inline-approval" });
+        cy.get("[data-cy=\"editorConfig.approvers\"]").type(`${USERS[1].email }{downarrow}{enter}`);
+        cy.get("[data-cy=\"editorConfig.groups\"]").type("Everyone{downarrow}{enter}");
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-inline-approval" } );
+      });
+
+      it("Add Request Approval", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Request Approval" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-request-approval" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-request-approval" } );
+      });
+
+      it("Add Checkpoint", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Checkpoint" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-checkpoint" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-checkpoint" } );
+      });
+
+      it("Add Create a Label", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Create a Label" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-create-label" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-create-label" } );
+      });
+
+      it("Add Implementation Task", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Implementation Task" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-task" });
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-task" } );
+      });
+
+      it("Add Instructions 'MPI'", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "MPI" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-mpi" });
+        cy.get("[data-cy=\"instructionsDocument\"]").type("AR Form{downarrow}{enter}");
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-mpi" } );
+      });
+
+      it("Add Instructions 'Select Document(s)'", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Select Document" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-select-doc" });
+        cy.get("[data-cy=\"options\"]").type("AR Form{downarrow}{enter}");
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-select-doc" } );
+      });
+
+      it("Add Instructions 'Select Requirement(s)'", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Select Requirement" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-select-req" });
+        cy.get("[data-cy=\"options\"]")
+          .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
+        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.fbMouseOverByLabel({ label: "fb-select-req" } );
+      });
+
+      it("Add Actions 'Action Button'", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Action Button" });
+        cy.fbSelectCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
+        cy.fbAddNewFieldButton();
       });
 
       it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Text field", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Text field" });
-        });
-      });
-
-      context("Fill in TextField attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Enter rows '2'", () => {
-          cy.fbEnterNameValue({ name: "rows", value: "2" });
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
 
-    context("Edit TextField attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify TextField attributes", () => {
-      it("Verify TextField label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify TextField placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      });
-
-      it("Verify TextField rows", () => {
+    context("Verify Form fields", () => {
+      it("Verify TextField attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-textfield" });
+        cy.fbVerifyNameValue({ name: "placeholder", value: "fb-textfield placeholder" });
         cy.fbVerifyNameValue({ name: "rows", value: "2" });
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Checkbox Group' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Checkbox group", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
-        });
-      });
-
-      context("Fill in Checkbox group attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Enter options", () => {
-          cy.fbGroupOptions("SelectOne", "SelectTwo", "SelectThree");
-        });
-
-        it("Check 'Include Other', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Checkbox Group attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Checkbox Group attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify options", () => {
-        cy.fbVerifyOptions("SelectOne", "SelectTwo", "SelectThree");
-      });
-
-      it("Verify checkboxes 'Include Other', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
+      it("Verify Checkbox group attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-checkbox-group" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-checkbox-group" });
+        cy.fbVerifyOptions("option1", "option2");
         cy.fbVerifyCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Autocomplete' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Autocomplete", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        });
-      });
-
-      context("Fill in Autocomplete attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Select 'Document revisions' as options", () => {
-          cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
-        });
-
-        it("Check 'Multi', 'QR Scan', 'Revision', 'Deletion', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Autocomplete attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Autocomplete attributes", () => {
-      it("Verify Autocomplete label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify Autocomplete placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      });
-
-      it("Verify Autocomplete options 'Document revisions' ", () => {
+      it("Verify Autocomplete attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-autocomplete" });
+        cy.fbVerifyNameValue({ name: "placeholder", value: "fb-autocomplete placeholder" });
         cy.get("[data-cy=\"optionId\"]").should("have.value", "Document revisions");
-      });
-
-      it("Verify checkboxes 'Multi', 'QR Scan', 'Revision', 'Deletion', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Text Editor' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Text Editor", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
-        });
-      });
-
-      context("Fill in Text Editor attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Enter options", () => {
-          cy.fbGroupOptions("SelectOne", "SelectTwo", "SelectThree");
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Text Editor attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Text Editor attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify options", () => {
+      it("Verify Text Editor attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-text-editor" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-text-editor" });
         cy.fbVerifyOptions("SelectOne", "SelectTwo", "SelectThree");
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Date Picker' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Date Picker", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
-        });
-      });
-
-      context("Fill in Date Picker attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Date Picker attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Date Picker attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
+      it("Verify Date picker attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-datepicker" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-datepicker" });
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Hyperlink' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Hyperlink", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Hyperlink" });
-        });
-      });
-
-      context("Fill in Hyperlink attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Enter linkUrl 'google.com'", () => {
-          cy.fbEnterNameValue({ name: "linkUrl", value: "google.com" });
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Hyperlink attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Hyperlink attributes", () => {
-      it("Verify Hyperlink label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify Hyperlink linkUrl", () => {
+      it("Verify Hyperlink attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-hyperlink" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-hyperlink" });
         cy.fbVerifyNameValue({ name: "linkUrl", value: "google.com" });
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Select Field' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Select Field", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
-        });
-      });
-
-      context("Fill in Select Field attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Enter placeholder 'test placeholder'", () => {
-          cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
-        });
-
-        it("Enter options", () => {
-          cy.fbGroupOptions("SelectOne", "SelectTwo", "SelectThree");
-        });
-
-        it("Check 'None', 'Other', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("includeNone", "includeContext", "reviseDisabled",
-            "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Select Field attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Select Field attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      });
-
-      it("Verify options", () => {
-        cy.fbVerifyOptions("SelectOne", "SelectTwo", "SelectThree");
-      });
-
-      it("Verify checkboxes 'None', 'Other', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("includeNone", "includeContext",
-          "reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Radio Button group' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Radio Button group", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
-        });
-      });
-
-      context("Fill in Radio Button group attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Enter options", () => {
-          cy.fbGroupOptions("SelectOne", "SelectTwo", "SelectThree");
-        });
-
-        it("Check 'Include Other', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Radio Button group attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Radio Button group attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify options", () => {
-        cy.fbVerifyOptions("SelectOne", "SelectTwo", "SelectThree");
-      });
-
-      it("Verify checkboxes 'Include Other', 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Paragraph' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Paragraph", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Paragraph" });
-        });
-      });
-
-      context("Fill in Paragraph attributes", () => {
-        it("Enter paragraph", () => {
-          cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
-            .click({ force: true }).clear().type("testing");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Paragraph attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Paragraph attributes", () => {
-      it("Verify paragraph", () => {
-        cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]").should("have.text", "testing");
-      });
-    });
-  });
-
-  context("FORM Input 'File Upload' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add File Upload", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
-        });
-      });
-
-      context("Fill in File Upload attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit File Upload attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify File Upload attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
+      it("Verify Select Field attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-select-field" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-select-field" });
+        cy.fbVerifyNameValue({ name: "placeholder", value: "fb-select-field placeholder" });
+        cy.fbVerifyOptions("option1", "option2");
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Blank Template Form' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Blank Template Form", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
-        });
-      });
-
-      context("Fill in Blank Template Form attributes", () => {
-        it("Enter label 'test Blank Template Form'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test Blank Template Form" });
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Blank Template Form attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Blank Template Form attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test Blank Template Form" });
-      });
-    });
-  });
-
-  context("FORM Input 'Quantity' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Quantity", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
-        });
-      });
-
-      context("Fill in Quantity attributes", () => {
-        it("Enter label 'test quantity'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test quantity" });
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Quantity attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Quantity attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test quantity" });
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
+      it("Verify Radio Button group attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-radiobutton-group" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-radiobutton-group" });
+        cy.fbVerifyOptions("option1", "option2");
+        cy.fbVerifyOptions("option1", "option2");
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Timer' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
+      it("Verify Paragraph attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-paragraph" });
+        cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]").should("have.text", "fb-paragraph");
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Timer", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Timer" });
-        });
-      });
-
-      context("Fill in Timer attributes", () => {
-        it("Enter label 'test timer'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test timer" });
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Timer attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Timer attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test timer" });
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
+      it("Verify File Upload attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-fileupload" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-fileupload" });
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Approval Matrix' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
+      it("Verify Blank Template Form attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-blank-template" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-blank-template" });
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Approval Matrix", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Approval Matrix" });
-        });
-      });
-
-      context("Fill in Approval Matrix attributes", () => {
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Approval Matrix attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Approval Matrix attributes", () => {
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
+      it("Verify Quantity attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-quantity" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-quantity" });
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'PO Approval Matrix' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add PO Approval Matrix", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "PO Approval Matrix" });
-        });
-      });
-
-      context("Fill in PO Approval Matrix attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit PO Approval Matrix attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify PO Approval Matrix attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
+      it("Verify Timer attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-timer" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-timer" });
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Instructions Media upload' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Instructions Media upload", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Instructions Media upload" });
-        });
-      });
-
-      context("Fill in Instructions Media upload attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Instructions Media upload attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Instructions Media upload attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
+      it("Verify Purchase Order attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-purchase-order" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-purchase-order" });
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Evidence Media upload' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Evidence Media upload", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Evidence Media upload" });
-        });
-      });
-
-      context("Fill in Evidence Media upload attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Evidence Media upload attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Evidence Media upload attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
+      it("Verify Receive Purchase Order attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-receive-purchase-order" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-receive-purchase-order" });
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Test Requirement' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
+      it("Verify Approval Matrix attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "Approval Roles" });
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
+      it("Verify PO Approval Matrix attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-po-approval-matrix" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-po-approval-matrix" });
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
+      it("Verify Instructions Media Upload attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-instructions" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-instructions" });
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
+      it("Verify Evidence Media Upload attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-evidence" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-evidence" });
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Test Requirement", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Test Requirement" });
-        });
-      });
-
-      context("Fill in Test Requirement attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select 'Document revisions' as options", () => {
-          cy.get("[data-cy=\"testRequirement\"]")
-            .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Test Requirement attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Test Requirement attributes", () => {
-      it("Verify Test Requirement label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify Test Requirement options 'Document revisions' ", () => {
+      it("Verify Test Requirement attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-test-req" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-test-req" });
         cy.get("[data-cy=\"testRequirement\"]")
           .should("have.value",
             "Visual Alarm Indicator - The system shall use color as a visual indication of alarm type");
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Procedure' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Procedure", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
-        });
-      });
-
-      context("Fill in Procedure attributes", () => {
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Procedure attributes", () => {
-      it("Click on Step #1 Edit icon", () => {
-        cy.get("[data-cy=\"edit-schema-item\"]").last().click({ force: true });
-      });
-    });
-
-    context("Verify Procedure attributes", () => {
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
+      it("Verify Procedure attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "Step #1" });
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Input 'Text field with range' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
+      it("Verify Equipment attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-equipment" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-equipment" });
+        cy.fbVerifyCheckboxValue("preventativeMaintenance");
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Text field with range", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
-        });
-      });
-
-      context("Fill in Text field with range attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Enter label 'test placeholder'", () => {
-          cy.fbEnterNameValue({ name: "placeholder", value: "test placeholder" });
-        });
-
-        it("Check 'Range', 'Critical to quality', 'Inspection' checkboxes", () => {
-          cy.fbSelectCheckboxName("editorConfig.rangeOption",
-            "editorConfig.criticalToQuality", "editorConfig.inspection");
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Text field with range attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Text field with range attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify placeholder", () => {
-        cy.fbVerifyNameValue({ name: "placeholder", value: "test placeholder" });
-      });
-
-      it("Verify checkboxes 'Range', 'Critical to quality', 'Inspection'", () => {
+      it("Verify TextField with range attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-range" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-range" });
+        cy.fbVerifyNameValue({ name: "placeholder", value: "fb-range placeholder" });
         cy.fbVerifyCheckboxName("editorConfig.rangeOption",
           "editorConfig.criticalToQuality", "editorConfig.inspection");
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Section 'Section' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Section field", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Section" });
-        });
-      });
-
-      context("Fill in Section attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Check 'Inspection Section' checkboxes", () => {
-          cy.fbSelectCheckboxValue("inspectionSection");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Section attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Section attributes", () => {
-      it("Verify Section label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify checkboxes 'Inspection Section'", () => {
+      it("Verify Section attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-section" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-section" });
         cy.fbVerifyCheckboxValue("inspectionSection");
-      });
-    });
-  });
-
-  context("FORM Section 'Subsection' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
+      it("Verify Subsection attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "FB-SUBSECTION" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-subsection" });
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
+      it("Verify Step attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-step" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-step" });
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
+      it("Verify Approvals attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-approvals" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-approvals" });
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Subsection field", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Subsection" });
-        });
-      });
-
-      context("Fill in Subsection attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Subsection attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Subsection attributes", () => {
-      it("Verify Subsection label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-    });
-  });
-
-  context("FORM Section 'Step' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Step field", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Step" });
-        });
-      });
-
-      context("Fill in Step attributes", () => {
-        it("Enter label 'test step label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test step label" });
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Step attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Step attributes", () => {
-      it("Verify Step label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test step label" });
-      });
-    });
-  });
-
-  context("FORM Section 'Test Step' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Test Step field", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Test Step" });
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Step attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Test Step attributes", () => {
-      it("Verify Step label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "Step" });
-      });
-    });
-  });
-
-  context("FORM Approval 'Approvals' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Approvals field", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Approvals" });
-        });
-      });
-
-      context("Fill in Approvals attributes", () => {
-        it("Enter label 'test approval'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test approval" });
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Approvals attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Approvals attributes", () => {
-      it("Verify approval", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test approval" });
-      });
-    });
-  });
-
-  context("FORM Approval 'Inline Approval' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Inline Approval field", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
-        });
-      });
-
-      context("Fill in Inline Approval attributes", () => {
-        it("Enter label 'test approval'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test approval" });
-        });
-
-        it("Select Approvers", () => {
-          cy.get("[data-cy=\"editorConfig.approvers\"]").type(`${USERS[1].email }{downarrow}{enter}`);
-        });
-
-        it("Select Groups", () => {
-          cy.get("[data-cy=\"editorConfig.groups\"]").type("Everyone{downarrow}{enter}");
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Inline Approval attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Inline Approval attributes", () => {
-      it("Verify approval", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test approval" });
-      });
-
-      it("Verify Approvers", () => {
+      it("Verify Inline Approval attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-inline-approval" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-inline-approval" });
         cy.get("[data-cy=\"editorConfig.approvers\"]").parent().should("contain", USERS[1].email);
-      });
-
-      it("Verify Groups", () => {
         cy.get("[data-cy=\"editorConfig.groups\"]").parent().should("contain", "Everyone");
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Actions 'Action Button' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Action Button field", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Action Button" });
-        });
-      });
-
-      context("Fill in Action Button attributes", () => {
-        it("Select checkboxes", () => {
-          cy.fbSelectCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Action Button attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Action Button attributes", () => {
-      it("Verify checkboxes", () => {
-        cy.fbVerifyCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
-      });
-    });
-  });
-
-  context("FORM Buttons 'Checkpoint' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Checkpoint", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Checkpoint" });
-        });
-      });
-
-      context("Fill in Checkpoint attributes", () => {
-        it("Enter label 'test checkpoint'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test checkpoint" });
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Checkpoint attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Checkpoint attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test checkpoint" });
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
+      it("Verify Request Approval attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-request-approval" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-request-approval" });
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Buttons 'Create a Label' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add 'Create a Label'", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Create a Label" });
-        });
-      });
-
-      context("Fill in 'Create a Label' attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit 'Create a Label' attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify 'Create a Label' attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
+      it("Verify Checkpoint attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-checkpoint" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-checkpoint" });
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Buttons 'Implementation Task' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add 'Implementation Task'", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Implementation Task" });
-        });
-      });
-
-      context("Fill in 'Implementation Task' attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit 'Implementation Task' attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify 'Implementation Task' attributes", () => {
-      it("Verify label", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
+      it("Verify Create a Label attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-create-label" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-create-label" });
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Instructions 'MPI' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
+      it("Verify Implementation Task attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-task" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-task" });
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add MPI", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "MPI" });
-        });
-      });
-
-      context("Fill in MPI attributes", () => {
-        it("Enter label 'test mpi'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test mpi" });
-        });
-
-        it("Select Document options", () => {
-          cy.get("[data-cy=\"instructionsDocument\"]").type("FM-00001 - rev 1 - AR Form{downarrow}{enter}");
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit MPI attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify MPI attributes", () => {
-      it("Verify label 'test mpi'", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test mpi" });
-      });
-
-      it("Verify Document option ", () => {
+      it("Verify MPI attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-mpi" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-mpi" });
         cy.get("[data-cy=\"instructionsDocument\"]").should("have.value", "FM-00001 - rev 1 - AR Form");
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Instructions 'Select Document(s)' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Select Document(s)", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Select Document" });
-        });
-      });
-
-      context("Fill in Select Document(s) attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select Options", () => {
-          cy.get("[data-cy=\"options\"]").type("AR Form{downarrow}{enter}");
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Select Document(s) attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Select Document(s) attributes", () => {
-      it("Verify label 'test label'", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify Option ", () => {
+      it("Verify Select Document attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-select-doc" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-select-doc" });
         cy.get("[data-cy=\"options\"]").parent().should("contain", "AR Form");
-      });
-
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      });
-    });
-  });
-
-  context("FORM Instructions 'Select Requirement(s)' test", () => {
-    context("Create FORM document", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter document title 'FORM document'", () => {
-        cy.drEnterDocumentTitle({ name: "FORM document" });
-      });
-
-      it("Enter document description 'FORM document description'", () => {
-        cy.drEnterDocumentDescription({ description: "FORM document description" });
-      });
-
-      it("Select 'Form' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Protocol' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      });
-
-      context("Add form fields", () => {
-        it("Add Select Requirement(s)", () => {
-          cy.fbAddNewField();
-          cy.fbSelectItemFromNewFieldList({ field: "Select Requirement" });
-        });
-      });
-
-      context("Fill in Select Requirement(s) attributes", () => {
-        it("Enter label 'test label'", () => {
-          cy.fbEnterNameValue({ name: "label", value: "test label" });
-        });
-
-        it("Select Options", () => {
-          cy.get("[data-cy=\"options\"]")
-            .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
-        });
-
-        it("Check 'Revision Disabled', 'Deletion Disabled', 'Copyable Value' checkboxes", () => {
-          cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        });
-
-        it("Click 'Add' button", () => {
-          cy.fbAddNewFieldButton();
-        });
-      });
-
-      context("Create FORM document", () => {
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-    });
-
-    context("Edit Select Requirement(s) attributes", () => {
-      it("Click on Edit icon", () => {
-        cy.fbEditHiddenBtn();
-      });
-    });
-
-    context("Verify Select Requirement(s) attributes", () => {
-      it("Verify label 'test label'", () => {
-        cy.fbVerifyNameValue({ name: "label", value: "test label" });
-      });
-
-      it("Verify Option ", () => {
+      it("Verify Select Requirement attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-select-req" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-select-req" });
         cy.get("[data-cy=\"options\"]").parent().should("contain",
           "Visual Alarm Indicator - The system shall use color as a visual indication of alarm type");
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbClickButton({ el: "dialog-close" });
       });
 
-      it("Verify checkboxes 'Revision Disabled', 'Deletion Disabled', 'Copyable Value'", () => {
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      it("Verify Action Button attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "Send Email" });
+        cy.fbVerifyCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
+        cy.fbClickButton({ el: "dialog-close" });
       });
     });
   });
