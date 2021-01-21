@@ -26,8 +26,9 @@ let createdPODocument;
 let supplierDocumentType;
 let maintenanceRecordDocumentType;
 let createdMaintenanceRecordFormDocument;
+let CSLDocumentType;
+let createdLotsFormDocument;
 
-let lotsNo;
 const lotsTitle = "Lots document";
 const lotsFormTitle = "Lots form document";
 const equipmentNo = "ET-00003";
@@ -115,6 +116,7 @@ context("Autocomplete test", () => {
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Supplier");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
+          CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specifications Lot");
           done();
         });
       });
@@ -554,6 +556,110 @@ context("Autocomplete test", () => {
         }).then(() => done());
       });
     });
+
+    it("[API]Create Lots form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Lots Form document</p>",
+          document: {
+            docId: "FM-00008",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: lotsFormTitle,
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: CSLDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "lot_quantity",
+                type: "quantity",
+                index: 0,
+                label: "Quantity Received",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                editorProperties: [
+
+                ],
+                validationAttribute: "Quantity Received",
+                applicableValidationSchema: true,
+              },
+              {
+                name: "expiry-date",
+                type: "datepicker",
+                index: 1,
+                label: "Expiry Date",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                editorProperties: [],
+                validationAttribute: "Expiry Date",
+                applicableValidationSchema: true,
+              },
+              {
+                name: "100-inspection-override",
+                type: "checkboxgroup",
+                index: 2,
+                label: "100% Inspection Override",
+                options: [
+                  {
+                    text: "100% Inspection Override",
+                    value: "100% Inspection Override",
+                  },
+                ],
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                editorProperties: [],
+                validationAttribute: "100% Inspection Override",
+                applicableValidationSchema: true,
+              },
+              {
+                label: "form.builder.approvals",
+                type: "approvals",
+                deleteDisabled: true,
+                name: "fb-approvals-ki5yh7ba",
+                uniqueSchemaItem: true,
+                index: 5,
+              },
+            ],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdLotsFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdLotsFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
+      });
+    });
   });
 
   context("Login user", () => {
@@ -570,83 +676,72 @@ context("Autocomplete test", () => {
   });
 
   context("Create 'Lots' document", () => {
-    it("Navigate to document list", () => {
-      cy.navigToDocumentList();
+    it("Navigate to Records", () => {
+      cy.navigToRecords();
     });
 
-    it("Click create document", () => {
-      cy.cmpClickCreateNewDocument();
+    it("Click on Create new", () => {
+      cy.poClickCreatePO();
     });
 
-    it("Enter document title " + lotsFormTitle, () => {
-      cy.drEnterDocumentTitle({ name: lotsFormTitle });
-    });
-
-    it("Enter document description 'Lots form description'", () => {
-      cy.drEnterDocumentDescription({ description: "Lots form description" });
-    });
-
-    it("Select 'Form' document type", () => {
-      cy.drSelectDocumentType({ documentType: "Form" });
-    });
-
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Select 'Lot' output document type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Lots" });
-    });
-
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
-    it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        cy.fbClickButton({ el: "updateRecord" });
+    it("Select 'Component Specifications Lot' from the dropdown", () => {
+      cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
+      cy.wait(500);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
+        cy.get("div[id^=react-select]").contains("Component Specifications Lot").click();
       });
     });
 
-    it("Click on 'Lots' in Manufacturing on sidebar", () => {
-      cy.fbClickButton({ el: "navigation.manufacturing" });
-      cy.fbClickButton({ el: "navigation.lots" });
+    it("Add lot title", () => {
+      cy.drEnterDocumentTitle({ name: lotsTitle });
     });
 
-    it("Click on 'Add New Lot' button", () => {
-      cy.get("#DocumentByTypeListPresenter-openDocRev").click();
+    it("Add lot description", () => {
+      cy.drEnterDocumentDescription({ description: "lot document description" });
     });
 
-    it("Enter Lot title " + lotsTitle, () => {
-      cy.get("#Title-field").type(lotsTitle);
+    it("Select 'Part document' in references", () => {
+      cy.drSelectReferences( "Part document" );
     });
 
-    it("Enter Quantity '1'", () => {
-      cy.get("[name=\"lot_quantity\"]").type("1");
+    it("Enter quantity received", () => {
+      cy.get("[name=\"lot_quantity\"]").type("12");
     });
 
-    it("Click 'Create document'", () => {
-      cy.fbClickButton({ el: "DocumentRevisionForm-submit" });
+    it("Check 100% override", () => {
+      cy.get("[value=\"100% Inspection Override\"]").check();
     });
 
-    it("Get lots no", () => {
-      cy.get("#HeaderInfo-docId").then((lot) => { lotsNo = lot.text(); });
+    it("Add 'Expiry Date'", () => {
+      cy.poAddDateRequired();
     });
 
-    it("Click 'Accept Lot & confirm' button", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet], () => {
-          cy.fbClickButton({ el: "ApproveAndRelease-button" });
-          cy.wait(1000);
-          cy.fbClickButton({ el: "ApproveAndRelease-submit" });
-
-        });
+    it("Create 'Preventative maintenance document'", () => {
+      cy.drClickCreateDocumentWithApiCall();
+      cy.wait(5000);
     });
 
-    it("Reload company", () => {
-      cy.fbClickButton({ el: "UserMenuButton" });
-      cy.get("#switchCompanyButton").click();
+    it("Add an Approval'", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve record", () => {
+      cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
+      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
+        cy.get("[data-cy=\"common.confirm\"]").click();
+      });
+    });
+
+    it("Logs user in & Selects company", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: "Tester1!",
+      });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
   });
@@ -900,7 +995,7 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Approval requests' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "approval-request", length: 10 });
+      cy.fbVerifyAutocompleteElementLength({ el: "approval-request", length: 9 });
     });
 
     it("Verify count of 'Approvers' in the list", () => {
@@ -1011,7 +1106,7 @@ context("Autocomplete test", () => {
 
     it("Verify count of 'Lots' in the list", () => {
       cy.fbVerifyAutocompleteElementLength({ el: "lots", length: 1 });
-      cy.get(".MuiAutocomplete-popper ul li").should("contain", lotsNo).and("contain", lotsTitle);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", lotsTitle);
     });
 
     it("Verify count of 'Available Part Documents' in the list", () => {

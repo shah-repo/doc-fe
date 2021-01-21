@@ -11,7 +11,6 @@ let loginResponse;
 let multipleCompanies;
 let secondEmployee;
 const lotsTitle = `Lots ${Cypress.moment().format("X")}`;
-let lotsNo;
 
 context("FORM Field test", () => {
   context("[API]Prepare company", () => {
@@ -102,8 +101,8 @@ context("FORM Field test", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
-      it("Select 'Lot' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Lots" });
+      it("Select 'Component Specifications Lot' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Component Specifications Lot" });
       });
 
       it("Click create document", () => {
@@ -119,44 +118,68 @@ context("FORM Field test", () => {
     });
 
     context("Create 'Lots'", () => {
-      it("Click on 'Lots' in Manufacturing on sidebar", () => {
-        cy.fbClickButton({ el: "navigation.manufacturing" });
-        cy.fbClickButton({ el: "navigation.lots" });
+      it("Navigate to Records", () => {
+        cy.navigToRecords();
       });
 
-      it("Click on 'Add New Lot' button", () => {
-        cy.get("#DocumentByTypeListPresenter-openDocRev").click();
+      it("Click on Create new", () => {
+        cy.poClickCreatePO();
       });
 
-      it("Enter Lot title " + lotsTitle, () => {
-        cy.get("#Title-field").type(lotsTitle);
+      it("Select 'Component Specifications Lot' from the dropdown", () => {
+        cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
+        cy.wait(500);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
+          cy.get("div[id^=react-select]").contains("Component Specifications Lot").click();
+        });
       });
 
-      it("Enter Quantity '1'", () => {
-        cy.get("[name=\"lot_quantity\"]").type("1");
+      it("Add lot title", () => {
+        cy.drEnterDocumentTitle({ name: lotsTitle });
       });
 
-      it("Click 'Create document'", () => {
-        cy.fbClickButton({ el: "DocumentRevisionForm-submit" });
+      it("Add lot description", () => {
+        cy.drEnterDocumentDescription({ description: "lot document description" });
       });
 
-      it("Get lots no", () => {
-        cy.get("#HeaderInfo-docId").then((lot) => { lotsNo = lot.text(); });
+      it("Select 'Part document' in references", () => {
+        cy.drSelectReferences( "Part document" );
       });
 
-      it("Click 'Accept Lot & confirm' button", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet], () => {
-            cy.fbClickButton({ el: "ApproveAndRelease-button" });
-            cy.wait(1000);
-            cy.fbClickButton({ el: "ApproveAndRelease-submit" });
-
-          });
+      it("Enter quantity received", () => {
+        cy.get("[name=\"lot_quantity\"]").type("12");
       });
 
-      it("Reload company", () => {
-        cy.fbClickButton({ el: "UserMenuButton" });
-        cy.get("#switchCompanyButton").click();
+      it("Check 100% override", () => {
+        cy.get("[value=\"100% Inspection Override\"]").check();
+      });
+
+      it("Create 'Preventative maintenance document'", () => {
+        cy.drClickCreateDocumentWithApiCall();
+        cy.wait(5000);
+      });
+
+      it("Add an Approval'", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      });
+
+      it("Submit for approval", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Approve record", () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
+        cy.get("input[name=\"password\"]").type("Tester1!");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
+          cy.get("[data-cy=\"common.confirm\"]").click();
+        });
+      });
+
+      it("Logs user in & Selects company", () => {
+        cy.authLogin({
+          email: USERS[1].email,
+          password: "Tester1!",
+        });
         cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
       });
     });
@@ -247,7 +270,7 @@ context("FORM Field test", () => {
         });
 
         it("Verify created 'Lots' in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").should("contain", lotsNo).and("contain", lotsTitle);
+          cy.get(".MuiAutocomplete-popper ul li").should("contain", lotsTitle);
         });
 
         it("Verify count in the list", () => {
