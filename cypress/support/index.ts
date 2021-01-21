@@ -83,6 +83,7 @@ before(() => {
   if (CONFIG.RUN_ENVIRONMENT === "pipeline") {
     const dir = `${CONFIG.DIR_SCREENSHOTS}/${Cypress.spec.name}`;
     cy.task("deleteScreenshotsFolder", dir);
+    cy.task("deleteExistingReports", { reportDir: CONFIG.REPORTS_DIR, testName: Cypress.spec.name });
   }
 });
 
@@ -144,8 +145,6 @@ if (CONFIG.SKIP_ON_RUN_FAILURE) {
   before(() => {
     cy.task("resetShouldSkipFlag");
   });
-
-
 }
 
 if (CONFIG.RUN_ENVIRONMENT === "pipeline") { // TODO does not work!!

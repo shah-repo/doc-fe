@@ -1,6 +1,7 @@
 import { downloadFile } from "cypress-downloadfile/lib/addPlugin";
 import { rename, rmdirSync } from "fs";
 import { getEmail } from "../support/commands/imap/imap";
+import { deleteJunitTestReports, deleteMochaTestReports } from "../support/deleteReports/deleteReranReports";
 import { allowedCharacters } from "../utils/context/constants";
 
 // ***********************************************************
@@ -39,6 +40,11 @@ export default (on, config) => {
     downloadFile,
     deleteScreenshotsFolder(dir) {
       rmdirSync(dir, { recursive: true });
+      return null;
+    },
+    deleteExistingReports(params: {reportDir; testName}) {
+      deleteMochaTestReports(`${params.reportDir}/`, params.testName);
+      deleteJunitTestReports(`${params.reportDir}/junit/`, params.testName);
       return null;
     },
   });

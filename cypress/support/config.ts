@@ -28,6 +28,7 @@ export class ConfigEnv {
       COMMIT_FE: Cypress.env("COMMIT_FE"),
       COMMIT_BE: Cypress.env("COMMIT_BE"),
       COMMIT_REMOTEJS: Cypress.env("COMMIT_REMOTEJS"),
+      REPORTS_DIR: Cypress.env("REPORTS_DIR"),
     });
 
     const errors = validateSync(configEnv, {
@@ -74,10 +75,12 @@ export class ConfigEnv {
 
   RUN_ENVIRONMENT!: string;
 
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === "pipeline")
+  @IsDefined()
+  @IsString()
   DIR_SCREENSHOTS!: string;
 
   TEST_COMPANY_REPLICA_NAME!: string;
-
 
   @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === "pipeline")
   @IsDefined()
@@ -93,6 +96,11 @@ export class ConfigEnv {
   @IsDefined()
   @IsString()
   COMMIT_REMOTEJS!: string;
+
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === "pipeline")
+  @IsDefined()
+  @IsString()
+  REPORTS_DIR!: string;
 }
 
 
