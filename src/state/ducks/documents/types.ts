@@ -3,12 +3,14 @@ import { Attachment } from "../attachments";
 import { Owner } from "../common";
 import { DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET, DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST } from "./constants";
 
+
 export enum DocumentStatus {
   Draft = "DRAFT",
   InReview = "IN_REVIEW",
   Withdrawn = "WITHDRAWN",
   Approved = "APPROVED",
   Rejected = "REJECTED",
+  Released = "RELEASED"
 }
 
 export enum ApprovalStatus {

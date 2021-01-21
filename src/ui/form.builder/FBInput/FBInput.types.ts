@@ -105,6 +105,7 @@ export type FBInputProps =
     testRequirement?: string;
     isTemplate?: boolean;
     includeQRScan?: boolean;
+    isInputOwner?: boolean;
     designDisabled?: boolean;
     /**
      * @cfg {Bool} Whether the field can be deleted in the output document.
