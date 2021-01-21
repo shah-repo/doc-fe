@@ -47,7 +47,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     const {
       inputOwners = [],
     } = document || {};
-    const ownerIds = uniq(Object.values(inputOwners as any));
+    const ownerIds = uniq(Object.values(inputOwners as unknown as string));
     owners = employees.filter((e) => ownerIds.includes(e.id)).map((owner) => (
       `${owner?.user?.name} (${owner?.user?.email})`));
 

@@ -53,7 +53,11 @@ export const withFBInput = <T extends FBInputProps>(
   }: T) => {
 
     const { formState, workspaceState, bookmarkState } = FB.useStores();
-    const { isOutput } = workspaceState || {};
+    const {
+      isOutput,
+      document,
+      externalState: { auth: { user: { employeeId = "" } = {} } = {} } = {},
+    } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
@@ -63,9 +67,9 @@ export const withFBInput = <T extends FBInputProps>(
     value = inputState?.value;
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
-    const inputOwner = workspaceState?.document?.inputOwners?.[name];
+    const inputOwner = document?.inputOwners?.[name];
     isInputOwner = inputOwner === undefined ||
-      inputOwner === workspaceState?.externalState?.auth?.user.employeeId;
+      inputOwner === employeeId;
 
     // Set validation scheme. This is union of scheme & comps configs.
     useEffect(() => {
