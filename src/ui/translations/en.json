@@ -830,6 +830,7 @@
   "form.builder.audit.NUMBER_NEW": "{label} Added",
   "form.builder.audit.NUMBER_EDITED": "{label} Updated",
   "form.builder.audit.NUMBER_DELETED": "{label} Deleted",
+  "form.builder.owner.input.warning": "There are contributors to the document. Contributors {contributors} should be added as approvers.",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.pdf": "Download PDF file",
