@@ -48,11 +48,16 @@ export const withFBInput = <T extends FBInputProps>(
     omitFormValue,
     showErrorMsg = true,
     deleted,
+    isInputOwner,
     ...props
   }: T) => {
 
     const { formState, workspaceState, bookmarkState } = FB.useStores();
-    const { isOutput } = workspaceState || {};
+    const {
+      isOutput,
+      document,
+      externalState: { auth: { user: { employeeId = "" } = {} } = {} } = {},
+    } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
@@ -62,6 +67,9 @@ export const withFBInput = <T extends FBInputProps>(
     value = inputState?.value;
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
+    const inputOwner = document?.inputOwners?.[name];
+    isInputOwner = inputOwner === undefined ||
+      inputOwner === employeeId;
 
     // Set validation scheme. This is union of scheme & comps configs.
     useEffect(() => {
@@ -120,6 +128,7 @@ export const withFBInput = <T extends FBInputProps>(
 
     const child = first(React.Children.toArray(children));
     const isClone = !includes(OmitInputClones, type) && !isUndefined(child) && !hidden;
+    disabled = !isInputOwner || disabled;
 
     if (isClone) {
       children = cloneElement(child as React.ReactElement, {
@@ -172,6 +181,7 @@ export const withFBInput = <T extends FBInputProps>(
       onChange,
       onBlur,
       includeContext,
+      isInputOwner,
       validationMode,
       helperText,
       children,

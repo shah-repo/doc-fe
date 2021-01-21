@@ -1,10 +1,12 @@
-import { Box } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBRequiredApprover, FBSection, FBText } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { ApprovalStatus } from "../../../state/ducks/common";
 import { DocumentStatus } from "../../../state/ducks/documents";
+import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
 import { FBProvider } from "../FBProvider";
 import { FBApprovalsProps } from "./FBApprovals.types";
@@ -29,6 +31,8 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
   loading,
   inlineApprovalExists,
   isAlphaReleased,
+  owners,
+  showFieldOwnersWarning,
   ...props
 }) => (
   <FBProvider {...{ dialogState }}>
@@ -65,6 +69,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
             display="flex"
             flexDirection="row"
             alignItems="center"
+            mb={4}
           >
             {approval.approver?.user.name}
             {approval.status && approval.status !== "DRAFT" && (
@@ -111,6 +116,19 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
           </Box>
         )}
       </FBMapWrapper>
+      {showFieldOwnersWarning && (
+        <Box bgcolor={Colors.light_red} display="flex">
+          <ReportProblemOutlinedIcon fontSize="small"/>
+          <Typography variant="h5" style={{ marginLeft: 8 }}>
+            <Text
+              translation="form.builder.owner.input.warning"
+              values={{
+                contributors: owners?.join(", "),
+              }}
+            />
+          </Typography>
+        </Box>
+      )}
     </FBInput>
   </FBProvider>
 );

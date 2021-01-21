@@ -47,6 +47,7 @@ export interface Company {
   addresses: [];
   acctCodes: [];
   navigation: NavigationItem[];
+  employees?: Employee[];
 }
 
 export interface SelectCompanyAction {
