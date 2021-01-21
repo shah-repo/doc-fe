@@ -8,7 +8,7 @@ import { DialogHandler } from "../../../hooks/useDialog";
 import { styles } from "./ApiToken.style";
 import ApiTokenResponseFormPresenter from "./ApiTokenResponseForm.presenter";
 
-export interface Props {
+interface Props {
   dialog: DialogHandler;
   apiTokenName: string;
   apiTokenKey: string;

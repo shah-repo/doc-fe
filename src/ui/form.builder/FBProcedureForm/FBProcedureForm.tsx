@@ -34,7 +34,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
         name="title"
         label="form.builder.part"
         rules="required"
-        optionId={FBAutocompleteAsyncOption.ebParts}
+        optionId={FBAutocompleteAsyncOption.materials}
         filterOptions={lotFilterOptions}
         loading={partLoading}
         disabled={partLoading}
@@ -50,6 +50,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
         loading={lotLoading}
         disabled={lotLoading}
         {...{ disabledOptions }}
+        freeSolo
         withState
       />
     </>

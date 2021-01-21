@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { connect } from "react-redux";
 import { Attachment, attachmentsActions } from "../../../../state/ducks/attachments";
+import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 import { ApplicationState } from "../../../../state/reducers";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
@@ -66,9 +67,14 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
     },
   });
 
-  const handleUpload = (files: File[], lineType, cleanCopRequired) => {
+  const handleUpload = (files: File[], lineType, cleanCopyRequired) => {
+
     if (files.length === 0) {
       return;
+    }
+
+    if (lineType === LINE_TYPES.RED_LINE) {
+      cleanCopyRequired = true;
     }
 
     const file = files.pop();
@@ -76,8 +82,8 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       return;
     }
     setIsUploading(true);
-    async.start(upload, file, lineType, async, cleanCopRequired);
-    handleUpload(files, lineType, cleanCopRequired);
+    async.start(upload, file, lineType, async, cleanCopyRequired);
+    handleUpload(files, lineType, cleanCopyRequired);
   };
 
   const onChange = (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => {
@@ -88,14 +94,14 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
         const type = file.name.split(".").pop();
         if (type === "doc") {
           !isUserAlertedNoDocFiles &&
-           alert(intl.formatMessage({ id: "common.attachment.form.DOCERROR" }));
+           toastError(intl.formatMessage({ id: "common.attachment.form.DOCERROR" }));
           isUserAlertedNoDocFiles = true;
           return false;
         }
 
         if (type !== "docx" && cleanCopyRequired) {
           !isUserAlrtedCleanCopyMismatch &&
-          alert(intl.formatMessage({ id: "common.attachment.form.Create.Clean.Copy.Error" }));
+          toastError(intl.formatMessage({ id: "common.attachment.form.Create.Clean.Copy.Error" }));
           isUserAlrtedCleanCopyMismatch = true;
           return false;
         }

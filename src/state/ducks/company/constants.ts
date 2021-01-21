@@ -116,6 +116,12 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
         category: "Lot",
         restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
       },
+      {
+        label: "Parts",
+        type: "CATEGORY",
+        icon: "/navigation_icons/tag-check.svg",
+        category: "Parts",
+      },
     ],
     restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
   },

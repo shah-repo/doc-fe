@@ -1,5 +1,6 @@
 import { find, get } from "lodash";
 import React from "react";
+import { toastError } from "../../components/notifications";
 import FBStore from "../stores/ui/FBStore";
 import { FBTemplateSchema } from "../types/store";
 import { FBTransportSchemaProps } from "../types/transport";
@@ -20,12 +21,12 @@ export const withTransport = <T extends FBTransportSchemaProps>(
 
     const setFileContent = (result: string | ArrayBuffer | null) => {
       if (!result as unknown as string) {
-        return alert("Not a valid template.");
+        return toastError("Not a valid template.");
       }
 
       const schema: FBTemplateSchema[] = JSON.parse(result as string);
       if (!find(schema, "type") && !find(schema, "index")) {
-        return alert("Not a valid template.");
+        return toastError("Not a valid template.");
       }
 
       FBStore.setSchema(schema);
@@ -34,7 +35,7 @@ export const withTransport = <T extends FBTransportSchemaProps>(
     const importSchema = (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = get(event, "currentTarget.files[0]");
       if (!file) {
-        return alert("Invalid file.");
+        return toastError("Invalid file.");
       }
       return readFile(file);
     };

@@ -31,8 +31,6 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
       borderRadius={4}
       id={name}
       style={{ scrollMarginTop: 50 }}
-      display="flex"
-      flexDirection="row"
     >
       {label && (
         <FBText

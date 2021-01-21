@@ -11,6 +11,7 @@ const FBEditor: React.FunctionComponent<FBEditorProps> = ({
   editorState,
   children,
   underValidation,
+  isFormOutput,
   mode,
 }) => (
   <FBProvider {...{ editorState }}>
@@ -20,10 +21,12 @@ const FBEditor: React.FunctionComponent<FBEditorProps> = ({
         {type && FBEditorState.omitFinalValidation.includes(type) && (
           <FBCheckbox name="omitFinalValidation" hidden={true} defaultChecked={true} />
         )}
-        <FBEditorProperties
-          key={`fb-editor-props-${type}-${index}`}
-          {...{ type, inputProps }}
-        />
+        {!isFormOutput && (
+          <FBEditorProperties
+            key={`fb-editor-props-${type}-${index}`}
+            {...{ type, inputProps }}
+          />
+        )}
       </Box>
       {underValidation && (
         <Box hidden={mode === "config"}>

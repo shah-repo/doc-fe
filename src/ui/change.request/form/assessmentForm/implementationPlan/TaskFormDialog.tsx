@@ -7,7 +7,7 @@ import Text from "../../../../components/Text";
 import { ImplementationPlanTaskFormValues } from "../../types";
 import TaskForm from "./TaskForm";
 
-export interface OwnProps {
+interface OwnProps {
   onSubmit: (values: ImplementationPlanTaskFormValues) => void;
   closeDialog: () => void;
   openDialog: () => void;

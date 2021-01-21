@@ -4,7 +4,7 @@ import { action } from "mobx";
 import apiClient from "../../../../state/apiClient";
 import { AsyncActionErrorResponse } from "../../../../state/middlewares/api/types";
 import { store } from "../../../../state/store";
-import { toastInfo } from "../../../components/notifications";
+import { toastError, toastInfo } from "../../../components/notifications";
 import { ATTACH_TEMPLATE_URL, CANCEL_SIGNATURE_REQUEST_URL, CREATE_TEMPLATE_URL, SEND_SIGNATURE_REQUEST_URL } from "../../FBHelloSign/constants";
 import { FBTemplateSchema } from "../../types/store";
 import { FBActionModel } from "../domain/models/FBActionModel";
@@ -21,7 +21,7 @@ export class FormBuilderActionStore {
   @action public apiCall = async (action: Partial<FBActionModel>) => {
     const { requestUrl, requestMethod } = action;
     if (!requestUrl && !requestMethod) {
-      return alert("Not enough data for sending a request");
+      return toastError("Not enough data for sending a request");
     }
     try {
       const requestConfig: AxiosRequestConfig = {
@@ -45,14 +45,14 @@ export class FormBuilderActionStore {
           return true;
         }
         if (requestUrl === ATTACH_TEMPLATE_URL) {
-          return alert("Template Attached Successfully");
+          return toastError("Template Attached Successfully");
         }
         if (requestUrl === CANCEL_SIGNATURE_REQUEST_URL) {
           return toastInfo(
             "Signature request cancellation requested. This page will be reloaded after the request is completed."
           );
         }
-        alert("Success");
+        toastError("Success");
       }
     } catch (exception) {
       let responseMessage = "";
@@ -64,12 +64,12 @@ export class FormBuilderActionStore {
       }
       const errorMessage: string = responseMessage || exception.message;
       if (requestUrl === ATTACH_TEMPLATE_URL) {
-        return alert("Template doesn't exist, enter existing TemplateID and save document");
+        return toastError("Template doesn't exist, enter existing TemplateID and save document");
       }
       if (requestUrl === SEND_SIGNATURE_REQUEST_URL) {
         return false;
       }
-      alert(errorMessage);
+      toastError(errorMessage);
     }
   };
 }
