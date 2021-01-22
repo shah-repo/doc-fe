@@ -30,7 +30,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   displayStatus,
 }) => {
 
-  const [isStatusVisible, statusLabel, tooltipConfig] = useDocumentStatus(documentTypeId, status);
+  const [isStatusVisible,, tooltipConfig] = useDocumentStatus(documentTypeId, status);
   const [isTitleVisible] = useTitle(documentTypeId);
   const classes = styles();
   const isStatusReleased = isDocumentRevisionInStatus(
@@ -51,7 +51,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
         isStatusVisible &&
           <CustomLabelTooltip {...{ tooltipConfig }}>
             <Chip
-              label={<Text message={statusLabel} />}
+              label={<Text message={displayStatus} />}
               id="HeaderInfo-status"
               data-cy="HeaderInfo-status"
               className={classNames(classes.statusDefault)}
