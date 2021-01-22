@@ -24,7 +24,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     if (workspaceState?.getSchemaItemAt(index)?.deleted) {
       index = size(workspaceState?.getSchema());
     }
-    
+
     function additionalSchema() {
       if (!type) { return; }
       let additionalSchema = FBData.additionalSchema(type);
