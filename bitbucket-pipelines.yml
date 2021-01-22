@@ -12,7 +12,7 @@ definitions:
       ports:
         - 1234:1234
   caches:
-
+    node-cy: node_modules
   steps:
     - step: &COMMON
         image:
@@ -81,7 +81,7 @@ definitions:
           services:
             - sorry-cypress-director
           caches:
-            - node
+            - node-cy
           artifacts:
             - test-results/**
           script:
@@ -89,7 +89,7 @@ definitions:
             - yarn install --frozen-lockfile
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
-            - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
+            # - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
@@ -100,15 +100,15 @@ definitions:
             <<:  *COMMON_RUN_CYPRESS
             name: Cypress specs 1/4
         # TODO: uncomment!!
-        - step: 
-            <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 2/4
-        - step: 
-            <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 3/4
-        - step: 
-            <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 4/4
+        # - step: 
+        #     <<:  *COMMON_RUN_CYPRESS
+        #     name: Cypress specs 2/4
+        # - step: 
+        #     <<:  *COMMON_RUN_CYPRESS
+        #     name: Cypress specs 3/4
+        # - step: 
+        #     <<:  *COMMON_RUN_CYPRESS
+        #     name: Cypress specs 4/4
     #
     # DEV
     #

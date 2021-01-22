@@ -21,6 +21,9 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
     const { dialogState, workspaceState, formState } = FB.useStores();
     const { isOutput } = workspaceState || {};
+    if (workspaceState?.getSchemaItemAt(index)?.deleted) {
+      index = size(workspaceState?.getSchema());
+    }
 
     function additionalSchema() {
       if (!type) { return; }
