@@ -84,6 +84,12 @@ before(() => {
     const dir = `${CONFIG.DIR_SCREENSHOTS}/${Cypress.spec.name}`;
     cy.task("deleteScreenshotsFolder", dir);
     cy.task("deleteExistingReports", { reportDir: CONFIG.REPORTS_DIR, testName: Cypress.spec.name });
+
+    it("Server has correct code deployed", () => {
+      cy.visit(`${CONFIG.FE_URL}/status`, { timeout: 20 * 1000 });
+      cy.get("[data-cy=\"status-frontend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_FE);
+      cy.get("[data-cy=\"status-backend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_BE);
+    });
   }
 });
 
@@ -146,16 +152,3 @@ if (CONFIG.SKIP_ON_RUN_FAILURE) {
     cy.task("resetShouldSkipFlag");
   });
 }
-
-if (CONFIG.RUN_ENVIRONMENT === "pipeline") { // TODO does not work!!
-  it("Server has correct code deployed2", () => {
-    cy.visit(`${CONFIG.FE_URL}/status`, { timeout: 20 * 1000 });
-    cy.get("[data-cy=\"status-frontend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_FE);
-    cy.get("[data-cy=\"status-backend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_BE);
-  });
-}
-it("Server has correct code deployed", () => {
-  cy.visit(`${CONFIG.FE_URL}/status`, { timeout: 20 * 1000 });
-  cy.get("[data-cy=\"status-frontend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_FE);
-  cy.get("[data-cy=\"status-backend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_BE);
-});
