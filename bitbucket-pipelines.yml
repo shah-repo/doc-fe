@@ -87,13 +87,13 @@ definitions:
           script:
             - source ./scripts/cypress/utils/variables_pipeline.sh
             - yarn install --frozen-lockfile
-            # - ./scripts/cypress/utils/make_results_dir_pipeline.sh
-            # - ./scripts/cypress/utils/generate_requirements_json_file.sh
-            # - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
-            # - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            # - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
-            # - ./scripts/cypress/utils/merge_reports_pipeline.sh
-            # - ./scripts/cypress/utils/exit_1_if_failures.sh
+            - ./scripts/cypress/utils/make_results_dir_pipeline.sh
+            - ./scripts/cypress/utils/generate_requirements_json_file.sh
+            - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
+            - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
+            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
+            - ./scripts/cypress/utils/merge_reports_pipeline.sh
+            - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - parallel: &RUN_CYPRESS_IN_PARALLEL
         - step: 
