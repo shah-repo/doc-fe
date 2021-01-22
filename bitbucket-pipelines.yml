@@ -12,7 +12,7 @@ definitions:
       ports:
         - 1234:1234
   caches:
-    node_cy: node_modules
+    node-cy: node_modules
   steps:
     - step: &COMMON
         image:
@@ -81,7 +81,7 @@ definitions:
           services:
             - sorry-cypress-director
           caches:
-            - node_cy
+            - node-cy
           artifacts:
             - test-results/**
           script:
