@@ -27,6 +27,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     groups,
     renderOption,
     isIncluded,
+    isContributorIncluded,
     currentUser,
     ownerId,
     dialogState,
@@ -48,8 +49,10 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       inputOwners = [],
     } = document || {};
     const ownerIds = uniq(Object.values(inputOwners as unknown as string));
-    owners = employees.filter((e) => ownerIds.includes(e.id)).map((owner) => (
-      `${owner?.user?.name} (${owner?.user?.email})`));
+    owners = employees.filter((e) => ownerIds.includes(e.id)).map((owner) => ({
+      name: `${owner?.user?.name} (${owner?.user?.email})`,
+      id: owner.id,
+    }));
 
     const {
       owner: { user: { id: userId = "" } = {} } = {},
@@ -153,6 +156,11 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       group.joinedEmployees.some((employee) =>
         approvals?.map((approval) => approval.approver?.id).includes(employee));
 
+
+    isContributorIncluded = (id: string): boolean => {
+      const values = formState?.inputState.get("fb-approvals-" + name)?.value;
+      return values?.includes(id);
+    };
     // eslint-disable-next-line react/display-name
     renderOption = (option: FBApprover) => {
       const requiredGroups: string [] =
@@ -226,6 +234,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       isAlphaReleased,
       owners,
       showFieldOwnersWarning,
+      isContributorIncluded,
     });
   };
 
