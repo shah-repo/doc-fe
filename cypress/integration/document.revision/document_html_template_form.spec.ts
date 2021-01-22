@@ -173,10 +173,10 @@ context("Document HTML template form", () => {
 
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithoutApiCall();
-      cy.route2({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
           if (res.body !== "") {
-            const response = JSON.parse(res.body);
+            const response = res.body;
             customFieldId = response.formTemplate.schema[0].name;
           }
         });
@@ -229,10 +229,10 @@ context("Document HTML template form", () => {
     });
 
     it("Filters document by name and status, and select it", () => {
-      cy.route2({ method: "GET", pathname: "/api/v1/document_revisions/*" }, (req) => {
+      cy.intercept({ method: "GET", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
           if (res.body !== "") {
-            const response = JSON.parse(res.body);
+            const response = res.body;
             docRevisionId = response.id;
           }
         });

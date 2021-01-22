@@ -108,8 +108,7 @@ Cypress.Commands.add("navigToEquipment", () => {
 Cypress.Commands.add("navigToDocumentList", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetDocRevStatusesCategory,
-    CyRoutes.GetDocumentTypes,
-    CyRoutes.GetDocRevDisplayStatus],
+    CyRoutes.GetDocumentTypes],
   () => {
     cy.navigToNestedItem({
       navigItems: [
