@@ -19,4 +19,5 @@ export enum MomentFormats {
   DateTime = "MMMM D, YYYY hh:mm A",
   DateTimeAlt = "D MMM YYYY hh:mm a",
   DateTimeComplete = "M/D/YYYY hh:mm A",
+  DayMonthDateYear = "ddd MMMM D YYYY",
 }
