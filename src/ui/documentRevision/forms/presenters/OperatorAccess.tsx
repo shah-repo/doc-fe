@@ -26,7 +26,7 @@ const OperatorAccess: React.FunctionComponent<Props> = ({ documentTypeId }) => {
       currentUserId
     );
   });
-  const [isVisible] = useAssignOperatorsToDocument(documentTypeId);
+  const { isVisible } = useAssignOperatorsToDocument(documentTypeId);
 
   if (!isVisible) {
     return null;
