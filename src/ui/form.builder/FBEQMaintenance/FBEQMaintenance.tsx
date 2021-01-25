@@ -77,6 +77,11 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
     <FBEQMaintenanceHistory {...{ name }}/>
     {complianceDueDate &&
       <Box mb={3} data-cy="maintenance.status">
+        <FBText
+          boxProps={{ display: "inline-flex" }}
+          locale={isTypePM ? "form.builder.pm" : "form.builder.cal"}
+        />
+        <span> - </span>
         {complianceStatus}
         <span> - </span>
         <FBText
