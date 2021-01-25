@@ -7,7 +7,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { keys, truncate, values } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FBMapWrapper, FBPurchaseOrderDetailsHead, FBPurchaseOrderItem, FBPurchaseOrderTableDetailsProps, FBTableCell, FBTooltip } from "..";
+import { FBMapWrapper, FBPurchaseOrderDetailsProduct, FBPurchaseOrderDetailsService, FBPurchaseOrderItem, FBPurchaseOrderTableDetailsProps, FBTableCell, FBTooltip } from "..";
 
 
 const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableDetailsProps> = ({
@@ -26,7 +26,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
         <TableHead>
           <TableRow>
             <FBTableCell />
-            <FBMapWrapper<string[]> collection={values(FBPurchaseOrderDetailsHead)}>
+            <FBMapWrapper<string[]> collection={values(FBPurchaseOrderDetailsProduct)}>
               {(head, index) => (
                 <FBTableCell
                   label={head}
@@ -56,12 +56,13 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                     </FBTooltip>
                   )}
                 </FBTableCell>
-                <FBMapWrapper<string[]> collection={keys(FBPurchaseOrderDetailsHead)}>
+                <FBMapWrapper<string[]> collection={item.type === "product" ?
+                  keys(FBPurchaseOrderDetailsProduct) : keys(FBPurchaseOrderDetailsService)}>
                   {(key, index) => {
                     let label = item[key];
                     let tooltipTitle: string | undefined;
                     const dataCy = key;
-                    if (key === "description") {
+                    if (key === "description" && item.type === "product") {
                       key = "partNumberTitle";
                       label = truncate(item[key], { length: 35, omission: " ..." });
                       tooltipTitle = label;
