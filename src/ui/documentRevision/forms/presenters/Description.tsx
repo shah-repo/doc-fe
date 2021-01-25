@@ -17,7 +17,7 @@ const Description: React.FunctionComponent<Props> = ({
   isDisabled = false,
 }) => {
   const intl = useIntl();
-  const [isVisible, label, tooltipConfig, validators] = useDescription(documentTypeId, isQms);
+  const { isVisible, label, tooltipConfig, validation: validators } = useDescription(documentTypeId, isQms);
   const placeholder: string = isQms ?
     "" :
     intl.formatMessage({ id: "document.revision.no.qms.message" });
