@@ -200,10 +200,6 @@ context("Parts from EB flow test", () => {
         cy.drEnterDocumentTitle({ name: "Test Engineering Build" });
       });
 
-      it("Enter description 'Test Engineering Build description'", () => {
-        cy.drEnterDocumentDescription({ description: "Test Engineering Build description" });
-      });
-
       it("Add an Approval'", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
           cy.get("[data-cy*=fb-approvals-]").type(USERS[2].name + "{downarrow}{enter}");
@@ -269,10 +265,6 @@ context("Parts from EB flow test", () => {
     context("Fill in the EB attributes", () => {
       it("Enter title 'Test Engineering Build'", () => {
         cy.drEnterDocumentTitle({ name: "Test Engineering Build" });
-      });
-
-      it("Enter description 'Test Engineering Build description'", () => {
-        cy.drEnterDocumentDescription({ description: "Test Engineering Build description" });
       });
 
       it("Add an Approval", () => {
