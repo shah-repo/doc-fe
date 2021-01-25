@@ -73,7 +73,7 @@ definitions:
     - step: &COMMON_RUN_CYPRESS
           name: Cypress specs
           image:
-            name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs_node_14_10_0_chrome_87_cy_6_3_0
+            name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs_node_14_10_0_chrome_88_cy_6_2_0
             aws:
               access-key: $AWS_ACCESS_KEY_ID
               secret-key: $AWS_SECRET_ACCESS_KEY
