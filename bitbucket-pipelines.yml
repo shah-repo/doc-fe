@@ -78,6 +78,7 @@ definitions:
               access-key: $AWS_ACCESS_KEY_ID
               secret-key: $AWS_SECRET_ACCESS_KEY
           max-time: 30
+          size: 2x
           services:
             - sorry-cypress-director
           caches:
@@ -98,25 +99,25 @@ definitions:
     - parallel: &RUN_CYPRESS_IN_PARALLEL
         - step: 
             <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 1/7
+            name: Cypress specs 1/4
         - step: 
             <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 2/7
+            name: Cypress specs 2/4
         - step: 
             <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 3/7
+            name: Cypress specs 3/4
         - step: 
             <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 4/7
-        - step: 
-            <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 5/7
-        - step: 
-            <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 6/7
-        - step: 
-            <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 7/7
+            name: Cypress specs 4/4
+        # - step: 
+        #     <<:  *COMMON_RUN_CYPRESS
+        #     name: Cypress specs 5/7
+        # - step: 
+        #     <<:  *COMMON_RUN_CYPRESS
+        #     name: Cypress specs 6/7
+        # - step: 
+        #     <<:  *COMMON_RUN_CYPRESS
+        #     name: Cypress specs 7/7
     #
     # DEV
     #
