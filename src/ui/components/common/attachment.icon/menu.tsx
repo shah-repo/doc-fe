@@ -12,7 +12,7 @@ import MenuItemSetPrimary from "./menu.setPrimary";
 import { AttachmentMenuProps, PasswordSubmitActionType } from "./utils/types";
 
 interface OwnProps {
-  redLineRequiresPassword: (attachment: Attachment) => boolean;
+  redLineRequiresPassword: (attachment: Attachment, type?: AttachmentType) => boolean;
   cleanCopyRequiresPassword: (attachment: Attachment) => boolean;
   handleWatermarkRequest?: (
     attachment: Attachment,
@@ -66,7 +66,7 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
 
   const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {
     setSelectedAttachment(attachment);
-    if (redLineRequiresPassword(attachment)
+    if (redLineRequiresPassword(attachment, type)
     && type === AttachmentType.CleanCopy) {
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_CLEAN_COPY_FILE);
       openWarningDialog();
