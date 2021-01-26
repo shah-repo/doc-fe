@@ -1,2 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface FBSupplierProps {}
+import { FBInputProps, FBProviderProps } from "..";
+
+export type FBSupplierProps =
+& Pick<FBProviderProps, "dialogState" | "supplierState">
+& Pick<FBInputProps, "name" | "label" | "disabled" | "loading">
+& {
+  handleAdd(): void;
+};

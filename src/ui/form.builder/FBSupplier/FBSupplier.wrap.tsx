@@ -1,26 +1,38 @@
 import React from "react";
+import { FB, FBDialogState, FBSupplierForm, FBSupplierProps, FBSupplierState } from "..";
 
-export const withFBSupplier = (
-  Component: React.FunctionComponent,
+export const withFBSupplier = <T extends FBSupplierProps>(
+  Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    handleAdd,
     ...props
-  }) =>
+  }: T) => {
 
-  // MARK: @config
+    // MARK: @config
+    const dialogState = FB.useRef(FBDialogState);
+    const supplierState = FB.useRef(FBSupplierState);
 
-  // MARK: @reactions
+    // MARK: @reactions
 
-  // MARK: @helpers
+    // MARK: @helpers
 
-  // MARK: @methods
+    // MARK: @methods
+    handleAdd = () => dialogState?.config({
+      open: true,
+      title: "form.builder.create.new.supplier",
+      content: <FBSupplierForm {...{ supplierState }}/>,
+    });
 
-  // MARK: @observer
+    // MARK: @observer
 
-    Component({
-      ...(props),
-    })
-  ;
+    return Component({
+      ...(props as T),
+      handleAdd,
+      dialogState,
+      supplierState,
+    });
+  };
 
   Comp.displayName = "withFBSupplier";
   return Comp;
