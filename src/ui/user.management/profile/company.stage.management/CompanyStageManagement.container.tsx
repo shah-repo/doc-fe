@@ -2,10 +2,8 @@ import { Box } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import React from "react";
 import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../../../state/ducks/company";
-import { HOME_URL } from "../../../constants/urls";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useGetHasTag from "../../../hooks/useGetHasTag";
@@ -22,7 +20,7 @@ export const CompanyStageManagementContainer: React.FunctionComponent<{}> = ({
   const initialValues = toNumRevisionStageInitialValues(numOfRevStages);
 
   if (!canManageCompanyStage) {
-    return <Redirect to={HOME_URL} />;
+    return null;
   }
 
   const onSubmit = (values: any) => {

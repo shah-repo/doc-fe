@@ -1,10 +1,8 @@
 import { Formik, FormikProps } from "formik";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { Company, companyActions, companySelectors } from "../../../../state/ducks/company";
-import { HOME_URL } from "../../../constants/urls";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useGetHasTag from "../../../hooks/useGetHasTag";
@@ -30,7 +28,7 @@ export const NavigationManagementContainer: React.FunctionComponent<{}> = ({
   });
 
   if (!canManageNavigation) {
-    return <Redirect to={HOME_URL} />;
+    return null;
   }
 
   const onSubmit = (values: any) => {
