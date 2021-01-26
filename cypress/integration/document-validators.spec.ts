@@ -562,7 +562,7 @@ field is empty: Add text field`, () => {
         [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
         });
-      cy.wait(500);
+      cy.wait(3000);
     });
   });
 

@@ -828,8 +828,7 @@ context("Autocomplete test", () => {
     });
 
     it("Click 'Add Approver' & 'confirm' button", () => {
-      cy.fbClickButton({ el: "ApproveAndRelease-button" });
-      cy.fbClickButton({ el: "ApproveAndRelease-submit" });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Reload company", () => {

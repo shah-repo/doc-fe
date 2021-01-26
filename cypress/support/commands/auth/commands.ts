@@ -74,7 +74,7 @@ Cypress.Commands.add("authRequiredValidation", (params: {selector: string; show:
     cy.get(`[data-cy="${params.selector}"] p`).should("be.visible");
     cy.get(`[data-cy="${params.selector}"] p`).should("have.text", "Required");
   } else {
-    cy.get(`[data-cy="${params.selector}"] p`).should("not.be.visible");
+    cy.get(`[data-cy="${params.selector}"] p`).should("not.exist");
   }
 });
 
@@ -91,8 +91,7 @@ Cypress.Commands.add("authSubmitLoginError", (params: {show: boolean; message: s
       .should("have.text", params.message);
   }
   else {
-    cy.get(`[class="Toastify__toast-body"]`)
-      .should("not.be.visible");
+    cy.checkToastMessage({ exists: false });
   }
 });
 

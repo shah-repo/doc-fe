@@ -200,9 +200,11 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
     cy.wrapWithWaitOnApiCalls([
       CyRoutes.IOTCredentials,
       CyRoutes.CompanyMine,
+      CyRoutes.IOTCredentials,
     ], () => {
       cy.get("#root").contains(params.name).click();
     });
+    cy.wait(500);
   }
 });
 
@@ -216,6 +218,7 @@ Cypress.Commands.add("cmpClickCreateNewDocument", () => {
     cy.get("[data-cy=\"document.revision.create\"]").click();
   });
   cy.checkToastMessage({ exists: false });
+  cy.wait(3000);
 });
 
 Cypress.Commands.add("cmpVerifyNoPendingActions", () => {

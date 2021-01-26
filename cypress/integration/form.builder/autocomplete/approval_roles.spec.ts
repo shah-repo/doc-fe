@@ -122,6 +122,7 @@ context("FORM Field test", () => {
 
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
+        cy.wait(3000);
       });
 
       it("Click Save button", () => {
@@ -166,8 +167,7 @@ context("FORM Field test", () => {
       });
 
       it("Click 'Add Approver' & 'confirm' button", () => {
-        cy.fbClickButton({ el: "ApproveAndRelease-button" });
-        cy.fbClickButton({ el: "ApproveAndRelease-submit" });
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
 
       it("Reload company", () => {
@@ -244,6 +244,7 @@ context("FORM Field test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
+            cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
               .find("[data-cy^=\"test-label-\"]").click();
 

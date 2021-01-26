@@ -224,6 +224,7 @@ Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) 
       cy.get("[data-cy=\"select.document.documentType.id\"]").click();
       cy.get(`[data-cy="selectItem.document.documentType.id.${params.documentType}"]`).click();
     });
+  cy.wait(500);
 });
 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
@@ -617,5 +618,5 @@ Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
 });
 
 Cypress.Commands.add("drRequestAccessVisibility", (params: {isVisible: boolean}) => {
-  cy.get(`[data-cy="PreviewControlsContainer-access"]`).should((params.isVisible ? "" : "not.") + "be.visible");
+  cy.get(`[data-cy="PreviewControlsContainer-access"]`).should((params.isVisible ? "" : "not.") + "exist");
 });

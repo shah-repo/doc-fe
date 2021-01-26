@@ -119,6 +119,7 @@ context("Dynamic Form Test", () => {
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
+      cy.wait(3000);
     });
 
     it("Approve and Release document", () => {

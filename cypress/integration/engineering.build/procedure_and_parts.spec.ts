@@ -653,10 +653,6 @@ context("Procedure and parts flow test", () => {
         cy.drEnterDocumentTitle({ name: "EB document" });
       });
 
-      it("Enters description 'Procedure description'", () => {
-        cy.drEnterDocumentDescription({ description: "EB description" });
-      });
-
       it("Add approver to approvals", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       });
@@ -804,6 +800,7 @@ context("Procedure and parts flow test", () => {
               cy.visit(CONFIG.FE_URL + link);
             });
           });
+          cy.wait(5000);
         });
 
         it("Approve and release the part", () => {
@@ -933,6 +930,7 @@ context("Procedure and parts flow test", () => {
               cy.visit(CONFIG.FE_URL + link);
             });
           });
+          cy.wait(5000);
         });
 
         it("Approve and release the part", () => {

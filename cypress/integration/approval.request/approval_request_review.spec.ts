@@ -237,7 +237,7 @@ context("Approval request form scenario", () => {
     //  approvers 'In_review' should be enabled now 'ENC-4797'
     it("Check 'Approvers' are not disabled", () => {
       SystemRequirement("REQ-0850");
-      cy.get("[data-cy=\"approvers\"] input").should("not.be.disabled");
+      cy.get("input[data-cy=\"approvers\"]").should("not.be.disabled");
     });
   });
 

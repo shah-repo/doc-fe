@@ -12,7 +12,7 @@ let multipleCompanies;
 let secondEmployee;
 const partsName = `Parts ${Cypress.moment().format("X")}`;
 
-context("FORM Field test", () => {
+context("Autocomplete 'Available Part Documents' test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -180,6 +180,7 @@ context("FORM Field test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
+            cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
               .find("[data-cy^=\"test-label-\"]").click();
 

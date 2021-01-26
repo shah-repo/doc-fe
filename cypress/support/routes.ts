@@ -77,8 +77,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/employees*",
     },
     callConfig: {
-      responseTimeout: 20 * 1000,
-      requestTimeout: 10 * 1000,
+      responseTimeout: 30 * 1000,
+      requestTimeout: 20 * 1000,
     },
   },
   EmployeesPost: {
@@ -141,8 +141,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/*",
     },
     callConfig: {
-      responseTimeout: 25 * 1000,
-      requestTimeout: 15 * 1000,
+      responseTimeout: 35 * 1000,
+      requestTimeout: 25 * 1000,
     },
   },
   GetDocDynamicForm: {
@@ -238,7 +238,7 @@ export const routes: ICyRoutes =   {
       url: "api/v1/auth/credentials/iot",
     },
     callConfig: {
-      responseTimeout: 10 * 1000,
+      responseTimeout: 20 * 1000,
     },
   },
   GetFileUploadCandidates: {
@@ -329,6 +329,10 @@ export const routes: ICyRoutes =   {
       method: "GET",
       url: "/api/v1/change_requests/*",
     },
+    callConfig: {
+      requestTimeout: 15 * 1000,
+      responseTimeout: 20 * 1000,
+    },
   },
   DocPreview: {
     requestConfig: {
@@ -336,7 +340,7 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/documents/*",
     },
     callConfig: {
-      responseTimeout: 20 * 1000,
+      responseTimeout: 30 * 1000,
     },
   },
   DocRevPreview: {
@@ -355,8 +359,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/*/aggregated_audit",
     },
     callConfig: {
-      requestTimeout: 15 * 1000,
-      responseTimeout: 20 * 1000,
+      requestTimeout: 25 * 1000,
+      responseTimeout: 30 * 1000,
     },
   },
   GetDocAudit: {
