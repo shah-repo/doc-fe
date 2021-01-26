@@ -98,5 +98,13 @@
   {
     "text": "form.builder.units.gallon",
     "value": "gallon"
+  },
+  {
+    "text": "form.builder.units.liter",
+    "value": "liter"
+  },
+  {
+    "text": "form.builder.units.milliliter",
+    "value": "milliliter"
   }
 ]
