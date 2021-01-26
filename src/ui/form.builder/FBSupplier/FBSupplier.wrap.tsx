@@ -3,7 +3,9 @@ import React from "react";
 export const withFBSupplier = (
   Component: React.FunctionComponent,
 ) => {
-  const Comp = () =>
+  const Comp = ({
+    ...props
+  }) =>
 
   // MARK: @config
 
@@ -15,7 +17,9 @@ export const withFBSupplier = (
 
   // MARK: @observer
 
-    Component({})
+    Component({
+      ...(props),
+    })
   ;
 
   Comp.displayName = "withFBSupplier";
