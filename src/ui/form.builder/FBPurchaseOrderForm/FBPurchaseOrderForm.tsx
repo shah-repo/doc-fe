@@ -122,11 +122,6 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
           name="capitalEquipment"
           gutter={false}
         />
-        <FBCheckbox
-          label="form.builder.field.is.traceability.required"
-          name="isTraceabilityRequired"
-          gutter={false}
-        />
       </Box>
     }
     {children}
