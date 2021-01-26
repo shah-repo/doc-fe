@@ -39,7 +39,6 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
           name="partNumber"
           optionId="11"
           onChange={handlePartTitle}
-          rules="required_without:serviceId"
           {...{ getOptionDisabled, getOptionLabel }}
         />
         <FBTextField
@@ -56,7 +55,6 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         <FBTextField
           label="form.builder.field.service.id"
           name="serviceId"
-          rules="required_without:partNumber"
         />
         <FBTextField
           label="form.builder.field.description"
