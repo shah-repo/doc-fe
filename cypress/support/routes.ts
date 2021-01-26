@@ -67,7 +67,8 @@ export enum CyRoutes {
   GetRevisionDocTypeGroupOptions = "GetRevisionDocTypeGroupOptions",
   PostDocRev = "PostDocRev",
   GroupGet = "GroupGet",
-  GetDocRevDisplayStatus = "GetDocRevDisplayStatus"
+  GetDocRevDisplayStatus = "GetDocRevDisplayStatus",
+  PostTasks = "PostTasks",
 }
 
 export const routes: ICyRoutes =   {
@@ -145,6 +146,16 @@ export const routes: ICyRoutes =   {
       requestTimeout: 25 * 1000,
     },
   },
+  PostTasks: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/tasks",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+      requestTimeout: 10 * 1000,
+    },
+  },
   GetDocDynamicForm: {
     requestConfig: {
       method: "GET",
@@ -161,6 +172,10 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/statuses*",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
   GetDocRevDisplayStatus: {
@@ -420,6 +435,10 @@ export const routes: ICyRoutes =   {
       method: "GET",
       url: "/api/v1/change_requests/available_approvers",
     },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+      requestTimeout: 10 * 1000,
+    },
   },
   GetRequiredApproversDocRev: {
     requestConfig: {
@@ -458,6 +477,10 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/document_revisions",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
   PostChangeRequests: {

@@ -696,10 +696,6 @@ context("Autocomplete test", () => {
       cy.drEnterDocumentTitle({ name: lotsTitle });
     });
 
-    it("Add lot description", () => {
-      cy.drEnterDocumentDescription({ description: "lot document description" });
-    });
-
     it("Select 'Part document' in references", () => {
       cy.drSelectReferences( "Part document" );
     });
@@ -834,7 +830,7 @@ context("Autocomplete test", () => {
     it("Reload company", () => {
       cy.fbClickButton({ el: "UserMenuButton" });
       cy.get("#switchCompanyButton").click();
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      cy.cmpSelectCompanyAlreadyLoggedIn({ name: createdCompany.name, multiple: multipleCompanies });
     });
   });
 

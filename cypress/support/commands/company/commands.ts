@@ -71,6 +71,7 @@ declare global {
         sessionId: string;
         payload: Partial<Company>;}): Chainable<Subject>;
       cmpSelectCompany(params: { name: string; multiple: boolean }): Chainable<Subject>;
+      cmpSelectCompanyAlreadyLoggedIn(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpClickCreateNewDocument(): Chainable<Subject>;
       cmpClickCreateApprovalRequest(): Chainable<Subject>;
       cmpVerifyNoPendingActions(): Chainable<Subject>;
@@ -201,6 +202,18 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
       CyRoutes.IOTCredentials,
       CyRoutes.CompanyMine,
       CyRoutes.IOTCredentials,
+    ], () => {
+      cy.get("#root").contains(params.name).click();
+    });
+    cy.wait(500);
+  }
+});
+
+Cypress.Commands.add("cmpSelectCompanyAlreadyLoggedIn", (params: { name: string; multiple: boolean }) => {
+  if (params.multiple) {
+    cy.wrapWithWaitOnApiCalls([
+      CyRoutes.IOTCredentials,
+      CyRoutes.CompanyMine,
     ], () => {
       cy.get("#root").contains(params.name).click();
     });

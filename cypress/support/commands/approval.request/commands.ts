@@ -153,11 +153,12 @@ Cypress.Commands.add("arClickCreateApprovalRequestAfterCompletingForm", () => {
 });
 
 Cypress.Commands.add("arClickSendToReview", () => {
-  cy.wrapWithWaitOnApiCall(
+  cy.wrapWithWaitOnApiCalls([
     CyRoutes.ARtoReview,
-    () => {
-      cy.get("[data-cy=\"transitionButton\"]").click();
-    });
+    CyRoutes.ARPreview],
+  () => {
+    cy.get("[data-cy=\"transitionButton\"]").click();
+  });
   cy.checkToastMessage({ exists: false });
 });
 

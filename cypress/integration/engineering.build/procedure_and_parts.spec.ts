@@ -422,10 +422,6 @@ context("Procedure and parts flow test", () => {
       cy.drEnterDocumentTitle({ name: "Component specification lot document" });
     });
 
-    it("Add lot description", () => {
-      cy.drEnterDocumentDescription({ description: "Component specification lot document description" });
-    });
-
     it("Select 'Part document' in references", () => {
       cy.drSelectReferences( "Part document" );
     });

@@ -323,7 +323,9 @@ context("Check Document History", () => {
     });
 
     it(`select '${formTitle.newValue}'`, () => {
-      cy.get("#root").contains(formTitle.newValue).click();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
+        cy.get("#root").contains(formTitle.newValue).click();
+      });
     });
   });
 

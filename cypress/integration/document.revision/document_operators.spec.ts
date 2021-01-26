@@ -168,6 +168,7 @@ context("Document Operators Access Test", () => {
 
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.wait(3000);
     });
 
     it("'Approve and Release' the document", () => {

@@ -220,7 +220,9 @@ context("Approval request implementation tasks", () => {
       cy.get("[data-cy=\"description\"]").next().type("Task Description");
       cy.get("[data-cy=\"assigned\"]").type(`${USERS[2].email}{downarrow}{enter}`);
       cy.poAddDateRequired();
-      cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostTasks, () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
+      });
     });
 
     it("Add description 'Test' to trigger autosave", () => {

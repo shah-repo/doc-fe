@@ -471,10 +471,6 @@ context("Equipment maintenance test", () => {
       cy.drEnterDocumentTitle({ name: "Preventative maintenance document" });
     });
 
-    it("Enter description 'Preventative maintenance'", () => {
-      cy.drEnterDocumentDescription({ description: "Preventative maintenance" });
-    });
-
     it("Select document type 'Maintenance Record'", () => {
       cy.drSelectDocumentType({ documentType: "Maintenance Record" });
     });

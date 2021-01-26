@@ -145,7 +145,7 @@ context("FORM Field test", () => {
       it("Reload company", () => {
         cy.fbClickButton({ el: "UserMenuButton" });
         cy.get("#switchCompanyButton").click();
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+        cy.cmpSelectCompanyAlreadyLoggedIn({ name: createdCompany.name, multiple: multipleCompanies });
       });
     });
 

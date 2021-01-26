@@ -37,7 +37,7 @@ Cypress.Commands.add("navigListExistsCheck", (...list: NavigationItems[]) => {
 
 Cypress.Commands.add("navigListNotExistsCheck", (...list: NavigationItems[]) => {
   list.forEach((item) => {
-    cy.get("[data-cy=\"navigation." + item + "\"]").should("not.be.visible");
+    cy.get("[data-cy=\"navigation." + item + "\"]").should("not.exist");
   });
 });
 

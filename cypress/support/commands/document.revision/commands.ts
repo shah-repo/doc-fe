@@ -333,7 +333,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
   cy.checkToastMessage({ exists: false });
-  cy.wait(500);
+  cy.wait(2000);
 });
 
 Cypress.Commands.add("drClickCreateDocumentWithApiCallForFormsExpectingToastError", () => {

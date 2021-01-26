@@ -191,9 +191,7 @@ context("Records flow", () => {
 
   context("Check if there are multiple record forms to select", () => {
     it("Navigate to Records", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
-        cy.navigToRecords();
-      });
+      cy.navigToRecords();
     });
 
     it("Create new record button click", () => {
@@ -210,10 +208,6 @@ context("Records flow", () => {
   });
 
   context("Create new record without inline approval form and check if they are in alpha revision", () => {
-    it("Navigate to Records", () => {
-      cy.navigToRecords();
-    });
-
     it("Create new record button click", () => {
       cy.recCreateRecordFromLandingPage();
     });
