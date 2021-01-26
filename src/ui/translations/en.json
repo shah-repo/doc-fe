@@ -727,6 +727,8 @@
   "form.builder.units.kilogram": "kilogram",
   "form.builder.units.pounds": "pounds",
   "form.builder.units.gallon": "gallon",
+  "form.builder.units.liter": "liter",
+  "form.builder.units.milliliter": "milliliter",
   "form.builder.units.ounce": "ounce",
   "form.builder.currency": "Currency: ",
   "form.builder.EUR.to.USD": "1 Euro = {rate} USD",
