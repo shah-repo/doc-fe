@@ -17,6 +17,7 @@ interface Props {
   type: DisplayType;
   bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
   setShouldDisplay?: (value: boolean) => void;
+  isRecord: boolean;
 }
 
 export const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
@@ -27,6 +28,7 @@ export const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
   type,
   bannerPortal,
   setShouldDisplay,
+  isRecord,
 }) => {
   const dispatch = useDispatch();
   const showShouldUpgrade = useShouldUpgradeToLatest(documentStatus, formDocumentStatus, formDocumentId);
@@ -42,7 +44,7 @@ export const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
   const upgradeAction = useActionCreator(documentRevisionsActions.upgradeToReleasedForm);
   const onUpgradeClick = () => async.start(upgradeAction, docRevId, async);
 
-  if (!showShouldUpgrade) {
+  if (!showShouldUpgrade || isRecord) {
     return null;
   }
 
