@@ -79,8 +79,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/employees*",
     },
     callConfig: {
-      responseTimeout: 30 * 1000,
-      requestTimeout: 20 * 1000,
+      responseTimeout: 50 * 1000,
+      requestTimeout: 40 * 1000,
     },
   },
   EmployeesPost: {
@@ -200,6 +200,10 @@ export const routes: ICyRoutes =   {
       method: "GET",
       url: "/api/v1/document_revisions?documentTypeCategory*",
     },
+    callConfig: {
+      responseTimeout: 35 * 1000,
+      requestTimeout: 20 * 1000,
+    },
   },
   GetDocTypeGroupOptions: {
     requestConfig: {
@@ -246,7 +250,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/release/*",
     },
     callConfig: {
-      responseTimeout: 45 * 1000,
+      responseTimeout: 55 * 1000,
+      requestTimeout: 30 * 1000,
     },
   },
   ARtoReview: {

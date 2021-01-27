@@ -93,10 +93,11 @@ context("Approval request form scenario", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Approval request' outputdocument type",
-      () => {
+    it("Click on 'Approval request' outputdocument type", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
         cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
       });
+    });
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
