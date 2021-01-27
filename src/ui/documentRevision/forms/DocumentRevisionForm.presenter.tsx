@@ -5,7 +5,7 @@ import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentRevision, documentRevisionsSelectors, FBOutputDocumentType, Reference } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsSelectors, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
@@ -96,6 +96,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   canChangeOwnerShip,
   documentRevision,
   setFieldValue,
+  setFieldTouched,
   type,
   FBContainer,
   bannerPortal,
@@ -139,7 +140,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isPart = checkIsDocumentPart(documentRevision?.document.documentType.groupOptions);
   const isDocumentEquipment = checkIsDocumentEquipment(documentRevision?.document.documentType.groupOptions);
   const isDocumentReceivable = checkIsDocumentReceivable(documentRevision?.document.documentType.groupOptions);
-  console.log({ availableReferences });
 
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
@@ -199,18 +199,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   }, [isDocRevStatusDraft, values.document, values.name]);
 
   useEffect(() => {
-    if (!isDocumentReceivable || !poreceive) {
+    if (!isDocumentReceivable && !poreceive) {
       return;
     }
-
-    documentReferences.push({
-      id: poreceiveId,
-      docId: poreceive.docId,
-      documentRevisions: [poreceive],
-      name: poreceive.name,
-    } as Reference);
+    setFieldValue("referenceTo", [...documentReferences, { id: poreceive.document.id }]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poreceive, isDocumentReceivable]);
+  }, [poreceive]);
 
   return (
     <Grid

@@ -74,6 +74,7 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
     },
     canAccess: true,
   },
+  documentId: faker.random.uuid(),
   released: faker.date.future(undefined, "2019-05-31"),
   referenceTo: [],
   trainingRecords: [],

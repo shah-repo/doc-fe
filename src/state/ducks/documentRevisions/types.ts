@@ -101,6 +101,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   attachments: Attachment[];
   status: DocumentRevisionStatus;
   document: DocumentRevisionDocument;
+  documentId: string;
   released: Date;
   referenceTo: Reference[];
   createdAt?: string;
