@@ -2,7 +2,7 @@ import { first } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { EBPartPostBody, FB, FBFormState, FBSupplierFormActions, FBSupplierFormProps } from "..";
+import { FB, FBFormState, FBSupplierFormActions, FBSupplierFormProps, SupplierPostBody } from "..";
 
 export const withFBSupplierForm = <T extends FBSupplierFormProps>(
   Component: React.FunctionComponent<T>,
@@ -31,7 +31,7 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     // MARK: @methods
     onDialogConfirm = () => {
       const formValue = formState.getValues();
-      supplierState?.addNewSupplier(formValue as EBPartPostBody);
+      supplierState?.addNewSupplier(formValue as SupplierPostBody);
       onDialogClose?.();
     };
 
