@@ -55,3 +55,9 @@ cat <<EOF > ./cypress-reporter-config.json
   }
 }
 EOF
+
+cat <<EOF > ./cypress/cache/merged_specs.json
+{
+  "results": []
+}
+EOF
