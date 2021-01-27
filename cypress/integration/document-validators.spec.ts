@@ -568,11 +568,18 @@ field is empty: Add text field`, () => {
 
   context("Validation errors should prevent from releasing document", () => {
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
     });
 
     it("Check returned errors are not empty", () => {
       cy.checkToastMessageIsNotEmpty({ exists: true });
+    });
+
+    it("Check returned toast error message", () => {
+      cy.checkToastMessageContains({
+        message: "The Name is a required field.,The Address field is " +
+        "required when State is empty.,No document selected,No document selected",
+      });
     });
 
     it("Cancel release of document", () => {

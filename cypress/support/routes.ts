@@ -69,6 +69,7 @@ export enum CyRoutes {
   GroupGet = "GroupGet",
   GetDocRevDisplayStatus = "GetDocRevDisplayStatus",
   PostTasks = "PostTasks",
+  DeleteLogout = "DeleteLogout",
 }
 
 export const routes: ICyRoutes =   {
@@ -166,6 +167,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/document_revisions/in_review/*",
+    },
+  },
+  DeleteLogout: {
+    requestConfig: {
+      method: "DELETE",
+      url: "/api/v1/auth/logout",
+    },
+    callConfig: {
+      responseTimeout: 35 * 1000,
+      requestTimeout: 25 * 1000,
     },
   },
   GetDocRevStatusesCategory: {
@@ -355,7 +366,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/documents/*",
     },
     callConfig: {
-      responseTimeout: 30 * 1000,
+      requestTimeout: 15 * 1000,
+      responseTimeout: 20 * 1000,
     },
   },
   DocRevPreview: {

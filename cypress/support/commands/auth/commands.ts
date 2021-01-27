@@ -97,7 +97,9 @@ Cypress.Commands.add("authSubmitLoginError", (params: {show: boolean; message: s
 
 Cypress.Commands.add("authLogout", () => {
   cy.get("[data-cy=\"UserMenuButton\"]", { timeout: 50 * 1000 }).click();
-  cy.get("[data-cy=\"header.logout\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.DeleteLogout, () => {
+    cy.get("[data-cy=\"header.logout\"]").click();
+  });
 });
 
 Cypress.Commands.add("authEnterSignUpPassword", (params: {password: string}) => {

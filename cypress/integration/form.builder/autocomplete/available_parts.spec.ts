@@ -103,6 +103,7 @@ context("FORM Field test", () => {
 
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
+        cy.wait(3000);
       });
 
       it("Approve and release FORM document", () => {

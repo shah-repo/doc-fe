@@ -563,10 +563,6 @@ context("Equipment maintenance test", () => {
       cy.drEnterDocumentTitle({ name: "Calibration document" });
     });
 
-    it("Enter description 'Calibration'", () => {
-      cy.drEnterDocumentDescription({ description: "Calibration" });
-    });
-
     it("Select document type 'Maintenance Record'", () => {
       cy.drSelectDocumentType({ documentType: "Maintenance Record" });
     });
