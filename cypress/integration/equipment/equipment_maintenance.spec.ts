@@ -530,20 +530,13 @@ context("Equipment maintenance test", () => {
         .contains("MR-00001 - Preventative maintenance document");
     });
 
-    // it("Check preventative maintenance status is in complience for next 10 days", () => {
-    //   const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
-    //     .add(10, "days")
-    //     .format("ddd MMM DD YYYY");
-    //   cy.get("[data-cy=\"maintenance.status\"]")
-    //     .eq(0)
-    //     .contains(`In Compliance - Due Date: ${prevMaintenanceComplianceDate}`);
-    // });
-
-
     it("Check preventative maintenance status is in complience for next 10 days", () => {
+      const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
+        .add(10, "days")
+        .format("ddd MMMM D YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(0)
-        .contains("In Compliance");
+        .contains(`PM - Done - Due Date: ${prevMaintenanceComplianceDate}`);
     });
   });
 
@@ -631,19 +624,13 @@ context("Equipment maintenance test", () => {
         .contains("MR-00002 - Calibration document");
     });
 
-    // it("Check calibration status is in complience for next 5 days", () => {
-    //   const calibrationComplianceDate = moment().tz("America/Los_Angeles")
-    //     .add(5, "days")
-    //     .format("ddd MMM DD YYYY");
-    //   cy.get("[data-cy=\"maintenance.status\"]")
-    //     .eq(1)
-    //     .contains(`In Compliance - Due Date: ${calibrationComplianceDate}`);
-    // });
-
     it("Check calibration status is in complience for next 5 days", () => {
+      const calibrationComplianceDate = moment().tz("America/Los_Angeles")
+        .add(5, "days")
+        .format("ddd MMMM D YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(1)
-        .contains("In Compliance");
+        .contains(`CAL - Done - Due Date: ${calibrationComplianceDate}`);
     });
 
     it("Verify status is 'Released'", () => {
