@@ -2,7 +2,7 @@ import { FBInputProps, FBProviderProps } from "..";
 import { DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
 
 export type FBSupplierFormProps =
-& Pick<FBProviderProps, "formState" | "supplierState" >
+& Pick<FBProviderProps, "formState">
 & Pick<FBInputProps, "children" | "disabled" | "loading">
 & {
   onDialogClose?: () => void;

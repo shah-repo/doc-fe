@@ -5,4 +5,5 @@ export type FBSupplierProps =
 & Pick<FBInputProps, "name" | "label" | "disabled" | "loading">
 & {
   handleAdd(): void;
+  isPreview?: boolean;
 };

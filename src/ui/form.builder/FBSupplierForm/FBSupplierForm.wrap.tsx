@@ -14,12 +14,11 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     loading,
     formOptions,
     formAutocompleteDisabled,
-    supplierState,
     ...props
   }: T) => {
 
     // MARK: @config
-    const { dialogState } = FB.useStores();
+    const { dialogState, supplierState } = FB.useStores();
     const formState = FB.useRef<FBFormState>(FBFormState, {});
 
     React.useEffect(() => dialogState?.setActions(
@@ -80,8 +79,11 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
 
     // MARK: @observer
     useObserver(() => {
-      loading = supplierState?.proposedDocIdApi.loading
-      || supplierState?.documentTypeApi.loading;
+      loading = (
+        supplierState?.newSupplierApi.loading ||
+        supplierState?.proposedDocIdApi.loading ||
+        supplierState?.documentTypeApi.loading
+      );
       disabled = disabled || loading;
 
       // disable Choose a Form Autocomplete if document type isn't selected

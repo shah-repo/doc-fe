@@ -11,6 +11,8 @@ const FBSupplier: React.FunctionComponent<FBSupplierProps> = ({
   loading,
   dialogState,
   supplierState,
+  isPreview,
+  name,
 }) => (
   <FBProvider {...{ dialogState, supplierState }}>
     <FBDialog />
@@ -22,20 +24,19 @@ const FBSupplier: React.FunctionComponent<FBSupplierProps> = ({
             gutter={false}
             shouldReloadOnInit
             withState
-            omitFormValue
-            name="supplier"
+            autosave
             optionId={FBAutocompleteAsyncOption.suppliers}
-            {...{ label, disabled, loading }}
+            {...{ name, label, disabled, loading }}
           />
         </Box>
-        <Box>
+        {!isPreview && <Box>
           <FBButton
             variant="contained"
             label="form.builder.create.new.supplier"
             onClick={handleAdd}
             {...{ disabled }}
           />
-        </Box>
+        </Box>}
       </Box>
     </FBInput>
   </FBProvider>
