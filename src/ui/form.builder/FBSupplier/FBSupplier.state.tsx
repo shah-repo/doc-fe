@@ -4,7 +4,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBSupplierState {
+class FBSupplierState {
   // MARK: @observables
 
   // MARK: @config
