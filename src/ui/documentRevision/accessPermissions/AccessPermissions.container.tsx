@@ -39,7 +39,7 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
   const securityEmployees = get(selectedDocument, "document.securityEmployees", []);
   const operators = get(selectedDocument, "document.operators", []);
 
-  const [isVisible] = useAssignOperatorsToDocument(documentTypeId);
+  const { isVisible } = useAssignOperatorsToDocument(documentTypeId);
 
   return (
     <AccessPermissionsPresenter
