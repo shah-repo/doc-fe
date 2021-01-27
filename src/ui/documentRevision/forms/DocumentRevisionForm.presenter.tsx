@@ -1,14 +1,13 @@
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { flatten, get, isEmpty } from "lodash";
+import { flatten, isEmpty } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentRevision, documentRevisionsSelectors, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
-import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import FormWrapper from "../../components/forms/FormWrapper";
@@ -23,7 +22,7 @@ import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
-import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentReceivable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
+import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../helpers/documentRevisionStatus";
 import { isDocumentAlphaReleased } from "../helpers/revisionStage";
 import { styles } from "./DocumentRevisionForm.styles";
@@ -96,7 +95,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   canChangeOwnerShip,
   documentRevision,
   setFieldValue,
-  setFieldTouched,
   type,
   FBContainer,
   bannerPortal,
@@ -110,9 +108,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const { workspaceState } = FB.useStores();
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
-  const poreceiveName = (workspaceState?.schema)?.find((field) => field.type === "poreceive")?.name || "";
-  const poreceiveId = get(workspaceState?.document?.formInput, poreceiveName);
-
 
   const hasOutput = useMemo(() => {
     const documentType = documentTypesById[values.document?.documentType?.id || ""];
@@ -128,8 +123,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
-  const poreceive = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, poreceiveId));
   // helpers
   const isDocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isDocRevStatusInPendingChange = isDocumentRevisionPendingChange(documentRevision?.status);
@@ -139,7 +132,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
   const isPart = checkIsDocumentPart(documentRevision?.document.documentType.groupOptions);
   const isDocumentEquipment = checkIsDocumentEquipment(documentRevision?.document.documentType.groupOptions);
-  const isDocumentReceivable = checkIsDocumentReceivable(documentRevision?.document.documentType.groupOptions);
 
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
@@ -197,14 +189,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       });
     }
   }, [isDocRevStatusDraft, values.document, values.name]);
-
-  useEffect(() => {
-    if (!isDocumentReceivable && !poreceive) {
-      return;
-    }
-    setFieldValue("referenceTo", [...documentReferences, { id: poreceive.document.id }]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poreceive]);
 
   return (
     <Grid

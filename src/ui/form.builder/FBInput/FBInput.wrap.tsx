@@ -155,7 +155,11 @@ export const withFBInput = <T extends FBInputProps>(
         () => inputState?.autosaveNextValue,
         (value) => {
           if (autosave && !isEqual(inputState?.autosavePrevValue, value)) {
-            submitForm();
+            submitForm({
+              type,
+              prevValue: inputState?.autosavePrevValue,
+              nextValue: value,
+            });
           }
         }
       );

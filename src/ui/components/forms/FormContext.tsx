@@ -3,6 +3,7 @@ import { isEqual } from "lodash";
 import React, { useContext } from "react";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { FB } from "../../form.builder";
+import { SubmitFormRelation } from "./FormContext.types";
 
 export const FormContext = React.createContext({ submitOnChange: false });
 
@@ -44,11 +45,18 @@ export const useFormContext = () => {
         formik.setFieldValue("formTemplate", undefined);
     }
   }
+
   // TODO: check if this param is needed. Formik context should be available
-  const submitForm = () => {
+  const submitForm = (relation?: SubmitFormRelation) => {
     if (context.submitOnChange) {
       if (workspaceState) {
         setFBValue();
+      }
+      // type should be poreceive, but it is always autocomplete
+      // saved id is not an id of that document, should fetch it
+      // remove id of reference
+      if (relation && relation.type === "poreceive") {
+        formik.setFieldValue("referenceTo", [{ id: relation.nextValue }]);
       }
       formik.submitForm();
     }
