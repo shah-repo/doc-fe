@@ -7,7 +7,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { keys, truncate, values } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FBMapWrapper, FBPurchaseOrderDetailsProduct, FBPurchaseOrderDetailsService, FBPurchaseOrderItem, FBPurchaseOrderTableDetailsProps, FBTableCell, FBTooltip } from "..";
+import { FBMapWrapper, FBPurchaseOrderDetailsProduct, FBPurchaseOrderItem, FBPurchaseOrderTableDetailsProps, FBTableCell, FBTooltip } from "..";
+import { FBPurchaseOrderCollection } from "./helpers";
 
 
 const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableDetailsProps> = ({
@@ -56,8 +57,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                     </FBTooltip>
                   )}
                 </FBTableCell>
-                <FBMapWrapper<string[]> collection={item.type === "product" ?
-                  keys(FBPurchaseOrderDetailsProduct) : keys(FBPurchaseOrderDetailsService)}>
+                <FBMapWrapper<string[]> collection={keys(FBPurchaseOrderCollection[item.type])}>
                   {(key, index) => {
                     let label = item[key];
                     let tooltipTitle: string | undefined;
