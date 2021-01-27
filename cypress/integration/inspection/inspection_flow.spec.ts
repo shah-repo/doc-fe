@@ -1017,6 +1017,7 @@ context("Inspection flow", () => {
       context("Save form and release it", () => {
         it("Click save", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
+          cy.wait(8000);
         });
 
         it("Approve and Release document", () => {

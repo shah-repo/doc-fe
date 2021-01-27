@@ -93,7 +93,7 @@ context("Create company via API and create Suppliers document", () => {
 
   it("Click create document after filling document", () => {
     cy.drClickCreateDocumentWithApiCall();
-    cy.wait(3000);
+    cy.wait(8000);
   });
 
   it("Approve and release document", () => {
@@ -122,6 +122,7 @@ context("Create company via API and create Suppliers document", () => {
 
   it("Click create document after filling document", () => {
     cy.drClickCreateSupplierWithApiCall();
+    cy.wait(8000);
   });
 
   it("Approve and release document", () => {
@@ -182,6 +183,7 @@ context("Create company via API and create Suppliers document", () => {
 
   it("Click create document after filling document", () => {
     cy.drClickCreateDocumentWithApiCall();
+    cy.wait(8000);
   });
 
   it("Approve and release document", () => {

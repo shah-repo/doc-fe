@@ -102,6 +102,7 @@ context("FORM Field test", () => {
 
       it("Click Save button", () => {
         cy.get("button[type=\"submit\"]").click();
+        cy.wait(8000);
       });
     });
 

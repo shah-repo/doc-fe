@@ -582,6 +582,7 @@ context("Procedure and parts flow test", () => {
     context("Create document and release it", () => {
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithApiCall();
+        cy.wait(8000);
       });
 
       it("Approve and release document", () => {
@@ -631,6 +632,7 @@ context("Procedure and parts flow test", () => {
     context("Create document and release it", () => {
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithApiCall();
+        cy.wait(8000);
       });
 
       it("Approve and release document", () => {
