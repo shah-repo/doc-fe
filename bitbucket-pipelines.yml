@@ -122,6 +122,10 @@ definitions:
         # - step: 
         #     <<:  *COMMON_RUN_CYPRESS
         #     name: Cypress specs 8/8
+
+    - step: &RUN_CYPRESS_SINGLE
+        <<:  *COMMON_RUN_CYPRESS
+        name: Cypress specs 1/1
     #
     # DEV
     #
@@ -263,6 +267,9 @@ pipelines:
     
     run-cypress-on-dev:
       - parallel: *RUN_CYPRESS_IN_PARALLEL
+    
+    run-single-cypress-on-dev:
+      - step: *RUN_CYPRESS_SINGLE
 
   branches:
     master:
