@@ -86,11 +86,10 @@ export const Approvers: React.FunctionComponent<Props> = ({
       setCheckedGroups(initialGroups);
       return;
     }
-
     const uniqGroups = uniqBy(documentTypeGroups, "id").reverse();
-    if (!isEmpty(difference(selectedUsers, selectedApprovers))) { // added
-      const newUserId = last(difference(selectedUsers, selectedApprovers)).value;
-      if (isDocumentPO) {
+    if (isDocumentPO) {
+      if (!isEmpty(difference(selectedUsers, selectedApprovers))) { // user added
+        const newUserId = last(difference(selectedUsers, selectedApprovers)).value;
         const checkedGroup =
           find(uniqGroups, (group) =>
             includes(group.joinedEmployees.map((e) => e.id), newUserId)
@@ -99,32 +98,22 @@ export const Approvers: React.FunctionComponent<Props> = ({
         checkedGroup.groupApprover = newUserId;
         const newGroups = concat(checkedGroups, checkedGroup);
         setCheckedGroups(newGroups);
-      } else {
-        const newlyCheckedGroups =
-          filter(uniqGroups, (group) =>
-            (includes(group.joinedEmployees.map((e) => e.id), newUserId)
-            || includes(group.joinedEmployees.map((e) => e.id), owner?.id))
-            && !includes(checkedGroups.map((g) => g.id), group.id));
-        const newGroups = concat(checkedGroups, newlyCheckedGroups);
-        setCheckedGroups(newGroups);
-      }
-    } else if (!isEmpty(difference(selectedApprovers, selectedUsers))) { // removed
-      if (isDocumentPO) {
+      } else if (!isEmpty(difference(selectedApprovers, selectedUsers))) { // user removed
         const removedUserId = last(difference(selectedApprovers, selectedUsers)).value;
         const newGroups = checkedGroups.filter((group) => group.groupApprover === removedUserId);
         setCheckedGroups(newGroups);
-      } else {
-        const newGroups =
-          filter(uniqGroups, (group) =>
-            group
-              .joinedEmployees
-              .some((employee) => (
-                selectedUsers
-                  .map((u) => u.value)
-                  .includes(employee.id)) || owner?.id === employee.id)
-          );
-        setCheckedGroups(newGroups);
       }
+    } else {
+      const newGroups =
+        filter(uniqGroups, (group) =>
+          group
+            .joinedEmployees
+            .some((employee) => (
+              selectedUsers
+                .map((u) => u.value)
+                .includes(employee.id)) || owner?.id === employee.id)
+        );
+      setCheckedGroups(newGroups);
     }
     setSelectedApprovers(selectedUsers);
   };

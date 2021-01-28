@@ -88,7 +88,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const history = useHistory();
   const docId = documentRevision?.document?.docId || "";
   const title = documentRevision?.name;
-  const isDocumentPO = checkIsDocumentPO(documentRevision.document.documentType.groupOptions);
+  const isDocumentPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
 
   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
