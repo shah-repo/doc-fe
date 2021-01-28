@@ -104,6 +104,17 @@ if (Cypress.env("RUN_ENVIRONMENT") === "pipeline") {
 }
 
 it("Server has correct code deployed3", function()  {
+  if (CONFIG.RUN_ENVIRONMENT !== "pipeline") {
+    this.skip();
+  } else {
+    cy.visit(`${CONFIG.FE_URL}/status`, { timeout: 20 * 1000 });
+    cy.get("[data-cy=\"status-frontend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_FE);
+    cy.get("[data-cy=\"status-backend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_BE);
+  }
+});
+
+
+it("Server has correct code deployed4", function()  {
   if (Cypress.env("RUN_ENVIRONMENT") !== "pipeline") {
     this.skip();
   } else {
@@ -113,8 +124,19 @@ it("Server has correct code deployed3", function()  {
   }
 });
 
-it("Server has correct code deployed4", function()  {
+it("Server has correct code deployed5", function()  {
   if (Cypress.env("RUN_ENVIRONMENT") === "pipeline") {
+    this.skip();
+  } else {
+    cy.visit(`${CONFIG.FE_URL}/status`, { timeout: 20 * 1000 });
+    cy.get("[data-cy=\"status-frontend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_FE);
+    cy.get("[data-cy=\"status-backend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_BE);
+  }
+});
+
+
+it("Server has correct code deployed6", function()  {
+  if (CONFIG.RUN_ENVIRONMENT === "pipeline") {
     this.skip();
   } else {
     cy.visit(`${CONFIG.FE_URL}/status`, { timeout: 20 * 1000 });
