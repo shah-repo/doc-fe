@@ -190,6 +190,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           formDocumentStatus={documentRevision?.formDocument?.status}
           setShouldDisplay={props.setUpgradeToLastestDisplay}
           type="button"
+          isRecord={isRecord}
         />
         {!(isRecord && isInlineApproval) &&
           isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}
