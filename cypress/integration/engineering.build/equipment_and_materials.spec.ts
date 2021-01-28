@@ -435,6 +435,10 @@ context("Procedure and parts flow test", () => {
         cy.drEnterDocumentTitle({ name: "EB document" });
       });
 
+      it("Enters description 'Procedure description'", () => {
+        cy.drEnterDocumentDescription({ description: "EB description" });
+      });
+
       it("Add approver to approvals", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
       });
