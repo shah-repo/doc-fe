@@ -62,6 +62,9 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                     let label = item[key];
                     let tooltipTitle: string | undefined;
                     const dataCy = key;
+                    if (item.type === "service" && !key.serviceId && key === "serviceId") {
+                      label = "N/A";
+                    }
                     if (key === "description" && item.type === "product") {
                       key = "partNumberTitle";
                       label = truncate(item[key], { length: 35, omission: " ..." });
