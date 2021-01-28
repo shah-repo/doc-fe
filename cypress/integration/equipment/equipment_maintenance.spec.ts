@@ -471,10 +471,6 @@ context("Equipment maintenance test", () => {
       cy.drEnterDocumentTitle({ name: "Preventative maintenance document" });
     });
 
-    it("Enter description 'Preventative maintenance'", () => {
-      cy.drEnterDocumentDescription({ description: "Preventative maintenance" });
-    });
-
     it("Select document type 'Maintenance Record'", () => {
       cy.drSelectDocumentType({ documentType: "Maintenance Record" });
     });
@@ -534,20 +530,13 @@ context("Equipment maintenance test", () => {
         .contains("MR-00001 - Preventative maintenance document");
     });
 
-    // it("Check preventative maintenance status is in complience for next 10 days", () => {
-    //   const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
-    //     .add(10, "days")
-    //     .format("ddd MMM DD YYYY");
-    //   cy.get("[data-cy=\"maintenance.status\"]")
-    //     .eq(0)
-    //     .contains(`In Compliance - Due Date: ${prevMaintenanceComplianceDate}`);
-    // });
-
-
     it("Check preventative maintenance status is in complience for next 10 days", () => {
+      const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
+        .add(10, "days")
+        .format("MMMM D, YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(0)
-        .contains("In Compliance");
+        .contains(`In Compliance - Due Date: ${prevMaintenanceComplianceDate}`);
     });
   });
 
@@ -565,10 +554,6 @@ context("Equipment maintenance test", () => {
 
     it("Enter title 'Calibration document'", () => {
       cy.drEnterDocumentTitle({ name: "Calibration document" });
-    });
-
-    it("Enter description 'Calibration'", () => {
-      cy.drEnterDocumentDescription({ description: "Calibration" });
     });
 
     it("Select document type 'Maintenance Record'", () => {
@@ -614,6 +599,7 @@ context("Equipment maintenance test", () => {
 
   context("Check equipment calibration history on maintenance document", () => {
     it("Navig to Equipment", () => {
+      cy.reload();
       cy.navigToDashboard();
       cy.navigToEquipment();
     });
@@ -638,18 +624,13 @@ context("Equipment maintenance test", () => {
         .contains("MR-00002 - Calibration document");
     });
 
-    // it("Check calibration status is in complience for next 5 days", () => {
-    //   const calibrationComplianceDate = moment().tz("America/Los_Angeles")
-    //     .add(5, "days")
-    //     .format("ddd MMM DD YYYY");
-    //   cy.get("[data-cy=\"maintenance.status\"]")
-    //     .eq(1)
-    //     .contains(`In Compliance - Due Date: ${calibrationComplianceDate}`);
-    // });
-
     it("Check calibration status is in complience for next 5 days", () => {
+      const calibrationComplianceDate = moment().tz("America/Los_Angeles")
+        .add(5, "days")
+        .format("MMMM D, YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
-        .contains("In Compliance"); // FIXME  2021/01/28, 20.28.5 -> 21.1
+        .eq(1)
+        .contains(`In Compliance - Due Date: ${calibrationComplianceDate}`);
     });
 
     it("Verify status is 'Released'", () => {
