@@ -113,6 +113,16 @@ it("Server has correct code deployed3", function()  {
   }
 });
 
+it("Server has correct code deployed4", function()  {
+  if (Cypress.env("RUN_ENVIRONMENT") === "pipeline") {
+    this.skip();
+  } else {
+    cy.visit(`${CONFIG.FE_URL}/status`, { timeout: 20 * 1000 });
+    cy.get("[data-cy=\"status-frontend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_FE);
+    cy.get("[data-cy=\"status-backend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_BE);
+  }
+});
+
 if (CONFIG.TAKE_SCREENSHOT_AFTER_EACH) {
   const oldIt = it;
   const foo = (title, callback) => {
