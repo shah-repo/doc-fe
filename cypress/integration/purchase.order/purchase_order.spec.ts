@@ -245,6 +245,7 @@ context("PO test", () => {
         [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.poAddPOButtonClick();
         });
+      cy.checkToastMessage({ exists: false });
     });
 
     it("Check currency options dropdown", () => {
@@ -359,6 +360,7 @@ context("PO test", () => {
         [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.poAddPOButtonClick();
         });
+      cy.checkToastMessage({ exists: false });
     });
 
     it("Check currency options dropdown", () => {
@@ -367,7 +369,9 @@ context("PO test", () => {
     });
 
     it("Select Currency 'EUR'", () => {
-      cy.poSelectCurrency({ currencyValue: "EUR" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.poSelectCurrency({ currencyValue: "EUR" });
+      });
     });
 
     it("Check for conversion message", () => {
@@ -393,10 +397,8 @@ context("PO test", () => {
 
     it("Check if total converted to dollars is shown", () => {
       // SystemRequirement("REQ-1460");
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.poConvertedToDollarsMessage();
-        });
+      cy.poConvertedToDollarsMessage();
+      cy.checkToastMessage({ exists: false });
     });
   });
 

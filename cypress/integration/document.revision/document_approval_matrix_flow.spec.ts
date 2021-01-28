@@ -418,7 +418,7 @@ context("Document Approval Matrix Flow", () => {
   context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(2000);
+      cy.wait(8000);
     });
 
     it("'Training Required' should be checked because of DAM", () => {
@@ -674,7 +674,7 @@ context("Document Approval Matrix Flow", () => {
   context("Save document, Check Group Role is enforced and Release Document", () => {
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(2000);
+      cy.wait(8000);
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {

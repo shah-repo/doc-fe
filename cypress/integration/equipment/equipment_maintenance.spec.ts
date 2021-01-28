@@ -581,7 +581,6 @@ context("Equipment maintenance test", () => {
 
     it("Check Calibration document existance", () => {
       cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
-        .eq(1)
         .contains("MR-00002 - Calibration document");
     });
 
@@ -590,7 +589,6 @@ context("Equipment maintenance test", () => {
         .add(5, "days")
         .format("ddd MMM DD YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
-        .eq(1)
         .contains(`In Compliance - Due Date: ${calibrationComplianceDate}`);
     });
 
