@@ -5,7 +5,7 @@ definitions:
   services:
     sorry-cypress-director:
       image:
-        name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:sorry-cypress-director-no-retries1
+        name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:sorry-cypress-director-3-retries
       variables:
         EXECUTION_DRIVER: "../execution/in-memory"
         SCREENSHOTS_DRIVER: "../screenshots/dummy.driver"
@@ -100,22 +100,22 @@ definitions:
     - parallel: &RUN_CYPRESS_IN_PARALLEL
         - step: 
             <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 1/4
+            name: Cypress specs 1/6
         - step: 
             <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 2/4
+            name: Cypress specs 2/6
         - step: 
             <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 3/4
+            name: Cypress specs 3/6
         - step: 
             <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 4/4
-        # - step: 
-        #     <<:  *COMMON_RUN_CYPRESS
-        #     name: Cypress specs 5/8
-        # - step: 
-        #     <<:  *COMMON_RUN_CYPRESS
-        #     name: Cypress specs 6/8
+            name: Cypress specs 4/6
+        - step: 
+            <<:  *COMMON_RUN_CYPRESS
+            name: Cypress specs 5/6
+        - step: 
+            <<:  *COMMON_RUN_CYPRESS
+            name: Cypress specs 6/6
         # - step: 
         #     <<:  *COMMON_RUN_CYPRESS
         #     name: Cypress specs 7/8
