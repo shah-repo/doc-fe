@@ -26,6 +26,7 @@ import { useApproveAndRelease } from "../../../../hooks/docCustomization/useCust
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
+import { checkIsDocumentPO } from "../../../helpers/checkDocumentGroup";
 import { ApproveAndReleaseFormValues } from "../../types";
 import ApproveAndReleaseForm from "./ApproveAndReleaseForm";
 
@@ -87,6 +88,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const history = useHistory();
   const docId = documentRevision?.document?.docId || "";
   const title = documentRevision?.name;
+  const isDocumentPO = checkIsDocumentPO(documentRevision.document.documentType.groupOptions);
 
   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
@@ -254,6 +256,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
         selectedInvalid,
         isRecord,
         isInlineApproval,
+        isDocumentPO,
       }}
     />
   );

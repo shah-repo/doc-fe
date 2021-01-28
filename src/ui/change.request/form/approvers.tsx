@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
-import { uniqBy } from "lodash";
-import React from "react";
+import { concat, difference, filter, find, includes, isEmpty, last, uniqBy } from "lodash";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { components } from "react-select";
 import { ReactComponent as CheckedMark } from "../../../assets/images/check_mark.svg";
@@ -26,6 +26,7 @@ interface OwnProps {
   values?: ApproveAndReleaseFormValues;
   owner?: Owner;
   shouldShowDAMCheck?: boolean;
+  isDocumentPO: boolean;
 }
 
 export type Props = OwnProps;
@@ -37,6 +38,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
   values,
   owner,
   shouldShowDAMCheck = true,
+  isDocumentPO,
 }) => {
   // We should check if we need all of this
   // Now that approvers are moved to the FB
@@ -64,20 +66,78 @@ export const Approvers: React.FunctionComponent<Props> = ({
         base,
   };
 
+  const initialGroups = uniqBy(documentTypeGroups, "id")
+    .reduce<any[]>((groups, group) => {
+      if (includes(group.joinedEmployees.map((e) => e.id), owner?.id)) {
+        groups.push({
+          ...group,
+          groupApprover: owner?.id,
+        });
+      }
+      return groups;
+    }, []);
+
+  const [checkedGroups, setCheckedGroups] = useState<any[]>(initialGroups);
+  const [selectedApprovers, setSelectedApprovers] = useState<any[]>([]);
+
+
+  const markGroupChecked = (selectedUsers: any[]) => {
+    if (!selectedUsers || isEmpty(selectedUsers)) {
+      setCheckedGroups(initialGroups);
+      return;
+    }
+
+    const uniqGroups = uniqBy(documentTypeGroups, "id").reverse();
+    if (!isEmpty(difference(selectedUsers, selectedApprovers))) { // added
+      const newUserId = last(difference(selectedUsers, selectedApprovers)).value;
+      if (isDocumentPO) {
+        const checkedGroup =
+          find(uniqGroups, (group) =>
+            includes(group.joinedEmployees.map((e) => e.id), newUserId)
+            && !includes(checkedGroups.map((g) => g.id), group.id)) as any;
+        if (!checkedGroup) { return; }
+        checkedGroup.groupApprover = newUserId;
+        const newGroups = concat(checkedGroups, checkedGroup);
+        setCheckedGroups(newGroups);
+      } else {
+        const newlyCheckedGroups =
+          filter(uniqGroups, (group) =>
+            (includes(group.joinedEmployees.map((e) => e.id), newUserId)
+            || includes(group.joinedEmployees.map((e) => e.id), owner?.id))
+            && !includes(checkedGroups.map((g) => g.id), group.id));
+        const newGroups = concat(checkedGroups, newlyCheckedGroups);
+        setCheckedGroups(newGroups);
+      }
+    } else if (!isEmpty(difference(selectedApprovers, selectedUsers))) { // removed
+      if (isDocumentPO) {
+        const removedUserId = last(difference(selectedApprovers, selectedUsers)).value;
+        const newGroups = checkedGroups.filter((group) => group.groupApprover === removedUserId);
+        setCheckedGroups(newGroups);
+      } else {
+        const newGroups =
+          filter(uniqGroups, (group) =>
+            group
+              .joinedEmployees
+              .some((employee) => (
+                selectedUsers
+                  .map((u) => u.value)
+                  .includes(employee.id)) || owner?.id === employee.id)
+          );
+        setCheckedGroups(newGroups);
+      }
+    }
+    setSelectedApprovers(selectedUsers);
+  };
+
   const renderGroupApproversResults = () => {
     const uniqGroups = uniqBy(documentTypeGroups, "id");
-    const selectedEmployees = (values?.approvals || []).map((e) => e.value);
-
     return (
       <Box display="flex" flexWrap="wrap">
         {
           uniqGroups.map((group, index) =>
             <Box marginRight={6} marginBottom={4} key={group.id} display="inline-flex">
               {
-                group
-                  .joinedEmployees
-                  .some((employee) => (
-                    selectedEmployees?.includes(employee.id)) || owner?.id === employee.id) ?
+                includes(checkedGroups.map((g) => g.id), group.id) ?
                   <CheckedMark data-cy={"checked-" + index} /> : <UncheckedMark data-cy={"unchecked"} />
               }
               <Box paddingLeft={1} display="initial" data-cy={"group-" + index}>
@@ -127,6 +187,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
           components: { MultiValueLabel },
         }}
         options={uniqBy(arrayOfOptions, "value").filter((e: any) => e.value !== owner?.id) as OptionType[]}
+        onChange={(users) => markGroupChecked(users as any[])}
       />
       {documentTypeGroups && shouldShowDAMCheck && renderGroupApproversResults()}
     </AsyncGate>

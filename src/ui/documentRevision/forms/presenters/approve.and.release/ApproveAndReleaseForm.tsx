@@ -32,6 +32,7 @@ interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   selectedInvalid: boolean;
   isRecord: boolean;
   isInlineApproval: boolean;
+  isDocumentPO: boolean;
   setFormDocument: (value: string) => void;
   setDocumentType: (value: string) => void;
   setSelectedInvalid: (value: boolean) => void;
@@ -52,6 +53,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   selectedInvalid,
   isRecord,
   isInlineApproval,
+  isDocumentPO,
 }) => {
   const classes = styles();
 
@@ -130,6 +132,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
               owner,
               values,
               documentTypeGroups,
+              isDocumentPO,
             }
           }
         />
