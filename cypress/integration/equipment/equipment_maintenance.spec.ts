@@ -635,7 +635,6 @@ context("Equipment maintenance test", () => {
 
     it("Check Calibration document existance", () => {
       cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
-        .eq(1)
         .contains("MR-00002 - Calibration document");
     });
 
@@ -650,8 +649,7 @@ context("Equipment maintenance test", () => {
 
     it("Check calibration status is in complience for next 5 days", () => {
       cy.get("[data-cy=\"maintenance.status\"]")
-        .eq(1)
-        .contains("In Compliance");
+        .contains("In Compliance"); // FIXME  2021/01/28, 20.28.5 -> 21.1
     });
 
     it("Verify status is 'Released'", () => {

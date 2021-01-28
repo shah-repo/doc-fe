@@ -43,7 +43,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   setDisableCreateButton,
   match,
 }) => {
-  const [isVisible, label, tooltipConfig, validators] = useDocumentTypeSelect(documentTypeId);
+  const { isVisible, label, tooltipConfig, validation: validators } = useDocumentTypeSelect(documentTypeId);
 
   const { workspaceState } = FB.useStores();
   const formik = useFormikContext();

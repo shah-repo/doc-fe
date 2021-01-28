@@ -1138,10 +1138,6 @@ context("Inspection flow", () => {
       cy.drEnterDocumentTitle({ name: "Inspection Document" });
     });
 
-    it("Enters description 'Inspection Document description'", () => {
-      cy.drEnterDocumentDescription({ description: "Inspection Document description" });
-    });
-
     it("Change document type", () => {
       cy.drSelectDocumentType({ documentType: "Subassembly Lot" });
     });
