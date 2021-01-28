@@ -101,15 +101,15 @@ definitions:
         - step: 
             <<:  *COMMON_RUN_CYPRESS
             name: Cypress specs 1/4
-        # - step: 
-        #     <<:  *COMMON_RUN_CYPRESS
-        #     name: Cypress specs 2/4
-        # - step: 
-        #     <<:  *COMMON_RUN_CYPRESS
-        #     name: Cypress specs 3/4
-        # - step: 
-        #     <<:  *COMMON_RUN_CYPRESS
-        #     name: Cypress specs 4/4
+        - step: 
+            <<:  *COMMON_RUN_CYPRESS
+            name: Cypress specs 2/4
+        - step: 
+            <<:  *COMMON_RUN_CYPRESS
+            name: Cypress specs 3/4
+        - step: 
+            <<:  *COMMON_RUN_CYPRESS
+            name: Cypress specs 4/4
         # - step: 
         #     <<:  *COMMON_RUN_CYPRESS
         #     name: Cypress specs 5/8
