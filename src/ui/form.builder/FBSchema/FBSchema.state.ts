@@ -38,6 +38,7 @@ import { FBSelect } from "../FBSelect";
 import { FBSelectDocument } from "../FBSelectDocument";
 import { FBSelectRequirement } from "../FBSelectRequirement";
 import { FBSubsection } from "../FBSubsection";
+import FBSupplier from "../FBSupplier/FBSupplier";
 import { FBTask } from "../FBTask";
 import { FBTestRequirement } from "../FBTestRequirement";
 import { FBTextEditor } from "../FBTextEditor";
@@ -107,6 +108,7 @@ export class FBSchemaState {
     ebpart: FBEBPart,
     eqmaintenance: FBEQMaintenance,
     textfieldwithrange: FBTextFieldWithRange,
+    supplier: FBSupplier,
   };
 
   @observable public schema?: FBSchemaProps[];
