@@ -101,7 +101,7 @@ definitions:
         - step: 
             <<:  *COMMON_RUN_CYPRESS
             name: Cypress specs 1/4
-        # - step: 
+        - step: 
             <<:  *COMMON_RUN_CYPRESS
             name: Cypress specs 2/4
         # - step: 
