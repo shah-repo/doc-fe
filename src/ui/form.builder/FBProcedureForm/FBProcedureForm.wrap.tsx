@@ -1,15 +1,16 @@
-import { isEmpty, map } from "lodash";
+import { filter, first, isEmpty, lowerCase, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormProps, FBProcedureFormState, FBProcedureItemConfig, FBProcedureItemType } from "..";
+import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormFilterType, FBProcedureFormProps, FBProcedureFormState, FBProcedureItemConfig, FBProcedureItemType } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { SelectOption } from "../../components/forms/fields/Select";
 
 export const withFBProcedureForm = <T extends FBProcedureFormProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    lotFilterOptions,
+    partFilterOptions,
     formState,
     disabledOptions,
     procedureFormState,
@@ -18,7 +19,8 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     type,
     lotOptions,
     partOptions,
-    disabled,
+    partLoading,
+    lotLoading,
     ...props
   }: T) => {
     // MARK: @config
@@ -48,26 +50,45 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     }, []);
 
     // MARK: @reactions
+    // Fetch lots on part selection
     useEffect(() => reaction(
       () => formState?.inputState.get("title")?.value,
-      (value) => {
-        handleChangeOfPart();
-        if (!value && !formState?.inputState.get("partLot")?.value) {
-          procedureFormState?.fetchLots();
-          procedureFormState?.fetchParts();
+      (id) => {
+        if (id && FB.isUUID(id)) {
+          return procedureFormState?.fetchLotsToPart(id);
         }
+        procedureFormState?.clearLots();
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
+
+    useEffect(() => reaction(
+      () => procedureFormState?.lotsApi.data,
+      (data) => procedureFormState?.setLots(map(data, "id")),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
     // if title and partLot empty it will set to default options
     useEffect(() => reaction(
       () => formState?.inputState.get("partLot")?.value,
-      (value) => {
-        handleChangeOfLot();
-        if (!value && !formState?.inputState.get("title")?.value) {
-          procedureFormState?.fetchLots();
-          procedureFormState?.fetchParts();
+      (id) => {
+        if (id && FB.isUUID(id)) {
+          return procedureFormState?.fetchPartsOfLot(id);
         }
+        procedureFormState?.clearParts();
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    useEffect(() => reaction(
+      () => procedureFormState?.partsApi.data,
+      (data) => {
+        const partValue = formState?.getFieldValue("title");
+        procedureFormState?.setParts(map(data, "id"));
+        if (partValue) { return; }
+        formState?.setFieldValue("title", first(data)?.id);
+        formState?.getInputState("title")?.setRender();
+        formState?.validate();
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -83,39 +104,45 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       dialogState?.closeDialog();
     }
 
-    function handleChangeOfPart() {
-      const formValue = formState?.getValues() as FBProcedureItemConfig;
-      // freeSolo or empty
-      if (!formValue.title ||
-        isEmpty(procedureFormState?.defaultParts.filter((e) => e.id === formValue?.title))) {
-        return;
+    function handleFilter(
+      data: DocumentRevision[],
+      type: FBProcedureFormFilterType,
+      inputValue: string,
+    ) {
+      const typeValue = formState?.getFieldValue(type);
+      let filtered = typeValue ? [] : data;
+      const relation = type === FBProcedureFormFilterType.parts
+        ? procedureFormState?.lots
+        : procedureFormState?.parts;
+
+      if (!isEmpty(relation)) {
+        filtered = filter(data, (option) => relation!.includes(option.id));
       }
-      procedureFormState?.fetchLotsToPart(formValue.title);
+      filtered = filter(filtered, (option) => {
+        const { name, displayRevision, document: { docId = "" } = {} } = option;
+        const optionLabel = `${name} - rev ${displayRevision} - ${docId}`;
+        return lowerCase(optionLabel).includes(lowerCase(inputValue));
+      });
+      return filtered;
     }
 
-    function handleChangeOfLot() {
-      const formValue = formState?.getValues() as FBProcedureItemConfig;
-      if (!formValue.partLot) {
-        return;
-      }
-      procedureFormState?.fetchPartsOfLot(formValue.partLot);
-    }
+    // MARK: @methods
+    lotFilterOptions = (options, { inputValue }) =>
+      handleFilter(options, FBProcedureFormFilterType.lots, inputValue);
+
+    partFilterOptions = (options, { inputValue }) =>
+      handleFilter(options, FBProcedureFormFilterType.parts, inputValue);
 
     // MARK: @observer
     useObserver(() => {
-      lotOptions = procedureFormState?.lotsToPart?.map((schemaItem: DocumentRevision) => ({
-        value: schemaItem.id,
-        text: `${schemaItem.document.docId} - rev ${schemaItem.revision} - ${schemaItem.name}`,
-      } as SelectOption));
-      partOptions = procedureFormState?.partsOfLot?.map((schemaItem: DocumentRevision) => ({
-        value: schemaItem.id,
-        text: `${schemaItem.document.docId} - rev ${schemaItem.revision} - ${schemaItem.name}`,
-      } as SelectOption));
-      disabled = !procedureFormState?.partsOfLot || !procedureFormState.lotsToPart;
+      partLoading = procedureFormState?.partsApi.loading;
+      lotLoading = procedureFormState?.lotsApi.loading;
     });
 
     return Component({
       ...(props as T),
+      lotFilterOptions,
+      partFilterOptions,
       formState,
       disabledOptions,
       initialValues,
@@ -123,7 +150,8 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       type,
       lotOptions,
       partOptions,
-      disabled,
+      partLoading,
+      lotLoading,
     });
   };
 

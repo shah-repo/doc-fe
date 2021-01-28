@@ -157,7 +157,7 @@ export class FBSchemaState {
       index: i,
       ...(includes(FBEditorState.pickStepIndex, schemaItem.type)) && {
         stepIndex: size(filter(ro.slice(0, i + 1), (step) =>
-          includes(FBEditorState.pickStepIndex, step.type))),
+          !step.deleted && includes(FBEditorState.pickStepIndex, step.type))),
       },
     }));
     set(this, "schema", schema);
@@ -208,7 +208,9 @@ export class FBSchemaState {
 
   public getItemsByType = (type?: FBInputType): FBSchemaProps[] => {
     if (!type) { return []; }
-    return filter(this.getSchema(), { type });
+    return filter(this.getSchema(), (item) =>
+      !item.deleted && item.type === type
+    );
   };
 }
 

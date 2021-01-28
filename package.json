@@ -1,7 +1,7 @@
 {
   "name": "doc-fe",
   "description": "DOC-POC Frontend application",
-  "version": "20.28.5",
+  "version": "21.1.0",
   "private": true,
   "dependencies": {
     "@datadog/browser-rum": "^1.12.7",
@@ -41,6 +41,7 @@
     "moment": "2.24.0",
     "moment-timezone": "0.5.27",
     "mqtt-pattern": "1.2.0",
+    "patch-package": "^6.2.2",
     "qrcode.react": "1.0.0",
     "query-string": "6.9.0",
     "react": "16.12.0",
@@ -74,6 +75,7 @@
     "sort-json": "^2.0.0",
     "striptags": "3.1.1",
     "styled-components": "^5.1.0",
+    "ts-unused-exports": "^7.0.0",
     "typescript": "3.7.4",
     "uniqid": "^5.2.0",
     "use-debounce": "3.3.0",
@@ -90,7 +92,9 @@
     "test": "react-scripts --max_old_space_size=500 --expose-gc test --logHeapUsage",
     "eject": "react-scripts eject",
     "lint": "eslint -c .eslintrc.js --ext .ts --ext .tsx  src",
-    "lint:fix": "yarn lint --fix"
+    "lint:fix": "yarn lint --fix",
+    "unused-exports": "yarn ts-unused-exports tsconfig.json --excludePathsFromReport=/__mocks__/ --maxIssues=490",
+    "postinstall": "patch-package"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -947,6 +947,84 @@ context("Inspection flow", () => {
       });
     });
 
+    context("Revise subassembly for Part", () => {
+      it("Navigate to documents", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Select 'Subassembly part form'", () => {
+        cy.dlSelectFirstDocument();
+      });
+
+      it("Click revise document", () => {
+        cy.drClickReviseDocument();
+      });
+
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      context("Add Inspection fields", () => {
+        it("Add inspection section", () => {
+          cy.fbClickAddNewHiddenBtn();
+          cy.fbSelectCustomFieldToAdd({ name: "Section" });
+          cy.fbEnterLabel({ label: "Inspection template" });
+          cy.get("[value=\"inspectionSection\"]").check();
+          cy.fbAddField();
+        });
+
+        it("Add 'Height field'", () => {
+          cy.fbClickAddNewHiddenBtn();
+          cy.fbSelectCustomFieldToAdd({ name: "Text field with range" });
+          cy.fbEnterLabel({ label: "Height" });
+          cy.fbEnterPlaceholder({ placeholder: "Enter Value" });
+          cy.get("[name$=\"rangeOption\"]").check();
+          cy.get("[name=\"editorConfig.range.from\"]").type("20");
+          cy.get("[name=\"editorConfig.range.to\"]").type("150");
+          cy.get("[name=\"editorConfig.criticalToQuality\"]").check();
+          cy.get("[name=\"editorConfig.inspection\"]").check();
+          cy.get("[name=\"editorConfig.passValue\"]").check();
+          cy.get("[name=\"editorConfig.pass.value.from\"]").type("20");
+          cy.get("[name=\"editorConfig.pass.value.to\"]").type("150");
+          cy.get("[id$=\"editorConfig.aql\"]").click();
+          cy.get("ul[role=listbox]>li").contains("1.0").click();
+          cy.get("[value=\"includeInInspection\"]").check();
+          cy.get("[value=\"includeInFaiInspection\"]").check();
+          cy.fbAddField();
+        });
+
+        it("Add 'Width field'", () => {
+          cy.fbClickAddNewHiddenBtn();
+          cy.fbSelectCustomFieldToAdd({ name: "Text field with range" });
+          cy.fbEnterLabel({ label: "Width" });
+          cy.fbEnterPlaceholder({ placeholder: "Enter Value" });
+          cy.get("[name$=\"rangeOption\"]").check();
+          cy.get("[name=\"editorConfig.range.from\"]").type("20");
+          cy.get("[name=\"editorConfig.range.to\"]").type("150");
+          cy.get("[name=\"editorConfig.criticalToQuality\"]").check();
+          cy.get("[name=\"editorConfig.inspection\"]").check();
+          cy.get("[name=\"editorConfig.passValue\"]").check();
+          cy.get("[name=\"editorConfig.pass.value.from\"]").type("20");
+          cy.get("[name=\"editorConfig.pass.value.to\"]").type("150");
+          cy.get("[id$=\"editorConfig.aql\"]").click();
+          cy.get("ul[role=listbox]>li").contains("1.0").click();
+          cy.get("[value=\"includeInInspection\"]").check();
+          cy.get("[value=\"includeInFaiInspection\"]").check();
+          cy.fbAddField();
+        });
+      });
+
+      context("Save form and release it", () => {
+        it("Click save", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+
+        it("Approve and Release document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
+    });
+
     context("Create Part for Inspection", () => {
       it("Navigate to Parts", () => {
         cy.navigToParts();
@@ -997,63 +1075,7 @@ context("Inspection flow", () => {
         });
       });
 
-      context("Add Inspection fields", () => {
-        it("Add inspection section", () => {
-          cy.fbClickAddNewHiddenBtn();
-          cy.fbSelectCustomFieldToAdd({ name: "Section" });
-          cy.fbEnterLabel({ label: "Inspection template" });
-          cy.get("[value=\"inspectionSection\"]").check();
-          cy.fbAddField();
-        });
-
-        it("Add 'Height field'", () => {
-          cy.fbClickAddNewHiddenBtn();
-          cy.fbSelectCustomFieldToAdd({ name: "Text field with range" });
-          cy.fbEnterLabel({ label: "Height" });
-          cy.fbEnterPlaceholder({ placeholder: "Enter Value" });
-          cy.get("[name$=\"rangeOption\"]").check();
-          cy.get("[name=\"editorConfig.range.from\"]").type("20");
-          cy.get("[name=\"editorConfig.range.to\"]").type("150");
-          cy.get("[name=\"editorConfig.criticalToQuality\"]").check();
-          cy.get("[name=\"editorConfig.inspection\"]").check();
-          cy.get("[name=\"editorConfig.passValue\"]").check();
-          cy.get("[name=\"editorConfig.pass.value.from\"]").type("20");
-          cy.get("[name=\"editorConfig.pass.value.to\"]").type("150");
-          cy.get("[id$=\"editorConfig.aql\"]").click();
-          cy.get("ul[role=listbox]>li").contains("1.0").click();
-          cy.get("[name=\"editorConfig.fai\"]").check();
-          cy.get("[value=\"includeInInspection\"]").check();
-          cy.get("[value=\"includeInFaiInspection\"]").check();
-          cy.fbAddField();
-        });
-
-        it("Add 'Width field'", () => {
-          cy.fbClickAddNewHiddenBtn();
-          cy.fbSelectCustomFieldToAdd({ name: "Text field with range" });
-          cy.fbEnterLabel({ label: "Width" });
-          cy.fbEnterPlaceholder({ placeholder: "Enter Value" });
-          cy.get("[name$=\"rangeOption\"]").check();
-          cy.get("[name=\"editorConfig.range.from\"]").type("20");
-          cy.get("[name=\"editorConfig.range.to\"]").type("150");
-          cy.get("[name=\"editorConfig.criticalToQuality\"]").check();
-          cy.get("[name=\"editorConfig.inspection\"]").check();
-          cy.get("[name=\"editorConfig.passValue\"]").check();
-          cy.get("[name=\"editorConfig.pass.value.from\"]").type("20");
-          cy.get("[name=\"editorConfig.pass.value.to\"]").type("150");
-          cy.get("[id$=\"editorConfig.aql\"]").click();
-          cy.get("ul[role=listbox]>li").contains("1.0").click();
-          cy.get("[name=\"editorConfig.fai\"]").check();
-          cy.get("[value=\"includeInInspection\"]").check();
-          cy.get("[value=\"includeInFaiInspection\"]").check();
-          cy.fbAddField();
-        });
-      });
-
-      context("Save and Release part document", () => {
-        it("Click save", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
-
+      context("Release part document", () => {
         it("Approve and Release document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });

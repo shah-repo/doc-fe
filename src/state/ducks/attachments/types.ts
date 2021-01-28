@@ -21,7 +21,6 @@ export interface AttachmentDownloadResponse {
   url: string;
 }
 
-export type AttachmentState = Attachment;
 export type AvatarS3linkResponse = AttachmentDownloadResponse;
 
 export enum AttachmentType {
@@ -35,7 +34,7 @@ export enum WatermarkRequestStatus {
   Done = "DONE",
 }
 
-export interface WatermarkRequester {
+interface WatermarkRequester {
   id: string;
   active: boolean;
   slackUserId: Nullable<string>;
@@ -59,11 +58,11 @@ export interface WatermarkRequestBody {
   documentRevision?: Id;
 }
 
-export interface AddWatermarkAction {
+interface AddWatermarkAction {
   type: typeof ADD_WATERMARK;
   payload: string;
 }
-export interface RemoveWatermarkAction {
+interface RemoveWatermarkAction {
   type: typeof REMOVE_WATERMARK;
   payload: string;
 }

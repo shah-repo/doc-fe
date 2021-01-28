@@ -6,7 +6,8 @@ export type FBTextFieldWithRangeProps =
   range?: FBRangeValue;
   pass?: FBRangeValue;
   aql?: string;
-  fai?: boolean;
+  includeInFaiInspection?: boolean;
+  criticalToQuality?: boolean;
 };
 
 export interface FBPassValueRange {

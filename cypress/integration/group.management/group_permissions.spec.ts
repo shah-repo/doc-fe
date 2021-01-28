@@ -199,7 +199,7 @@ context("Group Permissions Flow", () => {
     });
 
     it(`Remove permissions for  'Everyone' for ${USERS[3].name}`, () => {
-      cy.grpRemoveUser({ item: 1 });
+      cy.grpRemoveUser({ name: USERS[3].name });
     });
 
     it("Saves the group", () => {
@@ -325,6 +325,7 @@ context("Group Permissions Flow", () => {
     it("Navigate to existing document", () => {
       cy.navigToDocumentList();
       cy.drClickOnSpecificDocFromList({ item: "AR Form" });
+      cy.wait(5000);
     });
 
     it("Check if 'Request Access' and 'Change Owner' button exists on document", () => {

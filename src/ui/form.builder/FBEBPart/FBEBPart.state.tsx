@@ -1,5 +1,6 @@
 import { action, observable, set } from "mobx";
 import { EBPartPatchBody, EBPartPostBody, ProposedDocIdBody } from ".";
+import { DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType/types";
 import { Document, DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
@@ -16,6 +17,7 @@ export class FBEBPartState {
   public newChildApi = new FBRequest<DocumentRevision, EBPartPostBody>(FBEndpoint.DocumentRevisionsUrl);
   public proposedDocIdApi = new FBRequest<ProposedDocIdBody, null>(FBEndpoint.FetchDocId);
   public documentApi = new FBRequest<Document, null>(FBEndpoint.Document);
+  public documentTypeApi = new FBRequest<DocumentTypeById, null>(FBEndpoint.FetchDocumentType);
 
   // MARK: @constructor
   public constructor(children: { childrenParts?: string; childrenPartsForRevise?: string }) {
@@ -42,17 +44,29 @@ export class FBEBPartState {
     this.newChildApi.set({ body, method: "post" });
   };
 
-  public fetchProposedDocId = (documentTypeId: string) => this.proposedDocIdApi.set({
-    url: FBEndpoint.FetchDocId,
-    urlValues: { documentTypeId },
-    method: "get",
-  });
+  public fetchProposedDocId = (documentTypeId: string) => {
+    if (!documentTypeId) { return; }
+    this.proposedDocIdApi.set({
+      url: FBEndpoint.FetchDocId,
+      urlValues: { documentTypeId },
+      method: "get",
+    });
+  };
 
   public fetchDocumentById = (id: string) => this.documentApi.set({
     url: FBEndpoint.Document,
     urlValues: { id },
     method: "get",
   });
+
+  public fetchDocumentType = (documentTypeId: string) => {
+    if (!documentTypeId) { return; }
+    this.documentTypeApi.set({
+      url: FBEndpoint.FetchDocumentType,
+      urlValues: { documentTypeId },
+      method: "get",
+    });
+  };
 }
 
 export default FBEBPartState;

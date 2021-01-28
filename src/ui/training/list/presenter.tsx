@@ -17,7 +17,7 @@ import { documentRevisionEffectiveDateOption, dueDateOption, trainingCompletedOn
 import useDialog from "../../hooks/useDialog";
 import { styles } from "./styles";
 
-export interface Props {
+interface Props {
   tableName: string;
   data: TableDataProps<TrainingListData>;
   clearFilter?: () => void;

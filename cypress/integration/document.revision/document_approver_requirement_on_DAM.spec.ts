@@ -480,6 +480,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Click Create Approval Request", () => {
       cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.wait(2000);
     });
 
     it("Click 'Send To Review'", () => {
@@ -546,10 +547,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Confirm password", () => {
       cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
-      cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
-        () => {
-          cy.get(`[data-cy="passwordConfirm"]`).click();
-        });
+      cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove, () => {
+        cy.get(`[data-cy="passwordConfirm"]`).click();
+      });
+      cy.checkToastMessage({ exists: false });
     });
   });
 

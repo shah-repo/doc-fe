@@ -2,6 +2,7 @@ import { Box } from "@material-ui/core";
 import { find, get, unionBy, uniqWith } from "lodash";
 import React from "react";
 import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceTplActions } from "..";
+import { toastError } from "../../components/notifications";
 
 export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
   Component: React.FunctionComponent<T>,
@@ -28,12 +29,12 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
 
     const setFileContent = (result: string | ArrayBuffer | null) => {
       if (!result as unknown as string) {
-        return alert("Not a valid template.");
+        return toastError("Not a valid template.");
       }
 
       const schema: FBSchemaProps[] = JSON.parse(result as string);
       if (!find(schema, "type") && !find(schema, "index")) {
-        return alert("Not a valid template.");
+        return toastError("Not a valid template.");
       }
 
       const mergedSchema = uniqWith(
@@ -47,7 +48,7 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
     importSchema = (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = get(event, "currentTarget.files[0]");
       if (!file) {
-        return alert("Invalid file.");
+        return toastError("Invalid file.");
       }
       return readFile(file);
     };

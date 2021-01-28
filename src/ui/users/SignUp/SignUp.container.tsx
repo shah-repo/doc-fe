@@ -3,7 +3,7 @@ import { LOGIN_URL } from "../../constants/urls";
 import { LoginContainerProps } from "../Login.container";
 import SignupFormContainer from "./SignupForm.container";
 
-export type Props = LoginContainerProps;
+type Props = LoginContainerProps;
 
 const SignUpContainer: React.FunctionComponent<Props> = () => (
   <SignupFormContainer

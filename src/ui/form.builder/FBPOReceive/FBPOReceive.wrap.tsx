@@ -5,6 +5,7 @@ import { useIntl } from "react-intl";
 import { FB, FBPOReceiveForm, FBPOReceiveFormActions, FBPOReceiveItemProps, FBPOReceiveProps, FBPOReceiveState, FBPurchaseOrderItem, FBSchemaProps } from "..";
 import { stripTags } from "../../../common/utils/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { toastError } from "../../components/notifications";
 import { FBDialogState } from "../FBDialog";
 import { FBInputType } from "../FBInput";
 
@@ -37,7 +38,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
         return;
       }
       if (!workspaceState?.documentId) {
-        alert(intl.formatMessage({ id: "form.builder.save.doc.before.continue" }));
+        toastError(intl.formatMessage({ id: "form.builder.save.doc.before.continue" }));
         return;
       }
 

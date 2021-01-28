@@ -13,7 +13,7 @@ import { USERS } from "../../utils/constants/users";
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
-let secondEmployee;
+let adminEmployee;
 let approvalRequestDocumentType;
 let initialArDocument;
 let group;
@@ -22,6 +22,10 @@ let materialsDocumentType;
 let partDocumentType;
 let equipmentDocument;
 let materialsDocument;
+let formDocumentType;
+let CSLDocumentType;
+let createdLotsFormDocument;
+let createdPartDocument;
 
 const NOT_RELEASED_TOAST_ERROR_MESSAGE = "Last docRev for Part linked to EB after copying is not in RELEASED status.";
 const currentDate = moment().tz("America/Los_Angeles").format("MMMM D, YYYY");
@@ -80,19 +84,21 @@ context("Procedure and parts flow test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Material");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PART_DOCUMENT_TYPE_NAME);
+          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
+          CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specifications Lot");
           done();
         });
       });
     });
 
-    it("[API]Login second tester", (done: any) => {
+    it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -104,13 +110,13 @@ context("Procedure and parts flow test", () => {
     it("[API]Create equipment document", () => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
-        employeeId: secondEmployee.id,
+        employeeId: adminEmployee.id,
         groupName: "Everyone",
       }).then((response) => {
         group = response;
         cy.arGetArDocumentByName({
           sessionId: loginResponse.sessionId,
-          employeeId: secondEmployee.id,
+          employeeId: adminEmployee.id,
           name: "AR Form",
         }).then((response) => {
           initialArDocument = response;
@@ -139,7 +145,7 @@ context("Procedure and parts flow test", () => {
               revisionChangeType: RevisionChangeType.NextRevision,
               revisionStage: 1,
             },
-            employeeId: secondEmployee.id as unknown as string,
+            employeeId: adminEmployee.id as unknown as string,
             sessionId: loginResponse.sessionId as unknown as string,
           }).then((response) => {
             equipmentDocument = response;
@@ -150,7 +156,7 @@ context("Procedure and parts flow test", () => {
                 documentType: { id: approvalRequestDocumentType[0].id },
                 formDocument: { id: initialArDocument[0].id },
               },
-              employeeId: secondEmployee.id,
+              employeeId: adminEmployee.id,
               sessionId: loginResponse.sessionId,
             });
           });
@@ -184,7 +190,7 @@ context("Procedure and parts flow test", () => {
           revisionChangeType: RevisionChangeType.NextRevision,
           revisionStage: 1,
         },
-        employeeId: secondEmployee.id as unknown as string,
+        employeeId: adminEmployee.id as unknown as string,
         sessionId: loginResponse.sessionId as unknown as string,
       }).then((response) => {
         materialsDocument = response;
@@ -195,13 +201,13 @@ context("Procedure and parts flow test", () => {
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
           },
-          employeeId: secondEmployee.id,
+          employeeId: adminEmployee.id,
           sessionId: loginResponse.sessionId,
         });
       });
     });
 
-    it("[API]Create part document", () => {
+    it("[API]Create part document", (done: any) => {
       cy.drCreateDocumentRevision({
         payload: {
           attachments: [],
@@ -227,8 +233,157 @@ context("Procedure and parts flow test", () => {
           revisionChangeType: RevisionChangeType.NextRevision,
           revisionStage: 1,
         },
-        employeeId: secondEmployee.id as unknown as string,
+        employeeId: adminEmployee.id as unknown as string,
         sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdPartDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdPartDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
+    it("[API]Create part for eb document", () => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Part for EB document</p>",
+          document: {
+            docId: "PRT-00006",
+            documentType: {
+              id: partDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Part for EB document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      });
+    });
+
+    it("[API]Create Lots form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Lots Form document</p>",
+          document: {
+            docId: "FM-00008",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Lots form document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: CSLDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "lot_quantity",
+                type: "quantity",
+                index: 0,
+                label: "Quantity Received",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                editorProperties: [
+
+                ],
+                validationAttribute: "Quantity Received",
+                applicableValidationSchema: true,
+              },
+              {
+                name: "expiry-date",
+                type: "datepicker",
+                index: 1,
+                label: "Expiry Date",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                editorProperties: [],
+                validationAttribute: "Expiry Date",
+                applicableValidationSchema: true,
+              },
+              {
+                name: "100-inspection-override",
+                type: "checkboxgroup",
+                index: 2,
+                label: "100% Inspection Override",
+                options: [
+                  {
+                    text: "100% Inspection Override",
+                    value: "100% Inspection Override",
+                  },
+                ],
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                editorProperties: [],
+                validationAttribute: "100% Inspection Override",
+                applicableValidationSchema: true,
+              },
+              {
+                label: "form.builder.approvals",
+                type: "approvals",
+                deleteDisabled: true,
+                name: "fb-approvals-ki5yh7ba",
+                uniqueSchemaItem: true,
+                index: 5,
+              },
+            ],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdLotsFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdLotsFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
       });
     });
   });
@@ -236,13 +391,72 @@ context("Procedure and parts flow test", () => {
   context("Login second user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+  });
+
+  context("Create lot document", () => {
+    it("Navigate to Records", () => {
+      cy.navigToRecords();
+    });
+
+    it("Click on Create new", () => {
+      cy.poClickCreatePO();
+    });
+
+    it("Select 'Component Specifications Lot' from the dropdown", () => {
+      cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
+      cy.wait(500);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
+        cy.get("div[id^=react-select]").contains("Component Specifications Lot").click();
+      });
+    });
+
+    it("Add lot title", () => {
+      cy.drEnterDocumentTitle({ name: "Component specification lot document" });
+    });
+
+    it("Select 'Part document' in references", () => {
+      cy.drSelectReferences( "Part document" );
+    });
+
+    it("Enter quantity received", () => {
+      cy.get("[name=\"lot_quantity\"]").type("12");
+    });
+
+    it("Check 100% override", () => {
+      cy.get("[value=\"100% Inspection Override\"]").check();
+    });
+
+    it("Add 'Expiry Date'", () => {
+      cy.poAddDateRequired();
+    });
+
+    it("Create 'Preventative maintenance document'", () => {
+      cy.drClickCreateDocumentWithApiCall();
+      cy.wait(5000);
+    });
+
+    it("Add an Approval'", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve record", () => {
+      cy.ebApprove();
+    });
+
+    it("Verify status is 'Released'", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
     });
   });
 
@@ -304,7 +518,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Add first approver to approval request on approver list", () => {
-          cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+          cy.arAddApproverOnApproverList({ approver: USERS[1].email });
         });
 
         it("Click Create Approval Request", () => {
@@ -435,8 +649,12 @@ context("Procedure and parts flow test", () => {
         cy.drEnterDocumentTitle({ name: "EB document" });
       });
 
+      it("Enters description 'Procedure description'", () => {
+        cy.drEnterDocumentDescription({ description: "EB description" });
+      });
+
       it("Add approver to approvals", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       });
 
       it("Save document", () => {
@@ -445,7 +663,8 @@ context("Procedure and parts flow test", () => {
 
       it("Add material document", () => {
         cy.pmAddMaterialDocumentToProcedure({
-          materialDoc: "Materials document",
+          materialDoc: "Part document",
+          partLotDoc: "Component specification lot document",
           numberOfMaterial: 2,
           typeOfMaterial: "gram",
         });
@@ -454,6 +673,7 @@ context("Procedure and parts flow test", () => {
       it("Add free material text", () => {
         cy.pmAddFreeTextMaterial({
           material: "Free text material",
+          partLot: "Test",
           numberOfMaterial: 3,
           typeOfMaterial: "pounds",
         });
@@ -480,7 +700,7 @@ context("Procedure and parts flow test", () => {
     context("Choose a part and approve EB", () => {
       it("Choose an existing part from the list of available parts", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=\"childrenParts\"]").type("Part document{downarrow}{enter}");
+          cy.get("[data-cy=\"childrenParts\"]").type("Part for EB document{downarrow}{enter}");
         });
       });
 
@@ -491,7 +711,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Check if the part is displayed in the document summary", () => {
-        cy.ebCheckIfPartIsInSummary({ partName: "Part document" });
+        cy.ebCheckIfPartIsInSummary({ partName: "Part for EB document" });
       });
 
       it("Approve record button click", () => {
@@ -531,7 +751,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       });
 
       it("Save document", () => {
@@ -646,11 +866,9 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
-      });
-
-      it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        });
       });
     });
 
@@ -661,12 +879,12 @@ context("Procedure and parts flow test", () => {
 
       it("Verify 'Materials document' is removed from materials", () => {
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").eq(2)
-          .should("contain.text", "MT-00004 - Materials document | Qty: 2 gram");
+          .should("contain.text", "PRT-00005 - Part document | CSL-00001 | Qty: 2 gram");
       });
 
       it("Verify 'Free text material' is removed from materials", () => {
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").eq(1)
-          .should("contain.text", "Free text material | Qty: 5 pounds");
+          .should("contain.text", "Free text material | ? | Qty: 5 pounds");
       });
 
       it("Verify 'Equipment document' is removed from equipment", () => {
@@ -750,7 +968,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Check if the part is displayed in the document summary", () => {
-          cy.ebCheckIfPartIsInSummary({ partName: "Part document" });
+          cy.ebCheckIfPartIsInSummary({ partName: "PRT-00006 - Part for EB document" });
         });
       });
     });

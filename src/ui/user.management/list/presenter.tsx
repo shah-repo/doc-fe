@@ -16,7 +16,7 @@ import UserProfileAdminContainer from "../profile/UserProfileAdmin.container";
 import { DEFAULT_SELECTED_EMPLOYEE } from "../utils/types";
 import { styles } from "./styles";
 
-export interface Props {
+interface Props {
   tableName: string;
   tableCriteria: TablePanelStateProps;
   tableData: TableDataProps<any>;

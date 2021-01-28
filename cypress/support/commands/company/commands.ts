@@ -26,6 +26,14 @@ interface IdocumentTypeDto {
   needsSignature?: boolean;
   category?: string;
   schema?: any;
+  fieldsConfig?:
+  {
+    U: {
+      visible: boolean;
+      required: boolean;
+      label: string;
+    };
+  };
 }
 
 export interface ICreateCompanyBootstrap {
@@ -207,6 +215,7 @@ Cypress.Commands.add("cmpClickCreateNewDocument", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
     cy.get("[data-cy=\"document.revision.create\"]").click();
   });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("cmpVerifyNoPendingActions", () => {
@@ -215,6 +224,7 @@ Cypress.Commands.add("cmpVerifyNoPendingActions", () => {
 
 Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
   cy.get("[data-cy=\"change.request.create\"]").click();
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("cmpVerifyCompanyLogo", (params:  {logoSource: string}) => {

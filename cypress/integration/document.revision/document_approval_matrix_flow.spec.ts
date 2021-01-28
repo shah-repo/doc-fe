@@ -47,6 +47,17 @@ const roleTwo = "Role Two";
 const individualRole = "Role Three";
 
 context("Document Approval Matrix Flow", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
 
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
@@ -416,9 +427,9 @@ context("Document Approval Matrix Flow", () => {
   });
 
   context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
-    it("clicks on 'Save' button", () => {
+    it("Click on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(2000);
+      cy.wait(8000);
     });
 
     it("'Training Required' should be checked because of DAM", () => {
@@ -674,7 +685,7 @@ context("Document Approval Matrix Flow", () => {
   context("Save document, Check Group Role is enforced and Release Document", () => {
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(2000);
+      cy.wait(8000);
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {

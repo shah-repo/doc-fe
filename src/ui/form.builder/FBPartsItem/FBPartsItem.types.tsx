@@ -19,7 +19,7 @@ export const FBPartItemStatusBg: Record<FBPartItemStatus, string> = {
 
 export type FBPartsItemProps =
 & Pick<FBInputProps, "gutter">
-& Pick<FBProcedureItemProps, "name" | "type" | "getItem" | "loading">
+& Pick<FBProcedureItemProps, "name" | "type" | "getItem" | "getLot" | "loading">
 & {
   getItemUrl?(id: string): string | undefined;
   collection?: FBProcedureItemConfig[];

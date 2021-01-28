@@ -11,8 +11,8 @@ const FBIcon: React.FunctionComponent<FBIconProps> = ({
   <Box {...boxProps}>
     <svg width="100%" height="100%" viewBox="0 0 1024 1024">
       <FBMapWrapper<FBIconConfig[]> collection={icon as FBIconConfig[] || []}>
-        {(config: FBIconConfig) => (
-          <path d={config.path} fill={config.fill} />
+        {(config: FBIconConfig, index: number) => (
+          <path key={`fb-icon-${index}`} d={config.path} fill={config.fill} />
         )}
       </FBMapWrapper>
     </svg>

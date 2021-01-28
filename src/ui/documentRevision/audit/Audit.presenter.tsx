@@ -7,6 +7,7 @@ import { ApprovalStatus } from "../../../state/ducks/common";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
+import { FBApprovalAuditState, FBText } from "../../form.builder";
 import { styles } from "./Audit.presenter.styles";
 
 interface OwnProps {
@@ -31,15 +32,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       const change = audit[groupId][0];
       const { owner, ownerUser, ownerThirdParty } = change;
       const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
-      const hasOnlyFBChanges = audit[groupId].every((change) => change.field.includes("formInput"));
 
-      if (hasOnlyFBChanges) {
-        return null;
-      }
-
-      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
-       * TODO: this if statement should be deleted
-      */
       if (audit[groupId].filter((change) =>
         change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
       ).length === 0) {
@@ -66,27 +59,36 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
     orderBy(audits, ["field"]).forEach((change: Audit, index) => {
       change.groupKey = groupKey;
+      const isFBField = change.field.includes("formInput");
+      const isOmittedFB = (
+        isFBField &&
+        !FBApprovalAuditState.docAudit.includes(change.fbSchemaItem?.type!)
+      );
+      if (isOmittedFB) { return; }
       if (change.field.includes("attachments")) {
         attachments.push(change);
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_NEW") {
         newReferences.push(change);
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_DELETED") {
         deletedReferences.push(change);
-      } else if (change.field.includes("formInput")
-      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
-       * TODO: this condition should be deleted
-      */
-        || (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned)
-      ) {
+      } else if (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned) {
         return;
       } else {
         singleFields.push((
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
-              <Text
-                dataCy={`change-key-${groupKey}-${key}`}
-                message={`documentRevision.audit.${change.field}.${change.type}`}
-              />
+              {!isFBField && (
+                <Text
+                  dataCy={`change-key-${groupKey}-${key}`}
+                  message={`documentRevision.audit.${change.field}.${change.type}`}
+                />
+              )}
+              {isFBField && (
+                <FBText
+                  locale={`form.builder.audit.${change.type}`}
+                  values={{ label: change.fbSchemaItem?.label || change.fbSchemaItem?.placeholder }}
+                />
+              )}
             </Box>
             <div className={classes.auditValue}>
               <AuditFactory audit={change} dataCy={`change-value-${groupKey}-${key}`} />

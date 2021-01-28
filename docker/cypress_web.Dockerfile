@@ -9,6 +9,7 @@ RUN yarn install --frozen-lockfile
 
 COPY src /opt/app/src
 COPY public /opt/app/public
+COPY patches /opt/app/patches
 COPY tsconfig* /opt/app/
 
 ARG REACT_APP_API_ENDPOINT
@@ -23,6 +24,7 @@ ARG REACT_APP_THEME
 ARG NODE_ENV
 ARG REACT_APP_DATADOG_APPLICATION_ID
 ARG REACT_APP_DATADOG_CLIENT_TOKEN
+ARG REACT_APP_CONSOLE_TOAST
 
 RUN yarn react-scripts --max_old_space_size=4096 build
 RUN yarn cache clean

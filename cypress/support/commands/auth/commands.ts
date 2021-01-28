@@ -50,6 +50,7 @@ Cypress.Commands.add("authLogin", (params: { email: string; password: string }) 
         .get("[data-cy=\"LoginFormPresenter-password\"]").type(params.password)
         .get("[data-cy=\"LoginFormPresenter-submit\"]").click();
     });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("authEnterEmail", (params: { value: string }) => {

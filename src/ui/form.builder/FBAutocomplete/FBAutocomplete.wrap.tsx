@@ -29,6 +29,8 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     options,
     optionId,
     freeSolo,
+    withState,
+    omitFormValue,
     ...props
   }: T) => {
     const { formState } = FB.useStores();
@@ -86,11 +88,14 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       // setField doesn't work here, the same problem prefilled with first option
       if (!freeSolo) { return; }
       const { target: { value = "" } = {} } = ev;
-      formState?.setFieldValue(name, value);
+      formState?.setFieldValue(name, value, withState, omitFormValue);
+      formState?.validate();
     };
 
-    const stringify = (option: OptionType) => (getOptionLabel && getOptionLabel(option)) || "";
-    filterOptions = createFilterOptions({ ignoreAccents: false, stringify });
+    if (!filterOptions) {
+      const stringify = (option: OptionType) => (getOptionLabel && getOptionLabel(option)) || "";
+      filterOptions = createFilterOptions({ ignoreAccents: false, stringify });
+    }
 
     if (isUndefined(defaultValue)) {
       defaultValue = "";
@@ -112,6 +117,8 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       optionId,
       freeSolo,
       value: defaultValue,
+      withState,
+      omitFormValue,
       name,
     });
   };

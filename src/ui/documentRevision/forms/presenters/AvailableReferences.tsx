@@ -26,7 +26,7 @@ Partial<TypographyProps>;
 
 const getReferenceValues = (documentRevisions: DocumentRevision[], docRevsById: DocumentRevisionsByIdState) => {
   const highestRev = getHighestReleasedRevision(documentRevisions);
-  const docType = docRevsById[highestRev?.id || ""].document.documentType;
+  const docType = docRevsById[highestRev?.id || ""]?.document?.documentType;
   const isReferencePart = checkIsDocumentPart(docType?.groupOptions);
   const canReferenceCreateInspection = checkCanTypeCreateInspection(docType?.groupOptions);
   return { highestRev, isReferencePart, canReferenceCreateInspection };
