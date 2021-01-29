@@ -1,5 +1,5 @@
 import { CircularProgress } from "@material-ui/core";
-import { first } from "lodash";
+import { first, isString } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { Fragment } from "react";
 import { Audit } from "../../state/ducks/audit";
@@ -29,7 +29,11 @@ export const AuditAttachment: React.FunctionComponent<Props> = ({
     try {
       auditValue = JSON.parse(auditValue);
     } catch {
-      auditValue.push(auditValue);
+      if (isString(auditValue)) {
+        auditValue = [auditValue];
+      } else {
+        auditValue.push(auditValue);
+      }
     }
     attachmentState.getFiles(auditValue);
   }, []);
