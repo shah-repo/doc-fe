@@ -25,9 +25,9 @@ echo "-------- Building Application --------"
 
 yarn install --frozen-lockfile
 
-# yarn build
+yarn build
 
-# rm -rf compiled compiled.tar.gz
-# mkdir compiled
-# cp -R "build" "compiled/"
-# tar -czvf compiled.tar.gz compiled
+rm -rf compiled compiled.tar.gz
+mkdir compiled
+cp -R "build" "compiled/"
+tar -czvf compiled.tar.gz compiled
