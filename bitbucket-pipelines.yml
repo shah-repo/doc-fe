@@ -3,6 +3,7 @@ clone:
 
 definitions:
   caches:
+    node-test: node_modules
 
   steps:
     - step: &COMMON
@@ -13,7 +14,7 @@ definitions:
             secret-key: $AWS_SECRET_ACCESS_KEY
         max-time: 20
         caches:
-          - node
+          - node-test
 
     - step: &COMMON_BUILD
         image:
@@ -24,7 +25,7 @@ definitions:
         max-time: 20
         size: 2x
         caches:
-          - node
+          - node-test
 
     - step: &COMMON_DEPLOY
         image:
@@ -53,7 +54,7 @@ definitions:
         name: Tests
         size: 2x
         caches:
-          - node
+          - node-test
         artifacts:
           - test-results/**
           - jest-config/**
