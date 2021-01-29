@@ -100,13 +100,13 @@ definitions:
     - parallel: &RUN_CYPRESS_IN_PARALLEL
         - step: 
             <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 1/4
+            name: Cypress specs 1/3
         - step: 
             <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 2/4
-        # - step: 
-        #     <<:  *COMMON_RUN_CYPRESS
-        #     name: Cypress specs 3/4
+            name: Cypress specs 2/3
+        - step: 
+            <<:  *COMMON_RUN_CYPRESS
+            name: Cypress specs 3/3
         # - step: 
         #     <<:  *COMMON_RUN_CYPRESS
         #     name: Cypress specs 4/4
