@@ -1,7 +1,8 @@
 import { useFormikContext } from "formik";
-import { isEqual } from "lodash";
+import { find, isEqual } from "lodash";
 import React, { useContext } from "react";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
+import { ReferenceToEditRequest } from "../../../state/ducks/documentRevisions/types";
 import { FB } from "../../form.builder";
 import { SubmitFormRelation } from "./FormContext.types";
 
@@ -52,11 +53,25 @@ export const useFormContext = () => {
       if (workspaceState) {
         setFBValue();
       }
-      // type should be poreceive, but it is always autocomplete
-      // saved id is not an id of that document, should fetch it
-      // remove id of reference
-      if (relation && relation.type === "poreceive") {
-        formik.setFieldValue("referenceTo", [{ id: relation.nextValue }]);
+      if (relation) {
+        const type = find(workspaceState?.schema, { name: relation.name })?.type;
+        if (type === "poreceive") {
+          let oldReferences;
+          const currentPoReference = workspaceState?.document?.formInput?.[relation.name || ""];
+          const refWithoutPrevValue = workspaceState?.document?.referenceTo.filter((e) => {
+            const docRevIds = e.documentRevisions?.map((i) => i.id );
+            if (docRevIds?.includes(currentPoReference) || docRevIds?.includes(relation.prevValue)) {
+              return null;
+            }
+            return e;
+          });
+
+          if (refWithoutPrevValue) {
+            oldReferences = refWithoutPrevValue?.map((e) => ({ id: e.id }))as ReferenceToEditRequest[];
+          }
+          oldReferences = workspaceState?.document?.referenceTo.map((e) => ({ id: e.id }))as ReferenceToEditRequest[];
+          formik.setFieldValue("referenceTo", [...oldReferences, { id: relation.nextValue }]);
+        }
       }
       formik.submitForm();
     }
