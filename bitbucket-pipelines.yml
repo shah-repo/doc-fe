@@ -160,7 +160,7 @@ pipelines:
   tags:
     deploy-to-dev:
       - step: *BUILD_DEV
-      - step: *DEPLOY_DEV
+      # - step: *DEPLOY_DEV
 
     deploy-to-dev2:
       - step: *BUILD_DEV2
