@@ -42,6 +42,8 @@ SCRIPT="${PYTHON_SCRIPTS_DIR}/setConfigValues.py"
 python3 $SCRIPT "${ENV}"
 
 yarn install --frozen-lockfile
+
+echo "NODE_ENV $NODE_ENV"
 yarn build
 
 rm -rf compiled compiled.tar.gz
