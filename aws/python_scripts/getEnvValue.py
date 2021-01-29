@@ -13,7 +13,6 @@ if len(sys.argv) >= 4:
     key = sys.argv[3]
 
     path = "%s/%s.env" % (directory, env)
-    print(path)
     env_vars = loadEnvVarsFrom(path)
 
     print(env_vars.str(key))
