@@ -55,8 +55,25 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   isInlineApproval,
   isDocumentPO,
 }) => {
+
+  // MARK: @selectors
+
+  // MARK: @state
+
+  // MARK: @config
+
+  // MARK: @styles
   const classes = styles();
 
+  // MARK: @actions
+
+  // MARK: @async
+
+  // MARK: @effects
+
+  // MARK: @helpers
+
+  // MARK: @methods
   const validateSelectedForm = (option: any) => {
     const { schema } = option || {};
     if (!schema) { return; }
@@ -113,13 +130,13 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
     });
   };
 
-
   if (templateOptions.length === 1) {
     setFormDocument(templateOptions[0].value);
     setDocumentType(templateOptions[0].docTypeId);
     validateSelectedForm(templateOptions[0]);
   }
 
+  // MARK: @render
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />

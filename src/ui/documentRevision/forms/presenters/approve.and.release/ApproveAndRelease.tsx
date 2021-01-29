@@ -66,23 +66,9 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   isRecord,
   isInlineApproval,
 }) => {
-  const intl = useIntl();
-  const [isVisible, label, tooltipConfig] = useApproveAndRelease(documentTypeId);
-  const classes = styles();
-  const dialog = useDialog();
-  const alertDialog = useDialog();
-  const releaseAction = useActionCreator(documentRevisionsActions.approveAndRelease);
-  const finalizeAction = useActionCreator(documentRevisionsActions.finalizeAndRelease);
-  const releaseNonQmsAction = useActionCreator(documentRevisionsActions.approveAndReleaseNonQms);
-  const async = useAsync<any>({ onSuccess: dialog.close });
+
+  // MARK: @selectors
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
-  const [documentTypeGroups, setDocTypeGroups] = useState<any[]>([]);
-  const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
-  const [templateOptions, setTemplateOptions] = useState<TemplateOption[]>([]);
-  const [formDocument, setFormDocument] = useState<string>("");
-  const [documentType, setDocumentType] = useState<string>("");
-  const [selectedInvalid, setSelectedInvalid] = useState<boolean>(false);
-  const create = useActionCreator(changeRequestsActions.create);
   const documentRevision = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, docRevId));
   const history = useHistory();
@@ -90,6 +76,38 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const title = documentRevision?.name;
   const isDocumentPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
 
+  // MARK: @state
+  const [documentTypeGroups, setDocTypeGroups] = useState<any[]>([]);
+  const [templateOptions, setTemplateOptions] = useState<TemplateOption[]>([]);
+  const [formDocument, setFormDocument] = useState<string>("");
+  const [documentType, setDocumentType] = useState<string>("");
+  const [selectedInvalid, setSelectedInvalid] = useState<boolean>(false);
+
+  // MARK: @config
+  const intl = useIntl();
+  const [isVisible, label, tooltipConfig] = useApproveAndRelease(documentTypeId);
+  const classes = styles();
+  const dialog = useDialog();
+  const alertDialog = useDialog();
+  const transformedDocTypeGroups = [].concat(...documentTypeGroups);
+  const initialValues = {
+    password: "",
+    effectiveDate: "",
+    approvals: [],
+    formDocument: { id: "" },
+    documentType: { id: "" },
+  };
+
+  // MARK: @actions
+  const releaseAction = useActionCreator(documentRevisionsActions.approveAndRelease);
+  const finalizeAction = useActionCreator(documentRevisionsActions.finalizeAndRelease);
+  const releaseNonQmsAction = useActionCreator(documentRevisionsActions.approveAndReleaseNonQms);
+  const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
+  const create = useActionCreator(changeRequestsActions.create);
+  const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
+
+  // MARK: @async
+  const async = useAsync<any>({ onSuccess: dialog.close });
   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
       setDocTypeGroups([
@@ -97,8 +115,6 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       ].flat());
     },
   });
-
-  const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
 
   const asyncGetDocTypeByGroup = useAsync({
     onSuccess: (data: DocumentTypeById[] = []) => {
@@ -117,6 +133,13 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     },
   });
 
+  const asyncAR = useAsync<ChangeRequest>({
+    onSuccess: (createdChangeRequest?) => {
+      createdChangeRequest && history.push(changeRequestEditPath(createdChangeRequest.id));
+    },
+  });
+
+  // MARK: @effects
   useEffect(() => {
     if (!docRevId) {
       return;
@@ -129,33 +152,8 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docRevId]);
 
-  const openDialog = () => {
-    async.reset();
-    asyncGroups.start(
-      getGroupsByStage,
-      docRevId,
-      asyncGroups,
-    );
-    asyncGetDocTypeByGroup.start(
-      getDocTypeByGroupAction,
-      { docTypeGroupOption: "CHANGE_REQUEST" },
-      asyncGetDocTypeByGroup);
-    dialog.open();
-  };
 
-  const closeDialog = () => {
-    setFormDocument("");
-    setDocumentType("");
-    setSelectedInvalid(false);
-    dialog.close();
-  };
-
-  const asyncAR = useAsync<ChangeRequest>({
-    onSuccess: (createdChangeRequest?) => {
-      createdChangeRequest && history.push(changeRequestEditPath(createdChangeRequest.id));
-    },
-  });
-
+  // MARK: @helpers
   const initialValuesAR = (values: any): any => ({
     title: intl.formatMessage({ id: "documentRevision.releasing" }, { docId, title }),
     description: intl.formatMessage({ id: "documentRevision.releasing" }, { docId, title }),
@@ -177,6 +175,50 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       effectiveDate: values.effectiveDate,
     },
   });
+
+  const renderForm = (props: FormikProps<ApproveAndReleaseFormValues>) => (
+    <ApproveAndReleaseForm
+      {...props}
+      asyncState={selectedInvalid ? asyncAR.asyncState : async.asyncState}
+      cancel={closeDialog}
+      documentTypeGroups={transformedDocTypeGroups}
+      owner={owner as Owner}
+      {...{
+        isQms,
+        templateOptions,
+        setFormDocument,
+        setDocumentType,
+        closeDialog,
+        setSelectedInvalid,
+        selectedInvalid,
+        isRecord,
+        isInlineApproval,
+        isDocumentPO,
+      }}
+    />
+  );
+
+  // MARK: @methods
+  const openDialog = () => {
+    async.reset();
+    asyncGroups.start(
+      getGroupsByStage,
+      docRevId,
+      asyncGroups,
+    );
+    asyncGetDocTypeByGroup.start(
+      getDocTypeByGroupAction,
+      { docTypeGroupOption: "CHANGE_REQUEST" },
+      asyncGetDocTypeByGroup);
+    dialog.open();
+  };
+
+  const closeDialog = () => {
+    setFormDocument("");
+    setDocumentType("");
+    setSelectedInvalid(false);
+    dialog.close();
+  };
 
   const onSubmit = (values: any) => {
     if (selectedInvalid) {
@@ -224,44 +266,9 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     );
   };
 
-  if (!id || status !== DocumentRevisionStatus.Draft || !canApprove || revisionStage !== 1) {
-    return null;
-  }
 
-  const transformedDocTypeGroups = [].concat(...documentTypeGroups);
-  const initialValues = {
-    password: "",
-    effectiveDate: "",
-    approvals: [],
-    formDocument: { id: "" },
-    documentType: { id: "" },
-  };
-
-
-  const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
-  const renderForm = (props: FormikProps<ApproveAndReleaseFormValues>) => (
-    <ApproveAndReleaseForm
-      {...props}
-      asyncState={selectedInvalid ? asyncAR.asyncState : async.asyncState}
-      cancel={closeDialog}
-      documentTypeGroups={transformedDocTypeGroups}
-      owner={owner as Owner}
-      {...{
-        isQms,
-        templateOptions,
-        setFormDocument,
-        setDocumentType,
-        closeDialog,
-        setSelectedInvalid,
-        selectedInvalid,
-        isRecord,
-        isInlineApproval,
-        isDocumentPO,
-      }}
-    />
-  );
-
-  if (!isVisible) {
+  // MARK: @render
+  if (!isVisible || !id || status !== DocumentRevisionStatus.Draft || !canApprove || revisionStage !== 1) {
     return null;
   }
 
@@ -286,7 +293,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
           fullWidth={true}
           maxWidth="xs"
           open={dialog.isOpen}
-          onSubmit={preventPropagation}
+          onSubmit={(event: React.FormEvent) => event.stopPropagation()}
           classes={{ paper: classes.dialogContent }}
           id="ApproveAndRelease-dialog"
         >
