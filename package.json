@@ -75,6 +75,7 @@
     "sort-json": "^2.0.0",
     "striptags": "3.1.1",
     "styled-components": "^5.1.0",
+    "ts-pnp": "^1.2.0",
     "ts-unused-exports": "^7.0.0",
     "typescript": "3.7.4",
     "uniqid": "^5.2.0",
