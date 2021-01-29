@@ -167,10 +167,7 @@ pipelines:
       - step: *DEPLOY_DEV2
 
     deploy-to-demo:
-      - parallel:
-          - step: *RUN_TESTS
-          - step: *RUN_LINTER
-          - step: *BUILD_DEMO
+      - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO
 
     deploy-to-prod:
