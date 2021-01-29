@@ -15,6 +15,9 @@ set -o allexport
 export CI=false # had to do this to make the build process not treat warnings as errors
 set +o allexport
 
+echo "REACT_APP_API_ENDPOINT $REACT_APP_API_ENDPOINT"
+echo "NODE_ENV $NODE_ENV"
+
 # Generating Build Info
 echo "-------- Generating Build Info --------"
 
