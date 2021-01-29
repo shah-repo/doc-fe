@@ -41,12 +41,12 @@ export CI=false # had to do this to make the build process not treat warnings as
 
 # SCRIPT="${PYTHON_SCRIPTS_DIR}/setConfigValues.py"
 # python3 $SCRIPT "${ENV}"
-
-yarn install --frozen-lockfile
-
 echo "NODE_ENV $NODE_ENV"
 echo "REACT_APP_API_ENDPOINT $REACT_APP_API_ENDPOINT"
 echo "REACT_APP_THEME $REACT_APP_THEME"
+yarn install --frozen-lockfile
+
+
 yarn build
 
 rm -rf compiled compiled.tar.gz
