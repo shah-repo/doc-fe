@@ -12,8 +12,9 @@ PYTHON_SCRIPTS_DIR="${AWS_DIR}/python_scripts"
 set -o allexport
 [[ -f "${ENVIRONMENT_DIR}/pipelines/${ENV}.env" ]] && source "${ENVIRONMENT_DIR}/pipelines/${ENV}.env"
 [[ -f "${ENVIRONMENT_DIR}/${ENV}.env" ]] && source "${ENVIRONMENT_DIR}/${ENV}.env"
-export CI=false # had to do this to make the build process not treat warnings as errors
 set +o allexport
+
+export CI=false # had to do this to make the build process not treat warnings as errors
 
 echo "REACT_APP_API_ENDPOINT $REACT_APP_API_ENDPOINT"
 echo "NODE_ENV $NODE_ENV"
