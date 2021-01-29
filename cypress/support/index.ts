@@ -86,14 +86,9 @@ before(() => {
     cy.task("deleteExistingReports", { reportDir: CONFIG.REPORTS_DIR, testName: Cypress.spec.name });
 
     it("Server has correct commits code deployed", function()  {
-      // if( CONFIG.RUN_ENVIRONMENT === "pipeline") does not work!!
-      if (Cypress.env("RUN_ENVIRONMENT") === "pipeline") {
-        cy.visit(`${CONFIG.FE_URL}/status`, { timeout: 20 * 1000 });
-        cy.get("[data-cy=\"status-frontend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_FE);
-        cy.get("[data-cy=\"status-backend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_BE);
-      } else {
-        this.skip();
-      }
+      cy.visit(`${CONFIG.FE_URL}/status`, { timeout: 20 * 1000 });
+      cy.get("[data-cy=\"status-frontend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_FE);
+      cy.get("[data-cy=\"status-backend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_BE);
     });
   }
 });
