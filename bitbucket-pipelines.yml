@@ -151,11 +151,11 @@ definitions:
 # Pipelines
 #
 pipelines:
-  pull-requests:
-    "**":
-      - parallel:
-          - step: *RUN_TESTS
-          - step: *RUN_LINTER
+  # pull-requests:
+  #   "**":
+  #     - parallel:
+  #         - step: *RUN_TESTS
+  #         - step: *RUN_LINTER
 
   tags:
     deploy-to-dev:
