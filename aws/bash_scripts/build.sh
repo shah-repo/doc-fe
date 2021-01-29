@@ -44,6 +44,8 @@ python3 $SCRIPT "${ENV}"
 yarn install --frozen-lockfile
 
 echo "NODE_ENV $NODE_ENV"
+echo "REACT_APP_API_ENDPOINT $REACT_APP_API_ENDPOINT"
+echo "REACT_APP_THEME $REACT_APP_THEME"
 yarn build
 
 rm -rf compiled compiled.tar.gz
