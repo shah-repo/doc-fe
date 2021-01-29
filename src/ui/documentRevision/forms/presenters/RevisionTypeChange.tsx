@@ -32,17 +32,31 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
   isAlphaReleased,
 }) => {
   const classes = styles();
-  const [showRevisionSelect, revisionSelectLabel, revisionTooltipConfig] = useRevisionSelect(documentTypeId);
-  const [showNextRevisionLevel, nextRevisionLevelLabel, revisionLevelTooltipConfig] = useNextRevision(documentTypeId);
-  const [
-    showNextRevisionStage,
-    nextRevisionStageLabel,
-    revisionStageTooltipConfig] = useNextRevisionStage(documentTypeId);
-  const [showObsolete, obsoleteLabel, obsoleteTooltipConfig] = useObsolete(documentTypeId);
-  const [
-    showAdministrationChange,
-    administrationChangeLabel,
-    administrationTooltipConfig] = useAdministrativeChange(documentTypeId);
+  const {
+    isVisible: showRevisionSelect,
+    label: revisionSelectLabel,
+    tooltipConfig: revisionTooltipConfig,
+  } = useRevisionSelect(documentTypeId);
+  const {
+    isVisible: showNextRevisionLevel,
+    label: nextRevisionLevelLabel,
+    tooltipConfig: revisionLevelTooltipConfig,
+  } = useNextRevision(documentTypeId);
+  const {
+    isVisible: showNextRevisionStage,
+    label: nextRevisionStageLabel,
+    tooltipConfig: revisionStageTooltipConfig,
+  } = useNextRevisionStage(documentTypeId);
+  const {
+    isVisible: showObsolete,
+    label: obsoleteLabel,
+    tooltipConfig: obsoleteTooltipConfig,
+  } = useObsolete(documentTypeId);
+  const {
+    isVisible: showAdministrationChange,
+    label: administrationChangeLabel,
+    tooltipConfig: administrationTooltipConfig,
+  } = useAdministrativeChange(documentTypeId);
   const numOfStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
 
   if (!showRevisionSelect) {

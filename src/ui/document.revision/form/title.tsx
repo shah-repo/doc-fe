@@ -18,7 +18,7 @@ export const Title: React.FunctionComponent<Props> = ({
   documentTypeId = "",
   ...props
 }) => {
-  const [isVisible, label, tooltipConfig, validators] = useTitle(documentTypeId);
+  const { isVisible, label, tooltipConfig, validation: validators } = useTitle(documentTypeId);
   const documents = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const options = useMemo(
     () =>

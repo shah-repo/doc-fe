@@ -66,7 +66,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   isInlineApproval,
 }) => {
   const intl = useIntl();
-  const [isVisible, label, tooltipConfig] = useApproveAndRelease(documentTypeId);
+  const { isVisible, label, tooltipConfig } = useApproveAndRelease(documentTypeId);
   const classes = styles();
   const dialog = useDialog();
   const alertDialog = useDialog();

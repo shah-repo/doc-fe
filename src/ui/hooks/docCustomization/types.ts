@@ -2,7 +2,12 @@ import { TooltipProps } from "@material-ui/core";
 import { TooltipLabelConfig } from "../../../state/ducks/documentRevisions/documentType";
 import { Validator } from "../../components/forms/fields/validators";
 
-export type UIConfig = [boolean, string?, TooltipLabelConfig?, Validator?];
+export interface UIConfig {
+  isVisible: boolean;
+  label?: string;
+  tooltipConfig?: TooltipLabelConfig;
+  validation?: Validator;
+}
 
 export interface ConditionalWrapperProps {
   condition?: boolean;

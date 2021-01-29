@@ -363,8 +363,8 @@ context("Record inline history Flow", () => {
           );
         });
 
-        it("Check record status is in 'Released'", () => {
-          cy.drCheckDocumentStatus({ status: "Released" });
+        it("Check record status is in 'Last Signed'", () => {
+          cy.drCheckDocumentStatus({ status: "Last Signed" });
         });
       });
 
