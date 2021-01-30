@@ -48,7 +48,11 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();
-  const [showRevise, reviseLabel, tooltipConfig] = useReviseDocument(documentRevision.document?.documentType?.id);
+  const {
+    isVisible: showRevise,
+    label: reviseLabel,
+    tooltipConfig,
+  } = useReviseDocument(documentRevision.document?.documentType?.id);
   const intl = useIntl();
   const dispatch = useDispatch();
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);

@@ -127,7 +127,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   const formIds = useSelector(documentTypeSelectors.formIds);
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypesByCategory);
-  const [isVisible, label, tooltipConfig] = useCreateDocumentByTypeButton(documentTypeId);
+  const { isVisible, label, tooltipConfig } = useCreateDocumentByTypeButton(documentTypeId);
 
   const [errorMessage, setErrorMessage] = useState<string>();
   const [initialValues, setInitialValues] = useState<MultipleFormInitialValues>({ selectType: [] });
