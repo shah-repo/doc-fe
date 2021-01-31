@@ -78,6 +78,7 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
   referenceTo: [],
   trainingRecords: [],
   ...documentRevision,
+  inputOwners: [],
 });
 
 export const getDocumentRevisionEditRequestBody = (

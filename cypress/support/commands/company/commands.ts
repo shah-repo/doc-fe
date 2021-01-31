@@ -26,6 +26,14 @@ interface IdocumentTypeDto {
   needsSignature?: boolean;
   category?: string;
   schema?: any;
+  fieldsConfig?:
+  {
+    U: {
+      visible: boolean;
+      required: boolean;
+      label: string;
+    };
+  };
 }
 
 export interface ICreateCompanyBootstrap {

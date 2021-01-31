@@ -448,7 +448,7 @@ context("Equipment maintenance test", () => {
 
         it("Select 'Equipment maintenance document'", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
-            cy.get("div[aria-rowindex=\"1\"]").click();
+            cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
           });
         });
       });
@@ -523,7 +523,7 @@ context("Equipment maintenance test", () => {
 
     it("Select 'Equipment maintenance document'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
-        cy.get("div[aria-rowindex=\"1\"]").click();
+        cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
       });
       cy.wait(5000);
     });
@@ -628,14 +628,13 @@ context("Equipment maintenance test", () => {
 
     it("Select 'Equipment maintenance document'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
-        cy.get("div[aria-rowindex=\"1\"]").click();
+        cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
       });
       cy.wait(5000);
     });
 
     it("Check Calibration document existance", () => {
       cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
-        .eq(1)
         .contains("MR-00002 - Calibration document");
     });
 
@@ -650,8 +649,7 @@ context("Equipment maintenance test", () => {
 
     it("Check calibration status is in complience for next 5 days", () => {
       cy.get("[data-cy=\"maintenance.status\"]")
-        .eq(1)
-        .contains("In Compliance");
+        .contains("In Compliance"); // FIXME  2021/01/28, 20.28.5 -> 21.1
     });
 
     it("Verify status is 'Released'", () => {

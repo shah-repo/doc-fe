@@ -28,7 +28,7 @@ interface DispatchProps {
   getSlackUrl: typeof userManagementActions.getSlackUrl;
 }
 
-export type Props = OwnProps & DispatchProps & StateProps;
+type Props = OwnProps & DispatchProps & StateProps;
 
 export const UserProfileContainer: React.FunctionComponent<Props> = ({
   closeUserProfile,

@@ -202,7 +202,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         docRevId={documentRevision?.id}
         documentStatus={documentRevision?.status}
         formDocumentStatus={documentRevision?.formDocument?.status}
-        bannerPortal={bannerPortal}
+        {...{
+          bannerPortal,
+          isRecord,
+        }}
       />
       <FormHeader {...{ isCreateDocumentDisabled }} />
       <FormWrapper
@@ -264,6 +267,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             dataProp={flatten([documentRevision.parent])}
             label="common.previous.build"
             docRevId={docRevId}
+            showRemoveButton={isDocRevStatusDraft || isDocRevStatusInPendingChange}
             isDraft={isDocRevStatusDraft || isRevised}
           />
         )}

@@ -15,7 +15,7 @@ import AddGroup from "../add.group/Group";
 import { GroupsDisplay } from "../display.groups/GroupsDisplay";
 import { styles } from "./styles";
 
-export interface Props {
+interface Props {
   tableName: string;
   tableData: TableDataProps<any>;
   clearFilter?: () => void;

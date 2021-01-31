@@ -47,6 +47,7 @@ export interface Company {
   addresses: [];
   acctCodes: [];
   navigation: NavigationItem[];
+  employees?: Employee[];
 }
 
 export interface SelectCompanyAction {
@@ -73,6 +74,8 @@ export interface CompanyMineRequest {
   addresses?: string[];
   acctCodes?: string[];
   helloSignIntegrationEnabled?: boolean;
+  navigation?: NavigationItem[];
+  numOfRevStages?: number;
 }
 
 export type SelectCompanyState = Company;

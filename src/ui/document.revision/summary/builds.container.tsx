@@ -11,6 +11,7 @@ interface OwnProps {
   label: Translation;
   isDraft?: boolean;
   docRevId?: string;
+  showRemoveButton?: boolean;
 }
 export type Props = OwnProps & DataProps<DocumentRevision[]>;
 
@@ -19,6 +20,7 @@ export const BuildsContainer: React.FunctionComponent<Props> = ({
   label,
   isDraft,
   docRevId,
+  showRemoveButton,
 }) => {
   const async = useAsync<any>({
     onError: (error) => {
@@ -26,11 +28,11 @@ export const BuildsContainer: React.FunctionComponent<Props> = ({
     },
   });
   const removeAction = useActionCreator(documentRevisionsActions.removePreviousBuild);
-  const handleRemoveBuild = (id: string) => {
-    async.start(removeAction, id, docRevId, async);
+  const handleRemoveBuild = () => {
+    async.start(removeAction, docRevId, async);
   };
   return (
-    <BuildsPresenter {...{ label, dataProp, isDraft, handleRemoveBuild, docRevId }}/>
+    <BuildsPresenter {...{ label, dataProp, isDraft, handleRemoveBuild, showRemoveButton }}/>
   );
 };
 

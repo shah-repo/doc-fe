@@ -25,6 +25,7 @@ declare global {
       drClickCreateDocumentWithApiCall(params?: { toastifyExists: boolean }): Chainable<Subject>;
       drClickCreateSupplierWithApiCall(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForForms(): Chainable<Subject>;
+      drClickCreateDocumentWithApiCallForFormsExpectingToastError(): Chainable<Subject>;
       drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
@@ -38,6 +39,7 @@ declare global {
       drSelectOutputDocTypeSecondTime(params: { documentType: string }): Chainable<Subject>;
       drChooseTypeOfRevisionChangeOption(params: { option: string }): Chainable<Subject>;
       drSelectRevisionStageOptions(params: { revisionStageOption: string }): Chainable<Subject>;
+      drAssignDocumentTo(params: { username: string }): Chainable<Subject>;
       drDocumentFieldError(params: { field: string; message: string }): Chainable<Subject>;
       closeAllAlertMessages(): Chainable<Subject>;
       checkToastMessage(params: { exists: boolean }): Chainable<Subject>;
@@ -332,6 +334,15 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
   cy.wait(500);
 });
 
+Cypress.Commands.add("drClickCreateDocumentWithApiCallForFormsExpectingToastError", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    });
+  cy.checkToastMessage({ exists: true });
+  cy.wait(500);
+});
+
 Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
   cy.checkToastMessage({ exists: false });
@@ -388,7 +399,6 @@ Cypress.Commands.add("drClickReviseDocument", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApprovers, () => {
     cy.get("[data-cy=\"updateRecord\"]").click();
   });
-  // cy.wait(3000);
 });
 
 Cypress.Commands.add("drClickTrainingRequired", () => {
@@ -406,6 +416,13 @@ Cypress.Commands.add("drCheckTypeOfRevisionChangeOptions", () => {
 Cypress.Commands.add("drSelectRevisionStageOptions", (params: {revisionStageOption: string}) => {
   cy.get("[data-cy^=\"common.\"]");
   cy.get("label").contains(params.revisionStageOption).click();
+});
+
+Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
+  cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").type(`${params.username}{downarrow}{enter}`, { force: true });
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
+    cy.get("[data-cy='add-user'").eq(2).click();
+  });
 });
 
 Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: { option: string }) => {
@@ -580,7 +597,7 @@ Cypress.Commands.add("drSelectUser", (...users: string[]) => {
 Cypress.Commands.add("drAddUserFromPermissionTab", (...users: string[]) => {
   users.forEach((user) => {
     cy.get(`[id="react-select-2-input"]`).type(`${user}{downarrow}{enter}`, { force: true });
-    cy.get(`[data-cy="add-user"]`).click();
+    cy.get(`[data-cy="add-user"]`).eq(0).click();
   });
 });
 
@@ -594,7 +611,7 @@ Cypress.Commands.add("drSelectGroup", (...groups: string[]) => {
 Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
   groups.forEach((group) => {
     cy.get(`[id="react-select-3-input"]`).type(`${group}{downarrow}{enter}`, { force: true });
-    cy.get(`[data-cy="add-user"]`).click();
+    cy.get(`[data-cy="add-user"]`).eq(1).click();
   });
 });
 

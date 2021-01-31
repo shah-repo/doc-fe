@@ -947,54 +947,21 @@ context("Inspection flow", () => {
       });
     });
 
-    context("Create Part for Inspection", () => {
-      it("Navigate to Parts", () => {
-        cy.navigToParts();
+    context("Revise subassembly for Part", () => {
+      it("Navigate to documents", () => {
+        cy.navigToDocumentList();
       });
 
-      it("Click 'ADD NEW PART'", () => {
-        cy.recCreateRecordFromLandingPage();
-        cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Subassembly" });
+      it("Select 'Subassembly part form'", () => {
+        cy.dlSelectFirstDocument();
       });
 
-      it("Enter title 'New Part for inspection'", () => {
-        cy.drEnterDocumentTitle({ name: "New Part for inspection" });
+      it("Click revise document", () => {
+        cy.drClickReviseDocument();
       });
 
-      it("Enters description 'New Part for inspection description'", () => {
-        cy.drEnterDocumentDescription({ description: "New Part for inspection description" });
-      });
-
-      it("Select make vs buy", () => {
-        cy.get("[id$=\"make-vs-buy\"]").click();
-        cy.get("ul[role=listbox]>li").contains("Make").click();
-      });
-
-      it("Select unit of measure", () => {
-        cy.get("[id$=\"unit-of-measure\"]").click();
-        cy.get("ul[role=listbox]>li").contains("Batch").click();
-      });
-
-      it("Select traceability required", () => {
-        cy.get("[value=\"Traceability required\"]").check();
-      });
-
-      it("Select 'No' for Serialized option", () => {
-        cy.get("[name=\"serialized\"][value=\"No\"]").check();
-      });
-
-      it("Select 'IQC Required'", () => {
-        cy.get("[value=\"IQC Required\"]").check();
-      });
-
-      it("Select 'Limited Shelf Life'", () => {
-        cy.get("[value=\"Limited Shelf Life\"]").check();
-      });
-
-      it("Select 'FAI Required'", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-          cy.get("[value=\"FAI Required\"]").check();
-        });
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       context("Add Inspection fields", () => {
@@ -1047,11 +1014,68 @@ context("Inspection flow", () => {
         });
       });
 
-      context("Save and Release part document", () => {
+      context("Save form and release it", () => {
         it("Click save", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
         });
 
+        it("Approve and Release document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
+    });
+
+    context("Create Part for Inspection", () => {
+      it("Navigate to Parts", () => {
+        cy.navigToParts();
+      });
+
+      it("Click 'ADD NEW PART'", () => {
+        cy.recCreateRecordFromLandingPage();
+        cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Subassembly" });
+      });
+
+      it("Enter title 'New Part for inspection'", () => {
+        cy.drEnterDocumentTitle({ name: "New Part for inspection" });
+      });
+
+      it("Enters description 'New Part for inspection description'", () => {
+        cy.drEnterDocumentDescription({ description: "New Part for inspection description" });
+      });
+
+      it("Select make vs buy", () => {
+        cy.get("[id$=\"make-vs-buy\"]").click();
+        cy.get("ul[role=listbox]>li").contains("Make").click();
+      });
+
+      it("Select unit of measure", () => {
+        cy.get("[id$=\"unit-of-measure\"]").click();
+        cy.get("ul[role=listbox]>li").contains("Batch").click();
+      });
+
+      it("Select traceability required", () => {
+        cy.get("[value=\"Traceability required\"]").check();
+      });
+
+      it("Select 'No' for Serialized option", () => {
+        cy.get("[name=\"serialized\"][value=\"No\"]").check();
+      });
+
+      it("Select 'IQC Required'", () => {
+        cy.get("[value=\"IQC Required\"]").check();
+      });
+
+      it("Select 'Limited Shelf Life'", () => {
+        cy.get("[value=\"Limited Shelf Life\"]").check();
+      });
+
+      it("Select 'FAI Required'", () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+          cy.get("[value=\"FAI Required\"]").check();
+        });
+      });
+
+      context("Release part document", () => {
         it("Approve and Release document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
@@ -1112,10 +1136,6 @@ context("Inspection flow", () => {
 
     it("Enters title 'Inspection Document'", () => {
       cy.drEnterDocumentTitle({ name: "Inspection Document" });
-    });
-
-    it("Enters description 'Inspection Document description'", () => {
-      cy.drEnterDocumentDescription({ description: "Inspection Document description" });
     });
 
     it("Change document type", () => {

@@ -49,6 +49,6 @@ export enum FBAutocompleteAsyncOption {
   preventativeMaintenaceForms = "23",
   lots = "24",
   availablePartDocuments = "25",
-  ebParts = "26", // Duplicate of materials. We should replace this id with something new
+  supplierDocumentTypes = "26",
   ebLots = "27",
 }

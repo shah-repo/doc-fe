@@ -15,6 +15,11 @@ const getWhiteLabeling = createSelector(
   (selectedCompany) => (selectedCompany.whiteLabeling || {})[Config.Theme as ThemeEnv] || WHITE_LABEL_DEFAULT,
 );
 
+const getAllWhiteLabeling = createSelector(
+  getSelectedCompany,
+  (selectedCompany) => selectedCompany.whiteLabeling || WHITE_LABEL_DEFAULT,
+);
+
 const getCompanyMine = (state: ApplicationState) => state.company.companyMine;
 
 const getNavigationItems = (state: ApplicationState) => state.company.selectedCompany.navigation;
@@ -33,4 +38,5 @@ export default {
   getNavigationItems,
   getNavigationItemStatus,
   getCompanyMaxRevisionStage,
+  getAllWhiteLabeling,
 };

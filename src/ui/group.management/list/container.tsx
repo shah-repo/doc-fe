@@ -16,7 +16,7 @@ import { DEFAULT_SELECTED_GROUP } from "../utils/types";
 import ListPresenter from "./presenter";
 
 type OwnProps = RouteComponentProps;
-export type Props = OwnProps;
+type Props = OwnProps;
 
 export const ListContainer: React.FunctionComponent<Props> = () => {
   const dispatch = useDispatch();

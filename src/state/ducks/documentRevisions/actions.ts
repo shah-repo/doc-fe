@@ -330,14 +330,13 @@ const createFaiInspection = (
 
 const removePreviousBuild = (
   id: string,
-  currentDocId: string,
   handlers: Handlers,
 ): ApiAction<DocumentRevision> =>
   apiActionWithCallbacks({
     url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/parent_remove`,
     method: "post",
     onSuccess: (documentRevision, dispatch) => {
-      dispatch(load(currentDocId));
+      dispatch(documentRevisionSet(documentRevision));
     },
     handlers,
   });

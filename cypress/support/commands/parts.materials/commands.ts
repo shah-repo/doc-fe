@@ -11,10 +11,12 @@ declare global {
     interface Chainable<Subject> {
       pmAddMaterialDocumentToProcedure(params: {
         materialDoc: string;
+        partLotDoc?: string;
         numberOfMaterial: integerType;
         typeOfMaterial: string;}): Chainable<Subject>;
       pmAddFreeTextMaterial(params: {
         material: string;
+        partLot?: string;
         numberOfMaterial: integerType;
         typeOfMaterial: string;}): Chainable<Subject>;
       pmAddEquipmentDocument(params: {equipmentDoc: string}): Chainable<Subject>;
@@ -40,12 +42,20 @@ Cypress.Commands.add("pmVerifyAddedMaterial", (params: {
 
 Cypress.Commands.add("pmAddMaterialDocumentToProcedure", (params: {
   materialDoc: string;
+  partLotDoc?: string;
   numberOfMaterial: integerType;
   typeOfMaterial: string;}) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").click();
-  cy.wait(8000);
+  cy.wait(2000);
+
   cy.get("[data-cy=\"title\"]").click();
   cy.get("ul[role=\"listbox\"]>li").contains(params.materialDoc).click();
+
+  if (params.partLotDoc) {
+    cy.get("[data-cy=\"partLot\"]").click();
+    cy.get("ul[role=\"listbox\"]>li").contains(params.partLotDoc).click();
+  }
+
   cy.get("[name=\"quantity\"]").type(params.numberOfMaterial.toString());
   cy.get("[data-cy=\"unit\"]").click();
   cy.get("ul[role=\"listbox\"]>li").contains(params.typeOfMaterial).click();
@@ -56,11 +66,17 @@ Cypress.Commands.add("pmAddMaterialDocumentToProcedure", (params: {
 
 Cypress.Commands.add("pmAddFreeTextMaterial", (params: {
   material: string;
+  partLot?: string;
   numberOfMaterial: integerType;
   typeOfMaterial: string;}) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").click();
-  cy.wait(8000);
+  cy.wait(2000);
   cy.get("[data-cy=\"title\"]").type(params.material);
+
+  if (params.partLot) {
+    cy.get("[data-cy=\"partLot\"]").type(params.partLot);
+  }
+
   cy.get("[name=\"quantity\"]").type(params.numberOfMaterial.toString());
   cy.get("[data-cy=\"unit\"]").click();
   cy.get("ul[role=\"listbox\"]>li").contains(params.typeOfMaterial).click();
