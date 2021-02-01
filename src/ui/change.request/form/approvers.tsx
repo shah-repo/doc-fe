@@ -57,16 +57,14 @@ export const Approvers: React.FunctionComponent<Props> = ({
   const arrayOfOptions = [
     ...toUniqGroupOptions(approvers), ...availableApprovers,
   ];
-  const initialGroups = uniqBy(documentTypeGroups, "id")
-    .reduce<Group[]>((groups, group) => {
-      if (includes(group.joinedEmployees.map((e) => e.id), owner?.id)) {
-        groups.push({
-          ...group,
-          groupApprover: owner?.id,
-        });
-      }
-      return groups;
-    }, []);
+  const initialGroup = find(
+    uniqBy(documentTypeGroups, "id"),
+    (group) => includes(group.joinedEmployees.map((e) => e.id), owner?.id)
+  );
+  const initialGroups = initialGroup ? [{
+    ...initialGroup,
+    groupApprover: owner?.id,
+  }] : [];
 
   // MARK: @styles
   const styles = {
