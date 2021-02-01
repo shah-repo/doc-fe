@@ -17,7 +17,6 @@ const AppPresenter: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (pingServerAsyncInfo.status === AsyncStatus.Idle) {
-      console.log("AppPresenter Idle pingServer");
       pingServer();
       toggleSpinner(true);
     }

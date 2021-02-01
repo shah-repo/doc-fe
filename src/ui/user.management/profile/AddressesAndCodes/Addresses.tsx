@@ -7,7 +7,7 @@ import EditRemoveAddFields from "./EditRemoveAddFields";
 
 interface OwnProps {
   canUpdateCompany: boolean;
-  addresses: string[];
+  addresses: [];
 }
 
 type Props = OwnProps;

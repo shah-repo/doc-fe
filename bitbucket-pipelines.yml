@@ -90,8 +90,7 @@ definitions:
             - yarn install --frozen-lockfile
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
-            - node --expose-gc --max-old-space-size=2900 node_modules/.bin/tsc -p tsconfig.cypress.json
-            - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
+            # - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh

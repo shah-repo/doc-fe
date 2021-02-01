@@ -44,8 +44,8 @@ export interface Company {
   helloSignAppId: string;
   helloSignIntegrationEnabled: boolean;
   teamId: string;
-  addresses: string[];
-  acctCodes: string[];
+  addresses: [];
+  acctCodes: [];
   navigation: NavigationItem[];
   employees?: Employee[];
 }
