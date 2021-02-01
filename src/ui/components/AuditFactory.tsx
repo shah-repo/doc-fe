@@ -1,4 +1,5 @@
 import { Box } from "@material-ui/core";
+import { get, has } from "lodash";
 import React, { Fragment } from "react";
 import { useIntl } from "react-intl";
 import { getFormattedDateString, MomentFormats } from "../../common/utils/date";
@@ -30,7 +31,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
 }) => {
   let returnValue;
   const intl = useIntl();
-  const isFBField = audit.field.includes("formInput");
+  const isFBField = has(audit, "fbSchemaItem");
   const { nextValue, previousValue } = audit;
   const { type = "" } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
@@ -79,7 +80,10 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
         return (<div>{arrayValue.join(", ")}</div>);
       },
       procedure() {
-        return <AuditProcedure {...{ audit, dataCy, auditValue }} />
+        if (audit.field === "fileUploadCandidate") {
+          return <div data-cy={dataCy}>{get(auditValue, "name")}</div>;
+        }
+        return <AuditProcedure {...{ audit, dataCy, auditValue }} />;
       },
       default() { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };

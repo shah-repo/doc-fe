@@ -602,6 +602,8 @@
   "form.builder.field.date.required": "Date Required",
   "form.builder.field.part.number": "Part Number",
   "form.builder.part.number": "Part Number",
+  "form.builder.fileUploadCandidate": "Attachments",
+  "form.builder.partLot": "Part Lot",
   "form.builder.part.revision": "Part Revision",
   "form.builder.field.part.description": "Part Description",
   "form.builder.field.supplier.part.number": "Supplier Part Number",
