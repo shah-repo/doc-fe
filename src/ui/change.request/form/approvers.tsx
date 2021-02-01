@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import { concat, difference, filter, find, includes, isEmpty, last, uniqBy } from "lodash";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { components } from "react-select";
 import { ReactComponent as CheckedMark } from "../../../assets/images/check_mark.svg";
@@ -27,6 +27,8 @@ interface OwnProps {
   owner?: Owner;
   shouldShowDAMCheck?: boolean;
   isDocumentPO: boolean;
+  checkedGroups: Group[];
+  setCheckedGroups(groups: Group[]): void;
 }
 
 export type Props = OwnProps;
@@ -38,6 +40,8 @@ export const Approvers: React.FunctionComponent<Props> = ({
   owner,
   shouldShowDAMCheck = true,
   isDocumentPO,
+  checkedGroups,
+  setCheckedGroups,
 }) => {
   // MARK: @selectors
   const loadApproversAsyncState = useSelector(changeRequestsSelectors.getLoadApproversAsyncState);
@@ -75,11 +79,16 @@ export const Approvers: React.FunctionComponent<Props> = ({
   };
 
   // MARK: @state
-  const [checkedGroups, setCheckedGroups] = useState<Group[]>(initialGroups);
   const [selectedApprovers, setSelectedApprovers] = useState<OptionType[]>([]);
 
   // MARK: @actions
   const loadAvailableApproversAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
+
+  // MARK: @effects
+  useEffect(() => {
+    setCheckedGroups(initialGroups);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // MARK: @methods
   /** Check/uncheck DAM/POAM required approval groups based on autocomplete selection

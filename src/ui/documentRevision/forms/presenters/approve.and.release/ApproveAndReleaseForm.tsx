@@ -33,6 +33,8 @@ interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   isRecord: boolean;
   isInlineApproval: boolean;
   isDocumentPO: boolean;
+  checkedGroups: Group[];
+  setCheckedGroups(groups: Group[]): void;
   setFormDocument: (value: string) => void;
   setDocumentType: (value: string) => void;
   setSelectedInvalid: (value: boolean) => void;
@@ -54,6 +56,8 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   isRecord,
   isInlineApproval,
   isDocumentPO,
+  checkedGroups,
+  setCheckedGroups,
 }) => {
 
   // MARK: @selectors
@@ -142,7 +146,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
       <FormMessage asyncState={asyncState} />
       {isQms && (
         <Approvers
-          withoutCurrentUser={true}
+          withoutCurrentUser
           shouldShowDAMCheck={!isInlineApproval || !isRecord}
           {
             ...{
@@ -150,6 +154,8 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
               values,
               documentTypeGroups,
               isDocumentPO,
+              checkedGroups,
+              setCheckedGroups,
             }
           }
         />

@@ -1,6 +1,6 @@
 import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
-import { flatten } from "lodash";
+import { concat, find, flatten } from "lodash";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -82,6 +82,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const [formDocument, setFormDocument] = useState<string>("");
   const [documentType, setDocumentType] = useState<string>("");
   const [selectedInvalid, setSelectedInvalid] = useState<boolean>(false);
+  const [checkedGroups, setCheckedGroups] = useState<Group[]>([]);
 
   // MARK: @config
   const intl = useIntl();
@@ -194,6 +195,8 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
         isRecord,
         isInlineApproval,
         isDocumentPO,
+        checkedGroups,
+        setCheckedGroups,
       }}
     />
   );
@@ -226,9 +229,15 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       return;
     }
 
+    /** Add owner to approvals (needed for validation) */
+    const approvalsBody = concat(values.approvals, [{ value: owner?.id }]);
+
     const approvers = !values.approvals || values.approvals.length === 0 ?
       undefined :
-      values.approvals.map((approver) => ({ id: approver.value }));
+      approvalsBody.map((approver) => ({
+        employeeId: approver.value,
+        signatureGroupId: find(checkedGroups, (group) => group.groupApprover === approver.value)?.id || null,
+      }));
     const effectiveDate = values.effectiveDate !== ""
       ? values.effectiveDate
       : undefined;
