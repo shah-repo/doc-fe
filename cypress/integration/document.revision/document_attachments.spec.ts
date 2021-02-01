@@ -356,6 +356,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
+      cy.arClearFilter();
       cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "In Review" });
     });
 
@@ -386,6 +387,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
+      cy.arClearFilter();
       cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Approved" });
     });
 

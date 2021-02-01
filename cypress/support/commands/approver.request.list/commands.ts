@@ -1,6 +1,8 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
 
+import { CyRoutes } from "../../routes";
+
 // import { integerType } from "aws-sdk/clients/iam";
 
 export { };
@@ -34,7 +36,9 @@ Cypress.Commands.add("alVerifyStartingFilter", () => {
 });
 
 Cypress.Commands.add("alClearFilters", () => {
-  cy.get("button[data-cy=clearFilter]").click().wait(300);
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
+    cy.get("#clearFilter").click();
+  });
 });
 
 Cypress.Commands.add("alFilterByArId", (params: {arId: string }) => {

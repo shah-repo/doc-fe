@@ -3,7 +3,6 @@
 
 import { NavigationItems } from "../../../src/state/ducks/auth/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -282,9 +281,7 @@ context("Document Access Rights", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
-        cy.drFilterDocListByNameAndStatus({ title: normalDocument, status: "Release" });
-      });
+      cy.drFilterDocListByNameAndStatus({ title: normalDocument, status: "Release" });
     });
 
     it("User is not restricted.", () => {
@@ -298,9 +295,7 @@ context("Document Access Rights", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
-        cy.drFilterDocListByNameAndStatus({ title: userPermissionDocument, status: "Release" });
-      });
+      cy.drFilterDocListByNameAndStatus({ title: userPermissionDocument, status: "Release" });
     });
 
     it("User is not restricted.", () => {
@@ -314,9 +309,7 @@ context("Document Access Rights", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
-        cy.drFilterDocListByNameAndStatus({ title: groupPermissionDocument, status: "Release" });
-      });
+      cy.drFilterDocListByNameAndStatus({ title: groupPermissionDocument, status: "Release" });
     });
 
     it("User is restricted.", () => {
@@ -347,9 +340,7 @@ context("Document Access Rights", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
-        cy.drFilterDocListByNameAndStatus({ title: normalDocument, status: "Release" });
-      });
+      cy.drFilterDocListByNameAndStatus({ title: normalDocument, status: "Release" });
     });
 
     it("User is not restricted.", () => {
@@ -363,9 +354,7 @@ context("Document Access Rights", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
-        cy.drFilterDocListByNameAndStatus({ title: userPermissionDocument, status: "Release" });
-      });
+      cy.drFilterDocListByNameAndStatus({ title: userPermissionDocument, status: "Release" });
     });
 
     it("User is restricted.", () => {
@@ -380,9 +369,7 @@ context("Document Access Rights", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
-        cy.drFilterDocListByNameAndStatus({ title: groupPermissionDocument, status: "Release" });
-      });
+      cy.drFilterDocListByNameAndStatus({ title: groupPermissionDocument, status: "Release" });
     });
 
     it("User is not restricted.", () => {

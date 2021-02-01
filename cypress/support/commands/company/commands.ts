@@ -202,6 +202,7 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
       CyRoutes.IOTCredentials,
       CyRoutes.CompanyMine,
       CyRoutes.IOTCredentials,
+      CyRoutes.SessionDetails,
     ], () => {
       cy.get("#root").contains(params.name).click();
     });

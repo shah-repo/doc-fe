@@ -476,10 +476,6 @@ context("Receivable list test", () => {
 
   context("Check for filters", () => {
     context("Verify filter by receivable id", () => {
-      it("Clear filter", () => {
-        cy.dlClearFilters();
-      });
-
       it("Filter list by id 'RC-00006'", () => {
         cy.recFilterByReceivableId({ id: "RC-00006" });
       });

@@ -70,6 +70,8 @@ export enum CyRoutes {
   GetDocRevDisplayStatus = "GetDocRevDisplayStatus",
   PostTasks = "PostTasks",
   DeleteLogout = "DeleteLogout",
+  GetDocRevs = "GetDocRevs",
+  SessionDetails = "SessionDetails",
 }
 
 export const routes: ICyRoutes =   {
@@ -87,6 +89,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/employees",
+    },
+  },
+  SessionDetails: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/auth/sessionDetails",
+    },
+    callConfig: {
+      responseTimeout: 50 * 1000,
+      requestTimeout: 40 * 1000,
     },
   },
   LotQuantity: {
@@ -269,7 +281,8 @@ export const routes: ICyRoutes =   {
       url: "api/v1/auth/credentials/iot",
     },
     callConfig: {
-      responseTimeout: 20 * 1000,
+      responseTimeout: 55 * 1000,
+      requestTimeout: 30 * 1000,
     },
   },
   GetFileUploadCandidates: {
@@ -371,8 +384,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/documents/*",
     },
     callConfig: {
-      requestTimeout: 15 * 1000,
-      responseTimeout: 20 * 1000,
+      requestTimeout: 30 * 1000,
+      responseTimeout: 40 * 1000,
     },
   },
   DocRevPreview: {
@@ -431,8 +444,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/*/required_approvers",
     },
     callConfig: {
-      responseTimeout: 10 * 1000,
-      requestTimeout: 10 * 1000,
+      responseTimeout: 40 * 1000,
+      requestTimeout: 30 * 1000,
     },
   },
   PostApproveAR: {
@@ -487,13 +500,23 @@ export const routes: ICyRoutes =   {
   GetChangeRequests: {
     requestConfig: {
       method: "GET",
-      url: "/api/v1/change_requests*",
+      url: "/api/v1/change_requests**",
     },
   },
   PostDocRev: {
     requestConfig: {
       method: "POST",
       url: "/api/v1/document_revisions",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+      requestTimeout: 10 * 1000,
+    },
+  },
+  GetDocRevs: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions*",
     },
     callConfig: {
       responseTimeout: 15 * 1000,
