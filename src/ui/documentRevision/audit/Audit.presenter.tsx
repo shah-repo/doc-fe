@@ -65,6 +65,18 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         !FBApprovalAuditState.docAudit.includes(change.fbSchemaItem?.type!)
       );
       if (isOmittedFB) { return; }
+
+      if (isFBField) {
+        const { nextValue, previousValue } = change;
+        let auditValue: any = nextValue;
+        if (nextValue === "undefined"  || nextValue === "[]" || nextValue === "{}") {
+          auditValue = previousValue;
+        }
+        if (auditValue === "undefined"  || auditValue === "[]" || auditValue === "{}") {
+          return;
+        }
+      }
+
       if (change.field.includes("attachments")) {
         attachments.push(change);
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_NEW") {
