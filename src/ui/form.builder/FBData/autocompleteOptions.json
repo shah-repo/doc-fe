@@ -231,13 +231,11 @@
   },
   {
     "id": "26",
-    "path": "/document_revisions?docTypeGroupOptions%5B%5D=MATERIAL&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED",
-    "label": "EB Parts",
+    "path": "/document_type?docTypeGroupOption=SUPPLIER",
+    "label": "Supplier Document Types",
     "valueKey": "id",
-    "labelKey": "name",
-    "labelPrefixRoot": "document.docId",
-    "root": "",
-    "includeRevision": "displayRevision"
+    "labelKey": "documentTypeName",
+    "root": ""
   },
   {
     "id": "27",

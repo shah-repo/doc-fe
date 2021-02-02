@@ -202,7 +202,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         docRevId={documentRevision?.id}
         documentStatus={documentRevision?.status}
         formDocumentStatus={documentRevision?.formDocument?.status}
-        bannerPortal={bannerPortal}
+        {...{
+          bannerPortal,
+          isRecord,
+        }}
       />
       <FormHeader {...{ isCreateDocumentDisabled }} />
       <FormWrapper

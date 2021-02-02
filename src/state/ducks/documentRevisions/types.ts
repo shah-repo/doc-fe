@@ -126,7 +126,13 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   // there can currently be only one child part
   childrenParts?: DocumentRevision[];
   outputDocumentTypes?: any;
+  inputOwners?: InputOwner[];
 }
+
+export interface InputOwner {
+  [key: string]: string;
+}
+
 
 export const RevisionStageOptions = [
   { value: 1, text: "common.Numeric" },

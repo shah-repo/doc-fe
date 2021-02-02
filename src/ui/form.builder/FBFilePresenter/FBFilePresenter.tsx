@@ -3,14 +3,15 @@ import { FBDialog, FBFilePresenterIcon, FBFilePresenterProps, FBFilePresenterRaw
 import { withFBFilePresenter } from "./FBFilePresenter.wrap";
 
 const FBFilePresenter: React.FunctionComponent<FBFilePresenterProps> = ({
+  filePresenterState,
   dialogState,
   mode = "icon",
   ...props
 }) =>  (
-  <FBProvider {...{ dialogState }}>
+  <FBProvider {...{ dialogState, filePresenterState }}>
     <FBDialog />
-    {mode === "icon" && <FBFilePresenterIcon {...props}/>}
-    {mode === "raw" && <FBFilePresenterRaw {...props} />}
+    {mode === "icon" && <FBFilePresenterIcon {...props} {...{ filePresenterState }} />}
+    {mode === "raw" && <FBFilePresenterRaw {...props} {...{ filePresenterState }} />}
   </FBProvider>
 );
 
