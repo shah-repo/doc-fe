@@ -19,7 +19,7 @@ import useActionCreator from "../../hooks/useActionCreator";
 import { toUniqGroupOptions } from "./transform";
 
 
-interface OwnProps {
+interface Props {
   dataProp?: Approval[];
   withoutCurrentUser?: boolean;
   documentTypeGroups?: Group[];
@@ -31,9 +31,7 @@ interface OwnProps {
   setCheckedGroups(groups: Group[]): void;
 }
 
-export type Props = OwnProps;
-
-export const Approvers: React.FunctionComponent<Props> = ({
+const Approvers: React.FunctionComponent<Props> = ({
   dataProp,
   withoutCurrentUser = false,
   documentTypeGroups,

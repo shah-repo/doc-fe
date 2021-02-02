@@ -54,7 +54,7 @@ const styles = makeStyles(() =>
   },
   ));
 
-export const ApproveAndRelease: React.FunctionComponent<Props> = ({
+const ApproveAndRelease: React.FunctionComponent<Props> = ({
   id,
   status,
   isQms,
