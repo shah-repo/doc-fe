@@ -166,8 +166,8 @@ context("Document Operators Access Test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+    it("Click on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("'Approve and Release' the document", () => {
@@ -299,10 +299,6 @@ context("Document Operators Access Test", () => {
       cy.get("[name^='text-field-for']").type("Test First Field");
     });
 
-    it("Add Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
-    });
-
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
@@ -343,16 +339,8 @@ context("Document Operators Access Test", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
-    it("Fill value for FB textbox field", () => {
-      cy.get("[name^='text-field-for']").type("Try To Edit");
-    });
-
-    it("Add Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
-    });
-
-    it("clicks on 'Save' button expecting error", () => {
-      cy.drClickCreateDocumentWithApiCallForFormsExpectingToastError();
+    it("Check field from other colaborator is disabled", () => {
+      cy.get("[name^='text-field-for']").should("be.be.disabled");
     });
 
     it(`Logout as current user`, () => {
@@ -373,28 +361,44 @@ context("Document Operators Access Test", () => {
     });
   });
 
-  context(`Approve document as owner '${USERS[2].name}'`, () => {
+  context("Check all colaborators must be on approvals list", () => {
     it("Navigates to document list", () => {
       cy.navigToRecords();
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
+      cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
+    });
+
+    it("Check field from first colaborator is disabled", () => {
+      cy.get("[name^='text-field-for']").should("be.be.disabled");
+    });
+
+    it("Check field from second colaborator is disabled", () => {
+      cy.get("[name^='new-text-field-for']").should("be.be.disabled");
+    });
+
+    it("Add Owner as Approver on document", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+    });
+
+    it("Add first colaborator as Approver on document", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
     });
 
     it("Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         cy.checkToastMessageIsEqual({ message: "All colaborators to the document must be on approvers list" });
       });
     });
-  });
 
-  context("Approve form as owner", () => {
-    it("Add Approver on document", () => {
+    it("Add second colaborator as Approver on document", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[4].name });
     });
+  });
 
+  context("Submit for approval and approve as owner", () => {
     it("Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
@@ -485,6 +489,10 @@ context("Document Operators Access Test", () => {
 
     it("Reload document", () => {
       cy.reload();
+    });
+
+    it("Verify status is released", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
     });
   });
 });
