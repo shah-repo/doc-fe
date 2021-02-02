@@ -2,9 +2,6 @@ clone:
   depth: 10
 
 definitions:
-  caches:
-    node-test: node_modules
-
   steps:
     - step: &COMMON
         image:
@@ -14,7 +11,7 @@ definitions:
             secret-key: $AWS_SECRET_ACCESS_KEY
         max-time: 20
         caches:
-          - node-test
+          - node
 
     - step: &COMMON_BUILD
         image:
@@ -25,7 +22,7 @@ definitions:
         max-time: 20
         size: 2x
         caches:
-          - node-test
+          - node
 
     - step: &COMMON_DEPLOY
         image:
@@ -45,7 +42,7 @@ definitions:
         artifacts:
           - eslint-results/**
         script:
-          - yarn install --frozen-lockfile
+          - NODE_ENV=development yarn install --frozen-lockfile
           - ./aws/bash_scripts/runUnusedExportsCheck.sh
           - ./aws/bash_scripts/runLinter.sh
 
@@ -54,12 +51,12 @@ definitions:
         name: Tests
         size: 2x
         caches:
-          - node-test
+          - node
         artifacts:
           - test-results/**
           - jest-config/**
         script:
-          - yarn install --frozen-lockfile
+          - NODE_ENV=development yarn install --frozen-lockfile
           - ./aws/bash_scripts/runTests.sh
     #
     # DEV
