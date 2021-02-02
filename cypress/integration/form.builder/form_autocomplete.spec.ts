@@ -696,10 +696,6 @@ context("Autocomplete test", () => {
       cy.drEnterDocumentTitle({ name: lotsTitle });
     });
 
-    it("Add lot description", () => {
-      cy.drEnterDocumentDescription({ description: "lot document description" });
-    });
-
     it("Select 'Part document' in references", () => {
       cy.drSelectReferences( "Part document" );
     });

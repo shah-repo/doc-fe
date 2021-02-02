@@ -533,10 +533,10 @@ context("Equipment maintenance test", () => {
     it("Check preventative maintenance status is in complience for next 10 days", () => {
       const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
         .add(10, "days")
-        .format("MMMM D, YYYY");
+        .format("ddd MMMM D YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(0)
-        .contains(`In Compliance - Due Date: ${prevMaintenanceComplianceDate}`);
+        .contains(`PM Done - Due Date: ${prevMaintenanceComplianceDate}`);
     });
   });
 
@@ -599,7 +599,6 @@ context("Equipment maintenance test", () => {
 
   context("Check equipment calibration history on maintenance document", () => {
     it("Navig to Equipment", () => {
-      cy.reload();
       cy.navigToDashboard();
       cy.navigToEquipment();
     });
@@ -621,16 +620,17 @@ context("Equipment maintenance test", () => {
 
     it("Check Calibration document existance", () => {
       cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
+        .eq(1)
         .contains("MR-00002 - Calibration document");
     });
 
     it("Check calibration status is in complience for next 5 days", () => {
       const calibrationComplianceDate = moment().tz("America/Los_Angeles")
         .add(5, "days")
-        .format("MMMM D, YYYY");
+        .format("ddd MMMM D YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(1)
-        .contains(`In Compliance - Due Date: ${calibrationComplianceDate}`);
+        .contains(`CAL Done - Due Date: ${calibrationComplianceDate}`);
     });
 
     it("Verify status is 'Released'", () => {
