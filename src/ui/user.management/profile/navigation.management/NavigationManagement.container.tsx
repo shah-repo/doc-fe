@@ -9,7 +9,7 @@ import useGetHasTag from "../../../hooks/useGetHasTag";
 import { toNavigationBodyValues, toNavigationIntialValues } from "../../utils/transform";
 import NavigationManagementPresenter from "./NavigationManagement.presenter";
 
-export const NavigationManagementContainer: React.FunctionComponent<{}> = ({
+const NavigationManagementContainer: React.FunctionComponent<{}> = ({
 }) => {
   const dispatch = useDispatch();
 

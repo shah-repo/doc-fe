@@ -24,7 +24,7 @@ interface DispatchProps {
   submitSupplierSurvey: typeof supplierSurveyActions.submitSupplierSurvey;
 }
 
-export type SupplierSurveyContainerProps = StateProps &
+type SupplierSurveyContainerProps = StateProps &
 DispatchProps &
 Pick<RouteComponentProps, "location">;
 
@@ -36,7 +36,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   supplierSurvey: supplierSurveySelectors.supplierSurvey(state),
 });
 
-export const SupplierSurveyContainer: React.FunctionComponent<
+const SupplierSurveyContainer: React.FunctionComponent<
 SupplierSurveyContainerProps
 > = ({
   location,

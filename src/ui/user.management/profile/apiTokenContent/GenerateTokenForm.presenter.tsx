@@ -5,7 +5,7 @@ import { required, validator } from "../../../components/forms/fields/validators
 import Text from "../../../components/Text";
 import { styles } from "./ApiToken.style";
 
-export const GenerateTokenFormPresenter: React.FunctionComponent = () => {
+const GenerateTokenFormPresenter: React.FunctionComponent = () => {
   const classes = styles();
   return (
     <Box style={{

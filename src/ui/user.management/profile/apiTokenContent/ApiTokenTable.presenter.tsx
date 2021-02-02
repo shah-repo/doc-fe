@@ -8,12 +8,12 @@ import { TablePanel } from "../../../components/table/panel";
 import Text from "../../../components/Text";
 import { styles } from "./ApiToken.style";
 
-export interface Props {
+interface Props {
   tableName: string;
   disableApiToken: (id: string) => void;
 }
 
-export const ApiTokenTablePresenter: React.FunctionComponent<Props> = ({
+const ApiTokenTablePresenter: React.FunctionComponent<Props> = ({
   tableName,
   disableApiToken,
 }) => {

@@ -24,7 +24,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export const UserGroups: React.FunctionComponent<Props> = ({
+const UserGroups: React.FunctionComponent<Props> = ({
   canManageUsers,
   employeeGroups,
   callbackUpdateGroups,

@@ -14,7 +14,7 @@ import ApiTokenDialog from "./ApiTokenDialog";
 import ApiTokenTablePresenter from "./ApiTokenTable.presenter";
 import GenerateTokenFormPresenter from "./GenerateTokenForm.presenter";
 
-export const ApiTokenContent: React.FunctionComponent = () => {
+const ApiTokenContent: React.FunctionComponent = () => {
   const dialog = useDialog();
   const openDialog = () => dialog.open();
 

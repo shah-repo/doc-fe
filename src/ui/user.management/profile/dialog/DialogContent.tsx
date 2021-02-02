@@ -56,7 +56,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export const DialogContent: React.FunctionComponent<Props> = ({
+const DialogContent: React.FunctionComponent<Props> = ({
   canManageUsers,
   employeeGroups,
   employeeId,

@@ -32,7 +32,7 @@ interface StateProps {
 
 type Props = OwnProps & DispatchProps & StateProps;
 
-export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
+const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
   showUserProfile,
   closeUserProfile,
   selectedEmployee,

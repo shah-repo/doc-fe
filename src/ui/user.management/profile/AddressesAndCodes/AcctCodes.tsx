@@ -12,7 +12,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export const AcctCodes: React.FunctionComponent<Props> = ({
+const AcctCodes: React.FunctionComponent<Props> = ({
   canUpdateCompany,
   acctCodes,
 }) => {
