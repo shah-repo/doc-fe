@@ -18,12 +18,12 @@ export const withFBBlankTplForm = <T extends FBBlankTplFormProps>(
 
     React.useEffect(() => {
       reaction(
-        () => formState?.inputState.get(name || "")?.value,
-        (defaultValue) => {
+        () => formState?.inputState.get(name || "")?.value.id,
+        () => {
           workspaceState?.setSchemaItem({
             ...props,
             name,
-            defaultValue,
+            defaultValue: formState?.inputState.get(name || "")?.value,
           });
         }
       );
