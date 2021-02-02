@@ -2,8 +2,7 @@ import { cloneDeep, filter, findLast, groupBy, includes, isEmpty, isUndefined, s
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBApprovalConfig, FBApprovalProps, FBApprovalState, FBApprovalStatus, FBApprovalValue, FBInlineApprovalRole, FBInlineApproverType } from ".";
-import { FB } from "..";
+import { FB, FBApprovalConfig, FBApprovalProps, FBApprovalState, FBApprovalStatus, FBApprovalValue, FBInlineApprovalRole, FBInlineApproverType } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";

@@ -6,6 +6,7 @@ export type FBFilePresenterDownloadType = "download" | "view";
 
 export type FBAttachment = Attachment & {
   url?: string;
+  description?: string;
 };
 
 export enum FBFilePresenterColor {
@@ -48,12 +49,16 @@ export type FBFilePresenterProps =
   file: FBAttachment;
   fileName?: string;
   fileShortName?: string;
-  fileType?: string;
+  fileExtension?: string;
   fileSize?: string;
-  fileDescription?: string;
+  fileType?: string;
   fileColor?: string;
+  fileDescription?: string;
   loading?: boolean;
   mode?: FBFilePresenterMode;
+  omitDescription?: boolean;
 };
 
-export type FBFilePresenterModeProps = Omit<FBFilePresenterProps, "dialogState" | "mode">;
+export type FBFilePresenterModeProps =
+& Omit<FBFilePresenterProps, "dialogState" | "mode">
+& Pick<FBInputProps, "boxProps">;
