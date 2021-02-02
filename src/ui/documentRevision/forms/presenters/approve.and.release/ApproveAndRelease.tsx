@@ -232,11 +232,11 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     /** Add owner to approvals (needed for validation) */
     const approvalsBody = concat(values.approvals, [{ value: owner?.id }]);
 
-    const approvers = !values.approvals || values.approvals.length === 0 ?
+    const approversWithSignatures = !values.approvals || values.approvals.length === 0 ?
       undefined :
       approvalsBody.map((approver) => ({
-        employeeId: approver.value,
-        signatureGroupId: find(checkedGroups, (group) => group.groupApprover === approver.value)?.id || null,
+        approver: { id: approver.value },
+        signatureGroupId: { id: find(checkedGroups, (group) => group.groupApprover === approver.value)?.id || null },
       }));
     const effectiveDate = values.effectiveDate !== ""
       ? values.effectiveDate
@@ -247,7 +247,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         releaseNonQmsAction,
         id,
         {
-          approvers,
+          approversWithSignatures,
           effectiveDate,
           documentType: { id: documentType },
           formDocument: { id: formDocument },
@@ -270,7 +270,12 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     async.start(
       releaseAction,
       id,
-      { approvers, effectiveDate, documentType: { id: documentType }, formDocument: { id: formDocument } },
+      {
+        approversWithSignatures,
+        effectiveDate,
+        documentType: { id: documentType },
+        formDocument: { id: formDocument },
+      },
       async,
     );
   };
