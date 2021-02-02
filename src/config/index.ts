@@ -25,8 +25,6 @@ const DEFAULTS = {
 
 type ConfigKey = keyof typeof DEFAULTS;
 
-console.log({ SM_APP_CONFIG });
-
 class Config {
   private static PREFIX = "REACT_APP";
 

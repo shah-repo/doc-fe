@@ -2,6 +2,8 @@ clone:
   depth: 10
 
 definitions:
+  caches:
+
   steps:
     - step: &COMMON
         image:
