@@ -9,6 +9,10 @@ TEST_RESULTS_DIR="${BASE_DIR}/test-results"
 JEST_CONFIG_LOG_DIR="${BASE_DIR}/jest-config"
 MAX_WORKERS="6"
 
+set -o allexport
+source "${ENVIRONMENT_DIR}/test.env"
+set +o allexport
+
 echo "-------- Generate fake server info -------"
 cat >> "${BITBUCKET_CLONE_DIR}/src/data/buildInfo.json" <<EOF 
 {
