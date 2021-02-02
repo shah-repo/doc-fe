@@ -44,7 +44,7 @@ export const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
   const upgradeAction = useActionCreator(documentRevisionsActions.upgradeToReleasedForm);
   const onUpgradeClick = () => async.start(upgradeAction, docRevId, async);
 
-  if (!showShouldUpgrade || isRecord) {
+  if (!showShouldUpgrade || (isRecord && documentStatus === DocumentRevisionStatus.Released)) {
     return null;
   }
 
