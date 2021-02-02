@@ -56,7 +56,6 @@ export const useFormContext = () => {
       if (relation) {
         const type = find(workspaceState?.schema, { name: relation.name })?.type;
         if (type === "poreceive") {
-          let oldReferences;
           const currentPoReference = workspaceState?.document?.formInput?.[relation.name || ""];
           const refWithoutPrevValue = workspaceState?.document?.referenceTo.filter((e) => {
             const docRevIds = e.documentRevisions?.map((i) => i.id );
@@ -65,11 +64,7 @@ export const useFormContext = () => {
             }
             return e;
           });
-
-          if (refWithoutPrevValue) {
-            oldReferences = refWithoutPrevValue?.map((e) => ({ id: e.id }))as ReferenceToEditRequest[];
-          }
-          oldReferences = workspaceState?.document?.referenceTo.map((e) => ({ id: e.id }))as ReferenceToEditRequest[];
+          const oldReferences = refWithoutPrevValue?.map((e) => ({ id: e.id }))as ReferenceToEditRequest[];
           formik.setFieldValue("referenceTo", [...oldReferences, { id: relation.nextValue }]);
         }
       }
