@@ -86,7 +86,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
           const newInput = {};
           keys(values.formInput).map((key) => {
-            newInput[key] = values?.formInput && typeof values?.formInput[key] === "string"
+            newInput[key] = values?.formInput && typeof values?.formInput[key] === "string" && key !== "equipment_id"
               ? "Void"
               : null;
             return key;
@@ -112,6 +112,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       formik.setFieldValue("name", "Void");
       formik.setFieldValue("description", "Void");
       formik.setFieldValue("referenceTo", null);
+      formik.setFieldValue("parentEquipment", null);
     }
     formik.submitForm();
   };
@@ -190,6 +191,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           formDocumentStatus={documentRevision?.formDocument?.status}
           setShouldDisplay={props.setUpgradeToLastestDisplay}
           type="button"
+          isRecord={isRecord}
         />
         {!(isRecord && isInlineApproval) &&
           isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}

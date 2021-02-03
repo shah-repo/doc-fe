@@ -33,7 +33,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
       toastError(loadProposedDocIdState.message);
     }
   }, [loadProposedDocIdState]);
-  const [isVisible, label, tooltipConfig, validators] = useDocId(documentTypeId);
+  const { isVisible, label, tooltipConfig, validation: validators } = useDocId(documentTypeId);
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     const { documentType } = document;

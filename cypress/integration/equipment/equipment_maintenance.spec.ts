@@ -536,7 +536,7 @@ context("Equipment maintenance test", () => {
         .format("ddd MMMM D YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(0)
-        .contains(`PM - Done - Due Date: ${prevMaintenanceComplianceDate}`);
+        .contains(`PM Done - Due Date: ${prevMaintenanceComplianceDate}`);
     });
   });
 
@@ -630,7 +630,7 @@ context("Equipment maintenance test", () => {
         .format("ddd MMMM D YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(1)
-        .contains(`CAL - Done - Due Date: ${calibrationComplianceDate}`);
+        .contains(`CAL Done - Due Date: ${calibrationComplianceDate}`);
     });
 
     it("Verify status is 'Released'", () => {

@@ -14,9 +14,8 @@ import {
   FBEQMaintenanceState,
   FBFieldWrapperState,
   FBFilePresenterState,
-
-
-  FBFilesPresenterState, FBFileUploadState,
+  FBFilesPresenterState,
+  FBFileUploadState,
   FBFormState,
   FBInlineApprovalState,
   FBMediaAlbumState,
@@ -29,6 +28,7 @@ import {
   FBPurchaseOrderState,
   FBSchemaState,
   FBSnackbarState,
+  FBSupplierState,
   FBTaskState,
   FBTextEditorOptionsState,
   FBTextEditorState,
@@ -73,4 +73,5 @@ export interface FBProviderProps {
   ebPartState?: FBEBPartState;
   textFieldWithRangeState?: FBTextFieldWithRangeState;
   filesPresenterState?: FBFilesPresenterState;
+  supplierState?: FBSupplierState;
 }

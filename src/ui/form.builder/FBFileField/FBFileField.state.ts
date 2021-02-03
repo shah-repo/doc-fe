@@ -2,11 +2,11 @@ import { isUndefined } from "lodash";
 import { action } from "mobx";
 import { FBFile } from ".";
 import { Attachment } from "../../../state/ducks/attachments";
-import { ATTACHMENT_UPLOAD_URL } from "../../../state/ducks/attachments/constants";
+import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
 export class FBFileFieldState extends FBRequest<Attachment, FBFile> {
-  public url: string = ATTACHMENT_UPLOAD_URL;
+  public url: string = FBEndpoint.AttachmentUpload;
 
   @action public upload = (files: File[] | undefined) => {
     if (isUndefined(files) || files.length === 0) {

@@ -63,6 +63,8 @@ export interface PageDetailsColumn {
   label: Translation;
   sourcePath: string;
   valuePath: string;
+  showOnWeb: boolean;
+  showOnAndroid: boolean;
 }
 
 export interface PageDetailsAddNew {

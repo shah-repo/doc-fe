@@ -1,11 +1,9 @@
 import { Formik, FormikProps } from "formik";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { Company, companyActions, companySelectors } from "../../../../state/ducks/company";
-import { HOME_URL } from "../../../constants/urls";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useGetHasTag from "../../../hooks/useGetHasTag";
@@ -44,7 +42,7 @@ export const WhiteLabelingManagementContainer: React.FunctionComponent<{}> = ({
   });
 
   if (!canManageWhiteLabeling) {
-    return <Redirect to={HOME_URL} />;
+    return null;
   }
 
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
