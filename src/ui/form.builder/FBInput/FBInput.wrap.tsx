@@ -4,15 +4,13 @@ import { first, get, includes, isArray, isBoolean, isEqual, isString, isUndefine
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { FBAutocompleteAsyncOption, FBOption } from "..";
+import { FBOption } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
-import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
-import { FBInputProps, OmitInputClones } from "../FBInput";
+import { FBInputProps, FBInputType, OmitInputClones } from "../FBInput";
 import { FB } from "../helpers";
-import { getDocumentId } from "./FBInput.helpers";
 import { withFBOnChange } from "./FBInput.onchange";
 
 export const withFBInput = <T extends FBInputProps>(
@@ -69,7 +67,6 @@ export const withFBInput = <T extends FBInputProps>(
     value = inputState?.value;
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
-    const poValues = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.POList)?._data;
     const inputOwner = document?.inputOwners?.[name];
     isInputOwner = inputOwner === undefined ||
       inputOwner === employeeId;
@@ -167,11 +164,16 @@ export const withFBInput = <T extends FBInputProps>(
         () => inputState?.autosaveNextValue,
         (value) => {
           if (autosave && !isEqual(inputState?.autosavePrevValue, value)) {
-            submitForm({
-              name,
-              prevValue: inputState?.autosavePrevValue,
-              nextValue: getDocumentId(poValues, value),
-            });
+            if (type === "poreceive") {
+              submitForm({
+                type: type as FBInputType,
+                name,
+                prevValue: inputState?.autosavePrevValue,
+                nextValue: value,
+              });
+              return;
+            }
+            submitForm();
           }
         }
       );

@@ -1,6 +1,8 @@
+import { FBInputType } from "../../form.builder";
 
 export interface SubmitFormRelation {
-  name?: string;
+  type: FBInputType;
+  name: string;
   prevValue: any;
   nextValue: any;
 }

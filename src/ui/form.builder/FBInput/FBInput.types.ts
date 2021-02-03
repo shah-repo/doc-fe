@@ -193,6 +193,7 @@ export const OmitInputClones: FBInputType[] = [
   "parts",
   "range",
   "passpercentage",
+  "poreceive",
 ];
 
 export interface FBInputConstructor {

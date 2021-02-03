@@ -1,9 +1,10 @@
 import { useFormikContext } from "formik";
-import { find, isEqual } from "lodash";
+import { filter, isEqual, map } from "lodash";
 import React, { useContext } from "react";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
-import { ReferenceToEditRequest } from "../../../state/ducks/documentRevisions/types";
-import { FB } from "../../form.builder";
+import { FB, FBAutocompleteAsyncOption } from "../../form.builder";
+import FBAutocompleteAsyncStore from "../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { SubmitFormRelation } from "./FormContext.types";
 
 export const FormContext = React.createContext({ submitOnChange: false });
@@ -11,7 +12,7 @@ export const FormContext = React.createContext({ submitOnChange: false });
 export const useFormContext = () => {
   const context = useContext(FormContext);
   const formik = useFormikContext();
-  const { workspaceState, formState } = FB.useStores();
+  const { workspaceState, formState, schemaState } = FB.useStores();
 
   function isOutputSchema(): boolean {
     const values = formik.values as any;
@@ -47,6 +48,41 @@ export const useFormContext = () => {
     }
   }
 
+  function setReferences(relation: SubmitFormRelation) {
+    const { type, name, prevValue, nextValue } = relation;
+    const prevDocument: DocumentRevision | undefined =
+      FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, prevValue);
+    const nextDocument: DocumentRevision | undefined =
+      FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, nextValue);
+    const prevValueId = prevDocument?.document.id;
+    const nextValueId = nextDocument?.document.id;
+    let refValues = (formik.values as any).referenceTo;
+    if (!prevValueId) {
+      formik.setFieldValue("referenceTo", [...refValues, { id: nextValueId }]);
+      return;
+    }
+    const poNames = schemaState?.getNamesByType(type);
+    const values: string[] = [];
+    // Check for other poreceive values
+    map(formState?.getValues(), (id: string, key) => {
+      if (key === name) { return; }
+      if (!poNames?.includes(key)) { return; }
+      const docRev: DocumentRevision | undefined =
+        FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, id);
+      const { document: { id: docId = undefined } = {} } = docRev || {};
+      if (!docId) { return; }
+      values.push(docId);
+    });
+    if (!values.includes(prevValueId)) {
+      refValues = filter(refValues, (ref) => ref.value !== prevValueId);
+    }
+    if (nextValueId) {
+      formik.setFieldValue("referenceTo", [...refValues, { id: nextValueId }]);
+      return;
+    }
+    formik.setFieldValue("referenceTo", refValues);
+  }
+
   // TODO: check if this param is needed. Formik context should be available
   const submitForm = (relation?: SubmitFormRelation) => {
     if (context.submitOnChange) {
@@ -54,18 +90,8 @@ export const useFormContext = () => {
         setFBValue();
       }
       if (relation) {
-        const type = find(workspaceState?.schema, { name: relation.name })?.type;
-        if (type === "poreceive") {
-          const currentPoReference = workspaceState?.document?.formInput?.[relation.name || ""];
-          const refWithoutPrevValue = workspaceState?.document?.referenceTo.filter((e) => {
-            const docRevIds = e.documentRevisions?.map((i) => i.id );
-            if (docRevIds?.includes(currentPoReference) || docRevIds?.includes(relation.prevValue)) {
-              return null;
-            }
-            return e;
-          });
-          const oldReferences = refWithoutPrevValue?.map((e) => ({ id: e.id }))as ReferenceToEditRequest[];
-          formik.setFieldValue("referenceTo", [...oldReferences, { id: relation.nextValue }]);
+        if (relation.type === "poreceive") {
+          setReferences(relation);
         }
       }
       formik.submitForm();
