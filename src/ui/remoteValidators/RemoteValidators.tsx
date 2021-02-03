@@ -1,10 +1,25 @@
 import { AxiosRequestConfig } from "axios";
 import React, { useEffect } from "react";
 import apiClient from "../../state/apiClient";
-import { FETCH_VALIDATORS_REMOTE_URL_URL } from "../../state/ducks/auth/constants";
+import { FETCH_VALIDATORS_REMOTE_URL_URL, REMOTE_VALIDATORS_STATUS_URL } from "../../state/ducks/auth/constants";
 import { store } from "../../state/store";
 import { CompanyValidators } from "./interfaces";
 import { RemoteValidatorHelper } from "./remoteValidatorsHelper";
+
+export const fetchRemoteValidatorsStatus = async () => {
+  const requestConfig: AxiosRequestConfig = {
+    method: "get",
+    url: REMOTE_VALIDATORS_STATUS_URL,
+    headers: {},
+  };
+
+  requestConfig.headers.Authorization = `bearer ${
+    store.getState().auth.user.employeeId
+  }:${store.getState().auth.user.sessionId}`;
+
+  const { data } = await apiClient.request(requestConfig);
+  return data;
+};
 
 const fetchRemoteValidators = async () => {
   try {
