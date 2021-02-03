@@ -16,7 +16,7 @@ import { documentTypeActions, DocumentTypeById } from "../../../../../state/duck
 import { ApplicationState } from "../../../../../state/reducers";
 import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
 import { toChangeRequestEditRequestBody } from "../../../../change.request/form/transform";
-import { TemplateOption } from "../../../../change.request/form/types";
+import { ApproverPayload, TemplateOption } from "../../../../change.request/form/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import { FormContext } from "../../../../components/forms/FormContext";
 import Text from "../../../../components/Text";
@@ -223,6 +223,11 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     dialog.close();
   };
 
+  const getApproverPayload = (approverId?: string): ApproverPayload => ({
+    approver: { id: approverId || null },
+    signatureGroupId: { id: find(checkedGroups, (group) => group.groupApprover === approverId)?.id || null },
+  });
+
   const onSubmit = (values: any) => {
     if (selectedInvalid) {
       asyncAR.start(create, toChangeRequestEditRequestBody(initialValuesAR(values)), asyncAR);
@@ -230,14 +235,11 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     }
 
     /** Add owner to approvals (needed for validation) */
-    const approvalsBody = concat(values.approvals, [{ value: owner?.id }]);
+    const approvalsBody = concat(values.approvals || [], [{ value: owner?.id }]);
 
-    const approversWithSignatures = !values.approvals || values.approvals.length === 0 ?
-      undefined :
-      approvalsBody.map((approver) => ({
-        approver: { id: approver.value },
-        signatureGroupId: { id: find(checkedGroups, (group) => group.groupApprover === approver.value)?.id || null },
-      }));
+    const approversWithSignatures = !values.approvals || values.approvals.length === 0
+      ? [getApproverPayload(owner?.id)]
+      : approvalsBody.map((approver) => (getApproverPayload(approver.value)));
     const effectiveDate = values.effectiveDate !== ""
       ? values.effectiveDate
       : undefined;

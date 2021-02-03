@@ -59,14 +59,24 @@ const Approvers: React.FunctionComponent<Props> = ({
   const arrayOfOptions = [
     ...toUniqGroupOptions(approvers), ...availableApprovers,
   ];
-  const initialGroup = find(
-    uniqBy(documentTypeGroups, "id"),
-    (group) => includes(group.joinedEmployees.map((e) => e.id), owner?.id)
-  );
-  const initialGroups = initialGroup ? [{
-    ...initialGroup,
-    groupApprover: owner?.id,
-  }] : [];
+  let initialGroups: Group[] = [];
+  if (isDocumentPO) {
+    const ownerGroup = find(
+      uniqBy(documentTypeGroups, "id"),
+      (group) => includes(group.joinedEmployees.map((e) => e.id), owner?.id)
+    );
+    if (ownerGroup) {
+      initialGroups = [{
+        ...ownerGroup,
+        groupApprover: owner?.id,
+      }];
+    }
+  } else {
+    initialGroups = filter(
+      uniqBy(documentTypeGroups, "id"),
+      (group) => includes(group.joinedEmployees.map((e) => e.id), owner?.id)
+    );
+  }
 
   // MARK: @styles
   const styles = {

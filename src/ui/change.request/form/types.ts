@@ -58,3 +58,12 @@ export interface TemplateOption {
   schema?: FBSchemaProps[];
   formInput?: Record<string, any>;
 }
+
+export interface ApproverPayload {
+  approver: {
+    id: string | null;
+  };
+  signatureGroupId: {
+    id: string | null;
+  };
+}
