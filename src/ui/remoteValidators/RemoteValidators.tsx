@@ -13,10 +13,6 @@ export const fetchRemoteValidatorsStatus = async () => {
     headers: {},
   };
 
-  requestConfig.headers.Authorization = `bearer ${
-    store.getState().auth.user.employeeId
-  }:${store.getState().auth.user.sessionId}`;
-
   const { data } = await apiClient.request(requestConfig);
   return data;
 };
