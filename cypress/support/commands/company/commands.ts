@@ -97,7 +97,7 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
   const bodyDefaults = {
     name: `${capitalize(faker.commerce.color())} ${faker.company.companyName()} ${companyNumber}`,
     companyAcronym: `TC${companyNumber}`,
-    scheduledForDeletion: true,
+    scheduledForDeletion: false,
     whiteLabeling: {
       DEV_THEME: {
         logo: "/ta_assets_company_logo.png",

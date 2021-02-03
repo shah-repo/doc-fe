@@ -12,6 +12,7 @@ declare global {
       recCreateRecordFromLandingPage(): Chainable<Subject>;
       recCheckIfMultilpeFormsAreAvailable(params: {recordType: string; recordForms: string[]}): Chainable<Subject>;
       recSelectRecordFormFromMultiSelect( params: {recordType: string; recordForm?: string} ): Chainable<Subject>;
+      equipSelectRecordFormFromMultiSelect( params: {recordType: string; recordForm?: string} ): Chainable<Subject>;
       inspecSelectRecordFormFromMultiSelect( params: {recordType: string; recordForm?: string} ): Chainable<Subject>;
       recCheckRevisionStage(params: {stage: string}): Chainable<Subject>;
       recFilterRecordListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
@@ -63,6 +64,24 @@ Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType:
     cy.get("div[id^=react-select]").contains(params.recordType).click();
     if (params.recordForm) {
       cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").type(params.recordForm + "{downarrow}{enter}");
+    }
+  });
+});
+
+Cypress.Commands.add("equipSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocumentType, CyRoutes.GetSpecificDocumentType], () => {
+    cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
+  });
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.EmployeesGet,
+    CyRoutes.DocPreview,
+    CyRoutes.GetRequiredApprovers], () => {
+    cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
+    cy.wait(500);
+    cy.get("div[id^=react-select]").contains(params.recordType).click();
+    if (params.recordForm) {
+      cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").click();
+      cy.get("div[id^=react-select]").contains(params.recordForm).click();
     }
   });
 });

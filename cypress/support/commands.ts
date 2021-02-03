@@ -20,6 +20,7 @@ declare global {
       selectCompany(params: { name: string }): Chainable<Subject>;
       unClick(): Chainable<Subject>;
       myCompanies(token: string): Chainable<Subject>;
+      triggerDueDateEmailScript(params: {sessionId: string; currentDate: string});
       wrapWithWaitOnApiCall(
         name: CyRoutes,
         callback: () => void,
@@ -96,6 +97,20 @@ Cypress.Commands.add("myCompanies", (token: string) => {
     url: `${CONFIG.BE_URL}/api/v1/company/mine`,
     headers: {
       Authorization: `bearer ${token}`,
+    },
+    timeout: 10 * 1000,
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("triggerDueDateEmailScript", (params: {sessionId: string; currentDate: string}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/due_date_notifiers/send_emails`,
+    headers: {
+      Authorization: `bearer_admin ${params.sessionId}`,
+    },
+    body: {
+      currentDate: params.currentDate,
     },
     timeout: 10 * 1000,
   }).then((response) => response.body);

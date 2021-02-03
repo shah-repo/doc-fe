@@ -13,6 +13,7 @@ declare global {
       imapVerifyInReviewAREmailNotification(params: {userEmail: string; arId: string}): Chainable;
       imapVerifyRejectedAREmailNotification(params: {userEmail: string; arId: string}): Chainable;
       imapVerifyApprovedAREmailNotification(params: {userEmail: string; arId: string}): Chainable;
+      imapVerifyLastEmailIsNot(params: {userEmail: string; documentId: string}): Chainable;
       imapGetActivationLink(params: {userEmail: string}): Chainable;
     }
   }
@@ -56,5 +57,14 @@ Cypress.Commands.add("imapGetActivationLink", (params: { userEmail: string}) => 
     const endingPosition = emailText.search("\" target");
     const activationLink = emailText.substring(startingPosition, endingPosition);
     cy.visit(CONFIG.FE_URL + activationLink);
+  });
+});
+
+Cypress.Commands.add("imapVerifyLastEmailIsNot", (params: { userEmail: string; documentId: string}) => {
+  cy.imapGetTextFromLastEmail({ userEmail: params.userEmail }).should((emailText) => {
+    const startingPosition = emailText.search("<body");
+    const endingPosition = emailText.search("</body>");
+    const emailBody = emailText.substring(startingPosition, endingPosition);
+    expect(emailBody).to.not.contain(params.documentId);
   });
 });

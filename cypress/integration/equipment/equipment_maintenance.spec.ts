@@ -13,7 +13,6 @@ const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
 const SECOND_USER = USERS[3];
 const THIRD_USER = USERS[4];
-const INDIVIDUAL_USER = USERS[5];
 const IMPORTER_USER = USERS[6];
 const CAL_DUE_DATE = moment().tz("America/Los_Angeles")
   .add(5, "days")
@@ -67,7 +66,7 @@ context("Equipment maintenance test", () => {
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [FIRST_USER, SECOND_USER, THIRD_USER, INDIVIDUAL_USER],
+            users: [FIRST_USER, SECOND_USER, THIRD_USER],
             documentTypes: [],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -136,7 +135,59 @@ context("Equipment maintenance test", () => {
                 }],
                 schema: [
                   {
+                    name: "fb-default-eq-status",
+                    type: "radiogroup",
                     index: 0,
+                    label: "EQ Status",
+                    rules: "required",
+                    options: [
+                      {
+                        text: "Active",
+                        value: "Active",
+                      },
+                      {
+                        text: "Inactive",
+                        value: "Inactive",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "fb-primary-owner-eq",
+                    type: "autocomplete",
+                    index: 1,
+                    label: "Primary Owner",
+                    optionId: "13",
+                    placeholder: "Select employee as primary owner",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Primary Owner",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "fb-coordinator-eq",
+                    type: "autocomplete",
+                    index: 2,
+                    label: "Coordinator",
+                    optionId: "13",
+                    placeholder: "Select employee as coordinator",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Coordinator",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    index: 3,
                     type: "eqmaintenance",
                     name: "pm-ki5wtk5l",
                     editorConfig: {
@@ -152,7 +203,7 @@ context("Equipment maintenance test", () => {
                     validationAttribute: "PM",
                   },
                   {
-                    index: 1,
+                    index: 4,
                     type: "eqmaintenance",
                     name: "calibration-ki5wtyj0",
                     editorConfig: {
@@ -344,12 +395,18 @@ context("Equipment maintenance test", () => {
       cy.drEnterDocumentDescription({ description: "Equipment maintenance" });
     });
 
+    it("Select 'Active' as EQ status", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
+        cy.get("input[name=fb-default-eq-status][value=Active]").check();
+      });
+    });
+
     it("Select document 'Yes' for preventative maintenance required", () => {
       cy.get("[value=\"Yes\"]").eq(0).click();
     });
 
     it("Select 'Maintenance record form' for preventative maintenance required", () => {
-      cy.get("[data-cy*=\"preventativeForm\"]").click();
+      cy.get("[data-cy*=\"preventativeForm\"]").eq(0).click();
       cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").click();
     });
 
@@ -410,7 +467,7 @@ context("Equipment maintenance test", () => {
       });
 
       it("Add first approver to approval request on approver list", () => {
-        cy.arAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email });
       });
 
       it("Click Create Approval Request", () => {
@@ -601,6 +658,10 @@ context("Equipment maintenance test", () => {
     it("Navig to Equipment", () => {
       cy.navigToDashboard();
       cy.navigToEquipment();
+    });
+
+    it("Verify 'EQ STATUS' is Active", () => {
+      cy.get("div.ReactVirtualized__Table__rowColumn").last().should("have.text", "Active");
     });
 
     it("Verify 'CAL DUE DATE'", () => {
