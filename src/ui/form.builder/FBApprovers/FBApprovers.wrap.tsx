@@ -37,10 +37,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
 
       reaction( // React on approvers autocomplete changes
         () => formState?.inputState.get(name || "")?.value,
-        (value) => {
-          console.log(value);
-          approversState?.setValue(map(value, "id"));
-        },
+        (value) => approversState?.setValue(map(value, "id")),
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
