@@ -81,11 +81,10 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const FBIsOutput = Boolean(docId && !isEmpty(docId));
   const FBIsActive = formInput || formTemplate || formDocument;
   const docTypeId = dataProp?.document?.documentType?.id;
-  const [isTrainingVisible] = useTraining(docTypeId);
-  const [isDescriptionVisible] = useDescription(docTypeId);
-  const [isTitleVisible, titleLabel, tooltipConfig] = useTitle(docTypeId);
-  const [isCRLinkVisible] = useCRLink(docTypeId);
-  const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
+  const { isVisible: isTrainingVisible } = useTraining(docTypeId);
+  const { isVisible: isDescriptionVisible, label: descriptionLabel } = useDescription(docTypeId);
+  const { isVisible: isTitleVisible, label: titleLabel, tooltipConfig } = useTitle(docTypeId);
+  const { isVisible: isCRLinkVisible } = useCRLink(docTypeId);
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(document.documentType.groupOptions);
   const isPart = checkIsDocumentPart(document?.documentType?.groupOptions);
@@ -181,7 +180,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         }
         {
           isDescriptionVisible &&
-          <SummaryFieldWithHtml label={`common.description.${docTypeAcronym}`} value={description} />
+          <SummaryFieldWithHtml label={descriptionLabel} value={description} />
         }
         {formTemplate && (
           <SummaryField

@@ -86,7 +86,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
   // MARK: @config
   const intl = useIntl();
-  const [isVisible, label, tooltipConfig] = useApproveAndRelease(documentTypeId);
+  const { isVisible, label, tooltipConfig } = useApproveAndRelease(documentTypeId);
   const classes = styles();
   const dialog = useDialog();
   const alertDialog = useDialog();

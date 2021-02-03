@@ -12,7 +12,7 @@ let multipleCompanies;
 let secondEmployee;
 const lotsTitle = `Lots ${Cypress.moment().format("X")}`;
 
-context("FORM Field test", () => {
+context("Autocomplete 'Lots' test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -136,10 +136,6 @@ context("FORM Field test", () => {
 
       it("Add lot title", () => {
         cy.drEnterDocumentTitle({ name: lotsTitle });
-      });
-
-      it("Add lot description", () => {
-        cy.drEnterDocumentDescription({ description: "lot document description" });
       });
 
       it("Select 'Part document' in references", () => {

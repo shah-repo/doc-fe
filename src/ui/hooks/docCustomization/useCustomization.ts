@@ -61,7 +61,7 @@ const useCustomization = (
     requiredFlag: config?.required?.toString(),
   };
 
-  return [isVisible, label, tooltipConfig, validation];
+  return { isVisible, label, tooltipConfig, validation };
 };
 
 export default useCustomization;

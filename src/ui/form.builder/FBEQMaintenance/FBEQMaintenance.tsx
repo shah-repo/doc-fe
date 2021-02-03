@@ -81,7 +81,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
           boxProps={{ display: "inline-flex" }}
           locale={isTypePM ? "form.builder.pm" : "form.builder.cal"}
         />
-        <span> - </span>
+        &nbsp;
         {complianceStatus}
         <span> - </span>
         <FBText

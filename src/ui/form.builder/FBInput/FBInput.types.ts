@@ -67,7 +67,8 @@ export type FBInputType =
   | "eqmaintenance"
   | "textfieldwithrange"
   | "range"
-  | "passpercentage";
+  | "passpercentage"
+  | "supplier";
 
 export type FBInputProps =
   & FBLabelProps

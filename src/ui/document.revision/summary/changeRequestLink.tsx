@@ -13,7 +13,7 @@ export type Props = DataProps<DocumentRevision>;
 export const ChangeRequestLink: React.FunctionComponent<Props> = ({
   dataProp,
 }) => {
-  const [isVisible] = useCRLink(dataProp?.document?.documentType?.id);
+  const { isVisible } = useCRLink(dataProp?.document?.documentType?.id);
   if (!dataProp || !dataProp.changeRequest) {
     return null;
   }
