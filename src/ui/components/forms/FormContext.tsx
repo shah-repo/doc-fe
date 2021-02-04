@@ -49,6 +49,7 @@ export const useFormContext = () => {
   }
 
   function setReferences(relation: SubmitFormRelation) {
+    if (!workspaceState) { return; }
     const { type, name, prevValue, nextValue } = relation;
     const prevDocument: DocumentRevision | undefined =
       FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, prevValue);
@@ -56,9 +57,10 @@ export const useFormContext = () => {
       FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, nextValue);
     const prevValueId = prevDocument?.document.id;
     const nextValueId = nextDocument?.document.id;
-    let refValues = (formik.values as any).referenceTo;
+    let refValues = workspaceState.referenceValue;
     if (!prevValueId) {
       formik.setFieldValue("referenceTo", [...refValues, { id: nextValueId }]);
+      workspaceState.referenceValue = [...refValues, { id: nextValueId! }];
       return;
     }
     const poNames = schemaState?.getNamesByType(type);
@@ -74,10 +76,11 @@ export const useFormContext = () => {
       values.push(docId);
     });
     if (!values.includes(prevValueId)) {
-      refValues = filter(refValues, (ref) => ref.value !== prevValueId);
+      refValues = filter(refValues, (ref) => ref.id !== prevValueId);
     }
     if (nextValueId) {
       formik.setFieldValue("referenceTo", [...refValues, { id: nextValueId }]);
+      workspaceState.referenceValue = [...refValues, { id: nextValueId }];
       return;
     }
     formik.setFieldValue("referenceTo", refValues);
