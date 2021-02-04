@@ -2,6 +2,8 @@
 
 set -e
 
+./scripts/cypress/utils/generate_testmail_credentials.sh
+
 secs_to_human() {
     if [[ -z ${1} || ${1} -lt 60 ]] ;then
         min=0 ; secs="${1}"

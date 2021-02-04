@@ -16,6 +16,7 @@ declare global {
       inspecSelectRecordFormFromMultiSelect( params: {recordType: string; recordForm?: string} ): Chainable<Subject>;
       recCheckRevisionStage(params: {stage: string}): Chainable<Subject>;
       recFilterRecordListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
+      equipClickCreateNew(): Chainable<Subject>;
     }
   }
 }
@@ -83,6 +84,17 @@ Cypress.Commands.add("equipSelectRecordFormFromMultiSelect", (params: {recordTyp
       cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").click();
       cy.get("div[id^=react-select]").contains(params.recordForm).click();
     }
+  });
+});
+
+Cypress.Commands.add("equipClickCreateNew", () => {
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.GetDocumentType,
+    CyRoutes.GetSpecificDocumentType,
+    CyRoutes.EmployeesGet,
+    CyRoutes.DocPreview,
+    CyRoutes.GetRequiredApprovers], () => {
+    cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
   });
 });
 

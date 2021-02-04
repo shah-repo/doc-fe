@@ -30,6 +30,8 @@ jest-config/*
 
 
 cypress/cache/*
+cypress/credentials/credentials.json
+cypress/credentials/gmail_token.json
 cypress/downloads/*
 !cypress/cache/readme.txt
 scripts/cypress/env_vars_for_compose.sh

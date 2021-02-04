@@ -379,12 +379,12 @@ context("Equipment maintenance test", () => {
   });
 
   context("Create equipment maintenace document", () => {
-    it("Navigate to document list", () => {
+    it("Navigate to equipment list", () => {
       cy.navigToEquipment();
     });
 
     it("Click 'ADD NEW EQUIPMENT'", () => {
-      cy.recCreateNew();
+      cy.equipClickCreateNew();
     });
 
     it("Enter title 'Equipment maintenance document'", () => {

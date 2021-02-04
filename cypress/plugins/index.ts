@@ -1,6 +1,6 @@
 import { downloadFile } from "cypress-downloadfile/lib/addPlugin";
 import { rename } from "fs";
-import { getEmail } from "../support/commands/imap/imap";
+import { getEmail, getEmails } from "../support/commands/imap/imap";
 import { allowedCharacters } from "../utils/context/constants";
 
 // ***********************************************************
@@ -33,7 +33,8 @@ export default (on, config) => {
       if (value != null) { shouldSkip = value; }
       return shouldSkip;
     },
-    mail: getEmail,
+    gmailGetLastMail: getEmail,
+    gmailGetMails: getEmails,
     downloadFile,
   });
 

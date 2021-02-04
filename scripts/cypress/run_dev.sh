@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+./scripts/cypress/utils/generate_testmail_credentials.sh
+
 export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START:-5600}
 export ENLIL_COMPOSE_EXPOSE_DIRECTOR_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+6))"
 
@@ -23,9 +25,6 @@ export CYPRESS_SCREENSHOTS_FOLDER="cypress/cache/testRunner/screenshots"
 export CYPRESS_VIDEOS_FOLDER="cypress/cache/testRunner/videos"
 export CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL:-"zoran.kovacevic+admin@codecons.com"}
 export CYPRESS_SUPERADMIN_PASSWORD=${CYPRESS_SUPERADMIN_PASSWORD:-"Tester1!"}
-export CYPRESS_TEST_EMAIL=${CYPRESS_TEST_EMAIL:-"enlil.testmail@gmail.com"}
-export CYPRESS_TEST_EMAIL_PASSWORD=${CYPRESS_TEST_EMAIL_PASSWORD:-"shifamed123"}
-
 
 mkdir -p $CYPRESS_SCREENSHOTS_FOLDER
 mkdir -p $CYPRESS_VIDEOS_FOLDER
