@@ -18,7 +18,7 @@ export const withFBBlankTplForm = <T extends FBBlankTplFormProps>(
 
     React.useEffect(() => {
       reaction(
-        () => formState?.inputState.get(name || "")?.value.id,
+        () => formState?.inputState.get(name || "")?.value?.length,
         () => {
           workspaceState?.setSchemaItem({
             ...props,
