@@ -43,13 +43,7 @@ context("Document Access Rights", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: ADMIN_USER.email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: IMPORTER_USER.email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [FIRST_USER, SECOND_USER, THIRD_USER, INDIVIDUAL_USER],
             documentTypes: [],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,

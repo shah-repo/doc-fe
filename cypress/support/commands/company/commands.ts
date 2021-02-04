@@ -99,6 +99,12 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
     name: `${capitalize(faker.commerce.color())} ${faker.company.companyName()} ${companyNumber}`,
     companyAcronym: `TC${companyNumber}`,
     scheduledForDeletion: true,
+    numOfRevStages: 3,
+    numOfDocDigits: 5,
+    helloSignIntegrationEnabled: false,
+    helloSignTestMode: false,
+    remoteValidatorBundleName: "default",
+    slackIntegrationEnabled: false,
     whiteLabeling: {
       DEV_THEME: {
         logo: "/ta_assets_company_logo.png",

@@ -28,13 +28,7 @@ context("Approval request form scenario", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[20].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[24].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[21], USERS[22], USERS[23]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
