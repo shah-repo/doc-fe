@@ -11,7 +11,7 @@ let multipleCompanies;
 let secondEmployee;
 const companyAddress = `New Company Address ${Cypress.moment().format("X")}`;
 
-context("FORM Field test", () => {
+context("Autocomplete 'Company addresses' test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");

@@ -12,7 +12,7 @@ let multipleCompanies;
 let secondEmployee;
 const supplierTitle = `Supplier${Cypress.moment().format("X")}`;
 
-context("FORM Field test", () => {
+context("Autocomplete 'Supplier list' test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
