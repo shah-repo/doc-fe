@@ -87,6 +87,7 @@ definitions:
             - test-results/**
           script:
             - source ./scripts/cypress/utils/variables_pipeline.sh
+            - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
@@ -216,6 +217,18 @@ definitions:
 # Pipelines
 #
 pipelines:
+  default:
+      - variables:
+          - name: CYPRESS_FE_URL
+          - name: CYPRESS_BE_URL
+          - name: CYPRESS_SUPERADMIN_EMAIL
+          - name: CYPRESS_SUPERADMIN_PASSWORD
+          - name: CYPRESS_COMMIT_FE
+          - name: CYPRESS_COMMIT_BE
+          - name: CYPRESS_COMMIT_REMOTEJS
+      - step: 
+          <<:  *COMMON_RUN_CYPRESS
+          name: Cypress specs local test
   custom: 
     run-cypress-on-dev:
       - variables:

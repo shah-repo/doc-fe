@@ -1,0 +1,15 @@
+diff --git a/node_modules/bbrun/src/docker.js b/node_modules/bbrun/src/docker.js
+index 0901095..59dafa5 100644
+--- a/node_modules/bbrun/src/docker.js
++++ b/node_modules/bbrun/src/docker.js
+@@ -32,8 +32,8 @@ function checkExists() {
+ 
+ function run(commands, image, dryRun, interactive, workDir) {
+   const cmd = interactive
+-    ? `run --rm -P -it --entrypoint=/bin/bash -v ${pwd()}:${workDir} -w ${workDir} ${image}`
+-    : `run --rm -P -v ${pwd()}:${workDir} -w ${workDir} ${image} bash ${BUILD_SCRIPT}`;
++    ? `run --rm -P --add-host host.docker.internal:host-gateway -it --entrypoint=/bin/bash -v ${pwd()}:${workDir} -w ${workDir} ${image}`
++    : `run --rm -P --add-host host.docker.internal:host-gateway -v ${pwd()}:${workDir} -w ${workDir} ${image} bash ${BUILD_SCRIPT}`;
+ 
+   if (dryRun) {
+     console.log(`docker command:\n\tdocker ${cmd}`);

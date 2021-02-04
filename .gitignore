@@ -34,3 +34,5 @@ cypress/downloads/*
 !cypress/cache/readme.txt
 scripts/cypress/env_vars_for_compose.sh
 src/data/buildInfo.json
+cypress-reporter-config.json
+.bbrun.sh
