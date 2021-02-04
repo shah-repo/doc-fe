@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import { concat, difference, filter, find, includes, isEmpty, last, uniqBy } from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { components } from "react-select";
 import { ReactComponent as CheckedMark } from "../../../assets/images/check_mark.svg";
@@ -28,6 +28,7 @@ interface Props {
   shouldShowDAMCheck?: boolean;
   isDocumentPO: boolean;
   checkedGroups: Group[];
+  initialGroups: Group[];
   setCheckedGroups(groups: Group[]): void;
 }
 
@@ -40,6 +41,7 @@ const Approvers: React.FunctionComponent<Props> = ({
   isDocumentPO,
   checkedGroups,
   setCheckedGroups,
+  initialGroups,
 }) => {
   // MARK: @selectors
   const loadApproversAsyncState = useSelector(changeRequestsSelectors.getLoadApproversAsyncState);
@@ -59,24 +61,7 @@ const Approvers: React.FunctionComponent<Props> = ({
   const arrayOfOptions = [
     ...toUniqGroupOptions(approvers), ...availableApprovers,
   ];
-  let initialGroups: Group[] = [];
-  if (isDocumentPO) {
-    const ownerGroup = find(
-      uniqBy(documentTypeGroups, "id"),
-      (group) => includes(group.joinedEmployees.map((e) => e.id), owner?.id)
-    );
-    if (ownerGroup) {
-      initialGroups = [{
-        ...ownerGroup,
-        groupApprover: owner?.id,
-      }];
-    }
-  } else {
-    initialGroups = filter(
-      uniqBy(documentTypeGroups, "id"),
-      (group) => includes(group.joinedEmployees.map((e) => e.id), owner?.id)
-    );
-  }
+
 
   // MARK: @styles
   const styles = {
@@ -93,10 +78,6 @@ const Approvers: React.FunctionComponent<Props> = ({
   const loadAvailableApproversAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
 
   // MARK: @effects
-  useEffect(() => {
-    setCheckedGroups(initialGroups);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // MARK: @methods
   /** Check/uncheck DAM/POAM required approval groups based on autocomplete selection

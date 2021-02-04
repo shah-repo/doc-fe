@@ -1,6 +1,6 @@
 import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
-import { concat, find, flatten } from "lodash";
+import { concat, filter, find, flatten, includes, uniqBy } from "lodash";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -71,13 +71,9 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const documentRevision = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, docRevId));
-  const history = useHistory();
-  const docId = documentRevision?.document?.docId || "";
-  const title = documentRevision?.name;
-  const isDocumentPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
 
   // MARK: @state
-  const [documentTypeGroups, setDocTypeGroups] = useState<any[]>([]);
+  const [documentTypeGroups, setDocTypeGroups] = useState<Group[]>([]);
   const [templateOptions, setTemplateOptions] = useState<TemplateOption[]>([]);
   const [formDocument, setFormDocument] = useState<string>("");
   const [documentType, setDocumentType] = useState<string>("");
@@ -85,12 +81,16 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const [checkedGroups, setCheckedGroups] = useState<Group[]>([]);
 
   // MARK: @config
+  const history = useHistory();
+  const docId = documentRevision?.document?.docId || "";
+  const title = documentRevision?.name;
+  const isDocumentPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
   const intl = useIntl();
   const { isVisible, label, tooltipConfig } = useApproveAndRelease(documentTypeId);
   const classes = styles();
   const dialog = useDialog();
   const alertDialog = useDialog();
-  const transformedDocTypeGroups = [].concat(...documentTypeGroups);
+  const transformedDocTypeGroups = ([] as Group[]).concat(...documentTypeGroups);
   const initialValues = {
     password: "",
     effectiveDate: "",
@@ -98,6 +98,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     formDocument: { id: "" },
     documentType: { id: "" },
   };
+  let initialGroups: Group[] = [];
 
   // MARK: @actions
   const releaseAction = useActionCreator(documentRevisionsActions.approveAndRelease);
@@ -107,13 +108,32 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const create = useActionCreator(changeRequestsActions.create);
   const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
 
+
   // MARK: @async
-  const async = useAsync<any>({ onSuccess: dialog.close });
+  const async = useAsync({ onSuccess: dialog.close });
   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
       setDocTypeGroups([
         response,
       ].flat());
+      if (isDocumentPO) {
+        const ownerGroup = find(
+          uniqBy(response, "id"),
+          (group) => includes(group.joinedEmployees.map((e) => e.id), owner?.id)
+        );
+        if (ownerGroup) {
+          initialGroups = [{
+            ...ownerGroup,
+            groupApprover: owner?.id,
+          }];
+        }
+      } else {
+        initialGroups = filter(
+          uniqBy(response, "id"),
+          (group) => includes(group.joinedEmployees.map((e) => e.id), owner?.id)
+        );
+      }
+      setCheckedGroups(initialGroups);
     },
   });
 
@@ -197,6 +217,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         isDocumentPO,
         checkedGroups,
         setCheckedGroups,
+        initialGroups,
       }}
     />
   );

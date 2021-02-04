@@ -34,6 +34,7 @@ interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   isInlineApproval: boolean;
   isDocumentPO: boolean;
   checkedGroups: Group[];
+  initialGroups: Group[];
   setCheckedGroups(groups: Group[]): void;
   setFormDocument: (value: string) => void;
   setDocumentType: (value: string) => void;
@@ -58,6 +59,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   isDocumentPO,
   checkedGroups,
   setCheckedGroups,
+  initialGroups,
 }) => {
 
   // MARK: @selectors
@@ -156,6 +158,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
               isDocumentPO,
               checkedGroups,
               setCheckedGroups,
+              initialGroups,
             }
           }
         />
