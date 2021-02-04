@@ -24,14 +24,7 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
     const intl = useIntl();
     const { formState, workspaceState } = FB.useStores();
 
-    const {
-      document,
-      externalState: { auth: { user: { employeeId = "" } = {} } = {} } = {},
-    } = workspaceState || {};
-
-    const inputOwner = document?.inputOwners?.[name];
-    isInputOwner = inputOwner === undefined ||
-      inputOwner === employeeId;
+    isInputOwner = FB.getIsInputOwner(name, workspaceState);
     disabled = !isInputOwner || disabled;
 
     controls = map(options as FBOption[], (option, index) => {

@@ -45,15 +45,8 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     if (!formValue && isEmpty(formValue) && isPreview) {
       formValue = intl.formatMessage({ id: "form.builder.none" });
     }
-    const {
-      document,
-      externalState: { auth: { user: { employeeId = "" } = {} } = {} } = {},
-    } = workspaceState || {};
 
-
-    const inputOwner = document?.inputOwners?.[name];
-    isInputOwner = inputOwner === undefined ||
-      inputOwner === employeeId;
+    isInputOwner = FB.getIsInputOwner(name, workspaceState);
     disabled = !isInputOwner || disabled;
 
     !toolbar && (toolbar = {

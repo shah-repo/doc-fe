@@ -21,14 +21,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
     const formValue = formState?.getFieldValue(name) || defaultValue;
     fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState, formValue);
 
-    const {
-      document,
-      externalState: { auth: { user: { employeeId = "" } = {} } = {} } = {},
-    } = workspaceState || {};
-
-    const inputOwner = document?.inputOwners?.[name];
-    isInputOwner = inputOwner === undefined ||
-      inputOwner === employeeId;
+    isInputOwner = FB.getIsInputOwner(name, workspaceState);
     disabled = !isInputOwner || disabled;
 
     useObserver(() => {
