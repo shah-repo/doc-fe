@@ -1623,7 +1623,7 @@ context("Checkboxes test", () => {
     });
 
     it("Verify Approval Matrix fields & values", () => {
-      cy.get("[data-cy=\"form.builder.approval.role\"]").parentsUntil("MuiFormControl-root")
+      cy.get("[data-cy=\"form.builder.approval.role\"]").parent().parent().parent()
         .find("input.MuiInputBase-input").invoke("val").should("not.be.empty");
 
       cy.contains("Approval Role").should("exist");
