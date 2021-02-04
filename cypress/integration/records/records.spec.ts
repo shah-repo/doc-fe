@@ -8,7 +8,6 @@ import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-const runId = new Date().valueOf();
 const currentDate = moment().tz("America/Los_Angeles").format("MMMM D, YYYY");
 let createdCompany;
 let loginResponse;
@@ -38,13 +37,8 @@ context("Records flow", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAcronym: `T1${runId}`,
             companyAdminEmail: USERS[1].email,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            name: `Test Company ${runId}`,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
