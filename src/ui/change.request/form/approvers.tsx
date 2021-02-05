@@ -105,7 +105,7 @@ const Approvers: React.FunctionComponent<Props> = ({
         setCheckedGroups(newGroups);
       } else if (!isEmpty(difference(selectedApprovers, selectedUsers))) { // user removed
         const removedUserId = last(difference(selectedApprovers, selectedUsers))?.value;
-        const newGroups = checkedGroups.filter((group) => group.groupApprover === removedUserId);
+        const newGroups = checkedGroups.filter((group) => group.groupApprover !== removedUserId);
         setCheckedGroups(newGroups);
       }
     } else { // user can fullfil all available signature requirements (DAM)
