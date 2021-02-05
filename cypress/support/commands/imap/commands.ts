@@ -78,10 +78,12 @@ Cypress.Commands.add("imapGetActivationLink", (params: { userEmail: string}) => 
 
 Cypress.Commands.add("imapVerifyLastEmailIsNot", (params: { userEmail: string; documentId: string}) => {
   cy.imapGetTextFromLastEmail({ userEmail: params.userEmail }).should((emailText) => {
-    const startingPosition = emailText.search("<body");
-    const endingPosition = emailText.search("</body>");
-    const emailBody = emailText.substring(startingPosition, endingPosition);
-    expect(emailBody).to.not.contain(params.documentId);
+    if (emailText) {
+      const startingPosition = emailText.search("<body");
+      const endingPosition = emailText.search("</body>");
+      const emailBody = emailText.substring(startingPosition, endingPosition);
+      expect(emailBody).to.not.contain(params.documentId);
+    }
   });
 });
 

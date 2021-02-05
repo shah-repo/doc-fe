@@ -3,6 +3,7 @@ import * as gmail from "gmail-tester";
 import * as path from "path";
 
 export async function getEmail(email) {
+  let returnValue = null;
   const dateOffset = (5 * 60 * 1000);
   const myDate = new Date();
   myDate.setTime(myDate.getTime() - dateOffset);
@@ -17,11 +18,16 @@ export async function getEmail(email) {
       after: myDate,
     }
   );
-  return mail[0].body.html;
+  if (mail) {
+    returnValue = mail[0].body.html;
+  }
+
+  return returnValue;
 }
 
 export async function getEmails(email, options?) {
-  const dateOffset = (10 * 1000);
+  let mails = [];
+  const dateOffset = (15 * 1000);
   const myDate = new Date();
   myDate.setTime(myDate.getTime() - dateOffset);
   const messages = await gmail.check_inbox(
@@ -36,10 +42,9 @@ export async function getEmails(email, options?) {
     }
   );
   if (messages) {
-    return messages;
+    mails = messages;
   }
-  else {
-    return [];
-  }
+
+  return mails;
 }
 

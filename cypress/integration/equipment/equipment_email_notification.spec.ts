@@ -791,6 +791,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify email is not sent again for EQ-00002", () => {
+        cy.imapVerifyNumberOfEmailsReceivedInLastMin({ userEmail: ADMIN_USER.email, emailCount: 0 });
         cy.imapVerifyNumberOfEmailsReceivedInLastMin({ userEmail: FIRST_USER.email, emailCount: 0 });
       });
     });
@@ -1240,8 +1241,6 @@ context("Test Equipment maintenance email notifications", () => {
       it("Verify no email is received for EQ-00004", () => {
         cy.imapVerifyNumberOfEmailsReceivedInLastMin({ userEmail: FIRST_USER.email, emailCount: 0 });
         cy.imapVerifyNumberOfEmailsReceivedInLastMin({ userEmail: ADMIN_USER.email, emailCount: 0 });
-        cy.imapVerifyLastEmailIsNot({ userEmail: ADMIN_USER.email, documentId: "EQ-00004" });
-        cy.imapVerifyLastEmailIsNot({ userEmail: FIRST_USER.email, documentId: "EQ-00004" });
       });
     });
   });
