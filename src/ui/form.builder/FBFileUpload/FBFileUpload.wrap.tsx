@@ -9,16 +9,20 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
   const Comp = ({
     fileUploadState,
     disabled,
-    name,
+    name = "",
     defaultValue,
     withState,
     files,
+    isInputOwner,
     ...props
   }: T) => {
 
-    const { formState } = FB.useStores();
+    const { formState, workspaceState } = FB.useStores();
     const formValue = formState?.getFieldValue(name) || defaultValue;
     fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState, formValue);
+
+    isInputOwner = workspaceState?.getIsInputOwner(name);
+    disabled = !isInputOwner || disabled;
 
     useObserver(() => {
       files = fileUploadState?.files;

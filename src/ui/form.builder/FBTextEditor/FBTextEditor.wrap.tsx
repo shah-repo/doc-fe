@@ -24,12 +24,14 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     formValue,
     toolbar,
     masked,
-    name,
+    name = "",
+    disabled,
+    isInputOwner,
     ...props
   }: T) => {
 
     // MARK: @config
-    const { formState } = FB.useStores();
+    const { formState, workspaceState } = FB.useStores();
     const emptyHtmlContent = "<p></p>";
     const intl = useIntl();
     formValue = formState?.getFieldValue(name);
@@ -43,6 +45,9 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     if (!formValue && isEmpty(formValue) && isPreview) {
       formValue = intl.formatMessage({ id: "form.builder.none" });
     }
+
+    isInputOwner = workspaceState?.getIsInputOwner(name);
+    disabled = !isInputOwner || disabled;
 
     !toolbar && (toolbar = {
       options: [
@@ -131,6 +136,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       toolbar,
       masked,
       name,
+      disabled,
     });
   };
 

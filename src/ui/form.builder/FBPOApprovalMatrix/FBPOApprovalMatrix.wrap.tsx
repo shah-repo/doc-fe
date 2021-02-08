@@ -17,6 +17,7 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     name = "",
     handleRevert,
     disabled,
+    isInputOwner,
     ...props
   }: T) => {
 
@@ -26,6 +27,8 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     const formValue = formState?.getFieldValue(name) as POApprovalMatrix;
     const { approvalLevels = [] } = formValue || {};
     const isOutput = workspaceState?.isOutput;
+    isInputOwner = workspaceState?.getIsInputOwner(name);
+    disabled = !isInputOwner || disabled;
 
     poamState = FB.useRef<FBPOApprovalMatrixState>(FBPOApprovalMatrixState, {
       formState,
