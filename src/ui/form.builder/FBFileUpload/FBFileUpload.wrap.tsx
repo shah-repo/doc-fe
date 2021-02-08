@@ -21,7 +21,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
     const formValue = formState?.getFieldValue(name) || defaultValue;
     fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState, formValue);
 
-    isInputOwner = FB.getIsInputOwner(name, workspaceState);
+    isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
 
     useObserver(() => {

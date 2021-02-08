@@ -46,7 +46,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       formValue = intl.formatMessage({ id: "form.builder.none" });
     }
 
-    isInputOwner = FB.getIsInputOwner(name, workspaceState);
+    isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
 
     !toolbar && (toolbar = {

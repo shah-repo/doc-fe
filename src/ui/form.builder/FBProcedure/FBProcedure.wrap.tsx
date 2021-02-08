@@ -34,7 +34,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     const inputState = FB.useRef<FBInputState>(FBInputState, {});
     formState?.inputState.set(`${FBFieldName.ProcedureDiff}${name}`, inputState);
     types = keys(FBProcedureItemType);
-    isInputOwner = FB.getIsInputOwner(name, workspaceState);
+    isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
 
     // MARK: @reactions

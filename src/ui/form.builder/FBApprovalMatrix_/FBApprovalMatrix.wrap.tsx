@@ -23,7 +23,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
 
     const { formState, approvalMatrixFieldState, workspaceState } = FB.useStores();
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
-    isInputOwner = FB.getIsInputOwner(name, workspaceState);
+    isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
 
     const modeContent = () => (

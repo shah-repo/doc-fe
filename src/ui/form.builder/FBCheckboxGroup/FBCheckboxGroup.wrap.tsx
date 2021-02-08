@@ -29,7 +29,7 @@ export const withFBCheckboxGroup = <T extends FBCheckboxGroupProps>(
     const formValue = formState?.getFieldValue(name) || defaultValue;
     const intl = useIntl();
 
-    isInputOwner = FB.getIsInputOwner(name, workspaceState);
+    isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
 
     controls = map(options as FBOption[], (option, index) => {

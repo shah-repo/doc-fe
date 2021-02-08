@@ -97,6 +97,16 @@ export class FBWorkspaceState extends FBSchemaState {
     }
     return this.mode === mode;
   };
+
+  @action public getIsInputOwner = ( name: string ): boolean => {
+    const {
+      document,
+      externalState: { auth: { user: { employeeId = "" } = {} } = {} } = {},
+    } = this || {};
+    const inputOwner = document?.inputOwners?.[name];
+
+    return inputOwner === undefined || inputOwner === employeeId;
+  };
 }
 
 export default FBWorkspaceState;

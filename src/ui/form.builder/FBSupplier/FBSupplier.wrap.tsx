@@ -23,7 +23,7 @@ export const withFBSupplier = <T extends FBSupplierProps>(
     const { formState, workspaceState } = FB.useStores();
 
     isPreview = workspaceState?.mode === "preview";
-    isInputOwner = FB.getIsInputOwner(name, workspaceState);
+    isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
 
     // MARK: @reactions
