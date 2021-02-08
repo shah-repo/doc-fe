@@ -27,11 +27,10 @@ export const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ book
           const { name: hash, label = "" } = bookmark;
           const link = window.location.href.split("#");
           return (
-            <Box display="flex" py={0.3} pl={1}>
+            <Box display="flex" py={0.3} pl={1} key={`fb-bookmark-${hash}-${index}`}>
               <Box flexGrow={1}>
                 <Link
                   to={{ hash }}
-                  key={`fb-bookmark-${hash}-${index}`}
                   style={{ textDecoration: "none" }}
                   onClick={() => setSelectedIndex(index)}
                 >

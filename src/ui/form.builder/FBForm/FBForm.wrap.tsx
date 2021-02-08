@@ -34,6 +34,7 @@ export const withFBForm = <T extends FBFormProps>(
     useEffect(() => {
       if (!formState) { return; }
       formState.initialValues = initialValues;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [initialValues]);
 
     return Component({
