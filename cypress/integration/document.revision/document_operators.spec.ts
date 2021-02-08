@@ -339,10 +339,6 @@ context("Document Operators Access Test", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
-    it("Check field from other colaborator is disabled", () => {
-      cy.get("[name^='text-field-for']").should("be.be.disabled");
-    });
-
     it(`Logout as current user`, () => {
       cy.authLogout();
     });
@@ -361,21 +357,13 @@ context("Document Operators Access Test", () => {
     });
   });
 
-  context("Check all colaborators must be on approvals list", () => {
+  context("Submit for approval and approve as owner", () => {
     it("Navigates to document list", () => {
       cy.navigToRecords();
     });
 
     it("Filter document by name and status, and select it", () => {
       cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
-    });
-
-    it("Check field from first colaborator is disabled", () => {
-      cy.get("[name^='text-field-for']").should("be.be.disabled");
-    });
-
-    it("Check field from second colaborator is disabled", () => {
-      cy.get("[name^='new-text-field-for']").should("be.be.disabled");
     });
 
     it("Add Owner as Approver on document", () => {
@@ -386,19 +374,10 @@ context("Document Operators Access Test", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
     });
 
-    it("Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
-        cy.checkToastMessageIsEqual({ message: "All colaborators to the document must be on approvers list" });
-      });
-    });
-
     it("Add second colaborator as Approver on document", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[4].name });
     });
-  });
 
-  context("Submit for approval and approve as owner", () => {
     it("Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
