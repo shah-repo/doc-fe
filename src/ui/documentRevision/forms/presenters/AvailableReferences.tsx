@@ -1,8 +1,9 @@
 import { Box, Chip, TextField, Typography } from "@material-ui/core";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import { some } from "lodash";
+import { map, some } from "lodash";
 import * as React from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { TypographyProps } from "../../../../state/ducks/common";
 import { DocumentRevision, documentRevisionsSelectors, Reference } from "../../../../state/ducks/documentRevisions";
@@ -10,6 +11,7 @@ import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisi
 import { DocumentRevisionsByIdState } from "../../../../state/ducks/documentRevisions/types";
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import Text from "../../../components/Text";
+import { FB } from "../../../form.builder";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
 import { getHighestReleasedRevision } from "../transform";
 
@@ -39,6 +41,8 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   documentGroupOptions,
   ...fieldProps
 }) => {
+  const { workspaceState } = FB.useStores();
+  const [value, setValue] = useState<any[]>([]);
   const onChange = (e, value) => {
     const {
       form: { setFieldValue, setFieldTouched, touched },
@@ -48,6 +52,9 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
       setFieldTouched(name, true);
     }
     setFieldValue(name, value);
+    setValue(value);
+    if (!workspaceState) { return; }
+    workspaceState.referenceValue = map(value, (obj) => ({ id: obj.value }));
   };
 
   const docRevsById = useSelector(documentRevisionsSelectors.byId);
@@ -66,7 +73,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     ? availableReferences.filter((ref) => !ref.deleteDisabled)
     : availableReferences;
 
-  const defaultValue = documentReferences?.map((ref) => {
+  const defaultValue = (refs: Reference[] = []): any => refs?.map((ref) => {
     if (!ref.documentRevisions) { return { label: "", value: ref.id, deleteDisabled: false }; }
     const {
       highestRev,
@@ -78,9 +85,16 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
       label: `${ref.docId} - ${highestRev?.displayRevision} - ${highestRev?.name}`,
       value: ref.id,
       deleteDisabled: (isReferencePart && canDocumentCreateInspection) ||
-      (canReferenceCreateInspection && isDocumentFai),
+        (canReferenceCreateInspection && isDocumentFai),
     };
   });
+
+  useEffect(() => {
+    const value = defaultValue(documentReferences);
+    setValue(value);
+    if (!workspaceState) { return; }
+    workspaceState.referenceValue = map(value, (obj) => ({ id: obj.value }));
+  }, [documentReferences]);
 
   return (
     <Field {...fieldProps} label={undefined}>
@@ -90,7 +104,8 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         </Typography>
       </Box>
       <Autocomplete
-        {...{ onChange, options, defaultValue, disabled }}
+        {...{ onChange, options, disabled }}
+        value={value}
         renderInput={(params: RenderInputParams) => (
           <Box display="flex">
             <Box width="100%" data-cy="referenceTo">
