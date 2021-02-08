@@ -199,9 +199,9 @@ context("Document HTML template form", () => {
                 `{{}{{}/documentRevision.changeRequest.approvals}}` +
               `</div>` +
               `<div><strong>Date & Signature</strong>` +
-                `{{}{{}#documentRevision.changeRequest.approvals}}` +
-                `<ul><li>{{}{{}dateFormatter}}</li></ul>` +
-                `{{}{{}/documentRevision.changeRequest.approvals}}` +
+                `{{}{{}#validApprovalDates}}` +
+                `<ul><li>{{}{{}reviewedAt}}</li></ul>` +
+                `{{}{{}/validApprovalDates}}` +
               `</div>` +
             `</body>` +
           `</html>`,
