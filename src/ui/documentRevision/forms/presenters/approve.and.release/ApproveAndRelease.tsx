@@ -270,7 +270,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         releaseNonQmsAction,
         id,
         {
-          approversWithSignatures,
+          approvers: approversWithSignatures,
           effectiveDate,
           documentType: { id: documentType },
           formDocument: { id: formDocument },
