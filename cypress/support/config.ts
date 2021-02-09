@@ -1,6 +1,12 @@
 /* eslint-disable no-console */
 import { plainToClass } from "class-transformer";
-import { IsBoolean, IsDefined, IsEmail, IsOptional, IsString, ValidateIf, validateSync } from "class-validator";
+import { IsBoolean, IsDefined, IsEmail, IsEnum, IsOptional, IsString, ValidateIf, validateSync } from "class-validator";
+
+enum RUN_ENVIRONMENT_OPTIONS {
+  LOCALDEV = "LOCALDEV",
+  LOCALPARALLEL = "LOCALPARALLEL",
+  PIPELINE = "PIPELINE"
+}
 
 export class ConfigEnv {
   private static instance: ConfigEnv;
@@ -34,8 +40,11 @@ export class ConfigEnv {
     const errors = validateSync(configEnv, {
       whitelist: true,
       forbidUnknownValues: false,
+      forbidNonWhitelisted: true,
     });
+
     if (errors.length) {
+      console.log({ errors });
       throw new Error(`Config validation errors: ${errors}`);
     }
     return configEnv;
@@ -74,10 +83,10 @@ export class ConfigEnv {
   SUPERADMIN_PASSWORD!: string;
 
   @IsDefined()
-  @IsString()
-  RUN_ENVIRONMENT!: string;
+  @IsEnum(RUN_ENVIRONMENT_OPTIONS)
+  RUN_ENVIRONMENT!: RUN_ENVIRONMENT_OPTIONS;
 
-  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === "pipeline")
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE)
   @IsDefined()
   @IsString()
   SCREENSHOTS_FOLDER!: string;
@@ -86,22 +95,22 @@ export class ConfigEnv {
   @IsString()
   TEST_COMPANY_REPLICA_NAME!: string;
 
-  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === "pipeline")
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE)
   @IsDefined()
   @IsString()
   COMMIT_FE!: string;
 
-  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === "pipeline")
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE)
   @IsDefined()
   @IsString()
   COMMIT_BE!: string;
 
-  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === "pipeline")
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE)
   @IsDefined()
   @IsString()
   COMMIT_REMOTEJS!: string;
 
-  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === "pipeline")
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE)
   @IsDefined()
   @IsString()
   JSON_REPORTS_FOLDER!: string;

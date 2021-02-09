@@ -1,8 +1,9 @@
 
 import { existsSync, readdirSync, readFileSync, unlinkSync } from "fs";
-import { CONFIG } from "../config";
+// import { CONFIG } from "../config";
 
-export function deleteMochaTestReports(specFileName: string) {
+export function deleteMochaTestReports(params: {CONFIG: any; specFileName: string}) {
+  const { CONFIG, specFileName } = params;
   const reportDir = `${CONFIG.JSON_REPORTS_FOLDER}/`;
   if (existsSync(reportDir)) {
     const files: string[] = [];
@@ -27,7 +28,8 @@ export function deleteMochaTestReports(specFileName: string) {
   }
 }
 
-export function deleteJunitTestReports(specFileName) {
+export function deleteJunitTestReports(params: {CONFIG: any; specFileName: string}) {
+  const { CONFIG, specFileName } = params;
   const reportDir = `${CONFIG.JSON_REPORTS_FOLDER}/junit/`;
   if (existsSync(reportDir)) {
     const files = readdirSync(reportDir);
