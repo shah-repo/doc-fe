@@ -19,6 +19,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
     loading,
     value,
     groups,
+    checkedGroups,
     ...props
   }: T) => {
 
@@ -40,19 +41,43 @@ export const withFBApprovers = <T extends FBApproversProps>(
 
       reaction( // React on approvers autocomplete changes
         () => formState?.inputState.get(name || "")?.value,
-        (value) => markGroupChecked(value),
+        (value) => {
+          markGroupChecked(value);
+
+          const approversWithSignatures = value?.map((approver) => ({
+            approver: { id: approver.id || null },
+            signatureGroupId: {
+              id: find(approversState?.checkedGroups, (group) => group.groupApprover === approver.id)?.id || null,
+            },
+          })) || [];
+          formState?.setFieldValue("approversWithSignatures", approversWithSignatures);
+        },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     React.useEffect(() => {
       reaction(
-        () => approversState?.groups,
-        () => {
-          approversState?.setCheckedGroups([]);
-        }
+        () => approversState?.data,
+        (response) => resetToInitialGroups(response),
       );
-    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const resetToInitialGroups = (requiredGroups) => {
+      const initialApprovers = workspaceState?.changeRequest?.formInput?.approversWithSignatures;
+      const initialIds = initialApprovers?.map((app) => app.signatureGroupId.id);
+      const initialGroups = requiredGroups?.reduce((acc, group) => {
+        if (includes(initialIds, group.id)) {
+          acc.push({
+            ...group,
+            groupApprover: find(initialApprovers, (app) => app.signatureGroupId.id === group.id).approver.id,
+          });
+        }
+        return acc;
+      }, []);
+      approversState?.setCheckedGroups(initialGroups || []);
+    };
 
     function getRequiredApprovers(documentRevisions: FBDocumentRevisionsValue[]) {
       const ids: string[] = map(documentRevisions, "proposedDocumentRevision.id");
@@ -60,7 +85,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
     }
 
     function includesApprover(group: FBRequiredApprover, approver: string): boolean {
-      return (map((group.joinedEmployees as FBJoinedEmployee[]), "id")).includes(approver);
+      return (group.joinedEmployees as string[]).includes(approver);
     }
 
     // eslint-disable-next-line react/display-name
@@ -79,24 +104,20 @@ export const withFBApprovers = <T extends FBApproversProps>(
       );
     };
 
-    isIncluded = (group: FBRequiredApprover): boolean =>
-      includes(map(approversState?.checkedGroups, "id"), group.id);
+    isIncluded = (group: FBRequiredApprover): boolean => includes(map(approversState?.checkedGroups, "id"), group.id);
 
     /** Check/uncheck DAM/POAM required approval groups based on autocomplete selection
    * @selectedUsers Current autocomplete selection.
    */
     const markGroupChecked = (selectedUsers: FBOption[]) => {
-      if (!selectedUsers || isEmpty(selectedUsers)) {
-        approversState?.setCheckedGroups([]);
-        return;
-      }
       const previousSelectionIds = approversState?.value || [];
       const newSelectionIds = map(selectedUsers, "id");
+      const requiredGroups = approversState?.data?.reverse();
       if (isARforPO) { // one user can fullfil only one signature requirement (POAM)
         if (!isEmpty(difference(newSelectionIds, previousSelectionIds))) { // user added
           const newUserId = last(difference(newSelectionIds, previousSelectionIds));
           const checkedGroup =
-            find(approversState?.data, (group) =>
+            find(requiredGroups, (group) =>
               includes(map((group.joinedEmployees as FBJoinedEmployee[]), "id"), newUserId)
               && !includes(approversState?.checkedGroups?.map((g) => g.id), group.id)) as FBRequiredApprover;
           if (!checkedGroup) {
@@ -112,7 +133,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
           approversState?.setCheckedGroups(newGroups || []);
         }
       } else { // user can fullfil all available signature requirements (DAM)
-        const newGroups = filter(approversState?.data, (group) =>
+        const newGroups = filter(requiredGroups, (group) =>
           map((group.joinedEmployees as FBJoinedEmployee[]), "id").some((employee) => value?.includes(employee)));
         approversState?.setCheckedGroups(newGroups);
       }
@@ -123,6 +144,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
       value = approversState?.value;
       groups = approversState?.groups;
       loading = approversState?.loading;
+      checkedGroups = approversState?.checkedGroups;
     });
 
     return Component({
