@@ -12,7 +12,6 @@ definitions:
       ports:
         - 1234:1234
   caches:
-    node-cy: node_modules
   steps:
     - step: &COMMON
         image:
@@ -82,7 +81,7 @@ definitions:
           services:
             - sorry-cypress-director
           caches:
-            - node-cy
+            - node
           artifacts:
             - test-results/**
           script:
@@ -91,7 +90,7 @@ definitions:
             - yarn install --frozen-lockfile
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
-            # - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
+            - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
@@ -240,12 +239,12 @@ pipelines:
           - name: CYPRESS_COMMIT_BE
           - name: CYPRESS_COMMIT_REMOTEJS
       - parallel: *RUN_CYPRESS_IN_PARALLEL
-  # TODO: uncomment!!
-  # pull-requests:
-  #   "**":
-  #     - parallel:
-  #         - step: *RUN_TESTS
-  #         - step: *RUN_LINTER
+
+  pull-requests:
+    "**":
+      - parallel:
+          - step: *RUN_TESTS
+          - step: *RUN_LINTER
 
   tags:
     deploy-to-dev:
@@ -274,7 +273,7 @@ pipelines:
           - step: *BUILD_SANDBOX
       - step: *DEPLOY_SANDBOX
     
-    run-cypress-on-dev:
+    run-parallel-cypress-on-dev:
       - parallel: *RUN_CYPRESS_IN_PARALLEL
     
     run-single-cypress-on-dev:

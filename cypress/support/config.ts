@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { plainToClass } from "class-transformer";
-import { IsBoolean, IsDefined, IsEmail, IsString, ValidateIf, validateSync } from "class-validator";
+import { IsBoolean, IsDefined, IsEmail, IsOptional, IsString, ValidateIf, validateSync } from "class-validator";
 
 export class ConfigEnv {
   private static instance: ConfigEnv;
@@ -23,12 +23,12 @@ export class ConfigEnv {
       SUPERADMIN_EMAIL: Cypress.env("SUPERADMIN_EMAIL"),
       SUPERADMIN_PASSWORD: Cypress.env("SUPERADMIN_PASSWORD"),
       RUN_ENVIRONMENT: Cypress.env("RUN_ENVIRONMENT"),
-      DIR_SCREENSHOTS: Cypress.env("DIR_SCREENSHOTS"),
+      SCREENSHOTS_FOLDER: Cypress.env("SCREENSHOTS_FOLDER"),
       TEST_COMPANY_REPLICA_NAME: Cypress.env("TEST_COMPANY_REPLICA_NAME"),
       COMMIT_FE: Cypress.env("COMMIT_FE"),
       COMMIT_BE: Cypress.env("COMMIT_BE"),
       COMMIT_REMOTEJS: Cypress.env("COMMIT_REMOTEJS"),
-      REPORTS_DIR: Cypress.env("REPORTS_DIR"),
+      JSON_REPORTS_FOLDER: Cypress.env("JSON_REPORTS_FOLDER"),
     });
 
     const errors = validateSync(configEnv, {
@@ -73,13 +73,17 @@ export class ConfigEnv {
   @IsString()
   SUPERADMIN_PASSWORD!: string;
 
+  @IsDefined()
+  @IsString()
   RUN_ENVIRONMENT!: string;
 
   @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === "pipeline")
   @IsDefined()
   @IsString()
-  DIR_SCREENSHOTS!: string;
+  SCREENSHOTS_FOLDER!: string;
 
+  @IsOptional()
+  @IsString()
   TEST_COMPANY_REPLICA_NAME!: string;
 
   @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === "pipeline")
@@ -100,7 +104,7 @@ export class ConfigEnv {
   @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === "pipeline")
   @IsDefined()
   @IsString()
-  REPORTS_DIR!: string;
+  JSON_REPORTS_FOLDER!: string;
 }
 
 

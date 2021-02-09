@@ -81,18 +81,23 @@ Cypress.on("test:after:run", (test, runnable: any ) => {
 
 before(() => {
   if (CONFIG.RUN_ENVIRONMENT === "pipeline") {
-    const dir = `${CONFIG.DIR_SCREENSHOTS}/${Cypress.spec.name}`;
-    cy.task("deleteScreenshotsFolder", dir);
-    cy.task("deleteExistingReports", { reportDir: CONFIG.REPORTS_DIR, testName: Cypress.spec.name });
+    cy.task("deleteScreenshotsFolder", Cypress.spec.name);
+    cy.task("deleteExistingReports", Cypress.spec.name );
   }
 });
 
 it("Server has correct commits code deployed", function()  {
-  // if( CONFIG.RUN_ENVIRONMENT === "pipeline") does not work!!
-  if (Cypress.env("RUN_ENVIRONMENT") === "pipeline") {
+  if (CONFIG.RUN_ENVIRONMENT === "pipeline") {
     cy.visit(`${CONFIG.FE_URL}/status`, { timeout: 20 * 1000 });
-    cy.get("[data-cy=\"status-frontend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_FE);
-    cy.get("[data-cy=\"status-backend-commit-hash\"] td:nth-child(2)").should("have.text", CONFIG.COMMIT_BE);
+
+    cy.get("[data-cy=\"status-frontend-commit-hash\"] td:nth-child(2)")
+      .should("have.text", CONFIG.COMMIT_FE);
+
+    cy.get("[data-cy=\"status-backend-commit-hash\"] td:nth-child(2)")
+      .should("have.text", CONFIG.COMMIT_BE);
+
+    cy.get("[data-cy=\"status-remote-js-validators-commit-hash\"] td:nth-child(2)")
+      .should("have.text", CONFIG.COMMIT_REMOTEJS);
   } else {
     this.skip();
   }
