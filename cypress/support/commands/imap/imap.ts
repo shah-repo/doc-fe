@@ -13,7 +13,7 @@ export async function getEmail(email) {
     {
       to: email,
       wait_time_sec: 5,
-      max_wait_time_sec: 20,
+      max_wait_time_sec: 30,
       include_body: true,
       after: myDate,
     }
@@ -27,19 +27,28 @@ export async function getEmail(email) {
 
 export async function getEmails(email, options?) {
   let mails = [];
-  const dateOffset = (15 * 1000);
-  const myDate = new Date();
-  myDate.setTime(myDate.getTime() - dateOffset);
+  let settings;
+
+  if (!options) {
+    const dateOffset = (20 * 1000);
+    const myDate = new Date();
+    myDate.setTime(myDate.getTime() - dateOffset);
+    settings =     {
+      to: email,
+      wait_time_sec: 5,
+      max_wait_time_sec: 30,
+      include_body: true,
+      after: myDate,
+    };
+  }
+  else {
+    settings = options;
+  }
+
   const messages = await gmail.check_inbox(
     path.resolve(__dirname, "../../../credentials/credentials.json"),
     path.resolve(__dirname, "../../../credentials/gmail_token.json"),
-    {
-      to: email,
-      wait_time_sec: 5,
-      max_wait_time_sec: 20,
-      include_body: true,
-      after: myDate,
-    }
+    settings
   );
   if (messages) {
     mails = messages;

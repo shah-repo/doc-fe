@@ -559,8 +559,14 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify email is not received for EQ-00001", () => {
-        cy.imapVerifyLastEmailIsNot({ userEmail: ADMIN_USER.email, documentId: "EQ-00001" });
-        cy.imapVerifyLastEmailIsNot({ userEmail: FIRST_USER.email, documentId: "EQ-00001" });
+        cy.imapVerifyLastEmailDoesNotContain({
+          userEmail: ADMIN_USER.email,
+          content: "EQ-00001 Equipment maintenance document due date in",
+        });
+        cy.imapVerifyLastEmailDoesNotContain({
+          userEmail: FIRST_USER.email,
+          content: "EQ-00001 Equipment maintenance document due date in",
+        });
       });
     });
   });
@@ -775,11 +781,15 @@ context("Test Equipment maintenance email notifications", () => {
         cy.wait(15000);
       });
 
-      it("Verify only one email is received for EQ-00002", () => {
-        cy.imapVerifyNumberOfEmailsReceivedInLastMin({ userEmail: FIRST_USER.email, emailCount: 1 });
-        cy.imapVerifyNumberOfEmailsReceivedInLastMin({ userEmail: ADMIN_USER.email, emailCount: 1 });
-        cy.imapVerifyLastEmailContains({ userEmail: FIRST_USER.email, content: "EQ-00002" });
-        cy.imapVerifyLastEmailContains({ userEmail: ADMIN_USER.email, content: "EQ-00002" });
+      it("Verify email is received for EQ-00002", () => {
+        cy.imapVerifyLastEmailContains({
+          userEmail: FIRST_USER.email,
+          content: "EQ-00002 Equipment maintenance document due date in 4 days",
+        });
+        cy.imapVerifyLastEmailContains({
+          userEmail: ADMIN_USER.email,
+          content: "EQ-00002 Equipment maintenance document due date in 4 days",
+        });
       });
 
       it("Trigger email script", () => {
@@ -791,8 +801,20 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify email is not sent again for EQ-00002", () => {
-        cy.imapVerifyNumberOfEmailsReceivedInLastMin({ userEmail: ADMIN_USER.email, emailCount: 0 });
-        cy.imapVerifyNumberOfEmailsReceivedInLastMin({ userEmail: FIRST_USER.email, emailCount: 0 });
+        const dateOffset = (15 * 1000);
+        const dateAfterEmailShouldArrive = new Date();
+        dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+
+        cy.imapVerifyNumberOfEmailsReceivedSince({
+          userEmail: FIRST_USER.email,
+          emailCount: 0,
+          date: dateAfterEmailShouldArrive,
+        });
+        cy.imapVerifyNumberOfEmailsReceivedSince({
+          userEmail: ADMIN_USER.email,
+          emailCount: 0,
+          date: dateAfterEmailShouldArrive,
+        });
       });
     });
   });
@@ -1007,11 +1029,15 @@ context("Test Equipment maintenance email notifications", () => {
         cy.wait(15000);
       });
 
-      it("Verify only one email is received for EQ-00003", () => {
-        cy.imapVerifyNumberOfEmailsReceivedInLastMin({ userEmail: FIRST_USER.email, emailCount: 1 });
-        cy.imapVerifyNumberOfEmailsReceivedInLastMin({ userEmail: ADMIN_USER.email, emailCount: 1 });
-        cy.imapVerifyLastEmailContains({ userEmail: FIRST_USER.email, content: "EQ-00003" });
-        cy.imapVerifyLastEmailContains({ userEmail: ADMIN_USER.email, content: "EQ-00003" });
+      it("Verify email is received for EQ-00003", () => {
+        cy.imapVerifyLastEmailContains({
+          userEmail: FIRST_USER.email,
+          content: "EQ-00003 Equipment maintenance document due date in 17 days",
+        });
+        cy.imapVerifyLastEmailContains({
+          userEmail: ADMIN_USER.email,
+          content: "EQ-00003 Equipment maintenance document due date in 17 days",
+        });
       });
 
       it("Trigger email script", () => {
@@ -1023,7 +1049,15 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify email is not sent again for EQ-00003", () => {
-        cy.imapVerifyNumberOfEmailsReceivedInLastMin({ userEmail: FIRST_USER.email, emailCount: 0 });
+        const dateOffset = (15 * 1000);
+        const dateAfterEmailShouldArrive = new Date();
+        dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+
+        cy.imapVerifyNumberOfEmailsReceivedSince({
+          userEmail: FIRST_USER.email,
+          emailCount: 0,
+          date: dateAfterEmailShouldArrive,
+        });
       });
     });
   });
@@ -1239,8 +1273,20 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify no email is received for EQ-00004", () => {
-        cy.imapVerifyNumberOfEmailsReceivedInLastMin({ userEmail: FIRST_USER.email, emailCount: 0 });
-        cy.imapVerifyNumberOfEmailsReceivedInLastMin({ userEmail: ADMIN_USER.email, emailCount: 0 });
+        const dateOffset = (15 * 1000);
+        const dateAfterEmailShouldArrive = new Date();
+        dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+
+        cy.imapVerifyNumberOfEmailsReceivedSince({
+          userEmail: FIRST_USER.email,
+          emailCount: 0,
+          date: dateAfterEmailShouldArrive,
+        });
+        cy.imapVerifyNumberOfEmailsReceivedSince({
+          userEmail: ADMIN_USER.email,
+          emailCount: 0,
+          date: dateAfterEmailShouldArrive,
+        });
       });
     });
   });
