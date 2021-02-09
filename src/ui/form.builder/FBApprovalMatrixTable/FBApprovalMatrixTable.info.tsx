@@ -1,6 +1,6 @@
 import { Box, Table, TableBody, TableHead, TableRow } from "@material-ui/core";
 import { keys, map, values } from "lodash";
-import React from "react";
+import React, { Fragment } from "react";
 import * as generateUuid from "uuid/v4";
 import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableInfoHead, FBApprovalMatrixTableProps, FBCheckbox, FBDocTypeGroup, FBMapWrapper, FBSelect, FBTableCell, FBTextField } from "..";
 
@@ -95,7 +95,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
           />
           <FBMapWrapper<string[]> collection={keys(FBApprovalMatrixTableInfoHead)}>
             {(key: keyof typeof FBApprovalMatrixTableInfoHead, index) => (
-              <>
+              <Fragment key={`fb-matrix-${index}`}>
                 {key === "trainingReq" && (
                   <FBTableCell>
                     <Box display="flex" justifyContent="center" pl={3}>
@@ -181,7 +181,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                     </Box>
                   </FBTableCell>
                 )}
-              </>
+              </Fragment>
             )}
           </FBMapWrapper>
         </TableRow>

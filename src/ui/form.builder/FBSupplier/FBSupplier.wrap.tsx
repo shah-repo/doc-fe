@@ -13,6 +13,7 @@ export const withFBSupplier = <T extends FBSupplierProps>(
     loading,
     disabled,
     isPreview,
+    isInputOwner,
     ...props
   }: T) => {
 
@@ -22,6 +23,8 @@ export const withFBSupplier = <T extends FBSupplierProps>(
     const { formState, workspaceState } = FB.useStores();
 
     isPreview = workspaceState?.mode === "preview";
+    isInputOwner = workspaceState?.getIsInputOwner(name);
+    disabled = !isInputOwner || disabled;
 
     // MARK: @reactions
     // on add supplier
