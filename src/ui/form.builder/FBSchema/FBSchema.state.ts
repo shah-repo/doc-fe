@@ -212,6 +212,17 @@ export class FBSchemaState {
       !item.deleted && item.type === type
     );
   };
+
+  public getNamesByType = (type?: FBInputType): string[] => {
+    if (!type) { return []; }
+    return this.getSchema().reduce((names: string[], item) => {
+      if (item.deleted || item.type !== type) { return names; }
+      if (item.name) {
+        names.push(item.name);
+      }
+      return names;
+    }, []);
+  };
 }
 
 export default FBSchemaState;

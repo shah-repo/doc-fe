@@ -16,6 +16,7 @@ export class FBInputState {
 
   public constructor({ value, hidden }: FBInputConstructor) {
     this.value = value;
+    this.autosaveNextValue = value;
     this.hidden = hidden;
   }
 
@@ -24,7 +25,7 @@ export class FBInputState {
   };
 
   @action public setAutosaveValue = (value: any) => {
-    this.autosavePrevValue = this.autosaveNextValue;
+    this.autosavePrevValue = cloneDeep(this.autosaveNextValue);
     set(this, "autosaveNextValue", cloneDeep(value));
   };
 

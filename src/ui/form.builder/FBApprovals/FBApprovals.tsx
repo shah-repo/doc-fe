@@ -1,15 +1,13 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBRequiredApprover, FBSection, FBText } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { ApprovalStatus } from "../../../state/ducks/common";
 import { DocumentStatus } from "../../../state/ducks/documents";
-import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
 import { FBProvider } from "../FBProvider";
-import { FBApprovalsProps } from "./FBApprovals.types";
+import { FBApprovalsProps, Owner } from "./FBApprovals.types";
 import { withFBApprovals } from "./FBApprovals.wrap";
 
 const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
@@ -33,6 +31,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
   isAlphaReleased,
   owners,
   showFieldOwnersWarning,
+  isContributorIncluded,
   ...props
 }) => (
   <FBProvider {...{ dialogState }}>
@@ -61,6 +60,21 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
           )}
         </FBMapWrapper>
       </Box>
+      {showFieldOwnersWarning && owners && <Box display="flex" flexWrap="wrap" mb={4}>
+        <FBMapWrapper<Owner[]> collection={owners}>
+          {(owner: Owner, id) => (
+            <Box display="flex" key={`fb-approvals-${id}`} mr={2.5} >
+              <CheckCircleIcon
+                data-cy={
+                  `fb-approvals-${owner.name}-check-${isContributorIncluded?.(owner.id) ? "marked" : "disabled"}`
+                }
+                color={isContributorIncluded?.(owner.id) ? "primary" : "disabled"}
+              />
+              <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={owner.name} />
+            </Box>
+          )}
+        </FBMapWrapper>
+      </Box>}
       <FBMapWrapper<FBInlineApprovalBody[]> collection={approvals}>
         {(approval: FBInlineApprovalBody, index) => (
           <Box
@@ -116,19 +130,6 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
           </Box>
         )}
       </FBMapWrapper>
-      {showFieldOwnersWarning && (
-        <Box bgcolor={Colors.light_red} display="flex">
-          <ReportProblemOutlinedIcon fontSize="small"/>
-          <Typography variant="h5" style={{ marginLeft: 8 }}>
-            <Text
-              translation="form.builder.owner.input.warning"
-              values={{
-                contributors: owners?.join(", "),
-              }}
-            />
-          </Typography>
-        </Box>
-      )}
     </FBInput>
   </FBProvider>
 );

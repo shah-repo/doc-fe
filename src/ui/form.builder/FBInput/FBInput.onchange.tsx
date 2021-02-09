@@ -22,9 +22,9 @@ export const withFBOnChange = <T extends FBInputProps>(
   }: T) => {
 
     const { formState, schemaState, workspaceState } = FB.useStores();
-    const inputValue = withState
-      ? formState?.getFieldValue(name)
-      : formState?.getInputState(name || "")?.value;
+    const inputValue =
+      formState?.getFieldValue(name) ||
+      formState?.getInputState(name || "")?.value;
     inputState = FB.useRef<FBInputState>(FBInputState, {
       value: inputValue,
       hidden,

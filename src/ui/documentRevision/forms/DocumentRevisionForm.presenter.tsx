@@ -152,6 +152,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const outputDocumentTypes = pmFormId ?
     initialValues.outputDocumentTypes :
     initialValues.formDocument?.formTemplate?.outputDocumentTypes;
+  const documentReferences = documentRevision?.referenceTo;
 
   isOwnerContext = React.createContext(isOwner);
   documentTypeContext = React.createContext(documentType);
@@ -284,7 +285,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <RevisionStage {...{ isDisabled, isDocRevFirstDraft, shouldShowRevStageForDocType }}/>
         <AvailableReferencesField
           availableReferences={availableReferences}
-          documentReferences={documentRevision?.referenceTo}
+          documentReferences={documentReferences}
           name="referenceTo"
           label="documentRevision.form.references"
           disabled={isDisabledInput}
