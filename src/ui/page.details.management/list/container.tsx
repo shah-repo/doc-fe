@@ -21,8 +21,8 @@ import { HOME_URL } from "../../constants/urls";
 import useDialog from "../../hooks/useDialog";
 import useGetHasTag from "../../hooks/useGetHasTag";
 import Colors from "../../layout/theme/utils/colors";
-import PageDetailsForm from "../add.page.details/container";
-import PageDetailsFormContainer from "../form/container";
+import { PageDetailsForm } from "../add.page.details/container";
+import { PageDetailsFormContainer } from "../form/container";
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({

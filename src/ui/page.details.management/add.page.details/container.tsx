@@ -72,5 +72,3 @@ export const PageDetailsForm: React.FunctionComponent<Props> = ({
     </Dialog>
   );
 };
-
-export default PageDetailsForm;

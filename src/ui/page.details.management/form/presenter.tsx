@@ -70,5 +70,3 @@ export const PageDetailsFormPresenter: React.FunctionComponent<Props> = ({
     </Grid>
 
   ); };
-
-export default PageDetailsFormPresenter;

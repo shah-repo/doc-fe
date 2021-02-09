@@ -59,5 +59,3 @@ export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({
     </Formik>
   );
 };
-
-export default PageDetailsFormContainer;
