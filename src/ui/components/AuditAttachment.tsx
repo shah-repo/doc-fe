@@ -27,6 +27,7 @@ export const AuditAttachment: React.FunctionComponent<Props> = ({
   React.useEffect(() => {
     if (auditValue === "undefined") { return; }
     try {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       auditValue = JSON.parse(auditValue);
     } catch {
       if (isString(auditValue)) {

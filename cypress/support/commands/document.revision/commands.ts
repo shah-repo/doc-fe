@@ -48,6 +48,7 @@ declare global {
       checkToastMessageContains(params: { message: string }): Chainable<Subject>;
       drCheckApprovalsEnforcment(): Chainable<Subject>;
       drVerifyFirstDocumentRevisionList(params: { revision: string }): Chainable<Subject>;
+      drApproveAndReleaseDocumentWithSelectingApprover(users: string[], params?: { toastifyExists: boolean }): Chainable<Subject>;
 
       /* Document Approval Matrix */
 
@@ -623,4 +624,33 @@ Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
 
 Cypress.Commands.add("drRequestAccessVisibility", (params: {isVisible: boolean}) => {
   cy.get(`[data-cy="PreviewControlsContainer-access"]`).should((params.isVisible ? "" : "not.") + "exist");
+});
+
+Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names: string[], params: { toastifyExists: boolean }) => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
+    cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+  });
+  cy.wait(500);
+  names.forEach((name) => {
+    cy.get(`[data-cy="field-approvals"]`).type(`${name}{enter}`);
+  });
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.ReleaseDocRev,
+    () => {
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+    });
+  if (params === undefined)
+  {
+    cy.checkToastMessage({ exists: false });
+  }
+  else {
+    if (params.toastifyExists)
+    {
+      cy.checkToastMessage({ exists: true });
+    }
+    else
+    {
+      cy.checkToastMessage({ exists: false });
+    }
+  }
 });

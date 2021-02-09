@@ -62,6 +62,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       const isFBField = change.field.includes("formInput");
       const isOmittedFB = (
         isFBField &&
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         !FBApprovalAuditState.docAudit.includes(change.fbSchemaItem?.type!)
       );
       if (isOmittedFB) { return; }

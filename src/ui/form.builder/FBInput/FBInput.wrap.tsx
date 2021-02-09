@@ -9,7 +9,7 @@ import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
-import { FBInputProps, OmitInputClones } from "../FBInput";
+import { FBInputProps, FBInputType, OmitInputClones } from "../FBInput";
 import { FB } from "../helpers";
 import { withFBOnChange } from "./FBInput.onchange";
 
@@ -53,11 +53,7 @@ export const withFBInput = <T extends FBInputProps>(
   }: T) => {
 
     const { formState, workspaceState, bookmarkState } = FB.useStores();
-    const {
-      isOutput,
-      document,
-      externalState: { auth: { user: { employeeId = "" } = {} } = {} } = {},
-    } = workspaceState || {};
+    const { isOutput } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
@@ -67,9 +63,8 @@ export const withFBInput = <T extends FBInputProps>(
     value = inputState?.value;
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
-    const inputOwner = document?.inputOwners?.[name];
-    isInputOwner = inputOwner === undefined ||
-      inputOwner === employeeId;
+    isInputOwner = workspaceState?.getIsInputOwner(name);
+    disabled = !isInputOwner || disabled;
 
     // Set validation scheme. This is union of scheme & comps configs.
     useEffect(() => {
@@ -139,7 +134,8 @@ export const withFBInput = <T extends FBInputProps>(
         ...(type !== "autocomplete" && { value }),
         ...(type === "textfield" && { error }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
-        ...( workspaceState?.mode === "preview" && { className: FBClasses.inputPreview }),
+        ...(workspaceState?.mode === "preview" && { className: FBClasses.inputPreview }),
+        ...(!isInputOwner && { className: FBClasses.nonOwner }),
       });
     }
 
@@ -164,6 +160,15 @@ export const withFBInput = <T extends FBInputProps>(
         () => inputState?.autosaveNextValue,
         (value) => {
           if (autosave && !isEqual(inputState?.autosavePrevValue, value)) {
+            if (type === "poreceive") {
+              submitForm({
+                type: type as FBInputType,
+                name,
+                prevValue: inputState?.autosavePrevValue,
+                nextValue: value,
+              });
+              return;
+            }
             submitForm();
           }
         }
