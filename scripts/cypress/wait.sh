@@ -26,5 +26,4 @@ until $(curl --output /dev/null --silent --head --fail $CYPRESS_FE_URL); do
     sleep 2
 done
 
-echo "1"
 echo ""
