@@ -40,7 +40,7 @@ export default (on, config) => {
     downloadFile,
     deleteScreenshotsFolder(params: {CONFIG: any; specFileName: string}) {
       const { CONFIG, specFileName } = params;
-      rmdirSync(`${CONFIG.SCREENSHOTS_FOLDER}/${specFileName}`, { recursive: true });
+      rmdirSync(`${CONFIG.SCREENSHOTS_DIR}/${specFileName}`, { recursive: true });
       return null;
     },
     deleteExistingReports(params: {CONFIG: any; specFileName: string}) {

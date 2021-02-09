@@ -29,7 +29,7 @@ export class ConfigEnv {
       SUPERADMIN_EMAIL: Cypress.env("SUPERADMIN_EMAIL"),
       SUPERADMIN_PASSWORD: Cypress.env("SUPERADMIN_PASSWORD"),
       RUN_ENVIRONMENT: Cypress.env("RUN_ENVIRONMENT"),
-      SCREENSHOTS_FOLDER: Cypress.env("SCREENSHOTS_FOLDER"),
+      SCREENSHOTS_DIR: Cypress.env("SCREENSHOTS_DIR"),
       TEST_COMPANY_REPLICA_NAME: Cypress.env("TEST_COMPANY_REPLICA_NAME"),
       COMMIT_FE: Cypress.env("COMMIT_FE"),
       COMMIT_BE: Cypress.env("COMMIT_BE"),
@@ -89,7 +89,7 @@ export class ConfigEnv {
   @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE)
   @IsDefined()
   @IsString()
-  SCREENSHOTS_FOLDER!: string;
+  SCREENSHOTS_DIR!: string;
 
   @IsOptional()
   @IsString()
