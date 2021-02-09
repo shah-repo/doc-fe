@@ -72,6 +72,7 @@ export interface PageDetailsAddNew {
 }
 
 export interface PageDetails {
+  id: string;
   addNewBtnLabel: string;
   columns: PageDetailsColumn[];
   category: string;
