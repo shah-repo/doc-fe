@@ -2,7 +2,7 @@
 import { plainToClass } from "class-transformer";
 import { IsBoolean, IsDefined, IsEmail, IsEnum, IsOptional, IsString, ValidateIf, validateSync } from "class-validator";
 
-enum RUN_ENVIRONMENT_OPTIONS {
+export enum RUN_ENVIRONMENT_OPTIONS {
   LOCALDEV = "LOCALDEV",
   LOCALPARALLEL = "LOCALPARALLEL",
   PIPELINE = "PIPELINE"
