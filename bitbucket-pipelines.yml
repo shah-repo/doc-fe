@@ -216,7 +216,7 @@ definitions:
 # Pipelines
 #
 pipelines:
-  default:
+  foo:
       - variables:
           - name: CYPRESS_FE_URL
           - name: CYPRESS_BE_URL
