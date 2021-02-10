@@ -12,6 +12,7 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
   gutter,
   disabled,
   loading,
+  defaultValue,
   groups = {},
 }) => (
   <FBInput {...{ name, gutter, disabled }} type="approvers">
@@ -25,7 +26,7 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
       gutter={false}
       omitFormValue={true}
       name={`fb-approvers-${name}`}
-      {...{ loading, renderOption }}
+      {...{ loading, renderOption, defaultValue }}
     />
     <Box display="flex" flexWrap="wrap">
       <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>

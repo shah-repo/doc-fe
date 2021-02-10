@@ -15,11 +15,12 @@ export const withFBApprovers = <T extends FBApproversProps>(
     renderOption,
     isIncluded,
     approversState,
-    name,
+    name = "",
     loading,
     value,
     groups,
     checkedGroups,
+    defaultValue = [],
     ...props
   }: T) => {
 
@@ -32,6 +33,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
     approversState = FB.useRef(FBApproversState, { documentRevisions, formValue });
     const isARforPO = Boolean(find(workspaceState?.changeRequest?.documentRevisions,
       (revision) => checkIsDocumentPO(revision.document?.documentType?.groupOptions)));
+    defaultValue = formState?.getFieldValue(name)?.map((app) => app.approver);
 
     React.useEffect(() => {
       reaction( // React on documentRevisions comp changes
@@ -65,7 +67,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
     }, []);
 
     const resetToInitialGroups = (requiredGroups) => {
-      const initialApprovers = workspaceState?.changeRequest?.formInput?.approversWithSignatures;
+      const initialApprovers = workspaceState?.changeRequest?.formInput?.[name];
       const initialIds = initialApprovers?.map((app) => app.signatureGroupId.id);
       const initialGroups = requiredGroups?.reduce((acc, group) => {
         if (includes(initialIds, group.id)) {
@@ -155,6 +157,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
       name,
       value,
       groups,
+      defaultValue,
     });
   };
 
