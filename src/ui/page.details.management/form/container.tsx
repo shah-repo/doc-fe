@@ -6,7 +6,7 @@ import { pageDetailsActions } from "../../../state/ducks/pageDetails";
 import { toastError } from "../../components/notifications";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
-import { toPageDetailsBodyValues, toPageDetailsIntialValues } from "../transform";
+import { toPageDetailsBodyValues, toPageDetailsInitialValues } from "../transform";
 import { PageDetailsCategory } from "../types";
 import { PageDetailsFormPresenter } from "./presenter";
 
@@ -24,7 +24,7 @@ export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({
     },
   });
   const { id } = pageDetails;
-  const initialValues = toPageDetailsIntialValues(pageDetails);
+  const initialValues = toPageDetailsInitialValues(pageDetails);
   const transitionLabel =  "common.delete";
 
   const updatePageDetailsAction = useActionCreator(pageDetailsActions.updatePageDetails);
