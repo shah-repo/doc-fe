@@ -33,7 +33,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
     approversState = FB.useRef(FBApproversState, { documentRevisions, formValue });
     const isARforPO = Boolean(find(workspaceState?.changeRequest?.documentRevisions,
       (revision) => checkIsDocumentPO(revision.document?.documentType?.groupOptions)));
-    defaultValue = formState?.getFieldValue(name)?.map((app) => app.approver);
+    defaultValue = formState?.getFieldValue(name)?.map((app) => app.approver || app); // ENC-6598 - app.approver for new structure, app for old structure
 
     React.useEffect(() => {
       reaction( // React on documentRevisions comp changes
