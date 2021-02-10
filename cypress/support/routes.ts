@@ -72,6 +72,7 @@ export enum CyRoutes {
   DeleteLogout = "DeleteLogout",
   GetDocRevs = "GetDocRevs",
   SessionDetails = "SessionDetails",
+  PatchDocRevOwner = "PatchDocRevOwner"
 }
 
 export const routes: ICyRoutes =   {
@@ -167,6 +168,12 @@ export const routes: ICyRoutes =   {
     callConfig: {
       responseTimeout: 15 * 1000,
       requestTimeout: 10 * 1000,
+    },
+  },
+  PatchDocRevOwner: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/document_revisions/*/owner_change",
     },
   },
   GetDocDynamicForm: {
