@@ -18,12 +18,11 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
     controls,
     disabled,
     isInputOwner,
+    name = "",
     ...props
   }: T) => {
     const intl = useIntl();
     const { formState, workspaceState } = FB.useStores();
-    // prop name has to be used like this, if not value of rb is always undefined
-    const { name = "" } = props;
 
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
@@ -50,6 +49,7 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
       controls,
       disabled,
       options,
+      name,
     });
   };
 
