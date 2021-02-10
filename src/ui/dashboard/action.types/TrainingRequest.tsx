@@ -21,7 +21,7 @@ export const TrainingRequest: React.FunctionComponent<Props> = ({
   const intl = useIntl();
   const [title] = useState(intl.formatMessage(
     { id: "dashboard.title.training" },
-    { docId: trainingRecord?.trainingPlan?.document.docId },
+    { docId: trainingRecord?.trainingPlan?.document?.docId },
   ));
   const [description] = useState(intl.formatMessage(
     { id: "dashboard.assigned.training" },
@@ -40,7 +40,7 @@ export const TrainingRequest: React.FunctionComponent<Props> = ({
 
   return (
     <DashboardActionTypeBase
-      url={documentDetailsPath(trainingRecord.trainingPlan?.document.id || "")}
+      url={documentDetailsPath(trainingRecord.trainingPlan?.document?.id || "")}
       alert={isDue}
       {...{
         alertMessage,
