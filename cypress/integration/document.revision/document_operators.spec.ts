@@ -322,13 +322,21 @@ context("Document Operators Access Test", () => {
   });
 
 
-  context(`Add new textbox field for operator '${USERS[4].name}'`, () => {
+  context(`Fill textbox field with operator '${USERS[4].name}'`, () => {
     it("Navigates to document list", () => {
       cy.navigToRecords();
     });
 
     it("Filter document by name and status, and select it", () => {
       cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
+    });
+
+    it("Check field for first operator is not disabled", () => {
+      cy.get("[name^='text-field-for']").should("not.be.disabled");
+    });
+
+    it("Check field for second operator is not disabled", () => {
+      cy.get("[name^='new-text-field-for']").should("not.be.disabled");
     });
 
     it("Fill value for FB textbox field", () => {

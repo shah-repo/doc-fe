@@ -360,11 +360,11 @@ context("Document Field Owners Test", () => {
     });
 
     it("Check field from first colaborator is disabled", () => {
-      cy.get("[name^='text-field-for']").should("be.be.disabled");
+      cy.get("[name^='text-field-for']").should("be.disabled");
     });
 
     it("Check field from second colaborator is disabled", () => {
-      cy.get("[name^='new-text-field-for']").should("be.be.disabled");
+      cy.get("[name^='new-text-field-for']").should("be.disabled");
     });
   });
 
