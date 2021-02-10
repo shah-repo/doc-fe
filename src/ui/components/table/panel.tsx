@@ -72,10 +72,8 @@ export function TablePanel<T extends any>({
     if (didMount) {
       queryApi();
     }
-  }, [tableCriteria.queryDict]);
-  useEffect(() => {
-    queryApi();
-  }, []);
+  }, [tableCriteria.queryDict, didMount]);
+
   useEffect(() => {
     if (tableCriteria.forceUpdate) {
       queryApi();
@@ -179,6 +177,7 @@ export function TablePanel<T extends any>({
         if (normalizrSchema) {
           const { entities, result } = resp.data;
           resp.data = denormalize(result, normalizrSchema, entities);
+          console.log({ resp });
         }
 
         return resp;
@@ -197,6 +196,7 @@ export function TablePanel<T extends any>({
         setIsLoading(false);
       })
       .catch((exception) => {
+        console.log({ exception });
         if (axios.isCancel(exception)) {
           return;
         }
