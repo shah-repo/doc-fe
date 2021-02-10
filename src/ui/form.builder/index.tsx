@@ -137,6 +137,9 @@ export * from "./FBFieldTopBar/FBFieldTopBar.types";
 export { default as FBFieldWrapper } from "./FBFieldWrapper/FBFieldWrapper";
 export { default as FBFieldWrapperState } from "./FBFieldWrapper/FBFieldWrapper.state";
 export * from "./FBFieldWrapper/FBFieldWrapper.types";
+export { default as FBFileDescription } from "./FBFileDescription/FBFileDescription";
+export { default as FBFileDescriptionActions } from "./FBFileDescription/FBFileDescription.actions";
+export * from "./FBFileDescription/FBFileDescription.types";
 export { default as FBFileField } from "./FBFileField/FBFileField";
 export { default as FBFileFieldState } from "./FBFileField/FBFileField.state";
 export * from "./FBFileField/FBFileField.types";
@@ -329,4 +332,5 @@ export { default as FBWorkspaceTplActions } from "./FBWorkspaceTplActions/FBWork
 export * from "./FBWorkspaceTplActions/FBWorkspaceTplActions.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
+
 

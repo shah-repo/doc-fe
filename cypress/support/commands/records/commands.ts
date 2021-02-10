@@ -14,9 +14,26 @@ declare global {
       recSelectRecordFormFromMultiSelect( params: {recordType: string; recordForm?: string} ): Chainable<Subject>;
       inspecSelectRecordFormFromMultiSelect( params: {recordType: string; recordForm?: string} ): Chainable<Subject>;
       recCheckRevisionStage(params: {stage: string}): Chainable<Subject>;
+      recFilterRecordListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
     }
   }
 }
+
+Cypress.Commands.add("recFilterRecordListByNameAndStatus", (params: { title: string; status: string }) => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
+    cy.get("#clearFilter").click();
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
+    cy.get("#name").type(params.title).wait(500);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
+    cy.get("[id=\"mui-component-select-displayStatus\"]").click().wait(300);
+    cy.get("li[data-value]").contains(params.status).click();
+  });
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
+    cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
+  });
+});
 
 Cypress.Commands.add("recCreateRecordFromLandingPage", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {

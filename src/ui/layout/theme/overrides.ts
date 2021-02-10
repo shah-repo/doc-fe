@@ -179,6 +179,11 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiFormControl: {
     root: {
       fontFamily: "Open Sans, sans-serif;",
+      [`& .${FBClasses.nonOwner}`]: {
+        [`& .Mui-disabled`]: {
+          backgroundColor: Colors.light_gray,
+        },
+      },
       [`& .${FBClasses.inputPreview}`]: {
         [`& .Mui-disabled`]: {
           color: `${appTheme.palette.text.primary} !important`,

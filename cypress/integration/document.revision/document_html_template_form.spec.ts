@@ -1,3 +1,5 @@
+import moment from "moment";
+import "moment-timezone";
 import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -7,6 +9,7 @@ let loginResponse;
 let multipleCompanies;
 
 const documentRevisionName = "New HTML Template Document Revision";
+const currentDate = moment().tz("America/Los_Angeles").format("MMMM Do YYYY");
 let customFieldId;
 let docRevisionId;
 let baererSessionId;
@@ -107,7 +110,7 @@ context("Document HTML template form", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
@@ -186,7 +189,22 @@ context("Document HTML template form", () => {
 
     it("Enter html code into 'Render HTML' field", () => {
       cy.drEnterHtmlText({
-        htmlText: `<html><body><h1>Heading - {{}{{}documentRevision.formInput.${customFieldId}}} </h1><p>Paragraph.</p></body></html>`,
+        htmlText:
+          `<html>` +
+            `<body>` +
+              `<h1>Heading - {{}{{}documentRevision.formInput.${customFieldId}}} </h1><p>Paragraph.</p>` +
+              `<div><strong>Name</strong>` +
+                `{{}{{}#documentRevision.changeRequest.approvals}}` +
+                `<ul><li>{{}{{}approver.user.name}}</li></ul>` +
+                `{{}{{}/documentRevision.changeRequest.approvals}}` +
+              `</div>` +
+              `<div><strong>Date & Signature</strong>` +
+                `{{}{{}#validApprovalDates}}` +
+                `<ul><li>{{}{{}reviewedAt}}</li></ul>` +
+                `{{}{{}/validApprovalDates}}` +
+              `</div>` +
+            `</body>` +
+          `</html>`,
       });
     });
 
@@ -220,7 +238,8 @@ context("Document HTML template form", () => {
     });
 
     it("Approve and Release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      // cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`, `${USERS[3].name}`]);
     });
 
     it("Navigates to document list", () => {
@@ -237,7 +256,7 @@ context("Document HTML template form", () => {
           }
         });
       }).as("response");
-      cy.drFilterDocListByNameAndStatus({ title: documentRevisionName, status: "Released" });
+      cy.drFilterDocListByNameAndStatus({ title: documentRevisionName, status: "None" });
       cy.wait("@response");
     });
 
@@ -251,7 +270,19 @@ context("Document HTML template form", () => {
       }).then((response) => {
         const responseBody = response.body.toString();
         expect(responseBody)
-          .to.have.string("<html><body><h1>Heading - First entry </h1><p>Paragraph.</p></body></html>");
+          .to.have.string(
+            `<html>` +
+              `<body>` +
+                `<h1>Heading - First entry </h1><p>Paragraph.</p>`)
+          .and.have.string(
+            `<div>` +
+              `<strong>Name</strong>` +
+              `<ul><li>${USERS[1].name}</li></ul>` +
+              `<ul><li>${USERS[3].name}</li></ul>` +
+              `<ul><li>${USERS[2].name}</li></ul>` +
+            `</div>`)
+          .and.have.string(`<strong>Date & Signature</strong>`)
+          .and.have.string(`${currentDate}`);
       });
     });
   });

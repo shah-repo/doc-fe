@@ -2,9 +2,7 @@ import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, siz
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
-import { FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType, FBTextEditor } from "..";
-import { FBActionField } from "../FBActionField";
-import { FBApproval } from "../FBApproval";
+import { FBActionField, FBApproval, FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType, FBTextEditor } from "..";
 import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
 import { FBApprovals } from "../FBApprovals";
 import { FBApprovers } from "../FBApprovers";
@@ -212,6 +210,17 @@ export class FBSchemaState {
     return filter(this.getSchema(), (item) =>
       !item.deleted && item.type === type
     );
+  };
+
+  public getNamesByType = (type?: FBInputType): string[] => {
+    if (!type) { return []; }
+    return this.getSchema().reduce((names: string[], item) => {
+      if (item.deleted || item.type !== type) { return names; }
+      if (item.name) {
+        names.push(item.name);
+      }
+      return names;
+    }, []);
   };
 }
 

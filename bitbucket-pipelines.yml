@@ -44,7 +44,7 @@ definitions:
         artifacts:
           - eslint-results/**
         script:
-          - yarn install --frozen-lockfile
+          - NODE_ENV=development yarn install --frozen-lockfile
           - ./aws/bash_scripts/runUnusedExportsCheck.sh
           - ./aws/bash_scripts/runLinter.sh
 
@@ -58,7 +58,7 @@ definitions:
           - test-results/**
           - jest-config/**
         script:
-          - yarn install --frozen-lockfile
+          - NODE_ENV=development yarn install --frozen-lockfile
           - ./aws/bash_scripts/runTests.sh
     #
     # DEV
@@ -167,10 +167,7 @@ pipelines:
       - step: *DEPLOY_DEV2
 
     deploy-to-demo:
-      - parallel:
-          - step: *RUN_TESTS
-          - step: *RUN_LINTER
-          - step: *BUILD_DEMO
+      - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO
 
     deploy-to-prod:

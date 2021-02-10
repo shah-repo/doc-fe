@@ -116,6 +116,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         : procedureFormState?.parts;
 
       if (!isEmpty(relation)) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         filtered = filter(data, (option) => relation!.includes(option.id));
       }
       filtered = filter(filtered, (option) => {

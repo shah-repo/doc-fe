@@ -1,15 +1,32 @@
 import { includes, isUndefined, set, truncate } from "lodash";
-import { action, observable } from "mobx";
+import { action, observable, reaction } from "mobx";
 import { FBAttachment, FBFilePresenterDownloadType } from "..";
 import { Attachment, AttachmentDownloadResponse, AttachmentType } from "../../../state/ducks/attachments";
 import { ATTACHMENT_ROOT_URL } from "../../../state/ducks/attachments/constants";
 import { VIEWABLE_FILES, WATERMARK_FILES } from "../../components/common/view.file/utils/constants";
+import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
 export class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, Attachment> {
   @observable public toolsVisible?: boolean;
-  public file: FBAttachment | undefined;
+  public file?: FBAttachment;
   public downloadType?: FBFilePresenterDownloadType;
+
+  public attachmentApi: FBRequest<FBAttachment, Partial<FBAttachment>> = new FBRequest();
+
+  constructor(file?: FBAttachment) {
+    super();
+    this.file = file;
+
+    reaction(
+      () => this.attachmentApi.loading,
+      (loading) => (this.loading = loading),
+    );
+  }
+
+  @action public setToolsVisible = (state: boolean) => {
+    set(this, "toolsVisible", state);
+  };
 
   public get fileId(): string | undefined {
     return this.file?.id;
@@ -46,10 +63,6 @@ export class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, 
     return includes(WATERMARK_FILES, this.fileType);
   }
 
-  public setFile = (file: Attachment) => {
-    set(this, "file", file);
-  };
-
   public setDownloadType = (type: FBFilePresenterDownloadType) => {
     this.downloadType = type;
     if (this.file?.url) { return; }
@@ -63,15 +76,23 @@ export class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, 
     this.fetch();
   };
 
+  public patchFile = (values: Partial<FBAttachment>) => {
+    const { id } = this.file || {};
+    if (!id) { return; }
+    this.attachmentApi.set({
+      url: FBEndpoint.AttachmentPatch,
+      urlValues: { id },
+      body: values,
+      method: "patch",
+    });
+  };
+
   private attachmentType = (file: Attachment): AttachmentType | undefined => {
     if (isUndefined(file)) { return; }
     return !file.s3linkCleanCopy
       ? AttachmentType.Attached
       : AttachmentType.CleanCopy;
   };
-
-  @action public setToolsVisible = (state: boolean) =>
-    set(this, "toolsVisible", state);
 }
 
 export default FBFilePresenterState;

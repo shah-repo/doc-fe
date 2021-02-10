@@ -80,9 +80,9 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             borderRight={0}
             borderTop={0}
             borderColor={Colors.hint_gray}
+            key={`fb-procedure-item-${type}-${index}`}
           >
             <Box
-              key={`fb-procedure-item-${type}-${index}`}
               display="flex"
               bgcolor={(item.status || "none") === "none" ? "white" : FBPartItemStatusBg[item.status || ""]}
               p={1.5}
