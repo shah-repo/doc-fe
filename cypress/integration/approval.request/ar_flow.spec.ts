@@ -299,7 +299,7 @@ context("Approval request form", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
-      cy.arClearFilter();
+      cy.alClearFilters();
       cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Approved" });
     });
 

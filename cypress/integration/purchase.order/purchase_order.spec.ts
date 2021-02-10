@@ -189,7 +189,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.CompanyMine, CyRoutes.DocRevGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.CompanyMine], () => {
         cy.poAddNewFieldItem();
       });
     });
