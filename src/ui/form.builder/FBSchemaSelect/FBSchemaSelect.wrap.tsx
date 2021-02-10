@@ -1,8 +1,7 @@
 import { omit } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBSchemaSelectProps, FBSchemaSelectState } from ".";
-import { FB, FBSchemaProps } from "..";
+import { FB, FBSchemaProps, FBSchemaSelectProps, FBSchemaSelectState } from "..";
 
 export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
   Component: React.FunctionComponent<T>

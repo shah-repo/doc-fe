@@ -1,5 +1,5 @@
 import React from "react";
-import { FBSchemaSelectProps } from ".";
+import { FBSchemaSelectProps } from "..";
 import { FBAutocomplete } from "../FBAutocomplete";
 import { withFBSchemaSelect } from "./FBSchemaSelect.wrap";
 
