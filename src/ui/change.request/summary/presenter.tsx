@@ -1,5 +1,6 @@
 import { Box, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
 import { FormikProps } from "formik";
+import { cloneDeep } from "lodash";
 import React from "react";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
@@ -9,6 +10,7 @@ import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
+import { FB } from "../../form.builder";
 import { ChangeRequestFormValues } from "../form/types";
 import Approvers from "./approvers";
 import SummaryHeader from "./SummaryHeader";
@@ -44,6 +46,13 @@ export const Presenter: React.FunctionComponent<Props> = ({
   FBContainer,
 }) => {
   const classes = styles();
+
+  const { formState } = FB.useStores();
+
+  // fix for Approvers not changing in AR in review state
+  if (formState?.getValues()) {
+    dataProp.formInput = cloneDeep(formState?.getValues());
+  }
 
   return (
     <Box>
