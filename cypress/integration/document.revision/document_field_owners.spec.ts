@@ -369,11 +369,11 @@ context("Document Field Owners Test", () => {
   });
 
   context("Check all colaborators must be on approvals list", () => {
-    it("Add Owner as Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[6].name });
+    it("Add first colaborator as Approver on document", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
     });
 
-    it("Add first colaborator as Approver on document", () => {
+    it("Add second colaborator as Approver on document", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
     });
 
@@ -384,16 +384,37 @@ context("Document Field Owners Test", () => {
       });
     });
 
-    it("Add second colaborator as Approver on document", () => {
+    it("Add third colaborator as Approver on document", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[4].name });
     });
-  });
 
-  context("Submit for approval and approve as owner", () => {
     it("Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
+    });
+
+    it(`Logout as current user`, () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[2].email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Select company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Navigates to document list", () => {
+      cy.navigToRecords();
+    });
+
+    it("Filter document by name and status, and select it", () => {
+      cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "In Review" });
     });
 
     it("Approve record button click", () => {
