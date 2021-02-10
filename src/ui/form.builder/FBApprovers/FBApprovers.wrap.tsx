@@ -40,7 +40,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
       );
 
       reaction( // React on approvers autocomplete changes
-        () => formState?.inputState.get(name || "")?.value,
+        () => formState?.inputState.get(`fb-approvers-${name}` || "")?.value,
         (value) => {
           markGroupChecked(value);
 
@@ -50,7 +50,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
               id: find(approversState?.checkedGroups, (group) => group.groupApprover === approver.id)?.id || null,
             },
           })) || [];
-          formState?.setFieldValue("approversWithSignatures", approversWithSignatures);
+          formState?.setFieldValue(name, approversWithSignatures);
         },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
