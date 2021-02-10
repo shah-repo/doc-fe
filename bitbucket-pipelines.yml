@@ -216,7 +216,8 @@ definitions:
 # Pipelines
 #
 pipelines:
-  foo:
+  custom: 
+    run-cypress-on-dev-bbrun-single:
       - variables:
           - name: CYPRESS_FE_URL
           - name: CYPRESS_BE_URL
@@ -228,8 +229,7 @@ pipelines:
       - step: 
           <<:  *COMMON_RUN_CYPRESS
           name: Cypress specs local test
-  custom: 
-    run-cypress-on-dev:
+    run-cypress-on-dev-bbrun-parallel:
       - variables:
           - name: CYPRESS_FE_URL
           - name: CYPRESS_BE_URL

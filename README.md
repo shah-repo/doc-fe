@@ -346,7 +346,7 @@ context("Example", () => {
 
 4. Run bbrun in another shell
     ```
-    yarn run bbrun --pipeline "default" --env "$(cat cy_pipeline_locally.env | paste -sd'~' | sed -e 's/~/, /g')"
+    yarn run bbrun --pipeline "custom:run-cypress-on-dev-bbrun-parallel" --env "$(cat cy_pipeline_locally.env | paste -sd'~' | sed -e 's/~/, /g')"
     ```
 5. To stop specs container, run
     ```
