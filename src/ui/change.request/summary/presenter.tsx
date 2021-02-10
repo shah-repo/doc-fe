@@ -34,9 +34,9 @@ interface OwnProps extends DataProps<ChangeRequest> {
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
-export type Props = OwnProps & FormikProps<ChangeRequestFormValues>;
+type Props = OwnProps & FormikProps<ChangeRequestFormValues>;
 
-export const Presenter: React.FunctionComponent<Props> = ({
+const Presenter: React.FunctionComponent<Props> = ({
   dataProp,
   asyncState,
   canEdit,
