@@ -2,6 +2,7 @@
 import { Box, CircularProgress } from "@material-ui/core";
 import axios, { AxiosRequestConfig } from "axios";
 import { debounce, set, sortBy as lodashSortBy } from "lodash";
+import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,6 +36,7 @@ export function TablePanel<T extends any>({
   tableName,
   providedData,
   rootCustomStyle,
+  normalizrSchema,
 }: Props<T>) {
   const didMount = useDidMount();
   let lastQueryValue = "";
@@ -148,6 +150,10 @@ export function TablePanel<T extends any>({
       store.getState().auth.user.employeeId
     }:${store.getState().auth.user.sessionId}`;
 
+    if (normalizrSchema) {
+      requestConfig.headers["x-enlil-normalizr-response"] = true;
+    }
+
     setIsLoading(true);
     dispatch(
       tableSearchActions.setData(
@@ -169,6 +175,14 @@ export function TablePanel<T extends any>({
 
     apiClient
       .request(requestConfig)
+      .then((resp) => {
+        if (normalizrSchema) {
+          const { entities, result } = resp.data;
+          resp.data = denormalize(result, normalizrSchema, entities);
+        }
+
+        return resp;
+      })
       .then(({ data }) => {
         if (customDataSet) {
           data = customDataSet(data);
