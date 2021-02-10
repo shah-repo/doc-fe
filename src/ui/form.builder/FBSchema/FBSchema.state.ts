@@ -2,7 +2,7 @@ import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, siz
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
-import { FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType } from "..";
+import { FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType, FBTextEditor } from "..";
 import { FBActionField } from "../FBActionField";
 import { FBApproval } from "../FBApproval";
 import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
@@ -41,7 +41,6 @@ import { FBSubsection } from "../FBSubsection";
 import FBSupplier from "../FBSupplier/FBSupplier";
 import { FBTask } from "../FBTask";
 import { FBTestRequirement } from "../FBTestRequirement";
-import { FBTextEditor } from "../FBTextEditor";
 import { FBTextField } from "../FBTextField";
 import { FBTextFieldWithRange } from "../FBTextFieldWithRange";
 import { FBTimerField } from "../FBTimerField";
