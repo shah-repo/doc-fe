@@ -1,6 +1,5 @@
 import { Box, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { cloneDeep } from "lodash";
 import React from "react";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
@@ -51,7 +50,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
 
   // fix for Approvers not changing in AR in review state
   if (formState?.getValues()) {
-    dataProp.formInput = cloneDeep(formState?.getValues());
+    dataProp.formInput = formState?.getValues();
   }
 
   return (
