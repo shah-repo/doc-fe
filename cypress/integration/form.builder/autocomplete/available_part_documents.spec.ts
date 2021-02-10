@@ -12,7 +12,7 @@ let multipleCompanies;
 let secondEmployee;
 const partsName = `Parts ${Cypress.moment().format("X")}`;
 
-context("FORM Field test", () => {
+context("Autocomplete 'Available Part Documents' test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -25,13 +25,7 @@ context("FORM Field test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -103,6 +97,7 @@ context("FORM Field test", () => {
 
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
+        cy.wait(8000);
       });
 
       it("Approve and release FORM document", () => {
@@ -180,6 +175,7 @@ context("FORM Field test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
+            cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
               .find("[data-cy^=\"test-label-\"]").click();
 

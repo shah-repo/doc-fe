@@ -28,13 +28,7 @@ context("Approval request form scenario", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[20].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[24].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[21], USERS[22], USERS[23]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
@@ -93,10 +87,11 @@ context("Approval request form scenario", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Approval request' outputdocument type",
-      () => {
+    it("Click on 'Approval request' outputdocument type", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
         cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
       });
+    });
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
@@ -237,7 +232,7 @@ context("Approval request form scenario", () => {
     //  approvers 'In_review' should be enabled now 'ENC-4797'
     it("Check 'Approvers' are not disabled", () => {
       SystemRequirement("REQ-0850");
-      cy.get("[data-cy=\"approvers\"] input").should("not.be.disabled");
+      cy.get("input[data-cy=\"approvers\"]").should("not.be.disabled");
     });
   });
 

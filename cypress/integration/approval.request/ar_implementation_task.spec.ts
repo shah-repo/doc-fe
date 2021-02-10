@@ -32,13 +32,7 @@ context("Approval request implementation tasks", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
@@ -148,7 +142,9 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click on 'Approval request' outputdocument type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
+        cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
+      });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -164,6 +160,7 @@ context("Approval request implementation tasks", () => {
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
+      cy.wait(8000);
     });
 
     it("Approve and release document", () => {
@@ -220,7 +217,9 @@ context("Approval request implementation tasks", () => {
       cy.get("[data-cy=\"description\"]").next().type("Task Description");
       cy.get("[data-cy=\"assigned\"]").type(`${USERS[2].email}{downarrow}{enter}`);
       cy.poAddDateRequired();
-      cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostTasks, () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
+      });
     });
 
     it("Add description 'Test' to trigger autosave", () => {
