@@ -1,11 +1,10 @@
 import { Box, createStyles, makeStyles, Theme } from "@material-ui/core";
 import { useFormikContext } from "formik";
-import { findIndex } from "lodash";
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ValueType } from "react-select";
 import { Permission } from "../../../../state/ducks/auth/types";
-import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
@@ -39,13 +38,11 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   isDisabled = false,
   outputDocs,
 }) => {
-  const dispatch = useDispatch();
   const formik = useFormikContext();
   const { workspaceState } = FB.useStores();
   const classes = styles();
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeFormOptions);
   const documentTypesById = useSelector(documentTypeSelectors.byId);
-  const unitMeasures = useSelector(documentRevisionsSelectors.getUnitMeasures);
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
   const outputDocumentTypeOptions: OptionType[] = React.useMemo(
     () =>
@@ -71,18 +68,12 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
       ...formik.values as Partial<DocumentRevision>,
       outputDocumentTypes: value as OptionType[],
     };
-    const schema = getFBSchemeByDocType(
+    const scheme = getFBSchemeByDocType(
       formValue,
       documentTypesById,
       workspaceState?.getSchema(),
     );
-    const indexOfUnits = findIndex(schema, { name: "unit-of-measure" });
-    const newSchema = [...schema];
-    if (indexOfUnits !== -1) {
-      dispatch(documentRevisionsActions.getUnitMeasures());
-      newSchema[indexOfUnits] = { ...newSchema[indexOfUnits], options: unitMeasures };
-    }
-    workspaceState?.setSchema(newSchema);
+      workspaceState?.setSchema(scheme);
   };
 
   return (
