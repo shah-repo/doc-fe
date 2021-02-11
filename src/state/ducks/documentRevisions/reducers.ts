@@ -2,8 +2,8 @@ import { groupBy, keyBy, keys, merge, omit, uniq } from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { AuditByCRIdState } from "../audit/types";
-import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_SET, DOCUMENT_SET, UNIT_MEASURES_LIST } from "./constants";
-import { AllIdsState, DocumentByIdState, DocumentRevisionAuditSetAction, DocumentRevisionsAllIdsState, DocumentRevisionsByIdState, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentSetAction, UnitMeasuresActionsState, UnitMeasuresListAction } from "./types";
+import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
+import { AllIdsState, DocumentByIdState, DocumentRevisionAuditSetAction, DocumentRevisionsAllIdsState, DocumentRevisionsByIdState, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentSetAction } from "./types";
 
 type DocumentRevisionActions =
   | DocumentRevisionsListAction
@@ -111,18 +111,6 @@ export const auditsAllId = (
   }
 };
 
-export const unitMeasures = (
-  state: UnitMeasuresActionsState = [],
-  action: UnitMeasuresListAction,
-): UnitMeasuresActionsState => {
-  switch (action.type) {
-    case UNIT_MEASURES_LIST:
-      return [...action.payload ];
-    default:
-      return state;
-  }
-};
-
 export default combineReducers({
   loadListAsyncInfo: asyncReducer(DOCUMENT_REVISION_LIST_ASYNC),
   loadAsyncInfo: asyncReducer(DOCUMENT_REVISION_GET_ASYNC),
@@ -133,5 +121,4 @@ export default combineReducers({
   documentsById,
   auditsByCRId,
   auditsAllId,
-  unitMeasures,
 });

@@ -1,5 +1,4 @@
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
-import { SelectOption } from "../../../ui/components/forms/fields/Select";
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
 import { FBSchemaProps, FBTaskItem } from "../../../ui/form.builder";
 import { Attachment } from "../attachments";
@@ -8,7 +7,7 @@ import { Group } from "../auth/types";
 import { ChangeRequest } from "../changeRequest";
 import { Approval, Id, Owner, User } from "../common";
 import { TrainingRecord } from "../training";
-import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET, UNIT_MEASURES_LIST } from "./constants";
+import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
 import { DocumentGroupOptionsType, DocumentType } from "./documentType";
 
 export enum DocumentRevisionStatus {
@@ -192,11 +191,6 @@ export interface DocumentRevisionsListAction {
   payload: DocumentRevision[];
 }
 
-export interface UnitMeasuresListAction {
-  type: typeof UNIT_MEASURES_LIST;
-  payload: SelectOption[];
-}
-
 export interface DocumentRevisionsByIdState {
   [key: string]: DocumentRevision;
 }
@@ -223,8 +217,6 @@ export interface DocumentRevisionAuditSetAction {
 }
 
 export type AllIdsState = string[];
-
-export type UnitMeasuresActionsState = SelectOption[];
 
 export interface ApproveAndReleaseRequest {
   approvers: Id[];
