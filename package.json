@@ -41,6 +41,7 @@
     "moment": "2.24.0",
     "moment-timezone": "0.5.27",
     "mqtt-pattern": "1.2.0",
+    "normalizr": "^3.6.1",
     "patch-package": "^6.2.2",
     "qrcode.react": "1.0.0",
     "query-string": "6.9.0",
@@ -93,7 +94,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint -c .eslintrc.js --ext .ts --ext .tsx  src",
     "lint:fix": "yarn lint --fix",
-    "unused-exports": "yarn ts-unused-exports tsconfig.json --excludePathsFromReport=/__mocks__/ --maxIssues=490",
+    "unused-exports": "yarn ts-unused-exports tsconfig.json --excludePathsFromReport=/__mocks__/ --maxIssues=489",
     "postinstall": "patch-package"
   },
   "eslintConfig": {
