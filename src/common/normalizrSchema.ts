@@ -3,21 +3,21 @@ import { schema } from "normalizr";
 // copied from BE, src/utils/normalizr/normalizrSchema.ts
 
 const userSch = new schema.Entity("User", {});
-export const employeeSch = new schema.Entity("Employee", {});
-export const groupSch = new schema.Entity("Group", {});
+const employeeSch = new schema.Entity("Employee", {});
+const groupSch = new schema.Entity("Group", {});
 export const docRevSch = new schema.Entity("DocumentRevision", {});
-export const documentSch = new schema.Entity("Document", {});
+const documentSch = new schema.Entity("Document", {});
 const documentTypeSch = new schema.Entity("DocumentType", {});
 export const changeRequestSch = new schema.Entity("ChangeRequest", {});
 const companySch = new schema.Entity("Company", {});
-export const approvalSch = new schema.Entity("Approval", {});
-export const taskSch = new schema.Entity("Task", {});
+const approvalSch = new schema.Entity("Approval", {});
+const taskSch = new schema.Entity("Task", {});
 const implPlanSch = new schema.Entity("ImplementationPlan", {});
-export const trainingPlanSch = new schema.Entity("TrainingPlan", {});
-export const trainingRecordsSch = new schema.Entity("TrainingRecord", {});
-export const suppSurvReqSch = new schema.Entity("SupplierSurveyRequest", {});
-export const attachmentSch = new schema.Entity("Attachment", {});
-export const attachmentWatermarkSch = new schema.Entity("AttachmentWatermark", {});
+const trainingPlanSch = new schema.Entity("TrainingPlan", {});
+const trainingRecordsSch = new schema.Entity("TrainingRecord", {});
+const suppSurvReqSch = new schema.Entity("SupplierSurveyRequest", {});
+const attachmentSch = new schema.Entity("Attachment", {});
+const attachmentWatermarkSch = new schema.Entity("AttachmentWatermark", {});
 const pdfSch = new schema.Entity("PDFAsAttachment", {});
 
 employeeSch.define({

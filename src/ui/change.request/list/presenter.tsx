@@ -11,7 +11,6 @@ import FromListContainer from "../form.list/FormList.container";
 import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helpers";
 import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
 import { ChangeRequestsUserProps } from "../utils/types";
-import { changeRequestSch } from "./../../../common/normalizrSchema";
 import styles from "./styles";
 
 export type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
@@ -111,7 +110,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           customDataSet={customDataSet}
           tableName={tableName}
           sortBy={"crId"}
-          normalizrSchema={[changeRequestSch]}
         />
       </Grid>
     </Grid>
