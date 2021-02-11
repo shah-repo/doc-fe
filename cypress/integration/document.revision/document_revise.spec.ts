@@ -151,7 +151,6 @@ context("Document revise test", () => {
       cy.drClickReviseDocument();
       cy.drChooseTypeOfRevisionChangeOption({ option: "Administrative Change" });
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(8000);
     });
 
     it("Approve and release document", () => {

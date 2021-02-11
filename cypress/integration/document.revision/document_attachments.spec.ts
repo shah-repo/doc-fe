@@ -133,7 +133,6 @@ context("Document Attachment Flow", () => {
 
       it("Clicks Save button", () => {
         cy.drClickCreateDocumentWithApiCall();
-        cy.wait(8000);
       });
 
       it("Approves and releases document", () => {
@@ -156,7 +155,6 @@ context("Document Attachment Flow", () => {
 
       it("Clicks Save button", () => {
         cy.drClickCreateDocumentWithApiCall();
-        cy.wait(8000);
       });
 
       it("Approves and releases document", () => {
@@ -170,7 +168,6 @@ context("Document Attachment Flow", () => {
 
       it("Clicks Save button", () => {
         cy.drClickCreateDocumentWithApiCall();
-        cy.wait(8000);
       });
 
       it("Approves and releases document", () => {
@@ -201,7 +198,6 @@ context("Document Attachment Flow", () => {
 
       it("Clicks Save button", () => {
         cy.drClickCreateDocumentWithApiCall();
-        cy.wait(8000);
       });
 
       it("Approves and releases document", () => {
@@ -253,7 +249,6 @@ context("Document Attachment Flow", () => {
 
     it("Clicks Save button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(8000);
     });
 
     it("Navigate to approval request list", () => {
@@ -350,7 +345,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
-      cy.arClearFilter();
+      cy.alClearFilters();
       cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "In Review" });
     });
 
@@ -381,7 +376,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
-      cy.arClearFilter();
+      cy.alClearFilters();
       cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Approved" });
     });
 

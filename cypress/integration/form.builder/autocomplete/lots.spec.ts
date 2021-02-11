@@ -101,7 +101,6 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
-        cy.wait(8000);
       });
 
       it("Approve and release FORM document", () => {
@@ -146,7 +145,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Create 'Preventative maintenance document'", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
         cy.wait(5000);
       });
 
