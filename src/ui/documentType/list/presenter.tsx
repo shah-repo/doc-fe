@@ -2,6 +2,7 @@ import { Grid } from "@material-ui/core";
 import moment from "moment";
 import React from "react";
 import { useIntl } from "react-intl";
+import { docRevSch } from "../../../common/normalizrSchema";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DocumentType, PageDetails } from "../../../state/ducks/documentRevisions/documentType";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -79,6 +80,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
           queryUrl={queryUrl}
           cellMeasure={true}
           tableName={tableName}
+          normalizrSchema={[docRevSch]}
         />
       </Grid>
     </Grid>

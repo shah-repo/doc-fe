@@ -1,3 +1,4 @@
+import { schema } from "normalizr";
 import { SortDirectionType } from "react-virtualized/dist/es/Table";
 import { Translation } from "../../translations/types";
 import { TableColumnActionType, TableColumnProps } from "./column/types";
@@ -33,6 +34,7 @@ export interface TablePanelProps<T> {
   tableName: string;
   providedData?: T[];
   rootCustomStyle?: any;
+  normalizrSchema?: schema.Entity | schema.Entity[];
 }
 
 export interface TablePanelStateProps {

@@ -3,6 +3,7 @@ import { isEmpty, set } from "lodash";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
+import { docRevSch } from "../../../common/normalizrSchema";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { convertHtmlEntities, stripTags } from "../../../common/utils/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -288,6 +289,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           customDataSet={customDataSet}
           sortBy={"docId"}
           tableName={tableName}
+          normalizrSchema={[docRevSch]}
         />
       </Grid>
     </Grid>
