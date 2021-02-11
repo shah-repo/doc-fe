@@ -270,11 +270,10 @@ context("Document HTML template form", () => {
                 `<h1>Heading - First entry </h1><p>Paragraph.</p>`)
           .and.have.string(
             `<div>` +
-              `<strong>Name</strong>` +
-              `<ul><li>${USERS[1].name}</li></ul>` +
-              `<ul><li>${USERS[3].name}</li></ul>` +
-              `<ul><li>${USERS[2].name}</li></ul>` +
-            `</div>`)
+              `<strong>Name</strong>`)
+          .and.have.string(`<ul><li>${USERS[1].name}</li></ul>`)
+          .and.have.string(`<ul><li>${USERS[3].name}</li></ul>`)
+          .and.have.string(`<ul><li>${USERS[2].name}</li></ul>`)
           .and.have.string(`<strong>Date & Signature</strong>`)
           .and.have.string(`${currentDate}`);
       });
