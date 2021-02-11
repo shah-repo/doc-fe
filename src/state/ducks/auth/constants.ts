@@ -31,3 +31,5 @@ export const USERS_URL = "/users";
 export const USERS_ME_URL = "/users/me";
 
 export const RESEND_SIGNUP_EMAIL_URL = "/auth/resend_confirmation_email";
+
+export const UNIT_MEASURES_URL = "/public/configs/parts_units.json";

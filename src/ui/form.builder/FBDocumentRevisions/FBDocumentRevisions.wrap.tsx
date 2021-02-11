@@ -25,7 +25,8 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     ...props
   }: T) => {
 
-    const { formState: parentFormState, bookmarkState } = FB.useStores();
+    const { formState: parentFormState, bookmarkState, workspaceState } = FB.useStores();
+    const { isOutput } = workspaceState || {};
     const parentFormValue = parentFormState?.getFieldValue(name);
 
     docRevState = FB.useRef(FBDocumentRevisionsState, parentFormValue);
@@ -52,6 +53,7 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     ), []);
 
     React.useEffect(() => {
+      if (!isOutput || !parentFormValue) { return; }
       bookmarkState?.setLoading(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
