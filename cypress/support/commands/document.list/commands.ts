@@ -101,7 +101,9 @@ Cypress.Commands.add("dlVerifyEffectiveDateIsPresentOnFirstDocument", () => {
 });
 
 Cypress.Commands.add("dlClearFilters", () => {
-  cy.get("button[data-cy=clearFilter]").click().wait(500);
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
+    cy.get("button[data-cy=clearFilter]").click();
+  });
 });
 
 Cypress.Commands.add("dlVerifyDocumentCount", (params: {numberOfDoc: integerType }) => {
@@ -183,7 +185,9 @@ Cypress.Commands.add("dlVerifyFilterByArId", (params: {arId: string }) => {
 
 Cypress.Commands.add("dlFilterByStatus", (params: {status: string }) => {
   cy.get("div[id=\"mui-component-select-displayStatus\"]").click().wait(500);
-  cy.get("ul[role=listbox]>li").contains(params.status).click().wait(500);
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDisplayStatus, () => {
+    cy.get("ul[role=listbox]>li").contains(params.status).click();
+  });
 });
 
 Cypress.Commands.add("dlVerifyFilterByStatus", (params: {status: string }) => {

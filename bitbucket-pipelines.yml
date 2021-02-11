@@ -2,8 +2,16 @@ clone:
   depth: 10
 
 definitions:
+  services:
+    sorry-cypress-director:
+      image:
+        name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:sorry-cypress-director-3-retries
+      variables:
+        EXECUTION_DRIVER: "../execution/in-memory"
+        SCREENSHOTS_DRIVER: "../screenshots/dummy.driver"
+      ports:
+        - 1234:1234
   caches:
-
   steps:
     - step: &COMMON
         image:
@@ -60,6 +68,63 @@ definitions:
         script:
           - NODE_ENV=development yarn install --frozen-lockfile
           - ./aws/bash_scripts/runTests.sh
+
+    - step: &COMMON_RUN_CYPRESS
+          name: Cypress specs
+          image:
+            name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs_node_14_10_0_chrome_88_cy_6_2_0
+            aws:
+              access-key: $AWS_ACCESS_KEY_ID
+              secret-key: $AWS_SECRET_ACCESS_KEY
+          max-time: 30
+          size: 2x
+          services:
+            - sorry-cypress-director
+          caches:
+            - node
+          artifacts:
+            - test-results/**
+          script:
+            - source ./scripts/cypress/utils/variables_pipeline.sh
+            - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+            - yarn install --frozen-lockfile
+            - ./scripts/cypress/utils/make_results_dir_pipeline.sh
+            - ./scripts/cypress/utils/generate_requirements_json_file.sh
+            - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
+            - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
+            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
+            - ./scripts/cypress/utils/merge_reports_pipeline.sh
+            - ./scripts/cypress/utils/exit_1_if_failures.sh
+
+    - parallel: &RUN_CYPRESS_IN_PARALLEL
+        - step: 
+            <<:  *COMMON_RUN_CYPRESS
+            name: Cypress specs 1/4
+        - step: 
+            <<:  *COMMON_RUN_CYPRESS
+            name: Cypress specs 2/4
+        - step: 
+            <<:  *COMMON_RUN_CYPRESS
+            name: Cypress specs 3/4
+        - step: 
+            <<:  *COMMON_RUN_CYPRESS
+            name: Cypress specs 4/4
+        # - step: 
+        #     <<:  *COMMON_RUN_CYPRESS
+        #     name: Cypress specs 5/4
+        # - step: 
+        #     <<:  *COMMON_RUN_CYPRESS
+        #     name: Cypress specs 6/4
+        # - step: 
+        #     <<:  *COMMON_RUN_CYPRESS
+        #     name: Cypress specs 7/8
+        # - step: 
+        #     <<:  *COMMON_RUN_CYPRESS
+        #     name: Cypress specs 8/8
+
+    - step: &RUN_CYPRESS_SINGLE
+        <<:  *COMMON_RUN_CYPRESS
+        name: Cypress specs 1/1
     #
     # DEV
     #
@@ -151,6 +216,30 @@ definitions:
 # Pipelines
 #
 pipelines:
+  custom: 
+    run-cypress-on-dev-bbrun-single:
+      - variables:
+          - name: CYPRESS_FE_URL
+          - name: CYPRESS_BE_URL
+          - name: CYPRESS_SUPERADMIN_EMAIL
+          - name: CYPRESS_SUPERADMIN_PASSWORD
+          - name: CYPRESS_COMMIT_FE
+          - name: CYPRESS_COMMIT_BE
+          - name: CYPRESS_COMMIT_REMOTEJS
+      - step: 
+          <<:  *COMMON_RUN_CYPRESS
+          name: Cypress specs local test
+    run-cypress-on-dev-bbrun-parallel:
+      - variables:
+          - name: CYPRESS_FE_URL
+          - name: CYPRESS_BE_URL
+          - name: CYPRESS_SUPERADMIN_EMAIL
+          - name: CYPRESS_SUPERADMIN_PASSWORD
+          - name: CYPRESS_COMMIT_FE
+          - name: CYPRESS_COMMIT_BE
+          - name: CYPRESS_COMMIT_REMOTEJS
+      - parallel: *RUN_CYPRESS_IN_PARALLEL
+
   pull-requests:
     "**":
       - parallel:
@@ -183,6 +272,12 @@ pipelines:
           - step: *RUN_LINTER
           - step: *BUILD_SANDBOX
       - step: *DEPLOY_SANDBOX
+    
+    run-parallel-cypress-on-dev:
+      - parallel: *RUN_CYPRESS_IN_PARALLEL
+    
+    run-single-cypress-on-dev:
+      - step: *RUN_CYPRESS_SINGLE
 
   branches:
     master:

@@ -92,7 +92,9 @@ Cypress.Commands.add("usrClickCloseDialogButton", () => {
 });
 
 Cypress.Commands.add("usrCheckIfUserIsCreated", (params: {email: string}) => {
-  cy.get("#clearFilter").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
+    cy.get("#clearFilter").click();
+  });
   cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
     cy.get("#email").type(params.email);
   });

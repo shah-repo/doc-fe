@@ -38,13 +38,7 @@ context("Receivable list test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
@@ -476,10 +470,6 @@ context("Receivable list test", () => {
 
   context("Check for filters", () => {
     context("Verify filter by receivable id", () => {
-      it("Clear filter", () => {
-        cy.dlClearFilters();
-      });
-
       it("Filter list by id 'RC-00006'", () => {
         cy.recFilterByReceivableId({ id: "RC-00006" });
       });

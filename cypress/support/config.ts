@@ -1,6 +1,12 @@
 /* eslint-disable no-console */
 import { plainToClass } from "class-transformer";
-import { IsBoolean, IsDefined, IsEmail, IsString, validateSync } from "class-validator";
+import { IsBoolean, IsDefined, IsEmail, IsEnum, IsOptional, IsString, ValidateIf, validateSync } from "class-validator";
+
+export enum RUN_ENVIRONMENT_OPTIONS {
+  LOCALDEV = "LOCALDEV",
+  LOCALPARALLEL = "LOCALPARALLEL",
+  PIPELINE = "PIPELINE"
+}
 
 export class ConfigEnv {
   private static instance: ConfigEnv;
@@ -22,14 +28,23 @@ export class ConfigEnv {
       SKIP_ON_RUN_FAILURE: Cypress.env("SKIP_ON_RUN_FAILURE"),
       SUPERADMIN_EMAIL: Cypress.env("SUPERADMIN_EMAIL"),
       SUPERADMIN_PASSWORD: Cypress.env("SUPERADMIN_PASSWORD"),
+      RUN_ENVIRONMENT: Cypress.env("RUN_ENVIRONMENT"),
+      SCREENSHOTS_DIR: Cypress.env("SCREENSHOTS_DIR"),
       TEST_COMPANY_REPLICA_NAME: Cypress.env("TEST_COMPANY_REPLICA_NAME"),
+      COMMIT_FE: Cypress.env("COMMIT_FE"),
+      COMMIT_BE: Cypress.env("COMMIT_BE"),
+      COMMIT_REMOTEJS: Cypress.env("COMMIT_REMOTEJS"),
+      JSON_REPORTS_FOLDER: Cypress.env("JSON_REPORTS_FOLDER"),
     });
 
     const errors = validateSync(configEnv, {
       whitelist: true,
       forbidUnknownValues: false,
+      forbidNonWhitelisted: true,
     });
+
     if (errors.length) {
+      console.log({ errors });
       throw new Error(`Config validation errors: ${errors}`);
     }
     return configEnv;
@@ -68,8 +83,37 @@ export class ConfigEnv {
   SUPERADMIN_PASSWORD!: string;
 
   @IsDefined()
+  @IsEnum(RUN_ENVIRONMENT_OPTIONS)
+  RUN_ENVIRONMENT!: RUN_ENVIRONMENT_OPTIONS;
+
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE)
+  @IsDefined()
+  @IsString()
+  SCREENSHOTS_DIR!: string;
+
+  @IsOptional()
   @IsString()
   TEST_COMPANY_REPLICA_NAME!: string;
+
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE)
+  @IsDefined()
+  @IsString()
+  COMMIT_FE!: string;
+
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE)
+  @IsDefined()
+  @IsString()
+  COMMIT_BE!: string;
+
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE)
+  @IsDefined()
+  @IsString()
+  COMMIT_REMOTEJS!: string;
+
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE)
+  @IsDefined()
+  @IsString()
+  JSON_REPORTS_FOLDER!: string;
 }
 
 

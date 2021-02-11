@@ -95,13 +95,7 @@ context("Check Document History", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -323,7 +317,9 @@ context("Check Document History", () => {
     });
 
     it(`select '${formTitle.newValue}'`, () => {
-      cy.get("#root").contains(formTitle.newValue).click();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
+        cy.get("#root").contains(formTitle.newValue).click();
+      });
     });
   });
 

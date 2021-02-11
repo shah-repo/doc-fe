@@ -6,7 +6,6 @@ import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
@@ -35,16 +34,8 @@ context("Record inline Flow", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAcronym: `T1${runId}`,
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            name: `Test Company ${runId}`,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -340,7 +331,16 @@ context("Record inline Flow", () => {
 
         it("Filter record by name and status, and select it", () => {
           SystemRequirement("REQ-0120");
-          cy.drFilterDocListByNameAndStatus({ title: "Record Document Revision", status: "Released" });
+          // cy.drFilterDocListByNameAndStatus({ title: "Record Document Revision", status: "Released" });
+          cy.dlFilterByRev({ revision: "Record Document Revision" });
+          cy.dlFilterByStatus({ status: "Released" });
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.DocPreview,
+            CyRoutes.EmployeesGet,
+            CyRoutes.GetRequiredApproversDocRev,
+          ], () => {
+            cy.get(".MuiTableCell-root a:nth-child(1)").first().click();
+          });
         });
 
         it("Verify record is in alpha state", () => {
