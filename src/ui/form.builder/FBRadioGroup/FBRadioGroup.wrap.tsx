@@ -17,8 +17,8 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
     optionLabelKey = "",
     controls,
     disabled,
-    name = "",
     isInputOwner,
+    name = "",
     ...props
   }: T) => {
     const intl = useIntl();
@@ -49,6 +49,7 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
       controls,
       disabled,
       options,
+      name,
     });
   };
 
