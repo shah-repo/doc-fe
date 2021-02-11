@@ -97,7 +97,6 @@ export const withFBInput = <T extends FBInputProps>(
           }
           const value = optionsToString?.(options);
           formState?.setFieldValue(name, value, withState, omitFormValue);
-          inputState && (inputState.value = value);
           return value;
         },
         autocompleteasync() { return; },
@@ -131,7 +130,7 @@ export const withFBInput = <T extends FBInputProps>(
         disabled,
         onChange,
         onBlur,
-        ...(type !== "autocomplete" && { value }),
+        ...(withState && type !== "autocomplete" && { value }),
         ...(type === "textfield" && { error }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
         ...(workspaceState?.mode === "preview" && { className: FBClasses.inputPreview }),
