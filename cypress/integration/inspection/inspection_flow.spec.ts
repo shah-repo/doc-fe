@@ -1011,7 +1011,6 @@ context("Inspection flow", () => {
       context("Save form and release it", () => {
         it("Click save", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
-          cy.wait(8000);
         });
 
         it("Approve and Release document", () => {
@@ -1150,7 +1149,7 @@ context("Inspection flow", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
     });
 
     it("Add 'Expiry Date'", () => {

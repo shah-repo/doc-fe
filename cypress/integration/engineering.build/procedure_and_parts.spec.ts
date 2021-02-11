@@ -55,7 +55,13 @@ context("Procedure and parts flow test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
+            helloSignIntegrationEnabled: false,
+            helloSignTestMode: false,
             importerEmail: USERS[5].email,
+            numOfRevStages: 3,
+            numOfDocDigits: 5,
+            remoteValidatorBundleName: "default",
+            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -433,7 +439,7 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
       cy.wait(5000);
     });
 
@@ -576,7 +582,6 @@ context("Procedure and parts flow test", () => {
     context("Create document and release it", () => {
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithApiCall();
-        cy.wait(8000);
       });
 
       it("Approve and release document", () => {
@@ -626,7 +631,6 @@ context("Procedure and parts flow test", () => {
     context("Create document and release it", () => {
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithApiCall();
-        cy.wait(8000);
       });
 
       it("Approve and release document", () => {
@@ -643,6 +647,10 @@ context("Procedure and parts flow test", () => {
     context("Fill EB document attributes", () => {
       it("Enters title 'Form document for procedure'", () => {
         cy.drEnterDocumentTitle({ name: "EB document" });
+      });
+
+      it("Enters description 'Procedure description'", () => {
+        cy.drEnterDocumentDescription({ description: "EB description" });
       });
 
       it("Add approver to approvals", () => {
@@ -792,7 +800,6 @@ context("Procedure and parts flow test", () => {
               cy.visit(CONFIG.FE_URL + link);
             });
           });
-          cy.wait(5000);
         });
 
         it("Approve and release the part", () => {
@@ -920,7 +927,6 @@ context("Procedure and parts flow test", () => {
               cy.visit(CONFIG.FE_URL + link);
             });
           });
-          cy.wait(5000);
         });
 
         it("Approve and release the part", () => {

@@ -22,7 +22,7 @@ declare global {
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drApproveAndReleaseDocumentWithoutSelectingForm(params?: { toastifyExists: boolean }): Chainable<Subject>;
       drCloseApproveAndReleaseDialog(): Chainable<Subject>;
-      drClickCreateDocumentWithApiCall(params?: { toastifyExists: boolean }): Chainable<Subject>;
+      drClickCreateDocumentWithApiCall(params?: { toastifyExists?: boolean; requiredApproversDocRev: boolean}): Chainable<Subject>;
       drClickCreateSupplierWithApiCall(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForForms(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForFormsExpectingToastError(): Chainable<Subject>;
@@ -297,9 +297,16 @@ Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
   cy.checkToastMessage({ exists: false });
 });
 
-Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExists: boolean }) => {
+Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExists: boolean; requiredApproversDocRev: boolean }) => {
+  let routesToWait;
+  if (params && params.requiredApproversDocRev) {
+    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev];
+  }
+  else {
+    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApprovers];
+  }
   cy.wrapWithWaitOnApiCalls(
-    [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApprovers], () => {
+    routesToWait, () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
   cy.wait(500);

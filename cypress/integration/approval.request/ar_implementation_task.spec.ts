@@ -160,7 +160,6 @@ context("Approval request implementation tasks", () => {
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(8000);
     });
 
     it("Approve and release document", () => {

@@ -107,7 +107,6 @@ context("Autocomplete 'Preventative Maintenance Forms' test", () => {
 
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
-        cy.wait(8000);
       });
 
       it("Approve and release FORM document", () => {

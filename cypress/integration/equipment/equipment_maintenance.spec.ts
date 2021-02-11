@@ -486,7 +486,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
     });
 
     it("Add an Approval'", () => {
@@ -571,7 +571,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Create 'Calibration document'", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
     });
 
     it("Add an Approval", () => {
@@ -606,7 +606,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select 'Equipment maintenance document'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.DocRevPreview], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
       });
       cy.wait(5000);

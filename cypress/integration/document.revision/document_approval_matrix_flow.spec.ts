@@ -423,7 +423,6 @@ context("Document Approval Matrix Flow", () => {
   context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
     it("Click on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(8000);
     });
 
     it("'Training Required' should be checked because of DAM", () => {
