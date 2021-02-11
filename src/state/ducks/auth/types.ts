@@ -69,6 +69,7 @@ export interface Group {
   parents: Group[];
   joinedEmployees: Employee[];
   type?: GroupType;
+  groupApprover?: string; // FE property for POAM check (ENC-4125)
 }
 
 export type AuthUserPayload = User;

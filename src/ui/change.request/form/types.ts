@@ -1,5 +1,5 @@
 import { Attachment as AttachmentInterface } from "../../../state/ducks/attachments";
-import { Id } from "../../../state/ducks/common";
+import { Id, Nullable } from "../../../state/ducks/common";
 import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FBSchemaProps } from "../../form.builder";
@@ -57,4 +57,13 @@ export interface TemplateOption {
   docTypeId: string;
   schema?: FBSchemaProps[];
   formInput?: Record<string, any>;
+}
+
+export interface ApproverPayload {
+  approver: {
+    id: Nullable<string>;
+  };
+  signatureGroupId: {
+    id: Nullable<string>;
+  };
 }

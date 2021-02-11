@@ -7,6 +7,7 @@ export type FBApproversProps =
 & {
   isIncluded?: (group: FBRequiredApprover) => void;
   groups?: Record<string, FBRequiredApprover>;
+  checkedGroups?: FBRequiredApprover[];
   value?: string[];
 };
 
@@ -46,6 +47,7 @@ export type FBRequiredApprover =
 & FBJoinedEmployee
 & {
   joinedEmployees: FBJoinedEmployee[] | string[];
+  groupApprover?: string; // FE property for POAM check (ENC-4125)
 };
 
 export interface FBApproversConstructor {
