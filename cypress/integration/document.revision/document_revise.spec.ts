@@ -131,6 +131,7 @@ context("Document revise test", () => {
                 effectiveDate: (new Date()).toISOString(),
                 documentType: { id: approvalRequestDocumentType[0].id },
                 formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: secondEmployee.id } }],
               },
               employeeId: secondEmployee.id,
               sessionId: loginResponse.sessionId,
