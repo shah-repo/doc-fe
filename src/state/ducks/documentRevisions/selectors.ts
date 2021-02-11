@@ -18,6 +18,8 @@ const documentsById = (state: ApplicationState) =>
 const auditsByCRId = (state: ApplicationState) =>
   state.documentRevisions.auditsByCRId;
 
+const getUnitMeasures = (state: ApplicationState) => state.documentRevisions.unitMeasures;
+
 const getDocumentRevisionsList = createSelector(
   allIds,
   byId,
@@ -160,4 +162,5 @@ export default {
   makeGetAudit,
   makeGetDisableCreateNewVersion,
   getDocId,
+  getUnitMeasures,
 };
