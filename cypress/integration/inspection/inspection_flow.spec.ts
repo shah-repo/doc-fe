@@ -931,6 +931,7 @@ context("Inspection flow", () => {
                   effectiveDate: (new Date()).toISOString(),
                   documentType: { id: approvalRequestDocumentType[0].id },
                   formDocument: { id: initialArDocument[0].id },
+                  approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
                 },
                 employeeId: adminEmployee.id,
                 sessionId: loginResponse.sessionId,

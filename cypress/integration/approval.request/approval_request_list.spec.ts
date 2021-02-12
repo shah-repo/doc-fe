@@ -164,9 +164,6 @@ context("Approval request landing page test", () => {
                 justificationOfChange: "ar test",
                 id: faker.random.uuid(),
               }],
-              approvers: [{
-                id: secondEmployee.id,
-              }],
             },
           },
           employeeId: secondEmployee.id as unknown as string,
@@ -184,9 +181,6 @@ context("Approval request landing page test", () => {
                 descriptionOfChange: "ar test",
                 justificationOfChange: "ar test",
                 id: faker.random.uuid(),
-              }],
-              approvers: [{
-                id: secondEmployee.id,
               }],
             },
           },
@@ -225,6 +219,14 @@ context("Approval request landing page test", () => {
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
       cy.arFilterARListByNameAndStatus({ title: approvalRequestName, status: "Draft" });
+    });
+
+    it("Add approvers to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+    });
+
+    it("Save changes", () => {
+      cy.arSaveApiCall();
     });
 
     it("Send to review", () => {
@@ -381,7 +383,7 @@ context("Approval request landing page test", () => {
   context("Verify description is shown on hover", () => {
     it("Verify description", () => {
       SystemRequirement("REQ-0840");
-      cy.alVerifyDescriptionOnHover({ description: "Description for first approval request" });
+      cy.alVerifyDescriptionOnHover({ description: "\nDescription for first approval request\n" });
     });
   });
 });

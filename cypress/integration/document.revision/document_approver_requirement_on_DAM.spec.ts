@@ -448,18 +448,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.arApproverRoleStatus({ roleName: roleThree, enabled: false });
     });
 
-    it("Add first approver to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: FIRST_USER.email });
-    });
-
-    it("Add second approver to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: SECOND_USER.email });
-    });
-
-    it("Add third approver to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: THIRD_USER.email });
-    });
-
     it(`Verify approver is marked for ${roleOne}`, () => {
       cy.arApproverRoleStatus({ roleName: roleOne, enabled: true });
     });
@@ -475,6 +463,22 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it("Click Create Approval Request", () => {
       cy.arClickCreateApprovalRequestAfterCompletingForm();
       cy.wait(2000);
+    });
+
+    it("Add first approver to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: FIRST_USER.email });
+    });
+
+    it("Add second approver to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: SECOND_USER.email });
+    });
+
+    it("Add third approver to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: THIRD_USER.email });
+    });
+
+    it("Save changes", () => {
+      cy.arSaveApiCall();
     });
 
     it("Click 'Send To Review'", () => {
