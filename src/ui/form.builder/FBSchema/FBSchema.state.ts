@@ -172,6 +172,7 @@ export class FBSchemaState {
       return;
     }
     this.updateSchemaItem(schemaItem, schemaItemIndex);
+    this.setValidationSchemaItem(schemaItem);
   };
 
   @action public setSchemaItemAt = (schemaItem: FBSchemaProps | FBInputProps, index = 0) => {
@@ -182,12 +183,14 @@ export class FBSchemaState {
     const newSchema = this.schema?.slice(0) || [];
     newSchema?.splice(index, 0, schemaItem);
     this.setSchema(newSchema);
+    this.setValidationSchemaItem(schemaItem);
   };
 
   @action public updateSchemaItem = (schemaItem: FBSchemaProps, at: number) => {
     const newSchema = [...this.getSchema()];
     newSchema[at] = schemaItem;
     this.setSchema(newSchema);
+    this.setValidationSchemaItem(schemaItem);
   };
 
   @action public removeSchemaItem = (schemaItem?: FBSchemaProps) => {
@@ -196,6 +199,8 @@ export class FBSchemaState {
     }
     const schema = filter(this.schema, (item) => item.name !== schemaItem.name);
     this.setSchema(schema);
+    const validationSchema = filter(this.schema, (item) => item.name !== schemaItem.name);
+    this.validationSchema = validationSchema;
   };
 
   @action public removeSchemaItemAt = (index: number | undefined) => {

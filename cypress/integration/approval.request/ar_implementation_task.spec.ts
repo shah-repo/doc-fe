@@ -198,13 +198,19 @@ context("Approval request implementation tasks", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Add first approver to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
-    });
+    // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
 
     it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
       cy.arClickCreateApprovalRequestAfterCompletingForm();
+    });
+
+    it("Add approvers to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+    });
+
+    it("Save changes", () => {
+      cy.arSaveApiCall();
     });
   });
 

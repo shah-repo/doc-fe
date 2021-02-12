@@ -172,13 +172,19 @@ context("Approval request form scenario", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
+    // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
+
+    it("Click Create Approval Request", () => {
+      cy.arClickCreateApprovalRequestAfterCompletingForm();
+    });
+
     it("Add approvers to approval request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[20].email });
       cy.arAddApproverOnApproverList({ approver: USERS[22].email });
     });
 
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+    it("Save changes", () => {
+      cy.arSaveApiCall();
     });
 
     it("Click send to review", () => {
@@ -232,7 +238,7 @@ context("Approval request form scenario", () => {
     //  approvers 'In_review' should be enabled now 'ENC-4797'
     it("Check 'Approvers' are not disabled", () => {
       SystemRequirement("REQ-0850");
-      cy.get("input[data-cy=\"approvers\"]").should("not.be.disabled");
+      cy.get("input[data-cy=\"fb-approvers-approvers\"]").should("not.be.disabled");
     });
   });
 

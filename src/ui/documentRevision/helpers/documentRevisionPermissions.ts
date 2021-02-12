@@ -6,8 +6,8 @@ export const canEditDocumentRevision = (
   documentRevision: DocumentRevision,
   currentUserEmail: string,
 ) =>
-  documentRevision.owner &&
-  currentUserEmail === documentRevision.owner.user?.email &&
+  documentRevision?.owner &&
+  currentUserEmail === documentRevision?.owner.user?.email &&
   isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange],
     documentRevision.status
