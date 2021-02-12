@@ -439,7 +439,7 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
       cy.wait(5000);
     });
 

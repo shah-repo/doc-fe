@@ -3,7 +3,7 @@ import { NavigationMenu, NavigationMenuItem } from "../../state/ducks/company";
 
 let navigationMenu: NavigationMenu[];
 
-export const getNavigation = () => {
+const getNavigation = () => {
   const data = localStorage.getItem("navigationMenu");
   if (data) {
     return JSON.parse(data);

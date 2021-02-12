@@ -56,13 +56,7 @@ context("Validators tests", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
@@ -562,17 +556,24 @@ field is empty: Add text field`, () => {
         [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
         });
-      cy.wait(500);
+      cy.wait(3000);
     });
   });
 
   context("Validation errors should prevent from releasing document", () => {
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
     });
 
     it("Check returned errors are not empty", () => {
       cy.checkToastMessageIsNotEmpty({ exists: true });
+    });
+
+    it("Check returned toast error message", () => {
+      cy.checkToastMessageContains({
+        message: "The Name is a required field.,The Address field is " +
+        "required when State is empty.,No document selected,No document selected",
+      });
     });
 
     it("Cancel release of document", () => {

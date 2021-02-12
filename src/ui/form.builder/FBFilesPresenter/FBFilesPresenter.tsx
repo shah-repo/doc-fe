@@ -11,7 +11,7 @@ const FBFilesPresenter: React.FunctionComponent<FBFilesPresenterProps> = ({
   <Box { ...boxProps } display="flex" flexDirection="row" flexWrap="wrap">
     <FBMapWrapper<FBAttachment[]> collection={attachments}>
       {(file: FBAttachment, index) => (
-        <FBFilePresenter key={index} {...{ file, mode }} />
+        <FBFilePresenter key={`fb-file-presenter-${index}`} {...{ file, mode }} />
       )}
     </FBMapWrapper>
   </Box>

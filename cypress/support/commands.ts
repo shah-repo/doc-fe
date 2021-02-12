@@ -19,6 +19,7 @@ declare global {
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
       selectCompany(params: { name: string }): Chainable<Subject>;
       unClick(): Chainable<Subject>;
+      checkIfInputHasValue(params: { inputSelector: string }): Chainable<Subject>;
       myCompanies(token: string): Chainable<Subject>;
       triggerDueDateEmailScript(params: {sessionId: string; currentDate: string});
       wrapWithWaitOnApiCall(
@@ -69,6 +70,16 @@ export interface ICreateCompanyBootstrap {
   remoteValidatorBundleName: string;
   acctCodes?: string[];
 }
+
+Cypress.Commands.add("checkIfInputHasValue", (params: {inputSelector}) => {
+  cy.get("body").then(($body) => {
+    const inputField = $body.find(params.inputSelector).attr("value");
+    if (inputField) {
+      return true;
+    }
+    return false;
+  });
+});
 
 Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstrap; sessionId: string }) => {
   cy.request({

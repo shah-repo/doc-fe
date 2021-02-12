@@ -10,6 +10,7 @@ export type FBCheckboxGroupProps =
   | "disabled"
   | "defaultValue"
   | "applicableValidationSchema"
+  | "isInputOwner"
   >>
   & Pick<FormGroupProps, "row">
   & {

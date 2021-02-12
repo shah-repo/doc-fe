@@ -98,10 +98,9 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
       documentRevision.status,
       currentEmployeeId,
       documentRevision.owner.id,
-      isCompanyAdmin,
       hasChangeOwnershipPermission,
     );
-  }, [currentEmployeeId, documentRevision, isCompanyAdmin, hasChangeOwnershipPermission]);
+  }, [currentEmployeeId, documentRevision, hasChangeOwnershipPermission]);
 
   const canEdit =
     documentRevision &&

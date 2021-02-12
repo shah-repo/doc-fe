@@ -19,14 +19,17 @@ export enum DOC_TYPE_GROUP {
   WORK_ORDER = "WORK_ORDER",
   SUPPLIER = "SUPPLIER",
   PART = "PART",
+  MATERIAL = "MATERIAL",
   RECEIVABLE = "RECEIVABLE",
   ENGINEERING_BUILD = "ENGINEERING_BUILD",
   EQUIPMENT = "EQUIPMENT",
   MAINTENANCE_RECORD = "MAINTENANCE_RECORD",
-  INSPECTION = "INSPECTION",
   FAI_INSPECTION = "FAI_INSPECTION",
   LOT = "LOT",
+  PART_LOT = "PART_LOT",
+  LHR = "LHR",
 }
+
 export type DocumentGroupType = keyof typeof DOC_TYPE_GROUP;
 
 // Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
@@ -72,6 +75,7 @@ export interface PageDetailsAddNew {
 }
 
 export interface PageDetails {
+  id: string;
   addNewBtnLabel: string;
   columns: PageDetailsColumn[];
   category: string;

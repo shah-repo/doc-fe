@@ -40,7 +40,7 @@ import "./commands/records/commands";
 import "./commands/status/commands";
 import "./commands/suppliers/commands";
 import "./commands/user.management/commands";
-import { CONFIG } from "./config";
+import { CONFIG, RUN_ENVIRONMENT_OPTIONS } from "./config";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
@@ -76,6 +76,30 @@ Cypress.on("test:after:run", (test, runnable: any ) => {
     test.state === "failed"
   ) {
     addScreenshotToContext(test, runnable, "Screenshot On Failure");
+  }
+});
+
+before(() => {
+  if (CONFIG.RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE) {
+    cy.task("deleteScreenshotsFolder", { CONFIG, specFileName: Cypress.spec.name });
+    cy.task("deleteExistingReports", { CONFIG, specFileName: Cypress.spec.name } );
+  }
+});
+
+it("Server has correct commits code deployed", function()  {
+  if (CONFIG.RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE) {
+    cy.visit(`${CONFIG.FE_URL}/status`, { timeout: 20 * 1000 });
+
+    cy.get("[data-cy=\"status-frontend-commit-hash\"] td:nth-child(2)")
+      .should("have.text", CONFIG.COMMIT_FE);
+
+    cy.get("[data-cy=\"status-backend-commit-hash\"] td:nth-child(2)")
+      .should("have.text", CONFIG.COMMIT_BE);
+
+    cy.get("[data-cy=\"status-remote-js-validators-commit-hash\"] td:nth-child(2)")
+      .should("have.text", CONFIG.COMMIT_REMOTEJS);
+  } else {
+    this.skip();
   }
 });
 

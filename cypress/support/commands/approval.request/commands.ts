@@ -276,11 +276,14 @@ Cypress.Commands.add("arClickCreateApprovalRequestAfterCompletingForm", () => {
 });
 
 Cypress.Commands.add("arClickSendToReview", () => {
-  cy.wrapWithWaitOnApiCall(
+  cy.wrapWithWaitOnApiCalls([
     CyRoutes.ARtoReview,
-    () => {
-      cy.get("[data-cy=\"transitionButton\"]").click();
-    });
+    CyRoutes.ARPreview,
+    CyRoutes.DocRevGet,
+  ],
+  () => {
+    cy.get("[data-cy=\"transitionButton\"]").click();
+  });
   cy.checkToastMessage({ exists: false });
 });
 
@@ -302,11 +305,20 @@ Cypress.Commands.add("arClickOnFirstAddedDocument", () => {
 });
 
 Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; status: string }) => {
-  cy.get("#clearFilter").click().wait(1000);
-  cy.get("#title").type(params.title);
-  cy.get("[id=\"mui-component-select-state\"]").click().wait(300);
-  cy.get("li[data-value]").contains(params.status).click().wait(1000);
-  cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
+    cy.get("#title").type(params.title);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
+    cy.get("[id=\"mui-component-select-state\"]").click().wait(300);
+    cy.get("li[data-value]").contains(params.status).click();
+  });
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.GetRequiredApproversDocRev,
+    CyRoutes.GetRequiredApproversDocRev,
+    CyRoutes.DocRevGet,
+  ], () => {
+    cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
+  });
 });
 
 Cypress.Commands.add("arApproveAR", () => {

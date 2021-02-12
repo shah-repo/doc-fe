@@ -17,9 +17,24 @@ declare global {
       recCheckRevisionStage(params: {stage: string}): Chainable<Subject>;
       recFilterRecordListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       equipClickCreateNew(): Chainable<Subject>;
+      recFilterByRev(params: {revision: string }): Chainable<Subject>;
+      recFilterByStatus(params: {status: string }): Chainable<Subject>;
     }
   }
 }
+
+Cypress.Commands.add("recFilterByStatus", (params: {status: string }) => {
+  cy.get("div[id=\"mui-component-select-displayStatus\"]").click().wait(500);
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
+    cy.get("ul[role=listbox]>li").contains(params.status).click();
+  });
+});
+
+Cypress.Commands.add("recFilterByRev", (params: {revision: string }) => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
+    cy.get("input[name=name]").type(params.revision).wait(500);
+  });
+});
 
 Cypress.Commands.add("recFilterRecordListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {

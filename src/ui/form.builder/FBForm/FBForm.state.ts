@@ -73,7 +73,10 @@ export class FBFormState extends FBSchemaState {
         lodashSet(this.values, fieldName, defaultValue);
       }
     }
-    return lodashGet(this.values, fieldName) || lodashGet(this.initialValues, fieldName);
+    if (isUndefined(lodashGet(this.values, fieldName))) {
+      return lodashGet(this.initialValues, fieldName);
+    }
+    return lodashGet(this.values, fieldName);
   };
 
   private setValidationValue = (fieldName: string, value: any) => {
@@ -224,8 +227,8 @@ export class FBFormState extends FBSchemaState {
     if (!name) { return; }
     const inputState = this.inputState.get(name);
     if (!inputState) { return; }
-    const formValue = this.getFieldValue(name);
-    inputState.setAutosaveValue(formValue);
+    const formValue = cloneDeep(this.getFieldValue(name));
+    inputState.setAutosaveValue(cloneDeep(formValue));
   };
 }
 

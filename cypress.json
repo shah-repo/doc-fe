@@ -9,9 +9,9 @@
   "supportFile": "cypress/support/index.ts",
   "projectId": "9v9it2",
   "recordKey": "9e6e4a3d-c43a-4e60-8984-fa2ae0a90a76",
-  "defaultCommandTimeout": 30000,
+  "defaultCommandTimeout": 50000,
+  "responseTimeout": 50000,
   "trashAssetsBeforeRuns": false,
-  "experimentalNetworkStubbing": true,
   "modifyObstructiveCode": false,
   "env": {
     "TEST_COMPANY_REPLICA_NAME": "test"

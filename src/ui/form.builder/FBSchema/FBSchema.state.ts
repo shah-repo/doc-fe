@@ -30,7 +30,7 @@ import { FBQuantityField } from "../FBQuantityField";
 import { FBRadio } from "../FBRadio";
 import { FBRadioGroup } from "../FBRadioGroup";
 import { FBRequestApproval } from "../FBRequestApproval";
-import { FBSchemaSelect } from "../FBSchemaSelect";
+import FBSchemaSelect from "../FBSchemaSelect/FBSchemaSelect";
 import { FBSection } from "../FBSection";
 import { FBSelect } from "../FBSelect";
 import { FBSelectDocument } from "../FBSelectDocument";
@@ -39,7 +39,7 @@ import { FBSubsection } from "../FBSubsection";
 import FBSupplier from "../FBSupplier/FBSupplier";
 import { FBTask } from "../FBTask";
 import { FBTestRequirement } from "../FBTestRequirement";
-import { FBTextEditor } from "../FBTextEditor";
+import FBTextEditor from "../FBTextEditor/FBTextEditor";
 import { FBTextField } from "../FBTextField";
 import { FBTextFieldWithRange } from "../FBTextFieldWithRange";
 import { FBTimerField } from "../FBTimerField";
@@ -211,6 +211,17 @@ export class FBSchemaState {
     return filter(this.getSchema(), (item) =>
       !item.deleted && item.type === type
     );
+  };
+
+  public getNamesByType = (type?: FBInputType): string[] => {
+    if (!type) { return []; }
+    return this.getSchema().reduce((names: string[], item) => {
+      if (item.deleted || item.type !== type) { return names; }
+      if (item.name) {
+        names.push(item.name);
+      }
+      return names;
+    }, []);
   };
 }
 

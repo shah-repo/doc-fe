@@ -103,7 +103,8 @@ Cypress.Commands.add("atchUploadRedlineAttachment", (params: {fileName: string }
 Cypress.Commands.add("atchSetPrimaryAttachment", (params: {fileName: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.SetPrimaryAttachment, () => {
     cy.get(`button[title="${params.fileName}"]`).rightclick();
-    cy.get("[data-cy=\"set.attachment.as.primary\"]", { timeout: 1000 }).click();
+    cy.wait(500);
+    cy.get("[data-cy=\"set.attachment.as.primary\"]").click();
   });
 });
 
@@ -152,10 +153,10 @@ Cypress.Commands.add("atchNoPrimaryForRedline", (params: {fileName: string }) =>
 });
 
 Cypress.Commands.add("atchDownloadFile", (params: {fileName: string; saveFileName: string }) => {
-  cy.route2({ pathname: "/api/v1/attachments/*/download*" }, (req) => {
+  cy.intercept({ pathname: "/api/v1/attachments/*/download*" }, (req) => {
     req.reply((res) => {
       if (res.body !== "") {
-        const response = JSON.parse(res.body);
+        const response = res.body;
         res.send(response.url);
       }
     });
@@ -169,9 +170,8 @@ Cypress.Commands.add("atchDownloadFile", (params: {fileName: string; saveFileNam
       cy.get("[data-cy=\"passwordConfirm\"]").click();
     }
   });
-  cy.wait("@attach");
   cy.wait("@attach").then((res) => {
-    const fileUrl = res.response.body.toString();
+    const fileUrl = res.response?.body.toString();
     cy.downloadFile({
       url: fileUrl,
       directory: "cypress/downloads",
@@ -181,10 +181,10 @@ Cypress.Commands.add("atchDownloadFile", (params: {fileName: string; saveFileNam
 });
 
 Cypress.Commands.add("atchDownloadAll", () => {
-  cy.route2({ pathname: "/api/v1/attachments/*/download*" }, (req) => {
+  cy.intercept({ pathname: "/api/v1/attachments/*/download*" }, (req) => {
     req.reply((res) => {
       if (res.body !== "") {
-        const response = JSON.parse(res.body);
+        const response = res.body;
         res.send(response.url);
       }
     });
@@ -197,14 +197,16 @@ Cypress.Commands.add("atchDownloadAll", () => {
       cy.get("[data-cy=\"passwordConfirm\"]").click();
     }
   });
-  cy.wait("@attach");
   cy.wait("@attach").then((res) => {
-    const fileUrl = res.response.body.toString();
-    const fileName = fileUrl.split("/")[5].split("?");
-    cy.downloadFile({
-      url: fileUrl,
-      directory: "cypress/downloads",
-      fileName: fileName[0],
-    });
+    if (res) {
+      const fileUrl = res.response?.body.toString();
+      const fileName = fileUrl.split("/")[5].split("?");
+      cy.downloadFile({
+        url: fileUrl,
+        directory: "cypress/downloads",
+        fileName: fileName[0],
+      });
+    }
+
   });
 });

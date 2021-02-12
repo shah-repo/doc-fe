@@ -26,7 +26,7 @@ const FBEQMaintenanceHistory: React.FunctionComponent<FBEQMaintenanceHistoryProp
       {(item: DocumentRevision, index) => {
         const dueDate = get(item.formInput, "fb-equipment_due_date");
         return (
-          <Box display="flex" flexDirection="row">
+          <Box display="flex" flexDirection="row" key={`fb-eq-${index}`}>
             <Box color={Colors.medium_blue} mr={0.5}>
               <Link
                 to={documentVersionPath(item.id, item.document?.id )}
