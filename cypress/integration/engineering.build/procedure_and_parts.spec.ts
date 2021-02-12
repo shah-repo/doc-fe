@@ -521,12 +521,18 @@ context("Procedure and parts flow test", () => {
           cy.arClickAddBtnOnAddDocumentsDialog();
         });
 
+        // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
+
+        it("Click Create Approval Request", () => {
+          cy.arClickCreateApprovalRequestAfterCompletingForm();
+        });
+
         it("Add first approver to approval request on approver list", () => {
           cy.arAddApproverOnApproverList({ approver: USERS[1].email });
         });
 
-        it("Click Create Approval Request", () => {
-          cy.arClickCreateApprovalRequestAfterCompletingForm();
+        it("Save changes", () => {
+          cy.arSaveApiCall();
         });
 
         it("Click 'Send To Review'", () => {

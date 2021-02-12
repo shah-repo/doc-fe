@@ -140,7 +140,7 @@ Cypress.Commands.add("arClickAddBtnOnAddDocumentsDialog", () => {
 });
 
 Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string }) => {
-  cy.get("[data-cy=\"approvers\"]").click();
+  cy.get("[data-cy=\"fb-approvers-approvers\"]").click();
   cy.get("ul[role=\"listbox\"]>li").contains(params.approver).click();
 });
 
