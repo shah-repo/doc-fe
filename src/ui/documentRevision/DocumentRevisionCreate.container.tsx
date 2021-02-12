@@ -126,7 +126,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
       equipment_id: docRevId,
     };
     initialValues.formDocument = {
-      id: pmFormId,
+      ...pmForm,
     };
   }
 
