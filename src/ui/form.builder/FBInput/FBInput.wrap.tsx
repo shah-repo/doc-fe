@@ -130,7 +130,7 @@ export const withFBInput = <T extends FBInputProps>(
         disabled,
         onChange,
         onBlur,
-        ...(type !== "autocomplete" && { value }),
+        ...(withState && type !== "autocomplete" && { value }),
         ...(type === "textfield" && { error }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
         ...(workspaceState?.mode === "preview" && { className: FBClasses.inputPreview }),
