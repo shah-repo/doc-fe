@@ -52,7 +52,7 @@ export const withFBInput = <T extends FBInputProps>(
     ...props
   }: T) => {
 
-    const { formState, workspaceState, bookmarkState } = FB.useStores();
+    const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
     const { isOutput } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
@@ -68,7 +68,7 @@ export const withFBInput = <T extends FBInputProps>(
     // Set validation scheme. This is union of scheme & comps configs.
     useEffect(() => {
       if (!applicableValidationSchema) { return; }
-      workspaceState?.setValidationSchemaItem({ name, label, type, ...props });
+      schemaState?.setValidationSchemaItem({ name, label, type, ...props });
     }, []);
 
     // TODO: Autocomplete default set as input
