@@ -34,8 +34,12 @@ export default (on, config) => {
       if (value != null) { shouldSkip = value; }
       return shouldSkip;
     },
-    gmailGetLastMail: getEmail,
-    gmailGetMails: getEmails,
+    gmailGetLastMail(email) {
+      return getEmail(email);
+    },
+    gmailGetMails(params: {userEmail; options}) {
+      return getEmails(params.userEmail, params.options);
+    },
     downloadFile,
     deleteScreenshotsFolder(params: {CONFIG: any; specFileName: string}) {
       const { CONFIG, specFileName } = params;

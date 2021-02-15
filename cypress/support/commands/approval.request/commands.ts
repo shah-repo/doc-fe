@@ -58,12 +58,34 @@ declare global {
         employeeId: string;
         sessionId: string;
       }): Chainable<Subject>;
+      arPatchAR(params: {
+        payload: ChangeRequestEditRequestBody;
+        arID: string;
+        employeeId: string;
+        sessionId: string;
+      }): Chainable<Subject>;
     }
   }
 }
 
 Cypress.Commands.add("arCheckDashboardARNotificationExistance", (params: {shouldExist: boolean}) => {
   cy.get("[data-cy=\"pendingActionsAR\"]").should(params.shouldExist ? "exist" : "not.exist");
+});
+
+Cypress.Commands.add("arPatchAR", (params: {
+  payload: ChangeRequestEditRequestBody;
+  arID: string;
+  employeeId: string;
+  sessionId: string;
+}) => {
+  cy.request({
+    method: "PATCH",
+    url: `${CONFIG.BE_URL}/api/v1/change_requests/${params.arID}`,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
 });
 
 Cypress.Commands.add("arCreateApprovalRequest", (params: {

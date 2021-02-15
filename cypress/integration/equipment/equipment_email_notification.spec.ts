@@ -216,6 +216,7 @@ context("Test Equipment maintenance email notifications", () => {
                 effectiveDate: (new Date()).toISOString(),
                 documentType: { id: approvalRequestDocumentType[0].id },
                 formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
               },
               employeeId: adminEmployee.id,
               sessionId: loginResponse.sessionId,
@@ -341,6 +342,7 @@ context("Test Equipment maintenance email notifications", () => {
             effectiveDate: (new Date()).toISOString(),
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
           },
           employeeId: adminEmployee.id,
           sessionId: loginResponse.sessionId,
@@ -426,31 +428,64 @@ context("Test Equipment maintenance email notifications", () => {
                   justificationOfChange: "ar test",
                   id: faker.random.uuid(),
                 }],
-                approvers: [{
-                  id: adminEmployee.id,
-                }],
+                approvers: [
+                  {
+                    approver: {
+                      id: adminEmployee.id,
+                    },
+                    signatureGroupId: {
+                      id: null,
+                    },
+                  },
+                ],
               },
             },
             employeeId: adminEmployee.id,
             sessionId: loginResponse.sessionId,
           }).then((response) => {
             createdARForEquipNoOwnerCoordinator = response;
-            cy.arInReview({
+            cy.arPatchAR({
+              payload: {
+                formInput: {
+                  documentRevisions: [{
+                    proposedDocumentRevision: { id: createdSecondEquipmentDocID },
+                    descriptionOfChange: "ar test",
+                    justificationOfChange: "ar test",
+                    id: faker.random.uuid(),
+                  }],
+                  approvers: [
+                    {
+                      approver: {
+                        id: adminEmployee.id,
+                      },
+                      signatureGroupId: {
+                        id: null,
+                      },
+                    },
+                  ],
+                },
+              },
+              arID: createdARForEquipNoOwnerCoordinator.id,
               employeeId: adminEmployee.id,
               sessionId: loginResponse.sessionId,
-              arID: createdARForEquipNoOwnerCoordinator.id,
             }).then(() => {
-              cy.arApprove({
+              cy.arInReview({
                 employeeId: adminEmployee.id,
                 sessionId: loginResponse.sessionId,
                 arID: createdARForEquipNoOwnerCoordinator.id,
               }).then(() => {
-                cy.arClose({
+                cy.arApprove({
                   employeeId: adminEmployee.id,
                   sessionId: loginResponse.sessionId,
                   arID: createdARForEquipNoOwnerCoordinator.id,
                 }).then(() => {
-                  done();
+                  cy.arClose({
+                    employeeId: adminEmployee.id,
+                    sessionId: loginResponse.sessionId,
+                    arID: createdARForEquipNoOwnerCoordinator.id,
+                  }).then(() => {
+                    done();
+                  });
                 });
               });
             });
@@ -551,6 +586,7 @@ context("Test Equipment maintenance email notifications", () => {
 
     context("Trigger script and verify email is not received", () => {
       it("Trigger email script", () => {
+        cy.wait(5000);
         cy.triggerDueDateEmailScript({
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
@@ -658,22 +694,48 @@ context("Test Equipment maintenance email notifications", () => {
             sessionId: loginResponse.sessionId,
           }).then((response) => {
             createdARForEquipNoOwnerCoordinator = response;
-            cy.arInReview({
+            cy.arPatchAR({
+              payload: {
+                formInput: {
+                  documentRevisions: [{
+                    proposedDocumentRevision: { id: createdSecondEquipmentDocID },
+                    descriptionOfChange: "ar test",
+                    justificationOfChange: "ar test",
+                    id: faker.random.uuid(),
+                  }],
+                  approvers: [
+                    {
+                      approver: {
+                        id: adminEmployee.id,
+                      },
+                      signatureGroupId: {
+                        id: null,
+                      },
+                    },
+                  ],
+                },
+              },
+              arID: createdARForEquipNoOwnerCoordinator.id,
               employeeId: adminEmployee.id,
               sessionId: loginResponse.sessionId,
-              arID: createdARForEquipNoOwnerCoordinator.id,
             }).then(() => {
-              cy.arApprove({
+              cy.arInReview({
                 employeeId: adminEmployee.id,
                 sessionId: loginResponse.sessionId,
                 arID: createdARForEquipNoOwnerCoordinator.id,
               }).then(() => {
-                cy.arClose({
+                cy.arApprove({
                   employeeId: adminEmployee.id,
                   sessionId: loginResponse.sessionId,
                   arID: createdARForEquipNoOwnerCoordinator.id,
                 }).then(() => {
-                  done();
+                  cy.arClose({
+                    employeeId: adminEmployee.id,
+                    sessionId: loginResponse.sessionId,
+                    arID: createdARForEquipNoOwnerCoordinator.id,
+                  }).then(() => {
+                    done();
+                  });
                 });
               });
             });
@@ -774,11 +836,12 @@ context("Test Equipment maintenance email notifications", () => {
 
     context("Trigger script and verify email is received only once", () => {
       it("Trigger email script", () => {
+        cy.wait(5000);
         cy.triggerDueDateEmailScript({
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
         });
-        cy.wait(15000);
+        cy.wait(10000);
       });
 
       it("Verify email is received for EQ-00002", () => {
@@ -793,6 +856,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Trigger email script", () => {
+        cy.wait(5000);
         cy.triggerDueDateEmailScript({
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
@@ -906,22 +970,48 @@ context("Test Equipment maintenance email notifications", () => {
             sessionId: loginResponse.sessionId,
           }).then((response) => {
             createdARForEquipNoOwnerCoordinator = response;
-            cy.arInReview({
+            cy.arPatchAR({
+              payload: {
+                formInput: {
+                  documentRevisions: [{
+                    proposedDocumentRevision: { id: createdSecondEquipmentDocID },
+                    descriptionOfChange: "ar test",
+                    justificationOfChange: "ar test",
+                    id: faker.random.uuid(),
+                  }],
+                  approvers: [
+                    {
+                      approver: {
+                        id: adminEmployee.id,
+                      },
+                      signatureGroupId: {
+                        id: null,
+                      },
+                    },
+                  ],
+                },
+              },
+              arID: createdARForEquipNoOwnerCoordinator.id,
               employeeId: adminEmployee.id,
               sessionId: loginResponse.sessionId,
-              arID: createdARForEquipNoOwnerCoordinator.id,
             }).then(() => {
-              cy.arApprove({
+              cy.arInReview({
                 employeeId: adminEmployee.id,
                 sessionId: loginResponse.sessionId,
                 arID: createdARForEquipNoOwnerCoordinator.id,
               }).then(() => {
-                cy.arClose({
+                cy.arApprove({
                   employeeId: adminEmployee.id,
                   sessionId: loginResponse.sessionId,
                   arID: createdARForEquipNoOwnerCoordinator.id,
                 }).then(() => {
-                  done();
+                  cy.arClose({
+                    employeeId: adminEmployee.id,
+                    sessionId: loginResponse.sessionId,
+                    arID: createdARForEquipNoOwnerCoordinator.id,
+                  }).then(() => {
+                    done();
+                  });
                 });
               });
             });
@@ -1022,6 +1112,7 @@ context("Test Equipment maintenance email notifications", () => {
 
     context("Trigger script and verify email is received only once", () => {
       it("Trigger email script", () => {
+        cy.wait(5000);
         cy.triggerDueDateEmailScript({
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
@@ -1041,6 +1132,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Trigger email script", () => {
+        cy.wait(5000);
         cy.triggerDueDateEmailScript({
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
@@ -1149,22 +1241,48 @@ context("Test Equipment maintenance email notifications", () => {
             sessionId: loginResponse.sessionId,
           }).then((response) => {
             createdARForEquipNoOwnerCoordinator = response;
-            cy.arInReview({
+            cy.arPatchAR({
+              payload: {
+                formInput: {
+                  documentRevisions: [{
+                    proposedDocumentRevision: { id: createdSecondEquipmentDocID },
+                    descriptionOfChange: "ar test",
+                    justificationOfChange: "ar test",
+                    id: faker.random.uuid(),
+                  }],
+                  approvers: [
+                    {
+                      approver: {
+                        id: adminEmployee.id,
+                      },
+                      signatureGroupId: {
+                        id: null,
+                      },
+                    },
+                  ],
+                },
+              },
+              arID: createdARForEquipNoOwnerCoordinator.id,
               employeeId: adminEmployee.id,
               sessionId: loginResponse.sessionId,
-              arID: createdARForEquipNoOwnerCoordinator.id,
             }).then(() => {
-              cy.arApprove({
+              cy.arInReview({
                 employeeId: adminEmployee.id,
                 sessionId: loginResponse.sessionId,
                 arID: createdARForEquipNoOwnerCoordinator.id,
               }).then(() => {
-                cy.arClose({
+                cy.arApprove({
                   employeeId: adminEmployee.id,
                   sessionId: loginResponse.sessionId,
                   arID: createdARForEquipNoOwnerCoordinator.id,
                 }).then(() => {
-                  done();
+                  cy.arClose({
+                    employeeId: adminEmployee.id,
+                    sessionId: loginResponse.sessionId,
+                    arID: createdARForEquipNoOwnerCoordinator.id,
+                  }).then(() => {
+                    done();
+                  });
                 });
               });
             });
@@ -1265,6 +1383,7 @@ context("Test Equipment maintenance email notifications", () => {
 
     context("Trigger script and verify email is not received", () => {
       it("Trigger email script", () => {
+        cy.wait(13000);
         cy.triggerDueDateEmailScript({
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
@@ -1273,7 +1392,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify no email is received for EQ-00004", () => {
-        const dateOffset = (15 * 1000);
+        const dateOffset = (12 * 1000);
         const dateAfterEmailShouldArrive = new Date();
         dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 

@@ -4,7 +4,7 @@ import * as path from "path";
 
 export async function getEmail(email) {
   let returnValue = null;
-  const dateOffset = (5 * 60 * 1000);
+  const dateOffset = (20 * 1000);
   const myDate = new Date();
   myDate.setTime(myDate.getTime() - dateOffset);
   const mail = await gmail.check_inbox(
@@ -13,7 +13,7 @@ export async function getEmail(email) {
     {
       to: email,
       wait_time_sec: 5,
-      max_wait_time_sec: 30,
+      max_wait_time_sec: 40,
       include_body: true,
       after: myDate,
     }
@@ -30,13 +30,13 @@ export async function getEmails(email, options?) {
   let settings;
 
   if (!options) {
-    const dateOffset = (20 * 1000);
+    const dateOffset = (25 * 1000);
     const myDate = new Date();
     myDate.setTime(myDate.getTime() - dateOffset);
     settings =     {
       to: email,
       wait_time_sec: 5,
-      max_wait_time_sec: 30,
+      max_wait_time_sec: 50,
       include_body: true,
       after: myDate,
     };
