@@ -276,10 +276,6 @@ context("Document Attachment Flow", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Add first approver to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
-    });
-
     it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
       cy.arClickCreateApprovalRequestAfterCompletingForm();
@@ -308,6 +304,14 @@ context("Document Attachment Flow", () => {
 
     it("Filter approval by name and status, and select it", () => {
       cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Draft" });
+    });
+
+    it("Add first approver to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+    });
+
+    it("Save changes", () => {
+      cy.arSaveApiCall();
     });
 
     it("Click 'Send To Review'", () => {

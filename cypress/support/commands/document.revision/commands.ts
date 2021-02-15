@@ -567,6 +567,7 @@ export interface IApproveAndReleasePayload{
   effectiveDate: string;
   documentType: { id: string };
   formDocument: { id: string };
+  approversWithSignatures?: [{ approver: {id: string} }];
 }
 
 Cypress.Commands.add("drAPIApproveAndRelease", (params: {

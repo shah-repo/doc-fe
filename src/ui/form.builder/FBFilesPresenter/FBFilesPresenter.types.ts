@@ -3,7 +3,7 @@ import { Id } from "../../../state/ducks/common";
 import { FBAttachment } from "../FBFilePresenter";
 
 export type FBFilesPresenterProps =
-& Pick<FBInputProps, "boxProps">
+& Pick<FBInputProps, "boxProps" | "disabled">
 & Pick<FBProviderProps, "filesPresenterState">
 & Pick<FBFilePresenterProps, "mode">
 & {

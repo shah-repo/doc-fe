@@ -19,7 +19,7 @@ const FBFileUpload: React.FunctionComponent<FBFileUploadProps> = ({
       {!isEmpty(files) && (
         <FBFilesPresenter
           boxProps={{ mt: 2 }}
-          {...{ files }}
+          {...{ files, disabled }}
         />
       )}
     </FBProvider>
