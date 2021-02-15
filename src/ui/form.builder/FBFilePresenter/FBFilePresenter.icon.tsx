@@ -71,6 +71,7 @@ const FBFilePresenterIcon: React.FunctionComponent<FBFilePresenterModeProps> = (
             background: Colors.light_red,
           }}
           onClick={handleRemove}
+          {...{ disabled }}
         >
           <RemoveCircleOutlineIcon fontSize="small" />
         </IconButton>
