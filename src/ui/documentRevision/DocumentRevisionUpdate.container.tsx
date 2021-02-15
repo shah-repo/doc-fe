@@ -73,7 +73,7 @@ DocumentRevisionUpdateContainerProps
     documentRevisionStatusContextFromCR = React.createContext<undefined | DocumentRevisionStatus>(undefined);
   }, []);
 
-  if (!(canEditDocumentRevision(documentRevision, currentUserEmail) || isCurrentUserOperator )) {
+  if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator) )) {
     return (
       <DocumentRevisionSummaryPresenter
         dataProp={documentRevision}
