@@ -134,7 +134,6 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case "approvals.status":
       case "status":
-        // eslint-disable-next-line no-case-declarations
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
           returnValue = (audit.nextValue as Employee).user?.name;
           break;
