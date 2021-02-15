@@ -13,7 +13,6 @@ export enum ApprovalStatus {
 export interface Owner {
   id: string;
   user: User;
-  approvalStatus?: string;
 }
 
 export interface User {

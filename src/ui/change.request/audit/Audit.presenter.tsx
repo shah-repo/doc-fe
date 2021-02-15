@@ -61,9 +61,9 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           if (!isEmpty(removedApproverByDate)) {
             change = {
               ...change,
+              approvalStatus: change.nextValue as string,
               nextValue: {
                 ...removedApproverByDate[0].approver,
-                approvalStatus: change.nextValue as string,
               },
             };
           }
