@@ -1,8 +1,9 @@
 import { Box, List } from "@material-ui/core";
-import { orderBy } from "lodash";
+import { isEmpty, orderBy } from "lodash";
 import React from "react";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
-import { ApprovalStatus } from "../../../state/ducks/common";
+import { Approval, ApprovalStatus } from "../../../state/ducks/common";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -10,28 +11,20 @@ import { styles } from "./Audit.presenter.styles";
 
 interface OwnProps {
   audit: AuditGroupType;
+  approvals: Approval[];
 }
 
 export type AuditPresenterProps = OwnProps;
 
 export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
+  approvals,
 }) => {
   const classes = styles();
 
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
-
-      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
-       * TODO: this if statement should be deleted
-      */
-      if (audit[groupId].filter((change) =>
-        change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
-      ).length === 0) {
-        return null;
-      }
-
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer} data-cy={`audit-${key}`}>
@@ -58,24 +51,33 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         //   // This is a hack to not display approvers twice in history
         //   // Until BE removes field approvals
         //   return;
-        /** Temporary solution until BE adds additional info (who was abandoned) to audit.
-       * TODO: this condition should be deleted
-      */
-      } else if (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned) {
-        return;
       } else if (change.field !== "effectiveDate" || change.nextValue !== "null") {
+        const isRemovingApproverAction = change.field === "approvals.status" &&
+        change.nextValue === ApprovalStatus.Abandoned;
+        if (isRemovingApproverAction) {
+          const removedApproverByDate = approvals.filter((e) =>
+            getFormattedDateString(e.updatedAt, MomentFormats.DateTimeSeconds) ===
+            getFormattedDateString(change.timestamp, MomentFormats.DateTimeSeconds));
+          if (!isEmpty(removedApproverByDate)) {
+            change = {
+              ...change,
+              nextValue: {
+                ...removedApproverByDate[0].approver,
+                approvalStatus: change.nextValue as string,
+              },
+            };
+          }
+        }
         singleFields.push(
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
               <Text
                 message={
-                  change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned
-                    ? "changeRequest.audit.approvers.removed.by"
+                  isRemovingApproverAction
+                  // hack, since BE cannot make correct data for removing approvers
+                    ? "changeRequest.audit.approvers.ARRAY_DELETED"
                     : `changeRequest.audit.${change.field}.${change.type}`
                 }
-                values={{
-                  owner: change.owner?.user.name,
-                }}
               />
             </Box>
             <div className={classes.auditValue}>
