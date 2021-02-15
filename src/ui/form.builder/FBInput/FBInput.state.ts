@@ -16,7 +16,6 @@ export class FBInputState {
 
   public constructor({ value, hidden }: FBInputConstructor) {
     this.value = value;
-    this.autosaveNextValue = value;
     this.hidden = hidden;
   }
 
