@@ -18,6 +18,7 @@ import { FBHelloSign } from "../FBHelloSign";
 import { FBHyperlink } from "../FBHyperlink";
 import { FBInlineApproval } from "../FBInlineApproval";
 import { FBInstructionsDocument } from "../FBInstructionsDocument";
+import FBLHRStep from "../FBLHRStep/FBLHRStep";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
 import { FBParts } from "../FBParts";
@@ -107,6 +108,7 @@ export class FBSchemaState {
     eqmaintenance: FBEQMaintenance,
     textfieldwithrange: FBTextFieldWithRange,
     supplier: FBSupplier,
+    lhrstep: FBLHRStep,
   };
 
   @observable public schema?: FBSchemaProps[];

@@ -68,7 +68,8 @@ export type FBInputType =
   | "textfieldwithrange"
   | "range"
   | "passpercentage"
-  | "supplier";
+  | "supplier"
+  | "lhrstep";
 
 export type FBInputProps =
   & FBLabelProps
