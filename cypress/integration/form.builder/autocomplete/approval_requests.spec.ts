@@ -87,10 +87,7 @@ context("FORM Field test", () => {
 
       it("Enter description 'AR from New form template for approval request'", () => {
         cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
-      });
-
-      it("Add first approver to approval request on approver list", () => {
-        cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+        cy.wait(2000);
       });
 
       it("Click Create Approval Request", () => {
@@ -98,6 +95,14 @@ context("FORM Field test", () => {
           [CyRoutes.PostChangeRequests], () => {
             cy.get("[data-cy=\"navigation.createChangeRequest\"]").click();
           });
+      });
+
+      it("Add first approver to approval request on approver list", () => {
+        cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+      });
+
+      it("Save changes", () => {
+        cy.arSaveApiCall();
       });
     });
 
