@@ -249,7 +249,7 @@
   },
   {
     "id": "28",
-    "path": "/document_revisions?documentTypeAcronym=SEED-&status%5B%5D=RELEASED",
+    "path": "/document_revisions?docTypeGroupOptions%5B%5D=SEED&status%5B%5D=RELEASED",
     "label": "Seed Documents",
     "valueKey": "id",
     "labelKey": "name",
