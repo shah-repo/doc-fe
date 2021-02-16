@@ -257,7 +257,7 @@
   },
   {
     "id": "29",
-    "path": "/document_revisions/forms_group_option?docTypeGroupOption=MPI",
+    "path": "/document_revisions?docTypeGroups%5B%5D=MPI&status%5B%5D=RELEASED",
     "label": "MPI documents",
     "valueKey": "id",
     "labelKey": "name",

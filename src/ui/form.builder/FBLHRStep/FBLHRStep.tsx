@@ -4,7 +4,6 @@ import { withFBLHRStep } from "./FBLHRStep.wrap";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   name,
-  label,
   ...props
 }) => (
   <FBInput {...props} {...{ name }} type="lhrstep">
@@ -12,7 +11,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
       name={`fb-lhrstep-mpi-${name}`}
       optionId={FBAutocompleteAsyncOption.mpiDocuments}
       gutter={false}
-      {...{ label }}
     />
   </FBInput>
 );
