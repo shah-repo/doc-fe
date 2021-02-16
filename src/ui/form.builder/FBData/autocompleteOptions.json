@@ -103,7 +103,7 @@
     "path": "/document_revisions?docTypeGroups%5B%5D=PO&status%5B%5D=RELEASED",
     "label": "Purchase Order list",
     "valueKey": "id",
-    "labelKey": "name",
+    "labelKey": "description",
     "labelPrefixRoot": "document.docId",
     "root": "",
     "includeRevision": "displayRevision"
