@@ -591,17 +591,22 @@ context("Test Equipment maintenance email notifications", () => {
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
         });
-        cy.wait(10000);
       });
 
       it("Verify email is not received for EQ-00001", () => {
-        cy.imapVerifyLastEmailDoesNotContain({
-          userEmail: ADMIN_USER.email,
-          content: "EQ-00001 Equipment maintenance document due date in",
-        });
-        cy.imapVerifyLastEmailDoesNotContain({
+        const dateOffset = (5 * 1000);
+        const dateAfterEmailShouldArrive = new Date();
+        dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+
+        cy.imapVerifyNumberOfEmailsReceivedSince({
           userEmail: FIRST_USER.email,
-          content: "EQ-00001 Equipment maintenance document due date in",
+          emailCount: 0,
+          date: dateAfterEmailShouldArrive,
+        });
+        cy.imapVerifyNumberOfEmailsReceivedSince({
+          userEmail: ADMIN_USER.email,
+          emailCount: 0,
+          date: dateAfterEmailShouldArrive,
         });
       });
     });
@@ -841,17 +846,22 @@ context("Test Equipment maintenance email notifications", () => {
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
         });
-        cy.wait(10000);
       });
 
       it("Verify email is received for EQ-00002", () => {
+        const dateOffset = (5 * 1000);
+        const dateAfterEmailShouldArrive = new Date();
+        dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+
         cy.imapVerifyLastEmailContains({
           userEmail: FIRST_USER.email,
           content: "EQ-00002 Equipment maintenance document due date in 4 days",
+          date: dateAfterEmailShouldArrive,
         });
         cy.imapVerifyLastEmailContains({
           userEmail: ADMIN_USER.email,
           content: "EQ-00002 Equipment maintenance document due date in 4 days",
+          date: dateAfterEmailShouldArrive,
         });
       });
 
@@ -861,11 +871,10 @@ context("Test Equipment maintenance email notifications", () => {
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
         });
-        cy.wait(10000);
       });
 
       it("Verify email is not sent again for EQ-00002", () => {
-        const dateOffset = (15 * 1000);
+        const dateOffset = (5 * 1000);
         const dateAfterEmailShouldArrive = new Date();
         dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 
@@ -1117,17 +1126,22 @@ context("Test Equipment maintenance email notifications", () => {
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
         });
-        cy.wait(15000);
       });
 
       it("Verify email is received for EQ-00003", () => {
+        const dateOffset = (5 * 1000);
+        const dateAfterEmailShouldArrive = new Date();
+        dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+
         cy.imapVerifyLastEmailContains({
           userEmail: FIRST_USER.email,
           content: "EQ-00003 Equipment maintenance document due date in 17 days",
+          date: dateAfterEmailShouldArrive,
         });
         cy.imapVerifyLastEmailContains({
           userEmail: ADMIN_USER.email,
           content: "EQ-00003 Equipment maintenance document due date in 17 days",
+          date: dateAfterEmailShouldArrive,
         });
       });
 
@@ -1137,11 +1151,10 @@ context("Test Equipment maintenance email notifications", () => {
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
         });
-        cy.wait(10000);
       });
 
       it("Verify email is not sent again for EQ-00003", () => {
-        const dateOffset = (15 * 1000);
+        const dateOffset = (5 * 1000);
         const dateAfterEmailShouldArrive = new Date();
         dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 
@@ -1388,11 +1401,10 @@ context("Test Equipment maintenance email notifications", () => {
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
         });
-        cy.wait(10000);
       });
 
       it("Verify no email is received for EQ-00004", () => {
-        const dateOffset = (12 * 1000);
+        const dateOffset = (5 * 1000);
         const dateAfterEmailShouldArrive = new Date();
         dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 

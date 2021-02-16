@@ -19,7 +19,7 @@ declare global {
       imapVerifyLastEmailDoesNotContain(params: {userEmail: string; content: string}): Chainable;
       imapVerifyNumberOfEmailsReceivedSince(params: {userEmail: string; emailCount: integer; date: Date}): Chainable;
       imapGetActivationLink(params: {userEmail: string}): Chainable;
-      imapVerifyLastEmailContains(params: {userEmail: string; content: string}): Chainable;
+      imapVerifyLastEmailContains(params: {userEmail: string; content: string; date: Date}): Chainable;
     }
   }
 }
@@ -62,16 +62,25 @@ Cypress.Commands.add("imapVerifyApprovedAREmailNotification", (params: { userEma
   });
 });
 
-Cypress.Commands.add("imapVerifyLastEmailContains", (params: { userEmail: string; content: string}) => {
-  cy.imapGetTextFromLastEmail({ userEmail: params.userEmail }).should((emailText) => {
-    if (emailText) {
+Cypress.Commands.add("imapVerifyLastEmailContains", (params: { userEmail: string; content: string; date: Date}) => {
+  const getEmailSetting =  {
+    to: params.userEmail,
+    wait_time_sec: 5,
+    max_wait_time_sec: 30,
+    include_body: true,
+    after: params.date,
+  };
+
+  cy.imapGetMails({ userEmail: params.userEmail, options: getEmailSetting }).should((emails) => {
+    if (emails) {
+      const emailText = emails[0].body.html;
       const startingPosition = emailText.search("<body");
       const endingPosition = emailText.search("</body>");
       const emailBody = emailText.substring(startingPosition, endingPosition);
       expect(emailBody).to.contain(params.content);
     }
     else {
-      expect.fail("No email found");
+      assert.fail("No email found");
     }
   });
 });
