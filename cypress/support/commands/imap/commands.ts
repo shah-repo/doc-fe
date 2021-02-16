@@ -64,10 +64,15 @@ Cypress.Commands.add("imapVerifyApprovedAREmailNotification", (params: { userEma
 
 Cypress.Commands.add("imapVerifyLastEmailContains", (params: { userEmail: string; content: string}) => {
   cy.imapGetTextFromLastEmail({ userEmail: params.userEmail }).should((emailText) => {
-    const startingPosition = emailText.search("<body");
-    const endingPosition = emailText.search("</body>");
-    const emailBody = emailText.substring(startingPosition, endingPosition);
-    expect(emailBody).to.contain(params.content);
+    if (emailText) {
+      const startingPosition = emailText.search("<body");
+      const endingPosition = emailText.search("</body>");
+      const emailBody = emailText.substring(startingPosition, endingPosition);
+      expect(emailBody).to.contain(params.content);
+    }
+    else {
+      expect.fail("No email found");
+    }
   });
 });
 
