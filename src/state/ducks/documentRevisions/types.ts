@@ -170,6 +170,8 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
   retrain?: boolean;
   renderHTML?: string;
   status?: DocumentRevisionStatus;
+  parentEquipment?: Id;
+  equipmentSection?: string;
 }
 
 export interface DocumentRevisionSetAction {
