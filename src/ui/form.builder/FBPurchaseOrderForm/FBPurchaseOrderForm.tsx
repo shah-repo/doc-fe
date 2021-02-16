@@ -46,6 +46,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
           name="partNumberTitle"
           onChange={handlePartDescription}
           disabled={hasPartNumber}
+          withState
         />
       </>
     }

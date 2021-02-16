@@ -36,7 +36,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
       (revision) => checkIsDocumentPO(revision.document?.documentType?.groupOptions)));
     // ENC-6598 - app.approver for new structure, app for old structure
     defaultValue = formState?.getFieldValue(name)?.map((app) => app.approver || app);
-    disabled = disabled || !workspaceState?.changeRequest;
+    disabled = !workspaceState?.changeRequest;
 
     React.useEffect(() => {
       reaction( // React on documentRevisions comp changes

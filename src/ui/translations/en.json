@@ -428,6 +428,8 @@
   "documentRevision.audit.securityGroups.ARRAY_DELETED": "Access revoked for group",
   "documentRevision.audit.securityEmployees.ARRAY_NEW": "Access granted to user",
   "documentRevision.audit.securityEmployees.ARRAY_DELETED": "Access revoked for user",
+  "documentRevision.audit.operators.ARRAY_NEW": "Operator added",
+  "documentRevision.audit.operators.ARRAY_DELETED": "Operator removed",
   "documentRevision.audit.approvers.removed.by": "Approval Removed by {owner}",
   "documentRevision.void.alert": "Are you sure you want to void this document?\nThis action cannot be undone.",
   "documentRevision.record.void.alert": "Are you sure you want to void this record?\nThis action cannot be undone.",
