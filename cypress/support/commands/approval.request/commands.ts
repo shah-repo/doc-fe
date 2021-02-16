@@ -2,6 +2,8 @@
 
 
 /* eslint-disable max-len */
+import moment from "moment";
+import "moment-timezone";
 import { ChangeRequestEditRequestBody } from "../../../../src/state/ducks/changeRequest/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
@@ -40,12 +42,50 @@ declare global {
       arCheckDashboardARNotificationExistance(params: {shouldExist: boolean}): Chainable<Subject>;
       arVerifySignatureIsNotMet(): Chainable<Subject>;
       arApproverRoleStatus(params: {roleName: string; enabled: boolean}): Chainable<Subject>;
+      arInReview(params: {arID: string; employeeId: string; sessionId: string}): Chainable<Subject>;
+      arApprove(params: {arID: string; employeeId: string; sessionId: string}): Chainable<Subject>;
+      arClose(params: {arID: string; employeeId: string; sessionId: string}): Chainable<Subject>;
+      approvals(params: {
+        assignedEmployeeId: string;
+        fieldId: string;
+        recordId: string;
+        employeeId: string;
+        sessionId: string;
+      }): Chainable<Subject>;
+      approvalSubmitForApproval(params: {docRevId: string; employeeId: string; sessionId: string}): Chainable<Subject>;
+      approvalApprove(params: {
+        approvalsId: string;
+        employeeId: string;
+        sessionId: string;
+      }): Chainable<Subject>;
+      arPatchAR(params: {
+        payload: ChangeRequestEditRequestBody;
+        arID: string;
+        employeeId: string;
+        sessionId: string;
+      }): Chainable<Subject>;
     }
   }
 }
 
 Cypress.Commands.add("arCheckDashboardARNotificationExistance", (params: {shouldExist: boolean}) => {
   cy.get("[data-cy=\"pendingActionsAR\"]").should(params.shouldExist ? "exist" : "not.exist");
+});
+
+Cypress.Commands.add("arPatchAR", (params: {
+  payload: ChangeRequestEditRequestBody;
+  arID: string;
+  employeeId: string;
+  sessionId: string;
+}) => {
+  cy.request({
+    method: "PATCH",
+    url: `${CONFIG.BE_URL}/api/v1/change_requests/${params.arID}`,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
 });
 
 Cypress.Commands.add("arCreateApprovalRequest", (params: {
@@ -59,6 +99,111 @@ Cypress.Commands.add("arCreateApprovalRequest", (params: {
     body: params.payload,
     headers: {
       Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("arInReview", (params: {
+  arID: string;
+  employeeId: string;
+  sessionId: string;
+}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/change_requests/${params.arID}/in_review`,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("approvalSubmitForApproval", (params: {
+  docRevId: string;
+  employeeId: string;
+  sessionId: string;
+}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/document_revisions/in_review/${params.docRevId}`,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("arApprove", (params: {
+  arID: string;
+  employeeId: string;
+  sessionId: string;
+}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/change_requests/${params.arID}/approve`,
+    headers: {
+      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:Tester1!`,
+    },
+    body: {
+      password: "Tester1!",
+    },
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("approvalApprove", (params: {
+  approvalsId: string;
+  employeeId: string;
+  sessionId: string;
+}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/approvals/${params.approvalsId}/approve`,
+    headers: {
+      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:Tester1!`,
+    },
+    body: {
+      password: "Tester1!",
+    },
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("arClose", (params: {
+  arID: string;
+  employeeId: string;
+  sessionId: string;
+}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/change_requests/${params.arID}/closed`,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+    body: {
+      effectiveDate: moment().tz("America/Los_Angeles").toISOString(),
+    },
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("approvals", (params: {
+  assignedEmployeeId: string;
+  fieldId: string;
+  recordId: string;
+  employeeId: string;
+  sessionId: string;
+}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/approvals`,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+    body: {
+      assigned: {
+        id: params.assignedEmployeeId,
+      },
+      type: "MASTER",
+      fieldId: params.fieldId,
+      partOf: {
+        id: params.recordId,
+      },
     },
   }).then((response) => response.body);
 });
