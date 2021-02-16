@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { concat, difference, filter, find, includes, isEmpty, last, uniqBy } from "lodash";
+import { concat, difference, filter, find, includes, isEmpty, last, sortBy, uniqBy } from "lodash";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { components } from "react-select";
@@ -88,7 +88,7 @@ const Approvers: React.FunctionComponent<Props> = ({
       setCheckedGroups(initialGroups);
       return;
     }
-    const uniqGroups = uniqBy(documentTypeGroups, "id").reverse();
+    const uniqGroups = sortBy(uniqBy(documentTypeGroups, "id"), "documentStage");
     if (isDocumentPO) { // one user can fullfil only one signature requirement (POAM)
       if (!isEmpty(difference(selectedUsers, selectedApprovers))) { // user added
         const newUserId = last(difference(selectedUsers, selectedApprovers))?.value;
