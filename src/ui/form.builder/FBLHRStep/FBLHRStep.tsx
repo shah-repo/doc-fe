@@ -15,7 +15,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
     <FBAutocompleteAsync
       optionId={FBAutocompleteAsyncOption.mpiDocuments}
       gutter={false}
-      withState
+      name={`fb-lhrstep-${name}`}
       {...{ disabled }}
     />
   </FBInput>
