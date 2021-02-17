@@ -48,6 +48,7 @@ export type FBRequiredApprover =
 & {
   joinedEmployees: FBJoinedEmployee[] | string[];
   groupApprover?: string; // FE property for POAM check (ENC-4125)
+  documentStage?: number;
 };
 
 export interface FBApproversConstructor {
