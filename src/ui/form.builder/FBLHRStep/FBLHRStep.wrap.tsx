@@ -1,6 +1,5 @@
-import { reaction } from "mobx";
 import React from "react";
-import { FB, FBLHRStepProps } from "..";
+import { FBLHRStepProps } from "..";
 
 export const withFBLHRStep = <T extends FBLHRStepProps>(
   Component: React.FunctionComponent<T>,
@@ -8,18 +7,10 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
   const Comp = ({
     name,
     ...props
-  }: T) => {
-    const { formState } = FB.useStores();
-    React.useEffect(() => reaction(
-      () => formState?.inputState.get(`fb-lhrstep-${name}`)?.value,
-      (data) => {
-        console.log(data);
-      }
-    ));
-    return Component({
-      ...(props as T),
-      name,
-    }); };
+  }: T) => Component({
+    ...(props as T),
+    name,
+  });
 
   Comp.displayName = "withFBLHRStep";
   return Comp;
