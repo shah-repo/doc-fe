@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash";
+import { isEmpty, isObject } from "lodash";
 import React from "react";
 import { FBFieldTopBarProps } from ".";
 import { FB } from "..";
@@ -53,7 +53,11 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
       const scheme = workspaceState?.getSchema() || [];
       let relatedValidationItem: FBSchemaProps | undefined;
       for (const schemeItem of scheme) {
-        const { name, rules = "" } = schemeItem || {};
+        const { name } = schemeItem || {};
+        let { rules = "" } = schemeItem || {};
+        if (isObject(rules)) {
+          rules = JSON.stringify(rules);
+        }
         if (name && name !== fieldName && (rules.includes(fieldName) || fieldRules.includes(name))) {
           relatedValidationItem = schemeItem;
           break;
