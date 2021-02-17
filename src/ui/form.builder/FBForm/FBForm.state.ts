@@ -1,5 +1,5 @@
 import { flatten, unflatten } from "flat";
-import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, setWith } from "lodash";
+import { cloneDeep, Dictionary, filter, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, setWith } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBFormConstructor, FBInputState, FBWorkspaceMode, FBWorkspaceState } from "..";
 import { FBSchemaState } from "../FBSchema";
@@ -202,13 +202,22 @@ export class FBFormState extends FBSchemaState {
   public registerValidator = (validator: any) => {
     this.Validator.registerAsyncImplicit(
       "required_if_in",
-      function(val: string[], req: string, attribute: string, passes) {
+      function(val: string[], req: any, attribute: string, passes) {
         const reqs = req.split(",");
         const reqName = reqs.shift() || "";
         let inputValue = lodashGet(validator.input, reqName);
         // Radio group support
         !isArray(inputValue) && (inputValue = [inputValue]);
-        const diff = inputValue && inputValue.filter((val) => reqs.includes(val));
+        const diff = filter(inputValue, (iValue) => {
+          const reqGroup = reqs.reduce((group, value) => {
+            if (!inputValue.join(",").includes(value)) {
+              group.push(value);
+              return group;
+            }
+            return group;
+          }, []);
+          return isEmpty(reqGroup);
+        });
         if (diff && diff.length > 0 && (!val || isEmpty(val))) {
           const { messages: { attributeNames } } = validator;
           // validator message changed according to ENC-5130

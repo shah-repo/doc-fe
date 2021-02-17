@@ -11,7 +11,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 let secondEmployee;
-let componentSpecificationDocumentType;
+let clinicalProtocolDocumentType;
 let group;
 const documentRevisionName = "New document for testing AR";
 const approvalRequestTitle = "Approval request from newly created form";
@@ -47,7 +47,7 @@ context("Approval request form", () => {
         }).then((response) => {
           createdCompany = response;
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
+          clinicalProtocolDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           done();
         });
       });
@@ -78,7 +78,7 @@ context("Approval request form", () => {
             document: {
               docId: "CP-00004",
               documentType: {
-                id: componentSpecificationDocumentType[0].id,
+                id: clinicalProtocolDocumentType[0].id,
               },
               securityList: {
                 operators: [],
@@ -119,7 +119,7 @@ context("Approval request form", () => {
             document: {
               docId: "CP-00005",
               documentType: {
-                id: componentSpecificationDocumentType[0].id,
+                id: clinicalProtocolDocumentType[0].id,
               },
               securityList: {
                 operators: [],
