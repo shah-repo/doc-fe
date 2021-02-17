@@ -253,6 +253,8 @@
     "label": "Seed Documents",
     "valueKey": "id",
     "labelKey": "name",
-    "root": ""
+    "labelPrefixRoot": "document.docId",
+    "root": "",
+    "includeRevision": "displayRevision"
   }
 ]
