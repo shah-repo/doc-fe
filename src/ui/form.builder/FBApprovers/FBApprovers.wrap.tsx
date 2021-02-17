@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { cloneDeep, compact, concat, difference, filter, find, includes, isEmpty, last, map } from "lodash";
+import { cloneDeep, compact, concat, difference, filter, find, includes, isEmpty, last, map, sortBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
@@ -117,7 +117,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
     const markGroupChecked = (selectedUsers: FBOption[]) => {
       const previousSelectionIds = approversState?.value || [];
       const newSelectionIds = map(selectedUsers, "id");
-      const requiredGroups = approversState?.data?.reverse();
+      const requiredGroups = sortBy(approversState?.data || [], "documentStage");
       if (isARforPO) { // one user can fullfil only one signature requirement (POAM)
         if (!isEmpty(difference(newSelectionIds, previousSelectionIds))) { // user added
           const newUserId = last(difference(newSelectionIds, previousSelectionIds));
