@@ -1,5 +1,5 @@
 import { flatten, unflatten } from "flat";
-import { cloneDeep, Dictionary, filter, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, setWith } from "lodash";
+import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, setWith, values } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBFormConstructor, FBInputState, FBWorkspaceMode, FBWorkspaceState } from "..";
 import { FBSchemaState } from "../FBSchema";
@@ -173,7 +173,7 @@ export class FBFormState extends FBSchemaState {
     }
 
     const rules = final ? this.finalValidationRulse : this.getRules();
-    const values = omitBy(this.validationValues, (v) => isString(v) && isEmpty(v));
+    const values = omitBy(this.validationValues, (v) => (isString(v) && isEmpty(v)) || (isArray(v) && isEmpty(v)));
 
     // *TODO: unify validators format
     let validator: any;
@@ -208,15 +208,13 @@ export class FBFormState extends FBSchemaState {
         let inputValue = lodashGet(validator.input, reqName);
         // Radio group support
         !isArray(inputValue) && (inputValue = [inputValue]);
-        const diff = filter(inputValue, (iValue) => {
-          const reqGroup = reqs.reduce((group, value) => {
-            if (!inputValue.join(",").includes(value)) {
-              group.push(value);
-              return group;
-            }
-            return group;
-          }, []);
-          return isEmpty(reqGroup);
+        const diff = inputValue && inputValue.filter((val) => {
+          try {
+            return values(JSON.parse(reqs.join(","))).includes(val);
+          }
+          catch {
+            return reqs.includes(val);
+          }
         });
         if (diff && diff.length > 0 && (!val || isEmpty(val))) {
           const { messages: { attributeNames } } = validator;
