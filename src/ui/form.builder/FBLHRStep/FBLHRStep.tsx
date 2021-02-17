@@ -4,13 +4,19 @@ import { withFBLHRStep } from "./FBLHRStep.wrap";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   name,
+  disabled,
   ...props
 }) => (
-  <FBInput {...props} {...{ name }} type="lhrstep">
+  <FBInput
+    {...props}
+    {...{ name }}
+    type="lhrstep"
+  >
     <FBAutocompleteAsync
-      name={`fb-lhrstep-mpi-${name}`}
       optionId={FBAutocompleteAsyncOption.mpiDocuments}
       gutter={false}
+      withState
+      {...{ disabled }}
     />
   </FBInput>
 );
