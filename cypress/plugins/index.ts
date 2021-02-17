@@ -1,6 +1,7 @@
 import { downloadFile } from "cypress-downloadfile/lib/addPlugin";
-import { rename } from "fs";
-import { getEmail } from "../support/commands/imap/imap";
+import { rename, rmdirSync } from "fs";
+import { getEmail, getEmails } from "../support/commands/imap/imap";
+import { deleteJunitTestReports, deleteMochaTestReports } from "../support/deleteReports/deleteReranReports";
 import { allowedCharacters } from "../utils/context/constants";
 
 // ***********************************************************
@@ -33,8 +34,24 @@ export default (on, config) => {
       if (value != null) { shouldSkip = value; }
       return shouldSkip;
     },
-    mail: getEmail,
+    gmailGetLastMail(email) {
+      return getEmail(email);
+    },
+    gmailGetMails(params: {userEmail; options}) {
+      return getEmails(params.userEmail, params.options);
+    },
     downloadFile,
+    deleteScreenshotsFolder(params: {CONFIG: any; specFileName: string}) {
+      const { CONFIG, specFileName } = params;
+      rmdirSync(`${CONFIG.SCREENSHOTS_DIR}/${specFileName}`, { recursive: true });
+      return null;
+    },
+    deleteExistingReports(params: {CONFIG: any; specFileName: string}) {
+      const { CONFIG, specFileName } = params;
+      deleteMochaTestReports({ CONFIG, specFileName });
+      deleteJunitTestReports({ CONFIG, specFileName });
+      return null;
+    },
   });
 
   on("after:screenshot", (details) => {

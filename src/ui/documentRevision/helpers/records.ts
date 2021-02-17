@@ -1,7 +1,8 @@
 import { find, isEmpty, some } from "lodash";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { ApprovalStatus } from "../../../state/ducks/documents";
 import { FBFormState, FBSchemaProps } from "../../form.builder";
+import { checkIsDocumentRecord } from "./checkDocumentGroup";
 
 export const getInlineApprovalFields = (schema?: FBSchemaProps[]) => {
   if (!schema) { return []; }
@@ -47,3 +48,12 @@ const isSectionApproved = (fieldName: string, documentRevision: DocumentRevision
   */
 const getFieldApprovals = (fieldName: string, documentRevision: DocumentRevision) =>
  documentRevision.approvals?.filter((app) => app.fieldId === fieldName);
+
+export const getShouldShowUpgradeForRecord = (documentRevision: DocumentRevision) => {
+  const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
+  const isRecord = checkIsDocumentRecord(documentRevision?.document?.documentType?.groupOptions);
+  const version = documentRevision?.version;
+  const isAdministrativeChange = documentRevision?.revisionChangeType === RevisionChangeType.AdministrativeChange;
+
+  return (isRecord && !isInlineApproval && version === 1) || (isInlineApproval && !isAdministrativeChange);
+};

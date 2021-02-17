@@ -1,4 +1,4 @@
-import { at, get, has, isArray, isEmpty, isObject, isString, map, remove, toNumber, union } from "lodash";
+import { at, cloneDeep, get, has, isArray, isEmpty, isObject, isString, map, remove, toNumber, union } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from "..";
@@ -22,11 +22,12 @@ export const withFBOnChange = <T extends FBInputProps>(
   }: T) => {
 
     const { formState, schemaState, workspaceState } = FB.useStores();
-    const inputValue = withState
-      ? formState?.getFieldValue(name)
-      : formState?.getInputState(name || "")?.value;
+    const inputValue =
+      formState?.getFieldValue(name) ||
+      formState?.getInputState(name || "")?.value;
+
     inputState = FB.useRef<FBInputState>(FBInputState, {
-      value: inputValue,
+      value: cloneDeep(inputValue),
       hidden,
     });
 

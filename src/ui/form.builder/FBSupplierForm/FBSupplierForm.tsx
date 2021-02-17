@@ -1,7 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBSupplierFormProps, FBTextField } from "..";
-import { FBTextEditor } from "../FBTextEditor";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBSupplierFormProps, FBTextEditor, FBTextField } from "..";
 import { withFBSupplierForm } from "./FBSupplierForm.wrap";
 
 const FBSupplierForm: React.FunctionComponent<FBSupplierFormProps> = ({

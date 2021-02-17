@@ -1,8 +1,7 @@
 import { omit } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBSchemaSelectProps, FBSchemaSelectState } from ".";
-import { FB, FBSchemaProps } from "..";
+import { FB, FBSchemaProps, FBSchemaSelectProps, FBSchemaSelectState, FBSchemeMultuValueTypes } from "..";
 
 export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
   Component: React.FunctionComponent<T>
@@ -23,9 +22,33 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
   }: T) => {
     const { workspaceState, schemaState, formState } = FB.useStores();
     schemaSelectState = FB.useRef<FBSchemaSelectState>(FBSchemaSelectState);
-    // old documents use getSchema(), there is no migration
-    options = workspaceState?.getValidationSchema() || workspaceState?.getSchema();
     defaultValue = formState?.getFieldValue(name);
+
+    function getOptions(): FBSchemaProps[] {
+      const scheme: FBSchemaProps[] = workspaceState?.getValidationSchema() || workspaceState?.getSchema();
+      const options = scheme.reduce((reduced: FBSchemaProps[], item) => {
+        const { type, deleted, multiple } = item || {};
+        if (!type || deleted) { return reduced; }
+
+        // Use only multi value fields for required if in validator
+        if (name === "validators.required_if_in.name") {
+          if (multiple || FBSchemeMultuValueTypes.includes(type)) {
+            reduced.push(item);
+          }
+          return reduced;
+        }
+        // Use only sigle value fields for required if validator
+        if (name === "validators.required_if.name") {
+          if (!multiple && !FBSchemeMultuValueTypes.includes(type)) {
+            reduced.push(item);
+          }
+          return reduced;
+        }
+        reduced.push(item);
+        return reduced;
+      }, []);
+      return options;
+    }
 
     function setIncludedSchemaItem(value?: FBSchemaProps) {
       if (!value) {
@@ -72,7 +95,7 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
       optionLabelKey,
       optionValueKey,
       defaultValue,
-      options,
+      options: getOptions(),
       disabled,
       schema,
       index,

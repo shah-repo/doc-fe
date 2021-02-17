@@ -23,6 +23,7 @@ export interface User {
 }
 
 export interface Approval {
+  updatedAt: string;
   id: string;
   status: ApprovalStatus;
   type: "MASTER" | "SECTION";

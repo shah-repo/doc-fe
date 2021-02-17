@@ -1,3 +1,5 @@
+import moment from "moment";
+import "moment-timezone";
 import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -7,6 +9,7 @@ let loginResponse;
 let multipleCompanies;
 
 const documentRevisionName = "New HTML Template Document Revision";
+const currentDate = moment().tz("America/Los_Angeles").format("MMMM Do YYYY");
 let customFieldId;
 let docRevisionId;
 let baererSessionId;
@@ -28,13 +31,7 @@ context("Document HTML template form", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -107,7 +104,7 @@ context("Document HTML template form", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
@@ -173,10 +170,10 @@ context("Document HTML template form", () => {
 
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithoutApiCall();
-      cy.route2({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
           if (res.body !== "") {
-            const response = JSON.parse(res.body);
+            const response = res.body;
             customFieldId = response.formTemplate.schema[0].name;
           }
         });
@@ -186,7 +183,22 @@ context("Document HTML template form", () => {
 
     it("Enter html code into 'Render HTML' field", () => {
       cy.drEnterHtmlText({
-        htmlText: `<html><body><h1>Heading - {{}{{}documentRevision.formInput.${customFieldId}}} </h1><p>Paragraph.</p></body></html>`,
+        htmlText:
+          `<html>` +
+            `<body>` +
+              `<h1>Heading - {{}{{}documentRevision.formInput.${customFieldId}}} </h1><p>Paragraph.</p>` +
+              `<div><strong>Name</strong>` +
+                `{{}{{}#documentRevision.changeRequest.approvals}}` +
+                `<ul><li>{{}{{}approver.user.name}}</li></ul>` +
+                `{{}{{}/documentRevision.changeRequest.approvals}}` +
+              `</div>` +
+              `<div><strong>Date & Signature</strong>` +
+                `{{}{{}#validApprovalDates}}` +
+                `<ul><li>{{}{{}reviewedAt}}</li></ul>` +
+                `{{}{{}/validApprovalDates}}` +
+              `</div>` +
+            `</body>` +
+          `</html>`,
       });
     });
 
@@ -220,7 +232,8 @@ context("Document HTML template form", () => {
     });
 
     it("Approve and Release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      // cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`, `${USERS[3].name}`]);
     });
 
     it("Navigates to document list", () => {
@@ -229,15 +242,15 @@ context("Document HTML template form", () => {
     });
 
     it("Filters document by name and status, and select it", () => {
-      cy.route2({ method: "GET", pathname: "/api/v1/document_revisions/*" }, (req) => {
+      cy.intercept({ method: "GET", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
           if (res.body !== "") {
-            const response = JSON.parse(res.body);
+            const response = res.body;
             docRevisionId = response.id;
           }
         });
       }).as("response");
-      cy.drFilterDocListByNameAndStatus({ title: documentRevisionName, status: "Released" });
+      cy.drFilterDocListByNameAndStatus({ title: documentRevisionName, status: "None" });
       cy.wait("@response");
     });
 
@@ -251,7 +264,18 @@ context("Document HTML template form", () => {
       }).then((response) => {
         const responseBody = response.body.toString();
         expect(responseBody)
-          .to.have.string("<html><body><h1>Heading - First entry </h1><p>Paragraph.</p></body></html>");
+          .to.have.string(
+            `<html>` +
+              `<body>` +
+                `<h1>Heading - First entry </h1><p>Paragraph.</p>`)
+          .and.have.string(
+            `<div>` +
+              `<strong>Name</strong>`)
+          .and.have.string(`<ul><li>${USERS[1].name}</li></ul>`)
+          .and.have.string(`<ul><li>${USERS[3].name}</li></ul>`)
+          .and.have.string(`<ul><li>${USERS[2].name}</li></ul>`)
+          .and.have.string(`<strong>Date & Signature</strong>`)
+          .and.have.string(`${currentDate}`);
       });
     });
   });

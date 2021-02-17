@@ -5,7 +5,7 @@ import { documentRevisionsActions, documentRevisionsSelectors } from "../../../.
 export const getUrlandActions = (requestType) => {
   const urlAction = {
     document: [
-      documentRevisionsActions.save,
+      documentRevisionsActions.ownerChange,
       documentRevisionsSelectors.getDocumentRevision,
     ],
     // eslint-disable-next-line @typescript-eslint/camelcase

@@ -2,6 +2,8 @@
 
 set -e
 
+./scripts/cypress/utils/generate_testmail_credentials.sh
+
 secs_to_human() {
     if [[ -z ${1} || ${1} -lt 60 ]] ;then
         min=0 ; secs="${1}"
@@ -35,6 +37,7 @@ export CYPRESS_BE_URL=${CYPRESS_BE_URL:-"http://localhost:$ENLIL_COMPOSE_EXPOSE_
 export CYPRESS_FE_URL=${CYPRESS_FE_URL:-"http://localhost:$ENLIL_COMPOSE_EXPOSE_FE_PORT"}
 export CYPRESS_TEST_EMAIL=${CYPRESS_TEST_EMAIL:-"enlil.testmail@gmail.com"}
 export CYPRESS_TEST_EMAIL_PASSWORD=${CYPRESS_TEST_EMAIL_PASSWORD:-"shifamed123"}
+export CYPRESS_RUN_ENVIRONMENT=${CYPRESS_RUN_ENVIRONMENT:-"LOCALPARALLEL"}
 
 export COMPOSE_PROJECT_NAME="enlil_$ENLIL_COMPOSE_PORT_RANGE_START"
 

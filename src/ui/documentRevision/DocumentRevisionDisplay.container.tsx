@@ -87,6 +87,7 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
   const availableOperators = operators.map((operator) => operator.user.email);
   const isCurrentUserOperator = availableOperators.includes(currentUserEmail);
   const hasChangeOwnershipPermission = useSelector(getHasPermission(Permission.DOCUMENT_OWNER_CHANGE));
+  const canEditDocRev = canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator);
   isOperator = React.createContext(isCurrentUserOperator);
 
   const canChangeOwnerShip = useMemo(() => {
@@ -98,16 +99,15 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
       documentRevision.status,
       currentEmployeeId,
       documentRevision.owner.id,
-      isCompanyAdmin,
       hasChangeOwnershipPermission,
     );
-  }, [currentEmployeeId, documentRevision, isCompanyAdmin, hasChangeOwnershipPermission]);
+  }, [currentEmployeeId, documentRevision, hasChangeOwnershipPermission]);
 
   const canEdit =
     documentRevision &&
     !isNewVersion &&
     !isNewOutput &&
-    (canEditDocumentRevision(documentRevision, currentUserEmail) || isCurrentUserOperator);
+    canEditDocRev;
 
   const canPreview =
     documentRevision && !(canEdit || isNewVersion || isNewOutput);

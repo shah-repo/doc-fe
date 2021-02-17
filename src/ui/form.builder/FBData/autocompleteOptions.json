@@ -103,7 +103,7 @@
     "path": "/document_revisions?docTypeGroups%5B%5D=PO&status%5B%5D=RELEASED",
     "label": "Purchase Order list",
     "valueKey": "id",
-    "labelKey": "name",
+    "labelKey": "description",
     "labelPrefixRoot": "document.docId",
     "root": "",
     "includeRevision": "displayRevision"
@@ -246,5 +246,13 @@
     "labelPrefixRoot": "document.docId",
     "root": "",
     "includeRevision": "displayRevision"
+  },
+  {
+    "id": "28",
+    "path": "/document_revisions?docTypeGroupOptions%5B%5D=SEED&status%5B%5D=RELEASED",
+    "label": "Seed Documents",
+    "valueKey": "id",
+    "labelKey": "name",
+    "root": ""
   }
 ]

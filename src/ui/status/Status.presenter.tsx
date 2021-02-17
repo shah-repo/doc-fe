@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React from "react";
 import Config from "../../config";
-import { getRemoteValidatorBundle } from "./../remoteValidators/RemoteValidators";
+import { fetchRemoteValidatorsStatus } from "./../remoteValidators/RemoteValidators";
 
 const API = Config.ApiEndpoint;
 const WORKER_API = Config.WorkerApiEndpoint;
@@ -53,18 +53,13 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
           console.log(error);
         },
       );
-    getRemoteValidatorBundle()
+    fetchRemoteValidatorsStatus()
       .then(
-        (result) => {
-          const dict = result?.buildInfo;
-          if (dict) {
-            this.setState({ remoteJS: dict });
-          } else {
-            this.setState({ remoteJS: { Status: "You have to be logged in" } });
-          }
+        (dict) => {
+          this.setState({ remoteJS: dict });
         },
-        (error) => {
-          console.log(error);
+        ({ response }) => {
+          this.setState({ remoteJS: response.data });
         },
       );
   }
@@ -75,9 +70,7 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
 
       (
         <tr
-          key={index} data-cy={`status-${name}-${this.toSnakeCase(key)}`}
-
-        >
+          key={index} data-cy={`status-${name}-${this.toSnakeCase(key)}`}>
           <td style={{
             paddingRight: "1em",
           }}><b>{key}: </b></td>

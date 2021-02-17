@@ -71,6 +71,7 @@ declare global {
         sessionId: string;
         payload: Partial<Company>;}): Chainable<Subject>;
       cmpSelectCompany(params: { name: string; multiple: boolean }): Chainable<Subject>;
+      cmpSelectCompanyAlreadyLoggedIn(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpClickCreateNewDocument(): Chainable<Subject>;
       cmpClickCreateApprovalRequest(): Chainable<Subject>;
       cmpVerifyNoPendingActions(): Chainable<Subject>;
@@ -98,6 +99,12 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
     name: `${capitalize(faker.commerce.color())} ${faker.company.companyName()} ${companyNumber}`,
     companyAcronym: `TC${companyNumber}`,
     scheduledForDeletion: true,
+    numOfRevStages: 3,
+    numOfDocDigits: 5,
+    helloSignIntegrationEnabled: false,
+    helloSignTestMode: false,
+    remoteValidatorBundleName: "default",
+    slackIntegrationEnabled: false,
     whiteLabeling: {
       DEV_THEME: {
         logo: "/ta_assets_company_logo.png",
@@ -200,9 +207,24 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
     cy.wrapWithWaitOnApiCalls([
       CyRoutes.IOTCredentials,
       CyRoutes.CompanyMine,
+      CyRoutes.IOTCredentials,
+      CyRoutes.SessionDetails,
     ], () => {
       cy.get("#root").contains(params.name).click();
     });
+    cy.wait(500);
+  }
+});
+
+Cypress.Commands.add("cmpSelectCompanyAlreadyLoggedIn", (params: { name: string; multiple: boolean }) => {
+  if (params.multiple) {
+    cy.wrapWithWaitOnApiCalls([
+      CyRoutes.IOTCredentials,
+      CyRoutes.CompanyMine,
+    ], () => {
+      cy.get("#root").contains(params.name).click();
+    });
+    cy.wait(500);
   }
 });
 
@@ -216,6 +238,7 @@ Cypress.Commands.add("cmpClickCreateNewDocument", () => {
     cy.get("[data-cy=\"document.revision.create\"]").click();
   });
   cy.checkToastMessage({ exists: false });
+  cy.wait(3000);
 });
 
 Cypress.Commands.add("cmpVerifyNoPendingActions", () => {

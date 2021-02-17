@@ -330,3 +330,27 @@ context("Example", () => {
 
 </p>
 </details>
+
+#### Running cypress BB pipeline locally
+
+1.  Start sorry-cypress director. Make sure image name is the same as in `bitbucket-pipelines.yml` 
+  - eg. `817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:sorry-cypress-director-3-retries`
+ 
+     ```
+     docker run -p 1234:1234 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:sorry-cypress-director-3-retries
+     ```
+
+2. Make  sure  cy_pipeline_locally.env  points  has  correct  credentials,  server  urls  and  git  commit  hashes.
+
+3. Make  sure  `ENLIL_DIRECTOR_HOST`  is  set  to  `"host.docker.internal"`
+
+4. Run bbrun in another shell
+    ```
+    yarn run bbrun --pipeline "custom:run-cypress-on-dev-bbrun-parallel" --env "$(cat cy_pipeline_locally.env | paste -sd'~' | sed -e 's/~/, /g')"
+    ```
+5. To stop specs container, run
+    ```
+    docker stop $(docker ps -a -q  --filter ancestor=817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs_node_14_10_0_chrome_88_cy_6_2_0)
+
+    ```
+    - make sure ancestor image name is the same as in `bitbucket-pipelines.yml`

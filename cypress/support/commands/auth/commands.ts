@@ -74,7 +74,7 @@ Cypress.Commands.add("authRequiredValidation", (params: {selector: string; show:
     cy.get(`[data-cy="${params.selector}"] p`).should("be.visible");
     cy.get(`[data-cy="${params.selector}"] p`).should("have.text", "Required");
   } else {
-    cy.get(`[data-cy="${params.selector}"] p`).should("not.be.visible");
+    cy.get(`[data-cy="${params.selector}"] p`).should("not.exist");
   }
 });
 
@@ -91,14 +91,15 @@ Cypress.Commands.add("authSubmitLoginError", (params: {show: boolean; message: s
       .should("have.text", params.message);
   }
   else {
-    cy.get(`[class="Toastify__toast-body"]`)
-      .should("not.be.visible");
+    cy.checkToastMessage({ exists: false });
   }
 });
 
 Cypress.Commands.add("authLogout", () => {
   cy.get("[data-cy=\"UserMenuButton\"]", { timeout: 50 * 1000 }).click();
-  cy.get("[data-cy=\"header.logout\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.DeleteLogout, () => {
+    cy.get("[data-cy=\"header.logout\"]").click();
+  });
 });
 
 Cypress.Commands.add("authEnterSignUpPassword", (params: {password: string}) => {

@@ -70,13 +70,7 @@ context("Document Approval Matrix Flow", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: ADMIN_USER.email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: IMPORTER_USER.email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [FIRST_USER, SECOND_USER, THIRD_USER, INDIVIDUAL_USER],
             documentTypes: [],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
@@ -429,7 +423,6 @@ context("Document Approval Matrix Flow", () => {
   context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
     it("Click on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(8000);
     });
 
     it("'Training Required' should be checked because of DAM", () => {
