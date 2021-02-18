@@ -11,6 +11,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
     type="lhrstep"
     optionId={FBAutocompleteAsyncOption.mpiDocuments}
     autosave
+    withState
     {...{ disabled, name }}
   />
 );
