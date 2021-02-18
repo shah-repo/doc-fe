@@ -10,8 +10,6 @@ import {
   FBEditorState,
   FBInputProps,
   FBInputType,
-  FBProcedure,
-  FBProcedureDiff,
 } from "..";
 import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
 import { FBApprovals } from "../FBApprovals";
@@ -30,10 +28,13 @@ import { FBInlineApproval } from "../FBInlineApproval";
 import { FBInstructionsDocument } from "../FBInstructionsDocument";
 import FBLHRStep from "../FBLHRStep/FBLHRStep";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
+import FBMPIProcedure from "../FBMPIProcedure/FBMPIProcedure";
 import { FBParagraph } from "../FBParagraph";
 import { FBParts } from "../FBParts";
 import { FBPOApprovalMatrix } from "../FBPOApprovalMatrix";
 import { FBPOReceive } from "../FBPOReceive";
+import FBProcedure from "../FBProcedure/FBProcedure";
+import FBProcedureDiff from "../FBProcedureDiff/FBProcedureDiff";
 import { FBPurchaseOrder } from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import { FBRadio } from "../FBRadio";
@@ -52,7 +53,6 @@ import FBTextEditor from "../FBTextEditor/FBTextEditor";
 import { FBTextField } from "../FBTextField";
 import { FBTextFieldWithRange } from "../FBTextFieldWithRange";
 import { FBTimerField } from "../FBTimerField";
-import FBMPIProcedure from "../FBMPIProcedure/FBMPIProcedure";
 
 export class FBSchemaState {
   public static omitLabel: FBInputType[] = [
