@@ -1,5 +1,5 @@
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBInput, FBLHRStepProps } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBLHRStepProps } from "..";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
@@ -7,18 +7,12 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   disabled,
   ...props
 }) => (
-  <FBInput
-    {...props}
-    {...{ name }}
+  <FBAutocompleteAsync
     type="lhrstep"
-  >
-    <FBAutocompleteAsync
-      optionId={FBAutocompleteAsyncOption.mpiDocuments}
-      gutter={false}
-      name={`fb-lhrstep-${name}`}
-      {...{ disabled }}
-    />
-  </FBInput>
+    optionId={FBAutocompleteAsyncOption.mpiDocuments}
+    autosave
+    {...{ disabled, name }}
+  />
 );
 
 export default withFBLHRStep(FBLHRStep);
