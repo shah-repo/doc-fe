@@ -586,7 +586,7 @@ context("Test Equipment maintenance email notifications", () => {
 
     context("Trigger script and verify email is not received", () => {
       it("Trigger email script", () => {
-        cy.wait(5000);
+        cy.wait(30000);
         cy.triggerDueDateEmailScript({
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
@@ -594,7 +594,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify email is not received for EQ-00001", () => {
-        const dateOffset = (5 * 1000);
+        const dateOffset = (1 * 1000);
         const dateAfterEmailShouldArrive = new Date();
         dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 
@@ -866,7 +866,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Trigger email script", () => {
-        cy.wait(5000);
+        cy.wait(15000);
         cy.triggerDueDateEmailScript({
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
@@ -874,7 +874,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify email is not sent again for EQ-00002", () => {
-        const dateOffset = (5 * 1000);
+        const dateOffset = (1 * 1000);
         const dateAfterEmailShouldArrive = new Date();
         dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 
@@ -1146,7 +1146,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Trigger email script", () => {
-        cy.wait(5000);
+        cy.wait(15000);
         cy.triggerDueDateEmailScript({
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
@@ -1154,7 +1154,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify email is not sent again for EQ-00003", () => {
-        const dateOffset = (5 * 1000);
+        const dateOffset = (1 * 1000);
         const dateAfterEmailShouldArrive = new Date();
         dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 
@@ -1404,7 +1404,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify no email is received for EQ-00004", () => {
-        const dateOffset = (5 * 1000);
+        const dateOffset = (1 * 1000);
         const dateAfterEmailShouldArrive = new Date();
         dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 

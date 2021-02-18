@@ -457,16 +457,7 @@ context("PO test", () => {
     context("Add description and Approve document", () => {
       it("Enter description 'New Purchase Order'", () => {
         // SystemRequirement("REQ-1290");
-        cy.drEnterDocumentDescription({ description: "New Purchase Order" });
-      });
-
-      it("Save description", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
-          });
-        cy.checkToastMessage({ exists: false });
-        cy.wait(500);
+        cy.drEnterDocumentDescriptionWithWait({ description: "New Purchase Order" });
       });
 
       it("Approve and release document", () => {
