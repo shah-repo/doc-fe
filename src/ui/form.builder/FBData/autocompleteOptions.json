@@ -254,5 +254,15 @@
     "valueKey": "id",
     "labelKey": "name",
     "root": ""
+  },
+  {
+    "id": "29",
+    "path": "/document_revisions?docTypeGroupOptions%5B%5D=MPI&status%5B%5D=RELEASED",
+    "label": "MPI documents",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": "",
+    "includeRevision": "displayRevision"
   }
 ]

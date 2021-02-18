@@ -1,26 +1,42 @@
 {
-  "approval": [{
-    "type": "section",
-    "name": "fb-approval-section-${id}",
-    "label": "form.builder.section"
-  }],
-  "requestapproval": [{
-    "type": "section",
-    "name": "fb-requestapproval-section-${id}",
-    "label": "form.builder.section"
-  }],
-  "procedure": [{
-    "type": "parts",
-    "name": "fb-parts-${id}",
-    "uniqueSchemaItem": true
-  }, {
-    "type": "section",
-    "name": "fb-procedure-section-${id}",
-    "label": "form.builder.procedure"
-  }],
-  "mpiprocedure": [{
-    "type": "section",
-    "name": "fb-mpi-procedure-section-${id}",
-    "label": "form.builder.mpiprocedure"
-  }]
+  "approval": [
+    {
+      "type": "section",
+      "name": "fb-approval-section-${id}",
+      "label": "form.builder.section"
+    }
+  ],
+  "requestapproval": [
+    {
+      "type": "section",
+      "name": "fb-requestapproval-section-${id}",
+      "label": "form.builder.section"
+    }
+  ],
+  "procedure": [
+    {
+      "type": "parts",
+      "name": "fb-parts-${id}",
+      "uniqueSchemaItem": true
+    },
+    {
+      "type": "section",
+      "name": "fb-procedure-section-${id}",
+      "label": "form.builder.procedure"
+    }
+  ],
+  "lhrstep": [
+    {
+      "type": "stepsection",
+      "name": "fb-lhrstep-section-${id}",
+      "label": "form.builder.step"
+    }
+  ],
+  "mpiprocedure": [
+    {
+      "type": "section",
+      "name": "fb-mpi-procedure-section-${id}",
+      "label": "form.builder.mpiprocedure"
+    }
+  ]
 }

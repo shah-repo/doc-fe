@@ -69,7 +69,8 @@ export type FBInputType =
   | "range"
   | "passpercentage"
   | "supplier"
-  | "mpiprocedure";
+  | "mpiprocedure"
+  | "lhrstep";
 
 export type FBInputProps =
   & FBLabelProps
