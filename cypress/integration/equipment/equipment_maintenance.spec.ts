@@ -392,7 +392,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
         cy.get("input[name=fb-default-eq-status][value=Active]").check();
       });
     });
@@ -563,7 +563,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetAvailableApprovers], () => {
+        cy.ebApprove();
+      });
     });
 
     it("Verify status is 'Released'", () => {
@@ -583,6 +585,12 @@ context("Equipment maintenance test", () => {
       cy.wait(5000);
     });
 
+    it("Reload 'Equipment maintenance document'", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+        cy.reload();
+      });
+    });
+
     it("Check preventative maintenance document existance", () => {
       cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
         .eq(0)
@@ -590,6 +598,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Check preventative maintenance status is in complience for next 10 days", () => {
+      cy.log(createdCompany.name);
       const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
         .add(10, "days")
         .format("ddd MMMM D YYYY");
@@ -674,11 +683,17 @@ context("Equipment maintenance test", () => {
       cy.get("div[aria-rowindex=\"1\"]>div:nth-child(7)").should("contain.text", PM_DUE_DATE);
     });
 
-    it("Select 'Equipment maintenance document'", () => {
+    it("Select 'Equipment calibration document'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.DocRevPreview], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
       });
       cy.wait(5000);
+    });
+
+    it("Reload 'Equipment calibration document'", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+        cy.reload();
+      });
     });
 
     it("Check Calibration document existance", () => {

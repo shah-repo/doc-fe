@@ -66,7 +66,7 @@ Cypress.Commands.add("imapVerifyLastEmailContains", (params: { userEmail: string
   const getEmailSetting =  {
     to: params.userEmail,
     wait_time_sec: 5,
-    max_wait_time_sec: 30,
+    max_wait_time_sec: 50,
     include_body: true,
     after: params.date,
   };
