@@ -2,7 +2,17 @@ import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, siz
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
-import { FBActionField, FBApproval, FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType } from "..";
+import {
+  FBActionField,
+  FBApproval,
+  FBAutocompleteAsync,
+  FBCheckboxGroup,
+  FBEditorState,
+  FBInputProps,
+  FBInputType,
+  FBProcedure,
+  FBProcedureDiff,
+} from "..";
 import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
 import { FBApprovals } from "../FBApprovals";
 import { FBApprovers } from "../FBApprovers";
@@ -23,8 +33,6 @@ import { FBParagraph } from "../FBParagraph";
 import { FBParts } from "../FBParts";
 import { FBPOApprovalMatrix } from "../FBPOApprovalMatrix";
 import { FBPOReceive } from "../FBPOReceive";
-import { FBProcedure } from "../FBProcedure";
-import { FBProcedureDiff } from "../FBProcedureDiff";
 import { FBPurchaseOrder } from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import { FBRadio } from "../FBRadio";
@@ -43,6 +51,7 @@ import FBTextEditor from "../FBTextEditor/FBTextEditor";
 import { FBTextField } from "../FBTextField";
 import { FBTextFieldWithRange } from "../FBTextFieldWithRange";
 import { FBTimerField } from "../FBTimerField";
+import FBMPIProcedure from "../FBMPIProcedure/FBMPIProcedure";
 
 export class FBSchemaState {
   public static omitLabel: FBInputType[] = [
@@ -101,6 +110,7 @@ export class FBSchemaState {
     approvers: FBApprovers,
     approvals: FBApprovals,
     procedure: FBProcedure,
+    mpiprocedure: FBMPIProcedure,
     parts: FBParts,
     procedurediff: FBProcedureDiff,
     ebpart: FBEBPart,

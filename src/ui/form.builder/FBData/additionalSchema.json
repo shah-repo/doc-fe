@@ -17,5 +17,10 @@
     "type": "section",
     "name": "fb-procedure-section-${id}",
     "label": "form.builder.procedure"
+  }],
+  "mpiprocedure": [{
+    "type": "section",
+    "name": "fb-mpi-procedure-section-${id}",
+    "label": "form.builder.mpiprocedure"
   }]
 }
