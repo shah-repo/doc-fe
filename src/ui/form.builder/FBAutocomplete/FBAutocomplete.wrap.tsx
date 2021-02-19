@@ -24,16 +24,20 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     disabledOptions,
     placeholder,
     multiple,
-    name,
+    name = "",
     defaultValue,
     options,
     optionId,
     freeSolo,
     withState,
     omitFormValue,
+    disabled,
     ...props
   }: T) => {
-    const { formState } = FB.useStores();
+    const { formState, workspaceState } = FB.useStores();
+    const isInputOwner = workspaceState?.getIsInputOwner(name);
+    disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) &&
+      !isInputOwner) || disabled;
     const formValue = formState?.getFieldValue(name) || defaultValue;
     const intl = useIntl();
 
@@ -120,6 +124,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       withState,
       omitFormValue,
       name,
+      disabled,
     });
   };
 

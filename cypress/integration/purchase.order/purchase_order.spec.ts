@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
@@ -9,6 +11,10 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
+let supplierDocumentType;
+let secondEmployee;
+let group;
+const documentSupplierRevisionName = "New suplier for PO";
 
 context("PO test", () => {
   context("Create company via API and create Purchase Order Form document", () => {
@@ -39,6 +45,59 @@ context("PO test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
+          done();
+        });
+      });
+    });
+
+    it("[API]Login second tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[2].email,
+        password: "Tester1!",
+      }).then((response) => {
+        loginResponse = response;
+        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
+        done();
+      });
+    });
+
+    it("[API]Creates suplier document for PO", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Test Supplier Document</p>",
+            document: {
+              docId: "SUP-00004",
+              documentType: {
+                id: supplierDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: documentSupplierRevisionName,
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+          },
+          employeeId: secondEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then(() => {
           done();
         });
       });
@@ -110,6 +169,22 @@ context("PO test", () => {
       cy.fbAddNewFieldButton();
     });
 
+    it("Click 'Add New Field'", () => {
+      cy.fbAddNewFieldWhenHidden();
+    });
+
+    it("Add supplier form builder field", () => {
+      cy.fbSelectCustomFieldToAdd({ name: "Supplier" });
+    });
+
+    it("Fill label field with 'Supplier'", () => {
+      cy.fbEnterLabel({ label: "Supplier" });
+    });
+
+    it("Click 'Add' to finish adding new field", () => {
+      cy.fbAddNewFieldButton();
+    });
+
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
@@ -146,6 +221,44 @@ context("PO test", () => {
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+  });
+
+  context("Create Supplier form for PO", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enters title 'New Supplier Form'", () => {
+      cy.drEnterDocumentTitle({ name: "New Supplier Form" });
+    });
+
+    it("Enters description 'New Supplier Description'", () => {
+      cy.drEnterDocumentDescription({ description: "New Supplier Description" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Selects 'Form' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Click on 'Suppliers' outputdocument type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Suppliers" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -242,6 +355,53 @@ context("PO test", () => {
       cy.checkToastMessage({ exists: false });
     });
 
+    it("Click on 'Add item' button to add item without Part Number", () => {
+      cy.poAddNewFieldItem();
+    });
+
+    it("Enter Quantity Ordered", () => {
+      // SystemRequirement("REQ-1410");
+      cy.poEnterQuantityOrdered({ quantity: "10" });
+    });
+
+    it("Select Units", () => {
+      // SystemRequirement("REQ-1410");
+      cy.poSelectUnits();
+    });
+
+    it("Select GL code", () => {
+      // SystemRequirement("REQ-1410");
+      cy.poSelectGLCode();
+    });
+
+    it("Enter Supplier Part Number", () => {
+      // SystemRequirement("REQ-1410");
+      cy.poEnterSupplierPartNumber({ partNumber: "PRT-0003" });
+    });
+
+    it("Enter number of Units", () => {
+      // SystemRequirement("REQ-1410");
+      cy.poNumberOfUnits({ number: "2" });
+    });
+
+    it("Add Required Date", () => {
+      // SystemRequirement("REQ-1410");
+      cy.poAddDateRequired();
+    });
+
+    it("Check Tax box", () => {
+      // SystemRequirement("REQ-1450");
+      cy.poSelectTaxCheckbox();
+    });
+
+    it("Click on 'Add' inside PO dialog box", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.poAddPOButtonClick();
+        });
+      cy.checkToastMessage({ exists: false });
+    });
+
     it("Check currency options dropdown", () => {
       // SystemRequirement("REQ-1320");
       cy.poCheckCurrency();
@@ -259,26 +419,50 @@ context("PO test", () => {
 
     it("Check Subtotal value", () => {
       // SystemRequirement("REQ-1430");
-      cy.poCheckAmount({ number: "$10.00" });
+      cy.poCheckAmount({ number: "$30.00" });
     });
 
     it("Check Tax value", () => {
       // SystemRequirement("REQ-1450");
-      cy.poCheckAmount({ number: "$0.65" });
+      cy.poCheckAmount({ number: "$1.95" });
     });
 
     it("Check Total value", () => {
       // SystemRequirement("REQ-1440");
-      cy.poCheckAmount({ number: "$30.65" });
+      cy.poCheckAmount({ number: "$51.95" });
     });
 
-    it("Enter description 'New Purchase Order'", () => {
-      // SystemRequirement("REQ-1290");
-      cy.drEnterDocumentDescription({ description: "New Purchase Order" });
+    context("Add Supplier to PO", () => {
+      it("Click 'Create A New Supplier'", () => {
+        cy.get("[data-cy=\"form.builder.create.new.supplier\"]").click();
+      });
+
+      it("Enter Supplier Title 'Supplier'", () => {
+        cy.get("[data-cy=\"name\"]").type("Supplier");
+      });
+
+      it("Enter Supplier Description 'Supplier Description'", () => {
+        cy.ebEnterPartDescription({ description: "Supplier Description" });
+      });
+
+      it("Select Document Type 'Supplier'", () => {
+        cy.get("[name=\"document.documentType.id\"]").type("{downarrow}{enter}");
+      });
+
+      it("Create new supplier", () => {
+        cy.get("[data-cy=\"common.confirm\"]").click();
+      });
     });
 
-    it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    context("Add description and Approve document", () => {
+      it("Enter description 'New Purchase Order'", () => {
+        // SystemRequirement("REQ-1290");
+        cy.drEnterDocumentDescriptionWithWait({ description: "New Purchase Order" });
+      });
+
+      it("Approve and release document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
     });
   });
 
@@ -355,6 +539,28 @@ context("PO test", () => {
           cy.poAddPOButtonClick();
         });
       cy.checkToastMessage({ exists: false });
+    });
+
+    it("Click on 'Add item' button", () => {
+      cy.poAddNewFieldItem();
+    });
+
+    it("Click on 'Service' select option", () => {
+      // SystemRequirement("REQ-1390");
+      // SystemRequirement("REQ-1420");
+      cy.poSelectOption({ optionName: "service" });
+    });
+
+    it("Click on 'Add' inside PO dialog box", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.poAddPOButtonClick();
+        });
+      cy.checkToastMessage({ exists: false });
+    });
+
+    it("Select Supplier", () => {
+      cy.get("[data-cy^=\"supplier-\"]").type("SUP-00004{downarrow}{enter}");
     });
 
     it("Check currency options dropdown", () => {

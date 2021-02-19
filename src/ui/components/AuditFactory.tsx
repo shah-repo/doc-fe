@@ -108,6 +108,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case "tasks.assigned":
       case "owner":
+      case "operators":
       case "securityEmployees":
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Owner).user.name}</div>);
         break;

@@ -995,11 +995,11 @@ context("Autocomplete test", () => {
 
     it("Verify count of 'Approvers' in the list", () => {
       cy.fbVerifyAutocompleteElementLength({ el: "approvers", length: 5 });
-      cy.get(".MuiAutocomplete-popper ul li").eq(0).should("have.text", `${USERS[1].name} - ${USERS[1].email}`);
-      cy.get(".MuiAutocomplete-popper ul li").eq(1).should("have.text", `${USERS[2].name} - ${USERS[2].email}`);
-      cy.get(".MuiAutocomplete-popper ul li").eq(2).should("have.text", `${USERS[3].name} - ${USERS[3].email}`);
-      cy.get(".MuiAutocomplete-popper ul li").eq(3).should("have.text", `${USERS[4].name} - ${USERS[4].email}`);
-      cy.get(".MuiAutocomplete-popper ul li").eq(4).should("have.text", `${USERS[5].name} - ${USERS[5].email}`);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", `${USERS[3].name} - ${USERS[3].email}`);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", `${USERS[4].name} - ${USERS[4].email}`);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", `${USERS[5].name} - ${USERS[5].email}`);
     });
 
     it("Verify count of 'Document types' in the list", () => {
@@ -1049,11 +1049,11 @@ context("Autocomplete test", () => {
 
     it("Verify count of 'Employees' in the list", () => {
       cy.fbVerifyAutocompleteElementLength({ el: "employees", length: 5 });
-      cy.get(".MuiAutocomplete-popper ul li").eq(0).should("have.text", USERS[1].name);
-      cy.get(".MuiAutocomplete-popper ul li").eq(1).should("have.text", USERS[2].name);
-      cy.get(".MuiAutocomplete-popper ul li").eq(2).should("have.text", USERS[3].name);
-      cy.get(".MuiAutocomplete-popper ul li").eq(3).should("have.text", USERS[4].name);
-      cy.get(".MuiAutocomplete-popper ul li").eq(4).should("have.text", USERS[5].name);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[1].name);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[2].name);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[3].name);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[4].name);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[5].name);
     });
 
     it("Verify count of 'Official Groups' in the list", () => {
