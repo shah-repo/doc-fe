@@ -31,7 +31,7 @@ export enum FBApprovalMatrixTableInfoHead {
 export enum FBDocTypeGroup {
   FORM = "FORM",
   OTHER = "OTHER",
-  MPI = "MPI",
+  PI = "PI",
   RECORD = "RECORD",
   DYNAMIC_FORM = "DYNAMIC FORM",
   POAM = "POAM",
