@@ -180,6 +180,8 @@ export { default as FBInstructionsDocument } from "./FBInstructionsDocument/FBIn
 export * from "./FBInstructionsDocument/FBInstructionsDocument.types";
 export { default as FBLabel } from "./FBLabel/FBLabel";
 export * from "./FBLabel/FBLabel.types";
+export { default as FBLHRStep } from "./FBLHRStep/FBLHRStep";
+export * from "./FBLHRStep/FBLHRStep.types";
 export { default as FBMapWrapper } from "./FBMapWrapper/FBMapWrapper";
 export * from "./FBMapWrapper/FBMapWrapper.types";
 export { default as FBMediaAlbum } from "./FBMediaAlbum/FBMediaAlbum";

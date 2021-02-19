@@ -132,6 +132,7 @@ export class FBEditorState {
     eqmaintenance: FBEditorEQMaintenance,
     textfieldwithrange: FBEditorTextFieldWithRange,
     supplier: FBEditorLabel,
+    lhrstep: FBEditorEmpty,
   };
 
   @observable public mode?: FBEditorMode = "config";

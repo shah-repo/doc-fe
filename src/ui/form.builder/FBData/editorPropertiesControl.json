@@ -248,5 +248,12 @@
     "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
+  ],
+  "lhrstep": [
+    "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
+    "deleteDisabled",
+    "copyableValue"
   ]
 }
