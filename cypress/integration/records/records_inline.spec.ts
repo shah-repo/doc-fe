@@ -8,7 +8,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 
 context("Record inline Flow", () => {
   before(() => {
@@ -54,17 +53,6 @@ context("Record inline Flow", () => {
         });
       });
     });
-
-    it("[API]Login second tester", (done: any) => {
-      cy.authApiLogin({
-        email: USERS[2].email,
-        password: "Tester1!",
-      }).then((response) => {
-        loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
-        done();
-      });
-    });
   });
 
   context("Login user", () => {
@@ -76,12 +64,11 @@ context("Record inline Flow", () => {
     });
 
     it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
   });
 
   context("FORM document creation flow", () => {
-
     context("Start document creation flow", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();

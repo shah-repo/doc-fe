@@ -1,31 +1,59 @@
-import * as imaps from "imap-simple";
+/* eslint-disable @typescript-eslint/camelcase */
+import * as gmail from "gmail-tester";
+import * as path from "path";
 
-const config = {
-  imap: {
-    user: process.env.CYPRESS_TEST_EMAIL,
-    password: process.env.CYPRESS_TEST_EMAIL_PASSWORD,
-    host: "imap.gmail.com",
-    port: 993,
-    tls: true,
-    authTimeout: 15 * 1000,
-  },
-};
+export async function getEmail(email) {
+  let returnValue = null;
+  const dateOffset = (20 * 1000);
+  const myDate = new Date();
+  myDate.setTime(myDate.getTime() - dateOffset);
+  const mail = await gmail.check_inbox(
+    path.resolve(__dirname, "../../../credentials/credentials.json"),
+    path.resolve(__dirname, "../../../credentials/gmail_token.json"),
+    {
+      to: email,
+      wait_time_sec: 5,
+      max_wait_time_sec: 40,
+      include_body: true,
+      after: myDate,
+    }
+  );
+  if (mail) {
+    returnValue = mail[0].body.html;
+  }
 
-export function getEmail(email) {
-  return imaps.connect(config).then((connection) => connection.openBox("INBOX").then(() => {
-    const emailsSince = new Date();
-    emailsSince.setTime(Date.now());
-    const searchCriteria = ["ALL", ["TO", email], ["SENTSINCE", emailsSince.toISOString()]];
+  return returnValue;
+}
 
-    const fetchOptions = {
-      bodies: ["HEADER", "TEXT"],
-      markSeen: true,
+export async function getEmails(email, options?) {
+  let mails = [];
+  let settings;
+
+  if (!options) {
+    const dateOffset = (25 * 1000);
+    const myDate = new Date();
+    myDate.setTime(myDate.getTime() - dateOffset);
+    settings =     {
+      to: email,
+      wait_time_sec: 5,
+      max_wait_time_sec: 50,
+      include_body: true,
+      after: myDate,
     };
+  }
+  else {
+    settings = options;
+  }
 
-    return connection.search(searchCriteria, fetchOptions).then((results) => {
-      const emailText = results.map((res) => res.parts.filter((part) => part.which === "TEXT")[0].body);
-      return emailText[emailText.length - 1];
-    });
-  })).then((result) => result);
+  const messages = await gmail.check_inbox(
+    path.resolve(__dirname, "../../../credentials/credentials.json"),
+    path.resolve(__dirname, "../../../credentials/gmail_token.json"),
+    settings
+  );
+  if (messages) {
+    mails = messages;
+  }
+
+  return mails;
 }
 

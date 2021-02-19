@@ -67,9 +67,15 @@ declare global {
       fbAddAutocompleteElement(params: { name: string; label: string }): Chainable<Subject>;
       fbVerifyAutocompleteElementLength(params: { el: string; length: number }): Chainable<Subject>;
       fbClickLabelEditHiddenBtn(params: { label: string }): Chainable<Subject>;
+      fbAutocompleteType(params: { autocompleteOption: string }): Chainable<Subject>;
     }
   }
 }
+
+Cypress.Commands.add("fbAutocompleteType", (params: { autocompleteOption: string }) => {
+  cy.get("[data-cy=\"optionId\"]").click();
+  cy.get("ul[role=listbox]>li").contains(params.autocompleteOption).click();
+});
 
 Cypress.Commands.add("fbAddNewFieldOption", () => {
   cy.unClick();
