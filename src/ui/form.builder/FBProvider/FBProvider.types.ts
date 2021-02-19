@@ -34,6 +34,7 @@ import {
   FBTextEditorState,
   FBTextFieldWithRangeState,
   FBWorkspaceState,
+  FBMPIProcedureState,
 } from "..";
 
 
@@ -74,4 +75,5 @@ export interface FBProviderProps {
   textFieldWithRangeState?: FBTextFieldWithRangeState;
   filesPresenterState?: FBFilesPresenterState;
   supplierState?: FBSupplierState;
+  mpiProcedureState?: FBMPIProcedureState;
 }

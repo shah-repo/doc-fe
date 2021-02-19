@@ -228,6 +228,13 @@
     "deleteDisabled",
     "copyableValue"
   ],
+  "mpiprocedure": [
+    "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
+    "deleteDisabled",
+    "copyableValue"
+  ],
   "parts": [
     "reviseDisabled",
     "includeInInspection",

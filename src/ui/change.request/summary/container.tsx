@@ -138,7 +138,7 @@ export const Container: React.FunctionComponent<Props> = ({
         title: intl.formatMessage({
           id: "document.revision.history",
         }),
-        component: dataProp ? <ChangeRequestAuditContainer changeRequestId={dataProp.id} />
+        component: dataProp ? <ChangeRequestAuditContainer changeRequest={dataProp} />
           : null,
       },
     }, {

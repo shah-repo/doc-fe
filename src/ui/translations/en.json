@@ -791,6 +791,7 @@
   "form.builder.create.new.part": "Create a new part",
   "form.builder.create.new.supplier": "Create a new supplier",
   "form.builder.procedure": "Procedure",
+  "form.builder.mpiprocedure": "MPI Procedure",
   "form.builder.equipment": "Equipment",
   "form.builder.equipment|s": "Equipment",
   "form.builder.materials": "Materials",

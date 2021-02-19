@@ -134,11 +134,8 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case "approvals.status":
       case "status":
-        if (audit.nextValue === ApprovalStatus.Abandoned) {
-        /** Temporary solution until BE adds additional info (who was abandoned) to audit.
-         * TODO: should be replaced with abandoned approval's name.
-        */
-          returnValue = "";
+        if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
+          returnValue = (audit.nextValue as Employee).user?.name;
           break;
         }
         returnValue = (

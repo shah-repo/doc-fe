@@ -85,7 +85,7 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
         title: intl.formatMessage({
           id: "document.revision.history",
         }),
-        component: changeRequest ? <ChangeRequestAuditContainer changeRequestId={changeRequest.id} />
+        component: changeRequest ? <ChangeRequestAuditContainer {...{ changeRequest }} />
           : null,
       },
     },

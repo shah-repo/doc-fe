@@ -2,15 +2,18 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { AuditGroupType } from "../../../state/ducks/audit/types";
 import {
+  ChangeRequest,
   changeRequestsActions,
   changeRequestsSelectors,
 } from "../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../state/reducers";
 import AuditPresenter from "./Audit.presenter";
 
-interface OwnProps {
-  changeRequestId: string;
+interface Props {
+  changeRequest: ChangeRequest;
 }
+
+type OwnProps = Props;
 
 interface StateProps {
   audit: AuditGroupType;
@@ -27,20 +30,20 @@ const mapStateToProps = (
   state: ApplicationState,
   props: OwnProps,
 ): StateProps => ({
-  audit: getAudit(state, props.changeRequestId),
+  audit: getAudit(state, props.changeRequest.id),
 });
 
 export const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
   audit,
   loadAudit,
-  changeRequestId,
+  changeRequest,
 }) => {
-  const loadAuditAction = () => loadAudit(changeRequestId);
+  const loadAuditAction = () => loadAudit(changeRequest.id);
   useState(() => {
     loadAuditAction();
   });
 
-  return <AuditPresenter audit={audit} />;
+  return <AuditPresenter approvals={changeRequest.approvals} audit={audit} />;
 };
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(

@@ -27,7 +27,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     const { submitForm } = useFormContext();
     const formValue = formState?.getFieldValue(name) as FBProcedureValue;
     procedureState = FB.useRef(FBProcedureState, formValue);
-    isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
+    isOutput = isOutput || Boolean(workspaceState?.isOutput && workspaceState?.id);
     isPreview = workspaceState?.mode === "preview";
     const diffValue = formState?.inputState.get(FBFieldName.ProcedureDiff)?.value;
     procedureState?.setDiffPreview(diffValue);

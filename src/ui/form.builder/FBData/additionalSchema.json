@@ -31,5 +31,12 @@
       "name": "fb-lhrstep-section-${id}",
       "label": "form.builder.step"
     }
+  ],
+  "mpiprocedure": [
+    {
+      "type": "section",
+      "name": "fb-mpi-procedure-section-${id}",
+      "label": "form.builder.mpiprocedure"
+    }
   ]
 }

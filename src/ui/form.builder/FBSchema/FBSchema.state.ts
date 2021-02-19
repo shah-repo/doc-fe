@@ -2,7 +2,15 @@ import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, siz
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
-import { FBActionField, FBApproval, FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType } from "..";
+import {
+  FBActionField,
+  FBApproval,
+  FBAutocompleteAsync,
+  FBCheckboxGroup,
+  FBEditorState,
+  FBInputProps,
+  FBInputType,
+} from "..";
 import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
 import { FBApprovals } from "../FBApprovals";
 import { FBApprovers } from "../FBApprovers";
@@ -20,12 +28,13 @@ import { FBInlineApproval } from "../FBInlineApproval";
 import { FBInstructionsDocument } from "../FBInstructionsDocument";
 import FBLHRStep from "../FBLHRStep/FBLHRStep";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
+import FBMPIProcedure from "../FBMPIProcedure/FBMPIProcedure";
 import { FBParagraph } from "../FBParagraph";
 import { FBParts } from "../FBParts";
 import { FBPOApprovalMatrix } from "../FBPOApprovalMatrix";
 import { FBPOReceive } from "../FBPOReceive";
-import { FBProcedure } from "../FBProcedure";
-import { FBProcedureDiff } from "../FBProcedureDiff";
+import FBProcedure from "../FBProcedure/FBProcedure";
+import FBProcedureDiff from "../FBProcedureDiff/FBProcedureDiff";
 import { FBPurchaseOrder } from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import { FBRadio } from "../FBRadio";
@@ -102,6 +111,7 @@ export class FBSchemaState {
     approvers: FBApprovers,
     approvals: FBApprovals,
     procedure: FBProcedure,
+    mpiprocedure: FBMPIProcedure,
     parts: FBParts,
     procedurediff: FBProcedureDiff,
     ebpart: FBEBPart,

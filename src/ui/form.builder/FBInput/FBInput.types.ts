@@ -69,6 +69,7 @@ export type FBInputType =
   | "range"
   | "passpercentage"
   | "supplier"
+  | "mpiprocedure"
   | "lhrstep";
 
 export type FBInputProps =
@@ -188,6 +189,7 @@ export const OmitInputClones: FBInputType[] = [
   "approvals",
   "texteditor",
   "procedure",
+  "mpiprocedure",
   "procedurediff",
   "eqmaintenance",
   "ebpart",

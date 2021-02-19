@@ -61,6 +61,7 @@ export class FBControlPickerState {
         "evidencemediaupload",
         "testRequirement",
         "procedure",
+        "mpiprocedure",
         ...this.hasEquipmentMaintenance ? ["eqmaintenance"] as FBInputType[] : [],
         "textfieldwithrange",
         "supplier",
