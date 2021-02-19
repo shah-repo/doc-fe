@@ -208,12 +208,12 @@ export class FBFormState extends FBSchemaState {
         let inputValue = lodashGet(validator.input, reqName);
         // Radio group support
         !isArray(inputValue) && (inputValue = [inputValue]);
-        const diff = inputValue && inputValue.filter((val) => {
+        const diff = inputValue && inputValue.filter((inputVal) => {
           try {
-            return values(JSON.parse(reqs.join(","))).includes(val);
+            return values(JSON.parse(reqs.join(","))).includes(inputVal);
           }
           catch {
-            return reqs.includes(val);
+            return reqs.includes(inputVal);
           }
         });
         if (diff && diff.length > 0 && (!val || isEmpty(val))) {
