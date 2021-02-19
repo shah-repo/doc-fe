@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+./scripts/cypress/utils/generate_testmail_credentials.sh
+
 PIPELINE_TOTAL_NUMBER_OF_STEPS=${BITBUCKET_PARALLEL_STEP_COUNT:-1}
 PIPELINE_STEP_NUMBER=${BITBUCKET_PARALLEL_STEP:-1}
 
