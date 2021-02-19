@@ -1,3 +1,7 @@
+#!/bin/bash
+
+mkdir -p "cypress/credentials"
+
 cat <<EOF > ./cypress/credentials/credentials.json
 {
   "installed": {
