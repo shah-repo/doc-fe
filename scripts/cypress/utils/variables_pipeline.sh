@@ -34,6 +34,7 @@ cat <<EOF > ./cypress-reporter-config.json
   "reporterEnabled": "mochawesome, mocha-junit-reporter",
   "mochaJunitReporterReporterOptions": {
     "mochaFile": "test-results/$CI_BUILD_ID/json/junit/results-[hash].xml",
+    "testsuitesTitle": true
   },
   "mochawesomeReporterOptions": {
     "reportDir": "$DIR_JSON",
