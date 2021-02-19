@@ -72,7 +72,8 @@ export enum CyRoutes {
   DeleteLogout = "DeleteLogout",
   GetDocRevs = "GetDocRevs",
   SessionDetails = "SessionDetails",
-  PatchDocRevOwner = "PatchDocRevOwner"
+  PatchDocRevOwner = "PatchDocRevOwner",
+  PreventIdleLogout = "PreventIdleLogout",
 }
 
 export const routes: ICyRoutes =   {
@@ -120,6 +121,16 @@ export const routes: ICyRoutes =   {
       responseTimeout: 10 * 1000,
     },
   },
+  PreventIdleLogout: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/auth/prevent_idle_logout",
+    },
+    callConfig: {
+      responseTimeout: 50 * 1000,
+      requestTimeout: 40 * 1000,
+    },
+  },
   GroupsGet: {
     requestConfig: {
       method: "GET",
@@ -156,8 +167,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/*",
     },
     callConfig: {
-      responseTimeout: 35 * 1000,
-      requestTimeout: 25 * 1000,
+      responseTimeout: 55 * 1000,
+      requestTimeout: 45 * 1000,
     },
   },
   PostTasks: {
@@ -319,6 +330,10 @@ export const routes: ICyRoutes =   {
       method: "POST",
       url: "/api/v1/attachments/upload",
     },
+    callConfig: {
+      responseTimeout: 25 * 1000,
+      requestTimeout: 20 * 1000,
+    },
   },
   UploadAttachmentMediaUpload: {
     requestConfig: {
@@ -382,7 +397,7 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/change_requests/*",
     },
     callConfig: {
-      requestTimeout: 15 * 1000,
+      requestTimeout: 25 * 1000,
       responseTimeout: 20 * 1000,
     },
   },
@@ -482,6 +497,10 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/required_approvers*",
+    },
+    callConfig: {
+      responseTimeout: 35 * 1000,
+      requestTimeout: 30 * 1000,
     },
   },
   PostApprovalsApprove: {

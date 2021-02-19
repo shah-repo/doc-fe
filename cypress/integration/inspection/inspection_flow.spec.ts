@@ -1038,34 +1038,50 @@ context("Inspection flow", () => {
         cy.drEnterDocumentDescription({ description: "New Part for inspection description" });
       });
 
+      it("Click on save", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
       it("Select make vs buy", () => {
-        cy.get("[id$=\"make-vs-buy\"]").click();
-        cy.get("ul[role=listbox]>li").contains("Make").click();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[id$=\"make-vs-buy\"]").click();
+          cy.get("ul[role=listbox]>li").contains("Make").click();
+        });
       });
 
       it("Select unit of measure", () => {
-        cy.get("[id$=\"unit-of-measure\"]").click();
-        cy.get("ul[role=listbox]>li").contains("Batch").click();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[id$=\"unit-of-measure\"]").click();
+          cy.get("ul[role=listbox]>li").contains("Batch").click();
+        });
       });
 
       it("Select traceability required", () => {
-        cy.get("[value=\"Traceability required\"]").check();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[value=\"Traceability required\"]").check();
+        });
       });
 
       it("Select 'No' for Serialized option", () => {
-        cy.get("[name=\"serialized\"][value=\"No\"]").check();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[name=\"serialized\"][value=\"No\"]").check();
+        });
       });
 
       it("Select 'IQC Required'", () => {
-        cy.get("[value=\"IQC Required\"]").check();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[value=\"IQC Required\"]").check();
+        });
       });
 
       it("Select 'Limited Shelf Life'", () => {
-        cy.get("[value=\"Limited Shelf Life\"]").check();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[value=\"Limited Shelf Life\"]").check();
+        });
       });
 
       it("Select 'FAI Required'", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("[value=\"FAI Required\"]").check();
         });
       });

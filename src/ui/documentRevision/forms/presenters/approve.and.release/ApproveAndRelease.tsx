@@ -1,6 +1,6 @@
 import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
-import { concat, filter, find, flatten, includes, uniqBy } from "lodash";
+import { concat, filter, find, flatten, includes, sortBy, uniqBy } from "lodash";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -118,7 +118,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       ].flat());
       if (isDocumentPO) {
         const ownerGroup = find(
-          uniqBy(response, "id"),
+          sortBy(uniqBy(response, "id"), "documentStage"),
           (group) => includes(group.joinedEmployees.map((e) => e.id), owner?.id)
         );
         if (ownerGroup) {

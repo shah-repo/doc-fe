@@ -154,6 +154,7 @@
     "eslint-plugin-react": "^7.18.3",
     "eslint-plugin-react-hooks": "^2.4.0",
     "faker": "4.1.0",
+    "gmail-tester": "^1.3.2",
     "imap-simple": "^5.0.0",
     "mocha": "^8.0.1",
     "mocha-junit-reporter": "^2.0.0",

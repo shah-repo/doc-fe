@@ -10,9 +10,9 @@ export const withFBValidation = <T extends FBValidationProps>(
     ...props
   }: T) => {
 
-    function valueByType(value: any, key: string): any {
+    function valueByType(value: any, key: string, validator: string): any {
       switch (true) {
-        case isArray(value): return value;
+        case isArray(value): return validator === "required_if_in" ? JSON.stringify({ ...value }) : value;
         case isDate(value): return (value as string);
         case isObject(value): return get(value, key);
         default: return value;
@@ -24,7 +24,7 @@ export const withFBValidation = <T extends FBValidationProps>(
       let rules = value ? key : "";
       if (isObject(value)) {
         map(value, (v, k) => {
-          rules += `${ruleDelimiter.shift()}${valueByType(v, k)}`;
+          rules += `${ruleDelimiter.shift()}${valueByType(v, k, key)}`;
         });
       }
       return rules;

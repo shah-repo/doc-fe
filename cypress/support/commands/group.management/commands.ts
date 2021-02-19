@@ -276,7 +276,7 @@ Cypress.Commands.add("grpRemoveUser", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("grpSaveGroup", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPost, () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GroupsPost, CyRoutes.GroupsGet], () => {
     cy.get("#Group-createGroup").click();
   });
   cy.get("#DialogContent-close").click();
