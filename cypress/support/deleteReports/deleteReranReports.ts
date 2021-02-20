@@ -1,6 +1,5 @@
 
 import { existsSync, readdirSync, readFileSync, unlinkSync } from "fs";
-// import { CONFIG } from "../config";
 
 export function deleteMochaTestReports(params: {CONFIG: any; specFileName: string}) {
   const { CONFIG, specFileName } = params;
