@@ -256,7 +256,7 @@ context("Approval request landing page test", () => {
 
     it("Check only approval requests are shown on approval list", () => {
       SystemRequirement("REQ-0760");
-      cy.dlVerifyDocumentCount({ numberOfDoc: 4 });
+      cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
     });
   });
 
