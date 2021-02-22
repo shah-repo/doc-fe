@@ -24,15 +24,18 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     formValue,
     toolbar,
     masked,
-    name,
+    name = "",
+    disabled,
+    isInputOwner,
+    withState,
+    omitFormValue,
     ...props
   }: T) => {
 
     // MARK: @config
-    const { formState } = FB.useStores();
+    const { formState, workspaceState } = FB.useStores();
     const emptyHtmlContent = "<p></p>";
     const intl = useIntl();
-    formValue = formState?.getFieldValue(name);
     textEditorState = FB.useRef(FBTextEditorState, htmlToEditorState(formValue));
 
     // form preview mode just disables the text editor
@@ -43,6 +46,9 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     if (!formValue && isEmpty(formValue) && isPreview) {
       formValue = intl.formatMessage({ id: "form.builder.none" });
     }
+
+    isInputOwner = workspaceState?.getIsInputOwner(name);
+    disabled = !isInputOwner || disabled;
 
     !toolbar && (toolbar = {
       options: [
@@ -69,7 +75,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
           if (!data) { return; }
           let htmlContent = draftToHtml(convertToRaw(data.getCurrentContent())).trim();
           (htmlContent === emptyHtmlContent) && (htmlContent = "");
-          formState?.setFieldValue(name, htmlContent);
+          formState?.setFieldValue(name, htmlContent, false, omitFormValue);
           formState?.validate();
         }
       );
@@ -107,6 +113,9 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       // If onBlur method is called from options menu open trigger
       if (textEditorState?.preserveFocus) { return; }
       handleMask?.(true);
+      if (withState) {
+        formState?.setFieldValue(name, formState.getFieldValue(name), true, omitFormValue);
+      }
       formState?.setFieldAutosave(name);
     };
 
@@ -114,6 +123,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     useObserver(() => {
       editorState = textEditorState?.editorState;
       masked = textEditorState?.masked;
+      formValue = formState?.getFieldValue(name);
     });
 
     return Component({
@@ -131,6 +141,9 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       toolbar,
       masked,
       name,
+      disabled,
+      withState,
+      omitFormValue,
     });
   };
 

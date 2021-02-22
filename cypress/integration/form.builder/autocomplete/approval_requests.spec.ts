@@ -27,13 +27,7 @@ context("FORM Field test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -93,10 +87,7 @@ context("FORM Field test", () => {
 
       it("Enter description 'AR from New form template for approval request'", () => {
         cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
-      });
-
-      it("Add first approver to approval request on approver list", () => {
-        cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+        cy.wait(2000);
       });
 
       it("Click Create Approval Request", () => {
@@ -104,6 +95,14 @@ context("FORM Field test", () => {
           [CyRoutes.PostChangeRequests], () => {
             cy.get("[data-cy=\"navigation.createChangeRequest\"]").click();
           });
+      });
+
+      it("Add first approver to approval request on approver list", () => {
+        cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+      });
+
+      it("Save changes", () => {
+        cy.arSaveApiCall();
       });
     });
 
@@ -187,6 +186,7 @@ context("FORM Field test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
+            cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
               .find("[data-cy^=\"test-label-\"]").click();
 

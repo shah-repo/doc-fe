@@ -12,11 +12,9 @@ import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { toastError } from "../../components/notifications";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import { FBWorkspace, FBWorkspaceMode } from "../../form.builder";
 import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
 import useGetAvailableReferences from "../../hooks/useGetAvailableReferences";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
@@ -72,7 +70,6 @@ DocumentRevisionFormContainerProps
 }) => {
   const bannerPortal = React.useRef(null);
   const loadAction =  useActionCreator(documentRevisionsActions.loadList);
-  const loadDocumentAction = useActionCreator(documentsActions.getDocumentById);
   const [releasedDocRev, setReleasedDocRev] = useState<DocumentRevision>();
 
   const docId = initialValues.document?.docId;
@@ -143,34 +140,18 @@ DocumentRevisionFormContainerProps
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentTypeAcronym]);
 
-  // Fetching and setting released document for revision prediction
-  const loadDocumentAsync = useAsync({
-    onSuccess: (data?: Document) => {
-      if (data) {
-        setReleasedDocRev((data?.documentRevisions).find((doc) => isDocumentRevisionReleased(doc.status)));
-        return;
-      }
-    },
-    onError: (error) => {
-      toastError(error as string);
-    },
-  });
-
   useEffect(() => {
     if (!document.id) {
       return;
     }
-    loadDocumentAsync.start(
-      loadDocumentAction,
-      document.id,
-      loadDocumentAsync,
-    );
+    setReleasedDocRev((document?.documentRevisions).find((doc) => isDocumentRevisionReleased(doc.status)));
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [document?.documentRevisions]);
 
   // FB config
   const FBContainer = React.useRef(null);
-  const { group: formGroup } = cleanInitialValues.document?.documentType || {};
+  const { groupOptions: formGroupOptions } = cleanInitialValues.document?.documentType || {};
   const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
   const isOutput =  Boolean(outputGroup && !isEmpty(outputGroup));
   const pmFormSchema = pmForm?.formTemplate?.schema || [];
@@ -187,7 +168,7 @@ DocumentRevisionFormContainerProps
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
   , [cleanInitialValues]);
 
-  if (formGroup && formGroup.includes("FORM")) {
+  if (formGroupOptions && formGroupOptions.includes("FORM")) {
     mode = "design";
   } else if (outputGroup || !isEmpty(originScheme)) {
     mode = isEditableSchema ? "formDesign" : "form";

@@ -31,6 +31,7 @@ declare global {
       recCheckNumberOfAvailablePo(params: {numberOfOpenPOs: integer}): Chainable<Subject>;
       recSelectPo(params: {poTitle: string}): Chainable<Subject>;
       recVerifyPOIsDisplayed(params: {loadedPoItems: PurchaseOrderItem[]}): Chainable<Subject>;
+      recClearFilter(): Chainable<Subject>;
     }
   }
 }
@@ -75,7 +76,9 @@ Cypress.Commands.add("recClickOnFirstReceivableOnList", () => {
 });
 
 Cypress.Commands.add("recFilterByReceivableId", (params: {id: string}) => {
-  cy.get("input[name=docId]").type(params.id).wait(300);
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
+    cy.get("input[name=docId]").type(params.id).wait(300);
+  });
 });
 
 Cypress.Commands.add("recClickUpdateRecord", (params: {id: string}) => {
@@ -95,7 +98,9 @@ Cypress.Commands.add("recVerifyFilterByReceivableId", (params: {recId: string })
 });
 
 Cypress.Commands.add("recFilterByOwner", (params: {owner: string}) => {
-  cy.get("input[name=owner]").type(params.owner).wait(300);
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
+    cy.get("input[name=owner]").type(params.owner).wait(300);
+  });
 });
 
 Cypress.Commands.add("recVerifyFilterByOwner", (params: {owner: string }) => {
@@ -107,8 +112,10 @@ Cypress.Commands.add("recVerifyFilterByOwner", (params: {owner: string }) => {
 });
 
 Cypress.Commands.add("recFilterByState", (params: {state: string}) => {
-  cy.get("div[id=\"mui-component-select-displayStatus\"]").click().wait(300);
-  cy.get("ul[role=listbox]>li").contains(params.state).click().wait(300);
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
+    cy.get("div[id=\"mui-component-select-displayStatus\"]").click().wait(300);
+    cy.get("ul[role=listbox]>li").contains(params.state).click().wait(300);
+  });
 });
 
 Cypress.Commands.add("recVerifyFilterByState", (params: {state: string }) => {
@@ -120,7 +127,9 @@ Cypress.Commands.add("recVerifyFilterByState", (params: {state: string }) => {
 });
 
 Cypress.Commands.add("recFilterByARId", (params: {arId: string}) => {
-  cy.get("input[name=crId]").type(params.arId).wait(300);
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
+    cy.get("input[name=crId]").type(params.arId).wait(300);
+  });
 });
 
 Cypress.Commands.add("recVerifyFilterByARId", (params: {arId: string }) => {
@@ -139,13 +148,14 @@ Cypress.Commands.add("recVerifyFilterClear", () => {
 });
 
 Cypress.Commands.add("recCheckNumberOfAvailablePo", (params: {numberOfOpenPOs: integer}) => {
-  cy.get("[data-cy^=receivable]").scrollIntoView().wait(2000);
-  cy.get("[data-cy^=receivable]").click();
+  cy.get("[data-cy*=receivable]").scrollIntoView().wait(2000);
+  cy.get("[data-cy*=receivable]").click();
   cy.get("ul[role=listbox]>li").should("have.length", params.numberOfOpenPOs);
 });
 
 Cypress.Commands.add("recSelectPo", (params: {poTitle: string}) => {
-  cy.get("[data-cy^=receivable]").type(params.poTitle + "{downarrow}{enter}");
+  cy.get("[data-cy*=receivable]");
+  cy.get("ul[role=listbox]>li").contains(params.poTitle).click();
 });
 
 Cypress.Commands.add("recVerifyPOIsDisplayed", (params: {loadedPoItems: PurchaseOrderItem[]}) => {

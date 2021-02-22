@@ -155,6 +155,7 @@ context("Procedure and parts flow test", () => {
                 effectiveDate: (new Date()).toISOString(),
                 documentType: { id: approvalRequestDocumentType[0].id },
                 formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
               },
               employeeId: adminEmployee.id,
               sessionId: loginResponse.sessionId,
@@ -200,6 +201,7 @@ context("Procedure and parts flow test", () => {
             effectiveDate: (new Date()).toISOString(),
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
           },
           employeeId: adminEmployee.id,
           sessionId: loginResponse.sessionId,
@@ -243,6 +245,7 @@ context("Procedure and parts flow test", () => {
             effectiveDate: (new Date()).toISOString(),
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
           },
           employeeId: adminEmployee.id,
           sessionId: loginResponse.sessionId,
@@ -378,6 +381,7 @@ context("Procedure and parts flow test", () => {
             effectiveDate: (new Date()).toISOString(),
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
           },
           employeeId: adminEmployee.id,
           sessionId: loginResponse.sessionId,
@@ -422,10 +426,6 @@ context("Procedure and parts flow test", () => {
       cy.drEnterDocumentTitle({ name: "Component specification lot document" });
     });
 
-    it("Add lot description", () => {
-      cy.drEnterDocumentDescription({ description: "Component specification lot document description" });
-    });
-
     it("Select 'Part document' in references", () => {
       cy.drSelectReferences( "Part document" );
     });
@@ -443,7 +443,7 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
       cy.wait(5000);
     });
 
@@ -521,12 +521,18 @@ context("Procedure and parts flow test", () => {
           cy.arClickAddBtnOnAddDocumentsDialog();
         });
 
+        // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
+
+        it("Click Create Approval Request", () => {
+          cy.arClickCreateApprovalRequestAfterCompletingForm();
+        });
+
         it("Add first approver to approval request on approver list", () => {
           cy.arAddApproverOnApproverList({ approver: USERS[1].email });
         });
 
-        it("Click Create Approval Request", () => {
-          cy.arClickCreateApprovalRequestAfterCompletingForm();
+        it("Save changes", () => {
+          cy.arSaveApiCall();
         });
 
         it("Click 'Send To Review'", () => {
@@ -870,11 +876,9 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-      });
-
-      it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        });
       });
     });
 

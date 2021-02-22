@@ -15,7 +15,7 @@ export const DOCUMENT_TYPE_BY_CATEGORY_ASYNC = "documentType/CATEGORY_ASYNC";
 export const SET_DOCUMENT_TYPES_BY_CATEGORY = "documentType/SET_CATEGORY";
 
 export const RECORD_GROUP_TYPES: DocumentGroupType[] = ["PO", "SUPPLIER", "RECORD"];
-export const DOCUMENT_GROUP_TYPES: DocumentGroupType[] = ["DAM", "DYNAMIC_FORM", "FORM", "MPI", "OTHER", "PART", "POAM", "WORK_ORDER"];
+export const DOCUMENT_GROUP_TYPES: DocumentGroupType[] = ["DAM", "DYNAMIC_FORM", "FORM", "PI", "OTHER", "PART", "POAM", "WORK_ORDER"];
 
 
 export const DOCUMENT_LIST_TYPE_NAMES = [

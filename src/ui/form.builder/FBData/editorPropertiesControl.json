@@ -228,6 +228,13 @@
     "deleteDisabled",
     "copyableValue"
   ],
+  "mpiprocedure": [
+    "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
+    "deleteDisabled",
+    "copyableValue"
+  ],
   "parts": [
     "reviseDisabled",
     "includeInInspection",
@@ -243,6 +250,13 @@
     "copyableValue"
   ],
   "textfieldwithrange": [
+    "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
+    "deleteDisabled",
+    "copyableValue"
+  ],
+  "lhrstep": [
     "reviseDisabled",
     "includeInInspection",
     "includeInFaiInspection",

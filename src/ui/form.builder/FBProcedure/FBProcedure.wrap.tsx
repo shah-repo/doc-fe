@@ -15,7 +15,9 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     isOutput,
     index = 0,
     types,
-    name,
+    name = "",
+    disabled,
+    isInputOwner,
     ...props
   }: T) => {
 
@@ -25,13 +27,15 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     const { submitForm } = useFormContext();
     const formValue = formState?.getFieldValue(name) as FBProcedureValue;
     procedureState = FB.useRef(FBProcedureState, formValue);
-    isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
+    isOutput = isOutput || Boolean(workspaceState?.isOutput && workspaceState?.id);
     isPreview = workspaceState?.mode === "preview";
     const diffValue = formState?.inputState.get(FBFieldName.ProcedureDiff)?.value;
     procedureState?.setDiffPreview(diffValue);
     const inputState = FB.useRef<FBInputState>(FBInputState, {});
     formState?.inputState.set(`${FBFieldName.ProcedureDiff}${name}`, inputState);
     types = keys(FBProcedureItemType);
+    isInputOwner = workspaceState?.getIsInputOwner(name);
+    disabled = !isInputOwner || disabled;
 
     // MARK: @reactions
     // Form sync
@@ -142,6 +146,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
       types,
       index,
       name,
+      disabled,
     });
   };
 

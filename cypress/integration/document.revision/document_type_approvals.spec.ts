@@ -47,13 +47,7 @@ context("Check DAM enforcement rules for document types", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: ADMIN_USER.email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: IMPORTER_USER.email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [FIRST_USER, SECOND_USER, THIRD_USER, INDIVIDUAL_USER],
             documentTypes: [
               {
@@ -150,6 +144,7 @@ context("Check DAM enforcement rules for document types", () => {
                 effectiveDate: (new Date()).toISOString(),
                 documentType: { id: approvalRequestDocumentType[0].id },
                 formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
               },
               employeeId: adminEmployee.id,
               sessionId: adminEmployeeLoginResponse.sessionId,
@@ -210,6 +205,7 @@ context("Check DAM enforcement rules for document types", () => {
             effectiveDate: (new Date()).toISOString(),
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
           },
           employeeId: adminEmployee.id,
           sessionId: adminEmployeeLoginResponse.sessionId,

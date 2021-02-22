@@ -276,7 +276,7 @@ Cypress.Commands.add("grpRemoveUser", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("grpSaveGroup", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPost, () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GroupsPost, CyRoutes.GroupsGet], () => {
     cy.get("#Group-createGroup").click();
   });
   cy.get("#DialogContent-close").click();
@@ -323,7 +323,8 @@ Cypress.Commands.add("grpSelectUnofficial", () => {
 
 Cypress.Commands.add("grpTypeMembers", (...names: string[]) => {
   names.forEach((name) => {
-    cy.get(`#Group-members`).type(`${name}{enter}`);
+    cy.get(`#Group-members`).click();
+    cy.get("div[id^=react-select]").contains(name).click();
   });
 });
 

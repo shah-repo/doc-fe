@@ -1,4 +1,4 @@
-import { cloneDeep, debounce, filter, map } from "lodash";
+import { cloneDeep, filter, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -25,7 +25,8 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     ...props
   }: T) => {
 
-    const { formState: parentFormState, bookmarkState } = FB.useStores();
+    const { formState: parentFormState, bookmarkState, workspaceState } = FB.useStores();
+    const { isOutput } = workspaceState || {};
     const parentFormValue = parentFormState?.getFieldValue(name);
 
     docRevState = FB.useRef(FBDocumentRevisionsState, parentFormValue);
@@ -33,7 +34,8 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     formState = FB.useRef(FBFormState, {});
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(() => debounce(mapCollection, 600), []);
+    // *Note: Can't remember why is this here. If it pass QA we can delete it.
+    // React.useEffect(() => debounce(mapCollection, 600), []);
 
     React.useEffect(() => reaction( // Form sync
       () => docRevState?.value,
@@ -50,12 +52,19 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    React.useEffect(() => {
+      if (!isOutput || !parentFormValue) { return; }
+      bookmarkState?.setLoading(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     function mapCollection() {
       const docList = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.documentRevisions);
-      if (!docList) {
-        bookmarkState?.setLoading(true);
-        return;
-      }
+      // This is related to debounce mapCoolection from above
+      // if (!docList) {
+      //   bookmarkState?.setLoading(true);
+      //   return;
+      // }
       docRevState?.value?.map((value, index) => {
         const { proposedDocumentRevision: { id: docRevId } } = value;
         setBookmark(docList.get(docRevId), index);

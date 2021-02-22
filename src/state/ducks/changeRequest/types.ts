@@ -115,8 +115,8 @@ export interface ImplementationPlanRequest {
 }
 
 export interface ChangeRequestEditRequestBody {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   formInput?: Record<string, any>;
   formDocument?: FBDocumentRevisionProps;
   documentType?: Id;

@@ -45,6 +45,7 @@ for((i=1; i <= $NUMBER_OF_WORKERS; i+=1))
 do
   echo "Started worker: $i"
   # ./scripts/cypress/utils/run_node.sh  2>/dev/null || true  &
+  sleep 5
   runNode $i &
   pids[${i}]=$!
 done

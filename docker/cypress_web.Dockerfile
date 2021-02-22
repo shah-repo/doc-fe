@@ -5,11 +5,11 @@ WORKDIR /opt/app
 
 COPY package*.json ./
 COPY yarn*.lock ./
+COPY patches /opt/app/patches
 RUN yarn install --frozen-lockfile
 
 COPY src /opt/app/src
 COPY public /opt/app/public
-COPY patches /opt/app/patches
 COPY tsconfig* /opt/app/
 
 ARG REACT_APP_API_ENDPOINT

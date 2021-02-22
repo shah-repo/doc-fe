@@ -124,23 +124,25 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
 
   const pageDetailColumns = (isByCategory ? documentCategory.columns : documentType?.pageDetails?.columns) || [];
 
-  const columns: TableColumnProps<DocumentRevision>[] = pageDetailColumns.map(
-    (column: PageDetailsColumn) => {
-      const [omitSearch, searchOptions] = columnSearchConfiguration(column.valuePath, tableCriteria, statuses);
-      return {
-        key: column.valuePath as keyof DocumentRevision,
-        // version is a hack need to insert inside configuration 20.19
-        label: column.label === "Version" as string ? "common.revision" : column.label,
-        cellHref: cellHrefRenderer,
-        omitSearch,
-        columnOptions: {
-          cellDataGetter: ({ rowData }) =>
-            getFormattedRowValue(column.valuePath, rowData),
-        },
-        searchOptions,
-      };
-    },
-  );
+  const columns: TableColumnProps<DocumentRevision>[] = pageDetailColumns
+    .filter((c) => c.showOnWeb)
+    .map(
+      (column: PageDetailsColumn) => {
+        const [omitSearch, searchOptions] = columnSearchConfiguration(column.valuePath, tableCriteria, statuses);
+        return {
+          key: column.valuePath as keyof DocumentRevision,
+          // version is a hack need to insert inside configuration 20.19
+          label: column.label === "Version" as string ? "common.revision" : column.label,
+          cellHref: cellHrefRenderer,
+          omitSearch,
+          columnOptions: {
+            cellDataGetter: ({ rowData }) =>
+              getFormattedRowValue(column.valuePath, rowData),
+          },
+          searchOptions,
+        };
+      },
+    );
 
   const staticColumns: TableColumnProps<DocumentRevision>[] = getStaticColumns(
     isByCategory,

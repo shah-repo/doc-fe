@@ -37,13 +37,7 @@ context("Approval request landing page test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
@@ -170,9 +164,6 @@ context("Approval request landing page test", () => {
                 justificationOfChange: "ar test",
                 id: faker.random.uuid(),
               }],
-              approvers: [{
-                id: secondEmployee.id,
-              }],
             },
           },
           employeeId: secondEmployee.id as unknown as string,
@@ -190,9 +181,6 @@ context("Approval request landing page test", () => {
                 descriptionOfChange: "ar test",
                 justificationOfChange: "ar test",
                 id: faker.random.uuid(),
-              }],
-              approvers: [{
-                id: secondEmployee.id,
               }],
             },
           },
@@ -233,6 +221,14 @@ context("Approval request landing page test", () => {
       cy.arFilterARListByNameAndStatus({ title: approvalRequestName, status: "Draft" });
     });
 
+    it("Add approvers to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+    });
+
+    it("Save changes", () => {
+      cy.arSaveApiCall();
+    });
+
     it("Send to review", () => {
       cy.arClickSendToReview();
     });
@@ -266,10 +262,6 @@ context("Approval request landing page test", () => {
 
   context("Check for filters on approver request list", () => {
     context("Check AR ID filter", () => {
-      it("Clear filters", () => {
-        cy.dlClearFilters();
-      });
-
       it("Filter list by AR ID", () => {
         cy.alFilterByArId({ arId: "AR99999" });
       });
@@ -287,7 +279,7 @@ context("Approval request landing page test", () => {
 
     context("Check AR title filter", () => {
       it("Clear filters", () => {
-        cy.dlClearFilters();
+        cy.alClearFilters();
       });
 
       it("Filter list by TITLE", () => {
@@ -307,7 +299,7 @@ context("Approval request landing page test", () => {
 
     context("Check OWNER filter", () => {
       it("Clear filters", () => {
-        cy.dlClearFilters();
+        cy.alClearFilters();
       });
 
       it("Filter list by OWNER", () => {
@@ -327,7 +319,7 @@ context("Approval request landing page test", () => {
 
     context("Check STATUS filter", () => {
       it("Clear filters", () => {
-        cy.dlClearFilters();
+        cy.alClearFilters();
       });
 
       it("Filter list by STATUS", () => {
@@ -347,7 +339,7 @@ context("Approval request landing page test", () => {
 
     context("Check for maintaining approval request list filter options", () => {
       it("Clear filters", () => {
-        cy.dlClearFilters();
+        cy.alClearFilters();
       });
 
       it("Filter list by status", () => {
@@ -379,7 +371,7 @@ context("Approval request landing page test", () => {
 
     context("Check clear button is clearing all filters", () => {
       it("Clear filters", () => {
-        cy.dlClearFilters();
+        cy.alClearFilters();
       });
 
       it("Verify filters are cleared", () => {
@@ -391,7 +383,7 @@ context("Approval request landing page test", () => {
   context("Verify description is shown on hover", () => {
     it("Verify description", () => {
       SystemRequirement("REQ-0840");
-      cy.alVerifyDescriptionOnHover({ description: "Description for first approval request" });
+      cy.alVerifyDescriptionOnHover({ description: "\nDescription for first approval request\n" });
     });
   });
 });

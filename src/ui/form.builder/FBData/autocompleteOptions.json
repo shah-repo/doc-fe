@@ -103,7 +103,7 @@
     "path": "/document_revisions?docTypeGroups%5B%5D=PO&status%5B%5D=RELEASED",
     "label": "Purchase Order list",
     "valueKey": "id",
-    "labelKey": "name",
+    "labelKey": "description",
     "labelPrefixRoot": "document.docId",
     "root": "",
     "includeRevision": "displayRevision"
@@ -135,7 +135,7 @@
   },
   {
     "id": "16",
-    "path": "/document_revisions?docTypeGroups%5B%5D=FORM&docTypeGroups%5B%5D=SUPPLIER&docTypeGroups%5B%5D=OTHER&docTypeGroups%5B%5D=MPI&docTypeGroups%5B%5D=DYNAMIC_FORM&docTypeGroups%5B%5D=POAM&docTypeGroups%5B%5D=PO&docTypeGroups%5B%5D=WORK_ORDER&docTypeGroups%5B%5D=PART&docTypeGroups%5B%5D=DAM&docTypeGroups%5B%5D=EQUIPMENT&docTypeGroups%5B%5D=MATERIAL&status%5B%5D=DRAFT",
+    "path": "/document_revisions?docTypeGroups%5B%5D=FORM&docTypeGroups%5B%5D=SUPPLIER&docTypeGroups%5B%5D=OTHER&docTypeGroups%5B%5D=PI&docTypeGroups%5B%5D=DYNAMIC_FORM&docTypeGroups%5B%5D=POAM&docTypeGroups%5B%5D=PO&docTypeGroups%5B%5D=WORK_ORDER&docTypeGroups%5B%5D=PART&docTypeGroups%5B%5D=DAM&docTypeGroups%5B%5D=EQUIPMENT&docTypeGroups%5B%5D=MATERIAL&status%5B%5D=DRAFT",
     "label": "Document Revisions In Draft without Records",
     "valueKey": "id",
     "labelKey": "name",
@@ -246,5 +246,24 @@
     "labelPrefixRoot": "document.docId",
     "root": "",
     "includeRevision": "displayRevision"
+  },
+  {
+    "id": "28",
+    "path": "/document_revisions?docTypeGroupOptions%5B%5D=SEED&status%5B%5D=RELEASED",
+    "label": "Seed Documents",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": "",
+    "includeRevision": "displayRevision"
+  },
+  {
+    "id": "29",
+    "path": "/document_revisions?docTypeGroupOptions%5B%5D=MPI&status%5B%5D=RELEASED&status%5B%5D=DRAFT",
+    "label": "MPI documents",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
   }
 ]

@@ -66,7 +66,14 @@ export enum CyRoutes {
   PatchDocSecurity = "PatchDocSecurity",
   GetRevisionDocTypeGroupOptions = "GetRevisionDocTypeGroupOptions",
   PostDocRev = "PostDocRev",
-  GroupGet = "GroupGet"
+  GroupGet = "GroupGet",
+  GetDocRevDisplayStatus = "GetDocRevDisplayStatus",
+  PostTasks = "PostTasks",
+  DeleteLogout = "DeleteLogout",
+  GetDocRevs = "GetDocRevs",
+  SessionDetails = "SessionDetails",
+  PatchDocRevOwner = "PatchDocRevOwner",
+  PreventIdleLogout = "PreventIdleLogout",
 }
 
 export const routes: ICyRoutes =   {
@@ -76,14 +83,24 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/employees*",
     },
     callConfig: {
-      responseTimeout: 20 * 1000,
-      requestTimeout: 10 * 1000,
+      responseTimeout: 50 * 1000,
+      requestTimeout: 40 * 1000,
     },
   },
   EmployeesPost: {
     requestConfig: {
       method: "POST",
       url: "/api/v1/employees",
+    },
+  },
+  SessionDetails: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/auth/sessionDetails",
+    },
+    callConfig: {
+      responseTimeout: 50 * 1000,
+      requestTimeout: 40 * 1000,
     },
   },
   LotQuantity: {
@@ -102,6 +119,16 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 10 * 1000,
+    },
+  },
+  PreventIdleLogout: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/auth/prevent_idle_logout",
+    },
+    callConfig: {
+      responseTimeout: 50 * 1000,
+      requestTimeout: 40 * 1000,
     },
   },
   GroupsGet: {
@@ -140,8 +167,24 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/*",
     },
     callConfig: {
-      responseTimeout: 25 * 1000,
+      responseTimeout: 55 * 1000,
+      requestTimeout: 45 * 1000,
+    },
+  },
+  PostTasks: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/tasks",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
       requestTimeout: 10 * 1000,
+    },
+  },
+  PatchDocRevOwner: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/document_revisions/*/owner_change",
     },
   },
   GetDocDynamicForm: {
@@ -156,16 +199,40 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/in_review/*",
     },
   },
+  DeleteLogout: {
+    requestConfig: {
+      method: "DELETE",
+      url: "/api/v1/auth/logout",
+    },
+    callConfig: {
+      responseTimeout: 35 * 1000,
+      requestTimeout: 25 * 1000,
+    },
+  },
   GetDocRevStatusesCategory: {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/statuses*",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+      requestTimeout: 10 * 1000,
+    },
+  },
+  GetDocRevDisplayStatus: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions?displayStatus*",
     },
   },
   GetDocRevDocTypeCategory: {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions?documentTypeCategory*",
+    },
+    callConfig: {
+      responseTimeout: 35 * 1000,
+      requestTimeout: 20 * 1000,
     },
   },
   GetDocTypeGroupOptions: {
@@ -213,7 +280,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/release/*",
     },
     callConfig: {
-      responseTimeout: 45 * 1000,
+      responseTimeout: 55 * 1000,
+      requestTimeout: 30 * 1000,
     },
   },
   ARtoReview: {
@@ -232,7 +300,8 @@ export const routes: ICyRoutes =   {
       url: "api/v1/auth/credentials/iot",
     },
     callConfig: {
-      responseTimeout: 10 * 1000,
+      responseTimeout: 55 * 1000,
+      requestTimeout: 30 * 1000,
     },
   },
   GetFileUploadCandidates: {
@@ -260,6 +329,10 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/attachments/upload",
+    },
+    callConfig: {
+      responseTimeout: 25 * 1000,
+      requestTimeout: 20 * 1000,
     },
   },
   UploadAttachmentMediaUpload: {
@@ -323,6 +396,10 @@ export const routes: ICyRoutes =   {
       method: "GET",
       url: "/api/v1/change_requests/*",
     },
+    callConfig: {
+      requestTimeout: 25 * 1000,
+      responseTimeout: 20 * 1000,
+    },
   },
   DocPreview: {
     requestConfig: {
@@ -330,7 +407,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/documents/*",
     },
     callConfig: {
-      responseTimeout: 20 * 1000,
+      requestTimeout: 30 * 1000,
+      responseTimeout: 40 * 1000,
     },
   },
   DocRevPreview: {
@@ -339,13 +417,18 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/*",
     },
     callConfig: {
-      responseTimeout: 10 * 1000,
+      requestTimeout: 15 * 1000,
+      responseTimeout: 20 * 1000,
     },
   },
   GetDocAggregatedAudit: {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/*/aggregated_audit",
+    },
+    callConfig: {
+      requestTimeout: 25 * 1000,
+      responseTimeout: 30 * 1000,
     },
   },
   GetDocAudit: {
@@ -384,8 +467,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/*/required_approvers",
     },
     callConfig: {
-      responseTimeout: 10 * 1000,
-      requestTimeout: 10 * 1000,
+      responseTimeout: 40 * 1000,
+      requestTimeout: 30 * 1000,
     },
   },
   PostApproveAR: {
@@ -405,11 +488,19 @@ export const routes: ICyRoutes =   {
       method: "GET",
       url: "/api/v1/change_requests/available_approvers",
     },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+      requestTimeout: 10 * 1000,
+    },
   },
   GetRequiredApproversDocRev: {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/required_approvers*",
+    },
+    callConfig: {
+      responseTimeout: 35 * 1000,
+      requestTimeout: 30 * 1000,
     },
   },
   PostApprovalsApprove: {
@@ -436,13 +527,27 @@ export const routes: ICyRoutes =   {
   GetChangeRequests: {
     requestConfig: {
       method: "GET",
-      url: "/api/v1/change_requests*",
+      url: "/api/v1/change_requests**",
     },
   },
   PostDocRev: {
     requestConfig: {
       method: "POST",
       url: "/api/v1/document_revisions",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+      requestTimeout: 10 * 1000,
+    },
+  },
+  GetDocRevs: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions*",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
   PostChangeRequests: {

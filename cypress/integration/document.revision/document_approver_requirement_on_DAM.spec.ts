@@ -49,13 +49,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: ADMIN_USER.email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: IMPORTER_USER.email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [FIRST_USER, SECOND_USER, THIRD_USER, INDIVIDUAL_USER],
             documentTypes: [],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
@@ -454,18 +448,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.arApproverRoleStatus({ roleName: roleThree, enabled: false });
     });
 
-    it("Add first approver to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: FIRST_USER.email });
-    });
-
-    it("Add second approver to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: SECOND_USER.email });
-    });
-
-    it("Add third approver to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: THIRD_USER.email });
-    });
-
     it(`Verify approver is marked for ${roleOne}`, () => {
       cy.arApproverRoleStatus({ roleName: roleOne, enabled: true });
     });
@@ -480,6 +462,23 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Click Create Approval Request", () => {
       cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.wait(2000);
+    });
+
+    it("Add first approver to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: FIRST_USER.email });
+    });
+
+    it("Add second approver to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: SECOND_USER.email });
+    });
+
+    it("Add third approver to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: THIRD_USER.email });
+    });
+
+    it("Save changes", () => {
+      cy.arSaveApiCall();
     });
 
     it("Click 'Send To Review'", () => {

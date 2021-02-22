@@ -68,7 +68,9 @@ export type FBInputType =
   | "textfieldwithrange"
   | "range"
   | "passpercentage"
-  | "supplier";
+  | "supplier"
+  | "mpiprocedure"
+  | "lhrstep";
 
 export type FBInputProps =
   & FBLabelProps
@@ -187,12 +189,14 @@ export const OmitInputClones: FBInputType[] = [
   "approvals",
   "texteditor",
   "procedure",
+  "mpiprocedure",
   "procedurediff",
   "eqmaintenance",
   "ebpart",
   "parts",
   "range",
   "passpercentage",
+  "poreceive",
 ];
 
 export interface FBInputConstructor {

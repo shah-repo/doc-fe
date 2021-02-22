@@ -24,7 +24,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     ...props
   }: T) => {
     // MARK: @config
-    const { procedureState, dialogState } = FB.useStores();
+    const { procedureState, mpiProcedureState, dialogState } = FB.useStores();
     formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
     procedureFormState = FB.useRef<FBProcedureFormState>(FBProcedureFormState, {
       initialValues,
@@ -97,6 +97,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     function handleAdd() {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
       procedureState?.addItem(formValue, type);
+      mpiProcedureState?.addItem(formValue, type);
       handleCancel?.();
     }
 
@@ -116,6 +117,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         : procedureFormState?.parts;
 
       if (!isEmpty(relation)) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         filtered = filter(data, (option) => relation!.includes(option.id));
       }
       filtered = filter(filtered, (option) => {

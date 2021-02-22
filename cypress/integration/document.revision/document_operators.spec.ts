@@ -33,13 +33,7 @@ context("Document Operators Access Test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -166,8 +160,9 @@ context("Document Operators Access Test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+    it("Click on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+      cy.wait(3000);
     });
 
     it("'Approve and Release' the document", () => {
@@ -299,10 +294,6 @@ context("Document Operators Access Test", () => {
       cy.get("[name^='text-field-for']").type("Test First Field");
     });
 
-    it("Add Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
-    });
-
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
@@ -326,7 +317,7 @@ context("Document Operators Access Test", () => {
   });
 
 
-  context(`Add new textbox field for operator '${USERS[4].name}'`, () => {
+  context(`Fill textbox field with operator '${USERS[4].name}'`, () => {
     it("Navigates to document list", () => {
       cy.navigToRecords();
     });
@@ -335,24 +326,20 @@ context("Document Operators Access Test", () => {
       cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
     });
 
+    it("Check field for first operator is not disabled", () => {
+      cy.get("[name^='text-field-for']").should("not.be.disabled");
+    });
+
+    it("Check field for second operator is not disabled", () => {
+      cy.get("[name^='new-text-field-for']").should("not.be.disabled");
+    });
+
     it("Fill value for FB textbox field", () => {
       cy.get("[name^='new-text-field-for']").type("Test First Field");
     });
 
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
-    });
-
-    it("Fill value for FB textbox field", () => {
-      cy.get("[name^='text-field-for']").type("Try To Edit");
-    });
-
-    it("Add Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
-    });
-
-    it("clicks on 'Save' button expecting error", () => {
-      cy.drClickCreateDocumentWithApiCallForFormsExpectingToastError();
     });
 
     it(`Logout as current user`, () => {
@@ -373,25 +360,24 @@ context("Document Operators Access Test", () => {
     });
   });
 
-  context(`Approve document as owner '${USERS[2].name}'`, () => {
+  context("Submit for approval and approve as owner", () => {
     it("Navigates to document list", () => {
       cy.navigToRecords();
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
+      cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
     });
 
-    it("Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
-        cy.checkToastMessageIsEqual({ message: "All colaborators to the document must be on approvers list" });
-      });
+    it("Add Owner as Approver on document", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
     });
-  });
 
-  context("Approve form as owner", () => {
-    it("Add Approver on document", () => {
+    it("Add first colaborator as Approver on document", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
+    });
+
+    it("Add second colaborator as Approver on document", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[4].name });
     });
 
@@ -485,6 +471,10 @@ context("Document Operators Access Test", () => {
 
     it("Reload document", () => {
       cy.reload();
+    });
+
+    it("Verify status is released", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
     });
   });
 });

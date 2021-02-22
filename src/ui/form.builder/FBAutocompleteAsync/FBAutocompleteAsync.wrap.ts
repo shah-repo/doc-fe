@@ -1,4 +1,4 @@
-import { get, isEmpty, isObject, map } from "lodash";
+import { get, isEmpty, isObject, isString, map } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FBAutocompleteAsyncProps, FBAutocompleteAsyncState } from ".";
@@ -104,6 +104,11 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       }
       return `${optionLabel}${get(option, optionLabelKey, "")}`;
     });
+
+    // Stupid hack that works just until autocomplete refactoring is done
+    if (!isEmpty(options) && isString(defaultValue) && FB.isUUID(defaultValue)) {
+      formState?.getInputState(name || "")?.setRender();
+    }
 
     return Component({
       ...(props as T),

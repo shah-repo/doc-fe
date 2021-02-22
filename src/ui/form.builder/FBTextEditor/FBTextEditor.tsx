@@ -28,6 +28,7 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
 }) => {
   // hack for adding empty lines in preview mode
   // so there is no additional growing blank space on the bottom of editor
+  // eslint-disable-next-line no-useless-escape
   const formattedFormValue = formValue.replace(/<[^\/>]*>([\s]?)*<\/[^>]*>/g, "<p><br></p>" );
   return (
     <FBProvider {...{ textEditorState }}>

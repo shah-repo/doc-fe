@@ -12,7 +12,7 @@ let multipleCompanies;
 let secondEmployee;
 const lotsTitle = `Lots ${Cypress.moment().format("X")}`;
 
-context("FORM Field test", () => {
+context("Autocomplete 'Lots' test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -25,13 +25,7 @@ context("FORM Field test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -138,10 +132,6 @@ context("FORM Field test", () => {
         cy.drEnterDocumentTitle({ name: lotsTitle });
       });
 
-      it("Add lot description", () => {
-        cy.drEnterDocumentDescription({ description: "lot document description" });
-      });
-
       it("Select 'Part document' in references", () => {
         cy.drSelectReferences( "Part document" );
       });
@@ -155,7 +145,7 @@ context("FORM Field test", () => {
       });
 
       it("Create 'Preventative maintenance document'", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
         cy.wait(5000);
       });
 
@@ -251,6 +241,7 @@ context("FORM Field test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
+            cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
               .find("[data-cy^=\"test-label-\"]").click();
 

@@ -46,6 +46,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
           name="partNumberTitle"
           onChange={handlePartDescription}
           disabled={hasPartNumber}
+          withState
         />
       </>
     }
@@ -59,7 +60,6 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         <FBTextField
           label="form.builder.field.description"
           name="description"
-          rules="required"
         />
       </>
     }
@@ -68,7 +68,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         <FBQuantityField
           label="form.builder.field.qunatity.ordered"
           name="order"
-          rules="required|min:1"
+          rules="min:1"
           onChange={handleTotal}
         />
       </Box>
@@ -76,7 +76,6 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         <FBAutocomplete
           label="form.builder.field.units"
           name="units"
-          rules="required"
           options={type === "service" ? FBData.serviceUnitsOptions : FBData.productUnitsOptions}
           optionValueKey="value"
           optionLabelKey="text"
@@ -91,14 +90,12 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
     <FBDatePicker
       label="form.builder.field.date.required"
       name="date"
-      rules="required"
     />
     {
       type === "product" &&
       <FBTextField
         label="form.builder.field.supplier.part.number"
         name="description"
-        rules="required"
         rows="3"
       />
     }
@@ -106,7 +103,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       type="number"
       label="form.builder.field.unit.price"
       name="unitPrice"
-      rules="required|min:0"
+      rules="min:0"
       onChange={handleTotal}
     />
     {
