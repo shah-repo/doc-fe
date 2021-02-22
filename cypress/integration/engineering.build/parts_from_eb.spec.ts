@@ -360,7 +360,9 @@ context("Parts from EB flow test", () => {
 
     context("Add a new part via EB", () => {
       it("Open Create a New Part dialog", () => {
-        cy.get("[data-cy=\"form.builder.create.new.part\"]").click();
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+          cy.get("[data-cy=\"form.builder.create.new.part\"]").click();
+        });
       });
 
       context("Fill in the required attributes and create the part", () => {
@@ -373,13 +375,13 @@ context("Parts from EB flow test", () => {
         });
 
         it("Choose a document type", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetProposedDocId, () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetProposedDocId, CyRoutes.GetSpecificDocumentType], () => {
             cy.ebChoosePartType({ partName: PART_DOCUMENT_TYPE_NAME });
           });
         });
 
         it("Create the part", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.PostDocRev, () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev, CyRoutes.PatchDocRev], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });
