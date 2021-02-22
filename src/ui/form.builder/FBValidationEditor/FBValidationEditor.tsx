@@ -1,6 +1,5 @@
 import React from "react";
-import { FBValidationEditorProps } from ".";
-import { FBTabs } from "..";
+import { FBTabs, FBValidationEditorProps } from "..";
 import { withFBValidationEditor } from "./FBValidationEditor.wrap";
 
 const FBValidationEditor: React.FunctionComponent<FBValidationEditorProps> = ({

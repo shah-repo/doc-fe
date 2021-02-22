@@ -1,6 +1,6 @@
 import { first, get, has, isArray, isEmpty, isString, isUndefined, join, template } from "lodash";
 import { action, observable, set } from "mobx";
-import apiClient, { FBRequestSet, FBRequestTemplateUrl } from ".";
+import { apiClient, FBRequestSet, FBRequestTemplateUrl } from "..";
 import { store } from "../../../state/store";
 import { ApiActionMethod } from "../../../state/types";
 import { toastError } from "../../components/notifications";

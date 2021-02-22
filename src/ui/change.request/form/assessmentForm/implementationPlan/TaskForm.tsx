@@ -12,7 +12,7 @@ import InputField from "../../../../components/forms/fields/Input";
 import TextEditorField from "../../../../components/forms/fields/RichTextEditor";
 import { required, validator } from "../../../../components/forms/fields/validators";
 import Text from "../../../../components/Text";
-import { ImplementationPlanTaskFormValues } from "../../types.js";
+import { ImplementationPlanTaskFormValues } from "../../types";
 
 interface OwnProps extends FormikProps<ImplementationPlanTaskFormValues> {
   cancel: () => void;

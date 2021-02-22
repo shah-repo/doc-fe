@@ -1,5 +1,4 @@
-import { FBFormProps, FBInputProps } from "..";
-import { FBInputType } from "../FBInput";
+import { FBFormProps, FBInputProps, FBInputType } from "..";
 
 export const FBSectionTypes: FBInputType[] = [
   "section",

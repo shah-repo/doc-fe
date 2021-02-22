@@ -1,8 +1,7 @@
 import { flatten, unflatten } from "flat";
 import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, setWith, values } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import { FBFormConstructor, FBInputState, FBWorkspaceMode, FBWorkspaceState } from "..";
-import { FBSchemaState } from "../FBSchema";
+import { FBFormConstructor, FBInputState, FBSchemaState, FBWorkspaceMode, FBWorkspaceState } from "..";
 
 class FBFormState extends FBSchemaState {
   public rules: Dictionary<string> = {};

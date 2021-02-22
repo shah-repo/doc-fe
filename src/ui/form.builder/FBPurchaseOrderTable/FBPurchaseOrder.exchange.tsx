@@ -1,5 +1,5 @@
 import React from "react";
-import { FBPurchaseOrderTableProps } from ".";
+import { FBPurchaseOrderTableProps } from "..";
 import Text from "../../components/Text";
 
 type Props = Pick<FBPurchaseOrderTableProps, "calculation">;

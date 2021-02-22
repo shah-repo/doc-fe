@@ -1,8 +1,7 @@
 import { Dictionary, uniqBy } from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
-import { FB, FBSnackbarState } from "..";
-import { FBDialogState } from "../FBDialog";
+import { FB, FBDialogState, FBSnackbarState } from "..";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../stores/ui/FBStore";
 import { FBTemplateSchema } from "../types/store";

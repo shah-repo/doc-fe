@@ -1,6 +1,6 @@
 import { Box, Menu } from "@material-ui/core";
 import React from "react";
-import { FBContextMenuProps } from ".";
+import { FBContextMenuProps } from "..";
 import { withFBContextMenu } from "./FBContextMenu.wrap";
 
 const FBContextMenu: React.FunctionComponent<FBContextMenuProps> = ({

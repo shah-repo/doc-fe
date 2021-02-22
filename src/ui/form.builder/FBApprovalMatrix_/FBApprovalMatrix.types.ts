@@ -1,5 +1,4 @@
-import { FBApprovalMatrixFieldProps, FBDialogState, FBInputProps } from "..";
-import { FBWorkspaceMode } from "../types/workspace";
+import { FBApprovalMatrixFieldProps, FBDialogState, FBInputProps, FBWorkspaceMode } from "..";
 
 export type FBApprovalMatrixProps =
 & Pick<FBInputProps, "disabled" | "name" | "isInputOwner">

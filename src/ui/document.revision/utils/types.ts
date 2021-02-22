@@ -59,14 +59,6 @@ export interface ReferenceSummary {
   displayRevision?: string;
 }
 
-interface BuildsSummary {
-  id: string;
-  url: string;
-  docId?: string;
-  title: string;
-  revisionStage?: number;
-}
-
 export interface TrainingControlProps extends DataProps<TrainingRecord[]> {
   documentRevisionId: string;
 }

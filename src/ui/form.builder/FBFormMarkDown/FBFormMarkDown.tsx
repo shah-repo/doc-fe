@@ -1,5 +1,5 @@
 import React from "react";
-import { FBFormMarkDownProps } from ".";
+import { FBFormMarkDownProps } from "..";
 import FBButton from "../components/inputs/FBButton";
 import { withFBFormMarkDown } from "./FBFormMarkDown.wrap";
 

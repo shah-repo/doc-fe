@@ -2,8 +2,7 @@ import { Box, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, with
 import classNames from "classnames";
 import { find } from "lodash";
 import React from "react";
-import { FBPOApprovalMatrixState } from "..";
-import { FBMapWrapper } from "../..";
+import { FBMapWrapper, FBPOApprovalMatrixState } from "../..";
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
 import { FBPOApprovalMatrixTableProps, POApprovalMatrixLevel } from "../FBPOApprovalMatrix.types";

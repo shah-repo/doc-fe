@@ -1,7 +1,6 @@
 import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, size, union, unionBy } from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
-import { FBSchemaProps } from ".";
 import {
   FBActionField,
   FBApproval,
@@ -38,8 +37,7 @@ import {
   FBQuantityField,
   FBRadio,
   FBRadioGroup,
-  FBRequestApproval,
-  FBSchemaSelect,
+  FBRequestApproval, FBSchemaProps, FBSchemaSelect,
   FBSection,
   FBSelect,
   FBSelectDocument,

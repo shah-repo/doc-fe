@@ -1,7 +1,6 @@
 import { BoxProps, MenuProps } from "@material-ui/core";
-import { FBContextMenuState } from ".";
+import { FBContextMenuState, FBFormProps } from "..";
 import { TextProps } from "../../components/Text";
-import { FBFormProps } from "../FBForm";
 
 export interface FBContextMenuItemProps {
   text: string;

@@ -1,6 +1,5 @@
 import React from "react";
-import { FBStepperEditorProps } from ".";
-import { FBStepper } from "..";
+import { FBStepper, FBStepperEditorProps } from "..";
 import { withFBStepperEditor } from "./FBStepperEditor.wrap";
 
 const FBStepperEditor: React.FunctionComponent<FBStepperEditorProps> = ({

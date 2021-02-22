@@ -1,7 +1,7 @@
 import { isUndefined } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
-import { FBValidationEditorProps } from ".";
+import { FBValidationEditorProps } from "..";
 import { getHasPermission } from "../../../common/utils/selectors";
 import { Permission } from "../../../state/ducks/auth";
 import FBValidatorCustom from "../components/validation/FBValidatorCustom";

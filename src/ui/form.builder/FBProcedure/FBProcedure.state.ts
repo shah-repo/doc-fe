@@ -1,8 +1,7 @@
 import { filter, get, unionBy } from "lodash";
 import { action, computed, observable, set } from "mobx";
-import { FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from "..";
+import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { FBAutocompleteAsyncOption } from "../FBAutocompleteAsync";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export class FBProcedureState {

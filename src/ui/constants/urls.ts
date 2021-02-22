@@ -19,7 +19,7 @@ export const DOCUMENT_REVISION_VERSION_URL = `${DOCUMENT_REVISION_ROOT_URL}/vers
 export const DOCUMENT_REVISION_NEW_VERSION_URL = `${DOCUMENT_REVISION_ROOT_URL}/new-version/:documentRevisionId`;
 export const DOCUMENT_REVISION_OUTPUT_URL = `${DOCUMENT_REVISION_ROOT_URL}/output_document/:documentRevisionId`;
 
-const TRAINING_URL = "/training";
+export const TRAINING_URL = "/training";
 export const TRAINING_DETAIL_URL = `${TRAINING_URL}/detail/:trainingId`;
 
 export const SIGNUP_URL = "/signup";

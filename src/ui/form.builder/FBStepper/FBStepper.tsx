@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import Stepper from "@material-ui/core/Stepper";
 import React from "react";
-import { FBStepperProps, FBStepperWidth } from ".";
+import { FBStepperProps, FBStepperWidth } from "..";
 import { withFBStepper } from "./FBStepper.wrap";
 
 const FBStepper: React.FunctionComponent<FBStepperProps> = ({

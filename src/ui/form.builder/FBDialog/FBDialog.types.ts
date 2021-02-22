@@ -1,7 +1,6 @@
 import { DialogProps, SvgIconProps } from "@material-ui/core";
 import { ReactNode } from "react";
-import { FBDialogState } from ".";
-import { FBLabelLocaleProps } from "..";
+import { FBDialogState, FBLabelLocaleProps } from "..";
 
 export type FBDialogProps =
 & Pick<Partial<DialogProps>, "open" | "maxWidth">

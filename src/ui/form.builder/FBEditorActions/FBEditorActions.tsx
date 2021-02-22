@@ -1,7 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBEditorActionsProps } from ".";
-import { FBButton, FBSubmitButton } from "..";
+import { FBButton, FBEditorActionsProps, FBSubmitButton } from "..";
 import { withFBEditorActions } from "./FBEditorActions.wrap";
 
 const FBEditorActions: React.FunctionComponent<FBEditorActionsProps> = ({

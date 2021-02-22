@@ -1,7 +1,7 @@
 import { isUndefined } from "lodash";
 import { action, observable, set } from "mobx";
 import React from "react";
-import { FBDialogProps } from ".";
+import { FBDialogProps } from "..";
 
 export class FBDialogState {
   @observable public open = false;

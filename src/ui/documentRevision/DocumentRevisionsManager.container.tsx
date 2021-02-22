@@ -43,8 +43,11 @@ interface OwnProps {
 type DocumentRevisionManagerContainerProps = OwnProps & StateProps;
 
 // TO-DO Move To Context Folder
+export let documentRevisionStatusContext = React.createContext<DocumentRevisionStatus>(DocumentRevisionStatus.Draft);
 export let documentRevisionStatusContextFromDocList = React.createContext<undefined | DocumentRevisionStatus>(undefined);
 export let documentRevisionTypeGroupsFromDocListContext = React.createContext<undefined | DocumentGroupType>(undefined);
+export let documentRevisionVersionContext = React.createContext<number>(1);
+
 
 const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
 const mapStateToProps = (

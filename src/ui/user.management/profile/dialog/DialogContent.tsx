@@ -21,7 +21,7 @@ import Addresses from "../AddressesAndCodes/Addresses";
 import ApiTokenContent from "../apiTokenContent/ApiTokenContent";
 import CompanyStageManagementContainer from "../company.stage.management/CompanyStageManagement.container";
 import UserGroups from "../groups/UserGroups";
-import { HelloSignAccess } from "../HelloSignAccess";
+import HelloSignAccess from "../HelloSignAccess";
 import NavigationManagementContainer from "../navigation.management/NavigationManagement.container";
 import WhiteLabelingManagementContainer from "../whiteLabeling.management/WhiteLabelingManagement.container";
 

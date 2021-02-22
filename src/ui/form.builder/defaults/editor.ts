@@ -1,7 +1,7 @@
 import { Dictionary } from "lodash";
+import { FBInputType } from "..";
 import FBLabelEditor from "../components/editors/FBLabelEditor";
 import FBSectionBox from "../components/layout/FBSectionBox";
-import { FBInputType } from "../FBInput";
 import { FBEditorElementType } from "../types/editor";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {

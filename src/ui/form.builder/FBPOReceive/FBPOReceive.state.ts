@@ -1,12 +1,11 @@
 import { Dictionary, template } from "lodash";
 import { action, computed } from "mobx";
 import { useIntl } from "react-intl";
-import { FBPurchaseOrderItem } from "..";
+import { FBPurchaseOrderItem, FBSchemaProps } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { toastError } from "../../components/notifications";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
-import { FBSchemaProps } from "../FBSchema";
 import { FBEditorElementType } from "../types/editor";
 
 class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {

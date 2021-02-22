@@ -4,13 +4,11 @@ import { first, get, includes, isArray, isBoolean, isEqual, isString, isUndefine
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { FBOption } from "..";
+import { FB, FBInputProps, FBInputType, FBOption, OmitInputClones } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
-import { FBInputProps, FBInputType, OmitInputClones } from "../FBInput";
-import { FB } from "../helpers";
 import { withFBOnChange } from "./FBInput.onchange";
 
 export const withFBInput = <T extends FBInputProps>(

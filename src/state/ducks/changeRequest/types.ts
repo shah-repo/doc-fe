@@ -19,25 +19,19 @@ export enum ImplementationPlanTaskStatus {
   Done = "DONE",
 }
 
-export interface Justifications {
+interface Justifications {
   id?: string;
   description?: string;
   attachments: Attachment[];
 }
 
-export enum AssessmentType {
-  design = "design",
-  process = "process",
-  regulatory = "regulatory",
-}
-
-export interface Assessment {
+interface Assessment {
   design: AssessmentItem;
   process: AssessmentItem;
   regulatory: AssessmentItem;
 }
 
-export interface AssessmentItem {
+interface AssessmentItem {
   id?: string;
   reasoning?: string | null;
   attachments?: Attachment[] | null;
@@ -81,37 +75,6 @@ export interface ChangeRequest {
   formInput?: Record<string, any>;
   formDocument?: FBDocumentRevisionProps;
   tasks?: FBTaskItem[];
-}
-
-export interface Approver {
-  id: string;
-}
-
-export interface DocumentRevisionRequestBody {
-  id: string;
-}
-
-export interface EditRequestBodyAttachment {
-  id: string;
-}
-
-export interface EditRequestBodyNestedObject {
-  description?: string;
-  attachments: EditRequestBodyAttachment[];
-}
-
-export interface ImplementationPlanTaskRequest {
-  id?: string;
-  title: string;
-  description: string;
-  dueDate?: string;
-  assigned?: Id;
-  status: string;
-}
-
-export interface ImplementationPlanRequest {
-  tasks: ImplementationPlanTaskRequest[];
-  attachments: EditRequestBodyAttachment[];
 }
 
 export interface ChangeRequestEditRequestBody {

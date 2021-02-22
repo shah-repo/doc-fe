@@ -26,7 +26,7 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useAsync, { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import FormListDialog from "../dialogs/FormListDialog/FormListDialog.presenter";
-import { MultipleFormTemplateDialog } from "../dialogs/MultipleFormTemplateDialog";
+import MultipleFormTemplateDialog from "../dialogs/MultipleFormTemplateDialog";
 import { filterSecurityGroupsForQms } from "./helpers";
 import { styles } from "./styles";
 

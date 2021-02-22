@@ -2,10 +2,8 @@
 import { differenceBy, filter, map } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBWorkspaceProps, FBWorkspaceState } from ".";
-import { FB, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState } from "..";
+import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState, FBWorkspaceProps, FBWorkspaceState } from "..";
 import { store } from "../../../state/store";
-import { FBDialogState } from "../FBDialog";
 
 // Disable missing translation message for the non translation cases.
 

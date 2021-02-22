@@ -1,7 +1,6 @@
 import { Dictionary } from "lodash";
-import { FBSnackbarState } from "..";
+import { FBDialogState, FBSnackbarState } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { FBDialogState } from "../FBDialog";
 import { FBFormikFieldProps } from "./formik";
 import { FBTemplateSchema } from "./store";
 

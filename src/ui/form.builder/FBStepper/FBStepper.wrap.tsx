@@ -2,10 +2,8 @@ import { Step, StepButton } from "@material-ui/core";
 import { get, isUndefined, map, size } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBStepperProps } from ".";
-import { FB, FBSwitchPanelState } from "..";
+import { FB, FBStepperProps, FBStepperWidth, FBSwitchPanelState } from "..";
 import Text from "../../components/Text";
-import { FBStepperWidth } from "./FBStepper.types";
 
 export const withFBStepper = <T extends FBStepperProps>(
   Component: React.FunctionComponent<T>,

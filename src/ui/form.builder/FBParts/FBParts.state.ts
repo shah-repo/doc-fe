@@ -1,7 +1,6 @@
 import { unionBy, values } from "lodash";
 import { computed, observable } from "mobx";
-import { FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from "..";
-import { FBProcedureState } from "../FBProcedure/FBProcedure.state";
+import { FBProcedureItemConfig, FBProcedureItemType, FBProcedureState, FBProcedureValue } from "..";
 
 class FBPartsState extends FBProcedureState {
   // MARK: @config

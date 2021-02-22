@@ -1,24 +1,7 @@
 import { includes } from "lodash";
 import { action, observable, set } from "mobx";
 import React from "react";
-import { FBEditorApprovalField, FBEditorEQMaintenance, FBEditorInlineApproval, FBEditorMode, FBEditorModeProps, FBEditorProps, FBEditorTextFieldWithRange, FBInputType } from "..";
-import { FBEditorAction } from "../FBEditorAction";
-import { FBEditorApprovals } from "../FBEditorApprovals";
-import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
-import { FBEditorCheckControl } from "../FBEditorCheckControl";
-import { FBEditorEmpty } from "../FBEditorEmpty";
-import { FBEditorHyperlink } from "../FBEditorHyperlink";
-import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
-import { FBEditorLabel } from "../FBEditorLabel";
-import { FBEditorMediaAlbum } from "../FBEditorMediaAlbum";
-import { FBEditorOptionGroup } from "../FBEditorOptionGroup";
-import { FBEditorParagraph } from "../FBEditorParagraph";
-import { FBEditorRequestApproval } from "../FBEditorRequestApproval";
-import { FBEditorSelectDocument } from "../FBEditorSelectDocument";
-import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
-import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
-import { FBEditorTextEditor } from "../FBEditorTextEditor";
-import { FBEditorTextField } from "../FBEditorTextField";
+import { FBEditorAction, FBEditorApprovalField, FBEditorApprovals, FBEditorAutocomplete, FBEditorCheckControl, FBEditorEmpty, FBEditorEQMaintenance, FBEditorHyperlink, FBEditorInlineApproval, FBEditorInstructionsDocument, FBEditorLabel, FBEditorMediaAlbum, FBEditorMode, FBEditorModeProps, FBEditorOptionGroup, FBEditorParagraph, FBEditorProps, FBEditorRequestApproval, FBEditorSelectDocument, FBEditorSelectRequirement, FBEditorTestRequirement, FBEditorTextEditor, FBEditorTextField, FBEditorTextFieldWithRange, FBInputType } from "..";
 
 class FBEditorState {
 

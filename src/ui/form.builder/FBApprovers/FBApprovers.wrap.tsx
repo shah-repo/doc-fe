@@ -3,9 +3,8 @@ import { cloneDeep, compact, concat, difference, filter, find, includes, isEmpty
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
-import { FB, FBApprover, FBApproversProps, FBApproversState, FBJoinedEmployee, FBOption, FBRequiredApprover } from "..";
+import { FB, FBApprover, FBApproversProps, FBApproversState, FBDocumentRevisionsValue, FBJoinedEmployee, FBOption, FBRequiredApprover } from "..";
 import { checkIsDocumentPO } from "../../documentRevision/helpers/checkDocumentGroup";
-import { FBDocumentRevisionsValue } from "../FBDocumentRevisions";
 
 export const withFBApprovers = <T extends FBApproversProps>(
   Component: React.FunctionComponent<T>,

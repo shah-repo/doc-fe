@@ -1,8 +1,8 @@
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBPurchaseOrderClasses } from ".";
 import { FB, FBPurchaseOrderTableProps } from "..";
+import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   Component: React.FunctionComponent<T>,

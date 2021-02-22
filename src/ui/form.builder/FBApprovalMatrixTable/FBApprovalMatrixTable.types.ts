@@ -1,5 +1,4 @@
-import { FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixFieldProps } from "..";
-import { FBProviderProps } from "../FBProvider";
+import { FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixFieldProps, FBProviderProps } from "..";
 
 export type FBApprovalMatrixTableProps =
 & Pick<FBApprovalMatrixFieldProps, "name">

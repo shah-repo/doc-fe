@@ -1,6 +1,5 @@
-import { FBProviderProps } from "..";
+import { FBInputProps, FBProviderProps } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { FBInputProps } from "../FBInput";
 
 export type FBEQMaintenanceProps =
 & Pick<FBInputProps, "name" | "gutter" | "disabled" | "label" | "editorConfig" | "rules">

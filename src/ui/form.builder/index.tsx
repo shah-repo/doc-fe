@@ -92,6 +92,7 @@ export { default as FBEditorAutocomplete } from "./FBEditorAutocomplete/FBEditor
 export { default as FBEditorCheckControl } from "./FBEditorCheckControl/FBEditorCheckControl";
 export { default as FBEditorCustomControl } from "./FBEditorCustomControl/FBEditorCustomControl";
 export * from "./FBEditorCustomControl/FBEditorCustomControl.state";
+export { default as FBEditorCustomControlState } from "./FBEditorCustomControl/FBEditorCustomControl.state";
 export * from "./FBEditorCustomControl/FBEditorCustomControl.types";
 export { default as FBEditorEmpty } from "./FBEditorEmpty/FBEditorEmpty";
 export { default as FBEditorEQMaintenance } from "./FBEditorEQMaintenance/FBEditorEQMaintenance";

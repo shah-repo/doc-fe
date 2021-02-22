@@ -52,7 +52,6 @@ export interface CompanyGroupsListAction {
 export type GroupsByIdState = Dictionary<LoadCompanyGroup>;
 
 export type GroupsAllIdsState = string[];
-export type LoadJoinedDataState = Dictionary<LoadCompanyGroup>;
 
 export interface ApiTokenData {
   name: string;

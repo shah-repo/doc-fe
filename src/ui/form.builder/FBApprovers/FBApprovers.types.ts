@@ -1,5 +1,4 @@
-import { FBAutocompleteAsyncProps } from "../FBAutocompleteAsync";
-import { FBProviderProps } from "../FBProvider";
+import { FBAutocompleteAsyncProps, FBProviderProps } from "..";
 
 export type FBApproversProps =
 & Pick<FBProviderProps, "approversState">

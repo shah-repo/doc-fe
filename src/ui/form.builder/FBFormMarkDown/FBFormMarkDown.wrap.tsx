@@ -2,8 +2,7 @@ import Base64 from "Base64";
 import { join, map, template as lodashTemplate } from "lodash";
 import marked from "marked";
 import React from "react";
-import { FBFormMarkDownProps } from ".";
-import { FB } from "..";
+import { FB, FBFormMarkDownProps } from "..";
 
 export const withFBFormMarkDown = <T extends FBFormMarkDownProps>(
   Component: React.FunctionComponent<T>,

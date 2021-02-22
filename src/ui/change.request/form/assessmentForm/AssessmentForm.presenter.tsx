@@ -12,7 +12,7 @@ import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 import ScrollToError from "../../../components/forms/ScrollToError";
 import useDidMount from "../../../hooks/useDidMount";
 import FormHeader from "../../form/assessmentForm/FormHeader";
-import { ChangeRequestFormValues } from "../types.js";
+import { ChangeRequestFormValues } from "../types";
 import styles from "./AssessmentForm.styles";
 
 interface Props

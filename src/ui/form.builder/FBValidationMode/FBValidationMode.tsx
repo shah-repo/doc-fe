@@ -1,5 +1,5 @@
 import React from "react";
-import { FBValidationModeProps } from ".";
+import { FBValidationModeProps } from "..";
 import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
 import { withFBValidationMode } from "./FBValidationMode.wrap";
 

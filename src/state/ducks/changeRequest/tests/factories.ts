@@ -1,5 +1,5 @@
 import faker from "faker";
-import { ChangeRequest, ChangeRequestAvailableApprovers, ChangeRequestEditRequestBody, ChangeRequestStatus } from "..";
+import { ChangeRequest, ChangeRequestAvailableApprovers, ChangeRequestStatus } from "..";
 import { Audit } from "../../audit";
 import { getOwner, getUser } from "../../common/tests/factories";
 
@@ -57,14 +57,6 @@ export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): Ch
   documentRevisions: [],
   closedAt: faker.date.future(undefined, "2019-05-31"),
   ...changeRequest,
-});
-
-export const getChangeRequestEditRequestBody = (
-  body: Partial<ChangeRequestEditRequestBody> = {},
-): ChangeRequestEditRequestBody => ({
-  title: faker.lorem.sentence(),
-  description: faker.lorem.sentence(),
-  ...body,
 });
 
 export const getApprover = (

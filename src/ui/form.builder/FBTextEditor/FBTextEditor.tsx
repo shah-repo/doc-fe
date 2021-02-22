@@ -3,9 +3,8 @@ import { isEmpty, isUndefined } from "lodash";
 import React from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBConditionalWrapper, FBInput, FBProvider, FBTextEditorProps } from "..";
+import { FBConditionalWrapper, FBInput, FBProvider, FBTextEditorOptions, FBTextEditorProps } from "..";
 import Colors from "../../layout/theme/utils/colors";
-import { FBTextEditorOptions } from "../FBTextEditorOptions";
 import { withFBTextEditor } from "./FBTextEditor.wrap";
 
 const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({

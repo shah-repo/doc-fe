@@ -1,7 +1,6 @@
 import { isUndefined } from "lodash";
 import React from "react";
-import { FBStepperEditorProps } from ".";
-import { FBValidationEditor, FBValidationMode } from "..";
+import { FBStepperEditorProps, FBValidationEditor, FBValidationMode } from "..";
 import editorStore from "../stores/ui/FBEditorStore";
 
 export const withFBStepperEditor = <T extends FBStepperEditorProps>(

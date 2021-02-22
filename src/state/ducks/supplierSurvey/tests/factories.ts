@@ -3,7 +3,7 @@ import { SupplierSurveyForm } from "..";
 import { FBFormTemplateProps } from "../../documentRevisions";
 import { getDocumentRevision } from "../../documentRevisions/tests/factories";
 
-export const getFormTemplate = (formTemplate: Partial<FBFormTemplateProps> = {}): FBFormTemplateProps => ({
+const getFormTemplate = (formTemplate: Partial<FBFormTemplateProps> = {}): FBFormTemplateProps => ({
   outputDocumentTypes: [{
     id: faker.random.uuid(),
     documentTypeName: faker.random.word(),

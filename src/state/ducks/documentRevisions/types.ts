@@ -22,9 +22,6 @@ export enum DocumentRevisionStatus {
   Voided = "VOIDED",
 }
 
-export enum DocumentRevisionStatusAlias {
-  Draft = "WIP",
-}
 
 export enum RevisionChangeType {
   NextRevision = "NEXT_REVISION",
@@ -76,7 +73,7 @@ export interface PDF {
   type: string;
 }
 
-export interface Precalc {
+interface Precalc {
   formDocId: string;
   revision: number;
 }
@@ -129,7 +126,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   inputOwners?: InputOwner[];
 }
 
-export interface InputOwner {
+interface InputOwner {
   [key: string]: string;
 }
 
@@ -144,7 +141,7 @@ export interface ReferenceToEditRequest {
   id: string;
 }
 
-export interface SecurityListRequest {
+interface SecurityListRequest {
   securityEmployees: Id[];
   securityGroups: Id[];
   operators: Id[];

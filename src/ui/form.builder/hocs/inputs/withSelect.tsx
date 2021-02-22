@@ -3,7 +3,7 @@ import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import { map } from "lodash";
 import React from "react";
 import Text from "../../../components/Text";
-import { FBSelectProps } from "../../types/inputs/select.js";
+import { FBSelectProps } from "../../types/inputs/select";
 import { withOptions } from "../common/withOptions";
 
 export const withSelect = <T extends FBSelectProps>(

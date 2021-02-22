@@ -74,10 +74,6 @@ export interface PageDetailsColumn {
   showOnAndroid: boolean;
 }
 
-export interface PageDetailsAddNew {
-  label: string;
-}
-
 export interface PageDetails {
   id: string;
   addNewBtnLabel: string;
@@ -85,6 +81,7 @@ export interface PageDetails {
   category: string;
   exportList: boolean;
 }
+
 export interface DocumentType {
   id: string;
   documentTypeAcronym: string;
@@ -105,7 +102,7 @@ export interface DocumentType {
   active?: boolean;
 }
 
-export interface DocumentForms {
+interface DocumentForms {
   id: string;
 }
 
@@ -147,9 +144,9 @@ export type DocumentTypeAllIdsState = string[];
 
 export type DocumentTypeByCategoryState = DocumentType[];
 
-export type FieldConfig = { [key in FieldType]?: IFieldConfigItem };
+type FieldConfig = { [key in FieldType]?: IFieldConfigItem };
 
-export interface IFieldConfigItem {
+interface IFieldConfigItem {
   visible: boolean;
   required?: boolean;
   label?: string;

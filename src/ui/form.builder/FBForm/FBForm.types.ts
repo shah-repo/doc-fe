@@ -1,6 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBFormState } from ".";
-import { FBSchemaProps, FBWorkspaceMode, FBWorkspaceState } from "..";
+import { FBFormState, FBSchemaProps, FBWorkspaceMode, FBWorkspaceState } from "..";
 
 export enum FBFormMode {
   add = "form.builder.add",

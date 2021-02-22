@@ -1,6 +1,6 @@
 import { Box, Tabs } from "@material-ui/core";
 import React from "react";
-import { FBTabsProps } from ".";
+import { FBTabsProps } from "..";
 import { withFBTabs } from "./FBTabs.wrap";
 
 const FBTabs: React.FunctionComponent<FBTabsProps> = ({
