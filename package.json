@@ -142,6 +142,7 @@
     "cypress-downloadfile": "^1.2.0",
     "cypress-file-upload": "4.1.1",
     "cypress-localstorage-commands": "^1.2.1",
+    "cypress-movie": "^3.0.5",
     "cypress-multi-reporters": "^1.4.0",
     "cypress-promise": "^1.1.0",
     "cypress-xpath": "^1.6.0",

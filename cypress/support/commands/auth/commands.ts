@@ -55,6 +55,28 @@ Cypress.Commands.add("authLogin", (params: { email: string; password: string }) 
   cy.checkToastMessage({ exists: false });
 });
 
+Cypress.Commands.overwrite("click", (originalFn, subject, options) => {
+
+  const currentCommand = cy.state("current").attributes.name;
+
+  if (currentCommand === "click") {
+    cy.wrap(subject).arrow({ duration: 1000, blocking: true }).then(() => originalFn(subject, options));
+  } else {
+    return originalFn(subject, options);
+  }
+});
+
+Cypress.Commands.overwrite("type", (originalFn, subject, options) => {
+
+  const currentCommand = cy.state("current").attributes.name;
+
+  if (currentCommand === "type") {
+    cy.wrap(subject).arrow({ duration: 1000, blocking: true }).then(() => originalFn(subject, options));
+  } else {
+    return originalFn(subject, options);
+  }
+});
+
 Cypress.Commands.add("authEnterEmail", (params: { value: string }) => {
   cy.get("[data-cy=\"LoginFormPresenter-email\"]").clear().type(params.value);
 });
