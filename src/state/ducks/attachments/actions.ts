@@ -1,9 +1,7 @@
+import { ADD_WATERMARK, Attachment, AttachmentDownloadResponse, AttachmentType, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_URL, AvatarS3linkResponse, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC, WatermarkRequest, WatermarkRequestBody } from ".";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
-import { authActions } from "../auth";
-import { EmployeeEditRequestBody } from "../auth/types";
-import { ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_URL, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC } from "./constants";
-import { Attachment, AttachmentDownloadResponse, AttachmentType, AvatarS3linkResponse, WatermarkRequest, WatermarkRequestBody } from "./types";
+import { authActions, EmployeeEditRequestBody } from "../auth";
 
 const upload = (file: File, lineType: string, handlers: Handlers<Attachment>, isCleanCopyRequired): ApiAction => {
   const formData = new FormData();

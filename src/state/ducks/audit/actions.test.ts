@@ -1,9 +1,8 @@
 
+import { Audit, AUDIT_LOGS_ROOT_URL } from ".";
 import { getCallbackHandler } from "../../../common/tests/factories";
 import { Handlers } from "../../types";
 import actions from "./actions";
-import { AUDIT_LOGS_ROOT_URL } from "./constants";
-import { Audit } from "./types";
 
 describe("audit actions tests", () => {
   describe("getChanges tests", () => {

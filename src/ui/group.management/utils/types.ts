@@ -1,5 +1,5 @@
 import { COMPANY_DEFAULT_STATE } from "../../../state/ducks/company/reducers";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { GetEmployeeResponse, LoadCompanyGroup } from "../../../state/ducks/userManagement";
 
 export const DEFAULT_SELECTED_GROUP: LoadCompanyGroup = {

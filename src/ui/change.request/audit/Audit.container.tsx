@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { AuditGroupType } from "../../../state/ducks/audit/types";
+import { AuditGroupType } from "../../../state/ducks/audit";
 import {
   ChangeRequest,
   changeRequestsActions,

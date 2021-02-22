@@ -1,7 +1,7 @@
+import { ALL_PAGE_DETAILS_FETCHED, PAGE_DETAILS_ROOT_URL } from ".";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { PageDetails } from "../documentRevisions/documentType/types";
-import { ALL_PAGE_DETAILS_FETCHED, PAGE_DETAILS_ROOT_URL } from "./constants";
 
 const allPageDetailsFetched = (pageDetails: PageDetails[]) => ({
   type: ALL_PAGE_DETAILS_FETCHED,

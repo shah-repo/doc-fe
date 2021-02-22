@@ -1,12 +1,11 @@
-import { apiAction, apiActionWithCallbacks } from "../../factories";
-import { ApiAction, Handlers } from "../../types";
 import {
-  SUPPLIER_SURVEY,
+  SubmitSupplierSurvey, SupplierSurveyAction, SupplierSurveyForm, SupplierSurveySubmitAction, SUPPLIER_SURVEY,
   SUPPLIER_SURVEY_ASYNC,
   SUPPLIER_SURVEY_ROOT_URL,
   SUPPLIER_SURVEY_SUBMIT,
-} from "./constants";
-import { SubmitSupplierSurvey, SupplierSurveyAction, SupplierSurveyForm, SupplierSurveySubmitAction } from "./types";
+} from ".";
+import { apiAction, apiActionWithCallbacks } from "../../factories";
+import { ApiAction, Handlers } from "../../types";
 
 const supplierSurveyList = (
   supplierSurvey: SupplierSurveyForm,

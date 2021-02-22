@@ -1,10 +1,10 @@
 import { cloneDeep } from "lodash";
+import { DocumentByIdState, DocumentRevisionsAllIdsState, DocumentRevisionsByIdState } from ".";
 import { ApplicationState } from "../../reducers";
 import { getAsyncState } from "../../tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
 import selectors from "./selectors";
 import { getAudit, getDocument, getDocumentRevision } from "./tests/factories";
-import { DocumentByIdState, DocumentRevisionsAllIdsState, DocumentRevisionsByIdState } from "./types";
 
 describe("document revision selectors tests", () => {
   let state: ApplicationState;

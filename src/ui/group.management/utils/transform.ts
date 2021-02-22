@@ -1,5 +1,5 @@
 import { omit } from "lodash";
-import { Group, Permission } from "../../../state/ducks/auth/types";
+import { Group, Permission } from "../../../state/ducks/auth";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { GetEmployeeResponse, LoadCompanyGroup } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";

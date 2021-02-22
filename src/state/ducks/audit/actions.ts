@@ -1,6 +1,6 @@
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
-import { AUDIT_LOGS_ROOT_URL } from "./constants";
+import { AUDIT_LOGS_ROOT_URL } from ".";
 
 const getChanges = (id: string, handlers: Handlers):
 ApiAction => apiActionWithCallbacks({

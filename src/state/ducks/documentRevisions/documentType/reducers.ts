@@ -1,8 +1,7 @@
 import { keyBy, uniq } from "lodash";
 import { combineReducers } from "redux";
+import { DocRevByIdState, DocumentType, DocumentTypeAllIdsState, DocumentTypeByCategoryAction, DocumentTypeByCategoryState, DocumentTypeByIdAction, DocumentTypeByIdState, DocumentTypeListAction, DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, SET_DOCUMENT_TYPES_BY_CATEGORY } from ".";
 import asyncReducer from "../../../reducers/asyncReducer";
-import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, SET_DOCUMENT_TYPES_BY_CATEGORY } from "./constants";
-import { DocRevByIdState, DocumentType, DocumentTypeAllIdsState, DocumentTypeByCategoryAction, DocumentTypeByCategoryState, DocumentTypeByIdAction, DocumentTypeByIdState, DocumentTypeListAction } from "./types";
 
 type DocumentTypeActions =  DocumentTypeListAction;
 

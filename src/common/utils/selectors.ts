@@ -1,5 +1,4 @@
-import { authSelectors } from "../../state/ducks/auth";
-import { Permission } from "../../state/ducks/auth/types";
+import { authSelectors, Permission } from "../../state/ducks/auth";
 import { tableSearchSelectors } from "../../state/ducks/tableSearch";
 import { ApplicationState } from "../../state/reducers";
 

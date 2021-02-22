@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
-import { Permission } from "../../../state/ducks/auth/types";
+import { Permission } from "../../../state/ducks/auth";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { AsyncActionPayload } from "../../../state/types";

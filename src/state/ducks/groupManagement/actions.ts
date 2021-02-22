@@ -1,9 +1,8 @@
+import { GroupRequestBody } from ".";
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { authActions } from "../auth";
-import { userManagementActions } from "../userManagement";
-import { GROUPS_URL } from "../userManagement/constants";
-import { GroupRequestBody } from "./types";
+import { GROUPS_URL, userManagementActions } from "../userManagement";
 
 const createGroup = (
   body: GroupRequestBody,

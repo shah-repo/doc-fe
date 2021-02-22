@@ -2,7 +2,7 @@ import { Formik, FormikProps } from "formik";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
-import { GroupTag } from "../../../../state/ducks/auth/types";
+import { GroupTag } from "../../../../state/ducks/auth";
 import { Company, companyActions, companySelectors } from "../../../../state/ducks/company";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";

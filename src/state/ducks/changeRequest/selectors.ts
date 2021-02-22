@@ -4,7 +4,7 @@ import { stripTags, stripTagsFromObject } from "../../../common/utils/helpers";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
-import { Audit, AuditGroupType } from "../audit/types";
+import { Audit, AuditGroupType } from "../audit";
 
 const allIds = (state: ApplicationState) => state.changeRequests.allIds;
 const byId = (state: ApplicationState) => state.changeRequests.byId;

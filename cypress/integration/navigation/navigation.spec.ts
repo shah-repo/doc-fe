@@ -2,7 +2,7 @@
 /// <reference types="Cypress" />
 
 import path from "path";
-import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { GroupTag } from "../../../src/state/ducks/auth";
 import { CONFIG } from "../../support/config";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { USERS } from "../../utils/constants/users";

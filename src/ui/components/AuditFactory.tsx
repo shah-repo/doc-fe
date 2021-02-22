@@ -5,7 +5,7 @@ import { useIntl } from "react-intl";
 import { getFormattedDateString, MomentFormats } from "../../common/utils/date";
 import { Attachment } from "../../state/ducks/attachments";
 import { Audit } from "../../state/ducks/audit";
-import { Group } from "../../state/ducks/auth/types";
+import { Group } from "../../state/ducks/auth";
 import { ChangeRequest } from "../../state/ducks/changeRequest";
 import { Approval, ApprovalStatus, Owner } from "../../state/ducks/common";
 import { Employee } from "../../state/ducks/company";

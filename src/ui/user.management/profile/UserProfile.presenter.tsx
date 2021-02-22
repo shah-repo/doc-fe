@@ -1,8 +1,7 @@
 import { Dialog } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { authSelectors } from "../../../state/ducks/auth";
-import { EmployeeEditRequestBody } from "../../../state/ducks/auth/types";
+import { authSelectors, EmployeeEditRequestBody } from "../../../state/ducks/auth";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";

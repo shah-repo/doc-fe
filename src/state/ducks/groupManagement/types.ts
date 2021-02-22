@@ -1,7 +1,6 @@
-import { GroupTag, Permission } from "../auth/types";
+import { GroupTag, Permission } from "../auth";
 import { Id } from "../common";
-import { SET_JOINED_DATA } from "../userManagement/constants";
-import { LoadCompanyGroups } from "../userManagement/types";
+import { LoadCompanyGroups, SET_JOINED_DATA } from "../userManagement";
 
 export interface GroupRequestBody {
   id?: string;

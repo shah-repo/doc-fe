@@ -6,8 +6,7 @@ import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export
 import { docRevSch } from "../../../common/normalizrSchema";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { convertHtmlEntities, stripTags } from "../../../common/utils/helpers";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { DocumentRevision, DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../common/utils/helpers";
 import Date from "../../components/Date";
 import ClearFilters from "../../components/table/ClearFilters";

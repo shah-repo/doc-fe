@@ -1,8 +1,7 @@
 import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { convertHtmlEntities, stripTags, stripTagsFromObject } from "../../../common/utils/helpers";
-import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
+import { ChangeRequest, CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";

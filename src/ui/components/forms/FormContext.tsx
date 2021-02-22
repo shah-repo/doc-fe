@@ -2,7 +2,7 @@ import { useFormikContext } from "formik";
 import { filter, isEmpty, isEqual, map } from "lodash";
 import React, { useContext } from "react";
 import { DocumentRevision, ReferenceToEditRequest } from "../../../state/ducks/documentRevisions";
-import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
 import { FB, FBAutocompleteAsyncOption } from "../../form.builder";
 import FBAutocompleteAsyncStore from "../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { SubmitFormRelation } from "./FormContext.types";

@@ -1,7 +1,6 @@
-import { COMPANY_GROUPS_LIST } from "./constants";
+import { CompanyGroupsListAction, COMPANY_GROUPS_LIST, LoadCompanyGroups } from ".";
 import { groupsAllIds, groupsById } from "./reducers";
 import { getCompanyGroup } from "./tests/factories";
-import { CompanyGroupsListAction, LoadCompanyGroups } from "./types";
 
 describe("user management reducer test", () => {
   const companyGroups: LoadCompanyGroups = [

@@ -1,8 +1,8 @@
 import { createSelector } from "reselect";
+import { WHITE_LABEL_DEFAULT } from ".";
 import Config from "../../../config";
 import { ThemeEnv } from "../../../ui/layout/theme/utils/types";
 import { ApplicationState } from "../../reducers";
-import { WHITE_LABEL_DEFAULT } from "./constants";
 
 const getSelectedCompany = (state: ApplicationState) => state.company.selectedCompany;
 const slackTeamId = (state: ApplicationState) => state.company.selectedCompany.teamId;

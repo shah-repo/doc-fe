@@ -1,9 +1,9 @@
 import { createSelector } from "reselect";
+import { Group, GroupTag, IotCredentials, Permission } from ".";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 import { Nullable } from "../common";
-import { Group, GroupTag, IotCredentials, Permission } from "./types";
 
 const isAuthenticated = (state: ApplicationState): boolean =>
   Boolean(state.auth.user.sessionId && state.auth.user.employeeId);

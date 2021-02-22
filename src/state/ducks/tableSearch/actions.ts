@@ -1,20 +1,17 @@
-import { TableDataProps, TablePanelStateProps } from "../../../ui/components/table/types";
-import {
-  TABLE_CLEAR_ALL,
-  TABLE_DATA_SET,
-  TABLE_FORCE_UPDATE_SET,
-  TABLE_SEARCH_CLEAR,
-  TABLE_SEARCH_SET,
-  TABLE_SORT,
-} from "./constants";
 import {
   TableDataSetAction,
   TableSearchClearAction,
   TableSearchClearAllAction,
   TableSearchForceUpdateAction,
   TableSearchSetAction,
-  TableSortAction,
-} from "./types";
+  TableSortAction, TABLE_CLEAR_ALL,
+  TABLE_DATA_SET,
+  TABLE_FORCE_UPDATE_SET,
+  TABLE_SEARCH_CLEAR,
+  TABLE_SEARCH_SET,
+  TABLE_SORT,
+} from ".";
+import { TableDataProps, TablePanelStateProps } from "../../../ui/components/table/types";
 
 const setSearchCriteria = (
   searchCriteria: Partial<TablePanelStateProps>,

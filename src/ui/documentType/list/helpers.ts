@@ -1,4 +1,4 @@
-import { GroupTag } from "../../../state/ducks/auth/types";
+import { GroupTag } from "../../../state/ducks/auth";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { TableColumnProps } from "../../components/table/column/types";

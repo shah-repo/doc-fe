@@ -1,5 +1,5 @@
 import { FBDialogState, FBFormProps, FBSchemaProps, FBSnackbarState, FBWorkspaceState } from "..";
-import { UserGroupsState, UserState } from "../../../state/ducks/auth/types";
+import { UserGroupsState, UserState } from "../../../state/ducks/auth";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { Company } from "../../../state/ducks/company";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";

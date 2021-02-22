@@ -1,8 +1,8 @@
 import { Dictionary } from "lodash";
-import { Group, GroupTag, GroupType, Permission } from "../auth/types";
+import { COMPANY_GROUPS_LIST } from ".";
+import { Group, GroupTag, GroupType, Permission } from "../auth";
 import { Id, Nullable, User } from "../common";
 import { Company, Employee } from "../company";
-import { COMPANY_GROUPS_LIST } from "./constants";
 
 export interface GetEmployeeResponse {
   id: string;

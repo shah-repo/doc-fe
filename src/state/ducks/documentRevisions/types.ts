@@ -1,13 +1,13 @@
+import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from ".";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
 import { FBSchemaProps, FBTaskItem } from "../../../ui/form.builder";
 import { Attachment } from "../attachments";
-import { AuditActionPayload } from "../audit/types";
-import { Group } from "../auth/types";
+import { AuditActionPayload } from "../audit";
+import { Group } from "../auth";
 import { ChangeRequest } from "../changeRequest";
 import { Approval, Id, Owner, User } from "../common";
 import { TrainingRecord } from "../training";
-import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
 import { DocumentGroupOptionsType, DocumentType } from "./documentType";
 
 export enum DocumentRevisionStatus {

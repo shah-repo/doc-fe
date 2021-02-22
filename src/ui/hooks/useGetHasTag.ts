@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { authSelectors } from "../../state/ducks/auth";
-import { GroupTag } from "../../state/ducks/auth/types";
+import { authSelectors, GroupTag } from "../../state/ducks/auth";
 import { ApplicationState } from "../../state/reducers";
 
 const useGetHasTag = (

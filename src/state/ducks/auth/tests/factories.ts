@@ -1,6 +1,6 @@
 import faker from "faker";
+import { AuthResponse, User } from "..";
 import { getEmployee } from "../../company/tests/factories";
-import { AuthResponse, User } from "../types";
 
 export const getAuthResponse = (response: Partial<AuthResponse> = {}): AuthResponse => ({
   ExpiresAt: faker.date.recent().toISOString(),

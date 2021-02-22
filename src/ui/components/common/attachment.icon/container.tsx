@@ -1,8 +1,7 @@
 import { isEmpty, omit } from "lodash";
 import React, { useMemo, useState } from "react";
 import { connect, useSelector } from "react-redux";
-import { Attachment, AttachmentDownloadResponse, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments";
-import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
+import { Attachment, AttachmentDownloadResponse, attachmentsActions, AttachmentType, LINE_TYPES, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { Id, Nullable } from "../../../../state/ducks/common";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";

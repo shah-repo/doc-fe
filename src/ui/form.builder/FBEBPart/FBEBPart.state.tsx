@@ -1,7 +1,7 @@
 import { action, observable, set } from "mobx";
 import { EBPartPatchBody, EBPartPostBody, ProposedDocIdBody } from "..";
-import { DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType/types";
-import { Document, DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { Document, DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 

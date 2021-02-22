@@ -3,7 +3,7 @@ import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { cloneDeep, filter, isEmpty } from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { GroupTag, Permission } from "../../../state/ducks/auth/types";
+import { GroupTag, Permission } from "../../../state/ducks/auth";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";

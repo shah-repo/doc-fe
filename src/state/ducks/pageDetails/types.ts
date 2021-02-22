@@ -1,5 +1,5 @@
+import { ALL_PAGE_DETAILS_FETCHED } from ".";
 import { PageDetails } from "../documentRevisions/documentType/types";
-import { ALL_PAGE_DETAILS_FETCHED } from "./constants";
 
 export interface PageDetailsState {
   [key: string]: PageDetails;

@@ -1,10 +1,9 @@
-import { SUPPLIER_SURVEY } from "./constants";
-import { SUPPLIER_SURVEY_DEFAULT_STATE, supplierSurvey } from "./reducers";
-import { getSurveyFormDocumentRevision } from "./tests/factories";
 import {
   SupplierSurveyAction,
-  SupplierSurveyForm,
-} from "./types";
+  SupplierSurveyForm, SUPPLIER_SURVEY,
+} from ".";
+import { supplierSurvey, SUPPLIER_SURVEY_DEFAULT_STATE } from "./reducers";
+import { getSurveyFormDocumentRevision } from "./tests/factories";
 
 describe("supplier survey reducers tests", () => {
   const initialState: SupplierSurveyForm = SUPPLIER_SURVEY_DEFAULT_STATE;

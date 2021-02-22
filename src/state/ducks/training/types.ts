@@ -1,4 +1,4 @@
-import { Employee } from "../company/types";
+import { Employee } from "../company";
 import { DocumentRevision, DocumentRevisionDocument } from "../documentRevisions";
 
 export enum TrainingPlanStatus {

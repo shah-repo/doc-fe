@@ -2,7 +2,7 @@ import { Box, Grid, TextField, Typography } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
 import Select from "react-select";
-import { GroupRequestBody } from "../../../../state/ducks/groupManagement/types";
+import { GroupRequestBody } from "../../../../state/ducks/groupManagement";
 import { GetEmployeeResponse } from "../../../../state/ducks/userManagement";
 import { AsyncActionPayload } from "../../../../state/types";
 import { MultiValueRemove, selectStyles } from "../../../components/forms/fields/Autocomplete/Autocomplete";

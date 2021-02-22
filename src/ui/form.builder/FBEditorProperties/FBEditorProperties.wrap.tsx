@@ -1,6 +1,6 @@
 import { at, filter, get, map, some } from "lodash";
 import { FB, FBData, FBEditorPropertiesDefaultValue, FBEditorPropertiesOmitByGroup, FBEditorPropertiesProps, FBOption } from "..";
-import { DocumentGroupOptionsType } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentGroupOptionsType } from "../../../state/ducks/documentRevisions/documentType";
 import { checkDocumentGroupOptions, checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
 
 export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(

@@ -1,5 +1,5 @@
 import faker from "faker";
-import { TrainingRecord } from "../types";
+import { TrainingRecord } from "..";
 
 export const getTrainingRecord = (trainingRecord: Partial<TrainingRecord> = {}): TrainingRecord => ({
   id: faker.random.uuid(),

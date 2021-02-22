@@ -1,6 +1,6 @@
 import { FBAutocompleteAsyncProps, FBInputProps, FBProviderProps } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { Document } from "../../../state/ducks/documents/types";
+import { Document } from "../../../state/ducks/documents";
 
 export type FBEBPartProps =
 & Pick<FBProviderProps, "dialogState" | "ebPartState" | "formState">

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { AuditGroupType } from "../../../state/ducks/audit/types";
+import { AuditGroupType } from "../../../state/ducks/audit";
 import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
 import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";

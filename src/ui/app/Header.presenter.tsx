@@ -5,7 +5,7 @@ import { WithStyles, withStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import { Nullable } from "../../state/ducks/common/types";
+import { Nullable } from "../../state/ducks/common";
 import Text from "../components/Text";
 import UserProfileContainer from "../user.management/profile/UserProfile.container";
 import styles from "./Header.styles";

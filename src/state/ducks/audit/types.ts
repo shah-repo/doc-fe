@@ -1,6 +1,6 @@
 import { FBSchemaProps } from "../../../ui/form.builder";
 import { Attachment } from "../attachments";
-import { Group, User } from "../auth/types";
+import { Group, User } from "../auth";
 import { ChangeRequest } from "../changeRequest";
 import { Approval, Owner } from "../common";
 import { DocumentRevision, Reference } from "../documentRevisions";

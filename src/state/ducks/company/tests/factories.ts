@@ -1,6 +1,5 @@
 import faker from "faker";
-import { DEFAULT_NAVIGATION_ITEMS } from "../constants";
-import { Company, Employee, WhiteLabeling } from "../types";
+import { Company, DEFAULT_NAVIGATION_ITEMS, Employee, WhiteLabeling } from "..";
 
 export const getCompany = (company: Partial<Company> = {}): Company => ({
   id: faker.random.uuid(),

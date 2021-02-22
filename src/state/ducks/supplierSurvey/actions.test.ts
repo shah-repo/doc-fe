@@ -1,10 +1,9 @@
 import faker from "faker";
+import { SubmitSupplierSurvey, SupplierSurveyForm, SUPPLIER_SURVEY_ROOT_URL } from ".";
 import { getCallbackHandler } from "../../../common/tests/factories";
 import { Handlers } from "../../types";
 import actions from "./actions";
-import { SUPPLIER_SURVEY_ROOT_URL } from "./constants";
 import { getSurveyFormDocumentRevision } from "./tests/factories";
-import { SubmitSupplierSurvey, SupplierSurveyForm } from "./types";
 
 describe("supplier survey action test", () => {
   const token = faker.random.uuid();

@@ -1,5 +1,5 @@
 import { FBInputProps, FBProviderProps } from "..";
-import { DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType";
 
 export type FBSupplierFormProps =
 & Pick<FBProviderProps, "formState">

@@ -1,13 +1,12 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
+import { AuthResponse, AuthUserAction, AUTH_AWS_IOT_URL, AUTH_USER, ClearNonAuthDataAction, CLEAR_NON_AUTH_DATA, ConfirmPasswordAction, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, EditUserMeAction, EmployeeEditRequestBody, ForgotPassword, ForgotPasswordAction, ForgotPasswordConfirmation, FORGOT_PASSWORD_URL, Group, GROUPS_URL, LoginRequestBody, LoginWithCodeRequestBody, LOGIN_URL, LOGIN_WITH_CODE_URL, LogoutRequestBody, LogoutUserAction, LOGOUT_URL, LOGOUT_USER, NewPasswordConfirmation, NewUserSetPasswordAction, PING_SERVER_GET_ASYNC, PING_SERVER_URL, RESEND_SIGNUP_EMAIL_URL, SelectEmployeeAction, SESSION_DETAILS_URL, SetCredentialsAction, SET_CREDENTIALS, SET_EMPLOYEE, SignupAction, SIGNUP_URL, ToggleCustomLabelsAction, TOGGLE_CUSTOM_LABELS, User, UserGroupsAction, USERS_ME_URL, USERS_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from ".";
 import { IotService } from "../../../common/utils/iot/mqttClient";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
 import { companyActions, Employee } from "../company";
 import { userManagementActions } from "../userManagement";
-import { AUTH_AWS_IOT_URL, AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, GROUPS_URL, LOGIN_URL, LOGIN_WITH_CODE_URL, LOGOUT_URL, LOGOUT_USER, PING_SERVER_GET_ASYNC, PING_SERVER_URL, RESEND_SIGNUP_EMAIL_URL, SESSION_DETAILS_URL, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USERS_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from "./constants";
-import { AuthResponse, AuthUserAction, ClearNonAuthDataAction, ConfirmPasswordAction, EditUserMeAction, EmployeeEditRequestBody, ForgotPassword, ForgotPasswordAction, ForgotPasswordConfirmation, Group, LoginRequestBody, LoginWithCodeRequestBody, LogoutRequestBody, LogoutUserAction, NewPasswordConfirmation, NewUserSetPasswordAction, SelectEmployeeAction, SetCredentialsAction, SignupAction, ToggleCustomLabelsAction, User, UserGroupsAction } from "./types";
 
 const authSignup = (): SignupAction => ({
   type: SIGNUP_URL,

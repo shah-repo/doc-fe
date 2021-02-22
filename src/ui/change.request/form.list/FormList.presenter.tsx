@@ -1,7 +1,7 @@
 import { Box, Button, Dialog, Grid } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
-import { HeaderTableType } from "../../../state/ducks/documentRevisions/types";
+import { HeaderTableType } from "../../../state/ducks/documentRevisions";
 import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { DialogHandler } from "../../hooks/useDialog";

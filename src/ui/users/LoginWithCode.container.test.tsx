@@ -3,7 +3,7 @@ import { mount } from "enzyme";
 import { defaultsDeep } from "lodash";
 import React from "react";
 import { act } from "react-dom/test-utils";
-import { LoginWithCodeRequestBody } from "../../state/ducks/auth/types";
+import { LoginWithCodeRequestBody } from "../../state/ducks/auth";
 import { Handlers } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
 import { LOGIN_URL } from "../constants/urls";

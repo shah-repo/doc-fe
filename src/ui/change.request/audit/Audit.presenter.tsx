@@ -2,7 +2,7 @@ import { Box, List } from "@material-ui/core";
 import { isEmpty, orderBy } from "lodash";
 import React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
+import { Audit, AuditGroupType } from "../../../state/ducks/audit";
 import { Approval, ApprovalStatus } from "../../../state/ducks/common";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";

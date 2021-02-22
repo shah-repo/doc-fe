@@ -5,7 +5,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import Select, { components } from "react-select";
 import { ReactComponent as CloseIcon } from "../../../assets/images/circle-remove.svg";
-import { Group } from "../../../state/ducks/auth/types";
+import { Group } from "../../../state/ducks/auth";
 import { Owner, TypographySize } from "../../../state/ducks/common";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";

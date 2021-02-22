@@ -1,7 +1,7 @@
 import faker from "faker";
-import { Audit } from "../../audit/types";
+import { ChangeRequest, ChangeRequestAvailableApprovers, ChangeRequestEditRequestBody, ChangeRequestStatus } from "..";
+import { Audit } from "../../audit";
 import { getOwner, getUser } from "../../common/tests/factories";
-import { ChangeRequest, ChangeRequestAvailableApprovers, ChangeRequestEditRequestBody, ChangeRequestStatus } from "../types";
 
 const createNestedObject = () => (
   {

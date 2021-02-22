@@ -1,9 +1,9 @@
 import faker from "faker";
-import { getChangeRequest } from "../../changeRequest/tests/factories";
 import {
   PendingAction,
   PendingActionType,
-} from "../types";
+} from "..";
+import { getChangeRequest } from "../../changeRequest/tests/factories";
 
 export const getPendingAction = (pendingAction: Partial<PendingAction> = {}): PendingAction => ({
   type: faker.random.arrayElement(Object.values(PendingActionType)),

@@ -1,6 +1,6 @@
 import * as CRC32 from "crc-32";
 import faker from "faker";
-import { Company } from "../../../../src/state/ducks/company/types";
+import { Company } from "../../../../src/state/ducks/company";
 import { HEX2RGB } from "../../../utils/context/converers";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";

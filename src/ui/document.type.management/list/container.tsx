@@ -13,7 +13,7 @@ import { sortBy } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { GroupTag } from "../../../state/ducks/auth/types";
+import { GroupTag } from "../../../state/ducks/auth";
 import { DocumentType, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import Text from "../../components/Text";
 import { HOME_URL } from "../../constants/urls";

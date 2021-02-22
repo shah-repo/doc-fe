@@ -1,7 +1,7 @@
 import { Button, Grid } from "@material-ui/core";
 import { isEmpty } from "lodash";
 import React from "react";
-import { GroupRequestBody } from "../../../../state/ducks/groupManagement/types";
+import { GroupRequestBody } from "../../../../state/ducks/groupManagement";
 import Text from "../../../components/Text";
 
 interface Props {

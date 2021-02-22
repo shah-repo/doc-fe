@@ -1,7 +1,6 @@
+import { DASHBOARD_ROOT_URL, PendingAction } from ".";
 import actions from "./actions";
-import { DASHBOARD_ROOT_URL } from "./constants";
 import { getPendingAction } from "./tests/factories";
-import { PendingAction } from "./types";
 
 describe("dashboard actions tests", () => {
   describe("loadPendingActionsList tests", () => {

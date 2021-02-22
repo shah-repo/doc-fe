@@ -1,6 +1,6 @@
+import { ADD_WATERMARK, REMOVE_WATERMARK } from ".";
 import { Id, Nullable, User } from "../common";
 import { DocumentRevision } from "../documentRevisions";
-import { ADD_WATERMARK, REMOVE_WATERMARK } from "./constants";
 
 export interface Attachment {
   id: string;

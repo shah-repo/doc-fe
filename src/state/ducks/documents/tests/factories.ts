@@ -1,6 +1,6 @@
 import faker from "faker";
+import { Approval, ApprovalStatus, Document, DocumentEditRequestBody, DocumentStatus, User } from "..";
 import { getOwner } from "../../common/tests/factories";
-import { Approval, ApprovalStatus, Document, DocumentEditRequestBody, DocumentStatus, User } from "../types";
 
 export const getUser = (user: Partial<User> = {}): User => ({
   id: faker.random.uuid(),

@@ -1,5 +1,5 @@
 import { FBApprovalMatrixFieldState, FBButtonProps, FBInputProps } from "..";
-import { Group } from "../../../state/ducks/auth/types";
+import { Group } from "../../../state/ducks/auth";
 import { Employee } from "../../../state/ducks/company";
 import { FBWorkspaceMode } from "../types/workspace";
 

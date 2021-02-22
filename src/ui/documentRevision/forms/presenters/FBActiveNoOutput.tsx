@@ -3,7 +3,7 @@ import { useFormikContext } from "formik";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { ValueType } from "react-select";
-import { Permission } from "../../../../state/ducks/auth/types";
+import { Permission } from "../../../../state/ducks/auth";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";

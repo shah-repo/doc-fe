@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import { ReactComponent as SlackLogo } from "../../../../assets/images/slack_full_logo.svg";
 import { getTableCriteria } from "../../../../common/utils/selectors";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
-import { EmployeeEditRequestBody } from "../../../../state/ducks/auth/types";
+import { EmployeeEditRequestBody } from "../../../../state/ducks/auth";
 import { companySelectors } from "../../../../state/ducks/company";
 import { tableSearchActions } from "../../../../state/ducks/tableSearch";
 import { GetEmployeeResponse, userManagementActions } from "../../../../state/ducks/userManagement";

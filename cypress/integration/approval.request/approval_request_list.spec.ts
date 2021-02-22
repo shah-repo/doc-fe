@@ -2,7 +2,7 @@
 /// <reference types="Cypress" />
 
 import faker from "faker";
-import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { USERS } from "../../utils/constants/users";

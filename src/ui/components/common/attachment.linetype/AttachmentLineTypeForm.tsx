@@ -3,7 +3,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import NotesIcon from "@material-ui/icons/Notes";
 import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
 import * as React from "react";
-import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
+import { LINE_TYPES } from "../../../../state/ducks/attachments";
 import Text from "../../Text";
 import { styles } from "./utils/styles";
 

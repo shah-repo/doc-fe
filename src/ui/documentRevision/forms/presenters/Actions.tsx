@@ -4,7 +4,7 @@ import { isEqual, keys, omit } from "lodash";
 import * as React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { RevisionChangeType } from "../../../../state/ducks/documentRevisions";
-import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType";
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";

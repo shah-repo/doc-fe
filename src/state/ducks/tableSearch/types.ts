@@ -1,6 +1,3 @@
-import { TableDataProps, TablePanelStateProps } from "../../../ui/components/table/types";
-import { User } from "../auth/types";
-import { GetEmployeeResponse } from "../userManagement";
 import {
   EDIT_EMPLOYEE_ACTIVE_STATUS,
   EDIT_EMPLOYEE_GROUPS,
@@ -10,8 +7,11 @@ import {
   TABLE_FORCE_UPDATE_SET,
   TABLE_SEARCH_CLEAR,
   TABLE_SEARCH_SET,
-  TABLE_SORT,
-} from "./constants";
+  TABLE_SORT
+} from ".";
+import { TableDataProps, TablePanelStateProps } from "../../../ui/components/table/types";
+import { User } from "../auth";
+import { GetEmployeeResponse } from "../userManagement";
 
 export interface TableSearchSetAction {
   type: typeof TABLE_SEARCH_SET;

@@ -1,12 +1,11 @@
 import faker from "faker";
+import { AddEmployeeRequest, EmployeeGroupsEditRequestBody, EMPLOYEES_URL, GetEmployeeResponse, GROUPS_ME_URL, GROUPS_URL, LoadCompanyGroups } from ".";
 import { getCallbackHandler } from "../../../common/tests/factories";
 import { Handlers } from "../../types";
-import { Group } from "../auth/types";
+import { Group } from "../auth";
 import { getUser } from "../common/tests/factories";
 import actions from "./actions";
-import { EMPLOYEES_URL, GROUPS_ME_URL, GROUPS_URL } from "./constants";
 import { getCompanyGroup, getGroup } from "./tests/factories";
-import { AddEmployeeRequest, EmployeeGroupsEditRequestBody, GetEmployeeResponse, LoadCompanyGroups } from "./types";
 
 describe(" survey management actions test", () => {
   const companyGroup: LoadCompanyGroups = [getCompanyGroup()];

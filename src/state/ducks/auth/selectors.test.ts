@@ -1,4 +1,5 @@
 import { cloneDeep } from "lodash";
+import { Permission } from ".";
 import { ApplicationState } from "../../reducers";
 import { getAsyncState } from "../../tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
@@ -6,7 +7,6 @@ import { getEmployee } from "../company/tests/factories";
 import { getGroup } from "../userManagement/tests/factories";
 import selectors from "./selectors";
 import { getUser } from "./tests/factories";
-import { Permission } from "./types";
 
 describe("auth selectors tests", () => {
   let state: ApplicationState;

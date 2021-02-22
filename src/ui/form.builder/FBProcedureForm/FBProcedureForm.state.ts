@@ -1,4 +1,4 @@
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 

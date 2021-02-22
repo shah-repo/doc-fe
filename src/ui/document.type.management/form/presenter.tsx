@@ -1,7 +1,7 @@
 import { Box, Button, Grid, InputLabel, TextareaAutosize } from "@material-ui/core";
 import { Field, FormikProps } from "formik";
 import React from "react";
-import { GroupTag } from "../../../state/ducks/auth/types";
+import { GroupTag } from "../../../state/ducks/auth";
 import { DocumentType, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType";
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import CheckboxField from "../../components/forms/fields/Checkbox";

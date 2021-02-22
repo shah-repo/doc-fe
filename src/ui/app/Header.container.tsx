@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { authActions, authSelectors } from "../../state/ducks/auth";
-import { GroupTag } from "../../state/ducks/auth/types";
+import { authActions, authSelectors, GroupTag } from "../../state/ducks/auth";
 import { LOGIN_URL } from "../constants/urls";
 import FBStore from "../form.builder/stores/ui/FBStore";
 import useGetHasTag from "../hooks/useGetHasTag";

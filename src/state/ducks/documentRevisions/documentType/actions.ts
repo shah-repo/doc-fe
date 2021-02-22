@@ -1,9 +1,8 @@
+import { DocumentType, DocumentTypeByCategoryAction, DocumentTypeById, DocumentTypeByIdAction, DocumentTypeListAction, DOCUMENT_TYPE_BY_CATEGORY_ASYNC, DOCUMENT_TYPE_BY_GROUP_ASYNC, DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_BY_ID_ASYNC, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, DOCUMENT_TYPE_ROOT_URL, SET_DOCUMENT_TYPES_BY_CATEGORY } from ".";
 import { APPROVAL_MATRIX_URL, PO_APPROVAL_MATRIX_URL } from "../../../../ui/form.builder/FBApprovalMatrix/constants";
 import { ApprovalMatrix } from "../../../../ui/form.builder/FBApprovalMatrix/FBApprovalMatrix.types";
 import { apiAction, apiActionWithCallbacks } from "../../../factories";
 import { ApiAction, Handlers } from "../../../types";
-import { DOCUMENT_TYPE_BY_CATEGORY_ASYNC, DOCUMENT_TYPE_BY_GROUP_ASYNC, DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_BY_ID_ASYNC, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, DOCUMENT_TYPE_ROOT_URL, SET_DOCUMENT_TYPES_BY_CATEGORY } from "./constants";
-import { DocumentType, DocumentTypeByCategoryAction, DocumentTypeById, DocumentTypeByIdAction, DocumentTypeListAction } from "./types";
 
 const documentTypesList = (documentTypes: DocumentType[]): DocumentTypeListAction => ({
   type: DOCUMENT_TYPE_LIST,
