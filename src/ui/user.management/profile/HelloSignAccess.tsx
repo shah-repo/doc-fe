@@ -11,7 +11,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export const HelloSignAccess: React.FunctionComponent<Props> = ({
+const HelloSignAccess: React.FunctionComponent<Props> = ({
   helloSignStatus,
 }) => {
   const async = useAsync();

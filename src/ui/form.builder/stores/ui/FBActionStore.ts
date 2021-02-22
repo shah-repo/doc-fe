@@ -11,7 +11,7 @@ import { FBActionModel } from "../domain/models/FBActionModel";
 import FBStore from "./FBStore";
 // import qs from "query-string";
 
-export class FormBuilderActionStore {
+class FormBuilderActionStore {
   public values: Dictionary<Dictionary<any>> = {};
 
   @action public getActions = (): FBTemplateSchema[] => filter(FBStore.getSchema(), (schemaItem) => (

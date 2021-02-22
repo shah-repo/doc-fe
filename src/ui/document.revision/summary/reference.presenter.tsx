@@ -10,9 +10,9 @@ interface OwnProps {
   label: string;
 }
 
-export type Props = OwnProps & DataProps<Model[]>;
+type Props = OwnProps & DataProps<Model[]>;
 
-export const styles = makeStyles((theme) =>
+const styles = makeStyles((theme) =>
   createStyles({
     chip: {
       "border": `1px solid ${Colors.medium_blue}`,
@@ -27,7 +27,7 @@ export const styles = makeStyles((theme) =>
     },
   }));
 
-export const ReferencePresenter: React.FunctionComponent<Props> = ({
+const ReferencePresenter: React.FunctionComponent<Props> = ({
   dataProp,
   label,
 }) => {

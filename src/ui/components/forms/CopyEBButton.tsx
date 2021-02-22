@@ -8,7 +8,7 @@ import { documentVersionPath } from "../../document.revision/utils/paths";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 
-export interface CloneEBButtonProps extends ButtonProps {
+interface CloneEBButtonProps extends ButtonProps {
   documentRevision: DocumentRevision;
 }
 

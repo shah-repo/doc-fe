@@ -14,12 +14,14 @@ export const useCRLink = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType.CR_ID);
 export const useDocId = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.DOC_ID, "common.documentId");
-export const useDocumentHistory = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, DisplayFieldType.VERSIONS, "document.revision.docVersion");
+/** currently unused */
+// export const useDocumentHistory = (documentTypeId = ""): UIConfig =>
+//   useCustomization(documentTypeId, DisplayFieldType.VERSIONS, "document.revision.docVersion");
 export const useDocumentStatus = (documentTypeId = "", status: string): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType[`STATUS_${configureStatus(status)}`], status);
-export const useDocumentVersion = (documentTypeId = "", status: string): UIConfig =>
-  useCustomization(documentTypeId, DisplayFieldType[`VERSION_${configureStatus(status)}`], status);
+/** currently unused */
+// export const useDocumentVersion = (documentTypeId = "", status: string): UIConfig =>
+//   useCustomization(documentTypeId, DisplayFieldType[`VERSION_${configureStatus(status)}`], status);
 export const useDocumentTypeSelect = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.DOC_TYPE, "document.type");
 export const useNextRevision = (documentTypeId = ""): UIConfig =>
@@ -63,5 +65,3 @@ const useCustomization = (
 
   return { isVisible, label, tooltipConfig, validation };
 };
-
-export default useCustomization;

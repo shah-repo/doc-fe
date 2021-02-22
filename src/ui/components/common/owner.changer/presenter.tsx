@@ -11,7 +11,7 @@ import FormProgress from "../../forms/FormProgress";
 import SubmitButton from "../../forms/SubmitButton";
 import Text from "../../Text";
 
-export interface OwnProps {
+interface OwnProps {
   employees: SelectOption[];
   updateOwner: any;
   currentOwner: Owner;

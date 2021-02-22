@@ -16,14 +16,14 @@ import { Password } from "../../password/types";
 import AttachmentRedLineWarningDialog from "../attachment.redline.warning/dialog";
 
 
-export interface Props {
+interface Props {
   isAttachmentEmpty: boolean;
   docRevId: string;
   containsRedline: boolean;
   docRevStatus: DocumentRevisionStatus;
 }
 
-export const styles = makeStyles((theme: Theme) =>
+const styles = makeStyles((theme: Theme) =>
   createStyles({
     downloadLabel: ({ isAttachmentEmpty }) => ({
       flex: "0 0 50%",

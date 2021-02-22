@@ -2,7 +2,7 @@ import { action, computed, observable } from "mobx";
 import { FBSortableType } from "../../types/sortable";
 import FBStore from "./FBStore";
 
-export class FBSortableStore {
+class FBSortableStore {
   @observable public mode: FBSortableType = "inactive";
 
   @action public setMode = (type: FBSortableType) => {

@@ -10,7 +10,7 @@ interface Props {
   documentRevision: DocumentRevision;
 }
 
-export const PODetailsContainer: React.FunctionComponent<Props> = ({
+const PODetailsContainer: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
   const [purchaseOrder] = useState<FBPurchaseOrderValue>(() => {

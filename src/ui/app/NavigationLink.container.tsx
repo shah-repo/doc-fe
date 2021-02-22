@@ -10,7 +10,7 @@ import { DOCUMENT_BY_CATEGORY_ROOT_URL } from "../constants/urls";
 import NavigationLinkPresenter from "./NavigationLink.presenter";
 import { updateNavigationItem } from "./NavigationLocalStorageHelpers";
 
-export interface NavigationLinkContainerProps extends NavigationItem {
+interface NavigationLinkContainerProps extends NavigationItem {
   currentPath: string;
 }
 

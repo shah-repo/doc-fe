@@ -4,7 +4,7 @@ import { Collection } from "mobx-rest";
 import { FBValidatorIndicatorProps } from "../../../types/validation/validator";
 import { FBActionModel } from "../models/FBActionModel";
 
-export class FBActionCollection extends Collection<FBActionModel> {
+class FBActionCollection extends Collection<FBActionModel> {
   public data(): Partial<FBActionModel>[] {
     // return actionData;
     return get(window, "EnlilRemoteValidators.avaliableActions");

@@ -4,7 +4,7 @@ import { Attachment } from "../../../state/ducks/attachments";
 import { Id } from "../../../state/ducks/common";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBFileUploadState {
+class FBFileUploadState {
   @observable public files: Id[] = [];
 
   public attachmentApi: FBRequest<Attachment, null> = new FBRequest();

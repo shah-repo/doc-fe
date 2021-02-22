@@ -17,7 +17,7 @@ interface Props {
   watermarkId: string;
 }
 
-export const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
+const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
   watermarkId,
   addRequestResult,
   removeWatermark,

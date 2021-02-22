@@ -40,14 +40,11 @@ interface OwnProps {
   deprecatedAt: string;
 }
 
-export type DocumentRevisionManagerContainerProps = OwnProps &
-StateProps;
+type DocumentRevisionManagerContainerProps = OwnProps & StateProps;
 
 // TO-DO Move To Context Folder
-export let documentRevisionStatusContext = React.createContext<DocumentRevisionStatus>(DocumentRevisionStatus.Draft);
 export let documentRevisionStatusContextFromDocList = React.createContext<undefined | DocumentRevisionStatus>(undefined);
 export let documentRevisionTypeGroupsFromDocListContext = React.createContext<undefined | DocumentGroupType>(undefined);
-export let documentRevisionVersionContext = React.createContext<number>(1);
 
 const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
 const mapStateToProps = (
@@ -58,7 +55,7 @@ const mapStateToProps = (
   docId: documentRevisionsSelectors.getDocId(state, props.documentId),
 });
 
-export const DocumentRevisionManagerContainer: React.FunctionComponent<
+const DocumentRevisionManagerContainer: React.FunctionComponent<
 DocumentRevisionManagerContainerProps
 > = ({
   isNewVersion,

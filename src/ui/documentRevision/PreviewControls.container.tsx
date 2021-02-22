@@ -37,14 +37,14 @@ interface StateProps {
   disableCreateNewVersion: boolean;
 }
 
-export type PreviewControlsContainerProps = OwnProps & StateProps & RouteComponentProps;
+type PreviewControlsContainerProps = OwnProps & StateProps & RouteComponentProps;
 
 const getDisableCreateNewVersion = documentRevisionsSelectors.makeGetDisableCreateNewVersion();
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
   disableCreateNewVersion: getDisableCreateNewVersion(state, props.documentRevision.document.id),
 });
 
-export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
+const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
   documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();

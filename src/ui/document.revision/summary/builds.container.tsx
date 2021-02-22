@@ -13,9 +13,9 @@ interface OwnProps {
   docRevId?: string;
   showRemoveButton?: boolean;
 }
-export type Props = OwnProps & DataProps<DocumentRevision[]>;
+type Props = OwnProps & DataProps<DocumentRevision[]>;
 
-export const BuildsContainer: React.FunctionComponent<Props> = ({
+const BuildsContainer: React.FunctionComponent<Props> = ({
   dataProp,
   label,
   isDraft,

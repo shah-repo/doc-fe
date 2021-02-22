@@ -1,12 +1,11 @@
 import { find } from "lodash";
 import React from "react";
-import { FBControlPickerDataProps, FBInputType, FBWorkspaceExternalState, FBWorkspaceState } from "..";
+import { FBControlPickerDataProps, FBEditorCustomControl, FBInputType, FBWorkspaceExternalState, FBWorkspaceState } from "..";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { store } from "../../../state/store";
 import { checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
-import { FBEditorCustomControl } from "../FBEditorCustomControl";
 
-export class FBControlPickerState {
+class FBControlPickerState {
 
   public customPicker: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     customcontrol: FBEditorCustomControl,

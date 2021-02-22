@@ -18,7 +18,7 @@ const styles = makeStyles(() =>
   },
   ));
 
-export const AddRoleDialog: React.FunctionComponent<AddRoleDialogProps> = ({
+const AddRoleDialog: React.FunctionComponent<AddRoleDialogProps> = ({
   activeEmployees,
   groupOptions,
   onSave,

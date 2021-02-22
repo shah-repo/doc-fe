@@ -35,9 +35,3 @@ export const toastInfo = (message: string, options: ToastOptions = {}) =>
 
 export const toastSuccess = (message: string, options: ToastOptions = {}) =>
   toast(ToastType.Success, message, options);
-
-export const toastWarning = (message: string, options: ToastOptions = {}) =>
-  toast(ToastType.Warning, message, options);
-
-export const toastDefault = (message: string, options: ToastOptions = {}) =>
-  toast(ToastType.Default, message, options);

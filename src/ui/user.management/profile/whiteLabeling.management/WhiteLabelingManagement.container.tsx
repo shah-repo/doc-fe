@@ -10,8 +10,7 @@ import useGetHasTag from "../../../hooks/useGetHasTag";
 import { toWhiteLabelingBodyValues, toWhiteLabelingInitialValues } from "../../utils/transform";
 import WhiteLabelingManagementPresenter from "./WhiteLabelingManagement.presenter";
 
-const WhiteLabelingManagementContainer: React.FunctionComponent<{}> = ({
-}) => {
+const WhiteLabelingManagementContainer: React.FunctionComponent<{}> = () => {
   const dispatch = useDispatch();
 
   const [s3link, sets3link] = useState<string | null>(null);

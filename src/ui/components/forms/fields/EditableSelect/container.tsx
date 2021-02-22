@@ -3,7 +3,7 @@ import { withFormik } from "../../../hoc/formik";
 import Presenter from "./presenter";
 import { EditableSelectContainerProps } from "./utils/types";
 
-export const EditableSelectContainer: React.FunctionComponent<EditableSelectContainerProps> = ({
+const EditableSelectContainer: React.FunctionComponent<EditableSelectContainerProps> = ({
   name = "",
   form,
   field,

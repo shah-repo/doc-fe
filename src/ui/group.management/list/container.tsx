@@ -18,7 +18,7 @@ import ListPresenter from "./presenter";
 type OwnProps = RouteComponentProps;
 type Props = OwnProps;
 
-export const ListContainer: React.FunctionComponent<Props> = () => {
+const ListContainer: React.FunctionComponent<Props> = () => {
   const dispatch = useDispatch();
   const editGroupsDialog = useDialog();
   const previewGroupsDialog = useDialog();

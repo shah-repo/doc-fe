@@ -13,7 +13,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export const TrainingRequest: React.FunctionComponent<Props> = ({
+const TrainingRequest: React.FunctionComponent<Props> = ({
   index,
   trainingRecord,
 }) => {

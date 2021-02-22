@@ -20,7 +20,7 @@ interface Props {
   shouldShowUpgradeBannerForRecord: boolean;
 }
 
-export const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
+const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
   documentStatus,
   formDocumentId = "",
   docRevId,

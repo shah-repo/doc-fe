@@ -17,7 +17,7 @@ interface Props extends FormikProps<DocumentType> {
   transitionLabel: Translation;
 }
 
-export const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
+const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
   dirty,
   resetForm,
   initialValues,

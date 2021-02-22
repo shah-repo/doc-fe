@@ -5,12 +5,12 @@ import * as React from "react";
 import Text from "../../Text";
 import Field, { FieldOwnProps } from "./Field";
 
-export interface SelectOption {
+interface SelectOption {
   value: string | number;
   text: string;
 }
 
-export interface SelectOwnProps extends FieldOwnProps {
+interface SelectOwnProps extends FieldOwnProps {
   selectProps?: MuiSelectProps;
   options: SelectOption[];
   includeEmpty?: boolean;

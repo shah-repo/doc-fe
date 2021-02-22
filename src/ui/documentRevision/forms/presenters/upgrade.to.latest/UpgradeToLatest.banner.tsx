@@ -13,7 +13,7 @@ interface Props {
   onUpgradeClick: () => void;
 }
 
-export const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
+const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
   showShouldUpgrade,
   bannerPortal,
   onUpgradeClick,

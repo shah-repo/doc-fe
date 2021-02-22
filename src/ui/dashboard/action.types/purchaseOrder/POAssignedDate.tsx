@@ -10,7 +10,7 @@ interface Props {
   approvals?: Approval[];
 }
 
-export const POAssignedDate: React.FunctionComponent<Props> = ({
+const POAssignedDate: React.FunctionComponent<Props> = ({
   approvals = [],
 }) => {
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);

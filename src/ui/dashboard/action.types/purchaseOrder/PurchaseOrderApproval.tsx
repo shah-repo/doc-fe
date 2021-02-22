@@ -13,7 +13,7 @@ interface Props {
 
 export let IndexContetxt = React.createContext(-1);
 
-export const PurchaseOrderApproval: React.FunctionComponent<Props> = ({
+const PurchaseOrderApproval: React.FunctionComponent<Props> = ({
   index,
   documentRevision,
 }) => {

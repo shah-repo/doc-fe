@@ -7,9 +7,9 @@ import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 
-export type Props = DataProps<Approval[]>;
+type Props = DataProps<Approval[]>;
 
-export const Approvers: React.FunctionComponent<Props> = ({ dataProp }) => {
+const Approvers: React.FunctionComponent<Props> = ({ dataProp }) => {
 
   if (isEmpty(dataProp)) {
     return null;

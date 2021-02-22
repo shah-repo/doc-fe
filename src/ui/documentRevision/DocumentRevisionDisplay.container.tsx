@@ -36,7 +36,7 @@ interface OwnProps {
 
 export let isOperator = React.createContext<boolean>(false);
 
-export type DocumentRevisionDisplayContainerProps =
+type DocumentRevisionDisplayContainerProps =
   OwnProps &
   DispatchProps &
   StateProps;
@@ -60,7 +60,7 @@ const mapStateToProps = (
   ),
 });
 
-export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevisionDisplayContainerProps> = ({
+const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevisionDisplayContainerProps> = ({
   currentUserEmail,
   loadDocumentRevision,
   isNewVersion,

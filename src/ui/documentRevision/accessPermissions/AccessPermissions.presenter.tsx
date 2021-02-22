@@ -26,9 +26,9 @@ interface OwnProps {
   isVisible: boolean;
 }
 
-export type AccessPermissionsPresenterProps = OwnProps;
+type AccessPermissionsPresenterProps = OwnProps;
 
-export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPresenterProps> = ({
+const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPresenterProps> = ({
   availableApprovers,
   groupOptions,
   securityGroups,

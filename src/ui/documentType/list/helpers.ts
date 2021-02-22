@@ -7,8 +7,6 @@ import { TablePanelStateProps } from "../../components/table/types";
 import { documentRevisionEffectiveDateOption, documentRevisionStatusOption } from "../../document.revision/utils/helpers";
 import { Translation } from "../../translations/types";
 
-export const shouldShowStaticColumns = (documentTypeName) => documentTypeName !== "Purchase Order";
-
 export const columnSearchConfiguration = (valuePath: string, tableCriteria: TablePanelStateProps, statuses: DocumentRevisionStatus[]): [boolean, Partial<TableSearchFieldProps>] => {
   let omitSearch = true;
   let searchOptions: Partial<TableSearchFieldProps> = { dataKey: valuePath };

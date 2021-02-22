@@ -21,7 +21,7 @@ interface Props {
   hasOfficialPermission: boolean;
 }
 
-export const GroupContentContainer: React.FunctionComponent<Props> = ({
+const GroupContentContainer: React.FunctionComponent<Props> = ({
   selectedGroup,
   isCreateMode,
   employees,

@@ -14,7 +14,7 @@ interface Props {
   shouldShowRevStageForDocType: boolean;
 }
 
-export const RevisionStage: React.FunctionComponent<Props> = ({
+const RevisionStage: React.FunctionComponent<Props> = ({
   isDisabled,
   isDocRevFirstDraft,
   shouldShowRevStageForDocType,

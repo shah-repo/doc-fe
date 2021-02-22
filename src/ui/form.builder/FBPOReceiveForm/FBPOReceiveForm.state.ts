@@ -10,7 +10,7 @@ import { filterSecurityGroupsForQms } from "../../documentType/list/helpers";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBPOReceiveFormState  {
+class FBPOReceiveFormState  {
   public docIdAPI: FBRequest<any, any> = new FBRequest();
   public createLotAPI: FBRequest<any, any> = new FBRequest();
   public releasedLfpoAPI: FBRequest<any, any> = new FBRequest();

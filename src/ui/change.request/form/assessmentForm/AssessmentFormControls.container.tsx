@@ -12,7 +12,7 @@ import OwnerChangerContainer from "../../../components/common/owner.changer/cont
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
 import useGetHasTag from "../../../hooks/useGetHasTag";
 import ChangeRequestTransitionDialogContainer from "../../dialogs/ChangeRequestTransitionDialog.container";
-import { ChangeRequestWithdrawDialog } from "../../dialogs/ChangeRequestWithdrawDialog";
+import ChangeRequestWithdrawDialog from "../../dialogs/ChangeRequestWithdrawDialog";
 import { canChangeCROwner } from "../../utils/helpers";
 import TransitionButton from "./TransitionButton";
 import AssessmentFormVoidContainer from "./Void";

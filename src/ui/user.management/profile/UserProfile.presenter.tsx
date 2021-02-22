@@ -41,7 +41,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export const UserProfilePresenter: React.FunctionComponent<Props> = ({
+const UserProfilePresenter: React.FunctionComponent<Props> = ({
   isOpen,
   close,
   canManageUsers,

@@ -1,12 +1,10 @@
 export const COMPANY_GROUPS_LIST = "userManagement/COMPANY_GROUPS_LIST";
-export const CURRENT_GROUP = "userManagement/CURRENT_GROUP";
 export const COMPANY_GROUPS_GET_ASYNC = "userManagement/COMPANY_GROUPS_GET_ASYNC";
 export const GROUPS_ME_GET_ASYNC = "userManagement/GROUPS_ME_GET_ASYNC";
 export const GROUP_GET_BY_ID = "userManagement/GROUPS_GET_BY_ID";
 export const ADD_EMPLOYEE_POST_ASYNC = "userManagement/ADD_EMPLOYEE_POST_ASYNC";
 export const EMPLOYEE_GET_ASYNC = "userManagement/EMPLOYEE_GET_ASYNC";
 export const API_TOKEN_POST_ASYNC = "userManagement/API_TOKEN_POST_ASYNC";
-export const API_TOKEN_LIST = "userManagement/API_TOKEN_LIST";
 export const API_TOKEN_GET_ASYNC = "userManagement/API_TOKEN_GET_ASYNC";
 export const API_TOKEN_DELETE_ASYNC = "userManagement/API_TOKEN_DELETE_ASYNC";
 

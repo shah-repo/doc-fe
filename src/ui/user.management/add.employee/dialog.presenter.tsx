@@ -11,7 +11,7 @@ interface Props {
   closeDialog: () => void;
 }
 
-export const AddEmployeeDialogPresenter: React.FunctionComponent<Props> = ({
+const AddEmployeeDialogPresenter: React.FunctionComponent<Props> = ({
   isOpen,
   closeDialog,
   children,

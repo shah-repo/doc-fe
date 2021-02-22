@@ -33,7 +33,7 @@ interface OwnProps {
   isNewVersion?: boolean;
 }
 
-export type DocumentRevisionUpdateContainerProps = OwnProps &
+type DocumentRevisionUpdateContainerProps = OwnProps &
 DispatchProps &
 StateProps;
 
@@ -43,7 +43,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
 });
 
-export const DocumentRevisionUpdateContainer: React.FunctionComponent<
+const DocumentRevisionUpdateContainer: React.FunctionComponent<
 DocumentRevisionUpdateContainerProps
 > = ({
   save,

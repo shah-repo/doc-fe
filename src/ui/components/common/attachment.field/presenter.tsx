@@ -9,7 +9,7 @@ interface Props extends AttachmentFieldProps {
   isUploading: boolean;
 }
 
-export const AttachmentFieldPresenter: React.FunctionComponent<
+const AttachmentFieldPresenter: React.FunctionComponent<
 Props
 > = ({ name, multiple, component = "button", disabled, upload, form, field, onChange, isUploading }) => {
   const isField = component === "field";

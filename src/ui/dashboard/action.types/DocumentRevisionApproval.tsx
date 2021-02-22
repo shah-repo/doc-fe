@@ -21,7 +21,7 @@ interface Props {
   approval: Approval;
 }
 
-export const DocumentRevisionApproval: React.FunctionComponent<Props> = ({
+const DocumentRevisionApproval: React.FunctionComponent<Props> = ({
   index,
   documentRevision,
   approval,

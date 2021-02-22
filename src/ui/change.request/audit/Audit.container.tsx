@@ -23,7 +23,7 @@ interface DispatchProps {
   loadAudit: typeof changeRequestsActions.loadAudit;
 }
 
-export type AuditContainerProps = OwnProps & StateProps & DispatchProps;
+type AuditContainerProps = OwnProps & StateProps & DispatchProps;
 
 const getAudit = changeRequestsSelectors.makeGetAudit();
 const mapStateToProps = (
@@ -33,7 +33,7 @@ const mapStateToProps = (
   audit: getAudit(state, props.changeRequest.id),
 });
 
-export const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
+const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
   audit,
   loadAudit,
   changeRequest,

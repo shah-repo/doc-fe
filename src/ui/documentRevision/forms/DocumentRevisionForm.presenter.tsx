@@ -41,7 +41,7 @@ import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import UpgradeToLatestContainer from "./presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { DocumentRevisionFormValues } from "./types";
 
-export interface Props extends FormikProps<DocumentRevisionFormValues> {
+interface Props extends FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
@@ -77,7 +77,7 @@ export let FormHeaderContext = React.createContext<FormHeaderContext | undefined
 export let isOwnerContext = React.createContext<boolean>(false);
 export let documentTypeContext = React.createContext<string | undefined>(undefined);
 
-export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
+const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState,
   initialValues,
   availableReferences,

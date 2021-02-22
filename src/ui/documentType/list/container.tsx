@@ -46,7 +46,7 @@ const getFormattedRowValue = (path: any, rowData: any) => {
   return isDate ? <Date value={value} /> : override;
 };
 
-export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
+const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   match,
 }) => {
   const dispatch = useDispatch();

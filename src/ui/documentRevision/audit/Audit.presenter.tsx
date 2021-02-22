@@ -19,9 +19,9 @@ interface OwnProps {
   isStatusVisible: boolean;
 }
 
-export type AuditPresenterProps = OwnProps;
+type AuditPresenterProps = OwnProps;
 
-export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
+const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
   statusLabel,
   versionNumber,

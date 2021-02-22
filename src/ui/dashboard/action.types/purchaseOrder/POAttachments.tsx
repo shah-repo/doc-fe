@@ -13,7 +13,7 @@ interface Props {
   documentRevision: DocumentRevision;
 }
 
-export const POAttachments: React.FunctionComponent<Props> = ({
+const POAttachments: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
   const [attachments] = useState<Attachment[]>(() => {

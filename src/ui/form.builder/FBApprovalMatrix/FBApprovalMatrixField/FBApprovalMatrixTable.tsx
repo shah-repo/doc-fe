@@ -140,7 +140,7 @@ const Styles = styled.div`
   }
 `;
 
-export interface Props extends FBFormDefaultProps {
+interface Props extends FBFormDefaultProps {
   data: any[];
   columns: any[];
   editMode: boolean;

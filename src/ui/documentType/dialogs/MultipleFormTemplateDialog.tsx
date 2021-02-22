@@ -11,7 +11,7 @@ import { DialogHandler } from "../../hooks/useDialog";
 import { docIdAsyncContext } from "../list/CreateDocumentByType";
 import { styles } from "./FormListDialog/FormListDialog.styles";
 
-export interface DocumentTypeDialogProps extends FormikProps<any> {
+interface DocumentTypeDialogProps extends FormikProps<any> {
   documentTypes: DocumentType[];
   formIds: DocumentTypeByIdForm[];
   dialog: DialogHandler;
@@ -20,7 +20,7 @@ export interface DocumentTypeDialogProps extends FormikProps<any> {
   isRecord: boolean;
   closeMultipleFormDialog: () => void;
 }
-export const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProps> = ({
+const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProps> = ({
   dialog,
   formIds,
   documentTypes,

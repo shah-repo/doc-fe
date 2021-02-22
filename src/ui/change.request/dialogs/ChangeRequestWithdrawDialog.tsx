@@ -14,7 +14,7 @@ interface Props {
   changeRequestId: string;
 }
 
-export const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
+const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
   buttonProps,
   label,
   changeRequestId,

@@ -31,7 +31,7 @@ export let changeRequestFormOnScreenContext = React.createContext<boolean>(false
 
 type ChangeRequestFormContainerProps = OwnProps;
 
-export const ChangeRequestFormContainer: React.FunctionComponent<
+const ChangeRequestFormContainer: React.FunctionComponent<
   ChangeRequestFormContainerProps
 > = ({
   onSubmit,

@@ -44,11 +44,11 @@ interface OwnProps {
   canChangeOwnerShip?: boolean;
 }
 
-export type Props = OwnProps &
+type Props = OwnProps &
 DataProps<DocumentRevision> &
 WithStyles<typeof styles>;
 
-export const Presenter: React.FunctionComponent<Props> = ({
+const Presenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
   dataProp: {

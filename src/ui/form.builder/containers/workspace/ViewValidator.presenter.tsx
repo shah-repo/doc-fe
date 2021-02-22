@@ -13,7 +13,7 @@ interface Props {
   schema: FBTemplateSchema[];
 }
 
-export const ViewValidatorPresenter: React.FunctionComponent<Props> = ({
+const ViewValidatorPresenter: React.FunctionComponent<Props> = ({
   isOpen,
   closeDialog,
   schema,

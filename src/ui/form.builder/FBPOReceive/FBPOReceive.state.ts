@@ -9,7 +9,7 @@ import FBRequest from "../FBApi/FBApi.request";
 import { FBSchemaProps } from "../FBSchema";
 import { FBEditorElementType } from "../types/editor";
 
-export class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
+class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
   public receivedItems: FBRequest<any, Dictionary<number>> = new FBRequest();
 
   public constructor(id: string) {

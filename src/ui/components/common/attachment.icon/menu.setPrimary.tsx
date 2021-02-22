@@ -10,7 +10,7 @@ import useAsync from "../../../hooks/useAsync";
 import { toastError } from "../../notifications";
 import Text from "../../Text";
 
-export interface Props {
+interface Props {
   handleClose?: any;
   attachment: any;
   documentRevision?: DocumentRevision;

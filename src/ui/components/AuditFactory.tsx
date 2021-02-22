@@ -24,9 +24,9 @@ interface OwnProps {
   dataCy?: string;
 }
 
-export type Props = OwnProps;
+type Props = OwnProps;
 
-export const AuditFactory: React.FunctionComponent<Props> = ({
+const AuditFactory: React.FunctionComponent<Props> = ({
   audit, dataCy,
 }) => {
   let returnValue;

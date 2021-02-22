@@ -14,7 +14,7 @@ interface SidebarPresenterProps {
   changeRequests: ChangeRequest[];
 }
 
-export const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ changeRequests }) => {
+const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ changeRequests }) => {
   const classes = styles();
   return (
     <Box pt={0.4}>

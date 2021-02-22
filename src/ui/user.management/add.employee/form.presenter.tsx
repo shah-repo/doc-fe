@@ -21,7 +21,7 @@ interface Props extends FormikProps<AddEmployeeFormValues> {
   groupOptions: OptionType[];
 }
 
-export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
+const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
   asyncState,
   groupOptions,
   resetForm,

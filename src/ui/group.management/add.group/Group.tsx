@@ -20,7 +20,7 @@ interface Props {
   isCreateMode?: boolean;
 }
 
-export const AddGroup: React.FunctionComponent<Props> = ({
+const AddGroup: React.FunctionComponent<Props> = ({
   isOpen,
   closeDialog,
   selectedGroup,

@@ -1,16 +1,13 @@
 import { includes } from "lodash";
 import { action, observable, set } from "mobx";
 import React from "react";
-import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
+import { FBEditorApprovalField, FBEditorEQMaintenance, FBEditorInlineApproval, FBEditorMode, FBEditorModeProps, FBEditorProps, FBEditorTextFieldWithRange, FBInputType } from "..";
 import { FBEditorAction } from "../FBEditorAction";
-import { FBEditorApprovalField } from "../FBEditorApprovalField";
 import { FBEditorApprovals } from "../FBEditorApprovals";
 import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
 import { FBEditorEmpty } from "../FBEditorEmpty";
-import { FBEditorEQMaintenance } from "../FBEditorEQMaintenance";
 import { FBEditorHyperlink } from "../FBEditorHyperlink";
-import { FBEditorInlineApproval } from "../FBEditorInlineApproval";
 import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
 import { FBEditorLabel } from "../FBEditorLabel";
 import { FBEditorMediaAlbum } from "../FBEditorMediaAlbum";
@@ -22,9 +19,8 @@ import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
 import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
 import { FBEditorTextEditor } from "../FBEditorTextEditor";
 import { FBEditorTextField } from "../FBEditorTextField";
-import { FBEditorTextFieldWithRange } from "../FBEditorTextFieldWithRange";
 
-export class FBEditorState {
+class FBEditorState {
 
   public static omitFinalValidation: FBInputType[] = [
     "section",

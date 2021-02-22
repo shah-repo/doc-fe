@@ -16,7 +16,7 @@ interface Props {
   tableData: TableDataProps<ChangeRequest>;
 }
 
-export const FromListContainer: React.FunctionComponent<Props> = ({ headers, tableData }) => {
+const FromListContainer: React.FunctionComponent<Props> = ({ headers, tableData }) => {
   const [templateOptions, setTemplateOptions] = useState<TemplateOption[]>([]);
   const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
   const history = useHistory();

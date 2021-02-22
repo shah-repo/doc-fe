@@ -17,15 +17,6 @@ export const canEditDocumentRevision = (documentRevision: DocumentRevision) => {
   );
 };
 
-export const documentRevisionIdMask = (
-  type: string,
-  count: string | number,
-) => {
-  const countStr = "" + count;
-  const pad = "0000";
-  return type + pad.substring(0, pad.length - countStr.length) + countStr;
-};
-
 export const documentRevisionStatusOption = (statuses?: DocumentRevisionStatus[]) => {
   const options: SelectOption[] = [];
   if (statuses) {

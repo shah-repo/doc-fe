@@ -18,9 +18,9 @@ interface OwnProps extends DataProps<Model> {
   crId: string;
 }
 
-export type Props = OwnProps;
+type Props = OwnProps;
 
-export const ImplementationPlan: React.FunctionComponent<Props> = ({
+const ImplementationPlan: React.FunctionComponent<Props> = ({
   dataProp,
   currentUserEmail,
   crStatus,

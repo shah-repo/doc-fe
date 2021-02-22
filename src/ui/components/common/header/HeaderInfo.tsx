@@ -9,7 +9,7 @@ import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/use
 import Text from "../../Text";
 import { styles } from "./HeaderInfo.styles";
 
-export interface Props {
+interface Props {
   status: string;
   id: string;
   name: string;
@@ -22,7 +22,7 @@ export interface Props {
   displayStatus?: string;
 }
 
-export const HeaderInfo: React.FunctionComponent<Props> = ({
+const HeaderInfo: React.FunctionComponent<Props> = ({
   status,
   name,
   id,

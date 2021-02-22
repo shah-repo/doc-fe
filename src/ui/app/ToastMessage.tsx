@@ -3,7 +3,7 @@ import React from "react";
 import Text from "../components/Text";
 import { styles } from "./ToastMessage.styles";
 
-export interface MsgProps {
+interface MsgProps {
   message: string;
 }
 

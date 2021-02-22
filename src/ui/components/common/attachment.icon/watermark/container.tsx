@@ -14,7 +14,7 @@ interface Props {
   newWatermarkError: string;
 }
 
-export const WatermarkContainer: React.FunctionComponent<Props> = ({
+const WatermarkContainer: React.FunctionComponent<Props> = ({
   newWatermarkRequest,
   newWatermarkError,
 }) => {

@@ -31,9 +31,9 @@ import styles from "./styles";
 interface OwnProps extends DataProps<ChangeRequest> {
   currentUserEmail: string;
 }
-export type Props = OwnProps;
+type Props = OwnProps;
 
-export const Container: React.FunctionComponent<Props> = ({
+const Container: React.FunctionComponent<Props> = ({
   dataProp,
   currentUserEmail,
 }) => {

@@ -12,7 +12,7 @@ interface StateProps {
   employees: Employee[];
 }
 
-export type SwitchCompanyButtonProps = StateProps & Pick<RouteComponentProps, "location">;
+type SwitchCompanyButtonProps = StateProps & Pick<RouteComponentProps, "location">;
 
 const SwitchCompanyButton: React.FunctionComponent<SwitchCompanyButtonProps> = (props) => (
   <Box

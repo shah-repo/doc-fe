@@ -47,9 +47,9 @@ interface OwnProps {
   pmForm?: DocumentRevision;
 }
 
-export type DocumentRevisionFormContainerProps = OwnProps;
+type DocumentRevisionFormContainerProps = OwnProps;
 
-export const DocumentRevisionFormContainer: React.FunctionComponent<
+const DocumentRevisionFormContainer: React.FunctionComponent<
 DocumentRevisionFormContainerProps
 > = ({
   onSubmit,

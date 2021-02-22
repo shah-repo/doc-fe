@@ -3,7 +3,7 @@ import { Attachment } from "../../../../state/ducks/attachments";
 import Presenter from "./presenter";
 import { AttachmentIconFactoryProps, AttachmentIconProps } from "./utils/types";
 
-export const AttachmentIconPresenterFactory: React.FunctionComponent<
+const AttachmentIconPresenterFactory: React.FunctionComponent<
 AttachmentIconFactoryProps
 > = ({
   name,

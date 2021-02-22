@@ -30,10 +30,6 @@ export interface DocumentRevisionFormValues extends FBDocumentRevisionProps {
   equipmentSection?: string;
 }
 
-export interface SecurityId {
-  id: string;
-}
-
 export interface ApproveAndReleaseFormValues {
   approvals: OptionType[];
   password: string;

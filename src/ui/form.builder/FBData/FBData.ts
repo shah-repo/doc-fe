@@ -1,7 +1,5 @@
 import { map, template } from "lodash";
-import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBIconConfig, FBInputType, FBOption, FBPassType } from "..";
-import { FBIconType } from "../FBIcon";
-import { FBCurrencyOption } from "../FBPurchaseOrderTable";
+import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBCurrencyOption, FBEditorPropertiesOption, FBEditorPropertiesType, FBIconConfig, FBIconType, FBInputType, FBOption, FBPassType } from "..";
 import { FBSchemaProps } from "../FBSchema";
 import actionOptions from "./actionOptions.json";
 import additionalSchema from "./additionalSchema.json";
@@ -22,7 +20,7 @@ import testStepSchema from "./testStepSchema.json";
 import unitsOptions from "./unitsOptions.json";
 import yesNoOptions from "./yesNoOptions.json";
 
-export class FBData {
+class FBData {
   public static get testStepSchema(): FBSchemaProps[]  {
     const compiled = template(JSON.stringify(testStepSchema));
     return JSON.parse(compiled({ id: FB.uniqid })) as unknown as FBSchemaProps[];

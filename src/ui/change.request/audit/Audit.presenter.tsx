@@ -14,9 +14,9 @@ interface OwnProps {
   approvals: Approval[];
 }
 
-export type AuditPresenterProps = OwnProps;
+type AuditPresenterProps = OwnProps;
 
-export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
+const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
   approvals,
 }) => {

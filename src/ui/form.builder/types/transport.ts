@@ -6,10 +6,5 @@ export type FBTransportSchemaProps = FBDialogProps & {
   setSchemaName?: () => void;
 };
 
-export type FBTransportSchemaInjectedProps = Pick<FBTransportSchemaProps,
-    | "importSchema"
-    | "exportSchema"
-    | "setSchemaName"
->;
 export type FBImportSchemaProps = Pick<FBTransportSchemaProps, "importSchema">;
 export type FBExportSchemaProps = Omit<FBTransportSchemaProps, "importSchema">;

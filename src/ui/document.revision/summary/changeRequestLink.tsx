@@ -8,9 +8,9 @@ import { changeRequestEditPath } from "../../change.request/utils/paths";
 import Text from "../../components/Text";
 import { useCRLink } from "../../hooks/docCustomization/useCustomization";
 
-export type Props = DataProps<DocumentRevision>;
+type Props = DataProps<DocumentRevision>;
 
-export const ChangeRequestLink: React.FunctionComponent<Props> = ({
+const ChangeRequestLink: React.FunctionComponent<Props> = ({
   dataProp,
 }) => {
   const { isVisible } = useCRLink(dataProp?.document?.documentType?.id);

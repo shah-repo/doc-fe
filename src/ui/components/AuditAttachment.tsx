@@ -11,9 +11,9 @@ interface OwnProps {
   loading?: boolean;
 }
 
-export type Props = OwnProps;
+type Props = OwnProps;
 
-export const AuditAttachment: React.FunctionComponent<Props> = ({
+const AuditAttachment: React.FunctionComponent<Props> = ({
   audit, loading,
 }) => {
 

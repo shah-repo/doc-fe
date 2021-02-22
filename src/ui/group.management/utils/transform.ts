@@ -29,7 +29,7 @@ export const toArray = (values: OptionType[]): any[] => {
   );
 };
 
-export const toArrayOfIds = (data: any[] | null) => {
+const toArrayOfIds = (data: any[] | null) => {
   if (!data) { return []; }
   return data.map((item) => ({
     id: item.id,
@@ -61,7 +61,7 @@ export const toGroupOptions = (selectedGroup: LoadCompanyGroup): GroupRequestBod
   id: selectedGroup.id,
 });
 
-export const toIds = (options: OptionType[] | null) => {
+const toIds = (options: OptionType[] | null) => {
   if (options == null) { return []; }
   return options.map((option) => ({
     id: option.value,

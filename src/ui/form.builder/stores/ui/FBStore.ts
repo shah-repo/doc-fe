@@ -10,8 +10,7 @@ import FBDRStore from "./FBDRStore";
 import editorStore from "./FBEditorStore";
 import FBValidatorStore from "./FBValidatorStore";
 
-export class FormBuilderStore {
-
+class FormBuilderStore {
 
   @computed public get active(): boolean {
     return this.mode !== "none";

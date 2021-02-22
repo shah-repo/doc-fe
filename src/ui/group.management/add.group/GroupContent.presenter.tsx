@@ -28,7 +28,7 @@ interface Props {
   handleSubmit: () => void;
 }
 
-export const GroupContentPresenter: React.FunctionComponent<Props> = ({
+const GroupContentPresenter: React.FunctionComponent<Props> = ({
   employees,
   members,
   setMembers,

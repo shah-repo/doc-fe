@@ -25,7 +25,7 @@ interface Props {
   handleResendSignupEmail: (email: string) => void;
 }
 
-export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
+const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   tableName,
   tableCriteria,
   tableData,

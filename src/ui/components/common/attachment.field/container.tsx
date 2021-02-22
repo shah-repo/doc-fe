@@ -17,7 +17,7 @@ import { AttachmentContainerProps, AttachmentFieldDispatchProps } from "./utils/
 
 type DispatchProps = AttachmentFieldDispatchProps;
 
-export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps> = ({
+const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps> = ({
   name = "",
   upload,
   component = "button",

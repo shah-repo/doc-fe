@@ -24,7 +24,7 @@ export interface ApprovalMatrixItem {
   approvalRoles: ApprovalRolesStages;
 }
 
-export interface DocType {
+interface DocType {
   id?: string;
   acronym: string;
   name: string;
@@ -32,14 +32,14 @@ export interface DocType {
   group: string;
 }
 
-export interface ApprovalRolesStages {
+interface ApprovalRolesStages {
   stage1: boolean[];
   stage2: boolean[];
   stage3: boolean[];
   admStage: boolean[];
 }
 
-export type FBApprovalMatrixBasicProps = Pick<FBInputProps, "name" | "disabled">;
+type FBApprovalMatrixBasicProps = Pick<FBInputProps, "name" | "disabled">;
 
 export type FBApprovalMatrixFieldProps =
 & FBApprovalMatrixBasicProps
@@ -47,7 +47,7 @@ export type FBApprovalMatrixFieldProps =
   amState: FBApprovalMatrixState;
 };
 
-export interface Dialog {
+interface Dialog {
   isOpen: boolean;
   open: () => void;
   close: () => void;

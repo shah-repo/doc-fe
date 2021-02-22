@@ -8,7 +8,7 @@ import { FBInputProps } from "../../types/common";
 import { FBDocumentRevisionMode, FBDRGroupConfig } from "../../types/store";
 import FBStore from "./FBStore";
 
-export class FBDocumentRevisionStore {
+class FBDocumentRevisionStore {
   @observable public mode: FBDocumentRevisionMode = "none";
   public docSchema: FBInputProps[] = [];
 

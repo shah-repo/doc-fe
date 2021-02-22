@@ -15,14 +15,14 @@ interface OwnProps extends RouteComponentProps {
   changeRequest?: ChangeRequest;
 }
 
-export type ChangeRequestCreateContainerProps = OwnProps & RouteComponentProps<RouteParamsCreate>;
+type ChangeRequestCreateContainerProps = OwnProps & RouteComponentProps<RouteParamsCreate>;
 
-export const DEFAULT_INITIAL_VALUES = (): ChangeRequest => ({
+const DEFAULT_INITIAL_VALUES = (): ChangeRequest => ({
   title: "",
   description: "",
 } as unknown as ChangeRequest);
 
-export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateContainerProps> =
+const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateContainerProps> =
   ({ history, match }) => {
     const documentTypeId = match.params.documentTypeId;
     const formId = match.params.formId;

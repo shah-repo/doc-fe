@@ -9,7 +9,7 @@ interface Props {
   changeRequest: ChangeRequest;
 }
 
-export const TaskApproval: React.FunctionComponent<Props> = ({
+const TaskApproval: React.FunctionComponent<Props> = ({
   index,
   changeRequest,
 }) => {

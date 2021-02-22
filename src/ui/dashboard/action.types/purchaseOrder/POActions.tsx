@@ -8,7 +8,7 @@ interface Props {
   documentRevision: DocumentRevision;
 }
 
-export const POActions: React.FunctionComponent<Props> = ({
+const POActions: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
   const { changeRequest: { id: changeRequestId = "" } = {} } = documentRevision;

@@ -10,7 +10,7 @@ import FBRequest from "../FBApi/FBApi.request";
 import { FBAutocompleteAsyncState } from "../FBAutocompleteAsync/FBAutocompleteAsync.state";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
-export class FBApprovalState {
+class FBApprovalState {
   @observable public hasApproved: FBApprovalValue[] = [];
   @observable public auditData?: Audit[];
 

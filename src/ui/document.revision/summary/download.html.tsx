@@ -10,7 +10,7 @@ import useAsync from "../../hooks/useAsync";
 interface Props {
   pdf?: PDF;
 }
-export const DownloadHTML: React.FunctionComponent<Props> = ({
+const DownloadHTML: React.FunctionComponent<Props> = ({
   pdf,
 }) => {
   const intl = useIntl();

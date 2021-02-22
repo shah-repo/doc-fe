@@ -7,7 +7,7 @@ import Text from "../../../components/Text";
 import { toMembersOptions } from "../../../group.management/utils/transform";
 import { ApprovalRolesPresenterProps } from "../FBApprovalMatrix.types";
 
-export const styles = makeStyles(() =>
+const styles = makeStyles(() =>
   createStyles({
     boxWithBorder: {
       borderBottom: `1px solid ${"#B4C0CA"}`,

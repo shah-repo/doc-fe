@@ -13,9 +13,9 @@ interface OwnProps {
   auditValue?: string;
 }
 
-export type Props = OwnProps;
+type Props = OwnProps;
 
-export const AuditProcedure: React.FunctionComponent<Props> = ({
+const AuditProcedure: React.FunctionComponent<Props> = ({
   audit,
   dataCy,
   auditValue,

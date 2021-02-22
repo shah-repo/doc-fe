@@ -13,10 +13,10 @@ import {
 import ListPresenter from "./presenter";
 
 type OwnProps = RouteComponentProps;
-export type Props = OwnProps;
+type Props = OwnProps;
 
 export const CR_TABLE_NAME = "changeRequests";
-export const ListContainer: React.FunctionComponent<Props> = ({
+const ListContainer: React.FunctionComponent<Props> = ({
   history,
 }) => {
   const edit = (changeRequestId: string) => history.push(changeRequestEditPath(changeRequestId));

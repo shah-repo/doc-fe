@@ -30,7 +30,7 @@ interface DispatchProps {
 
 type Props = OwnProps & DispatchProps & StateProps;
 
-export const UserProfileContainer: React.FunctionComponent<Props> = ({
+const UserProfileContainer: React.FunctionComponent<Props> = ({
   closeUserProfile,
   showUserProfile,
   getSlackUrl,

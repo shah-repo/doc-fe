@@ -28,7 +28,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   availableAssignees: changeRequestsSelectors.getAssignessList(state),
 });
 
-export const styles = makeStyles(() =>
+const styles = makeStyles(() =>
   createStyles({
     submitBtn: {
       float: "right",

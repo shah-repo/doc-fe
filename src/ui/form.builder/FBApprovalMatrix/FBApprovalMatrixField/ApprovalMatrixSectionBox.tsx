@@ -6,7 +6,7 @@ import { ReactComponent as EditIcon } from "../../../../assets/images/pen_edit.s
 import Text from "../../../components/Text";
 import { FBFormDefaultProps } from "../../types/common";
 
-export interface Props extends FBFormDefaultProps {
+interface Props extends FBFormDefaultProps {
   openDialog: () => void;
   closeDialog: () => void;
   alreadyOpened?: boolean;

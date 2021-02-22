@@ -94,7 +94,7 @@ export { default as FBEditorCustomControl } from "./FBEditorCustomControl/FBEdit
 export * from "./FBEditorCustomControl/FBEditorCustomControl.state";
 export * from "./FBEditorCustomControl/FBEditorCustomControl.types";
 export { default as FBEditorEmpty } from "./FBEditorEmpty/FBEditorEmpty";
-export { default as FBFBEditorEQMaintenance } from "./FBEditorEQMaintenance/FBEditorEQMaintenance";
+export { default as FBEditorEQMaintenance } from "./FBEditorEQMaintenance/FBEditorEQMaintenance";
 export * from "./FBEditorEQMaintenance/FBEditorEQMaintenance.types";
 export { default as FBEditorHyperlink } from "./FBEditorHyperlink/FBEditorHyperlink";
 export { default as FBEditorInlineApproval } from "./FBEditorInlineApproval/FBEditorInlineApproval";

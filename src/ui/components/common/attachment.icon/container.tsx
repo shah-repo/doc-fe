@@ -36,7 +36,7 @@ type DispatchProps = AttachmentIconDispatchProps;
 
 export let SetFile: React.Context<React.Dispatch<React.SetStateAction<Attachment | undefined>>>;
 
-export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
+const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
   name = "",
   form,
   field,

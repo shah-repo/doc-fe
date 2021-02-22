@@ -12,7 +12,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export const GroupsDisplayContent: React.FunctionComponent<Props> = ({
+const GroupsDisplayContent: React.FunctionComponent<Props> = ({
   groupName,
   employees,
 }) => {

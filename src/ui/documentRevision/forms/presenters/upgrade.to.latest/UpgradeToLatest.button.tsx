@@ -10,7 +10,7 @@ interface Props {
   onUpgradeClick: () => void;
 }
 
-export const UpgradeToLatestButton: React.FunctionComponent<Props> = ({
+const UpgradeToLatestButton: React.FunctionComponent<Props> = ({
   setShouldDisplay,
   showShouldUpgrade,
   onUpgradeClick,

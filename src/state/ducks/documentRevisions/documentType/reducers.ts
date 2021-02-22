@@ -6,7 +6,7 @@ import { DocRevByIdState, DocumentType, DocumentTypeAllIdsState, DocumentTypeByC
 
 type DocumentTypeActions =  DocumentTypeListAction;
 
-export const byId = (state: DocumentTypeByIdState = {}, action: DocumentTypeActions): DocumentTypeByIdState => {
+const byId = (state: DocumentTypeByIdState = {}, action: DocumentTypeActions): DocumentTypeByIdState => {
   switch (action.type) {
     case DOCUMENT_TYPE_LIST:
       return { ...(keyBy<DocumentType>(action.payload, (documentType) => documentType.id)) };
@@ -15,7 +15,7 @@ export const byId = (state: DocumentTypeByIdState = {}, action: DocumentTypeActi
   }
 };
 
-export const allIds = (state: DocumentTypeAllIdsState = [], action: DocumentTypeActions): DocumentTypeAllIdsState => {
+const allIds = (state: DocumentTypeAllIdsState = [], action: DocumentTypeActions): DocumentTypeAllIdsState => {
   switch (action.type) {
     case DOCUMENT_TYPE_LIST:
       return uniq([...action.payload.map((documentType) => documentType.id)]);
@@ -24,7 +24,7 @@ export const allIds = (state: DocumentTypeAllIdsState = [], action: DocumentType
   }
 };
 
-export const DOC_REV_BY_ID_DEFAULT_STATE: DocRevByIdState = {
+const DOC_REV_BY_ID_DEFAULT_STATE: DocRevByIdState = {
   documentType: {
     id: "",
     documentTypeAcronym: "",
@@ -44,7 +44,10 @@ export const DOC_REV_BY_ID_DEFAULT_STATE: DocRevByIdState = {
   ],
 };
 
-export const docRevTypeId = (state: DocRevByIdState = DOC_REV_BY_ID_DEFAULT_STATE, action: DocumentTypeByIdAction): DocRevByIdState => {
+const docRevTypeId = (
+  state: DocRevByIdState = DOC_REV_BY_ID_DEFAULT_STATE,
+  action: DocumentTypeByIdAction
+): DocRevByIdState => {
   switch (action.type) {
     case DOCUMENT_TYPE_BY_ID:
       return { ...action.payload };
@@ -53,7 +56,7 @@ export const docRevTypeId = (state: DocRevByIdState = DOC_REV_BY_ID_DEFAULT_STAT
   }
 };
 
-export const docTypesByCategory = (
+const docTypesByCategory = (
   state: DocumentTypeByCategoryState = [],
   action: DocumentTypeByCategoryAction,
 ): DocumentTypeByCategoryState => {

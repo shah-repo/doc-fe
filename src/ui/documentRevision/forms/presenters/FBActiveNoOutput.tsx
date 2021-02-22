@@ -24,7 +24,7 @@ interface Props {
   outputDocs: OptionType[];
 }
 
-export const styles = makeStyles((theme: Theme) =>
+const styles = makeStyles((theme: Theme) =>
   createStyles({
     outputGrey: {
       color: `${theme.palette.text.disabled}`,

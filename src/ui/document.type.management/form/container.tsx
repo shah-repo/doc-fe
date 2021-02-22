@@ -12,7 +12,7 @@ interface Props {
   documentType: DocumentType;
 }
 
-export const DocumentTypeFormContainer: React.FunctionComponent<Props> = ({
+const DocumentTypeFormContainer: React.FunctionComponent<Props> = ({
   documentType,
 }) => {
   const dispatch = useDispatch();

@@ -17,7 +17,7 @@ interface Props {
   handleCloseMenu: () => void;
 }
 
-export const UserMenuPresenter: React.FunctionComponent<Props> = ({
+const UserMenuPresenter: React.FunctionComponent<Props> = ({
   location,
   anchorEl,
   handleCloseMenu,

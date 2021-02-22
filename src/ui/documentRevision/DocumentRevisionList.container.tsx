@@ -18,10 +18,10 @@ interface OwnProps {
   isRecord: boolean;
 }
 
-export type DocumentRevisionListContainerProps = OwnProps;
+type DocumentRevisionListContainerProps = OwnProps;
 
 // used by the document revision manager container
-export const DocumentRevisionListContainer: React.FunctionComponent<
+const DocumentRevisionListContainer: React.FunctionComponent<
 DocumentRevisionListContainerProps
 > = ({
   documentRevisions,

@@ -14,9 +14,9 @@ import { ListOwnProps } from "../utils/types";
 import ListPresenter from "./presenter";
 
 type OwnProps = ListOwnProps;
-export type Props = OwnProps;
+type Props = OwnProps;
 
-export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
+const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
   const TABLE_NAME = "documentRevisions";
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));

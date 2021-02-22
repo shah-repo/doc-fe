@@ -19,7 +19,7 @@ TableSearchClearAllAction;
 
 type TableDataActions = TableDataSetAction<any> & EditActiveStatusAction & TableSearchClearAllAction;
 
-export const criteria = (
+const criteria = (
   state: TableSearchByIdState = {},
   action: TableSearchActions,
 ): TableSearchByIdState => {
@@ -58,7 +58,7 @@ export const criteria = (
   }
 };
 
-export const data = (
+const data = (
   state: TableSearchDataState = {},
   action: TableDataActions,
 ): TableSearchDataState => {

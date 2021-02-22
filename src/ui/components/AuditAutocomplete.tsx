@@ -12,9 +12,9 @@ interface OwnProps {
   loading?: boolean;
 }
 
-export type Props = OwnProps;
+type Props = OwnProps;
 
-export const AuditAutocomplete: React.FunctionComponent<Props> = ({
+const AuditAutocomplete: React.FunctionComponent<Props> = ({
   audit, loading,
 }) => {
 

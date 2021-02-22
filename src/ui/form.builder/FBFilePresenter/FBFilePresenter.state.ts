@@ -7,7 +7,7 @@ import { VIEWABLE_FILES, WATERMARK_FILES } from "../../components/common/view.fi
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, Attachment> {
+class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, Attachment> {
   @observable public toolsVisible?: boolean;
   public file?: FBAttachment;
   public downloadType?: FBFilePresenterDownloadType;

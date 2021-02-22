@@ -36,7 +36,7 @@ interface RouteParams {
   equipmentSection: string;
 }
 
-export type DocumentRevisionCreateContainerProps =
+type DocumentRevisionCreateContainerProps =
   & StateProps
   & OwnProps
   & DispatchProps
@@ -63,7 +63,7 @@ export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => ({
   operators: [],
 });
 
-export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
+const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
   create,
   history,
   documentRevision,

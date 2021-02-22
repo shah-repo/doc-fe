@@ -3,7 +3,7 @@ import { combineReducers } from "redux";
 import { ALL_PAGE_DETAILS_FETCHED } from "./constants";
 import { PageDetailsAction, PageDetailsState } from "./types";
 
-export const byCategory = (
+const byCategory = (
   state: PageDetailsState = {},
   action: PageDetailsAction,
 ): PageDetailsState => {

@@ -14,7 +14,7 @@ export const DEFAULT_EMPLOYEE = {
   slackUserId: "",
 };
 
-export const DEFAULT_CREDENTIALS = {
+const DEFAULT_CREDENTIALS = {
   credentials: {
     AccessKeyId: "",
     SecretAccessKey: "",

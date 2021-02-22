@@ -30,7 +30,7 @@ const toolbarOptions = [
 
 const inline = { options: ["bold", "italic", "underline", "monospace"] };
 
-export interface RichTextEditorOwnProps extends FieldOwnProps {
+interface RichTextEditorOwnProps extends FieldOwnProps {
   size?: RenderSize;
   customToolbarAction?: () => void;
   actionsRenderer?: () => any;
@@ -39,7 +39,7 @@ export interface RichTextEditorOwnProps extends FieldOwnProps {
   toggleToolbar?: boolean;
 }
 
-export type RichTextEditorPropsWithFormik = RichTextEditorOwnProps & FormikFieldProps;
+type RichTextEditorPropsWithFormik = RichTextEditorOwnProps & FormikFieldProps;
 
 const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = ({
   actionsRenderer,
@@ -156,7 +156,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   );
 };
 
-export type RichTextEditorFieldProps = RichTextEditorOwnProps & FieldConfig;
+type RichTextEditorFieldProps = RichTextEditorOwnProps & FieldConfig;
 
 const RichTextEditorField: React.FunctionComponent<RichTextEditorFieldProps> = (
   props,

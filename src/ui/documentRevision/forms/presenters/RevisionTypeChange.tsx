@@ -22,7 +22,7 @@ interface Props {
   releasedDocRev?: DocumentRevision;
   isAlphaReleased: boolean;
 }
-export const RevisionTypeChange: React.FunctionComponent<Props> = ({
+const RevisionTypeChange: React.FunctionComponent<Props> = ({
   documentTypeId = "",
   isDisabled,
   isDocRevFirstDraft,

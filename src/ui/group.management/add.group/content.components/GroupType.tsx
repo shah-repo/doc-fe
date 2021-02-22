@@ -8,7 +8,7 @@ interface Props {
   setGroup: (values: GroupRequestBody) => void;
 }
 
-export const GroupType: React.FunctionComponent<Props> = ({
+const GroupType: React.FunctionComponent<Props> = ({
   group,
   setGroup,
 }) => {

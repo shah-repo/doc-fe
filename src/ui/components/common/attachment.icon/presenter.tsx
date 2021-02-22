@@ -18,7 +18,7 @@ import { styles } from "./utils/styles";
 import { AttachmentIconProps } from "./utils/types";
 
 
-export const AttachmentIconPresenter: React.FunctionComponent<
+const AttachmentIconPresenter: React.FunctionComponent<
 AttachmentIconProps
 > = ({
   attachment,

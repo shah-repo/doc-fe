@@ -13,7 +13,7 @@ interface Props {
   asyncState: AsyncState;
 }
 
-export const FormHeader: React.FunctionComponent<Props> = ({
+const FormHeader: React.FunctionComponent<Props> = ({
   changeRequest,
   asyncState,
 }) => (

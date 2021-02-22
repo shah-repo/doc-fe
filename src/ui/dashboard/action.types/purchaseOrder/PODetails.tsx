@@ -17,7 +17,7 @@ interface Props {
 }
 
 
-export const styles = makeStyles(() =>
+const styles = makeStyles(() =>
   createStyles({
     hideBorder: {
       "&.MuiExpansionPanel-root:before": {
@@ -27,7 +27,7 @@ export const styles = makeStyles(() =>
   }),
 );
 
-export const PODetails: React.FunctionComponent<Props> = ({
+const PODetails: React.FunctionComponent<Props> = ({
   documentRevision,
   purchaseOrder,
   supplierId,

@@ -4,7 +4,6 @@ import { SelectProps } from "@material-ui/core/Select";
 import { BaseTextFieldProps, OutlinedTextFieldProps } from "@material-ui/core/TextField";
 import { Dictionary } from "lodash";
 import { ReactNode } from "react";
-import { ValueType } from "react-select/src/types";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { SelectOption } from "../../components/forms/fields/Select";
@@ -23,7 +22,7 @@ export interface FBLabelRendererProps {
   labelRenderer?: React.ReactNode;
 }
 
-export interface FBOptionRendererProps {
+interface FBOptionRendererProps {
   optionsRenderer?: React.ReactNode[];
 }
 
@@ -146,12 +145,6 @@ FBOptionRendererProps & {
   row?: boolean;
   applicableOn?: FBValidatorTrigger[];
 };
-
-export type FBOnChangeType =
-  | React.ChangeEvent<HTMLInputElement>
-  | ValueType<SelectOption>
-  | string
-  | Date;
 
 export type FBOnChangeProps = FormikHybridFieldProps &
 Pick<SelectProps, "onChange" | "value"> &

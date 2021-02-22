@@ -16,9 +16,9 @@ interface OwnProps {
   showRemoveButton?: boolean;
 }
 
-export type Props = OwnProps & DataProps<DocumentRevision[]>;
+type Props = OwnProps & DataProps<DocumentRevision[]>;
 
-export const styles = makeStyles((theme) =>
+const styles = makeStyles((theme) =>
   createStyles({
     chip: {
       "border": `1px solid ${Colors.medium_blue}`,
@@ -35,7 +35,7 @@ export const styles = makeStyles((theme) =>
     },
   }));
 
-export const BuildsPresenter: React.FunctionComponent<Props> = ({
+const BuildsPresenter: React.FunctionComponent<Props> = ({
   dataProp,
   label,
   isDraft,

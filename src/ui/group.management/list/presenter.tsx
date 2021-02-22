@@ -12,7 +12,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import AddGroupContainer from "../add.group/AddGroup.container";
 import AddGroup from "../add.group/Group";
-import { GroupsDisplay } from "../display.groups/GroupsDisplay";
+import GroupsDisplay from "../display.groups/GroupsDisplay";
 import { styles } from "./styles";
 
 interface Props {
@@ -27,7 +27,7 @@ interface Props {
   canCreateGroups: boolean;
 }
 
-export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
+const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
   tableName,
   tableData,
   clearFilter,

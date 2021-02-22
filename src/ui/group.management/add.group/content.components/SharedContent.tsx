@@ -23,7 +23,7 @@ interface Props {
   hasOfficialPermission: boolean;
 }
 
-export const SharedContent: React.FunctionComponent<Props> = ({
+const SharedContent: React.FunctionComponent<Props> = ({
   employees,
   members,
   setMembers,

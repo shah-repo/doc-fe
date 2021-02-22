@@ -26,7 +26,7 @@ interface Props {
   isRecord: boolean;
 }
 
-export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
+const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   documentRevision,
   documentId,
   selectedDocumentRevision,

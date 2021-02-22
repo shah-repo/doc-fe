@@ -1,6 +1,6 @@
 import { action, observable } from "mobx";
 
-export class FBApprovalAuditStore {
+class FBApprovalAuditStore {
   @observable public data = new Map<string, any>();
   @observable public loading = new Map<string, boolean>();
 

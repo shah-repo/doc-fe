@@ -8,7 +8,7 @@ import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FBDialogState } from "../FBDialog";
 
-export type FBPOApprovalMatrixBasicProps = Pick<FBInputProps, "name" | "disabled" | "label" | "autosave" | "isInputOwner">;
+type FBPOApprovalMatrixBasicProps = Pick<FBInputProps, "name" | "disabled" | "label" | "autosave" | "isInputOwner">;
 
 export type FBPOApprovalMatrixFieldProps =
 & FBPOApprovalMatrixBasicProps

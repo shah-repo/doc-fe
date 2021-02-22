@@ -10,7 +10,7 @@ import { getUrlandActions } from "./helpers";
 import { RequestType } from "./helpers/types";
 import OwnerChangerPresenter from "./presenter";
 
-export interface OwnProps {
+interface OwnProps {
   requestId: string;
   requestType: RequestType;
 }

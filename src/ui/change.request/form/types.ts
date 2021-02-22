@@ -6,16 +6,6 @@ import { FBSchemaProps } from "../../form.builder";
 
 export type Attachment = AttachmentInterface;
 
-export interface FileUploadFormValues {
-  file?: File;
-}
-
-export interface Justifications {
-  id?: string;
-  description?: string;
-  attachments: Attachment[];
-}
-
 export interface ImplementationPlanTaskFormValues {
   id?: string;
   title: string;
@@ -23,11 +13,6 @@ export interface ImplementationPlanTaskFormValues {
   dueDate?: Date;
   assigned?: OptionType;
   status: string;
-}
-
-export interface ImplementationPlanFormValues {
-  attachments: Attachment[];
-  tasks: ImplementationPlanTaskFormValues[];
 }
 
 export interface ChangeRequestFormValues {
