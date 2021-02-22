@@ -252,7 +252,7 @@ context("Document Approval Matrix Flow", () => {
     });
   });
 
-  context("fills in Title and Description", () => {
+  context("Fills in Title and Description", () => {
     it(`type a title: ${DAMTitle}`, () => {
       cy.drEnterDocumentTitle({ name: `${DAMTitle}{enter}` });
     });
@@ -436,6 +436,13 @@ context("Document Approval Matrix Flow", () => {
         cy.drClickTrainingRequired();
       });
       cy.drIsTrainingRequired({ shouldBe: false });
+      cy.wait(3000);
+    });
+
+    it("Reload DAM document", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApprovers, CyRoutes.EmployeesGet], () => {
+        cy.reload();
+      });
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
@@ -678,7 +685,13 @@ context("Document Approval Matrix Flow", () => {
   context("Save document, Check Group Role is enforced and Release Document", () => {
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(8000);
+      cy.wait(3000);
+    });
+
+    it("Reload DAM document", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApprovers, CyRoutes.EmployeesGet], () => {
+        cy.reload();
+      });
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {

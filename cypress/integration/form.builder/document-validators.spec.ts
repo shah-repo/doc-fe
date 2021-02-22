@@ -25,7 +25,6 @@ const requiredIfFieldSelector = `${requiredIfFieldLabel.toLowerCase().split(" ")
 const requiredIfFieldValue = "Alex";
 
 const requiredIfInFieldLabel = "Required doctypes";
-const requiredIfInFieldSelector = `${requiredIfInFieldLabel.toLowerCase().split(" ").join("-")}-`;// "country-";
 
 const requiredWithFieldLabel = "State";
 const requiredWithFieldSelector = `${requiredWithFieldLabel.toLowerCase().split(" ").join("-")}-`;
@@ -231,7 +230,6 @@ context("Validators tests", () => {
   });
 
   context("Tries to submit partially filled in form", () => {
-
     it("Click on 'Save' button", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
@@ -240,7 +238,6 @@ context("Validators tests", () => {
       cy.get("[data-cy=\"field-outputDocumentTypes\"] .MuiFormHelperText-root.Mui-error")
         .should("have.text", "At least one input required");
     });
-
   });
 
   context("Adds Output Document Type and revision Stage", () => {
@@ -390,43 +387,6 @@ field text equals '${requiredIfFieldValue}': Add text field`, () => {
 
   });
 
-  //   context("Add 'Required If In' validation on 'Text Field'", () => {
-
-  //     it("open add field dialogue", () => {
-  //       cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
-  //     });
-
-  //     it("create 'Text Field'", () => {
-  //       cy.fbSelectTextField();
-  //     });
-
-  //     it(`give label to 'Text Field' as '${requiredIfInFieldLabel}'`, () => {
-  //       cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(requiredIfInFieldLabel);
-  //     });
-
-  //     it("open validations", () => {
-  //       cy.fbOpenValidation();
-  //     });
-
-  //     it("Mark as 'Required If In'", () => {
-  //       cy.get("[data-cy=\"fb-control-required_if_in:anotherfield,[value]\"]").click();
-  //     });
-
-  //     it(`select '${requiredIfFieldLabel}' field`, () => {
-  //       cy.get("[data-cy=\"validators.required_if_in.name\"]").type(`${requiredIfFieldLabel}{downarrow}{enter}`);
-  //     });
-
-  //     it(`type value as '${requiredIfInFieldValues}'`, () => {
-  //       cy.get("[data-cy=\"validators.required_if_in.value\"]").type(requiredIfInFieldValues);
-  //     });
-
-  //     it(`Make '${requiredIfInFieldLabel}' field required, if '${requiredIfFieldLabel}'
-  // field text includes '${requiredIfInFieldValues.split(",").join(" or ")}': Add text field`, () => {
-  //       cy.fbAddField();
-  //     });
-
-  //   });
-
   context("Add 'Required With' validation on 'Text Field'", () => {
     it("Open add field dialogue", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
@@ -481,8 +441,8 @@ field is not empty': Add text field`, () => {
     });
 
     it(`Select '${requiredWithFieldLabel}' field`, () => {
-      cy.get("[data-cy=\"validators.required_without.name\"]")
-        .type("{downarrow}{downarrow}{downarrow}{downarrow}{enter}");
+      cy.get("[data-cy=\"validators.required_without.name\"]").click();
+      cy.get("ul[role=listbox]>li").contains(requiredWithFieldLabel).click();
     });
 
     it(`Make '${requiredWithoutFieldLabel}' field required, if '${requiredWithFieldLabel}' 
@@ -637,7 +597,7 @@ field is empty: Add text field`, () => {
       cy.checkToastMessageContains({
         message: "The Order is a required field." +
         ",The Name is a required field." +
-        ",The Address field is required when Last Name is empty.,No document selected,No document selected",
+        ",The Address field is required when State is empty.,No document selected,No document selected",
       });
     });
 

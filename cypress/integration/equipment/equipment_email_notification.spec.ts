@@ -932,6 +932,7 @@ context("Test Equipment maintenance email notifications", () => {
 
       it("Select document 'Yes' for preventative maintenance required", () => {
         cy.get("[value=\"Yes\"]").eq(0).click();
+        cy.wait(500);
       });
 
       it("Select 'Maintenance record form' for preventative maintenance required", () => {

@@ -40,7 +40,7 @@ context("Document Field Owners Test", () => {
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
-            users: [USERS[2], USERS[3], USERS[4], USERS[6]],
+            users: [USERS[2], USERS[3], USERS[4], USERS[7]],
             documentTypes: [
               {
                 documentTypeName: "Form Operators",
@@ -330,8 +330,8 @@ context("Document Field Owners Test", () => {
       cy.get("[name^='new-text-field-for']").should("be.be.disabled");
     });
 
-    it(`Change owner to '${USERS[6].name}'`, () => {
-      cy.drChangeOwnerFromMenu({ employee: USERS[6].name });
+    it(`Change owner to '${USERS[7].name}'`, () => {
+      cy.drChangeOwnerFromMenu({ employee: USERS[7].name });
     });
 
     it(`Logout as current user`, () => {
@@ -342,7 +342,7 @@ context("Document Field Owners Test", () => {
   context("Check fields are disabled for user that is not field owner with new document owner", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[6].email,
+        email: USERS[7].email,
         password: "Tester1!",
       });
     });
