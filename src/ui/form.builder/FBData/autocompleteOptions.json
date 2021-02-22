@@ -265,5 +265,14 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": ""
+  },
+  {
+    "id": "30",
+    "path": "/public/configs/parts_units.json",
+    "label": "Unit Measures",
+    "valueKey": "value",
+    "labelKey": "text",
+    "root": "",
+    "publicApi": true
   }
 ]

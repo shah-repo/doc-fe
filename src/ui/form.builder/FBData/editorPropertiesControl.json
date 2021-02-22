@@ -262,5 +262,12 @@
     "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue"
+  ],
+  "unitMeasures": [
+    "reviseDisabled",
+    "includeInInspection",
+    "includeInFaiInspection",
+    "deleteDisabled",
+    "copyableValue"
   ]
 }
