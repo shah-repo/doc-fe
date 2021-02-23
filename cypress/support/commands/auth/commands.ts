@@ -46,6 +46,7 @@ Cypress.Commands.add("authLogin", (params: { email: string; password: string }) 
   cy.wrapWithWaitOnApiCall(CyRoutes.PreventIdleLogout, () => {
     cy.visit(`${CONFIG.FE_URL}/login`, { timeout: 50000 });
   });
+  cy.wait(500);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.Login, () => {
       cy.get("[data-cy=\"LoginFormPresenter-email\"]").type(params.email)
