@@ -1,7 +1,7 @@
 import { FBDialogState, FBFormProps, FBSchemaProps, FBSnackbarState, FBWorkspaceState } from "..";
 import { UserGroupsState, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { Company } from "../../../state/ducks/company";
+import { AutosaveState, Company } from "../../../state/ducks/company";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 
 export type FBWorkspaceMode =
@@ -34,6 +34,7 @@ export interface FBWorkspaceExternalState {
   company?: {
     selectedCompany: Company;
     companyMine: Company;
+    autosaveConfig: AutosaveState;
   };
   auth?: {
     user: UserState;

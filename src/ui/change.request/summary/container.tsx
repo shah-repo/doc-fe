@@ -9,6 +9,7 @@ import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
+import { companySelectors } from "../../../state/ducks/company";
 import { FormContext } from "../../components/forms/FormContext";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
 import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
@@ -47,6 +48,7 @@ export const Container: React.FunctionComponent<Props> = ({
   useDocumentTitle(dataProp.crId);
   const intl = useIntl();
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+  const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
   const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const hasOwnershipTag = useGetHasTag(GroupTag.OWNERSHIP_CHANGE);
 
@@ -100,7 +102,7 @@ export const Container: React.FunctionComponent<Props> = ({
       portalContainer={FBContainer}
       initialValues={dataProp.formInput}
       changeRequest={dataProp}
-      autosave={true}
+      autosave={autosaveEnabled}
       schema={schema}
       mode={"preview"}
     >

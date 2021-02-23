@@ -4,7 +4,9 @@ import { first, get, includes, isArray, isBoolean, isEqual, isString, isUndefine
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
+import { useSelector } from "react-redux";
 import { FBOption } from "..";
+import { companySelectors } from "../../../state/ducks/company";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
@@ -64,6 +66,7 @@ export const withFBInput = <T extends FBInputProps>(
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
     isInputOwner = workspaceState?.getIsInputOwner(name);
+    const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
 
     // Set validation scheme. This is union of scheme & comps configs.
     useEffect(() => {
@@ -123,6 +126,7 @@ export const withFBInput = <T extends FBInputProps>(
     const child = first(React.Children.toArray(children));
     const isClone = !includes(OmitInputClones, type) && !isUndefined(child) && !hidden;
     disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) && !isInputOwner) || disabled;
+    autosave = autosaveEnabled;
 
     if (isClone) {
       children = cloneElement(child as React.ReactElement, {
@@ -130,6 +134,7 @@ export const withFBInput = <T extends FBInputProps>(
         disabled,
         onChange,
         onBlur,
+        autosave,
         ...(withState && type !== "autocomplete" && { value }),
         ...(type === "textfield" && { error }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),

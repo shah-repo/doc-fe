@@ -4,6 +4,7 @@ import { cloneDeep, filter, isEmpty } from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
+import { companySelectors } from "../../../state/ducks/company";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
@@ -83,6 +84,7 @@ DocumentRevisionFormContainerProps
   let document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, initialValues.document?.id || ""));
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+  const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
 
   const availableReferences = useGetAvailableReferences(initialValues);
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
@@ -184,7 +186,7 @@ DocumentRevisionFormContainerProps
         ...documentRevision as unknown as DocumentRevision,
       }}
       initialValues={formInput}
-      autosave={true}
+      autosave={autosaveEnabled}
       schema={originScheme}
       {...{ mode }}
     >

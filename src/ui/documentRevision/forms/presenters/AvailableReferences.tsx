@@ -10,6 +10,7 @@ import { DocumentRevision, documentRevisionsSelectors, Reference } from "../../.
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentRevisionsByIdState } from "../../../../state/ducks/documentRevisions/types";
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
+import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
 import { FB } from "../../../form.builder";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
@@ -41,8 +42,10 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   documentGroupOptions,
   ...fieldProps
 }) => {
+  const { submitForm } = useFormContext();
   const { workspaceState } = FB.useStores();
   const [value, setValue] = useState<any[]>([]);
+
   const onChange = (e, value) => {
     const {
       form: { setFieldValue, setFieldTouched, touched },
@@ -55,6 +58,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     setValue(value);
     if (!workspaceState) { return; }
     workspaceState.referenceValue = map(value, (obj) => ({ id: obj.value }));
+    submitForm();
   };
 
   const docRevsById = useSelector(documentRevisionsSelectors.byId);
