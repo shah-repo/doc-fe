@@ -5,6 +5,7 @@ import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
 import { FB, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState } from "..";
 import { store } from "../../../state/store";
+import { checkIsDocumentEB } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBDialogState } from "../FBDialog";
 
 // Disable missing translation message for the non translation cases.
@@ -50,12 +51,12 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
     workspaceState && (workspaceState.document = document);
-    const { group: formGroup } = document?.document?.documentType || {};
+    const { groupOptions: formGroupOptions } = document?.document?.documentType || {};
     // We should include document type in FB
     // We can't ignore that FB is not standalone package anymore
     const { parent } = document || {};
     includeProcedureDiff = (
-      formGroup === "ENGINEERING_BUILD" &&
+      checkIsDocumentEB(formGroupOptions) &&
       Boolean(parent)
     );
 

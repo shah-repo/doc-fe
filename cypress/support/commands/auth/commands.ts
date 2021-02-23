@@ -50,9 +50,32 @@ Cypress.Commands.add("authLogin", (params: { email: string; password: string }) 
     CyRoutes.Login, () => {
       cy.get("[data-cy=\"LoginFormPresenter-email\"]").type(params.email)
         .get("[data-cy=\"LoginFormPresenter-password\"]").type(params.password)
+        .wait(300)
         .get("[data-cy=\"LoginFormPresenter-submit\"]").click();
     });
   cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.overwrite("click", (originalFn, subject, options) => {
+
+  const currentCommand = cy.state("current").attributes.name;
+
+  if (currentCommand === "click") {
+    cy.wrap(subject).arrow({ duration: 1000, blocking: true }).then(() => originalFn(subject, options));
+  } else {
+    return originalFn(subject, options);
+  }
+});
+
+Cypress.Commands.overwrite("type", (originalFn, subject, options) => {
+
+  const currentCommand = cy.state("current").attributes.name;
+
+  if (currentCommand === "type") {
+    cy.wrap(subject).arrow({ duration: 1000, blocking: true }).then(() => originalFn(subject, options));
+  } else {
+    return originalFn(subject, options);
+  }
 });
 
 Cypress.Commands.add("authEnterEmail", (params: { value: string }) => {

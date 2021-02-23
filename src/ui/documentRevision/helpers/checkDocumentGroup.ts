@@ -23,6 +23,7 @@ export const checkIsDocumentDAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_
 export const checkIsDocumentPOAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.POAM);
 export const checkIsDocumentEquipment = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EQUIPMENT);
 export const checkIsDocumentReceivable = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.RECEIVABLE);
+export const checkIsDynamicForm = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DYNAMIC_FORM);
 
 export const checkIsTypeHaveOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.HAVE_OUTPUT);
 export const checkIsTypeMustBeOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT);
