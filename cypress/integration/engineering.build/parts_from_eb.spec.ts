@@ -51,13 +51,7 @@ context("Parts from EB flow test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -147,6 +141,7 @@ context("Parts from EB flow test", () => {
                 effectiveDate: (new Date()).toISOString(),
                 documentType: { id: approvalRequestDocumentType[0].id },
                 formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: secondEmployee.id } }],
               },
               employeeId: secondEmployee.id,
               sessionId: loginResponse.sessionId,
@@ -365,7 +360,9 @@ context("Parts from EB flow test", () => {
 
     context("Add a new part via EB", () => {
       it("Open Create a New Part dialog", () => {
-        cy.get("[data-cy=\"form.builder.create.new.part\"]").click();
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+          cy.get("[data-cy=\"form.builder.create.new.part\"]").click();
+        });
       });
 
       context("Fill in the required attributes and create the part", () => {
@@ -378,13 +375,13 @@ context("Parts from EB flow test", () => {
         });
 
         it("Choose a document type", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetProposedDocId, () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetProposedDocId, CyRoutes.GetSpecificDocumentType], () => {
             cy.ebChoosePartType({ partName: PART_DOCUMENT_TYPE_NAME });
           });
         });
 
         it("Create the part", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.PostDocRev, () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev, CyRoutes.PatchDocRev], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });

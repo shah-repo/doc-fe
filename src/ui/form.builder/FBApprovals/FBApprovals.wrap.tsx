@@ -1,11 +1,12 @@
 import { Box } from "@material-ui/core";
-import { compact, difference, filter, find, isEmpty, isUndefined, map, unionBy } from "lodash";
+import { compact, difference, filter, find, isEmpty, isUndefined, map, unionBy, uniq } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBRequiredApprover } from "..";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentStatus } from "../../../state/ducks/documents";
 import { store } from "../../../state/store";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
 import { FBApprovalsProps, FBApprovalsStatusEndpoint } from "./FBApprovals.types";
@@ -26,9 +27,12 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     groups,
     renderOption,
     isIncluded,
+    isContributorIncluded,
     currentUser,
     ownerId,
     dialogState,
+    showFieldOwnersWarning,
+    owners,
     ...props
   }: T) => {
     let isComponentVisible = false;
@@ -39,7 +43,16 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       document,
       changeRequest,
       id,
+      externalState: { company: { companyMine: { employees = [] } = {} } = {} } = {},
     } = workspaceState || {};
+    const {
+      inputOwners = [],
+    } = document || {};
+    const ownerIds = uniq(Object.values(inputOwners as unknown as string));
+    owners = employees.filter((e) => ownerIds.includes(e.id)).map((owner) => ({
+      name: `${owner?.user?.name} (${owner?.user?.email})`,
+      id: owner.id,
+    }));
 
     const {
       owner: { user: { id: userId = "" } = {} } = {},
@@ -143,6 +156,11 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       group.joinedEmployees.some((employee) =>
         approvals?.map((approval) => approval.approver?.id).includes(employee));
 
+
+    isContributorIncluded = (id: string): boolean => {
+      const values = formState?.inputState.get("fb-approvals-" + name)?.value;
+      return values?.includes(id);
+    };
     // eslint-disable-next-line react/display-name
     renderOption = (option: FBApprover) => {
       const requiredGroups: string [] =
@@ -185,6 +203,12 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     const fieldValue = map(approvalsState?.getApprovals, "approver.id");
     formState?.setFieldValue(`fb-approvals-${name}`, fieldValue);
 
+    // TODO: check what is going on with the types,
+    // had to add any, DocumentStatus and DocumentRevisionStatus are not the same
+    documentStatus = document?.status as any;
+    showFieldOwnersWarning = !isEmpty(owners) && documentStatus !== DocumentStatus.Released;
+
+
     if (!isComponentVisible) {
       return null;
     }
@@ -197,7 +221,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       name,
       loading,
       disabled,
-      documentStatus: document?.status,
+      documentStatus,
       docId: id,
       approvalTransition,
       groups,
@@ -208,6 +232,9 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       inlineApprovalExists,
       onApproveClick,
       isAlphaReleased,
+      owners,
+      showFieldOwnersWarning,
+      isContributorIncluded,
     });
   };
 

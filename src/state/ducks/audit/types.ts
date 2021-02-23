@@ -13,6 +13,7 @@ export interface Audit {
   id: string;
   field: string;
   type: AuditTypes;
+  approvalStatus?: string;
   nextValue:
   | string
   | User

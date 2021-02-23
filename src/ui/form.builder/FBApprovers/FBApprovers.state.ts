@@ -8,6 +8,7 @@ export class FBApproversState extends FBRequest<FBRequiredApprover[], FBApprover
 
   @observable public groups?: Record<string, FBRequiredApprover> = {};
   @observable public value?: string[];
+  @observable public checkedGroups?: FBRequiredApprover[];
   public url = FBEndpoint.RequiredApprovers;
 
   public constructor({ documentRevisions, formValue }: FBApproversConstructor) {
@@ -38,6 +39,8 @@ export class FBApproversState extends FBRequest<FBRequiredApprover[], FBApprover
 
   @action setValue = (value: string[]) =>
     set(this, "value", value);
+
+  @action setCheckedGroups = (groups: FBRequiredApprover[]) => set(this, "checkedGroups", groups);
 }
 
 export default FBApproversState;

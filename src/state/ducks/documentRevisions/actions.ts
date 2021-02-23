@@ -84,6 +84,19 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
   // sendNoResponseHeader: true,
 });
 
+const ownerChange = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
+ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/owner_change`,
+  method: "patch",
+  data: body,
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(loadAudit(id));
+    dispatch(documentRevisionSet(documentRevision));
+  },
+  handlers,
+  cancelToken: axios.CancelToken.source(),
+});
+
 const create = (body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
 ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
   url: DOCUMENT_REVISION_ROOT_URL,
@@ -371,4 +384,5 @@ export default {
   fetchAvailableForms,
   createFaiInspection,
   removePreviousBuild,
+  ownerChange,
 };

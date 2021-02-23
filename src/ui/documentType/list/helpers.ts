@@ -122,7 +122,7 @@ export const getStaticColumns = (
     key: "status",
     label: "common.state",
     columnOptions: {
-      cellDataGetter: ({ rowData }) => (rowData.displayStatus).toUpperCase(),
+      cellDataGetter: ({ rowData }) => (rowData.displayStatus)?.toUpperCase(),
       width: 160,
     },
     cellType: (rowData) => (canEdit(rowData) ? "LINK" : "BASE"),

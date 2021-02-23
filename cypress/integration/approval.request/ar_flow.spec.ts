@@ -11,7 +11,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 let secondEmployee;
-let componentSpecificationDocumentType;
+let clinicalProtocolDocumentType;
 let group;
 const documentRevisionName = "New document for testing AR";
 const approvalRequestTitle = "Approval request from newly created form";
@@ -31,13 +31,7 @@ context("Approval request form", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
@@ -53,7 +47,7 @@ context("Approval request form", () => {
         }).then((response) => {
           createdCompany = response;
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
+          clinicalProtocolDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           done();
         });
       });
@@ -84,7 +78,7 @@ context("Approval request form", () => {
             document: {
               docId: "CP-00004",
               documentType: {
-                id: componentSpecificationDocumentType[0].id,
+                id: clinicalProtocolDocumentType[0].id,
               },
               securityList: {
                 operators: [],
@@ -125,7 +119,7 @@ context("Approval request form", () => {
             document: {
               docId: "CP-00005",
               documentType: {
-                id: componentSpecificationDocumentType[0].id,
+                id: clinicalProtocolDocumentType[0].id,
               },
               securityList: {
                 operators: [],
@@ -234,13 +228,19 @@ context("Approval request form", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Add first approver to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
-    });
+    // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
 
     it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
       cy.arClickCreateApprovalRequestAfterCompletingForm();
+    });
+
+    it("Add approvers to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+    });
+
+    it("Save changes", () => {
+      cy.arSaveApiCall();
     });
 
     it("Click 'Send To Review'", () => {
@@ -305,6 +305,7 @@ context("Approval request form", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
+      cy.alClearFilters();
       cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Approved" });
     });
 

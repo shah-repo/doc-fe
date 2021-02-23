@@ -2,9 +2,7 @@ import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, siz
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
-import { FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType } from "..";
-import { FBActionField } from "../FBActionField";
-import { FBApproval } from "../FBApproval";
+import { FBActionField, FBApproval, FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType } from "..";
 import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
 import { FBApprovals } from "../FBApprovals";
 import { FBApprovers } from "../FBApprovers";
@@ -32,15 +30,16 @@ import { FBQuantityField } from "../FBQuantityField";
 import { FBRadio } from "../FBRadio";
 import { FBRadioGroup } from "../FBRadioGroup";
 import { FBRequestApproval } from "../FBRequestApproval";
-import { FBSchemaSelect } from "../FBSchemaSelect";
+import FBSchemaSelect from "../FBSchemaSelect/FBSchemaSelect";
 import { FBSection } from "../FBSection";
 import { FBSelect } from "../FBSelect";
 import { FBSelectDocument } from "../FBSelectDocument";
 import { FBSelectRequirement } from "../FBSelectRequirement";
 import { FBSubsection } from "../FBSubsection";
+import FBSupplier from "../FBSupplier/FBSupplier";
 import { FBTask } from "../FBTask";
 import { FBTestRequirement } from "../FBTestRequirement";
-import { FBTextEditor } from "../FBTextEditor";
+import FBTextEditor from "../FBTextEditor/FBTextEditor";
 import { FBTextField } from "../FBTextField";
 import { FBTextFieldWithRange } from "../FBTextFieldWithRange";
 import { FBTimerField } from "../FBTimerField";
@@ -107,6 +106,7 @@ export class FBSchemaState {
     ebpart: FBEBPart,
     eqmaintenance: FBEQMaintenance,
     textfieldwithrange: FBTextFieldWithRange,
+    supplier: FBSupplier,
   };
 
   @observable public schema?: FBSchemaProps[];
@@ -172,6 +172,7 @@ export class FBSchemaState {
       return;
     }
     this.updateSchemaItem(schemaItem, schemaItemIndex);
+    this.setValidationSchemaItem(schemaItem);
   };
 
   @action public setSchemaItemAt = (schemaItem: FBSchemaProps | FBInputProps, index = 0) => {
@@ -182,12 +183,14 @@ export class FBSchemaState {
     const newSchema = this.schema?.slice(0) || [];
     newSchema?.splice(index, 0, schemaItem);
     this.setSchema(newSchema);
+    this.setValidationSchemaItem(schemaItem);
   };
 
   @action public updateSchemaItem = (schemaItem: FBSchemaProps, at: number) => {
     const newSchema = [...this.getSchema()];
     newSchema[at] = schemaItem;
     this.setSchema(newSchema);
+    this.setValidationSchemaItem(schemaItem);
   };
 
   @action public removeSchemaItem = (schemaItem?: FBSchemaProps) => {
@@ -196,6 +199,8 @@ export class FBSchemaState {
     }
     const schema = filter(this.schema, (item) => item.name !== schemaItem.name);
     this.setSchema(schema);
+    const validationSchema = filter(this.schema, (item) => item.name !== schemaItem.name);
+    this.validationSchema = validationSchema;
   };
 
   @action public removeSchemaItemAt = (index: number | undefined) => {
@@ -211,6 +216,17 @@ export class FBSchemaState {
     return filter(this.getSchema(), (item) =>
       !item.deleted && item.type === type
     );
+  };
+
+  public getNamesByType = (type?: FBInputType): string[] => {
+    if (!type) { return []; }
+    return this.getSchema().reduce((names: string[], item) => {
+      if (item.deleted || item.type !== type) { return names; }
+      if (item.name) {
+        names.push(item.name);
+      }
+      return names;
+    }, []);
   };
 }
 

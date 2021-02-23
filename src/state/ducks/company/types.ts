@@ -44,9 +44,10 @@ export interface Company {
   helloSignAppId: string;
   helloSignIntegrationEnabled: boolean;
   teamId: string;
-  addresses: [];
-  acctCodes: [];
+  addresses: string[];
+  acctCodes: string[];
   navigation: NavigationItem[];
+  employees?: Employee[];
 }
 
 export interface SelectCompanyAction {

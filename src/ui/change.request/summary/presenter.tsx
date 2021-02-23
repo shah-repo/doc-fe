@@ -9,6 +9,7 @@ import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
+import { FB } from "../../form.builder";
 import { ChangeRequestFormValues } from "../form/types";
 import Approvers from "./approvers";
 import SummaryHeader from "./SummaryHeader";
@@ -33,9 +34,9 @@ interface OwnProps extends DataProps<ChangeRequest> {
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
-export type Props = OwnProps & FormikProps<ChangeRequestFormValues>;
+type Props = OwnProps & FormikProps<ChangeRequestFormValues>;
 
-export const Presenter: React.FunctionComponent<Props> = ({
+const Presenter: React.FunctionComponent<Props> = ({
   dataProp,
   asyncState,
   canEdit,
@@ -44,6 +45,13 @@ export const Presenter: React.FunctionComponent<Props> = ({
   FBContainer,
 }) => {
   const classes = styles();
+
+  const { formState } = FB.useStores();
+
+  // fix for Approvers not changing in AR in review state
+  if (formState?.getValues()) {
+    dataProp.formInput = formState?.getValues();
+  }
 
   return (
     <Box>

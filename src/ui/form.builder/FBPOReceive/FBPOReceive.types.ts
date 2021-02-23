@@ -6,7 +6,7 @@ export enum FBPOReceiveImportance {
   other = 2
 }
 export type FBPOReceiveProps =
-& Pick<FBInputProps, "name" | "index" | "label" | "onChange" | "disabled">
+& Pick<FBInputProps, "name" | "index" | "label" | "onChange" | "disabled" | "defaultValue" | "gutter">
 & Pick<FBFormProps, "initialValues">
 & Pick<FBAutocompleteProps, "getOptionLabel">
 & {

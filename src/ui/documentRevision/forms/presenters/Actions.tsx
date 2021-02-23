@@ -13,7 +13,7 @@ import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
 import { checkCanBeCopied, checkIsDocumentRecord, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
-import { isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
+import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
 import InspectionControlsContainer from "../../InspectionControls/InspectionControls.container";
 import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.presenter";
@@ -39,6 +39,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const { workspaceState, formState } = FB.useStores();
 
+  // MARK: @helpers
   const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
   const serializedCSV = hasSerializedCSV(values.document?.documentType?.groupOptions);
@@ -47,6 +48,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     formState,
     documentRevision?.formDocument?.formTemplate?.schema
   );
+  const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
 
   const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
   const formik = useFormikContext();
@@ -191,6 +193,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           formDocumentStatus={documentRevision?.formDocument?.status}
           setShouldDisplay={props.setUpgradeToLastestDisplay}
           type="button"
+          {...{
+            shouldShowUpgradeBannerForRecord,
+          }}
         />
         {!(isRecord && isInlineApproval) &&
           isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}

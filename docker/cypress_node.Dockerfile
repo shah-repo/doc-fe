@@ -5,6 +5,7 @@ WORKDIR /opt/app
 
 COPY package*.json ./
 COPY yarn*.lock ./
+COPY patches /opt/app/patches
 RUN yarn install --frozen-lockfile
 
 COPY src /opt/app/src

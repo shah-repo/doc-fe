@@ -32,6 +32,10 @@ interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   selectedInvalid: boolean;
   isRecord: boolean;
   isInlineApproval: boolean;
+  isDocumentPO: boolean;
+  checkedGroups: Group[];
+  initialGroups: Group[];
+  setCheckedGroups(groups: Group[]): void;
   setFormDocument: (value: string) => void;
   setDocumentType: (value: string) => void;
   setSelectedInvalid: (value: boolean) => void;
@@ -52,9 +56,30 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   selectedInvalid,
   isRecord,
   isInlineApproval,
+  isDocumentPO,
+  checkedGroups,
+  setCheckedGroups,
+  initialGroups,
 }) => {
+
+  // MARK: @selectors
+
+  // MARK: @state
+
+  // MARK: @config
+
+  // MARK: @styles
   const classes = styles();
 
+  // MARK: @actions
+
+  // MARK: @async
+
+  // MARK: @effects
+
+  // MARK: @helpers
+
+  // MARK: @methods
   const validateSelectedForm = (option: any) => {
     const { schema } = option || {};
     if (!schema) { return; }
@@ -111,25 +136,29 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
     });
   };
 
-
   if (templateOptions.length === 1) {
     setFormDocument(templateOptions[0].value);
     setDocumentType(templateOptions[0].docTypeId);
     validateSelectedForm(templateOptions[0]);
   }
 
+  // MARK: @render
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
       {isQms && (
         <Approvers
-          withoutCurrentUser={true}
+          withoutCurrentUser
           shouldShowDAMCheck={!isInlineApproval || !isRecord}
           {
             ...{
               owner,
               values,
               documentTypeGroups,
+              isDocumentPO,
+              checkedGroups,
+              setCheckedGroups,
+              initialGroups,
             }
           }
         />

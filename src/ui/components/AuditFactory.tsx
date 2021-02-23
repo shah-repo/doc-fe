@@ -1,4 +1,5 @@
 import { Box } from "@material-ui/core";
+import { get, has } from "lodash";
 import React, { Fragment } from "react";
 import { useIntl } from "react-intl";
 import { getFormattedDateString, MomentFormats } from "../../common/utils/date";
@@ -15,6 +16,7 @@ import Text from "../components/Text";
 import { Translation } from "../translations/types";
 import AuditAttachment from "./AuditAttachment";
 import AuditAutocomplete from "./AuditAutocomplete";
+import AuditProcedure from "./AuditProcedure";
 import DialogOpener from "./textDiff/DialogOpener";
 
 interface OwnProps {
@@ -29,7 +31,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
 }) => {
   let returnValue;
   const intl = useIntl();
-  const isFBField = audit.field.includes("formInput");
+  const isFBField = has(audit, "fbSchemaItem");
   const { nextValue, previousValue } = audit;
   const { type = "" } = audit.fbSchemaItem || {};
   let auditValue: any = nextValue;
@@ -46,7 +48,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
     auditValue = intl.formatMessage({ id: "form.builder.other" });
   }
 
-  if (!auditValue || auditValue === "undefined") {
+  if (!auditValue || auditValue === "undefined" || auditValue === "{}") {
     return <Fragment>N/A</Fragment>;
   }
 
@@ -77,6 +79,12 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
         }
         return (<div>{arrayValue.join(", ")}</div>);
       },
+      procedure() {
+        if (audit.field === "fileUploadCandidate") {
+          return <div data-cy={dataCy}>{get(auditValue, "name")}</div>;
+        }
+        return <AuditProcedure {...{ audit, dataCy, auditValue }} />;
+      },
       default() { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };
     returnValue = (fbValue[type] || fbValue.default)();
@@ -100,6 +108,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case "tasks.assigned":
       case "owner":
+      case "operators":
       case "securityEmployees":
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Owner).user.name}</div>);
         break;
@@ -126,11 +135,8 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case "approvals.status":
       case "status":
-        if (audit.nextValue === ApprovalStatus.Abandoned) {
-        /** Temporary solution until BE adds additional info (who was abandoned) to audit.
-         * TODO: should be replaced with abandoned approval's name.
-        */
-          returnValue = "";
+        if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
+          returnValue = (audit.nextValue as Employee).user?.name;
           break;
         }
         returnValue = (

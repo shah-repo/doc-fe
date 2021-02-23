@@ -19,14 +19,19 @@ export enum DOC_TYPE_GROUP {
   WORK_ORDER = "WORK_ORDER",
   SUPPLIER = "SUPPLIER",
   PART = "PART",
+  MATERIAL = "MATERIAL",
   RECEIVABLE = "RECEIVABLE",
   ENGINEERING_BUILD = "ENGINEERING_BUILD",
   EQUIPMENT = "EQUIPMENT",
   MAINTENANCE_RECORD = "MAINTENANCE_RECORD",
-  INSPECTION = "INSPECTION",
   FAI_INSPECTION = "FAI_INSPECTION",
   LOT = "LOT",
+  PART_LOT = "PART_LOT",
+  LHR = "LHR",
+  COMPANY_BOOTSTRAP_RECORD = "COMPANY_BOOTSTRAP_RECORD",
+  SEED_DOCUMENT = "SEED_DOCUMENT",
 }
+
 export type DocumentGroupType = keyof typeof DOC_TYPE_GROUP;
 
 // Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
@@ -56,6 +61,8 @@ export enum DOC_TYPE_GROUP_OPTION {
   CAN_CREATE_INSPECTION = "CAN_CREATE_INSPECTION",
   SERIALIZED_CSV = "SERIALIZED_CSV",
   ENGINEERING_BUILD = "ENGINEERING_BUILD",
+  COMPANY_BOOTSTRAP_ON_RELEASE = "COMPANY_BOOTSTRAP_ON_RELEASE",
+  SEED = "SEED",
 }
 export type DocumentGroupOptionsType = keyof typeof DOC_TYPE_GROUP_OPTION;
 
@@ -63,6 +70,8 @@ export interface PageDetailsColumn {
   label: Translation;
   sourcePath: string;
   valuePath: string;
+  showOnWeb: boolean;
+  showOnAndroid: boolean;
 }
 
 export interface PageDetailsAddNew {
@@ -70,6 +79,7 @@ export interface PageDetailsAddNew {
 }
 
 export interface PageDetails {
+  id: string;
   addNewBtnLabel: string;
   columns: PageDetailsColumn[];
   category: string;

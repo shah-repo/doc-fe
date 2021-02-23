@@ -9,7 +9,7 @@ import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
-import { FBInputProps, OmitInputClones } from "../FBInput";
+import { FBInputProps, FBInputType, OmitInputClones } from "../FBInput";
 import { FB } from "../helpers";
 import { withFBOnChange } from "./FBInput.onchange";
 
@@ -48,10 +48,11 @@ export const withFBInput = <T extends FBInputProps>(
     omitFormValue,
     showErrorMsg = true,
     deleted,
+    isInputOwner,
     ...props
   }: T) => {
 
-    const { formState, workspaceState, bookmarkState } = FB.useStores();
+    const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
     const { isOutput } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
@@ -62,11 +63,12 @@ export const withFBInput = <T extends FBInputProps>(
     value = inputState?.value;
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
+    isInputOwner = workspaceState?.getIsInputOwner(name);
 
     // Set validation scheme. This is union of scheme & comps configs.
     useEffect(() => {
       if (!applicableValidationSchema) { return; }
-      workspaceState?.setValidationSchemaItem({ name, label, type, ...props });
+      schemaState?.setValidationSchemaItem({ name, label, type, ...props });
     }, []);
 
     // TODO: Autocomplete default set as input
@@ -120,6 +122,7 @@ export const withFBInput = <T extends FBInputProps>(
 
     const child = first(React.Children.toArray(children));
     const isClone = !includes(OmitInputClones, type) && !isUndefined(child) && !hidden;
+    disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) && !isInputOwner) || disabled;
 
     if (isClone) {
       children = cloneElement(child as React.ReactElement, {
@@ -127,10 +130,11 @@ export const withFBInput = <T extends FBInputProps>(
         disabled,
         onChange,
         onBlur,
-        ...(type !== "autocomplete" && { value }),
+        ...(withState && type !== "autocomplete" && { value }),
         ...(type === "textfield" && { error }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
-        ...( workspaceState?.mode === "preview" && { className: FBClasses.inputPreview }),
+        ...(workspaceState?.mode === "preview" && { className: FBClasses.inputPreview }),
+        ...(!isInputOwner && { className: FBClasses.nonOwner }),
       });
     }
 
@@ -155,6 +159,15 @@ export const withFBInput = <T extends FBInputProps>(
         () => inputState?.autosaveNextValue,
         (value) => {
           if (autosave && !isEqual(inputState?.autosavePrevValue, value)) {
+            if (type === "poreceive") {
+              submitForm({
+                type: type as FBInputType,
+                name,
+                prevValue: inputState?.autosavePrevValue,
+                nextValue: value,
+              });
+              return;
+            }
             submitForm();
           }
         }
@@ -172,6 +185,7 @@ export const withFBInput = <T extends FBInputProps>(
       onChange,
       onBlur,
       includeContext,
+      isInputOwner,
       validationMode,
       helperText,
       children,

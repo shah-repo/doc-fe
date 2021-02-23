@@ -1,15 +1,18 @@
 import { useFormikContext } from "formik";
-import { isEqual } from "lodash";
+import { filter, isEmpty, isEqual, map } from "lodash";
 import React, { useContext } from "react";
+import { DocumentRevision, ReferenceToEditRequest } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
-import { FB } from "../../form.builder";
+import { FB, FBAutocompleteAsyncOption } from "../../form.builder";
+import FBAutocompleteAsyncStore from "../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { SubmitFormRelation } from "./FormContext.types";
 
 export const FormContext = React.createContext({ submitOnChange: false });
 
 export const useFormContext = () => {
   const context = useContext(FormContext);
   const formik = useFormikContext();
-  const { workspaceState, formState } = FB.useStores();
+  const { workspaceState, formState, schemaState } = FB.useStores();
 
   function isOutputSchema(): boolean {
     const values = formik.values as any;
@@ -44,11 +47,69 @@ export const useFormContext = () => {
         formik.setFieldValue("formTemplate", undefined);
     }
   }
+
+  function setReferences(relation: SubmitFormRelation) {
+    if (!workspaceState) { return; }
+    const { type, name, prevValue, nextValue } = relation;
+    const prevDocument: DocumentRevision | undefined =
+      FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, prevValue);
+    const nextDocument: DocumentRevision | undefined =
+      FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, nextValue);
+    const prevValueId = prevDocument?.document.id;
+    const nextValueId = nextDocument?.document.id;
+    let refValues = workspaceState.referenceValue;
+    if (!prevValueId) {
+      // special case: when prevValue is undefined and there is a value in formInput,
+      // we need to remove it from refereces also,
+      // made according to issues with autosave(caused by this to other fields)
+      const currentPoReference = workspaceState?.document?.formInput?.[name];
+      const refWithoutPrevValue = workspaceState?.document?.referenceTo.filter((e) => {
+        const docRevIds = e.documentRevisions?.map((i) => i.id );
+        if (docRevIds?.includes(currentPoReference)) {
+          return null;
+        }
+        return e;
+      });
+      if (!isEmpty(refWithoutPrevValue)) {
+        refValues = refWithoutPrevValue?.map((e) => ({ id: e.id }))as ReferenceToEditRequest[];
+      }
+      formik.setFieldValue("referenceTo", [...refValues, { id: nextValueId }]);
+      workspaceState.referenceValue = [...refValues, { id: nextValueId! }];
+      return;
+    }
+    const poNames = schemaState?.getNamesByType(type);
+    const values: string[] = [];
+    // Check for other poreceive values
+    map(formState?.getValues(), (id: string, key) => {
+      if (key === name) { return; }
+      if (!poNames?.includes(key)) { return; }
+      const docRev: DocumentRevision | undefined =
+        FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, id);
+      const { document: { id: docId = undefined } = {} } = docRev || {};
+      if (!docId) { return; }
+      values.push(docId);
+    });
+    if (!values.includes(prevValueId)) {
+      refValues = filter(refValues, (ref) => ref.id !== prevValueId);
+    }
+    if (nextValueId) {
+      formik.setFieldValue("referenceTo", [...refValues, { id: nextValueId }]);
+      workspaceState.referenceValue = [...refValues, { id: nextValueId }];
+      return;
+    }
+    formik.setFieldValue("referenceTo", refValues);
+  }
+
   // TODO: check if this param is needed. Formik context should be available
-  const submitForm = () => {
+  const submitForm = (relation?: SubmitFormRelation) => {
     if (context.submitOnChange) {
       if (workspaceState) {
         setFBValue();
+      }
+      if (relation) {
+        if (relation.type === "poreceive") {
+          setReferences(relation);
+        }
       }
       formik.submitForm();
     }

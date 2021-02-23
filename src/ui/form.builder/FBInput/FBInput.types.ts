@@ -67,7 +67,8 @@ export type FBInputType =
   | "eqmaintenance"
   | "textfieldwithrange"
   | "range"
-  | "passpercentage";
+  | "passpercentage"
+  | "supplier";
 
 export type FBInputProps =
   & FBLabelProps
@@ -105,6 +106,7 @@ export type FBInputProps =
     testRequirement?: string;
     isTemplate?: boolean;
     includeQRScan?: boolean;
+    isInputOwner?: boolean;
     designDisabled?: boolean;
     /**
      * @cfg {Bool} Whether the field can be deleted in the output document.
@@ -191,6 +193,7 @@ export const OmitInputClones: FBInputType[] = [
   "parts",
   "range",
   "passpercentage",
+  "poreceive",
 ];
 
 export interface FBInputConstructor {

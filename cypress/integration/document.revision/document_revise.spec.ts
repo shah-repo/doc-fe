@@ -33,13 +33,7 @@ context("Document revise test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
@@ -137,6 +131,7 @@ context("Document revise test", () => {
                 effectiveDate: (new Date()).toISOString(),
                 documentType: { id: approvalRequestDocumentType[0].id },
                 formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: secondEmployee.id } }],
               },
               employeeId: secondEmployee.id,
               sessionId: loginResponse.sessionId,
@@ -241,12 +236,18 @@ context("Document revise test", () => {
         cy.arClickAddBtnOnAddDocumentsDialog();
       });
 
+      // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
+
+      it("Click Create Approval Request", () => {
+        cy.arClickCreateApprovalRequestAfterCompletingForm();
+      });
+
       it("Add first approver to approval request on approver list", () => {
         cy.arAddApproverOnApproverList({ approver: USERS[2].email });
       });
 
-      it("Click Create Approval Request", () => {
-        cy.arClickCreateApprovalRequestAfterCompletingForm();
+      it("Save changes", () => {
+        cy.arSaveApiCall();
       });
 
       it("Click send to review", () => {
@@ -315,12 +316,16 @@ context("Document revise test", () => {
         cy.arClickAddBtnOnAddDocumentsDialog();
       });
 
+      it("Click Create Approval Request", () => {
+        cy.arClickCreateApprovalRequestAfterCompletingForm();
+      });
+
       it("Add first approver to approval request on approver list", () => {
         cy.arAddApproverOnApproverList({ approver: USERS[2].email });
       });
 
-      it("Click Create Approval Request", () => {
-        cy.arClickCreateApprovalRequestAfterCompletingForm();
+      it("Save changes", () => {
+        cy.arSaveApiCall();
       });
 
       it("Click send to review", () => {

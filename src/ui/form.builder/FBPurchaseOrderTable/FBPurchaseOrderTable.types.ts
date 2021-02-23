@@ -31,9 +31,20 @@ export type FBPurchaseOrderTableSumProps =
 export type FBPurchaseOrderTableTotalProps =
 & Pick<FBPurchaseOrderTableProps,  "handleShippingCost" | "handleCurrencyChange" | "calculation" | "disabled" | "name">;
 
-export enum FBPurchaseOrderDetailsHead {
+export enum FBPurchaseOrderDetailsProduct {
   index = "form.builder.item",
   partNumberDocId = "form.builder.field.part.number",
+  description = "form.builder.field.description",
+  order = "form.builder.field.ordered",
+  received = "form.builder.field.received",
+  units = "form.builder.field.units",
+  formattedDate = "form.builder.field.date.required",
+  unitPrice = "form.builder.field.unit.price"
+}
+
+export enum FBPurchaseOrderDetailsService {
+  index = "form.builder.item",
+  serviceId = "form.builder.field.service.id",
   description = "form.builder.field.description",
   order = "form.builder.field.ordered",
   received = "form.builder.field.received",
