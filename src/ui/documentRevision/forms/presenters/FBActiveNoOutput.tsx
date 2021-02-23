@@ -48,7 +48,9 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     () =>
       documentTypes.reduce((acc: OptionType[], document) => {
         if (
-          checkIsTypeMustBeOutput(document.groupOptions) || checkIsTypeCanBeOutput(document.groupOptions)
+          (checkIsTypeMustBeOutput(document.groupOptions) ||
+          checkIsTypeCanBeOutput(document.groupOptions)) &&
+          document.group !== "PART"
         ) {
           acc.push({ value: document.id, label: document.documentTypeName });
         }
