@@ -82,6 +82,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         if (checkIsTypeMustBeOutput(docType.groupOptions)) {
           return false;
         }
+        if (docType.group === "PART") { return false; }
         if ((docType.hiddenForCreationForUsersWithoutTags?.length ?? 0) === 0) {
           return true;
         }
