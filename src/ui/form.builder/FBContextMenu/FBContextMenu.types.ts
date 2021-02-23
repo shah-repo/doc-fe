@@ -4,7 +4,6 @@ import { TextProps } from "../../components/Text";
 import { FBFormProps } from "../FBForm";
 
 export interface FBContextMenuItemProps {
-  id: string;
   text: string;
   textValues?: TextProps["values"];
   hidden?: boolean;
@@ -18,6 +17,7 @@ export type FBContextMenuProps =
 & {
   onClose?: () => any;
   onBlur?: () => any;
+  menuId?: string;
   contextMenuState?: FBContextMenuState;
   menuItems?: FBContextMenuItemProps[];
   menuEls?: FBFormProps["children"];

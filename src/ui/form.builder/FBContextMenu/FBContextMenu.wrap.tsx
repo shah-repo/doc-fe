@@ -18,6 +18,7 @@ export const withFBContextMenu = <T extends FBContextMenuProps>(
     open = false,
     menuItems,
     menuEls,
+    menuId,
     ...props
   }: T) => {
 
@@ -25,9 +26,9 @@ export const withFBContextMenu = <T extends FBContextMenuProps>(
 
     menuItems = filter(menuItems, (menuItem) => !menuItem.hidden);
     menuItems && (menuEls = map(menuItems, (menuItem, index) => {
-      const [message, values, id, onClick] = at(menuItem, ["text", "textValues", "id", "onClick"]);
+      const [message, values, onClick] = at(menuItem, ["text", "textValues", "onClick"]);
       return (
-        <MenuItem key={`fb-context-menu-item-${id}-${index}`} {...{ onClick }}>
+        <MenuItem key={`fb-context-menu-item-${menuId}-${index}`} {...{ onClick }}>
           <Text {...{ message, values }} />
         </MenuItem>
       );
