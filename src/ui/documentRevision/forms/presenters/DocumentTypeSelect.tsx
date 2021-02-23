@@ -16,7 +16,7 @@ import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustom
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import { DocumentCloneType } from "../../Clone.container";
-import { checkIsDocumentForm, checkIsTypeMustBeOutput } from "../../helpers/checkDocumentGroup";
+import { checkIsDocumentForm, checkIsDynamicForm, checkIsTypeMustBeOutput } from "../../helpers/checkDocumentGroup";
 import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
 
@@ -115,7 +115,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     const mode: FBWorkspaceMode = isNewOutput ? "form" :
       checkIsDocumentForm(type.groupOptions) ? "design" : "none";
     let scheme: FBSchemaProps[] = [];
-    if (mode === "design" && type.group !== "DYNAMIC_FORM") {
+    if (mode === "design" && !checkIsDynamicForm(type.groupOptions)) {
       const formValues = {
         ...formik.values as Partial<DocumentRevision>,
         "document.documentType.id": typeId,

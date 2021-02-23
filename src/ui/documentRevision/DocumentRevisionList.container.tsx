@@ -6,6 +6,7 @@ import { DocumentRevision, documentRevisionsActions } from "../../state/ducks/do
 import { documentTypeSelectors } from "../../state/ducks/documentRevisions/documentType";
 import { styles } from "./DocumentRevisionList.container.styles";
 import DocumentRevisionListPresenter from "./DocumentRevisionList.presenter";
+import { checkIsDocumentPO } from "./helpers/checkDocumentGroup";
 
 interface OwnProps {
   documentRevisions: DocumentRevision[];
@@ -42,8 +43,8 @@ DocumentRevisionListContainerProps
     loadDocumentAction();
   }, [loadDocumentAction, documentId]);
 
-  const documentTypeGroup = useSelector(documentTypeSelectors.byId)[documentTypeId || ""]?.group;
-  const isDocumentPO = documentTypeGroup === "PO";
+  const documentTypeGroupOptions = useSelector(documentTypeSelectors.byId)[documentTypeId || ""]?.groupOptions;
+  const isDocumentPO = checkIsDocumentPO(documentTypeGroupOptions);
 
   return (
     <div className={classes.container}>
