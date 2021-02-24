@@ -57,14 +57,15 @@ const getDocumentTypeOptionsForDocumentList = createSelector(
     orderBy(
       ids.filter((id) =>  documentTypes[id].active
         && !checkIfDocumentHasOptions(
-          documentTypes[id].groupOptions || [],
           [
             DOC_TYPE_GROUP_OPTION.RECORD,
             DOC_TYPE_GROUP_OPTION.EQUIPMENT,
             DOC_TYPE_GROUP_OPTION.ENGINEERING_BUILD,
             DOC_TYPE_GROUP_OPTION.PART,
             DOC_TYPE_GROUP_OPTION.SUPPLIER,
-          ])
+          ],
+          documentTypes[id].groupOptions
+        )
       )
         .map((id) => ({
           value: documentTypes[id].id,
