@@ -1,6 +1,6 @@
 import { Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { DocumentTypeByIdForm } from "../../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeByIdForm } from "../../../../state/ducks/documentRevisions/documentType/types";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import Text from "../../../components/Text";
 import { DialogHandler } from "../../../hooks/useDialog";

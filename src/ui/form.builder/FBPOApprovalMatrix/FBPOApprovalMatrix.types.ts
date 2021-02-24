@@ -1,9 +1,9 @@
 import { ButtonProps } from "@material-ui/core";
 import { Dictionary } from "lodash";
 import { FBDialogState, FBFormProps, FBFormState, FBInputProps, FBPOApprovalMatrixState } from "..";
-import { Group } from "../../../state/ducks/auth";
-import { Employee } from "../../../state/ducks/company";
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
+import { Group } from "../../../state/ducks/auth/types";
+import { Employee } from "../../../state/ducks/company/types";
+import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 
 type FBPOApprovalMatrixBasicProps = Pick<FBInputProps, "name" | "disabled" | "label" | "autosave" | "isInputOwner">;

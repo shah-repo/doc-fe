@@ -1,6 +1,6 @@
 import { Toolbar, Typography } from "@material-ui/core";
 import React from "react";
-import { DataProps, TypographyColor, TypographyProps, TypographySize } from "../../../../state/ducks/common";
+import { DataProps, TypographyColor, TypographyProps, TypographySize } from "../../../../state/ducks/common/types";
 import { Translation } from "../../../translations/types";
 import Text from "../../Text";
 import { styles } from "./utils/styles";

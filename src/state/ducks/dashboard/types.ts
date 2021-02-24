@@ -1,8 +1,8 @@
-import { PENDING_ACTIONS_LIST, PENDING_ACTIONS_REMOVE } from ".";
-import { ChangeRequest } from "../changeRequest";
-import { Approval } from "../common";
-import { DocumentRevision } from "../documentRevisions";
-import { TrainingRecord } from "../training";
+import { ChangeRequest } from "../changeRequest/types";
+import { Approval } from "../common/types";
+import { DocumentRevision } from "../documentRevisions/types";
+import { TrainingRecord } from "../training/types";
+import { PENDING_ACTIONS_LIST, PENDING_ACTIONS_REMOVE } from "./constants";
 
 export enum PendingActionType {
   PENDING_REVIEW = "PENDING_REVIEW",

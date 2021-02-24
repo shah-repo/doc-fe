@@ -31,7 +31,6 @@ export const MAINTENANCE = "/maintenance";
 export const SUPPLIER_SURVEY_URL = "/supplier_survey/:token";
 
 export const USER_MANAGEMENT_ROOT_URL = "/user_management";
-export const USER_MANAGEMENT_DETAIL_URL = `${USER_MANAGEMENT_ROOT_URL}/:userId`;
 
 export const SLACK_ROOT_URL = "/slack";
 export const SLACK_COMPANY_URL = `${SLACK_ROOT_URL}/company`;

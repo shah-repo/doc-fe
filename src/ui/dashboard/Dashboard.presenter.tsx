@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@material-ui/core";
 import React from "react";
-import { PendingActionType } from "../../state/ducks/dashboard";
+import { PendingActionType } from "../../state/ducks/dashboard/types";
 import AsyncGate from "../components/AsyncGate";
 import Text from "../components/Text";
 import ChangeRequestApproval from "./action.types/ChangeRequestApproval";

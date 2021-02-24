@@ -1,7 +1,7 @@
-import { Attachment } from "../../../state/ducks/attachments";
-import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { Id } from "../../../state/ducks/common";
-import { DocumentRevisionDocument, DocumentRevisionStatus, FBDocumentRevisionProps, RevisionChangeType } from "../../../state/ducks/documentRevisions";
+import { Attachment } from "../../../state/ducks/attachments/types";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { Id } from "../../../state/ducks/common/types";
+import { DocumentRevisionDocument, DocumentRevisionStatus, FBDocumentRevisionProps, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FBSchemaProps } from "../../form.builder";
 

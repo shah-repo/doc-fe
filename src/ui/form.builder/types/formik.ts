@@ -1,6 +1,6 @@
 import { FieldConfig, FieldProps, FormikConfig } from "formik";
 import { Dictionary } from "lodash";
-import { DocumentRevisionDocumentRequest, DocumentRevisionStatus, FBFormTemplateProps, RevisionChangeType } from "../../../state/ducks/documentRevisions";
+import { DocumentRevisionDocumentRequest, DocumentRevisionStatus, FBFormTemplateProps, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 
 export interface FBFormikProps extends Omit<FormikConfig<any>, "onSubmit" | "initialValues"> {
   onSubmit?: (values: any) => void;

@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { RouteComponentProps } from "react-router-dom";
-import { AuthProps } from "../../../state/ducks/auth";
-import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
-import { DataProps } from "../../../state/ducks/common";
+import { AuthProps } from "../../../state/ducks/auth/types";
+import { changeRequestsActions } from "../../../state/ducks/changeRequest";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { DataProps } from "../../../state/ducks/common/types";
 import { LoadAsyncState } from "../../../state/types";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 

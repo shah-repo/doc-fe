@@ -1,7 +1,7 @@
 import { filter, isEmpty, map } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { FBApprovalsConstructor, FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBRequiredApprover } from "..";
-import { Approval } from "../../../state/ducks/common";
+import { Approval } from "../../../state/ducks/common/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 

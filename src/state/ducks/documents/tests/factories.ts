@@ -1,6 +1,6 @@
 import faker from "faker";
-import { Document, DocumentStatus } from "..";
 import { getOwner } from "../../common/tests/factories";
+import { Document, DocumentStatus } from "../types";
 
 export const getDocument = (document: Partial<Document> = {}): Document => ({
   id: faker.random.uuid(),

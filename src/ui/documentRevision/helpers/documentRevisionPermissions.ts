@@ -1,5 +1,5 @@
 import { get } from "lodash";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "./documentRevisionStatus";
 
 const isOwner = (

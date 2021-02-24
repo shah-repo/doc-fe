@@ -1,7 +1,7 @@
 import { mount } from "enzyme";
 import React from "react";
 import { IntlProvider } from "react-intl";
-import { Document } from "../../../../state/ducks/documents";
+import { Document } from "../../../../state/ducks/documents/types";
 import messagesEn from "../../../translations/en.json";
 import { StyledTableHeader } from "../column/styles";
 import { TableColumnProps } from "../column/types";

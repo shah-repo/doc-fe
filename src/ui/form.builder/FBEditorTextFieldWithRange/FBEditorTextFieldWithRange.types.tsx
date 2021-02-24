@@ -5,7 +5,7 @@ export enum FBPassType {
   value = "value",
 }
 
-export interface FBPassValue {
+interface FBPassValue {
   type?: string;
   value?: FBRangeValue;
   percentage?: FBPassPercentageValue;

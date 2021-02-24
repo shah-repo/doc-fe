@@ -1,7 +1,7 @@
 import { Box, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import React, { useEffect } from "react";
-import { ChangeRequest } from "../../../../state/ducks/changeRequest";
+import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
 import { AsyncState } from "../../../../state/types";
 import InputField from "../../../components/forms/fields/Input";
 import TextEditorField from "../../../components/forms/fields/RichTextEditor";

@@ -1,6 +1,6 @@
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import Config from "../../../config";
-import { WhiteLabelingColors } from "../../../state/ducks/company";
+import { WhiteLabelingColors } from "../../../state/ducks/company/types";
 import ThemeOverrides from "./overrides";
 import { createAppPalette, muiTheme } from "./palette";
 import { ThemeEnv } from "./utils/types";

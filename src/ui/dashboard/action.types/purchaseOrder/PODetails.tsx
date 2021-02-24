@@ -2,7 +2,7 @@ import { Box, createStyles, ExpansionPanel, ExpansionPanelDetails, ExpansionPane
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React, { useMemo, useState } from "react";
 import { useIntl } from "react-intl";
-import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import Text from "../../../components/Text";
 import { FBPurchaseOrderValue } from "../../../form.builder";
 import POAssignedDate from "./POAssignedDate";

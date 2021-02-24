@@ -1,13 +1,8 @@
-import {
-  TrainingPlanTransition,
-  TrainingTransitionRequestBody,
-} from ".";
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { documentRevisionsActions } from "../documentRevisions";
-import {
-  TRAINING_RECORD_ROOT_URL,
-} from ".";
+import { TRAINING_RECORD_ROOT_URL } from "./constants";
+import { TrainingPlanTransition, TrainingTransitionRequestBody } from "./types";
 
 const applyTransition = (
   id: string,

@@ -1,7 +1,8 @@
 import { includes, isUndefined, set, truncate } from "lodash";
 import { action, observable, reaction } from "mobx";
 import { FBAttachment, FBFilePresenterDownloadType } from "..";
-import { Attachment, AttachmentDownloadResponse, AttachmentType, ATTACHMENT_ROOT_URL } from "../../../state/ducks/attachments";
+import { ATTACHMENT_ROOT_URL } from "../../../state/ducks/attachments/constants";
+import { Attachment, AttachmentDownloadResponse, AttachmentType } from "../../../state/ducks/attachments/types";
 import { VIEWABLE_FILES, WATERMARK_FILES } from "../../components/common/view.file/utils/constants";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";

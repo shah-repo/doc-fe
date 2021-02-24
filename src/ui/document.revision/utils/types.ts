@@ -1,7 +1,8 @@
 import { RouteComponentProps } from "react-router-dom";
-import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision, documentRevisionsActions, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
-import { TrainingRecord } from "../../../state/ducks/training";
+import { DataProps } from "../../../state/ducks/common/types";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { TrainingRecord } from "../../../state/ducks/training/types";
 import { LoadAsyncState } from "../../../state/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";

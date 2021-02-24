@@ -1,8 +1,8 @@
 import faker from "faker";
-import { Document, DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "..";
-import { Audit } from "../../audit";
+import { Audit } from "../../audit/types";
 import { getOwner } from "../../common/tests/factories";
-import { DocumentType } from "../documentType";
+import { DocumentType } from "../documentType/types";
+import { Document, DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../types";
 
 const generateDocumentType = (docType: Partial<DocumentType> = {}): DocumentType => ({
   id: faker.random.uuid(),

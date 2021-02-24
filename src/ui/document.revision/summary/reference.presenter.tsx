@@ -1,7 +1,7 @@
 import { Box, Chip, createStyles, ListItem, makeStyles, Tooltip, Typography } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
-import { DataProps } from "../../../state/ducks/common";
+import { DataProps } from "../../../state/ducks/common/types";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
 import { ReferenceSummary as Model } from "../utils/types";

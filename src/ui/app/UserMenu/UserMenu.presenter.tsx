@@ -5,7 +5,7 @@ import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
 import SyncAltOutlinedIcon from "@material-ui/icons/SyncAltOutlined";
 import React from "react";
-import { Nullable } from "../../../state/ducks/common";
+import { Nullable } from "../../../state/ducks/common/types";
 import SwitchCompanyButtonContainer from "../../components/icons/SwitchCompanyButton/SwitchCompanyButton.container";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { ChangeRequest, changeRequestsActions } from "../../state/ducks/changeRequest";
-import { documentTypeActions, DocumentTypeById } from "../../state/ducks/documentRevisions/documentType";
+import { changeRequestsActions } from "../../state/ducks/changeRequest";
+import { ChangeRequest } from "../../state/ducks/changeRequest/types";
+import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeById } from "../../state/ducks/documentRevisions/documentType/types";
 import { FormContext } from "../components/forms/FormContext";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";

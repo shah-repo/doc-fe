@@ -1,8 +1,8 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
-import { Permission } from "../../../state/ducks/auth";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement";
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
+import { Permission } from "../../../state/ducks/auth/types";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
+import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { AsyncActionPayload } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ActionButtons from "./content.components/ActionButtons";

@@ -1,9 +1,9 @@
-import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, SET_DOCUMENT_TYPES_BY_CATEGORY } from ".";
-import { FBFormTemplateProps } from "..";
 import { FBSchemaProps } from "../../../../ui/form.builder";
 import { Translation } from "../../../../ui/translations/types";
-import { GroupTag } from "../../auth";
-import { Nullable } from "../../common";
+import { GroupTag } from "../../auth/types";
+import { Nullable } from "../../common/types";
+import { FBFormTemplateProps } from "../types";
+import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, SET_DOCUMENT_TYPES_BY_CATEGORY } from "./constants";
 
 // Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
 export enum DOC_TYPE_GROUP {

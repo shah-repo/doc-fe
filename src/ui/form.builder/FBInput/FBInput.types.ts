@@ -2,8 +2,8 @@ import { BaseTextFieldProps, BoxProps } from "@material-ui/core";
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
 import { Dictionary } from "lodash";
 import { FBEditorOptionsProps, FBEditorPropertiesType, FBEditorValidationMode, FBInlineApprovalRole, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
-import { Employee } from "../../../state/ducks/company";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement";
+import { Employee } from "../../../state/ducks/company/types";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { FBValidatorConfigProps } from "../types/validation/validatorDialog";
 
 export type FBInputTransform = "upper" | "lower";

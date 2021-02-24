@@ -1,7 +1,8 @@
 import { keyBy, uniq } from "lodash";
 import { combineReducers } from "redux";
-import { CompanyGroupsListAction, COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST, GroupsAllIdsState, GroupsByIdState, LoadCompanyGroup } from ".";
 import asyncReducer from "../../reducers/asyncReducer";
+import { COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST } from "./constants";
+import { CompanyGroupsListAction, GroupsAllIdsState, GroupsByIdState, LoadCompanyGroup } from "./types";
 
 export const groupsById = (
   state: GroupsByIdState = {},

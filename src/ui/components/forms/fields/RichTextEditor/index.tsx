@@ -8,7 +8,7 @@ import React, { useEffect, useState } from "react";
 import { Editor, EditorProps } from "react-draft-wysiwyg";
 import useDebounce from "use-debounce/lib/useDebounce";
 import "../../../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { RenderSize } from "../../../../../state/ducks/common";
+import { RenderSize } from "../../../../../state/ducks/common/types";
 import useDidMount from "../../../../hooks/useDidMount";
 import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";

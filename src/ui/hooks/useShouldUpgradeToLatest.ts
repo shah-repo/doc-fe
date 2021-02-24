@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { Document, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
+import { documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { Document, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../state/reducers";
 import { getIsLastVersionObsolete, isDocumentRevisionDeprecated, isDocumentRevisionInStatus } from "../documentRevision/helpers/documentRevisionStatus";
 

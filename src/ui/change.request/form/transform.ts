@@ -1,6 +1,6 @@
 import { pick } from "lodash";
 import { getStartOfDayDateString } from "../../../common/utils/date";
-import { ChangeRequest, ChangeRequestEditRequestBody } from "../../../state/ducks/changeRequest";
+import { ChangeRequest, ChangeRequestEditRequestBody } from "../../../state/ducks/changeRequest/types";
 import { reactQuillEmptyString } from "../../components/forms/fields/validators";
 import { ChangeRequestFormValues } from "./types";
 

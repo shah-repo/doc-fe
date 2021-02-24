@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import { authSelectors } from "../../../../state/ducks/auth";
-import { Employee } from "../../../../state/ducks/company";
+import { Employee } from "../../../../state/ducks/company/types";
 import { ApplicationState } from "../../../../state/reducers";
 import Text from "../../Text";
 

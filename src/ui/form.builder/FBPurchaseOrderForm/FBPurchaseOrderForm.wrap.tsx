@@ -2,7 +2,7 @@ import { get, includes, map } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { useState } from "react";
 import { FB, FBPurchaseOrderFormProps, FBPurchaseOrderItem } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { generateDocIdLabel } from "./helpers";
 
 

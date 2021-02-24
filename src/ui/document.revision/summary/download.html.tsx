@@ -1,7 +1,8 @@
 import React from "react";
 import { useIntl } from "react-intl";
-import { AttachmentDownloadResponse, attachmentsActions } from "../../../state/ducks/attachments";
-import { PDF } from "../../../state/ducks/documentRevisions";
+import { attachmentsActions } from "../../../state/ducks/attachments";
+import { AttachmentDownloadResponse } from "../../../state/ducks/attachments/types";
+import { PDF } from "../../../state/ducks/documentRevisions/types";
 import AsyncButton from "../../components/AsyncButton";
 import { toastError } from "../../components/notifications";
 import useActionCreator from "../../hooks/useActionCreator";

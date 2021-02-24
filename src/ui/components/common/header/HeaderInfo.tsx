@@ -1,8 +1,8 @@
 import { Chip, Grid, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
-import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
-import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType";
+import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";

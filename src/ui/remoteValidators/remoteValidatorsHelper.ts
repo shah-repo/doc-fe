@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 import apiClient from "../../state/apiClient";
-import { VALIDATORS_HELPER_REMOTE_URL_URL } from "../../state/ducks/auth";
+import { VALIDATORS_HELPER_REMOTE_URL_URL } from "../../state/ducks/auth/constants";
 import { store } from "../../state/store";
 import { IRemoteValidatorsHelper } from "./interfaces";
 

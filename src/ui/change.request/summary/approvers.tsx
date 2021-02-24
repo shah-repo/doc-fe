@@ -1,7 +1,7 @@
 import { Box, Typography } from "@material-ui/core";
 import { isEmpty } from "lodash";
 import React from "react";
-import { Approval, ApprovalStatus, DataProps } from "../../../state/ducks/common";
+import { Approval, ApprovalStatus, DataProps } from "../../../state/ducks/common/types";
 import SummaryField from "../../common/summary/base";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";

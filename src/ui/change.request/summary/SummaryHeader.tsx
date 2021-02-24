@@ -1,8 +1,8 @@
 import { Grid } from "@material-ui/core";
 import { FormikErrors } from "formik";
 import React from "react";
-import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { DataProps } from "../../../state/ducks/common";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { DataProps } from "../../../state/ducks/common/types";
 import { AsyncState } from "../../../state/types";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";

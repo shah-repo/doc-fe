@@ -1,5 +1,5 @@
 import faker from "faker";
-import { Owner, User } from "..";
+import { Owner, User } from "../types";
 
 export const getUser = (user: Partial<User> = {}): User => ({
   id: faker.random.uuid(),

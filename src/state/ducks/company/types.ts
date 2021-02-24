@@ -1,8 +1,8 @@
-import { SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from ".";
 import { ThemeEnv } from "../../../ui/layout/theme/utils/types";
-import { GroupTag } from "../auth";
-import { User } from "../common";
-import { DocumentType } from "../documentRevisions/documentType";
+import { GroupTag } from "../auth/types";
+import { User } from "../common/types";
+import { DocumentType } from "../documentRevisions/documentType/types";
+import { SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from "./constants";
 
 export interface WhiteLabelingColors {
   defaultBackground: string;

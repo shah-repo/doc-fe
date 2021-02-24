@@ -1,10 +1,10 @@
 import { get, orderBy } from "lodash";
 import { createSelector } from "reselect";
-import { DocumentType } from ".";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../../../ui/common/utils/helpers";
 import { checkIsDocumentEquipment, checkIsDocumentRecord } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { ApplicationState } from "../../../reducers";
 import { AsyncState } from "../../../types";
+import { DocumentType } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentType.allIds;
 const byId = (state: ApplicationState) => state.documentType.byId;

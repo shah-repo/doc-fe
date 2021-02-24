@@ -1,4 +1,4 @@
-import { ChangeRequestStatus, ImplementationPlanTask, ImplementationPlanTaskStatus } from "../../../state/ducks/changeRequest";
+import { ChangeRequestStatus, ImplementationPlanTask, ImplementationPlanTaskStatus } from "../../../state/ducks/changeRequest/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { ChangeRequestUserProps } from "./types";
 

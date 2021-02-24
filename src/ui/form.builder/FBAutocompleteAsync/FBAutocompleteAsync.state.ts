@@ -4,7 +4,7 @@ import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncOption, FBData } from "..
 import FBRequest from "../FBApi/FBApi.request";
 import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
 
-export class FBAutocompleteAsyncState extends FBRequest<any, any> {
+class FBAutocompleteAsyncState extends FBRequest<any, any> {
   private optionId: string | undefined;
   public additionalData?: any[];
 

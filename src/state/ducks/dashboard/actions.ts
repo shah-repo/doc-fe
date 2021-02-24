@@ -1,6 +1,7 @@
-import { DASHBOARD_ROOT_URL, PendingAction, PendingActionsListAction, PendingActionsRemoveAction, PENDING_ACTIONS_LIST, PENDING_ACTIONS_LIST_ASYNC, PENDING_ACTIONS_REMOVE } from ".";
 import { apiAction } from "../../factories";
 import { ApiAction } from "../../types";
+import { DASHBOARD_ROOT_URL, PENDING_ACTIONS_LIST, PENDING_ACTIONS_LIST_ASYNC, PENDING_ACTIONS_REMOVE } from "./constants";
+import { PendingAction, PendingActionsListAction, PendingActionsRemoveAction } from "./types";
 
 const pendingActionsList = (pendingActions: PendingAction[]): PendingActionsListAction => ({
   type: PENDING_ACTIONS_LIST,

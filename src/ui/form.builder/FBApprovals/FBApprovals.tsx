@@ -3,8 +3,8 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import React from "react";
 import { FBApprovalsProps, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText, Owner } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { ApprovalStatus } from "../../../state/ducks/common";
-import { DocumentStatus } from "../../../state/ducks/documents";
+import { ApprovalStatus } from "../../../state/ducks/common/types";
+import { DocumentStatus } from "../../../state/ducks/documents/types";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBApprovals } from "./FBApprovals.wrap";
 

@@ -1,6 +1,6 @@
 import { BoxProps } from "@material-ui/core";
 import { FBContextMenuProps, FBInputProps, FBProviderProps } from "..";
-import { Attachment } from "../../../state/ducks/attachments";
+import { Attachment } from "../../../state/ducks/attachments/types";
 
 export type FBFilePresenterDownloadType = "download" | "view";
 

@@ -5,8 +5,8 @@ import { BaseTextFieldProps, OutlinedTextFieldProps } from "@material-ui/core/Te
 import { Dictionary } from "lodash";
 import { ReactNode } from "react";
 import { FBValidationModeType } from "..";
-import { Employee } from "../../../state/ducks/company";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement";
+import { Employee } from "../../../state/ducks/company/types";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { FBActionContainerProps } from "./actions/action";

@@ -1,6 +1,6 @@
 import { get, isEmpty, isUndefined } from "lodash";
 import { action, set } from "mobx";
-import { FETCH_VALIDATORS_REMOTE_URL_URL } from "../../../../state/ducks/auth";
+import { FETCH_VALIDATORS_REMOTE_URL_URL } from "../../../../state/ducks/auth/constants";
 import { RemoteValidatorHelper } from "../../../remoteValidators/remoteValidatorsHelper";
 import FBRequest from "../../FBApi/FBApi.request";
 

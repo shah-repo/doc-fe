@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions";
+import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
+import { DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import useShouldUpgradeToLatest from "../../../../hooks/useShouldUpgradeToLatest";

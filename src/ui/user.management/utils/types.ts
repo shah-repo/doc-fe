@@ -1,4 +1,4 @@
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
+import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 
 export interface RouteParams {
   userId: string;

@@ -1,20 +1,24 @@
 import faker from "faker";
-import {
-  AuthResponse,
-  EmployeeEditRequestBody, GROUPS_URL, LoginRequestBody,
-  LoginWithCodeRequestBody, LOGIN_URL,
-  LOGIN_WITH_CODE_URL,
-  LOGOUT_URL,
-  USERS_ME_URL,
-  USERS_URL,
-} from ".";
 import { getCallbackHandler } from "../../../common/tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
 import { Handlers } from "../../types";
 import { userManagementActions } from "../userManagement";
 import { getGroup } from "../userManagement/tests/factories";
 import authActions from "./actions";
+import {
+  GROUPS_URL,
+  LOGIN_URL,
+  LOGIN_WITH_CODE_URL,
+  LOGOUT_URL,
+  USERS_ME_URL,
+  USERS_URL,
+} from "./constants";
 import { getAuthResponse, getUser } from "./tests/factories";
+import {
+  AuthResponse,
+  EmployeeEditRequestBody, LoginRequestBody,
+  LoginWithCodeRequestBody,
+} from "./types";
 
 describe("login action tests", () => {
   const loginValues: LoginRequestBody = {

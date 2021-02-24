@@ -1,4 +1,5 @@
-import { FBProcedureState, FBProcedureValue } from "..";
+import { FBProcedureValue } from "..";
+import FBProcedureState from "../FBProcedure/FBProcedure.state";
 
 export default class FBMPIProcedureState extends FBProcedureState {
   // MARK: @config

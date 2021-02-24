@@ -1,7 +1,8 @@
 import { Box } from "@material-ui/core";
 import React, { useState } from "react";
-import { AttachmentDownloadResponse, attachmentsActions } from "../../../../state/ducks/attachments";
-import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
+import { attachmentsActions } from "../../../../state/ducks/attachments";
+import { AttachmentDownloadResponse } from "../../../../state/ducks/attachments/types";
+import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { Attachment } from "../../../change.request/form/types";
 import Text from "../../../components/Text";
 import { FBInputProps } from "../../../form.builder";

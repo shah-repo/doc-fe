@@ -1,8 +1,10 @@
 import { combineReducers } from "redux";
-import { CompanyMineAction, DEFAULT_NAVIGATION_ITEMS, SelectCompanyAction, SelectCompanyState, SELECT_COMPANY, SET_COMPANY_MINE, UpdateNavigationMenuItem, UPDATE_NAVIGATION_ITEM, WHITE_LABEL_DEFAULT } from ".";
 import { setNavigation } from "../../../ui/app/NavigationLocalStorageHelpers";
 import { ThemeEnv } from "../../../ui/layout/theme/utils/types";
-import { LogoutUserAction, LOGOUT_USER } from "../auth";
+import { LOGOUT_USER } from "../auth/constants";
+import { LogoutUserAction } from "../auth/types";
+import { DEFAULT_NAVIGATION_ITEMS, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM, WHITE_LABEL_DEFAULT } from "./constants";
+import { CompanyMineAction, SelectCompanyAction, SelectCompanyState, UpdateNavigationMenuItem } from "./types";
 
 export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   id: "",

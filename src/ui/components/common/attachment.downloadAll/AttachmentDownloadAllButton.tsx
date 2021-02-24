@@ -1,8 +1,9 @@
 import { CircularProgress, createStyles, Link, makeStyles, Theme } from "@material-ui/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import React, { useState } from "react";
-import { AttachmentDownloadResponse, attachmentsActions } from "../../../../state/ducks/attachments";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { attachmentsActions } from "../../../../state/ducks/attachments";
+import { AttachmentDownloadResponse } from "../../../../state/ducks/attachments/types";
+import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../../state/types";
 import Text from "../../../components/Text";
 import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionObsolete, isDocumentRevisionReleased } from "../../../documentRevision/helpers/documentRevisionStatus";

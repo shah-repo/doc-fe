@@ -1,6 +1,6 @@
 import { ProposedDocIdBody, SupplierPostBody } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 

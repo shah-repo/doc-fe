@@ -2,7 +2,7 @@ import { Box } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import React from "react";
 import { useSelector } from "react-redux";
-import { GroupTag } from "../../../../state/ducks/auth";
+import { GroupTag } from "../../../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../../../state/ducks/company";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";

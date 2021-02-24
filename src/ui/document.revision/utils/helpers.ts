@@ -1,7 +1,7 @@
 import { get, orderBy } from "lodash";
 import moment from "moment";
 import "moment-timezone";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { store } from "../../../state/store";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../documentRevision/helpers/documentRevisionStatus";

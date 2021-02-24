@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { FBValidationEditorProps } from "..";
 import { getHasPermission } from "../../../common/utils/selectors";
-import { Permission } from "../../../state/ducks/auth";
+import { Permission } from "../../../state/ducks/auth/types";
 import FBValidatorCustom from "../components/validation/FBValidatorCustom";
 import FBValidatorForm from "../components/validation/FBValidatorForm";
 

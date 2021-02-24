@@ -1,6 +1,6 @@
 import { Dialog } from "@material-ui/core";
 import React from "react";
-import { LoadCompanyGroup } from "../../../state/ducks/userManagement";
+import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
 import DialogTitle from "../dialog/DialogTitle";
 import GroupsDisplayContent from "./GroupsDisplayContent";
 

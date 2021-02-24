@@ -1,7 +1,7 @@
 import { isUndefined } from "lodash";
 import { action } from "mobx";
 import { FBFile } from "..";
-import { Attachment } from "../../../state/ducks/attachments";
+import { Attachment } from "../../../state/ducks/attachments/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 

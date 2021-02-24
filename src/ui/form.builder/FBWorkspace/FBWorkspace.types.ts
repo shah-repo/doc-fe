@@ -1,8 +1,8 @@
 import { FBDialogState, FBFormProps, FBSchemaProps, FBSnackbarState, FBWorkspaceState } from "..";
-import { UserGroupsState, UserState } from "../../../state/ducks/auth";
-import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { Company } from "../../../state/ducks/company";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { UserGroupsState, UserState } from "../../../state/ducks/auth/types";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { Company } from "../../../state/ducks/company/types";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 
 export type FBWorkspaceMode =
 | "none"

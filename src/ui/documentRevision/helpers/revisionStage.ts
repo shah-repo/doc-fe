@@ -1,5 +1,5 @@
 import { isEmpty } from "lodash";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentRecord } from "./checkDocumentGroup";
 
 export const getIsAdministrativeDefault = (documentRevision: DocumentRevision) => {

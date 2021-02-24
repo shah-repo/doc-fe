@@ -1,7 +1,8 @@
 import { Formik, FormikProps } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { DocumentType, documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 import { toastError } from "../../components/notifications";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";

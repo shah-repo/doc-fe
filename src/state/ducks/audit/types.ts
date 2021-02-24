@@ -1,10 +1,10 @@
 import { FBSchemaProps } from "../../../ui/form.builder";
-import { Attachment } from "../attachments";
-import { Group, User } from "../auth";
-import { ChangeRequest } from "../changeRequest";
-import { Approval, Owner } from "../common";
-import { DocumentRevision, Reference } from "../documentRevisions";
-import { DocumentType } from "../documentRevisions/documentType";
+import { Attachment } from "../attachments/types";
+import { Group, User } from "../auth/types";
+import { ChangeRequest } from "../changeRequest/types";
+import { Approval, Owner } from "../common/types";
+import { DocumentType } from "../documentRevisions/documentType/types";
+import { DocumentRevision, Reference } from "../documentRevisions/types";
 
 type AuditTypes = "ARRAY_NEW" | "ARRAY_DELETED";
 export interface Audit {

@@ -1,5 +1,5 @@
-import { Employee } from "../company";
-import { DocumentRevision, DocumentRevisionDocument } from "../documentRevisions";
+import { Employee } from "../company/types";
+import { DocumentRevision, DocumentRevisionDocument } from "../documentRevisions/types";
 
 enum TrainingPlanStatus {
   ACTIVE = "ACTIVE",

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import authSelectors from "../../../state/ducks/auth/selectors";
-import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
+import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import {
   changeRequestEditPath,

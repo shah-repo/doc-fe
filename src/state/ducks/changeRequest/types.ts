@@ -1,9 +1,9 @@
-import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from ".";
 import { FBTaskItem } from "../../../ui/form.builder";
-import { Attachment } from "../attachments";
-import { AuditActionPayload } from "../audit";
-import { Approval, Id, Owner, User } from "../common";
-import { FBDocumentRevisionProps } from "../documentRevisions";
+import { Attachment } from "../attachments/types";
+import { AuditActionPayload } from "../audit/types";
+import { Approval, Id, Owner, User } from "../common/types";
+import { FBDocumentRevisionProps } from "../documentRevisions/types";
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from "./constants";
 
 export enum ChangeRequestStatus {
   Draft = "DRAFT",

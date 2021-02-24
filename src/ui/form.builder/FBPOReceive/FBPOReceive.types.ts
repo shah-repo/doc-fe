@@ -1,5 +1,5 @@
 import { FBAutocompleteProps, FBDialogState, FBFormProps, FBInputProps, FBPOReceiveState, FBPurchaseOrderProps, FBSchemaProps } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 
 export enum FBPOReceiveImportance {
   purchaseorder = 1,

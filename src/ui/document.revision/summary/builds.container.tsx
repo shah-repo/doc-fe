@@ -1,6 +1,7 @@
 import React from "react";
-import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { DataProps } from "../../../state/ducks/common/types";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../components/notifications";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";

@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
-import { PendingActionsListAction, PendingActionsRemoveAction, PendingActionsState, PENDING_ACTIONS_LIST, PENDING_ACTIONS_LIST_ASYNC, PENDING_ACTIONS_REMOVE } from ".";
 import asyncReducer from "../../reducers/asyncReducer";
+import { PENDING_ACTIONS_LIST, PENDING_ACTIONS_LIST_ASYNC, PENDING_ACTIONS_REMOVE } from "./constants";
+import { PendingActionsListAction, PendingActionsRemoveAction, PendingActionsState } from "./types";
 
 type PendingActions = PendingActionsListAction | PendingActionsRemoveAction;
 

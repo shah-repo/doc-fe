@@ -1,7 +1,7 @@
 import faker from "faker";
-import { SupplierSurveyForm } from "..";
-import { FBFormTemplateProps } from "../../documentRevisions";
 import { getDocumentRevision } from "../../documentRevisions/tests/factories";
+import { FBFormTemplateProps } from "../../documentRevisions/types";
+import { SupplierSurveyForm } from "../types";
 
 const getFormTemplate = (formTemplate: Partial<FBFormTemplateProps> = {}): FBFormTemplateProps => ({
   outputDocumentTypes: [{

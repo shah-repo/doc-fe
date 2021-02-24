@@ -1,8 +1,9 @@
 import MenuItem from "@material-ui/core/MenuItem";
 import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
 import React from "react";
-import { LINE_TYPES } from "../../../../state/ducks/attachments";
-import { DocumentRevision, documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
+import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
 import { isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import useActionCreator from "../../../hooks/useActionCreator";

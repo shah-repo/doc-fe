@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { FB } from "../..";
-import { GetEmployeeResponse, userManagementActions, userManagementSelectors } from "../../../../state/ducks/userManagement";
+import { userManagementActions, userManagementSelectors } from "../../../../state/ducks/userManagement";
+import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
 import { isDocumentRevisionReleased } from "../../../documentRevision/helpers/documentRevisionStatus";
 import { DEFAULT_ACTIVE_EMPLOYEES } from "../../../group.management/utils/types";
 import useActionCreator from "../../../hooks/useActionCreator";

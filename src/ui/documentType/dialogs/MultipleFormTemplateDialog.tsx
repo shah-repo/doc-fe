@@ -2,7 +2,7 @@ import { Button, Dialog, DialogContent, DialogTitle, Grid, Typography } from "@m
 import PostAddTwoToneIcon from "@material-ui/icons/PostAddTwoTone";
 import { FormikProps } from "formik";
 import React from "react";
-import { DocumentType, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";

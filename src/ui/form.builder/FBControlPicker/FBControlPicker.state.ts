@@ -1,7 +1,7 @@
 import { find } from "lodash";
 import React from "react";
 import { FBControlPickerDataProps, FBEditorCustomControl, FBInputType, FBWorkspaceExternalState, FBWorkspaceState } from "..";
-import { GroupTag } from "../../../state/ducks/auth";
+import { GroupTag } from "../../../state/ducks/auth/types";
 import { store } from "../../../state/store";
 import { checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
 

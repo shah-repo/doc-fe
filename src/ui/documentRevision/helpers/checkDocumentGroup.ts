@@ -1,4 +1,4 @@
-import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 
 /** Checks if document has a specific group option.
    * @param groupOption Option that is searched for.

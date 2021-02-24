@@ -1,6 +1,6 @@
 import { get, maxBy, pick } from "lodash";
-import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
-import { DocumentType } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
 import { checkIsDocumentDAM, checkIsDocumentPOAM, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";

@@ -2,7 +2,7 @@ import { Box } from "@material-ui/core";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
-import { Approval } from "../../../../state/ducks/common";
+import { Approval } from "../../../../state/ducks/common/types";
 import DateTime from "../../../components/DateTime";
 import Text from "../../../components/Text";
 

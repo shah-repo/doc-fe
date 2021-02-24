@@ -1,5 +1,5 @@
 import { FBInputProps, FBInputType, FBOption } from "..";
-import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
+import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 
 export type FBEditorPropertiesType =
 | "multiple"

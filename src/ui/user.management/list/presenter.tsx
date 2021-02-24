@@ -1,8 +1,9 @@
 import { Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
-import { Group } from "../../../state/ducks/auth";
-import { EMPLOYEES_URL, GetEmployeeResponse } from "../../../state/ducks/userManagement";
+import { Group } from "../../../state/ducks/auth/types";
+import { EMPLOYEES_URL } from "../../../state/ducks/userManagement/constants";
+import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";

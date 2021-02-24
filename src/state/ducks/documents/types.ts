@@ -1,7 +1,7 @@
-import { DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST, DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET } from ".";
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
-import { Attachment } from "../attachments";
-import { Owner } from "../common";
+import { Attachment } from "../attachments/types";
+import { Owner, User } from "../common/types";
+import { DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST, DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET } from "./constants";
 
 
 export enum DocumentStatus {
@@ -17,11 +17,6 @@ export enum ApprovalStatus {
   Pending = "PENDING",
   Approved = "APPROVED",
   Rejected = "REJECTED",
-}
-
-export interface User {
-  id: string;
-  email: string;
 }
 
 export interface Approval {

@@ -1,4 +1,4 @@
-import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { isDocumentRevisionInDraft } from "./documentRevisionStatus";
 
 const getAlphabetFromNumber = (num: number) => {

@@ -1,6 +1,6 @@
 import { Box, FormControlLabel, Radio, RadioGroup, Typography } from "@material-ui/core";
 import React from "react";
-import { GroupRequestBody } from "../../../../state/ducks/groupManagement";
+import { GroupRequestBody } from "../../../../state/ducks/groupManagement/types";
 import Text from "../../../components/Text";
 
 interface Props {

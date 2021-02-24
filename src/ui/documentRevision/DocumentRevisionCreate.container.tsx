@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, FBOutputDocumentType, RevisionChangeType } from "../../state/ducks/documentRevisions";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
+import { DocumentRevision, FBOutputDocumentType, RevisionChangeType } from "../../state/ducks/documentRevisions/types";
 import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";

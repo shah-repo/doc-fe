@@ -1,7 +1,9 @@
 import { combineReducers } from "redux";
-import { EditActiveStatusAction, EDIT_EMPLOYEE_ACTIVE_STATUS, EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO, TableDataSetAction, TableSearchByIdState, TableSearchClearAction, TableSearchClearAllAction, TableSearchDataState, TableSearchForceUpdateAction, TableSearchSetAction, TableSortAction, TABLE_CLEAR_ALL, TABLE_DATA_SET, TABLE_FORCE_UPDATE_SET, TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from ".";
-import { LOGOUT_USER, User, USERS_ME_URL } from "../auth";
-import { GetEmployeeResponse } from "../userManagement";
+import { LOGOUT_USER, USERS_ME_URL } from "../auth/constants";
+import { User } from "../auth/types";
+import { GetEmployeeResponse } from "../userManagement/types";
+import { EDIT_EMPLOYEE_ACTIVE_STATUS, EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO, TABLE_CLEAR_ALL, TABLE_DATA_SET, TABLE_FORCE_UPDATE_SET, TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from "./constants";
+import { EditActiveStatusAction, TableDataSetAction, TableSearchByIdState, TableSearchClearAction, TableSearchClearAllAction, TableSearchDataState, TableSearchForceUpdateAction, TableSearchSetAction, TableSortAction } from "./types";
 
 export const DEFAULT_TABLE_SEARCH = {
   queryDict: {},

@@ -1,5 +1,5 @@
 import { some } from "lodash";
-import { Document, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { Document, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 
 export const getIsLastVersionObsolete = (formDocuments: Document) =>
   some(formDocuments.documentRevisions, ["status", DocumentRevisionStatus.Obsolete ]);

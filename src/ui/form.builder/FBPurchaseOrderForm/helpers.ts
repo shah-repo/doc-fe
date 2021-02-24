@@ -1,4 +1,4 @@
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
 
 export const generateDocIdLabel = (docRev?: DocumentRevision) => {

@@ -1,7 +1,7 @@
 import { Box, Button, createStyles, InputLabel, Link, makeStyles, TextareaAutosize, Theme } from "@material-ui/core";
 import { Field, FormikProps } from "formik";
 import React from "react";
-import { Nullable } from "../../../../state/ducks/common";
+import { Nullable } from "../../../../state/ducks/common/types";
 import { AsyncState } from "../../../../state/types";
 import FormProgress from "../../../components/forms/FormProgress";
 import FormWrapper from "../../../components/forms/FormWrapper";

@@ -1,8 +1,9 @@
-import { Company, CompanyMineAction, CompanyMineRequest, NavigationMenu, SelectCompanyAction, SELECT_COMPANY, SET_COMPANY_MINE, UpdateNavigationMenuItem, UPDATE_NAVIGATION_ITEM } from ".";
 import { getEmployeeNavigation } from "../../../ui/app/NavigationLocalStorageHelpers";
 import { COMPANY_MINE_URL } from "../../../ui/constants/urls";
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
+import { SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from "./constants";
+import { Company, CompanyMineAction, CompanyMineRequest, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from "./types";
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
   type: SELECT_COMPANY,

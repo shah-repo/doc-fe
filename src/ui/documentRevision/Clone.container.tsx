@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { DocumentRevision, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import DocumentRevisionCreateContainer from "./DocumentRevisionCreate.container";

@@ -3,7 +3,7 @@ import { action, observable, set } from "mobx";
 import React from "react";
 import { FBDialogProps } from "..";
 
-export class FBDialogState {
+class FBDialogState {
   @observable public open = false;
   @observable public maxWidth: FBDialogProps["maxWidth"] = "sm";
   @observable public content?: React.ReactElement;

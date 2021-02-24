@@ -2,7 +2,7 @@ import { CircularProgress } from "@material-ui/core";
 import { first, isString } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { Fragment } from "react";
-import { Audit } from "../../state/ducks/audit";
+import { Audit } from "../../state/ducks/audit/types";
 import { FB, FBFilesPresenterState } from "../form.builder";
 
 interface OwnProps {

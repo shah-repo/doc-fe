@@ -2,7 +2,7 @@ import { AppBar, Box, IconButton, TextField, Toolbar, Typography } from "@materi
 import CloseIcon from "@material-ui/icons/Close";
 import { isEmpty } from "lodash";
 import React from "react";
-import { EmployeeEditRequestBody } from "../../../../state/ducks/auth";
+import { EmployeeEditRequestBody } from "../../../../state/ducks/auth/types";
 import Text from "../../../components/Text";
 import styles from "../UserProfile.styles";
 interface OwnProps {

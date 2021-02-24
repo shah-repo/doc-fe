@@ -1,6 +1,6 @@
 import { FBApprovalState, FBInputProps } from "..";
-import { Employee } from "../../../state/ducks/company";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement";
+import { Employee } from "../../../state/ducks/company/types";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 
 export interface FBApprovalConfig {
   label?: string;

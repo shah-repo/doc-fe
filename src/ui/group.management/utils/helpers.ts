@@ -1,6 +1,6 @@
 import { includes, some } from "lodash";
-import { Permission } from "../../../state/ducks/auth";
-import { Employee } from "../../../state/ducks/company";
+import { Permission } from "../../../state/ducks/auth/types";
+import { Employee } from "../../../state/ducks/company/types";
 
 export const getHasOfficialPermissions = (currentEmployeePermissions: Permission[]) => includes(currentEmployeePermissions, Permission.GROUP_CREATE) &&
            includes(currentEmployeePermissions, Permission.GROUP_UPDATE);

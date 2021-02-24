@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { GetEmployeeResponse, userManagementActions } from "../../../../state/ducks/userManagement";
+import { userManagementActions } from "../../../../state/ducks/userManagement";
+import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
 import { ApplicationState } from "../../../../state/reducers";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";

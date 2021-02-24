@@ -1,6 +1,6 @@
 import { find, isEmpty, some } from "lodash";
-import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/documentRevisions";
-import { ApprovalStatus } from "../../../state/ducks/documents";
+import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
+import { ApprovalStatus } from "../../../state/ducks/documents/types";
 import { FBFormState, FBSchemaProps } from "../../form.builder";
 import { checkIsDocumentRecord } from "./checkDocumentGroup";
 

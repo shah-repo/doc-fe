@@ -1,9 +1,10 @@
 import { flatten, isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { HeaderTableType } from "../../../state/ducks/documentRevisions";
-import { documentTypeActions, DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType/types";
+import { HeaderTableType } from "../../../state/ducks/documentRevisions/types";
 import { TableDataProps } from "../../components/table/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";

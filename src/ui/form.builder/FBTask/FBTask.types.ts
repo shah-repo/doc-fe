@@ -1,9 +1,9 @@
 import { BoxProps } from "@material-ui/core";
 import { FBDialogState, FBFormProps, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBTaskFieldState, FBTaskState, FBVisibilityType } from "..";
-import { Attachment } from "../../../state/ducks/attachments";
-import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { Employee } from "../../../state/ducks/company";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { Attachment } from "../../../state/ducks/attachments/types";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { Employee } from "../../../state/ducks/company/types";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 
 export type FBTaskItemType = "CR_IMPLEMENTATION_PLAN" | "GENERIC";
 export type FBTaskItemStatus = "DRAFT" | "PENDING" | "DONE" | "ABANDONED";

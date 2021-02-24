@@ -1,7 +1,7 @@
 import { get, includes, isEmpty, union } from "lodash";
 import { action, computed, observable } from "mobx";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
-import { DocumentGroupOptionsType, DocumentType } from "../../../../state/ducks/documentRevisions/documentType";
+import { DocumentGroupOptionsType, DocumentType } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { canEditDocumentRevision } from "../../../document.revision/utils/helpers";
 import { DocumentRevisionFormValues } from "../../../documentRevision/forms/types";
 import { FBInputProps } from "../../types/common";

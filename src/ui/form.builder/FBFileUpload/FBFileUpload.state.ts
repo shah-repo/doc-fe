@@ -1,7 +1,7 @@
 import { filter, isUndefined, union } from "lodash";
 import { action, observable, set } from "mobx";
-import { Attachment } from "../../../state/ducks/attachments";
-import { Id } from "../../../state/ducks/common";
+import { Attachment } from "../../../state/ducks/attachments/types";
+import { Id } from "../../../state/ducks/common/types";
 import FBRequest from "../FBApi/FBApi.request";
 
 class FBFileUploadState {

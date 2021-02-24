@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import { logo } from "../../common/utils/helpers";
 import { authSelectors } from "../../state/ducks/auth";
-import { Employee } from "../../state/ducks/company";
+import { Employee } from "../../state/ducks/company/types";
 import { ApplicationState } from "../../state/reducers";
 import { HOME_URL } from "../constants/urls";
 import LoginPresenter from "./Login.presenter";

@@ -1,6 +1,6 @@
-import { Attachment as AttachmentInterface } from "../../../state/ducks/attachments";
-import { Id, Nullable } from "../../../state/ducks/common";
-import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions";
+import { Attachment as AttachmentInterface } from "../../../state/ducks/attachments/types";
+import { Id, Nullable } from "../../../state/ducks/common/types";
+import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FBSchemaProps } from "../../form.builder";
 

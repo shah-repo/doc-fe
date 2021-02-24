@@ -1,10 +1,10 @@
 import { includes, isArray, isEmpty, size } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBInlineApprovalBody, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
-import { GroupTag, UserState } from "../../../state/ducks/auth";
-import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest";
-import { Id } from "../../../state/ducks/common";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { GroupTag, UserState } from "../../../state/ducks/auth/types";
+import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
+import { Id } from "../../../state/ducks/common/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 
 class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
