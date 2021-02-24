@@ -65,7 +65,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     documentRevision?.formDocument?.formTemplate?.schema
   );
   const shouldShowUpgrade =  !isEditableSchema
-    && ((isRecord && shouldShowUpgradeBannerForRecord) || (!isRecord && shouldShowUpgradeForDocs));
+    && (shouldShowUpgradeBannerForRecord || (!isRecord && shouldShowUpgradeForDocs));
 
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
