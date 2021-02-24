@@ -33,6 +33,12 @@ context("Document Creation Flow", () => {
                 group: "OTHER",
                 isQms: true,
               },
+              {
+                documentTypeName: "Test Document Type",
+                documentTypeAcronym: "TDT-",
+                group: "OTHER",
+                isQms: true,
+              },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -87,17 +93,17 @@ context("Document Creation Flow", () => {
       cy.drEnterDocumentDescription({ description: "New Document Revision description" });
     });
 
-    it("Selects 'Component Specification' document type from dropdown", () => {
+    it("Selects 'Test Document Type' document type from dropdown", () => {
       // SystemRequirement("REQ-0490");
-      cy.drSelectDocumentType({ documentType: "Component Specification" });
+      cy.drSelectDocumentType({ documentType: "Test Document Type" });
     });
 
-    it("Checks if document type id is 'CS-00002'", () => {
+    it("Checks if document type id is 'TDT-00002'", () => {
       SystemRequirement("REQ-0320");
-      cy.drCheckIfDocumentIdMatches({ docId: "CS-00002" });
+      cy.drCheckIfDocumentIdMatches({ docId: "TDT-00002" });
     });
 
-    it("Set document type id manually to 'CS-00999'", () => {
+    it("Set document type id manually to 'TDT-00999'", () => {
       SystemRequirement("REQ-0170");
       cy.drSetDocTypeId({ docId: "00999" });
     });
