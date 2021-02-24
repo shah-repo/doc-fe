@@ -5,26 +5,26 @@ import useDialog from "../../../../hooks/useDialog";
 import UpgradeToLatestDialog from "./UpgradeToLatestDialog";
 
 interface Props {
-  showShouldUpgrade: boolean;
+  shouldShowUpgrade: boolean;
   setShouldDisplay?: (value: boolean) => void;
   onUpgradeClick: () => void;
 }
 
 export const UpgradeToLatestButton: React.FunctionComponent<Props> = ({
   setShouldDisplay,
-  showShouldUpgrade,
+  shouldShowUpgrade,
   onUpgradeClick,
 }) => {
   const dialog = useDialog();
 
   useEffect(() => {
-    setShouldDisplay?.(showShouldUpgrade);
-  }, [showShouldUpgrade, setShouldDisplay]);
+    setShouldDisplay?.(shouldShowUpgrade);
+  }, [shouldShowUpgrade, setShouldDisplay]);
 
   return (
     <>
       {
-        showShouldUpgrade &&
+        shouldShowUpgrade &&
         <>
           <Button
             variant="outlined"
