@@ -1,7 +1,7 @@
 import { get, orderBy } from "lodash";
 import { createSelector } from "reselect";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../../../ui/common/utils/helpers";
-import { checkIsDocumentEquipment, checkIsDocumentRecord } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentPart, checkIsDocumentRecord, checkIsDOcumentSupplier } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { ApplicationState } from "../../../reducers";
 import { AsyncState } from "../../../types";
 import { DocumentType } from "./types";
@@ -58,6 +58,9 @@ const getDocumentTypeOptionsForDocumentList = createSelector(
       ids.filter((id) =>  documentTypes[id].active
         && !checkIsDocumentRecord(documentTypes[id].groupOptions)
         && !checkIsDocumentEquipment(documentTypes[id].groupOptions)
+        && !checkIsDocumentEB(documentTypes[id].groupOptions)
+        && !checkIsDocumentPart(documentTypes[id].groupOptions)
+        && !checkIsDOcumentSupplier(documentTypes[id].groupOptions)
       )
         .map((id) => ({
           value: documentTypes[id].id,
