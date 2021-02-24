@@ -1,17 +1,16 @@
 import { FormControlLabel, Switch } from "@material-ui/core";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GroupTag } from "../../../state/ducks/auth/types";
+import { Permission } from "../../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../../state/ducks/company";
-import useGetHasTag from "../../hooks/useGetHasTag";
+import useGetHasPermission from "../../hooks/useGetHasPermission";
 
 const AutosaveToggle: React.FunctionComponent<any> = (
 
 ) => {
   const dispatch = useDispatch();
 
-  // TODO: Change to correct tag when BE is done
-  const canToggleAutosave = useGetHasTag(GroupTag.GROUP_MANAGEMENT);
+  const canToggleAutosave = useGetHasPermission(Permission.DEVELOPERS);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
 
   if (!canToggleAutosave) {
