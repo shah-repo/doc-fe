@@ -323,6 +323,8 @@ export { default as FBTimerField } from "./FBTimerField/FBTimerField";
 export * from "./FBTimerField/FBTimerField.types";
 export { default as FBTooltip } from "./FBTooltip/FBTooltip";
 export * from "./FBTooltip/FBTooltip.types";
+export { default as FBUnitMeasures } from "./FBUnitMeasures/FBUnitMeasures";
+export * from "./FBUnitMeasures/FBUnitMeasures.types";
 export * from "./FBValidation/FBValidation.types";
 export { default as FBValidationEditor } from "./FBValidationEditor/FBValidationEditor";
 export * from "./FBValidationEditor/FBValidationEditor.types";
