@@ -6,7 +6,7 @@ import { Employee } from "../../../state/ducks/company/types";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { FBValidatorConfigProps } from "../types/validation/validatorDialog";
 
-export type FBInputTransform = "upper" | "lower";
+type FBInputTransform = "upper" | "lower";
 export type FBVisibilityType = "visible" | "hidden";
 
 export type FBInputType =
@@ -69,7 +69,8 @@ export type FBInputType =
   | "passpercentage"
   | "supplier"
   | "mpiprocedure"
-  | "lhrstep";
+  | "lhrstep"
+  | "unitMeasures";
 
 export type FBInputProps =
   & FBLabelProps

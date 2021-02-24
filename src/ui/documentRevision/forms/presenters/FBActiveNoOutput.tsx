@@ -47,9 +47,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   const outputDocumentTypeOptions: OptionType[] = React.useMemo(
     () =>
       documentTypes.reduce((acc: OptionType[], document) => {
-        if (
-          checkIsTypeMustBeOutput(document.groupOptions) || checkIsTypeCanBeOutput(document.groupOptions)
-        ) {
+        if (checkIsTypeMustBeOutput(document.groupOptions) || checkIsTypeCanBeOutput(document.groupOptions)) {
           acc.push({ value: document.id, label: document.documentTypeName });
         }
         return acc;

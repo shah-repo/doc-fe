@@ -50,6 +50,7 @@ import {
   FBTextField,
   FBTextFieldWithRange,
   FBTimerField,
+  FBUnitMeasures,
 } from "..";
 
 class FBSchemaState {
@@ -117,6 +118,7 @@ class FBSchemaState {
     textfieldwithrange: FBTextFieldWithRange,
     supplier: FBSupplier,
     lhrstep: FBLHRStep,
+    unitMeasures: FBUnitMeasures,
   };
 
   @observable public schema?: FBSchemaProps[];
@@ -239,5 +241,4 @@ class FBSchemaState {
     }, []);
   };
 }
-
 export default FBSchemaState;

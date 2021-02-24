@@ -5,7 +5,7 @@ import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { Employee } from "../../../state/ducks/company/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 
-export type FBTaskItemType = "CR_IMPLEMENTATION_PLAN" | "GENERIC";
+type FBTaskItemType = "CR_IMPLEMENTATION_PLAN" | "GENERIC";
 export type FBTaskItemStatus = "DRAFT" | "PENDING" | "DONE" | "ABANDONED";
 export type FBTaskActionMode = "description" | "note";
 

@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBStepperEditor } from "../../FBStepperEditor";
+import { FBStepperEditor } from "../..";
 import FBTextField from "../inputs/FBTextField";
 import FBAdditionsEditor from "./FBAdditionsEditor";
 import FBLabelEditor from "./FBLabelEditor";

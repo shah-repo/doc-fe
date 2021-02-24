@@ -111,9 +111,10 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     }
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     FBAutocompleteAsyncStore.loading.set(this.optionId!, true);
-    const { path: url, root = "" } = this.optionConfig;
+    const { path: url, root = "", publicApi } = this.optionConfig;
     this.setUrl(url);
     this.setRoot(root);
+    this.setPublicApi(publicApi as boolean);
     this.fetch();
   }
 }

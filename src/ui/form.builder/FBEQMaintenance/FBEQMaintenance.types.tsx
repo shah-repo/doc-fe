@@ -1,5 +1,4 @@
 import { FBInputProps, FBProviderProps } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 
 export type FBEQMaintenanceProps =
 & Pick<FBInputProps, "name" | "gutter" | "disabled" | "label" | "editorConfig" | "rules">
@@ -12,13 +11,3 @@ export type FBEQMaintenanceProps =
   pmFormId?: string;
   isTypePM?: boolean;
 };
-
-export interface FBEQMaintenanceValue {
-  preventativeForm: string;
-  frequency: number;
-  instructions: string;
-  manufacturer: string;
-  specs: string;
-  history: DocumentRevision[];
-  status: string;
-}

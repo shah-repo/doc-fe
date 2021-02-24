@@ -4,7 +4,6 @@ import { Action, Dispatch, Middleware, MiddlewareAPI } from "redux";
 import { redirectTo } from "../../../common/redirectHandler";
 import { MAINTENANCE, STATUS } from "../../../ui/constants/urls";
 import apiClient from "../../apiClient";
-import apiXClient from "../../apiXClient";
 import { authActions } from "../../ducks/auth";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, AsyncAction, AsyncStatus } from "../../types";
@@ -66,8 +65,6 @@ const apiMiddleware: Middleware = ({
       const { employeeId, sessionId } = getState().auth.user;
       const authorization = `bearer ${employeeId}:${sessionId}`;
       requestConfig.headers.Authorization = authorization;
-      // * Note mobx-rest
-      apiXClient(authorization);
     }
 
     if (action.password) {

@@ -114,6 +114,7 @@ class FBEditorState {
     textfieldwithrange: FBEditorTextFieldWithRange,
     supplier: FBEditorLabel,
     lhrstep: FBEditorEmpty,
+    unitMeasures: FBEditorLabel,
   };
 
   @observable public mode?: FBEditorMode = "config";

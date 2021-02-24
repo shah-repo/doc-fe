@@ -30,6 +30,7 @@ export enum DOC_TYPE_GROUP {
   LHR = "LHR",
   COMPANY_BOOTSTRAP_RECORD = "COMPANY_BOOTSTRAP_RECORD",
   SEED_DOCUMENT = "SEED_DOCUMENT",
+  PI_INSTANCE = "PI_INSTANCE",
 }
 
 export type DocumentGroupType = keyof typeof DOC_TYPE_GROUP;

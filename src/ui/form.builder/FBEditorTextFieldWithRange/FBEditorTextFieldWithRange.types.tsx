@@ -11,7 +11,7 @@ interface FBPassValue {
   percentage?: FBPassPercentageValue;
 }
 
-export interface FBEditorTextFieldWithRangeConfig {
+interface FBEditorTextFieldWithRangeConfig {
   rangeOption?: boolean;
   passValue?: boolean;
   range?: FBRangeValue;

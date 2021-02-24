@@ -89,7 +89,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
           break;
         default:
           window.onbeforeunload = null;
-          window.open(file.url, "_parent");
+          window.open(file.url);
       }
     }
 

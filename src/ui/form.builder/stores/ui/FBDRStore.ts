@@ -1,9 +1,10 @@
-import { get, includes, isEmpty, union } from "lodash";
+import { get, isEmpty, union } from "lodash";
 import { action, computed, observable } from "mobx";
-import { DocumentGroupOptionsType, DocumentType } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { canEditDocumentRevision } from "../../../document.revision/utils/helpers";
 import { DocumentRevisionFormValues } from "../../../documentRevision/forms/types";
+import { checkIsDocumentForm } from "../../../documentRevision/helpers/checkDocumentGroup";
 import { FBInputProps } from "../../types/common";
 import { FBDocumentRevisionMode, FBDRGroupConfig } from "../../types/store";
 import FBStore from "./FBStore";
@@ -18,13 +19,12 @@ class FBDocumentRevisionStore {
 
   @action public setInitialFBMode = (docType: DocumentType) => {
     this.docSchema = docType.schema as FBInputProps[] || [];
-    const formOption: DocumentGroupOptionsType = "FORM";
-    const docRevMode = docType.groupOptions?.includes(formOption) ? "create" : "none";
+    const docRevMode = checkIsDocumentForm(docType.groupOptions) ? "create" : "none";
     this.setMode(docRevMode);
   };
 
   @action public setValues = (values: DocumentRevision | DocumentRevisionFormValues) => {
-    const fmGroup = get(values, "document.documentType.group");
+    const fmGroup = get(values, "document.documentType.groupOptions");
     const outputGroup = get(values, "formDocument.document.docId");
     FBStore.documentId = values.formDocument?.document?.id || values.document?.id || "";
     FBStore.docId = values.id || "";
@@ -33,7 +33,7 @@ class FBDocumentRevisionStore {
 
     switch (true) {
       // TEMPLATE FORM
-      case fmGroup && includes(fmGroup, "FORM"):
+      case fmGroup && checkIsDocumentForm(fmGroup):
         return this.fmConfig(values);
       // OUTPUT FORM
       case outputGroup !== undefined:

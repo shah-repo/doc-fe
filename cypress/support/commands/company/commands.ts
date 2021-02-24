@@ -94,10 +94,12 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
   const { payload, sessionId, specFilePath } = params;
 
   const companyNumber = (Math.abs(CRC32.str(specFilePath)) + Math.round(Math.random() * 100000)) % 100000;
+  const companyName = `${capitalize(faker.commerce.color())} ${faker.company.companyName()} ${companyNumber}`;
+  const acronym = companyName.match(/[A-Z]/g)?.join("");
 
   const bodyDefaults = {
-    name: `${capitalize(faker.commerce.color())} ${faker.company.companyName()} ${companyNumber}`,
-    companyAcronym: `TC${companyNumber}`,
+    name: `${companyName}`,
+    companyAcronym: `TC${acronym}${companyNumber}`,
     scheduledForDeletion: true,
     numOfRevStages: 3,
     numOfDocDigits: 5,

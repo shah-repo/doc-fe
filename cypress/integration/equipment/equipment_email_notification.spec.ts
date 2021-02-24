@@ -494,9 +494,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Reload Equipment document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
-          cy.reload();
-        });
+        cy.equipReloadDocument();
       });
 
       it("Verify status is 'Released'", () => {
@@ -572,9 +570,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Reload Equipment document ", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
-          cy.reload();
-        });
+        cy.equipReloadDocument();
       });
 
       it("Verify maintenance record is present", () => {
@@ -749,9 +745,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Reload Equipment document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
-          cy.reload();
-        });
+        cy.equipReloadDocument();
       });
 
       it("Verify status is 'Released'", () => {
@@ -827,9 +821,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Reload Equipment document ", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
-          cy.reload();
-        });
+        cy.equipReloadDocument();
       });
 
       it("Verify maintenance record is present", () => {
@@ -1030,9 +1022,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Reload Equipment document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
-          cy.reload();
-        });
+        cy.equipReloadDocument();
       });
 
       it("Verify status is 'Released'", () => {
@@ -1108,9 +1098,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Reload Equipment document ", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
-          cy.reload();
-        });
+        cy.equipReloadDocument();
       });
 
       it("Verify maintenance record is present", () => {
@@ -1305,9 +1293,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Reload Equipment document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
-          cy.reload();
-        });
+        cy.equipReloadDocument();
       });
 
       it("Verify status is 'Released'", () => {
@@ -1383,9 +1369,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Reload Equipment document ", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
-          cy.reload();
-        });
+        cy.equipReloadDocument();
       });
 
       it("Verify maintenance record is present", () => {

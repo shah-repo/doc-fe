@@ -19,7 +19,7 @@ export interface FBEmployee {
   user: FBUser;
 }
 
-export interface FBUser {
+interface FBUser {
   id: string;
   email: string;
   name: string;

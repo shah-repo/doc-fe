@@ -69,7 +69,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const canCopy = checkCanBeCopied(documentRevision.document?.documentType?.groupOptions);
 
   const isLastVersionObsolete = () => {
-    if (selectedDocument.document.documentType.group === "RECORD") {
+    if (checkIsDocumentRecord(selectedDocument.document.documentType.groupOptions)) {
       return;
     }
     return formDocuments && getIsLastVersionObsolete(formDocuments);

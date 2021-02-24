@@ -58,18 +58,6 @@ export type FBApprovalFieldProps<T> = FBApprovalProps & {
   collection: T[];
 };
 
-export interface FBApprovalData {
-  approvers?: Employee[];
-  approverGroups?: GroupRequestBody[];
-  approvalRoles?: FBInlineApprovalRole;
-}
-
-export interface FBApprovalSocketMsg {
-  data?: {
-    message: string;
-  };
-}
-
 export interface FBApprovalConstructor {
   documentId?: string;
   value?: FBApprovalValue[];

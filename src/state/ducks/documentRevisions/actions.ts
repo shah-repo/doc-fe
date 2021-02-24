@@ -1,5 +1,6 @@
 import axios from "axios";
 import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
+import { checkIsDocumentRecord } from "../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { CreateInspectionBody } from "../../../ui/documentRevision/InspectionControls/InspectionControls.types";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
@@ -196,7 +197,7 @@ const finalizeAndRelease = (
   method: "post",
   data: body,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
-    if (docRev.document?.documentType?.group === "RECORD") {
+    if (checkIsDocumentRecord(docRev.document?.documentType?.groupOptions)) {
       window.location.href = documentVersionPath(docRev.id, docRev.document.id);
     } else {
       dispatch(load(id));

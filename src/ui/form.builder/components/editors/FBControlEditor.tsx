@@ -1,5 +1,5 @@
 import React from "react";
-import { FBStepperEditor } from "../../FBStepperEditor";
+import { FBStepperEditor } from "../..";
 import FBAdditionsEditor from "./FBAdditionsEditor";
 import FBLabelEditor from "./FBLabelEditor";
 

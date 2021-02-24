@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { FBProvider, FBSnackbar } from "../..";
+import { FBDialog, FBFormMarkDown, FBProvider, FBSnackbar } from "../..";
 import { companySelectors } from "../../../../state/ducks/company";
 import useDialog from "../../../hooks/useDialog";
 import FBAddFieldButton0 from "../../components/custom/FBAddFieldButton0";
 import FBTransportSchema from "../../components/custom/FBTransportSchema";
 import FBButton from "../../components/inputs/FBButton";
-import { FBDialog } from "../../FBDialog";
-import FBFormMarkDown from "../../FBFormMarkDown";
 import { withWorkspace } from "../../hocs/withWorkspace";
 import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
 import editorStore from "../../stores/ui/FBEditorStore";

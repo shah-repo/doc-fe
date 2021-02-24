@@ -1,4 +1,4 @@
-import { FBPurchaseOrderDetailsProduct, FBPurchaseOrderDetailsService } from "./FBPurchaseOrderTable.types";
+import { FBPurchaseOrderDetailsProduct, FBPurchaseOrderDetailsService } from "..";
 
 export const FBPurchaseOrderCollection = {
   product: FBPurchaseOrderDetailsProduct,

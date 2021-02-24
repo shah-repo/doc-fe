@@ -1,6 +1,6 @@
 import { FBSwitchPanelState } from "..";
 
-export interface FBSwitchPanelConfigProps {
+interface FBSwitchPanelConfigProps {
   title: string;
   content: React.ReactNode | string;
 }

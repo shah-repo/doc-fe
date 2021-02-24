@@ -1,3 +1,4 @@
+import { some } from "lodash";
 import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 
 /** Checks if document has a specific group option.
@@ -12,6 +13,18 @@ export const checkDocumentGroupOptions = (
   return documentGroupOptions.includes(groupOption);
 };
 
+/** Checks if document has any of the given options.
+   * @param groupOptions Options that are searched for.
+   * @param documentGroupOptions Array of group options a document has.
+   */
+export const checkIfDocumentHasOptions = (
+  groupOptions: DocumentGroupOptionsType[],
+  documentGroupOptions?: DocumentGroupOptionsType[],
+): boolean => {
+  if (!documentGroupOptions) { return false; }
+  return some(groupOptions, ((groupOption) => checkDocumentGroupOptions(groupOption, documentGroupOptions)));
+};
+
 export const checkIsDocumentEditableSchema = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
 export const checkIsDocumentRecord = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.RECORD);
 export const checkIsDocumentPart =  checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.PART);
@@ -21,6 +34,7 @@ export const checkIsDocumentForm = checkDocumentGroupOptions.bind(this, DOC_TYPE
 export const checkIsDocumentDAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DAM);
 export const checkIsDocumentPOAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.POAM);
 export const checkIsDocumentEquipment = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EQUIPMENT);
+export const checkIsDynamicForm = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DYNAMIC_FORM);
 
 export const checkIsTypeHaveOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.HAVE_OUTPUT);
 export const checkIsTypeMustBeOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT);

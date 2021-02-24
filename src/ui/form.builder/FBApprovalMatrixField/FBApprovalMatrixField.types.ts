@@ -30,7 +30,7 @@ export interface FBApprovalMatrixDocType {
   category: string;
 }
 
-export interface FBApprovalRolesStages {
+interface FBApprovalRolesStages {
   stage1: boolean[];
   stage2: boolean[];
   stage3: boolean[];

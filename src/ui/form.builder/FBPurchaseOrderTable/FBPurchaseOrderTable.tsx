@@ -3,8 +3,7 @@ import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
-import { FBPurchaseOrderTableDetails, FBPurchaseOrderTableProps, FBPurchaseOrderTableSum, FBTableCell } from "..";
-import FBPurchaseOrderTableTotal from "./FBPurchaseOrderTable.total";
+import { FBPurchaseOrderTableDetails, FBPurchaseOrderTableProps, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBTableCell } from "..";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
 const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> = ({

@@ -8,7 +8,7 @@ export type FBControlPickerProps =
   pickers?: FBControlPickerDataProps;
 };
 
-export type FBControlPickerType =
+type FBControlPickerType =
 | "section"
 | "inputs"
 | "approvals"
