@@ -17,6 +17,7 @@ export type FBContextMenuProps =
 & {
   onClose?: () => any;
   onBlur?: () => any;
+  menuId?: string;
   contextMenuState?: FBContextMenuState;
   menuItems?: FBContextMenuItemProps[];
   menuEls?: FBFormProps["children"];

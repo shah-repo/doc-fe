@@ -504,6 +504,7 @@
   "form.builder.supplier": "Supplier",
   "form.builder.checkbox": "Checkbox",
   "form.builder.checkboxgroup": "Checkbox group",
+  "form.builder.unitMeasures": "Unit Measures",
   "form.builder.datepicker": "Date picker",
   "form.builder.texteditor": "Text Editor",
   "form.builder.select": "Select Field",

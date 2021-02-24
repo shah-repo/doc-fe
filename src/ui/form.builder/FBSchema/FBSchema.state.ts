@@ -53,6 +53,7 @@ import FBTextEditor from "../FBTextEditor/FBTextEditor";
 import { FBTextField } from "../FBTextField";
 import { FBTextFieldWithRange } from "../FBTextFieldWithRange";
 import { FBTimerField } from "../FBTimerField";
+import FBUnitMeasures from "../FBUnitMeasures/FBUnitMeasures";
 
 export class FBSchemaState {
   public static omitLabel: FBInputType[] = [
@@ -119,6 +120,7 @@ export class FBSchemaState {
     textfieldwithrange: FBTextFieldWithRange,
     supplier: FBSupplier,
     lhrstep: FBLHRStep,
+    unitMeasures: FBUnitMeasures,
   };
 
   @observable public schema?: FBSchemaProps[];

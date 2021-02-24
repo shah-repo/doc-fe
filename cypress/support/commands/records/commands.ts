@@ -19,6 +19,7 @@ declare global {
       equipClickCreateNew(): Chainable<Subject>;
       recFilterByRev(params: {revision: string }): Chainable<Subject>;
       recFilterByStatus(params: {status: string }): Chainable<Subject>;
+      equipReloadDocument(): Chainable<Subject>;
     }
   }
 }
@@ -112,6 +113,17 @@ Cypress.Commands.add("equipClickCreateNew", () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
   });
 });
+
+Cypress.Commands.add("equipReloadDocument", () => {
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.DocPreview,
+    CyRoutes.EmployeesGet,
+    CyRoutes.DocPreview,
+    CyRoutes.EmployeesGet], () => {
+    cy.reload();
+  });
+});
+
 
 Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
   cy.wrapWithWaitOnApiCalls([

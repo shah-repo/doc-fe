@@ -434,7 +434,9 @@ context("PO test", () => {
 
     context("Add Supplier to PO", () => {
       it("Click 'Create A New Supplier'", () => {
-        cy.get("[data-cy=\"form.builder.create.new.supplier\"]").click();
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+          cy.get("[data-cy=\"form.builder.create.new.supplier\"]").click();
+        });
       });
 
       it("Enter Supplier Title 'Supplier'", () => {
@@ -446,18 +448,27 @@ context("PO test", () => {
       });
 
       it("Select Document Type 'Supplier'", () => {
-        cy.get("[name=\"document.documentType.id\"]").type("{downarrow}{enter}");
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
+          cy.get("[name=\"document.documentType.id\"]").type("{downarrow}{enter}");
+        });
       });
 
       it("Create new supplier", () => {
-        cy.get("[data-cy=\"common.confirm\"]").click();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[data-cy=\"common.confirm\"]").click();
+        });
       });
     });
 
     context("Add description and Approve document", () => {
       it("Enter description 'New Purchase Order'", () => {
         // SystemRequirement("REQ-1290");
-        cy.drEnterDocumentDescriptionWithWait({ description: "New Purchase Order" });
+        cy.drEnterDocumentDescription({ description: "New Purchase Order" });
+      });
+
+      it("Save PO document", () => {
+        // SystemRequirement("REQ-1290");
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Approve and release document", () => {
