@@ -23,7 +23,7 @@ let formDocumentType;
 const currentDate = moment().tz("America/Los_Angeles").format("MMMM D, YYYY");
 
 const NOT_RELEASED_TOAST_ERROR_MESSAGE = "Last docRev for Part linked to EB after copying is not in RELEASED status.";
-const PART_DOCUMENT_TYPE_NAME = "Part for eb";
+const PART_DOCUMENT_TYPE_NAME = "Parts";
 const EXISTING_PART_NAME = "Test Part";
 const NEW_PART_NAME = "New Part";
 
@@ -53,16 +53,7 @@ context("Parts from EB flow test", () => {
             companyAdminEmail: USERS[1].email,
             importerEmail: USERS[5].email,
             users: [USERS[2], USERS[3], USERS[4]],
-            documentTypes: [
-              {
-                documentTypeName: PART_DOCUMENT_TYPE_NAME,
-                documentTypeAcronym: "PRT-",
-                group: "PART",
-                isQms: true,
-                needsSignature: true,
-                category: "Parts",
-              },
-            ],
+            documentTypes: [],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
@@ -155,7 +146,7 @@ context("Parts from EB flow test", () => {
   context("Login user", () => {
     it("Log user in", () => {
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
@@ -217,12 +208,12 @@ context("Parts from EB flow test", () => {
   context("Create an EB with an existing part", () => {
     context("Create a part", () => {
       context("Start document creation flow", () => {
-        it("Navigate to Document list", () => {
-          cy.navigToDocumentList();
+        it("Navigate to parts", () => {
+          cy.navigToParts();
         });
 
-        it("Click on 'Create a document' button", () => {
-          cy.cmpClickCreateNewDocument();
+        it("Clicks on 'Add new part' button", () => {
+          cy.ptClickCreateNewPart();
         });
       });
 
@@ -232,21 +223,7 @@ context("Parts from EB flow test", () => {
         });
 
         it("Enter description 'Test Part description'", () => {
-          cy.drEnterDocumentDescription({ description: "Test Part description" });
-        });
-
-        it(`Select '${PART_DOCUMENT_TYPE_NAME}' document type from dropdown`, () => {
-          cy.drSelectDocumentType({ documentType: PART_DOCUMENT_TYPE_NAME });
-        });
-
-        it("Select 'Numeric' revision stage", () => {
-          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-        });
-      });
-
-      context("Create part", () => {
-        it("Click Create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drEnterDocumentDescriptionWithWait({ description: "Test Part description" });
         });
       });
     });
@@ -273,12 +250,12 @@ context("Parts from EB flow test", () => {
       });
 
       it("Enter description 'Test Engineering Build description'", () => {
-        cy.drEnterDocumentDescription({ description: "Test Engineering Build description" });
+        cy.drEnterDocumentDescriptionWithWait({ description: "Test Engineering Build description" });
       });
 
       it("Add an Approval'", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-          cy.get("[data-cy*=fb-approvals-]").type(USERS[2].name + "{downarrow}{enter}");
+          cy.get("[data-cy*=fb-approvals-]").type(USERS[1].name + "{downarrow}{enter}");
         });
       });
 
@@ -344,12 +321,12 @@ context("Parts from EB flow test", () => {
       });
 
       it("Enter description 'Test Engineering Build description'", () => {
-        cy.drEnterDocumentDescription({ description: "Test Engineering Build description" });
+        cy.drEnterDocumentDescriptionWithWait({ description: "Test Engineering Build description" });
       });
 
       it("Add an Approval", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-          cy.get("[data-cy*=fb-approvals-]").type(USERS[2].name + "{downarrow}{enter}");
+          cy.get("[data-cy*=fb-approvals-]").type(USERS[1].name + "{downarrow}{enter}");
         });
       });
 
@@ -439,13 +416,12 @@ context("Parts from EB flow test", () => {
 
     context("Submit for Approval", () => {
       it("Save the EB", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
-        cy.checkToastMessage({ exists: false });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Add an Approval", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-          cy.get("[data-cy*=fb-approvals-]").type(USERS[2].name + "{downarrow}{enter}");
+          cy.get("[data-cy*=fb-approvals-]").type(USERS[1].name + "{downarrow}{enter}");
         });
       });
 
