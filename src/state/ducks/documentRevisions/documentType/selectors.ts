@@ -1,10 +1,10 @@
 import { get, orderBy } from "lodash";
 import { createSelector } from "reselect";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../../../ui/common/utils/helpers";
-import { checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentPart, checkIsDocumentRecord, checkIsDOcumentSupplier } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { checkIfDocumentHasOptions } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { ApplicationState } from "../../../reducers";
 import { AsyncState } from "../../../types";
-import { DocumentType } from "./types";
+import { DocumentType, DOC_TYPE_GROUP_OPTION } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentType.allIds;
 const byId = (state: ApplicationState) => state.documentType.byId;
@@ -56,11 +56,15 @@ const getDocumentTypeOptionsForDocumentList = createSelector(
   (ids, documentTypes) =>
     orderBy(
       ids.filter((id) =>  documentTypes[id].active
-        && !checkIsDocumentRecord(documentTypes[id].groupOptions)
-        && !checkIsDocumentEquipment(documentTypes[id].groupOptions)
-        && !checkIsDocumentEB(documentTypes[id].groupOptions)
-        && !checkIsDocumentPart(documentTypes[id].groupOptions)
-        && !checkIsDOcumentSupplier(documentTypes[id].groupOptions)
+        && !checkIfDocumentHasOptions(
+          documentTypes[id].groupOptions || [],
+          [
+            DOC_TYPE_GROUP_OPTION.RECORD,
+            DOC_TYPE_GROUP_OPTION.EQUIPMENT,
+            DOC_TYPE_GROUP_OPTION.ENGINEERING_BUILD,
+            DOC_TYPE_GROUP_OPTION.PART,
+            DOC_TYPE_GROUP_OPTION.SUPPLIER,
+          ])
       )
         .map((id) => ({
           value: documentTypes[id].id,

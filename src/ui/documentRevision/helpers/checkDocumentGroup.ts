@@ -1,3 +1,4 @@
+import { some } from "lodash";
 import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 
 /** Checks if document has a specific group option.
@@ -12,6 +13,18 @@ export const checkDocumentGroupOptions = (
   return documentGroupOptions.includes(groupOption);
 };
 
+/** Checks if document has any of the given options.
+   * @param groupOptions Options that are searched for.
+   * @param documentGroupOptions Array of group options a document has.
+   */
+export const checkIfDocumentHasOptions = (
+  groupOptions: DocumentGroupOptionsType[],
+  documentGroupOptions?: DocumentGroupOptionsType[],
+): boolean => {
+  if (!documentGroupOptions) { return false; }
+  return some(groupOptions, ((groupOption) => checkDocumentGroupOptions(groupOption, documentGroupOptions)));
+};
+
 export const checkIsDocumentEditableSchema = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
 export const checkIsDocumentDocument = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DOCUMENT);
 export const checkIsDocumentRecord = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.RECORD);
@@ -24,7 +37,7 @@ export const checkIsDocumentPOAM = checkDocumentGroupOptions.bind(this, DOC_TYPE
 export const checkIsDocumentEquipment = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EQUIPMENT);
 export const checkIsDocumentReceivable = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.RECEIVABLE);
 export const checkIsDynamicForm = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DYNAMIC_FORM);
-export const checkIsDOcumentSupplier = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.SUPPLIER);
+export const checkIsDocumentSupplier = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.SUPPLIER);
 
 export const checkIsTypeHaveOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.HAVE_OUTPUT);
 export const checkIsTypeMustBeOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT);
