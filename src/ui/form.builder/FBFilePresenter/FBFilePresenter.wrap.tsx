@@ -169,6 +169,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
       toolsVisible,
       disabled,
       menuItems,
+      file,
       fileName,
       fileShortName,
       fileExtension,
