@@ -20,7 +20,7 @@ export interface FBApprovalRole {
   index: number;
 }
 
-export interface FBApprovalMatrixDocType {
+interface FBApprovalMatrixDocType {
   id?: string;
   acronym: string;
   name: string;
