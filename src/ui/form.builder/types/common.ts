@@ -4,7 +4,6 @@ import { SelectProps } from "@material-ui/core/Select";
 import { BaseTextFieldProps, OutlinedTextFieldProps } from "@material-ui/core/TextField";
 import { Dictionary } from "lodash";
 import { ReactNode } from "react";
-import { FBValidationModeType } from "..";
 import { Employee } from "../../../state/ducks/company/types";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { SelectOption } from "../../components/forms/fields/Select";
@@ -105,7 +104,7 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
   customValidator?: FBValidatorConfigProps;
   gutter?: boolean;
   tooltip?: string;
-  validationMode?: FBValidationModeType[];
+  validationMode?: ("ValidationHidden" | "ValidationDisabled")[];
   formValuesRules?: Dictionary<any>;
   templateId?: string;
   isTemplate?: boolean;
