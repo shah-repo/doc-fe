@@ -10,7 +10,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 
-context.skip("Checkboxes test", () => {
+context("Checkboxes test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -564,7 +564,7 @@ context.skip("Checkboxes test", () => {
 
       it("Add Instructions 'MPI' with checkboxes", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "MPI" });
+        cy.get(`[data-cy="form.builder.instructionsdocument"]`).eq(-1).click();
         cy.fbEnterNameValue({ name: "label", value: "mpi-wi-ch" });
         cy.get("[data-cy=\"instructionsDocument\"]").type("AR Form{downarrow}{enter}");
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -574,7 +574,7 @@ context.skip("Checkboxes test", () => {
 
       it("Add Instructions 'MPI' without checkboxes", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "MPI" });
+        cy.get(`[data-cy="form.builder.instructionsdocument"]`).eq(-1).click();
         cy.fbEnterNameValue({ name: "label", value: "mpi-wo-ch" });
         cy.get("[data-cy=\"instructionsDocument\"]").type("AR Form{downarrow}{enter}");
         cy.fbAddNewFieldButton();
@@ -1001,6 +1001,14 @@ context.skip("Checkboxes test", () => {
   });
 
   context("Verify other checkboxes properties", () => {
+    it("Verify Autocomplete with 'Include QR Scan' checkbox", () => {
+      cy.contains("ac-wi-ch").parentsUntil("li").should("contain", "Scan QR code");
+    });
+
+    it("Verify Autocomplete without 'Include QR Scan' checkbox", () => {
+      cy.contains("ac-wo-ch").parentsUntil("li").should("not.contain", "Scan QR code");
+    });
+
     it("Open Preview dialog", () => {
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
     });
@@ -1021,15 +1029,6 @@ context.skip("Checkboxes test", () => {
         .click()
         .type("{downarrow}{enter}")
         .should("not.have.value", "");
-    });
-
-    it("Verify Autocomplete without 'Include QR Scan' checkbox", () => {
-      cy.contains("ac-wo-ch").parentsUntil("li").find(".MuiTypography-root")
-        .should("not.contain", "Scan QR code");
-    });
-
-    it("Verify Autocomplete with 'Include QR Scan' checkbox", () => {
-      cy.contains("ac-wi-ch").parentsUntil("li").find(".MuiTypography-root").should("contain", "Scan QR code");
     });
 
     it("Verify Select Field without 'Include None' checkbox", () => {
@@ -1426,6 +1425,218 @@ context.skip("Checkboxes test", () => {
       cy.fbMouseOverByLabel({ label: "sr-wi-ch" } );
       cy.fbVerifyElementNotVisibileByLabel({ label: "sr-wi-ch", el: "edit-schema-item" });
       cy.fbVerifyElementNotVisibileByLabel({ label: "sr-wi-ch", el: "remove-schema-item" });
+    });
+  });
+
+  context("Create 'Engineering Build' Record for copyableValue checkbox", () => {
+    it("Navigate to Record on side bar", () => {
+      cy.fbClickButton({ el: "navigation.records" });
+    });
+
+    it("Click 'Create a Record' button", () => {
+      cy.get("#DocumentByTypeListPresenter-openDocRev").click();
+    });
+
+    it("Select Record Type: 'Engineering Build'", () => {
+      cy.get("#MultipleFormTemplate-selectDocForm").type("Engineering Build{downarrow}{enter}");
+    });
+
+    it("Add TextFields value", () => {
+      cy.get("[name^=\"textfield-wi-ch-\"]").type("textfield-wi-ch-value");
+      cy.get("[name^=\"textfield-wo-ch-\"]").type("textfield-wo-ch-value");
+    });
+
+    it("Select Checkboxes group", () => {
+      cy.get("[name^=\"cbg-wi-ch-\"]").find("label").eq(0).click();
+      cy.get("[name^=\"cbg-wo-ch-\"]").find("label").eq(0).click();
+    });
+
+    it("Add TextEditors value", () => {
+      cy.get("[data-cy^=\"te-wi-ch-\"]").find("div[contenteditable]")
+        .click({ force: true }).type("te-wi-ch-value");
+      cy.get("[data-cy^=\"te-wo-ch-\"]").find("div[contenteditable]")
+        .click({ force: true }).type("te-wo-ch-value");
+    });
+
+    it("Select 'Select fields' value", () => {
+      cy.get("[id^=mui-component-select-sf-wi-ch-]").click();
+      cy.get("[data-value=\"option1\"]").click();
+      cy.contains("sf-wi-ch").click();
+      cy.get("[id^=mui-component-select-sf-wo-ch-]").click();
+      cy.get("[data-value=\"option1\"]").click();
+    });
+
+    it("Select Radio button groups value", () => {
+      cy.get("[name^=\"rbg-wi-ch-\"]").eq(0).click();
+      cy.get("[name^=\"rbg-wo-ch-\"]").eq(0).click();
+    });
+
+    it("Add Quantities value", () => {
+      cy.get("[name^=\"q-wi-ch-\"]").type("1");
+      cy.get("[name^=\"q-wo-ch-\"]").type("1");
+    });
+
+    it("Add Timers value", () => {
+      cy.get("[name^=\"t-wi-ch-\"]").type("t-wi-ch-value");
+      cy.get("[name^=\"t-wo-ch-\"]").type("t-wo-ch-value");
+    });
+
+    it("Add 'TextField with range' value", () => {
+      cy.get("[name^=\"twr-wi-ch-\"]").type("2");
+      cy.get("[name^=\"twr-wo-ch-\"]").type("2");
+    });
+
+    it("Add Date pickers value", () => {
+      cy.get("[name^=\"dp-wi-ch-\"]").parent().find("button").click();
+      cy.get(".MuiPickersDay-daySelected").click();
+      cy.get("[name^=\"dp-wo-ch-\"]").parent().find("button").click();
+      cy.get(".MuiPickersDay-daySelected").click();
+    });
+
+    it("Add Purchase Orders value", () => {
+      cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wi-ch-\"]").click();
+      cy.get("[data-value=EUR]").click();
+      cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wo-ch-\"]").click();
+      cy.get("[data-value=EUR]").click();
+    });
+
+    it("Select Autocompletes", () => {
+      cy.get("[data-cy^=\"ac-wi-ch-\"]").click().type("test title{downarrow}{enter}");
+      cy.get("[data-cy^=\"ac-wo-ch-\"]").click().type("test title{downarrow}{enter}");
+    });
+
+    it("Select Procedure", () => {
+      cy.contains("Step #1").parentsUntil(".MuiFormControl-fullWidth").parent()
+        .find("div[contenteditable]").click({ force: true }).clear().type("step1 description");
+
+      cy.contains("Step #2").parentsUntil(".MuiFormControl-fullWidth").parent()
+        .find("div[contenteditable]").click({ force: true }).clear().type("step2 description");
+    });
+
+    it("Select radio button of with copyableValue checkbox Equipment Maintenance", () => {
+      cy.get("input[name^=\"eq-wi-ch-\"]").eq(-1).click();
+    });
+
+    it("Enter Justification of with copyableValue checkbox Equipment Maintenance", () => {
+      cy.get("[data-cy^=\"eq-wi-ch-\"]").find("div[contenteditable]")
+        .click({ force: true }).clear().type("Justification1");
+    });
+
+    it("Select radio button of without copyableValue checkbox Equipment Maintenance", () => {
+      cy.get("input[name^=\"eq-wo-ch-\"]").eq(-1).click();
+    });
+
+    it("Enter Justification of without copyableValue checkbox Equipment Maintenance", () => {
+      cy.get("[data-cy^=\"eq-wo-ch-\"]").find("div[contenteditable]")
+        .click({ force: true }).clear().type("Justification2");
+    });
+
+    it("Click on 'Add Another Role' button", () => {
+      cy.get("button[data-cy=\"form.builder.add.another.role\"]").click();
+    });
+
+    it("Enter Approval Role 'Role 1'", () => {
+      cy.get("[data-cy=\"name\"]").type("Role 1");
+    });
+
+    it("Click on 'Add' button", () => {
+      cy.get("button[data-cy=\"common.add\"]").click();
+    });
+
+    it("Enter title: 'test title'", () => {
+      cy.get("#Title-field").type("test title");
+    });
+
+    it("Enter description: 'test description'", () => {
+      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
+        .click({ force: true }).clear().type("test description");
+    });
+
+    it("Click 'Save' button", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        });
+      cy.wait(500);
+    });
+
+    it("Click 'Clone EB' button", () => {
+      cy.fbClickButton({ el: "CloneEBButton" });
+    });
+  });
+
+  context("Verify 'copyableValue' checkbox property", () => {
+    it("Verify 'TextField' values", () => {
+      cy.get("[name^=\"textfield-wi-ch-\"]").should("have.value", "textfield-wi-ch-value");
+      cy.get("[name^=\"textfield-wo-ch-\"]").should("not.have.value", "textfield-wo-ch-value");
+    });
+
+    it("Verify 'Checkboxes group' values", () => {
+      cy.get("[name^=\"cbg-wi-ch-\"]").find("input").eq(0).should("be.checked");
+      cy.get("[name^=\"cbg-wo-ch-\"]").find("input").eq(0).should("not.be.checked");
+    });
+
+    it("Verify TextEditor with Editor values", () => {
+      cy.get("[data-cy^=\"te-wi-ch-\"]").parent().find("p").should("have.text", "te-wi-ch-value");
+      cy.get("[data-cy^=\"te-wo-ch-\"]").parent().should("not.have.text", "te-wo-ch-value");
+    });
+
+    it("Verify Select fields values", () => {
+      cy.get("[name^=\"sf-wi-ch-\"]").should("have.value", "option1");
+      cy.get("[name^=\"sf-wo-ch-\"]").invoke("val").should("be.empty");
+    });
+
+    it("Verify Radio button groups values", () => {
+      cy.get("[name^=\"rbg-wi-ch-\"]").eq(0).should("have.value", "option1");
+      cy.get("[name^=\"rbg-wo-ch-\"]").eq(0).should("not.be.checked");
+    });
+
+    it("Verify Quantities values", () => {
+      cy.get("[name^=\"q-wi-ch-\"]").should("have.value", "1");
+      cy.get("[name^=\"q-wo-ch-\"]").invoke("val").should("be.empty");
+    });
+
+    it("Verify Timers values", () => {
+      cy.get("[name^=\"t-wi-ch-\"]").should("have.value", "t-wi-ch-value");
+      cy.get("[name^=\"t-wo-ch-\"]").invoke("val").should("be.empty");
+    });
+
+    it("Verify TextField with range values", () => {
+      cy.get("[name^=\"twr-wi-ch-\"]").should("have.value", "2");
+      cy.get("[name^=\"twr-wo-ch-\"]").invoke("val").should("be.empty");
+    });
+
+    it("Verify Date pickers values", () => {
+      cy.get("input[name^=\"dp-wi-ch-\"]").invoke("val").should("not.be.empty");
+      cy.get("input[name^=\"dp-wo-ch-\"]").should("have.value", "");
+    });
+
+    it("Verify Purchase Orders values", () => {
+      cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wi-ch-\"]").should("have.text", "EUR €");
+      cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wo-ch-\"]").should("have.text", "USD $");
+    });
+
+    it("Verify Autocompletes values", () => {
+      cy.get("[data-cy^=\"ac-wi-ch-\"]").parent().invoke("text").should("not.be.empty");
+      cy.get("[data-cy^=\"ac-wo-ch-\"]").should("have.value", "");
+    });
+
+    it("Verify Approval Matrix fields & values", () => {
+      cy.contains("Approval Role").should("exist");
+      cy.contains("Approving Users").should("exist");
+      cy.contains("Approving Groups").should("exist");
+    });
+
+    it("Verify Procedure", () => {
+      cy.contains("Step #1").parentsUntil(".MuiFormControl-fullWidth").parent()
+        .find("div").eq(-1).invoke("text").should("not.be.empty");
+      cy.contains("Step #2").parentsUntil(".MuiFormControl-fullWidth").parent()
+        .find("div").eq(-1).invoke("text").should("be.empty");
+    });
+
+    it("Verify Equipment Maintenance", () => {
+      cy.get("[data-cy^=\"eq-wi-ch-\"]").invoke("text").should("not.be.empty");
+      cy.get("input[name^=\"eq-wo-ch-\"]").eq(-1).should("not.be.checked");
     });
   });
 });
