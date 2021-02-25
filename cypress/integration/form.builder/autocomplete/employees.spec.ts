@@ -25,13 +25,7 @@ context("Autocomplete 'Employees' test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -189,6 +183,7 @@ context("Autocomplete 'Employees' test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
+            cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
               .find("[data-cy^=\"test-label-\"]").click();
 
@@ -215,12 +210,12 @@ context("Autocomplete 'Employees' test", () => {
         });
 
         it("Verify Users name in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").eq(0).should("have.text", USERS[10].name);
-          cy.get(".MuiAutocomplete-popper ul li").eq(1).should("have.text", USERS[1].name);
-          cy.get(".MuiAutocomplete-popper ul li").eq(2).should("have.text", USERS[2].name);
-          cy.get(".MuiAutocomplete-popper ul li").eq(3).should("have.text", USERS[3].name);
-          cy.get(".MuiAutocomplete-popper ul li").eq(4).should("have.text", USERS[4].name);
-          cy.get(".MuiAutocomplete-popper ul li").eq(5).should("have.text", USERS[5].name);
+          cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[10].name);
+          cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[1].name);
+          cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[2].name);
+          cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[3].name);
+          cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[4].name);
+          cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[5].name);
         });
       });
     });

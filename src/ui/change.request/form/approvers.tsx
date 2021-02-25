@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
-import { uniqBy } from "lodash";
-import React from "react";
+import { concat, difference, filter, find, includes, isEmpty, last, sortBy, uniqBy } from "lodash";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { components } from "react-select";
 import { ReactComponent as CheckedMark } from "../../../assets/images/check_mark.svg";
@@ -19,33 +19,31 @@ import useActionCreator from "../../hooks/useActionCreator";
 import { toUniqGroupOptions } from "./transform";
 
 
-interface OwnProps {
+interface Props {
   dataProp?: Approval[];
   withoutCurrentUser?: boolean;
   documentTypeGroups?: Group[];
   values?: ApproveAndReleaseFormValues;
   owner?: Owner;
   shouldShowDAMCheck?: boolean;
+  isDocumentPO: boolean;
+  checkedGroups: Group[];
+  initialGroups: Group[];
+  setCheckedGroups(groups: Group[]): void;
 }
 
-export type Props = OwnProps;
-
-export const Approvers: React.FunctionComponent<Props> = ({
+const Approvers: React.FunctionComponent<Props> = ({
   dataProp,
   withoutCurrentUser = false,
   documentTypeGroups,
-  values,
   owner,
   shouldShowDAMCheck = true,
+  isDocumentPO,
+  checkedGroups,
+  setCheckedGroups,
+  initialGroups,
 }) => {
-  // We should check if we need all of this
-  // Now that approvers are moved to the FB
-  // This is now only used for Approve&Release
-  const joinedEmployees = (groups: Group[]) => groups.map((group) => group.joinedEmployees.map((employee) =>
-    ({ group: group.name, id: employee.id, name: employee.user?.name })
-  ));
-  const approvers = documentTypeGroups ? joinedEmployees(documentTypeGroups).flat() : [];
-
+  // MARK: @selectors
   const loadApproversAsyncState = useSelector(changeRequestsSelectors.getLoadApproversAsyncState);
   const availableApprovers = useSelector((state: ApplicationState) => {
     if (withoutCurrentUser) {
@@ -55,8 +53,17 @@ export const Approvers: React.FunctionComponent<Props> = ({
     return changeRequestsSelectors.getApproversListForAssessmentForm(state);
   });
 
-  const loadAvailableApproversAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
+  // MARK: @config
+  const joinedEmployees = (groups: Group[]) => groups.map((group) => group.joinedEmployees.map((employee) =>
+    ({ group: group.name, id: employee.id, name: employee.user?.name })
+  ));
+  const approvers = documentTypeGroups ? joinedEmployees(documentTypeGroups).flat() : [];
+  const arrayOfOptions = [
+    ...toUniqGroupOptions(approvers), ...availableApprovers,
+  ];
 
+
+  // MARK: @styles
   const styles = {
     multiValueRemove: (base: React.CSSProperties, state: any) =>
       (dataProp && dataProp.some((approver) => approver.approver.id === state.data.value)) ?
@@ -64,20 +71,68 @@ export const Approvers: React.FunctionComponent<Props> = ({
         base,
   };
 
+  // MARK: @state
+  const [selectedApprovers, setSelectedApprovers] = useState<OptionType[]>([]);
+
+  // MARK: @actions
+  const loadAvailableApproversAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
+
+  // MARK: @effects
+
+  // MARK: @methods
+  /** Check/uncheck DAM/POAM required approval groups based on autocomplete selection
+   * @selectedUsers Current autocomplete selection.
+   */
+  const markGroupChecked = (selectedUsers: OptionType[]) => {
+    if (!selectedUsers || isEmpty(selectedUsers)) {
+      setCheckedGroups(initialGroups);
+      return;
+    }
+    const uniqGroups = sortBy(uniqBy(documentTypeGroups, "id"), "documentStage");
+    if (isDocumentPO) { // one user can fullfil only one signature requirement (POAM)
+      if (!isEmpty(difference(selectedUsers, selectedApprovers))) { // user added
+        const newUserId = last(difference(selectedUsers, selectedApprovers))?.value;
+        const checkedGroup =
+          find(uniqGroups, (group) =>
+            includes(group.joinedEmployees.map((e) => e.id), newUserId)
+            && !includes(checkedGroups.map((g) => g.id), group.id));
+        if (!checkedGroup) {
+          setSelectedApprovers(selectedUsers);
+          return;
+        }
+        checkedGroup.groupApprover = newUserId;
+        const newGroups = concat(checkedGroups, checkedGroup);
+        setCheckedGroups(newGroups);
+      } else if (!isEmpty(difference(selectedApprovers, selectedUsers))) { // user removed
+        const removedUserId = last(difference(selectedApprovers, selectedUsers))?.value;
+        const newGroups = checkedGroups.filter((group) => group.groupApprover !== removedUserId);
+        setCheckedGroups(newGroups);
+      }
+    } else { // user can fullfil all available signature requirements (DAM)
+      const newGroups =
+        filter(uniqGroups, (group) =>
+          group
+            .joinedEmployees
+            .some((employee) => (
+              selectedUsers
+                .map((u) => u.value)
+                .includes(employee.id)) || owner?.id === employee.id)
+        );
+      setCheckedGroups(newGroups);
+    }
+    setSelectedApprovers(selectedUsers);
+  };
+
+  // MARK: @helpers
   const renderGroupApproversResults = () => {
     const uniqGroups = uniqBy(documentTypeGroups, "id");
-    const selectedEmployees = (values?.approvals || []).map((e) => e.value);
-
     return (
       <Box display="flex" flexWrap="wrap">
         {
           uniqGroups.map((group, index) =>
             <Box marginRight={6} marginBottom={4} key={group.id} display="inline-flex">
               {
-                group
-                  .joinedEmployees
-                  .some((employee) => (
-                    selectedEmployees?.includes(employee.id)) || owner?.id === employee.id) ?
+                includes(checkedGroups.map((g) => g.id), group.id) ?
                   <CheckedMark data-cy={"checked-" + index} /> : <UncheckedMark data-cy={"unchecked"} />
               }
               <Box paddingLeft={1} display="initial" data-cy={"group-" + index}>
@@ -88,10 +143,6 @@ export const Approvers: React.FunctionComponent<Props> = ({
       </Box>
     );
   };
-
-  const arrayOfOptions = [
-    ...toUniqGroupOptions(approvers), ...availableApprovers,
-  ];
 
   const formatOptionLabel = ({ value, label, groups }) => {
     const uniqueValues = groups ? groups.filter((x, i, a) => a.indexOf(x) === i) : [];
@@ -108,6 +159,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
     <Box marginLeft={1}><Text message={data.label} /></Box>
   </components.MultiValueLabel>);
 
+  // MARK: @render
   return (
     <AsyncGate
       asyncState={loadApproversAsyncState}
@@ -127,6 +179,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
           components: { MultiValueLabel },
         }}
         options={uniqBy(arrayOfOptions, "value").filter((e: any) => e.value !== owner?.id) as OptionType[]}
+        onChange={(users) => markGroupChecked(users as OptionType[])}
       />
       {documentTypeGroups && shouldShowDAMCheck && renderGroupApproversResults()}
     </AsyncGate>

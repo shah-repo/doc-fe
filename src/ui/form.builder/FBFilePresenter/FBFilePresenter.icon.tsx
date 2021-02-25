@@ -12,6 +12,7 @@ const FBFilePresenterIcon: React.FunctionComponent<FBFilePresenterModeProps> = (
   handleRemove,
   onMouseOver,
   onMouseLeave,
+  file,
   fileName,
   fileColor,
   fileType,
@@ -25,6 +26,7 @@ const FBFilePresenterIcon: React.FunctionComponent<FBFilePresenterModeProps> = (
   omitDescription,
 }) =>  useObserver(() => (
   <FBContextMenu
+    menuId={file?.id}
     {...{ menuItems }}
     boxProps={{
       p: 2,
@@ -71,6 +73,7 @@ const FBFilePresenterIcon: React.FunctionComponent<FBFilePresenterModeProps> = (
             background: Colors.light_red,
           }}
           onClick={handleRemove}
+          {...{ disabled }}
         >
           <RemoveCircleOutlineIcon fontSize="small" />
         </IconButton>

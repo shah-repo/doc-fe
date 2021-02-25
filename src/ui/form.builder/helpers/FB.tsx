@@ -32,6 +32,13 @@ export class FB {
     const reUUID = /^([a-f\d]{8}(-[a-f\d]{4}){3}-[a-f\d]{12}?)$/i;
     return reUUID4.test(uuid) || reUUID.test(uuid);
   }
+
+  public static isConsideredEmptyInput(input: Record<string, any>): boolean {
+    return input == null ||
+      (typeof input === "object" && Object.keys(input).length === 0) ||
+      (Array.isArray(input) && input.length === 0) ||
+      (typeof input !== "number" && !input);
+  }
 }
 
 export default FB;

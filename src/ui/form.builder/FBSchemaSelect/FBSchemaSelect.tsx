@@ -1,6 +1,5 @@
 import React from "react";
-import { FBSchemaSelectProps } from ".";
-import { FBAutocomplete } from "../FBAutocomplete";
+import { FBAutocomplete, FBSchemaSelectProps } from "..";
 import { withFBSchemaSelect } from "./FBSchemaSelect.wrap";
 
 const FBSchemaSelect: React.FunctionComponent<FBSchemaSelectProps> = ({

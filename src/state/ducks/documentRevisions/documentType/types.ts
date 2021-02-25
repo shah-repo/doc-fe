@@ -9,7 +9,7 @@ import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, SET_DOCUMENT_TYPES_BY_CATEGORY
 export enum DOC_TYPE_GROUP {
   FORM = "FORM",
   OTHER = "OTHER",
-  MPI = "MPI",
+  PI = "PI",
   RECORD = "RECORD",
   CHANGE_REQUEST = "CHANGE_REQUEST",
   DAM = "DAM",
@@ -28,6 +28,9 @@ export enum DOC_TYPE_GROUP {
   LOT = "LOT",
   PART_LOT = "PART_LOT",
   LHR = "LHR",
+  COMPANY_BOOTSTRAP_RECORD = "COMPANY_BOOTSTRAP_RECORD",
+  SEED_DOCUMENT = "SEED_DOCUMENT",
+  PI_INSTANCE = "PI_INSTANCE",
 }
 
 export type DocumentGroupType = keyof typeof DOC_TYPE_GROUP;
@@ -59,6 +62,8 @@ export enum DOC_TYPE_GROUP_OPTION {
   CAN_CREATE_INSPECTION = "CAN_CREATE_INSPECTION",
   SERIALIZED_CSV = "SERIALIZED_CSV",
   ENGINEERING_BUILD = "ENGINEERING_BUILD",
+  COMPANY_BOOTSTRAP_ON_RELEASE = "COMPANY_BOOTSTRAP_ON_RELEASE",
+  SEED = "SEED",
 }
 export type DocumentGroupOptionsType = keyof typeof DOC_TYPE_GROUP_OPTION;
 
@@ -75,6 +80,7 @@ export interface PageDetailsAddNew {
 }
 
 export interface PageDetails {
+  id: string;
   addNewBtnLabel: string;
   columns: PageDetailsColumn[];
   category: string;

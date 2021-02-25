@@ -11,7 +11,8 @@ import { RequestType } from "../../../components/common/owner.changer/helpers/ty
 import CopyEBButton from "../../../components/forms/CopyEBButton";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
-import { checkCanBeCopied, checkIsDocumentRecord, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
+import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
+import { checkCanBeCopied, checkIsDocumentEditableSchema, checkIsDocumentRecord, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
@@ -26,41 +27,51 @@ import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.contai
 import VoidButton from "./VoidButton";
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
+  const formik = useFormikContext();
+
   // isCreateDocumentDisabled is flag for temporary disabling
   // of create button until correct doc id is generated
   const { isCreateDocumentDisabled } = props;
+  const { workspaceState, formState } = FB.useStores();
   const {
     documentRevision,
     values,
     docInfo,
     asyncState,
     canChangeOwnerShip,
+    type,
   } = React.useContext(FormHeaderContext)!;
+  const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
+  const isUserDocumentOwner = React.useContext(isOwnerContext);
 
-  const { workspaceState, formState } = FB.useStores();
 
   // MARK: @helpers
+  const shouldShowUpgradeForDocs = useShouldUpgradeToLatest(
+    documentRevision?.status,
+    documentRevision?.formDocument?.status,
+    documentRevision?.formDocument?.document?.id
+  );
+  const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
+  const isEditableSchema = checkIsDocumentEditableSchema(values.document?.documentType?.groupOptions);
   const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
   const serializedCSV = hasSerializedCSV(values.document?.documentType?.groupOptions);
+  const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
+  const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
+  const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isApproved = isInlineFormApproved(
     documentRevision,
     formState,
     documentRevision?.formDocument?.formTemplate?.schema
   );
-  const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
+  const shouldShowUpgrade =  !isEditableSchema
+    && (shouldShowUpgradeBannerForRecord || (!isRecord && shouldShowUpgradeForDocs));
 
-  const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
-  const formik = useFormikContext();
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
-  const isUserDocumentOwner = React.useContext(isOwnerContext);
-  const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const showVoidButton = isStatusInDraft && documentRevision?.version === 1;
-  const showVoidButtonOnInlineRecords = isStatusInDraft &&
-     isDocumentNumericRelease(documentRevision?.revisionStage);
-  const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
-  const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
+  const showVoidButtonOnInlineRecords = isStatusInDraft && isDocumentNumericRelease(documentRevision?.revisionStage);
+  const isNewVersion = type === "newVersion";
 
   function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -118,6 +129,15 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     }
     formik.submitForm();
   };
+
+  React.useEffect(() => {
+    // Autosave when record is updated
+    if (isNewVersion && isRecord) {
+      onFormClick();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
     <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
   );
@@ -187,14 +207,12 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         />}
         {renderChangeOwnership}
         <UpgradeToLatestContainer
-          documentStatus={documentRevision?.status}
           formDocumentId={documentRevision?.formDocument?.document?.id}
           docRevId={documentRevision?.id}
-          formDocumentStatus={documentRevision?.formDocument?.status}
           setShouldDisplay={props.setUpgradeToLastestDisplay}
           type="button"
           {...{
-            shouldShowUpgradeBannerForRecord,
+            shouldShowUpgrade,
           }}
         />
         {!(isRecord && isInlineApproval) &&

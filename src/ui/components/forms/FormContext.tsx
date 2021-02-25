@@ -1,7 +1,7 @@
 import { useFormikContext } from "formik";
-import { filter, isEqual, map } from "lodash";
+import { filter, isEmpty, isEqual, map } from "lodash";
 import React, { useContext } from "react";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, ReferenceToEditRequest } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { FB, FBAutocompleteAsyncOption } from "../../form.builder";
 import FBAutocompleteAsyncStore from "../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store";
@@ -59,6 +59,20 @@ export const useFormContext = () => {
     const nextValueId = nextDocument?.document.id;
     let refValues = workspaceState.referenceValue;
     if (!prevValueId) {
+      // special case: when prevValue is undefined and there is a value in formInput,
+      // we need to remove it from refereces also,
+      // made according to issues with autosave(caused by this to other fields)
+      const currentPoReference = workspaceState?.document?.formInput?.[name];
+      const refWithoutPrevValue = workspaceState?.document?.referenceTo.filter((e) => {
+        const docRevIds = e.documentRevisions?.map((i) => i.id );
+        if (docRevIds?.includes(currentPoReference)) {
+          return null;
+        }
+        return e;
+      });
+      if (!isEmpty(refWithoutPrevValue)) {
+        refValues = refWithoutPrevValue?.map((e) => ({ id: e.id }))as ReferenceToEditRequest[];
+      }
       formik.setFieldValue("referenceTo", [...refValues, { id: nextValueId }]);
       workspaceState.referenceValue = [...refValues, { id: nextValueId! }];
       return;

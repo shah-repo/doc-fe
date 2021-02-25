@@ -10,7 +10,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 
-context("Checkboxes test", () => {
+context.skip("Checkboxes test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");

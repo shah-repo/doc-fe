@@ -59,6 +59,7 @@ export class FBEditorState {
     "task",
     "approvals",
     "procedure",
+    "mpiprocedure",
     "eqmaintenance",
     "textfieldwithrange",
   ];
@@ -83,7 +84,7 @@ export class FBEditorState {
     "approvals",
   ];
 
-  public static pickStepIndex: FBInputType[] = ["stepsection", "teststep", "procedure"];
+  public static pickStepIndex: FBInputType[] = ["stepsection", "teststep", "procedure", "mpiprocedure"];
 
   public static pickCustomHandler: FBInputType[] = ["teststep"];
 
@@ -128,10 +129,13 @@ export class FBEditorState {
     task: FBEditorLabel,
     approvals: FBEditorApprovals,
     procedure: FBEditorEmpty,
+    mpiprocedure: FBEditorEmpty,
     parts: FBEditorEmpty,
     eqmaintenance: FBEditorEQMaintenance,
     textfieldwithrange: FBEditorTextFieldWithRange,
     supplier: FBEditorLabel,
+    lhrstep: FBEditorEmpty,
+    unitMeasures: FBEditorLabel,
   };
 
   @observable public mode?: FBEditorMode = "config";

@@ -23,13 +23,7 @@ context("Dynamic Form Test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -119,6 +113,7 @@ context("Dynamic Form Test", () => {
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
+      cy.wait(3000);
     });
 
     it("Approve and Release document", () => {

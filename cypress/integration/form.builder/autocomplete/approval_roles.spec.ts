@@ -25,13 +25,7 @@ context("Autocomplete 'Approval Roles' test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -166,14 +160,13 @@ context("Autocomplete 'Approval Roles' test", () => {
       });
 
       it("Click 'Add Approver' & 'confirm' button", () => {
-        cy.fbClickButton({ el: "ApproveAndRelease-button" });
-        cy.fbClickButton({ el: "ApproveAndRelease-submit" });
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
 
       it("Reload company", () => {
         cy.fbClickButton({ el: "UserMenuButton" });
         cy.get("#switchCompanyButton").click();
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+        cy.cmpSelectCompanyAlreadyLoggedIn({ name: createdCompany.name, multiple: multipleCompanies });
       });
     });
 
@@ -244,6 +237,7 @@ context("Autocomplete 'Approval Roles' test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
+            cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
               .find("[data-cy^=\"test-label-\"]").click();
 

@@ -24,13 +24,7 @@ context("Autocomplete 'Document types' test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -102,6 +96,7 @@ context("Autocomplete 'Document types' test", () => {
 
       it("Click Save button", () => {
         cy.get("button[type=\"submit\"]").click();
+        cy.wait(8000);
       });
     });
 
@@ -172,6 +167,7 @@ context("Autocomplete 'Document types' test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
+            cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
               .find("[data-cy^=\"test-label-\"]").click();
 

@@ -63,13 +63,7 @@ context("Autocomplete test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -181,6 +175,7 @@ context("Autocomplete test", () => {
                 effectiveDate: (new Date()).toISOString(),
                 documentType: { id: approvalRequestDocumentType[0].id },
                 formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
               },
               employeeId: adminEmployee.id,
               sessionId: loginResponse.sessionId,
@@ -226,6 +221,7 @@ context("Autocomplete test", () => {
             effectiveDate: (new Date()).toISOString(),
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
           },
           employeeId: adminEmployee.id,
           sessionId: loginResponse.sessionId,
@@ -325,6 +321,7 @@ context("Autocomplete test", () => {
                 effectiveDate: (new Date()).toISOString(),
                 documentType: { id: approvalRequestDocumentType[0].id },
                 formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
               },
               employeeId: adminEmployee.id,
               sessionId: loginResponse.sessionId,
@@ -393,6 +390,7 @@ context("Autocomplete test", () => {
                     effectiveDate: (new Date()).toISOString(),
                     documentType: { id: approvalRequestDocumentType[0].id },
                     formDocument: { id: initialArDocument[0].id },
+                    approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
                   },
                   employeeId: adminEmployee.id,
                   sessionId: loginResponse.sessionId,
@@ -550,6 +548,7 @@ context("Autocomplete test", () => {
             effectiveDate: (new Date()).toISOString(),
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
           },
           employeeId: adminEmployee.id,
           sessionId: loginResponse.sessionId,
@@ -652,6 +651,7 @@ context("Autocomplete test", () => {
             effectiveDate: (new Date()).toISOString(),
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
           },
           employeeId: adminEmployee.id,
           sessionId: loginResponse.sessionId,
@@ -713,7 +713,7 @@ context("Autocomplete test", () => {
     });
 
     it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
       cy.wait(5000);
     });
 
@@ -824,14 +824,13 @@ context("Autocomplete test", () => {
     });
 
     it("Click 'Add Approver' & 'confirm' button", () => {
-      cy.fbClickButton({ el: "ApproveAndRelease-button" });
-      cy.fbClickButton({ el: "ApproveAndRelease-submit" });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Reload company", () => {
       cy.fbClickButton({ el: "UserMenuButton" });
       cy.get("#switchCompanyButton").click();
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      cy.cmpSelectCompanyAlreadyLoggedIn({ name: createdCompany.name, multiple: multipleCompanies });
     });
   });
 
@@ -996,11 +995,11 @@ context("Autocomplete test", () => {
 
     it("Verify count of 'Approvers' in the list", () => {
       cy.fbVerifyAutocompleteElementLength({ el: "approvers", length: 5 });
-      cy.get(".MuiAutocomplete-popper ul li").eq(0).should("have.text", `${USERS[1].name} - ${USERS[1].email}`);
-      cy.get(".MuiAutocomplete-popper ul li").eq(1).should("have.text", `${USERS[2].name} - ${USERS[2].email}`);
-      cy.get(".MuiAutocomplete-popper ul li").eq(2).should("have.text", `${USERS[3].name} - ${USERS[3].email}`);
-      cy.get(".MuiAutocomplete-popper ul li").eq(3).should("have.text", `${USERS[4].name} - ${USERS[4].email}`);
-      cy.get(".MuiAutocomplete-popper ul li").eq(4).should("have.text", `${USERS[5].name} - ${USERS[5].email}`);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", `${USERS[3].name} - ${USERS[3].email}`);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", `${USERS[4].name} - ${USERS[4].email}`);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", `${USERS[5].name} - ${USERS[5].email}`);
     });
 
     it("Verify count of 'Document types' in the list", () => {
@@ -1050,11 +1049,11 @@ context("Autocomplete test", () => {
 
     it("Verify count of 'Employees' in the list", () => {
       cy.fbVerifyAutocompleteElementLength({ el: "employees", length: 5 });
-      cy.get(".MuiAutocomplete-popper ul li").eq(0).should("have.text", USERS[1].name);
-      cy.get(".MuiAutocomplete-popper ul li").eq(1).should("have.text", USERS[2].name);
-      cy.get(".MuiAutocomplete-popper ul li").eq(2).should("have.text", USERS[3].name);
-      cy.get(".MuiAutocomplete-popper ul li").eq(3).should("have.text", USERS[4].name);
-      cy.get(".MuiAutocomplete-popper ul li").eq(4).should("have.text", USERS[5].name);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[1].name);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[2].name);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[3].name);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[4].name);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[5].name);
     });
 
     it("Verify count of 'Official Groups' in the list", () => {

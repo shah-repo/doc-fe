@@ -52,7 +52,7 @@ export const withFBInput = <T extends FBInputProps>(
     ...props
   }: T) => {
 
-    const { formState, workspaceState, bookmarkState } = FB.useStores();
+    const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
     const { isOutput } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
@@ -64,12 +64,11 @@ export const withFBInput = <T extends FBInputProps>(
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
     isInputOwner = workspaceState?.getIsInputOwner(name);
-    disabled = !isInputOwner || disabled;
 
     // Set validation scheme. This is union of scheme & comps configs.
     useEffect(() => {
       if (!applicableValidationSchema) { return; }
-      workspaceState?.setValidationSchemaItem({ name, label, type, ...props });
+      schemaState?.setValidationSchemaItem({ name, label, type, ...props });
     }, []);
 
     // TODO: Autocomplete default set as input
@@ -123,7 +122,7 @@ export const withFBInput = <T extends FBInputProps>(
 
     const child = first(React.Children.toArray(children));
     const isClone = !includes(OmitInputClones, type) && !isUndefined(child) && !hidden;
-    disabled = !isInputOwner || disabled;
+    disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) && !isInputOwner) || disabled;
 
     if (isClone) {
       children = cloneElement(child as React.ReactElement, {
@@ -131,7 +130,7 @@ export const withFBInput = <T extends FBInputProps>(
         disabled,
         onChange,
         onBlur,
-        ...(type !== "autocomplete" && { value }),
+        ...(withState && type !== "autocomplete" && { value }),
         ...(type === "textfield" && { error }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
         ...(workspaceState?.mode === "preview" && { className: FBClasses.inputPreview }),

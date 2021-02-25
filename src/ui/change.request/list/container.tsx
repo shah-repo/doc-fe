@@ -1,8 +1,10 @@
-import React from "react";
+import { isEmpty } from "lodash";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import authSelectors from "../../../state/ducks/auth/selectors";
+import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import {
   changeRequestEditPath,
@@ -24,6 +26,29 @@ export const ListContainer: React.FunctionComponent<Props> = ({
   const currentUserEmail = useSelector(authSelectors.currentUserEmail);
   const tableCriteria = useSelector(getTableCriteria(CR_TABLE_NAME));
   const tableData = useSelector(getTableData(CR_TABLE_NAME));
+
+  const setSearchStatus = (
+    state?: ChangeRequestStatus
+  ) => {
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          queryDict: {
+            state,
+          },
+        },
+        CR_TABLE_NAME,
+      ),
+    );
+  };
+
+  useEffect(() => {
+    if (isEmpty(tableCriteria.queryDict)) {
+      setSearchStatus(ChangeRequestStatus.InReview);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <ListPresenter

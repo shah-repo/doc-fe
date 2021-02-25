@@ -12,12 +12,30 @@ declare global {
       recCreateRecordFromLandingPage(): Chainable<Subject>;
       recCheckIfMultilpeFormsAreAvailable(params: {recordType: string; recordForms: string[]}): Chainable<Subject>;
       recSelectRecordFormFromMultiSelect( params: {recordType: string; recordForm?: string} ): Chainable<Subject>;
+      equipSelectRecordFormFromMultiSelect( params: {recordType: string; recordForm?: string} ): Chainable<Subject>;
       inspecSelectRecordFormFromMultiSelect( params: {recordType: string; recordForm?: string} ): Chainable<Subject>;
       recCheckRevisionStage(params: {stage: string}): Chainable<Subject>;
       recFilterRecordListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
+      equipClickCreateNew(): Chainable<Subject>;
+      recFilterByRev(params: {revision: string }): Chainable<Subject>;
+      recFilterByStatus(params: {status: string }): Chainable<Subject>;
+      equipReloadDocument(): Chainable<Subject>;
     }
   }
 }
+
+Cypress.Commands.add("recFilterByStatus", (params: {status: string }) => {
+  cy.get("div[id=\"mui-component-select-displayStatus\"]").click().wait(500);
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
+    cy.get("ul[role=listbox]>li").contains(params.status).click();
+  });
+});
+
+Cypress.Commands.add("recFilterByRev", (params: {revision: string }) => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
+    cy.get("input[name=name]").type(params.revision).wait(500);
+  });
+});
 
 Cypress.Commands.add("recFilterRecordListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
@@ -66,6 +84,46 @@ Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType:
     }
   });
 });
+
+Cypress.Commands.add("equipSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocumentType, CyRoutes.GetSpecificDocumentType], () => {
+    cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
+  });
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.EmployeesGet,
+    CyRoutes.DocPreview,
+    CyRoutes.GetRequiredApprovers], () => {
+    cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
+    cy.wait(500);
+    cy.get("div[id^=react-select]").contains(params.recordType).click();
+    if (params.recordForm) {
+      cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").click();
+      cy.get("div[id^=react-select]").contains(params.recordForm).click();
+    }
+  });
+});
+
+Cypress.Commands.add("equipClickCreateNew", () => {
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.GetDocumentType,
+    CyRoutes.GetSpecificDocumentType,
+    CyRoutes.EmployeesGet,
+    CyRoutes.DocPreview,
+    CyRoutes.GetRequiredApprovers], () => {
+    cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
+  });
+});
+
+Cypress.Commands.add("equipReloadDocument", () => {
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.DocPreview,
+    CyRoutes.EmployeesGet,
+    CyRoutes.DocPreview,
+    CyRoutes.EmployeesGet], () => {
+    cy.reload();
+  });
+});
+
 
 Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
   cy.wrapWithWaitOnApiCalls([

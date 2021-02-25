@@ -22,7 +22,7 @@ declare global {
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drApproveAndReleaseDocumentWithoutSelectingForm(params?: { toastifyExists: boolean }): Chainable<Subject>;
       drCloseApproveAndReleaseDialog(): Chainable<Subject>;
-      drClickCreateDocumentWithApiCall(params?: { toastifyExists: boolean }): Chainable<Subject>;
+      drClickCreateDocumentWithApiCall(params?: { toastifyExists?: boolean; requiredApproversDocRev: boolean}): Chainable<Subject>;
       drClickCreateSupplierWithApiCall(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForForms(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForFormsExpectingToastError(): Chainable<Subject>;
@@ -225,6 +225,7 @@ Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) 
       cy.get("[data-cy=\"select.document.documentType.id\"]").click();
       cy.get(`[data-cy="selectItem.document.documentType.id.${params.documentType}"]`).click();
     });
+  cy.wait(500);
 });
 
 Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: string }) => {
@@ -241,12 +242,13 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params:
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   });
-  cy.wait(500);
+  cy.wait(2000);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
     });
+  cy.wait(500);
   if (params === undefined)
   {
     cy.checkToastMessage({ exists: false });
@@ -295,11 +297,19 @@ Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
   cy.checkToastMessage({ exists: false });
 });
 
-Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExists: boolean }) => {
+Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExists: boolean; requiredApproversDocRev: boolean }) => {
+  let routesToWait;
+  if (params && params.requiredApproversDocRev) {
+    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev];
+  }
+  else {
+    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApprovers];
+  }
   cy.wrapWithWaitOnApiCalls(
-    [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet], () => {
+    routesToWait, () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
+  cy.wait(500);
   if (params === undefined)
   {
     cy.checkToastMessage({ exists: false });
@@ -314,7 +324,6 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExi
       cy.checkToastMessage({ exists: false });
     }
   }
-  cy.wait(500);
 });
 
 Cypress.Commands.add("drClickCreateSupplierWithApiCall", () => {
@@ -332,7 +341,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
   cy.checkToastMessage({ exists: false });
-  cy.wait(500);
+  cy.wait(2000);
 });
 
 Cypress.Commands.add("drClickCreateDocumentWithApiCallForFormsExpectingToastError", () => {
@@ -366,11 +375,15 @@ Cypress.Commands.add("drSetDocTypeId", (params: { docId: string }) => {
 });
 
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {
-  cy.get("#clearFilter").click().wait(500);
-  cy.get("#name").type(params.title).wait(500);
-  cy.get("[id=\"mui-component-select-displayStatus\"]").click().wait(300);
-  cy.get("li[data-value]").contains(params.status).click().wait(500);
-  cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
+  cy.dlClearFilters();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
+    cy.get("#name").type(params.title);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
+    cy.get("[id=\"mui-component-select-displayStatus\"]").click().wait(300);
+    cy.get("li[data-value]").contains(params.status).click().wait(500);
+  });
+  cy.dlSelectFirstDocument();
 });
 
 Cypress.Commands.add("drChangeOwnerFromMenu", (params: { employee: string }) => {
@@ -382,7 +395,7 @@ Cypress.Commands.add("drChangeOwnerByAdmin", (params: { employee: string }) => {
   cy.get("[data-cy=\"changeOwner\"]").click();
   cy.get("#employee").click();
   cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
-  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRevOwner, () => {
     cy.get("[data-cy=\"changeOwner-submit\"]").click();
   });
 });
@@ -391,7 +404,7 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
   cy.get("[data-cy=\"changeOwner\"]").click();
   cy.get("#employee").click();
   cy.get(`[data-cy="selectItem.employee.${params.employee}"]`).click();
-  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRevOwner, () => {
     cy.get("[data-cy=\"changeOwner-submit\"]").click();
   });
 });
@@ -554,6 +567,7 @@ export interface IApproveAndReleasePayload{
   effectiveDate: string;
   documentType: { id: string };
   formDocument: { id: string };
+  approversWithSignatures?: [{ approver: {id: string} }];
 }
 
 Cypress.Commands.add("drAPIApproveAndRelease", (params: {
@@ -617,7 +631,7 @@ Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
 });
 
 Cypress.Commands.add("drRequestAccessVisibility", (params: {isVisible: boolean}) => {
-  cy.get(`[data-cy="PreviewControlsContainer-access"]`).should((params.isVisible ? "" : "not.") + "be.visible");
+  cy.get(`[data-cy="PreviewControlsContainer-access"]`).should((params.isVisible ? "" : "not.") + "exist");
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names: string[], params: { toastifyExists: boolean }) => {
