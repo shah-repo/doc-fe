@@ -184,7 +184,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
