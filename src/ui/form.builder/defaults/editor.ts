@@ -1,7 +1,6 @@
 import { Dictionary } from "lodash";
 import { FBInputType } from "..";
 import FBLabelEditor from "../components/editors/FBLabelEditor";
-import FBSectionBox from "../components/layout/FBSectionBox";
 import { FBEditorElementType } from "../types/editor";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
@@ -40,45 +39,6 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   // selectdocument: FBEditorSelectDocument,
   // selectrequirement: FBEditorSelectRequirement,
   // testRequirement: FBEditorTestRequirement,
-};
-
-export const FBFieldComponent: Dictionary<any> = {
-  section: FBSectionBox,
-  // subsection: FBSubSectionBox,
-  // textfield: FBTextField,
-  // checkbox: FBCheckbox,
-  // checkboxgroup: FBCheckboxGroup,
-  // datepicker: FBDatePicker,
-  // texteditor: FBTextEditorField,
-  // select: FBSelect,
-  // radio: FBRadio,
-  // radiogroup: FBRadioGroup,
-  // autocomplete: FBAutocompleteAsync,
-  // autocompleteasync: FBAutocompleteAsync,
-  // hyperlink: FBLink,
-  // fileupload: FBFileUpload,
-  // schemaSelect: FBValidatorSchemaSelect,
-  // schemaItem: FBValidatorSchemaItem,
-  // action: FBActionContainer,
-  // hellosign: FBHelloSign,
-  // approvalMatrix: FBApprovalMatrix,
-  // poApprovalMatrix: FBPOApprovalMatrix,
-  // purchaseorder: FBPurchaseOrder,
-  // poreceive: FBPOReceive,
-  // paragraph: FBParagraph,
-  // stepsection: FBSectionBox,
-  // teststep: FBSectionBox,
-  // instructionsmediaupload: FBMediaAlbumField,
-  // evidencemediaupload: FBMediaAlbumField,
-  // checkpoint: FBButton,
-  // approval: FBApproval,
-  // createlabel: FBButton,
-  // quantity: FBQuantityField,
-  // timer: FBTimerField,
-  // instructionsdocument: FBInstructionsDocument,
-  // selectdocument: FBSelectDocument,
-  // selectrequirement: FBSelectRequirement,
-  // testRequirement: FBTestRequirement,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBInputType[]> = {

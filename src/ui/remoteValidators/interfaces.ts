@@ -33,13 +33,6 @@ interface ISchemaItem {
 interface IFormTemplate {
   schema: ISchemaItem[];
 }
-export interface CompanyValidators {
-  validateTemplateSchema: (formTemplate: IFormTemplate) => Promise<any>;
-  validateInput: (params: IValidateInput) => Promise<any>;
-  registerHelperCallback: (callback: () => IRemoteValidatorsHelper) => void;
-  registerContextCallback: (callback: () => IRemoteValidatorsContext) => void;
-  buildInfo: {[K: string]: string};
-}
 
 enum APPLICABLE_FOR_ACTION {
   ON_SUBMIT = "ON_SUBMIT",

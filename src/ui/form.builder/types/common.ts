@@ -1,13 +1,12 @@
 import { BoxProps } from "@material-ui/core/Box/Box";
 import { FormControlProps } from "@material-ui/core/FormControl/FormControl";
 import { SelectProps } from "@material-ui/core/Select";
-import { BaseTextFieldProps, OutlinedTextFieldProps } from "@material-ui/core/TextField";
+import { BaseTextFieldProps } from "@material-ui/core/TextField";
 import { Dictionary } from "lodash";
 import { ReactNode } from "react";
 import { Employee } from "../../../state/ducks/company/types";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { SelectOption } from "../../components/forms/fields/Select";
-import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { FBActionContainerProps } from "./actions/action";
 import { FBContextProps } from "./common/context";
 import { FBEditorElementType } from "./editor";
@@ -17,7 +16,7 @@ import { FBValidatorConfigProps } from "./validation/validatorDialog";
 
 export type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
 
-export interface FBLabelRendererProps {
+interface FBLabelRendererProps {
   labelRenderer?: React.ReactNode;
 }
 
@@ -143,12 +142,4 @@ FBOptionRendererProps & {
   fieldName?: string;
   row?: boolean;
   applicableOn?: FBValidatorTrigger[];
-};
-
-export type FBOnChangeProps = FormikHybridFieldProps &
-Pick<SelectProps, "onChange" | "value"> &
-Pick<FBFormDefaultProps, "validatorDelimiter"> &
-Pick<OutlinedTextFieldProps, "error" | "helperText"> & {
-  value?: any;
-  onChange?: (trigger: any) => void;
 };

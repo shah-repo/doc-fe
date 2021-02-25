@@ -41,15 +41,6 @@ export type FBPOApprovalMatrixFormProps =
 //   validateForm?: (values: any) => void;
 // };
 
-export type FBPOApprovalMatrixAddItemProps =
-& FBPOApprovalMatrixBasicProps
-& Pick<FBPOApprovalMatrixDialogProps,
-"onSubmit" | "closeDialog" | "isDialogOpen" | "employees" | "groupOptions" | "signatureStages">
-& {
-  openDialog: () => void;
-};
-
-
 export type FBPOApprovalMatrixTableProps =
 & FBPOApprovalMatrixBasicProps
 & Pick<FBPOApprovalMatrixDialogProps, "onSubmit" |
