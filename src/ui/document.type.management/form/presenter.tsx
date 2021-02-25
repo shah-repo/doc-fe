@@ -1,15 +1,16 @@
 import { Box, Button, Grid, InputLabel, TextareaAutosize } from "@material-ui/core";
 import { Field, FormikProps } from "formik";
 import React from "react";
+import { useIntl } from "react-intl";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import { DocumentType, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType, DOC_TYPE_GROUP, REVISION_STAGE_OPTIONS } from "../../../state/ducks/documentRevisions/documentType";
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import InputField from "../../components/forms/fields/Input";
 import FormWrapper from "../../components/forms/FormWrapper";
 import Text from "../../components/Text";
 import { Translation } from "../../translations/types";
-import { enumToOptions } from "../transform";
+import { enumToOptions, translatedOptions } from "../transform";
 import styles from "./styles";
 
 interface Props extends FormikProps<DocumentType> {
@@ -26,6 +27,8 @@ export const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
   ...props
 }) => {
   const classes = styles();
+  const intl = useIntl();
+
   const autoSizerRenderer = (props) =>
     <Field name={props.name}>
       {({
@@ -74,7 +77,7 @@ export const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
           />
           <CheckboxField
             name="needsSignature"
-            label="Needs Signature"
+            label="QMS Document"
           />
           <CheckboxField
             name="defaultTraining"
@@ -85,6 +88,12 @@ export const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
           name="startingNumber"
           label="Starting Number"
           inputProps={{ id: "startingNumber", type: "number" }}
+        />
+        <AutocompleteField
+          name="defaultRevStage"
+          label="Default Revision Stage"
+          autocompleteProps={{ id: "defaultRevStage" }}
+          options={translatedOptions(intl, REVISION_STAGE_OPTIONS)}
         />
         <AutocompleteField
           name="hiddenForCreationForUsersWithoutTags"

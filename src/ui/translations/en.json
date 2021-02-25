@@ -630,6 +630,7 @@
   "form.builder.prefix": "Prefix",
   "form.builder.internalType": "Internal type",
   "form.builder.needsSignature": "Needs signature",
+  "form.builder.qms.document": "QMS Document",
   "form.builder.category": "Category",
   "form.builder.documentType": "Document type",
   "form.builder.approvals.alpha": "Approvals Alpha",
