@@ -64,6 +64,28 @@ Cypress.on("uncaught:exception", (err, runnable) => {
   return true;
 });
 
+Cypress.Commands.overwrite("click", (originalFn, subject, options) => {
+
+  const currentCommand = cy.state("current").attributes.name;
+
+  if (currentCommand === "click") {
+    cy.wrap(subject).arrow({ duration: 40, blocking: true }).then(() => originalFn(subject, options));
+  } else {
+    return originalFn(subject, options);
+  }
+});
+
+Cypress.Commands.overwrite("type", (originalFn, subject, options) => {
+
+  const currentCommand = cy.state("current").attributes.name;
+
+  if (currentCommand === "type") {
+    cy.wrap(subject).arrow({ duration: 40, blocking: true }).then(() => originalFn(subject, options));
+  } else {
+    return originalFn(subject, options);
+  }
+});
+
 Cypress.Screenshot.defaults({
   capture: "viewport",
   scale: false,
