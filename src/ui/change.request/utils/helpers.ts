@@ -1,4 +1,4 @@
-import { ChangeRequestStatus, ImplementationPlanTask, ImplementationPlanTaskStatus } from "../../../state/ducks/changeRequest/types";
+import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { ChangeRequestUserProps } from "./types";
 
@@ -25,18 +25,6 @@ export const canChangeCROwner = (
 
 export const canEditApprovers = ({ dataProp, currentUserEmail }: ChangeRequestUserProps) => canEditChangeRequest({ dataProp, currentUserEmail }) ||
     (currentUserEmail === dataProp.owner.user.email && dataProp.state === ChangeRequestStatus.InReview);
-
-export const canCloseTask = (
-  changeRequestStatus: ChangeRequestStatus,
-  task: ImplementationPlanTask,
-  currentUserEmail: string,
-) => (
-  (task.assigned && task.assigned.user.email === currentUserEmail) &&
-    (task.status === ImplementationPlanTaskStatus.Pending) &&
-    (changeRequestStatus === ChangeRequestStatus.InReview ||
-      changeRequestStatus === ChangeRequestStatus.Implementation ||
-      changeRequestStatus === ChangeRequestStatus.Approved)
-);
 
 export const changeRequestStatusOption = () => {
   const options: SelectOption[] = [];

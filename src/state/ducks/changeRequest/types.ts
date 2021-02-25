@@ -14,11 +14,6 @@ export enum ChangeRequestStatus {
   Voided = "VOIDED",
 }
 
-export enum ImplementationPlanTaskStatus {
-  Pending = "PENDING",
-  Done = "DONE",
-}
-
 interface Justifications {
   id?: string;
   description?: string;
@@ -37,7 +32,7 @@ interface AssessmentItem {
   attachments?: Attachment[] | null;
 }
 
-export interface ImplementationPlanTask {
+interface ImplementationPlanTask {
   id: string;
   title: string;
   description: string;
@@ -50,11 +45,12 @@ export interface ImplementationPlanTask {
   closingNote: string | null;
 }
 
-export interface ImplementationPlan {
+interface ImplementationPlan {
   id: string;
   tasks: ImplementationPlanTask[];
   attachments: Attachment[];
 }
+
 // This needs to be properly cleaned up
 export interface ChangeRequest {
   createdAt: string;
