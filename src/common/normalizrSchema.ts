@@ -89,11 +89,3 @@ attachmentSch.define({
   pdf: pdfSch,
 });
 
-export class NormalizerData {
-  constructor({ entities, result }) {
-    this.entities = entities;
-    this.result = result;
-  }
-  entities: any;
-  result: any;
-}
