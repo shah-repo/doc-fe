@@ -13,7 +13,7 @@ export class FBWorkspaceState extends FBSchemaState {
   public externalState?: FBWorkspaceExternalState;
   public document?: DocumentRevision;
   public changeRequest?: ChangeRequest;
-  public autosave?: boolean;
+  @observable public autosave?: boolean;
 
   // Hack because formik context from autosave & reference comp are not the same ref
   // and we need to know the values from both FB and AvailableReferences to create
@@ -93,6 +93,10 @@ export class FBWorkspaceState extends FBSchemaState {
 
   @action public setMode = (mode: FBWorkspaceMode) => {
     set(this, "mode", mode);
+  };
+
+  @action public setAutosave = (autosave: boolean) => {
+    set(this, "autosave", autosave);
   };
 
   @action public getMode = (): FBWorkspaceMode => get(this, "mode");
