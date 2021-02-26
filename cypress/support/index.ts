@@ -78,11 +78,12 @@ Cypress.Commands.overwrite("click", (originalFn, subject, options) => {
 Cypress.Commands.overwrite("type", (originalFn, subject, options) => {
 
   const currentCommand = cy.state("current").attributes.name;
+  const args = cy.state("current").attributes.args;
 
-  if (currentCommand === "type") {
+  if (currentCommand === "type" && args.length == 1) {
     cy.wrap(subject).arrow({ duration: 40, blocking: true }).then(() => originalFn(subject, options));
   } else {
-    return originalFn(subject, options);
+    return originalFn(subject, options, { force: true });
   }
 });
 
