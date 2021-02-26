@@ -435,7 +435,7 @@ Cypress.Commands.add("drSelectRevisionStageOptions", (params: {revisionStageOpti
 Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").type(`${params.username}{downarrow}{enter}`, { force: true });
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get("[data-cy='add-user'").eq(2).click();
+    cy.wait(1000).get("[data-cy='add-user'").eq(2).click();
   });
 });
 
