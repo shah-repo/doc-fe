@@ -1,7 +1,28 @@
 import { includes } from "lodash";
 import { action, observable, set } from "mobx";
 import React from "react";
-import { FBEditorAction, FBEditorApprovalField, FBEditorApprovals, FBEditorAutocomplete, FBEditorCheckControl, FBEditorEmpty, FBEditorEQMaintenance, FBEditorHyperlink, FBEditorInlineApproval, FBEditorInstructionsDocument, FBEditorLabel, FBEditorMediaAlbum, FBEditorMode, FBEditorModeProps, FBEditorOptionGroup, FBEditorParagraph, FBEditorProps, FBEditorRequestApproval, FBEditorSelectDocument, FBEditorSelectRequirement, FBEditorTestRequirement, FBEditorTextEditor, FBEditorTextField, FBEditorTextFieldWithRange, FBInputType } from "..";
+import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
+import FBEditorAction from "../FBEditorAction/FBEditorAction";
+import FBEditorApprovalField from "../FBEditorApprovalField/FBEditorApprovalField";
+import FBEditorApprovals from "../FBEditorApprovals/FBEditorApprovals";
+import FBEditorAutocomplete from "../FBEditorAutocomplete/FBEditorAutocomplete";
+import FBEditorCheckControl from "../FBEditorCheckControl/FBEditorCheckControl";
+import FBEditorEmpty from "../FBEditorEmpty/FBEditorEmpty";
+import FBEditorEQMaintenance from "../FBEditorEQMaintenance/FBEditorEQMaintenance";
+import FBEditorHyperlink from "../FBEditorHyperlink/FBEditorHyperlink";
+import FBEditorInlineApproval from "../FBEditorInlineApproval/FBEditorInlineApproval";
+import FBEditorInstructionsDocument from "../FBEditorInstructionsDocument/FBEditorInstructionsDocument";
+import FBEditorLabel from "../FBEditorLabel/FBEditorLabel";
+import FBEditorMediaAlbum from "../FBEditorMediaAlbum/FBEditorMediaAlbum";
+import FBEditorOptionGroup from "../FBEditorOptionGroup/FBEditorOptionGroup";
+import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
+import FBEditorRequestApproval from "../FBEditorRequestApproval/FBEditorRequestApproval";
+import FBEditorSelectDocument from "../FBEditorSelectDocument/FBEditorSelectDocument";
+import FBEditorSelectRequirement from "../FBEditorSelectRequirement/FBEditorSelectRequirement";
+import FBEditorTestRequirement from "../FBEditorTestRequirement/FBEditorTestRequirement";
+import FBEditorTextEditor from "../FBEditorTextEditor/FBEditorTextEditor";
+import FBEditorTextField from "../FBEditorTextField/FBEditorTextField";
+import FBEditorTextFieldWithRange from "../FBEditorTextFieldWithRange/FBEditorTextFieldWithRange";
 
 class FBEditorState {
 
