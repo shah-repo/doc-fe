@@ -77,7 +77,7 @@ export const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
           />
           <CheckboxField
             name="needsSignature"
-            label="QMS Document"
+            label="Needs Signature"
           />
           <CheckboxField
             name="defaultTraining"
