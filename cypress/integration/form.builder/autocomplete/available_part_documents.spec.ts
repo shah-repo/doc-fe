@@ -115,7 +115,12 @@ context("Autocomplete 'Available Part Documents' test", () => {
       });
 
       it("Clicks on 'Add new part' button", () => {
-        cy.ptClickCreateNewPart();
+        cy.wrapWithWaitOnApiCalls([
+          CyRoutes.GetRequiredApprovers,
+          CyRoutes.EmployeesGet,
+          CyRoutes.DocPreview], () => {
+          cy.ptClickCreateNewPart();
+        });
       });
 
       it("Enter document title " + partsName, () => {

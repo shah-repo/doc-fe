@@ -213,7 +213,12 @@ context("Parts from EB flow test", () => {
         });
 
         it("Clicks on 'Add new part' button", () => {
-          cy.ptClickCreateNewPart();
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.GetRequiredApprovers,
+            CyRoutes.EmployeesGet,
+            CyRoutes.DocPreview], () => {
+            cy.ptClickCreateNewPart();
+          });
         });
       });
 

@@ -143,12 +143,12 @@ context("Document Operators Access Test", () => {
       cy.navigToParts();
     });
 
-    it("Clicks on 'Add new part' button", () => {
-      cy.wait(5000).ptClickCreateNewPart();
+    it("Click on 'Add new part' button", () => {
+      cy.ptClickCreateNewPart();
     });
 
     it("Clicks on 'Part Operators' Form", () => {
-      cy.ptSelectPartFormFromMultiSelect({ partForm: "Part Operators" });
+      cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Part Operators" });
     });
 
     it("Enter title 'Test Part'", () => {
