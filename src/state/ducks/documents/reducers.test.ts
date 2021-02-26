@@ -1,6 +1,7 @@
-import { Document, DocumentListAction, DocumentSetAction, DocumentsToReviewListAction, DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST, DOCUMENT_SET } from ".";
+import { DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST, DOCUMENT_SET } from "./constants";
 import { allIds, byId } from "./reducers";
 import { getDocument } from "./tests/factories";
+import { Document, DocumentListAction, DocumentSetAction, DocumentsToReviewListAction } from "./types";
 
 describe("documents reducers tests", () => {
   const documentList: Document[] = [

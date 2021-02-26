@@ -1,10 +1,10 @@
 import { cloneDeep } from "lodash";
-import { ChangeRequestsAllIdsState, ChangeRequestsApproversAllIdsState, ChangeRequestsApproversByIdState, ChangeRequestsByIdState } from ".";
 import { ApplicationState } from "../../reducers";
 import { getAsyncState } from "../../tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
 import selectors from "./selectors";
 import { getApprover, getAudit, getChangeRequest } from "./tests/factories";
+import { ChangeRequestsAllIdsState, ChangeRequestsApproversAllIdsState, ChangeRequestsApproversByIdState, ChangeRequestsByIdState } from "./types";
 
 describe("change requests selectors tests", () => {
   let state: ApplicationState;

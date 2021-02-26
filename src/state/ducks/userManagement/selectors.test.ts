@@ -1,9 +1,9 @@
 import { cloneDeep } from "lodash";
-import { GroupsByIdState } from ".";
 import { ApplicationState } from "../../reducers";
 import initialStoreState from "../../tests/helpers/initialStoreState";
 import selectors from "./selectors";
 import { getCompanyGroup } from "./tests/factories";
+import { GroupsByIdState } from "./types";
 
 describe("user management selectors test", () => {
   let state: ApplicationState;

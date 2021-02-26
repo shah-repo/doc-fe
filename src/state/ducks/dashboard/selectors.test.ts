@@ -1,10 +1,10 @@
 import { cloneDeep } from "lodash";
-import { PendingActionsState } from ".";
 import { ApplicationState } from "../../reducers";
 import { getAsyncState } from "../../tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
 import selectors from "./selectors";
 import { getPendingAction } from "./tests/factories";
+import { PendingActionsState } from "./types";
 
 describe("change requests selectors tests", () => {
   let state: ApplicationState;

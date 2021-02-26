@@ -1,6 +1,7 @@
-import { ChangeRequest, ChangeRequestAuditSetAction, ChangeRequestAvailableApprovers, ChangeRequestListAction, ChangeRequestListApproversAction, ChangeRequestSetAction, CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from ".";
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from "./constants";
 import { allIds, approversAllIds, approversById, auditsAllId, auditsByCRId, byId } from "./reducers";
 import { getApprover, getAudit, getChangeRequest } from "./tests/factories";
+import { ChangeRequest, ChangeRequestAuditSetAction, ChangeRequestAvailableApprovers, ChangeRequestListAction, ChangeRequestListApproversAction, ChangeRequestSetAction } from "./types";
 
 describe("change requests reducers tests", () => {
   const changeRequestList: ChangeRequest[] = [

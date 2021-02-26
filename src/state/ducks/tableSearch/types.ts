@@ -10,7 +10,7 @@ import {
   TABLE_FORCE_UPDATE_SET,
   TABLE_SEARCH_CLEAR,
   TABLE_SEARCH_SET,
-  TABLE_SORT
+  TABLE_SORT,
 } from "./constants";
 
 export interface TableSearchSetAction {

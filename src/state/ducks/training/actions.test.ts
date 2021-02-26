@@ -1,8 +1,9 @@
 
-import { TrainingPlanTransition, TRAINING_RECORD_ROOT_URL } from ".";
 import { getCallbackHandler } from "../../../common/tests/factories";
 import { Handlers } from "../../types";
 import actions from "./actions";
+import { TRAINING_RECORD_ROOT_URL } from "./constants";
+import { TrainingPlanTransition } from "./types";
 
 describe("training actions tests", () => {
   describe("applyTransition tests", () => {

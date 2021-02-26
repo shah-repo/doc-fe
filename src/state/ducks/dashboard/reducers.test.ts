@@ -1,6 +1,7 @@
-import { PendingAction, PendingActionsListAction, PENDING_ACTIONS_LIST } from ".";
+import { PENDING_ACTIONS_LIST } from "./constants";
 import { pendingActions } from "./reducers";
 import { getPendingAction } from "./tests/factories";
+import { PendingAction, PendingActionsListAction } from "./types";
 
 describe("change requests reducers tests", () => {
   const pendingActionsList: PendingAction[] = [
