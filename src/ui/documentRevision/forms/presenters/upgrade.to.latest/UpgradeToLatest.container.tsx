@@ -1,38 +1,31 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
-import { DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
-import useShouldUpgradeToLatest from "../../../../hooks/useShouldUpgradeToLatest";
 import UpgradeToLatestBanner from "./UpgradeToLatest.banner";
 import UpgradeToLatestButton from "./UpgradeToLatest.button";
 
 type DisplayType = "button" | "banner";
 
 interface Props {
-  documentStatus?: DocumentRevisionStatus;
   formDocumentId?: string;
   docRevId?: string;
-  formDocumentStatus?: DocumentRevisionStatus;
   type: DisplayType;
   bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
   setShouldDisplay?: (value: boolean) => void;
-  shouldShowUpgradeBannerForRecord: boolean;
+  shouldShowUpgrade: boolean;
 }
 
 const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
-  documentStatus,
   formDocumentId = "",
   docRevId,
-  formDocumentStatus,
   type,
   bannerPortal,
   setShouldDisplay,
-  shouldShowUpgradeBannerForRecord,
+  shouldShowUpgrade,
 }) => {
   const dispatch = useDispatch();
-  const showShouldUpgrade = useShouldUpgradeToLatest(documentStatus, formDocumentStatus, formDocumentId);
 
   useEffect(() => {
     if (formDocumentId) {
@@ -45,7 +38,7 @@ const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
   const upgradeAction = useActionCreator(documentRevisionsActions.upgradeToReleasedForm);
   const onUpgradeClick = () => async.start(upgradeAction, docRevId, async);
 
-  if (!showShouldUpgrade || !shouldShowUpgradeBannerForRecord) {
+  if (!shouldShowUpgrade) {
     return null;
   }
 
@@ -53,11 +46,11 @@ const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
     <>
       {
         type === "button" &&
-        <UpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, showShouldUpgrade }}/>
+        <UpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, shouldShowUpgrade }}/>
       }
       {
         type === "banner" &&
-        <UpgradeToLatestBanner {...{ onUpgradeClick, showShouldUpgrade, bannerPortal }} />
+        <UpgradeToLatestBanner {...{ onUpgradeClick, shouldShowUpgrade, bannerPortal }} />
       }
     </>
   );

@@ -8,13 +8,13 @@ import Colors from "../../../../layout/theme/utils/colors";
 import { UpgradeToLatestDialog } from "./UpgradeToLatestDialog";
 
 interface Props {
-  showShouldUpgrade: boolean;
+  shouldShowUpgrade: boolean;
   bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
   onUpgradeClick: () => void;
 }
 
 const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
-  showShouldUpgrade,
+  shouldShowUpgrade,
   bannerPortal,
   onUpgradeClick,
 }) => {
@@ -25,7 +25,7 @@ const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
   return (
     <>
       {
-        showShouldUpgrade && showBanner &&
+        shouldShowUpgrade && showBanner &&
         <Portal container={bannerPortal?.current}>
           <Box
             bgcolor="secondary.main"

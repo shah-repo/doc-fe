@@ -11,7 +11,8 @@ import { RequestType } from "../../../components/common/owner.changer/helpers/ty
 import CopyEBButton from "../../../components/forms/CopyEBButton";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
-import { checkCanBeCopied, checkIsDocumentRecord, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
+import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
+import { checkCanBeCopied, checkIsDocumentEditableSchema, checkIsDocumentRecord, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
@@ -45,7 +46,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
 
   // MARK: @helpers
+  const shouldShowUpgradeForDocs = useShouldUpgradeToLatest(
+    documentRevision?.status,
+    documentRevision?.formDocument?.status,
+    documentRevision?.formDocument?.document?.id
+  );
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
+  const isEditableSchema = checkIsDocumentEditableSchema(values.document?.documentType?.groupOptions);
   const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
   const serializedCSV = hasSerializedCSV(values.document?.documentType?.groupOptions);
@@ -57,6 +64,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     formState,
     documentRevision?.formDocument?.formTemplate?.schema
   );
+  const shouldShowUpgrade =  !isEditableSchema
+    && (shouldShowUpgradeBannerForRecord || (!isRecord && shouldShowUpgradeForDocs));
 
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
@@ -198,14 +207,12 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         />}
         {renderChangeOwnership}
         <UpgradeToLatestContainer
-          documentStatus={documentRevision?.status}
           formDocumentId={documentRevision?.formDocument?.document?.id}
           docRevId={documentRevision?.id}
-          formDocumentStatus={documentRevision?.formDocument?.status}
           setShouldDisplay={props.setUpgradeToLastestDisplay}
           type="button"
           {...{
-            shouldShowUpgradeBannerForRecord,
+            shouldShowUpgrade,
           }}
         />
         {!(isRecord && isInlineApproval) &&
