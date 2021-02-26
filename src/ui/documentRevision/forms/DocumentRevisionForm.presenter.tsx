@@ -141,7 +141,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     documentRevision?.formDocument?.document?.id
   );
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
-  const shouldShowUpgrade = !isEB && (shouldShowUpgradeBannerForRecord || (!isRecord && shouldShowUpgradeForDocs));
+  const shouldShowUpgrade = !isEB && (
+    (!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs)
+  );
 
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
