@@ -1,8 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import { GroupTag } from "../../../src/state/ducks/auth";
-import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions";
+import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { NavigationItems } from "../../utils/constants/navigationItems";
