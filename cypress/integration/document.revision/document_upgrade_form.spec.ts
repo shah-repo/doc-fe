@@ -11,7 +11,7 @@ let loginResponse;
 let multipleCompanies;
 
 
-context("Parts from EB flow test", () => {
+context.skip("Document form upgrade", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });

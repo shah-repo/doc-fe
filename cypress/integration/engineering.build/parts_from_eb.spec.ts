@@ -223,7 +223,11 @@ context("Parts from EB flow test", () => {
         });
 
         it("Enter description 'Test Part description'", () => {
-          cy.drEnterDocumentDescriptionWithWait({ description: "Test Part description" });
+          cy.drEnterDocumentDescription({ description: "Test Part description" });
+        });
+
+        it("Save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
       });
     });
@@ -250,7 +254,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Enter description 'Test Engineering Build description'", () => {
-        cy.drEnterDocumentDescriptionWithWait({ description: "Test Engineering Build description" });
+        cy.drEnterDocumentDescription({ description: "Test Engineering Build description" });
       });
 
       it("Add an Approval'", () => {
@@ -321,7 +325,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Enter description 'Test Engineering Build description'", () => {
-        cy.drEnterDocumentDescriptionWithWait({ description: "Test Engineering Build description" });
+        cy.drEnterDocumentDescription({ description: "Test Engineering Build description" });
       });
 
       it("Add an Approval", () => {

@@ -125,8 +125,13 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string 
 });
 
 Cypress.Commands.add("ptClickCreateNewPart", () => {
-  cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
-  cy.checkToastMessage({ exists: false });
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.GetRequiredApprovers,
+    CyRoutes.EmployeesGet,
+    CyRoutes.DocPreview], () => {
+    cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
+    cy.checkToastMessage({ exists: false });
+  });
 });
 
 Cypress.Commands.add("ptSelectPartFormFromMultiSelect", (params: {partForm: string}) => {
