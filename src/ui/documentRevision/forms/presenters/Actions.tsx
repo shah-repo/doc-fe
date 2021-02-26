@@ -12,7 +12,7 @@ import CopyEBButton from "../../../components/forms/CopyEBButton";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
-import { checkCanBeCopied, checkIsDocumentEditableSchema, checkIsDocumentRecord, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkIsDocumentEB, checkIsDocumentRecord, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
@@ -52,7 +52,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     documentRevision?.formDocument?.document?.id
   );
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
-  const isEditableSchema = checkIsDocumentEditableSchema(values.document?.documentType?.groupOptions);
+  const isEB = checkIsDocumentEB(values.document?.documentType?.groupOptions);
   const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
   const serializedCSV = hasSerializedCSV(values.document?.documentType?.groupOptions);
@@ -64,8 +64,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     formState,
     documentRevision?.formDocument?.formTemplate?.schema
   );
-  const shouldShowUpgrade =  !isEditableSchema
-    && (shouldShowUpgradeBannerForRecord || (!isRecord && shouldShowUpgradeForDocs));
+  const shouldShowUpgrade =  !isEB && (
+    (!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs)
+  );
 
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const documentTypeId = documentRevision?.document?.documentType?.id;
