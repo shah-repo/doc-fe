@@ -21,6 +21,7 @@ import useDialog from "../../hooks/useDialog";
 import useGetHasTag from "../../hooks/useGetHasTag";
 import Colors from "../../layout/theme/utils/colors";
 import AddDocumentTypeFormContainer from "../add.document.type/container";
+import ExportDAMDetails from "../export.dam.details/exportDAMDetails";
 import DocumentTypeFormContainer from "../form/container";
 
 const styles = makeStyles((theme: Theme) =>
@@ -77,6 +78,7 @@ function Row(props: { row: DocumentType }) {
 export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
   const classes = styles();
   const dialog = useDialog();
+  const exportDAMDialog = useDialog();
 
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeList);
   const canManageDocumentType = useGetHasTag(GroupTag.DOCUMENT_TYPE_MANAGEMENT);
@@ -90,6 +92,9 @@ export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
       <Box display="flex" justifyContent="flex-end">
         <Button onClick={dialog.open} variant="outlined">
           <Text translation={"common.add.document.type"} />
+        </Button>
+        <Button onClick={exportDAMDialog.open} variant="outlined">
+          <Text translation={"common.export.dam.details"} />
         </Button>
       </Box>
       <Table >
@@ -106,6 +111,7 @@ export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
         </TableBody>
       </Table>
       <AddDocumentTypeFormContainer {...{ dialog }}/>
+      <ExportDAMDetails dialog={exportDAMDialog} />
     </Box>
 
   );
