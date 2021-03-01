@@ -16,9 +16,9 @@
 // Import commands.js using ES2015 syntax:
 import "cypress-file-upload";
 import "cypress-localstorage-commands";
-import "cypress-movie/commands";
 import "cypress-promise/register";
 import "cypress-xpath";
+import "../../node_modules/cypress-movie/src/arrow";
 import { addScreenshotToContext } from "../utils/context/screenshotsToContext";
 import "./commands";
 import "./commands/approval.request/commands";
