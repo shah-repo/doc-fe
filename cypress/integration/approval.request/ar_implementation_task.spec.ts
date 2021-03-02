@@ -275,12 +275,12 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Closed" });
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Approved" });
     });
 
-    it("Check approval request status is 'Closed'", () => {
+    it("Check approval request status is 'Approved'", () => {
       SystemRequirement("REQ-0020", "REQ-0730");
-      cy.arVerifyStatus({ status: "Closed" });
+      cy.arVerifyStatus({ status: "Approved" });
     });
   });
 });
