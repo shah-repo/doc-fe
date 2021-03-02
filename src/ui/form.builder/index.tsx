@@ -181,6 +181,7 @@ export * from "./FBInstructionsDocument/FBInstructionsDocument.types";
 export { default as FBLabel } from "./FBLabel/FBLabel";
 export * from "./FBLabel/FBLabel.types";
 export { default as FBLHRStep } from "./FBLHRStep/FBLHRStep";
+export { default as FBLHRStepState } from "./FBLHRStep/FBLHRStep.state";
 export * from "./FBLHRStep/FBLHRStep.types";
 export { default as FBMapWrapper } from "./FBMapWrapper/FBMapWrapper";
 export * from "./FBMapWrapper/FBMapWrapper.types";
