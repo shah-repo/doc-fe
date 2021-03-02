@@ -5,13 +5,13 @@ import FBRequest from "../FBApi/FBApi.request";
 
 class FBLHRStepState {
   // MARK: @api
-  public startMpiApi = new FBRequest<DocumentRevision, StartMpiBody>(FBEndpoint.startMpi);
+  public startMpiApi = new FBRequest<DocumentRevision, StartMpiBody>(FBEndpoint.StartMpi);
 
   // MARK: @helpers
   public startMpi = (fieldId: string, woId?: string, mpiId?: string ) => {
     if (!woId || !mpiId) { return; }
     this.startMpiApi.set({
-      url: FBEndpoint.startMpi,
+      url: FBEndpoint.StartMpi,
       method: "post",
       body: {
         wo: {
