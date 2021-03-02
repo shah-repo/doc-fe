@@ -7,15 +7,17 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 ) => {
   const Comp = ({
     name = "",
-    disabled,
     index,
+    startMpi,
     ...props
   }: T) => {
+
+    // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
-    disabled = isOutput;
 
+    // MARK: @helpers
     React.useEffect(() => {
       formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
       formState?.getInputState(name)?.setRender();
@@ -23,6 +25,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // MARK: @reactions
     React.useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
       (value) => {
@@ -34,13 +37,21 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
           },
         });
       }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
+
+    // MARK: @methods
+    startMpi = () => {
+    };
+
+    // MARK: @observer
+
 
     return Component({
       ...(props as T),
       name,
-      disabled,
+      isOutput,
+      startMpi,
     }); };
 
   Comp.displayName = "withFBLHRStep";
