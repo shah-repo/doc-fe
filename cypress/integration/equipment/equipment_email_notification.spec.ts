@@ -35,7 +35,7 @@ let createdMaintenanceRecord;
 let approvalForFirstEquipment;
 let group;
 
-context("Test Equipment maintenance email notifications", () => {
+context.skip("Test Equipment maintenance email notifications", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
