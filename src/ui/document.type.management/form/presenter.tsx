@@ -1,15 +1,16 @@
 import { Box, Button, Grid, InputLabel, TextareaAutosize } from "@material-ui/core";
 import { Field, FormikProps } from "formik";
 import React from "react";
+import { useIntl } from "react-intl";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import { DocumentType, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentType, DOC_TYPE_GROUP, REVISION_STAGE_OPTIONS } from "../../../state/ducks/documentRevisions/documentType/types";
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import InputField from "../../components/forms/fields/Input";
 import FormWrapper from "../../components/forms/FormWrapper";
 import Text from "../../components/Text";
 import { Translation } from "../../translations/types";
-import { enumToOptions } from "../transform";
+import { enumToOptions, translatedOptions } from "../transform";
 import styles from "./styles";
 
 interface Props extends FormikProps<DocumentType> {
@@ -26,6 +27,8 @@ const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
   ...props
 }) => {
   const classes = styles();
+  const intl = useIntl();
+
   const autoSizerRenderer = (props) =>
     <Field name={props.name}>
       {({
@@ -51,60 +54,66 @@ const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
       >
         <InputField
           name="documentTypeName"
-          label="Document Type Name"
+          label="common.document.type.name"
           inputProps={{ id: "documentTypeName" }}
         />
         <InputField
           name="documentTypeAcronym"
-          label="Document Type Acronym"
+          label="common.document.type.acronym"
           inputProps={{ id: "documentTypeAcronym" }}
         />
         <Grid item xs={12} className={classes.gridWrapper}>
           <CheckboxField
             name="privateNumberPool"
-            label="Private Number Pool"
+            label="common.private.number.pool"
           />
           <CheckboxField
             name="canRedLine"
-            label="RedLine"
+            label="common.redline"
           />
           <CheckboxField
             name="isQms"
-            label="Qms"
+            label="common.qms"
           />
           <CheckboxField
             name="needsSignature"
-            label="Needs Signature"
+            label="form.builder.needsSignature"
           />
           <CheckboxField
             name="defaultTraining"
-            label="Default Training"
+            label="common.default.training"
           />
         </Grid>
         <InputField
           name="startingNumber"
-          label="Starting Number"
+          label="common.starting.number"
           inputProps={{ id: "startingNumber", type: "number" }}
         />
         <AutocompleteField
+          name="defaultRevStage"
+          label="common.default.rev.stage"
+          autocompleteProps={{ id: "defaultRevStage" }}
+          options={translatedOptions(intl, REVISION_STAGE_OPTIONS)}
+        />
+        <AutocompleteField
           name="hiddenForCreationForUsersWithoutTags"
-          label="Hidden For Creation For Users Without Tags"
+          label= "common.hidden.message"
           autocompleteProps={{ id: "hiddenForCreationForUsersWithoutTags", isMulti: true }}
           options={enumToOptions(GroupTag)}
         />
         <AutocompleteField
           name="group"
-          label="Group"
+          label="common.group"
           autocompleteProps={{ id: "group" }}
           options={enumToOptions(DOC_TYPE_GROUP)}
         />
         <InputField
           name="category"
-          label="Category"
+          label="form.builder.category"
           inputProps={{ id: "category" }}
         />
-        {autoSizerRenderer({ label: "Schema", name: "schema" })}
-        {autoSizerRenderer({ label: "Fields Config", name: "fieldsConfig" })}
+        {autoSizerRenderer({ label: "common.schema", name: "schema" })}
+        {autoSizerRenderer({ label: "common.fields.config", name: "fieldsConfig" })}
         <Box display="flex" justifyContent="flex-end" mt={6}>
           <Button type="submit" variant="outlined">
             <Text translation={"common.save"} />

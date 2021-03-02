@@ -5,6 +5,12 @@ import { Nullable } from "../../common/types";
 import { FBFormTemplateProps } from "../types";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, SET_DOCUMENT_TYPES_BY_CATEGORY } from "./constants";
 
+export enum REVISION_STAGE_OPTIONS {
+  NUMERIC = "common.Numeric",
+  NUMERIC_ALPHA = "common.NumericAlpha",
+  ALPHA = "common.Alpha",
+}
+
 // Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
 export enum DOC_TYPE_GROUP {
   FORM = "FORM",
@@ -94,6 +100,7 @@ export interface DocumentType {
   defaultTraining: boolean;
   schema?: FBSchemaProps[];
   fieldsConfig?: FieldConfig;
+  defaultRevStage?: string;
   hiddenForCreationForUsersWithoutTags?: GroupTag[];
   privateNumberPool?: boolean;
   canRedLine?: boolean;
