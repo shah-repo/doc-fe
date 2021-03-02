@@ -69,14 +69,58 @@ context("FORM Field test", () => {
     });
   });
 
+  // TODO: Create form for Parts with API, not through document list creation!
+  context("Create Form Part document to create Part", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enters title 'New Part Form'", () => {
+      cy.drEnterDocumentTitle({ name: "New Part Form" });
+    });
+
+    it("Enters description 'New Part Form description'", () => {
+      cy.drEnterDocumentDescription({ description: "New Part Form description" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Selects 'Form' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Selects 'Parts' document type from dropdown", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Parts" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
   context("Autocomplete 'Parts' test", () => {
     context("Create 'Parts'", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+      it("Navigates to parts list", () => {
+        cy.navigToParts();
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
+      it("Clicks on 'Add new part' button", () => {
+        cy.wrapWithWaitOnApiCalls([
+          CyRoutes.GetRequiredApprovers,
+          CyRoutes.EmployeesGet,
+          CyRoutes.DocPreview], () => {
+          cy.ptClickCreateNewPart();
+        });
       });
 
       it("Enter document title 'Parts document title'", () => {
@@ -87,16 +131,12 @@ context("FORM Field test", () => {
         cy.drEnterDocumentDescription({ description: "Parts document description" });
       });
 
-      it("Select 'Parts' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Parts" });
-      });
-
       it("Select 'Numeric' revision stage", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release FORM document", () => {

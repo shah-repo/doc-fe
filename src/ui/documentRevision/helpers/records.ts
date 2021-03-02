@@ -55,5 +55,5 @@ export const getShouldShowUpgradeForRecord = (documentRevision: DocumentRevision
   const version = documentRevision?.version;
   const isAdministrativeChange = documentRevision?.revisionChangeType === RevisionChangeType.AdministrativeChange;
 
-  return (isRecord && !isInlineApproval && version === 1) || (isInlineApproval && !isAdministrativeChange);
+  return isRecord && ((!isInlineApproval && version === 1) || (isInlineApproval && !isAdministrativeChange));
 };

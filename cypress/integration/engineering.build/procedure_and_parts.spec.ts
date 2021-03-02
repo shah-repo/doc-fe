@@ -614,7 +614,7 @@ context("Procedure and parts flow test", () => {
         cy.drEnterDocumentTitle({ name: "Form document for EB" });
       });
 
-      it("Enters description 'Procedure description'", () => {
+      it("Enters description 'EB form description'", () => {
         cy.drEnterDocumentDescription({ description: "EB form description" });
       });
 
@@ -659,7 +659,7 @@ context("Procedure and parts flow test", () => {
         cy.drEnterDocumentTitle({ name: "EB document" });
       });
 
-      it("Enters description 'Procedure description'", () => {
+      it("Enters description 'EB description'", () => {
         cy.drEnterDocumentDescription({ description: "EB description" });
       });
 
