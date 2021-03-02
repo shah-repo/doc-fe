@@ -2,6 +2,7 @@ import { isEmpty, isObject } from "lodash";
 import React from "react";
 import { FBFieldTopBarProps } from ".";
 import { FB } from "..";
+import { useFormContext } from "../../components/forms/FormContext";
 import { toastError } from "../../components/notifications";
 import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
 import { withFBEditorHelper } from "../FBEditor/FBEditor.helper";
@@ -17,6 +18,7 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
     ...props
   }: T) => {
 
+    const { submitForm } = useFormContext();
     const { fieldWrapperState, workspaceState, bookmarkState } = FB.useStores();
     const { documentId, document } = workspaceState || {};
     const { documentType } = document?.document || {};
@@ -37,12 +39,14 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
       if (documentId && !isEmpty(documentId)) {
         inputProps = { ...inputProps, deleted: true };
         workspaceState?.setSchemaItem(inputProps);
+        submitForm();
         return;
       }
       if (inputProps?.type === "section") {
         bookmarkState?.removeBookmark(inputProps?.name as string);
       }
       workspaceState?.removeSchemaItem(inputProps);
+      submitForm();
     };
 
     const markDownSchemaItem = () =>
