@@ -3,8 +3,8 @@ import * as React from "react";
 import { useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { authSelectors } from "../../../../state/ducks/auth";
-import { DocumentRevision, FBOutputDocumentType } from "../../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
+import { DocumentRevision, FBOutputDocumentType } from "../../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
@@ -16,7 +16,7 @@ import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustom
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import { DocumentCloneType } from "../../Clone.container";
-import { checkIsDocumentForm, checkIsDynamicForm, checkIsTypeMustBeOutput } from "../../helpers/checkDocumentGroup";
+import { checkIsDocumentForm, checkIsDocumentPart, checkIsDynamicForm, checkIsTypeMustBeOutput } from "../../helpers/checkDocumentGroup";
 import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
 
@@ -82,7 +82,8 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         if (checkIsTypeMustBeOutput(docType.groupOptions)) {
           return false;
         }
-        if (docType.group === "PART") { return false; }
+        // omit parts (ENC-6788) unless it is already selected as doc type via Parts module (ENC-7022 fix)
+        if (checkIsDocumentPart(docType.groupOptions) && !isDocTypeDisabled) { return false; }
         if ((docType.hiddenForCreationForUsersWithoutTags?.length ?? 0) === 0) {
           return true;
         }
@@ -91,7 +92,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       ).map((docType) =>
         ({ value: docType.id, text: docType.documentTypeName })
       );
-  }, [isNewOutput, outputDocumentTypes, documentTypes, currentUserTags, isCreateMaintenance]);
+  }, [isNewOutput, isCreateMaintenance, outputDocumentTypes, documentTypes, isDocTypeDisabled, currentUserTags]);
 
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>

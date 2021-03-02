@@ -10,7 +10,7 @@ interface Props {
   title: Translation;
 }
 
-export const GroupInfoPresenter: React.FunctionComponent<Props> = ({
+const GroupInfoPresenter: React.FunctionComponent<Props> = ({
   items,
   title,
 }) => {

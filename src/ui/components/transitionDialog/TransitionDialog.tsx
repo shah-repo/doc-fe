@@ -14,7 +14,7 @@ import PasswordForm from "../password/form/PasswordForm";
 import styles from "./TransitionDialog.styles";
 import { PasswordFormValues, Transition } from "./types";
 
-export interface TransitionDialogProps {
+interface TransitionDialogProps {
   onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void;
   openDialog: () => void;
   asyncState: AsyncState;

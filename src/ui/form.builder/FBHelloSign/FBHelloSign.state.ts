@@ -3,7 +3,7 @@ import { FBHelloSignPayload } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBHelloSignState {
+class FBHelloSignState {
   @observable public waitOverlay = false;
   @observable public signatureSent = false;
   public loadingMessage = "";

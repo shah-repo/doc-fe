@@ -15,7 +15,7 @@ interface Props {
   retry: () => void;
 }
 
-export const SlackLandingPresenter: React.FunctionComponent<Props> = ({
+const SlackLandingPresenter: React.FunctionComponent<Props> = ({
   successMessage,
   errorMessage,
   onCounterFinish,

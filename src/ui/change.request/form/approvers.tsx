@@ -8,7 +8,7 @@ import { ReactComponent as UncheckedMark } from "../../../assets/images/uncheck_
 import { authSelectors } from "../../../state/ducks/auth";
 import { Group } from "../../../state/ducks/auth/types";
 import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
-import { Approval, Owner } from "../../../state/ducks/common";
+import { Approval, Owner } from "../../../state/ducks/common/types";
 import { ApplicationState } from "../../../state/reducers";
 import AsyncGate from "../../components/AsyncGate";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";

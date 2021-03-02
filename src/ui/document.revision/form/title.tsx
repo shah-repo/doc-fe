@@ -12,9 +12,9 @@ interface OwnProps {
   disabled?: boolean;
 }
 
-export type Props = OwnProps;
+type Props = OwnProps;
 
-export const Title: React.FunctionComponent<Props> = ({
+const Title: React.FunctionComponent<Props> = ({
   documentTypeId = "",
   ...props
 }) => {

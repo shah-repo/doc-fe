@@ -4,8 +4,9 @@ import { cloneDeep, filter, isEmpty } from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { Document, DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
@@ -47,9 +48,9 @@ interface OwnProps {
   pmForm?: DocumentRevision;
 }
 
-export type DocumentRevisionFormContainerProps = OwnProps;
+type DocumentRevisionFormContainerProps = OwnProps;
 
-export const DocumentRevisionFormContainer: React.FunctionComponent<
+const DocumentRevisionFormContainer: React.FunctionComponent<
 DocumentRevisionFormContainerProps
 > = ({
   onSubmit,

@@ -1,8 +1,7 @@
 import { cloneDeep } from "lodash";
 import { reaction } from "mobx";
 import React from "react";
-import { FBApprovalMatrixFieldProps, FBApprovalMatrixFieldState } from ".";
-import { FB } from "..";
+import { FB, FBApprovalMatrixFieldProps, FBApprovalMatrixFieldState } from "..";
 
 export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
   Component: React.FunctionComponent<T>

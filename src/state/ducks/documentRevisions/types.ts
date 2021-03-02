@@ -1,14 +1,14 @@
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
 import { FBSchemaProps, FBTaskItem } from "../../../ui/form.builder";
-import { Attachment } from "../attachments";
+import { Attachment } from "../attachments/types";
 import { AuditActionPayload } from "../audit/types";
 import { Group } from "../auth/types";
-import { ChangeRequest } from "../changeRequest";
-import { Approval, Id, Owner, User } from "../common";
-import { TrainingRecord } from "../training";
+import { ChangeRequest } from "../changeRequest/types";
+import { Approval, Id, Owner, User } from "../common/types";
+import { TrainingRecord } from "../training/types";
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
-import { DocumentGroupOptionsType, DocumentType } from "./documentType";
+import { DocumentGroupOptionsType, DocumentType } from "./documentType/types";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -22,9 +22,6 @@ export enum DocumentRevisionStatus {
   Voided = "VOIDED",
 }
 
-export enum DocumentRevisionStatusAlias {
-  Draft = "WIP",
-}
 
 export enum RevisionChangeType {
   NextRevision = "NEXT_REVISION",
@@ -76,7 +73,7 @@ export interface PDF {
   type: string;
 }
 
-export interface Precalc {
+interface Precalc {
   formDocId: string;
   revision: number;
 }
@@ -129,7 +126,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   inputOwners?: InputOwner[];
 }
 
-export interface InputOwner {
+interface InputOwner {
   [key: string]: string;
 }
 
@@ -144,7 +141,7 @@ export interface ReferenceToEditRequest {
   id: string;
 }
 
-export interface SecurityListRequest {
+interface SecurityListRequest {
   securityEmployees: Id[];
   securityGroups: Id[];
   operators: Id[];

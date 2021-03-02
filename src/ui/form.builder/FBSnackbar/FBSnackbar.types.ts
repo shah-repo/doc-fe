@@ -1,6 +1,5 @@
 import { SnackbarProps } from "@material-ui/core";
-import { FBSnackbarState } from ".";
-import { FBFormProps } from "../FBForm";
+import { FBFormProps, FBSnackbarState } from "..";
 
 export type FBSnackbarProps =
 & Pick<SnackbarProps, "onClose" | "anchorOrigin" | "autoHideDuration" | "action">

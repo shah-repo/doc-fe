@@ -12,7 +12,7 @@ export interface Props {
   index: number;
 }
 
-export const styles = makeStyles(() =>
+const styles = makeStyles(() =>
   createStyles({
     container: {
       border: "1px solid lightgray",
@@ -33,7 +33,7 @@ export const styles = makeStyles(() =>
   },
   ));
 
-export const TaskPresenter: React.FunctionComponent<Props> = ({
+const TaskPresenter: React.FunctionComponent<Props> = ({
   task, removeTask, index, editTask,
 }) => {
   const classes = styles();

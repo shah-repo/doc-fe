@@ -1,7 +1,8 @@
-import { FBInputProps } from "..";
+import { FBInputProps, FBProviderProps } from "..";
 
 export type FBLHRStepProps =
-& Pick<FBInputProps, "name" | "label" | "disabled" | "index">
+& Pick<FBProviderProps, "lhrStepState">
+& Pick<FBInputProps, "name" | "label" | "disabled" | "index" | "loading">
 & {
   startMpi(): void;
   editorConfig: {

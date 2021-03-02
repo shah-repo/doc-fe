@@ -1,7 +1,7 @@
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { FormikHybridFieldProps } from "../../../hoc/utils/types";
 
-export type AttachmentComponent = "field" | "button";
+type AttachmentComponent = "field" | "button";
 
 export interface AttachmentFieldDispatchProps {
   upload: typeof attachmentsActions.upload;

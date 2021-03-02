@@ -1,4 +1,4 @@
-import { FBConditionalWrapperProps } from ".";
+import { FBConditionalWrapperProps } from "..";
 
 const FBConditionalWrapper = ({
   condition,

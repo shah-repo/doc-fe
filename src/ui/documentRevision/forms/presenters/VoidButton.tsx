@@ -1,6 +1,7 @@
 import { Box, Button } from "@material-ui/core";
 import React, { useMemo } from "react";
-import { DocumentRevision, documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
+import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../../state/types";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import FormMessage from "../../../components/forms/FormMessage";

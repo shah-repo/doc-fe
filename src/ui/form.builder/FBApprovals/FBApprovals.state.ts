@@ -1,13 +1,11 @@
 import { filter, isEmpty, map } from "lodash";
 import { action, computed, observable, set } from "mobx";
-import { FBApprovalsConstructor } from ".";
-import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody } from "..";
-import { Approval } from "../../../state/ducks/common";
+import { FBApprovalsConstructor, FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBRequiredApprover } from "..";
+import { Approval } from "../../../state/ducks/common/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
-import { FBJoinedEmployee, FBRequiredApprover } from "../FBApprovers";
 
-export class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approval> {
+class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approval> {
   @observable public groups?: Record<string, FBRequiredApprover> = {};
   @observable approvals?: FBInlineApprovalBody[];
 

@@ -8,7 +8,7 @@ interface Props {
   value: string | number;
 }
 
-export const PODetailItem: React.FunctionComponent<Props> = ({
+const PODetailItem: React.FunctionComponent<Props> = ({
   label,
   value,
 }) => (

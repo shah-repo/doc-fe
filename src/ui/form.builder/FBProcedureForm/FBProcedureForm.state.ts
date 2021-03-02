@@ -2,7 +2,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBProcedureFormState {
+class FBProcedureFormState {
 
   // MARK: @config
   public parts?: string[];

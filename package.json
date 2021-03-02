@@ -1,7 +1,7 @@
 {
   "name": "doc-fe",
   "description": "DOC-POC Frontend application",
-  "version": "21.2.0",
+  "version": "21.3.0",
   "private": true,
   "dependencies": {
     "@datadog/browser-rum": "^1.12.7",
@@ -94,7 +94,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint -c .eslintrc.js --ext .ts --ext .tsx  src",
     "lint:fix": "yarn lint --fix",
-    "unused-exports": "yarn ts-unused-exports tsconfig.json --excludePathsFromReport=/__mocks__/ --maxIssues=489",
+    "unused-exports": "yarn ts-unused-exports tsconfig.json --excludePathsFromReport=/__mocks__/ --maxIssues=0",
     "postinstall": "patch-package"
   },
   "eslintConfig": {

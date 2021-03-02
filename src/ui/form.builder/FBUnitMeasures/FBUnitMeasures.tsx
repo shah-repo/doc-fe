@@ -1,6 +1,5 @@
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption } from "..";
-import { FBUnitMeasuresProps } from "./FBUnitMeasures.types";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBUnitMeasuresProps } from "..";
 
 const FBUnitMeasures: React.FunctionComponent<FBUnitMeasuresProps> = ({
   name,

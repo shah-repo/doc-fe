@@ -3,7 +3,7 @@ import BorderColorIcon from "@material-ui/icons/BorderColor";
 import CodeIcon from "@material-ui/icons/Code";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import React from "react";
-import { FBFieldTopBarProps } from ".";
+import { FBFieldTopBarProps } from "..";
 import { withFBFieldTopBar } from "./FBFieldTopBar.wrap";
 
 const FBFieldTopBar: React.FunctionComponent<FBFieldTopBarProps> = ({

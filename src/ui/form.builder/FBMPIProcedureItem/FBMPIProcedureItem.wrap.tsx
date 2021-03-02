@@ -1,9 +1,8 @@
 import { cloneDeep, get } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBDialogState, FBFormMode, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
+import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import { FBMPIProcedureItemProps } from "./FBMPIProcedureItem.types";
 
 export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
   Component: React.FunctionComponent<T>,

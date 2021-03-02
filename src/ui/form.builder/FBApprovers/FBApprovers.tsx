@@ -1,8 +1,7 @@
 import { Box } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import React from "react";
-import { FBApproversProps, FBInput, FBMapWrapper, FBRequiredApprover, FBText } from "..";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption } from "../FBAutocompleteAsync";
+import { FBApproversProps, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBInput, FBMapWrapper, FBRequiredApprover, FBText } from "..";
 import { withFBApprovers } from "./FBApprovers.wrap";
 
 const FBApprovers: React.FunctionComponent<FBApproversProps> = ({

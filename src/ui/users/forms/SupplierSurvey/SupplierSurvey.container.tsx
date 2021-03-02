@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Redirect, RouteComponentProps, useParams } from "react-router-dom";
 import { authSelectors } from "../../../../state/ducks/auth";
-import { supplierSurveyActions, SupplierSurveyForm, supplierSurveySelectors } from "../../../../state/ducks/supplierSurvey";
+import { supplierSurveyActions, supplierSurveySelectors } from "../../../../state/ducks/supplierSurvey";
+import { SupplierSurveyForm } from "../../../../state/ducks/supplierSurvey/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { AsyncState } from "../../../../state/types";
 import AsyncGate from "../../../components/AsyncGate";
@@ -24,7 +25,7 @@ interface DispatchProps {
   submitSupplierSurvey: typeof supplierSurveyActions.submitSupplierSurvey;
 }
 
-export type SupplierSurveyContainerProps = StateProps &
+type SupplierSurveyContainerProps = StateProps &
 DispatchProps &
 Pick<RouteComponentProps, "location">;
 
@@ -36,7 +37,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   supplierSurvey: supplierSurveySelectors.supplierSurvey(state),
 });
 
-export const SupplierSurveyContainer: React.FunctionComponent<
+const SupplierSurveyContainer: React.FunctionComponent<
 SupplierSurveyContainerProps
 > = ({
   location,

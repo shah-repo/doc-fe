@@ -1,5 +1,5 @@
 import { FBApprovalsState, FBAutocompleteAsyncProps, FBDialogState, FBFormState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalTransition, FBInputProps, FBRequiredApprover } from "..";
-import { DocumentStatus } from "../../../state/ducks/documents";
+import { DocumentStatus } from "../../../state/ducks/documents/types";
 
 export enum FBApprovalsStatusEndpoint {
   APPROVE = "approve",

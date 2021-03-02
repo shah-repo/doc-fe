@@ -24,7 +24,9 @@ declare global {
       pmUploadAttachment(params: {fileName: string }): Chainable<Subject>;
       pmAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       pmSubmitForApproval(): Chainable<Subject>;
+      ptClickCreateNewPart(): Chainable<Subject>;
       pmToggleChangesFromPrevBuild(): Chainable<Subject>;
+      ptSelectPartFormFromMultiSelect(params: {partForm: string}): Chainable<Subject>;
       pmVerifyAddedMaterial(params: {
         materialDocName: string;
         quantity: integerType;
@@ -119,6 +121,19 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string 
   cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").click();
   cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
     cy.get("ul[role=\"listbox\"]>li").contains(params.approver).click();
+  });
+});
+
+Cypress.Commands.add("ptClickCreateNewPart", () => {
+  cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("ptSelectPartFormFromMultiSelect", (params: {partForm: string}) => {
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.EmployeesGet,
+    CyRoutes.DocPreview], () => {
+    cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").type(params.partForm + "{downarrow}{enter}");
   });
 });
 

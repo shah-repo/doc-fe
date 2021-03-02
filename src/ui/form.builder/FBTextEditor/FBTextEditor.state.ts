@@ -1,7 +1,7 @@
 import { EditorState } from "draft-js";
 import { action, observable, set } from "mobx";
 
-export class FBTextEditorState {
+class FBTextEditorState {
   // MARK: @observables
   @observable public editorState?: EditorState;
   @observable public masked?: boolean;

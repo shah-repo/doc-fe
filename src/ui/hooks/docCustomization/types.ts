@@ -1,5 +1,5 @@
 import { TooltipProps } from "@material-ui/core";
-import { TooltipLabelConfig } from "../../../state/ducks/documentRevisions/documentType";
+import { TooltipLabelConfig } from "../../../state/ducks/documentRevisions/documentType/types";
 import { Validator } from "../../components/forms/fields/validators";
 
 export interface UIConfig {

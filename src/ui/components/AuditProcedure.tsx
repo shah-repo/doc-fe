@@ -2,7 +2,7 @@ import { Box, CircularProgress } from "@material-ui/core";
 import { last } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { Audit } from "../../state/ducks/audit";
+import { Audit } from "../../state/ducks/audit/types";
 import { getAuditDefaultValue } from "../common/utils/audit";
 import { FB, FBProcedureItemType, FBProcedureState } from "../form.builder";
 import AuditAttachment from "./AuditAttachment";
@@ -13,9 +13,9 @@ interface OwnProps {
   auditValue?: string;
 }
 
-export type Props = OwnProps;
+type Props = OwnProps;
 
-export const AuditProcedure: React.FunctionComponent<Props> = ({
+const AuditProcedure: React.FunctionComponent<Props> = ({
   audit,
   dataCy,
   auditValue,

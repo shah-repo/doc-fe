@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 
-export const FBPurchaseOrderClasses = makeStyles({
+const FBPurchaseOrderClasses = makeStyles({
   root: {
     "width": "100%",
     "tableLayout": "fixed",

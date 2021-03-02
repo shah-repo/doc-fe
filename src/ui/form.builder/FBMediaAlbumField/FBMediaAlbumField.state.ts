@@ -5,7 +5,7 @@ import { apiClient, FBMediaAlbumFieldConstructor, FBMediaAlbumFieldMode, FBMedia
 import { toastError } from "../../components/notifications";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 
-export class FBMediaAlbumFieldState {
+class FBMediaAlbumFieldState {
   @observable public loading = false;
   @observable public mode: FBMediaAlbumFieldMode = "qr";
   public filesUploaded: FBMediaProps[] = [];

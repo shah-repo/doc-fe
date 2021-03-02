@@ -612,6 +612,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it(`Select '${ARDocument}'`, () => {
+      cy.alClearFilters();
       cy.get("#root").contains(ARDocument).click();
     });
 

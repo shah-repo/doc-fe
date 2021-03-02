@@ -1,6 +1,7 @@
 import { reaction } from "mobx";
+import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBLHRStepProps } from "..";
+import { FB, FBLHRStepProps, FBLHRStepState } from "..";
 
 export const withFBLHRStep = <T extends FBLHRStepProps>(
   Component: React.FunctionComponent<T>,
@@ -8,12 +9,14 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
   const Comp = ({
     name = "",
     index,
+    loading,
     startMpi,
     ...props
   }: T) => {
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
+    const lhrStepState = FB.useRef(FBLHRStepState);
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
 
@@ -26,6 +29,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     }, []);
 
     // MARK: @reactions
+    // on MPI input change
     React.useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
       (value) => {
@@ -40,11 +44,32 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    // on LHRS create
+    React.useEffect(() => reaction(
+      () => lhrStepState.startMpiApi.data,
+      (docRev) => {
+        window.open(
+          `/document_revision/${docRev.documentId}/version/${docRev.id}`,
+          "_blank"
+        );
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+
     // MARK: @methods
     startMpi = () => {
+      lhrStepState.startMpi(
+        name,
+        workspaceState?.document?.id,
+        schemaItem?.editorConfig?.value
+      );
     };
 
     // MARK: @observer
+    useObserver(() => {
+      loading = lhrStepState?.startMpiApi.loading;
+    });
 
 
     return Component({
@@ -52,6 +77,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       name,
       isOutput,
       startMpi,
+      lhrStepState,
     }); };
 
   Comp.displayName = "withFBLHRStep";

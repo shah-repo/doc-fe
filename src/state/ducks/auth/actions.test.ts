@@ -16,8 +16,7 @@ import {
 import { getAuthResponse, getUser } from "./tests/factories";
 import {
   AuthResponse,
-  EmployeeEditRequestBody,
-  LoginRequestBody,
+  EmployeeEditRequestBody, LoginRequestBody,
   LoginWithCodeRequestBody,
 } from "./types";
 

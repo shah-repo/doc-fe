@@ -1,6 +1,5 @@
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBData, FBDatePicker, FBForm, FBTaskFormProps } from "..";
-import { FBSchema } from "../FBSchema";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBData, FBDatePicker, FBForm, FBSchema, FBTaskFormProps } from "..";
 import { withFBTaskForm } from "./FBTaskForm.wrap";
 
 const FBTaskFormDescription: React.FunctionComponent<FBTaskFormProps> = ({

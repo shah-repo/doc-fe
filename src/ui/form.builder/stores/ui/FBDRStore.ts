@@ -1,7 +1,7 @@
 import { get, isEmpty, union } from "lodash";
 import { action, computed, observable } from "mobx";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
-import { DocumentType } from "../../../../state/ducks/documentRevisions/documentType";
+import { DocumentType } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { canEditDocumentRevision } from "../../../document.revision/utils/helpers";
 import { DocumentRevisionFormValues } from "../../../documentRevision/forms/types";
 import { checkIsDocumentForm } from "../../../documentRevision/helpers/checkDocumentGroup";
@@ -9,7 +9,7 @@ import { FBInputProps } from "../../types/common";
 import { FBDocumentRevisionMode, FBDRGroupConfig } from "../../types/store";
 import FBStore from "./FBStore";
 
-export class FBDocumentRevisionStore {
+class FBDocumentRevisionStore {
   @observable public mode: FBDocumentRevisionMode = "none";
   public docSchema: FBInputProps[] = [];
 

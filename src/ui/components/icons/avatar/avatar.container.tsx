@@ -1,5 +1,5 @@
 import React from "react";
-import { Nullable } from "../../../../state/ducks/common";
+import { Nullable } from "../../../../state/ducks/common/types";
 import AvatarPresenter from "./avatar.presenter";
 
 interface OwnProps {

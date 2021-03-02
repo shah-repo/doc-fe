@@ -6,7 +6,8 @@ class FBLHRStepState {
   public startMpiApi = new FBRequest<any, any>(FBEndpoint.startMpi);
 
   // MARK: @helpers
-  public startMpi = (woId: string, mpiId: string, fieldId: string ) => {
+  public startMpi = (fieldId: string, woId?: string, mpiId?: string ) => {
+    if (!woId || !mpiId) { return; }
     this.startMpiApi.set({
       url: FBEndpoint.startMpi,
       method: "post",

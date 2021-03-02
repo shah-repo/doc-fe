@@ -2,7 +2,7 @@ import { CircularProgress } from "@material-ui/core";
 import { get } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { Fragment } from "react";
-import { Audit } from "../../state/ducks/audit";
+import { Audit } from "../../state/ducks/audit/types";
 import { FB, FBAutocompleteAsyncState } from "../form.builder";
 import FBAutocompleteAsyncStore from "../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store";
 
@@ -12,9 +12,9 @@ interface OwnProps {
   loading?: boolean;
 }
 
-export type Props = OwnProps;
+type Props = OwnProps;
 
-export const AuditAutocomplete: React.FunctionComponent<Props> = ({
+const AuditAutocomplete: React.FunctionComponent<Props> = ({
   audit, loading,
 }) => {
 

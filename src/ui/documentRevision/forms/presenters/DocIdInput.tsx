@@ -1,8 +1,9 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
-import { DocumentRevisionDocument } from "../../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions/documentType";
-import { DocumentProposedIdSetAction, documentsSelectors } from "../../../../state/ducks/documents";
+import { DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevisionDocument } from "../../../../state/ducks/documentRevisions/types";
+import { documentsSelectors } from "../../../../state/ducks/documents";
+import { DocumentProposedIdSetAction } from "../../../../state/ducks/documents/types";
 import { AsyncStatus } from "../../../../state/types";
 import InputField from "../../../components/forms/fields/Input";
 import { toastError } from "../../../components/notifications";

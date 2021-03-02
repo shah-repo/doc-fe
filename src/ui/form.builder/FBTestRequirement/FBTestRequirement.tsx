@@ -1,6 +1,5 @@
 import React from "react";
-import { FBTestRequirementProps } from ".";
-import { FBAutocomplete, FBData } from "..";
+import { FBAutocomplete, FBData, FBTestRequirementProps } from "..";
 
 const FBTestRequirement: React.FunctionComponent<FBTestRequirementProps> = ({
   testRequirement,

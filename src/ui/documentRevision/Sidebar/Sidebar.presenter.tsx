@@ -20,7 +20,7 @@ interface Props {
   loading?: boolean;
 }
 
-export const SidebarPresenter: React.FunctionComponent<Props> = ({
+const SidebarPresenter: React.FunctionComponent<Props> = ({
   isDrawerOpen,
   indexNumber,
   sidebarList,

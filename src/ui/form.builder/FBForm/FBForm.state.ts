@@ -2,9 +2,9 @@ import { flatten, unflatten } from "flat";
 import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, setWith, values } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBFormConstructor, FBInputState, FBWorkspaceMode, FBWorkspaceState } from "..";
-import { FBSchemaState } from "../FBSchema";
+import FBSchemaState from "../FBSchema/FBSchema.state";
 
-export class FBFormState extends FBSchemaState {
+class FBFormState extends FBSchemaState {
   public rules: Dictionary<string> = {};
   public validationAttributeNames: Dictionary<string> = {};
   public errorValidation = true;

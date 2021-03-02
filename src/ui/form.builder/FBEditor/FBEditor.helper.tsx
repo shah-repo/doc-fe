@@ -1,9 +1,6 @@
 import { filter, includes, size, union } from "lodash";
 import React from "react";
-import { FBEditorHelperProps } from ".";
-import { FB, FBEditorActions, FBEditorState, FBEditorTitle, FBInputProps } from "..";
-import { FBData } from "../FBData";
-import { FBInputType } from "../FBInput";
+import { FB, FBData, FBEditorActions, FBEditorHelperProps, FBEditorState, FBEditorTitle, FBInputProps, FBInputType } from "..";
 
 export const withFBEditorHelper = <T extends FBEditorHelperProps>(
   Component: React.FunctionComponent<T>

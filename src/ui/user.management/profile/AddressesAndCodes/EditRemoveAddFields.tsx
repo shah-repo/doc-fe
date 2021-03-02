@@ -27,7 +27,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export const EditRemoveAddFields: React.FunctionComponent<Props> = ({
+const EditRemoveAddFields: React.FunctionComponent<Props> = ({
   canUpdateCompany,
   noValueLabel,
   editLabel,

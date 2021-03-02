@@ -8,7 +8,7 @@ interface Props {
   download: () => void;
 }
 
-export const styles = makeStyles((theme) =>
+const styles = makeStyles((theme) =>
   createStyles({
     link: {
       "color": theme.palette.primary.main,
@@ -20,7 +20,7 @@ export const styles = makeStyles((theme) =>
     },
   }));
 
-export const POAttachment: React.FunctionComponent<Props> = ({
+const POAttachment: React.FunctionComponent<Props> = ({
   attachment,
   download,
 }) => {

@@ -1,4 +1,4 @@
-import { DOCUMENT_SET, DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST } from "./constants";
+import { DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST, DOCUMENT_SET } from "./constants";
 import { allIds, byId } from "./reducers";
 import { getDocument } from "./tests/factories";
 import { Document, DocumentListAction, DocumentSetAction, DocumentsToReviewListAction } from "./types";
