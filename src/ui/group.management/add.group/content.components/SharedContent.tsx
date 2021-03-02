@@ -3,7 +3,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import Select from "react-select";
 import { GroupRequestBody } from "../../../../state/ducks/groupManagement/types";
-import { GetEmployeeResponse } from "../../../../state/ducks/userManagement";
+import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
 import { AsyncActionPayload } from "../../../../state/types";
 import { MultiValueRemove, selectStyles } from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
@@ -23,7 +23,7 @@ interface Props {
   hasOfficialPermission: boolean;
 }
 
-export const SharedContent: React.FunctionComponent<Props> = ({
+const SharedContent: React.FunctionComponent<Props> = ({
   employees,
   members,
   setMembers,

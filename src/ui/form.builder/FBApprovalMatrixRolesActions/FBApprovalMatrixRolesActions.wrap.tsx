@@ -1,6 +1,5 @@
 import React from "react";
-import { FBApprovalMatrixRolesActionsProps } from ".";
-import { FB, FBApprovalRole } from "..";
+import { FB, FBApprovalMatrixRolesActionsProps, FBApprovalRole } from "..";
 
 export const withFBApprovalMatrixRolesActions = <T extends FBApprovalMatrixRolesActionsProps>(
   Component: React.FunctionComponent<T>

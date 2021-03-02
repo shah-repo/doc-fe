@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import authSelectors from "../../../state/ducks/auth/selectors";
-import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
+import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import {
   changeRequestEditPath,
@@ -13,10 +13,10 @@ import {
 import ListPresenter from "./presenter";
 
 type OwnProps = RouteComponentProps;
-export type Props = OwnProps;
+type Props = OwnProps;
 
 export const CR_TABLE_NAME = "changeRequests";
-export const ListContainer: React.FunctionComponent<Props> = ({
+const ListContainer: React.FunctionComponent<Props> = ({
   history,
 }) => {
   const edit = (changeRequestId: string) => history.push(changeRequestEditPath(changeRequestId));

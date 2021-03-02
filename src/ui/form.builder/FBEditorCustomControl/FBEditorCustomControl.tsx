@@ -1,7 +1,7 @@
 import { CircularProgress } from "@material-ui/core";
 import React from "react";
 import { FBButton, FBEditorCustomControlProps, FBMapWrapper } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { withFBEditorCustomControl } from "./FBEditorCustomControl.wrap";
 
 const FBEditorCustomControl: React.FunctionComponent<FBEditorCustomControlProps> = ({

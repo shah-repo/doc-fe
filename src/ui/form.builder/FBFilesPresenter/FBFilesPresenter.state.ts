@@ -2,7 +2,7 @@ import { FBAttachment } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBFilesPresenterState {
+class FBFilesPresenterState {
 
   public filesApi: FBRequest<FBAttachment[], null> = new FBRequest();
 

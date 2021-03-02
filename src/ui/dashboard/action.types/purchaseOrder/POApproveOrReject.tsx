@@ -9,7 +9,7 @@ interface Props {
   changeRequestId: string;
 }
 
-export const POApproveOrReject: React.FunctionComponent<Props> = ({
+const POApproveOrReject: React.FunctionComponent<Props> = ({
   changeRequestId,
 }) => {
   const index = useContext(IndexContetxt);

@@ -1,9 +1,10 @@
 import { List } from "@material-ui/core";
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Nullable } from "../../state/ducks/common";
-import { DocumentRevision, documentRevisionsActions } from "../../state/ducks/documentRevisions";
+import { Nullable } from "../../state/ducks/common/types";
+import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../state/ducks/documentRevisions/documentType";
+import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
 import { styles } from "./DocumentRevisionList.container.styles";
 import DocumentRevisionListPresenter from "./DocumentRevisionList.presenter";
 import { checkIsDocumentPO } from "./helpers/checkDocumentGroup";
@@ -19,10 +20,10 @@ interface OwnProps {
   isRecord: boolean;
 }
 
-export type DocumentRevisionListContainerProps = OwnProps;
+type DocumentRevisionListContainerProps = OwnProps;
 
 // used by the document revision manager container
-export const DocumentRevisionListContainer: React.FunctionComponent<
+const DocumentRevisionListContainer: React.FunctionComponent<
 DocumentRevisionListContainerProps
 > = ({
   documentRevisions,

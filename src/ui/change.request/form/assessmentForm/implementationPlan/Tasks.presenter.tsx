@@ -17,7 +17,7 @@ interface OwnProps {
 
 export type Props = OwnProps;
 
-export const TasksPresenter: React.FunctionComponent<Props> = ({
+const TasksPresenter: React.FunctionComponent<Props> = ({
   tasks,
   openDialog,
   closeDialog,

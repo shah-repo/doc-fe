@@ -30,8 +30,8 @@ export type FBInlineApprovalOptions = FBEmployee & {
   listGroup: string;
 };
 
-export type FBInlineApprovalType = "MASTER" | "SECTION";
-export type FBInlineApprovalStatus = "DRAFT" | "PENDING" | "ABANDONED" | "APPROVED" | "REJECTED";
+type FBInlineApprovalType = "MASTER" | "SECTION";
+type FBInlineApprovalStatus = "DRAFT" | "PENDING" | "ABANDONED" | "APPROVED" | "REJECTED";
 export type FBInlineApprovalTransition = "abandon" | "pending" | "approve" | "reject" | "pending_by_field";
 
 export enum FBInlineApprovalStatusIdent {

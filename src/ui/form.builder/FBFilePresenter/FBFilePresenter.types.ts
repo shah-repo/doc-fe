@@ -1,6 +1,6 @@
 import { BoxProps } from "@material-ui/core";
 import { FBContextMenuProps, FBInputProps, FBProviderProps } from "..";
-import { Attachment } from "../../../state/ducks/attachments";
+import { Attachment } from "../../../state/ducks/attachments/types";
 
 export type FBFilePresenterDownloadType = "download" | "view";
 
@@ -34,7 +34,7 @@ export enum FBFilePresenterColor {
   "XD" = "#6F0A58",
 }
 
-export type FBFilePresenterMode = "raw" | "icon";
+type FBFilePresenterMode = "raw" | "icon";
 
 export type FBFilePresenterProps =
 & Pick<FBInputProps, "name" | "disabled">

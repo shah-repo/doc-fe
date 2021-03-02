@@ -1,7 +1,6 @@
 import { find, get, map, some, union, unionBy } from "lodash";
-import { DocumentRevision, FBFormTemplateProps } from "../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
-import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentType, DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, FBFormTemplateProps } from "../../../state/ducks/documentRevisions/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FB, FBSchemaProps } from "../../form.builder";
 import { checkIsDocumentRecord } from "./checkDocumentGroup";

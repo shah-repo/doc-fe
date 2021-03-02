@@ -7,8 +7,9 @@ import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.
 import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
-import { DataProps } from "../../../state/ducks/common";
+import { changeRequestsActions } from "../../../state/ducks/changeRequest";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { DataProps } from "../../../state/ducks/common/types";
 import { FormContext } from "../../components/forms/FormContext";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
 import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
@@ -31,9 +32,9 @@ import styles from "./styles";
 interface OwnProps extends DataProps<ChangeRequest> {
   currentUserEmail: string;
 }
-export type Props = OwnProps;
+type Props = OwnProps;
 
-export const Container: React.FunctionComponent<Props> = ({
+const Container: React.FunctionComponent<Props> = ({
   dataProp,
   currentUserEmail,
 }) => {

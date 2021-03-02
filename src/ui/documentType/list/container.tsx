@@ -5,9 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentRevision, documentRevisionsActions, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
-import { documentTypeSelectors, PageDetailsColumn } from "../../../state/ducks/documentRevisions/documentType";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { PageDetailsColumn } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { pageDetailsSelectors } from "../../../state/ducks/pageDetails";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import Date from "../../components/Date";
@@ -46,7 +48,7 @@ const getFormattedRowValue = (path: any, rowData: any) => {
   return isDate ? <Date value={value} /> : override;
 };
 
-export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
+const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   match,
 }) => {
   const dispatch = useDispatch();

@@ -2,7 +2,7 @@
 import { action, observable, set } from "mobx";
 import { FBTaskFieldProps } from "..";
 
-export class FBTaskFieldState {
+class FBTaskFieldState {
   @observable public visibility: FBTaskFieldProps["visibility"] = "hidden";
 
   @action public setVisibility = (state: boolean) => {

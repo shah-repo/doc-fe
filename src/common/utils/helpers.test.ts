@@ -1,4 +1,4 @@
-import { DocumentRevision } from "../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
 import {
   getInnerHTMLProp,
   sanitizeHtml,

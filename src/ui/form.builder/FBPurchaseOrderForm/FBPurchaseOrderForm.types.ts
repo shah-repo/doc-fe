@@ -1,5 +1,4 @@
-import { FBFormProps, FBInputProps, FBPurchaseOrderItem } from "..";
-import { FBAutocompleteProps } from "../FBAutocomplete";
+import { FBAutocompleteProps, FBFormProps, FBInputProps, FBPurchaseOrderItem } from "..";
 
 export type FBPurchaseOrderFormProps =
 & Pick<FBFormProps, "children">

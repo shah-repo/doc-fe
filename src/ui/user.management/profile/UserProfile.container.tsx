@@ -4,7 +4,8 @@ import { getHasPermission } from "../../../common/utils/selectors";
 import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
 import { EmployeeEditRequestBody, GroupTag, Permission } from "../../../state/ducks/auth/types";
-import { companySelectors, Employee } from "../../../state/ducks/company";
+import { companySelectors } from "../../../state/ducks/company";
+import { Employee } from "../../../state/ducks/company/types";
 import { userManagementActions } from "../../../state/ducks/userManagement";
 import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
 import { ApplicationState } from "../../../state/reducers";
@@ -30,7 +31,7 @@ interface DispatchProps {
 
 type Props = OwnProps & DispatchProps & StateProps;
 
-export const UserProfileContainer: React.FunctionComponent<Props> = ({
+const UserProfileContainer: React.FunctionComponent<Props> = ({
   closeUserProfile,
   showUserProfile,
   getSlackUrl,

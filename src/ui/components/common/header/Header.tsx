@@ -5,7 +5,7 @@ import React from "react";
 import { DRAWER_WIDTH } from "../../../app/NavigationLink.styles";
 import Colors from "../../../layout/theme/utils/colors";
 
-export const styles = makeStyles((theme: Theme) =>
+const styles = makeStyles((theme: Theme) =>
   createStyles({
     appbar: {
       backgroundColor: Colors.white,

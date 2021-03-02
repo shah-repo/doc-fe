@@ -1,7 +1,7 @@
-import { FBApprovalsStatusEndpoint } from "../../../ui/form.builder/FBApprovals";
+import { APPROVALS_ROOT_URL } from ".";
+import { FBApprovalsStatusEndpoint } from "../../../ui/form.builder";
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
-import { APPROVALS_ROOT_URL } from "./constants";
 
 const applyTransition = (
   id: string,

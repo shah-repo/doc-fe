@@ -1,11 +1,9 @@
 import { isEmpty, isObject } from "lodash";
 import React from "react";
-import { FBFieldTopBarProps } from ".";
-import { FB } from "..";
+import { FB, FBFieldTopBarProps, FBSchemaProps } from "..";
 import { toastError } from "../../components/notifications";
 import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
 import { withFBEditorHelper } from "../FBEditor/FBEditor.helper";
-import { FBSchemaProps } from "../FBSchema";
 
 export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
   Component: React.FunctionComponent<T>,

@@ -1,8 +1,7 @@
 import { includes, isUndefined } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBFieldWrapperProps, FBFieldWrapperState } from ".";
-import { FB, FBSchemaState } from "..";
+import { FB, FBFieldWrapperProps, FBFieldWrapperState, FBSchemaState } from "..";
 
 export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
   Component: React.FunctionComponent<T>,

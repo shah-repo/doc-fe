@@ -1,6 +1,6 @@
 import { action, observable, set } from "mobx";
 
-export class FBEQMaintenanceState {
+class FBEQMaintenanceState {
   // MARK: @observables
   @observable public newPMDisabled?: boolean;
 

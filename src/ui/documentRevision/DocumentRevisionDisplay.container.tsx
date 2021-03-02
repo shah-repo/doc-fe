@@ -4,7 +4,8 @@ import { connect, useSelector } from "react-redux";
 import { getHasPermission } from "../../common/utils/selectors";
 import { authSelectors } from "../../state/ducks/auth";
 import { GroupTag, Permission } from "../../state/ducks/auth/types";
-import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
@@ -36,7 +37,7 @@ interface OwnProps {
 
 export let isOperator = React.createContext<boolean>(false);
 
-export type DocumentRevisionDisplayContainerProps =
+type DocumentRevisionDisplayContainerProps =
   OwnProps &
   DispatchProps &
   StateProps;
@@ -60,7 +61,7 @@ const mapStateToProps = (
   ),
 });
 
-export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevisionDisplayContainerProps> = ({
+const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevisionDisplayContainerProps> = ({
   currentUserEmail,
   loadDocumentRevision,
   isNewVersion,

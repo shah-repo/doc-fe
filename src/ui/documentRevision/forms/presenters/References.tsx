@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { DocumentRevisionDocument } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevisionDocument } from "../../../../state/ducks/documentRevisions/types";
 import ReferencePresenter from "../../../document.revision/summary/reference.presenter";
 import { getReferencedBySummary } from "../../../document.revision/utils/references.helpers";
 

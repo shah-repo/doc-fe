@@ -1,5 +1,5 @@
 import { CALL_API } from "../middlewares/api";
-import { ApiAction, AsyncAction, AsyncStatus, Handlers } from "../types";
+import { ApiAction, Handlers } from "../types";
 
 export const apiAction =
   <R, B>(apiDefinition: Partial<ApiAction<R, B>>): ApiAction<R, B> => {
@@ -16,14 +16,6 @@ export const apiAction =
 
     return action;
   };
-
-export const resetAsyncStateAction = (type: string): AsyncAction => ({
-  type,
-  payload: {
-    status: AsyncStatus.Idle,
-    message: "",
-  },
-});
 
 interface ApiDefinitionWithCallbacks<R, B> extends Partial<ApiAction<R, B>> {
   handlers: Handlers<R>;

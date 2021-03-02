@@ -1,7 +1,7 @@
 import { action, observable, set } from "mobx";
 import { FBWorkspaceMode } from "..";
 
-export class FBProcedureDiffState {
+class FBProcedureDiffState {
   // MARK: @config
   public initialMode: FBWorkspaceMode;
 

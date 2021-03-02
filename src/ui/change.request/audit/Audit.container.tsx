@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { AuditGroupType } from "../../../state/ducks/audit/types";
 import {
-  ChangeRequest,
   changeRequestsActions,
   changeRequestsSelectors,
 } from "../../../state/ducks/changeRequest";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { ApplicationState } from "../../../state/reducers";
 import AuditPresenter from "./Audit.presenter";
 
@@ -23,7 +23,7 @@ interface DispatchProps {
   loadAudit: typeof changeRequestsActions.loadAudit;
 }
 
-export type AuditContainerProps = OwnProps & StateProps & DispatchProps;
+type AuditContainerProps = OwnProps & StateProps & DispatchProps;
 
 const getAudit = changeRequestsSelectors.makeGetAudit();
 const mapStateToProps = (
@@ -33,7 +33,7 @@ const mapStateToProps = (
   audit: getAudit(state, props.changeRequest.id),
 });
 
-export const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
+const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
   audit,
   loadAudit,
   changeRequest,

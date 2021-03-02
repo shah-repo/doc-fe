@@ -3,14 +3,15 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { GroupTag } from "../../../../state/ducks/auth/types";
-import { Company, companyActions, companySelectors } from "../../../../state/ducks/company";
+import { companyActions, companySelectors } from "../../../../state/ducks/company";
+import { Company } from "../../../../state/ducks/company/types";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useGetHasTag from "../../../hooks/useGetHasTag";
 import { toWhiteLabelingBodyValues, toWhiteLabelingInitialValues } from "../../utils/transform";
 import WhiteLabelingManagementPresenter from "./WhiteLabelingManagement.presenter";
 
-export const WhiteLabelingManagementContainer: React.FunctionComponent<{}> = () => {
+const WhiteLabelingManagementContainer: React.FunctionComponent<{}> = () => {
   const dispatch = useDispatch();
 
   const [s3link, sets3link] = useState<string | null>(null);

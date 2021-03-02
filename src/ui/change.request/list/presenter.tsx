@@ -1,8 +1,8 @@
 import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { convertHtmlEntities, stripTags, stripTagsFromObject } from "../../../common/utils/helpers";
-import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
@@ -13,9 +13,9 @@ import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths"
 import { ChangeRequestsUserProps } from "../utils/types";
 import styles from "./styles";
 
-export type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
+type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
 
-export const ListPresenter: React.FunctionComponent<Props> = ({
+const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
   currentUserEmail,
   editChangeRequest,

@@ -15,7 +15,7 @@ interface Props {
   content: any;
 }
 
-export const WatermarkPresenter: React.FunctionComponent<Props> = ({
+const WatermarkPresenter: React.FunctionComponent<Props> = ({
   isOpen,
   handleClose,
   title,

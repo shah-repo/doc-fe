@@ -6,7 +6,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Link } from "react-router-dom";
 import { FBEQMaintenanceHistoryProps, FBMapWrapper, FBText } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBEQMaintenanceHistory } from "./FBEQMaintenanceHistory.wrap";

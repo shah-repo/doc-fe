@@ -1,7 +1,6 @@
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBDialogProps } from ".";
-import { FB } from "..";
+import { FB, FBDialogProps } from "..";
 
 export const withFBDialog = <T extends FBDialogProps>(
   Component: React.FunctionComponent<T>,

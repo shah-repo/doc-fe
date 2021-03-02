@@ -2,7 +2,7 @@ import { Box, CircularProgress, IconButton, Tooltip } from "@material-ui/core";
 import AlbumIcon from "@material-ui/icons/Album";
 import QRCode from "qrcode.react";
 import React from "react";
-import { FBMediaQRProps } from ".";
+import { FBMediaQRProps } from "..";
 import Text from "../../components/Text";
 import { withFBMediaQR } from "./FBMediaQR.wrap";
 

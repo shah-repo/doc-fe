@@ -1,6 +1,6 @@
 import { Provider } from "mobx-react";
 import React from "react";
-import { FBProviderProps } from ".";
+import { FBProviderProps } from "..";
 
 const FBProvider: React.FunctionComponent<FBProviderProps> = (props) =>
   <Provider {...props} />;

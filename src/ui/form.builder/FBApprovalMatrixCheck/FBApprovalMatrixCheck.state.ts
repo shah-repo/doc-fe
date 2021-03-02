@@ -1,6 +1,6 @@
 import { action, observable, set } from "mobx";
 
-export class FBApprovalMatrixCheckState  {
+class FBApprovalMatrixCheckState  {
 
   @observable public checked = false;
 

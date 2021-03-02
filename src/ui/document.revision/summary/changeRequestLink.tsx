@@ -2,15 +2,15 @@ import { Box, ListItem, Tooltip, Typography } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import { stripTags } from "../../../common/utils/helpers";
-import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DataProps } from "../../../state/ducks/common/types";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
 import Text from "../../components/Text";
 import { useCRLink } from "../../hooks/docCustomization/useCustomization";
 
-export type Props = DataProps<DocumentRevision>;
+type Props = DataProps<DocumentRevision>;
 
-export const ChangeRequestLink: React.FunctionComponent<Props> = ({
+const ChangeRequestLink: React.FunctionComponent<Props> = ({
   dataProp,
 }) => {
   const { isVisible } = useCRLink(dataProp?.document?.documentType?.id);

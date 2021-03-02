@@ -1,19 +1,19 @@
 import { Button } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as DisableIcon } from "../../../../assets/images/disable-icon.svg";
-import { GetApiTokenList } from "../../../../state/ducks/userManagement";
 import { API_TOKEN } from "../../../../state/ducks/userManagement/constants";
+import { GetApiTokenList } from "../../../../state/ducks/userManagement/types";
 import { TableColumnProps } from "../../../components/table/column/types";
 import { TablePanel } from "../../../components/table/panel";
 import Text from "../../../components/Text";
 import { styles } from "./ApiToken.style";
 
-export interface Props {
+interface Props {
   tableName: string;
   disableApiToken: (id: string) => void;
 }
 
-export const ApiTokenTablePresenter: React.FunctionComponent<Props> = ({
+const ApiTokenTablePresenter: React.FunctionComponent<Props> = ({
   tableName,
   disableApiToken,
 }) => {
