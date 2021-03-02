@@ -1,5 +1,6 @@
 import { map, template } from "lodash";
-import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBCurrencyOption, FBEditorPropertiesOption, FBEditorPropertiesType, FBIconConfig, FBIconType, FBInputType, FBOption, FBPassType, FBSchemaProps } from "..";
+import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBIconConfig, FBIconType, FBInputType, FBOption, FBPassType, FBSchemaProps } from "..";
+import { FBCurrencyOption } from "../FBPurchaseOrderTable/FBPurchaseOrderTable.types";
 import actionOptions from "./actionOptions.json";
 import additionalSchema from "./additionalSchema.json";
 import approvalMatrixRoleSchema from "./approvalMatrixRoleSchema.json";

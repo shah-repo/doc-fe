@@ -1,9 +1,10 @@
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
 import { FormattedNumber } from "react-intl";
-import { FBData, FBPurchaseOrderTableTotalProps, FBSelect, FBTableCell, FBTextField } from "..";
+import { FBData, FBSelect, FBTableCell, FBTextField } from "..";
 import { FormContext } from "../../components/forms/FormContext";
 import FBPurchaseOrderExchange from "./FBPurchaseOrder.exchange";
+import { FBPurchaseOrderTableTotalProps } from "./FBPurchaseOrderTable.types";
 
 const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTotalProps> = ({
   handleShippingCost,
