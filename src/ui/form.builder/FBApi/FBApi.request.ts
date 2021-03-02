@@ -102,12 +102,6 @@ export default class FBRequest<Data, Body> {
       apiXClient("", this.publicApi);
     }
 
-    if (!this.publicApi) {
-      const { employeeId, sessionId } = store.getState().auth.user;
-      const authorization = `bearer ${employeeId}:${sessionId}`;
-      apiXClient(authorization, false);
-    }
-
     switch (method) {
       case "get":
         this.method = "get";
