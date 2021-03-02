@@ -239,6 +239,11 @@ pipelines:
           - name: CYPRESS_COMMIT_BE
           - name: CYPRESS_COMMIT_REMOTEJS
       - parallel: *RUN_CYPRESS_IN_PARALLEL
+      - step: 
+          artifacts:
+            - test-results/**
+          script:
+            - echo "Test"
 
   pull-requests:
     "**":
