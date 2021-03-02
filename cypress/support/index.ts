@@ -16,9 +16,9 @@
 // Import commands.js using ES2015 syntax:
 import "cypress-file-upload";
 import "cypress-localstorage-commands";
-import "cypress-movie/commands";
 import "cypress-promise/register";
 import "cypress-xpath";
+import "../../node_modules/cypress-movie/src/arrow";
 import { addScreenshotToContext } from "../utils/context/screenshotsToContext";
 import "./commands";
 import "./commands/approval.request/commands";
@@ -62,6 +62,29 @@ Cypress.on("uncaught:exception", (err, runnable) => {
     return false;
   }
   return true;
+});
+
+Cypress.Commands.overwrite("click", (originalFn, subject, options) => {
+
+  const currentCommand = cy.state("current").attributes.name;
+
+  if (currentCommand === "click") {
+    cy.wrap(subject).arrow({ duration: 40, blocking: true }).then(() => originalFn(subject, options));
+  } else {
+    return originalFn(subject, options);
+  }
+});
+
+Cypress.Commands.overwrite("type", (originalFn, subject, options) => {
+
+  const currentCommand = cy.state("current").attributes.name;
+  const args = cy.state("current").attributes.args;
+
+  if (currentCommand === "type" && args.length == 1) {
+    cy.wrap(subject).arrow({ duration: 40, blocking: true }).then(() => originalFn(subject, options));
+  } else {
+    return originalFn(subject, options, { force: true });
+  }
 });
 
 Cypress.Screenshot.defaults({
