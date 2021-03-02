@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -15,29 +16,34 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     pmFormId,
     name = "",
     editorConfig,
+    availableMaintenanceForms,
     ...props
   }: T) => {
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
+    const fbEqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     const { id: docRevId, document: { status = "" } = {} } = workspaceState || {};
-    const isEqStatusDraft = status === DocumentRevisionStatus.Draft;
+    const isEqStatusReleased = status === DocumentRevisionStatus.Released;
     const isTypePM = editorConfig.type?.includes("preventativeMaintenance");
     const complianceStatus = formState?.getFieldValue(`${name}.status`);
     const dueDate = formState?.getFieldValue(`${name}.complianceDueDate`);
     const complianceDueDate = dueDate && getFormattedDateString(dueDate, MomentFormats.DayMonthDateYear);
+    availableMaintenanceForms = fbEqMaintenanceState?.availableMaintenanceFormsApi.data;
+
+    useEffect(() => {
+      fbEqMaintenanceState?.getAvailableMaintenanceForms();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     pmFormId = formState?.getFieldValue(`${name}.preventativeForm`);
-
+    if (pmFormId && availableMaintenanceForms) {
+      const object = availableMaintenanceForms?.find((e) => e.id === pmFormId);
+      const lastReleased = object?.documentRevisions?.find((i) => i.status === DocumentRevisionStatus.Released);
+      pmFormId = lastReleased?.id;
+    }
     // MARK: @reactions
-    // Set pm form id on form select
-    useEffect(() => reaction(
-      () => formState?.inputState.get(`${name}.preventativeForm`)?.value,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      (id) => (pmFormId = id)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
 
     // Set new pm button disabled status.
     useEffect(() => reaction(
@@ -45,6 +51,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled())
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
+
     useEffect(() => reaction(
       () => formState?.inputState.get(`${name}.frequency`)?.value,
       () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled())
@@ -56,7 +63,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       return !(
         formState?.getFieldValue(`${name}.preventativeForm`) &&
         formState?.getFieldValue(`${name}.frequency`)
-      ) || isEqStatusDraft;
+      ) || !isEqStatusReleased || isEmpty(pmFormId);
     }
 
     // MARK: @methods
@@ -71,6 +78,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         eqMaintenanceState?.newPMDisabled ||
         newPMDisabled()
       );
+      availableMaintenanceForms = fbEqMaintenanceState?.availableMaintenanceFormsApi.data;
     });
 
     return Component({

@@ -12,6 +12,7 @@ export type FBEQMaintenanceProps =
   isNewPMDisabled?: boolean;
   pmFormId?: string;
   isTypePM?: boolean;
+  availableMaintenanceForms?: any[];
 };
 
 export interface FBEQMaintenanceValue {
