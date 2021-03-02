@@ -49,7 +49,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       () => lhrStepState.startMpiApi.data,
       (docRev) => {
         window.open(
-          `/document_revision/${docRev.documentId}/version/${docRev.id}`,
+          `/document_revision/${docRev?.documentId}/version/${docRev?.id}`,
           "_blank"
         );
       }

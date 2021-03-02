@@ -10,3 +10,13 @@ export type FBLHRStepProps =
   };
   isOutput: boolean;
 };
+
+export interface StartMpiBody {
+  wo: {
+    id: string;
+  };
+  mpi: {
+    id: string;
+  };
+  fieldId: string;
+}
