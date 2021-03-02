@@ -1,7 +1,7 @@
 import { Card, CardActions, CardContent, Tooltip } from "@material-ui/core";
 import { shallow } from "enzyme";
 import React from "react";
-import { Attachment } from "../../../state/ducks/attachments";
+import { Attachment } from "../../../state/ducks/attachments/types";
 import DownloadButtonContainer from "./DownloadButton.container";
 import FileCard, { FileCardProps } from "./FileCard";
 

@@ -1,9 +1,7 @@
 import { Portal } from "@material-ui/core";
 import { isUndefined } from "lodash";
 import React from "react";
-import { FBWorkspaceMemo, FBWorkspaceProps } from ".";
-import { FBConditionalWrapper, FBDialog, FBFieldName, FBForm, FBProvider, FBSnackbar } from "..";
-import { FBProcedureDiff } from "../FBProcedureDiff";
+import { FBConditionalWrapper, FBDialog, FBFieldName, FBForm, FBProcedureDiff, FBProvider, FBSnackbar, FBWorkspaceMemo, FBWorkspaceProps } from "..";
 import { withFBWorkspace } from "./FBWorkspace.wrap";
 
 const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({

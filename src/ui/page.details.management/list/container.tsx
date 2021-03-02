@@ -14,7 +14,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import { PageDetails } from "../../../state/ducks/documentRevisions/documentType";
+import { PageDetails } from "../../../state/ducks/documentRevisions/documentType/types";
 import { pageDetailsSelectors } from "../../../state/ducks/pageDetails";
 import Text from "../../components/Text";
 import { HOME_URL } from "../../constants/urls";

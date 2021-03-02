@@ -1,7 +1,6 @@
 import { FormGroup } from "@material-ui/core";
 import React from "react";
-import { FBCheckboxGroupProps } from ".";
-import { FBInput } from "..";
+import { FBCheckboxGroupProps, FBInput } from "..";
 import { withFBCheckboxGroup } from "./FBCheckboxGroup.wrap";
 
 const FBCheckboxGroup: React.FunctionComponent<FBCheckboxGroupProps> = ({

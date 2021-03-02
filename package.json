@@ -94,7 +94,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint -c .eslintrc.js --ext .ts --ext .tsx  src",
     "lint:fix": "yarn lint --fix",
-    "unused-exports": "yarn ts-unused-exports tsconfig.json --excludePathsFromReport=/__mocks__/ --maxIssues=489",
+    "unused-exports": "yarn ts-unused-exports tsconfig.json --excludePathsFromReport=/__mocks__/ --maxIssues=0",
     "postinstall": "patch-package"
   },
   "eslintConfig": {

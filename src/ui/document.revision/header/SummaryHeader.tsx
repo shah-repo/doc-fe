@@ -1,5 +1,5 @@
 import React from "react";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import SummaryHeaderPresenter from "./SummaryHeader.presenter";
 
 interface Props {

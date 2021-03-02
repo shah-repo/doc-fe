@@ -5,9 +5,8 @@ import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { isEmpty } from "lodash";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBButton, FBDialog, FBFilesPresenter, FBMapWrapper, FBMediaAlbumField, FBMPIProcedureItemProps, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemType, FBProvider, FBText } from "..";
+import { FBButton, FBDialog, FBFilesPresenter, FBFormMode, FBMapWrapper, FBMediaAlbumField, FBMPIProcedureItemProps, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemType, FBProvider, FBText } from "..";
 import Colors from "../../layout/theme/utils/colors";
-import { FBFormMode } from "../FBForm";
 import { withFBMPIProcedureItem } from "./FBMPIProcedureItem.wrap";
 
 const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({

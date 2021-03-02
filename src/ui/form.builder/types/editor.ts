@@ -1,11 +1,3 @@
-import { FBTemplateSchema } from "./store";
-
-export type FBEditorSectionType =
-  | "section"
-  | "basicFields"
-  | "lists"
-  | "groups";
-
 export type FBEditorElementType =
   | "textfield"
   | "checkbox"
@@ -53,9 +45,4 @@ export interface FBEditorFormProps {
   type: FBEditorElementType;
   index: number;
   mode: FBEditorModeType;
-}
-
-export interface FBValidatorGroup {
-  name: string;
-  fields: Partial<FBTemplateSchema>[];
 }

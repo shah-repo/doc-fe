@@ -1,7 +1,7 @@
 import { Box, Chip, Grid, Typography } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { Employee } from "../../../state/ducks/company";
+import { Employee } from "../../../state/ducks/company/types";
 import Text from "../../components/Text";
 import styles from "./styles";
 
@@ -12,7 +12,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export const GroupsDisplayContent: React.FunctionComponent<Props> = ({
+const GroupsDisplayContent: React.FunctionComponent<Props> = ({
   groupName,
   employees,
 }) => {

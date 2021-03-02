@@ -3,7 +3,7 @@ import { MobXProviderContext } from "mobx-react";
 import React from "react";
 import { FBProviderProps } from "..";
 
-export class FB {
+class FB {
   public static useRef<T>(state: (new(props: any) => T), props: any = undefined): T {
     const stateRef = React.useRef<T | undefined>(undefined);
     if (isUndefined(stateRef.current)) {

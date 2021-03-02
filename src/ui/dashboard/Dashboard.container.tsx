@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
-import { dashboardActions, dashboardSelectors, PendingAction } from "../../state/ducks/dashboard";
+import { dashboardActions, dashboardSelectors } from "../../state/ducks/dashboard";
+import { PendingAction } from "../../state/ducks/dashboard/types";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import DashboardPresenter from "./Dashboard.presenter";

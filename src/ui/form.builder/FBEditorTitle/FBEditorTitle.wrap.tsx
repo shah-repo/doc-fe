@@ -1,7 +1,6 @@
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBEditorTitleProps } from ".";
-import { FB } from "..";
+import { FB, FBEditorTitleProps } from "..";
 
 export const withFBEditorTitle = <T extends FBEditorTitleProps>(
   Component: React.FunctionComponent<T>

@@ -1,13 +1,11 @@
 import { GroupTag } from "../../../state/ducks/auth/types";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TableSearchFieldProps } from "../../components/table/search/types";
 import { TablePanelStateProps } from "../../components/table/types";
 import { documentRevisionEffectiveDateOption, documentRevisionStatusOption } from "../../document.revision/utils/helpers";
 import { Translation } from "../../translations/types";
-
-export const shouldShowStaticColumns = (documentTypeName) => documentTypeName !== "Purchase Order";
 
 export const columnSearchConfiguration = (valuePath: string, tableCriteria: TablePanelStateProps, statuses: DocumentRevisionStatus[]): [boolean, Partial<TableSearchFieldProps>] => {
   let omitSearch = true;

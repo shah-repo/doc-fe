@@ -1,5 +1,4 @@
-import { FBControlPickerState, FBInputProps, FBInputType } from "..";
-import { FBEditorHelperProps } from "../FBEditor";
+import { FBControlPickerState, FBEditorHelperProps, FBInputProps, FBInputType } from "..";
 
 export type FBControlPickerProps =
 & FBEditorHelperProps
@@ -9,7 +8,7 @@ export type FBControlPickerProps =
   pickers?: FBControlPickerDataProps;
 };
 
-export type FBControlPickerType =
+type FBControlPickerType =
 | "section"
 | "inputs"
 | "approvals"

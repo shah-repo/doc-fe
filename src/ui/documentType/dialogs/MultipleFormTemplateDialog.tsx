@@ -2,7 +2,7 @@ import { Button, Dialog, DialogContent, DialogTitle, Grid, Typography } from "@m
 import PostAddTwoToneIcon from "@material-ui/icons/PostAddTwoTone";
 import { FormikProps } from "formik";
 import React from "react";
-import { DocumentType, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
@@ -11,7 +11,7 @@ import { DialogHandler } from "../../hooks/useDialog";
 import { docIdAsyncContext } from "../list/CreateDocumentByType";
 import { styles } from "./FormListDialog/FormListDialog.styles";
 
-export interface DocumentTypeDialogProps extends FormikProps<any> {
+interface DocumentTypeDialogProps extends FormikProps<any> {
   documentTypes: DocumentType[];
   formIds: DocumentTypeByIdForm[];
   dialog: DialogHandler;
@@ -20,7 +20,7 @@ export interface DocumentTypeDialogProps extends FormikProps<any> {
   isRecord: boolean;
   closeMultipleFormDialog: () => void;
 }
-export const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProps> = ({
+const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProps> = ({
   dialog,
   formIds,
   documentTypes,

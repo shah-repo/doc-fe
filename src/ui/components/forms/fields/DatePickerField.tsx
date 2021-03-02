@@ -5,7 +5,7 @@ import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } fro
 import moment from "moment";
 import * as React from "react";
 import { useEffect } from "react";
-import { TypographyProps } from "../../../../state/ducks/common";
+import { TypographyProps } from "../../../../state/ducks/common/types";
 import { useFormContext } from "../FormContext";
 import Field, { FieldOwnProps } from "./Field";
 

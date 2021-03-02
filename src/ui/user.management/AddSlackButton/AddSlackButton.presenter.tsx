@@ -8,7 +8,7 @@ interface Props {
   addSlack: () => void;
 }
 
-export const AddSlackButtonPresenter: React.FunctionComponent<Props> = ({
+const AddSlackButtonPresenter: React.FunctionComponent<Props> = ({
   addSlack,
 }) => {
   const classes = styles();

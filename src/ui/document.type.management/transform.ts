@@ -1,3 +1,4 @@
+import { IntlShape } from "react-intl";
 import { toArray } from "../group.management/utils/transform";
 
 export const enumToOptions = (values): any => {
@@ -9,6 +10,16 @@ export const enumToOptions = (values): any => {
     value,
   })
   ); };
+
+export const translatedOptions = (intl: IntlShape, enumOptions) =>  Object.values(enumOptions).map((value) => {
+  const translatedValue = intl.formatMessage({
+    id: value as string,
+  });
+  return ({
+    label: translatedValue,
+    value: translatedValue,
+  });
+});
 
 export const stringifyJSON = (value) => {
   if (!value) {
@@ -26,6 +37,7 @@ export const parseJSON = (value) => {
 
 export const toDocumentTypeBody = (values) => ({
   ...values,
+  defaultRevStage: values.defaultRevStage.value,
   group: values.group.value,
   hiddenForCreationForUsersWithoutTags: toArray(values.hiddenForCreationForUsersWithoutTags),
   schema: parseJSON(values.schema),
@@ -42,6 +54,7 @@ export const toDocumentTypeIntialValues = (documentType) => ({
   defaultTraining: documentType.defaultTraining,
   startingNumber: documentType.startingNumber,
   hiddenForCreationForUsersWithoutTags: enumToOptions(documentType.hiddenForCreationForUsersWithoutTags),
+  defaultRevStage: enumToOptions([documentType.defaultRevStage]),
   group: enumToOptions([documentType.group]),
   category: documentType.category,
   schema: stringifyJSON(documentType.schema),

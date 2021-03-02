@@ -1,8 +1,7 @@
 import { Box, CircularProgress, TableCell } from "@material-ui/core";
 import { isUndefined } from "lodash";
 import React from "react";
-import { FBTableCellProps } from ".";
-import { FBConditionalWrapper, FBTooltip } from "..";
+import { FBConditionalWrapper, FBTableCellProps, FBTooltip } from "..";
 import Text from "../../components/Text";
 
 const FBTableCell: React.FunctionComponent<FBTableCellProps> = ({

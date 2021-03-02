@@ -3,7 +3,7 @@ import { observable } from "mobx";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBEQMaintenanceHistoryState extends FBRequest<any, any>  {
+class FBEQMaintenanceHistoryState extends FBRequest<any, any>  {
   @observable maintenanceHistory?: any;
 
   public constructor(id: string) {

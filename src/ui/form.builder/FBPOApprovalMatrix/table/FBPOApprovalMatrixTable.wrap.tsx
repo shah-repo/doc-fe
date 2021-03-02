@@ -3,7 +3,7 @@ import { useObserver } from "mobx-react";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { FB, FBAutocompleteAsyncOption } from "../..";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import useDialog from "../../../hooks/useDialog";
 import FBAutocompleteAsyncStore from "../../FBAutocompleteAsync/FBAutocompleteAsync.store";

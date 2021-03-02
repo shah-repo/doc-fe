@@ -2,9 +2,8 @@ import Box from "@material-ui/core/Box";
 import FormLabel from "@material-ui/core/FormLabel/FormLabel";
 import { hasIn, isString } from "lodash";
 import React from "react";
-import { FBText } from "..";
+import { FBLabelProps, FBText } from "..";
 import Colors from "../../layout/theme/utils/colors";
-import { FBLabelProps } from "../FBLabel";
 import { FBLabelLocaleProps } from "./FBLabel.types";
 import { withFBLabel } from "./FBLabel.wrap";
 

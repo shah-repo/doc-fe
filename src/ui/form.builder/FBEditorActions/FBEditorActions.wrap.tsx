@@ -1,7 +1,6 @@
 import { compact, filter, isString, kebabCase, size, union } from "lodash";
 import React from "react";
-import { FBEditorActionsProps } from ".";
-import { FB, FBData, FBSchemaProps } from "..";
+import { FB, FBData, FBEditorActionsProps, FBSchemaProps } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";

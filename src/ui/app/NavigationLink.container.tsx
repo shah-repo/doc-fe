@@ -4,13 +4,14 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { authSelectors } from "../../state/ducks/auth";
-import { companyActions, companySelectors, NavigationItem, NavigationItemType } from "../../state/ducks/company";
+import { companyActions, companySelectors } from "../../state/ducks/company";
+import { NavigationItem, NavigationItemType } from "../../state/ducks/company/types";
 import { ApplicationState } from "../../state/reducers";
 import { DOCUMENT_BY_CATEGORY_ROOT_URL } from "../constants/urls";
 import NavigationLinkPresenter from "./NavigationLink.presenter";
 import { updateNavigationItem } from "./NavigationLocalStorageHelpers";
 
-export interface NavigationLinkContainerProps extends NavigationItem {
+interface NavigationLinkContainerProps extends NavigationItem {
   currentPath: string;
 }
 

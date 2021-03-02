@@ -2,12 +2,10 @@ import { Checkbox, FormControlLabel } from "@material-ui/core";
 import { at, includes, map } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FBCheckboxGroupProps } from ".";
-import { FBOption } from "..";
+import { FB, FBCheckboxGroupProps, FBOption } from "..";
 import Text from "../../components/Text";
 import { isTranslation } from "../../translations/types";
 import { withFBOption } from "../FBOption/FBOption.wrap";
-import { FB } from "../helpers";
 
 export const withFBCheckboxGroup = <T extends FBCheckboxGroupProps>(
   Component: React.FunctionComponent<T>,

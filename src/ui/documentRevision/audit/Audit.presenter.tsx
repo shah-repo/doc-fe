@@ -4,7 +4,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
-import { ApprovalStatus } from "../../../state/ducks/common";
+import { ApprovalStatus } from "../../../state/ducks/common/types";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -19,9 +19,9 @@ interface OwnProps {
   isStatusVisible: boolean;
 }
 
-export type AuditPresenterProps = OwnProps;
+type AuditPresenterProps = OwnProps;
 
-export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
+const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
   statusLabel,
   versionNumber,

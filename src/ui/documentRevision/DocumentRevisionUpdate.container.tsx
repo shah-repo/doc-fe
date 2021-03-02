@@ -2,7 +2,8 @@ import { debounce, isEmpty } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
-import { DocumentRevision, DocumentRevisionEditRequestBody, documentRevisionsActions, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
+import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../state/reducers";
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
@@ -33,7 +34,7 @@ interface OwnProps {
   isNewVersion?: boolean;
 }
 
-export type DocumentRevisionUpdateContainerProps = OwnProps &
+type DocumentRevisionUpdateContainerProps = OwnProps &
 DispatchProps &
 StateProps;
 
@@ -43,7 +44,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
 });
 
-export const DocumentRevisionUpdateContainer: React.FunctionComponent<
+const DocumentRevisionUpdateContainer: React.FunctionComponent<
 DocumentRevisionUpdateContainerProps
 > = ({
   save,

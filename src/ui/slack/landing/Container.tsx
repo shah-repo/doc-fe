@@ -14,7 +14,7 @@ import SlackLandingPresenter from "./Presenter";
 
 type Props = RouteComponentProps;
 
-export const SlackLandingContainer: React.FunctionComponent<Props> = ({
+const SlackLandingContainer: React.FunctionComponent<Props> = ({
   location,
   history,
 }) => {

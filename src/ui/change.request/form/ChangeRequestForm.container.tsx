@@ -4,8 +4,8 @@ import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
 import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
-import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/types";
 import { AsyncState } from "../../../state/types";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
@@ -31,7 +31,7 @@ export let changeRequestFormOnScreenContext = React.createContext<boolean>(false
 
 type ChangeRequestFormContainerProps = OwnProps;
 
-export const ChangeRequestFormContainer: React.FunctionComponent<
+const ChangeRequestFormContainer: React.FunctionComponent<
   ChangeRequestFormContainerProps
 > = ({
   onSubmit,

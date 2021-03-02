@@ -3,13 +3,14 @@ import { FormikProps } from "formik";
 import { flatten, isEmpty } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
+import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
@@ -26,7 +27,7 @@ import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInf
 import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord } from "../helpers/records";
-import { isDocumentAlphaReleased } from "../helpers/revisionStage";
+import { getRevisionStageNumber, isDocumentAlphaReleased } from "../helpers/revisionStage";
 import { styles } from "./DocumentRevisionForm.styles";
 import AvailableReferencesField from "./presenters/AvailableReferences";
 import Description from "./presenters/Description";
@@ -42,7 +43,7 @@ import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import UpgradeToLatestContainer from "./presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { DocumentRevisionFormValues } from "./types";
 
-export interface Props extends FormikProps<DocumentRevisionFormValues> {
+interface Props extends FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
@@ -78,7 +79,7 @@ export let FormHeaderContext = React.createContext<FormHeaderContext | undefined
 export let isOwnerContext = React.createContext<boolean>(false);
 export let documentTypeContext = React.createContext<string | undefined>(undefined);
 
-export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
+const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState,
   initialValues,
   availableReferences,
@@ -107,21 +108,23 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 }) => {
   useScrollIntoView();
   const classes = styles();
+  const intl = useIntl();
+
   const { workspaceState } = FB.useStores();
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
+  const [forceNewRender, setNewRender] = React.useState();
+  const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
 
-  const hasOutput = useMemo(() => {
-    const documentType = documentTypesById[values.document?.documentType?.id || ""];
-    return checkIsTypeHaveOutput(documentType?.groupOptions);
+  const hasOutput = useMemo(() =>
+    checkIsTypeHaveOutput(documentTypeById?.groupOptions)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentTypesById, values.document?.documentType?.id]);
+  , [documentTypesById, values.document?.documentType?.id]);
 
-  const isRecord = useMemo(() => {
-    const documentType = documentTypesById[values.document?.documentType?.id || ""];
-    return checkIsDocumentRecord(documentType?.groupOptions);
+  const isRecord = useMemo(() =>
+    checkIsDocumentRecord(documentTypeById?.groupOptions)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentTypesById, values.document?.documentType?.id]);
+  , [documentTypesById, values.document?.documentType?.id]);
 
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
@@ -184,6 +187,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     if (proposedDocId) {
       setFieldValue("document.docId", proposedDocId);
     }
+    if (!isEmpty(documentTypeById?.defaultRevStage)) {
+      const value = getRevisionStageNumber(intl, documentTypeById?.defaultRevStage as string);
+      setNewRender(value);
+      setFieldValue("revisionStage", value);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposedDocId, setFieldValue]);
 
   useEffect(() => {
@@ -288,7 +297,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             isDraft={isDocRevStatusDraft || isRevised}
           />
         )}
-        <RevisionStage {...{ isDisabled, isDocRevFirstDraft, shouldShowRevStageForDocType }}/>
+        {/* hack for rerender revision stage */}
+        {forceNewRender && <RevisionStage {...{ isDisabled, isDocRevFirstDraft, shouldShowRevStageForDocType }}/>}
+        {!forceNewRender && <RevisionStage {...{ isDisabled, isDocRevFirstDraft, shouldShowRevStageForDocType }}/>}
         <AvailableReferencesField
           availableReferences={availableReferences}
           documentReferences={documentReferences}

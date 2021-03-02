@@ -1,8 +1,8 @@
 import { shallow } from "enzyme";
 import faker from "faker";
 import React from "react";
-import { ChangeRequestStatus } from "../../state/ducks/changeRequest";
 import { getChangeRequest } from "../../state/ducks/changeRequest/tests/factories";
+import { ChangeRequestStatus } from "../../state/ducks/changeRequest/types";
 import { getOwner, getUser } from "../../state/ducks/common/tests/factories";
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import { ChangeRequestUpdateContainer, ChangeRequestUpdateContainerProps } from "./ChangeRequestUpdate.container";

@@ -12,7 +12,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export const DialogTitle: React.FunctionComponent<Props> = ({
+const DialogTitle: React.FunctionComponent<Props> = ({
   closeDialog,
   title,
 }) => {

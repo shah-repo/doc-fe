@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
-import { ChangeRequest } from "../../../../state/ducks/changeRequest";
+import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
 import { AsyncState } from "../../../../state/types";
 import Header from "../../../components/common/header/Header";
 import HeaderInfo from "../../../components/common/header/HeaderInfo";
@@ -13,7 +13,7 @@ interface Props {
   asyncState: AsyncState;
 }
 
-export const FormHeader: React.FunctionComponent<Props> = ({
+const FormHeader: React.FunctionComponent<Props> = ({
   changeRequest,
   asyncState,
 }) => (

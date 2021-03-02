@@ -8,7 +8,7 @@ import ListPresenter from "./presenter";
 
 type Props = RouteComponentProps;
 
-export const TrainingListContainer: React.FunctionComponent<Props> = () => {
+const TrainingListContainer: React.FunctionComponent<Props> = () => {
   const dispatch = useDispatch();
 
   const TABLE_NAME = "training";

@@ -1,7 +1,7 @@
 import { Dictionary } from "lodash";
 import { Group, GroupTag, GroupType, Permission } from "../auth/types";
-import { Id, Nullable, User } from "../common";
-import { Company, Employee } from "../company";
+import { Id, Nullable, User } from "../common/types";
+import { Company, Employee } from "../company/types";
 import { COMPANY_GROUPS_LIST } from "./constants";
 
 export interface GetEmployeeResponse {
@@ -52,7 +52,6 @@ export interface CompanyGroupsListAction {
 export type GroupsByIdState = Dictionary<LoadCompanyGroup>;
 
 export type GroupsAllIdsState = string[];
-export type LoadJoinedDataState = Dictionary<LoadCompanyGroup>;
 
 export interface ApiTokenData {
   name: string;

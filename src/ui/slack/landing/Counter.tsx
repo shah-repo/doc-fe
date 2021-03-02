@@ -7,7 +7,7 @@ interface Props {
   onCounterFinish: () => void;
 }
 
-export const SlackLandingCounter: React.FunctionComponent<Props> = ({
+const SlackLandingCounter: React.FunctionComponent<Props> = ({
   onCounterFinish,
 }) => {
   const [timerValue, updateTimerValue] = useState(3);

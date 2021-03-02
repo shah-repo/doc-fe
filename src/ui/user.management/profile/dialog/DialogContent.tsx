@@ -8,7 +8,8 @@ import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { EmployeeEditRequestBody } from "../../../../state/ducks/auth/types";
 import { companySelectors } from "../../../../state/ducks/company";
 import { tableSearchActions } from "../../../../state/ducks/tableSearch";
-import { GetEmployeeResponse, userManagementActions } from "../../../../state/ducks/userManagement";
+import { userManagementActions } from "../../../../state/ducks/userManagement";
+import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
 import { AsyncState } from "../../../../state/types";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
@@ -21,7 +22,7 @@ import Addresses from "../AddressesAndCodes/Addresses";
 import ApiTokenContent from "../apiTokenContent/ApiTokenContent";
 import CompanyStageManagementContainer from "../company.stage.management/CompanyStageManagement.container";
 import UserGroups from "../groups/UserGroups";
-import { HelloSignAccess } from "../HelloSignAccess";
+import HelloSignAccess from "../HelloSignAccess";
 import NavigationManagementContainer from "../navigation.management/NavigationManagement.container";
 import WhiteLabelingManagementContainer from "../whiteLabeling.management/WhiteLabelingManagement.container";
 
@@ -56,7 +57,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export const DialogContent: React.FunctionComponent<Props> = ({
+const DialogContent: React.FunctionComponent<Props> = ({
   canManageUsers,
   employeeGroups,
   employeeId,

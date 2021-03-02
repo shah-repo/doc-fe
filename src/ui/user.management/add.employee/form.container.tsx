@@ -20,7 +20,7 @@ export interface AddEmployeeFormValues {
   groups: OptionType[];
 }
 
-export const AddEmployeeFormContainer: React.FunctionComponent = () => {
+const AddEmployeeFormContainer: React.FunctionComponent = () => {
   const TABLE_NAME = "userManagement";
   const dispatch = useDispatch();
   const history = useHistory();

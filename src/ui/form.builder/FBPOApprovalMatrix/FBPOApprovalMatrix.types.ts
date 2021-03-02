@@ -1,14 +1,12 @@
 import { ButtonProps } from "@material-ui/core";
 import { Dictionary } from "lodash";
-import { FBPOApprovalMatrixState } from ".";
-import { FBFormProps, FBFormState, FBInputProps } from "..";
+import { FBDialogState, FBFormProps, FBFormState, FBInputProps, FBPOApprovalMatrixState } from "..";
 import { Group } from "../../../state/ducks/auth/types";
 import { Employee } from "../../../state/ducks/company/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { FBDialogState } from "../FBDialog";
 
-export type FBPOApprovalMatrixBasicProps = Pick<FBInputProps, "name" | "disabled" | "label" | "autosave" | "isInputOwner">;
+type FBPOApprovalMatrixBasicProps = Pick<FBInputProps, "name" | "disabled" | "label" | "autosave" | "isInputOwner">;
 
 export type FBPOApprovalMatrixFieldProps =
 & FBPOApprovalMatrixBasicProps
@@ -42,15 +40,6 @@ export type FBPOApprovalMatrixFormProps =
 // & {
 //   validateForm?: (values: any) => void;
 // };
-
-export type FBPOApprovalMatrixAddItemProps =
-& FBPOApprovalMatrixBasicProps
-& Pick<FBPOApprovalMatrixDialogProps,
-"onSubmit" | "closeDialog" | "isDialogOpen" | "employees" | "groupOptions" | "signatureStages">
-& {
-  openDialog: () => void;
-};
-
 
 export type FBPOApprovalMatrixTableProps =
 & FBPOApprovalMatrixBasicProps

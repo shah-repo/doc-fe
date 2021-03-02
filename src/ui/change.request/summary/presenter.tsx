@@ -1,8 +1,8 @@
 import { Box, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
 import { FormikProps } from "formik";
 import React from "react";
-import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { DataProps } from "../../../state/ducks/common";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { DataProps } from "../../../state/ducks/common/types";
 import { AsyncState } from "../../../state/types";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";

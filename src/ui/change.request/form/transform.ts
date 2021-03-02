@@ -1,10 +1,10 @@
 import { isEmpty, pick } from "lodash";
 import { getStartOfDayDateString } from "../../../common/utils/date";
-import { ChangeRequest, ChangeRequestEditRequestBody } from "../../../state/ducks/changeRequest";
+import { ChangeRequest, ChangeRequestEditRequestBody } from "../../../state/ducks/changeRequest/types";
 import { reactQuillEmptyString } from "../../components/forms/fields/validators";
 import { ChangeRequestFormValues } from "./types";
 
-export interface OptionApproverType {
+interface OptionApproverType {
   value: string;
   label: string;
   groups: string[];
@@ -21,7 +21,7 @@ export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeR
   return values;
 };
 
-export const toOptions = (values: any[]): OptionApproverType[] => values.map((value) => ({
+const toOptions = (values: any[]): OptionApproverType[] => values.map((value) => ({
   label: value.name,
   value: value.id,
   groups: [value.group],

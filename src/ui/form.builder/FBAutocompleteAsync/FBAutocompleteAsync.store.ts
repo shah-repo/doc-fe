@@ -1,7 +1,7 @@
 import { isEmpty, map } from "lodash";
 import { action, observable } from "mobx";
 
-export class FBAutocompleteAsyncStore {
+class FBAutocompleteAsyncStore {
   @observable public data = new Map<string, any>();
   @observable public loading = new Map<string, boolean>();
 

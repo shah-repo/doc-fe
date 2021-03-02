@@ -6,7 +6,7 @@ import { useIntl } from "react-intl";
 import Select, { components } from "react-select";
 import { ReactComponent as CloseIcon } from "../../../assets/images/circle-remove.svg";
 import { Group } from "../../../state/ducks/auth/types";
-import { Owner, TypographySize } from "../../../state/ducks/common";
+import { Owner, TypographySize } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
@@ -26,9 +26,9 @@ interface OwnProps {
   isVisible: boolean;
 }
 
-export type AccessPermissionsPresenterProps = OwnProps;
+type AccessPermissionsPresenterProps = OwnProps;
 
-export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPresenterProps> = ({
+const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPresenterProps> = ({
   availableApprovers,
   groupOptions,
   securityGroups,

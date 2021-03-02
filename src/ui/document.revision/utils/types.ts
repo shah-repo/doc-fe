@@ -1,9 +1,8 @@
 import { RouteComponentProps } from "react-router-dom";
-import { AuthProps } from "../../../state/ducks/auth/types";
-import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision, documentRevisionsActions, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
-import { documentsActions } from "../../../state/ducks/documents";
-import { TrainingRecord } from "../../../state/ducks/training";
+import { DataProps } from "../../../state/ducks/common/types";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { TrainingRecord } from "../../../state/ducks/training/types";
 import { LoadAsyncState } from "../../../state/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
@@ -19,13 +18,6 @@ export interface ContainerDispatchProps {
 
 // List
 export type ListOwnProps = RouteComponentProps;
-export type ListStateProps = DataProps<DocumentRevision[]> & AuthProps & {
-  documentTypeOptions: SelectOption[];
-};
-
-export interface ListDispatchProps {
-  setDocId: typeof documentsActions.setDocumentProposedId;
-}
 
 export enum ReleasedDateOptions {
   LAST_WEEK = "Last 7 days",
@@ -38,19 +30,6 @@ export enum CompletedOnDateOptions {
   NEXT_TWO_WEEKS = "Next 14 days",
   NEXT_MONTH = "Next 30 days",
   PENDING = "Pending",
-}
-
-// Summary
-export type SummaryStateProps = LoadAsyncState & DataProps<DocumentRevision[]>;
-
-export interface SummaryDispatchProps {
-  loadDocument: typeof documentRevisionsActions.loadDocument;
-}
-
-export interface SummaryOwnProps {
-  documentId: string;
-  documentRevisionId: string | null;
-  isNewVersion: boolean;
 }
 
 // Common
@@ -68,7 +47,7 @@ export interface RouteParams {
   documentId: string;
 }
 
-export interface ActionProps {
+interface ActionProps {
   editDocumentRevision: (documentRevisionId: string, documentId: string) => void;
   previewDocumentRevision: (documentRevisionId: string, documentId: string) => void;
 }
@@ -79,14 +58,6 @@ export interface ReferenceSummary {
   docId?: string;
   title: string;
   displayRevision?: string;
-}
-
-export interface BuildsSummary {
-  id: string;
-  url: string;
-  docId?: string;
-  title: string;
-  revisionStage?: number;
 }
 
 export interface TrainingControlProps extends DataProps<TrainingRecord[]> {

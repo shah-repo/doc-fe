@@ -8,11 +8,10 @@ import { Translation } from "../../../translations/types";
 import { TableSearchFieldProps } from "../search/types";
 import { TableSelectionRenderer } from "../types";
 
-export type TableColumnType = "BASE" | "LINK" | "ACTION";
+type TableColumnType = "BASE" | "LINK" | "ACTION";
 export type TableColumnActionType = "EDIT" | "FILE_COPY" | "PREVIEW" | "ADD";
-export type TableColumnSearchType = "FIELD" | "SELECT";
-export type TableCellTypeRenderer<T> = (rowData: T) => TableColumnType;
-export type TableCellTooltipRenderer<T> = (rowData: T) => string;
+type TableCellTypeRenderer<T> = (rowData: T) => TableColumnType;
+type TableCellTooltipRenderer<T> = (rowData: T) => string;
 
 export interface TableCellProps<T> extends MuiTableCellProps {
   cellData: TableColumnActionType[];

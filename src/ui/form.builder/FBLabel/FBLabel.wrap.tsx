@@ -1,6 +1,6 @@
 import { get, isUndefined } from "lodash";
 import React from "react";
-import { FBLabelFontSize, FBLabelProps } from "./FBLabel.types";
+import { FBLabelFontSize, FBLabelProps } from "..";
 
 export const withFBLabel = <T extends FBLabelProps>(
   Component: React.FunctionComponent<T>,

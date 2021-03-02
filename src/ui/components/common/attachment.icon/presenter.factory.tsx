@@ -1,9 +1,9 @@
 import React from "react";
-import { Attachment } from "../../../../state/ducks/attachments";
+import { Attachment } from "../../../../state/ducks/attachments/types";
 import Presenter from "./presenter";
 import { AttachmentIconFactoryProps, AttachmentIconProps } from "./utils/types";
 
-export const AttachmentIconPresenterFactory: React.FunctionComponent<
+const AttachmentIconPresenterFactory: React.FunctionComponent<
 AttachmentIconFactoryProps
 > = ({
   name,
