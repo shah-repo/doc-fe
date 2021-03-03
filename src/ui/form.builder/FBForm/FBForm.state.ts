@@ -13,7 +13,7 @@ export class FBFormState extends FBSchemaState {
   public values: Dictionary<any> = {};
   public validationValues: Dictionary<any> = {};
   private finalValidationRulse: Dictionary<string> = {};
-  public validatorRules: Record<string, {name: string, value: string}[]> = {};
+  public validatorRules: Record<string, FBValidationRelatedRules[]> = {};
   public validationRelatedRules: Record<string, FBValidationRelatedRules[]> = {};
 
   // TO BBE REMOVED!

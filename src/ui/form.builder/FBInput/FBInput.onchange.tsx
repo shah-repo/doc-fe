@@ -60,7 +60,7 @@ export const withFBOnChange = <T extends FBInputProps>(
         map(formState?.validationRelatedRules[name], (field) => {
           const { name: fieldName, value: fieldValue } = field;
           if (formValue !== fieldValue) {
-            formState.omitFieldValue((fieldName || "") as string);
+            formState.omitFieldValue((fieldName || ""));
             formState.errors.set(fieldName, "");
           }
         });

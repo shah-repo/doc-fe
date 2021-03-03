@@ -81,10 +81,10 @@ export const withFBInput = <T extends FBInputProps>(
         const fieldName: string = first(value.value.split(",")) || "";
         const fieldValue = last(value.value.split(","));
         const validationRules = formState.validationRelatedRules[fieldName] || [];
-        formState.validationRelatedRules[fieldName] = union([{name, value: fieldValue}], validationRules);
+        formState.validationRelatedRules[fieldName] = union([{ name, value: fieldValue }], validationRules);
       });
     }
-    
+
     if ((isOutput || formState?.workspaceMode !== "design") && formState?.workspaceMode !== "formPreview") {
       const isUnderMode = (
         !helperText && (
@@ -93,7 +93,7 @@ export const withFBInput = <T extends FBInputProps>(
           (isArray(validationValue) && size(validationValue) === 0)
         )
       );
-      
+
       (isUndefined(hidden) && validationMode === "visibility") && (hidden = isUnderMode);
       (!disabled && validationMode === "disabled") && (disabled = isUnderMode);
     }
