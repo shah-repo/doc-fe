@@ -6,6 +6,7 @@ import { NavigationItem } from "./types";
 export const SELECT_COMPANY = "company/SELECT_COMPANY";
 export const SET_COMPANY_MINE = "company/SET_COMPANY_MINE";
 export const UPDATE_NAVIGATION_ITEM = "company/UPDATE_NAVIGATION_ITEM";
+export const AUTOSAVE_CONFIG = "company/AUTOSAVE_CONFIG";
 
 export const WHITE_LABEL_DEFAULT = {
   logo: "",

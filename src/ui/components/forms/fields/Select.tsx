@@ -13,7 +13,7 @@ export interface SelectOption {
   text: string;
 }
 
-export interface SelectOwnProps extends FieldOwnProps {
+interface SelectOwnProps extends FieldOwnProps {
   selectProps?: MuiSelectProps;
   options: SelectOption[];
   includeEmpty?: boolean;

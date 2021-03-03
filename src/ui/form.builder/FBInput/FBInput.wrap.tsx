@@ -55,6 +55,7 @@ export const withFBInput = <T extends FBInputProps>(
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
+
     defaultValue = setDefaultValue();
     helperText = formState?.errors.get(name) || helperText;
     error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
@@ -156,6 +157,9 @@ export const withFBInput = <T extends FBInputProps>(
       reaction(
         () => inputState?.autosaveNextValue,
         (value) => {
+          if (!workspaceState?.autosave) {
+            return;
+          }
           if (autosave && !isEqual(inputState?.autosavePrevValue, value)) {
             if (type === "poreceive") {
               submitForm({
