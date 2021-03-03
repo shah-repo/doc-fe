@@ -7,7 +7,6 @@ import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, SET_DOCUMENT_TYPES_BY_CATEGORY
 
 export enum REVISION_STAGE_OPTIONS {
   NUMERIC = "common.Numeric",
-  NUMERIC_ALPHA = "common.NumericAlpha",
   ALPHA = "common.Alpha",
 }
 

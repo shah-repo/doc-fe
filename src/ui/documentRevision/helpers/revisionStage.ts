@@ -1,7 +1,6 @@
 import { isEmpty } from "lodash";
 import { IntlShape } from "react-intl";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { REVISION_STAGE_OPTIONS } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentRevision, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { checkIsDocumentRecord } from "./checkDocumentGroup";
 
 export const getIsAdministrativeDefault = (documentRevision: DocumentRevision) => {
@@ -15,8 +14,8 @@ export const isDocumentNumericRelease = (revisionStage?: number) => revisionStag
 export const isDocumentAlphaReleased = (revisionStage?: number) => revisionStage === 3;
 
 export const getRevisionStageNumber = (intl: IntlShape, revisionStageName: string) => {
-  const revisionStageByName = Object.values(REVISION_STAGE_OPTIONS).map((value, index) =>
-    ({ [intl.formatMessage({ id: value })]: (index + 1).toString() })
+  const revisionStageByName = RevisionStageOptions.map((option) =>
+    ({ [intl.formatMessage({ id: option.text })]: option.value.toString() })
   );
   return Object.assign({}, ...revisionStageByName)[revisionStageName];
 };
