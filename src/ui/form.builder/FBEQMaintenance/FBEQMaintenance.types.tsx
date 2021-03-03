@@ -12,7 +12,7 @@ export type FBEQMaintenanceProps =
   isNewPMDisabled?: boolean;
   pmFormId?: string;
   isTypePM?: boolean;
-  availableMaintenanceForms?: any[];
+  availableMaintenanceForms?: AvailableMaintenanceForm[];
 };
 
 export interface FBEQMaintenanceValue {
@@ -23,4 +23,12 @@ export interface FBEQMaintenanceValue {
   specs: string;
   history: DocumentRevision[];
   status: string;
+}
+
+export interface AvailableMaintenanceForm {
+  companyId: string;
+  docId: string;
+  documentRevisions: DocumentRevision[];
+  documentType: Partial<DocumentType>;
+  id: string;
 }

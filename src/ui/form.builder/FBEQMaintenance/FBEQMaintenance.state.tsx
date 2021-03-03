@@ -1,12 +1,13 @@
 import { action, observable, set } from "mobx";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
+import { AvailableMaintenanceForm } from "./FBEQMaintenance.types";
 
 export class FBEQMaintenanceState {
   // MARK: @observables
   @observable public newPMDisabled?: boolean;
 
-  public availableMaintenanceFormsApi: FBRequest<any[], null> = new FBRequest();
+  public availableMaintenanceFormsApi: FBRequest<AvailableMaintenanceForm[], null> = new FBRequest();
 
   // MARK: @actions
   @action public setNewPMDisabled = (disabled?: boolean) =>

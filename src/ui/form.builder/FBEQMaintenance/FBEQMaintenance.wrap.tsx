@@ -39,8 +39,9 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     pmFormId = formState?.getFieldValue(`${name}.preventativeForm`);
     if (pmFormId && availableMaintenanceForms) {
-      const object = availableMaintenanceForms?.find((e) => e.id === pmFormId);
-      const lastReleased = object?.documentRevisions?.find((i) => i.status === DocumentRevisionStatus.Released);
+      const maintenanceForm = availableMaintenanceForms?.find((e) => e.id === pmFormId);
+      const lastReleased = maintenanceForm?.documentRevisions?.find((rev) =>
+        rev.status === DocumentRevisionStatus.Released);
       pmFormId = lastReleased?.id;
     }
     // MARK: @reactions
