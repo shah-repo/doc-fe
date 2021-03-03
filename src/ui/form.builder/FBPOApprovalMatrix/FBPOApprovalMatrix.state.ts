@@ -9,7 +9,7 @@ const DEFAULT_POAM: POApprovalMatrix = {
   approvalLevels: [] as POApprovalMatrixLevel[],
 };
 
-export class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
+class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
   public static stages = [1, 2, 3];
   @observable public name = "";
   @observable public poam = DEFAULT_POAM;

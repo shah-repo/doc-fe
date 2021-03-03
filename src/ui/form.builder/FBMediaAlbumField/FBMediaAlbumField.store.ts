@@ -1,7 +1,7 @@
 import { action, observable } from "mobx";
 import { FBMediaProps } from "..";
 
-export class FBMediaAlbumFieldStore {
+class FBMediaAlbumFieldStore {
   @observable public data = new Map<string, any>();
 
   @action public setData = (fieldName: string, data: FBMediaProps[]) => {

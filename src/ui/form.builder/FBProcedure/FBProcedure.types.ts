@@ -1,6 +1,4 @@
-import { FBInputProps, FBProcedureItemConfig } from "..";
-import { FBMediaProps } from "../FBMediaAlbum";
-import { FBProviderProps } from "../FBProvider";
+import { FBInputProps, FBMediaProps, FBProcedureItemConfig, FBProviderProps } from "..";
 
 export type FBProcedureProps =
 & Pick<FBInputProps, "name" | "gutter" | "stepIndex" | "index" | "disabled" | "loading" | "autosave" | "isInputOwner">

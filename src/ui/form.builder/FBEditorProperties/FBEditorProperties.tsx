@@ -1,7 +1,6 @@
 import { isEmpty } from "lodash";
 import React from "react";
-import { FBEditorPropertiesDefaultValue, FBEditorPropertiesProps } from ".";
-import { FBCheckboxGroup, FBFieldName } from "..";
+import { FBCheckboxGroup, FBEditorPropertiesDefaultValue, FBEditorPropertiesProps, FBFieldName } from "..";
 import { withFBEditorProperties } from "./FBEditorProperties.wrap";
 
 const FBEditorProperties: React.FunctionComponent<FBEditorPropertiesProps> = ({

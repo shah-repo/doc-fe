@@ -5,8 +5,8 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { authSelectors } from "../../state/ducks/auth";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
-import { DocumentRevisionTransitionResponse, FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import AlertDialog from "../app/alert.dialog/AlertDialog";
@@ -37,14 +37,14 @@ interface StateProps {
   disableCreateNewVersion: boolean;
 }
 
-export type PreviewControlsContainerProps = OwnProps & StateProps & RouteComponentProps;
+type PreviewControlsContainerProps = OwnProps & StateProps & RouteComponentProps;
 
 const getDisableCreateNewVersion = documentRevisionsSelectors.makeGetDisableCreateNewVersion();
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
   disableCreateNewVersion: getDisableCreateNewVersion(state, props.documentRevision.document.id),
 });
 
-export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
+const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
   documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();

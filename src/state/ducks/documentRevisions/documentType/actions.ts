@@ -113,6 +113,14 @@ const addDocumentType = (
   handlers,
 });
 
+const getApprovalMatrixNco = (
+  handlers: Handlers,
+): ApiAction<DocumentType[]> => apiActionWithCallbacks({
+  url: `${DOCUMENT_TYPE_ROOT_URL}/export_approval_matrix_nco`,
+  method: "get",
+  handlers,
+});
+
 export default {
   loadList,
   getDocTypeIds,
@@ -123,4 +131,5 @@ export default {
   updateDocumentType,
   deleteDocumentType,
   addDocumentType,
+  getApprovalMatrixNco,
 };

@@ -1,6 +1,6 @@
 import { ApiActionMethod } from "../../../state/types";
 
-export interface Response {
+interface Response {
   abort: () => void;
   promise: Promise<any>;
 }
@@ -12,8 +12,6 @@ export interface Adapter {
   put(path: string, data?: {}, options?: {}): Response;
   del(path: string, data?: {}, options?: {}): Response;
 }
-
-export type FBRequestMethod = "get" | "post" | "put" | "patch" | "delete";
 
 export interface FBRequestTemplateUrl {
   url: string;

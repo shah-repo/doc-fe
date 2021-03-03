@@ -1,8 +1,8 @@
 import classNames from "classnames";
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Nullable } from "../../state/ducks/common";
-import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
+import { Nullable } from "../../state/ducks/common/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import SummaryInfo from "../common/summary/SummaryInfo";
 import DateFormatter from "../components/Date";
 import Text from "../components/Text";
@@ -26,7 +26,7 @@ interface Props {
   isRecord: boolean;
 }
 
-export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
+const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   documentRevision,
   documentId,
   selectedDocumentRevision,

@@ -1,8 +1,8 @@
 import { SnackbarOrigin } from "@material-ui/core";
 import { action, observable, set } from "mobx";
-import { FBSnackbarProps } from ".";
+import { FBSnackbarProps } from "..";
 
-export class FBSnackbarState {
+class FBSnackbarState {
   @observable public open = false;
   @observable public message?: string;
   @observable public action?: React.ReactNode;

@@ -7,7 +7,7 @@ import useAsync from "../../hooks/useAsync";
 import { PasswordValues } from "../types";
 import ConfirmPasswordContainer from "./ConfirmPassword.container";
 
-export type NewUserSetPasswordContainerProps = Pick<RouteComponentProps, "location">;
+type NewUserSetPasswordContainerProps = Pick<RouteComponentProps, "location">;
 
 const NewUserSetPasswordContainer: React.FunctionComponent<NewUserSetPasswordContainerProps> = ({
   location,

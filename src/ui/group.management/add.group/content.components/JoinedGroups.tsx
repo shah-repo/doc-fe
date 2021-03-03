@@ -10,7 +10,7 @@ interface Props {
   parentGroups: any[];
 }
 
-export const JoinedGroups: React.FunctionComponent<Props> = ({
+const JoinedGroups: React.FunctionComponent<Props> = ({
   parentGroups,
 }) => {
   const allGroups = useSelector(userManagementSelectors.getOfficialGroups);

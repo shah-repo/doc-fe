@@ -1,22 +1,22 @@
 import { Grid } from "@material-ui/core";
 import { FormikErrors } from "formik";
 import React from "react";
-import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { DataProps } from "../../../state/ducks/common";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { DataProps } from "../../../state/ducks/common/types";
 import { AsyncState } from "../../../state/types";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
 import SubmitButton from "../../components/forms/SubmitButton";
 import ControlsContainer from "../form/assessmentForm/AssessmentFormControls.container";
 
-export interface Props extends DataProps<ChangeRequest> {
+interface Props extends DataProps<ChangeRequest> {
   asyncState: AsyncState;
   canChangeOwnerShip: boolean;
   errors: FormikErrors<any>;
   canEdit: boolean;
 }
 
-export const SummaryHeader: React.FunctionComponent<Props> = ({
+const SummaryHeader: React.FunctionComponent<Props> = ({
   dataProp,
   dataProp: { state, title, crId, id },
   canChangeOwnerShip,

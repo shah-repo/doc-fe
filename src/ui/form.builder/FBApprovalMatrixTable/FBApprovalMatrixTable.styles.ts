@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 
-export const FBApprovalMatrixTableClasses = makeStyles({
+const FBApprovalMatrixTableClasses = makeStyles({
   tableInfo: {
     "width": "100%",
     "tableLayout": "fixed",

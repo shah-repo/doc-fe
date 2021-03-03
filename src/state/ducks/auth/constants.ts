@@ -24,8 +24,6 @@ export const FETCH_VALIDATORS_REMOTE_URL_URL = "/remoteValidators";
 export const REMOTE_VALIDATORS_STATUS_URL = "/remoteValidators/status";
 export const VALIDATORS_HELPER_REMOTE_URL_URL = "/remoteValidators/helper";
 
-export const AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS = 100;
-
 export const SESSION_DETAILS_URL = "/auth/sessionDetails";
 export const USERS_URL = "/users";
 export const USERS_ME_URL = "/users/me";

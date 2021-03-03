@@ -1,6 +1,6 @@
 import { shallow } from "enzyme";
 import React from "react";
-import { Attachment } from "../../../state/ducks/attachments";
+import { Attachment } from "../../../state/ducks/attachments/types";
 import { Async } from "../../hooks/useAsync";
 import {
   DownloadButtonContainer,

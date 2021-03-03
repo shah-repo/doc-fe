@@ -1,7 +1,7 @@
 import { ThemeEnv } from "../../../ui/layout/theme/utils/types";
 import { GroupTag } from "../auth/types";
-import { User } from "../common";
-import { DocumentType } from "../documentRevisions/documentType";
+import { User } from "../common/types";
+import { DocumentType } from "../documentRevisions/documentType/types";
 import { AUTOSAVE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from "./constants";
 
 export interface WhiteLabelingColors {

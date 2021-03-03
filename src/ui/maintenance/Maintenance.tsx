@@ -2,7 +2,7 @@ import React from "react";
 import Text from "../components/Text";
 import { styles } from "./Maintenance.styles";
 
-export const Maintenance: React.FunctionComponent = () => {
+const Maintenance: React.FunctionComponent = () => {
   const classes = styles();
   return (
     <div className={classes.container}>

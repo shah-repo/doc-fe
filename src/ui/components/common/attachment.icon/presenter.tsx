@@ -5,8 +5,9 @@ import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as RemoveDocumentActive } from "../../../../assets/images/circle-delete-second.svg";
 import { ReactComponent as RemoveDocument } from "../../../../assets/images/circle-delete.svg";
-import { Attachment } from "../../../../state/ducks/attachments";
-import { Document, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { Attachment } from "../../../../state/ducks/attachments/types";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
+import { Document, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import Text from "../../../components/Text";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
@@ -17,8 +18,7 @@ import FileIcon from "./icon";
 import { styles } from "./utils/styles";
 import { AttachmentIconProps } from "./utils/types";
 
-
-export const AttachmentIconPresenter: React.FunctionComponent<
+const AttachmentIconPresenter: React.FunctionComponent<
 AttachmentIconProps
 > = ({
   attachment,

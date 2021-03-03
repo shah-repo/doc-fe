@@ -33,7 +33,7 @@ const AUTOSAVE_DEFAULT_STATE = {
 
 type CompanyActions = SelectCompanyAction | LogoutUserAction;
 
-export const selectedCompany = (
+const selectedCompany = (
   state: SelectCompanyState = COMPANY_DEFAULT_STATE,
   action: CompanyActions,
 ): SelectCompanyState => {
@@ -53,7 +53,7 @@ export const selectedCompany = (
   }
 };
 
-export const companyMine = (
+const companyMine = (
   state: SelectCompanyState = COMPANY_DEFAULT_STATE,
   action: CompanyMineAction | UpdateNavigationMenuItem,
 ): SelectCompanyState => {

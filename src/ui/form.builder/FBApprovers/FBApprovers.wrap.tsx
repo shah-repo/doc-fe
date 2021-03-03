@@ -3,9 +3,8 @@ import { cloneDeep, compact, concat, difference, filter, find, includes, isEmpty
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
-import { FB, FBApprover, FBApproversProps, FBApproversState, FBJoinedEmployee, FBOption, FBRequiredApprover } from "..";
+import { FB, FBApprover, FBApproversProps, FBApproversState, FBDocumentRevisionsValue, FBJoinedEmployee, FBOption, FBRequiredApprover } from "..";
 import { checkIsDocumentPO } from "../../documentRevision/helpers/checkDocumentGroup";
-import { FBDocumentRevisionsValue } from "../FBDocumentRevisions";
 
 export const withFBApprovers = <T extends FBApproversProps>(
   Component: React.FunctionComponent<T>,
@@ -81,7 +80,15 @@ export const withFBApprovers = <T extends FBApproversProps>(
         }
         return acc;
       }, []);
-      approversState?.setCheckedGroups(initialGroups || []);
+      const initialGroupsDAM = filter(requiredGroups, (group) =>
+        map((group.joinedEmployees as FBJoinedEmployee[]), "id").some((employee) =>
+          initialApprovers?.map((e) => e.approver.id).includes(employee)));
+
+      if (isARforPO) {
+        approversState?.setCheckedGroups(initialGroups || []);
+        return;
+      }
+      approversState?.setCheckedGroups(initialGroupsDAM || []);
     };
 
     function getRequiredApprovers(documentRevisions: FBDocumentRevisionsValue[]) {
@@ -109,7 +116,8 @@ export const withFBApprovers = <T extends FBApproversProps>(
       );
     };
 
-    isIncluded = (group: FBRequiredApprover): boolean => includes(map(approversState?.checkedGroups, "id"), group.id);
+    isIncluded = (group: FBRequiredApprover): boolean => (
+      includes(map(approversState?.checkedGroups, "id"), group.id));
 
     /** Check/uncheck DAM/POAM required approval groups based on autocomplete selection
    * @selectedUsers Current autocomplete selection.
@@ -139,7 +147,8 @@ export const withFBApprovers = <T extends FBApproversProps>(
         }
       } else { // user can fullfil all available signature requirements (DAM)
         const newGroups = filter(requiredGroups, (group) =>
-          map((group.joinedEmployees as FBJoinedEmployee[]), "id").some((employee) => value?.includes(employee)));
+          map((group.joinedEmployees as FBJoinedEmployee[]), "id").some((employee) =>
+            newSelectionIds?.includes(employee)));
         approversState?.setCheckedGroups(newGroups);
       }
       approversState?.setValue(newSelectionIds);

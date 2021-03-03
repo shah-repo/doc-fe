@@ -3,7 +3,7 @@ import { omitReviseDisabledOption } from "../../defaults/editor";
 import FBTextField from "../inputs/FBTextField";
 import FBAdditionsEditor from "./FBAdditionsEditor";
 
-export interface FBLabelEditorProps {
+interface FBLabelEditorProps {
   defaultValue?: string;
   standalone?: boolean;
   type?: string;

@@ -1,7 +1,7 @@
 import { get, orderBy } from "lodash";
 import moment from "moment";
 import "moment-timezone";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { store } from "../../../state/store";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../documentRevision/helpers/documentRevisionStatus";
@@ -15,15 +15,6 @@ export const canEditDocumentRevision = (documentRevision: DocumentRevision) => {
     currentUser === owner &&
     (isDocumentRevisionInDraft(documentRevision) || isDocumentRevisionPendingChange(documentRevision))
   );
-};
-
-export const documentRevisionIdMask = (
-  type: string,
-  count: string | number,
-) => {
-  const countStr = "" + count;
-  const pad = "0000";
-  return type + pad.substring(0, pad.length - countStr.length) + countStr;
 };
 
 export const documentRevisionStatusOption = (statuses?: DocumentRevisionStatus[]) => {

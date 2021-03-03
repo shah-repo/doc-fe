@@ -1,5 +1,5 @@
 import { Link, TableCell } from "@material-ui/core";
-import { createStyles, makeStyles, Theme, withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 
 export const StyledTableHeader = withStyles((theme) => ({
   head: {
@@ -41,19 +41,3 @@ export const StyledCellLink = withStyles((theme) => ({
     cursor: "pointer",
   },
 }))(Link);
-
-export const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    columnBox: {
-      display: "column",
-      flex: 1,
-    },
-    headerSpan: {
-      padding: theme.spacing(2),
-    },
-    headerField: {
-      backgroundColor: "#e8e9ed",
-      padding: theme.spacing(1, 2),
-    },
-  }),
-);

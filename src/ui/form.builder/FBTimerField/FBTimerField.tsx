@@ -1,7 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBTimerProps } from ".";
-import { FBButton, FBTextField } from "..";
+import { FBButton, FBTextField, FBTimerProps } from "..";
 
 const FBTimerField: React.FunctionComponent<FBTimerProps> = ({
   ...props

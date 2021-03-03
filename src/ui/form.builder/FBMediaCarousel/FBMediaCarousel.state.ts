@@ -1,7 +1,7 @@
 import { action, observable, set } from "mobx";
 import { FBVisibilityType } from "..";
 
-export class FBMediaCarouselState {
+class FBMediaCarouselState {
   @observable public toolsVisibility: FBVisibilityType= "hidden";
 
   @action public setActiveStep = (step: number) => {

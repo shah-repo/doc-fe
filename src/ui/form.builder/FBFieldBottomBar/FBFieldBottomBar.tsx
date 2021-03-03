@@ -1,7 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBFieldBottomBarProps } from ".";
-import { FBButton } from "..";
+import { FBButton, FBFieldBottomBarProps } from "..";
 import { withFBStarter } from "../FBStarter/FBStarter.wrap";
 
 const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({

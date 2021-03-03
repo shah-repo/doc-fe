@@ -4,7 +4,7 @@ import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import FBStore from "../FBStore/FBStore";
 
-export class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
+class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
 
   public static omitAudit: FBInputType[] = [
     "instructionsdocument",

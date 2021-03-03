@@ -1,6 +1,7 @@
 import { Typography, WithStyles } from "@material-ui/core";
 import React, { useMemo } from "react";
-import { trainingActions, TrainingPlanTransition } from "../../../state/ducks/training";
+import { trainingActions } from "../../../state/ducks/training";
+import { TrainingPlanTransition } from "../../../state/ducks/training/types";
 import { EffectiveDateFormValues } from "../../change.request/form/types";
 import Text from "../../components/Text";
 import TransitionDialog from "../../components/transitionDialog/TransitionDialog";

@@ -2,9 +2,11 @@ import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
-import { documentRevisionsActions, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
-import { documentTypeActions, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
+import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -14,9 +16,9 @@ import { ListOwnProps } from "../utils/types";
 import ListPresenter from "./presenter";
 
 type OwnProps = ListOwnProps;
-export type Props = OwnProps;
+type Props = OwnProps;
 
-export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
+const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
   const TABLE_NAME = "documentRevisions";
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));

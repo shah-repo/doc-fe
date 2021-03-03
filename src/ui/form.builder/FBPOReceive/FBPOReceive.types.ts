@@ -1,10 +1,6 @@
 import { FBAutocompleteProps, FBDialogState, FBFormProps, FBInputProps, FBPOReceiveState, FBPurchaseOrderProps, FBSchemaProps } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 
-export enum FBPOReceiveImportance {
-  purchaseorder = 1,
-  other = 2
-}
 export type FBPOReceiveProps =
 & Pick<FBInputProps, "name" | "index" | "label" | "onChange" | "disabled" | "defaultValue" | "gutter">
 & Pick<FBFormProps, "initialValues">

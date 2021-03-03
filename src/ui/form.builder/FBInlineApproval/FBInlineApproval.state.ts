@@ -14,7 +14,7 @@ import { Document } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBInlineApprovalState {
+class FBInlineApprovalState {
   // MARK: @observables
   @observable public options?: FBInlineApprovalOptions[];
   @observable approvals?: FBInlineApprovalBody[];

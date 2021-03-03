@@ -11,7 +11,7 @@ interface SidebarPresenterProps {
   bookmarks?: FBBookmarkItem[];
 }
 
-export const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }) => {
+const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }) => {
 
   const { bookmarkState } = FB.useStores();
   const [selectedIndex, setSelectedIndex] = React.useState(undefined);

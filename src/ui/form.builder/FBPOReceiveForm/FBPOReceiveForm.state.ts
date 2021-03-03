@@ -1,8 +1,8 @@
 import { template } from "lodash";
 import { action } from "mobx";
 import { FBPOReceiveFormConstructor, FBPurchaseOrderItem } from "..";
-import { RevisionChangeType } from "../../../state/ducks/documentRevisions";
-import { DocumentType } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
+import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { documentPreviewPath } from "../../document.revision/utils/paths";
 import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
 import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
@@ -10,7 +10,7 @@ import { filterSecurityGroupsForQms } from "../../documentType/list/helpers";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBPOReceiveFormState  {
+class FBPOReceiveFormState  {
   public docIdAPI: FBRequest<any, any> = new FBRequest();
   public createLotAPI: FBRequest<any, any> = new FBRequest();
   public releasedLfpoAPI: FBRequest<any, any> = new FBRequest();

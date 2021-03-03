@@ -2,7 +2,7 @@ import React from "react";
 import useDialog from "../../hooks/useDialog";
 import AddEmployeePresenter from "./presenter";
 
-export const AddEmployeeContainer: React.FunctionComponent = () => {
+const AddEmployeeContainer: React.FunctionComponent = () => {
   const dialog = useDialog();
   const openDialog = () => dialog.open();
   const closeDialog = () => dialog.close();

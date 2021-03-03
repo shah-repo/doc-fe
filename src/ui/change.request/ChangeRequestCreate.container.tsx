@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { ChangeRequest, changeRequestsActions } from "../../state/ducks/changeRequest";
-import { documentTypeActions, DocumentTypeById } from "../../state/ducks/documentRevisions/documentType";
+import { changeRequestsActions } from "../../state/ducks/changeRequest";
+import { ChangeRequest } from "../../state/ducks/changeRequest/types";
+import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeById } from "../../state/ducks/documentRevisions/documentType/types";
 import { FormContext } from "../components/forms/FormContext";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
@@ -15,14 +17,14 @@ interface OwnProps extends RouteComponentProps {
   changeRequest?: ChangeRequest;
 }
 
-export type ChangeRequestCreateContainerProps = OwnProps & RouteComponentProps<RouteParamsCreate>;
+type ChangeRequestCreateContainerProps = OwnProps & RouteComponentProps<RouteParamsCreate>;
 
-export const DEFAULT_INITIAL_VALUES = (): ChangeRequest => ({
+const DEFAULT_INITIAL_VALUES = (): ChangeRequest => ({
   title: "",
   description: "",
 } as unknown as ChangeRequest);
 
-export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateContainerProps> =
+const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateContainerProps> =
   ({ history, match }) => {
     const documentTypeId = match.params.documentTypeId;
     const formId = match.params.formId;

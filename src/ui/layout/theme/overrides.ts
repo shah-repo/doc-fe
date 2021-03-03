@@ -1,6 +1,6 @@
 import { Theme } from "@material-ui/core";
 import { Overrides } from "@material-ui/core/styles/overrides";
-import { WhiteLabelingColors } from "../../../state/ducks/company";
+import { WhiteLabelingColors } from "../../../state/ducks/company/types";
 import { FBClasses } from "../../form.builder/defaults/layout";
 import Colors from "./utils/colors";
 

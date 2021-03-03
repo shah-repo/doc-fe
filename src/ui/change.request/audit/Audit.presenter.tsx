@@ -3,7 +3,7 @@ import { isEmpty, orderBy } from "lodash";
 import React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
-import { Approval, ApprovalStatus } from "../../../state/ducks/common";
+import { Approval, ApprovalStatus } from "../../../state/ducks/common/types";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -14,9 +14,9 @@ interface OwnProps {
   approvals: Approval[];
 }
 
-export type AuditPresenterProps = OwnProps;
+type AuditPresenterProps = OwnProps;
 
-export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
+const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
   approvals,
 }) => {

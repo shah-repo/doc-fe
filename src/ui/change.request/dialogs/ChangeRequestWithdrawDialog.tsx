@@ -1,6 +1,7 @@
 import Button, { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
-import { changeRequestsActions, ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../state/ducks/changeRequest";
+import { changeRequestsActions } from "../../../state/ducks/changeRequest";
+import { ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../state/ducks/changeRequest/types";
 import AlertDialog from "../../app/alert.dialog/AlertDialog";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -14,7 +15,7 @@ interface Props {
   changeRequestId: string;
 }
 
-export const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
+const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
   buttonProps,
   label,
   changeRequestId,

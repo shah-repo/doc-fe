@@ -1,8 +1,8 @@
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import React, { useMemo } from "react";
-import { Attachment, AttachmentType } from "../../../../state/ducks/attachments";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { Attachment, AttachmentType } from "../../../../state/ducks/attachments/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { FormHeaderSummaryContext } from "../../../document.revision/header/SummaryHeader";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import Text from "../../Text";

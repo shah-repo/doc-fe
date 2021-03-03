@@ -1,9 +1,8 @@
 import { Box, CircularProgress, Link } from "@material-ui/core";
 import { AttachFile } from "@material-ui/icons";
 import React from "react";
-import { FBFileFieldProps } from ".";
+import { FBFileFieldProps, FBText } from "..";
 import Colors from "../../layout/theme/utils/colors";
-import { FBText } from "../FBText";
 import { withFBAttachmentField } from "./FBFileField.wrap";
 
 const FBFileField: React.FunctionComponent<FBFileFieldProps> = ({

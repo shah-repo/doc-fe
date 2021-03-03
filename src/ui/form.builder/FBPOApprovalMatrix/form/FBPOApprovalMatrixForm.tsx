@@ -1,9 +1,8 @@
 import { Box, Typography } from "@material-ui/core";
 import React from "react";
 import * as generateUuid from "uuid/v4";
-import { FBAutocompleteAsync, FBForm, FBTextField } from "../..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBTextField } from "../..";
 import Text from "../../../components/Text";
-import { FBAutocompleteAsyncOption } from "../../FBAutocompleteAsync";
 import { FBPOApprovalMatrixFormProps } from "../FBPOApprovalMatrix.types";
 
 const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProps> = ({

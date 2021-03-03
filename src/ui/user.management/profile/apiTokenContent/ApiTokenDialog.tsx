@@ -15,7 +15,7 @@ interface Props {
   apiTokenSecret: string;
 }
 
-export const ApiTokenDialog: React.FunctionComponent<Props> = ({
+const ApiTokenDialog: React.FunctionComponent<Props> = ({
   dialog,
   apiTokenName,
   apiTokenKey,

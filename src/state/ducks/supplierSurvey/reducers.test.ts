@@ -1,5 +1,5 @@
 import { SUPPLIER_SURVEY } from "./constants";
-import { SUPPLIER_SURVEY_DEFAULT_STATE, supplierSurvey } from "./reducers";
+import { supplierSurvey, SUPPLIER_SURVEY_DEFAULT_STATE } from "./reducers";
 import { getSurveyFormDocumentRevision } from "./tests/factories";
 import {
   SupplierSurveyAction,

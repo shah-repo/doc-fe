@@ -13,7 +13,7 @@ import { InspectionDialogProps } from "../InspectionControls.types";
  * @param isDocTypeInputDisabled Flag that marks whether user can choose a document type
  *            (should be disabled before a form is chosen)
  */
-export const InspectionDialog: React.FunctionComponent<InspectionDialogProps> = ({
+const InspectionDialog: React.FunctionComponent<InspectionDialogProps> = ({
   onFormSelect,
   onDocTypeSelect,
   inspectionDialog,

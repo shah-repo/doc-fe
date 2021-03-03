@@ -1,7 +1,7 @@
 import { toastSuccess } from "../../components/notifications";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBActionFieldState extends FBRequest<null, any> {
+class FBActionFieldState extends FBRequest<null, any> {
 
   public constructor(url: string) {
     super();

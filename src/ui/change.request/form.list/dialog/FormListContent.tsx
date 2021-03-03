@@ -13,7 +13,7 @@ interface Props {
   templateOptions: TemplateOption[];
 }
 
-export const FormListContent: React.FunctionComponent<Props> = ({
+const FormListContent: React.FunctionComponent<Props> = ({
   dialog,
   templateOptions,
 }) => {

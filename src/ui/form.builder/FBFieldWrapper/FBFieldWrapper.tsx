@@ -1,8 +1,7 @@
 import { Box } from "@material-ui/core";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import React from "react";
-import { FBFieldWrapperProps } from ".";
-import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar, FBProvider } from "..";
+import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar, FBFieldWrapperProps, FBProvider } from "..";
 import { withFBFieldWrapper } from "./FBFieldWrapper.wrap";
 
 const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({

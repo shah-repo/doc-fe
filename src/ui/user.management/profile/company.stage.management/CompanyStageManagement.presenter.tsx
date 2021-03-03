@@ -23,7 +23,7 @@ const styles = makeStyles((theme: Theme) =>
   },
   ));
 
-export const CompanyStageManagementPresenter: React.FunctionComponent<Props> = ({
+const CompanyStageManagementPresenter: React.FunctionComponent<Props> = ({
   dirty,
   resetForm,
   initialValues,

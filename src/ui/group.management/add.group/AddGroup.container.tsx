@@ -2,7 +2,7 @@ import React from "react";
 import useDialog from "../../hooks/useDialog";
 import AddGroupPresenter from "./AddGroup.presenter";
 
-export const AddGroupContainer: React.FunctionComponent = () => {
+const AddGroupContainer: React.FunctionComponent = () => {
   const dialog = useDialog();
   const openDialog = () => dialog.open();
   const closeDialog = () => dialog.close();

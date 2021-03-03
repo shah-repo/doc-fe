@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
 import React from "react";
-import { DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
+import { DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import { CloneContainer, CloneContainerProps } from "./Clone.container";
 import DocumentRevisionCreateContainer from "./DocumentRevisionCreate.container";

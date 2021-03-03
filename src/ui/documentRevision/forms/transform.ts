@@ -1,10 +1,10 @@
 import { get, maxBy, pick } from "lodash";
-import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
 import { checkIsDocumentDAM, checkIsDocumentPOAM, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
-import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
+import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
 import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
 import { getIsAdministrativeDefault } from "../helpers/revisionStage";
 import { DocumentRevisionFormValues } from "./types";
@@ -84,8 +84,11 @@ export const toDocumentRevisionFormValues = (
   const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
 
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isDocumentRecord;
-  const isdocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
-  const isDocRevFirstDraft = isdocRevStatusDraft && documentRevision?.version === 1;
+  const isDocRevFirstDraft = isDocumentRevisionInStatus(
+    [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange],
+      documentRevision?.status
+  ) && documentRevision?.version === 1;
+
 
   if (shouldShowRevStageForDocType && isDocRevFirstDraft) {
     values.revisionStage = documentRevision.revisionStage.toString();
