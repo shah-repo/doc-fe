@@ -77,6 +77,7 @@ export const useFormContext = () => {
         refValues = refWithoutPrevValue?.map((e) => ({ id: e.id }))as ReferenceToEditRequest[];
       }
       formik.setFieldValue("referenceTo", [...refValues, { id: nextValueId }]);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       workspaceState.referenceValue = [...refValues, { id: nextValueId! }];
       return;
     }

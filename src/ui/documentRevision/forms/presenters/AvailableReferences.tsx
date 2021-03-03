@@ -98,6 +98,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     setValue(value);
     if (!workspaceState) { return; }
     workspaceState.referenceValue = map(value, (obj) => ({ id: obj.value }));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentReferences]);
 
   return (
