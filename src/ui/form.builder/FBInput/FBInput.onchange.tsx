@@ -56,6 +56,15 @@ export const withFBOnChange = <T extends FBInputProps>(
       if (type && !FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);
       }
+      if (formState?.validationRelatedRules[name]) {
+        map(formState?.validationRelatedRules[name], (field) => {
+          const { name: fieldName, value: fieldValue } = field;
+          if (formValue !== fieldValue) {
+            formState.omitFieldValue((fieldName || "") as string);
+            formState.errors.set(fieldName, "");
+          }
+        });
+      }
     }
 
     function checkboxGroupValue(ev: React.ChangeEvent<HTMLInputElement>) {
