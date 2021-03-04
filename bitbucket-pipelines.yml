@@ -69,6 +69,25 @@ definitions:
           - NODE_ENV=development yarn install --frozen-lockfile
           - ./aws/bash_scripts/runTests.sh
 
+    - step: &COMMON_UPLOAD_CYPRESS_REPORT
+        name: Cypress upload reports
+        image:
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs_node_14_10_0_chrome_88_cy_6_2_0
+          aws:
+            access-key: $AWS_ACCESS_KEY_ID
+            secret-key: $AWS_SECRET_ACCESS_KEY
+        max-time: 30
+        size: 2x
+        caches:
+          - node
+        artifacts:
+          - test-results/**
+          - zipped-test-results/**
+        script:
+          script:
+            - source ./scripts/cypress/utils/variables_pipeline.sh
+            - ./scripts/cypress/utils/upload_video_reports.sh
+
     - step: &COMMON_RUN_CYPRESS
           name: Cypress specs
           image:
@@ -239,11 +258,7 @@ pipelines:
           - name: CYPRESS_COMMIT_BE
           - name: CYPRESS_COMMIT_REMOTEJS
       - parallel: *RUN_CYPRESS_IN_PARALLEL
-      - step: 
-          artifacts:
-            - zipped-test-results/**
-          script:
-            - ./scripts/cypress/utils/upload_video_reports.sh
+      - step: *COMMON_UPLOAD_CYPRESS_REPORT
 
   pull-requests:
     "**":
