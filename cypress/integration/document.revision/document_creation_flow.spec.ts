@@ -11,7 +11,7 @@ let loginResponse;
 let multipleCompanies;
 let documentUploadFailureCaught = false;
 
-context("Document Creation Flow", () => {
+context.skip("Document Creation Flow", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
