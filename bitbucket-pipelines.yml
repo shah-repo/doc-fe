@@ -84,9 +84,8 @@ definitions:
           - test-results/**
           - zipped-test-results/**
         script:
-          script:
-            - source ./scripts/cypress/utils/variables_pipeline.sh
-            - ./scripts/cypress/utils/upload_video_reports.sh
+          - source ./scripts/cypress/utils/variables_pipeline.sh
+          - ./scripts/cypress/utils/upload_video_reports.sh
 
     - step: &COMMON_RUN_CYPRESS
           name: Cypress specs
