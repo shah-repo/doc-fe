@@ -6,11 +6,13 @@ if [[ -z "${DIR_REPORTS}" ]]; then
   exit 1
 fi
 
+echo $DIR_REPORTS
+
 DATE=$(date "+%Y-%m-%dT%H:%M:%S%z")
 ZIP_FILE_NAME=21.4_$DATE.zip
-ZIP_FILE_NAME_PATH="zipped-test-results/$ZIP_FILE_NAME"
+ZIP_FILE_NAME_PATH="./zipped-test-results/$ZIP_FILE_NAME"
 
-mkdir -p "zipped-test-results"
+mkdir -p "./zipped-test-results"
 
 zip -r $ZIP_FILE_NAME_PATH $DIR_REPORTS
 
