@@ -17,6 +17,8 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   label,
   isTypePM,
   rules,
+  preventativeFormOptions,
+  getOptionLabel,
   ...props
 }) => (
   <FBInput showErrorMsg={false} {...{ name, rules }} {...props} type="eqmaintenance">
@@ -45,11 +47,12 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
     <FBAutocompleteAsync
       label={isTypePM ? "form.builder.preventative.maintenance.form" : "form.builder.calibration.form"}
       optionId={FBAutocompleteAsyncOption.preventativeMaintenaceForms}
+      filterOptions={preventativeFormOptions}
       name={`${name}.preventativeForm`}
       validationMode="visibility"
       rules={`required_if:${name}.requirements,Yes`}
       withState
-      {...{ disabled }}
+      {...{ disabled, getOptionLabel }}
     />
     <FBQuantityField
       name={`${name}.frequency`}
