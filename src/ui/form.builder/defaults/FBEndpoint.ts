@@ -42,4 +42,5 @@ export enum FBEndpoint {
   Parts = "/document_revisions?docTypeGroupOptions%5B%5D=MATERIAL&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED",
   FetchDocumentType = "/document_type/${documentTypeId}",
   StartMpi = "/lhr/start_mpi",
+  FecthAvailableMaintenanceForms = "/documents/available_maintenance_forms",
 }
