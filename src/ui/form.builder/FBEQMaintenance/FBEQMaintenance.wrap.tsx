@@ -89,8 +89,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
 
     getOptionLabel = (option) => {
       let title;
-      const typeValue = formState?.getFieldValue(`${name}.preventativeForm`);
-      if (option.id === typeValue) {
+      if (!option?.documentRevisions.find((doc) => doc.status === DocumentRevisionStatus.Released)) {
         title = option?.documentRevisions.find((doc) => doc.status === DocumentRevisionStatus.Obsolete)?.name;
         return `${option.docId} - OBS - ${title}`;
       }
