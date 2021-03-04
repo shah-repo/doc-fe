@@ -241,9 +241,9 @@ pipelines:
       - parallel: *RUN_CYPRESS_IN_PARALLEL
       - step: 
           artifacts:
-            - test-results/**
+            - zipped-test-results/**
           script:
-            - echo "Test"
+            - ./scripts/cypress/utils/upload_video_reports.sh
 
   pull-requests:
     "**":
