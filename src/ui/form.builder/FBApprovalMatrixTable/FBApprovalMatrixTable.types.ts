@@ -1,5 +1,4 @@
-import { FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixFieldProps } from "..";
-import { FBProviderProps } from "../FBProvider";
+import { FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixFieldProps, FBProviderProps } from "..";
 
 export type FBApprovalMatrixTableProps =
 & Pick<FBApprovalMatrixFieldProps, "name">
@@ -24,7 +23,7 @@ export enum FBApprovalMatrixTableInfoHead {
   internalType = "form.builder.internalType",
   documentType = "form.builder.documentType",
   trainingReq = "form.builder.trainingReq",
-  needsSignature = "form.builder.needsSignature",
+  needsSignature = "form.builder.qms.document",
   category = "form.builder.category"
 }
 

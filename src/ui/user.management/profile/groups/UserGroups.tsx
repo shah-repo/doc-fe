@@ -3,8 +3,9 @@ import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOut
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
-import { Nullable } from "../../../../state/ducks/common";
-import { GetEmployeeResponse, userManagementActions, userManagementSelectors } from "../../../../state/ducks/userManagement";
+import { Nullable } from "../../../../state/ducks/common/types";
+import { userManagementActions, userManagementSelectors } from "../../../../state/ducks/userManagement";
+import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
 import SummaryField from "../../../common/summary/base";
 import { MultiValueRemove, selectStyles } from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
@@ -24,7 +25,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export const UserGroups: React.FunctionComponent<Props> = ({
+const UserGroups: React.FunctionComponent<Props> = ({
   canManageUsers,
   employeeGroups,
   callbackUpdateGroups,

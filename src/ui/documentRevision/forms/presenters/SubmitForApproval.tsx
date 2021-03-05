@@ -1,7 +1,8 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, Typography } from "@material-ui/core";
 import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined";
 import React from "react";
-import { documentRevisionsActions, DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
+import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
 import { FB, FBFormState, FBProvider, FBSubmitButton, FBTextField } from "../../../form.builder";

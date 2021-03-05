@@ -3,7 +3,7 @@ import { Box, Typography } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { companySelectors } from "../../../../state/ducks/company";
-import { DocumentRevision, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import RadioButton from "../../../components/forms/fields/RadioButton";
 import RadioGroup from "../../../components/forms/fields/RadioGroup";
 import { required, validator } from "../../../components/forms/fields/validators";
@@ -22,7 +22,7 @@ interface Props {
   releasedDocRev?: DocumentRevision;
   isAlphaReleased: boolean;
 }
-export const RevisionTypeChange: React.FunctionComponent<Props> = ({
+const RevisionTypeChange: React.FunctionComponent<Props> = ({
   documentTypeId = "",
   isDisabled,
   isDocRevFirstDraft,

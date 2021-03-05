@@ -10,7 +10,7 @@ interface Props {
   crId: string;
 }
 
-export const styles = makeStyles((theme: Theme) =>
+const styles = makeStyles((theme: Theme) =>
   createStyles({
     containerWrap: {
       paddingLeft: "42px",
@@ -24,7 +24,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
   }));
 
-export const DashboardCRBase: React.FunctionComponent<Props> = ({
+const DashboardCRBase: React.FunctionComponent<Props> = ({
   title,
   crTitle,
   url,

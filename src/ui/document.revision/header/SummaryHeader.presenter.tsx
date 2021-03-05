@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
 import OwnerChangerContainer from "../../components/common/owner.changer/container";

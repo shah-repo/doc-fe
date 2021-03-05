@@ -1,6 +1,7 @@
 import { Box, Button } from "@material-ui/core";
 import React from "react";
-import { ChangeRequest, changeRequestsActions } from "../../../../state/ducks/changeRequest";
+import { changeRequestsActions } from "../../../../state/ducks/changeRequest";
+import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
 import { AsyncStatus } from "../../../../state/types";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import FormMessage from "../../../components/forms/FormMessage";

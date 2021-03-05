@@ -283,6 +283,7 @@ context("Approval request form scenario", () => {
 
       it("Navigate to AR", () => {
         cy.navigToApprovalRequestList();
+        cy.alClearFilters();
         cy.arSelectFirstDocument();
       });
 
@@ -395,6 +396,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Select first document", () => {
+      cy.alClearFilters();
       cy.arSelectFirstDocument();
     });
 
@@ -454,6 +456,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Select first document", () => {
+      cy.alClearFilters();
       cy.arSelectFirstDocument();
     });
 

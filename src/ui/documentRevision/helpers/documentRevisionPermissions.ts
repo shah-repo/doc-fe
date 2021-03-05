@@ -1,7 +1,7 @@
 import { get } from "lodash";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentForm } from "./checkDocumentGroup";
-import { isDocumentRevisionInStatus, isDocumentRevisionPendingChange, isDocumentRevisionReleased } from "./documentRevisionStatus";
+import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "./documentRevisionStatus";
 
 const isOwner = (
   documentRevision: DocumentRevision,
@@ -20,14 +20,6 @@ export const canEditDocumentRevision = (
     [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange],
     documentRevision.status
   );
-
-export const canSubmitDocumentRevision = (
-  documentRevision: DocumentRevision,
-  currentUserEmail: string,
-) =>
-  documentRevision.owner &&
-  currentUserEmail === documentRevision.owner.user.email &&
-  isDocumentRevisionPendingChange(documentRevision.status);
 
 export const canCreateNewVersion = (
   documentRevision: DocumentRevision,

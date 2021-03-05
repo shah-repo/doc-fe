@@ -28,7 +28,7 @@ const styles = makeStyles((theme: Theme) =>
   },
   ));
 
-export const NavigationManagementPresenter: React.FunctionComponent<Props> = ({
+const NavigationManagementPresenter: React.FunctionComponent<Props> = ({
   dirty,
   resetForm,
   initialValues,

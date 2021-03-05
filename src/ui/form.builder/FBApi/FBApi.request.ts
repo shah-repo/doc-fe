@@ -1,6 +1,6 @@
 import { first, get, has, isArray, isEmpty, isString, isUndefined, join, template } from "lodash";
 import { action, observable, set } from "mobx";
-import apiClient, { FBRequestSet, FBRequestTemplateUrl } from ".";
+import { apiClient, FBRequestSet, FBRequestTemplateUrl } from "..";
 import apiXClient from "../../../state/apiXClient";
 import { store } from "../../../state/store";
 import { ApiActionMethod } from "../../../state/types";
@@ -100,12 +100,6 @@ export default class FBRequest<Data, Body> {
 
     if (this.publicApi) {
       apiXClient("", this.publicApi);
-    }
-
-    if (!this.publicApi) {
-      const { employeeId, sessionId } = store.getState().auth.user;
-      const authorization = `bearer ${employeeId}:${sessionId}`;
-      apiXClient(authorization, false);
     }
 
     switch (method) {

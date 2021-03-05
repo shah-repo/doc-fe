@@ -10,7 +10,7 @@ interface Props {
   onCounterFinish: () => void;
 }
 
-export const SlackLandingSuccess: React.FunctionComponent<Props> = ({
+const SlackLandingSuccess: React.FunctionComponent<Props> = ({
   successMessage,
   onCounterFinish,
 }) => {

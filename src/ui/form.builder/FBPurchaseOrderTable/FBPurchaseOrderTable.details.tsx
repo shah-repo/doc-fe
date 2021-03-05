@@ -7,7 +7,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { keys, truncate, values } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FBMapWrapper, FBPurchaseOrderDetailsProduct, FBPurchaseOrderItem, FBPurchaseOrderTableDetailsProps, FBTableCell, FBTooltip } from "..";
+import { FBMapWrapper, FBPurchaseOrderItem, FBTableCell, FBTooltip } from "..";
+import { FBPurchaseOrderDetailsProduct, FBPurchaseOrderTableDetailsProps } from "./FBPurchaseOrderTable.types";
 import { FBPurchaseOrderCollection } from "./helpers";
 
 

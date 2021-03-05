@@ -6,7 +6,7 @@ import { createFilter } from "react-select";
 import { SelectComponentsProps } from "react-select/base";
 import CreatableSelect, { CreatableProps } from "react-select/creatable";
 import { ActionMeta, ValueType } from "react-select/src/types";
-import { TypographyProps } from "../../../../../state/ducks/common";
+import { TypographyProps } from "../../../../../state/ducks/common/types";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
 import { useFormContext } from "../../FormContext";

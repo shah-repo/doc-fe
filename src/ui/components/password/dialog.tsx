@@ -16,7 +16,7 @@ interface Props {
   dialogTitle?: Translation;
 }
 
-export const PasswordDialog: React.FunctionComponent<Props> = ({
+const PasswordDialog: React.FunctionComponent<Props> = ({
   dialogTitle = "transition.action.title",
   asyncState,
   closeDialog,

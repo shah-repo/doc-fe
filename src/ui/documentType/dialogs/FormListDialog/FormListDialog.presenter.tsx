@@ -6,12 +6,12 @@ import Text from "../../../components/Text";
 import { DialogHandler } from "../../../hooks/useDialog";
 import { styles } from "./FormListDialog.styles";
 
-export interface FormListDialogProps {
+interface FormListDialogProps {
   formIds: DocumentTypeByIdForm[];
   dialog: DialogHandler;
   handleSelection: (id: string) => void;
 }
-export const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
+const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
   dialog,
   formIds,
   handleSelection,

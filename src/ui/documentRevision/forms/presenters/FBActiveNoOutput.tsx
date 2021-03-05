@@ -4,8 +4,8 @@ import * as React from "react";
 import { useSelector } from "react-redux";
 import { ValueType } from "react-select";
 import { Permission } from "../../../../state/ducks/auth/types";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import { requiredAtLeastOne, validator } from "../../../components/forms/fields/validators";
@@ -24,7 +24,7 @@ interface Props {
   outputDocs: OptionType[];
 }
 
-export const styles = makeStyles((theme: Theme) =>
+const styles = makeStyles((theme: Theme) =>
   createStyles({
     outputGrey: {
       color: `${theme.palette.text.disabled}`,

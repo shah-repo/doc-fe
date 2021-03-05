@@ -17,7 +17,7 @@ interface Props {
   shouldShowUpgrade: boolean;
 }
 
-export const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
+const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
   formDocumentId = "",
   docRevId,
   type,

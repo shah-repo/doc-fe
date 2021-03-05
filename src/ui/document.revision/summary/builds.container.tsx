@@ -1,6 +1,7 @@
 import React from "react";
-import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { DataProps } from "../../../state/ducks/common/types";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../components/notifications";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -13,9 +14,9 @@ interface OwnProps {
   docRevId?: string;
   showRemoveButton?: boolean;
 }
-export type Props = OwnProps & DataProps<DocumentRevision[]>;
+type Props = OwnProps & DataProps<DocumentRevision[]>;
 
-export const BuildsContainer: React.FunctionComponent<Props> = ({
+const BuildsContainer: React.FunctionComponent<Props> = ({
   dataProp,
   label,
   isDraft,

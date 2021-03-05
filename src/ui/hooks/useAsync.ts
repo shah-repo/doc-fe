@@ -3,7 +3,7 @@ import { useState } from "react";
 import { AsyncState, AsyncStatus } from "../../state/types";
 import useCallbackHandler from "./useCallbackHandler";
 
-export interface AsyncHandlers<T> {
+interface AsyncHandlers<T> {
   onSuccess?: (arg?: T) => void;
   onError?: (message?: string) => void;
   setCancelToken?: (token?: CancelTokenSource) => void;

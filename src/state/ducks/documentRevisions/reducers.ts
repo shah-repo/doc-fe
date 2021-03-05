@@ -9,7 +9,7 @@ type DocumentRevisionActions =
   | DocumentRevisionsListAction
   | DocumentRevisionSetAction;
 
-export const byId = (
+const byId = (
   state: DocumentRevisionsByIdState = {},
   action: DocumentRevisionActions,
 ): DocumentRevisionsByIdState => {
@@ -33,7 +33,7 @@ export const byId = (
   }
 };
 
-export const allIds = (
+const allIds = (
   state: DocumentRevisionsAllIdsState = [],
   action: DocumentRevisionActions,
 ): DocumentRevisionsAllIdsState => {
@@ -55,7 +55,7 @@ export const allIds = (
 
 type DocumentByIdAction = DocumentSetAction | DocumentRevisionActions;
 
-export const documentsById = (
+const documentsById = (
   state: DocumentByIdState = {},
   action: DocumentByIdAction,
 ): DocumentByIdState => {
@@ -85,7 +85,7 @@ export const documentsById = (
   }
 };
 
-export const auditsByCRId = (
+const auditsByCRId = (
   state: AuditByCRIdState = {},
   action: DocumentRevisionAuditSetAction,
 ): AuditByCRIdState => {
@@ -99,7 +99,7 @@ export const auditsByCRId = (
   }
 };
 
-export const auditsAllId = (
+const auditsAllId = (
   state: AllIdsState = [],
   action: DocumentRevisionAuditSetAction,
 ): AllIdsState => {

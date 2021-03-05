@@ -10,7 +10,7 @@ import InspectionDialog from "./InspectionDialog/InspectionDialog";
  * @param isDocumentDraft Flag that marks whether the current document is in draft.
  * @param disabled Flag that marks whether the buttons should be disabled (because of loading etc.)
  */
-export const InspectionControlsPresenter: React.FunctionComponent<InspectionControlsPresenterProps> = ({
+const InspectionControlsPresenter: React.FunctionComponent<InspectionControlsPresenterProps> = ({
   onButtonClick,
   canCreateInspection,
   isDocumentDraft,

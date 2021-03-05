@@ -1,4 +1,4 @@
-import { Nullable } from "../../state/ducks/common";
+import { Nullable } from "../../state/ducks/common/types";
 
 export interface PageDetailsCategory {
   category: string;

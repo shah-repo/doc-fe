@@ -4,7 +4,7 @@
 /* eslint-disable max-len */
 import moment from "moment";
 import "moment-timezone";
-import { ChangeRequestEditRequestBody } from "../../../../src/state/ducks/changeRequest/types";
+import { ChangeRequestEditRequestBody } from "../../../../src/state/ducks/changeRequest";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 export { };

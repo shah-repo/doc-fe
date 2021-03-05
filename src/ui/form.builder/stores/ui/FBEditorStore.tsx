@@ -9,7 +9,7 @@ import FBValidatorStore from "../ui/FBValidatorStore";
 import FBDynamicValidatorStore from "./FBDynamicValidatorStore";
 import FBStore from "./FBStore";
 
-export class FBEditorStore {
+class FBEditorStore {
   @observable public open = false;
   @observable public content?: React.ReactNode = undefined;
   @observable public title?: string = undefined;

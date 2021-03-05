@@ -2,7 +2,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
 import { integer } from "aws-sdk/clients/cloudfront";
-import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
+import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 export { };
@@ -15,7 +15,7 @@ declare global {
       poClickCreatePO(): Chainable<Subject>;
       poAddPOButtonClick(): Chainable<Subject>;
       poEnterDocumentDescription(params: {description: string }): Chainable<Subject>;
-      poSelectPartNumber(): Chainable<Subject>;
+      poSelectPartNumber(params: {partNo: string }): Chainable<Subject>;
       poEnterQuantityOrdered(params: {quantity: string}): Chainable<Subject>;
       poSelectUnits(): Chainable<Subject>;
       poSelectGLCode(): Chainable<Subject>;
@@ -98,9 +98,9 @@ Cypress.Commands.add("poEnterDocumentDescription", (params: {description: string
   cy.get("[id=\"DocumentRevisionForm-submit\"]").wait(3000).click();
 });
 
-Cypress.Commands.add("poSelectPartNumber", () => {
+Cypress.Commands.add("poSelectPartNumber", (params: {partNo: string }) => {
   cy.get("[name=\"partNumber\"]").click().wait(300);
-  cy.get("ul[role=listbox] > li").contains("PRT-00003 - 1").click();
+  cy.get("ul[role=listbox] > li").contains(params.partNo).click();
 });
 
 Cypress.Commands.add("poEnterQuantityOrdered", (params: {quantity: string}) => {

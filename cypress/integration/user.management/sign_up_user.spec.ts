@@ -2,8 +2,8 @@
 /// <reference types="Cypress" />
 
 import faker from "faker";
-import { NavigationItems } from "../../../src/state/ducks/auth/types";
 import { CONFIG } from "../../support/config";
+import { NavigationItems } from "../../utils/constants/navigationItems";
 import { USERS } from "../../utils/constants/users";
 
 let createdCompany;

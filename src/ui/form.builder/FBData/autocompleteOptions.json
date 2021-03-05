@@ -202,13 +202,11 @@
   },
   {
     "id": "23",
-    "path": "/document_revisions/forms_group_option?docTypeGroupOption=MAINTENANCE",
+    "path": "/documents/available_maintenance_forms",
     "label": "Preventative Maintenance Forms",
     "valueKey": "id",
-    "labelKey": "name",
-    "labelPrefixRoot": "document.docId",
-    "root": "",
-    "includeRevision": "displayRevision"
+    "labelKey": "docId",
+    "root": ""
   },
   {
     "id": "24",

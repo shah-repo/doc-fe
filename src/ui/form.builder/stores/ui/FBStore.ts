@@ -1,6 +1,6 @@
 import { Dictionary, filter, first, get, isUndefined, map, set as lodashSet, uniqBy } from "lodash";
 import { action, computed, observable, set } from "mobx";
-import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { FBFormValues } from "../../defaults/formik";
 import FBAutocompleteAsyncStore from "../../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBInputProps } from "../../types/common";
@@ -10,8 +10,7 @@ import FBDRStore from "./FBDRStore";
 import editorStore from "./FBEditorStore";
 import FBValidatorStore from "./FBValidatorStore";
 
-export class FormBuilderStore {
-
+class FormBuilderStore {
 
   @computed public get active(): boolean {
     return this.mode !== "none";

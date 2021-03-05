@@ -1,7 +1,6 @@
 import { FBInputProps, FBMediaAlbumFieldState, FBMediaProps, FBWorkspaceState } from "..";
 
 export type FBMediaAlbumFieldMode = "media" | "qr";
-export type FBMediaStatus = "AVAILABLE" | "USED" | "OBSOLETED";
 
 export type FBMediaAlbumFieldProps =
 & Pick<FBInputProps,

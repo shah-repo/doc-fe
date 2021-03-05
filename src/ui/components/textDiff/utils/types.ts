@@ -23,15 +23,15 @@ export interface DiffContainerProps {
   newText: string;
 }
 
+export interface DialogOpenerProps {
+  id: string;
+  text: string;
+  dataCy?: string;
+}
+
 export interface DiffPresenterProps {
   refOld: RefObject<ReactQuill>;
   refNew: RefObject<ReactQuill>;
   refMain: RefObject<ReactQuill>;
   delta: DeltaStatic | null;
-}
-
-export interface DialogOpenerProps {
-  id: string;
-  text: string;
-  dataCy?: string;
 }

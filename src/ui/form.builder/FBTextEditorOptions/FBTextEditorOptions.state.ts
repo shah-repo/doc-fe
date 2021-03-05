@@ -1,6 +1,6 @@
 import { action, observable, set } from "mobx";
 
-export class FBTextEditorOptionsState {
+class FBTextEditorOptionsState {
   // MARK: @observables
   @observable public menuVisible?: boolean = false;
 

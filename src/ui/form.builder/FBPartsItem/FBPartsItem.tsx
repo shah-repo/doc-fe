@@ -10,9 +10,8 @@ import {
   FBPartsItemProps,
   FBProcedureItemConfig,
   FBProcedureItemLocale,
-  FBSection,
+  FBSection, FBText,
 } from "..";
-import { FBText } from "../FBText";
 import { withFBPartsItem } from "./FBPartsItem.wrap";
 
 const FBParts: React.FunctionComponent<FBPartsItemProps> = ({

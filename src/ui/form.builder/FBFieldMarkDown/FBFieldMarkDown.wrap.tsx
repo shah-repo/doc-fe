@@ -1,8 +1,7 @@
 import Base64 from "Base64";
 import { get, template as lodashTemplate } from "lodash";
 import React from "react";
-import { FBFieldMarkDownProps } from ".";
-import { FB } from "..";
+import { FB, FBFieldMarkDownProps } from "..";
 
 export const withFBFieldMarkDown = <T extends FBFieldMarkDownProps>(
   Component: React.FunctionComponent<T>,

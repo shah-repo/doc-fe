@@ -2,7 +2,7 @@ import { union } from "lodash";
 import { action, observable, set } from "mobx";
 import { FBDocumentRevisionsValue } from "..";
 
-export class FBDocumentRevisionsState {
+class FBDocumentRevisionsState {
   @observable public value?: FBDocumentRevisionsValue[];
 
   public constructor(formValue?: FBDocumentRevisionsValue[]) {

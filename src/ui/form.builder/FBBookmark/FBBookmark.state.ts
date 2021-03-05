@@ -2,7 +2,7 @@ import { filter, isUndefined } from "lodash";
 import { action, observable, set } from "mobx";
 import { FBBookmarkItem } from "..";
 
-export class FBBookmarkState {
+class FBBookmarkState {
   @observable public bookmarks?: FBBookmarkItem[];
   @observable public loading?: boolean;
 

@@ -5,7 +5,7 @@ import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import React from "react";
 import Img from "react-image";
 import LazyLoad from "react-lazy-load";
-import { FBMediaCarouselProps } from ".";
+import { FBMediaCarouselProps } from "..";
 import Text from "../../components/Text";
 import { withFBMediaCarousel } from "./FBMediaCarousel.wrap";
 

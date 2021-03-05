@@ -4,10 +4,9 @@ import { useObserver } from "mobx-react";
 import moment from "moment";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FB, FBApprovalAuditProps, FBApprovalAuditState, FBAuditData, FBAuditPOCalculation, FBAuditPOItem, FBFieldName } from "..";
+import { FB, FBApprovalAuditProps, FBApprovalAuditState, FBAuditData, FBAuditPOCalculation, FBAuditPOItem, FBFieldName, FBInputType } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import { FBInputType } from "../FBInput";
 import FBStore from "../FBStore/FBStore";
 
 // *NOTE: This needs to be refactored! Wait for the BE changes

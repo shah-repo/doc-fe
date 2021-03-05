@@ -5,9 +5,9 @@ import useDialog from "../../../../hooks/useDialog";
 import { ImplementationPlanTaskFormValues } from "../../types";
 import TasksPresenter from "./Tasks.presenter";
 
-export type Props = FieldArrayRenderProps;
+type Props = FieldArrayRenderProps;
 
-export const TasksContainer: React.FunctionComponent<Props> = ({
+const TasksContainer: React.FunctionComponent<Props> = ({
   push,
   remove,
   form,
