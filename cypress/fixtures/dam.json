@@ -1,0 +1,274 @@
+{
+  "approvalRoles": [
+    {
+      "index": 0,
+      "name": "Tester1"
+    },
+    {
+      "index": 1,
+      "name": "TesterQA"
+    }
+  ],
+  "approvalMatrix": [
+    {
+      "docType": {
+        "name": "Document Approval Matrix",
+        "acronym": "DAM-",
+        "group": "DAM",
+        "needsSignature": true,
+        "defaultTraining": false,
+        "fieldsConfig": {
+          "E": {
+            "visible": false,
+            "required": true
+          },
+          "J": {
+            "visible": false
+          },
+          "K": {
+            "visible": false
+          },
+          "L": {
+            "visible": false
+          },
+          "P3": {
+            "label": "History",
+            "visible": true
+          }
+        },
+        "category": ""
+      },
+      "approvalRoles": {
+        "stage1": [
+          false,
+          false
+        ],
+        "stage2": [
+          false,
+          false
+        ],
+        "stage3": [
+          false,
+          false
+        ],
+        "admStage": [
+          false,
+          false
+        ]
+      }
+    },
+    {
+      "docType": {
+        "name": "Approval Request",
+        "acronym": "AR-",
+        "group": "CHANGE_REQUEST",
+        "needsSignature": true,
+        "defaultTraining": false,
+        "schema": [
+          {
+            "name": "change-request-details",
+            "type": "section",
+            "index": 0,
+            "label": "Approval Request Details",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "deleteInFormDisabled": true
+          },
+          {
+            "name": "documentRevisions",
+            "type": "documentRevisions",
+            "index": 1,
+            "rules": {
+              "documentRevisions.*.id": "required",
+              "documentRevisions.*.descriptionOfChange": "required",
+              "documentRevisions.*.descriptionOfJustification": "required",
+              "documentRevisions.*.proposedDocumentRevision.id": "required"
+            },
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "deleteInFormDisabled": true
+          },
+          {
+            "name": "target-date-approvers",
+            "type": "section",
+            "index": 2,
+            "label": "Approvers",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ]
+          },
+          {
+            "name": "approvers",
+            "type": "approvers",
+            "index": 3,
+            "deleteDisabled": true,
+            "deleteInFormDisabled": true
+          }
+        ],
+        "category": ""
+      },
+      "approvalRoles": {
+        "stage1": [
+          false,
+          false
+        ],
+        "stage2": [
+          false,
+          false
+        ],
+        "stage3": [
+          false,
+          false
+        ],
+        "admStage": [
+          false,
+          false
+        ]
+      }
+    },
+    {
+      "docType": {
+        "name": "Form",
+        "acronym": "FM-",
+        "group": "FORM",
+        "needsSignature": true,
+        "defaultTraining": false,
+        "category": ""
+      },
+      "approvalRoles": {
+        "stage1": [
+          false,
+          false
+        ],
+        "stage2": [
+          false,
+          false
+        ],
+        "stage3": [
+          false,
+          false
+        ],
+        "admStage": [
+          false,
+          false
+        ]
+      }
+    },
+    {
+      "docType": {
+        "name": "Administrative",
+        "group": "OTHER",
+        "acronym": "ADM-",
+        "category": "",
+        "needsSignature": false,
+        "defaultTraining": false
+      },
+      "approvalRoles": {
+        "stage1": [
+          false,
+          false
+        ],
+        "stage2": [
+          false,
+          false
+        ],
+        "stage3": [
+          false,
+          false
+        ],
+        "admStage": [
+          false,
+          false
+        ]
+      }
+    },
+    {
+      "docType": {
+        "name": "Approved Supplier List Action",
+        "group": "OTHER",
+        "acronym": "ASLA-",
+        "category": "",
+        "needsSignature": true,
+        "defaultTraining": false
+      },
+      "approvalRoles": {
+        "stage1": [
+          false,
+          false
+        ],
+        "stage2": [
+          false,
+          false
+        ],
+        "stage3": [
+          false,
+          false
+        ],
+        "admStage": [
+          false,
+          false
+        ]
+      }
+    },
+    {
+      "docType": {
+        "name": "Test",
+        "group": "OTHER",
+        "acronym": "TST-",
+        "category": "",
+        "needsSignature": true,
+        "defaultTraining": false
+      },
+      "approvalRoles": {
+        "stage1": [
+          false,
+          false
+        ],
+        "stage2": [
+          false,
+          false
+        ],
+        "stage3": [
+          false,
+          false
+        ],
+        "admStage": [
+          false,
+          false
+        ]
+      }
+    },
+    {
+      "docType": {
+        "name": "Clinical Protocol",
+        "group": "OTHER",
+        "acronym": "CP-",
+        "category": "",
+        "needsSignature": true,
+        "defaultTraining": false
+      },
+      "approvalRoles": {
+        "stage1": [
+          true,
+          true
+        ],
+        "stage2": [
+          false,
+          false
+        ],
+        "stage3": [
+          false,
+          false
+        ],
+        "admStage": [
+          false,
+          false
+        ]
+      }
+    }
+  ]
+}

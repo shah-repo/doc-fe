@@ -1,0 +1,132 @@
+{"navigationItems": [
+    {
+      "icon": "/navigation_icons/dashboard.svg",
+      "path": "/",
+      "type": "LINK",
+      "label": "Dashboard"
+    },
+    {
+      "icon": "/navigation_icons/document-menu.svg",
+      "menu": [
+        {
+          "icon": "/navigation_icons/document.svg",
+          "path": "/document_revision",
+          "type": "LINK",
+          "label": "Document List"
+        },
+        {
+          "icon": "/navigation_icons/cr.svg",
+          "path": "/change_request",
+          "type": "LINK",
+          "label": "Approval Requests"
+        },
+        {
+          "icon": "/navigation_icons/text-paper.svg",
+          "type": "CATEGORY",
+          "label": "Records",
+          "category": "Record"
+        }
+      ],
+      "type": "MENU",
+      "label": "Document Control"
+    },
+    {
+      "icon": "/navigation_icons/document-menu.svg",
+      "type": "CATEGORY",
+      "label": "Equipment",
+      "category": "Equipment"
+    },
+    {
+      "icon": "/navigation_icons/supplier-menu.svg",
+      "menu": [
+        {
+          "icon": "/navigation_icons/supplier-list.svg",
+          "type": "CATEGORY",
+          "label": "Supplier List",
+          "category": "Supplier",
+          "restrictedToUsersWithTags": [
+            "CREATE_DOCS_OF_RESTRICTED_DOC_TYPES"
+          ]
+        }
+      ],
+      "type": "MENU",
+      "label": "Supplier Management",
+      "restrictedToUsersWithTags": [
+        "CREATE_DOCS_OF_RESTRICTED_DOC_TYPES"
+      ]
+    },
+    {
+      "icon": "/navigation_icons/receipt_list.svg",
+      "type": "CATEGORY",
+      "label": "Purchase Orders",
+      "category": "Purchase Order",
+      "restrictedToUsersWithTags": [
+        "CREATE_DOCS_OF_RESTRICTED_DOC_TYPES"
+      ]
+    },
+    {
+      "icon": "/navigation_icons/cart-simple-in.svg",
+      "type": "CATEGORY",
+      "label": "Receiving",
+      "category": "Receive",
+      "restrictedToUsersWithTags": [
+        "CREATE_DOCS_OF_RESTRICTED_DOC_TYPES"
+      ]
+    },
+    {
+      "icon": "/navigation_icons/tools.svg",
+      "menu": [
+        {
+          "icon": "/navigation_icons/icon_parts.svg",
+          "type": "CATEGORY",
+          "label": "Parts",
+          "category": "Parts"
+        },
+        {
+          "icon": "/navigation_icons/todo.svg",
+          "type": "CATEGORY",
+          "label": "Work Orders",
+          "category": "Work Order",
+          "restrictedToUsersWithTags": [
+            "CREATE_DOCS_OF_RESTRICTED_DOC_TYPES"
+          ]
+        },
+        {
+          "icon": "/navigation_icons/tag-check.svg",
+          "type": "CATEGORY",
+          "label": "Lots",
+          "category": "Lot",
+          "restrictedToUsersWithTags": [
+            "CREATE_DOCS_OF_RESTRICTED_DOC_TYPES"
+          ]
+        }
+      ],
+      "type": "MENU",
+      "label": "Manufacturing"
+    },
+    {
+      "icon": "/navigation_icons/group-management.svg",
+      "path": "/group_management",
+      "type": "LINK",
+      "label": "Group Management",
+      "restrictedToUsersWithTags": [
+        "GROUP_MANAGEMENT"
+      ]
+    },
+    {
+      "icon": "/navigation_icons/user-management.svg",
+      "path": "/user_management",
+      "type": "LINK",
+      "label": "User Management",
+      "restrictedToUsersWithTags": [
+        "USER_MANAGEMENT"
+      ]
+    },
+    {
+      "icon": "/navigation_icons/computer.svg",
+      "path": "/training",
+      "type": "LINK",
+      "label": "Training"
+    }
+  ]
+}

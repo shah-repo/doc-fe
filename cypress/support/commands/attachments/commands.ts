@@ -24,9 +24,79 @@ declare global {
       atchNoPrimaryForRedline(params: {fileName: string}): Chainable<Subject>;
       atchDownloadFile(params: {fileName: string; saveFileName: string}): Chainable<Subject>;
       atchDownloadAll(): Chainable<Subject>;
+      atchUploadJSONFormForSeed(params: {fileName: string; queue: number }): Chainable<Subject>;
+      atchUploadDOMJSONForNCO(params: {fileName: string; queue: number }): Chainable<Subject>;
+      atchUploadPageDetailsJSONForNCO(params: {fileName: string; queue: number }): Chainable<Subject>;
+      atchUploadNavigationJSONForNCO(params: {fileName: string; queue: number }): Chainable<Subject>;
+      atchUploadUserListJSONForNCO(params: {fileName: string; queue: number }): Chainable<Subject>;
     }
   }
 }
+
+Cypress.Commands.add("atchUploadJSONFormForSeed", (params: {fileName: string; queue: number }) => {
+  cy.fixture(params.fileName).then((fileContent) => {
+    cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.get("[id^=fb-attachment-field-json-form-]").eq(params.queue).attachFile({
+        fileContent: fileContent.toString(),
+        fileName: params.fileName,
+        mimeType: "*",
+        filePath: `fixtures/${params.fileName}`,
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("atchUploadDOMJSONForNCO", (params: {fileName: string; queue: number }) => {
+  cy.fixture(params.fileName).then((fileContent) => {
+    cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.get("[id^=fb-attachment-field-dom-json-]").eq(params.queue).attachFile({
+        fileContent: fileContent.toString(),
+        fileName: params.fileName,
+        mimeType: "*",
+        filePath: `fixtures/${params.fileName}`,
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("atchUploadPageDetailsJSONForNCO", (params: {fileName: string; queue: number }) => {
+  cy.fixture(params.fileName).then((fileContent) => {
+    cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.get("[id^=fb-attachment-field-page-details-json-]").eq(params.queue).attachFile({
+        fileContent: fileContent.toString(),
+        fileName: params.fileName,
+        mimeType: "*",
+        filePath: `fixtures/${params.fileName}`,
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("atchUploadNavigationJSONForNCO", (params: {fileName: string; queue: number }) => {
+  cy.fixture(params.fileName).then((fileContent) => {
+    cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.get("[id^=fb-attachment-field-navigation-json-]").eq(params.queue).attachFile({
+        fileContent: fileContent.toString(),
+        fileName: params.fileName,
+        mimeType: "*",
+        filePath: `fixtures/${params.fileName}`,
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("atchUploadUserListJSONForNCO", (params: {fileName: string; queue: number }) => {
+  cy.fixture(params.fileName).then((fileContent) => {
+    cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.get("[id^=fb-attachment-field-users-list-]").eq(params.queue).attachFile({
+        fileContent: fileContent.toString(),
+        fileName: params.fileName,
+        mimeType: "*",
+        filePath: `fixtures/${params.fileName}`,
+      });
+    });
+  });
+});
 
 Cypress.Commands.add("atchUploadAttachment", (params: {fileName: string }) => {
   cy.fixture(params.fileName).then((fileContent) => {
