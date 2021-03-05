@@ -72,7 +72,7 @@ definitions:
     - step: &COMMON_UPLOAD_CYPRESS_REPORT
         name: Cypress upload reports
         image:
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:run_cypress_specs_node_14_10_0_chrome_88_cy_6_2_0_aws
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_88_cy_6_2_0_aws
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
