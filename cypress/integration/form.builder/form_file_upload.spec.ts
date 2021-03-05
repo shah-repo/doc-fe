@@ -44,7 +44,7 @@ context("FORM Field Upload test", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[2].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -57,7 +57,7 @@ context("FORM Field Upload test", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[2].email,
         password: "Tester1!",
       });
     });
