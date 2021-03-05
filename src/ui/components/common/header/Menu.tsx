@@ -7,7 +7,7 @@ interface Props {
   children: any[];
 }
 
-export const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
+const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const items = children.filter((item) => item.props?.shouldDisplay || item.props?.shouldDisplay === undefined);
 

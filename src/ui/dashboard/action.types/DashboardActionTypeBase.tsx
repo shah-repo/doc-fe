@@ -14,7 +14,7 @@ interface Props {
   alertMessage?: string;
 }
 
-export const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
+const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
   index,
   title,
   description,

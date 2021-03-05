@@ -2,8 +2,7 @@ import { MenuItem } from "@material-ui/core";
 import { at, filter, isUndefined, map } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBContextMenuProps, FBContextMenuState } from ".";
-import { FB } from "..";
+import { FB, FBContextMenuProps, FBContextMenuState } from "..";
 import Text from "../../components/Text";
 
 export const withFBContextMenu = <T extends FBContextMenuProps>(

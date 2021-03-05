@@ -3,8 +3,8 @@ import moment from "moment";
 import React from "react";
 import { useIntl } from "react-intl";
 import { docRevSch } from "../../../common/normalizrSchema";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { DocumentType, PageDetails } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType, PageDetails } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
@@ -14,7 +14,7 @@ import { documentRevisionEffectiveDateOption } from "../../document.revision/uti
 import CreateDocumentByType from "./CreateDocumentByType";
 import { styles } from "./styles";
 
-export interface Props {
+interface Props {
   tableName: string;
   tableCriteria: TablePanelStateProps;
   tableData: TableDataProps<DocumentRevision>;
@@ -26,7 +26,7 @@ export interface Props {
   documentCategory: PageDetails;
 }
 
-export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
+const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   tableName,
   tableData,
   clearFilter,

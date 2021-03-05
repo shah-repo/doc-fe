@@ -1,6 +1,4 @@
-import { FBAutocompleteProps, FBInputProps, FBSchemaSelectState } from "..";
-import { FBInputType } from "../FBInput";
-import { FBSchemaComponentProps } from "../FBSchema/FBSchema.types";
+import { FBAutocompleteProps, FBInputProps, FBInputType, FBSchemaComponentProps, FBSchemaSelectState } from "..";
 
 export type FBSchemaSelectProps =
 & Omit<FBAutocompleteProps, "autocompleteState">

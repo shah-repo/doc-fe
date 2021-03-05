@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { FBFormProps, FBFormState } from ".";
-import { FB } from "..";
+import { FB, FBFormProps, FBFormState } from "..";
 
 export const withFBForm = <T extends FBFormProps>(
   Component: React.FunctionComponent<T>,

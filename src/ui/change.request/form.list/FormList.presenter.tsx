@@ -19,7 +19,7 @@ interface Props {
   exportDialog: DialogHandler;
 }
 
-export const FormListPresenter: React.FunctionComponent<Props> = ({
+const FormListPresenter: React.FunctionComponent<Props> = ({
   templateOptions,
   dialog,
   exportDialog,

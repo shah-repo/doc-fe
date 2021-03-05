@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
-import { ChangeRequest } from "../../../state/ducks/changeRequest";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -14,7 +14,7 @@ interface SidebarPresenterProps {
   changeRequests: ChangeRequest[];
 }
 
-export const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ changeRequests }) => {
+const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ changeRequests }) => {
   const classes = styles();
   return (
     <Box pt={0.4}>

@@ -14,7 +14,7 @@ interface Props {
   currentGroupId: string;
 }
 
-export const ParentGroups: React.FunctionComponent<Props> = ({
+const ParentGroups: React.FunctionComponent<Props> = ({
   parentGroups,
   setParentGroups,
   currentGroupId,

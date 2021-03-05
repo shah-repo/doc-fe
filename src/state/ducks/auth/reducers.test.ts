@@ -1,18 +1,11 @@
 import faker from "faker";
 import { getEmployee } from "../company/tests/factories";
-import { EditGroupsAction, EditUserInfoAction } from "../tableSearch";
+import { EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
 import {
-  EDIT_EMPLOYEE_GROUPS,
-  EDIT_EMPLOYEE_USER_INFO,
-} from "../tableSearch/constants";
+  EditGroupsAction, EditUserInfoAction,
+} from "../tableSearch/types";
 import { getGroup } from "../userManagement/tests/factories";
-import {
-  AUTH_USER,
-  LOGOUT_USER,
-  SET_EMPLOYEE,
-  USER_GROUPS,
-  USERS_ME_URL,
-} from "./constants";
+import { AUTH_USER, LOGOUT_USER, SET_EMPLOYEE, USERS_ME_URL, USER_GROUPS } from "./constants";
 import {
   groups,
   user,
@@ -21,11 +14,8 @@ import {
 } from "./reducers";
 import { getAuthResponse, getUser } from "./tests/factories";
 import {
-  AuthUserAction,
-  EditUserMeAction,
-  LogoutUserAction,
-  SelectEmployeeAction,
-  UserGroupsAction,
+  AuthUserAction, EditUserMeAction,
+  LogoutUserAction, SelectEmployeeAction, UserGroupsAction,
 } from "./types";
 
 describe("user reducer tests", () => {

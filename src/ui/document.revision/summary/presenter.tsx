@@ -5,10 +5,9 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
-import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
+import { DataProps } from "../../../state/ducks/common/types";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { Document } from "../../../state/ducks/documentRevisions/types";
+import { Document, DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
@@ -44,11 +43,11 @@ interface OwnProps {
   canChangeOwnerShip?: boolean;
 }
 
-export type Props = OwnProps &
+type Props = OwnProps &
 DataProps<DocumentRevision> &
 WithStyles<typeof styles>;
 
-export const Presenter: React.FunctionComponent<Props> = ({
+const Presenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
   dataProp: {

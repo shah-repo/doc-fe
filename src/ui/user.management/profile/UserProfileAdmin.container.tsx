@@ -4,9 +4,11 @@ import { getHasPermission } from "../../../common/utils/selectors";
 import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
 import { EmployeeEditRequestBody, GroupTag, Permission } from "../../../state/ducks/auth/types";
-import { companySelectors, Employee } from "../../../state/ducks/company";
-import { GetEmployeeResponse, userManagementActions } from "../../../state/ducks/userManagement";
+import { companySelectors } from "../../../state/ducks/company";
+import { Employee } from "../../../state/ducks/company/types";
+import { userManagementActions } from "../../../state/ducks/userManagement";
 import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
+import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { ApplicationState } from "../../../state/reducers";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useAsync from "../../hooks/useAsync";
@@ -32,7 +34,7 @@ interface StateProps {
 
 type Props = OwnProps & DispatchProps & StateProps;
 
-export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
+const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
   showUserProfile,
   closeUserProfile,
   selectedEmployee,

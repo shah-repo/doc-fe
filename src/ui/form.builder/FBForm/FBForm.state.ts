@@ -1,10 +1,10 @@
 import { flatten, unflatten } from "flat";
 import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, setWith, values } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import { FBFormConstructor, FBInputState, FBWorkspaceMode, FBWorkspaceState } from "..";
-import { FBSchemaState } from "../FBSchema";
+import { FBFormConstructor, FBInputState, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceState } from "..";
+import FBSchemaState from "../FBSchema/FBSchema.state";
 
-export class FBFormState extends FBSchemaState {
+class FBFormState extends FBSchemaState {
   public rules: Dictionary<string> = {};
   public validationAttributeNames: Dictionary<string> = {};
   public errorValidation = true;
@@ -13,6 +13,8 @@ export class FBFormState extends FBSchemaState {
   public values: Dictionary<any> = {};
   public validationValues: Dictionary<any> = {};
   private finalValidationRulse: Dictionary<string> = {};
+  public validatorRules: Record<string, FBValidationRelatedRules[]> = {};
+  public validationRelatedRules: Record<string, FBValidationRelatedRules[]> = {};
 
   // TO BBE REMOVED!
   public workspaceState?: FBWorkspaceState;
@@ -113,6 +115,7 @@ export class FBFormState extends FBSchemaState {
     this.initialValues = omit(this.initialValues, fieldName);
     this.values = omit(this.getValues(), fieldName);
     this.validationValues = omit(this.validationValues, fieldName);
+    this.inputState.get(fieldName)?.setValue(undefined);
   };
 
   @action public setRules = (rules: Dictionary<string>) =>
@@ -188,6 +191,7 @@ export class FBFormState extends FBSchemaState {
     this.registerValidator(validator);
     validator.setAttributeNames(this.validationAttributeNames);
     this.errors.clear();
+    this.validatorRules = validator.rules;
     validator.checkAsync(
       // passes
       () => callback && callback(true),

@@ -2,7 +2,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
 import React from "react";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
-import { DocumentRevision, documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
 import { isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -10,7 +11,7 @@ import useAsync from "../../../hooks/useAsync";
 import { toastError } from "../../notifications";
 import Text from "../../Text";
 
-export interface Props {
+interface Props {
   handleClose?: any;
   attachment: any;
   documentRevision?: DocumentRevision;

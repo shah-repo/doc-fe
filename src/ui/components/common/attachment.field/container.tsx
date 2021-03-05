@@ -3,8 +3,9 @@ import { map, pick } from "lodash";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { connect } from "react-redux";
-import { Attachment, attachmentsActions } from "../../../../state/ducks/attachments";
+import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
+import { Attachment } from "../../../../state/ducks/attachments/types";
 import { ApplicationState } from "../../../../state/reducers";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
@@ -17,7 +18,7 @@ import { AttachmentContainerProps, AttachmentFieldDispatchProps } from "./utils/
 
 type DispatchProps = AttachmentFieldDispatchProps;
 
-export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps> = ({
+const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps> = ({
   name = "",
   upload,
   component = "button",

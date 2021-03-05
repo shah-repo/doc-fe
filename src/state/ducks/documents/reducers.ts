@@ -39,7 +39,7 @@ export const allIds = (state: DocumentsAllIdsState = [], action: DocumentActions
   }
 };
 
-export const reviewIds = (
+const reviewIds = (
   state: DocumentsReviewIdsState = [],
   action: DocumentsToReviewListAction,
 ): DocumentsReviewIdsState => {

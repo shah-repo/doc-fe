@@ -17,9 +17,9 @@ interface OwnProps {
   documentTypeId: string;
 }
 
-export type AccessPermissionsContainerProps = OwnProps;
+type AccessPermissionsContainerProps = OwnProps;
 
-export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissionsContainerProps> = ({
+const AccessPermissionsContainer: React.FunctionComponent<AccessPermissionsContainerProps> = ({
   withoutCurrentUser = false,
   documentId,
   documentRevisionId,

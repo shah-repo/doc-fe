@@ -5,8 +5,7 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CropFreeIcon from "@material-ui/icons/CropFree";
 import { truncate } from "lodash";
 import React from "react";
-import { FBMediaAlbumProps } from ".";
-import { FBMediaCarousel, FBMediaGallery, FBProvider, FBTooltip } from "..";
+import { FBMediaAlbumProps, FBMediaCarousel, FBMediaGallery, FBProvider, FBTooltip } from "..";
 import Text from "../../components/Text";
 import { withFBMediaAlbum } from "./FBMediaAlbum.wrap";
 

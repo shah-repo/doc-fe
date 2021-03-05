@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions";
+import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/types";
 import Date from "../../components/Date";
 import Text from "../../components/Text";
 import { generateRevisionNumber } from "../helpers/generateRevisionNumber";

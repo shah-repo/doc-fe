@@ -1,7 +1,7 @@
 import { Formik, FormikProps } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { PageDetails } from "../../../state/ducks/documentRevisions/documentType";
+import { PageDetails } from "../../../state/ducks/documentRevisions/documentType/types";
 import { pageDetailsActions } from "../../../state/ducks/pageDetails";
 import { toastError } from "../../components/notifications";
 import useActionCreator from "../../hooks/useActionCreator";

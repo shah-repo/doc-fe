@@ -2,7 +2,7 @@ import { createSelector } from "reselect";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
-import { Nullable } from "../common";
+import { Nullable } from "../common/types";
 import { Group, GroupTag, IotCredentials, Permission } from "./types";
 
 const isAuthenticated = (state: ApplicationState): boolean =>

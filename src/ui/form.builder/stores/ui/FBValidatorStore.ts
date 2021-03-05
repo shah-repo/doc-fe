@@ -7,7 +7,7 @@ import { FBValidatorTrigger } from "../../types/validation/validator";
 import { FBValidatorConfigProps } from "../../types/validation/validatorDialog";
 import FBStore from "./FBStore";
 
-export class FormBuilderValidatorStored {
+class FormBuilderValidatorStored {
   @observable public errors: Dictionary<string> = {};
   @observable public indicatorValues: Dictionary<Dictionary<any>> = {};
   public applicableOn = false;

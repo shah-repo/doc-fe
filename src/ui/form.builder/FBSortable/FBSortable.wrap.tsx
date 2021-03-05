@@ -2,8 +2,7 @@ import { map } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { arrayMove, SortableElement, SortEnd } from "react-sortable-hoc";
-import { FBSortableProps } from ".";
-import { FB, FBFieldWrapper, FBInputProps, FBSchemaProps, FBSchemaState } from "..";
+import { FB, FBFieldWrapper, FBInputProps, FBSchemaProps, FBSchemaState, FBSortableProps } from "..";
 
 export const withFBSortable = <T extends FBSortableProps>(
   Component: React.FunctionComponent<T>,

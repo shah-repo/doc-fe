@@ -1,6 +1,5 @@
 import React from "react";
-import { FB, FBFieldName } from "..";
-import { FBWorkspaceTplActionsProps } from "./FBWorkspaceTplActions.types";
+import { FB, FBFieldName, FBWorkspaceTplActionsProps } from "..";
 
 export const withFBWorkspaceTplActions = <T extends FBWorkspaceTplActionsProps>(
   Component: React.FunctionComponent<T>

@@ -1,4 +1,4 @@
-import { WatermarkRequest } from "../../../state/ducks/attachments";
+import { WatermarkRequest } from "../../../state/ducks/attachments/types";
 import { TextProps } from "../Text";
 
 export interface WatermarkResponse {

@@ -1,6 +1,6 @@
 import { pick } from "lodash";
-import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions";
-import { SupplierSurveyForm } from "../../../state/ducks/supplierSurvey";
+import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/types";
+import { SupplierSurveyForm } from "../../../state/ducks/supplierSurvey/types";
 
 export const toSupplierSurveyFormValues = (
   supplierSurvey: SupplierSurveyForm,

@@ -16,7 +16,7 @@ import useDidMount from "../../hooks/useDidMount";
 import useGetHasTag from "../../hooks/useGetHasTag";
 import ListPresenter from "./presenter";
 
-export const UserManagementListContainer: React.FunctionComponent = () => {
+const UserManagementListContainer: React.FunctionComponent = () => {
   const didMount = useDidMount();
   const dispatch = useDispatch();
   const intl = useIntl();

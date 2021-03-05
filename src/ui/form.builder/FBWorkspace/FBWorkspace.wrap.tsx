@@ -2,11 +2,9 @@
 import { differenceBy, filter, map } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBWorkspaceProps, FBWorkspaceState } from ".";
-import { FB, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState } from "..";
+import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState, FBWorkspaceProps, FBWorkspaceState } from "..";
 import { store } from "../../../state/store";
 import { checkIsDocumentEB } from "../../documentRevision/helpers/checkDocumentGroup";
-import { FBDialogState } from "../FBDialog";
 
 // Disable missing translation message for the non translation cases.
 
@@ -35,7 +33,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     active,
     document,
     changeRequest,
-    autosave,
+    autosave = false,
     schema,
     includeProcedureDiff,
     ...props
@@ -48,6 +46,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       mode,
       autosave,
     });
+
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
     workspaceState && (workspaceState.document = document);
@@ -74,6 +73,12 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       workspaceState.approvals = document?.approvals as FBInlineApprovalBody[];
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [document?.approvals]);
+
+    React.useEffect(() => {
+      if (!workspaceState) { return; }
+      workspaceState.setAutosave(autosave);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [autosave]);
 
     // *TODO: find a way to reset constructor props
     React.useEffect(() => {

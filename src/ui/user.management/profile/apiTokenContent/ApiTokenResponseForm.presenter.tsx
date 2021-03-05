@@ -11,7 +11,7 @@ interface Props {
   apiTokenSecret: string;
 }
 
-export const ApiTokenResponseFormPresenter: React.FunctionComponent<Props> = ({
+const ApiTokenResponseFormPresenter: React.FunctionComponent<Props> = ({
   apiTokenKey,
   apiTokenSecret,
 }) => {

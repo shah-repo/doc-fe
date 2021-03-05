@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { Nullable } from "../../../../state/ducks/common";
+import { Nullable } from "../../../../state/ducks/common/types";
 import AvatarUploadContainer from "../../common/avatar.field/container";
 import styles from "./avatar.styles";
 

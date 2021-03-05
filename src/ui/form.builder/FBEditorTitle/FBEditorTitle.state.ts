@@ -1,6 +1,6 @@
 import { FBEditorModeProps } from "..";
 
-export class FBEditorTitleState {
+class FBEditorTitleState {
   public static modeConfig: FBEditorModeProps[] = [
     {
       mode: "config",

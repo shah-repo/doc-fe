@@ -3,8 +3,9 @@ import { Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
-import { attachmentsActions, WatermarkRequest } from "../../../../../state/ducks/attachments";
-import { Nullable } from "../../../../../state/ducks/common";
+import { attachmentsActions } from "../../../../../state/ducks/attachments";
+import { WatermarkRequest } from "../../../../../state/ducks/attachments/types";
+import { Nullable } from "../../../../../state/ducks/common/types";
 import useDialog from "../../../../hooks/useDialog";
 import Text from "../../../Text";
 import WatermarkPresenter from "./presenter";
@@ -14,7 +15,7 @@ interface Props {
   newWatermarkError: string;
 }
 
-export const WatermarkContainer: React.FunctionComponent<Props> = ({
+const WatermarkContainer: React.FunctionComponent<Props> = ({
   newWatermarkRequest,
   newWatermarkError,
 }) => {

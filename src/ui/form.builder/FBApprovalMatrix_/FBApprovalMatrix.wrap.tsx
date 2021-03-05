@@ -1,9 +1,7 @@
 import { isEmpty, last } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBApprovalMatrixProps } from ".";
-import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBApprovalMatrixSection, FBApprovalMatrixTable, FBDialogState } from "..";
-import { FBWorkspaceMode } from "../types/workspace";
+import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBApprovalMatrixProps, FBApprovalMatrixSection, FBApprovalMatrixTable, FBDialogState, FBWorkspaceMode } from "..";
 
 export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
   Component: React.FunctionComponent<T>

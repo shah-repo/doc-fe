@@ -1,9 +1,9 @@
 import faker from "faker";
-import { FBFormTemplateProps } from "../../documentRevisions";
 import { getDocumentRevision } from "../../documentRevisions/tests/factories";
+import { FBFormTemplateProps } from "../../documentRevisions/types";
 import { SupplierSurveyForm } from "../types";
 
-export const getFormTemplate = (formTemplate: Partial<FBFormTemplateProps> = {}): FBFormTemplateProps => ({
+const getFormTemplate = (formTemplate: Partial<FBFormTemplateProps> = {}): FBFormTemplateProps => ({
   outputDocumentTypes: [{
     id: faker.random.uuid(),
     documentTypeName: faker.random.word(),

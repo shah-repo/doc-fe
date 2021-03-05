@@ -1,6 +1,6 @@
 import React from "react";
 import { FB, FBDialogState, FBForm, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState } from "..";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   Component: React.FunctionComponent<T>,

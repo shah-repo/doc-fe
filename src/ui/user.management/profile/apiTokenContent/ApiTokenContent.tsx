@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { getTableData } from "../../../../common/utils/selectors";
 import { tableSearchActions } from "../../../../state/ducks/tableSearch";
-import { ApiTokenData, ApiTokenState, GetApiTokenList, userManagementActions } from "../../../../state/ducks/userManagement";
+import { userManagementActions } from "../../../../state/ducks/userManagement";
+import { ApiTokenData, ApiTokenState, GetApiTokenList } from "../../../../state/ducks/userManagement/types";
 import { FormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -14,7 +15,7 @@ import ApiTokenDialog from "./ApiTokenDialog";
 import ApiTokenTablePresenter from "./ApiTokenTable.presenter";
 import GenerateTokenFormPresenter from "./GenerateTokenForm.presenter";
 
-export const ApiTokenContent: React.FunctionComponent = () => {
+const ApiTokenContent: React.FunctionComponent = () => {
   const dialog = useDialog();
   const openDialog = () => dialog.open();
 

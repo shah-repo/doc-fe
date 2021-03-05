@@ -1,19 +1,18 @@
 import { includes, isArray, isEmpty, size } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import { FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from ".";
-import { FBInlineApprovalBody, FBSchemaState } from "..";
+import { FBInlineApprovalBody, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
 import { GroupTag, UserState } from "../../../state/ducks/auth/types";
-import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest";
-import { Id } from "../../../state/ducks/common";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
+import { Id } from "../../../state/ducks/common/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 
-export class FBWorkspaceState extends FBSchemaState {
+class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
   @observable approvals?: FBInlineApprovalBody[];
   public externalState?: FBWorkspaceExternalState;
   public document?: DocumentRevision;
   public changeRequest?: ChangeRequest;
-  public autosave?: boolean;
+  @observable public autosave?: boolean;
 
   // Hack because formik context from autosave & reference comp are not the same ref
   // and we need to know the values from both FB and AvailableReferences to create
@@ -93,6 +92,10 @@ export class FBWorkspaceState extends FBSchemaState {
 
   @action public setMode = (mode: FBWorkspaceMode) => {
     set(this, "mode", mode);
+  };
+
+  @action public setAutosave = (autosave: boolean) => {
+    set(this, "autosave", autosave);
   };
 
   @action public getMode = (): FBWorkspaceMode => get(this, "mode");

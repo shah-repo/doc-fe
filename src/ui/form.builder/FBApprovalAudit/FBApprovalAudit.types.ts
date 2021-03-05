@@ -1,16 +1,5 @@
 import { FBApprovalAuditState, FBApprovalProps, FBEmployee, FBInputProps, FBSchemaProps } from "..";
 
-export type FBAuditType =
-| "STRING_NEW"
-| "STRING_EDITED"
-| "OBJECT_NEW"
-| "OBJECT_EDITED"
-| "ARRAY_NEW"
-| "ARRAY_EDITED"
-| "NUMBER_NEW"
-| "NUMBER_EDITED"
-| "default";
-
 export interface FBAuditData {
   id: string;
   field: string;

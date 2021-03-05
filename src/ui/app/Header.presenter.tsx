@@ -8,6 +8,7 @@ import React from "react";
 import { Nullable } from "../../state/ducks/common/types";
 import Text from "../components/Text";
 import UserProfileContainer from "../user.management/profile/UserProfile.container";
+import AutosaveToggle from "./autosave/autosave";
 import styles from "./Header.styles";
 import UserAvatar from "./UserMenu/UserAvatar";
 import UserMenu from "./UserMenu/UserMenu.container";
@@ -53,6 +54,7 @@ const Header: React.FunctionComponent<Props> = ({
           label="Show customizable labels"
         />
         }
+        <AutosaveToggle/>
         <Grid item={true} className={classes.wrapContainer}>
           <Grid container={true} justify="flex-end" alignItems="center">
             <ClickAwayListener onClickAway={handleCloseMenu} mouseEvent="onClick">

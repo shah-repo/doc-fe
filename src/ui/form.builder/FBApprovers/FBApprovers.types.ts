@@ -1,5 +1,4 @@
-import { FBAutocompleteAsyncProps } from "../FBAutocompleteAsync";
-import { FBProviderProps } from "../FBProvider";
+import { FBAutocompleteAsyncProps, FBProviderProps } from "..";
 
 export type FBApproversProps =
 & Pick<FBProviderProps, "approversState">
@@ -20,7 +19,7 @@ export interface FBEmployee {
   user: FBUser;
 }
 
-export interface FBUser {
+interface FBUser {
   id: string;
   email: string;
   name: string;

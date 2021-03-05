@@ -6,7 +6,7 @@ import SlackLandingContainer from "./landing/Container";
 
 type Props = RouteComponentProps;
 
-export const SlackContainer: React.FunctionComponent<Props> = () => (
+const SlackContainer: React.FunctionComponent<Props> = () => (
   <Switch>
     <Route
       path={SLACK_COMPANY_URL}

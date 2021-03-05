@@ -1,8 +1,8 @@
 import { cloneDeep } from "lodash";
 import { action, observable, set } from "mobx";
-import { FBInputConstructor, FBInputType } from ".";
+import { FBInputConstructor, FBInputType } from "..";
 
-export class FBInputState {
+class FBInputState {
   public static omitLabel: FBInputType[] = ["checkbox", "radio", "hyperlink", "section"];
   // Set value on blur
   public static omitOnChange: FBInputType[] = ["textfield", "texteditor"];

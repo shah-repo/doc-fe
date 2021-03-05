@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
-import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevisionStatus, Reference as Model } from "../../../state/ducks/documentRevisions";
+import { DataProps } from "../../../state/ducks/common/types";
+import { DocumentRevisionStatus, Reference as Model } from "../../../state/ducks/documentRevisions/types";
 import { getReferenceToSummary } from "../utils/references.helpers";
 import { ReferenceSummary } from "../utils/types";
 import ReferencePresenter from "./reference.presenter";

@@ -1,7 +1,6 @@
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBEditorProps, FBEditorState } from ".";
-import { FB } from "..";
+import { FB, FBEditorProps, FBEditorState } from "..";
 
 export const withFBEditor = <T extends FBEditorProps>(
   Component: React.FunctionComponent<T>
