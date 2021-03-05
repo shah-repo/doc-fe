@@ -595,7 +595,7 @@ context("Create company with golden tenant", () => {
     it("Enters document description 'First document description'", () => {
       cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
         .click({ force: true }).type("First document description", { force: true });
-      cy.unClick().wait(1000);
+      cy.get("[data-cy^=document-title-]").click();
     });
 
     it("Selects document type as 'Form'", () => {
@@ -653,7 +653,7 @@ context("Create company with golden tenant", () => {
     it("Enters document description 'Second document description'", () => {
       cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
         .click({ force: true }).type("Second document description", { force: true });
-      cy.unClick().wait(1000);
+      cy.get("[data-cy^=document-title-]").click();
     });
 
     it("Selects document type as 'Clinical Protocol'", () => {
@@ -728,6 +728,77 @@ context("Create company with golden tenant", () => {
     it("Upload logo picture 'image.jpg'", () => {
       cy.get("[data-cy=\"media.upload\"]>div>div>button").click();
       cy.pmUploadAttachment({ fileName: "image.jpg" });
+    });
+
+    it("Approve and release document - create company", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+
+    it("Log out user", () => {
+      cy.authLogout();
+    });
+  });
+
+  context("Login user", () => {
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: newCompanyName, multiple: multipleCompanies });
+    });
+  });
+
+  context("Check document existence inside company", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Check number of documents in list", () => {
+      cy.dlClearFilters();
+      cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "5" });
+    });
+  });
+
+  context("Check each document values", () => {
+    it("Check first document values", () => {
+      cy.drFilterDocListByNameAndStatus({ title: "First document", status: "Draft" });
+      cy.get("[id=Title-field]").contains("First document");
+      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div:nth-child(2)>div>div>div>div>div>div>span>span")
+        .contains("First document description");
+      cy.get("[data-cy=\"select.document.documentType.id\"]").contains("Form");
+      cy.get("[id=\"formTemplate.outputDocumentTypes\"]").contains("Clinical Protocol");
+    });
+
+    it("Check second document values", () => {
+      cy.navigToDocumentList();
+      cy.dlClearFilters();
+      cy.drFilterDocListByNameAndStatus({ title: "Second document", status: "Draft" });
+      cy.get("[id=Title-field]>div>div").contains("Second document");
+      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div:nth-child(2)>div>div>div>div>div>div>span>span")
+        .contains("Second document description");
+      cy.get("[data-cy=\"select.document.documentType.id\"]").contains("Clinical Protocol");
+    });
+
+    it("Check third document values", () => {
+      cy.navigToDocumentList();
+      cy.dlClearFilters();
+      cy.drFilterDocListByNameAndStatus({ title: "Document Approval Matrix", status: "Released" });
+    });
+
+    it("Check forth document values", () => {
+      cy.navigToDocumentList();
+      cy.dlClearFilters();
+      cy.drFilterDocListByNameAndStatus({ title: "DAM Form", status: "Released" });
+    });
+
+    it("Check fifth document values", () => {
+      cy.navigToDocumentList();
+      cy.dlClearFilters();
+      cy.drFilterDocListByNameAndStatus({ title: "AR Form", status: "Released" });
     });
   });
 });
