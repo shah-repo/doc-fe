@@ -52,20 +52,31 @@ ZIPPED_REPORT_ATTACHMENT=$(curl -X POST "https://api.dev.enlil.io/api/v1/attachm
    \"isCleanCopyRequired\": false,
    \"lineType\": \"CLEAN_COPY\"
 }")
-ATTACHMENTS_FOR_DOCUMENT+=($ZIPPED_REPORT_ATTACHMENT,)
+ATTACHMENTS_FOR_DOCUMENT+=$ZIPPED_REPORT_ATTACHMENT,
 VIDEOS=$(find videos -type f)
+
+filterNameFromPath () {
+  FILE_NAME=null
+  while IFS='/' read -ra ADDR; do
+    for i in "${ADDR[@]}"; do
+        FILE_NAME=$i
+    done
+  done <<< "$1"
+}
 
 for VIDEO in ${VIDEOS[@]}
 do
+  FILE_NAME=null
+  filterNameFromPath $VIDEO
   ENLIL_ATTACHMENT=$(curl -X POST "https://api.dev.enlil.io/api/v1/attachments/external" -H "accept: application/json" -H "Authorization: apitoken 5db418b5-1599-4533-b677-25abfd2956a0:92662461-e204-4ad2-ba02-ccc6daf1fc13" -H "Content-Type: application/json" -d "
-  { \"name\": \"test report\",
-    \"type\": \"zip\",
+  { \"name\": \"$FILE_NAME\",
+    \"type\": \"mp4\",
     \"s3link\": \"/$TEST_RUN_BUCKET_PATH/$VIDEO\",
     \"description\": \"test report\",
     \"isCleanCopyRequired\": false,
     \"lineType\": \"CLEAN_COPY\"
   }")
-  ATTACHMENTS_FOR_DOCUMENT+=($ENLIL_ATTACHMENT,)
+  ATTACHMENTS_FOR_DOCUMENT+=$ENLIL_ATTACHMENT,
   echo $TEST_RUN_BUCKET_PATH/$VIDEO
 done
 
