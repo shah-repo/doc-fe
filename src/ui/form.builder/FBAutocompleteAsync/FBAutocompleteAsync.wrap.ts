@@ -1,4 +1,4 @@
-import { get, isEmpty, isObject, isString, map } from "lodash";
+import { get, isEmpty, isObject, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -75,15 +75,16 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
           ? autocompleteAsyncState?.sliceValue(selectedOptions)
           : slicedOptions;
       }
-      forceNewRender = formState?.getInputState(name || "")?.forceRender;
+      // forceNewRender = formState?.getInputState(name || "")?.forceRender;
     });
 
     // set missing selected autocomplete value
     React.useEffect(() => reaction(
       () => autocompleteAsyncState?.autocompleteValueApi.data,
       (data) => {
-        const { id: optionId } = data || {};
-        FBAutocompleteAsyncStore.add(optionId as string, optionId, data);
+        const { id } = data || {};
+        FBAutocompleteAsyncStore.add(optionId as string, id, data);
+        formState?.getInputState(name || "")?.setRender();
       },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -111,8 +112,12 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (!freeSolo && !isObject(option)) {
         option = defaultValue;
       }
-      if (!get(option, optionValueKey)) {
+      if (!get(option, optionValueKey) && !autocompleteAsyncState?.autocompleteValueApi.loading) {
         autocompleteAsyncState?.fetchAutocompleteOption(option, optionId);
+        return "";
+      }
+      if (!get(option, optionValueKey)) {
+        return "";
       }
       const { labelPrefixRoot, includeRevision } = autocompleteAsyncState?.optionConfig || {};
       let optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
@@ -123,11 +128,6 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       }
       return `${optionLabel}${get(option, optionLabelKey, "")}`;
     });
-
-    // Stupid hack that works just until autocomplete refactoring is done
-    if (!isEmpty(options) && isString(defaultValue) && FB.isUUID(defaultValue)) {
-      formState?.getInputState(name || "")?.setRender();
-    }
 
     return Component({
       ...(props as T),
