@@ -113,6 +113,7 @@ definitions:
             - source ./scripts/cypress/utils/variables_pipeline.sh
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
+            - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
