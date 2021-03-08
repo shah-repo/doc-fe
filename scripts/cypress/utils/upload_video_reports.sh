@@ -43,16 +43,84 @@ echo "Uploaded"
 
 #GENERATE ATTACHMENTS FOR ENLIL DOCUMENT
 declare -a ATTACHMENTS_FOR_DOCUMENT
-ZIPPED_REPORT_ATTACHMENT=$(curl -X POST "https://api.dev.enlil.io/api/v1/attachments/external" -H "accept: application/json" -H "Authorization: apitoken 5db418b5-1599-4533-b677-25abfd2956a0:92662461-e204-4ad2-ba02-ccc6daf1fc13" -H "Content-Type: application/json" -d "{ \"name\": \"test report\", \"type\": \"zip\", \"s3link\": \"$ZIPPED_REPORT_S3\", \"description\": \"test report\", \"isCleanCopyRequired\": false, \"lineType\": \"CLEAN_COPY\"}")
+ZIPPED_REPORT_ATTACHMENT=$(curl -X POST "https://api.dev.enlil.io/api/v1/attachments/external" -H "accept: application/json" -H "Authorization: apitoken 5db418b5-1599-4533-b677-25abfd2956a0:92662461-e204-4ad2-ba02-ccc6daf1fc13" -H "Content-Type: application/json" -d "
+{
+   \"name\": \"test report\",
+   \"type\": \"zip\",
+   \"s3link\": \"$ZIPPED_REPORT_S3\",
+   \"description\": \"test report\",
+   \"isCleanCopyRequired\": false,
+   \"lineType\": \"CLEAN_COPY\"
+}")
 ATTACHMENTS_FOR_DOCUMENT+=($ZIPPED_REPORT_ATTACHMENT,)
 VIDEOS=$(find videos -type f)
 
 for VIDEO in ${VIDEOS[@]}
 do
-  ENLIL_ATTACHMENT=$(curl -X POST "https://api.dev.enlil.io/api/v1/attachments/external" -H "accept: application/json" -H "Authorization: apitoken 5db418b5-1599-4533-b677-25abfd2956a0:92662461-e204-4ad2-ba02-ccc6daf1fc13" -H "Content-Type: application/json" -d "{ \"name\": \"test report\", \"type\": \"zip\", \"s3link\": \"$TEST_RUN_BUCKET_PATH/$VIDEO\", \"description\": \"test report\", \"isCleanCopyRequired\": false, \"lineType\": \"CLEAN_COPY\"}")
+  ENLIL_ATTACHMENT=$(curl -X POST "https://api.dev.enlil.io/api/v1/attachments/external" -H "accept: application/json" -H "Authorization: apitoken 5db418b5-1599-4533-b677-25abfd2956a0:92662461-e204-4ad2-ba02-ccc6daf1fc13" -H "Content-Type: application/json" -d "
+  { \"name\": \"test report\",
+    \"type\": \"zip\",
+    \"s3link\": \"/$TEST_RUN_BUCKET_PATH/$VIDEO\",
+    \"description\": \"test report\",
+    \"isCleanCopyRequired\": false,
+    \"lineType\": \"CLEAN_COPY\"
+  }")
   ATTACHMENTS_FOR_DOCUMENT+=($ENLIL_ATTACHMENT,)
+  echo $TEST_RUN_BUCKET_PATH/$VIDEO
 done
 
 #CREATE DOCUMENT WITH ATTACHMENT
-curl -X POST "https://api.dev.enlil.io/api/v1/document_revisions/external" -H "accept: application/json" -H "Authorization: apitoken 5db418b5-1599-4533-b677-25abfd2956a0:92662461-e204-4ad2-ba02-ccc6daf1fc13" -H "Content-Type: application/json" -d "{ \"description\": \"<p>Cypress test report test</p>\", \"name\": \"Cypress test report\", \"attachments\": [ ${ATTACHMENTS_FOR_DOCUMENT%?} ], \"referenceTo\": [], \"revisionStage\": 1, \"revisionChangeType\": \"NEXT_REVISION\", \"retrain\": false, \"document\": { \"docId\": \"CTR00013\", \"securityList\": { \"securityEmployees\": [], \"securityGroups\": [ { \"id\": \"4414cdad-8763-4da1-b6a1-6cebb674259e\" } ], \"operators\": [] }, \"documentType\": { \"id\": \"57e1a2a8-025f-4955-aee1-4d8e30907d34\" } }}"
+echo "
+{ 
+  \"description\": \"<p>Cypress test report test</p>\",
+  \"name\": \"Cypress test report\",
+  \"attachments\": [ ${ATTACHMENTS_FOR_DOCUMENT%?} ],
+  \"referenceTo\": [],
+  \"revisionStage\": 1,
+  \"revisionChangeType\": \"NEXT_REVISION\",
+  \"retrain\": false,
+  \"document\": { 
+    \"docId\": \"CTR00013\",
+    \"securityList\": 
+    { 
+      \"securityEmployees\": [],
+      \"securityGroups\": [ 
+        { 
+        \"id\": \"4414cdad-8763-4da1-b6a1-6cebb674259e\"
+        } ], 
+        \"operators\": [] 
+    }, 
+    \"documentType\": 
+    { 
+      \"id\": \"57e1a2a8-025f-4955-aee1-4d8e30907d34\"
+    } 
+  }
+}"
+
+curl -X POST "https://api.dev.enlil.io/api/v1/document_revisions/external" -H "accept: application/json" -H "Authorization: apitoken 5db418b5-1599-4533-b677-25abfd2956a0:92662461-e204-4ad2-ba02-ccc6daf1fc13" -H "Content-Type: application/json" -d "
+{ 
+  \"description\": \"<p>Cypress test report test</p>\",
+  \"name\": \"Cypress test report\",
+  \"attachments\": [ ${ATTACHMENTS_FOR_DOCUMENT%?} ],
+  \"referenceTo\": [],
+  \"revisionStage\": 1,
+  \"revisionChangeType\": \"NEXT_REVISION\",
+  \"retrain\": false,
+  \"document\": { 
+    \"docId\": \"CTR00013\",
+    \"securityList\": 
+    { 
+      \"securityEmployees\": [],
+      \"securityGroups\": [ 
+        { 
+        \"id\": \"4414cdad-8763-4da1-b6a1-6cebb674259e\"
+        } ], 
+        \"operators\": [] 
+    }, 
+    \"documentType\": 
+    { 
+      \"id\": \"57e1a2a8-025f-4955-aee1-4d8e30907d34\"
+    } 
+  }
+}"
 echo "Done"
