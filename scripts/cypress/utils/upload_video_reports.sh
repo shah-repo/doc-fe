@@ -71,7 +71,8 @@ do
   ENLIL_ATTACHMENT=$(curl -X POST "https://api.dev.enlil.io/api/v1/attachments/external" -H "accept: application/json" -H "Authorization: apitoken 5db418b5-1599-4533-b677-25abfd2956a0:92662461-e204-4ad2-ba02-ccc6daf1fc13" -H "Content-Type: application/json" -d "
   { \"name\": \"$FILE_NAME\",
     \"type\": \"mp4\",
-    \"s3link\": \"/$TEST_RUN_BUCKET_PATH/$VIDEO\",
+    \"s3link\": \"$TEST_RUN_BUCKET_PATH/$VIDEO\",
+    \"fileSizeS3Link\": \"$(stat -c%s "$VIDEO")\",
     \"description\": \"test report\",
     \"isCleanCopyRequired\": false,
     \"lineType\": \"CLEAN_COPY\"
