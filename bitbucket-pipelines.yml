@@ -85,6 +85,7 @@ definitions:
           - zipped-test-results/**
         script:
           - source ./scripts/cypress/utils/variables_pipeline.sh
+          - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
           - ./scripts/cypress/utils/upload_video_reports.sh
 
