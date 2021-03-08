@@ -11,12 +11,18 @@ if [[ -z "${DIR_VIDEOS_REPORT}" ]]; then
   exit 1
 fi
 
+#COMPANY VARIABLES
+COMPANY_ID=930729cd-675b-4151-ba0a-6ab97547b0f7
+USER_API_TOKEN=apitoken 5db418b5-1599-4533-b677-25abfd2956a0:92662461-e204-4ad2-ba02-ccc6daf1fc13
+ID_OF_GROUP_EVERYONE=4414cdad-8763-4da1-b6a1-6cebb674259e
+ID_OF_CYPRESS_TEST_REPORT_DOCTYPE=57e1a2a8-025f-4955-aee1-4d8e30907d34
+
 #Move videos so they don't get zipped
 mv $DIR_VIDEOS_REPORT ./ 
 
 #ZIP TEST REPORT
 DATE=$(date "+%Y-%m-%dT%H-%M-%S%z")
-TEST_RUN_BUCKET_PATH=930729cd-675b-4151-ba0a-6ab97547b0f7/cypress-reports-pipeline/$DATE
+TEST_RUN_BUCKET_PATH=$COMPANY_ID/cypress-reports-pipeline/$DATE
 ZIP_FILE_NAME=REPORT_$DATE.zip
 ZIP_FILE_NAME_PATH="./zipped-test-results/$ZIP_FILE_NAME"
 ZIPPED_REPORT_S3=$TEST_RUN_BUCKET_PATH/$ZIP_FILE_NAME
@@ -43,7 +49,7 @@ echo "Uploaded"
 
 #GENERATE ATTACHMENTS FOR ENLIL DOCUMENT
 declare -a ATTACHMENTS_FOR_DOCUMENT
-ZIPPED_REPORT_ATTACHMENT=$(curl -X POST "https://api.dev.enlil.io/api/v1/attachments/external" -H "accept: application/json" -H "Authorization: apitoken 5db418b5-1599-4533-b677-25abfd2956a0:92662461-e204-4ad2-ba02-ccc6daf1fc13" -H "Content-Type: application/json" -d "
+ZIPPED_REPORT_ATTACHMENT=$(curl -X POST "https://api.dev.enlil.io/api/v1/attachments/external" -H "accept: application/json" -H "Authorization: $USER_API_TOKEN" -H "Content-Type: application/json" -d "
 {
    \"name\": \"test report\",
    \"type\": \"zip\",
@@ -68,7 +74,7 @@ for VIDEO in ${VIDEOS[@]}
 do
   FILE_NAME=null
   filterNameFromPath $VIDEO
-  ENLIL_ATTACHMENT=$(curl -X POST "https://api.dev.enlil.io/api/v1/attachments/external" -H "accept: application/json" -H "Authorization: apitoken 5db418b5-1599-4533-b677-25abfd2956a0:92662461-e204-4ad2-ba02-ccc6daf1fc13" -H "Content-Type: application/json" -d "
+  ENLIL_ATTACHMENT=$(curl -X POST "https://api.dev.enlil.io/api/v1/attachments/external" -H "accept: application/json" -H "Authorization: $USER_API_TOKEN" -H "Content-Type: application/json" -d "
   { \"name\": \"$FILE_NAME\",
     \"type\": \"mp4\",
     \"s3link\": \"$TEST_RUN_BUCKET_PATH/$VIDEO\",
@@ -81,34 +87,7 @@ do
 done
 
 #CREATE DOCUMENT WITH ATTACHMENT
-echo "
-{ 
-  \"description\": \"<p>Cypress test report test</p>\",
-  \"name\": \"Cypress test report\",
-  \"attachments\": [ ${ATTACHMENTS_FOR_DOCUMENT%?} ],
-  \"referenceTo\": [],
-  \"revisionStage\": 1,
-  \"revisionChangeType\": \"NEXT_REVISION\",
-  \"retrain\": false,
-  \"document\": { 
-    \"docId\": \"CTR00013\",
-    \"securityList\": 
-    { 
-      \"securityEmployees\": [],
-      \"securityGroups\": [ 
-        { 
-        \"id\": \"4414cdad-8763-4da1-b6a1-6cebb674259e\"
-        } ], 
-        \"operators\": [] 
-    }, 
-    \"documentType\": 
-    { 
-      \"id\": \"57e1a2a8-025f-4955-aee1-4d8e30907d34\"
-    } 
-  }
-}"
-
-curl -X POST "https://api.dev.enlil.io/api/v1/document_revisions/external" -H "accept: application/json" -H "Authorization: apitoken 5db418b5-1599-4533-b677-25abfd2956a0:92662461-e204-4ad2-ba02-ccc6daf1fc13" -H "Content-Type: application/json" -d "
+curl -X POST "https://api.dev.enlil.io/api/v1/document_revisions/external" -H "accept: application/json" -H "Authorization: $USER_API_TOKEN" -H "Content-Type: application/json" -d "
 { 
   \"description\": \"<p>Cypress test report test</p>\",
   \"name\": \"Cypress test report\",
@@ -124,13 +103,13 @@ curl -X POST "https://api.dev.enlil.io/api/v1/document_revisions/external" -H "a
       \"securityEmployees\": [],
       \"securityGroups\": [ 
         { 
-        \"id\": \"4414cdad-8763-4da1-b6a1-6cebb674259e\"
+        \"id\": \"$ID_OF_GROUP_EVERYONE\"
         } ], 
         \"operators\": [] 
     }, 
     \"documentType\": 
     { 
-      \"id\": \"57e1a2a8-025f-4955-aee1-4d8e30907d34\"
+      \"id\": \"$ID_OF_CYPRESS_TEST_REPORT_DOCTYPE\"
     } 
   }
 }"
