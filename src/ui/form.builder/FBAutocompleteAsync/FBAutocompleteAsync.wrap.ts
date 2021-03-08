@@ -1,4 +1,5 @@
 import { get, isEmpty, isObject, isString, map } from "lodash";
+import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FBAutocompleteAsyncProps, FBAutocompleteAsyncState } from ".";
@@ -39,6 +40,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       valueKey: props.optionValueKey,
       labelKey: props.optionLabelKey,
     };
+
     // TODO: handle autocomplete default value from input wrap
     // and discard value prop
     const formValue = formState?.getFieldValue(name, defaultValue, omitFormValue) || value;
@@ -63,7 +65,11 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
         return;
       }
       const slicedOptions = autocompleteAsyncState?.sliceData;
-      loading = loading || FBAutocompleteAsyncStore.loading.get(optionId);
+      loading = (
+        loading ||
+        FBAutocompleteAsyncStore.loading.get(optionId) ||
+        autocompleteAsyncState?.autocompleteValueApi.loading
+      );
       if (slicedOptions) {
         options = selectedOptions
           ? autocompleteAsyncState?.sliceValue(selectedOptions)
@@ -71,6 +77,16 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       }
       forceNewRender = formState?.getInputState(name || "")?.forceRender;
     });
+
+    // set missing selected autocomplete value
+    React.useEffect(() => reaction(
+      () => autocompleteAsyncState?.autocompleteValueApi.data,
+      (data) => {
+        const { id: optionId } = data || {};
+        FBAutocompleteAsyncStore.add(optionId as string, optionId, data);
+      },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     // Add some static additional data to dynamic store list
     useEffect(() => autocompleteAsyncState?.setAdditionalData(additionalData),
@@ -94,6 +110,9 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       }
       if (!freeSolo && !isObject(option)) {
         option = defaultValue;
+      }
+      if (!get(option, optionValueKey)) {
+        autocompleteAsyncState?.fetchAutocompleteOption(option, optionId);
       }
       const { labelPrefixRoot, includeRevision } = autocompleteAsyncState?.optionConfig || {};
       let optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
