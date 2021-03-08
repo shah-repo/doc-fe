@@ -28,17 +28,17 @@ echo "Zipped"
 
 #UPLOAD ZIPPED REPORT TO S3
 S3_BUCKET="doc-be-dev"
-S3_BUCKET_PATH=s3://$S3_BUCKET/$ZIPPED_REPORT_S3
+S3_BUCKET_PATH=s3://$S3_BUCKET
 echo ""
 echo "--| Uploading to S3 $ZIP_FILE_NAME_PATH"
-aws s3 cp ./$ZIP_FILE_NAME_PATH $S3_BUCKET_PATH --acl public-read
+aws s3 cp ./$ZIP_FILE_NAME_PATH $S3_BUCKET_PATH/$ZIPPED_REPORT_S3 --acl public-read
 OBJECT_URL=https://$S3_BUCKET.s3-us-west-2.amazonaws.com/$ZIPPED_REPORT_S3
 echo $OBJECT_URL
 
 #UPLOAD TEST VIDEOS TO S3
 TEST_VIDEOS_PATH="./videos"
 echo "--| Uploading to S3 $TEST_VIDEOS_PATH"
-aws s3 cp $TEST_VIDEOS_PATH $TEST_RUN_BUCKET_PATH/videos --acl public-read --recursive
+aws s3 cp --recursive $TEST_VIDEOS_PATH $S3_BUCKET_PATH/$TEST_RUN_BUCKET_PATH/videos --acl public-read
 echo "Uploaded"
 
 #GENERATE ATTACHMENTS FOR ENLIL DOCUMENT
