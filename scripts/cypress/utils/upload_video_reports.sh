@@ -38,7 +38,7 @@ echo $OBJECT_URL
 #UPLOAD TEST VIDEOS TO S3
 TEST_VIDEOS_PATH="./videos"
 echo "--| Uploading to S3 $TEST_VIDEOS_PATH"
-aws s3 cp $TEST_VIDEOS_PATH $TEST_RUN_BUCKET_PATH/videos --acl public-read
+aws s3 cp $TEST_VIDEOS_PATH $TEST_RUN_BUCKET_PATH/videos --acl public-read --recursive
 echo "Uploaded"
 
 #GENERATE ATTACHMENTS FOR ENLIL DOCUMENT
