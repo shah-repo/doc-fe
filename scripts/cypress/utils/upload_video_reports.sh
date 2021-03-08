@@ -72,7 +72,6 @@ do
   { \"name\": \"$FILE_NAME\",
     \"type\": \"mp4\",
     \"s3link\": \"$TEST_RUN_BUCKET_PATH/$VIDEO\",
-    \"fileSizeS3Link\": \"$(stat -c%s "$VIDEO")\",
     \"description\": \"test report\",
     \"isCleanCopyRequired\": false,
     \"lineType\": \"CLEAN_COPY\"
