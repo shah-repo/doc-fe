@@ -12,10 +12,10 @@ if [[ -z "${DIR_VIDEOS_REPORT}" ]]; then
 fi
 
 #COMPANY VARIABLES
-COMPANY_ID=930729cd-675b-4151-ba0a-6ab97547b0f7
-USER_API_TOKEN=apitoken 5db418b5-1599-4533-b677-25abfd2956a0:92662461-e204-4ad2-ba02-ccc6daf1fc13
-ID_OF_GROUP_EVERYONE=4414cdad-8763-4da1-b6a1-6cebb674259e
-ID_OF_CYPRESS_TEST_REPORT_DOCTYPE=57e1a2a8-025f-4955-aee1-4d8e30907d34
+COMPANY_ID="9ecbda7d-811a-435f-adf1-3515b19aca87"
+USER_API_TOKEN="apitoken 1059b288-6f88-4ba0-a3a7-95f380513783:4dc019ef-e1cc-40cb-a39c-186b3bb88b40"
+ID_OF_GROUP_EVERYONE="cf0ffbbe-1dff-4676-86d2-c54d9333dcc9"
+ID_OF_CYPRESS_TEST_REPORT_DOCTYPE="cb8be6f4-9e09-4c9a-831e-43eda1007b2a"
 
 #Move videos so they don't get zipped
 mv $DIR_VIDEOS_REPORT ./ 
@@ -97,7 +97,7 @@ curl -X POST "https://api.dev.enlil.io/api/v1/document_revisions/external" -H "a
   \"revisionChangeType\": \"NEXT_REVISION\",
   \"retrain\": false,
   \"document\": { 
-    \"docId\": \"CTR00016\",
+    \"docId\": \"CTR-00001\",
     \"securityList\": 
     { 
       \"securityEmployees\": [],
