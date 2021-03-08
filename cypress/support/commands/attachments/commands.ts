@@ -24,6 +24,8 @@ declare global {
       atchNoPrimaryForRedline(params: {fileName: string}): Chainable<Subject>;
       atchDownloadFile(params: {fileName: string; saveFileName: string}): Chainable<Subject>;
       atchDownloadAll(): Chainable<Subject>;
+      elUploadAttachment(params: {fileName: string; el: string }): Chainable<Subject>;
+      elDownloadFile(params: {fileName: string; saveFileName: string }): Chainable<Subject>;
     }
   }
 }
@@ -208,5 +210,39 @@ Cypress.Commands.add("atchDownloadAll", () => {
       });
     }
 
+  });
+});
+
+Cypress.Commands.add("elUploadAttachment", (params: {fileName: string; el: string }) => {
+  cy.fixture(params.fileName).then((fileContent) => {
+    cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
+      cy.get(`[id^="${params.el}"]`).attachFile({
+        fileContent: fileContent.toString(),
+        fileName: params.fileName,
+        mimeType: "*",
+        filePath: `fixtures/${params.fileName}`,
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("elDownloadFile", (params: {fileName: string; saveFileName: string  }) => {
+  cy.intercept({ pathname: "/api/v1/attachments/*/download*" }, (req) => {
+    req.reply((res) => {
+      if (res.body !== "") {
+        const response = res.body;
+        res.send(response.url);
+      }
+    });
+  }).as("attach");
+  cy.contains(params.fileName).rightclick();
+  cy.contains(`Download attached file ${params.fileName}`).click();
+  cy.wait("@attach").then((res) => {
+    const fileUrl = res.response?.body.toString();
+    cy.downloadFile({
+      url: fileUrl,
+      directory: "cypress/downloads",
+      fileName: params.saveFileName,
+    });
   });
 });
