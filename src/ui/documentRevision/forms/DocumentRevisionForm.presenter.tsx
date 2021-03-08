@@ -20,6 +20,7 @@ import FormHeader from "../../document.revision/header/FormHeader";
 import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB, FBEBPart } from "../../form.builder";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
@@ -137,7 +138,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
   const isPart = checkIsDocumentPart(documentRevision?.document.documentType.groupOptions);
   const isDocumentEquipment = checkIsDocumentEquipment(documentRevision?.document.documentType.groupOptions);
+  const shouldShowUpgradeForDocs = useShouldUpgradeToLatest(
+    documentRevision?.status,
+    documentRevision?.formDocument?.status,
+    documentRevision?.formDocument?.document?.id
+  );
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
+  const shouldShowUpgrade = (isRecord && shouldShowUpgradeBannerForRecord) || (!isRecord && shouldShowUpgradeForDocs);
 
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
@@ -213,11 +220,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       <UpgradeToLatestContainer
         type="banner"
         docRevId={documentRevision?.id}
-        documentStatus={documentRevision?.status}
-        formDocumentStatus={documentRevision?.formDocument?.status}
         {...{
           bannerPortal,
-          shouldShowUpgradeBannerForRecord,
+          shouldShowUpgrade,
         }}
       />
       <FormHeader {...{ isCreateDocumentDisabled }} />
