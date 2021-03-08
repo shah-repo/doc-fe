@@ -80,7 +80,6 @@ definitions:
         size: 2x
         caches:
           - node
-          - docker
         artifacts:
           - test-results/**
           - zipped-test-results/**
