@@ -675,7 +675,7 @@ context("Create company with golden tenant", () => {
       cy.navigToDocumentList();
     });
 
-    it("Select released Seed Form", () => {
+    it("Select released NCO Form", () => {
       cy.drFilterDocListByNameAndStatus({ title: ncoFormName, status: "Released" });
     });
 
@@ -787,18 +787,121 @@ context("Create company with golden tenant", () => {
       cy.navigToDocumentList();
       cy.dlClearFilters();
       cy.drFilterDocListByNameAndStatus({ title: "Document Approval Matrix", status: "Released" });
+      cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(0).contains("Document Approval Matrix");
+      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Initial DAM Description");
     });
 
     it("Check forth document values", () => {
       cy.navigToDocumentList();
       cy.dlClearFilters();
       cy.drFilterDocListByNameAndStatus({ title: "DAM Form", status: "Released" });
+      cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(0).contains("DAM Form");
+      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("DAM Form");
+      cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(2).contains("Document Approval Matrix");
     });
 
     it("Check fifth document values", () => {
       cy.navigToDocumentList();
       cy.dlClearFilters();
       cy.drFilterDocListByNameAndStatus({ title: "AR Form", status: "Released" });
+      cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(0).contains("AR Form");
+      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Approval Request Form");
+      cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(2).contains("Approval Request");
+    });
+  });
+
+  context("Check each AR values", () => {
+    it("Check first AR", () => {
+      cy.navigToApprovalRequestList();
+      cy.arClearFilters();
+      cy.arFilterARListByNameAndStatus({ title: "AR Form", status: "Closed" });
+      cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(0).contains("AR Form");
+      cy.get("[data-cy=\"documentRevisions.0.proposedDocumentRevision.id\"]")
+        .should("have.value", "FM-00001 - rev 1 - AR Form");
+      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Approval Request Form");
+    });
+
+    it("Check second AR", () => {
+      cy.navigToApprovalRequestList();
+      cy.arClearFilters();
+      cy.arFilterARListByNameAndStatus({ title: "Releasing DAM-00003, Document Approval Matrix", status: "Closed" });
+      cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(0).contains("Releasing DAM-00003, Document Approval Matrix");
+      cy.get("[data-cy=\"documentRevisions.0.proposedDocumentRevision.id\"]")
+        .should("have.value", "DAM-00003 - rev 1 - Document Approval Matrix");
+      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Releasing DAM-00003, Document Approval Matrix");
+    });
+
+    it("Log out user", () => {
+      cy.authLogout();
+    });
+  });
+
+  context("Check if another user can login into company created by NCO", () => {
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[2].email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: newCompanyName, multiple: multipleCompanies });
+    });
+
+    it("Log out user", () => {
+      cy.authLogout();
+    });
+  });
+
+  context("Login as admin user and obsolete NCO document", () => {
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Select released NCO Form", () => {
+      cy.drFilterDocListByNameAndStatus({ title: "New company", status: "Released" });
+    });
+
+    it("Save document", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Select 'Obsolete' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Obsolete" });
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release document - create company", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+
+    it("Log out user", () => {
+      cy.authLogout();
+    });
+
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: "Tester1!",
+      });
+    });
+
+    it("Check if company is deleted", () => {
+      cy.cmpCompanyDoesntExist({ name: newCompanyName, multiple: multipleCompanies });
     });
   });
 });
