@@ -34,7 +34,7 @@ const THIRD_USER = USERS[4];
 const INDIVIDUAL_USER = USERS[14];
 const IMPORTER_USER = USERS[15];
 
-context.skip("Check DAM enforcement rules for document types", () => {
+context("Check DAM enforcement rules for document types", () => {
 
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {

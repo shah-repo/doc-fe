@@ -35,7 +35,7 @@ let createdEquipmentFormDocument;
 let createdMaintenanceRecordFormDocument;
 let group;
 
-context.skip("Equipment maintenance test", () => {
+context("Equipment maintenance test", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
