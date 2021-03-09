@@ -55,7 +55,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     formState,
     documentRevision?.formDocument?.formTemplate?.schema
   );
-  const shouldShowUpgrade =  (isRecord && shouldShowUpgradeBannerForRecord) || (!isRecord && shouldShowUpgradeForDocs);
+  const shouldShowUpgrade =
+    (!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs);
 
   const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
   const formik = useFormikContext();
