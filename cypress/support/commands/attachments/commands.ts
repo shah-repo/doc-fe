@@ -24,16 +24,13 @@ declare global {
       atchNoPrimaryForRedline(params: {fileName: string}): Chainable<Subject>;
       atchDownloadFile(params: {fileName: string; saveFileName: string}): Chainable<Subject>;
       atchDownloadAll(): Chainable<Subject>;
-<<<<<<< HEAD
       atchUploadJSONFormForSeed(params: {fileName: string; queue: number }): Chainable<Subject>;
       atchUploadDOMJSONForNCO(params: {fileName: string; queue: number }): Chainable<Subject>;
       atchUploadPageDetailsJSONForNCO(params: {fileName: string; queue: number }): Chainable<Subject>;
       atchUploadNavigationJSONForNCO(params: {fileName: string; queue: number }): Chainable<Subject>;
       atchUploadUserListJSONForNCO(params: {fileName: string; queue: number }): Chainable<Subject>;
-=======
       elUploadAttachment(params: {fileName: string; el: string }): Chainable<Subject>;
       elDownloadFile(params: {fileName: string; saveFileName: string }): Chainable<Subject>;
->>>>>>> develop
     }
   }
 }
