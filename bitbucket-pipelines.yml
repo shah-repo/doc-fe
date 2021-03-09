@@ -91,7 +91,6 @@ definitions:
           - yarn install --frozen-lockfile
           - ./scripts/cypress/utils/generate_requirements_json_file.sh
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
-          - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
           - ./scripts/cypress/utils/upload_video_reports.sh
 
