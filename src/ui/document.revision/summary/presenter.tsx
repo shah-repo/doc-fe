@@ -18,7 +18,7 @@ import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { getHighestRevision } from "../../documentRevision/forms/transform";
-import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentEB, checkIsDocumentForm, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
@@ -224,7 +224,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
             document={dataProp}
             initialValues={dataProp.formInput}
             schema={schema as FBSchemaProps[]}
-            mode={dataProp.document.documentType.group === "FORM" ?
+            mode={checkIsDocumentForm(dataProp.document.documentType.groupOptions) ?
               "formPreview" : "preview"}
           />
         </Box>

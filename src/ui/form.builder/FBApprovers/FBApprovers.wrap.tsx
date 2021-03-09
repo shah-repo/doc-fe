@@ -119,6 +119,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
 
     isIncluded = (group: FBRequiredApprover): boolean => (
       includes(map(approversState?.checkedGroups, "id"), group.id));
+
     /** Check/uncheck DAM/POAM required approval groups based on autocomplete selection
    * @selectedUsers Current autocomplete selection.
    */
@@ -149,7 +150,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
         const newGroups = filter(requiredGroups, (group) =>
           map((group.joinedEmployees as FBJoinedEmployee[]), "id").some((employee) =>
             newSelectionIds?.includes(employee)));
-            approversState?.setCheckedGroups(newGroups);
+        approversState?.setCheckedGroups(newGroups);
       }
       approversState?.setValue(newSelectionIds);
     };

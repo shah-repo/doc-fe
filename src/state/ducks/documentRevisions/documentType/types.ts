@@ -14,7 +14,7 @@ export enum REVISION_STAGE_OPTIONS {
 export enum DOC_TYPE_GROUP {
   FORM = "FORM",
   OTHER = "OTHER",
-  MPI = "MPI",
+  PI = "PI",
   RECORD = "RECORD",
   CHANGE_REQUEST = "CHANGE_REQUEST",
   DAM = "DAM",
@@ -35,6 +35,7 @@ export enum DOC_TYPE_GROUP {
   LHR = "LHR",
   NEW_COMPANY = "NEW_COMPANY",
   SEED_DOCUMENT = "SEED_DOCUMENT",
+  PI_INSTANCE = "PI_INSTANCE",
 }
 
 export type DocumentGroupType = keyof typeof DOC_TYPE_GROUP;

@@ -151,7 +151,7 @@ DocumentRevisionFormContainerProps
 
   // FB config
   const FBContainer = React.useRef(null);
-  const { group: formGroup } = cleanInitialValues.document?.documentType || {};
+  const { groupOptions: formGroupOptions } = cleanInitialValues.document?.documentType || {};
   const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
   const isOutput =  Boolean(outputGroup && !isEmpty(outputGroup));
   const pmFormSchema = pmForm?.formTemplate?.schema || [];
@@ -168,7 +168,7 @@ DocumentRevisionFormContainerProps
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
   , [cleanInitialValues]);
 
-  if (formGroup && formGroup.includes("FORM")) {
+  if (formGroupOptions && formGroupOptions.includes("FORM")) {
     mode = "design";
   } else if (outputGroup || !isEmpty(originScheme)) {
     mode = isEditableSchema ? "formDesign" : "form";

@@ -21,6 +21,7 @@ export interface FBAutocompleteAsyncConfig  {
   root?: string;
   labelPrefixRoot?: string;
   includeRevision?: string;
+  publicApi?: boolean;
 }
 
 export enum FBAutocompleteAsyncOption {
@@ -52,4 +53,6 @@ export enum FBAutocompleteAsyncOption {
   supplierDocumentTypes = "26",
   ebLots = "27",
   seed = "28",
+  mpiDocuments = "29",
+  unitMeasures = "30",
 }

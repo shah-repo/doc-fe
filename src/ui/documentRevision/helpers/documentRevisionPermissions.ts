@@ -1,5 +1,6 @@
 import { get } from "lodash";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { checkIsDocumentForm } from "./checkDocumentGroup";
 import { isDocumentRevisionInStatus, isDocumentRevisionPendingChange, isDocumentRevisionReleased } from "./documentRevisionStatus";
 
 const isOwner = (
@@ -41,7 +42,7 @@ export const canCreateOutput = (documentRevision: DocumentRevision) => {
   const documentType = get(documentRevision, "document.documentType");
   return (
     documentType &&
-    documentType.group === "FORM" &&
+    checkIsDocumentForm(documentType.groupOptions) &&
     isDocumentRevisionReleased(documentRevision.status)
   );
 };

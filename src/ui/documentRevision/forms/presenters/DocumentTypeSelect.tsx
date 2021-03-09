@@ -16,7 +16,7 @@ import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustom
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import { DocumentCloneType } from "../../Clone.container";
-import { checkIsDocumentForm, checkIsTypeMustBeOutput } from "../../helpers/checkDocumentGroup";
+import { checkIsDocumentForm, checkIsDocumentPart, checkIsDynamicForm, checkIsTypeMustBeOutput } from "../../helpers/checkDocumentGroup";
 import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
 
@@ -82,6 +82,8 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         if (checkIsTypeMustBeOutput(docType.groupOptions)) {
           return false;
         }
+        // omit parts (ENC-6788) unless it is already selected as doc type via Parts module (ENC-7022 fix)
+        if (checkIsDocumentPart(docType.groupOptions) && !isDocTypeDisabled) { return false; }
         if ((docType.hiddenForCreationForUsersWithoutTags?.length ?? 0) === 0) {
           return true;
         }
@@ -90,7 +92,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       ).map((docType) =>
         ({ value: docType.id, text: docType.documentTypeName })
       );
-  }, [isNewOutput, outputDocumentTypes, documentTypes, currentUserTags, isCreateMaintenance]);
+  }, [isNewOutput, isCreateMaintenance, outputDocumentTypes, documentTypes, isDocTypeDisabled, currentUserTags]);
 
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
@@ -115,7 +117,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     const mode: FBWorkspaceMode = isNewOutput ? "form" :
       checkIsDocumentForm(type.groupOptions) ? "design" : "none";
     let scheme: FBSchemaProps[] = [];
-    if (mode === "design" && type.group !== "DYNAMIC_FORM") {
+    if (mode === "design" && !checkIsDynamicForm(type.groupOptions)) {
       const formValues = {
         ...formik.values as Partial<DocumentRevision>,
         "document.documentType.id": typeId,

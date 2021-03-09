@@ -401,7 +401,7 @@ context("FORM Field test", () => {
 
       it("Add Instructions 'MPI'", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "MPI" });
+        cy.get(`[data-cy="form.builder.instructionsdocument"]`).eq(-1).click();
         cy.fbEnterNameValue({ name: "label", value: "fb-mpi" });
         cy.get("[data-cy=\"instructionsDocument\"]").type("AR Form{downarrow}{enter}");
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -512,7 +512,7 @@ context("FORM Field test", () => {
 
       it("Verify Paragraph attributes", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "fb-paragraph" });
-        cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]").should("have.text", "fb-paragraph");
+        cy.get("[data-cy=\"paragraph\"]").parent().find("div p").eq(-1).should("have.text", "fb-paragraph");
         cy.fbClickButton({ el: "dialog-close" });
       });
 
