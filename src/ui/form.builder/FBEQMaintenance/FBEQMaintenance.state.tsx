@@ -1,7 +1,7 @@
 import { action, observable, set } from "mobx";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
-import { AvailableMaintenanceForm } from "./FBEQMaintenance.types";
+import { AvailableMaintenanceForm } from "..";
 
 class FBEQMaintenanceState {
   // MARK: @observables
