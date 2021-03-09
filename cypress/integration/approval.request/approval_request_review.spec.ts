@@ -13,7 +13,7 @@ const approvalRequestFormName = "Approval request form template";
 const approvalRequestDocumentTitle = "Approval request from newly created form";
 const sampleDocOneTitle = "Sample Document One";
 
-context.skip("Approval request form scenario", () => {
+context("Approval request form scenario", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
