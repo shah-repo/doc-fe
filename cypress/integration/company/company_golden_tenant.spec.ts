@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -546,7 +547,7 @@ context("Create company with golden tenant", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Select 'New Company Record' output document type", () => {
+    it("Select 'SEED' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "SEED" });
     });
 
@@ -593,9 +594,12 @@ context("Create company with golden tenant", () => {
     });
 
     it("Enters document description 'First document description'", () => {
-      cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
-        .click({ force: true }).type("First document description", { force: true });
-      cy.get("[data-cy^=document-title-]").click();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
+            .click({ force: true }).type("First document description", { force: true });
+          cy.get("[data-cy^=document-title-]").click();
+        });
     });
 
     it("Selects document type as 'Form'", () => {
@@ -603,7 +607,7 @@ context("Create company with golden tenant", () => {
       cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul>li:nth-child(2)").click();
     });
 
-    it("Selects document type as 'Form'", () => {
+    it("Selects document type as 'Clinical Protocol'", () => {
       cy.get("[id^=mui-component-select-define-the-output-of-that-form-]").click();
       cy.get("[id^=menu-define-the-output-of-that-form-]>div:nth-child(3)>ul>li:nth-child(2)").click();
     });
@@ -651,9 +655,12 @@ context("Create company with golden tenant", () => {
     });
 
     it("Enters document description 'Second document description'", () => {
-      cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
-        .click({ force: true }).type("Second document description", { force: true });
-      cy.get("[data-cy^=document-title-]").click();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
+            .click({ force: true }).type("Second document description", { force: true });
+          cy.get("[data-cy^=document-title-]").click();
+        });
     });
 
     it("Selects document type as 'Clinical Protocol'", () => {
