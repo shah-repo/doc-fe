@@ -2,7 +2,7 @@ import { getEmployeeNavigation } from "../../../ui/app/NavigationLocalStorageHel
 import { COMPANY_MINE_URL } from "../../../ui/constants/urls";
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
-import { AUTOSAVE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from "./constants";
+import { AUTOSAVE_CONFIG, ENABLE_COMPANY_DROPBOX, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from "./constants";
 import { Company, CompanyMineAction, CompanyMineRequest, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from "./types";
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
@@ -51,10 +51,20 @@ const autosaveConfig = () => ({
   type: AUTOSAVE_CONFIG,
 });
 
+const enableDropbox = (handlers: Handlers): ApiAction => apiActionWithCallbacks({
+  url: ENABLE_COMPANY_DROPBOX,
+  method: "patch",
+  onSuccess: (data, dispatch) => {
+    dispatch(setCompanyMine(data));
+  },
+  handlers,
+});
+
 export default {
   selectCompany,
   getCompanyMine,
   updateCompanyMine,
   updateNavigationMenuItem,
   autosaveConfig,
+  enableDropbox,
 };

@@ -4,7 +4,7 @@ import { authActions } from "../auth";
 import { Group, User } from "../auth/types";
 import { EDIT_EMPLOYEE_ACTIVE_STATUS, EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
 import { EditActiveStatusAction, EditGroupsAction, EditUserInfoAction } from "../tableSearch/types";
-import { ADD_EMPLOYEE_POST_ASYNC, API_TOKEN, API_TOKEN_DELETE_ASYNC, API_TOKEN_GET_ASYNC, API_TOKEN_POST_ASYNC, API_TOKEN_REVOKE_URL, API_TOKEN_URL, COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST, EMPLOYEES_URL, EMPLOYEE_GET_ASYNC, GROUPS_ME_GET_ASYNC, GROUPS_ME_URL, GROUPS_URL, GROUP_GET_BY_ID, SLACK_URL } from "./constants";
+import { ADD_EMPLOYEE_POST_ASYNC, API_TOKEN, API_TOKEN_DELETE_ASYNC, API_TOKEN_GET_ASYNC, API_TOKEN_POST_ASYNC, API_TOKEN_REVOKE_URL, API_TOKEN_URL, COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST, EMPLOYEES_URL, EMPLOYEE_GET_ASYNC, ENABLE_EMPLOYEE_DROPBOX, GROUPS_ME_GET_ASYNC, GROUPS_ME_URL, GROUPS_URL, GROUP_GET_BY_ID, SLACK_URL } from "./constants";
 import { AddEmployeeRequest, ApiTokenData, CompanyGroupsListAction, EmployeeActiveStatusRequestBody, EmployeeGroupsEditRequestBody, GetApiTokenList, GetEmployeeResponse, GetSlackUrl, LoadCompanyGroups } from "./types";
 
 const companyGroupsList = (
@@ -149,6 +149,11 @@ const revokeApiToken = (id: string, handlers: Handlers): ApiAction<GetApiTokenLi
     handlers,
   });
 
+const enableDropbox  = (handlers: Handlers): ApiAction => apiActionWithCallbacks({
+  url: ENABLE_EMPLOYEE_DROPBOX,
+  method: "patch",
+  handlers,
+});
 
 export default {
   loadCompanyGroups,
@@ -165,4 +170,5 @@ export default {
   getApiTokenList,
   revokeApiToken,
   loadGroupById,
+  enableDropbox,
 };

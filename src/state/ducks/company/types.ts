@@ -48,6 +48,7 @@ export interface Company {
   acctCodes: string[];
   navigation: NavigationItem[];
   employees?: Employee[];
+  dropboxEnabled?: boolean;
 }
 
 export interface SelectCompanyAction {

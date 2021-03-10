@@ -12,6 +12,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import AddEmployeeContainer from "../add.employee/container";
 import AddSlackButtonContainer from "../AddSlackButton/AddSlackButton.container";
+import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
 import UserProfileAdminContainer from "../profile/UserProfileAdmin.container";
 import { DEFAULT_SELECTED_EMPLOYEE } from "../utils/types";
 import { styles } from "./styles";
@@ -132,8 +133,17 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
         xs={6}
         style={{ textAlign: "right", marginBottom: "16px" }}
       >
-        <AddSlackButtonContainer />
-        <AddEmployeeContainer />
+        <Grid
+          container
+          style={{
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
+          <EnableDropboxButton />
+          <AddSlackButtonContainer />
+          <AddEmployeeContainer />
+        </Grid>
       </Grid>
       <Grid item={true} className={classes.item}>
         <TablePanel<GetEmployeeResponse>
