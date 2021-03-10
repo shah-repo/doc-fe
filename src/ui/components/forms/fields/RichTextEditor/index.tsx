@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box } from "@material-ui/core";
+import { Timeout } from "aws-sdk/clients/lambda";
 import classNames from "classnames";
 import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
@@ -52,6 +53,8 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   const { submitForm } = useFormContext();
   const didMount = useDidMount();
   const { field, form } = fieldProps;
+  let timeout;
+  const [timeoutID, setTimeoutID] = useState<Timeout>();
   const [value, setValue] = useState();
   const [toolbarHidden, setToolbarHidden] = useState(toggleToolbar);
   const [toolbarHiddenDebounced, setToolbarHiddenDebounced] = useState(toggleToolbar);
@@ -112,7 +115,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     if (!touched[name]) {
       setFieldTouched(name, true);
     }
-
+    clearInterval(timeoutID);
     submitForm();
   };
 
@@ -120,6 +123,10 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     if (toggleToolbar) {
       setToolbarHidden(false);
     }
+    timeout = setInterval(() => {
+      submitForm();
+    }, 30000);
+    setTimeoutID(timeout);
   };
   return (
     <Field

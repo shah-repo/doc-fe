@@ -8,6 +8,7 @@ import { ApplicationState } from "../../state/reducers";
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
+import { shouldHaveNoResponse } from "../document.revision/utils/helpers";
 import { FBEndpoint } from "../form.builder/defaults/FBEndpoint";
 import FBStore from "../form.builder/FBStore/FBStore";
 import useAsync from "../hooks/useAsync";
@@ -24,6 +25,7 @@ interface StateProps {
 
 interface DispatchProps {
   save: typeof documentRevisionsActions.save;
+  saveWithNoResponse: typeof documentRevisionsActions.saveWithNoResponse;
 }
 
 interface OwnProps {
@@ -48,6 +50,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<
 DocumentRevisionUpdateContainerProps
 > = ({
   save,
+  saveWithNoResponse,
   documentRevision,
   currentUserEmail,
   onDirtyFlagChange,
@@ -86,15 +89,15 @@ DocumentRevisionUpdateContainerProps
 
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
+    const saveAction = shouldHaveNoResponse(dataToSubmit, documentRevision) ? saveWithNoResponse : save;
 
     if (isEmpty(dataToSubmit)) {
       return;
     }
 
     async.reset();
-
     const promise = async.start(
-      save,
+      saveAction,
       documentRevision.id,
       dataToSubmit as DocumentRevisionEditRequestBody,
       async,
@@ -133,5 +136,6 @@ export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   mapStateToProps,
   {
     save: documentRevisionsActions.save,
+    saveWithNoResponse: documentRevisionsActions.saveWithNoResponse,
   },
 )(DocumentRevisionUpdateContainer);

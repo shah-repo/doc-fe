@@ -1,12 +1,14 @@
+import { Timeout } from "aws-sdk/clients/lambda";
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import { isEmpty } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { FB, FBTextEditorProps, FBTextEditorState } from "..";
+import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBTextEditor = <T extends FBTextEditorProps>(
   Component: React.FunctionComponent<T>,
@@ -33,11 +35,13 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
   }: T) => {
 
     // MARK: @config
+    const intl = useIntl();
+    let timeout;
+    const [timeoutID, setTimeoutID] = useState<Timeout>();
     const { formState, workspaceState } = FB.useStores();
     const emptyHtmlContent = "<p></p>";
-    const intl = useIntl();
     textEditorState = FB.useRef(FBTextEditorState, htmlToEditorState(formValue));
-
+    const { submitForm } = useFormContext();
     // form preview mode just disables the text editor
     // preview mode pulls a new style
     isPreview = formState?.workspaceMode === "preview";
@@ -82,6 +86,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+
     // MARK: @helpers
     // Creates editor state with initial value
     function htmlToEditorState(value?: string): EditorState {
@@ -102,6 +107,15 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       if (!textEditorState?.editorReference) { return; }
       !masked && !textEditorState?.preserveFocus && textEditorState.editorReference.focus();
       textEditorState?.setMasked(masked);
+
+      if (!masked) {
+        timeout = setInterval(() => {
+          submitForm();
+        }, 30000);
+        setTimeoutID(timeout);
+      } else {
+        clearInterval(timeoutID);
+      }
     };
 
     onOptionsChange = (value: string) => {

@@ -1,4 +1,4 @@
-import { get, orderBy } from "lodash";
+import { get, has, orderBy } from "lodash";
 import moment from "moment";
 import "moment-timezone";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
@@ -103,3 +103,10 @@ export const trainingCompletedOnDateOption = () => [
     value: moment().add(7, "d").startOf("day").toISOString(),
   },
 ];
+
+export const shouldHaveNoResponse = (dataToSubmit: any, documentRevision: DocumentRevision) => {
+  const schema = get(documentRevision, "formDocument.formTemplate.schema");
+  const fieldsWithNoResponse = schema.filter((item) => item.type === "texteditor" && !item.deleted);
+  const getFormInputHasTextField = fieldsWithNoResponse.find((field) => has(dataToSubmit.formInput, field.name));
+  return has(dataToSubmit, "description") || getFormInputHasTextField;
+};
