@@ -12,6 +12,7 @@ export CYPRESS_SKIP_ON_RUN_FAILURE="true"
 export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH="false"
 export CYPRESS_SCREENSHOT_OF_RUN_FAILURE="true"
 export CYPRESS_VIDEO="false"
+export CYPRESS_ARROW_DURATION=40
 
 export DIR_JSON="test-results/$CI_BUILD_ID/json"
 export DIR_JUNIT="test-results/$CI_BUILD_ID/junit"

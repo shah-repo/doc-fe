@@ -40,6 +40,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     const [timeoutID, setTimeoutID] = useState<Timeout>();
     const { formState, workspaceState } = FB.useStores();
     const emptyHtmlContent = "<p></p>";
+    formValue = formState?.getFieldValue(name);
     textEditorState = FB.useRef(FBTextEditorState, htmlToEditorState(formValue));
     const { submitForm } = useFormContext();
     // form preview mode just disables the text editor
@@ -137,7 +138,6 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     useObserver(() => {
       editorState = textEditorState?.editorState;
       masked = textEditorState?.masked;
-      formValue = formState?.getFieldValue(name);
     });
 
     return Component({
