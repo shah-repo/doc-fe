@@ -43,4 +43,5 @@ export enum FBEndpoint {
   FetchDocumentType = "/document_type/${documentTypeId}",
   StartMpi = "/lhr/start_mpi",
   FecthAvailableMaintenanceForms = "/documents/available_maintenance_forms",
+  FetchAutocompleteValue = "/autocomplete_options/${id}/${optionId}",
 }
