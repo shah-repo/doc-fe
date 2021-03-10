@@ -144,7 +144,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     documentRevision?.formDocument?.document?.id
   );
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
-  const shouldShowUpgrade = (isRecord && shouldShowUpgradeBannerForRecord) || (!isRecord && shouldShowUpgradeForDocs);
+  const shouldShowUpgrade =
+    (!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs);
 
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
@@ -186,7 +187,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     if (proposedDocId) {
       setFieldValue("document.docId", proposedDocId);
     }
-    if (!isEmpty(documentTypeById?.defaultRevStage)) {
+    if (!isEmpty(documentTypeById?.defaultRevStage) && isDocRevFirstDraft) {
       const value = getRevisionStageNumber(intl, documentTypeById?.defaultRevStage as string);
       setNewRender(value);
       setFieldValue("revisionStage", value);
