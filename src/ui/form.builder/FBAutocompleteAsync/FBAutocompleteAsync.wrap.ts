@@ -116,7 +116,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
         if (isArray(option)) {
           const undefinedOptions = option.filter((e) => isString(e));
           undefinedOptions.map((opt) => {
-            if (!opt && !isString(opt)) {
+            if (!opt || !isString(opt) || opt === "Void") {
               // eslint-disable-next-line array-callback-return
               return;
             }
@@ -125,7 +125,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
           );
           return "";
         }
-        if (!option && !isString(option)) {
+        if (!option || !isString(option) || option === "Void") {
           return;
         }
         autocompleteAsyncState?.fetchAutocompleteOption(option, optionId);
