@@ -35,7 +35,8 @@ const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
         field,
       }) => (
         <>
-          <InputLabel className={classes.label}>{props.label}</InputLabel>
+          <InputLabel className={classes.label}>
+            {intl.formatMessage({ id: props.label })}</InputLabel>
           <TextareaAutosize
             rows={5}
             className={classes.textautosizer}

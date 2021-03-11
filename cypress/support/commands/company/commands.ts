@@ -71,6 +71,7 @@ declare global {
         sessionId: string;
         payload: Partial<Company>;}): Chainable<Subject>;
       cmpSelectCompany(params: { name: string; multiple: boolean }): Chainable<Subject>;
+      cmpCompanyDoesntExist(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpSelectCompanyAlreadyLoggedIn(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpClickCreateNewDocument(): Chainable<Subject>;
       cmpClickCreateApprovalRequest(): Chainable<Subject>;
@@ -215,6 +216,12 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
       cy.get("#root").contains(params.name).click();
     });
     cy.wait(500);
+  }
+});
+
+Cypress.Commands.add("cmpCompanyDoesntExist", (params: { name: string; multiple: boolean }) => {
+  if (params.multiple) {
+    cy.get("#root").should("not.contain", params.name);
   }
 });
 

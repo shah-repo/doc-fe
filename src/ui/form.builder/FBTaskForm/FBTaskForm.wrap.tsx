@@ -1,3 +1,4 @@
+import { useFormikContext } from "formik";
 import { omit, pick } from "lodash";
 import React from "react";
 import { FB, FBClosingNoteProps, FBData, FBFormState, FBTaskActionMode, FBTaskFormActions, FBTaskFormProps, FBTaskItem } from "..";
@@ -13,7 +14,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
     name,
     ...props
   }: T) => {
-
+    const formik = useFormikContext();
     const { dialogState, workspaceState } = FB.useStores();
     formState = FB.useRef<FBFormState>(FBFormState, {
       initialValues: {
@@ -35,6 +36,9 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
         note: () => handleAddNote(),
       };
       post[actionMode]();
+      // Adding task marks form as dirty but has separate request for saving tasks
+      // This is solution for triggering prompt for unsaved changes
+      formik.resetForm();
     }
 
     function handleAddDescription() {

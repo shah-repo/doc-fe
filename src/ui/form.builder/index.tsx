@@ -178,6 +178,7 @@ export * from "./FBInput/FBInput.types";
 export * from "./FBInstructionsDocument/FBInstructionsDocument.types";
 export { default as FBLabel } from "./FBLabel/FBLabel";
 export * from "./FBLabel/FBLabel.types";
+export { default as FBLHRStepState } from "./FBLHRStep/FBLHRStep.state";
 // export { default as FBLHRStep } from "./FBLHRStep/FBLHRStep";
 export * from "./FBLHRStep/FBLHRStep.types";
 export { default as FBMapWrapper } from "./FBMapWrapper/FBMapWrapper";

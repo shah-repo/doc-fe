@@ -1,7 +1,8 @@
+import { isEmpty } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { FB, FBEQMaintenanceProps, FBEQMaintenanceState } from "..";
+import { AvailableMaintenanceForm, FB, FBEQMaintenanceProps, FBEQMaintenanceState } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 
@@ -15,29 +16,37 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     pmFormId,
     name = "",
     editorConfig,
+    availableMaintenanceForms,
+    preventativeFormOptions,
+    getOptionLabel,
     ...props
   }: T) => {
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
+    const fbEqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     const { id: docRevId, document: { status = "" } = {} } = workspaceState || {};
-    const isEqStatusDraft = status === DocumentRevisionStatus.Draft;
+    const isEqStatusReleased = status === DocumentRevisionStatus.Released;
     const isTypePM = editorConfig.type?.includes("preventativeMaintenance");
     const complianceStatus = formState?.getFieldValue(`${name}.status`);
     const dueDate = formState?.getFieldValue(`${name}.complianceDueDate`);
     const complianceDueDate = dueDate && getFormattedDateString(dueDate, MomentFormats.DayMonthDateYear);
+    availableMaintenanceForms = fbEqMaintenanceState?.availableMaintenanceFormsApi.data;
+
+    useEffect(() => {
+      fbEqMaintenanceState?.getAvailableMaintenanceForms();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     pmFormId = formState?.getFieldValue(`${name}.preventativeForm`);
-
+    if (pmFormId && availableMaintenanceForms) {
+      const maintenanceForm = availableMaintenanceForms?.find((e) => e.id === pmFormId);
+      const lastReleased = maintenanceForm?.documentRevisions?.find((rev) =>
+        rev.status === DocumentRevisionStatus.Released);
+      pmFormId = lastReleased?.id;
+    }
     // MARK: @reactions
-    // Set pm form id on form select
-    useEffect(() => reaction(
-      () => formState?.inputState.get(`${name}.preventativeForm`)?.value,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      (id) => (pmFormId = id)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
 
     // Set new pm button disabled status.
     useEffect(() => reaction(
@@ -45,6 +54,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled())
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
+
     useEffect(() => reaction(
       () => formState?.inputState.get(`${name}.frequency`)?.value,
       () => eqMaintenanceState?.setNewPMDisabled(newPMDisabled())
@@ -56,7 +66,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       return !(
         formState?.getFieldValue(`${name}.preventativeForm`) &&
         formState?.getFieldValue(`${name}.frequency`)
-      ) || isEqStatusDraft;
+      ) || !isEqStatusReleased || isEmpty(pmFormId);
     }
 
     // MARK: @methods
@@ -65,12 +75,35 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       window.open(`/document_revision/${pmFormId}/create_maintenance/${docRevId}/${name}`);
     };
 
+    function handleFilter(
+      data: AvailableMaintenanceForm[],
+    ) {
+      const typeValue = formState?.getFieldValue(`${name}.preventativeForm`);
+      const options = data?.filter((form) =>
+        form.documentRevisions.some((doc) => doc.status === DocumentRevisionStatus.Released && form.id !== typeValue));
+      return options;
+    }
+
+    preventativeFormOptions = (options) =>
+      handleFilter(options);
+
+    getOptionLabel = (option) => {
+      let title;
+      if (!option?.documentRevisions?.find((doc) => doc.status === DocumentRevisionStatus.Released)) {
+        title = option?.documentRevisions.find((doc) => doc.status === DocumentRevisionStatus.Obsolete)?.name;
+        return `${option.docId} - OBS - ${title}`;
+      }
+      title = option.documentRevisions.find((doc) => doc.status === DocumentRevisionStatus.Released)?.name;
+      return `${option.docId} - ${title}`;
+    };
+
     // MARK: @observer
     useObserver(() => {
       isNewPMDisabled = (
         eqMaintenanceState?.newPMDisabled ||
         newPMDisabled()
       );
+      availableMaintenanceForms = fbEqMaintenanceState?.availableMaintenanceFormsApi.data;
     });
 
     return Component({
@@ -82,6 +115,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       name,
       editorConfig,
       isTypePM,
+      preventativeFormOptions,
+      getOptionLabel,
     });
   };
 

@@ -10,6 +10,7 @@ import { GroupTag } from "../../../state/ducks/auth/types";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { DataProps } from "../../../state/ducks/common/types";
+import { companySelectors } from "../../../state/ducks/company";
 import { FormContext } from "../../components/forms/FormContext";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
 import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
@@ -27,7 +28,6 @@ import { changeRequestEditPath } from "../utils/paths";
 import Presenter from "./presenter";
 import ChangeRequestSummarySockets from "./sockets";
 import styles from "./styles";
-
 
 interface OwnProps extends DataProps<ChangeRequest> {
   currentUserEmail: string;
@@ -48,6 +48,7 @@ const Container: React.FunctionComponent<Props> = ({
   useDocumentTitle(dataProp.crId);
   const intl = useIntl();
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+  const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
   const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const hasOwnershipTag = useGetHasTag(GroupTag.OWNERSHIP_CHANGE);
 
@@ -101,7 +102,7 @@ const Container: React.FunctionComponent<Props> = ({
       portalContainer={FBContainer}
       initialValues={dataProp.formInput}
       changeRequest={dataProp}
-      autosave={true}
+      autosave={autosaveEnabled}
       schema={schema}
       mode={"preview"}
     >

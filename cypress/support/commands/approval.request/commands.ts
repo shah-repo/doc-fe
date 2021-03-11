@@ -28,6 +28,7 @@ declare global {
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
+      arClearFilters(): Chainable<Subject>;
       arCheckTitleInEditableAndMatches(params: { name: string }): Chainable<Subject>;
       arWithdrawSubmission(): Chainable<Subject>;
       arIsProposedDocumentEmpty(): Chainable<Subject>;
@@ -239,6 +240,12 @@ Cypress.Commands.add("arVerifySignatureIsNotMet", (params: {title: string }) => 
 
 Cypress.Commands.add("arCheckImplementationTaskStatus", (params: {status: string }) => {
   cy.get("[data-cy=\"form.builder.status\"]").contains(params.status);
+});
+
+Cypress.Commands.add("arClearFilters", () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
+    cy.get("[data-cy=\"clearFilter\"]").click();
+  });
 });
 
 Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description: string }) => {

@@ -1,6 +1,11 @@
 import { Dictionary } from "lodash";
 import { FBFormState, FBSchemaProps, FBWorkspaceMode, FBWorkspaceState } from "..";
 
+export interface FBValidationRelatedRules {
+  name: string;
+  value: any;
+}
+
 export enum FBFormMode {
   add = "form.builder.add",
   edit = "form.builder.edit",

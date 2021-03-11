@@ -2,9 +2,11 @@ import { Formik, FormikProps } from "formik";
 import { cloneDeep } from "lodash";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
+import { useSelector } from "react-redux";
 import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
 import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { companySelectors } from "../../../state/ducks/company";
 import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/types";
 import { AsyncState } from "../../../state/types";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
@@ -43,6 +45,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
 }) => {
   const FBContainer = React.useRef(null);
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
+  const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
 
   useEffect(() => () => {
     changeRequestFormOnScreenContext = React.createContext<boolean>(false);
@@ -60,7 +63,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
       portalContainer={FBContainer}
       initialValues={cloneDeep(changeRequest?.formInput)}
       changeRequest={cloneDeep(changeRequest)}
-      autosave={true}
+      autosave={autosaveEnabled}
       schema={schemaData}
       mode="form"
     >

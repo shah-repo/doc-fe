@@ -124,6 +124,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   childrenParts?: DocumentRevision[];
   outputDocumentTypes?: any;
   inputOwners?: InputOwner[];
+  documentId?: string;
 }
 
 interface InputOwner {

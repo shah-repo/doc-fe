@@ -33,7 +33,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     active,
     document,
     changeRequest,
-    autosave,
+    autosave = false,
     schema,
     includeProcedureDiff,
     ...props
@@ -46,6 +46,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       mode,
       autosave,
     });
+
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
     workspaceState && (workspaceState.document = document);
@@ -72,6 +73,12 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       workspaceState.approvals = document?.approvals as FBInlineApprovalBody[];
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [document?.approvals]);
+
+    React.useEffect(() => {
+      if (!workspaceState) { return; }
+      workspaceState.setAutosave(autosave);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [autosave]);
 
     // *TODO: find a way to reset constructor props
     React.useEffect(() => {
