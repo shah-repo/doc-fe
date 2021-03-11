@@ -5,11 +5,6 @@ export type FBMPIProcedureSelectProps =
 & Pick<FBFormProps, "children" | "initialValues">
 & Pick<FBProviderProps, "formState" | "mpiProcedureSelectState">;
 
-export interface FBMPIProcedureSelectActionsProps {
-  handleAdd?: () => void;
-  handleCancel?: () => void;
-}
-
 export interface FBMPIProcedureSelectValue {
   fieldId: string;
   forMaterial: string;

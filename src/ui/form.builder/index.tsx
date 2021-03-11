@@ -204,7 +204,6 @@ export * from "./FBMPIProcedure/FBMPIProcedure.types";
 export { default as FBMPIProcedureItem } from "./FBMPIProcedureItem/FBMPIProcedureItem";
 export * from "./FBMPIProcedureItem/FBMPIProcedureItem.types";
 export { default as FBMPIProcedureSelect } from "./FBMPIProcedureSelect/FBMPIProcedureSelect";
-export { default as FBMPIProcedureSelectActions } from "./FBMPIProcedureSelect/FBMPIProcedureSelect.actions";
 export { default as FBMPIProcedureSelectState } from "./FBMPIProcedureSelect/FBMPIProcedureSelect.state";
 export * from "./FBMPIProcedureSelect/FBMPIProcedureSelect.types";
 export * from "./FBOption/FBOption.types";
