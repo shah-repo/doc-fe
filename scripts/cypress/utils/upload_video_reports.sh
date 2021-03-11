@@ -11,20 +11,12 @@ if [[ -z "${DIR_VIDEOS_REPORT}" ]]; then
   exit 1
 fi
 
-#COMPANY VARIABLES
-COMPANY_ID="9ecbda7d-811a-435f-adf1-3515b19aca87"
-USER_API_TOKEN="apitoken 1059b288-6f88-4ba0-a3a7-95f380513783:4dc019ef-e1cc-40cb-a39c-186b3bb88b40"
-ID_OF_GROUP_EVERYONE="cf0ffbbe-1dff-4676-86d2-c54d9333dcc9"
-ID_OF_CYPRESS_TEST_REPORT_DOCTYPE="cb8be6f4-9e09-4c9a-831e-43eda1007b2a"
-USER_EMAIL="enlil.testmail+cyrunner@gmail.com"
-USER_PASSWORD="Tester1!"
-
 #Move videos so they don't get zipped
 mv $DIR_VIDEOS_REPORT ./ 
 
 #ZIP TEST REPORT
 DATE=$(date "+%Y-%m-%dT%H-%M-%S%z")
-TEST_RUN_BUCKET_PATH=$COMPANY_ID/cypress-reports-pipeline/$DATE
+TEST_RUN_BUCKET_PATH=$CY_REPORT_COMPANY_ID/cypress-reports-pipeline/$DATE
 ZIP_FILE_NAME=REPORT_$DATE.zip
 ZIP_FILE_NAME_PATH="./zipped-test-results/$ZIP_FILE_NAME"
 ZIPPED_REPORT_S3=$TEST_RUN_BUCKET_PATH/$ZIP_FILE_NAME
@@ -54,7 +46,7 @@ declare -a ATTACHMENTS_FOR_DOCUMENT
 ZIPPED_REPORT_ATTACHMENT=$(curl \
   -X POST "https://api.dev.enlil.io/api/v1/attachments/external" \
   -H "accept: application/json" \
-  -H "Authorization: $USER_API_TOKEN" \
+  -H "Authorization: $CY_REPORT_USER_API_TOKEN" \
   -H "Content-Type: application/json" \
   -d \
     "{
@@ -84,7 +76,7 @@ do
   ENLIL_ATTACHMENT=$(curl \
     -X POST "https://api.dev.enlil.io/api/v1/attachments/external" \
     -H "accept: application/json" \
-    -H "Authorization: $USER_API_TOKEN" \
+    -H "Authorization: $CY_REPORT_USER_API_TOKEN" \
     -H "Content-Type: application/json" \
     -d \
       "{ \"name\": \"$FILE_NAME\",
@@ -98,30 +90,13 @@ do
   echo $TEST_RUN_BUCKET_PATH/$VIDEO
 done
 
-#GET PROPOSED DOC_ID FOR DOCUMENT CREATION
-LOGIN_RESPONSE=$(curl \
-  -X POST "https://api.dev.enlil.io/api/v1/auth/login" \
-  -H "accept: application/json" \
-  -H "Content-Type: application/json" \
-  -d \
-      "{ 
-          \"email\": \"$USER_EMAIL\",
-          \"password\": \"$USER_PASSWORD\"
-      }")
-SESSION_ID=$(echo $LOGIN_RESPONSE | jq .sessionId)
-EMPLOYEE_ID=$(echo $LOGIN_RESPONSE | jq .employees[].id)
-BEARER_TOKEN=$(echo "bearer ${EMPLOYEE_ID}:${SESSION_ID}" | tr -d '"')
-PROPOSED_DOCID=$(curl \
-  -X GET "https://api.dev.enlil.io/api/v1/documents/proposed_docid?documentTypeId=$ID_OF_CYPRESS_TEST_REPORT_DOCTYPE" \
-  -H "accept: application/json" \
-  -H "Authorization: $BEARER_TOKEN" | jq .docId | tr -d '"')
-
-
 #CREATE DOCUMENT WITH ATTACHMENT
+DATE_FOR_DOC_ID=$(date "+%Y-%m-%d")
+DOC_ID="CTR-${DATE_FOR_DOC_ID}-${BITBUCKET_BUILD_NUMBER}-${PIPELINE_STEP_NUMBER}"
 curl \
   -X POST "https://api.dev.enlil.io/api/v1/document_revisions/external" \
   -H "accept: application/json" \
-  -H "Authorization: $USER_API_TOKEN" \
+  -H "Authorization: $CY_REPORT_USER_API_TOKEN" \
   -H "Content-Type: application/json" \
   -d \
     "{ 
@@ -133,19 +108,19 @@ curl \
       \"revisionChangeType\": \"NEXT_REVISION\",
       \"retrain\": false,
       \"document\": { 
-        \"docId\": \"$PROPOSED_DOCID\",
+        \"docId\": \"$DOC_ID\",
         \"securityList\": 
         { 
           \"securityEmployees\": [],
           \"securityGroups\": [ 
             { 
-            \"id\": \"$ID_OF_GROUP_EVERYONE\"
+            \"id\": \"$CY_REPORT_ID_OF_GROUP_EVERYONE\"
             } ], 
             \"operators\": [] 
         }, 
         \"documentType\": 
         { 
-          \"id\": \"$ID_OF_CYPRESS_TEST_REPORT_DOCTYPE\"
+          \"id\": \"$CY_REPORT_ID_OF_CYPRESS_TEST_REPORT_DOCTYPE\"
         } 
       }
     }"
