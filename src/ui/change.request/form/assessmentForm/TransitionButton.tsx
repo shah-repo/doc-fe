@@ -37,7 +37,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
           async,
         );
       }
-    });
+    }, true);
   };
 
   return (
