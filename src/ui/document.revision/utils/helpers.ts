@@ -106,7 +106,7 @@ export const trainingCompletedOnDateOption = () => [
 
 export const shouldHaveNoResponse = (dataToSubmit: any, documentRevision: DocumentRevision) => {
   const schema = get(documentRevision, "formDocument.formTemplate.schema");
-  const fieldsWithNoResponse = schema.filter((item) => item.type === "texteditor" && !item.deleted);
-  const getFormInputHasTextField = fieldsWithNoResponse.find((field) => has(dataToSubmit.formInput, field.name));
+  const fieldsWithNoResponse = schema?.filter((item) => item.type === "texteditor" && !item.deleted);
+  const getFormInputHasTextField = fieldsWithNoResponse?.find((field) => has(dataToSubmit.formInput, field.name));
   return has(dataToSubmit, "description") || has(dataToSubmit, "name") || getFormInputHasTextField;
 };
