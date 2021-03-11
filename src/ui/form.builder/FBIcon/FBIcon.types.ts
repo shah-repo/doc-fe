@@ -14,3 +14,7 @@ export interface FBIconConfig {
   path: string;
   fill?: string;
 }
+
+export interface FBViewAttachmentIconProps {
+  text?: string;
+}

@@ -1,4 +1,4 @@
-import { at, get, has, isArray, isEmpty, isObject, isString, map, remove, toNumber, union } from "lodash";
+import { at, cloneDeep, get, has, isArray, isEmpty, isObject, isString, map, remove, toNumber, union } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from "..";
@@ -22,11 +22,12 @@ export const withFBOnChange = <T extends FBInputProps>(
   }: T) => {
 
     const { formState, schemaState, workspaceState } = FB.useStores();
-    const inputValue = withState
-      ? formState?.getFieldValue(name)
-      : formState?.getInputState(name || "")?.value;
+    const inputValue =
+      formState?.getFieldValue(name) ||
+      formState?.getInputState(name || "")?.value;
+
     inputState = FB.useRef<FBInputState>(FBInputState, {
-      value: inputValue,
+      value: cloneDeep(inputValue),
       hidden,
     });
 
@@ -54,6 +55,15 @@ export const withFBOnChange = <T extends FBInputProps>(
       formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
       if (type && !FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);
+      }
+      if (formState?.validationRelatedRules[name]) {
+        map(formState?.validationRelatedRules[name], (field) => {
+          const { name: fieldName, value: fieldValue } = field;
+          if (formValue !== fieldValue) {
+            formState.omitFieldValue((fieldName || ""));
+            formState.errors.set(fieldName, "");
+          }
+        });
       }
     }
 

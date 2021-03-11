@@ -4,6 +4,7 @@ import { FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } fro
 import { FBInlineApprovalBody, FBSchemaState } from "..";
 import { GroupTag, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest";
+import { Id } from "../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 
 export class FBWorkspaceState extends FBSchemaState {
@@ -13,6 +14,11 @@ export class FBWorkspaceState extends FBSchemaState {
   public document?: DocumentRevision;
   public changeRequest?: ChangeRequest;
   public autosave?: boolean;
+
+  // Hack because formik context from autosave & reference comp are not the same ref
+  // and we need to know the values from both FB and AvailableReferences to create
+  // new merged value
+  public referenceValue: Id[] = [];
 
   public constructor({ schema, mode, autosave }: FBWorkspaceConstructor) {
     super(schema);
@@ -74,7 +80,7 @@ export class FBWorkspaceState extends FBSchemaState {
   @computed public get isStarter() {
     return (
       (this.mode === "design" || this.mode === "formDesign") &&
-      !size(this.schema)
+      !size(this.schema?.filter((item) => !item.deleted))
     );
   }
 
@@ -96,6 +102,16 @@ export class FBWorkspaceState extends FBSchemaState {
       return includes(mode, this.mode);
     }
     return this.mode === mode;
+  };
+
+  @action public getIsInputOwner = ( name: string ): boolean => {
+    const {
+      document,
+      externalState: { auth: { user: { employeeId = "" } = {} } = {} } = {},
+    } = this || {};
+    const inputOwner = document?.inputOwners?.[name];
+
+    return inputOwner === undefined || inputOwner === employeeId;
   };
 }
 

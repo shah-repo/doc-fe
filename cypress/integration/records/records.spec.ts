@@ -8,7 +8,6 @@ import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-const runId = new Date().valueOf();
 const currentDate = moment().tz("America/Los_Angeles").format("MMMM D, YYYY");
 let createdCompany;
 let loginResponse;
@@ -38,16 +37,8 @@ context("Records flow", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAcronym: `T1${runId}`,
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            name: `Test Company ${runId}`,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -191,9 +182,7 @@ context("Records flow", () => {
 
   context("Check if there are multiple record forms to select", () => {
     it("Navigate to Records", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
-        cy.navigToRecords();
-      });
+      cy.navigToRecords();
     });
 
     it("Create new record button click", () => {
@@ -210,10 +199,6 @@ context("Records flow", () => {
   });
 
   context("Create new record without inline approval form and check if they are in alpha revision", () => {
-    it("Navigate to Records", () => {
-      cy.navigToRecords();
-    });
-
     it("Create new record button click", () => {
       cy.recCreateRecordFromLandingPage();
     });
@@ -257,6 +242,7 @@ context("Records flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
+      cy.checkToastMessage({ exists: false });
     });
 
     it("Reload document", () => {
@@ -272,3 +258,4 @@ context("Records flow", () => {
 
 
 export { };
+

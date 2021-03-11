@@ -11,9 +11,10 @@ import { RequestType } from "../../../components/common/owner.changer/helpers/ty
 import CopyEBButton from "../../../components/forms/CopyEBButton";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
+import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { checkCanBeCopied, checkIsDocumentRecord, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
-import { isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
+import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
 import InspectionControlsContainer from "../../InspectionControls/InspectionControls.container";
 import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.presenter";
@@ -39,6 +40,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const { workspaceState, formState } = FB.useStores();
 
+  // MARK: @helpers
+  const shouldShowUpgradeForDocs = useShouldUpgradeToLatest(
+    documentRevision?.status,
+    documentRevision?.formDocument?.status,
+    documentRevision?.formDocument?.document?.id
+  );
+  const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
   const serializedCSV = hasSerializedCSV(values.document?.documentType?.groupOptions);
@@ -47,6 +55,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     formState,
     documentRevision?.formDocument?.formTemplate?.schema
   );
+  const shouldShowUpgrade =
+    (!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs);
 
   const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
   const formik = useFormikContext();
@@ -86,9 +96,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
           const newInput = {};
           keys(values.formInput).map((key) => {
-            newInput[key] = values?.formInput && typeof values?.formInput[key] === "string"
+            newInput[key] = values?.formInput && typeof values?.formInput[key] === "string" && key !== "equipment_id"
               ? "Void"
-              : null;
+              : key === "equipment_id" ?  null : values?.formInput?.[key];
             return key;
           });
           // TEMPORARY FIX FOR BE VALIDATION
@@ -112,6 +122,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       formik.setFieldValue("name", "Void");
       formik.setFieldValue("description", "Void");
       formik.setFieldValue("referenceTo", null);
+      formik.setFieldValue("parentEquipment", null);
     }
     formik.submitForm();
   };
@@ -184,12 +195,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         />}
         {renderChangeOwnership}
         <UpgradeToLatestContainer
-          documentStatus={documentRevision?.status}
           formDocumentId={documentRevision?.formDocument?.document?.id}
           docRevId={documentRevision?.id}
-          formDocumentStatus={documentRevision?.formDocument?.status}
           setShouldDisplay={props.setUpgradeToLastestDisplay}
           type="button"
+          {...{
+            shouldShowUpgrade,
+          }}
         />
         {!(isRecord && isInlineApproval) &&
           isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}

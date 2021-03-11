@@ -12,11 +12,9 @@ import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { toastError } from "../../components/notifications";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import { FBWorkspace, FBWorkspaceMode } from "../../form.builder";
 import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
 import useGetAvailableReferences from "../../hooks/useGetAvailableReferences";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
@@ -46,6 +44,7 @@ interface OwnProps {
   type?: DocumentCloneType;
   isNewVersion?: boolean;
   pmFormId?: string;
+  pmForm?: DocumentRevision;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps;
@@ -67,10 +66,10 @@ DocumentRevisionFormContainerProps
   type,
   isNewVersion,
   pmFormId,
+  pmForm,
 }) => {
   const bannerPortal = React.useRef(null);
   const loadAction =  useActionCreator(documentRevisionsActions.loadList);
-  const loadDocumentAction = useActionCreator(documentsActions.getDocumentById);
   const [releasedDocRev, setReleasedDocRev] = useState<DocumentRevision>();
 
   const docId = initialValues.document?.docId;
@@ -84,8 +83,6 @@ DocumentRevisionFormContainerProps
   let document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, initialValues.document?.id || ""));
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
-  const pmForm = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, pmFormId || ""),);
 
   const availableReferences = useGetAvailableReferences(initialValues);
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
@@ -143,30 +140,14 @@ DocumentRevisionFormContainerProps
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentTypeAcronym]);
 
-  // Fetching and setting released document for revision prediction
-  const loadDocumentAsync = useAsync({
-    onSuccess: (data?: Document) => {
-      if (data) {
-        setReleasedDocRev((data?.documentRevisions).find((doc) => isDocumentRevisionReleased(doc.status)));
-        return;
-      }
-    },
-    onError: (error) => {
-      toastError(error as string);
-    },
-  });
-
   useEffect(() => {
     if (!document.id) {
       return;
     }
-    loadDocumentAsync.start(
-      loadDocumentAction,
-      document.id,
-      loadDocumentAsync,
-    );
+    setReleasedDocRev((document?.documentRevisions).find((doc) => isDocumentRevisionReleased(doc.status)));
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [document?.documentRevisions]);
 
   // FB config
   const FBContainer = React.useRef(null);

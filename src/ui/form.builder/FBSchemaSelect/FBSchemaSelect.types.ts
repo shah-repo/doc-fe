@@ -1,4 +1,5 @@
 import { FBAutocompleteProps, FBInputProps, FBSchemaSelectState } from "..";
+import { FBInputType } from "../FBInput";
 import { FBSchemaComponentProps } from "../FBSchema/FBSchema.types";
 
 export type FBSchemaSelectProps =
@@ -8,3 +9,5 @@ export type FBSchemaSelectProps =
 & {
   schemaSelectState?: FBSchemaSelectState;
 };
+
+export const FBSchemeMultuValueTypes: FBInputType[] = ["checkboxgroup"];

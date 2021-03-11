@@ -9,7 +9,7 @@ interface OwnProps {
   closeDialog: () => void;
 }
 
-export type Props = OwnProps;
+type Props = OwnProps;
 
 export const AddGroupPresenter: React.FunctionComponent<Props> = ({
   isOpen,

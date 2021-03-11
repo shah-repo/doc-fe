@@ -69,6 +69,8 @@ export interface Group {
   parents: Group[];
   joinedEmployees: Employee[];
   type?: GroupType;
+  groupApprover?: string; // FE property for POAM check (ENC-4125)
+  documentStage?: number;
 }
 
 export type AuthUserPayload = User;
@@ -232,6 +234,10 @@ export enum GroupTag {
   NAVIGATION_WITH_RESTRICTED_DOC_TYPES = "NAVIGATION_WITH_RESTRICTED_DOC_TYPES",
   DOCUMENT_TYPE_MANAGEMENT = "DOCUMENT_TYPE_MANAGEMENT",
   LABEL_TOOLTIPS = "LABEL_TOOLTIPS",
+  COMPANY_CONFIG_WHITELABELING = "COMPANY_CONFIG_WHITELABELING",
+  COMPANY_CONFIG_NAVIGATION = "COMPANY_CONFIG_NAVIGATION",
+  COMPANY_CONFIG_DOCUMENT_REV_STAGES = "COMPANY_CONFIG_DOCUMENT_REV_STAGES",
+  PAGE_DETAILS_MANAGEMENT = "PAGE_DETAILS_MANAGEMENT"
 }
 
 export enum GroupType{

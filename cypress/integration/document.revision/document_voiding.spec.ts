@@ -22,13 +22,7 @@ context("Document voiding Flow", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -115,6 +109,7 @@ context("Document voiding Flow", () => {
         cy.get("#HeaderMenuButton").click();
         cy.get("#void").click();
         cy.get("#AlertDialog-continueButton").click();
+        cy.checkToastMessage({ exists: false });
       });
     });
   });

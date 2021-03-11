@@ -1,12 +1,15 @@
 import { Box, List, Typography } from "@material-ui/core";
-import { orderBy } from "lodash";
+import { has, last, orderBy } from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import { MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { ApprovalStatus } from "../../../state/ducks/common";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
+import { FBApprovalAuditState, FBText } from "../../form.builder";
+import { isTranslation } from "../../translations/types";
 import { styles } from "./Audit.presenter.styles";
 
 interface OwnProps {
@@ -25,21 +28,14 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   isStatusVisible,
 }) => {
   const classes = styles();
+  const intl = useIntl();
 
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
       const { owner, ownerUser, ownerThirdParty } = change;
       const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
-      const hasOnlyFBChanges = audit[groupId].every((change) => change.field.includes("formInput"));
 
-      if (hasOnlyFBChanges) {
-        return null;
-      }
-
-      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
-       * TODO: this if statement should be deleted
-      */
       if (audit[groupId].filter((change) =>
         change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
       ).length === 0) {
@@ -66,27 +62,77 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
     orderBy(audits, ["field"]).forEach((change: Audit, index) => {
       change.groupKey = groupKey;
-      if (change.field.includes("attachments")) {
+      const isFBField = has(change, "fbSchemaItem");
+      const { label, placeholder = "", type: fbType, stepIndex: number = 1 } = change.fbSchemaItem || {};
+      let fbLabel = label || placeholder;
+      const isOmittedFB = (
+        isFBField &&
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        !FBApprovalAuditState.docAudit.includes(change.fbSchemaItem?.type!)
+      );
+      if (isOmittedFB) { return; }
+
+      if (isFBField) {
+        const { nextValue, previousValue } = change;
+        let auditValue: any = nextValue;
+        if (nextValue === "undefined"  || nextValue === "[]" || nextValue === "{}") {
+          auditValue = previousValue;
+        }
+        if (auditValue === "undefined"  || auditValue === "[]" || auditValue === "{}") {
+          return;
+        }
+      }
+
+      if (fbType === "procedure") {
+        let valueKey = last(change.field.split("."));
+        let valueKeyType = "";
+        if (valueKey === "id" && !change.field.includes("attachments")) { return; }
+        if (valueKey === "title") {
+          valueKey = change.field.split(".")[2].split("[")[0];
+        }
+        if (valueKey !== "materials" && change.field.includes("materials")) {
+          valueKeyType = "materials";
+        } else if (valueKey !== "equipment" && change.field.includes("equipment")) {
+          valueKeyType = "equipment";
+        }
+        if (change.field.includes("attachments")) {
+          valueKey = "attachments";
+        }
+        const stepLabel = intl.formatMessage({ id: "form.builder.step.number" }, { number });
+        let keyLabel = "";
+        if (isTranslation(`form.builder.${valueKeyType}`)) {
+          keyLabel = intl.formatMessage({ id: `form.builder.${valueKeyType}` }) + ": ";
+        }
+        if (isTranslation(`form.builder.${valueKey}`)) {
+          keyLabel += intl.formatMessage({ id: `form.builder.${valueKey}` });
+        }
+        fbLabel = `${stepLabel} ${keyLabel}`;
+      }
+
+      if (!isFBField && change.field.includes("attachments")) {
         attachments.push(change);
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_NEW") {
         newReferences.push(change);
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_DELETED") {
         deletedReferences.push(change);
-      } else if (change.field.includes("formInput")
-      /** Temporary solution until BE adds additional info (who was abandoned) to audit.
-       * TODO: this condition should be deleted
-      */
-        || (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned)
-      ) {
+      } else if (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned) {
         return;
       } else {
         singleFields.push((
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
-              <Text
-                dataCy={`change-key-${groupKey}-${key}`}
-                message={`documentRevision.audit.${change.field}.${change.type}`}
-              />
+              {!isFBField && (
+                <Text
+                  dataCy={`change-key-${groupKey}-${key}`}
+                  message={`documentRevision.audit.${change.field}.${change.type}`}
+                />
+              )}
+              {isFBField && (
+                <FBText
+                  locale={`form.builder.audit.${change.type}`}
+                  values={{ label: fbLabel }}
+                />
+              )}
             </Box>
             <div className={classes.auditValue}>
               <AuditFactory audit={change} dataCy={`change-value-${groupKey}-${key}`} />

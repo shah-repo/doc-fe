@@ -1,8 +1,9 @@
+import { isEmpty } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
 import { useIntl } from "react-intl";
-import { FB, FBDialogState, FBFilePresenterColor, FBFilePresenterDownloadType, FBFilePresenterProps, FBFilePresenterState, FBFilePreview } from "..";
+import { FB, FBDialogState, FBFileDescription, FBFilePresenterColor, FBFilePresenterDownloadType, FBFilePresenterProps, FBFilePresenterState, FBFilePreview } from "..";
 
 export const withFBFilePresenter = <T extends FBFilePresenterProps>(
   Component: React.FunctionComponent<T>,
@@ -18,7 +19,9 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     toolsVisible,
     disabled = false,
     fileSize,
+    fileExtension,
     fileDescription,
+    omitDescription = false,
     fileColor,
     menuItems,
     loading,
@@ -29,9 +32,8 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
 
     const intl = useIntl();
     const { formState } = FB.useStores();
-    filePresenterState = FB.useRef<FBFilePresenterState>(FBFilePresenterState);
+    filePresenterState = FB.useRef<FBFilePresenterState>(FBFilePresenterState, file);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
-    filePresenterState?.setFile(file);
 
     const { fileUploadState } = FB.useStores();
     const { fileName, fileShortName, fileType } = filePresenterState;
@@ -43,7 +45,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
       return `${(size / Math.pow(1024, i)).toFixed(2)} ${["B", "kB", "MB", "GB", "TB"][i]}`;
     }, [filePresenterState]);
 
-    fileDescription = useMemo(() => {
+    fileExtension = useMemo(() => {
       const microsoftFiles = ["XLSX", "XLS", "DOCX", "DOC"];
       const type = fileType?.toUpperCase();
       if (!type) { return; }
@@ -54,6 +56,14 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     }, [fileType, intl]);
 
     fileType && (fileColor = FBFilePresenterColor[fileType.toUpperCase()]);
+
+    useObserver(() => {
+      fileDescription = filePresenterState?.attachmentApi.data?.description || file.description;
+    });
+
+    const fileDescriptionTitle = isEmpty(fileDescription)
+      ? "form.builder.add.description"
+      : "form.builder.edit.description";
 
     React.useEffect(() => {
       reaction(
@@ -104,13 +114,35 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
     onMouseOver = () => filePresenterState?.setToolsVisible(true);
     onMouseLeave = () => filePresenterState?.setToolsVisible(false);
 
-    useObserver(() => {
-      loading = filePresenterState?.loading;
-      toolsVisible = filePresenterState?.toolsVisible;
-    });
+    function handleDescription() {
+      dialogState?.config({
+        open: true,
+        maxWidth: "sm",
+        title: fileDescriptionTitle,
+        content: (
+          <FBFileDescription
+            boxProps={{ width: "100%" }}
+            omitDescription={true}
+            {...{
+              file,
+              fileName,
+              fileColor,
+              fileType,
+              fileShortName,
+              fileSize,
+              fileExtension,
+              fileDescription,
+            }}
+          />
+        ),
+      });
+    }
 
     // File menu items
     menuItems = [{
+      text: fileDescriptionTitle,
+      onClick: () => handleDescription(),
+    }, {
       text: "form.builder.download.file",
       textValues: { fileShortName },
       onClick: () => handleDownload?.("download"),
@@ -127,6 +159,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
 
     return Component({
       ...(props as T),
+      filePresenterState,
       handleDownload,
       handleIconClick,
       handleRemove,
@@ -138,7 +171,9 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
       menuItems,
       fileName,
       fileShortName,
+      fileExtension,
       fileDescription,
+      omitDescription,
       fileColor,
       fileType,
       fileSize,

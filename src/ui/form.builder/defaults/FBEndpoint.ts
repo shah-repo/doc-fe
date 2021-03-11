@@ -5,6 +5,8 @@ export enum FBEndpoint {
   PrivateUpload = "/attachments/private_upload_url",
   FileUploadCandidates = "/documents/file_upload_candidates",
   AssetUrl = "/attachments/assetUrl",
+  AttachmentUpload = "/attachments/upload",
+  AttachmentPatch = "/attachments/${id}",
   AttachmentById = "/attachments/${id}",
   AttachmentsByIds ="/attachments?ids=${ids}",
   PostInlineApprove = "/document_revisions/${documentId}/inline_approve",
@@ -37,5 +39,8 @@ export enum FBEndpoint {
   LotsToPart = "/document_revisions/lots_of_part/${id}",
   PartsOfLot = "/document_revisions/parts_of_lot/${id}",
   Lots = "/document_revisions?docTypeGroupOptions%5B%5D=CAN_CREATE_INSPECTION&docTypeGroupOptions%5B%5D=ENGINEERING_BUILD&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED",
-  Parts = "/document_revisions?docTypeGroupOptions%5B%5D=MATERIAL&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED"
+  Parts = "/document_revisions?docTypeGroupOptions%5B%5D=MATERIAL&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED",
+  FetchDocumentType = "/document_type/${documentTypeId}",
+  FecthAvailableMaintenanceForms = "/documents/available_maintenance_forms",
+  FetchAutocompleteValue = "/autocomplete_options/${id}/${optionId}",
 }

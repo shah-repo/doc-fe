@@ -19,7 +19,9 @@ declare global {
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
       selectCompany(params: { name: string }): Chainable<Subject>;
       unClick(): Chainable<Subject>;
+      checkIfInputHasValue(params: { inputSelector: string }): Chainable<Subject>;
       myCompanies(token: string): Chainable<Subject>;
+      triggerDueDateEmailScript(params: {sessionId: string; currentDate: string});
       wrapWithWaitOnApiCall(
         name: CyRoutes,
         callback: () => void,
@@ -69,6 +71,16 @@ export interface ICreateCompanyBootstrap {
   acctCodes?: string[];
 }
 
+Cypress.Commands.add("checkIfInputHasValue", (params: {inputSelector}) => {
+  cy.get("body").then(($body) => {
+    const inputField = $body.find(params.inputSelector).attr("value");
+    if (inputField) {
+      return true;
+    }
+    return false;
+  });
+});
+
 Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstrap; sessionId: string }) => {
   cy.request({
     method: "POST",
@@ -96,6 +108,20 @@ Cypress.Commands.add("myCompanies", (token: string) => {
     url: `${CONFIG.BE_URL}/api/v1/company/mine`,
     headers: {
       Authorization: `bearer ${token}`,
+    },
+    timeout: 10 * 1000,
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("triggerDueDateEmailScript", (params: {sessionId: string; currentDate: string}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/due_date_notifiers/send_emails`,
+    headers: {
+      Authorization: `bearer_admin ${params.sessionId}`,
+    },
+    body: {
+      currentDate: params.currentDate,
     },
     timeout: 10 * 1000,
   }).then((response) => response.body);

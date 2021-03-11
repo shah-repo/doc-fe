@@ -1,4 +1,3 @@
-import { int } from "aws-sdk/clients/datapipeline";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 /* eslint-disable max-classes-per-file */
@@ -32,7 +31,7 @@ declare global {
       grpSelectOfficial(): Chainable;
       grpEnterGroupName(params: { name: string }): Chainable;
       grpAssignUser(params: { name: string }): Chainable;
-      grpRemoveUser(params: { item: int }): Chainable;
+      grpRemoveUser(params: { name: string }): Chainable;
       grpSaveGroup(): Chainable;
       grpSaveGroupPatch(): Chainable;
       grpSelectGroupWithoutClosingDialog(params: { name: string }): Chainable;
@@ -272,21 +271,23 @@ Cypress.Commands.add("grpAssignUser", (params: { name: string }) => {
   cy.get("#Group-members>div>div>div[id^=react-select]").contains(params.name).click();
 });
 
-Cypress.Commands.add("grpRemoveUser", (params: { item: int }) => {
-  cy.get("[class=\"circle_remove\"]").eq(params.item).click({ force: true });
+Cypress.Commands.add("grpRemoveUser", (params: { name: string }) => {
+  cy.xpath(`//div[@id="Group-members"]//div[text()="${params.name}"]/../div[2]`).click();
 });
 
 Cypress.Commands.add("grpSaveGroup", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPost, () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GroupsPost, CyRoutes.GroupsGet], () => {
     cy.get("#Group-createGroup").click();
   });
   cy.get("#DialogContent-close").click();
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("grpSaveGroupPatch", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPatch, () => {
     cy.get("#Group-createGroup").click();
   });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("grpSelectGroup", (params: {name: string}) => {
@@ -307,7 +308,9 @@ Cypress.Commands.add("grpSelectGroupWithoutClosingDialog", (params: {name: strin
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsGet, () => {
     cy.get("#groupName").type(params.name);
   });
-  cy.get(".ReactVirtualized__Table__rowColumn").contains(params.name).click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GroupGet, () => {
+    cy.get(".ReactVirtualized__Table__rowColumn").contains(params.name).click();
+  });
 });
 
 Cypress.Commands.add("grpCloseDialog", () => {
@@ -320,7 +323,8 @@ Cypress.Commands.add("grpSelectUnofficial", () => {
 
 Cypress.Commands.add("grpTypeMembers", (...names: string[]) => {
   names.forEach((name) => {
-    cy.get(`#Group-members`).type(`${name}{enter}`);
+    cy.get(`#Group-members`).click();
+    cy.get("div[id^=react-select]").contains(name).click();
   });
 });
 
@@ -336,6 +340,7 @@ Cypress.Commands.add("grpAddGroup", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPost, () => {
     cy.get("[data-cy=\"Group-createGroup\"]").click();
   });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("grpAPICreateNewGroup", (params: {

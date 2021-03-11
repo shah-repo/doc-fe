@@ -20,6 +20,23 @@ export class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
     "poApprovalMatrix",
   ];
 
+  public static docAudit: FBInputType[] = [
+    "number",
+    "textfield",
+    "checkbox",
+    "checkboxgroup",
+    "datepicker",
+    "texteditor",
+    "select",
+    "radio",
+    "radiogroup",
+    "autocomplete",
+    "autocompleteasync",
+    "fileupload",
+    "quantity",
+    "procedure",
+  ];
+
   public autocompleteApi = new FBAutocompleteAsyncState();
 
   public constructor({ documentId, isOutput }: FBApprovalAuditConstructor) {

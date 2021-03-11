@@ -6,6 +6,7 @@ export type FBFilePresenterDownloadType = "download" | "view";
 
 export type FBAttachment = Attachment & {
   url?: string;
+  description?: string;
 };
 
 export enum FBFilePresenterColor {
@@ -33,6 +34,8 @@ export enum FBFilePresenterColor {
   "XD" = "#6F0A58",
 }
 
+export type FBFilePresenterMode = "raw" | "icon";
+
 export type FBFilePresenterProps =
 & Pick<FBInputProps, "name" | "disabled">
 & Pick<FBContextMenuProps, "menuItems">
@@ -46,9 +49,16 @@ export type FBFilePresenterProps =
   file: FBAttachment;
   fileName?: string;
   fileShortName?: string;
-  fileType?: string;
+  fileExtension?: string;
   fileSize?: string;
-  fileDescription?: string;
+  fileType?: string;
   fileColor?: string;
+  fileDescription?: string;
   loading?: boolean;
+  mode?: FBFilePresenterMode;
+  omitDescription?: boolean;
 };
+
+export type FBFilePresenterModeProps =
+& Omit<FBFilePresenterProps, "dialogState" | "mode">
+& Pick<FBInputProps, "boxProps">;

@@ -1,10 +1,12 @@
 import { get, last } from "lodash";
+import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FB, FBPOReceiveForm, FBPOReceiveFormActions, FBPOReceiveItemProps, FBPOReceiveProps, FBPOReceiveState, FBPurchaseOrderItem, FBSchemaProps } from "..";
 import { stripTags } from "../../../common/utils/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { toastError } from "../../components/notifications";
 import { FBDialogState } from "../FBDialog";
 import { FBInputType } from "../FBInput";
 
@@ -14,14 +16,15 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
   const Comp = ({
     poReceiveState,
     dialogState,
-    initialValues,
-    disabled,
+    getOptionLabel,
     onChange,
+    initialValues,
+    defaultValue,
+    disabled,
     loading,
     schema,
     name,
     po,
-    getOptionLabel,
     ...props
   }: T) => {
 
@@ -31,13 +34,14 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
 
     poReceiveState = FB.useRef<FBPOReceiveState>(FBPOReceiveState, formValue);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
+    defaultValue = formState?.getFieldValue(name);
 
     const handleItem = (item?: FBPurchaseOrderItem) => {
       if (workspaceState?.isReleased || workspaceState?.isRevised) {
         return;
       }
       if (!workspaceState?.documentId) {
-        alert(intl.formatMessage({ id: "form.builder.save.doc.before.continue" }));
+        toastError(intl.formatMessage({ id: "form.builder.save.doc.before.continue" }));
         return;
       }
 
@@ -85,6 +89,15 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       poReceiveState?.setPOId(value?.id);
     };
 
+    React.useEffect(() => reaction(
+      () => formState?.inputState.get(`porec-${name}`)?.value,
+      (value) => {
+        formState?.setFieldValue(name, value);
+        formState?.setFieldAutosave(name);
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
     getOptionLabel = (option: DocumentRevision) => `${option.document?.docId} ${stripTags(option.description)}`;
 
     useObserver(() => {
@@ -94,15 +107,16 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
 
     return Component({
       ...(props as T),
-      onChange,
       poReceiveState,
       dialogState,
+      getOptionLabel,
+      onChange,
       initialValues: poReceiveState.docValues,
+      defaultValue,
       disabled,
       loading,
       schema,
       name,
-      getOptionLabel,
     });
   };
 

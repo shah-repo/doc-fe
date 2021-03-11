@@ -1,35 +1,31 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions";
+import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
-import useShouldUpgradeToLatest from "../../../../hooks/useShouldUpgradeToLatest";
 import UpgradeToLatestBanner from "./UpgradeToLatest.banner";
 import UpgradeToLatestButton from "./UpgradeToLatest.button";
 
 type DisplayType = "button" | "banner";
 
 interface Props {
-  documentStatus?: DocumentRevisionStatus;
   formDocumentId?: string;
   docRevId?: string;
-  formDocumentStatus?: DocumentRevisionStatus;
   type: DisplayType;
   bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
   setShouldDisplay?: (value: boolean) => void;
+  shouldShowUpgrade: boolean;
 }
 
 export const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
-  documentStatus,
   formDocumentId = "",
   docRevId,
-  formDocumentStatus,
   type,
   bannerPortal,
   setShouldDisplay,
+  shouldShowUpgrade,
 }) => {
   const dispatch = useDispatch();
-  const showShouldUpgrade = useShouldUpgradeToLatest(documentStatus, formDocumentStatus, formDocumentId);
 
   useEffect(() => {
     if (formDocumentId) {
@@ -42,7 +38,7 @@ export const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
   const upgradeAction = useActionCreator(documentRevisionsActions.upgradeToReleasedForm);
   const onUpgradeClick = () => async.start(upgradeAction, docRevId, async);
 
-  if (!showShouldUpgrade) {
+  if (!shouldShowUpgrade) {
     return null;
   }
 
@@ -50,11 +46,11 @@ export const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
     <>
       {
         type === "button" &&
-        <UpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, showShouldUpgrade }}/>
+        <UpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, shouldShowUpgrade }}/>
       }
       {
         type === "banner" &&
-        <UpgradeToLatestBanner {...{ onUpgradeClick, showShouldUpgrade, bannerPortal }} />
+        <UpgradeToLatestBanner {...{ onUpgradeClick, shouldShowUpgrade, bannerPortal }} />
       }
     </>
   );

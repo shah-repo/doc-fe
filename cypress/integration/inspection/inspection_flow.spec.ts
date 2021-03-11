@@ -359,13 +359,7 @@ context("Inspection flow", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -937,6 +931,7 @@ context("Inspection flow", () => {
                   effectiveDate: (new Date()).toISOString(),
                   documentType: { id: approvalRequestDocumentType[0].id },
                   formDocument: { id: initialArDocument[0].id },
+                  approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
                 },
                 employeeId: adminEmployee.id,
                 sessionId: loginResponse.sessionId,
@@ -947,54 +942,21 @@ context("Inspection flow", () => {
       });
     });
 
-    context("Create Part for Inspection", () => {
-      it("Navigate to Parts", () => {
-        cy.navigToParts();
+    context("Revise subassembly for Part", () => {
+      it("Navigate to documents", () => {
+        cy.navigToDocumentList();
       });
 
-      it("Click 'ADD NEW PART'", () => {
-        cy.recCreateRecordFromLandingPage();
-        cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Subassembly" });
+      it("Select 'Subassembly part form'", () => {
+        cy.dlSelectFirstDocument();
       });
 
-      it("Enter title 'New Part for inspection'", () => {
-        cy.drEnterDocumentTitle({ name: "New Part for inspection" });
+      it("Click revise document", () => {
+        cy.drClickReviseDocument();
       });
 
-      it("Enters description 'New Part for inspection description'", () => {
-        cy.drEnterDocumentDescription({ description: "New Part for inspection description" });
-      });
-
-      it("Select make vs buy", () => {
-        cy.get("[id$=\"make-vs-buy\"]").click();
-        cy.get("ul[role=listbox]>li").contains("Make").click();
-      });
-
-      it("Select unit of measure", () => {
-        cy.get("[id$=\"unit-of-measure\"]").click();
-        cy.get("ul[role=listbox]>li").contains("Batch").click();
-      });
-
-      it("Select traceability required", () => {
-        cy.get("[value=\"Traceability required\"]").check();
-      });
-
-      it("Select 'No' for Serialized option", () => {
-        cy.get("[name=\"serialized\"][value=\"No\"]").check();
-      });
-
-      it("Select 'IQC Required'", () => {
-        cy.get("[value=\"IQC Required\"]").check();
-      });
-
-      it("Select 'Limited Shelf Life'", () => {
-        cy.get("[value=\"Limited Shelf Life\"]").check();
-      });
-
-      it("Select 'FAI Required'", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-          cy.get("[value=\"FAI Required\"]").check();
-        });
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       context("Add Inspection fields", () => {
@@ -1021,7 +983,6 @@ context("Inspection flow", () => {
           cy.get("[name=\"editorConfig.pass.value.to\"]").type("150");
           cy.get("[id$=\"editorConfig.aql\"]").click();
           cy.get("ul[role=listbox]>li").contains("1.0").click();
-          cy.get("[name=\"editorConfig.fai\"]").check();
           cy.get("[value=\"includeInInspection\"]").check();
           cy.get("[value=\"includeInFaiInspection\"]").check();
           cy.fbAddField();
@@ -1042,18 +1003,90 @@ context("Inspection flow", () => {
           cy.get("[name=\"editorConfig.pass.value.to\"]").type("150");
           cy.get("[id$=\"editorConfig.aql\"]").click();
           cy.get("ul[role=listbox]>li").contains("1.0").click();
-          cy.get("[name=\"editorConfig.fai\"]").check();
           cy.get("[value=\"includeInInspection\"]").check();
           cy.get("[value=\"includeInFaiInspection\"]").check();
           cy.fbAddField();
         });
       });
 
-      context("Save and Release part document", () => {
+      context("Save form and release it", () => {
         it("Click save", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
         });
 
+        it("Approve and Release document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
+    });
+
+    context("Create Part for Inspection", () => {
+      it("Navigate to Parts", () => {
+        cy.navigToParts();
+      });
+
+      it("Click 'ADD NEW PART'", () => {
+        cy.recCreateRecordFromLandingPage();
+        cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Subassembly" });
+      });
+
+      it("Enter title 'New Part for inspection'", () => {
+        cy.drEnterDocumentTitle({ name: "New Part for inspection" });
+      });
+
+      it("Enters description 'New Part for inspection description'", () => {
+        cy.drEnterDocumentDescription({ description: "New Part for inspection description" });
+      });
+
+      it("Click on save", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Select make vs buy", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[id$=\"make-vs-buy\"]").click();
+          cy.get("ul[role=listbox]>li").contains("Make").click();
+        });
+      });
+
+      it("Select unit of measure", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[id$=\"unit-of-measure\"]").click();
+          cy.get("ul[role=listbox]>li").contains("Batch").click();
+        });
+      });
+
+      it("Select traceability required", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[value=\"Traceability required\"]").check();
+        });
+      });
+
+      it("Select 'No' for Serialized option", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[name=\"serialized\"][value=\"No\"]").check();
+        });
+      });
+
+      it("Select 'IQC Required'", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[value=\"IQC Required\"]").check();
+        });
+      });
+
+      it("Select 'Limited Shelf Life'", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[value=\"Limited Shelf Life\"]").check();
+        });
+      });
+
+      it("Select 'FAI Required'", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[value=\"FAI Required\"]").check();
+        });
+      });
+
+      context("Release part document", () => {
         it("Approve and Release document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
@@ -1133,7 +1166,7 @@ context("Inspection flow", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
     });
 
     it("Add 'Expiry Date'", () => {
@@ -1310,3 +1343,4 @@ context("Inspection flow", () => {
 });
 
 export { };
+

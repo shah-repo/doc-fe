@@ -7,7 +7,7 @@ import { ApprovalStatus } from "../../../state/ducks/common";
 import { DocumentStatus } from "../../../state/ducks/documents";
 import Colors from "../../layout/theme/utils/colors";
 import { FBProvider } from "../FBProvider";
-import { FBApprovalsProps } from "./FBApprovals.types";
+import { FBApprovalsProps, Owner } from "./FBApprovals.types";
 import { withFBApprovals } from "./FBApprovals.wrap";
 
 const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
@@ -29,6 +29,9 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
   loading,
   inlineApprovalExists,
   isAlphaReleased,
+  owners,
+  showFieldOwnersWarning,
+  isContributorIncluded,
   ...props
 }) => (
   <FBProvider {...{ dialogState }}>
@@ -57,6 +60,21 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
           )}
         </FBMapWrapper>
       </Box>
+      {showFieldOwnersWarning && owners && <Box display="flex" flexWrap="wrap" mb={4}>
+        <FBMapWrapper<Owner[]> collection={owners}>
+          {(owner: Owner, id) => (
+            <Box display="flex" key={`fb-approvals-${id}`} mr={2.5} >
+              <CheckCircleIcon
+                data-cy={
+                  `fb-approvals-${owner.name}-check-${isContributorIncluded?.(owner.id) ? "marked" : "disabled"}`
+                }
+                color={isContributorIncluded?.(owner.id) ? "primary" : "disabled"}
+              />
+              <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={owner.name} />
+            </Box>
+          )}
+        </FBMapWrapper>
+      </Box>}
       <FBMapWrapper<FBInlineApprovalBody[]> collection={approvals}>
         {(approval: FBInlineApprovalBody, index) => (
           <Box
@@ -65,6 +83,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
             display="flex"
             flexDirection="row"
             alignItems="center"
+            mb={4}
           >
             {approval.approver?.user.name}
             {approval.status && approval.status !== "DRAFT" && (

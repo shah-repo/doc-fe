@@ -17,6 +17,7 @@ import { withFBPartsItem } from "./FBPartsItem.wrap";
 
 const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
   getItem,
+  getLot,
   getItemUrl,
   collection = [],
   loading,
@@ -38,6 +39,7 @@ const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
             condition={Boolean(getItemUrl?.(item.title))}
             wrapper={(child) => (
               <Link
+                key={`fb-part-${type}-${index}`}
                 to={getItemUrl?.(item.title) as string}
                 target="_blank"
                 style={{
@@ -55,6 +57,7 @@ const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
               locale={`form.builder.procedure.${type}.title`}
               values={{
                 title: getItem?.(item.title),
+                lot: getLot?.(item.partLot),
                 quantity: item.quantity || "form.builder.none",
                 unit: item.unit,
               }}

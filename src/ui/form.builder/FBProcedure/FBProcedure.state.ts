@@ -9,6 +9,7 @@ export class FBProcedureState {
   // MARK: @config
   public materialsApi = new FBAutocompleteAsyncState(this.materialsId);
   public equipmentApi = new FBAutocompleteAsyncState(this.equipmentId);
+  public lotsApi = new FBAutocompleteAsyncState(this.lotsId);
   public isDiffPreview?: boolean;
 
   // MARK: @observables
@@ -59,12 +60,28 @@ export class FBProcedureState {
     return FBAutocompleteAsyncOption.equipment;
   }
 
+  public get lotsId(): string {
+    return FBAutocompleteAsyncOption.ebLots;
+  }
+
   public getItem = (id: string, type: FBProcedureItemType): string | undefined => {
     const item = this.findRevision(id, type);
     if (item) {
       return `${item.document?.docId} - ${item.name}`;
     }
     return id;
+  };
+
+  public getLot = (id?: string): string | undefined => {
+    if (!id) { return "?"; }
+    const item = this.findLot(id);
+    if (!item) { return id; }
+    return item.document?.docId;
+  };
+
+  protected findLot = (id: string): DocumentRevision | undefined => {
+    const item = FBAutocompleteAsyncStore.getValue<DocumentRevision>(this.lotsId, id);
+    return item;
   };
 
   protected findRevision = (id: string, type: FBProcedureItemType): DocumentRevision | undefined => {

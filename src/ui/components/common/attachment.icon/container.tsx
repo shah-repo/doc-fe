@@ -21,6 +21,7 @@ import useDialog from "../../../hooks/useDialog";
 import { Translation } from "../../../translations/types";
 import { useFormContext } from "../../forms/FormContext";
 import { withFormik } from "../../hoc/formik";
+import { toastError } from "../../notifications";
 import PasswordDialog from "../../password/dialog";
 import { Password } from "../../password/types";
 import { AttachmentRedLineWarningDialog } from "../attachment.redline.warning/dialog";
@@ -92,14 +93,18 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       setPassword(undefined);
     },
     onError: (message) => {
-      alert(message);
+      message && toastError(message as unknown as string);
       setPassword(undefined);
     },
   });
 
   SetFile = React.createContext(setSelectedAttachment);
 
-  const redLineRequiresPassword = (attachment: Attachment) => {
+  const redLineRequiresPassword = (attachment: Attachment, type?: AttachmentType) => {
+    const isRedLine = attachment.lineType === LINE_TYPES.RED_LINE;
+    if (isRedLine && type === AttachmentType.CleanCopy) {
+      return false;
+    }
     const hasPasswordRequiredStatusFromDocList = (
       documentRevisionStatusFromDocList === DocumentRevisionStatus.Released ||
       documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated ||
@@ -109,8 +114,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated ||
       documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete);
 
-    return (attachment.lineType === LINE_TYPES.RED_LINE)
-      && (hasPasswordRequiredStatusFromCR || hasPasswordRequiredStatusFromDocList);
+    return isRedLine && (hasPasswordRequiredStatusFromCR || hasPasswordRequiredStatusFromDocList);
   };
 
   const cleanCopyRequiresPassword = (attachment: Attachment) => {
@@ -199,7 +203,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     if (documentRevisionId) {
       setWatermark(true);
     }
-    if (cleanCopyRequiresPassword(attachment) || redLineRequiresPassword(attachment)) {
+    if (cleanCopyRequiresPassword(attachment) || redLineRequiresPassword(attachment, attachmentType)) {
       setdownloadType(attachmentType);
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_WATER_MARK);
       openWarningDialog();

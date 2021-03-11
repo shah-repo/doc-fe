@@ -24,7 +24,7 @@ export class FBInputState {
   };
 
   @action public setAutosaveValue = (value: any) => {
-    this.autosavePrevValue = this.autosaveNextValue;
+    this.autosavePrevValue = cloneDeep(this.autosaveNextValue);
     set(this, "autosaveNextValue", cloneDeep(value));
   };
 

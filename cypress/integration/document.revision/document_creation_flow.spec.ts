@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -23,13 +24,7 @@ context("Document Creation Flow", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -236,7 +231,9 @@ context("Document Creation Flow", () => {
 
     context("Uploads attachments", () => {
       it("Uploads test_image.jpg", () => {
-        cy.atchUploadAttachment({ fileName: "test_image.jpg" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.atchUploadAttachment({ fileName: "test_image.jpg" });
+        });
       });
 
       it("Check test_image.jpg attachment atributes", () => {
@@ -248,7 +245,9 @@ context("Document Creation Flow", () => {
       });
 
       it("Uploads image.jpg", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.atchUploadAttachment({ fileName: "image.jpg" });
+        });
       });
 
       it("Check test.docx attachment atributes", () => {
@@ -272,13 +271,11 @@ context("Document Creation Flow", () => {
         cy.atchCheckForSinglePrimaryAttachment();
       });
 
-      it("Save document after setting primary attachment", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
-
       it("Remove attachment test_image.jpg", () => {
         SystemRequirement("REQ-0240");
-        cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
+        });
       });
 
       it("Check two attachments are displayed: test.docx, image.jpg", () => {

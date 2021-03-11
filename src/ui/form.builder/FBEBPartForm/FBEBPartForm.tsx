@@ -1,7 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBEBPartFormProps, FBForm, FBTextField } from "..";
-import { FBTextEditor } from "../FBTextEditor";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBEBPartFormProps, FBForm, FBTextEditor, FBTextField } from "..";
 import { withFBEBPartForm } from "./FBEBPartForm.wrap";
 
 const FBEBPartForm: React.FunctionComponent<FBEBPartFormProps> = ({
@@ -10,6 +9,8 @@ const FBEBPartForm: React.FunctionComponent<FBEBPartFormProps> = ({
   formState,
   loading,
   disabled,
+  formOptions,
+  formAutocompleteDisabled,
 }) => (
   <FBForm {...{ formState }}>
     <FBTextField
@@ -31,6 +32,16 @@ const FBEBPartForm: React.FunctionComponent<FBEBPartFormProps> = ({
       name="document.documentType.id"
       withState
       {...{ loading, disabled }}
+    />
+    <FBAutocompleteAsync
+      name="formDocument.id"
+      label="form.builder.choose.form"
+      rules="required"
+      options={formOptions}
+      optionValueKey="id"
+      optionLabelKey="name"
+      disabled={disabled || formAutocompleteDisabled}
+      {...{ loading }}
     />
     <FBTextField hidden name="revisionStage" defaultValue={1} />
     <FBTextField hidden name="document.docId" />

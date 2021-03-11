@@ -6,7 +6,7 @@ import { getTableCriteria, getTableData } from "../../../common/utils/selectors"
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import ListPresenter from "./presenter";
 
-export type Props = RouteComponentProps;
+type Props = RouteComponentProps;
 
 export const TrainingListContainer: React.FunctionComponent<Props> = () => {
   const dispatch = useDispatch();

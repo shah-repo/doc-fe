@@ -25,75 +25,82 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
   masked,
   name,
   ...props
-}) => (
-  <FBProvider {...{ textEditorState }}>
-    <FBInput {...props} {...{ name, disabled }} type="texteditor">
-      <Box
-        bgcolor={isPreview ? "transparent" : "white"}
-        border={isPreview ? 0 : 1}
-        borderColor={Colors.hint_gray}
-        borderRadius={4}
-        style={{ display: "grid" }}
-        minHeight={isPreview ? "auto" : 140}
-      >
+}) => {
+  // hack for adding empty lines in preview mode
+  // so there is no additional growing blank space on the bottom of editor
+  // eslint-disable-next-line no-useless-escape
+  const formattedFormValue = formValue.replace(/<[^\/>]*>([\s]?)*<\/[^>]*>/g, "<p><br></p>" );
+  return (
+    <FBProvider {...{ textEditorState }}>
+      <FBInput {...props} {...{ name, disabled }} type="texteditor">
         <Box
-          display="flex"
-          style={{ gridArea: "1/1" }}
+          bgcolor={isPreview ? "transparent" : "white"}
+          border={isPreview ? 0 : 1}
+          borderColor={Colors.hint_gray}
           borderRadius={4}
-          data-cy={name}
-        >
-          <Editor
-            {...{ editorRef, editorState, onEditorStateChange, toolbar, onBlur }}
-            {...!isEmpty(options) && {
-              toolbarCustomButtons: [
-                <FBTextEditorOptions
-                  key={`fb-texteditor-options-${name}`}
-                  {...{ options, onOptionsChange }}
-                />,
-              ],
-            }}
-            toolbarHidden={isPreview}
-            toolbarStyle={{
-              border: "none",
-              borderBottom: `1px solid ${Colors.hint_gray}`,
-            }}
-            editorStyle={{
-              height: "auto",
-              padding: "0 13px",
-              overflow: "hidden",
-              visibility: isPreview ? "hidden" : "visible",
-            }}
-          />
-        </Box>
-        <FBConditionalWrapper
-          condition={!isUndefined(masked)}
-          wrapper={(wrapperChildren) => (
-            <Fade in={masked} mountOnEnter>
-              {wrapperChildren}
-            </Fade>
-          )}
+          style={{ display: "grid" }}
+          minHeight={isPreview ? "auto" : 140}
         >
           <Box
-            {...!disabled && { onClick: () => handleMask?.(false) }}
-            bgcolor={isPreview ? "transparent" : "white"}
-            borderRadius={4}
-            zIndex={1000}
             display="flex"
-            style={{
-              gridArea: "1/1",
-              cursor: !disabled ? "text" : "inherit",
-            }}
-            p={isPreview ? 0 : 1.5}
+            style={{ gridArea: "1/1" }}
+            borderRadius={4}
+            data-cy={name}
           >
-            <div
-              style={{ width: "100%", height: "100%" }}
-              dangerouslySetInnerHTML={{ __html: formValue }}
+            <Editor
+              {...{ editorRef, editorState, onEditorStateChange, toolbar, onBlur }}
+              {...!isEmpty(options) && {
+                toolbarCustomButtons: [
+                  <FBTextEditorOptions
+                    key={`fb-texteditor-options-${name}`}
+                    {...{ options, onOptionsChange }}
+                  />,
+                ],
+              }}
+              toolbarHidden={isPreview}
+              toolbarStyle={{
+                border: "none",
+                borderBottom: `1px solid ${Colors.hint_gray}`,
+              }}
+              editorStyle={{
+                height: "auto",
+                padding: "0 13px",
+                overflow: "hidden",
+                visibility: isPreview ? "hidden" : "visible",
+              }}
+              // fix for extra lines when pasting multiline content
+              stripPastedStyles={true}
             />
           </Box>
-        </FBConditionalWrapper>
-      </Box>
-    </FBInput>
-  </FBProvider>
-);
+          <FBConditionalWrapper
+            condition={!isUndefined(masked)}
+            wrapper={(wrapperChildren) => (
+              <Fade in={masked} mountOnEnter>
+                {wrapperChildren}
+              </Fade>
+            )}
+          >
+            <Box
+              {...!disabled && { onClick: () => handleMask?.(false) }}
+              bgcolor={isPreview ? "transparent" : "white"}
+              borderRadius={4}
+              zIndex={1000}
+              display="flex"
+              style={{
+                gridArea: "1/1",
+                cursor: !disabled ? "text" : "inherit",
+              }}
+              p={isPreview ? 0 : 1.5}
+            >
+              <div
+                style={{ width: "100%", height: "100%" }}
+                dangerouslySetInnerHTML={{ __html: formattedFormValue }}
+              />
+            </Box>
+          </FBConditionalWrapper>
+        </Box>
+      </FBInput>
+    </FBProvider>
+  ); };
 
 export default withFBTextEditor(FBTextEditor);

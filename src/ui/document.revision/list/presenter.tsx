@@ -3,6 +3,7 @@ import { isEmpty, set } from "lodash";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
+import { docRevSch } from "../../../common/normalizrSchema";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { convertHtmlEntities, stripTags } from "../../../common/utils/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -16,7 +17,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
-import { checkIsDocumentEquipment, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentEquipment, checkIsDocumentPart, checkIsDocumentRecord, checkIsDocumentSupplier } from "../../documentRevision/helpers/checkDocumentGroup";
 import useDialog from "../../hooks/useDialog";
 import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
@@ -63,6 +64,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     const customData = data.reduce<DocumentRevision[]>((acc, docRev) => {
       if (!checkIsDocumentRecord(docRev.document.documentType.groupOptions)
       && !checkIsDocumentEquipment(docRev.document.documentType.groupOptions)
+      && !checkIsDocumentSupplier(docRev.document.documentType.groupOptions)
       && !checkIsDocumentPart(docRev.document.documentType.groupOptions)) {
         set(docRev, "description", stripTags(docRev.description));
         set(
@@ -288,6 +290,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           customDataSet={customDataSet}
           sortBy={"docId"}
           tableName={tableName}
+          normalizrSchema={[docRevSch]}
         />
       </Grid>
     </Grid>

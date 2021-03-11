@@ -5,6 +5,7 @@ WORKDIR /opt/app
 
 COPY package*.json ./
 COPY yarn*.lock ./
+COPY patches /opt/app/patches
 RUN yarn install --frozen-lockfile
 
 COPY src /opt/app/src
@@ -23,6 +24,7 @@ ARG REACT_APP_THEME
 ARG NODE_ENV
 ARG REACT_APP_DATADOG_APPLICATION_ID
 ARG REACT_APP_DATADOG_CLIENT_TOKEN
+ARG REACT_APP_CONSOLE_TOAST
 
 RUN yarn react-scripts --max_old_space_size=4096 build
 RUN yarn cache clean

@@ -1,5 +1,6 @@
 import { Box } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import { get } from "lodash";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Link } from "react-router-dom";
@@ -22,23 +23,26 @@ const FBEQMaintenanceHistory: React.FunctionComponent<FBEQMaintenanceHistoryProp
       <ArrowDropDownIcon />
     </Box>
     <FBMapWrapper<DocumentRevision[]> collection={maintenanceHistory}>
-      {(item: DocumentRevision, index) => (
-        <Box display="flex" flexDirection="row">
-          <Box color={Colors.medium_blue} mr={0.5}>
-            <Link
-              to={documentVersionPath(item.id, item.document?.id )}
-              target="_blank"
-            >
-              {item.document?.docId} - {item.name}
-            </Link>
-          </Box>
-          <Box fontWeight="fontWeightRegular">
+      {(item: DocumentRevision, index) => {
+        const dueDate = get(item.formInput, "fb-equipment_due_date");
+        return (
+          <Box display="flex" flexDirection="row" key={`fb-eq-${index}`}>
+            <Box color={Colors.medium_blue} mr={0.5}>
+              <Link
+                to={documentVersionPath(item.id, item.document?.id )}
+                target="_blank"
+              >
+                {item.document?.docId} - {item.name}
+              </Link>
+            </Box>
+            <Box fontWeight="fontWeightRegular">
             | {item.owner.user.name}
             | {item.status}
-            {item.releasedAt && `| ${getFormattedDateString(item.releasedAt, MomentFormats.MonthDateYearAlt)}`}
+              {dueDate && `| ${getFormattedDateString(dueDate, MomentFormats.MonthDateYearAlt)}`}
+            </Box>
           </Box>
-        </Box>
-      )}
+        ); }
+      }
     </FBMapWrapper>
 
   </Box>

@@ -52,8 +52,6 @@ context("Create Test company example", () => {
             helloSignIntegrationEnabled: true,
             helloSignTestMode: true,
             importerEmail: importedUser.email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
             slackIntegrationEnabled: true,
             users: employees.map((user) => ({ email: user.email, name: user.name })),
             acctCodes: acctCodes,

@@ -6,10 +6,8 @@ import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 
 context("Record inline Flow", () => {
   before(() => {
@@ -35,16 +33,8 @@ context("Record inline Flow", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAcronym: `T1${runId}`,
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            name: `Test Company ${runId}`,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -63,17 +53,6 @@ context("Record inline Flow", () => {
         });
       });
     });
-
-    it("[API]Login second tester", (done: any) => {
-      cy.authApiLogin({
-        email: USERS[2].email,
-        password: "Tester1!",
-      }).then((response) => {
-        loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
-        done();
-      });
-    });
   });
 
   context("Login user", () => {
@@ -85,12 +64,11 @@ context("Record inline Flow", () => {
     });
 
     it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
   });
 
   context("FORM document creation flow", () => {
-
     context("Start document creation flow", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
@@ -244,6 +222,7 @@ context("Record inline Flow", () => {
           CyRoutes.DocPreview], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
+        cy.checkToastMessage({ exists: false });
       });
 
       it("Check system creates new major revision after inline approve", () => {
@@ -278,6 +257,7 @@ context("Record inline Flow", () => {
             CyRoutes.DocPreview], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
+          cy.checkToastMessage({ exists: false });
         });
 
         it("Approve second Inline Approval", () => {
@@ -289,6 +269,7 @@ context("Record inline Flow", () => {
             CyRoutes.DocPreview], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
+          cy.checkToastMessage({ exists: false });
         });
       });
 
@@ -337,7 +318,16 @@ context("Record inline Flow", () => {
 
         it("Filter record by name and status, and select it", () => {
           SystemRequirement("REQ-0120");
-          cy.drFilterDocListByNameAndStatus({ title: "Record Document Revision", status: "Released" });
+          // cy.drFilterDocListByNameAndStatus({ title: "Record Document Revision", status: "Released" });
+          cy.recFilterByRev({ revision: "Record Document Revision" });
+          cy.recFilterByStatus({ status: "Released" });
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.DocPreview,
+            CyRoutes.GetRequiredApproversDocRev,
+            CyRoutes.GetRequiredApproversDocRev,
+          ], () => {
+            cy.get(".MuiTableCell-root a:nth-child(1)").first().click();
+          });
         });
 
         it("Verify record is in alpha state", () => {

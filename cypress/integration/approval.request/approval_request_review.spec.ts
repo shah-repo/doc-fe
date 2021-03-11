@@ -28,13 +28,7 @@ context("Approval request form scenario", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[20].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[24].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[21], USERS[22], USERS[23]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
@@ -93,10 +87,11 @@ context("Approval request form scenario", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Approval request' outputdocument type",
-      () => {
+    it("Click on 'Approval request' outputdocument type", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
         cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
       });
+    });
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
@@ -177,13 +172,19 @@ context("Approval request form scenario", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
+    // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
+
+    it("Click Create Approval Request", () => {
+      cy.arClickCreateApprovalRequestAfterCompletingForm();
+    });
+
     it("Add approvers to approval request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[20].email });
       cy.arAddApproverOnApproverList({ approver: USERS[22].email });
     });
 
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+    it("Save changes", () => {
+      cy.arSaveApiCall();
     });
 
     it("Click send to review", () => {
@@ -237,7 +238,7 @@ context("Approval request form scenario", () => {
     //  approvers 'In_review' should be enabled now 'ENC-4797'
     it("Check 'Approvers' are not disabled", () => {
       SystemRequirement("REQ-0850");
-      cy.get("[data-cy=\"approvers\"] input").should("not.be.disabled");
+      cy.get("input[data-cy=\"fb-approvers-approvers\"]").should("not.be.disabled");
     });
   });
 
@@ -246,6 +247,7 @@ context("Approval request form scenario", () => {
       it("Withdraw Submission", () => {
         SystemRequirement("REQ-0890");
         cy.arWithdrawSubmission();
+        cy.checkToastMessage({ exists: false });
       });
     });
 
@@ -339,6 +341,7 @@ context("Approval request form scenario", () => {
       it("Verify message is shown if e-signature not met", () => {
         SystemRequirement("REQ-0880");
         cy.arVerifySignatureIsNotMet();
+        cy.closeAllAlertMessages();
       });
 
       it("Reject AR from dashboard", () => {
@@ -393,16 +396,6 @@ context("Approval request form scenario", () => {
 
     it("Select first document", () => {
       cy.arSelectFirstDocument();
-    });
-
-    it("Add approvers to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[20].email });
-      cy.wait(200);
-      cy.arAddApproverOnApproverList({ approver: USERS[22].email });
-    });
-
-    it("Save Approval Request", () => {
-      cy.arSaveApiCall();
     });
 
     it("Click send to review", () => {

@@ -1,24 +1,27 @@
 import { Box } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBEQMaintenanceHistory, FBInput, FBQuantityField, FBRadioGroup, FBTextEditor } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBEQMaintenanceHistory, FBInput, FBQuantityField, FBRadioGroup, FBText, FBTextEditor } from "..";
 import { FBSection } from "../FBSection";
 import { FBEQMaintenanceProps } from "./FBEQMaintenance.types";
 import { withFBEQMaintenance } from "./FBEQMaintenance.wrap";
 
 const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   handleAdd,
+  complianceDueDate,
+  complianceStatus,
   name,
   disabled,
   isNewPMDisabled,
   editorConfig = [],
   label,
-  currentStatus,
   isTypePM,
   rules,
+  preventativeFormOptions,
+  getOptionLabel,
   ...props
 }) => (
-  <FBInput {...{ name, rules }} {...props} type="eqmaintenance">
+  <FBInput showErrorMsg={false} {...{ name, rules }} {...props} type="eqmaintenance">
     <FBSection
       {...{ label }}
       name={`${name}-section`}
@@ -38,16 +41,18 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       label={isTypePM ? "form.builder.pm.required" : "form.builder.calibration.required"}
       name={`${name}.requirements`}
       options={FBData.yesNoOptions}
+      rules="required"
       {...{ disabled }}
     />
     <FBAutocompleteAsync
       label={isTypePM ? "form.builder.preventative.maintenance.form" : "form.builder.calibration.form"}
       optionId={FBAutocompleteAsyncOption.preventativeMaintenaceForms}
+      filterOptions={preventativeFormOptions}
       name={`${name}.preventativeForm`}
       validationMode="visibility"
       rules={`required_if:${name}.requirements,Yes`}
       withState
-      {...{ disabled }}
+      {...{ disabled, getOptionLabel }}
     />
     <FBQuantityField
       name={`${name}.frequency`}
@@ -65,9 +70,6 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       rules={`required_if:${name}.requirements,No`}
       {...{ disabled }}
     />
-    {currentStatus && <Box mb={3} data-cy="maintenance.status">
-      <b>Current Status:</b> {currentStatus}
-    </Box>}
     <FBTextEditor
       name={`${name}.instructions`}
       label="form.builder.pm.instructions"
@@ -76,6 +78,23 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       {...{ disabled }}
     />
     <FBEQMaintenanceHistory {...{ name }}/>
+    {complianceDueDate &&
+      <Box mb={3} data-cy="maintenance.status">
+        <FBText
+          boxProps={{ display: "inline-flex" }}
+          locale={isTypePM ? "form.builder.pm" : "form.builder.cal"}
+        />
+        &nbsp;
+        {complianceStatus}
+        <span> - </span>
+        <FBText
+          boxProps={{ display: "inline-flex" }}
+          locale={"common.due.date"}
+        />
+        <span>: </span>
+        {complianceDueDate}
+      </Box>
+    }
   </FBInput>
 );
 export default withFBEQMaintenance(FBEQMaintenance);

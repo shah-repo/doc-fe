@@ -15,7 +15,9 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     isOutput,
     index = 0,
     types,
-    name,
+    name = "",
+    disabled,
+    isInputOwner,
     ...props
   }: T) => {
 
@@ -32,6 +34,8 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     const inputState = FB.useRef<FBInputState>(FBInputState, {});
     formState?.inputState.set(`${FBFieldName.ProcedureDiff}${name}`, inputState);
     types = keys(FBProcedureItemType);
+    isInputOwner = workspaceState?.getIsInputOwner(name);
+    disabled = !isInputOwner || disabled;
 
     // MARK: @reactions
     // Form sync
@@ -59,7 +63,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
       (checked) => {
         const diffInput = `${FBFieldName.ProcedureDiff}${name}`;
         if (!checked) {
-          return formState?.setFieldValue(diffInput, undefined, true);
+          return formState?.setFieldValue(diffInput, undefined, true, true);
         }
         const diffCollection = getDiffValue();
         procedureState?.setDiffValue(diffCollection);
@@ -142,6 +146,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
       types,
       index,
       name,
+      disabled,
     });
   };
 

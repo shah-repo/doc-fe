@@ -19,9 +19,10 @@ export interface ApiAction<Response = any, Body = any> extends Action {
   onCompleted: (dispatch: Dispatch) => void;
   cancelToken?: CancelTokenSource;
   sendNoResponseHeader?: boolean;
+  normalizeResponseHeader?: boolean;
 }
 
-export interface ActionWithPayload<P> extends Action {
+interface ActionWithPayload<P> extends Action {
   payload: P;
 }
 

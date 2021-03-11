@@ -3,6 +3,8 @@
 
 import moment from "moment";
 import "moment-timezone";
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
@@ -11,10 +13,17 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
+let secondEmployee;
+let group;
+let initialArDocument;
+let partDocumentType;
+let approvalRequestDocumentType;
+let createdPartFormDocument;
+let formDocumentType;
 const currentDate = moment().tz("America/Los_Angeles").format("MMMM D, YYYY");
 
 const NOT_RELEASED_TOAST_ERROR_MESSAGE = "Last docRev for Part linked to EB after copying is not in RELEASED status.";
-const PART_DOCUMENT_TYPE_NAME = "Part";
+const PART_DOCUMENT_TYPE_NAME = "Part for eb";
 const EXISTING_PART_NAME = "Test Part";
 const NEW_PART_NAME = "New Part";
 
@@ -42,13 +51,7 @@ context("Parts from EB flow test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -63,6 +66,10 @@ context("Parts from EB flow test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PART_DOCUMENT_TYPE_NAME);
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           done();
         });
       });
@@ -76,6 +83,71 @@ context("Parts from EB flow test", () => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
+      });
+    });
+
+    it("[API]Create Part form", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: secondEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Part form</p>",
+              document: {
+                docId: "FM-00003",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Part form document",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: partDocumentType[0].id,
+                }],
+                schema: [],
+              },
+
+            },
+            employeeId: secondEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdPartFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdPartFormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: secondEmployee.id } }],
+              },
+              employeeId: secondEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
       });
     });
   });
@@ -288,7 +360,9 @@ context("Parts from EB flow test", () => {
 
     context("Add a new part via EB", () => {
       it("Open Create a New Part dialog", () => {
-        cy.get("[data-cy=\"form.builder.create.new.part\"]").click();
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+          cy.get("[data-cy=\"form.builder.create.new.part\"]").click();
+        });
       });
 
       context("Fill in the required attributes and create the part", () => {
@@ -301,13 +375,13 @@ context("Parts from EB flow test", () => {
         });
 
         it("Choose a document type", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetProposedDocId, () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetProposedDocId, CyRoutes.GetSpecificDocumentType], () => {
             cy.ebChoosePartType({ partName: PART_DOCUMENT_TYPE_NAME });
           });
         });
 
         it("Create the part", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.PostDocRev, () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev, CyRoutes.PatchDocRev], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });
@@ -359,13 +433,14 @@ context("Parts from EB flow test", () => {
       });
 
       it("Verify that the selected part is copied to the new build", () => {
-        cy.get("[data-cy=\"childForRevise\"]").should("contains.attr", "value", "PRT-00004 - " + NEW_PART_NAME);
+        cy.get("[data-cy=\"childForRevise\"]").should("contains.attr", "value", "PRT-00005 - " + NEW_PART_NAME);
       });
     });
 
     context("Submit for Approval", () => {
       it("Save the EB", () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        cy.checkToastMessage({ exists: false });
       });
 
       it("Add an Approval", () => {

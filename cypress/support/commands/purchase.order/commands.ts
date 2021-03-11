@@ -85,10 +85,12 @@ Cypress.Commands.add("poCreateNew", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet, CyRoutes.DocPreview, CyRoutes.LotQuantity], () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
   });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("poClickCreatePO", () => {
   cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("poEnterDocumentDescription", (params: {description: string }) => {
@@ -143,7 +145,7 @@ Cypress.Commands.add("poCheckCurrency", () => {
 });
 
 Cypress.Commands.add("poSelectCurrency", (params: { currencyValue: string }) => {
-  cy.get("ul[role=listbox] > li").contains(params.currencyValue).click().wait(500);
+  cy.get("ul[role=listbox] > li").contains(params.currencyValue).click();
 });
 
 Cypress.Commands.add("poSelectTaxCheckbox", () => {
@@ -233,6 +235,7 @@ Cypress.Commands.add("poSaveDocument", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
     cy.get("[id=\"DocumentRevisionForm-submit\"]").click();
   });
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("poAMCheckForApproval", () => {
@@ -251,6 +254,7 @@ Cypress.Commands.add("poAMCheckApprovalIconIfItsGray", () => {
 
 Cypress.Commands.add("poAMApproveButton", () => {
   cy.get("#ApproveAndRelease-submit").click();
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("poAMCheckIfApproverHasApprovalSign", () => {
@@ -259,12 +263,14 @@ Cypress.Commands.add("poAMCheckIfApproverHasApprovalSign", () => {
 
 Cypress.Commands.add("poAMCheckForAlertMessage", () => {
   cy.get("[class=\"Toastify__toast-body\"]").contains("at least one approver from group").contains("has to be selected").should("exist");
+  cy.closeAllAlertMessages();
 });
 
 Cypress.Commands.add("poRejectAR", (params: {password: string}) => {
   cy.get("button[aria-label=reject]").first().click().wait(300);
   cy.get("[data-cy=\"transition.action.password\"]").click().type(params.password);
   cy.wait(300).get("[data-cy=\"passwordConfirm\"]").click();
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("poVerifyStatus", (params: { status: string }) => {

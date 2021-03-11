@@ -1,7 +1,8 @@
-import { isEmpty } from "lodash";
+import { isEmpty, isObject } from "lodash";
 import React from "react";
 import { FBFieldTopBarProps } from ".";
 import { FB } from "..";
+import { toastError } from "../../components/notifications";
 import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
 import { withFBEditorHelper } from "../FBEditor/FBEditor.helper";
 import { FBSchemaProps } from "../FBSchema";
@@ -35,6 +36,8 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
       if (hasValidationRelation(name, rules)) { return; }
       if (documentId && !isEmpty(documentId)) {
         inputProps = { ...inputProps, deleted: true };
+        workspaceState?.setSchemaItem(inputProps);
+        return;
       }
       if (inputProps?.type === "section") {
         bookmarkState?.removeBookmark(inputProps?.name as string);
@@ -50,7 +53,11 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
       const scheme = workspaceState?.getSchema() || [];
       let relatedValidationItem: FBSchemaProps | undefined;
       for (const schemeItem of scheme) {
-        const { name, rules = "" } = schemeItem || {};
+        const { name } = schemeItem || {};
+        let { rules = "" } = schemeItem || {};
+        if (isObject(rules)) {
+          rules = JSON.stringify(rules);
+        }
         if (name && name !== fieldName && (rules.includes(fieldName) || fieldRules.includes(name))) {
           relatedValidationItem = schemeItem;
           break;
@@ -63,7 +70,8 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
           relatedValidationItem.name
         );
         // TODO: Check for copy and do translation
-        alert( `Field can't be removed because it has validation relation with the field: ${relatedValidationLabel}!`);
+        // eslint-disable-next-line max-len
+        toastError( `Field can't be removed because it has validation relation with the field: ${relatedValidationLabel}!`);
         return true;
       }
       return false;

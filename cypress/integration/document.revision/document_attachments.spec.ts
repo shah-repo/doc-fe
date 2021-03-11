@@ -27,13 +27,7 @@ context("Document Attachment Flow", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: USERS[5].email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -282,10 +276,6 @@ context("Document Attachment Flow", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Add first approver to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
-    });
-
     it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
       cy.arClickCreateApprovalRequestAfterCompletingForm();
@@ -314,6 +304,14 @@ context("Document Attachment Flow", () => {
 
     it("Filter approval by name and status, and select it", () => {
       cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Draft" });
+    });
+
+    it("Add first approver to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+    });
+
+    it("Save changes", () => {
+      cy.arSaveApiCall();
     });
 
     it("Click 'Send To Review'", () => {
@@ -351,6 +349,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
+      cy.alClearFilters();
       cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "In Review" });
     });
 
@@ -381,6 +380,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
+      cy.alClearFilters();
       cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Approved" });
     });
 

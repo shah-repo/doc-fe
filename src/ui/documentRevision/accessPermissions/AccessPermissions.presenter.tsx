@@ -157,7 +157,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   const DropdownIndicator = (props) => ( <components.DropdownIndicator
     {...props}
   >
-    <button onMouseDown={(e) => handleUpdate(e)} className={classes.accessButton}>
+    <button data-cy="add-user" onMouseDown={(e) => handleUpdate(e)} className={classes.accessButton}>
       {(props.selectProps.menuIsOpen || props.hasValue) ?
         <AddBoxOutlinedIcon data-cy="add-user" color="primary" fontSize="small" /> :
         <AddBoxOutlinedIcon color="disabled" fontSize="small" />}
@@ -256,6 +256,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
               </List>
             }
             <Select
+              id="document.assing.to.sidebar"
               options={operatorsSelectOptions}
               onChange={(e) => saveValueOperator(e)}
               placeholder={intl.formatMessage({

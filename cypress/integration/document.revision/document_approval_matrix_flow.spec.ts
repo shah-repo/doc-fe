@@ -47,6 +47,17 @@ const roleTwo = "Role Two";
 const individualRole = "Role Three";
 
 context("Document Approval Matrix Flow", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
 
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
@@ -59,13 +70,7 @@ context("Document Approval Matrix Flow", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: ADMIN_USER.email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: IMPORTER_USER.email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [FIRST_USER, SECOND_USER, THIRD_USER, INDIVIDUAL_USER],
             documentTypes: [],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
@@ -247,7 +252,7 @@ context("Document Approval Matrix Flow", () => {
     });
   });
 
-  context("fills in Title and Description", () => {
+  context("Fills in Title and Description", () => {
     it(`type a title: ${DAMTitle}`, () => {
       cy.drEnterDocumentTitle({ name: `${DAMTitle}{enter}` });
     });
@@ -416,9 +421,8 @@ context("Document Approval Matrix Flow", () => {
   });
 
   context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
-    it("clicks on 'Save' button", () => {
+    it("Click on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(8000);
     });
 
     it("'Training Required' should be checked because of DAM", () => {
@@ -432,6 +436,13 @@ context("Document Approval Matrix Flow", () => {
         cy.drClickTrainingRequired();
       });
       cy.drIsTrainingRequired({ shouldBe: false });
+      cy.wait(3000);
+    });
+
+    it("Reload DAM document", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApprovers, CyRoutes.EmployeesGet], () => {
+        cy.reload();
+      });
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
@@ -674,7 +685,13 @@ context("Document Approval Matrix Flow", () => {
   context("Save document, Check Group Role is enforced and Release Document", () => {
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(8000);
+      cy.wait(3000);
+    });
+
+    it("Reload DAM document", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApprovers, CyRoutes.EmployeesGet], () => {
+        cy.reload();
+      });
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {

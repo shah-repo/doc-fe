@@ -84,6 +84,19 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
   // sendNoResponseHeader: true,
 });
 
+const ownerChange = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
+ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/owner_change`,
+  method: "patch",
+  data: body,
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(loadAudit(id));
+    dispatch(documentRevisionSet(documentRevision));
+  },
+  handlers,
+  cancelToken: axios.CancelToken.source(),
+});
+
 const create = (body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
 ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
   url: DOCUMENT_REVISION_ROOT_URL,
@@ -328,6 +341,19 @@ const createFaiInspection = (
     handlers,
   });
 
+const removePreviousBuild = (
+  id: string,
+  handlers: Handlers,
+): ApiAction<DocumentRevision> =>
+  apiActionWithCallbacks({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/parent_remove`,
+    method: "post",
+    onSuccess: (documentRevision, dispatch) => {
+      dispatch(documentRevisionSet(documentRevision));
+    },
+    handlers,
+  });
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -357,4 +383,6 @@ export default {
   getDocRevStatuses,
   fetchAvailableForms,
   createFaiInspection,
+  removePreviousBuild,
+  ownerChange,
 };

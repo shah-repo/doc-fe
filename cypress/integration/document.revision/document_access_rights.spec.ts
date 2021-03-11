@@ -43,13 +43,7 @@ context("Document Access Rights", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: ADMIN_USER.email,
-            helloSignIntegrationEnabled: false,
-            helloSignTestMode: false,
             importerEmail: IMPORTER_USER.email,
-            numOfRevStages: 3,
-            numOfDocDigits: 5,
-            remoteValidatorBundleName: "default",
-            slackIntegrationEnabled: false,
             users: [FIRST_USER, SECOND_USER, THIRD_USER, INDIVIDUAL_USER],
             documentTypes: [],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
@@ -150,8 +144,9 @@ context("Document Access Rights", () => {
   });
 
   context("Save document And Approve & Release Document", () => {
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+    it("Clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+      cy.wait(3000);
     });
 
     it("'Approve and Release' the document", () => {
@@ -199,7 +194,8 @@ context("Document Access Rights", () => {
 
   context("Save document And Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
+      cy.wait(3000);
     });
 
     it("'Approve and Release' the document", () => {
@@ -247,7 +243,8 @@ context("Document Access Rights", () => {
 
   context("Save document And Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
+      cy.wait(3000);
     });
 
     it("'Approve and Release' the document", () => {

@@ -82,10 +82,9 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const FBIsActive = formInput || formTemplate || formDocument;
   const docTypeId = dataProp?.document?.documentType?.id;
   const { isVisible: isTrainingVisible } = useTraining(docTypeId);
-  const { isVisible: isDescriptionVisible } = useDescription(docTypeId);
+  const { isVisible: isDescriptionVisible, label: descriptionLabel } = useDescription(docTypeId);
   const { isVisible: isTitleVisible, label: titleLabel, tooltipConfig } = useTitle(docTypeId);
   const { isVisible: isCRLinkVisible } = useCRLink(docTypeId);
-  const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(document.documentType.groupOptions);
   const isPart = checkIsDocumentPart(document?.documentType?.groupOptions);
@@ -181,7 +180,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         }
         {
           isDescriptionVisible &&
-          <SummaryFieldWithHtml label={`common.description.${docTypeAcronym}`} value={description} />
+          <SummaryFieldWithHtml label={descriptionLabel} value={description} />
         }
         {formTemplate && (
           <SummaryField
@@ -200,7 +199,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           <ReferencedByContainer dataProp={document.referencedBy} />
         )}
         {isEB && parent && (
-          <BuildsContainer dataProp={flatten([parent])} label="common.previous.build" />
+          <BuildsContainer dataProp={flatten([parent])} label="common.previous.build" docRevId={dataProp.id} />
         )}
         {isEB && children && (
           <BuildsContainer dataProp={children} label="common.next.build" />

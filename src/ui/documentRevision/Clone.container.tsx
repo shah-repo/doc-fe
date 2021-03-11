@@ -9,7 +9,7 @@ import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevision
 
 export type DocumentCloneType = "none" | "newVersion" | "newOutput";
 
-export interface OwnProps {
+interface OwnProps {
   documentRevision: DocumentRevision;
   type: DocumentCloneType;
   isNewVersion: boolean;

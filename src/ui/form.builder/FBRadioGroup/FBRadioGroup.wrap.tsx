@@ -17,11 +17,15 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
     optionLabelKey = "",
     controls,
     disabled,
+    isInputOwner,
+    name = "",
     ...props
   }: T) => {
-
-    const { formState } = FB.useStores();
     const intl = useIntl();
+    const { formState, workspaceState } = FB.useStores();
+
+    isInputOwner = workspaceState?.getIsInputOwner(name);
+    disabled = !isInputOwner || disabled;
 
     controls = map(options as FBOption[], (option, index) => {
       const [value, message] = at(option, [optionValueKey, optionLabelKey]);
@@ -45,6 +49,7 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
       controls,
       disabled,
       options,
+      name,
     });
   };
 

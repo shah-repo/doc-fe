@@ -24,14 +24,20 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     disabledOptions,
     placeholder,
     multiple,
-    name,
+    name = "",
     defaultValue,
     options,
     optionId,
     freeSolo,
+    withState,
+    omitFormValue,
+    disabled,
     ...props
   }: T) => {
-    const { formState } = FB.useStores();
+    const { formState, workspaceState } = FB.useStores();
+    const isInputOwner = workspaceState?.getIsInputOwner(name);
+    disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) &&
+      !isInputOwner) || disabled;
     const formValue = formState?.getFieldValue(name) || defaultValue;
     const intl = useIntl();
 
@@ -86,11 +92,14 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       // setField doesn't work here, the same problem prefilled with first option
       if (!freeSolo) { return; }
       const { target: { value = "" } = {} } = ev;
-      formState?.setFieldValue(name, value);
+      formState?.setFieldValue(name, value, withState, omitFormValue);
+      formState?.validate();
     };
 
-    const stringify = (option: OptionType) => (getOptionLabel && getOptionLabel(option)) || "";
-    filterOptions = createFilterOptions({ ignoreAccents: false, stringify });
+    if (!filterOptions) {
+      const stringify = (option: OptionType) => (getOptionLabel && getOptionLabel(option)) || "";
+      filterOptions = createFilterOptions({ ignoreAccents: false, stringify });
+    }
 
     if (isUndefined(defaultValue)) {
       defaultValue = "";
@@ -112,7 +121,10 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       optionId,
       freeSolo,
       value: defaultValue,
+      withState,
+      omitFormValue,
       name,
+      disabled,
     });
   };
 

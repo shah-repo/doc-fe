@@ -8,7 +8,7 @@
     "type": "checkbox",
     "name": "validators.required_if",
     "label": "required_if:anotherfield,value",
-    "helperText": "The field must be present and not empty if the anotherfield field is equal to any value."
+    "helperText": "The field must be present and not empty if the anotherfield field is equal to any value. This can be used only with single value fields."
   },
   {
     "type": "schemaselect",
@@ -22,7 +22,7 @@
     "type": "checkbox",
     "name": "validators.required_if_in",
     "label": "required_if_in:anotherfield,[value]",
-    "helperText": "The field must be present and not empty if the anotherfield field includes value in the array."
+    "helperText": "The field must be present and not empty if the anotherfield field includes value in the array. This can be used only with multi value fields."
   },
   {
     "type": "schemaselect",

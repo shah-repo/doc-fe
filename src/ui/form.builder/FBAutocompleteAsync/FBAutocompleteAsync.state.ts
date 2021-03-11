@@ -1,11 +1,14 @@
 import { filter, find, get, groupBy, isArray, last, map, sortBy, union } from "lodash";
 import { action, computed, set } from "mobx";
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncOption, FBData } from "..";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
 
 export class FBAutocompleteAsyncState extends FBRequest<any, any> {
   private optionId: string | undefined;
+  public autocompleteValueApi: FBRequest<DocumentRevision, null> = new FBRequest();
   public additionalData?: any[];
 
   public constructor(optionId?: string) {
@@ -14,6 +17,14 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
   }
 
   public setAdditionalData = (data?: any[]) => set(this, "additionalData", data);
+
+  public fetchAutocompleteOption = (id: string, optionId?: string) => {
+    this.autocompleteValueApi.set({
+      url: FBEndpoint.FetchAutocompleteValue,
+      urlValues: { id, optionId },
+      method: "get",
+    });
+  };
 
   @computed public get optionConfig(): FBAutocompleteAsyncConfig | undefined {
     if (!this.optionId) {
@@ -42,7 +53,7 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!isArray(id)) {
       return options.get(id);
     }
-    return Array.from(map(id, (i) => options.get(i)));
+    return Array.from(map(id, (i) => options.get(i) || i));
   };
 
   @action public setOptionId = (id?: string) => {
@@ -55,8 +66,9 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
       return;
     }
     const isLoading = FBAutocompleteAsyncStore.loading.get(this.optionId);
+    if (isLoading) { return; }
     const hasData = Boolean(FBAutocompleteAsyncStore.data.get(this.optionId));
-    if (force || (!hasData && !isLoading)) {
+    if (force || !hasData) {
       this.loadInternal();
     }
   };
@@ -83,6 +95,16 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
           ...doc,
           documentRevisions: get(doc, "documentRevisions[0]"),
         }));
+      case FBAutocompleteAsyncOption.preventativeMaintenaceForms:
+        return data.map((option) => {
+          const releasedForm = option?.documentRevisions.find((e) => e.status === DocumentRevisionStatus.Released);
+          return ({
+            ...option,
+            name: releasedForm?.name || "",
+            displayRevision: releasedForm?.displayRevision || "",
+          });
+        });
+
       default: return union(data, this.additionalData);
     }
   };
