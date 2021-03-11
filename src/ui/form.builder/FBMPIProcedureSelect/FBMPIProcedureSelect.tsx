@@ -2,10 +2,8 @@ import { Box } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBForm, FBMPIProcedureSelectProps, FBTextField } from "..";
+import { FBAutocomplete, FBForm, FBMPIProcedureSelectProps, FBQuantityUnitField, FBTextField } from "..";
 import { FBClasses } from "../defaults/layout";
-import FBAutocomplete from "../FBAutocomplete/FBAutocomplete";
-import FBQuantityUnitField from "../FBQuantityUnitField/FBQuantityUnitField";
 import { withFBMPIProcedureSelect } from "./FBMPIProcedureSelect.wrap";
 
 const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> = ({
