@@ -43,6 +43,7 @@ echo "Uploaded"
 
 #GENERATE ATTACHMENTS FOR ENLIL DOCUMENT
 declare -a ATTACHMENTS_FOR_DOCUMENT
+ZIP_FILE_SIZE=$(stat -c%s "${ZIP_FILE_NAME_PATH}")
 ZIPPED_REPORT_ATTACHMENT=$(curl \
   -X POST "https://api.dev.enlil.io/api/v1/attachments/external" \
   -H "accept: application/json" \
@@ -55,7 +56,8 @@ ZIPPED_REPORT_ATTACHMENT=$(curl \
       \"s3link\": \"$ZIPPED_REPORT_S3\",
       \"description\": \"test report\",
       \"isCleanCopyRequired\": false,
-      \"lineType\": \"CLEAN_COPY\"
+      \"lineType\": \"CLEAN_COPY\",
+      \"fileSizeS3Link\": \"$ZIP_FILE_SIZE\"
     }")
 ATTACHMENTS_FOR_DOCUMENT+=$ZIPPED_REPORT_ATTACHMENT,
 VIDEOS=$(find videos -type f)
@@ -73,6 +75,7 @@ for VIDEO in ${VIDEOS[@]}
 do
   FILE_NAME=null
   filterNameFromPath $VIDEO
+  VIDEO_FILE_SIZE=$(stat -c%s "${VIDEO}")
   ENLIL_ATTACHMENT=$(curl \
     -X POST "https://api.dev.enlil.io/api/v1/attachments/external" \
     -H "accept: application/json" \
@@ -84,7 +87,8 @@ do
         \"s3link\": \"$TEST_RUN_BUCKET_PATH/$VIDEO\",
         \"description\": \"test report\",
         \"isCleanCopyRequired\": false,
-        \"lineType\": \"CLEAN_COPY\"
+        \"lineType\": \"CLEAN_COPY\",
+        \"fileSizeS3Link\": \"$VIDEO_FILE_SIZE\"
       }")
   ATTACHMENTS_FOR_DOCUMENT+=$ENLIL_ATTACHMENT,
   echo $TEST_RUN_BUCKET_PATH/$VIDEO
@@ -92,7 +96,7 @@ done
 
 #CREATE DOCUMENT WITH ATTACHMENT
 DATE_FOR_DOC_ID=$(date "+%Y-%m-%d")
-DOC_ID="CTR-${DATE_FOR_DOC_ID}-${BITBUCKET_BUILD_NUMBER}-${PIPELINE_STEP_NUMBER}"
+DOC_ID="CTR-${DATE_FOR_DOC_ID}-${BITBUCKET_BUILD_NUMBER}"
 curl \
   -X POST "https://api.dev.enlil.io/api/v1/document_revisions/external" \
   -H "accept: application/json" \
