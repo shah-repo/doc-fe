@@ -115,8 +115,18 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (!get(option, optionValueKey) && !autocompleteAsyncState?.autocompleteValueApi.loading) {
         if (isArray(option)) {
           const undefinedOptions = option.filter((e) => isString(e));
-          undefinedOptions.map((opt) => autocompleteAsyncState?.fetchAutocompleteOption(opt, optionId));
+          undefinedOptions.map((opt) => {
+            if (!opt && !isString(opt)) {
+              // eslint-disable-next-line array-callback-return
+              return;
+            }
+            return autocompleteAsyncState?.fetchAutocompleteOption(opt, optionId);
+          }
+          );
           return "";
+        }
+        if (!option && !isString(option)) {
+          return;
         }
         autocompleteAsyncState?.fetchAutocompleteOption(option, optionId);
         return "";
