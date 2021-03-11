@@ -21,6 +21,7 @@ import AcctCodes from "../AddressesAndCodes/AcctCodes";
 import Addresses from "../AddressesAndCodes/Addresses";
 import ApiTokenContent from "../apiTokenContent/ApiTokenContent";
 import CompanyStageManagementContainer from "../company.stage.management/CompanyStageManagement.container";
+import EmployeeDropboxButton from "../EmployeeDropboxButton/EmployeeDropboxButton";
 import UserGroups from "../groups/UserGroups";
 import HelloSignAccess from "../HelloSignAccess";
 import NavigationManagementContainer from "../navigation.management/NavigationManagement.container";
@@ -94,6 +95,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const [avatarURL, setAvatarURL] = useState<string>("");
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const companyMine = useSelector(companySelectors.getCompanyMine);
+  const isDropboxEnabled = useSelector(companySelectors.isDropboxEnabled);
   const { helloSignIntegrationEnabled } = companyMine;
 
   // this is a hack for back button to redirect to user management table
@@ -245,6 +247,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
           fromUserProfile= {true}
         />
         {canUpdateCompany && <HelloSignAccess helloSignStatus={helloSignIntegrationEnabled}/>}
+        {isDropboxEnabled && <EmployeeDropboxButton />}
         {slackIntegrationEnabled && slackTeamId && !slackUserId && (
           <div>
             <Typography variant="h4" className={classes.integrations}>
