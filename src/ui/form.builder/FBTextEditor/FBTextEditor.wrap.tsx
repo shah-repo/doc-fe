@@ -1,4 +1,3 @@
-import { Timeout } from "aws-sdk/clients/lambda";
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
@@ -37,7 +36,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     // MARK: @config
     const intl = useIntl();
     let timeout;
-    const [timeoutID, setTimeoutID] = useState<Timeout>();
+    const [timeoutID, setTimeoutID] = useState<number>();
     const { formState, workspaceState } = FB.useStores();
     const emptyHtmlContent = "<p></p>";
     formValue = formState?.getFieldValue(name);
