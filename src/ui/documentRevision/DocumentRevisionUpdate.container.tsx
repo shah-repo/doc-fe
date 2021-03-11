@@ -89,15 +89,23 @@ DocumentRevisionUpdateContainerProps
 
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
-    const saveAction = shouldHaveNoResponse(dataToSubmit, documentRevision) ? saveWithNoResponse : save;
 
     if (isEmpty(dataToSubmit)) {
       return;
     }
-
     async.reset();
+
+    if (shouldHaveNoResponse(dataToSubmit, documentRevision)) {
+      async.start(
+        saveWithNoResponse,
+        documentRevision.id,
+        dataToSubmit as DocumentRevisionEditRequestBody,
+        async,
+      );
+    }
+
     const promise = async.start(
-      saveAction,
+      save,
       documentRevision.id,
       dataToSubmit as DocumentRevisionEditRequestBody,
       async,

@@ -108,5 +108,5 @@ export const shouldHaveNoResponse = (dataToSubmit: any, documentRevision: Docume
   const schema = get(documentRevision, "formDocument.formTemplate.schema");
   const fieldsWithNoResponse = schema.filter((item) => item.type === "texteditor" && !item.deleted);
   const getFormInputHasTextField = fieldsWithNoResponse.find((field) => has(dataToSubmit.formInput, field.name));
-  return has(dataToSubmit, "description") || getFormInputHasTextField;
+  return has(dataToSubmit, "description") || has(dataToSubmit, "name") || getFormInputHasTextField;
 };
