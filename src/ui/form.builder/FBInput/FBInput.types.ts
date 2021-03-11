@@ -70,7 +70,8 @@ export type FBInputType =
   | "supplier"
   | "mpiprocedure"
   | "lhrstep"
-  | "unitMeasures";
+  | "unitMeasures"
+  | "quantityunit";
 
 export type FBInputProps =
   & FBLabelProps
@@ -197,6 +198,7 @@ export const OmitInputClones: FBInputType[] = [
   "range",
   "passpercentage",
   "poreceive",
+  "quantityunit",
 ];
 
 export interface FBInputConstructor {

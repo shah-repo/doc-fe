@@ -17,6 +17,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   style,
   dataCy,
   mode,
+  className,
   ...props
 }) => (
   <FBInput {...props} {...{ error, defaultValue }} type={inputType as FBInputType}>
@@ -34,7 +35,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
             onWheel: (e) => { e.currentTarget.blur(); },
           },
         }}
-        {...{ type, rows, error, multiline, InputProps, style, onBlur, placeholder }}
+        {...{ type, rows, error, multiline, InputProps, style, onBlur, placeholder, className }}
       />
     )}
   </FBInput>

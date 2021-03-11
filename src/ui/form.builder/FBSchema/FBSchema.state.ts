@@ -36,6 +36,7 @@ import FBProcedure from "../FBProcedure/FBProcedure";
 import FBProcedureDiff from "../FBProcedureDiff/FBProcedureDiff";
 import FBPurchaseOrder from "../FBPurchaseOrder/FBPurchaseOrder";
 import FBQuantityField from "../FBQuantityField/FBQuantityField";
+import FBQuantityUnitField from "../FBQuantityUnitField/FBQuantityUnitField";
 import FBRadio from "../FBRadio/FBRadio";
 import FBRadioGroup from "../FBRadioGroup/FBRadioGroup";
 import FBRequestApproval from "../FBRequestApproval/FBRequestApproval";
@@ -120,6 +121,7 @@ class FBSchemaState {
     supplier: FBSupplier,
     lhrstep: FBLHRStep,
     unitMeasures: FBUnitMeasures,
+    quantityunit: FBQuantityUnitField,
   };
 
   @observable public schema?: FBSchemaProps[];
