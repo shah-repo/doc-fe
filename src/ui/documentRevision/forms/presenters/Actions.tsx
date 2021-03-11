@@ -96,9 +96,9 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
           const newInput = {};
           keys(values.formInput).map((key) => {
-            newInput[key] = values?.formInput && typeof values?.formInput[key] === "string" && key !== "equipment_id"
+            newInput[key] = values?.formInput && typeof values?.formInput[key] === "string" && key === "equipment_id"
               ? "Void"
-              : null;
+              : values?.formInput?.[key];
             return key;
           });
           // TEMPORARY FIX FOR BE VALIDATION
