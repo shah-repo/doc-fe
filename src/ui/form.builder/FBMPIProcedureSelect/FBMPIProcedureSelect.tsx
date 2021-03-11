@@ -23,7 +23,7 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
       {() => (
         <>
           <FBAutocomplete
-            label="Lot Number"
+            label="form.builder.lot.number"
             name="usedLot"
             options={mpiProcedureSelectState?.lotsApi.data}
             loading={mpiProcedureSelectState?.lotsApi.loading}

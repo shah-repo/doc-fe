@@ -272,14 +272,5 @@
     "labelKey": "text",
     "root": "",
     "publicApi": true
-  },
-  {
-    "id": "31",
-    "path": "/document_revisions/lots_of_part/:id",
-    "label": "Parts Lots",
-    "valueKey": "id",
-    "labelKey": "document.docId",
-    "labelPrefixRoot": "",
-    "root": ""
   }
 ]

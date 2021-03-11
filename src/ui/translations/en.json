@@ -868,6 +868,7 @@
   "form.builder.audit.OBJECT_DELETED": "{label} Deleted",
   "form.builder.owner.input.warning": "There are contributors to the document. Contributors {contributors} should be added as approvers.",
   "form.builder.select": "Select",
+  "form.builder.lot.number": "Lot Number",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.pdf": "Download PDF file",
