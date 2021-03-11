@@ -69,32 +69,6 @@ definitions:
           - NODE_ENV=development yarn install --frozen-lockfile
           - ./aws/bash_scripts/runTests.sh
 
-    - step: &COMMON_UPLOAD_CYPRESS_REPORT
-        name: Cypress upload reports
-        image:
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_88_cy_6_2_0_aws
-          aws:
-            access-key: $AWS_ACCESS_KEY_ID
-            secret-key: $AWS_SECRET_ACCESS_KEY
-        max-time: 30
-        size: 2x
-        services:
-          - sorry-cypress-director
-        caches:
-          - node
-        artifacts:
-          - test-results/**
-          - zipped-test-results/**
-        script:
-          - source ./scripts/cypress/utils/variables_pipeline.sh
-          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
-          - yarn install --frozen-lockfile
-          - ./scripts/cypress/utils/generate_requirements_json_file.sh
-          - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
-          - ./scripts/cypress/utils/merge_reports_pipeline.sh
-          - ./scripts/cypress/utils/upload_video_reports.sh
-          - ./scripts/cypress/utils/exit_1_if_failures.sh
-
     - step: &COMMON_RUN_CYPRESS
           name: Cypress specs
           image:
@@ -119,6 +93,35 @@ definitions:
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
+            - ./scripts/cypress/utils/exit_1_if_failures.sh
+
+    - step: &RUN_CYPRESS_VIDEO
+        <<: *COMMON_RUN_CYPRESS
+        name: Cypress specs with video
+        script:
+            - CYPRESS_VIDEO="true" source ./scripts/cypress/utils/variables_pipeline.sh
+            - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+            - yarn install --frozen-lockfile
+            - ./scripts/cypress/utils/generate_requirements_json_file.sh
+            - ./scripts/cypress/utils/make_results_dir_pipeline.sh
+            - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
+            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
+            - ./scripts/cypress/utils/merge_reports_pipeline.sh
+
+    - step: &UPLOAD_CYPRESS_REPORT
+        <<: *COMMON_RUN_CYPRESS
+        name: Cypress upload reports
+        max-time: 10
+        size: 1x
+        script:
+          - source ./scripts/cypress/utils/variables_pipeline.sh
+          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+          - yarn install --frozen-lockfile
+          - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
+          - ./scripts/cypress/utils/merge_reports_pipeline.sh
+          - ./scripts/cypress/utils/upload_video_reports.sh
+          - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - parallel: &RUN_CYPRESS_IN_PARALLEL
         - step: 
@@ -133,18 +136,20 @@ definitions:
         - step: 
             <<:  *COMMON_RUN_CYPRESS
             name: Cypress specs 4/4
-        # - step: 
-        #     <<:  *COMMON_RUN_CYPRESS
-        #     name: Cypress specs 5/4
-        # - step: 
-        #     <<:  *COMMON_RUN_CYPRESS
-        #     name: Cypress specs 6/4
-        # - step: 
-        #     <<:  *COMMON_RUN_CYPRESS
-        #     name: Cypress specs 7/8
-        # - step: 
-        #     <<:  *COMMON_RUN_CYPRESS
-        #     name: Cypress specs 8/8
+
+    - parallel: &RUN_CYPRESS_IN_PARALLEL_VIDEO
+        - step: 
+            <<:  *RUN_CYPRESS_VIDEO
+            name: Cypress specs 1/4
+        - step: 
+            <<:  *RUN_CYPRESS_VIDEO
+            name: Cypress specs 2/4
+        - step: 
+            <<:  *RUN_CYPRESS_VIDEO
+            name: Cypress specs 3/4
+        - step: 
+            <<:  *RUN_CYPRESS_VIDEO
+            name: Cypress specs 4/4
 
     - step: &RUN_CYPRESS_SINGLE
         <<:  *COMMON_RUN_CYPRESS
@@ -253,7 +258,7 @@ pipelines:
       - step: 
           <<:  *COMMON_RUN_CYPRESS
           name: Cypress specs local test
-    run-cypress-on-dev-bbrun-parallel:
+    run-cypress-parallel:
       - variables:
           - name: CYPRESS_FE_URL
           - name: CYPRESS_BE_URL
@@ -263,6 +268,16 @@ pipelines:
           - name: CYPRESS_COMMIT_BE
           - name: CYPRESS_COMMIT_REMOTEJS
       - parallel: *RUN_CYPRESS_IN_PARALLEL
+    run-cypress-parallel-video-enlil-report:
+      - variables:
+          - name: CYPRESS_FE_URL
+          - name: CYPRESS_BE_URL
+          - name: CYPRESS_SUPERADMIN_EMAIL
+          - name: CYPRESS_SUPERADMIN_PASSWORD
+          - name: CYPRESS_COMMIT_FE
+          - name: CYPRESS_COMMIT_BE
+          - name: CYPRESS_COMMIT_REMOTEJS
+      - parallel: *RUN_CYPRESS_IN_PARALLEL_VIDEO
       - step: *COMMON_UPLOAD_CYPRESS_REPORT
 
   pull-requests:
