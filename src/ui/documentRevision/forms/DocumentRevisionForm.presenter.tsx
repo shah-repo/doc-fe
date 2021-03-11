@@ -5,6 +5,7 @@ import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { authSelectors } from "../../../state/ducks/auth";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
@@ -73,6 +74,7 @@ export interface FormHeaderContext {
   isDisabled: boolean;
   asyncState: AsyncState;
   type?: DocumentCloneType;
+  lastSavedTimestamp?: string;
 }
 
 export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
@@ -114,6 +116,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
   const [forceNewRender, setNewRender] = React.useState();
+  const [lastSavedTimestamp, setLastSavedTimestamp] = React.useState<string>();
   const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
 
   const hasOutput = useMemo(() =>
@@ -175,6 +178,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     isDisabled,
     asyncState,
     type,
+    lastSavedTimestamp,
   });
 
   useEffect(() => {
@@ -210,6 +214,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   }, [isDocRevStatusDraft, values.document, values.name]);
 
+  useEffect(() => {
+    if (!isSubmitting) {
+      return;
+    }
+    setLastSavedTimestamp(getFormattedDateString(Date.now(), MomentFormats.Time));
+  }, [isSubmitting]);
   return (
     <Grid
       item={true}
