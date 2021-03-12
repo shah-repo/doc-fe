@@ -43,7 +43,7 @@ echo "Uploaded"
 
 #GENERATE ATTACHMENTS FOR ENLIL DOCUMENT
 declare -a ATTACHMENTS_FOR_DOCUMENT
-ZIP_FILE_SIZE=$(stat -c%s ${ZIP_FILE_NAME_PATH})
+ZIP_FILE_SIZE=$(stat --format=%s "$ZIP_FILE_NAME_PATH")
 echo $ZIP_FILE_SIZE
 ZIPPED_REPORT_ATTACHMENT=$(curl \
   -X POST "https://api.dev.enlil.io/api/v1/attachments/external" \
@@ -76,7 +76,8 @@ for VIDEO in ${VIDEOS[@]}
 do
   FILE_NAME=null
   filterNameFromPath $VIDEO
-  VIDEO_FILE_SIZE=$(stat -c%s ${VIDEO})
+  VIDEO_FILE_SIZE=$(stat --format=%s "$VIDEO")
+  echo $VIDEO_FILE_SIZE
   ENLIL_ATTACHMENT=$(curl \
     -X POST "https://api.dev.enlil.io/api/v1/attachments/external" \
     -H "accept: application/json" \
