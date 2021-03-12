@@ -7,7 +7,7 @@ export type FBMPIProcedureSelectProps =
 
 export interface FBMPIProcedureSelectValue {
   fieldId: string;
-  forMaterial: string;
+  forMaterial: { id: string };
   quantity: number;
   unit: string;
   usedLot: { id: string };
