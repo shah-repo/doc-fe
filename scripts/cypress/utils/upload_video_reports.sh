@@ -43,7 +43,7 @@ echo "Uploaded"
 
 #GENERATE ATTACHMENTS FOR ENLIL DOCUMENT
 declare -a ATTACHMENTS_FOR_DOCUMENT
-ZIP_FILE_SIZE=$(stat -c%s "${ZIP_FILE_NAME_PATH}")
+ZIP_FILE_SIZE=$(stat -c%s ${ZIP_FILE_NAME_PATH})
 echo $ZIP_FILE_SIZE
 ZIPPED_REPORT_ATTACHMENT=$(curl \
   -X POST "https://api.dev.enlil.io/api/v1/attachments/external" \
@@ -76,8 +76,7 @@ for VIDEO in ${VIDEOS[@]}
 do
   FILE_NAME=null
   filterNameFromPath $VIDEO
-  VIDEO_FILE_SIZE=$(stat -c%s "${VIDEO}")
-  echo $TEST_RUN_BUCKET_PATH/$VIDEO
+  VIDEO_FILE_SIZE=$(stat -c%s ${VIDEO})
   ENLIL_ATTACHMENT=$(curl \
     -X POST "https://api.dev.enlil.io/api/v1/attachments/external" \
     -H "accept: application/json" \
@@ -93,7 +92,6 @@ do
         \"fileSizeS3Link\": \"$VIDEO_FILE_SIZE\"
       }")
   ATTACHMENTS_FOR_DOCUMENT+=$ENLIL_ATTACHMENT,
-  echo $TEST_RUN_BUCKET_PATH/$VIDEO
 done
 
 #CREATE DOCUMENT WITH ATTACHMENT
