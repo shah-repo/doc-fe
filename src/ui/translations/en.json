@@ -667,6 +667,7 @@
   "form.builder.instructionsmediaupload": "Instructions Media upload",
   "form.builder.evidencemediaupload": "Evidence Media upload",
   "form.builder.stepsection": "Step",
+  "form.builder.step.started": "Step started",
   "form.builder.teststep": "Test Step",
   "form.builder.step.number": "Step #{number}",
   "form.builder.save": "Save",

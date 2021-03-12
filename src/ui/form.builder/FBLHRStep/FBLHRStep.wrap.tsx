@@ -11,20 +11,27 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     index,
     loading,
     startMpi,
+    stepLHRs,
+    isHovering,
     ...props
   }: T) => {
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
-    const lhrStepState = FB.useRef(FBLHRStepState);
+    stepLHRs = workspaceState?.document?.smartReferencesFrom
+      ?.find((ref) => ref.type === "HIDDEN_PI_INSTANCE" && ref.metadata.fieldId === name)?.fromDocRev;
+    const lhrStepState = FB.useRef(FBLHRStepState, stepLHRs);
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
+    // console.log(schemaItem?.editorConfig.value);
 
     // MARK: @helpers
     React.useEffect(() => {
-      formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
-      formState?.getInputState(name)?.setRender();
-      formState?.validate();
+      if (lhrStepState.stepLHRs) {
+        setDisplayToLHRs();
+      } else {
+        setDisplayToMPI();
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -33,13 +40,15 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
       (value) => {
-        workspaceState?.setSchemaItem({
-          ...schemaItem,
-          editorConfig: {
-            ...schemaItem?.editorConfig,
-            value,
-          },
-        });
+        if (typeof value === "string") { // don't trigger if it is LHR/MPI hover toggle
+          workspaceState?.setSchemaItem({
+            ...schemaItem,
+            editorConfig: {
+              ...schemaItem?.editorConfig,
+              value,
+            },
+          });
+        }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -52,6 +61,9 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
           `/document_revision/${docRev?.documentId}/version/${docRev?.id}`,
           "_blank"
         );
+        lhrStepState
+          .setLHRs(docRev);
+        setDisplayToLHRs();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -66,9 +78,27 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       );
     };
 
+    const setDisplayToMPI = () => {
+      lhrStepState.setIsHovering(true);
+      formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
+      // console.log(formState?.getFieldValue(name)?.name);
+      formState?.getInputState(name)?.setRender();
+    };
+
+    const setDisplayToLHRs = () => {
+      lhrStepState.setIsHovering(false);
+      if (!lhrStepState.stepLHRs) { return; }
+      // console.log(formState?.getFieldValue(name)?.name);
+      formState?.setFieldValue(name, lhrStepState.stepLHRs);
+      formState?.getInputState(name)?.setRender();
+    };
+
+
     // MARK: @observer
     useObserver(() => {
       loading = lhrStepState?.startMpiApi.loading;
+      stepLHRs = lhrStepState.stepLHRs;
+      isHovering = lhrStepState.isHovering;
     });
 
 
@@ -78,6 +108,10 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       isOutput,
       startMpi,
       lhrStepState,
+      stepLHRs,
+      setDisplayToMPI,
+      setDisplayToLHRs,
+      isHovering,
     }); };
 
   Comp.displayName = "withFBLHRStep";

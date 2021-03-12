@@ -1,3 +1,4 @@
+import { observable, set } from "mobx";
 import { StartMpiBody } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
@@ -7,7 +8,19 @@ class FBLHRStepState {
   // MARK: @api
   public startMpiApi = new FBRequest<DocumentRevision, StartMpiBody>(FBEndpoint.StartMpi);
 
+  // MARK @config
+  @observable public stepLHRs?: DocumentRevision;
+  @observable public isHovering = false;
+
+  public constructor(lhrs?: DocumentRevision) {
+    this.stepLHRs = lhrs;
+  }
+
   // MARK: @helpers
+  public setLHRs = (lhrs) => set(this, "stepLHRs", lhrs);
+
+  public setIsHovering = (isHovering: boolean) => set(this, "isHovering", isHovering);
+
   public startMpi = (fieldId: string, woId?: string, mpiId?: string ) => {
     if (!woId || !mpiId) { return; }
     this.startMpiApi.set({
