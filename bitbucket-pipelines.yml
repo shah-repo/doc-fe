@@ -86,7 +86,9 @@ definitions:
             - test-results/**
           script:
             - echo $CY_REPORT_COMPANY_ID
+            - echo $CY_REPORT_USER_API_TOKEN
             - source ./scripts/cypress/utils/variables_pipeline.sh
+            - echo $CYPRESS_BASE_URL
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
@@ -101,8 +103,10 @@ definitions:
         name: Cypress specs with video
         script:
             - echo $CY_REPORT_COMPANY_ID
+            - echo $CY_REPORT_USER_API_TOKEN
             - export CYPRESS_VIDEO="true" 
             - source ./scripts/cypress/utils/variables_pipeline.sh
+            - echo $CYPRESS_BASE_URL
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
