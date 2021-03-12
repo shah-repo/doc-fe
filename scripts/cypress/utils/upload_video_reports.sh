@@ -44,7 +44,6 @@ echo "Uploaded"
 #GENERATE ATTACHMENTS FOR ENLIL DOCUMENT
 declare -a ATTACHMENTS_FOR_DOCUMENT
 ZIP_FILE_SIZE=$(stat --format=%s "$ZIP_FILE_NAME_PATH")
-echo $ZIP_FILE_SIZE
 ZIPPED_REPORT_ATTACHMENT=$(curl \
   -X POST "https://api.dev.enlil.io/api/v1/attachments/external" \
   -H "accept: application/json" \
@@ -58,7 +57,7 @@ ZIPPED_REPORT_ATTACHMENT=$(curl \
       \"description\": \"test report\",
       \"isCleanCopyRequired\": false,
       \"lineType\": \"CLEAN_COPY\",
-      \"fileSizeS3Link\": \"$ZIP_FILE_SIZE\"
+      \"fileSizeS3Link\": $ZIP_FILE_SIZE
     }")
 ATTACHMENTS_FOR_DOCUMENT+=$ZIPPED_REPORT_ATTACHMENT,
 VIDEOS=$(find videos -type f)
@@ -77,7 +76,6 @@ do
   FILE_NAME=null
   filterNameFromPath $VIDEO
   VIDEO_FILE_SIZE=$(stat --format=%s "$VIDEO")
-  echo $VIDEO_FILE_SIZE
   ENLIL_ATTACHMENT=$(curl \
     -X POST "https://api.dev.enlil.io/api/v1/attachments/external" \
     -H "accept: application/json" \
@@ -90,39 +88,15 @@ do
         \"description\": \"test report\",
         \"isCleanCopyRequired\": false,
         \"lineType\": \"CLEAN_COPY\",
-        \"fileSizeS3Link\": \"$VIDEO_FILE_SIZE\"
+        \"fileSizeS3Link\": $VIDEO_FILE_SIZE
       }")
+  echo $ENLIL_ATTACHMENT
   ATTACHMENTS_FOR_DOCUMENT+=$ENLIL_ATTACHMENT,
 done
 
 #CREATE DOCUMENT WITH ATTACHMENT
 DATE_FOR_DOC_ID=$(date "+%Y-%m-%d")
 DOC_ID="CTR-${DATE_FOR_DOC_ID}-${BITBUCKET_BUILD_NUMBER}"
-echo $("{ 
-      \"description\": \"<p>Cypress test report test</p>\",
-      \"name\": \"Cypress test report\",
-      \"attachments\": [ ${ATTACHMENTS_FOR_DOCUMENT%?} ],
-      \"referenceTo\": [],
-      \"revisionStage\": 1,
-      \"revisionChangeType\": \"NEXT_REVISION\",
-      \"retrain\": false,
-      \"document\": { 
-        \"docId\": \"$DOC_ID\",
-        \"securityList\": 
-        { 
-          \"securityEmployees\": [],
-          \"securityGroups\": [ 
-            { 
-            \"id\": \"$CY_REPORT_ID_OF_GROUP_EVERYONE\"
-            } ], 
-            \"operators\": [] 
-        }, 
-        \"documentType\": 
-        { 
-          \"id\": \"$CY_REPORT_ID_OF_CYPRESS_TEST_REPORT_DOCTYPE\"
-        } 
-      }
-    }")
 curl \
   -X POST "https://api.dev.enlil.io/api/v1/document_revisions/external" \
   -H "accept: application/json" \
