@@ -90,7 +90,6 @@ do
         \"lineType\": \"CLEAN_COPY\",
         \"fileSizeS3Link\": $VIDEO_FILE_SIZE
       }")
-  echo $ENLIL_ATTACHMENT
   ATTACHMENTS_FOR_DOCUMENT+=$ENLIL_ATTACHMENT,
 done
 
