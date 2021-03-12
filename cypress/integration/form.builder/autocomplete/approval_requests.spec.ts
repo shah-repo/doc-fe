@@ -14,7 +14,7 @@ const approvalRequestTitle = `ApprovalRequest${Cypress.moment().format("X")}`;
 let arDocCount = 0;
 let initialArDocument;
 
-context("FORM Field test", () => {
+context("Autocomplete 'Approval requests' test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");

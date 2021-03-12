@@ -11,7 +11,7 @@ let multipleCompanies;
 let secondEmployee;
 const documentRevisionTitle = `DocumentRevision${Cypress.moment().format("X")}`;
 
-context("FORM Field test", () => {
+context("Autocomplete 'Document Revisions In Draft without Records' test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
