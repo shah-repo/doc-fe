@@ -16,7 +16,7 @@ mv $DIR_VIDEOS_REPORT ./
 
 #ZIP TEST REPORT
 DATE=$(date "+%Y-%m-%dT%H-%M-%S%z")
-TEST_RUN_BUCKET_PATH=$CY_REPORT_COMPANY_ID/cypress-reports-pipeline/$DATE
+TEST_RUN_BUCKET_PATH="${CY_REPORT_COMPANY_ID}/cypress-reports-pipeline/${DATE}"
 ZIP_FILE_NAME=REPORT_$DATE.zip
 ZIP_FILE_NAME_PATH="./zipped-test-results/$ZIP_FILE_NAME"
 ZIPPED_REPORT_S3=$TEST_RUN_BUCKET_PATH/$ZIP_FILE_NAME
@@ -44,6 +44,7 @@ echo "Uploaded"
 #GENERATE ATTACHMENTS FOR ENLIL DOCUMENT
 declare -a ATTACHMENTS_FOR_DOCUMENT
 ZIP_FILE_SIZE=$(stat -c%s "${ZIP_FILE_NAME_PATH}")
+echo $ZIP_FILE_SIZE
 ZIPPED_REPORT_ATTACHMENT=$(curl \
   -X POST "https://api.dev.enlil.io/api/v1/attachments/external" \
   -H "accept: application/json" \
@@ -76,6 +77,7 @@ do
   FILE_NAME=null
   filterNameFromPath $VIDEO
   VIDEO_FILE_SIZE=$(stat -c%s "${VIDEO}")
+  echo $TEST_RUN_BUCKET_PATH/$VIDEO
   ENLIL_ATTACHMENT=$(curl \
     -X POST "https://api.dev.enlil.io/api/v1/attachments/external" \
     -H "accept: application/json" \
@@ -97,6 +99,31 @@ done
 #CREATE DOCUMENT WITH ATTACHMENT
 DATE_FOR_DOC_ID=$(date "+%Y-%m-%d")
 DOC_ID="CTR-${DATE_FOR_DOC_ID}-${BITBUCKET_BUILD_NUMBER}"
+echo $("{ 
+      \"description\": \"<p>Cypress test report test</p>\",
+      \"name\": \"Cypress test report\",
+      \"attachments\": [ ${ATTACHMENTS_FOR_DOCUMENT%?} ],
+      \"referenceTo\": [],
+      \"revisionStage\": 1,
+      \"revisionChangeType\": \"NEXT_REVISION\",
+      \"retrain\": false,
+      \"document\": { 
+        \"docId\": \"$DOC_ID\",
+        \"securityList\": 
+        { 
+          \"securityEmployees\": [],
+          \"securityGroups\": [ 
+            { 
+            \"id\": \"$CY_REPORT_ID_OF_GROUP_EVERYONE\"
+            } ], 
+            \"operators\": [] 
+        }, 
+        \"documentType\": 
+        { 
+          \"id\": \"$CY_REPORT_ID_OF_CYPRESS_TEST_REPORT_DOCTYPE\"
+        } 
+      }
+    }")
 curl \
   -X POST "https://api.dev.enlil.io/api/v1/document_revisions/external" \
   -H "accept: application/json" \
