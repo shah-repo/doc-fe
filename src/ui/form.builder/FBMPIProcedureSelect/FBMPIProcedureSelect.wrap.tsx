@@ -30,10 +30,13 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
     function handleAdd() {
       if (!id) { return; }
       const formValue = formState?.getValues() as FBMPIProcedureSelectValue;
+      const { quantity, unit, usedLot } = formValue;
       mpiProcedureSelectState?.useLot(id, {
-        ...formValue,
-        forMaterial: initialValues?.id,
         fieldId: name,
+        forMaterial: { id: initialValues?.id },
+        quantity,
+        unit,
+        usedLot,
       });
       handleCancel?.();
     }
