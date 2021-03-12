@@ -278,7 +278,7 @@ pipelines:
           - name: CYPRESS_COMMIT_BE
           - name: CYPRESS_COMMIT_REMOTEJS
       - parallel: *RUN_CYPRESS_IN_PARALLEL_VIDEO
-      - step: *COMMON_UPLOAD_CYPRESS_REPORT
+      - step: *UPLOAD_CYPRESS_REPORT
 
   pull-requests:
     "**":
