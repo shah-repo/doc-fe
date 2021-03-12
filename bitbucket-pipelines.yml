@@ -85,10 +85,7 @@ definitions:
           artifacts:
             - test-results/**
           script:
-            - echo $CY_REPORT_COMPANY_ID
-            - echo $CY_REPORT_USER_API_TOKEN
             - source ./scripts/cypress/utils/variables_pipeline.sh
-            - echo $CYPRESS_BASE_URL
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
@@ -101,9 +98,10 @@ definitions:
     - step: &RUN_CYPRESS_VIDEO
         <<: *COMMON_RUN_CYPRESS
         name: Cypress specs with video
+        artifacts:
+            - test-results/**
+            - zipped-test-results/**
         script:
-            - echo $CY_REPORT_COMPANY_ID
-            - echo $CY_REPORT_USER_API_TOKEN
             - export CYPRESS_VIDEO="true" 
             - source ./scripts/cypress/utils/variables_pipeline.sh
             - echo $CYPRESS_BASE_URL
@@ -121,7 +119,6 @@ definitions:
         max-time: 10
         size: 1x
         script:
-          - echo $CY_REPORT_COMPANY_ID
           - source ./scripts/cypress/utils/variables_pipeline.sh
           - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
           - yarn install --frozen-lockfile
