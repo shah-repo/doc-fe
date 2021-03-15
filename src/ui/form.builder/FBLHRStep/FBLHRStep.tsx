@@ -8,6 +8,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   name,
   isOutput,
   startMpi,
+  openLHRs,
   lhrStepState,
   loading,
   stepLHRs,
@@ -33,6 +34,11 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         onMouseEnter={setDisplayToMPI}
         onMouseLeave={setDisplayToLHRs}
         flexGrow={1}
+        onClick={() => {
+          if (isOutput && stepLHRs) {
+            openLHRs();
+          }
+        }}
       >
         <FBAutocompleteAsync
           boxProps={{ flexGrow: 1 }}

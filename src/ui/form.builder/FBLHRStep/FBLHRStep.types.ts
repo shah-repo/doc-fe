@@ -9,6 +9,7 @@ export type FBLHRStepProps =
   startMpi(): void;
   setDisplayToMPI(): void;
   setDisplayToLHRs(): void;
+  openLHRs(): void;
   editorConfig: {
     value: string;
   };
