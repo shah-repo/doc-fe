@@ -15,6 +15,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   setDisplayToLHRs,
   setDisplayToMPI,
   isHovering,
+  isDraft,
   ...props
 }) => (
   <FBProvider {...{ lhrStepState }}>
@@ -46,7 +47,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           optionId={FBAutocompleteAsyncOption.mpiDocuments}
           autosave
           withState
-          disabled={isOutput}
+          disabled={isOutput || !isDraft}
           {...{ name }}
           getOptionLabel={(option) => stepLHRs && !isHovering
             ? option.name

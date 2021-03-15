@@ -16,6 +16,7 @@ export type FBLHRStepProps =
   isOutput: boolean;
   stepLHRs?: Nullable<DocumentRevision>;
   isHovering: boolean;
+  isDraft: boolean;
 };
 
 export interface StartMpiBody {

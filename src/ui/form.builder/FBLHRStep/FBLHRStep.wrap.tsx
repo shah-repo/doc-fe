@@ -2,6 +2,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBLHRStepProps, FBLHRStepState } from "..";
+import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 
 export const withFBLHRStep = <T extends FBLHRStepProps>(
   Component: React.FunctionComponent<T>,
@@ -23,6 +24,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const lhrStepState = FB.useRef(FBLHRStepState, stepLHRs);
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
+    const isDraft = isDocumentRevisionInDraft(workspaceState?.document?.status);
 
     // MARK: @helpers
     React.useEffect(() => {
@@ -115,6 +117,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       setDisplayToLHRs,
       isHovering,
       openLHRs,
+      isDraft,
     }); };
 
   Comp.displayName = "withFBLHRStep";
