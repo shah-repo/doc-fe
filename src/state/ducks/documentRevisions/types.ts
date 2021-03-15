@@ -129,7 +129,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   smartReferencesTo?: SmartReference[];
 }
 
-export interface SmartReference {
+interface SmartReference {
   fromDocRev?: Nullable<DocumentRevision>;
   fromDocRevId?: Nullable<string>;
   fromDocumentId?: Nullable<string>;
