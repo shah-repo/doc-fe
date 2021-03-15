@@ -3,10 +3,16 @@
 
 import { integer } from "aws-sdk/clients/lightsail";
 import { CONFIG } from "../../config";
+import { IMAPEmail } from "./imap";
 
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export { };
+
+export interface IMAPEmailsInTesting {
+  sentToUser: string;
+  contains: string[];
+}
 
 declare global {
   namespace Cypress {
@@ -20,6 +26,10 @@ declare global {
       imapVerifyNumberOfEmailsReceivedSince(params: {userEmail: string; emailCount: integer; date: Date}): Chainable;
       imapGetActivationLink(params: {userEmail: string}): Chainable;
       imapVerifyLastEmailContains(params: {userEmail: string; content: string; date: Date}): Chainable;
+      imapVerifyEmailsInList(params: {
+        receivedEmails: IMAPEmail[];
+        emailsToTest: IMAPEmailsInTesting[];
+        getEmailsSincedate: Date;}): Chainable;
     }
   }
 }
@@ -120,3 +130,28 @@ Cypress.Commands.add("imapVerifyNumberOfEmailsReceivedSince", (params: {
     assert.lengthOf(emails, params.emailCount);
   });
 });
+
+Cypress.Commands.add("imapVerifyEmailsInList", (params: {
+  receivedEmails: IMAPEmail[];
+  emailsToTest: IMAPEmailsInTesting[];
+  getEmailsSincedate: Date;}) => {
+
+  params.emailsToTest.forEach((email) => {
+    const numberOfEmails = params.receivedEmails.filter(
+      (receivedEmail) => receivedEmail.receiver === email.sentToUser &&
+        arrayContainsArray(receivedEmail.body.html, email.contains));
+    console.log(numberOfEmails);
+  });
+  console.log(params.receivedEmails);
+
+});
+
+function arrayContainsArray(superset, subset) {
+  if (0 === subset.length) {
+    return false;
+  }
+  return subset.every(function(value) {
+    return (superset.indexOf(value) >= 0);
+  });
+}
+

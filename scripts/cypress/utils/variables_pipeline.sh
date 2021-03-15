@@ -27,7 +27,6 @@ export CYPRESS_RUN_ENVIRONMENT="PIPELINE"
 export CYPRESS_JSON_REPORTS_FOLDER=$DIR_JSON
 
 export CYPRESS_TEST_EMAIL="enlil.testmail@gmail.com"
-export CYPRESS_TEST_EMAIL_PASSWORD="shifamed123"
 export CYPRESS_BASE_URL=$CYPRESS_FE_URL
 
 cat <<EOF > ./cypress-reporter-config.json

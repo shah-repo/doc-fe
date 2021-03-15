@@ -74,13 +74,24 @@ export enum CyRoutes {
   SessionDetails = "SessionDetails",
   PatchDocRevOwner = "PatchDocRevOwner",
   PreventIdleLogout = "PreventIdleLogout",
+  EmployeesGetActive = "EmployeesGetActive",
 }
 
 export const routes: ICyRoutes =   {
   EmployeesGet: {
     requestConfig: {
       method: "GET",
-      url: "/api/v1/employees*",
+      url: "/api/v1/employees",
+    },
+    callConfig: {
+      responseTimeout: 50 * 1000,
+      requestTimeout: 40 * 1000,
+    },
+  },
+  EmployeesGetActive: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/employees?active*",
     },
     callConfig: {
       responseTimeout: 50 * 1000,
