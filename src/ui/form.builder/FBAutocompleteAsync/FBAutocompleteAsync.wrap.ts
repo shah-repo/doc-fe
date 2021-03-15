@@ -1,4 +1,4 @@
-import { get, isEmpty, isObject, map } from "lodash";
+import { get, isArray, isEmpty, isObject, isString, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -112,6 +112,11 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
         option = defaultValue;
       }
       if (!get(option, optionValueKey) && !autocompleteAsyncState?.autocompleteValueApi.loading) {
+        if (isArray(option)) {
+          const undefinedOptions = option.filter((e) => isString(e));
+          undefinedOptions.map((opt) => autocompleteAsyncState?.fetchAutocompleteOption(opt, optionId));
+          return "";
+        }
         autocompleteAsyncState?.fetchAutocompleteOption(option, optionId);
         return "";
       }
