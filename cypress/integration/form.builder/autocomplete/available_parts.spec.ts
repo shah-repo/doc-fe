@@ -12,7 +12,7 @@ let multipleCompanies;
 let secondEmployee;
 const partsName = `Parts ${Cypress.moment().format("X")}`;
 
-context("FORM Field test", () => {
+context("Autocomplete 'Available Parts' test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
