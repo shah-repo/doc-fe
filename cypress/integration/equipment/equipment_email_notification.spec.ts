@@ -1286,7 +1286,6 @@ context("Test Equipment maintenance email notifications", () => {
         cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
           if (emails) {
             emailsFromInbox = emails;
-            assert.lengthOf(emailsFromInbox, 14);
           }
           else {
             assert.fail("No email found");
