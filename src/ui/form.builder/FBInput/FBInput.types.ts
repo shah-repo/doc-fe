@@ -177,6 +177,7 @@ export type FBInputProps =
     //  * is validation relation.
     //  */
     // validateDefaultValue?: boolean;
+    includeNotes?: boolean;
   };
 
 export const OmitInputClones: FBInputType[] = [

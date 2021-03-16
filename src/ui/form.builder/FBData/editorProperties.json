@@ -40,5 +40,8 @@
   },
   "deleteDisabled": {
     "text": "form.builder.delete.disabled"
+  },
+  "includeNotes": {
+    "text": "form.builder.include.notes"
   }
 }
