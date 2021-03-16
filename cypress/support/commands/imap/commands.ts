@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable max-classes-per-file */
 
-import { integer } from "aws-sdk/clients/lightsail";
+import { integer } from "aws-sdk/clients/cloudfront";
 import { CONFIG } from "../../config";
 import { IMAPEmail } from "./imap";
 
@@ -29,7 +29,8 @@ declare global {
       imapVerifyEmailsInList(params: {
         receivedEmails: IMAPEmail[];
         emailsToTest: IMAPEmailsInTesting[];
-        getEmailsSincedate: Date;}): Chainable;
+        getEmailsSincedate: Date;
+        assertNumberOfEmailsFoundInList: integer;}): Chainable;
     }
   }
 }
@@ -134,17 +135,20 @@ Cypress.Commands.add("imapVerifyNumberOfEmailsReceivedSince", (params: {
 Cypress.Commands.add("imapVerifyEmailsInList", (params: {
   receivedEmails: IMAPEmail[];
   emailsToTest: IMAPEmailsInTesting[];
-  getEmailsSincedate: Date;}) => {
+  getEmailsSincedate: Date;
+  assertNumberOfEmailsFoundInList: integer;}) => {
 
   params.emailsToTest.forEach((email) => {
-    const numberOfEmails = params.receivedEmails.filter(
-      (receivedEmail) => receivedEmail.receiver === email.sentToUser &&
-        arrayContainsArray(receivedEmail.body.html, email.contains));
-    console.log(numberOfEmails);
+    const numberOfEmails = getEmailsThatAreInReceivedList(params.receivedEmails, email);
+    assert.lengthOf(numberOfEmails, params.assertNumberOfEmailsFoundInList);
   });
-  console.log(params.receivedEmails);
-
 });
+
+function getEmailsThatAreInReceivedList(receivedEmails, emailToTest) {
+  return receivedEmails.filter(
+    (receivedEmail) => receivedEmail.receiver === emailToTest.sentToUser &&
+      arrayContainsArray(receivedEmail.body.html, emailToTest.contains));
+}
 
 function arrayContainsArray(superset, subset) {
   if (0 === subset.length) {

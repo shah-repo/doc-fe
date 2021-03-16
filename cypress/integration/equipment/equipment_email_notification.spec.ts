@@ -38,16 +38,7 @@ let createdMaintenanceRecord;
 let approvalForFirstEquipment;
 let group;
 let emailsFromInbox: IMAPEmail[];
-
-const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-  {
-    sentToUser: FIRST_USER.email,
-    contains: ["EQ-00002", "due date in 4 days"],
-  },
-  {
-    sentToUser: ADMIN_USER.email,
-    contains: ["EQ-00002", "due date in 5 days"],
-  }];
+let companyId: string;
 
 const dateOffset = (5 * 1000);
 const dateAfterEmailShouldArrive = new Date();
@@ -95,6 +86,7 @@ context("Test Equipment maintenance email notifications", () => {
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
+          companyId = createdCompany.id;
           done();
         });
       });
@@ -1277,7 +1269,7 @@ context("Test Equipment maintenance email notifications", () => {
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
         });
-        cy.wait(20000);
+        cy.wait(40000);
       });
     });
 
@@ -1303,10 +1295,56 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify emails that should be received", () => {
+        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: FIRST_USER.email,
+            contains: ["EQ-00002 Equipment maintenance document due date in 4 days", companyId],
+          },
+          {
+            sentToUser: ADMIN_USER.email,
+            contains: ["EQ-00002 Equipment maintenance document due date in 4 days", companyId],
+          },
+          {
+            sentToUser: FIRST_USER.email,
+            contains: ["EQ-00003 Equipment maintenance document due date in 17 days", companyId],
+          },
+          {
+            sentToUser: ADMIN_USER.email,
+            contains: ["EQ-00003 Equipment maintenance document due date in 17 days", companyId],
+          },
+        ];
         cy.imapVerifyEmailsInList({
           receivedEmails: emailsFromInbox,
           emailsToTest: emailsThatShouldBeReceived,
           getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 1,
+        });
+      });
+
+      it("Verify emails that should not be received", () => {
+        const emailsThatShouldNotBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: ADMIN_USER.email,
+            contains: ["EQ-00001"],
+          },
+          {
+            sentToUser: FIRST_USER.email,
+            contains: ["EQ-00001"],
+          },
+          {
+            sentToUser: ADMIN_USER.email,
+            contains: ["EQ-00004"],
+          },
+          {
+            sentToUser: FIRST_USER.email,
+            contains: ["EQ-00004"],
+          },
+        ];
+        cy.imapVerifyEmailsInList({
+          receivedEmails: emailsFromInbox,
+          emailsToTest: emailsThatShouldNotBeReceived,
+          getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 0,
         });
       });
     });
