@@ -2,9 +2,12 @@
 import { useFormikContext } from "formik";
 import { isEqual, keys, omit } from "lodash";
 import * as React from "react";
+import { useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
+import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
+import { ApplicationState } from "../../../../state/reducers";
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
@@ -12,7 +15,8 @@ import CopyEBButton from "../../../components/forms/CopyEBButton";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
-import { checkCanBeCopied, checkIsDocumentRecord, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
+import { isOperator } from "../../DocumentRevisionDisplay.container";
+import { checkCanBeCopied, checkIsDocumentRecord, hasOperatorRelease, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
@@ -28,7 +32,6 @@ import VoidButton from "./VoidButton";
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const formik = useFormikContext();
-
   // isCreateDocumentDisabled is flag for temporary disabling
   // of create button until correct doc id is generated
   const { isCreateDocumentDisabled } = props;
@@ -42,8 +45,14 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     type,
   } = React.useContext(FormHeaderContext)!;
   const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
+  const documentTypeId = documentRevision?.document?.documentType?.id;
+  const schema = documentRevision?.formDocument?.formTemplate?.schema;
+  const isDisabled: boolean = documentRevision?.id !== undefined;
+  const isNewVersion = type === "newVersion";
   const isUserDocumentOwner = React.useContext(isOwnerContext);
-
+  const isCurrentUserOperator = React.useContext(isOperator);
+  const currentDocumentType = useSelector((state: ApplicationState) =>
+    documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ""));
 
   // MARK: @helpers
   const shouldShowUpgradeForDocs = useShouldUpgradeToLatest(
@@ -58,20 +67,14 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
   const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
-  const isApproved = isInlineFormApproved(
-    documentRevision,
-    formState,
-    documentRevision?.formDocument?.formTemplate?.schema
-  );
+  const isApproved = isInlineFormApproved( documentRevision, formState, schema);
+  const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType.groupOptions);
 
   const shouldShowUpgrade =
     (!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs);
-
-  const isDisabled: boolean = documentRevision?.id !== undefined;
-  const documentTypeId = documentRevision?.document?.documentType?.id;
   const showVoidButton = isStatusInDraft && documentRevision?.version === 1;
   const showVoidButtonOnInlineRecords = isStatusInDraft && isDocumentNumericRelease(documentRevision?.revisionStage);
-  const isNewVersion = type === "newVersion";
+  const showToOwnerOrOperator = isUserDocumentOwner || (isCurrentUserOperator && docTypeHasOperatorRelease);
 
   function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
@@ -165,7 +168,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       />
       <InspectionControlsContainer {...{ documentRevision }} />
       {
-        isRecord && (!isInlineApproval || revisionStage !== 1) && (
+        isRecord && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator && (
           <SubmitForApproval
             docRevId={values.id as string}
             status={values.status}
