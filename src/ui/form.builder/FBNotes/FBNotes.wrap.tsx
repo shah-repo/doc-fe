@@ -1,5 +1,7 @@
 import React from "react";
-import { FB, FBDialogState, FBNotesForm, FBNotesProps } from "..";
+import { FB, FBDialogState } from "..";
+import FBNotesForm from "../FBNotesForm/FBNotesForm";
+import { FBNotesProps } from "./FBNotes.types";
 
 export const withFBNotes = <T extends FBNotesProps>(
   Component: React.FunctionComponent<T>,
@@ -21,7 +23,7 @@ export const withFBNotes = <T extends FBNotesProps>(
     // MARK: @methods
     onClick = () => dialogState?.config({
       open: true,
-      title: "Add a Note",
+      title: "form.builder.add.note",
       content: <FBNotesForm />,
     });
 

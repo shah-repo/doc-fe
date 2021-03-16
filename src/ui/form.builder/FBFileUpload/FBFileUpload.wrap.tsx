@@ -14,13 +14,14 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
     withState,
     files,
     isInputOwner,
+    attachmentShortcut,
+    gutter,
     ...props
   }: T) => {
 
     const { formState, workspaceState } = FB.useStores();
     const formValue = formState?.getFieldValue(name) || defaultValue;
     fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState, formValue);
-
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
 
@@ -45,7 +46,9 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
       files,
       disabled,
       withState,
+      attachmentShortcut,
       name,
+      gutter,
     });
   };
 

@@ -1,6 +1,7 @@
 import { isEmpty } from "lodash";
 import React from "react";
 import { FBFileField, FBFilesPresenter, FBFileUploadProps, FBInput, FBProvider } from "..";
+import FBAttachmentShortcut from "../FBFileField/FBAttachmentShortcut";
 import { withFBFileUpload } from "./FBFileUpload.wrap";
 
 const FBFileUpload: React.FunctionComponent<FBFileUploadProps> = ({
@@ -9,14 +10,17 @@ const FBFileUpload: React.FunctionComponent<FBFileUploadProps> = ({
   fileUploadState,
   readonly = false,
   files,
+  attachmentShortcut = false,
+  gutter,
   ...props
 }) =>  (
-  <FBInput {...props} {...{ name }} type="fileupload">
+  <FBInput {...props} {...{ name, gutter }} type="fileupload">
     <FBProvider {...{ fileUploadState }}>
-      {!readonly && (
+      {!readonly && !attachmentShortcut && (
         <FBFileField key={`fb-attachment-field-${name}`} {...{ name, disabled }} />
       )}
-      {!isEmpty(files) && (
+      {attachmentShortcut && <FBAttachmentShortcut key={`fb-attachment-field-${name}`} {...{ name, disabled }} /> }
+      {!attachmentShortcut && !isEmpty(files) && (
         <FBFilesPresenter
           boxProps={{ mt: 2 }}
           {...{ files, disabled }}
