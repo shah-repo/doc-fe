@@ -5,7 +5,8 @@ import { IsBoolean, IsDefined, IsEmail, IsEnum, IsNumber, IsOptional, IsString, 
 export enum RUN_ENVIRONMENT_OPTIONS {
   LOCALDEV = "LOCALDEV",
   LOCALPARALLEL = "LOCALPARALLEL",
-  PIPELINE = "PIPELINE"
+  PIPELINE = "PIPELINE",
+  SCHEDULEDPIPELINE = "SCHEDULEDPIPELINE"
 }
 
 export class ConfigEnv {
@@ -91,7 +92,8 @@ export class ConfigEnv {
   @IsEnum(RUN_ENVIRONMENT_OPTIONS)
   RUN_ENVIRONMENT!: RUN_ENVIRONMENT_OPTIONS;
 
-  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE)
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE ||
+                                        RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.SCHEDULEDPIPELINE)
   @IsDefined()
   @IsString()
   SCREENSHOTS_DIR!: string;
@@ -115,7 +117,8 @@ export class ConfigEnv {
   @IsString()
   COMMIT_REMOTEJS!: string;
 
-  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE)
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE ||
+                                        RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.SCHEDULEDPIPELINE)
   @IsDefined()
   @IsString()
   JSON_REPORTS_FOLDER!: string;
