@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import { PlayCircleFilled } from "@material-ui/icons";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText, FBTextField } from "..";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
@@ -16,6 +16,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   setDisplayToMPI,
   isHovering,
   isDraft,
+  disabled,
   ...props
 }) => (
   <FBProvider {...{ lhrStepState }}>
@@ -61,6 +62,26 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         {...{ loading }}
       />
     </Box>
+    <FBTextField
+      {...{ disabled }}
+      name={`fb-lhrs-start-quantity-${name}`}
+      type="number"
+      label="form.builder.start.quantity"
+      rules="required"
+    />
+    <FBTextField
+      {...{ disabled }}
+      name={`fb-lhrs-accepted-quantity-${name}`}
+      type="number"
+      label="form.builder.accepted.quantity"
+    />
+    <FBTextField
+      {...{ disabled }}
+      name={`fb-lhrs-rejected-quantity-${name}`}
+      type="number"
+      label="form.builder.rejected.quantity"
+    />
+
   </FBProvider>
 );
 

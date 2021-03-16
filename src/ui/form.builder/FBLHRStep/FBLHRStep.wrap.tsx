@@ -14,6 +14,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     startMpi,
     stepLHRs,
     isHovering,
+    disabled,
     ...props
   }: T) => {
 
@@ -70,10 +71,16 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     // MARK: @methods
     startMpi = () => {
+      const startQuantity = formState?.getFieldValue(`fb-lhrs-start-quantity-${name}`);
+      if (!startQuantity) {
+        formState?.validate();
+        return;
+      }
       lhrStepState.startMpi(
         name,
+        startQuantity,
         workspaceState?.document?.id,
-        schemaItem?.editorConfig?.value
+        schemaItem?.editorConfig?.value,
       );
     };
 
@@ -118,6 +125,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       isHovering,
       openLHRs,
       isDraft,
+      disabled,
     }); };
 
   Comp.displayName = "withFBLHRStep";
