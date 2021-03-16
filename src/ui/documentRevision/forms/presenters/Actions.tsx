@@ -68,7 +68,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isApproved = isInlineFormApproved( documentRevision, formState, schema);
-  const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType.groupOptions);
+  const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
 
   const shouldShowUpgrade =
     (!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs);
