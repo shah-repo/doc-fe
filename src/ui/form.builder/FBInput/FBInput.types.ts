@@ -71,7 +71,8 @@ export type FBInputType =
   | "mpiprocedure"
   | "lhrstep"
   | "unitMeasures"
-  | "quantityunit";
+  | "quantityunit"
+  | "partsselection";
 
 export type FBInputProps =
   & FBLabelProps

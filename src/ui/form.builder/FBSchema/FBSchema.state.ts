@@ -30,6 +30,7 @@ import FBMediaAlbumField from "../FBMediaAlbumField/FBMediaAlbumField";
 import FBMPIProcedure from "../FBMPIProcedure/FBMPIProcedure";
 import FBParagraph from "../FBParagraph/FBParagraph";
 import FBParts from "../FBParts/FBParts";
+import FBPartsSelection from "../FBPartsSelection/FBPartsSelection";
 import FBPOApprovalMatrix from "../FBPOApprovalMatrix/FBPOApprovalMatrix";
 import FBPOReceive from "../FBPOReceive/FBPOReceive";
 import FBProcedure from "../FBProcedure/FBProcedure";
@@ -122,6 +123,7 @@ class FBSchemaState {
     lhrstep: FBLHRStep,
     unitMeasures: FBUnitMeasures,
     quantityunit: FBQuantityUnitField,
+    partsselection: FBPartsSelection,
   };
 
   @observable public schema?: FBSchemaProps[];
