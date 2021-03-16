@@ -36,6 +36,7 @@ import DocumentSecurity from "./presenters/DocumentSecurity";
 import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
 import FBActiveNoOutput from "./presenters/FBActiveNoOutput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
+import RedlineBanner from "./presenters/redline/Redline.banner";
 import References from "./presenters/References";
 import RetrainField from "./presenters/RetrainField";
 import RevisionStage from "./presenters/RevisionStage";
@@ -178,6 +179,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   });
 
   useEffect(() => {
+    setFieldValue("schema", workspaceState?.schema);
+  }, [workspaceState?.schema]);
+
+  useEffect(() => {
     if (!values.id && !values.document?.documentType?.id && setDocId) {
       setDocId("");
     }
@@ -218,6 +223,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       sm={type !== "newOutput" && isDisabled ? 12 : 10}
       xs={12}
     >
+      <RedlineBanner {...{ bannerPortal }}/>
       <UpgradeToLatestContainer
         type="banner"
         docRevId={documentRevision?.id}

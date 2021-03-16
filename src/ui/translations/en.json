@@ -349,6 +349,7 @@
   "common.document.type.acronym": "Document Type Acronym",
   "common.private.number.pool": "Private Number Pool",
   "common.redline": "RedLine",
+  "common.redline.message": "You are in redline mode",
   "common.qms": "Qms",
   "common.default.training": "Default Training",
   "common.starting.number": "Starting Number",

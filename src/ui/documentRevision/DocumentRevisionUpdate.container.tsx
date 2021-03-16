@@ -1,7 +1,8 @@
-import { debounce, isEmpty } from "lodash";
+import { debounce, isEmpty, pick } from "lodash";
 import React, { useEffect, useMemo } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
+import { companyActions, companySelectors } from "../../state/ducks/company";
 import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../state/reducers";
@@ -55,7 +56,8 @@ DocumentRevisionUpdateContainerProps
   canChangeOwnerShip,
   isNewVersion,
 }) => {
-
+  const dispatch = useDispatch();
+  const redlineActive = useSelector(companySelectors.getRedlineActive);
   const initialValues = useMemo(() => toDocumentRevisionFormValues(documentRevision), [documentRevision]);
   const isCurrentUserOperator = React.useContext(isOperator);
   const { docId } = documentRevision.document;
@@ -66,6 +68,9 @@ DocumentRevisionUpdateContainerProps
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
+      if (redlineActive) {
+        dispatch(companyActions.redlineConfig());
+      }
       setDoNotPrompt(true);
     },
   });
@@ -87,10 +92,29 @@ DocumentRevisionUpdateContainerProps
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
 
+    if (redlineActive) {
+      async.reset();
+
+      const promise = async.start(
+        save,
+        documentRevision.id,
+        pick(values, "schema", "formInput") as DocumentRevisionEditRequestBody,
+        async,
+      );
+      // workaround when editing document through CR view. The form is marked dirty when editing FB fields
+      promise?.then(() => {
+        FBStore.audit.set({
+          url: FBEndpoint.DocumentRevisionAudit,
+          urlValues: { documentId: documentRevision.id },
+          method: "get",
+        });
+        helpers.resetForm();
+      });
+    }
+
     if (isEmpty(dataToSubmit)) {
       return;
     }
-
     async.reset();
 
     const promise = async.start(
