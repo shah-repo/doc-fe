@@ -46,7 +46,7 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
       (docRevs: DocumentRevision[]) => {
         const released = find(Array.from(docRevs.values()), (rev) => rev.status === "RELEASED");
         if (!released) { return; }
-        formState?.setFieldValue(name, (released as DocumentRevision).id);
+        formState?.setFieldValue(name, (released).id);
         formState?.getInputState(name || "")?.setRender();
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
