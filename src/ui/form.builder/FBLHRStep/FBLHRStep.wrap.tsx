@@ -2,6 +2,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBLHRStepProps, FBLHRStepState } from "..";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 
 export const withFBLHRStep = <T extends FBLHRStepProps>(
@@ -63,7 +64,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         lhrStepState
           .setLHRs(docRev);
         setDisplayToLHRs();
-        openLHRs();
+        openLHRs(docRev);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -84,9 +85,11 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       );
     };
 
-    const openLHRs = () => {
+    const openLHRs = (docRev?: DocumentRevision) => {
+      const documentRevision = docRev || stepLHRs;
+      if (!documentRevision) { return; }
       window.open(
-        `/document_revision/${stepLHRs?.documentId}/version/${stepLHRs?.id}`,
+        `/document_revision/${documentRevision.documentId}/version/${documentRevision.id}`,
         "_blank"
       );
     };
