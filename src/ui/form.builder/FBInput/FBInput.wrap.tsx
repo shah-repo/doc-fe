@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { first, get, includes, isArray, isBoolean, isEqual, isString, isUndefined, size } from "lodash";
+import { first, get, includes, isArray, isBoolean, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
@@ -75,6 +75,17 @@ export const withFBInput = <T extends FBInputProps>(
     // then this can be removed and handle through defaultValue
     const validationValue = get(formState?.validationValues, name);
 
+    if (validationMode === "visibility" || validationMode === "disabled") {
+      map(get(formState?.validatorRules, name), (rule) => {
+        if (!formState) { return; }
+        const { value = "" } = rule || {};
+        const fieldName: string = first(value.split(",")) || "";
+        const fieldValue = last(value.split(","));
+        const validationRules = formState.validationRelatedRules[fieldName] || [];
+        formState.validationRelatedRules[fieldName] = union([{ name, value: fieldValue }], validationRules);
+      });
+    }
+
     if ((isOutput || formState?.workspaceMode !== "design") && formState?.workspaceMode !== "formPreview") {
       const isUnderMode = (
         !helperText && (
@@ -83,6 +94,7 @@ export const withFBInput = <T extends FBInputProps>(
           (isArray(validationValue) && size(validationValue) === 0)
         )
       );
+
       (isUndefined(hidden) && validationMode === "visibility") && (hidden = isUnderMode);
       (!disabled && validationMode === "disabled") && (disabled = isUnderMode);
     }

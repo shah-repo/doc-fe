@@ -135,7 +135,7 @@
   },
   {
     "id": "16",
-    "path": "/document_revisions?docTypeGroups%5B%5D=FORM&docTypeGroups%5B%5D=SUPPLIER&docTypeGroups%5B%5D=OTHER&docTypeGroups%5B%5D=PI&docTypeGroups%5B%5D=DYNAMIC_FORM&docTypeGroups%5B%5D=POAM&docTypeGroups%5B%5D=PO&docTypeGroups%5B%5D=WORK_ORDER&docTypeGroups%5B%5D=PART&docTypeGroups%5B%5D=DAM&docTypeGroups%5B%5D=EQUIPMENT&docTypeGroups%5B%5D=MATERIAL&status%5B%5D=DRAFT",
+    "path": "/document_revisions?docTypeGroups%5B%5D=FORM&docTypeGroups%5B%5D=SUPPLIER&docTypeGroups%5B%5D=OTHER&docTypeGroups%5B%5D=PI&docTypeGroups%5B%5D=DYNAMIC_FORM&docTypeGroups%5B%5D=POAM&docTypeGroups%5B%5D=PO&docTypeGroups%5B%5D=WORK_ORDER&docTypeGroups%5B%5D=PART&docTypeGroups%5B%5D=DAM&docTypeGroups%5B%5D=EQUIPMENT&docTypeGroups%5B%5D=MATERIAL&docTypeGroups%5B%5D=SEED_DOCUMENT&docTypeGroups%5B%5D=NEW_COMPANY&status%5B%5D=DRAFT",
     "label": "Document Revisions In Draft without Records",
     "valueKey": "id",
     "labelKey": "name",
@@ -202,13 +202,13 @@
   },
   {
     "id": "23",
-    "path": "/document_revisions/forms_group_option?docTypeGroupOption=MAINTENANCE",
+    "path": "/documents/available_maintenance_forms",
     "label": "Preventative Maintenance Forms",
     "valueKey": "id",
     "labelKey": "name",
-    "labelPrefixRoot": "document.docId",
-    "root": "",
-    "includeRevision": "displayRevision"
+    "labelPrefixRoot": "docId",
+    "includeRevision": "displayRevision",
+    "root": ""
   },
   {
     "id": "24",

@@ -1,4 +1,4 @@
-import { FBProviderProps } from "..";
+import { FBAutocompleteProps, FBProviderProps } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBInputProps } from "../FBInput";
 
@@ -12,6 +12,9 @@ export type FBEQMaintenanceProps =
   isNewPMDisabled?: boolean;
   pmFormId?: string;
   isTypePM?: boolean;
+  availableMaintenanceForms?: AvailableMaintenanceForm[];
+  preventativeFormOptions?: FBAutocompleteProps["filterOptions"];
+  getOptionLabel?: FBAutocompleteProps["getOptionLabel"];
 };
 
 export interface FBEQMaintenanceValue {
@@ -22,4 +25,12 @@ export interface FBEQMaintenanceValue {
   specs: string;
   history: DocumentRevision[];
   status: string;
+}
+
+export interface AvailableMaintenanceForm {
+  companyId: string;
+  docId: string;
+  documentRevisions: DocumentRevision[];
+  documentType: Partial<DocumentType>;
+  id: string;
 }
