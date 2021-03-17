@@ -2,6 +2,7 @@ import { Grid } from "@material-ui/core";
 import React from "react";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
+import { generateSubtitle } from "../../components/common/header/subtitles";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.presenter";
@@ -30,7 +31,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentD
         revisionChangeType={documentRevision?.revisionChangeType}
         subRevision={documentRevision?.subRevision}
         displayStatus={documentRevision.displayStatus}
-        subtitle={documentRevision.precalc?.["lshs_subtitle"]}
+        subtitle={generateSubtitle(documentRevision)}
       />}
       <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12}>
         <Grid container={true} alignItems="flex-end" justify="flex-end">

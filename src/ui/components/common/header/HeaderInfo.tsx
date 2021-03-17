@@ -20,7 +20,7 @@ interface Props {
   groupOptions?: DocumentGroupOptionsType[];
   isInlineApproval?: boolean;
   displayStatus?: string;
-  subtitle?: string;
+  subtitle?: any;
 }
 
 const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -46,6 +46,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
       [classes.statusIconReleased]: isStatusReleased,
       [classes.statusIconCanceled]: isStatusCanceled,
     })} />;
+
 
   return (
     <Grid item xs={6} className={classes.itemWrap} >

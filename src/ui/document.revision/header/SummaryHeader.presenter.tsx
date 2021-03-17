@@ -3,6 +3,7 @@ import React from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
+import { generateSubtitle } from "../../components/common/header/subtitles";
 import OwnerChangerContainer from "../../components/common/owner.changer/container";
 import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
@@ -33,7 +34,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
       revisionChangeType={documentRevision?.revisionChangeType}
       subRevision={documentRevision?.subRevision}
       displayStatus={documentRevision.displayStatus}
-      subtitle={documentRevision?.precalc?.["lshs_subtitle"]}
+      subtitle={generateSubtitle(documentRevision)}
     />
     <Grid item={true} xs={6}>
       <Grid container={true} alignItems="flex-end" justify="flex-end">

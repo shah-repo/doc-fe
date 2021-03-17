@@ -46,3 +46,5 @@ export const hasOperatorRelease = checkDocumentGroupOptions.bind(this, DOC_TYPE_
 
 export const checkCanTypeCreateInspection = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_CREATE_INSPECTION);
 export const checkCanBeCopied = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_BE_COPIED);
+export const checkIsTypeMpiOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MPI_OUTPUT);
+export const checkIsTypeLhr = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.LHR);
