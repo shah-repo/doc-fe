@@ -4,7 +4,7 @@ import { FBNote, FBNoteItem } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-class FBNotesState extends FBRequest<FBNoteItem, FBNote> {
+class FBNotesFormState extends FBRequest<FBNoteItem, FBNote> {
   @observable public notes?: FBNoteItem[];
   @observable public files?: any[];
 
@@ -39,4 +39,4 @@ class FBNotesState extends FBRequest<FBNoteItem, FBNote> {
   };
 }
 
-export default FBNotesState;
+export default FBNotesFormState;

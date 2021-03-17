@@ -14,13 +14,13 @@ const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
   handleNote,
   formState,
   files,
-  notesState,
+  notesFormState,
   notes,
   ...props
 }) => {
   const classes = styles();
   return (
-    <FBForm {...{ formState, notesState }}>
+    <FBForm {...{ formState, notesFormState }}>
       <FBMapWrapper<FBNoteItem[] | undefined> collection={notes}>
         {(note: FBNoteItem, index) => {
           const logo = !note?.avatar ? "/avatar_placeholder.svg" : note?.avatar;
@@ -59,6 +59,7 @@ const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
         <FBInputBaseField
           name="noteText"
           placeholder="common.type.here"
+          style={{ margin: 8, width: 435 }}
         />
         <Box mt={1.5}>
           <FBFileUpload

@@ -1,9 +1,9 @@
-import { map } from "lodash";
+import { isEmpty, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBFormState } from "..";
-import FBNotesState from "./FBNotesForm.state";
+import FBNotesFormState from "./FBNotesForm.state";
 import { FBNoteItem, FBNotesFormProps } from "./FBNotesForm.types";
 
 export const withFBNotesForm = <T extends FBNotesFormProps>(
@@ -11,7 +11,7 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
 ) => {
   const Comp = ({
     formState,
-    notesState,
+    notesFormState,
     handleNote,
     files,
     name,
@@ -32,16 +32,18 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
         } = {},
       } = {},
     } = workspaceState || {};
-    const formValue: FBNoteItem[] | undefined = formNotes;
+    const formValue: FBNoteItem[] | undefined = isEmpty(notes) ?
+      formNotes.filter((note) => note.formBuilderFieldName === name) :
+      notes?.filter((note) => note.formBuilderFieldName === name);
     formState = FB.useRef(FBFormState, {});
-    notesState = FB.useRef(FBNotesState, formValue);
+    notesFormState = FB.useRef(FBNotesFormState, formValue);
 
     // MARK: Reactions
     React.useEffect(() => {
       reaction(
         () => formState?.inputState.get("noteFile")?.value,
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        (value) => notesState?.setfiles(value),
+        (value) => notesFormState?.setfiles(value),
       );
     }
     );
@@ -61,15 +63,15 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
         },
         attachments: values?.noteFile || [],
       };
-      notesState?.setNote(note);
+      notesFormState?.setNote(note);
       formState?.reset();
     };
 
     // MARK: @observer
 
     useObserver(() => {
-      files = notesState?.files;
-      notes = map(notesState?.notes, (note) => {
+      files = notesFormState?.files;
+      notes = map(notesFormState?.notes, (note) => {
         const sender = employees?.find((employee) => employee.id === note.sender.id )?.user;
         return ({
           ...note,
@@ -83,7 +85,7 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
       ...(props as T),
       handleNote,
       formState,
-      notesState,
+      notesFormState,
       notes,
       files,
     });

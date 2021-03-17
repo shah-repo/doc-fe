@@ -28,8 +28,7 @@ const FBInputBaseField: React.FunctionComponent<FBInputBaseFieldProps> = ({
     )}
     { mode !== "preview" &&
       <InputBase
-        style={{ margin: 8, width: 445 }}
-        {...{ placeholder }}
+        {...{ placeholder, style }}
         inputProps={{ "aria-label": "naked" }}
       />}
   </FBInput>
