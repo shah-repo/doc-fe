@@ -2,7 +2,7 @@ import { FormControl, FormHelperText } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import { includes, isEmpty } from "lodash";
 import React from "react";
-import { FBFieldName, FBInputProps, FBInputState, FBLabel, FBTextField } from "..";
+import { FBFieldName, FBInputProps, FBInputState, FBLabel, FBNotes, FBTextField } from "..";
 import Text from "../../components/Text";
 import { withFBInput } from "./FBInput.wrap";
 
@@ -20,10 +20,13 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   type,
   hidden,
   name,
+  includeNotes,
+  isOutput,
 }) => (
   <>
     {!hidden && (
       <Box mb={gutter ? 5 : 0} {...boxProps}>
+        {includeNotes && isOutput && <FBNotes {...{ name }} />}
         <FormControl fullWidth {...{ error }}>
           {!includes(FBInputState.omitLabel, type) && label && (
             <FBLabel {...{ error, label, loading }} />
