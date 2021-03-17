@@ -46,6 +46,10 @@ RUN npm --version
 RUN npm install -g yarn@1.22.5 --force
 RUN yarn --version
 
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
+
 # a few environment variables to make NPM installs easier
 # good colors for most applications
 ENV TERM xterm

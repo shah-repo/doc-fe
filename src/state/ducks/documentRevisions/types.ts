@@ -5,7 +5,7 @@ import { Attachment } from "../attachments/types";
 import { AuditActionPayload } from "../audit/types";
 import { Group } from "../auth/types";
 import { ChangeRequest } from "../changeRequest/types";
-import { Approval, Id, Owner, User } from "../common/types";
+import { Approval, Id, Nullable, Owner, User } from "../common/types";
 import { TrainingRecord } from "../training/types";
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
 import { DocumentGroupOptionsType, DocumentType } from "./documentType/types";
@@ -125,6 +125,27 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   outputDocumentTypes?: any;
   inputOwners?: InputOwner[];
   documentId?: string;
+  smartReferencesFrom?: SmartReference[];
+  smartReferencesTo?: SmartReference[];
+}
+
+interface SmartReference {
+  fromDocRev?: Nullable<DocumentRevision>;
+  fromDocRevId?: Nullable<string>;
+  fromDocumentId?: Nullable<string>;
+  id: string;
+  metadata: {
+    fieldId: string;
+  };
+  toDocRevId?: Nullable<string>;
+  toDocRev?: Nullable<DocumentRevision>;
+  toDocumentId?: Nullable<string>;
+  type: SmartReferenceType;
+}
+
+export enum SmartReferenceType {
+  HiddenPiInstance = "HIDDEN_PI_INSTANCE",
+  General = "GENERAL",
 }
 
 interface InputOwner {

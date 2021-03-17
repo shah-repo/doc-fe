@@ -1,7 +1,7 @@
 import { filter, find, get, groupBy, isArray, last, map, sortBy, union } from "lodash";
 import { action, computed, set } from "mobx";
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncOption, FBData } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
@@ -95,6 +95,16 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
           ...doc,
           documentRevisions: get(doc, "documentRevisions[0]"),
         }));
+      case FBAutocompleteAsyncOption.preventativeMaintenaceForms:
+        return data.map((option) => {
+          const releasedForm = option?.documentRevisions.find((e) => e.status === DocumentRevisionStatus.Released);
+          return ({
+            ...option,
+            name: releasedForm?.name || "",
+            displayRevision: releasedForm?.displayRevision || "",
+          });
+        });
+
       default: return union(data, this.additionalData);
     }
   };

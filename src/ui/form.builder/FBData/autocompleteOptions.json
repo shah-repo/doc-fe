@@ -205,7 +205,9 @@
     "path": "/documents/available_maintenance_forms",
     "label": "Preventative Maintenance Forms",
     "valueKey": "id",
-    "labelKey": "docId",
+    "labelKey": "name",
+    "labelPrefixRoot": "docId",
+    "includeRevision": "displayRevision",
     "root": ""
   },
   {
@@ -261,7 +263,6 @@
     "label": "MPI documents",
     "valueKey": "id",
     "labelKey": "name",
-    "labelPrefixRoot": "document.docId",
     "root": ""
   },
   {
