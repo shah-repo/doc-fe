@@ -1,10 +1,10 @@
 import { find } from "lodash";
 import { reaction } from "mobx";
 import React, { useEffect } from "react";
-import { FB, FBAutocompleteAsyncOption } from "..";
+import { FB, FBAutocompleteAsyncOption, FBPartsSelectionProps } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import { FBPartsSelectionProps } from "./FBPartsSelection.types";
+
 
 export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
   Component: React.FunctionComponent<T>,

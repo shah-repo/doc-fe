@@ -1,5 +1,4 @@
-import { FBId } from "..";
-import { FBAutocompleteAsyncProps } from "../FBAutocompleteAsync/FBAutocompleteAsync.types";
+import { FBAutocompleteAsyncProps, FBId } from "..";
 
 export type FBPartsSelectionProps =
 & FBAutocompleteAsyncProps

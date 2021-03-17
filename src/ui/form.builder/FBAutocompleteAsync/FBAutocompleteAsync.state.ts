@@ -126,7 +126,6 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     FBAutocompleteAsyncStore.loading.set(this.optionId!, true);
     const { path: url, root = "", publicApi } = this.optionConfig;
 
-    // this.setUrl(url);
     this.setRoot(root);
     this.setPublicApi(publicApi as boolean);
     this.set({
@@ -134,7 +133,6 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
       urlValues: this.urlValues,
       method: "get",
     });
-    // this.fetch();
   }
 }
 

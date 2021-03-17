@@ -1,6 +1,5 @@
 import React from "react";
-import { FBAutocompleteAsyncOption, FBPartsSelectionProps } from "..";
-import FBAutocompleteAsync from "../FBAutocompleteAsync/FBAutocompleteAsync";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBPartsSelectionProps } from "..";
 import { withFBPartsSelection } from "./FBPartsSelection.wrap";
 
 const FBPartsSelection: React.FunctionComponent<FBPartsSelectionProps> = ({
