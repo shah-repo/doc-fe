@@ -88,39 +88,13 @@ DocumentRevisionUpdateContainerProps
       />
     );
   }
-
-  const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
-    const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
-
-    if (redlineActive) {
-      async.reset();
-
-      const promise = async.start(
-        save,
-        documentRevision.id,
-        pick(values, "schema", "formInput") as DocumentRevisionEditRequestBody,
-        async,
-      );
-      // workaround when editing document through CR view. The form is marked dirty when editing FB fields
-      promise?.then(() => {
-        FBStore.audit.set({
-          url: FBEndpoint.DocumentRevisionAudit,
-          urlValues: { documentId: documentRevision.id },
-          method: "get",
-        });
-        helpers.resetForm();
-      });
-    }
-
-    if (isEmpty(dataToSubmit)) {
-      return;
-    }
+  const handleSave = (data: DocumentRevisionEditRequestBody, helpers) => {
     async.reset();
 
     const promise = async.start(
       save,
       documentRevision.id,
-      dataToSubmit as DocumentRevisionEditRequestBody,
+      data,
       async,
     );
     // workaround when editing document through CR view. The form is marked dirty when editing FB fields
@@ -132,6 +106,20 @@ DocumentRevisionUpdateContainerProps
       });
       helpers.resetForm();
     });
+  };
+
+  const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
+    const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
+    const redlineDateToSubmit = pick(values, "schema", "formInput");
+    if (redlineActive) {
+      return handleSave( redlineDateToSubmit as DocumentRevisionEditRequestBody, helpers);
+    }
+
+    if (isEmpty(dataToSubmit)) {
+      return;
+    }
+
+    handleSave(dataToSubmit as DocumentRevisionEditRequestBody, helpers);
   };
 
   const debouncedSubmit = debounce(onSubmit, 1000);

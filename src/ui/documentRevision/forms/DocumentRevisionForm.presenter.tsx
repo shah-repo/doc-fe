@@ -64,6 +64,7 @@ interface Props extends FormikProps<DocumentRevisionFormValues> {
   showAdministrativeAndVoidChange: boolean;
   pmFormId?: string;
   releasedDocRev?: DocumentRevision;
+  redlineActive: boolean;
 }
 
 export interface FormHeaderContext {
@@ -106,6 +107,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   showAdministrativeAndVoidChange,
   pmFormId,
   releasedDocRev,
+  redlineActive,
 }) => {
   useScrollIntoView();
   const classes = styles();
@@ -116,7 +118,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
   const [forceNewRender, setNewRender] = React.useState();
   const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
-
+  const { schema = {} } =  workspaceState || {};
   const hasOutput = useMemo(() =>
     checkIsTypeHaveOutput(documentTypeById?.groupOptions)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -179,8 +181,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   });
 
   useEffect(() => {
-    setFieldValue("schema", workspaceState?.schema);
-  }, [workspaceState?.schema]);
+    if (!redlineActive) {
+      return;
+    }
+    setFieldValue("schema", schema);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [redlineActive, schema]);
 
   useEffect(() => {
     if (!values.id && !values.document?.documentType?.id && setDocId) {

@@ -86,6 +86,7 @@ DocumentRevisionFormContainerProps
     documentRevisionsSelectors.getDocument(state, initialValues.document?.id || ""));
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
+  const redlineActive = useSelector(companySelectors.getRedlineActive);
 
   const availableReferences = useGetAvailableReferences(initialValues);
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
@@ -212,6 +213,7 @@ DocumentRevisionFormContainerProps
           showAdministrativeAndVoidChange,
           pmFormId,
           releasedDocRev,
+          redlineActive,
         }}
       />
     </FBWorkspace>
