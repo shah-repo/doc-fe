@@ -100,7 +100,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           keys(values.formInput).map((key) => {
             newInput[key] = values?.formInput && typeof values?.formInput[key] === "string" && key !== "equipment_id"
               ? "Void"
-              : null;
+              : key === "equipment_id" ?  null : values?.formInput?.[key];
             return key;
           });
           // TEMPORARY FIX FOR BE VALIDATION
