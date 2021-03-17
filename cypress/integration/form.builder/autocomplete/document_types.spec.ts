@@ -90,6 +90,10 @@ context("FORM Field test", () => {
         cy.fbEnterNameData({ name: "startingNumber", data: "1" });
       });
 
+      it("Select 'Numeric' Default Revision stage", () => {
+        cy.dtSelectDefaultRevisionStage({ defaultRevisionStage: "Numeric" });
+      });
+
       it("Enter document type Group 'Form'", () => {
         cy.get("[data-cy=\"field-group\"]").type("FORM{downarrow}{enter}");
       });
