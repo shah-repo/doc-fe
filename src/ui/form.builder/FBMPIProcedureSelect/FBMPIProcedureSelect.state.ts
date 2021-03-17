@@ -33,7 +33,7 @@ class FBMPIProcedureSelectState {
   });
 
   public useLot = (id: string, body: FBMPIProcedureSelectValue) => this.useLotApi.set({
-    url: FBEndpoint.UseLot,
+    url: FBEndpoint.UseOverride,
     urlValues: { id },
     method: "post",
     body,

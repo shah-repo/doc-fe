@@ -50,7 +50,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       dialogState?.config({
         open: true,
         title: "form.builder.select",
-        content: <FBMPIProcedureSelect {...{ name }} initialValues={item} />,
+        content: <FBMPIProcedureSelect {...{ name, type }} initialValues={item} />,
       });
     };
 
