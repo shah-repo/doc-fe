@@ -1,44 +1,54 @@
 import { Box, IconButton, Typography } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import { isEmpty } from "lodash";
+import moment from "moment";
 import React from "react";
-import { useSelector } from "react-redux";
-import { FBFilesPresenter, FBFileUpload, FBForm } from "..";
-import { authSelectors } from "../../../state/ducks/auth";
+import { FBFilesPresenter, FBFileUpload, FBForm, FBMapWrapper } from "..";
 import Text from "../../components/Text";
 import FBInputBaseField from "../FBInputBaseField/FBInputBaseField";
 import styles from "./FBNotesForm.styles";
-import { FBNotesFormProps } from "./FBNotesForm.types";
+import { FBNoteItem, FBNotesFormProps } from "./FBNotesForm.types";
 import { withFBNotesForm } from "./FBNotesForm.wrap";
 
 const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
   handleNote,
   formState,
   files,
+  notesState,
+  notes,
   ...props
 }) => {
   const classes = styles();
-  const avatar = useSelector(authSelectors.currentEmployeeAvatar);
-  const logo = !avatar ? "/avatar_placeholder.svg" : avatar;
-
   return (
-    <FBForm {...{ formState }}>
-      <Box display="flex" pb={1}>
-        <img className={classes.avatar} src={logo}  alt="UserProfile" />
-        <Box>
-          <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-            <Text message="Sara" />
-          </Typography>
-          <Typography variant="subtitle2">
-            <Text message="30 mins ago" />
-          </Typography>
-        </Box>
-      </Box>
-      <Box borderBottom="1px solid lightgrey">
-        <Typography variant="subtitle1" style={{ marginLeft: 65, marginBottom: 16 }}>
-          <Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam" />
-        </Typography>
-      </Box>
+    <FBForm {...{ formState, notesState }}>
+      <FBMapWrapper<FBNoteItem[] | undefined> collection={notes}>
+        {(note: FBNoteItem, index) => {
+          const logo = !note?.avatar ? "/avatar_placeholder.svg" : note?.avatar;
+          const lastNote = index === ((notes?.length as number) - 1);
+          return (
+            <Box pb={lastNote ? 7 : 3}>
+              <Box display="flex" pb={1}>
+                <img className={classes.avatar} src={logo}  alt="UserProfile" />
+                <Box>
+                  <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
+                    <Text message={note?.senderName} />
+                  </Typography>
+                  <Typography variant="subtitle2">
+                    <Text message={moment.utc(note.createdAt).local().startOf("seconds").fromNow()} />
+                  </Typography>
+                </Box>
+              </Box>
+              <Box borderBottom={lastNote ? 0 : "1px solid lightgrey"} >
+                <Typography variant="subtitle1" style={{ marginBottom: 16, marginLeft: 64 }}>
+                  <Text message={note.description} />
+                </Typography>
+                <Box marginLeft={8}>
+                  <FBFilesPresenter files={note.attachments} mode="raw" />
+                </Box>
+              </Box>
+            </Box>
+          ); }}
+      </FBMapWrapper>
       <Box
         border="1px solid lightgrey"
         height="max-content"
@@ -48,12 +58,14 @@ const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
       >
         <FBInputBaseField
           name="noteText"
+          placeholder="common.type.here"
         />
         <Box mt={1.5}>
           <FBFileUpload
             name="noteFile"
-            attachmentShortcut
+            mode="fileUploadIcon"
             gutter={false}
+            withState
           />
         </Box>
         <IconButton

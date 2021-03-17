@@ -357,6 +357,7 @@
   "common.group": "Group",
   "common.schema": "Schema",
   "common.fields.config": "Fields Config",
+  "common.type.here": "Type here...",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",

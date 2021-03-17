@@ -4,7 +4,7 @@ import React from "react";
 import { FBFileFieldProps } from "..";
 import { withFBAttachmentField } from "./FBFileField.wrap";
 
-const FBAttachmentShortcut: React.FunctionComponent<FBFileFieldProps> = ({
+const FBFileFieldIcon: React.FunctionComponent<FBFileFieldProps> = ({
   name,
   multiple = true,
   loading = false,
@@ -30,4 +30,4 @@ const FBAttachmentShortcut: React.FunctionComponent<FBFileFieldProps> = ({
   </>
 );
 
-export default withFBAttachmentField(FBAttachmentShortcut);
+export default withFBAttachmentField(FBFileFieldIcon);

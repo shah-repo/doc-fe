@@ -9,6 +9,7 @@ export const withFBNotes = <T extends FBNotesProps>(
   const Comp = ({
     onClick,
     dialogState,
+    name,
     ...props
   }: T) => {
 
@@ -24,7 +25,7 @@ export const withFBNotes = <T extends FBNotesProps>(
     onClick = () => dialogState?.config({
       open: true,
       title: "form.builder.add.note",
-      content: <FBNotesForm />,
+      content: <FBNotesForm {...{ name }}/>,
     });
 
     // MARK: @observer

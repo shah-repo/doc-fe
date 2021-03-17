@@ -14,7 +14,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
     withState,
     files,
     isInputOwner,
-    attachmentShortcut,
+    mode,
     gutter,
     ...props
   }: T) => {
@@ -46,7 +46,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
       files,
       disabled,
       withState,
-      attachmentShortcut,
+      mode,
       name,
       gutter,
     });

@@ -20,7 +20,7 @@ export const withFBInputBaseField = <T extends FBInputBaseFieldProps>(
 
     const { formState } = FB.useStores();
     const { workspaceMode: mode } = formState || {};
-    defaultValue = defaultValue || formState?.getFieldValue(name);
+    // defaultValue = defaultValue || formState?.getFieldValue(name);
     const intl = useIntl();
     disabled = (
       disabled ||

@@ -21,11 +21,12 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   hidden,
   name,
   includeNotes,
+  isOutput,
 }) => (
   <>
     {!hidden && (
       <Box mb={gutter ? 5 : 0} {...boxProps}>
-        {includeNotes && <FBNotes {...{ name }} />}
+        {includeNotes && isOutput && <FBNotes {...{ name }} />}
         <FormControl fullWidth {...{ error }}>
           {!includes(FBInputState.omitLabel, type) && label && (
             <FBLabel {...{ error, label, loading }} />
