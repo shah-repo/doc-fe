@@ -1,7 +1,8 @@
-import { debounce, isEmpty } from "lodash";
+import { debounce, isEmpty, pick } from "lodash";
 import React, { useEffect, useMemo } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
+import { companyActions, companySelectors } from "../../state/ducks/company";
 import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../state/reducers";
@@ -55,7 +56,8 @@ DocumentRevisionUpdateContainerProps
   canChangeOwnerShip,
   isNewVersion,
 }) => {
-
+  const dispatch = useDispatch();
+  const redlineActive = useSelector(companySelectors.getRedlineActive);
   const initialValues = useMemo(() => toDocumentRevisionFormValues(documentRevision), [documentRevision]);
   const isCurrentUserOperator = React.useContext(isOperator);
   const { docId } = documentRevision.document;
@@ -66,6 +68,9 @@ DocumentRevisionUpdateContainerProps
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
+      if (redlineActive) {
+        dispatch(companyActions.redlineConfig());
+      }
       setDoNotPrompt(true);
     },
   });
@@ -83,20 +88,13 @@ DocumentRevisionUpdateContainerProps
       />
     );
   }
-
-  const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
-    const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
-
-    if (isEmpty(dataToSubmit)) {
-      return;
-    }
-
+  const handleSave = (data: DocumentRevisionEditRequestBody, helpers) => {
     async.reset();
 
     const promise = async.start(
       save,
       documentRevision.id,
-      dataToSubmit as DocumentRevisionEditRequestBody,
+      data,
       async,
     );
     // workaround when editing document through CR view. The form is marked dirty when editing FB fields
@@ -108,6 +106,20 @@ DocumentRevisionUpdateContainerProps
       });
       helpers.resetForm();
     });
+  };
+
+  const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
+    const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
+    const redlineDateToSubmit = pick(values, "schema", "formInput");
+    if (redlineActive) {
+      return handleSave( redlineDateToSubmit as DocumentRevisionEditRequestBody, helpers);
+    }
+
+    if (isEmpty(dataToSubmit)) {
+      return;
+    }
+
+    handleSave(dataToSubmit as DocumentRevisionEditRequestBody, helpers);
   };
 
   const debouncedSubmit = debounce(onSubmit, 1000);

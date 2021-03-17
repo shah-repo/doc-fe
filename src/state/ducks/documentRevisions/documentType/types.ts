@@ -71,7 +71,8 @@ export enum DOC_TYPE_GROUP_OPTION {
   SEED = "SEED",
   OPERATOR_RELEASE = "OPERATOR_RELEASE",
   MPI_OUTPUT = "MPI_OUTPUT",
-  LHR = "LHR"
+  LHR = "LHR",
+  REDLINE = "REDLINE",
 }
 export type DocumentGroupOptionsType = keyof typeof DOC_TYPE_GROUP_OPTION;
 
