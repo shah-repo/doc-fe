@@ -28,7 +28,8 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     const redlineActive = useSelector(companySelectors.getRedlineActive);
 
     isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
-    isPreview = (isOutput || workspaceState?.mode === "preview" || workspaceState?.mode === "formPreview") && !redlineActive;
+    isPreview = (isOutput || workspaceState?.mode === "preview" || workspaceState?.mode === "formPreview") &&
+    !redlineActive;
     types = keys(FBProcedureItemType);
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = (!isInputOwner || isPreview) && !redlineActive;
