@@ -10,4 +10,4 @@ export type FBFileUploadProps =
   mode?: FBFileFieldType;
 };
 
-export type FBFileFieldType = "fileUploadIcon" | "fileUpload";
+type FBFileFieldType = "fileUploadIcon" | "fileUpload";

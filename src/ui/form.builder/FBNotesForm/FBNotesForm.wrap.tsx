@@ -2,9 +2,8 @@ import { isEmpty, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBFormState } from "..";
+import { FB, FBFormState, FBNoteItem, FBNotesFormProps } from "..";
 import FBNotesFormState from "./FBNotesForm.state";
-import { FBNoteItem, FBNotesFormProps } from "./FBNotesForm.types";
 
 export const withFBNotesForm = <T extends FBNotesFormProps>(
   Component: React.FunctionComponent<T>,

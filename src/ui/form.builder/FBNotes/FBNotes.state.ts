@@ -1,8 +1,7 @@
 import { action, observable, set } from "mobx";
-import { FBNoteItem } from "..";
+import { FBNoteBody, FBNoteItem } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
-import { FBNoteBody } from "./FBNotes.types";
 
 class FBNotesState extends FBRequest<FBNoteItem[], FBNoteBody> {
   @observable public notes?: FBNoteItem[];

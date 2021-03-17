@@ -1,8 +1,6 @@
 import React from "react";
-import { FB, FBDialogState } from "..";
-import FBNotesForm from "../FBNotesForm/FBNotesForm";
+import { FB, FBDialogState, FBNotesForm, FBNotesProps } from "..";
 import FBNotesState from "./FBNotes.state";
-import { FBNotesProps } from "./FBNotes.types";
 
 export const withFBNotes = <T extends FBNotesProps>(
   Component: React.FunctionComponent<T>,

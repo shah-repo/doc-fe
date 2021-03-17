@@ -3,11 +3,10 @@ import SendIcon from "@material-ui/icons/Send";
 import { isEmpty } from "lodash";
 import moment from "moment";
 import React from "react";
-import { FBFilesPresenter, FBFileUpload, FBForm, FBMapWrapper } from "..";
+import { FBFilesPresenter, FBFileUpload, FBForm, FBMapWrapper, FBNoteItem, FBNotesFormProps } from "..";
 import Text from "../../components/Text";
 import FBInputBaseField from "../FBInputBaseField/FBInputBaseField";
 import styles from "./FBNotesForm.styles";
-import { FBNoteItem, FBNotesFormProps } from "./FBNotesForm.types";
 import { withFBNotesForm } from "./FBNotesForm.wrap";
 
 const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({

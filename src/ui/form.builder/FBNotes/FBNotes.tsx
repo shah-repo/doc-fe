@@ -1,9 +1,8 @@
 import { Box, IconButton } from "@material-ui/core";
 import React from "react";
-import { FBDialog, FBProvider } from "..";
+import { FBDialog, FBNotesProps, FBProvider } from "..";
 import { ReactComponent as NoteIcon } from "../../../assets/images/note.svg";
 import styles from "./FBNotes.styles";
-import { FBNotesProps } from "./FBNotes.types";
 import { withFBNotes } from "./FBNotes.wrap";
 
 const FBNotes: React.FunctionComponent<FBNotesProps> = ({
