@@ -43,6 +43,7 @@ export const checkIsTypeFaiInspection = checkDocumentGroupOptions.bind(this, DOC
 
 export const hasSerializedCSV = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.SERIALIZED_CSV);
 export const hasOperatorRelease = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.OPERATOR_RELEASE);
+export const hasRedline = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.REDLINE);
 
 export const checkCanTypeCreateInspection = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_CREATE_INSPECTION);
 export const checkCanBeCopied = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_BE_COPIED);
