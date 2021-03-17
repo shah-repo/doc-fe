@@ -1,5 +1,4 @@
-import { FBWorkspaceProps } from "..";
-import { FBFormProps } from "../FBForm";
+import { FBFormProps, FBWorkspaceProps } from "..";
 
 
 export type FBWorkspaceBottomBarProps =

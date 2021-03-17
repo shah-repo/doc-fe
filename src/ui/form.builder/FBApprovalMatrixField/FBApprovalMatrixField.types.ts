@@ -1,6 +1,6 @@
 import { FBApprovalMatrixFieldState, FBButtonProps, FBInputProps } from "..";
 import { Group } from "../../../state/ducks/auth/types";
-import { Employee } from "../../../state/ducks/company";
+import { Employee } from "../../../state/ducks/company/types";
 import { FBWorkspaceMode } from "../types/workspace";
 
 export type FBApprovalMatrixFieldProps =
@@ -20,7 +20,7 @@ export interface FBApprovalRole {
   index: number;
 }
 
-export interface FBApprovalMatrixDocType {
+interface FBApprovalMatrixDocType {
   id?: string;
   acronym: string;
   name: string;
@@ -30,7 +30,7 @@ export interface FBApprovalMatrixDocType {
   category: string;
 }
 
-export interface FBApprovalRolesStages {
+interface FBApprovalRolesStages {
   stage1: boolean[];
   stage2: boolean[];
   stage3: boolean[];

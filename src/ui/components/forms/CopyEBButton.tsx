@@ -2,13 +2,14 @@ import { Button } from "@material-ui/core";
 import { ButtonProps } from "@material-ui/core/Button";
 import * as React from "react";
 import { useHistory } from "react-router-dom";
-import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Text from "../../components/Text";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 
-export interface CloneEBButtonProps extends ButtonProps {
+interface CloneEBButtonProps extends ButtonProps {
   documentRevision: DocumentRevision;
 }
 

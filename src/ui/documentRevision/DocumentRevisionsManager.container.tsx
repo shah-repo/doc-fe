@@ -7,9 +7,10 @@ import { ReactComponent as BookmarkIcon } from "../../assets/images/bookmark.svg
 import { ReactComponent as CRIcon } from "../../assets/images/cr.svg";
 import { ReactComponent as TimelineIcon } from "../../assets/images/history.svg";
 import { ReactComponent as NoteIcon } from "../../assets/images/note.svg";
-import { ChangeRequest } from "../../state/ducks/changeRequest";
-import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
-import { DocumentGroupType } from "../../state/ducks/documentRevisions/documentType";
+import { ChangeRequest } from "../../state/ducks/changeRequest/types";
+import { documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { DocumentGroupType } from "../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import { FB, FBBookmarkState, FBProvider } from "../form.builder";
@@ -40,14 +41,11 @@ interface OwnProps {
   deprecatedAt: string;
 }
 
-export type DocumentRevisionManagerContainerProps = OwnProps &
-StateProps;
+type DocumentRevisionManagerContainerProps = OwnProps & StateProps;
 
 // TO-DO Move To Context Folder
-export let documentRevisionStatusContext = React.createContext<DocumentRevisionStatus>(DocumentRevisionStatus.Draft);
 export let documentRevisionStatusContextFromDocList = React.createContext<undefined | DocumentRevisionStatus>(undefined);
 export let documentRevisionTypeGroupsFromDocListContext = React.createContext<undefined | DocumentGroupType>(undefined);
-export let documentRevisionVersionContext = React.createContext<number>(1);
 
 const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
 const mapStateToProps = (
@@ -58,7 +56,7 @@ const mapStateToProps = (
   docId: documentRevisionsSelectors.getDocId(state, props.documentId),
 });
 
-export const DocumentRevisionManagerContainer: React.FunctionComponent<
+const DocumentRevisionManagerContainer: React.FunctionComponent<
 DocumentRevisionManagerContainerProps
 > = ({
   isNewVersion,
@@ -178,11 +176,9 @@ DocumentRevisionManagerContainerProps
     },
   ];
 
-  documentRevisionStatusContext = React.createContext(selectedDocument?.status);
   const status = selectedDocument ? selectedDocument.status : undefined;
   documentRevisionStatusContextFromDocList = React.createContext(status);
   documentRevisionTypeGroupsFromDocListContext = React.createContext(selectedDocument?.document.documentType.group);
-  documentRevisionVersionContext = React.createContext(selectedDocument?.version);
 
   useEffect(() => () => {
     documentRevisionStatusContextFromDocList = React.createContext<undefined | DocumentRevisionStatus>(undefined);

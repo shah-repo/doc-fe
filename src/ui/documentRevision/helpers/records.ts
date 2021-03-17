@@ -1,10 +1,10 @@
 import { find, isEmpty, some } from "lodash";
-import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/documentRevisions";
-import { ApprovalStatus } from "../../../state/ducks/documents";
+import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
+import { ApprovalStatus } from "../../../state/ducks/documents/types";
 import { FBFormState, FBSchemaProps } from "../../form.builder";
 import { checkIsDocumentRecord } from "./checkDocumentGroup";
 
-export const getInlineApprovalFields = (schema?: FBSchemaProps[]) => {
+const getInlineApprovalFields = (schema?: FBSchemaProps[]) => {
   if (!schema) { return []; }
   return schema.filter((field) => (field.type === "inlineapproval" as string));
 };

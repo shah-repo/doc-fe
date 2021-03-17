@@ -12,7 +12,7 @@ let multipleCompanies;
 let secondEmployee;
 let partsID;
 
-context("FORM Field test", () => {
+context("Autocomplete 'Parts' test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");

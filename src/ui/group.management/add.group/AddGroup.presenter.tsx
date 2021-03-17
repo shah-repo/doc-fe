@@ -11,7 +11,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export const AddGroupPresenter: React.FunctionComponent<Props> = ({
+const AddGroupPresenter: React.FunctionComponent<Props> = ({
   isOpen,
   openDialog,
   closeDialog,

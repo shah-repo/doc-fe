@@ -1,6 +1,6 @@
 import Dialog from "@material-ui/core/Dialog";
 import React, { useMemo } from "react";
-import { Attachment } from "../../../../state/ducks/attachments";
+import { Attachment } from "../../../../state/ducks/attachments/types";
 import ViewFileContent from "./components/dialog.content";
 import ViewFileTitle from "./components/dialog.title";
 import { PDF, SUPPORTED_IMAGE_FILES } from "./utils/constants";

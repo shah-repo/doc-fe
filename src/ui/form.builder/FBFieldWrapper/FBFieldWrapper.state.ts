@@ -1,7 +1,7 @@
 import { action, observable, set } from "mobx";
-import { FBFieldWrapperProps } from ".";
+import { FBFieldWrapperProps } from "..";
 
-export class FBFieldWrapperState {
+class FBFieldWrapperState {
   @observable public toolsVisible: FBFieldWrapperProps["toolsVisible"] = "hidden";
   @observable public addToolVisible: FBFieldWrapperProps["addToolVisible"] = "hidden";
   @observable public markDownVisible = false;

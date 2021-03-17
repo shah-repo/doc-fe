@@ -1,6 +1,6 @@
 import { createMuiTheme } from "@material-ui/core";
 import { Palette, PaletteColor } from "@material-ui/core/styles/createPalette";
-import { WhiteLabelingColors } from "../../../state/ducks/company";
+import { WhiteLabelingColors } from "../../../state/ducks/company/types";
 import { ThemeEnv } from "./utils/types";
 
 export const muiTheme = createMuiTheme();
@@ -41,7 +41,7 @@ export const createAppPalette = (theme: ThemeEnv, customColors: WhiteLabelingCol
   return palette;
 };
 
-export const defaultPalette: Palette = {
+const defaultPalette: Palette = {
   ...muiTheme.palette,
   primary: {
     main: "#0066FF",
@@ -67,7 +67,7 @@ export const defaultPalette: Palette = {
   },
 };
 
-export const devPalette: Palette = {
+const devPalette: Palette = {
   ...defaultPalette,
   secondary: {
     // ...defaultPalette.secondary,
@@ -78,7 +78,7 @@ export const devPalette: Palette = {
   },
 };
 
-export const demoPalette: Palette = {
+const demoPalette: Palette = {
   ...defaultPalette,
   secondary: {
     // ...defaultPalette.secondary,
@@ -87,7 +87,7 @@ export const demoPalette: Palette = {
   } as PaletteColor,
 };
 
-export const sandboxPalette: Palette = {
+const sandboxPalette: Palette = {
   ...defaultPalette,
   primary: {
     main: "#FF7600",

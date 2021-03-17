@@ -1,7 +1,8 @@
 import { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
 import { connect } from "react-redux";
-import { changeRequestsActions, ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../state/ducks/changeRequest";
+import { changeRequestsActions } from "../../../state/ducks/changeRequest";
+import { ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../state/ducks/changeRequest/types";
 import { ApplicationState } from "../../../state/reducers";
 import { toastError } from "../../components/notifications";
 import TransitionDialog from "../../components/transitionDialog/TransitionDialog";
@@ -21,9 +22,9 @@ interface DispatchProps {
   applyTransition: typeof changeRequestsActions.applyTransition;
 }
 
-export type TransitionDialogContainerProps = OwnProps & DispatchProps;
+type TransitionDialogContainerProps = OwnProps & DispatchProps;
 
-export const TransitionDialogContainer: React.FunctionComponent<TransitionDialogContainerProps> = ({
+const TransitionDialogContainer: React.FunctionComponent<TransitionDialogContainerProps> = ({
   changeRequestId,
   applyTransition,
   transition,

@@ -2,7 +2,7 @@ import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl, IconButto
 import CloseIcon from "@material-ui/icons/Close";
 import { Form, Formik } from "formik";
 import React, { Fragment } from "react";
-import { Owner } from "../../../../state/ducks/common";
+import { Owner } from "../../../../state/ducks/common/types";
 import { AsyncState } from "../../../../state/types";
 import SelectField, { SelectOption } from "../../forms/fields/Select";
 import { FormContext } from "../../forms/FormContext";
@@ -11,7 +11,7 @@ import FormProgress from "../../forms/FormProgress";
 import SubmitButton from "../../forms/SubmitButton";
 import Text from "../../Text";
 
-export interface OwnProps {
+interface OwnProps {
   employees: SelectOption[];
   updateOwner: any;
   currentOwner: Owner;

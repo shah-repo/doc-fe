@@ -1,9 +1,8 @@
 import { cloneDeep, get } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBDialogState, FBFormMode, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
+import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import { FBMPIProcedureItemProps } from "./FBMPIProcedureItem.types";
 
 export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
   Component: React.FunctionComponent<T>,
@@ -11,6 +10,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
   const Comp = ({
     onClick,
     handleRemove,
+    handleSelect,
     getItem,
     getLot,
     loading,
@@ -44,6 +44,14 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       });
     };
 
+    handleSelect = (item: FBProcedureItemConfig) => {
+      dialogState?.config({
+        open: true,
+        title: "form.builder.select",
+        content: <FBMPIProcedureSelect {...{ name }} initialValues={item} />,
+      });
+    };
+
     handleRemove = (id: string) => mpiProcedureState?.removeItem(id, type);
     getItem = (id: string): string => mpiProcedureState?.getItem(id, type) || "";
     getLot = (id?: string): string => mpiProcedureState?.getLot(id) || "";
@@ -69,8 +77,10 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       ...(props as T),
       onClick,
       handleRemove,
+      handleSelect,
       getItem,
       getLot,
+      mpiProcedureState,
       dialogState,
       loading,
       name,

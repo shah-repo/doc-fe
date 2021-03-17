@@ -1,9 +1,8 @@
 import { Box, Tooltip } from "@material-ui/core";
 import { isString, isUndefined } from "lodash";
 import React from "react";
-import { FBConditionalWrapper } from "..";
+import { FBConditionalWrapper, FBTooltipProps } from "..";
 import Text from "../../components/Text";
-import { FBTooltipProps } from "./FBTooltip.types";
 
 const FBTooltip: React.FunctionComponent<FBTooltipProps> = ({
   title,

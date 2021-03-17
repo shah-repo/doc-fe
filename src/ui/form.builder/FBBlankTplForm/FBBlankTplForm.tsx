@@ -1,6 +1,5 @@
 import React from "react";
-import { FBBlankTplFormProps, FBInput, FBSection } from "..";
-import { FBFileUpload } from "../FBFileUpload";
+import { FBBlankTplFormProps, FBFileUpload, FBInput, FBSection } from "..";
 import { withFBBlankTplForm } from "./FBBlankTplForm.wrap";
 
 const FBBlankTplForm: React.FunctionComponent<FBBlankTplFormProps> = ({

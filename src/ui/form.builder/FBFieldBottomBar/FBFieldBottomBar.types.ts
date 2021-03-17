@@ -1,5 +1,5 @@
 import { BoxProps } from "@material-ui/core";
-import { FBStarterProps } from "../FBStarter";
+import { FBStarterProps } from "..";
 import { FBInputProps } from "../types/common";
 
 export type FBFieldBottomBarProps =

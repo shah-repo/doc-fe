@@ -20,9 +20,9 @@ interface StateProps {
   slackTeamId: string;
 }
 
-export type Props = DispatchProps & StateProps;
+type Props = DispatchProps & StateProps;
 
-export const AddSlackButtonContainer: React.FunctionComponent<Props> = ({
+const AddSlackButtonContainer: React.FunctionComponent<Props> = ({
   isSlackIntegrationEnabled,
   getSlackUrl,
   slackTeamId,

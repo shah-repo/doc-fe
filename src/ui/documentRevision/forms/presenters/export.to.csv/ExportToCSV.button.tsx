@@ -2,7 +2,7 @@ import { Button } from "@material-ui/core";
 import { includes, isEmpty } from "lodash";
 import * as React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../../../common/utils/date";
-import { DocumentRevision } from "../../../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
 import Text from "../../../../components/Text";
 import ExportListDialog from "../../../../document.revision/list/ExportListDialog/ExportListDialog";
 import useDialog from "../../../../hooks/useDialog";

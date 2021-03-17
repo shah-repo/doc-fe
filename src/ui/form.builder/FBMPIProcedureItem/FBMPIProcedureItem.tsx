@@ -3,18 +3,20 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import EditIcon from "@material-ui/icons/Edit";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { isEmpty } from "lodash";
+import { Observer } from "mobx-react";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBButton, FBDialog, FBFilesPresenter, FBMapWrapper, FBMediaAlbumField, FBMPIProcedureItemProps, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemType, FBProvider, FBText } from "..";
+import { FBButton, FBDialog, FBFilesPresenter, FBFormMode, FBMapWrapper, FBMediaAlbumField, FBMPIProcedureItemProps, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemType, FBProvider, FBText } from "..";
 import Colors from "../../layout/theme/utils/colors";
-import { FBFormMode } from "../FBForm";
 import { withFBMPIProcedureItem } from "./FBMPIProcedureItem.wrap";
 
 const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   onClick,
   handleRemove,
+  handleSelect,
   getItem,
   getLot,
+  mpiProcedureState,
   dialogState,
   isPreview,
   disabled,
@@ -80,6 +82,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             borderTop={0}
             borderColor={Colors.hint_gray}
             key={`fb-procedure-item-${type}-${index}`}
+            onMouseEnter={() => mpiProcedureState?.setSelectState(index)}
+            onMouseLeave={() => mpiProcedureState?.setSelectState(index)}
           >
             <Box
               display="flex"
@@ -99,6 +103,21 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   flexGrow: 1,
                 }}
               />
+              {isPreview && (
+                <Observer>
+                  {() => (
+                    <FBButton
+                      label="form.builder.select"
+                      hidden={!mpiProcedureState?.selectState.get(index)}
+                      onClick={() => handleSelect?.({
+                        ...item,
+                        id: item.title,
+                        title: getItem?.(item.title) || "",
+                      })}
+                    />
+                  )}
+                </Observer>
+              )}
               {!isPreview && (
                 <>
                   <Box>

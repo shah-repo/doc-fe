@@ -1,7 +1,6 @@
 import { cloneDeep, filter, find, findIndex, includes, inRange, isUndefined, size, union, unionBy } from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
-import { FBSchemaProps } from ".";
 import {
   FBActionField,
   FBApproval,
@@ -9,53 +8,54 @@ import {
   FBCheckboxGroup,
   FBEditorState,
   FBInputProps,
-  FBInputType,
+  FBInputType, FBSchemaProps,
 } from "..";
-import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
-import { FBApprovals } from "../FBApprovals";
-import { FBApprovers } from "../FBApprovers";
-import { FBBlankTplForm } from "../FBBlankTplForm";
-import { FBButton } from "../FBButton";
-import { FBCheckbox } from "../FBCheckbox";
-import { FBDatePicker } from "../FBDatePicker";
-import { FBDocumentRevisions } from "../FBDocumentRevisions";
-import { FBEBPart } from "../FBEBPart";
-import { FBEQMaintenance } from "../FBEQMaintenance";
-import { FBFileUpload } from "../FBFileUpload";
-import { FBHelloSign } from "../FBHelloSign";
-import { FBHyperlink } from "../FBHyperlink";
-import { FBInlineApproval } from "../FBInlineApproval";
-import { FBInstructionsDocument } from "../FBInstructionsDocument";
+import FBApprovalMatrixField from "../FBApprovalMatrixField/FBApprovalMatrixField";
+import FBApprovals from "../FBApprovals/FBApprovals";
+import FBApprovers from "../FBApprovers/FBApprovers";
+import FBBlankTplForm from "../FBBlankTplForm/FBBlankTplForm";
+import FBButton from "../FBButton/FBButton";
+import FBCheckbox from "../FBCheckbox/FBCheckbox";
+import FBDatePicker from "../FBDatePicker/FBDatePicker";
+import FBDocumentRevisions from "../FBDocumentRevisions/FBDocumentRevisions";
+import FBEBPart from "../FBEBPart/FBEBPart";
+import FBEQMaintenance from "../FBEQMaintenance/FBEQMaintenance";
+import FBFileUpload from "../FBFileUpload/FBFileUpload";
+import FBHelloSign from "../FBHelloSign/FBHelloSign";
+import FBHyperlink from "../FBHyperlink/FBHyperlink";
+import FBInlineApproval from "../FBInlineApproval/FBInlineApproval";
+import FBInstructionsDocument from "../FBInstructionsDocument/FBInstructionsDocument";
 import FBLHRStep from "../FBLHRStep/FBLHRStep";
-import { FBMediaAlbumField } from "../FBMediaAlbumField";
+import FBMediaAlbumField from "../FBMediaAlbumField/FBMediaAlbumField";
 import FBMPIProcedure from "../FBMPIProcedure/FBMPIProcedure";
-import { FBParagraph } from "../FBParagraph";
-import { FBParts } from "../FBParts";
-import { FBPOApprovalMatrix } from "../FBPOApprovalMatrix";
-import { FBPOReceive } from "../FBPOReceive";
+import FBParagraph from "../FBParagraph/FBParagraph";
+import FBParts from "../FBParts/FBParts";
+import FBPOApprovalMatrix from "../FBPOApprovalMatrix/FBPOApprovalMatrix";
+import FBPOReceive from "../FBPOReceive/FBPOReceive";
 import FBProcedure from "../FBProcedure/FBProcedure";
 import FBProcedureDiff from "../FBProcedureDiff/FBProcedureDiff";
-import { FBPurchaseOrder } from "../FBPurchaseOrder";
-import { FBQuantityField } from "../FBQuantityField";
-import { FBRadio } from "../FBRadio";
-import { FBRadioGroup } from "../FBRadioGroup";
-import { FBRequestApproval } from "../FBRequestApproval";
+import FBPurchaseOrder from "../FBPurchaseOrder/FBPurchaseOrder";
+import FBQuantityField from "../FBQuantityField/FBQuantityField";
+import FBQuantityUnitField from "../FBQuantityUnitField/FBQuantityUnitField";
+import FBRadio from "../FBRadio/FBRadio";
+import FBRadioGroup from "../FBRadioGroup/FBRadioGroup";
+import FBRequestApproval from "../FBRequestApproval/FBRequestApproval";
 import FBSchemaSelect from "../FBSchemaSelect/FBSchemaSelect";
-import { FBSection } from "../FBSection";
-import { FBSelect } from "../FBSelect";
-import { FBSelectDocument } from "../FBSelectDocument";
-import { FBSelectRequirement } from "../FBSelectRequirement";
-import { FBSubsection } from "../FBSubsection";
+import FBSection from "../FBSection/FBSection";
+import FBSelect from "../FBSelect/FBSelect";
+import FBSelectDocument from "../FBSelectDocument/FBSelectDocument";
+import FBSelectRequirement from "../FBSelectRequirement/FBSelectRequirement";
+import FBSubsection from "../FBSubsection/FBSubsection";
 import FBSupplier from "../FBSupplier/FBSupplier";
-import { FBTask } from "../FBTask";
-import { FBTestRequirement } from "../FBTestRequirement";
+import FBTask from "../FBTask/FBTask";
+import FBTestRequirement from "../FBTestRequirement/FBTestRequirement";
 import FBTextEditor from "../FBTextEditor/FBTextEditor";
-import { FBTextField } from "../FBTextField";
-import { FBTextFieldWithRange } from "../FBTextFieldWithRange";
-import { FBTimerField } from "../FBTimerField";
+import FBTextField from "../FBTextField/FBTextField";
+import FBTextFieldWithRange from "../FBTextFieldWithRange/FBTextFieldWithRange";
+import FBTimerField from "../FBTimerField/FBTimerField";
 import FBUnitMeasures from "../FBUnitMeasures/FBUnitMeasures";
 
-export class FBSchemaState {
+class FBSchemaState {
   public static omitLabel: FBInputType[] = [
     "section",
     "subsection",
@@ -121,6 +121,7 @@ export class FBSchemaState {
     supplier: FBSupplier,
     lhrstep: FBLHRStep,
     unitMeasures: FBUnitMeasures,
+    quantityunit: FBQuantityUnitField,
   };
 
   @observable public schema?: FBSchemaProps[];

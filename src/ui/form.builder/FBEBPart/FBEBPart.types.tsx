@@ -1,5 +1,5 @@
 import { FBAutocompleteAsyncProps, FBInputProps, FBProviderProps } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { Document } from "../../../state/ducks/documents/types";
 
 export type FBEBPartProps =

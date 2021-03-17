@@ -6,7 +6,7 @@ import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
 
-export class FBAutocompleteAsyncState extends FBRequest<any, any> {
+class FBAutocompleteAsyncState extends FBRequest<any, any> {
   private optionId: string | undefined;
   public autocompleteValueApi: FBRequest<DocumentRevision, null> = new FBRequest();
   public additionalData?: any[];

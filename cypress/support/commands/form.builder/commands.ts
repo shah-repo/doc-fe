@@ -11,6 +11,7 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       fbAddNewFieldOption(): Chainable<Subject>;
+      fbRemoveLastAddedItem(): Chainable<Subject>;
       fbSelectItemFromNewFieldList(params: { field: string }): Chainable<Subject>;
       fbEnterPOLabelName(params: { name: string }): Chainable<Subject>;
       fbAddNewFieldButton(): Chainable<Subject>;
@@ -81,6 +82,10 @@ Cypress.Commands.add("fbAutocompleteType", (params: { autocompleteOption: string
 Cypress.Commands.add("dtSelectDefaultRevisionStage", (params: { defaultRevisionStage: string }) => {
   cy.get("[id=\"defaultRevStage\"]").click();
   cy.get("div[id^=react-select]").contains(params.defaultRevisionStage).click();
+});
+
+Cypress.Commands.add("fbRemoveLastAddedItem", () => {
+  cy.get("[data-cy=\"remove-schema-item\"]").last().click({ force: true });
 });
 
 Cypress.Commands.add("fbAddNewFieldOption", () => {

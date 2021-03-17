@@ -1,4 +1,4 @@
-import { Adapter } from ".";
+import { Adapter } from "..";
 
 let currentAdapter: any;
 

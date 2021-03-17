@@ -1,7 +1,7 @@
 import { Employee } from "../company/types";
-import { DocumentRevision, DocumentRevisionDocument } from "../documentRevisions";
+import { DocumentRevision, DocumentRevisionDocument } from "../documentRevisions/types";
 
-export enum TrainingPlanStatus {
+enum TrainingPlanStatus {
   ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",
 }
@@ -40,7 +40,7 @@ export interface TrainingRecordQuery {
   completedAtAfter: Date;
 }
 
-export interface TrainingPlan {
+interface TrainingPlan {
   id: string;
   status: TrainingPlanStatus;
   validity: number;

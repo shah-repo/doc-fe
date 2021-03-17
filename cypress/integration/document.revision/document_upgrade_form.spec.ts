@@ -55,9 +55,6 @@ context.skip("Document form upgrade", () => {
       });
     });
 
-    it("[API]Create and release form for EB", () => {
-    });
-
     it("[API]Create and release form for Record", () => {
     });
 
@@ -75,23 +72,6 @@ context.skip("Document form upgrade", () => {
 
     it("Select company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-  });
-
-  context("Create an EB from form", () => {
-    it("Navigate to document list", () => {
-    });
-
-    it("Select the EB form", () => {
-    });
-
-    it("Click on Create New button", () => {
-    });
-
-    it("Fill out the required fields", () => {
-    });
-
-    it("Save the document", () => {
     });
   });
 
@@ -129,28 +109,11 @@ context.skip("Document form upgrade", () => {
     });
   });
 
-  context("Revise the EB form", () => {
-    it("Navigate to document list", () => {
-    });
-
-    it("Select the created EB form", () => {
-    });
-
-    it("Click on Revise button", () => {
-    });
-
-    it("Add a new field to the form", () => {
-    });
-
-    it("Approve and release", () => {
-    });
-  });
-
   context("Revise the Record form", () => {
     it("Navigate to document list", () => {
     });
 
-    it("Select the created EB form", () => {
+    it("Select the created Record form", () => {
     });
 
     it("Click on Revise button", () => {
@@ -167,7 +130,7 @@ context.skip("Document form upgrade", () => {
     it("Navigate to document list", () => {
     });
 
-    it("Select the created EB form", () => {
+    it("Select the created Document form", () => {
     });
 
     it("Click on Revise button", () => {
@@ -191,17 +154,6 @@ context.skip("Document form upgrade", () => {
     });
 
     it("Check that new field was added", () => {
-    });
-  });
-
-  context("Check that EB cannot be upgraded to new form", () => {
-    it("Navigate to Record list", () => {
-    });
-
-    it("Select EB", () => {
-    });
-
-    it("Upgrade banner should not exist", () => {
     });
   });
 

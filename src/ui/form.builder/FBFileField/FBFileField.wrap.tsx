@@ -2,8 +2,7 @@ import { filter, get, isEmpty, join } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBFileFieldProps, FBFileFieldState } from ".";
-import { FB } from "..";
+import { FB, FBFileFieldProps, FBFileFieldState } from "..";
 import { toastError } from "../../components/notifications";
 
 export const withFBAttachmentField = <T extends FBFileFieldProps>(

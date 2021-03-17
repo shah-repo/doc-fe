@@ -2,8 +2,7 @@ import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FBAutocompleteProps } from ".";
-import { FB, FBOptionValueType } from "..";
+import { FB, FBAutocompleteProps, FBOptionValueType } from "..";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { isTranslation } from "../../translations/types";
 

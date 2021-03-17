@@ -18,7 +18,9 @@ import {
   FBFileUploadState,
   FBFormState,
   FBInlineApprovalState,
+  FBLHRStepState,
   FBMediaAlbumState,
+  FBMPIProcedureState,
   FBPartsState,
   FBPOApprovalMatrixState,
   FBPOReceiveState,
@@ -34,8 +36,8 @@ import {
   FBTextEditorState,
   FBTextFieldWithRangeState,
   FBWorkspaceState,
-  FBMPIProcedureState,
 } from "..";
+import FBMPIProcedureSelectState from "../FBMPIProcedureSelect/FBMPIProcedureSelect.state";
 
 
 export interface FBProviderProps {
@@ -76,4 +78,6 @@ export interface FBProviderProps {
   filesPresenterState?: FBFilesPresenterState;
   supplierState?: FBSupplierState;
   mpiProcedureState?: FBMPIProcedureState;
+  lhrStepState?: FBLHRStepState;
+  mpiProcedureSelectState?: FBMPIProcedureSelectState;
 }

@@ -3,7 +3,3 @@ export interface AsyncActionErrorResponse {
     message: string | string[];
   };
 }
-
-export interface TokenRefreshRequestBody {
-  RefreshToken: string;
-}

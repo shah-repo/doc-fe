@@ -5,7 +5,7 @@ import Select, { components, createFilter } from "react-select";
 import { SelectComponentsProps } from "react-select/base";
 import { ValueType } from "react-select/src/types";
 import { ReactComponent as DeleteIcon } from "../../../../../assets/images/circle-remove.svg";
-import { TypographyProps } from "../../../../../state/ducks/common";
+import { TypographyProps } from "../../../../../state/ducks/common/types";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
 import { useFormContext } from "../../FormContext";

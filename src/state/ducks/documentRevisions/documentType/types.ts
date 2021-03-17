@@ -1,7 +1,7 @@
 import { FBSchemaProps } from "../../../../ui/form.builder";
 import { Translation } from "../../../../ui/translations/types";
 import { GroupTag } from "../../auth/types";
-import { Nullable } from "../../common";
+import { Nullable } from "../../common/types";
 import { FBFormTemplateProps } from "../types";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, SET_DOCUMENT_TYPES_BY_CATEGORY } from "./constants";
 
@@ -69,6 +69,7 @@ export enum DOC_TYPE_GROUP_OPTION {
   ENGINEERING_BUILD = "ENGINEERING_BUILD",
   COMPANY_BOOTSTRAP_ON_RELEASE = "COMPANY_BOOTSTRAP_ON_RELEASE",
   SEED = "SEED",
+  OPERATOR_RELEASE = "OPERATOR_RELEASE",
 }
 export type DocumentGroupOptionsType = keyof typeof DOC_TYPE_GROUP_OPTION;
 
@@ -80,10 +81,6 @@ export interface PageDetailsColumn {
   showOnAndroid: boolean;
 }
 
-export interface PageDetailsAddNew {
-  label: string;
-}
-
 export interface PageDetails {
   id: string;
   addNewBtnLabel: string;
@@ -91,6 +88,7 @@ export interface PageDetails {
   category: string;
   exportList: boolean;
 }
+
 export interface DocumentType {
   id: string;
   documentTypeAcronym: string;
@@ -112,7 +110,7 @@ export interface DocumentType {
   active?: boolean;
 }
 
-export interface DocumentForms {
+interface DocumentForms {
   id: string;
 }
 
@@ -154,9 +152,9 @@ export type DocumentTypeAllIdsState = string[];
 
 export type DocumentTypeByCategoryState = DocumentType[];
 
-export type FieldConfig = { [key in FieldType]?: IFieldConfigItem };
+type FieldConfig = { [key in FieldType]?: IFieldConfigItem };
 
-export interface IFieldConfigItem {
+interface IFieldConfigItem {
   visible: boolean;
   required?: boolean;
   label?: string;

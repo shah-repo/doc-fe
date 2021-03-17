@@ -5,7 +5,9 @@ import { FieldInputProps, Formik, FormikProps } from "formik";
 import React from "react";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
+import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { changeRequestFormOnScreenContext } from "../../../change.request/form/ChangeRequestForm.container";
+import { documentRevisionTypeGroupsFromDocListContext } from "../../../documentRevision/DocumentRevisionsManager.container";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import Colors from "../../../layout/theme/utils/colors";
@@ -13,8 +15,6 @@ import { FormContext, useFormContext } from "../../forms/FormContext";
 import Text from "../../Text";
 import { AttachmentStyleProps } from "../attachment.field/utils/types";
 import AttachmentLineTypeForm from "./AttachmentLineTypeForm";
-import { documentRevisionTypeGroupsFromDocListContext } from "../../../documentRevision/DocumentRevisionsManager.container";
-import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
 
 interface Props {
   upload: typeof attachmentsActions.upload;
@@ -56,7 +56,7 @@ const styles = makeStyles((theme) => ({
 }));
 
 
-export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
+const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   upload,
   multiple,
   isField,

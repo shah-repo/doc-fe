@@ -1,10 +1,10 @@
 import faker from "faker";
 import { Audit } from "../../audit/types";
 import { getOwner } from "../../common/tests/factories";
-import { DocumentType } from "../documentType";
-import { Document, DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../types";
+import { DocumentType } from "../documentType/types";
+import { Document, DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../types";
 
-export const generateDocumentType = (docType: Partial<DocumentType> = {}): DocumentType => ({
+const generateDocumentType = (docType: Partial<DocumentType> = {}): DocumentType => ({
   id: faker.random.uuid(),
   documentTypeAcronym: faker.random.word(),
   documentTypeName: faker.random.words(),
@@ -79,19 +79,6 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
   trainingRecords: [],
   ...documentRevision,
   inputOwners: [],
-});
-
-export const getDocumentRevisionEditRequestBody = (
-  body: Partial<DocumentRevisionEditRequestBody> = {},
-): DocumentRevisionEditRequestBody => ({
-  name: faker.lorem.sentence(),
-  description: faker.lorem.sentence(),
-  attachments: [],
-  type: faker.lorem.word(),
-  referenceTo: [],
-  revisionChangeType: RevisionChangeType.NextRevision,
-  status: DocumentRevisionStatus.Deprecated,
-  ...body,
 });
 
 export const getDocument = (document: Partial<Document> = {}): Document => ({

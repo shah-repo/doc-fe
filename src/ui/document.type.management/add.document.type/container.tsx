@@ -14,7 +14,7 @@ interface Props {
   dialog: DialogHandler;
 }
 
-export const AddDocumentTypeFormContainer: React.FunctionComponent<Props> = ({
+const AddDocumentTypeFormContainer: React.FunctionComponent<Props> = ({
   dialog,
 }) => {
   const initialValues = {

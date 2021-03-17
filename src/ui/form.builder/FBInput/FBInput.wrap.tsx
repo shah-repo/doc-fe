@@ -4,13 +4,11 @@ import { first, get, includes, isArray, isBoolean, isEqual, isString, isUndefine
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { FBOption } from "..";
+import { FB, FBInputProps, FBInputType, FBOption, OmitInputClones } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
-import { FBInputProps, FBInputType, OmitInputClones } from "../FBInput";
-import { FB } from "../helpers";
 import { withFBOnChange } from "./FBInput.onchange";
 
 export const withFBInput = <T extends FBInputProps>(
@@ -57,6 +55,7 @@ export const withFBInput = <T extends FBInputProps>(
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
+
     defaultValue = setDefaultValue();
     helperText = formState?.errors.get(name) || helperText;
     error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
@@ -170,6 +169,9 @@ export const withFBInput = <T extends FBInputProps>(
       reaction(
         () => inputState?.autosaveNextValue,
         (value) => {
+          if (!workspaceState?.autosave) {
+            return;
+          }
           if (autosave && !isEqual(inputState?.autosavePrevValue, value)) {
             if (type === "poreceive") {
               submitForm({

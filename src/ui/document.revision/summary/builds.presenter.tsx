@@ -3,8 +3,8 @@ import { HighlightOffOutlined } from "@material-ui/icons";
 import React from "react";
 import { Link } from "react-router-dom";
 import { stripTags } from "../../../common/utils/helpers";
-import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DataProps } from "../../../state/ducks/common/types";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
 import { documentVersionPath } from "../utils/paths";
@@ -16,9 +16,9 @@ interface OwnProps {
   showRemoveButton?: boolean;
 }
 
-export type Props = OwnProps & DataProps<DocumentRevision[]>;
+type Props = OwnProps & DataProps<DocumentRevision[]>;
 
-export const styles = makeStyles((theme) =>
+const styles = makeStyles((theme) =>
   createStyles({
     chip: {
       "border": `1px solid ${Colors.medium_blue}`,
@@ -35,7 +35,7 @@ export const styles = makeStyles((theme) =>
     },
   }));
 
-export const BuildsPresenter: React.FunctionComponent<Props> = ({
+const BuildsPresenter: React.FunctionComponent<Props> = ({
   dataProp,
   label,
   isDraft,

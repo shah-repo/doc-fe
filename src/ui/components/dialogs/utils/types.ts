@@ -1,10 +1,10 @@
 import { DialogProps } from "@material-ui/core/Dialog";
-import { DialogHandler as  DialogHandlerHook } from "../../../hooks/useDialog";
+import { DialogHandler as DialogHandlerHook } from "../../../hooks/useDialog";
 import { Translation } from "../../../translations/types";
 
-export type DialogBreakpoint = "xs" | "sm" | "md" | "lg" | "xl";
-export type DialogContentRenderer = () => any;
-export type DialogHandler = (action: DialogAction) => any;
+type DialogBreakpoint = "xs" | "sm" | "md" | "lg" | "xl";
+type DialogContentRenderer = () => any;
+type DialogHandler = (action: DialogAction) => any;
 
 export enum DialogAction {
   Close = "common.close",
@@ -13,10 +13,6 @@ export enum DialogAction {
   Cancel = "common.cancel",
   Ok = "common.ok",
   Confirm = "common.confirm",
-}
-
-export enum DialogVariant {
-  Responsive = "",
 }
 
 export interface DialogResponsiveProps extends Partial<DialogProps> {

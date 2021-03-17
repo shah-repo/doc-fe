@@ -1,5 +1,5 @@
 
-export type SidebarType = "bookmarks" | "history" | "note" | "permissions" | "crHistory";
+type SidebarType = "bookmarks" | "history" | "note" | "permissions" | "crHistory";
 
 export interface Sidebar {
   icon: JSX.Element;
@@ -7,7 +7,7 @@ export interface Sidebar {
   type: SidebarType;
 }
 
-export interface SidebarDetails {
+interface SidebarDetails {
   title: string;
   component: JSX.Element | null;
   dataCy?: string;

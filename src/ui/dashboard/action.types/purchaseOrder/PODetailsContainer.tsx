@@ -1,8 +1,7 @@
 import { Box } from "@material-ui/core";
 import React, { useState } from "react";
-import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
-import { FBAutocompleteAsyncOption, FBPurchaseOrderValue } from "../../../form.builder";
-import { FBInputProps } from "../../../form.builder/types/common";
+import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
+import { FBAutocompleteAsyncOption, FBInputProps, FBPurchaseOrderValue } from "../../../form.builder";
 import POActions from "./POActions";
 import PODetails from "./PODetails";
 
@@ -10,7 +9,7 @@ interface Props {
   documentRevision: DocumentRevision;
 }
 
-export const PODetailsContainer: React.FunctionComponent<Props> = ({
+const PODetailsContainer: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
   const [purchaseOrder] = useState<FBPurchaseOrderValue>(() => {

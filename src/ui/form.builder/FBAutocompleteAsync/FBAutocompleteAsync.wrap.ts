@@ -2,8 +2,7 @@ import { get, isArray, isEmpty, isObject, isString, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { FBAutocompleteAsyncProps, FBAutocompleteAsyncState } from ".";
-import { FB, FBOptionValueType } from "..";
+import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBOptionValueType } from "..";
 import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(

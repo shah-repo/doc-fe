@@ -1,7 +1,7 @@
 import { PopoverPosition } from "@material-ui/core";
 import { action, computed, observable, set } from "mobx";
 
-export class FBContextMenuState {
+class FBContextMenuState {
   @observable public mouseX: number | undefined;
   @observable public mouseY: number | undefined;
 

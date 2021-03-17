@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable max-len */
 import { int } from "aws-sdk/clients/datapipeline";
-import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
+import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 

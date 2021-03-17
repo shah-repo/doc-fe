@@ -1,5 +1,5 @@
 
-export class FBApprovalMatrixTableState {
+class FBApprovalMatrixTableState {
   // MARK: @config
   public cellHeight: Record<number, number> = {};
 }

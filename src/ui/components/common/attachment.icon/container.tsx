@@ -1,11 +1,12 @@
 import { isEmpty, omit } from "lodash";
 import React, { useMemo, useState } from "react";
 import { connect, useSelector } from "react-redux";
-import { Attachment, AttachmentDownloadResponse, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments";
+import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
+import { Attachment, AttachmentDownloadResponse, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments/types";
 import { authSelectors } from "../../../../state/ducks/auth";
-import { Id, Nullable } from "../../../../state/ducks/common";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { Id, Nullable } from "../../../../state/ducks/common/types";
+import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { AsyncStatus } from "../../../../state/types";
 import { FormHeaderSummaryContext } from "../../../document.revision/header/SummaryHeader";
@@ -36,7 +37,7 @@ type DispatchProps = AttachmentIconDispatchProps;
 
 export let SetFile: React.Context<React.Dispatch<React.SetStateAction<Attachment | undefined>>>;
 
-export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
+const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
   name = "",
   form,
   field,

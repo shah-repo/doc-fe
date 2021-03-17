@@ -1,11 +1,8 @@
 import { Box, Typography } from "@material-ui/core";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBData, FBForm, FBProcedureFormProps, FBProcedureItemType, FBTextField } from "..";
+import { FB, FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBData, FBFileUpload, FBForm, FBProcedureFormProps, FBProcedureItemType, FBQuantityField, FBTextField } from "..";
 import Text from "../../components/Text";
-import { FBFileUpload } from "../FBFileUpload";
-import { FBQuantityField } from "../FBQuantityField";
-import { FB } from "../helpers";
 import { withFBProcedureForm } from "./FBProcedureForm.wrap";
 
 

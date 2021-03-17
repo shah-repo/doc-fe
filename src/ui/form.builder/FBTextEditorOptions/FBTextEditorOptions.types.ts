@@ -1,5 +1,4 @@
-import { FBInputProps } from "..";
-import { FBProviderProps } from "../FBProvider";
+import { FBInputProps, FBProviderProps } from "..";
 
 export type FBTextEditorOptionsProps =
 & Pick<FBInputProps, "options">

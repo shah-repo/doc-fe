@@ -5,7 +5,7 @@ import { FBApprovalMatrixConstructor, FBApprovalMatrixFieldData, FBApprovalMatri
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, null> {
+class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, null> {
   @observable public mode: FBApprovalMatrixFieldMode = "none";
   public url = FBEndpoint.ApprovalMatrix;
 

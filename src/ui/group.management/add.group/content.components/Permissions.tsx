@@ -15,7 +15,7 @@ interface Props {
   currentEmployeePermissions: Permission[];
 }
 
-export const Permissions: React.FunctionComponent<Props> = ({
+const Permissions: React.FunctionComponent<Props> = ({
   group,
   setGroup,
   currentEmployeePermissions,

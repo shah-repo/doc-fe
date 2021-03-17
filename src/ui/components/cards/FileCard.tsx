@@ -1,7 +1,7 @@
 import { Card, CardActions, CardContent, Grid, IconButton, Tooltip, Typography } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
 import React from "react";
-import { Attachment } from "../../../state/ducks/attachments";
+import { Attachment } from "../../../state/ducks/attachments/types";
 import DownloadButtonContainer from "./DownloadButton.container";
 
 export interface FileCardProps {

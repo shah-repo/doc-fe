@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 
-import { NavigationItems } from "../../../../src/state/ducks/auth/types";
+import { NavigationItems } from "../../../utils/constants/navigationItems";
 import { CyRoutes } from "../../routes";
 
 /* eslint-disable @typescript-eslint/no-namespace */

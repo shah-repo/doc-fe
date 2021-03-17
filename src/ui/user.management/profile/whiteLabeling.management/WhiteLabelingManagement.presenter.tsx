@@ -31,7 +31,7 @@ const styles = makeStyles((theme: Theme) =>
   },
   ));
 
-export const WhiteLabelingManagementPresenter: React.FunctionComponent<Props> = ({
+const WhiteLabelingManagementPresenter: React.FunctionComponent<Props> = ({
   dirty,
   resetForm,
   initialValues,
