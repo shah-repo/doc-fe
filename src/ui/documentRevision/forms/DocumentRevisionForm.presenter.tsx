@@ -156,7 +156,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabled: boolean = initialValues.id !== undefined;
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
   const docRevId = documentRevision?.id;
-  const isAttachmentEmpty = !(documentRevision?.attachments.length > 1);
+  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const documentTypeId = values.document?.documentType?.id;
   const showOutputInfo = workspaceState?.mode === "form" || workspaceState?.mode === "formDesign";
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord && !isDocumentEquipment;

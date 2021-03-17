@@ -263,7 +263,6 @@
     "label": "MPI documents",
     "valueKey": "id",
     "labelKey": "name",
-    "labelPrefixRoot": "document.docId",
     "root": ""
   },
   {
