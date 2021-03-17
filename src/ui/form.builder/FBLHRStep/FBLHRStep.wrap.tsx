@@ -2,7 +2,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBLHRStepProps, FBLHRStepState } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 
 export const withFBLHRStep = <T extends FBLHRStepProps>(
@@ -22,7 +22,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     stepLHRs = workspaceState?.document?.smartReferencesFrom
-      ?.find((ref) => ref.type === "HIDDEN_PI_INSTANCE" && ref.metadata.fieldId === name)?.fromDocRev;
+      ?.find((ref) => ref.type === SmartReferenceType.HiddenPiInstance && ref.metadata.fieldId === name)?.fromDocRev;
     const lhrStepState = FB.useRef(FBLHRStepState, stepLHRs);
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);

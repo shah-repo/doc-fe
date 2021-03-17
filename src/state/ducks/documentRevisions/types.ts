@@ -140,7 +140,12 @@ interface SmartReference {
   toDocRevId?: Nullable<string>;
   toDocRev?: Nullable<DocumentRevision>;
   toDocumentId?: Nullable<string>;
-  type: "HIDDEN_PI_INSTANCE" | "GENERAL";
+  type: SmartReferenceType;
+}
+
+export enum SmartReferenceType {
+  HiddenPiInstance = "HIDDEN_PI_INSTANCE",
+  General = "GENERAL",
 }
 
 interface InputOwner {
