@@ -36,6 +36,7 @@ export class ConfigEnv {
       COMMIT_REMOTEJS: Cypress.env("COMMIT_REMOTEJS"),
       JSON_REPORTS_FOLDER: Cypress.env("JSON_REPORTS_FOLDER"),
       ARROW_DURATION: Cypress.env("ARROW_DURATION"),
+      TEST_EMAIL: Cypress.env("TEST_EMAIL"),
     });
 
     const errors = validateSync(configEnv, {
@@ -58,6 +59,10 @@ export class ConfigEnv {
   @IsDefined()
   @IsString()
   FE_URL!: string;
+
+  @IsDefined()
+  @IsString()
+  TEST_EMAIL!: string;
 
   @IsDefined()
   @IsNumber()

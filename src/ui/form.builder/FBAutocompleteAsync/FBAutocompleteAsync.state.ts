@@ -53,7 +53,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!isArray(id)) {
       return options.get(id);
     }
-    return Array.from(map(id, (i) => options.get(i)));
+    return Array.from(map(id, (i) => options.get(i) || i));
   };
 
   @action public setOptionId = (id?: string) => {
