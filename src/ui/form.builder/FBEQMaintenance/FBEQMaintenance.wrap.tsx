@@ -88,13 +88,11 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       handleFilter(options);
 
     getOptionLabel = (option) => {
-      let title;
       if (!option?.documentRevisions?.find((doc) => doc.status === DocumentRevisionStatus.Released)) {
-        title = option?.documentRevisions.find((doc) => doc.status === DocumentRevisionStatus.Obsolete)?.name;
+        const title = option?.documentRevisions.find((doc) => doc.status === DocumentRevisionStatus.Obsolete)?.name;
         return `${option.docId} - OBS - ${title}`;
       }
-      title = option.documentRevisions.find((doc) => doc.status === DocumentRevisionStatus.Released)?.name;
-      return `${option.docId} - ${title}`;
+      return `${option.docId} - rev ${option.displayRevision} - ${option.name}`;
     };
 
     // MARK: @observer

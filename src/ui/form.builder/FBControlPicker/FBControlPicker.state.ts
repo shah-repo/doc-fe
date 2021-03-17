@@ -33,7 +33,7 @@ export class FBControlPickerState {
     if (isEQ) {
       return {
         inputs: [
-          ...this.hasEquipmentMaintenance ? ["eqmaintenance"] as FBInputType[] : [],
+          "eqmaintenance",
         ],
       };
     }
@@ -62,7 +62,7 @@ export class FBControlPickerState {
         "testRequirement",
         "procedure",
         "mpiprocedure",
-        ...this.hasEquipmentMaintenance ? ["eqmaintenance"] as FBInputType[] : [],
+        "eqmaintenance",
         "textfieldwithrange",
         "supplier",
         "lhrstep",
@@ -99,10 +99,6 @@ export class FBControlPickerState {
 
   private get hasApproval(): boolean | undefined {
     return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_INLINE_APPROVAL);
-  }
-
-  private get hasEquipmentMaintenance(): boolean | undefined {
-    return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_EQUIPMENT_MAINTENANCE);
   }
 
   private get hasRequestApproval(): boolean | undefined {

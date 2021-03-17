@@ -205,7 +205,9 @@
     "path": "/documents/available_maintenance_forms",
     "label": "Preventative Maintenance Forms",
     "valueKey": "id",
-    "labelKey": "docId",
+    "labelKey": "name",
+    "labelPrefixRoot": "docId",
+    "includeRevision": "displayRevision",
     "root": ""
   },
   {
