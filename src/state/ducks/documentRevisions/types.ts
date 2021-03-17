@@ -40,6 +40,9 @@ export interface DocumentRevisionDocument {
   referencedBy: DocumentRevision[];
   canAccess: boolean;
   securityList: SecurityList;
+  lot?: {
+    lotId: string;
+  };
 }
 
 export interface SecurityList {
