@@ -95,7 +95,7 @@ context("File delete in Pending Change", () => {
       cy.unClick();
     });
 
-    it("Uploads text.docx", () => {
+    it("Upload test.docx and image.jpg files", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
       cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
@@ -108,48 +108,60 @@ context("File delete in Pending Change", () => {
       cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[3].name}`]);
     });
 
-    it("Navigates to Approval Request list", () => {
-      cy.navigToApprovalRequestList();
-    });
+    context("Withdraw submission and check attachments on document", () => {
+      it("Navigates to Approval Request list", () => {
+        cy.navigToApprovalRequestList();
+      });
 
-    it("Filters document by name and status, and select it", () => {
-      cy.arFilterARListByNameAndStatus({ title: "test title", status: "In Review" });
-    });
+      it("Filters document by name and status, and select it", () => {
+        cy.arFilterARListByNameAndStatus({ title: "test title", status: "In Review" });
+      });
 
-    it("Withdraw Submission", () => {
-      cy.arWithdrawSubmission();
-    });
+      it("Withdraw Submission", () => {
+        cy.arWithdrawSubmission();
+      });
 
-    it("Navigate to document list", () => {
-      cy.navigToDocumentList();
-    });
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
 
-    it("Filters document by name and status, and select it", () => {
-      cy.drFilterDocListByNameAndStatus({ title: "test title", status: "Pending Change" });
-    });
+      it("Filters document by name and status, and select it", () => {
+        cy.drFilterDocListByNameAndStatus({ title: "test title", status: "Pending Change" });
+      });
 
-    it("Check number of attachments", () => {
-      cy.get("[data-cy=attachment]").should("have.length", 2);
-    });
+      it("Check number of attachments", () => {
+        cy.get("[data-cy=attachment]").should("have.length", 2);
+      });
 
-    it("Delete file test.docx", () => {
-      cy.contains("test.docx").parent().parent().find("#AttachmentIconPresenter-handleRemove").click({ force: true });
-    });
+      it("Delete file test.docx", () => {
+        cy.contains("test.docx").parent().parent().find("#AttachmentIconPresenter-handleRemove").click({ force: true });
+      });
 
-    it("Check number of attachments after reload page", () => {
-      cy.navigToDocumentList();
-      cy.drFilterDocListByNameAndStatus({ title: "test title", status: "Pending Change" });
-      cy.get("[data-cy=attachment]").should("have.length", 1);
-    });
+      it("Check number of attachments after reload page", () => {
+        cy.navigToDocumentList();
+        cy.drFilterDocListByNameAndStatus({ title: "test title", status: "Pending Change" });
+        cy.get("[data-cy=attachment]").should("have.length", 1);
+      });
 
-    it("Delete file image.jpg", () => {
-      cy.contains("image.jpg").parent().parent().find("#AttachmentIconPresenter-handleRemove").click({ force: true });
-    });
+      it("Delete file image.jpg", () => {
+        cy.contains("image.jpg").parent().parent().find("#AttachmentIconPresenter-handleRemove").click({ force: true });
+      });
 
-    it("Check number of attachments after reload page", () => {
-      cy.navigToDocumentList();
-      cy.drFilterDocListByNameAndStatus({ title: "test title", status: "Pending Change" });
-      cy.get("[data-cy=attachment]").should("have.length", 0);
+      it("Check number of attachments after reload page", () => {
+        cy.navigToDocumentList();
+        cy.drFilterDocListByNameAndStatus({ title: "test title", status: "Pending Change" });
+        cy.get("[data-cy=attachment]").should("have.length", 0);
+      });
+
+      it("Upload dummy.pdf", () => {
+        cy.atchUploadAttachment({ fileName: "dummy.pdf" });
+      });
+
+      it("Check number of attachments after reload page", () => {
+        cy.navigToDocumentList();
+        cy.drFilterDocListByNameAndStatus({ title: "test title", status: "Pending Change" });
+        cy.get("[data-cy=attachment]").should("have.length", 1);
+      });
     });
   });
 });
