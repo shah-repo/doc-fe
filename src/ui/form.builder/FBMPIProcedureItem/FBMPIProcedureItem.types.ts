@@ -5,4 +5,5 @@ export type FBMPIProcedureItemProps =
 & Pick<FBProviderProps, "mpiProcedureState">
 & {
   handleSelect?: (item: FBProcedureItemConfig) => void;
+  handleSelectionDelete?: (refId?: string) => void;
 };

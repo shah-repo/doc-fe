@@ -125,6 +125,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   outputDocumentTypes?: any;
   inputOwners?: InputOwner[];
   documentId?: string;
+  smartReferencesTo?: any;
 }
 
 interface InputOwner {
