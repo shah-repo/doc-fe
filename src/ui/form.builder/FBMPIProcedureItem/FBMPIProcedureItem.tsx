@@ -8,6 +8,7 @@ import { Observer } from "mobx-react";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {
+  FB,
   FBButton,
   FBDialog,
   FBFilesPresenter,
@@ -109,13 +110,13 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
               bgcolor={(item.status || "none") === "none" ? "white" : FBPartItemStatusBg[item.status || ""]}
               alignItems="center"
               p={1.5}
+              minHeight={55}
             >
               <Box flexGrow={1}>
                 <FBText
-                  locale={`form.builder.procedure.${type}.title`}
+                  locale={`form.builder.mpi.procedure.${type}.title`}
                   values={{
                     title: getItem?.(item.title),
-                    lot: getLot?.(item.partLot),
                     quantity: item.quantity ? (item.quantity * multiplier) : "form.builder.none",
                     unit: item.unit,
                   }}
@@ -176,12 +177,13 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   )}
                 </Observer>
               </Box>
-              {isPreview && (
+              {isPreview && FB.isUUID(item.title) && (
                 <Observer>
                   {() => (
                     <FBButton
                       label="form.builder.select"
                       hidden={!mpiProcedureState?.selectState.get(index)}
+                      style={{ margin: 0, padding: "4px" }}
                       onClick={() => handleSelect?.({
                         ...item,
                         id: item.title,
