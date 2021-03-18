@@ -1,6 +1,8 @@
 import { reaction } from "mobx";
 import React from "react";
+import { useSelector } from "react-redux";
 import { FB, FBBlankTplFormProps } from "..";
+import { companySelectors } from "../../../state/ducks/company";
 
 export const withFBBlankTplForm = <T extends FBBlankTplFormProps>(
   Component: React.FunctionComponent<T>,
@@ -13,7 +15,8 @@ export const withFBBlankTplForm = <T extends FBBlankTplFormProps>(
   }: T) => {
 
     const { workspaceState, formState } = FB.useStores();
-    disabled = workspaceState?.mode !== "design";
+    const redlineActive = useSelector(companySelectors.getRedlineActive);
+    disabled = workspaceState?.mode !== "design" && !redlineActive;
     readonly = disabled;
 
     React.useEffect(() => {

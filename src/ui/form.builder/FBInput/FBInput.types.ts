@@ -71,7 +71,8 @@ export type FBInputType =
   | "mpiprocedure"
   | "lhrstep"
   | "unitMeasures"
-  | "quantityunit";
+  | "quantityunit"
+  | "partsselection";
 
 export type FBInputProps =
   & FBLabelProps
@@ -177,6 +178,8 @@ export type FBInputProps =
     //  * is validation relation.
     //  */
     // validateDefaultValue?: boolean;
+    includeNotes?: boolean;
+    isOutput?: boolean;
   };
 
 export const OmitInputClones: FBInputType[] = [

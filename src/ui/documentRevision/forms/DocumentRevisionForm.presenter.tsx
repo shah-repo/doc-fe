@@ -37,6 +37,7 @@ import DocumentSecurity from "./presenters/DocumentSecurity";
 import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
 import FBActiveNoOutput from "./presenters/FBActiveNoOutput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
+import RedlineBanner from "./presenters/redline/Redline.banner";
 import References from "./presenters/References";
 import RetrainField from "./presenters/RetrainField";
 import RevisionStage from "./presenters/RevisionStage";
@@ -64,6 +65,7 @@ interface Props extends FormikProps<DocumentRevisionFormValues> {
   showAdministrativeAndVoidChange: boolean;
   pmFormId?: string;
   releasedDocRev?: DocumentRevision;
+  redlineActive: boolean;
 }
 
 export interface FormHeaderContext {
@@ -107,6 +109,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   showAdministrativeAndVoidChange,
   pmFormId,
   releasedDocRev,
+  redlineActive,
 }) => {
   useScrollIntoView();
   const classes = styles();
@@ -118,7 +121,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const [forceNewRender, setNewRender] = React.useState();
   const [lastSavedTimestamp, setLastSavedTimestamp] = React.useState<string>();
   const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
-
+  const { schema = {} } =  workspaceState || {};
   const hasOutput = useMemo(() =>
     checkIsTypeHaveOutput(documentTypeById?.groupOptions)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -159,7 +162,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabled: boolean = initialValues.id !== undefined;
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
   const docRevId = documentRevision?.id;
-  const isAttachmentEmpty = !(documentRevision?.attachments.length > 1);
+  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const documentTypeId = values.document?.documentType?.id;
   const showOutputInfo = workspaceState?.mode === "form" || workspaceState?.mode === "formDesign";
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord && !isDocumentEquipment;
@@ -180,6 +183,14 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     type,
     lastSavedTimestamp,
   });
+
+  useEffect(() => {
+    if (!redlineActive) {
+      return;
+    }
+    setFieldValue("schema", schema);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [redlineActive, schema]);
 
   useEffect(() => {
     if (!values.id && !values.document?.documentType?.id && setDocId) {
@@ -228,6 +239,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       sm={type !== "newOutput" && isDisabled ? 12 : 10}
       xs={12}
     >
+      <RedlineBanner {...{ bannerPortal }}/>
       <UpgradeToLatestContainer
         type="banner"
         docRevId={documentRevision?.id}

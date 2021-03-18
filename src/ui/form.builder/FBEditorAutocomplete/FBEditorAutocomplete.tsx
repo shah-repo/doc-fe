@@ -1,3 +1,4 @@
+import { filter } from "lodash";
 import React from "react";
 import { FBAutocomplete, FBData, FBEditor, FBEditorPlaceholder, FBEditorProps, FBTextField } from "..";
 
@@ -12,7 +13,7 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
     <FBEditorPlaceholder key={`fb-editor-placeholder-${type}-${index}`} />
     <FBAutocomplete
       label="form.builder.select.options"
-      options={FBData.autocompleteOptions}
+      options={filter(FBData.autocompleteOptions, { hidden: false })}
       optionLabelKey="label"
       optionValueKey="id"
       name="optionId"

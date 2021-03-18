@@ -224,6 +224,7 @@ export const withFBInput = <T extends FBInputProps>(
       withState,
       omitFormValue,
       deleted,
+      isOutput,
     });
   };
 

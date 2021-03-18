@@ -12,7 +12,8 @@ export type FBEditorPropertiesType =
 | "copyableValue"
 | "includeInInspection"
 | "includeInFaiInspection"
-| "deleteDisabled";
+| "deleteDisabled"
+| "includeNotes";
 
 export type FBEditorPropertiesProps = Pick<FBInputProps, "type" | "options" | "onChange"> & {
   inputProps?: Partial<FBInputProps>;};

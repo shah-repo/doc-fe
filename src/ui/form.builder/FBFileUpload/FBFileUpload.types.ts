@@ -7,4 +7,7 @@ export type FBFileUploadProps =
   fileUploadState?: FBFileUploadState;
   readonly?: boolean;
   files?: Id[];
+  mode?: FBFileFieldType;
 };
+
+type FBFileFieldType = "fileUploadIcon" | "fileUpload";
