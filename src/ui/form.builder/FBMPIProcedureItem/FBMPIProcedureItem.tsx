@@ -109,6 +109,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
               bgcolor={(item.status || "none") === "none" ? "white" : FBPartItemStatusBg[item.status || ""]}
               alignItems="center"
               p={1.5}
+              minHeight={55}
             >
               <Box flexGrow={1}>
                 <FBText
@@ -182,6 +183,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                     <FBButton
                       label="form.builder.select"
                       hidden={!mpiProcedureState?.selectState.get(index)}
+                      style={{ margin: 0, padding: "4px" }}
                       onClick={() => handleSelect?.({
                         ...item,
                         id: item.title,
