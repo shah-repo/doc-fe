@@ -6,6 +6,8 @@ export enum FBProcedureFormFilterType {
   lots = "partLot",
 }
 
+export type FBProcedureFormMode = "eb" | "mpi";
+
 export type FBProcedureFormProps =
 & Pick<FBFormProps, "formState" | "children" | "initialValues">
 & Pick<FBProcedureItemProps, "type">
@@ -22,6 +24,7 @@ export type FBProcedureFormProps =
   disabled?: boolean;
   partLoading?: boolean;
   lotLoading?: boolean;
+  mode?: FBProcedureFormMode;
 };
 
 export interface FBProcedureFormActionsProps {
