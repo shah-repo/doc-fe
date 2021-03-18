@@ -32,6 +32,8 @@ export const canCreateNewVersion = (
 
 export const canCreateOutput = (documentRevision: DocumentRevision) => {
   const documentType = get(documentRevision, "document.documentType");
+  console.log(documentType.groupOptions);
+
   return (
     documentType &&
     checkIsDocumentForm(documentType.groupOptions) &&
