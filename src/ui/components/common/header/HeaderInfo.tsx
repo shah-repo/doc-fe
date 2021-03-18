@@ -20,6 +20,7 @@ interface Props {
   groupOptions?: DocumentGroupOptionsType[];
   isInlineApproval?: boolean;
   displayStatus?: string;
+  subtitle?: any;
 }
 
 const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -28,6 +29,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   id,
   documentTypeId,
   displayStatus,
+  subtitle,
 }) => {
 
   const { isVisible: isStatusVisible, tooltipConfig, label } = useDocumentStatus(documentTypeId, status);
@@ -44,6 +46,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
       [classes.statusIconReleased]: isStatusReleased,
       [classes.statusIconCanceled]: isStatusCanceled,
     })} />;
+
 
   return (
     <Grid item xs={6} className={classes.itemWrap} >
@@ -66,6 +69,12 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
         isTitleVisible &&
         <Typography variant="h6" id="HeaderInfo-name" component="span">
           {name}
+        </Typography>
+      }
+      {
+        subtitle &&
+        <Typography variant="subtitle1" component="p">
+          {subtitle}
         </Typography>
       }
     </Grid>

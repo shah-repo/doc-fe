@@ -1,4 +1,4 @@
-import { cloneDeep, get } from "lodash";
+import { cloneDeep, get, toNumber } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
@@ -16,6 +16,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     getLot,
     loading,
     dialogState,
+    multiplier = 1,
     name,
     type,
     value,
@@ -23,10 +24,10 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
   }: T) => {
 
     // MARK: @config
-    const { mpiProcedureState, workspaceState } = FB.useStores();
+    const { mpiProcedureState, workspaceState, formState } = FB.useStores();
+    const { smartReferencesTo = [] } = workspaceState?.document || {};
     dialogState = FB.useRef(FBDialogState);
-    const { smartReferencesTo } = workspaceState?.document || {};
-
+    multiplier = toNumber(formState?.getFieldValue("lhr_initial_quantity")) || 1;
 
     useEffect(() => {
       if (!mpiProcedureState) { return; }
@@ -107,6 +108,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       getLot,
       mpiProcedureState,
       dialogState,
+      multiplier,
       loading,
       name,
       type,

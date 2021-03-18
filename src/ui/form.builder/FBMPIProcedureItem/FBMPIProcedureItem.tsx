@@ -22,7 +22,7 @@ import {
   FBProcedureItemOmitAction,
   FBProcedureItemType,
   FBProvider,
-  FBText,
+  FBText
 } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBMPIProcedureItem } from "./FBMPIProcedureItem.wrap";
@@ -39,6 +39,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   isPreview,
   disabled,
   loading,
+  multiplier = 1,
   type,
   value = [],
   name,
@@ -115,7 +116,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   values={{
                     title: getItem?.(item.title),
                     lot: getLot?.(item.partLot),
-                    quantity: item.quantity || "form.builder.none",
+                    quantity: item.quantity ? (item.quantity * multiplier) : "form.builder.none",
                     unit: item.unit,
                   }}
                   boxProps={{
