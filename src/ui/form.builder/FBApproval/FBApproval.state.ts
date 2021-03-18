@@ -19,9 +19,9 @@ class FBApprovalState {
 
   public postApi: FBRequest<any, FBApprovalApi> = new FBRequest(FBEndpoint.PostInlineApprove);
   public getDocumentApi: FBRequest<Document, null> = new FBRequest(FBEndpoint.Document);
-  public approversApi = new FBAutocompleteAsyncState(this.approversId);
-  public groupsApi = new FBAutocompleteAsyncState(this.groupsId);
-  public approvalRolesApi = new FBAutocompleteAsyncState(this.approvalRolesId);
+  public approversApi = new FBAutocompleteAsyncState({ optionId: this.approversId });
+  public groupsApi = new FBAutocompleteAsyncState({ optionId: this.groupsId });
+  public approvalRolesApi = new FBAutocompleteAsyncState({ optionId: this.approvalRolesId });
   public auditApi = new FBRequest<Audit[], null>();
 
   public constructor({

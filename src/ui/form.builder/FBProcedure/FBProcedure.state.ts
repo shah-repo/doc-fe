@@ -6,9 +6,9 @@ import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync
 
 class FBProcedureState {
   // MARK: @config
-  public materialsApi = new FBAutocompleteAsyncState(this.materialsId);
-  public equipmentApi = new FBAutocompleteAsyncState(this.equipmentId);
-  public lotsApi = new FBAutocompleteAsyncState(this.lotsId);
+  public materialsApi = new FBAutocompleteAsyncState({ optionId: this.materialsId });
+  public equipmentApi = new FBAutocompleteAsyncState({ optionId: this.equipmentId });
+  public lotsApi = new FBAutocompleteAsyncState({ optionId: this.lotsId });
   public isDiffPreview?: boolean;
 
   // MARK: @observables
