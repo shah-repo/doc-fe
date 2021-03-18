@@ -23,7 +23,7 @@ import {
   FBProcedureItemOmitAction,
   FBProcedureItemType,
   FBProvider,
-  FBText,
+  FBText
 } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBMPIProcedureItem } from "./FBMPIProcedureItem.wrap";
@@ -102,8 +102,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             borderTop={0}
             borderColor={Colors.hint_gray}
             key={`fb-procedure-item-${type}-${index}`}
-            onMouseEnter={() => mpiProcedureState?.setSelectState(index)}
-            onMouseLeave={() => mpiProcedureState?.setSelectState(index)}
+            onMouseEnter={() => mpiProcedureState?.setSelectState(index, type)}
+            onMouseLeave={() => mpiProcedureState?.setSelectState(index, type)}
           >
             <Box
               display="flex"
@@ -182,7 +182,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   {() => (
                     <FBButton
                       label="form.builder.select"
-                      hidden={!mpiProcedureState?.selectState.get(index)}
+                      hidden={!mpiProcedureState?.selectState.get(`${type}-${index}`)}
                       style={{ margin: 0, padding: "4px" }}
                       onClick={() => handleSelect?.({
                         ...item,
