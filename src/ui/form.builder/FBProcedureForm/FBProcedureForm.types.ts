@@ -6,7 +6,7 @@ export enum FBProcedureFormFilterType {
   lots = "partLot",
 }
 
-export type FBProcedureFormMode = "eb" | "mpi";
+type FBProcedureFormMode = "eb" | "mpi";
 
 export type FBProcedureFormProps =
 & Pick<FBFormProps, "formState" | "children" | "initialValues">
