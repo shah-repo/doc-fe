@@ -205,8 +205,6 @@ export const OmitInputClones: FBInputType[] = [
 ];
 
 export const OmitIncludeNotes: FBInputType[] = [
-  "eqmaintenance",
-  "procedure",
   "stepsection",
   "teststep",
   "section",

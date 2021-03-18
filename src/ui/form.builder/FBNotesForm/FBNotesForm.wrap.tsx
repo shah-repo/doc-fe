@@ -72,8 +72,8 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
         attachments: values?.noteFile || [],
       };
       notesFormState?.setNote(note);
-      formState?.setFieldValue("noteText", undefined, true);
-      formState?.reset();
+      formState?.setFieldValue("noteText", "", true);
+      formState?.setFieldValue("noteFile", [], true);
     };
 
     // MARK: @observer
