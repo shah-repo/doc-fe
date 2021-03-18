@@ -30,5 +30,10 @@ export const styles = makeStyles((theme: Theme) =>
     itemWrap: {
       alignSelf: "center",
     },
+    statusWrap: {
+      justifyContent: "center",
+      alignItems: "center",
+      display: "flex",
+    },
   },
   ));
