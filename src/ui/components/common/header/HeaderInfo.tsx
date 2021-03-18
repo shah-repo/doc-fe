@@ -46,7 +46,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   const isStatusCanceled = isDocumentRevisionCanceled(status);
   const documentType = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ""));
-  const isTypeMpiOutput = checkIsTypeMpiOutput(documentType.groupOptions);
+  const isTypeMpiOutput = checkIsTypeMpiOutput(documentType?.groupOptions);
 
   const titleRenderer = () => {
     const stepRegex = /Step #[0-9]+/;
