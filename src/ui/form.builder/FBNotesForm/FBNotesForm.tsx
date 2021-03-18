@@ -15,6 +15,7 @@ const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
   files,
   notesFormState,
   notes,
+  isDraft,
   ...props
 }) => {
   const classes = styles();
@@ -33,21 +34,22 @@ const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
                     <Text message={note?.senderName} />
                   </Typography>
                   <Typography variant="subtitle2">
-                    <Text message={moment.utc(note.createdAt).local().startOf("seconds").fromNow()} />
+                    <Text message={moment.utc(note?.createdAt).local().startOf("seconds").fromNow()} />
                   </Typography>
                 </Box>
               </Box>
               <Box borderBottom={lastNote ? 0 : "1px solid lightgrey"} >
-                <Typography variant="subtitle1" style={{ marginBottom: 16, marginLeft: 64 }}>
-                  <Text message={note.description} />
+                <Typography variant="subtitle1" style={{ marginBottom: 16, marginLeft: 64, overflowWrap: "anywhere" }}>
+                  <Text message={note?.description} />
                 </Typography>
                 <Box marginLeft={8}>
-                  <FBFilesPresenter files={note.attachments} mode="raw" />
+                  <FBFilesPresenter files={note?.attachments} mode="raw" />
                 </Box>
               </Box>
             </Box>
           ); }}
       </FBMapWrapper>
+      {isDraft &&
       <Box
         border="1px solid lightgrey"
         height="max-content"
@@ -59,6 +61,9 @@ const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
           name="noteText"
           placeholder="common.type.here"
           style={{ margin: 8, width: 435 }}
+          rowsMax={10}
+          multiline
+          withState
         />
         <Box mt={1.5}>
           <FBFileUpload
@@ -83,7 +88,7 @@ const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
         >
           <FBFilesPresenter {...{ files }} mode="raw" />
         </Box>}
-      </Box>
+      </Box>}
     </FBForm>
   );
 };

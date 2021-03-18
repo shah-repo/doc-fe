@@ -6,6 +6,7 @@ export default makeStyles((theme: Theme) =>
     iconButton: {
       "padding": theme.spacing(0.5),
       "margin": theme.spacing(1),
+      "height": "inherit",
       "&:hover": {
         "background": Colors.medium_light_blue,
         "borderRadius": theme.spacing(0.5),
