@@ -67,7 +67,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
       name={`fb-lhrs-start-quantity-${name}`}
       type="number"
       label="form.builder.start.quantity"
-      rules="required"
     />
     <FBTextField
       {...{ disabled }}
