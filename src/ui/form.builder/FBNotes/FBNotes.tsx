@@ -8,6 +8,7 @@ import { withFBNotes } from "./FBNotes.wrap";
 const FBNotes: React.FunctionComponent<FBNotesProps> = ({
   onClick,
   dialogState,
+  notesNumber,
 }) => {
   const classes = styles();
   return (
@@ -26,6 +27,7 @@ const FBNotes: React.FunctionComponent<FBNotesProps> = ({
         >
           <NoteIcon />
         </IconButton>
+        {notesNumber}
       </Box>
     </FBProvider>
   );
