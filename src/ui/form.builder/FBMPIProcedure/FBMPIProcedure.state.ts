@@ -1,4 +1,4 @@
-import { cloneDeep } from "lodash";
+import { cloneDeep, filter } from "lodash";
 import { action, observable, set } from "mobx";
 import { FBMPIProcedureSelectValue, FBProcedureValue } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
@@ -35,9 +35,13 @@ export default class FBMPIProcedureState extends FBProcedureState {
   };
 
   // MARK: @helpers
-  public selectionDelete = (id: string, refId: string) => this.deleteLotApi.set({
-    url: FBEndpoint.RemoveLot,
-    urlValues: { id, refId },
-    method: "delete",
-  });
+  public selectionDelete = (id: string, refId: string) => {
+    this.deleteLotApi.set({
+      url: FBEndpoint.RemoveLot,
+      urlValues: { id, refId },
+      method: "post",
+    });
+    const selection = filter(cloneDeep(this.partsSelected), (selection) => selection.refId !== refId);
+    set(this, "partsSelected", selection);
+  };
 }
