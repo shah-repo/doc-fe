@@ -2,6 +2,7 @@ import { Box, Button, Dialog, DialogContent, DialogContentText, Typography } fro
 import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined";
 import React from "react";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
+import { DocumentType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
@@ -9,6 +10,7 @@ import { FB, FBFormState, FBProvider, FBSubmitButton, FBTextField } from "../../
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
+import { checkIsTypeMpiOutput } from "../../helpers/checkDocumentGroup";
 import { styles } from "./FinalizeAndRelease.styles";
 
 interface Props {
@@ -17,6 +19,7 @@ interface Props {
   revisionChangeType: string;
   docRevOwner: string;
   updatedAt?: string;
+  currentDocumentType?: DocumentType;
 }
 
 export const SubmitForApproval: React.FunctionComponent<Props> = ({
@@ -25,11 +28,14 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   revisionChangeType,
   docRevOwner,
   updatedAt,
+  currentDocumentType,
 }) => {
   const classes = styles();
   const voidRecordDialog = useDialog();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
   const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
+  const isTypeMpiOutput = checkIsTypeMpiOutput(currentDocumentType?.groupOptions);
+  const label = isTypeMpiOutput ? "record.complete.step" : "record.submit.for.approval";
   const releaseAsync = useAsync({
     onError: (error) => {
       toastError(error as string);
@@ -81,7 +87,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
         id="ApproveAndRelease-button"
         data-cy="ApproveAndRelease-button"
       >
-        <Text message={isObsolete ? "common.void" : "record.submit.for.approval"} />
+        <Text message={isObsolete ? "common.void" : label} />
       </Button>
       <Dialog
         open={voidRecordDialog.isOpen}
