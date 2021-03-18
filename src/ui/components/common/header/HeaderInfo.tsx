@@ -49,7 +49,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   const isTypeMpiOutput = checkIsTypeMpiOutput(documentType.groupOptions);
 
   const titleRenderer = () => {
-    const stepRegex = /(?<=,)(.*?)(?=\()/;
+    const stepRegex = /Step #[0-9]+/;
     // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
     const mpiOutputTitle = name.match(stepRegex);
 
