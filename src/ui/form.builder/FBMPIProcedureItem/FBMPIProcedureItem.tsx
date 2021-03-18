@@ -22,7 +22,7 @@ import {
   FBProcedureItemOmitAction,
   FBProcedureItemType,
   FBProvider,
-  FBText
+  FBText,
 } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBMPIProcedureItem } from "./FBMPIProcedureItem.wrap";
@@ -129,7 +129,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                     <>
                       {!isEmpty(mpiProcedureState?.partsSelected) && (
                         <Box mt={1} display="flex" flexWrap="wrap">
-                          <FBMapWrapper<FBMPIProcedureSelectValue[]>
+                          <FBMapWrapper<Partial<FBMPIProcedureSelectValue>[]>
                             collection={mpiProcedureState?.partsSelected || []}
                           >
                             {(selection: FBMPIProcedureSelectValue, index) => (

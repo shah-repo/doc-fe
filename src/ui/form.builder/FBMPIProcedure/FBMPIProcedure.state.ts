@@ -13,7 +13,7 @@ export default class FBMPIProcedureState extends FBProcedureState {
 
   // MARK: @observables
   @observable public selectState = new Map<number, boolean>();
-  @observable public partsSelected: FBMPIProcedureSelectValue[] = [];
+  @observable public partsSelected: Partial<FBMPIProcedureSelectValue>[] = [];
 
   // MARK: @constructor
   public constructor(value?: FBProcedureValue) {

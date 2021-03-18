@@ -1,7 +1,7 @@
 import { cloneDeep, get, toNumber } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
+import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
@@ -39,7 +39,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
           });
         }
         return selected;
-      }, []);
+      }, [] as Partial<FBMPIProcedureSelectValue>[]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
