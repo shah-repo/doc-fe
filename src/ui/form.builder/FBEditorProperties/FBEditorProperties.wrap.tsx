@@ -1,7 +1,9 @@
 import { at, filter, get, map, some } from "lodash";
-import { FB, FBData, FBEditorPropertiesDefaultValue, FBEditorPropertiesOmitByGroup, FBEditorPropertiesProps, FBOption } from "..";
+import { FB, FBData, FBEditorPropertiesOmitByGroup, FBEditorPropertiesProps, FBOption } from "..";
 import { DocumentGroupOptionsType } from "../../../state/ducks/documentRevisions/documentType/types";
 import { checkDocumentGroupOptions, checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
+import { FBInputType } from "../FBInput/FBInput.types";
+import { FBEditorPropertiesDefaultValue } from "./FBEditorProperties.helper";
 
 export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
   Component: React.FunctionComponent<T>,
@@ -55,7 +57,7 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     // reviseDisabled, outputDisabled ...
     // Refactoring will require predefined schemes migration as well
     // This is a hack for default checked props
-    const defaultChecked = FBEditorPropertiesDefaultValue[type ?? ""];
+    const defaultChecked = FBEditorPropertiesDefaultValue(type as FBInputType, docGroupOptions)[type ?? ""];
     map(defaultChecked, (key) => {
       formState?.setFieldValue(key, true);
     });
@@ -64,6 +66,7 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
       ...(props as T),
       onChange,
       options,
+      docGroupOptions,
       type,
     });
   };

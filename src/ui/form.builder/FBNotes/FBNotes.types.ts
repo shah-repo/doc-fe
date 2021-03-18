@@ -5,4 +5,5 @@ export type FBNotesProps =
 & {
   onClick?: () => void;
   name?: string;
+  notesNumber?: number;
 };
