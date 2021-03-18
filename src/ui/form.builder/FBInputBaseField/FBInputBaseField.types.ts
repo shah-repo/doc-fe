@@ -16,6 +16,7 @@ export type FBInputBaseFieldProps =
     | "onBlur"
     | "variant"
     | "className"
+    | "rowsMax"
   >
   & {
     dataCy?: string;

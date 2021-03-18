@@ -10,6 +10,7 @@ export type FBNotesFormProps =
   notesFormState?: FBNotesFormState;
   name?: string;
   notes?: FBNoteItem[];
+  isDraft?: boolean;
 };
 
 export interface FBNoteItem {
@@ -27,4 +28,8 @@ export interface FBNote {
   formBuilderFieldName: string;
   documentRevision: Id;
   attachments: Id[];
+}
+
+export interface FBNoteByDocument {
+  documentRevisionId: string;
 }

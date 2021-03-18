@@ -19,6 +19,7 @@ const FBInputBaseField: React.FunctionComponent<FBInputBaseFieldProps> = ({
   dataCy,
   mode,
   className,
+  rowsMax,
   gutter = false,
   ...props
 }) => (
@@ -28,7 +29,7 @@ const FBInputBaseField: React.FunctionComponent<FBInputBaseFieldProps> = ({
     )}
     { mode !== "preview" &&
       <InputBase
-        {...{ placeholder, style }}
+        {...{ placeholder, style, rows, multiline, rowsMax }}
         inputProps={{ "aria-label": "naked" }}
       />}
   </FBInput>
