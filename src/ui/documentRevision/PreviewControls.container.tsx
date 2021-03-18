@@ -22,7 +22,7 @@ import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
-import { checkCanBeCopied, checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
 import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
@@ -57,16 +57,18 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const dispatch = useDispatch();
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
   const formDocumentId = documentRevision.formDocument?.document?.id || "";
+  const groupOptions = documentRevision.document?.documentType?.groupOptions;
   const formDocuments: Document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, formDocumentId)
   );
   const email = useSelector(authSelectors.currentUserEmail);
   const isUserDocumentOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
-  const isRecord = checkIsDocumentRecord(documentRevision.document?.documentType?.groupOptions);
+  const isRecord = checkIsDocumentRecord(groupOptions);
   const isStatusInReview = isDocumentRevisionInReview(documentRevision.status);
   const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
-  const canCopy = checkCanBeCopied(documentRevision.document?.documentType?.groupOptions);
+  const canCopy = checkCanBeCopied(groupOptions);
+  const hasOutput = checkIsTypeHaveOutput(groupOptions);
 
   const isLastVersionObsolete = () => {
     if (checkIsDocumentRecord(selectedDocument.document.documentType.groupOptions)) {
@@ -142,7 +144,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
         .find((type) => type.documentTypeName === "Approval Request");
 
-    if (hasAccess && canCreateOutput(documentRevision) && !isAR) {
+    if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
       return (
         <Button
           color="secondary"
