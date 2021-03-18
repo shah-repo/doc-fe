@@ -10,7 +10,6 @@ class FBFileUploadState {
   public attachmentApi: FBRequest<Attachment, null> = new FBRequest();
   public attachmentsbyIdsApi: FBRequest<Attachment[], null> = new FBRequest();
 
-
   public constructor(files?: Attachment[]) {
     this.files = files || [];
   }

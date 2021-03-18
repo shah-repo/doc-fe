@@ -49,6 +49,7 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
           id: faker.random.uuid(),
           email: faker.random.word(),
           name: faker.random.word(),
+          avatar: faker.random.uuid(),
         },
       ],
       operators: [
@@ -56,6 +57,7 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
           id: faker.random.uuid(),
           email: faker.random.word(),
           name: faker.random.word(),
+          avatar: faker.random.uuid(),
         },
       ],
       securityGroups: [
@@ -92,6 +94,7 @@ export const getDocument = (document: Partial<Document> = {}): Document => ({
         id: faker.random.uuid(),
         email: faker.random.word(),
         name: faker.random.word(),
+        avatar: faker.random.uuid(),
       },
     ],
     operators: [
@@ -99,6 +102,7 @@ export const getDocument = (document: Partial<Document> = {}): Document => ({
         id: faker.random.uuid(),
         email: faker.random.word(),
         name: faker.random.word(),
+        avatar: faker.random.uuid(),
       },
     ],
     securityGroups: [
