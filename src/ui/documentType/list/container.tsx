@@ -39,12 +39,17 @@ const getFormattedRowValue = (path: any, rowData: any) => {
     checkIsDocumentRecord(rowData?.document?.documentType?.groupOptions)
   );
   let override = value;
+  if (typeof value === "object" && !isDate) {
+    override = "";
+  }
   if (path.startsWith("precalc.revision")) {
     override = versionNumber;
   }
   if (path === "status") {
     override = rowData.displayStatus;
   }
+
+
   return isDate ? <Date value={value} /> : override;
 };
 

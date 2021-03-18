@@ -1,7 +1,9 @@
 import { keys } from "lodash";
 import { reaction } from "mobx";
 import React from "react";
+import { useSelector } from "react-redux";
 import { FB, FBMPIProcedureProps, FBMPIProcedureState, FBProcedureItemType } from "..";
+import { companySelectors } from "../../../state/ducks/company";
 
 export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
   Component: React.FunctionComponent<T>,
@@ -23,12 +25,14 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     const { workspaceState, formState } = FB.useStores();
     const schemeItem = workspaceState?.getSchemaItemAt(index);
     mpiProcedureState = FB.useRef(FBMPIProcedureState, schemeItem?.editorConfig);
+    const redlineActive = useSelector(companySelectors.getRedlineActive);
 
     isOutput = Boolean(workspaceState?.isOutput && workspaceState?.id);
-    isPreview = isOutput || workspaceState?.mode === "preview" || workspaceState?.mode === "formPreview";
+    isPreview = (isOutput || workspaceState?.mode === "preview" || workspaceState?.mode === "formPreview") &&
+    !redlineActive;
     types = keys(FBProcedureItemType);
     isInputOwner = workspaceState?.getIsInputOwner(name);
-    disabled = !isInputOwner || isPreview;
+    disabled = (!isInputOwner || isPreview) && !redlineActive;
 
     // MARK: @reactions
     React.useEffect(() => reaction(

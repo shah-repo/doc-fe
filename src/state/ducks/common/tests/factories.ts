@@ -3,6 +3,7 @@ import { Owner, User } from "../types";
 
 export const getUser = (user: Partial<User> = {}): User => ({
   id: faker.random.uuid(),
+  avatar: faker.random.uuid(),
   email: faker.internet.email(),
   name: faker.name.firstName(),
   ...user,

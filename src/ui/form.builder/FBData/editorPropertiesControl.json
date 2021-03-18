@@ -72,7 +72,8 @@
     "includeInInspection",
     "includeInFaiInspection",
     "deleteDisabled",
-    "copyableValue"
+    "copyableValue",
+    "includeNotes"
   ],
   "texteditor": [
     "reviseDisabled",
