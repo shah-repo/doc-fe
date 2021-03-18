@@ -12,8 +12,8 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
     ...props
   }: T) => {
     // MARK: @config
-    const { dialogState, workspaceState } = FB.useStores();
-    formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
+    const { dialogState, workspaceState, mpiProcedureState } = FB.useStores();
+    formState = FB.useRef<FBFormState>(FBFormState, {});
     mpiProcedureSelectState = FB.useRef(FBMPIProcedureSelectState, initialValues?.id);
     const { id } = workspaceState || {};
 
@@ -31,12 +31,17 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       if (!id) { return; }
       const formValue = formState?.getValues() as FBMPIProcedureSelectValue;
       const { quantity, unit, usedLot } = formValue;
-      mpiProcedureSelectState?.useLot(id, {
+      const part = {
         fieldId: name,
         forMaterial: { id: initialValues?.id },
         quantity,
         unit,
         usedLot,
+      };
+      mpiProcedureSelectState?.useLot(id, part);
+      mpiProcedureState?.addPartsSelected({
+        ...part,
+        materialId: initialValues?.id,
       });
       handleCancel?.();
     }
