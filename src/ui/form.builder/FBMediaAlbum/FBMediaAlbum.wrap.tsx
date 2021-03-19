@@ -11,6 +11,7 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
     mediaAlbumState,
     collection = [],
     hiddenContainer,
+    actionsDisabled,
     title = "",
     mode,
     ...props
@@ -31,7 +32,7 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
         ? collection[mediaAlbumState?.activeMedia || 0]?.name
         : "";
       hiddenContainer = Boolean(
-        (workspaceMode === "preview" || workspaceMode === "formPreview") &&
+        (workspaceMode === "preview" || workspaceMode === "formPreview" || actionsDisabled) &&
         isEmpty(collection)
       );
     });
@@ -42,6 +43,7 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
       mediaAlbumState,
       workspaceMode,
       hiddenContainer,
+      actionsDisabled,
       collection,
       title,
       mode,
