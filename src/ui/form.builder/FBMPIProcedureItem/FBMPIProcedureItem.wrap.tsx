@@ -17,6 +17,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     loading,
     dialogState,
     multiplier = 1,
+    isPreview,
     name,
     type,
     value,
@@ -28,6 +29,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     const { smartReferencesTo = [] } = workspaceState?.document || {};
     dialogState = FB.useRef(FBDialogState);
     multiplier = toNumber(formState?.getFieldValue("lhr_initial_quantity")) || 1;
+    isPreview = isPreview && workspaceState?.mode !== "formPreview";
 
     useEffect(() => {
       if (!mpiProcedureState) { return; }
@@ -113,6 +115,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       getItem,
       getLot,
       mpiProcedureState,
+      isPreview,
       dialogState,
       multiplier,
       loading,
