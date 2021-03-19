@@ -125,12 +125,15 @@ DocumentRevisionUpdateContainerProps
     }
 
     if (shouldHaveNoResponse(dataToSubmit, documentRevision)) {
+      async.reset();
       async.start(
         saveWithNoResponse,
         documentRevision.id,
         dataToSubmit as DocumentRevisionEditRequestBody,
         async,
       );
+      helpers.resetForm();
+      return;
     }
 
     handleSave(dataToSubmit as DocumentRevisionEditRequestBody, helpers);
