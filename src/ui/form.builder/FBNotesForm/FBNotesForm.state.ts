@@ -1,10 +1,10 @@
 import { union } from "lodash";
 import { action, observable, set } from "mobx";
-import { FBNote, FBNoteItem } from "..";
+import { FBNote, FBNoteByDocument, FBNoteItem } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-class FBNotesFormState extends FBRequest<FBNoteItem, FBNote> {
+class FBNotesFormState extends FBRequest<FBNoteItem[] | FBNoteItem, FBNote | FBNoteByDocument> {
   @observable public notes?: FBNoteItem[];
   @observable public files?: any[];
 
@@ -23,7 +23,21 @@ class FBNotesFormState extends FBRequest<FBNoteItem, FBNote> {
 
   public onSuccess() {
     if (!this.data) { return; }
-    this.setNotes(union(this.notes || [], [this.data]));
+    switch (this.method) {
+      case "get": {
+        const fetchedData = this.data as FBNoteItem[];
+        const data = fetchedData?.sort(function(a, b) {
+          return (a.createdAt < b.createdAt) ? -1 : ((a.createdAt > b.createdAt) ? 1 : 0);
+        }) || [];
+        this.setNotes(data);
+        break;
+      }
+      case "post": {
+        this.setNotes(union(this.notes || [], [this.data as FBNoteItem]));
+        break;
+      }
+      default: break;
+    }
     super.onSuccess();
   }
 
@@ -36,6 +50,12 @@ class FBNotesFormState extends FBRequest<FBNoteItem, FBNote> {
     this.setUrl(FBEndpoint.Notes);
     this.setBody(note);
     this.post();
+  };
+
+  public fetchNotes = (documentRevisionId: string) => {
+    this.setUrl(FBEndpoint.Notes);
+    this.setBody({ documentRevisionId });
+    this.fetch();
   };
 }
 

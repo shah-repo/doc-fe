@@ -1,12 +1,14 @@
 import { isEmpty } from "lodash";
 import React from "react";
-import { FBCheckboxGroup, FBEditorPropertiesDefaultValue, FBEditorPropertiesProps, FBFieldName } from "..";
+import { FBCheckboxGroup, FBEditorPropertiesProps, FBFieldName, FBInputType } from "..";
+import { FBEditorPropertiesDefaultValue } from "./FBEditorProperties.helper";
 import { withFBEditorProperties } from "./FBEditorProperties.wrap";
 
 const FBEditorProperties: React.FunctionComponent<FBEditorPropertiesProps> = ({
   onChange,
   options,
-  type = "",
+  docGroupOptions,
+  type = "" as FBInputType,
 }) => (
   <>
     {options && !isEmpty(options) && (
@@ -14,7 +16,7 @@ const FBEditorProperties: React.FunctionComponent<FBEditorPropertiesProps> = ({
         name={FBFieldName.EditorProps}
         label="form.builder.properties"
         {...{ onChange, options }}
-        defaultValue={FBEditorPropertiesDefaultValue[type]}
+        defaultValue={FBEditorPropertiesDefaultValue(type, docGroupOptions)[type]}
       />
     )}
   </>

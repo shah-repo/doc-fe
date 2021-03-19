@@ -72,10 +72,9 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     // MARK: @methods
     startMpi = () => {
-      const startQuantity = formState?.getFieldValue(`fb-lhrs-start-quantity-${name}`);
-      if (!startQuantity) {
-        formState?.validate();
-        return;
+      let startQuantity = formState?.getFieldValue(`fb-lhrs-start-quantity-${name}`);
+      if (!startQuantity || startQuantity === "") {
+        startQuantity = 1;
       }
       lhrStepState.startMpi(
         name,

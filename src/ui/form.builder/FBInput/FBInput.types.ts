@@ -204,6 +204,13 @@ export const OmitInputClones: FBInputType[] = [
   "quantityunit",
 ];
 
+export const OmitIncludeNotes: FBInputType[] = [
+  "stepsection",
+  "teststep",
+  "section",
+  "subsection",
+];
+
 export interface FBInputConstructor {
   value: any;
   hidden?: boolean;
