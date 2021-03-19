@@ -25,7 +25,6 @@ export default class FBMPIProcedureState extends FBProcedureState {
 
   // MARK: @actions
   @action public setSelectState = (index: number, type: FBProcedureItemType) => {
-    console.log(`${type}-${index}`);
     this.selectState.set(`${type}-${index}`, !this.selectState.get(`${type}-${index}`));
   };
 
