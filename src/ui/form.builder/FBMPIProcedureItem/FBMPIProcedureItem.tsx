@@ -23,7 +23,7 @@ import {
   FBProcedureItemOmitAction,
   FBProcedureItemType,
   FBProvider,
-  FBText
+  FBText,
 } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBMPIProcedureItem } from "./FBMPIProcedureItem.wrap";
