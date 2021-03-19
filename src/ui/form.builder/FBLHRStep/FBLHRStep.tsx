@@ -1,10 +1,7 @@
 import { Box } from "@material-ui/core";
-import { CheckCircle, PlayCircleFilled } from "@material-ui/icons";
+import { PlayCircleFilled } from "@material-ui/icons";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText, FBTextField } from "..";
-import { Approval } from "../../../state/ducks/documents/types";
-import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
-import FBMapWrapper from "../FBMapWrapper/FBMapWrapper";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
@@ -26,26 +23,11 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
     {stepLHRs && (
       <Box display="flex" alignItems="center" mb={1}>
         <Box mr={1} display="flex" alignItems="center">
-          {isDocumentRevisionReleased(stepLHRs.status)
-            ? <CheckCircle />
-            : <PlayCircleFilled />
-          }
+          <PlayCircleFilled />
         </Box>
         <FBText
-          locale={
-            isDocumentRevisionReleased(stepLHRs.status)
-              ? "form.builder.step.completed"
-              : "form.builder.step.started"
-          }
+          locale="form.builder.step.started"
         />
-        {console.log(stepLHRs)}
-        {stepLHRs.approvals && (
-          <FBMapWrapper<any> collection={stepLHRs.approvals}>
-            {(approval: Approval) => (
-              <Box>test</Box>
-            )}
-          </FBMapWrapper>
-        )}
       </Box>
     )}
     <Box
