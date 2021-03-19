@@ -29,7 +29,6 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     const { smartReferencesTo = [] } = workspaceState?.document || {};
     dialogState = FB.useRef(FBDialogState);
     multiplier = toNumber(formState?.getFieldValue("lhr_initial_quantity")) || 1;
-    console.log(isPreview);
     isPreview = isPreview && workspaceState?.mode !== "formPreview";
 
     useEffect(() => {
