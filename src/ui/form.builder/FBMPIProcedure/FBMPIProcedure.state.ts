@@ -1,6 +1,6 @@
 import { cloneDeep, filter } from "lodash";
 import { action, observable, set } from "mobx";
-import { FBMPIProcedureSelectValue, FBProcedureValue } from "..";
+import { FBMPIProcedureSelectValue, FBProcedureItemType, FBProcedureValue } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import FBProcedureState from "../FBProcedure/FBProcedure.state";
@@ -12,7 +12,7 @@ export default class FBMPIProcedureState extends FBProcedureState {
   public deleteLotApi: FBRequest<null, null> = new FBRequest();
 
   // MARK: @observables
-  @observable public selectState = new Map<number, boolean>();
+  @observable public selectState = new Map<string, boolean>();
   @observable public partsSelected: Partial<FBMPIProcedureSelectValue>[] = [];
 
   // MARK: @constructor
@@ -24,8 +24,8 @@ export default class FBMPIProcedureState extends FBProcedureState {
   // MARK: @computed
 
   // MARK: @actions
-  @action public setSelectState = (index) => {
-    this.selectState.set(index, !this.selectState.get(index));
+  @action public setSelectState = (index: number, type: FBProcedureItemType) => {
+    this.selectState.set(`${type}-${index}`, !this.selectState.get(`${type}-${index}`));
   };
 
   @action addPartsSelected = (part: FBMPIProcedureSelectValue) => {
