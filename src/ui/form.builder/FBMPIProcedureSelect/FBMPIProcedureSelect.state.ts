@@ -1,4 +1,4 @@
-import { action, observable, set } from "mobx";
+import { observable } from "mobx";
 import { FBMPIProcedureSelectValue } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
@@ -13,7 +13,7 @@ class FBMPIProcedureSelectState {
   public useLotApi: FBRequest<null, FBMPIProcedureSelectValue> = new FBRequest();
 
   // MARK: @observables
-  @observable public lotsNumber = 0;
+  @observable public partsAdded?: FBMPIProcedureSelectValue;
 
   // MARK: @constructor
   public constructor(id?: string) {
@@ -22,8 +22,6 @@ class FBMPIProcedureSelectState {
   }
 
   // MARK: @actions
-  @action setLotNumber = () =>
-    set(this, "lotsNumber", this.lotsNumber + 1);
 
   // MARK: @helpers
   public fetchLotsToPart = (id: string) => this.lotsApi.set({

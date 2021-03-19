@@ -2,8 +2,9 @@
 import { useFormikContext } from "formik";
 import { isEqual, keys, omit } from "lodash";
 import * as React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
+import { companyActions, companySelectors } from "../../../../state/ducks/company";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
@@ -16,7 +17,7 @@ import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
-import { checkCanBeCopied, checkIsDocumentRecord, hasOperatorRelease, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
@@ -26,12 +27,14 @@ import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";
 import ExportToCSVButton from "./export.to.csv/ExportToCSV.button";
+import RedlineButton from "./redline/Redline.button";
 import { SubmitForApproval } from "./SubmitForApproval";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
 import VoidButton from "./VoidButton";
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const formik = useFormikContext();
+  const dispatch = useDispatch();
   // isCreateDocumentDisabled is flag for temporary disabling
   // of create button until correct doc id is generated
   const { isCreateDocumentDisabled } = props;
@@ -44,6 +47,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     canChangeOwnerShip,
     type,
   } = React.useContext(FormHeaderContext)!;
+  const redlineActive = useSelector(companySelectors.getRedlineActive);
   const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
   const documentTypeId = documentRevision?.document?.documentType?.id;
   const schema = documentRevision?.formDocument?.formTemplate?.schema;
@@ -69,6 +73,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isApproved = isInlineFormApproved( documentRevision, formState, schema);
   const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
+  const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
 
   const shouldShowUpgrade =
     (!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs);
@@ -122,6 +127,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     }
   }
   const onFormClick = () => {
+    if (redlineActive) {
+      workspaceState?.setMode("form");
+      dispatch(companyActions.autosaveConfig());
+    }
     setFBValue();
     if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
       formik.setFieldValue("attachments", []);
@@ -141,20 +150,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
     <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
   );
 
   return (
     <div>
-      {(isStatusReleased || isStatusInDraft) && serializedCSV &&
-      <ExportToCSVButton
-        {...{ documentRevision }}
-      />}
-      {(isStatusReleased || isStatusInDraft) && canCopy &&
-        <CopyEBButton
-          {...{ documentRevision }}
-        />}
       <SubmitButton
         asyncState={asyncState}
         label={isDisabled ?
@@ -166,63 +168,78 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         data-cy={"DocumentRevisionForm-submit"}
         disabled={isCreateDocumentDisabled}
       />
-      <InspectionControlsContainer {...{ documentRevision }} />
       {
-        isRecord && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator && (
-          <SubmitForApproval
-            docRevId={values.id as string}
-            status={values.status}
-            docRevOwner={owner?.user.name}
-            updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
-            {
-              ...{
-                revisionChangeType,
+        !redlineActive &&
+      <span>
+        {(isStatusReleased || isStatusInDraft) && serializedCSV &&
+          <ExportToCSVButton
+            {...{ documentRevision }}
+          />}
+        {(isStatusReleased || isStatusInDraft) && canCopy &&
+        <CopyEBButton
+          {...{ documentRevision }}
+        />}
+        <InspectionControlsContainer {...{ documentRevision }} />
+        <RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline }}/>
+        {
+          isRecord && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator && (
+            <SubmitForApproval
+              docRevId={values.id as string}
+              status={values.status}
+              docRevOwner={owner?.user.name}
+              updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
+              {
+                ...{
+                  revisionChangeType,
+                  currentDocumentType,
+                }
               }
-            }
-          />
-        )
-      }
-      {
-        (!isRecord || (isInlineApproval && isApproved && isDocumentNumericRelease(revisionStage))) && (
-          <ApproveAndRelease
-            id={values.id}
-            status={values.status}
-            isQms={docInfo.isQms}
-            documentName={docInfo.name}
-            docRevId={values.id as string}
-            owner={documentRevision?.owner}
-            {
-              ...{
-                isRecord,
-                documentTypeId,
-                revisionStage,
-                isInlineApproval,
+            />
+          )
+        }
+        {
+          (!isRecord || (isInlineApproval && isApproved && isDocumentNumericRelease(revisionStage))) && (
+            <ApproveAndRelease
+              id={values.id}
+              status={values.status}
+              isQms={docInfo.isQms}
+              documentName={docInfo.name}
+              docRevId={values.id as string}
+              owner={documentRevision?.owner}
+              {
+                ...{
+                  isRecord,
+                  documentTypeId,
+                  revisionStage,
+                  isInlineApproval,
+                }
               }
-            }
-          />
-        )
-      }
-      <HeaderMenu>
-        {!(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
+            />
+          )
+        }
+        <HeaderMenu>
+          {!(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
         <CancelButton
           {...{ documentRevision }}
           setShouldDisplay={props.setCancelButtonDisplay}
         />}
-        {renderChangeOwnership}
-        <UpgradeToLatestContainer
-          formDocumentId={documentRevision?.formDocument?.document?.id}
-          docRevId={documentRevision?.id}
-          setShouldDisplay={props.setUpgradeToLastestDisplay}
-          type="button"
-          {...{
-            shouldShowUpgrade,
-          }}
-        />
-        {!(isRecord && isInlineApproval) &&
+          {renderChangeOwnership}
+          <UpgradeToLatestContainer
+            formDocumentId={documentRevision?.formDocument?.document?.id}
+            docRevId={documentRevision?.id}
+            setShouldDisplay={props.setUpgradeToLastestDisplay}
+            type="button"
+            {...{
+              shouldShowUpgrade,
+            }}
+          />
+          {!(isRecord && isInlineApproval) &&
           isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}
-        {isRecord && isInlineApproval &&
+          {isRecord && isInlineApproval &&
           isUserDocumentOwner && showVoidButtonOnInlineRecords && <VoidButton {...{ documentRevision }}/>}
-      </HeaderMenu>
+        </HeaderMenu>
+      </span>
+      }
     </div>
   );
 };

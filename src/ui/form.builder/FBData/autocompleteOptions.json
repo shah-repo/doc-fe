@@ -7,7 +7,8 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": "",
-    "includeRevision": "displayRevision"
+    "includeRevision": "displayRevision",
+    "hidden": false
   },
   {
     "id": "2",
@@ -16,7 +17,8 @@
     "valueKey": "id",
     "labelKey": "title",
     "labelPrefixRoot": "crId",
-    "root": ""
+    "root": "",
+    "hidden": false
   },
   {
     "id": "3",
@@ -25,7 +27,8 @@
     "valueKey": "id",
     "labelKey": "user.email",
     "labelPrefixRoot": "user.name",
-    "root": "optionalApprovers"
+    "root": "optionalApprovers",
+    "hidden": false
   },
   {
     "id": "4",
@@ -33,7 +36,8 @@
     "label": "Document types",
     "valueKey": "id",
     "labelKey": "documentTypeName",
-    "root": ""
+    "root": "",
+    "hidden": false
   },
   {
     "id": "5",
@@ -43,7 +47,8 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": "",
-    "includeRevision": "displayRevision"
+    "includeRevision": "displayRevision",
+    "hidden": false
   },
   {
     "id": "6",
@@ -53,7 +58,8 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": "",
-    "includeRevision": "displayRevision"
+    "includeRevision": "displayRevision",
+    "hidden": false
   },
   {
     "id": "7",
@@ -63,7 +69,8 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": "",
-    "includeRevision": "displayRevision"
+    "includeRevision": "displayRevision",
+    "hidden": false
   },
   {
     "id": "8",
@@ -71,7 +78,8 @@
     "label": "Company addresses",
     "valueKey": "id",
     "labelKey": "name",
-    "root": "addresses"
+    "root": "addresses",
+    "hidden": false
   },
   {
     "id": "9",
@@ -79,14 +87,16 @@
     "label": "GL codes",
     "valueKey": "id",
     "labelKey": "name",
-    "root": "acctCodes"
+    "root": "acctCodes",
+    "hidden": false
   },
   {
     "id": "10",
     "path": "/groups",
     "label": "Groups",
     "valueKey": "id",
-    "labelKey": "name"
+    "labelKey": "name",
+    "hidden": false
   },
   {
     "id": "11",
@@ -96,7 +106,8 @@
     "labelKey": "document.docId",
     "labelPrefixRoot": "",
     "root": "",
-    "includeRevision": "displayRevision"
+    "includeRevision": "displayRevision",
+    "hidden": false
   },
   {
     "id": "12",
@@ -106,7 +117,8 @@
     "labelKey": "description",
     "labelPrefixRoot": "document.docId",
     "root": "",
-    "includeRevision": "displayRevision"
+    "includeRevision": "displayRevision",
+    "hidden": false
   },
   {
     "id": "13",
@@ -114,14 +126,16 @@
     "label": "Employees",
     "valueKey": "id",
     "labelKey": "user.name",
-    "root": ""
+    "root": "",
+    "hidden": false
   },
   {
     "id": "14",
     "path": "/groups",
     "label": "Official Groups",
     "valueKey": "id",
-    "labelKey": "name"
+    "labelKey": "name",
+    "hidden": false
   },
   {
     "id": "15",
@@ -131,7 +145,8 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": "",
-    "includeRevision": "displayRevision"
+    "includeRevision": "displayRevision",
+    "hidden": false
   },
   {
     "id": "16",
@@ -141,7 +156,8 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": "",
-    "includeRevision": "displayRevision"
+    "includeRevision": "displayRevision",
+    "hidden": false
   },
   {
     "id": "17",
@@ -150,7 +166,8 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "",
-    "root": ""
+    "root": "",
+    "hidden": false
   },
   {
     "id": "18",
@@ -160,7 +177,8 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": "",
-    "includeRevision": "displayRevision"
+    "includeRevision": "displayRevision",
+    "hidden": false
   },
   {
     "id": "19",
@@ -170,7 +188,8 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": "",
-    "includeRevision": "displayRevision"
+    "includeRevision": "displayRevision",
+    "hidden": false
   },
   {
     "id": "20",
@@ -180,7 +199,8 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": "",
-    "includeRevision": "displayRevision"
+    "includeRevision": "displayRevision",
+    "hidden": false
   },
   {
     "id": "21",
@@ -190,7 +210,8 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": "",
-    "includeRevision": "displayRevision"
+    "includeRevision": "displayRevision",
+    "hidden": false
   },
   {
     "id": "22",
@@ -198,7 +219,8 @@
     "label": "Document types",
     "valueKey": "id",
     "labelKey": "documentTypeName",
-    "root": ""
+    "root": "",
+    "hidden": false
   },
   {
     "id": "23",
@@ -208,7 +230,8 @@
     "labelKey": "name",
     "labelPrefixRoot": "docId",
     "includeRevision": "displayRevision",
-    "root": ""
+    "root": "",
+    "hidden": false
   },
   {
     "id": "24",
@@ -218,7 +241,8 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": "",
-    "includeRevision": "displayRevision"
+    "includeRevision": "displayRevision",
+    "hidden": false
   },
   {
     "id": "25",
@@ -227,7 +251,8 @@
     "valueKey": "id",
     "labelKey": "documentRevisions.name",
     "labelPrefixRoot": "docId",
-    "root": ""
+    "root": "",
+    "hidden": false
   },
   {
     "id": "26",
@@ -235,7 +260,8 @@
     "label": "Supplier Document Types",
     "valueKey": "id",
     "labelKey": "documentTypeName",
-    "root": ""
+    "root": "",
+    "hidden": false
   },
   {
     "id": "27",
@@ -245,7 +271,8 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": "",
-    "includeRevision": "displayRevision"
+    "includeRevision": "displayRevision",
+    "hidden": false
   },
   {
     "id": "28",
@@ -255,7 +282,8 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": "",
-    "includeRevision": "displayRevision"
+    "includeRevision": "displayRevision",
+    "hidden": false
   },
   {
     "id": "29",
@@ -263,7 +291,8 @@
     "label": "MPI documents",
     "valueKey": "id",
     "labelKey": "name",
-    "root": ""
+    "root": "",
+    "hidden": false
   },
   {
     "id": "30",
@@ -272,6 +301,19 @@
     "valueKey": "value",
     "labelKey": "text",
     "root": "",
-    "publicApi": true
+    "publicApi": true,
+    "hidden": false
+  },
+  {
+    "id": "31",
+    "path": "/documents/${documentId}",
+    "label": "",
+    "valueKey": "id",
+    "labelKey": "displayStatus",
+    "root": "documentRevisions",
+    "includeRevision": "displayRevision",
+    "labelPrefixRoot": "name",
+    "publicApi": false,
+    "hidden": true
   }
 ]

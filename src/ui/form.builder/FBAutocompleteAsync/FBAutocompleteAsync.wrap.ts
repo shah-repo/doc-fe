@@ -21,6 +21,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     additionalData,
     omitFormValue,
     forceNewRender,
+    urlValues,
     freeSolo,
     optionId,
     options,
@@ -31,7 +32,10 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     ...props
   }: T) => {
     const { formState } = FB.useStores();
-    autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, optionId);
+    autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+      optionId,
+      urlValues,
+    });
     const {
       valueKey: optionValueKey = "value",
       labelKey: optionLabelKey = "text",
@@ -160,6 +164,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       forceNewRender,
       freeSolo,
       multiple,
+      urlValues,
       name,
       value,
     });

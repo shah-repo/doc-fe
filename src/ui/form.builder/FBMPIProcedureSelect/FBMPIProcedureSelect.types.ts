@@ -14,4 +14,7 @@ export interface FBMPIProcedureSelectValue {
   quantity: number;
   unit: string;
   usedLot: { id: string };
+  lotDocId?: string;
+  refId?: string;
+  materialId?: string;
 }
