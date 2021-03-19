@@ -89,7 +89,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       if (!documentRevision) { return; }
       window.open(
         `/document_revision/${documentRevision.documentId}/version/${documentRevision.id}`,
-        "_blank"
+        "_self"
       );
     };
 
