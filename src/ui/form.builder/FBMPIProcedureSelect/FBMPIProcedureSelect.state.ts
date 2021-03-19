@@ -10,7 +10,7 @@ class FBMPIProcedureSelectState {
 
   // MARK: @api
   public lotsApi: FBRequest<DocumentRevision[], null> = new FBRequest();
-  public useLotApi: FBRequest<null, FBMPIProcedureSelectValue> = new FBRequest();
+  public useOverrideApi: FBRequest<DocumentRevision, FBMPIProcedureSelectValue> = new FBRequest();
 
   // MARK: @observables
   @observable public partsAdded?: FBMPIProcedureSelectValue;
@@ -30,7 +30,7 @@ class FBMPIProcedureSelectState {
     method: "get",
   });
 
-  public useLot = (id: string, body: FBMPIProcedureSelectValue) => this.useLotApi.set({
+  public useOverride = (id: string, body: FBMPIProcedureSelectValue) => this.useOverrideApi.set({
     url: FBEndpoint.UseOverride,
     urlValues: { id },
     method: "post",

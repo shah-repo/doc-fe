@@ -1,4 +1,4 @@
-import { cloneDeep, filter } from "lodash";
+import { cloneDeep } from "lodash";
 import { action, observable, set } from "mobx";
 import { FBMPIProcedureSelectValue, FBProcedureItemType, FBProcedureValue } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
@@ -41,7 +41,7 @@ export default class FBMPIProcedureState extends FBProcedureState {
       urlValues: { id, refId },
       method: "post",
     });
-    const selection = filter(cloneDeep(this.partsSelected), (selection) => selection.refId !== refId);
-    set(this, "partsSelected", selection);
   };
+
+  public setPartsSelected = (partsSelected) => set(this, "partsSelected", partsSelected);
 }

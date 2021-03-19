@@ -3,7 +3,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import EditIcon from "@material-ui/icons/Edit";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
-import { isEmpty } from "lodash";
+import { isEmpty, some } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -135,7 +135,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                           >
                             {(selection: FBMPIProcedureSelectValue, index) => (
                               <Box key={`fb-mpi-procedure-selection-${index}`}>
-                                {selection.materialId === item.title && (
+                                {(selection.materialId === item.title || selection.equipmentId === item.title) && (
                                   <Box
                                     display="flex"
                                     flexDirection="row"
@@ -148,9 +148,9 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                     p={0.5}
                                   >
                                     <FBText
-                                      locale="form.builder.mpi.part.selection"
+                                      locale={`form.builder.mpi.part.selection.${type}`}
                                       values={{
-                                        lotDocId: selection.lotDocId || "",
+                                        docId: selection.overrideDocId || "",
                                         quantity: selection.quantity || 0,
                                         unit: selection.unit || "",
                                       }}
@@ -161,7 +161,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                     />
                                     <IconButton
                                       size="small"
-                                      style={{ fontSize: 11, marginTop: "-5px", marginRight: "-2px" }}
+                                      style={{ fontSize: 11 }}
                                       onClick={() => handleSelectionDelete?.(selection.refId)}
                                     >
                                       <HighlightOffIcon fontSize="inherit" />
@@ -181,7 +181,12 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                 <Observer>
                   {() => (
                     <FBButton
-                      label="form.builder.select"
+                      label={
+                        some(mpiProcedureState?.partsSelected,
+                          (selection) => selection.materialId === item.title || selection.equipmentId === item.title)
+                          ? "form.builder.change"
+                          : "form.builder.select"
+                      }
                       hidden={!mpiProcedureState?.selectState.get(`${type}-${index}`)}
                       style={{ margin: 0, padding: "4px" }}
                       onClick={() => handleSelect?.({

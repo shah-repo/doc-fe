@@ -1,7 +1,9 @@
 import { cloneDeep, get, toNumber } from "lodash";
+import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
+import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
@@ -31,19 +33,32 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     useEffect(() => {
       if (!mpiProcedureState) { return; }
-      mpiProcedureState.partsSelected = smartReferencesTo.reduce((selected, ref) => {
-        if (ref.metadata?.fieldId === name) {
+      const partsSelected = smartReferencesTo.reduce((selected, ref) => {
+        if (ref.metadata?.fieldId === name
+            && (ref.type === SmartReferenceType.EquipmentReplacement || ref.type === SmartReferenceType.LotUsage)) {
           selected.push({
             ...ref.metadata,
             refId: ref.id,
+            overrideDocId: ref.toDocRev?.document.docId,
           });
         }
         return selected;
       }, [] as Partial<FBMPIProcedureSelectValue>[]);
+      mpiProcedureState.setPartsSelected(partsSelected);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // MARK: @reactions
+    React.useEffect(() => {
+      reaction(
+        () => mpiProcedureState?.deleteLotApi.data,
+        (data) => {
+          // TODO: mpiProcedureState?.setPartsSelected(filtered selection)
+        }
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
 
     // MARK: @helpers
 

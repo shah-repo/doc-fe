@@ -42,6 +42,9 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
           label="form.builder.equipment"
           name="usedOverride"
           optionId={FBAutocompleteAsyncOption.equipment}
+          optionValueKey="id"
+          optionLabelKey="document.docId"
+          optionValueType="id"
         />
       )}
     {children}

@@ -10,11 +10,13 @@ export type FBMPIProcedureSelectProps =
 
 export interface FBMPIProcedureSelectValue {
   fieldId: string;
-  forMaterial: { id: string };
-  quantity: number;
-  unit: string;
-  usedLot: { id: string };
-  lotDocId?: string;
+  forPreselected: { id: string };
+  usedOverride: { id: string };
+  type: FBProcedureItemType | "MATERIAL" | "EQUIPMENT";
+  overrideDocId?: string;
   refId?: string;
   materialId?: string;
+  equipmentId?: string;
+  quantity?: number;
+  unit?: string;
 }
