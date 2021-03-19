@@ -6,9 +6,6 @@ export type FBNotesProps =
 & {
   onClick?: () => void;
   name?: string;
+  notesNumber?: number | 0;
   notesState?: FBNotesState;
 };
-
-export interface FBNoteBody {
-  documentRevisionId: string;
-}

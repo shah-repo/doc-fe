@@ -2,6 +2,9 @@ import React from "react";
 import { DocumentRevision, SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
 import { checkIsTypeLhr, checkIsTypeMpiOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
 
+const LHR_BUILD_TYPE = "lhr-build-type";
+const LHR_SUBTITLE_PRECALC_KEY = "lshs_subtitle";
+
 const LABEL_LENGTH = 50;
 const generateDocRevUrl: (params: {docRevId: string; documentId: string; label: string}) => any =
   ({ docRevId, documentId, label }) => (
@@ -13,7 +16,7 @@ const generateDocRevUrl: (params: {docRevId: string; documentId: string; label: 
     </a>);
 
 const generateLHRSubtitle = (documentRevision: DocumentRevision) => <React.Fragment>
-  {documentRevision.document?.lot?.lotId}
+  {`${documentRevision.document?.lot?.lotId}${documentRevision.precalc?.[LHR_BUILD_TYPE] === "R&D" ? "RD" : ""}`}
 </React.Fragment>;
 
 const generateLHRsSubtitle = (documentRevision: DocumentRevision) => {
@@ -23,7 +26,7 @@ const generateLHRsSubtitle = (documentRevision: DocumentRevision) => {
     ?.find((ref) => ref.type === SmartReferenceType.HiddenPiInstance)
     ?.toDocRev
     ?.precalc
-    ?.["lshs_subtitle"];
+    ?.[LHR_SUBTITLE_PRECALC_KEY];
 
   const partLink = subtitle?.part?.docRevId && subtitle?.part?.documentId && generateDocRevUrl(subtitle.part);
   const lhrLink = subtitle?.lhr?.docRevId && subtitle?.lhr?.documentId && generateDocRevUrl(subtitle.lhr);

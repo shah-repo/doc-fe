@@ -1,7 +1,7 @@
 import { cloneDeep, get, toNumber } from "lodash";
 import { useObserver } from "mobx-react";
-import React from "react";
-import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
+import React, { useEffect } from "react";
+import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
@@ -11,11 +11,13 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     onClick,
     handleRemove,
     handleSelect,
+    handleSelectionDelete,
     getItem,
     getLot,
     loading,
     dialogState,
     multiplier = 1,
+    isPreview,
     name,
     type,
     value,
@@ -23,9 +25,25 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
   }: T) => {
 
     // MARK: @config
-    const { mpiProcedureState, formState } = FB.useStores();
+    const { mpiProcedureState, workspaceState, formState } = FB.useStores();
+    const { smartReferencesTo = [] } = workspaceState?.document || {};
     dialogState = FB.useRef(FBDialogState);
     multiplier = toNumber(formState?.getFieldValue("lhr_initial_quantity")) || 1;
+    isPreview = isPreview && workspaceState?.mode !== "formPreview";
+
+    useEffect(() => {
+      if (!mpiProcedureState) { return; }
+      mpiProcedureState.partsSelected = smartReferencesTo.reduce((selected, ref) => {
+        if (ref.metadata?.fieldId === name) {
+          selected.push({
+            ...ref.metadata,
+            refId: ref.id,
+          });
+        }
+        return selected;
+      }, [] as Partial<FBMPIProcedureSelectValue>[]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // MARK: @reactions
 
@@ -42,7 +60,13 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
             title: `${FBProcedureItemLocale[type]}|s`,
           },
         },
-        content: <FBProcedureForm {...{ type }} initialValues={cloneDeep(part)} />,
+        content: (
+          <FBProcedureForm
+            {...{ type }}
+            initialValues={cloneDeep(part)}
+            mode="mpi"
+          />
+        ),
       });
     };
 
@@ -52,6 +76,13 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
         title: "form.builder.select",
         content: <FBMPIProcedureSelect {...{ name }} initialValues={item} />,
       });
+    };
+
+    handleSelectionDelete = (refId?: string) => {
+      if (!refId) { return; }
+      const { id } = workspaceState?.document || {};
+      if (!id) { return; }
+      mpiProcedureState?.selectionDelete(id, refId);
     };
 
     handleRemove = (id: string) => mpiProcedureState?.removeItem(id, type);
@@ -80,9 +111,11 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       onClick,
       handleRemove,
       handleSelect,
+      handleSelectionDelete,
       getItem,
       getLot,
       mpiProcedureState,
+      isPreview,
       dialogState,
       multiplier,
       loading,
