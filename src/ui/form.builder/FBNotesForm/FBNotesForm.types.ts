@@ -1,5 +1,6 @@
 import { FBFormProps } from "..";
 import { Id } from "../../../state/ducks/common/types";
+import FBNotesState from "../FBNotes/FBNotes.state";
 import FBNotesFormState from "./FBNotesForm.state";
 
 export type FBNotesFormProps =
@@ -11,6 +12,7 @@ export type FBNotesFormProps =
   name?: string;
   notes?: FBNoteItem[];
   isDraft?: boolean;
+  notesState?: FBNotesState;
 };
 
 export interface FBNoteItem {
