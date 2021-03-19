@@ -17,6 +17,7 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
     name,
     notes,
     isDraft,
+    notesState,
     ...props
   }: T) => {
 
@@ -72,6 +73,7 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
         attachments: values?.noteFile || [],
       };
       notesFormState?.setNote(note);
+      notesState?.setNumberOfNotes(notesState?.noteNumber as number + 1);
       formState?.setFieldValue("noteText", "", true);
       formState?.setFieldValue("noteFile", [], true);
     };
