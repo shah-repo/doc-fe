@@ -3,7 +3,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
-import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
@@ -33,7 +33,26 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     useEffect(() => {
       if (!mpiProcedureState) { return; }
-      const partsSelected = smartReferencesTo.reduce((selected, ref) => {
+      setFilteredParts(smartReferencesTo);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // MARK: @reactions
+    React.useEffect(() => {
+      reaction(
+        () => mpiProcedureState?.deleteLotApi.data,
+        (data?: DocumentRevision) => {
+          if (!data) { return; }
+          setFilteredParts(data.smartReferencesTo);
+        }
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+
+    // MARK: @helpers
+    const setFilteredParts = (data) => {
+      const partsSelected = data.reduce((selected, ref) => {
         if (ref.metadata?.fieldId === name
             && (ref.type === SmartReferenceType.EquipmentReplacement || ref.type === SmartReferenceType.LotUsage)) {
           selected.push({
@@ -44,23 +63,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
         }
         return selected;
       }, [] as Partial<FBMPIProcedureSelectValue>[]);
-      mpiProcedureState.setPartsSelected(partsSelected);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    // MARK: @reactions
-    React.useEffect(() => {
-      reaction(
-        () => mpiProcedureState?.deleteLotApi.data,
-        (data) => {
-          // TODO: mpiProcedureState?.setPartsSelected(filtered selection)
-        }
-      );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-
-    // MARK: @helpers
+      mpiProcedureState?.setPartsSelected(partsSelected);
+    };
 
     // MARK: @methods
     onClick = (part?: FBProcedureItemConfig) => {

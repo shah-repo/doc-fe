@@ -1,6 +1,7 @@
 import { cloneDeep } from "lodash";
 import { action, observable, set } from "mobx";
 import { FBMPIProcedureSelectValue, FBProcedureItemType, FBProcedureValue } from "..";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import FBProcedureState from "../FBProcedure/FBProcedure.state";
@@ -9,7 +10,7 @@ export default class FBMPIProcedureState extends FBProcedureState {
   // MARK: @config
 
   // MARK: @api
-  public deleteLotApi: FBRequest<null, null> = new FBRequest();
+  public deleteLotApi: FBRequest<DocumentRevision, null> = new FBRequest();
 
   // MARK: @observables
   @observable public selectState = new Map<string, boolean>();
