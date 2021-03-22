@@ -174,6 +174,7 @@ context("Parts from EB flow test", () => {
 
       it("Enter description 'Engineering Build Form description'", () => {
         cy.drEnterDocumentDescription({ description: "Engineering Build Form description" });
+        cy.wait(5000);
       });
 
       it("Select 'Form' document type from dropdown", () => {

@@ -390,6 +390,7 @@ context("Test Equipment maintenance email notifications", () => {
 
       it("Enter description 'Equipment maintenance'", () => {
         cy.drEnterDocumentDescription({ description: "Equipment maintenance" });
+        cy.wait(5000);
       });
 
       it("Select 'Active' as EQ status", () => {

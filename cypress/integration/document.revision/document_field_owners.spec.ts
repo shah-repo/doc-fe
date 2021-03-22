@@ -218,7 +218,7 @@ context("Document Field Owners Test", () => {
   });
 
   context(`Open created document and check for operators restrictions`, () => {
-    it("Navigates to document list", () => {
+    it("Navigate to records list", () => {
       cy.navigToRecords();
     });
 
@@ -275,7 +275,7 @@ context("Document Field Owners Test", () => {
 
 
   context(`Add new textbox field for operator '${USERS[4].name}'`, () => {
-    it("Navigates to document list", () => {
+    it("Navigate to records list", () => {
       cy.navigToRecords();
     });
 
@@ -314,7 +314,7 @@ context("Document Field Owners Test", () => {
   });
 
   context("Check fields are disabled for user that is not field owner, and change owner of document", () => {
-    it("Navigates to document list", () => {
+    it("Navigate to records list", () => {
       cy.navigToRecords();
     });
 
@@ -351,7 +351,7 @@ context("Document Field Owners Test", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Navigates to document list", () => {
+    it("Navigate to records list", () => {
       cy.navigToRecords();
     });
 
@@ -409,7 +409,7 @@ context("Document Field Owners Test", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Navigates to document list", () => {
+    it("Navigate to records list", () => {
       cy.navigToRecords();
     });
 
@@ -446,7 +446,7 @@ context("Document Field Owners Test", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Navigates to document list", () => {
+    it("Navigate to records list", () => {
       cy.navigToRecords();
     });
 
@@ -483,7 +483,7 @@ context("Document Field Owners Test", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Navigates to document list", () => {
+    it("Navigate to records list", () => {
       cy.navigToRecords();
     });
 
