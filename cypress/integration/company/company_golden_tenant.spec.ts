@@ -613,7 +613,10 @@ context.skip("Create company with golden tenant", () => {
     });
 
     it("Selects 'No' training required option", () => {
-      cy.get("[name^=training-required-]").eq(1).click();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[name^=training-required-]").eq(1).click();
+        });
     });
 
     it("'Approve and Release' the document", () => {
@@ -669,7 +672,10 @@ context.skip("Create company with golden tenant", () => {
     });
 
     it("Selects 'No' training required option", () => {
-      cy.get("[name^=training-required-]").eq(1).click();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[name^=training-required-]").eq(1).click();
+        });
     });
 
     it("'Approve and Release' the document", () => {
@@ -711,23 +717,39 @@ context.skip("Create company with golden tenant", () => {
     });
 
     it("Upload DOM JSON", () => {
-      cy.atchUploadDOMJSONForNCO({ fileName: "dam.json", queue: 0 });
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.atchUploadDOMJSONForNCO({ fileName: "dam.json", queue: 0 });
+        });
     });
 
     it("Upload Page Details JSON", () => {
-      cy.atchUploadPageDetailsJSONForNCO({ fileName: "PageDetails.json", queue: 0 });
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.atchUploadPageDetailsJSONForNCO({ fileName: "PageDetails.json", queue: 0 });
+        });
     });
 
     it("Upload Navigation JSON", () => {
-      cy.atchUploadNavigationJSONForNCO({ fileName: "navigation.json", queue: 0 });
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.atchUploadNavigationJSONForNCO({ fileName: "navigation.json", queue: 0 });
+        });
     });
 
     it("Upload Users List JSON", () => {
-      cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
+        });
     });
 
     it("Include Seed documents", () => {
-      cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").click();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.DocRevGet], () => {
+          cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").click();
+        });
+      cy.wait(1500);
       cy.get("[name^=seed-documents-to-be-included-]").type("SEED-00001{downarrow}{enter}");
       cy.get("[name^=seed-documents-to-be-included-]").type("SEED-00002{downarrow}{enter}");
     });
@@ -738,7 +760,10 @@ context.skip("Create company with golden tenant", () => {
     });
 
     it("Approve and release document - create company", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
+        CyRoutes.EmployeesGet, CyRoutes.GetAttachments], () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
     });
 
     it("Log out user", () => {
