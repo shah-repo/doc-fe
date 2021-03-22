@@ -160,7 +160,7 @@ context("FORM Field test", () => {
 
       it("Add Select Field", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
+        cy.fbSelectItemFromNewFieldList({ field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
         cy.fbEnterPlaceholder({ placeholder: "fb-select-field placeholder" });
         cy.fbGroupOptions("option1", "option2");

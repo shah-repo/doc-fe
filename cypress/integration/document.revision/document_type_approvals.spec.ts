@@ -301,7 +301,7 @@ context("Check DAM enforcement rules for document types", () => {
 
   context("Add New Role: Role One", () => {
     it("Open 'Add Role' dialog", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GroupsGet, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GroupsGet, CyRoutes.EmployeesGetActive], () => {
         cy.drAddAnotherRoleBtn();
       });
     });

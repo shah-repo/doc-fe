@@ -264,7 +264,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Add New Role: Role One", () => {
     it("Open 'Add Role' dialog", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GroupsGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGetActive, CyRoutes.GroupsGet], () => {
         cy.drAddAnotherRoleBtn();
       });
     });

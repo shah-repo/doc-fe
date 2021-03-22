@@ -215,7 +215,7 @@ context("Autocomplete 'Employees' test", () => {
           cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[2].name);
           cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[3].name);
           cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[4].name);
-          cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[5].name);
+          cy.get(".MuiAutocomplete-popper ul li").should("contain.text", "Importer Admin");
         });
       });
     });

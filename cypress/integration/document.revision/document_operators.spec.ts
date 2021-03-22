@@ -9,7 +9,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 
-context("Document Operators Access Test", () => {
+context.skip("Document Operators Access Test", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -212,7 +212,12 @@ context("Document Operators Access Test", () => {
 
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostDocRev,
+        CyRoutes.EmployeesGet,
+        CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.drCreateNewDocumentFromForm();
+      });
     });
 
     it("Enters title 'New Document'", () => {
@@ -220,7 +225,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Enters description 'New Document description'", () => {
-      cy.drEnterDocumentDescription({ description: "New Document description" });
+      cy.drEnterDocumentDescriptionWithWait({ description: "New Document description" });
     });
 
     it("Choose an existing part from the list of available parts", () => {
@@ -242,7 +247,9 @@ context("Document Operators Access Test", () => {
     });
 
     it("Add 'Text Field' field", () => {
-      cy.fbAddNewFieldButton();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.fbAddNewFieldButton();
+      });
     });
 
     it("Click on 'Add a field'", () => {

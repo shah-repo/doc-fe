@@ -216,7 +216,7 @@ context("Checkboxes test", () => {
 
       it("Add Select Field with checkboxes", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
+        cy.fbSelectItemFromNewFieldList({ field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "sf-wi-ch" });
         cy.fbGroupOptions("option1", "option2");
         cy.fbSelectCheckboxValue("includeNone", "includeContext", "reviseDisabled",
@@ -227,7 +227,7 @@ context("Checkboxes test", () => {
 
       it("Add Select Field without checkboxes", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
+        cy.fbSelectItemFromNewFieldList({ field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "sf-wo-ch" });
         cy.fbGroupOptions("option1", "option2");
         cy.fbAddNewFieldButton();
