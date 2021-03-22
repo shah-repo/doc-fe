@@ -37,7 +37,7 @@ export default class FBMPIProcedureState extends FBProcedureState {
   // MARK: @helpers
   public selectionDelete = (id: string, refId: string) => {
     this.deleteLotApi.set({
-      url: FBEndpoint.RemoveLot,
+      url: FBEndpoint.RemoveOverride,
       urlValues: { id, refId },
       method: "post",
     });

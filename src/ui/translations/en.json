@@ -879,7 +879,6 @@
   "form.builder.audit.OBJECT_DELETED": "{label} Deleted",
   "form.builder.owner.input.warning": "There are contributors to the document. Contributors {contributors} should be added as approvers.",
   "form.builder.select": "Select",
-  "form.builder.change": "Change",
   "form.builder.lot.number": "Lot Number",
   "form.builder.parts.manufactured": "Part to be Manufactured",
   "form.builder.add.note": "Add a Note",

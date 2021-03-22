@@ -45,6 +45,6 @@ export enum FBEndpoint {
   FecthAvailableMaintenanceForms = "/documents/available_maintenance_forms",
   FetchAutocompleteValue = "/autocomplete_options/${id}/${optionId}",
   UseOverride = "/lhr/lhrs/${id}/use_override",
-  RemoveLot = "/lhr/lhrs/${id}/remove_lot/${refId}",
+  RemoveOverride = "/lhr/lhrs/${id}/remove_override/${refId}",
   Notes = "/notes",
 }

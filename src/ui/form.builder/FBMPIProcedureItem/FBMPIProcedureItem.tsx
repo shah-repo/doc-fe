@@ -3,7 +3,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import EditIcon from "@material-ui/icons/Edit";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
-import { isEmpty, some } from "lodash";
+import { isEmpty } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -181,12 +181,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                 <Observer>
                   {() => (
                     <FBButton
-                      label={
-                        some(mpiProcedureState?.partsSelected,
-                          (selection) => selection.materialId === item.title || selection.equipmentId === item.title)
-                          ? "form.builder.change"
-                          : "form.builder.select"
-                      }
+                      label="form.builder.select"
                       hidden={!mpiProcedureState?.selectState.get(`${type}-${index}`)}
                       style={{ margin: 0, padding: "4px" }}
                       onClick={() => handleSelect?.({
