@@ -14,7 +14,7 @@ const randomNumberForCompany = (Math.round(Math.random() * 100000)) % 100000;
 const newCompanyName = "New company " + randomNumberForCompany;
 const newCompanyAbbr = "NC-" + randomNumberForCompany;
 
-context.skip("Create company with golden tenant", () => {
+context("Create company with golden tenant", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });

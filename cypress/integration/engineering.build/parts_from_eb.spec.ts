@@ -261,6 +261,7 @@ context("Parts from EB flow test", () => {
 
       it("Enter description 'Test Engineering Build description'", () => {
         cy.drEnterDocumentDescription({ description: "Test Engineering Build description" });
+        cy.wait(5000);
       });
 
       it("Add an Approval'", () => {

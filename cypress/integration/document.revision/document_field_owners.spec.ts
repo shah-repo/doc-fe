@@ -370,11 +370,11 @@ context("Document Field Owners Test", () => {
 
   context("Check all colaborators must be on approvals list", () => {
     it("Add first colaborator as Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
     });
 
     it("Add second colaborator as Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[4].name });
     });
 
     it("Submit for Approval", () => {
@@ -385,7 +385,9 @@ context("Document Field Owners Test", () => {
     });
 
     it("Add third colaborator as Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[4].name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[7].name });
+      });
     });
 
     it("Submit for Approval", () => {
@@ -400,7 +402,7 @@ context("Document Field Owners Test", () => {
 
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[7].email,
         password: "Tester1!",
       });
     });

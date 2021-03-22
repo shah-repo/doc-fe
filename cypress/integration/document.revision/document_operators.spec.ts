@@ -9,7 +9,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 
-context.skip("Document Operators Access Test", () => {
+context("Document Operators Access Test", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
