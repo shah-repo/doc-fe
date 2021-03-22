@@ -25,7 +25,9 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         <Box mr={1} display="flex" alignItems="center">
           <PlayCircleFilled />
         </Box>
-        <FBText locale="form.builder.step.started" />
+        <FBText
+          locale="form.builder.step.started"
+        />
       </Box>
     )}
     <Box

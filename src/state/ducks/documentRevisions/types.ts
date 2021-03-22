@@ -149,6 +149,8 @@ interface SmartReference {
 export enum SmartReferenceType {
   HiddenPiInstance = "HIDDEN_PI_INSTANCE",
   General = "GENERAL",
+  EquipmentReplacement = "EQUIPMENT_REPLACEMENT",
+  LotUsage = "LOT_USAGE",
 }
 
 interface InputOwner {

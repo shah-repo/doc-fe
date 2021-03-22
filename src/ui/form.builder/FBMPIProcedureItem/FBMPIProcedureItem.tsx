@@ -135,7 +135,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                           >
                             {(selection: FBMPIProcedureSelectValue, index) => (
                               <Box key={`fb-mpi-procedure-selection-${index}`}>
-                                {selection.materialId === item.title && (
+                                {(selection.materialId === item.title || selection.equipmentId === item.title) && (
                                   <Box
                                     display="flex"
                                     flexDirection="row"
@@ -148,9 +148,9 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                     p={0.5}
                                   >
                                     <FBText
-                                      locale="form.builder.mpi.part.selection"
+                                      locale={`form.builder.mpi.part.selection.${type}`}
                                       values={{
-                                        lotDocId: selection.lotDocId || "",
+                                        docId: selection.overrideDocId || "",
                                         quantity: selection.quantity || 0,
                                         unit: selection.unit || "",
                                       }}
@@ -161,7 +161,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                     />
                                     <IconButton
                                       size="small"
-                                      style={{ fontSize: 11, marginTop: "-5px", marginRight: "-2px" }}
+                                      style={{ fontSize: 11 }}
                                       onClick={() => handleSelectionDelete?.(selection.refId)}
                                     >
                                       <HighlightOffIcon fontSize="inherit" />
