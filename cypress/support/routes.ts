@@ -11,6 +11,7 @@ type ICyRoutes = {[key in keyof typeof CyRoutes]: {
 }};
 
 export enum CyRoutes {
+  GetAttachments = "GetAttachments",
   EmployeesGet = "EmployeesGet",
   EmployeesPost = "EmployeesPost",
   GroupsGet = "GroupsGet",
@@ -340,6 +341,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/attachments/upload",
+    },
+    callConfig: {
+      responseTimeout: 25 * 1000,
+      requestTimeout: 20 * 1000,
+    },
+  },
+  GetAttachments: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/attachments*",
     },
     callConfig: {
       responseTimeout: 25 * 1000,
