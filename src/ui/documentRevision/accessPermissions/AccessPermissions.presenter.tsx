@@ -24,6 +24,7 @@ interface OwnProps {
   documentId: string;
   documentRevisionId: string;
   isVisible: boolean;
+  label?: string;
 }
 
 type AccessPermissionsPresenterProps = OwnProps;
@@ -37,6 +38,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
   documentId,
   documentRevisionId,
   isVisible,
+  label,
 }) => {
   const classes = styles();
 
@@ -236,7 +238,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
         isVisible &&
         <>
           <Typography variant={TypographySize.md}>
-            <Text translation="document.assign.to" />
+            <Text message={label || "common.operators"} />
           </Typography>
           <div style={{ width: 200, paddingBottom: 32 }}>
             {
