@@ -16,7 +16,7 @@ const generateDocRevUrl: (params: {docRevId: string; documentId: string; label: 
     </a>);
 
 const generateLHRSubtitle = (documentRevision: DocumentRevision) => <React.Fragment>
-  {`${documentRevision.document?.lot?.lotId}${documentRevision.precalc?.[LHR_BUILD_TYPE] === "R&D" ? "RD" : ""}`}
+  {`${documentRevision.document?.lot?.lotId}${documentRevision.formInput?.[LHR_BUILD_TYPE] === "R&D" ? "RD" : ""}`}
 </React.Fragment>;
 
 const generateLHRsSubtitle = (documentRevision: DocumentRevision) => {
