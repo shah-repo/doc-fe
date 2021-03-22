@@ -39,7 +39,7 @@ const AccessPermissionsContainer: React.FunctionComponent<AccessPermissionsConta
   const securityEmployees = get(selectedDocument, "document.securityEmployees", []);
   const operators = get(selectedDocument, "document.operators", []);
 
-  const { isVisible } = useAssignOperatorsToDocument(documentTypeId);
+  const { isVisible, label } = useAssignOperatorsToDocument(documentTypeId);
 
   return (
     <AccessPermissionsPresenter
@@ -52,6 +52,7 @@ const AccessPermissionsContainer: React.FunctionComponent<AccessPermissionsConta
         operators,
         documentId,
         documentRevisionId,
+        label,
       }}
     />
   );
