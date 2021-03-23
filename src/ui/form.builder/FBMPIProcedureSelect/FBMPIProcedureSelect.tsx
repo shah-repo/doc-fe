@@ -30,7 +30,7 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
                 loading={mpiProcedureSelectState?.lotsApi.loading}
                 optionValueKey="id"
                 optionLabelKey="document.docId"
-                optionValueType="id"
+                optionValueType="object"
               />
               <FBQuantityUnitField gutter={false} />
             </>

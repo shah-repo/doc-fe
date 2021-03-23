@@ -1,4 +1,5 @@
 import { FBFormProps, FBInputProps, FBProcedureItemType, FBProviderProps } from "..";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 
 export type FBMPIProcedureSelectProps =
 & Pick<FBInputProps, "name">
@@ -11,7 +12,7 @@ export type FBMPIProcedureSelectProps =
 export interface FBMPIProcedureSelectValue {
   fieldId: string;
   forPreselected: { id: string };
-  usedOverride: { id: string };
+  usedOverride: Partial<DocumentRevision> | string;
   type: FBProcedureItemType | "MATERIAL" | "EQUIPMENT";
   overrideDocId?: string;
   refId?: string;
