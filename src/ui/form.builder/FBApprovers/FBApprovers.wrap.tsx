@@ -4,6 +4,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
 import { FB, FBApprover, FBApproversProps, FBApproversState, FBDocumentRevisionsValue, FBJoinedEmployee, FBOption, FBRequiredApprover } from "..";
+import { useFormContext } from "../../components/forms/FormContext";
 import { checkIsDocumentPO } from "../../documentRevision/helpers/checkDocumentGroup";
 
 export const withFBApprovers = <T extends FBApproversProps>(
@@ -13,6 +14,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
   const Comp = ({
     renderOption,
     isIncluded,
+    onBlur,
     approversState,
     name = "",
     loading,
@@ -25,6 +27,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
   }: T) => {
 
     const { formState, workspaceState } = FB.useStores();
+    const { submitForm } = useFormContext();
     const schema = workspaceState?.getSchema();
     const { name: docRevName } = useMemo(() => find(schema, { type: "documentRevisions" }) || {}, [schema]);
     const docRevFormValue = formState?.getFieldValue(docRevName);
@@ -36,6 +39,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
     // ENC-6598 - app.approver for new structure, app for old structure
     defaultValue = formState?.getFieldValue(name)?.map((app) => app.approver || app);
     disabled = !workspaceState?.changeRequest;
+    onBlur = () => submitForm();
 
     React.useEffect(() => {
       reaction( // React on documentRevisions comp changes
@@ -165,6 +169,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
       ...(props as T),
       renderOption,
       isIncluded,
+      onBlur,
       loading,
       name,
       value,
