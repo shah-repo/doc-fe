@@ -149,6 +149,7 @@ definitions:
 
     - step: &RUN_CYPRESS_VIDEO
         <<: *COMMON_RUN_CYPRESS
+        max-time: 60
         name: Cypress specs with video
         artifacts:
             - test-results/**
@@ -168,7 +169,7 @@ definitions:
     - step: &UPLOAD_CYPRESS_REPORT
         <<: *COMMON_RUN_CYPRESS
         name: Cypress upload reports
-        max-time: 10
+        max-time: 15
         size: 1x
         script:
           - source ./scripts/cypress/utils/variables_pipeline.sh
@@ -183,16 +184,19 @@ definitions:
     - parallel: &RUN_CYPRESS_IN_PARALLEL
         - step: 
             <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 1/4
+            name: Cypress specs 1/5
         - step: 
             <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 2/4
+            name: Cypress specs 2/5
         - step: 
             <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 3/4
+            name: Cypress specs 3/5
         - step: 
             <<:  *COMMON_RUN_CYPRESS
-            name: Cypress specs 4/4
+            name: Cypress specs 4/5
+        - step: 
+            <<:  *COMMON_RUN_CYPRESS
+            name: Cypress specs 5/5
 
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_DEV
         - step: 
@@ -253,16 +257,19 @@ definitions:
     - parallel: &RUN_CYPRESS_IN_PARALLEL_VIDEO
         - step: 
             <<:  *RUN_CYPRESS_VIDEO
-            name: Cypress specs 1/4
+            name: Cypress specs 1/5
         - step: 
             <<:  *RUN_CYPRESS_VIDEO
-            name: Cypress specs 2/4
+            name: Cypress specs 2/5
         - step: 
             <<:  *RUN_CYPRESS_VIDEO
-            name: Cypress specs 3/4
+            name: Cypress specs 3/5
         - step: 
             <<:  *RUN_CYPRESS_VIDEO
-            name: Cypress specs 4/4
+            name: Cypress specs 4/5
+        - step: 
+            <<:  *RUN_CYPRESS_VIDEO
+            name: Cypress specs 5/5
 
     - step: &RUN_CYPRESS_SINGLE
         <<:  *COMMON_RUN_CYPRESS

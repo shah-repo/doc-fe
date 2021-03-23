@@ -81,7 +81,7 @@ Cypress.Commands.add("usrEnterName", (params: {name: string }) => {
 });
 
 Cypress.Commands.add("usrClickSaveButton", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGet], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGetActive], () => {
     cy.get("#AddEmployeeFormPresenter-submitForm").click();
   });
   cy.checkToastMessage({ exists: false });
