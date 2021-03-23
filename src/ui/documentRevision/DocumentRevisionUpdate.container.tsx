@@ -71,7 +71,7 @@ DocumentRevisionUpdateContainerProps
       if (redlineActive) {
         dispatch(companyActions.redlineConfig());
       }
-      setDoNotPrompt(true);
+      setDoNotPrompt(false);
     },
   });
 
