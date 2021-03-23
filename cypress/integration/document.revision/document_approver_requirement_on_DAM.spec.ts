@@ -3,7 +3,7 @@
 
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 Cypress.Screenshot.defaults({
@@ -19,7 +19,6 @@ const FIRST_USER = USERS[11];
 const SECOND_USER = USERS[12];
 const THIRD_USER = USERS[13];
 const INDIVIDUAL_USER = USERS[14];
-const IMPORTER_USER = USERS[15];
 
 const ARDocument = "AR Document";
 const FormDAM = "Form DAM";

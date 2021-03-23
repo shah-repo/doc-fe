@@ -11,13 +11,12 @@ import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[25];
 const FIRST_USER = USERS[26];
 const SECOND_USER = USERS[27];
 const THIRD_USER = USERS[28];
-const IMPORTER_USER = USERS[29];
 
 let createdCompany;
 let loginResponse;

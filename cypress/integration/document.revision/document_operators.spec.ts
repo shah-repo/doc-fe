@@ -3,7 +3,7 @@
 
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
@@ -33,7 +33,7 @@ context("Document Operators Access Test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -225,7 +225,8 @@ context("Document Operators Access Test", () => {
     });
 
     it("Enters description 'New Document description'", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "New Document description" });
+      cy.drEnterDocumentDescription({ description: "New Document description" });
+      cy.wait(5000);
     });
 
     it("Choose an existing part from the list of available parts", () => {

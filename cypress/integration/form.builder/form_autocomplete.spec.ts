@@ -5,7 +5,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
@@ -63,7 +63,7 @@ context("Autocomplete test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -999,7 +999,7 @@ context("Autocomplete test", () => {
       cy.get(".MuiAutocomplete-popper ul li").should("contain.text", `${USERS[2].name} - ${USERS[2].email}`);
       cy.get(".MuiAutocomplete-popper ul li").should("contain.text", `${USERS[3].name} - ${USERS[3].email}`);
       cy.get(".MuiAutocomplete-popper ul li").should("contain.text", `${USERS[4].name} - ${USERS[4].email}`);
-      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", `Importer Admin - ${USERS[5].email}`);
+      cy.get(".MuiAutocomplete-popper ul li").should("contain.text", `Importer Admin - ${IMPORTER_USER.email}`);
     });
 
     it("Verify count of 'Document types' in the list", () => {
