@@ -65,6 +65,7 @@ interface Props extends FormikProps<DocumentRevisionFormValues> {
   pmFormId?: string;
   releasedDocRev?: DocumentRevision;
   redlineActive: boolean;
+  isOutput: boolean;
 }
 
 export interface FormHeaderContext {
@@ -108,6 +109,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   pmFormId,
   releasedDocRev,
   redlineActive,
+  isOutput,
 }) => {
   useScrollIntoView();
   const classes = styles();
@@ -198,7 +200,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     if (proposedDocId) {
       setFieldValue("document.docId", proposedDocId);
     }
-    if (!isEmpty(documentTypeById?.defaultRevStage) && values.version === undefined) {
+
+    if (!isEmpty(documentTypeById?.defaultRevStage) && values.version === undefined && !isOutput) {
       const value = getRevisionStageNumber(intl, documentTypeById?.defaultRevStage as string);
       setNewRender(value);
       setFieldValue("revisionStage", value);
