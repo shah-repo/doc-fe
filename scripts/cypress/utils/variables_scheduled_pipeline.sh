@@ -36,8 +36,8 @@ case "$ENV" in
 esac
 
 export CI_BUILD_ID="some_ci_build_id"
-export NODE_ENV="development"
 export CYPRESS_KONFIG_ENV="development"
+export NODE_ENV="development"
 export CYPRESS_BROWSER="chrome"
 export NUMBER_OF_WORKERS="3"
 export CYPRESS_INTEGRATION_FOLDER="cypress/integration"
