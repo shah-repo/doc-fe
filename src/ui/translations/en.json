@@ -833,7 +833,7 @@
   "form.builder.mpi.procedure.materials.title": "{title} | Qty: {quantity} {unit}",
   "form.builder.procedure.equipment.title": "{title}",
   "form.builder.mpi.procedure.equipment.title": "{title}",
-  "form.builder.mpi.part.selection.material": "{docId} | {quantity} {unit}",
+  "form.builder.mpi.part.selection.materials": "{docId} | {quantity} {unit}",
   "form.builder.mpi.part.selection.equipment": "{docId}",
   "form.builder.action.mode": "{mode} {title}",
   "form.builder.edit": "Edit",

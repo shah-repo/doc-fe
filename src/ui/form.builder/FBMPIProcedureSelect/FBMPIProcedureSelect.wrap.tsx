@@ -61,10 +61,16 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         forPreselected: { id: initialValues?.id },
         quantity,
         unit,
-        usedOverride,
+        usedOverride: { id: (usedOverride as DocumentRevision).id },
         type: type.toUpperCase() as "MATERIAL" | "EQUIPMENT",
       };
       mpiProcedureSelectState?.useOverride(id, part);
+      mpiProcedureState?.addPartsSelected({
+        ...part,
+        materialId: initialValues?.id,
+        overrideDocId: (usedOverride as DocumentRevision)?.document?.docId,
+      });
+
       handleCancel?.();
     }
 
