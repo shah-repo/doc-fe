@@ -23,6 +23,9 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     name,
     type,
     value,
+    isOutput,
+    isSelectVisible,
+    redlineActive,
     ...props
   }: T) => {
 
@@ -33,6 +36,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     multiplier = toNumber(formState?.getFieldValue("lhr_initial_quantity")) || 1;
     isPreview = isPreview && workspaceState?.mode !== "formPreview";
 
+    isSelectVisible = (isOutput && workspaceState?.mode !== "preview" && workspaceState?.mode !== "formPreview") ||
+      redlineActive;
     useEffect(() => {
       if (!mpiProcedureState) { return; }
       setFilteredParts(smartReferencesTo);
@@ -141,6 +146,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       name,
       type,
       value,
+      isSelectVisible,
     });
   };
 
