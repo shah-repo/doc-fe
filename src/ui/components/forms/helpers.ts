@@ -75,14 +75,11 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
   if (isEmpty(formInputDiff) && !hasKeysNotInValuesFormInput) {
     return diff;
   }
-  const formInputValues = hasKeysNotInValuesFormInput ?
-    transformedInitialValues.formInput :
-    transformedValues.formInput;
 
   return {
     ...diff,
     // TEMPORARY FIX FOR BE VALIDATION
     // formInput: transformedValues.formInput,
-    formInput: omit(formInputValues, ["partType", "childForRevise"]),
+    formInput: omit(transformedInitialValues.formInput, ["partType", "childForRevise"]),
   };
 };
