@@ -566,7 +566,10 @@ context("Create company with golden tenant", () => {
 
   context("Create first document from Seed Form - form with output", () => {
     it("Create new document from form", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+          cy.drCreateNewDocumentFromForm();
+        });
     });
 
     it("Enters title 'New Seed'", () => {
@@ -594,12 +597,8 @@ context("Create company with golden tenant", () => {
     });
 
     it("Enters document description 'First document description'", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
-            .click({ force: true }).type("First document description", { force: true });
-          cy.get("[data-cy^=document-title-]").click();
-        });
+      cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
+        .click({ force: true }).type("First document description", { force: true });
     });
 
     it("Selects document type as 'Form'", () => {
@@ -613,9 +612,13 @@ context("Create company with golden tenant", () => {
     });
 
     it("Selects 'No' training required option", () => {
+      cy.get("[name^=training-required-]").eq(1).click();
+    });
+
+    it("Save document", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[name^=training-required-]").eq(1).click();
+        [CyRoutes.PatchDocRev], () => {
+          cy.drClickCreateDocumentWithoutApiCall();
         });
     });
 
@@ -634,7 +637,10 @@ context("Create company with golden tenant", () => {
     });
 
     it("Create new document from form", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+          cy.drCreateNewDocumentFromForm();
+        });
     });
 
     it("Enters title 'New Seed 2'", () => {
@@ -658,12 +664,9 @@ context("Create company with golden tenant", () => {
     });
 
     it("Enters document description 'Second document description'", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
-            .click({ force: true }).type("Second document description", { force: true });
-          cy.get("[data-cy^=document-title-]").click();
-        });
+      cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
+        .click({ force: true }).type("Second document description", { force: true });
+      cy.get("[data-cy^=document-title-]").click();
     });
 
     it("Selects document type as 'Clinical Protocol'", () => {
@@ -672,9 +675,13 @@ context("Create company with golden tenant", () => {
     });
 
     it("Selects 'No' training required option", () => {
+      cy.get("[name^=training-required-]").eq(1).click();
+    });
+
+    it("Save document", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[name^=training-required-]").eq(1).click();
+        [CyRoutes.PatchDocRev], () => {
+          cy.drClickCreateDocumentWithoutApiCall();
         });
     });
 
@@ -693,7 +700,10 @@ context("Create company with golden tenant", () => {
     });
 
     it("Create new document from form", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+          cy.drCreateNewDocumentFromForm();
+        });
     });
 
     it("Enters title 'New Company'", () => {
