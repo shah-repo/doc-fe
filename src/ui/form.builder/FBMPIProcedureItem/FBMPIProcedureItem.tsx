@@ -44,6 +44,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   type,
   value = [],
   name,
+  isSelectVisible,
 }) => (
   <FBProvider {...{ dialogState, mpiProcedureState }}>
     <FBDialog />
@@ -177,7 +178,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   )}
                 </Observer>
               </Box>
-              {isPreview && FB.isUUID(item.title) && (
+              {isSelectVisible && FB.isUUID(item.title) && (
                 <Observer>
                   {() => (
                     <FBButton
