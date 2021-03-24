@@ -293,7 +293,7 @@ Cypress.Commands.add("arClickAddBtnOnAddDocumentsDialog", () => {
 
 Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string }) => {
   cy.wrapWithWaitOnApiCalls(
-    [CyRoutes.PatchAR], () => {
+    [CyRoutes.PatchAR, CyRoutes.ArAudit], () => {
       cy.get("[data-cy=\"fb-approvers-approvers\"]").click();
       cy.get("ul[role=\"listbox\"]>li").contains(params.approver).click();
       cy.unClick();

@@ -491,7 +491,7 @@ context("Copyable Checkbox test", () => {
 
     it("Click 'Save' button", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        [CyRoutes.PatchDocRev], () => {
           cy.unClick();
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
         });

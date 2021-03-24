@@ -10,7 +10,6 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[25];
@@ -393,9 +392,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Select 'Active' as EQ status", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-          cy.get("input[name=fb-default-eq-status][value=Active]").check();
-        });
+        cy.get("input[name=fb-default-eq-status][value=Active]").check();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
@@ -610,23 +607,17 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Select 'Active' as EQ status", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-          cy.get("input[name=fb-default-eq-status][value=Active]").check();
-        });
+        cy.get("input[name=fb-default-eq-status][value=Active]").check();
       });
 
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-          cy.get("[name=fb-primary-owner-eq]").click();
-          cy.get("ul[role=listbox]>li").contains(ADMIN_USER.name).click();
-        });
+        cy.get("[name=fb-primary-owner-eq]").click();
+        cy.get("ul[role=listbox]>li").contains(ADMIN_USER.name).click();
       });
 
       it(`Select "${FIRST_USER.name}" as Coordinator`, () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-          cy.get("[name=fb-coordinator-eq]").click();
-          cy.get("ul[role=listbox]>li").contains(FIRST_USER.name).click();
-        });
+        cy.get("[name=fb-coordinator-eq]").click();
+        cy.get("ul[role=listbox]>li").contains(FIRST_USER.name).click();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
@@ -834,23 +825,17 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Select 'Active' as EQ status", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-          cy.get("input[name=fb-default-eq-status][value=Active]").check();
-        });
+        cy.get("input[name=fb-default-eq-status][value=Active]").check();
       });
 
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-          cy.get("[name=fb-primary-owner-eq]").click();
-          cy.get("ul[role=listbox]>li").contains(ADMIN_USER.name).click();
-        });
+        cy.get("[name=fb-primary-owner-eq]").click();
+        cy.get("ul[role=listbox]>li").contains(ADMIN_USER.name).click();
       });
 
       it(`Select "${FIRST_USER.name}" as Coordinator`, () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-          cy.get("[name=fb-coordinator-eq]").click();
-          cy.get("ul[role=listbox]>li").contains(FIRST_USER.name).click();
-        });
+        cy.get("[name=fb-coordinator-eq]").click();
+        cy.get("ul[role=listbox]>li").contains(FIRST_USER.name).click();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1059,23 +1044,17 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Select 'Active' as EQ status", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-          cy.get("input[name=fb-default-eq-status][value=Active]").check();
-        });
+        cy.get("input[name=fb-default-eq-status][value=Active]").check();
       });
 
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-          cy.get("[name=fb-primary-owner-eq]").click();
-          cy.get("ul[role=listbox]>li").contains(ADMIN_USER.name).click();
-        });
+        cy.get("[name=fb-primary-owner-eq]").click();
+        cy.get("ul[role=listbox]>li").contains(ADMIN_USER.name).click();
       });
 
       it(`Select "${FIRST_USER.name}" as Coordinator`, () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-          cy.get("[name=fb-coordinator-eq]").click();
-          cy.get("ul[role=listbox]>li").contains(FIRST_USER.name).click();
-        });
+        cy.get("[name=fb-coordinator-eq]").click();
+        cy.get("ul[role=listbox]>li").contains(FIRST_USER.name).click();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {

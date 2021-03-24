@@ -328,7 +328,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExi
 
 Cypress.Commands.add("drClickCreateSupplierWithApiCall", () => {
   cy.wrapWithWaitOnApiCalls(
-    [CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+    [CyRoutes.PatchDocRev], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
   cy.checkToastMessage({ exists: false });
@@ -337,7 +337,7 @@ Cypress.Commands.add("drClickCreateSupplierWithApiCall", () => {
 
 Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
   cy.wrapWithWaitOnApiCalls(
-    [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+    [CyRoutes.PatchDocRev], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
   cy.checkToastMessage({ exists: false });
@@ -346,7 +346,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
 
 Cypress.Commands.add("drClickCreateDocumentWithApiCallForFormsExpectingToastError", () => {
   cy.wrapWithWaitOnApiCalls(
-    [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+    [CyRoutes.PatchDocRev], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
   cy.checkToastMessage({ exists: true });

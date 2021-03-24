@@ -391,9 +391,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.get("input[name=fb-default-eq-status][value=Active]").check();
-      });
+      cy.get("input[name=fb-default-eq-status][value=Active]").check();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -469,10 +467,6 @@ context("Equipment maintenance test", () => {
 
       it("Add first approver to approval request on approver list", () => {
         cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email });
-      });
-
-      it("Save changes", () => {
-        cy.arSaveApiCall();
       });
 
       it("Click 'Send To Review'", () => {

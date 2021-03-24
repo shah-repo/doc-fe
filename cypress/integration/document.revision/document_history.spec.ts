@@ -237,7 +237,7 @@ context("Check Document History", () => {
 
     it("add another output document type: Lots", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        [CyRoutes.PatchDocRev], () => {
           cy.drSelectOutputDocumentType({ documentType: "Lots" });
         });
     });

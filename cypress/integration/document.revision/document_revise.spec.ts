@@ -246,10 +246,6 @@ context("Document revise test", () => {
         cy.arAddApproverOnApproverList({ approver: USERS[2].email });
       });
 
-      it("Save changes", () => {
-        cy.arSaveApiCall();
-      });
-
       it("Click send to review", () => {
         cy.arClickSendToReview();
       });
@@ -322,10 +318,6 @@ context("Document revise test", () => {
 
       it("Add first approver to approval request on approver list", () => {
         cy.arAddApproverOnApproverList({ approver: USERS[2].email });
-      });
-
-      it("Save changes", () => {
-        cy.arSaveApiCall();
       });
 
       it("Click send to review", () => {

@@ -1043,45 +1043,45 @@ context("Inspection flow", () => {
       });
 
       it("Select make vs buy", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("[id$=\"make-vs-buy\"]").click();
           cy.get("ul[role=listbox]>li").contains("Make").click();
         });
       });
 
       it("Select unit of measure", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("[id$=\"unit-of-measure\"]").click();
           cy.get("ul[role=listbox]>li").contains("Batch").click();
         });
       });
 
       it("Select traceability required", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("[value=\"Traceability required\"]").check();
         });
       });
 
       it("Select 'No' for Serialized option", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("[name=\"serialized\"][value=\"No\"]").check();
         });
       });
 
       it("Select 'IQC Required'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("[value=\"IQC Required\"]").check();
         });
       });
 
       it("Select 'Limited Shelf Life'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("[value=\"Limited Shelf Life\"]").check();
         });
       });
 
       it("Select 'FAI Required'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("[value=\"FAI Required\"]").check();
         });
       });

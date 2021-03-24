@@ -316,10 +316,6 @@ context("Document Attachment Flow", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].email });
     });
 
-    it("Save changes", () => {
-      cy.arSaveApiCall();
-    });
-
     it("Click 'Send To Review'", () => {
       cy.arClickSendToReview();
     });
