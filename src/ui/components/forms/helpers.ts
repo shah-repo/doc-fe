@@ -80,6 +80,6 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
     ...diff,
     // TEMPORARY FIX FOR BE VALIDATION
     // formInput: transformedValues.formInput,
-    formInput: omit(transformedInitialValues.formInput, ["partType", "childForRevise"]),
+    formInput: omit(transformedValues.formInput, ["partType", "childForRevise"]),
   };
 };
