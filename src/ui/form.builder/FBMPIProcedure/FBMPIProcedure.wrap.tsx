@@ -4,6 +4,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { FB, FBMPIProcedureProps, FBMPIProcedureState, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
+import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
   Component: React.FunctionComponent<T>,
@@ -24,6 +25,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const schemeItem = workspaceState?.getSchemaItemAt(index);
+    const { submitForm } = useFormContext();
     mpiProcedureState = FB.useRef(FBMPIProcedureState, schemeItem?.editorConfig);
     const redlineActive = useSelector(companySelectors.getRedlineActive);
 
@@ -82,7 +84,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
         name: newName,
       };
       workspaceState?.setSchemaItemAt(newItem, index + 1);
-      // submitForm();
+      submitForm();
     };
 
     // MARK: @observer
