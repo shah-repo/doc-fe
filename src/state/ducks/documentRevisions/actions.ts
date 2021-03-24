@@ -1,5 +1,6 @@
 import axios from "axios";
 import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
+import { checkIsDocumentRecord } from "../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { CreateInspectionBody } from "../../../ui/documentRevision/InspectionControls/InspectionControls.types";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
@@ -7,7 +8,7 @@ import { Audit, AuditActionPayload } from "../audit/types";
 import { Group } from "../auth/types";
 import { documentsActions } from "../documents";
 import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET } from "./constants";
-import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "./documentType";
+import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "./documentType/types";
 import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, FinalizeAndReleaseRequest, SecurityList } from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
@@ -82,6 +83,16 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
   // temporarily disabling send-no-response header
   // should be uncommented later
   // sendNoResponseHeader: true,
+});
+
+const saveWithNoResponse = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
+ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
+  method: "patch",
+  data: body,
+  handlers,
+  cancelToken: axios.CancelToken.source(),
+  sendNoResponseHeader: true,
 });
 
 const ownerChange = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
@@ -196,7 +207,7 @@ const finalizeAndRelease = (
   method: "post",
   data: body,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
-    if (docRev.document?.documentType?.group === "RECORD") {
+    if (checkIsDocumentRecord(docRev.document?.documentType?.groupOptions)) {
       window.location.href = documentVersionPath(docRev.id, docRev.document.id);
     } else {
       dispatch(load(id));
@@ -385,4 +396,5 @@ export default {
   createFaiInspection,
   removePreviousBuild,
   ownerChange,
+  saveWithNoResponse,
 };

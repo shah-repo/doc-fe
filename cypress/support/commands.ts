@@ -143,7 +143,7 @@ Cypress.Commands.add("selectCompany", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("unClick", () => {
-  cy.get("#root>div>div>header").click();
+  cy.get("body").click( 10, 10, { force: true });
 });
 
 

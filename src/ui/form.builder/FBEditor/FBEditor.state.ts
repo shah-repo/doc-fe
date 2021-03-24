@@ -2,29 +2,29 @@ import { includes } from "lodash";
 import { action, observable, set } from "mobx";
 import React from "react";
 import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
-import { FBEditorAction } from "../FBEditorAction";
-import { FBEditorApprovalField } from "../FBEditorApprovalField";
-import { FBEditorApprovals } from "../FBEditorApprovals";
-import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
-import { FBEditorCheckControl } from "../FBEditorCheckControl";
-import { FBEditorEmpty } from "../FBEditorEmpty";
-import { FBEditorEQMaintenance } from "../FBEditorEQMaintenance";
-import { FBEditorHyperlink } from "../FBEditorHyperlink";
-import { FBEditorInlineApproval } from "../FBEditorInlineApproval";
-import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
-import { FBEditorLabel } from "../FBEditorLabel";
-import { FBEditorMediaAlbum } from "../FBEditorMediaAlbum";
-import { FBEditorOptionGroup } from "../FBEditorOptionGroup";
-import { FBEditorParagraph } from "../FBEditorParagraph";
-import { FBEditorRequestApproval } from "../FBEditorRequestApproval";
-import { FBEditorSelectDocument } from "../FBEditorSelectDocument";
-import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
-import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
-import { FBEditorTextEditor } from "../FBEditorTextEditor";
-import { FBEditorTextField } from "../FBEditorTextField";
-import { FBEditorTextFieldWithRange } from "../FBEditorTextFieldWithRange";
+import FBEditorAction from "../FBEditorAction/FBEditorAction";
+import FBEditorApprovalField from "../FBEditorApprovalField/FBEditorApprovalField";
+import FBEditorApprovals from "../FBEditorApprovals/FBEditorApprovals";
+import FBEditorAutocomplete from "../FBEditorAutocomplete/FBEditorAutocomplete";
+import FBEditorCheckControl from "../FBEditorCheckControl/FBEditorCheckControl";
+import FBEditorEmpty from "../FBEditorEmpty/FBEditorEmpty";
+import FBEditorEQMaintenance from "../FBEditorEQMaintenance/FBEditorEQMaintenance";
+import FBEditorHyperlink from "../FBEditorHyperlink/FBEditorHyperlink";
+import FBEditorInlineApproval from "../FBEditorInlineApproval/FBEditorInlineApproval";
+import FBEditorInstructionsDocument from "../FBEditorInstructionsDocument/FBEditorInstructionsDocument";
+import FBEditorLabel from "../FBEditorLabel/FBEditorLabel";
+import FBEditorMediaAlbum from "../FBEditorMediaAlbum/FBEditorMediaAlbum";
+import FBEditorOptionGroup from "../FBEditorOptionGroup/FBEditorOptionGroup";
+import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
+import FBEditorRequestApproval from "../FBEditorRequestApproval/FBEditorRequestApproval";
+import FBEditorSelectDocument from "../FBEditorSelectDocument/FBEditorSelectDocument";
+import FBEditorSelectRequirement from "../FBEditorSelectRequirement/FBEditorSelectRequirement";
+import FBEditorTestRequirement from "../FBEditorTestRequirement/FBEditorTestRequirement";
+import FBEditorTextEditor from "../FBEditorTextEditor/FBEditorTextEditor";
+import FBEditorTextField from "../FBEditorTextField/FBEditorTextField";
+import FBEditorTextFieldWithRange from "../FBEditorTextFieldWithRange/FBEditorTextFieldWithRange";
 
-export class FBEditorState {
+class FBEditorState {
 
   public static omitFinalValidation: FBInputType[] = [
     "section",
@@ -59,6 +59,7 @@ export class FBEditorState {
     "task",
     "approvals",
     "procedure",
+    "mpiprocedure",
     "eqmaintenance",
     "textfieldwithrange",
   ];
@@ -83,7 +84,7 @@ export class FBEditorState {
     "approvals",
   ];
 
-  public static pickStepIndex: FBInputType[] = ["stepsection", "teststep", "procedure"];
+  public static pickStepIndex: FBInputType[] = ["stepsection", "teststep", "procedure", "mpiprocedure"];
 
   public static pickCustomHandler: FBInputType[] = ["teststep"];
 
@@ -128,10 +129,13 @@ export class FBEditorState {
     task: FBEditorLabel,
     approvals: FBEditorApprovals,
     procedure: FBEditorEmpty,
+    mpiprocedure: FBEditorEmpty,
     parts: FBEditorEmpty,
     eqmaintenance: FBEditorEQMaintenance,
     textfieldwithrange: FBEditorTextFieldWithRange,
     supplier: FBEditorLabel,
+    lhrstep: FBEditorEmpty,
+    unitMeasures: FBEditorLabel,
   };
 
   @observable public mode?: FBEditorMode = "config";

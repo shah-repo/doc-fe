@@ -4,7 +4,7 @@ import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { AvailableMaintenanceForm, FB, FBEQMaintenanceProps, FBEQMaintenanceState } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
   Component: React.FunctionComponent<T>

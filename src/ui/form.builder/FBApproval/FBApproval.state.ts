@@ -1,16 +1,15 @@
 import { isEmpty, union } from "lodash";
 import { action, computed, observable, set } from "mobx";
-import { FBApprovalApi, FBApprovalConstructor, FBApprovalValue, FBAutocompleteAsyncOption, FBInlineApprovalRole } from "..";
-import { Audit } from "../../../state/ducks/audit";
-import { Employee } from "../../../state/ducks/company";
+import { FBApprovalApi, FBApprovalConstructor, FBApprovalValue, FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBInlineApprovalRole } from "..";
+import { Audit } from "../../../state/ducks/audit/types";
+import { Employee } from "../../../state/ducks/company/types";
 import { Document } from "../../../state/ducks/documentRevisions/types";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
-import { FBAutocompleteAsyncState } from "../FBAutocompleteAsync/FBAutocompleteAsync.state";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
-export class FBApprovalState {
+class FBApprovalState {
   @observable public hasApproved: FBApprovalValue[] = [];
   @observable public auditData?: Audit[];
 
@@ -20,9 +19,9 @@ export class FBApprovalState {
 
   public postApi: FBRequest<any, FBApprovalApi> = new FBRequest(FBEndpoint.PostInlineApprove);
   public getDocumentApi: FBRequest<Document, null> = new FBRequest(FBEndpoint.Document);
-  public approversApi = new FBAutocompleteAsyncState(this.approversId);
-  public groupsApi = new FBAutocompleteAsyncState(this.groupsId);
-  public approvalRolesApi = new FBAutocompleteAsyncState(this.approvalRolesId);
+  public approversApi = new FBAutocompleteAsyncState({ optionId: this.approversId });
+  public groupsApi = new FBAutocompleteAsyncState({ optionId: this.groupsId });
+  public approvalRolesApi = new FBAutocompleteAsyncState({ optionId: this.approvalRolesId });
   public auditApi = new FBRequest<Audit[], null>();
 
   public constructor({

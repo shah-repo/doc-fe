@@ -4,7 +4,7 @@ import { FBApproversBody, FBApproversConstructor, FBJoinedEmployee, FBRequiredAp
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBApproversState extends FBRequest<FBRequiredApprover[], FBApproversBody> {
+class FBApproversState extends FBRequest<FBRequiredApprover[], FBApproversBody> {
 
   @observable public groups?: Record<string, FBRequiredApprover> = {};
   @observable public value?: string[];

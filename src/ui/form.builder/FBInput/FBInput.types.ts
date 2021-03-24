@@ -1,13 +1,12 @@
 import { BaseTextFieldProps, BoxProps } from "@material-ui/core";
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
 import { Dictionary } from "lodash";
-import { FBEditorOptionsProps, FBEditorPropertiesType, FBInlineApprovalRole, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
-import { Employee } from "../../../state/ducks/company";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement";
-import { FBEditorValidationMode } from "../FBEditorValidation";
+import { FBEditorOptionsProps, FBEditorPropertiesType, FBEditorValidationMode, FBInlineApprovalRole, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
+import { Employee } from "../../../state/ducks/company/types";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { FBValidatorConfigProps } from "../types/validation/validatorDialog";
 
-export type FBInputTransform = "upper" | "lower";
+type FBInputTransform = "upper" | "lower";
 export type FBVisibilityType = "visible" | "hidden";
 
 export type FBInputType =
@@ -68,7 +67,12 @@ export type FBInputType =
   | "textfieldwithrange"
   | "range"
   | "passpercentage"
-  | "supplier";
+  | "supplier"
+  | "mpiprocedure"
+  | "lhrstep"
+  | "unitMeasures"
+  | "quantityunit"
+  | "partsselection";
 
 export type FBInputProps =
   & FBLabelProps
@@ -174,6 +178,8 @@ export type FBInputProps =
     //  * is validation relation.
     //  */
     // validateDefaultValue?: boolean;
+    includeNotes?: boolean;
+    isOutput?: boolean;
   };
 
 export const OmitInputClones: FBInputType[] = [
@@ -187,6 +193,7 @@ export const OmitInputClones: FBInputType[] = [
   "approvals",
   "texteditor",
   "procedure",
+  "mpiprocedure",
   "procedurediff",
   "eqmaintenance",
   "ebpart",
@@ -194,6 +201,14 @@ export const OmitInputClones: FBInputType[] = [
   "range",
   "passpercentage",
   "poreceive",
+  "quantityunit",
+];
+
+export const OmitIncludeNotes: FBInputType[] = [
+  "stepsection",
+  "teststep",
+  "section",
+  "subsection",
 ];
 
 export interface FBInputConstructor {

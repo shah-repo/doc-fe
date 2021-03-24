@@ -2,8 +2,8 @@ import DOMPurify from "dompurify";
 import { cloneDeep } from "lodash";
 import striptags from "striptags";
 import Config from "../../config";
-import { ChangeRequest } from "../../state/ducks/changeRequest";
-import { DocumentRevision } from "../../state/ducks/documentRevisions";
+import { ChangeRequest } from "../../state/ducks/changeRequest/types";
+import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
 
 export const sanitizeHtml = (html: string) => DOMPurify.sanitize(html);
 

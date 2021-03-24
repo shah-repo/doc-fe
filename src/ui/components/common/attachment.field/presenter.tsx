@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { AttachmentLineTypeSelector } from "../attachment.linetype/AttachmentLineTypeSelector";
+import AttachmentLineTypeSelector from "../attachment.linetype/AttachmentLineTypeSelector";
 import { styles } from "./utils/styles";
 import { AttachmentFieldProps } from "./utils/types";
 
@@ -9,7 +9,7 @@ interface Props extends AttachmentFieldProps {
   isUploading: boolean;
 }
 
-export const AttachmentFieldPresenter: React.FunctionComponent<
+const AttachmentFieldPresenter: React.FunctionComponent<
 Props
 > = ({ name, multiple, component = "button", disabled, upload, form, field, onChange, isUploading }) => {
   const isField = component === "field";

@@ -5,7 +5,8 @@ import { getTableCriteria, getTableData } from "../../../common/utils/selectors"
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
-import { LoadCompanyGroup, userManagementActions } from "../../../state/ducks/userManagement";
+import { userManagementActions } from "../../../state/ducks/userManagement";
+import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
 import { HOME_URL } from "../../constants/urls";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -18,7 +19,7 @@ import ListPresenter from "./presenter";
 type OwnProps = RouteComponentProps;
 type Props = OwnProps;
 
-export const ListContainer: React.FunctionComponent<Props> = () => {
+const ListContainer: React.FunctionComponent<Props> = () => {
   const dispatch = useDispatch();
   const editGroupsDialog = useDialog();
   const previewGroupsDialog = useDialog();

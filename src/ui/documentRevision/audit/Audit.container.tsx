@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { AuditGroupType } from "../../../state/ducks/audit/types";
-import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../state/reducers";
 import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus } from "../../hooks/docCustomization/useCustomization";
@@ -21,7 +22,7 @@ interface DispatchProps {
   loadAudit: typeof documentRevisionsActions.loadAudit;
 }
 
-export type AuditContainerProps = OwnProps & StateProps & DispatchProps;
+type AuditContainerProps = OwnProps & StateProps & DispatchProps;
 
 const getAudit = documentRevisionsSelectors.makeGetAudit();
 
@@ -32,7 +33,7 @@ const mapStateToProps = (
   audit: getAudit(state, props.documentRevisionId),
 });
 
-export const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
+const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
   audit,
   loadAudit,
   documentRevisionId,

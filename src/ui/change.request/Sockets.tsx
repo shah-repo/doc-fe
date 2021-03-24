@@ -1,6 +1,7 @@
 import React from "react";
 import { IotService } from "../../common/utils/iot/mqttClient";
-import { ChangeRequest, changeRequestsActions } from "../../state/ducks/changeRequest";
+import { changeRequestsActions } from "../../state/ducks/changeRequest";
+import { ChangeRequest } from "../../state/ducks/changeRequest/types";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useMqttSubscription from "../hooks/useMqttSubscription";

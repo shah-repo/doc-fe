@@ -1,5 +1,5 @@
 import { omit } from "lodash";
-import { EmployeeActiveStatusRequestBody, EmployeeGroupsEditRequestBody } from "../../../state/ducks/userManagement";
+import { EmployeeActiveStatusRequestBody, EmployeeGroupsEditRequestBody } from "../../../state/ducks/userManagement/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { parseJSON, stringifyJSON } from "../../document.type.management/transform";
 

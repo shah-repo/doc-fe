@@ -6,7 +6,7 @@ import { AsyncState, AsyncStatus } from "../../state/types";
 import Text from "../components/Text";
 import { Translation } from "../translations/types";
 
-export interface SubmitButtonProps extends ButtonProps {
+interface SubmitButtonProps extends ButtonProps {
   asyncState: AsyncState;
   label: Translation;
   errors?: FormikErrors<any>;

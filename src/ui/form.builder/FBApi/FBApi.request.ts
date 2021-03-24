@@ -1,6 +1,7 @@
 import { first, get, has, isArray, isEmpty, isString, isUndefined, join, template } from "lodash";
 import { action, observable, set } from "mobx";
-import apiClient, { FBRequestSet, FBRequestTemplateUrl } from ".";
+import { apiClient, FBRequestSet, FBRequestTemplateUrl } from "..";
+import apiXClient from "../../../state/apiXClient";
 import { store } from "../../../state/store";
 import { ApiActionMethod } from "../../../state/types";
 import { toastError } from "../../components/notifications";
@@ -12,6 +13,8 @@ export default class FBRequest<Data, Body> {
   public method?: ApiActionMethod;
   public url = "";
   public root = "";
+  public includeAuthorization = true;
+  public publicApi = false;
 
   public constructor(url = "") {
     this.url = url;
@@ -52,6 +55,10 @@ export default class FBRequest<Data, Body> {
     set(this, "root", root);
   };
 
+  @action public setPublicApi = (publicApi: boolean) => {
+    set(this, "publicApi", publicApi);
+  };
+
   @action public fetch = () => this.start("get");
   @action public post = () => this.start("post");
   @action public patch = () => this.start("patch");
@@ -90,6 +97,10 @@ export default class FBRequest<Data, Body> {
         store.getState().auth.user.employeeId
       }:${store.getState().auth.user.sessionId}:${this.body?.password}`,
     } : undefined;
+
+    if (this.publicApi) {
+      apiXClient("", this.publicApi);
+    }
 
     switch (method) {
       case "get":

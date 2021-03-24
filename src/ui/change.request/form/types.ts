@@ -1,20 +1,10 @@
-import { Attachment as AttachmentInterface } from "../../../state/ducks/attachments";
-import { Id, Nullable } from "../../../state/ducks/common";
-import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions";
+import { Attachment as AttachmentInterface } from "../../../state/ducks/attachments/types";
+import { Id, Nullable } from "../../../state/ducks/common/types";
+import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FBSchemaProps } from "../../form.builder";
 
 export type Attachment = AttachmentInterface;
-
-export interface FileUploadFormValues {
-  file?: File;
-}
-
-export interface Justifications {
-  id?: string;
-  description?: string;
-  attachments: Attachment[];
-}
 
 export interface ImplementationPlanTaskFormValues {
   id?: string;
@@ -23,11 +13,6 @@ export interface ImplementationPlanTaskFormValues {
   dueDate?: Date;
   assigned?: OptionType;
   status: string;
-}
-
-export interface ImplementationPlanFormValues {
-  attachments: Attachment[];
-  tasks: ImplementationPlanTaskFormValues[];
 }
 
 export interface ChangeRequestFormValues {

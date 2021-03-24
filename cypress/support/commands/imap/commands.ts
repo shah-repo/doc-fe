@@ -1,25 +1,33 @@
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable max-classes-per-file */
 
-import { integer } from "aws-sdk/clients/lightsail";
+import { integer } from "aws-sdk/clients/cloudfront";
 import { CONFIG } from "../../config";
+import { IMAPEmail } from "./imap";
 
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export { };
+
+export interface IMAPEmailsInTesting {
+  sentToUser: string;
+  contains: string[];
+}
 
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       imapGetTextFromLastEmail(params: {userEmail: string}): Chainable;
       imapGetMails(params: {userEmail: string; options: any}): Chainable;
-      imapVerifyInReviewAREmailNotification(params: {userEmail: string; arId: string}): Chainable;
-      imapVerifyRejectedAREmailNotification(params: {userEmail: string; arId: string}): Chainable;
-      imapVerifyApprovedAREmailNotification(params: {userEmail: string; arId: string}): Chainable;
       imapVerifyLastEmailDoesNotContain(params: {userEmail: string; content: string}): Chainable;
       imapVerifyNumberOfEmailsReceivedSince(params: {userEmail: string; emailCount: integer; date: Date}): Chainable;
       imapGetActivationLink(params: {userEmail: string}): Chainable;
       imapVerifyLastEmailContains(params: {userEmail: string; content: string; date: Date}): Chainable;
+      imapVerifyEmailsInList(params: {
+        receivedEmails: IMAPEmail[];
+        emailsToTest: IMAPEmailsInTesting[];
+        getEmailsSincedate: Date;
+        assertNumberOfEmailsFoundInList: integer;}): Chainable;
     }
   }
 }
@@ -31,36 +39,6 @@ Cypress.Commands.add("imapGetMails", (params: {userEmail: string; options: any})
   email: params.userEmail,
   options: params.options,
 }));
-
-Cypress.Commands.add("imapVerifyInReviewAREmailNotification", (params: { userEmail: string; arId: string}) => {
-  cy.imapGetTextFromLastEmail({ userEmail: params.userEmail }).should((emailText) => {
-    const startingPosition = emailText.search("<body");
-    const endingPosition = emailText.search("</body>");
-    const emailBody = emailText.substring(startingPosition, endingPosition);
-    expect(emailBody).to.contain(`Your approval request <b>${params.arId}</b> is in review.`);
-    expect(emailBody).to.contain("Please click on the buttons below to view CR or slack conversation.");
-  });
-});
-
-Cypress.Commands.add("imapVerifyRejectedAREmailNotification", (params: { userEmail: string; arId: string}) => {
-  cy.imapGetTextFromLastEmail({ userEmail: params.userEmail }).should((emailText) => {
-    const startingPosition = emailText.search("<body");
-    const endingPosition = emailText.search("</body>");
-    const emailBody = emailText.substring(startingPosition, endingPosition);
-    expect(emailBody).to.contain(`Your approval request <b>${params.arId}</b> is rejected.`);
-    expect(emailBody).to.contain("Please click on the button below to view it.");
-  });
-});
-
-Cypress.Commands.add("imapVerifyApprovedAREmailNotification", (params: { userEmail: string; arId: string}) => {
-  cy.imapGetTextFromLastEmail({ userEmail: params.userEmail }).should((emailText) => {
-    const startingPosition = emailText.search("<body");
-    const endingPosition = emailText.search("</body>");
-    const emailBody = emailText.substring(startingPosition, endingPosition);
-    expect(emailBody).to.contain(`Your approval request <b>${params.arId}</b> is approved.`);
-    expect(emailBody).to.contain("Please click on the button below to view it.");
-  });
-});
 
 Cypress.Commands.add("imapVerifyLastEmailContains", (params: { userEmail: string; content: string; date: Date}) => {
   const getEmailSetting =  {
@@ -120,3 +98,31 @@ Cypress.Commands.add("imapVerifyNumberOfEmailsReceivedSince", (params: {
     assert.lengthOf(emails, params.emailCount);
   });
 });
+
+Cypress.Commands.add("imapVerifyEmailsInList", (params: {
+  receivedEmails: IMAPEmail[];
+  emailsToTest: IMAPEmailsInTesting[];
+  getEmailsSincedate: Date;
+  assertNumberOfEmailsFoundInList: integer;}) => {
+
+  params.emailsToTest.forEach((email) => {
+    const numberOfEmails = getEmailsThatAreInReceivedList(params.receivedEmails, email);
+    assert.lengthOf(numberOfEmails, params.assertNumberOfEmailsFoundInList);
+  });
+});
+
+function getEmailsThatAreInReceivedList(receivedEmails, emailToTest) {
+  return receivedEmails.filter(
+    (receivedEmail) => receivedEmail.receiver === emailToTest.sentToUser &&
+      arrayContainsArray(receivedEmail.body.html, emailToTest.contains));
+}
+
+function arrayContainsArray(superset, subset) {
+  if (0 === subset.length) {
+    return false;
+  }
+  return subset.every(function(value) {
+    return (superset.indexOf(value) >= 0);
+  });
+}
+

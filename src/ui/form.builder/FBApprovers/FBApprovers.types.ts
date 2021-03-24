@@ -1,11 +1,11 @@
-import { FBAutocompleteAsyncProps } from "../FBAutocompleteAsync";
-import { FBProviderProps } from "../FBProvider";
+import { FBAutocompleteAsyncProps, FBProviderProps } from "..";
 
 export type FBApproversProps =
 & Pick<FBProviderProps, "approversState">
 & FBAutocompleteAsyncProps
 & {
   isIncluded?: (group: FBRequiredApprover) => void;
+  onBlur?: () => any;
   groups?: Record<string, FBRequiredApprover>;
   checkedGroups?: FBRequiredApprover[];
   value?: string[];
@@ -20,7 +20,7 @@ export interface FBEmployee {
   user: FBUser;
 }
 
-export interface FBUser {
+interface FBUser {
   id: string;
   email: string;
   name: string;

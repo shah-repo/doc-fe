@@ -1,5 +1,5 @@
-import { Id, Nullable, User } from "../common";
-import { DocumentRevision } from "../documentRevisions";
+import { Id, Nullable, User } from "../common/types";
+import { DocumentRevision } from "../documentRevisions/types";
 import { ADD_WATERMARK, REMOVE_WATERMARK } from "./constants";
 
 export interface Attachment {

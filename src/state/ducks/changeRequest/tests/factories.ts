@@ -1,7 +1,7 @@
 import faker from "faker";
 import { Audit } from "../../audit/types";
 import { getOwner, getUser } from "../../common/tests/factories";
-import { ChangeRequest, ChangeRequestAvailableApprovers, ChangeRequestEditRequestBody, ChangeRequestStatus } from "../types";
+import { ChangeRequest, ChangeRequestAvailableApprovers, ChangeRequestStatus } from "../types";
 
 const createNestedObject = () => (
   {
@@ -57,14 +57,6 @@ export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): Ch
   documentRevisions: [],
   closedAt: faker.date.future(undefined, "2019-05-31"),
   ...changeRequest,
-});
-
-export const getChangeRequestEditRequestBody = (
-  body: Partial<ChangeRequestEditRequestBody> = {},
-): ChangeRequestEditRequestBody => ({
-  title: faker.lorem.sentence(),
-  description: faker.lorem.sentence(),
-  ...body,
 });
 
 export const getApprover = (

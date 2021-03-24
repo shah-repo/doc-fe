@@ -1,6 +1,6 @@
 import { FBApprovalState, FBInputProps } from "..";
-import { Employee } from "../../../state/ducks/company";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement";
+import { Employee } from "../../../state/ducks/company/types";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 
 export interface FBApprovalConfig {
   label?: string;
@@ -57,18 +57,6 @@ export interface FBApprovalApi {
 export type FBApprovalFieldProps<T> = FBApprovalProps & {
   collection: T[];
 };
-
-export interface FBApprovalData {
-  approvers?: Employee[];
-  approverGroups?: GroupRequestBody[];
-  approvalRoles?: FBInlineApprovalRole;
-}
-
-export interface FBApprovalSocketMsg {
-  data?: {
-    message: string;
-  };
-}
 
 export interface FBApprovalConstructor {
   documentId?: string;

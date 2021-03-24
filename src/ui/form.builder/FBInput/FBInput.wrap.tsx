@@ -4,13 +4,11 @@ import { first, get, includes, isArray, isBoolean, isEqual, isString, isUndefine
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { FBOption } from "..";
+import { FB, FBInputProps, FBInputType, FBOption, OmitInputClones } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
-import { FBInputProps, FBInputType, OmitInputClones } from "../FBInput";
-import { FB } from "../helpers";
 import { withFBOnChange } from "./FBInput.onchange";
 
 export const withFBInput = <T extends FBInputProps>(
@@ -57,6 +55,7 @@ export const withFBInput = <T extends FBInputProps>(
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
+
     defaultValue = setDefaultValue();
     helperText = formState?.errors.get(name) || helperText;
     error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
@@ -76,10 +75,11 @@ export const withFBInput = <T extends FBInputProps>(
     const validationValue = get(formState?.validationValues, name);
 
     if (validationMode === "visibility" || validationMode === "disabled") {
-      map(get(formState?.validatorRules, name), (value) => {
+      map(get(formState?.validatorRules, name), (rule) => {
         if (!formState) { return; }
-        const fieldName: string = first(value?.value?.split(",")) || "";
-        const fieldValue = last(value?.value?.split(","));
+        const { value = "" } = rule || {};
+        const fieldName: string = first(value.split(",")) || "";
+        const fieldValue = last(value.split(","));
         const validationRules = formState.validationRelatedRules[fieldName] || [];
         formState.validationRelatedRules[fieldName] = union([{ name, value: fieldValue }], validationRules);
       });
@@ -144,7 +144,7 @@ export const withFBInput = <T extends FBInputProps>(
         ...(withState && type !== "autocomplete" && { value }),
         ...(type === "textfield" && { error }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
-        ...(workspaceState?.mode === "preview" && { className: FBClasses.inputPreview }),
+        ...(workspaceState?.mode === "preview" && name !== "password" && { className: FBClasses.inputPreview }),
         ...(!isInputOwner && { className: FBClasses.nonOwner }),
       });
     }
@@ -169,6 +169,9 @@ export const withFBInput = <T extends FBInputProps>(
       reaction(
         () => inputState?.autosaveNextValue,
         (value) => {
+          if (!workspaceState?.autosave) {
+            return;
+          }
           if (autosave && !isEqual(inputState?.autosavePrevValue, value)) {
             if (type === "poreceive") {
               submitForm({
@@ -221,6 +224,7 @@ export const withFBInput = <T extends FBInputProps>(
       withState,
       omitFormValue,
       deleted,
+      isOutput,
     });
   };
 

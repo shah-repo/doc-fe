@@ -1,7 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBButton, FBControlPickerDataProps, FBControlPickerProps, FBLabel, FBMapWrapper } from "..";
-import { FBInputType } from "../FBInput";
+import { FBButton, FBControlPickerDataProps, FBControlPickerProps, FBInputType, FBLabel, FBMapWrapper } from "..";
 import { withFBControlPicker } from "./FBControlPicker.wrap";
 
 const FBControlPicker: React.FunctionComponent<FBControlPickerProps> = ({

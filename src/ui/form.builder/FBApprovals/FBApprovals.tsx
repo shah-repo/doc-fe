@@ -1,13 +1,11 @@
 import { Box } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBRequiredApprover, FBSection, FBText } from "..";
+import { FBApprovalsProps, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText, Owner } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { ApprovalStatus } from "../../../state/ducks/common";
-import { DocumentStatus } from "../../../state/ducks/documents";
+import { ApprovalStatus } from "../../../state/ducks/common/types";
+import { DocumentStatus } from "../../../state/ducks/documents/types";
 import Colors from "../../layout/theme/utils/colors";
-import { FBProvider } from "../FBProvider";
-import { FBApprovalsProps, Owner } from "./FBApprovals.types";
 import { withFBApprovals } from "./FBApprovals.wrap";
 
 const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
@@ -32,11 +30,12 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
   owners,
   showFieldOwnersWarning,
   isContributorIncluded,
+  autosave,
   ...props
 }) => (
   <FBProvider {...{ dialogState }}>
     <FBDialog />
-    <FBInput {...props} {...{ name }} type="approvals">
+    <FBInput {...props} {...{ name, autosave }} type="approvals">
       <FBSection
         name={`fb-approvals-section-${name}`}
         {...{ label }}
@@ -48,7 +47,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
         withState
         gutter={false}
         multiple={true}
-        {...{ disabled, renderOption, loading }}
+        {...{ disabled, renderOption, loading, autosave }}
       />
       <Box display="flex" flexWrap="wrap" my={2}>
         <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>

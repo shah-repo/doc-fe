@@ -1,6 +1,6 @@
 import * as CRC32 from "crc-32";
 import faker from "faker";
-import { Company } from "../../../../src/state/ducks/company/types";
+import { Company } from "../../../../src/state/ducks/company";
 import { HEX2RGB } from "../../../utils/context/converers";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
@@ -71,6 +71,7 @@ declare global {
         sessionId: string;
         payload: Partial<Company>;}): Chainable<Subject>;
       cmpSelectCompany(params: { name: string; multiple: boolean }): Chainable<Subject>;
+      cmpCompanyDoesntExist(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpSelectCompanyAlreadyLoggedIn(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpClickCreateNewDocument(): Chainable<Subject>;
       cmpClickCreateApprovalRequest(): Chainable<Subject>;
@@ -214,7 +215,13 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
     ], () => {
       cy.get("#root").contains(params.name).click();
     });
-    cy.wait(500);
+    cy.wait(1500);
+  }
+});
+
+Cypress.Commands.add("cmpCompanyDoesntExist", (params: { name: string; multiple: boolean }) => {
+  if (params.multiple) {
+    cy.get("#root").should("not.contain", params.name);
   }
 });
 

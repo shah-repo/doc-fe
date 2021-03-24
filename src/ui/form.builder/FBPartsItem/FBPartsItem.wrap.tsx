@@ -1,8 +1,7 @@
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBProcedureItemType } from "..";
+import { FB, FBPartsItemProps, FBProcedureItemType } from "..";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import { FBPartsItemProps } from "./FBPartsItem.types";
 
 
 export const withFBPartsItem = <T extends FBPartsItemProps>(

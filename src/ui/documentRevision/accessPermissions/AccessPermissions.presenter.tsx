@@ -6,7 +6,7 @@ import { useIntl } from "react-intl";
 import Select, { components } from "react-select";
 import { ReactComponent as CloseIcon } from "../../../assets/images/circle-remove.svg";
 import { Group } from "../../../state/ducks/auth/types";
-import { Owner, TypographySize } from "../../../state/ducks/common";
+import { Owner, TypographySize } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
@@ -24,11 +24,12 @@ interface OwnProps {
   documentId: string;
   documentRevisionId: string;
   isVisible: boolean;
+  label?: string;
 }
 
-export type AccessPermissionsPresenterProps = OwnProps;
+type AccessPermissionsPresenterProps = OwnProps;
 
-export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPresenterProps> = ({
+const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPresenterProps> = ({
   availableApprovers,
   groupOptions,
   securityGroups,
@@ -37,6 +38,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   documentId,
   documentRevisionId,
   isVisible,
+  label,
 }) => {
   const classes = styles();
 
@@ -236,7 +238,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
         isVisible &&
         <>
           <Typography variant={TypographySize.md}>
-            <Text translation="document.assign.to" />
+            <Text message={label || "common.operators"} />
           </Typography>
           <div style={{ width: 200, paddingBottom: 32 }}>
             {

@@ -1,7 +1,7 @@
-import { get, orderBy } from "lodash";
+import { get, has, orderBy } from "lodash";
 import moment from "moment";
 import "moment-timezone";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { store } from "../../../state/store";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../documentRevision/helpers/documentRevisionStatus";
@@ -15,15 +15,6 @@ export const canEditDocumentRevision = (documentRevision: DocumentRevision) => {
     currentUser === owner &&
     (isDocumentRevisionInDraft(documentRevision) || isDocumentRevisionPendingChange(documentRevision))
   );
-};
-
-export const documentRevisionIdMask = (
-  type: string,
-  count: string | number,
-) => {
-  const countStr = "" + count;
-  const pad = "0000";
-  return type + pad.substring(0, pad.length - countStr.length) + countStr;
 };
 
 export const documentRevisionStatusOption = (statuses?: DocumentRevisionStatus[]) => {
@@ -112,3 +103,10 @@ export const trainingCompletedOnDateOption = () => [
     value: moment().add(7, "d").startOf("day").toISOString(),
   },
 ];
+
+export const shouldHaveNoResponse = (dataToSubmit: any, documentRevision: DocumentRevision) => {
+  const schema = get(documentRevision, "formDocument.formTemplate.schema");
+  const fieldsWithNoResponse = schema?.filter((item) => item.type === "texteditor" && !item.deleted);
+  const getFormInputHasTextField = fieldsWithNoResponse?.find((field) => has(dataToSubmit.formInput, field.name));
+  return has(dataToSubmit, "description") || getFormInputHasTextField;
+};

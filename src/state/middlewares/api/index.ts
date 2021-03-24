@@ -66,7 +66,8 @@ const apiMiddleware: Middleware = ({
       const { employeeId, sessionId } = getState().auth.user;
       const authorization = `bearer ${employeeId}:${sessionId}`;
       requestConfig.headers.Authorization = authorization;
-      // * Note mobx-rest
+
+      // needed here for mobx/FB calls
       apiXClient(authorization);
     }
 

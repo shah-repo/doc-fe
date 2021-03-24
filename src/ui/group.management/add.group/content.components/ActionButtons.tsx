@@ -11,7 +11,7 @@ interface Props {
   group: GroupRequestBody;
 }
 
-export const ActionButtons: React.FunctionComponent<Props> = ({
+const ActionButtons: React.FunctionComponent<Props> = ({
   handleReset,
   handleSubmit,
   isCreateMode,

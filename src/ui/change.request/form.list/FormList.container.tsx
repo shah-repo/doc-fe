@@ -1,8 +1,9 @@
 import { flatten, isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { documentTypeActions, DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType/types";
 import { HeaderTableType } from "../../../state/ducks/documentRevisions/types";
 import { TableDataProps } from "../../components/table/types";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -16,7 +17,7 @@ interface Props {
   tableData: TableDataProps<ChangeRequest>;
 }
 
-export const FromListContainer: React.FunctionComponent<Props> = ({ headers, tableData }) => {
+const FromListContainer: React.FunctionComponent<Props> = ({ headers, tableData }) => {
   const [templateOptions, setTemplateOptions] = useState<TemplateOption[]>([]);
   const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
   const history = useHistory();

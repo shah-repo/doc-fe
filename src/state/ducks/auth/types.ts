@@ -1,5 +1,5 @@
-import { Nullable } from "../common";
-import { Employee } from "../company";
+import { Nullable } from "../common/types";
+import { Employee } from "../company/types";
 import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USER_GROUPS } from "./constants";
 
 export interface LoginRequestBody {
@@ -43,11 +43,6 @@ export interface AuthResponse {
   iotCredentials: IotCredentials;
 }
 
-export interface Token {
-  value: string;
-  expiresAt: string;
-}
-
 export interface User {
   id: string;
   email: string;
@@ -72,8 +67,6 @@ export interface Group {
   groupApprover?: string; // FE property for POAM check (ENC-4125)
   documentStage?: number;
 }
-
-export type AuthUserPayload = User;
 
 export interface AuthUserAction {
   type: typeof AUTH_USER;
@@ -127,7 +120,7 @@ export interface IotCredentials {
   region: string;
 }
 
-export interface Credentials {
+interface Credentials {
   AccessKeyId: string;
   SecretAccessKey: string;
   SessionToken: string;
@@ -244,26 +237,4 @@ export enum GroupType{
   MANAGMENT = "MANAGMENT",
   REVISION_APPROVAL = "REVISION_APPROVAL",
   PURCHASE_APPROVAL = "PURCHASE_APPROVAL",
-}
-
-export enum NavigationItems{
-  DASHBOARD = "dashboard",
-  RECORDS = "records",
-  DOCUMENT_LIST = "documentList",
-  APPROVAL_REQUEST = "approvalRequests",
-  DOCUMENT_CONTROL = "documentControl",
-  USER_MANAGEMENT = "userManagement",
-  GROUP_MANAGEMENT = "groupManagement",
-  EQUIPMENT = "equipment",
-  TESTING_NAVIG_ITEM = "testingNavigationItem",
-  PURCHASE_ORDERS = "purchaseOrders",
-  SUPPLIER_LIST = "supplierList",
-  RECEIVING = "receiving",
-  MANUFACTURING = "manufacturing",
-  WORK_ORDERS = "workOrders",
-  LOTS = "lots",
-  PARTS = "parts",
-  INSPECTION = "inspection",
-  DOCUMENT_TYPE_MANAGEMENT = "documentTypeManagement",
-  SUPPLIER_MANAGEMENT = "supplierManagement"
 }

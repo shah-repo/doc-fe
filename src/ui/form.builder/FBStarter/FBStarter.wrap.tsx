@@ -1,6 +1,5 @@
 import React from "react";
-import { FBStarterProps } from ".";
-import { FB, FBControlPicker } from "..";
+import { FB, FBControlPicker, FBStarterProps } from "..";
 
 export const withFBStarter = <T extends FBStarterProps>(
   Component: React.FunctionComponent<T>,

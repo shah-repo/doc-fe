@@ -1,6 +1,6 @@
 import { Dictionary, get, isArray, isDate, isObject, join, map } from "lodash";
 import React from "react";
-import { FBValidationProps } from ".";
+import { FBValidationProps } from "..";
 
 export const withFBValidation = <T extends FBValidationProps>(
   Component: React.FunctionComponent<T>,

@@ -1,12 +1,7 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBData, FBForm, FBProcedureFormProps, FBTextField } from "..";
-import Text from "../../components/Text";
-import { FBFileUpload } from "../FBFileUpload";
-import { FBProcedureItemType } from "../FBProcedureItem";
-import { FBQuantityField } from "../FBQuantityField";
-import { FB } from "../helpers";
+import { FB, FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBData, FBFileUpload, FBForm, FBProcedureFormProps, FBProcedureItemType, FBQuantityField, FBTextField } from "..";
 import { withFBProcedureForm } from "./FBProcedureForm.wrap";
 
 
@@ -20,6 +15,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
   partLoading,
   lotLoading,
   optionId,
+  mode = "eb",
   type,
 }) => (
   <FBForm {...{ formState, initialValues }} >
@@ -42,17 +38,19 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
         freeSolo
         withState
       />
-      <FBAutocompleteAsync
-        name="partLot"
-        label="form.builder.part.lot"
-        optionId={FBAutocompleteAsyncOption.ebLots}
-        filterOptions={partFilterOptions}
-        loading={lotLoading}
-        disabled={lotLoading}
-        {...{ disabledOptions }}
-        freeSolo
-        withState
-      />
+      {mode !== "mpi" && (
+        <FBAutocompleteAsync
+          name="partLot"
+          label="form.builder.part.lot"
+          optionId={FBAutocompleteAsyncOption.ebLots}
+          filterOptions={partFilterOptions}
+          loading={lotLoading}
+          disabled={lotLoading}
+          {...{ disabledOptions }}
+          freeSolo
+          withState
+        />
+      )}
     </>
     }
     {type === FBProcedureItemType.equipment &&
@@ -83,10 +81,9 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
             />
           </Box>
         </Box>
-        <Typography variant="h6" style={{ marginBottom: 16 }} >
-          <Text message="common.attachments"/>
-        </Typography>
-        <FBFileUpload name="attachments" />
+        {mode !== "mpi" && (
+          <FBFileUpload label="form.builder.attachments" name="attachments" />
+        )}
       </>
     )}
     {children}

@@ -1,5 +1,4 @@
-import { FBAutocompleteProps, FBInputProps } from "..";
-import { FBProviderProps } from "../FBProvider";
+import { FBAutocompleteProps, FBInputProps, FBProviderProps } from "..";
 
 export type FBDocumentRevisionsProps =
 & Pick<FBInputProps, "name" | "disabled" | "gutter" | "index">

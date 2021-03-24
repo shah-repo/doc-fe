@@ -2,6 +2,17 @@
 import * as gmail from "gmail-tester";
 import * as path from "path";
 
+export interface IMAPEmail{
+  body: {
+    html: string;
+    text: string;
+  };
+  date: string;
+  from: string;
+  receiver: string;
+  subject: string;
+}
+
 export async function getEmail(email) {
   let returnValue = null;
   const dateOffset = (20 * 1000);

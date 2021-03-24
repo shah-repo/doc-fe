@@ -1,14 +1,14 @@
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
-import { FBSchemaProps, FBTaskItem } from "../../../ui/form.builder";
-import { Attachment } from "../attachments";
+import { FBNoteItem, FBSchemaProps, FBTaskItem } from "../../../ui/form.builder";
+import { Attachment } from "../attachments/types";
 import { AuditActionPayload } from "../audit/types";
 import { Group } from "../auth/types";
-import { ChangeRequest } from "../changeRequest";
-import { Approval, Id, Owner, User } from "../common";
-import { TrainingRecord } from "../training";
+import { ChangeRequest } from "../changeRequest/types";
+import { Approval, Id, Nullable, Owner, User } from "../common/types";
+import { TrainingRecord } from "../training/types";
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
-import { DocumentGroupOptionsType, DocumentType } from "./documentType";
+import { DocumentGroupOptionsType, DocumentType } from "./documentType/types";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -22,9 +22,6 @@ export enum DocumentRevisionStatus {
   Voided = "VOIDED",
 }
 
-export enum DocumentRevisionStatusAlias {
-  Draft = "WIP",
-}
 
 export enum RevisionChangeType {
   NextRevision = "NEXT_REVISION",
@@ -43,6 +40,9 @@ export interface DocumentRevisionDocument {
   referencedBy: DocumentRevision[];
   canAccess: boolean;
   securityList: SecurityList;
+  lot?: {
+    lotId: string;
+  };
 }
 
 export interface SecurityList {
@@ -76,7 +76,7 @@ export interface PDF {
   type: string;
 }
 
-export interface Precalc {
+interface Precalc {
   formDocId: string;
   revision: number;
 }
@@ -127,9 +127,33 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   childrenParts?: DocumentRevision[];
   outputDocumentTypes?: any;
   inputOwners?: InputOwner[];
+  documentId?: string;
+  smartReferencesFrom?: SmartReference[];
+  smartReferencesTo?: SmartReference[];
 }
 
-export interface InputOwner {
+interface SmartReference {
+  fromDocRev?: Nullable<DocumentRevision>;
+  fromDocRevId?: Nullable<string>;
+  fromDocumentId?: Nullable<string>;
+  id: string;
+  metadata: {
+    fieldId: string;
+  };
+  toDocRevId?: Nullable<string>;
+  toDocRev?: Nullable<DocumentRevision>;
+  toDocumentId?: Nullable<string>;
+  type: SmartReferenceType;
+}
+
+export enum SmartReferenceType {
+  HiddenPiInstance = "HIDDEN_PI_INSTANCE",
+  General = "GENERAL",
+  EquipmentReplacement = "EQUIPMENT_REPLACEMENT",
+  LotUsage = "LOT_USAGE",
+}
+
+interface InputOwner {
   [key: string]: string;
 }
 
@@ -144,7 +168,7 @@ export interface ReferenceToEditRequest {
   id: string;
 }
 
-export interface SecurityListRequest {
+interface SecurityListRequest {
   securityEmployees: Id[];
   securityGroups: Id[];
   operators: Id[];
@@ -257,6 +281,7 @@ export interface FBDocumentRevisionProps {
   renderHTML?: string;
   status?: DocumentRevisionStatus;
   tasks?: FBTaskItem[];
+  notes?: FBNoteItem[];
 }
 
 export interface FBOutputDocumentType {

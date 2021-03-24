@@ -2,7 +2,7 @@ import { Box, Typography } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { companySelectors } from "../../../../state/ducks/company";
-import { RevisionStageOptions } from "../../../../state/ducks/documentRevisions";
+import { RevisionStageOptions } from "../../../../state/ducks/documentRevisions/types";
 import RadioButton from "../../../components/forms/fields/RadioButton";
 import RadioGroup from "../../../components/forms/fields/RadioGroup";
 import { required, validator } from "../../../components/forms/fields/validators";
@@ -14,7 +14,7 @@ interface Props {
   shouldShowRevStageForDocType: boolean;
 }
 
-export const RevisionStage: React.FunctionComponent<Props> = ({
+const RevisionStage: React.FunctionComponent<Props> = ({
   isDisabled,
   isDocRevFirstDraft,
   shouldShowRevStageForDocType,

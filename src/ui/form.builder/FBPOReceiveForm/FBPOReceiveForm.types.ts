@@ -1,5 +1,5 @@
 import { FBFormProps, FBPOReceiveProps, FBPurchaseOrderItem } from "..";
-import { DocumentType } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 
 export type FBPOReceiveFormProps =
 & Pick<FBPOReceiveProps, "name">

@@ -1,8 +1,11 @@
 import { useFormikContext } from "formik";
-import { filter, isEmpty, isEqual, map } from "lodash";
+import { filter, isEmpty, isEqual, keys, map, omit } from "lodash";
 import React, { useContext } from "react";
-import { DocumentRevision, ReferenceToEditRequest } from "../../../state/ducks/documentRevisions";
+import { useSelector } from "react-redux";
+import { companySelectors } from "../../../state/ducks/company";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, ReferenceToEditRequest, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
+import { checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FB, FBAutocompleteAsyncOption } from "../../form.builder";
 import FBAutocompleteAsyncStore from "../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { SubmitFormRelation } from "./FormContext.types";
@@ -13,7 +16,8 @@ export const useFormContext = () => {
   const context = useContext(FormContext);
   const formik = useFormikContext();
   const { workspaceState, formState, schemaState } = FB.useStores();
-
+  const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
+  let isRecord;
   function isOutputSchema(): boolean {
     const values = formik.values as any;
     const { schema: documentSchema = [] } = values?.formDocument?.formTemplate || {};
@@ -38,8 +42,22 @@ export const useFormContext = () => {
         formik.setFieldValue("formDocument", {
           id: values.formDocument?.id,
         });
-        formik.setFieldValue("formInput", formState?.getValues());
-        if (workspaceState.mode === "formDesign" && isOutputSchema()) {
+        isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
+        if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
+          const newInput = {};
+          keys(values.formInput).map((key) => {
+            newInput[key] = values?.formInput && typeof values?.formInput[key] === "string" && key !== "equipment_id"
+              ? "Void"
+              : key === "equipment_id" ?  null : values?.formInput?.[key];
+            return key;
+          });
+          // TEMPORARY FIX FOR BE VALIDATION
+          formik.setFieldValue("formInput", omit(newInput, ["partType", "childForRevise"]));
+        } else {
+          // TEMPORARY FIX FOR BE VALIDATION
+          formik.setFieldValue("formInput", omit(formState?.getValues(), ["partType", "childForRevise"]));
+        }
+        if (isOutputSchema()) {
           formik.setFieldValue("schema", workspaceState.schema);
         }
         break;
@@ -74,6 +92,7 @@ export const useFormContext = () => {
         refValues = refWithoutPrevValue?.map((e) => ({ id: e.id }))as ReferenceToEditRequest[];
       }
       formik.setFieldValue("referenceTo", [...refValues, { id: nextValueId }]);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       workspaceState.referenceValue = [...refValues, { id: nextValueId! }];
       return;
     }
@@ -100,8 +119,11 @@ export const useFormContext = () => {
     formik.setFieldValue("referenceTo", refValues);
   }
 
-  // TODO: check if this param is needed. Formik context should be available
   const submitForm = (relation?: SubmitFormRelation) => {
+    if (!autosaveEnabled) {
+      return;
+    }
+
     if (context.submitOnChange) {
       if (workspaceState) {
         setFBValue();

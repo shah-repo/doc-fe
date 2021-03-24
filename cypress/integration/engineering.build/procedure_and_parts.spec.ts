@@ -4,11 +4,11 @@
 
 import moment from "moment";
 import "moment-timezone";
-import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions";
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
@@ -57,7 +57,7 @@ context("Procedure and parts flow test", () => {
             companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
@@ -614,7 +614,7 @@ context("Procedure and parts flow test", () => {
         cy.drEnterDocumentTitle({ name: "Form document for EB" });
       });
 
-      it("Enters description 'Procedure description'", () => {
+      it("Enters description 'EB form description'", () => {
         cy.drEnterDocumentDescription({ description: "EB form description" });
       });
 
@@ -659,7 +659,7 @@ context("Procedure and parts flow test", () => {
         cy.drEnterDocumentTitle({ name: "EB document" });
       });
 
-      it("Enters description 'Procedure description'", () => {
+      it("Enters description 'EB description'", () => {
         cy.drEnterDocumentDescription({ description: "EB description" });
       });
 

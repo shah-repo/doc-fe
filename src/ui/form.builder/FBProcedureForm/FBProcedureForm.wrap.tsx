@@ -3,7 +3,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormFilterType, FBProcedureFormProps, FBProcedureFormState, FBProcedureItemConfig, FBProcedureItemType } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 
 export const withFBProcedureForm = <T extends FBProcedureFormProps>(
   Component: React.FunctionComponent<T>,
@@ -24,7 +24,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     ...props
   }: T) => {
     // MARK: @config
-    const { procedureState, dialogState } = FB.useStores();
+    const { procedureState, mpiProcedureState, dialogState } = FB.useStores();
     formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
     procedureFormState = FB.useRef<FBProcedureFormState>(FBProcedureFormState, {
       initialValues,
@@ -97,6 +97,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     function handleAdd() {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
       procedureState?.addItem(formValue, type);
+      mpiProcedureState?.addItem(formValue, type);
       handleCancel?.();
     }
 

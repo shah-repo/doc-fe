@@ -3,7 +3,7 @@
 
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
-import { USERS } from "../../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -14,7 +14,7 @@ const approvalRequestTitle = `ApprovalRequest${Cypress.moment().format("X")}`;
 let arDocCount = 0;
 let initialArDocument;
 
-context("FORM Field test", () => {
+context("Autocomplete 'Approval requests' test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -27,7 +27,7 @@ context("FORM Field test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {

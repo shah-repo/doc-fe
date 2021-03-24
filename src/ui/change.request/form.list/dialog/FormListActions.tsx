@@ -10,7 +10,7 @@ interface Props {
   chosenTypeId: string;
   chosenFormId: string;
 }
-export const FormListActions: React.FunctionComponent<Props> = ({ dialog, chosenFormId, chosenTypeId }) => {
+const FormListActions: React.FunctionComponent<Props> = ({ dialog, chosenFormId, chosenTypeId }) => {
   const classes = styles();
   const history = useHistory();
 

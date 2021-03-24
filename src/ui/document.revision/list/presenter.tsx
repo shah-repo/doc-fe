@@ -6,8 +6,9 @@ import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export
 import { docRevSch } from "../../../common/normalizrSchema";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { convertHtmlEntities, stripTags } from "../../../common/utils/helpers";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../common/utils/helpers";
 import Date from "../../components/Date";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -17,7 +18,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
-import { checkIsDocumentEquipment, checkIsDocumentPart, checkIsDocumentRecord, checkIsDocumentSupplier } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIfDocumentHasOptions } from "../../documentRevision/helpers/checkDocumentGroup";
 import useDialog from "../../hooks/useDialog";
 import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
@@ -62,10 +63,16 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
 
   const customDataSet = (data: DocumentRevision[]) => {
     const customData = data.reduce<DocumentRevision[]>((acc, docRev) => {
-      if (!checkIsDocumentRecord(docRev.document.documentType.groupOptions)
-      && !checkIsDocumentEquipment(docRev.document.documentType.groupOptions)
-      && !checkIsDocumentSupplier(docRev.document.documentType.groupOptions)
-      && !checkIsDocumentPart(docRev.document.documentType.groupOptions)) {
+      if (!checkIfDocumentHasOptions(
+        [
+          DOC_TYPE_GROUP_OPTION.RECORD,
+          DOC_TYPE_GROUP_OPTION.EQUIPMENT,
+          DOC_TYPE_GROUP_OPTION.ENGINEERING_BUILD,
+          DOC_TYPE_GROUP_OPTION.PART,
+          DOC_TYPE_GROUP_OPTION.SUPPLIER,
+        ],
+        docRev.document.documentType.groupOptions
+      )) {
         set(docRev, "description", stripTags(docRev.description));
         set(
           docRev,

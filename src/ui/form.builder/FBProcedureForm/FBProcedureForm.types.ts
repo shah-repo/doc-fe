@@ -1,12 +1,12 @@
-import { FBAutocompleteAsyncProps, FBFormProps, FBProcedureItemProps } from "..";
+import { FBAutocompleteAsyncProps, FBAutocompleteProps, FBFormProps, FBProcedureFormState, FBProcedureItemProps } from "..";
 import { SelectOption } from "../../components/forms/fields/Select";
-import { FBAutocompleteProps } from "../FBAutocomplete";
-import FBProcedureFormState from "./FBProcedureForm.state";
 
 export enum FBProcedureFormFilterType {
   parts = "title",
   lots = "partLot",
 }
+
+type FBProcedureFormMode = "eb" | "mpi";
 
 export type FBProcedureFormProps =
 & Pick<FBFormProps, "formState" | "children" | "initialValues">
@@ -24,6 +24,7 @@ export type FBProcedureFormProps =
   disabled?: boolean;
   partLoading?: boolean;
   lotLoading?: boolean;
+  mode?: FBProcedureFormMode;
 };
 
 export interface FBProcedureFormActionsProps {

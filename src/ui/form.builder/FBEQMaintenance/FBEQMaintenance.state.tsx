@@ -1,9 +1,9 @@
 import { action, observable, set } from "mobx";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
-import { AvailableMaintenanceForm } from "./FBEQMaintenance.types";
+import { AvailableMaintenanceForm } from "..";
 
-export class FBEQMaintenanceState {
+class FBEQMaintenanceState {
   // MARK: @observables
   @observable public newPMDisabled?: boolean;
 

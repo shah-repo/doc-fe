@@ -1,8 +1,7 @@
 import { Button } from "@material-ui/core";
 import { hasIn, isString } from "lodash";
 import React from "react";
-import { FBButtonProps } from ".";
-import { FBLabelLocaleProps, FBText } from "..";
+import { FBButtonProps, FBLabelLocaleProps, FBText } from "..";
 
 const FBButton: React.FunctionComponent<FBButtonProps> = ({
   label = "",

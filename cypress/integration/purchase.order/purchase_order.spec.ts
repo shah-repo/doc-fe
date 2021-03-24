@@ -5,7 +5,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -30,13 +30,14 @@ context("PO test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
                 documentTypeName: "PO Part",
                 documentTypeAcronym: "PRT-",
                 group: "PART",
+                category: "Parts",
                 isQms: true,
               },
             ],
@@ -194,13 +195,55 @@ context("PO test", () => {
     });
   });
 
-  context("Create Part document for PO", () => {
+  context("Create Form Part document to create Part", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
     });
 
     it("Clicks on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enters title 'New Part Form'", () => {
+      cy.drEnterDocumentTitle({ name: "New Part Form" });
+    });
+
+    it("Enters description 'New Part Form description'", () => {
+      cy.drEnterDocumentDescription({ description: "New Part Form description" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Selects 'Form' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Selects 'PO Part' document type from dropdown", () => {
+      cy.drSelectOutputDocumentType({ documentType: "PO Part" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Create Part document for PO", () => {
+    it("Navigates to parts list", () => {
+      cy.navigToParts();
+    });
+
+    it("Clicks on 'Add new part' button", () => {
+      cy.ptClickCreateNewPart();
+    });
+
+    it("Clicks on 'PO Part' Form", () => {
+      cy.ptSelectPartFormFromMultiSelect({ partForm: "PO Part" });
     });
 
     it("Enters title 'New Part'", () => {
@@ -215,12 +258,8 @@ context("PO test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Selects 'PO Part' document type from dropdown", () => {
-      cy.drSelectDocumentType({ documentType: "PO Part" });
-    });
-
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -309,7 +348,7 @@ context("PO test", () => {
 
     it("Select Part Number", () => {
       // SystemRequirement("REQ-1410");
-      cy.poSelectPartNumber();
+      cy.poSelectPartNumber({ partNo: "PRT-00004 - 1" });
     });
 
     it("Enter Quantity Ordered", () => {
@@ -329,7 +368,7 @@ context("PO test", () => {
 
     it("Enter Supplier Part Number", () => {
       // SystemRequirement("REQ-1410");
-      cy.poEnterSupplierPartNumber({ partNumber: "PRT-0003" });
+      cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
     });
 
     it("Enter number of Units", () => {
@@ -376,7 +415,7 @@ context("PO test", () => {
 
     it("Enter Supplier Part Number", () => {
       // SystemRequirement("REQ-1410");
-      cy.poEnterSupplierPartNumber({ partNumber: "PRT-0003" });
+      cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
     });
 
     it("Enter number of Units", () => {
@@ -468,7 +507,12 @@ context("PO test", () => {
 
       it("Save PO document", () => {
         // SystemRequirement("REQ-1290");
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCalls(
+          [CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+          });
+        cy.checkToastMessage({ exists: false });
+        cy.wait(2000);
       });
 
       it("Approve and release document", () => {
@@ -737,7 +781,7 @@ context("PO test", () => {
       // SystemRequirement("REQ-1150");
       cy.filterPO({
         docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
-        partNumber: "PRT-0003", amount: "10", owner: "tester", issueDate: "10/10/2020",
+        partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
       }).wait(2000);
     });
 
@@ -753,7 +797,7 @@ context("PO test", () => {
     //   // SystemRequirement("REQ-1170");
     //   cy.filterCheckIfPOFilterPersists({
     //     docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
-    //     partNumber: "PRT-0003", amount: "10", owner: "tester", issueDate: "10/10/2020",
+    //     partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
     //   });
     // });
 

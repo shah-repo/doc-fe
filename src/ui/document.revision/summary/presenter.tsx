@@ -5,10 +5,9 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
-import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
+import { DataProps } from "../../../state/ducks/common/types";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { Document } from "../../../state/ducks/documentRevisions/types";
+import { Document, DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
@@ -18,7 +17,7 @@ import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { getHighestRevision } from "../../documentRevision/forms/transform";
-import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentEB, checkIsDocumentForm, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
@@ -44,11 +43,11 @@ interface OwnProps {
   canChangeOwnerShip?: boolean;
 }
 
-export type Props = OwnProps &
+type Props = OwnProps &
 DataProps<DocumentRevision> &
 WithStyles<typeof styles>;
 
-export const Presenter: React.FunctionComponent<Props> = ({
+const Presenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
   dataProp: {
@@ -224,7 +223,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
             document={dataProp}
             initialValues={dataProp.formInput}
             schema={schema as FBSchemaProps[]}
-            mode={dataProp.document.documentType.group === "FORM" ?
+            mode={checkIsDocumentForm(dataProp.document.documentType.groupOptions) ?
               "formPreview" : "preview"}
           />
         </Box>

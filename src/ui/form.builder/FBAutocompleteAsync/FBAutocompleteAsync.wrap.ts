@@ -2,8 +2,7 @@ import { get, isArray, isEmpty, isObject, isString, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { FBAutocompleteAsyncProps, FBAutocompleteAsyncState } from ".";
-import { FB, FBOptionValueType } from "..";
+import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBOptionValueType } from "..";
 import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
@@ -22,6 +21,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     additionalData,
     omitFormValue,
     forceNewRender,
+    urlValues,
     freeSolo,
     optionId,
     options,
@@ -32,7 +32,10 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     ...props
   }: T) => {
     const { formState } = FB.useStores();
-    autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, optionId);
+    autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+      optionId,
+      urlValues,
+    });
     const {
       valueKey: optionValueKey = "value",
       labelKey: optionLabelKey = "text",
@@ -161,6 +164,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       forceNewRender,
       freeSolo,
       multiple,
+      urlValues,
       name,
       value,
     });

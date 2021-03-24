@@ -1,4 +1,4 @@
-import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { DialogHandler } from "../../hooks/useDialog";
 

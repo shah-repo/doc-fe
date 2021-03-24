@@ -1,7 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBButton, FBSubmitButton } from "..";
-import { FBWorkspaceTplActionsProps } from "./FBWorkspaceTplActions.types";
+import { FBButton, FBSubmitButton, FBWorkspaceTplActionsProps } from "..";
 import { withFBWorkspaceTplActions } from "./FBWorkspaceTplActions.wrap";
 
 const FBWorkspaceTplActions: React.FunctionComponent<FBWorkspaceTplActionsProps> = ({

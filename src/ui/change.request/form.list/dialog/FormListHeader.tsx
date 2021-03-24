@@ -10,7 +10,7 @@ interface Props {
   dialog: DialogHandler;
 }
 
-export const FormListHeader: React.FunctionComponent<Props> = ({ dialog }) => (
+const FormListHeader: React.FunctionComponent<Props> = ({ dialog }) => (
   <DialogTitle style={{ boxShadow: `0px 1px ${Colors.medium_gray}` }}>
     <Grid container>
       <Grid item xs={2} style={{ alignSelf: "center" }}>

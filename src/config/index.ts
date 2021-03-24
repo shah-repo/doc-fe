@@ -60,6 +60,11 @@ class Config {
     return this.get("FRONTEND_URL");
   }
 
+  public static get PublicUrl() {
+    const url = this.get("API_ENDPOINT");
+    return url.substring(0, url.length - 4);
+  }
+
   public static get AwsCognitoClientId() {
     return this.get("AWS_COGNITO_CLIENT_ID");
   }

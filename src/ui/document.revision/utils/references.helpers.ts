@@ -1,4 +1,4 @@
-import { DocumentRevision, DocumentRevisionStatus, Reference } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, Reference } from "../../../state/ducks/documentRevisions/types";
 import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import { documentVersionPath } from "./paths";
 import { ReferenceSummary } from "./types";

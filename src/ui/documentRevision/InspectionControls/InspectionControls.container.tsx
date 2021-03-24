@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { DocumentRevision, documentRevisionsActions, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
-import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../components/notifications/index";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import useActionCreator from "../../hooks/useActionCreator";

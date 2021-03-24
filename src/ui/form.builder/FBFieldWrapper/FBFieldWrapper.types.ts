@@ -1,6 +1,5 @@
 import { BoxProps } from "@material-ui/core";
-import { FBFieldWrapperState } from ".";
-import { FBFormProps, FBInputProps, FBVisibilityType } from "..";
+import { FBFieldWrapperState, FBFormProps, FBInputProps, FBVisibilityType } from "..";
 
 export type FBFieldWrapperProps =
   & Pick<FBFormProps, "children">

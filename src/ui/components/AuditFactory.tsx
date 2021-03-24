@@ -3,14 +3,15 @@ import { get, has } from "lodash";
 import React, { Fragment } from "react";
 import { useIntl } from "react-intl";
 import { getFormattedDateString, MomentFormats } from "../../common/utils/date";
-import { Attachment } from "../../state/ducks/attachments";
-import { Audit } from "../../state/ducks/audit";
+import { convertHtmlEntities } from "../../common/utils/helpers";
+import { Attachment } from "../../state/ducks/attachments/types";
+import { Audit } from "../../state/ducks/audit/types";
 import { Group } from "../../state/ducks/auth/types";
-import { ChangeRequest } from "../../state/ducks/changeRequest";
-import { Approval, ApprovalStatus, Owner } from "../../state/ducks/common";
-import { Employee } from "../../state/ducks/company";
-import { DocumentRevision, Reference } from "../../state/ducks/documentRevisions";
-import { DocumentType } from "../../state/ducks/documentRevisions/documentType";
+import { ChangeRequest } from "../../state/ducks/changeRequest/types";
+import { Approval, ApprovalStatus, Owner } from "../../state/ducks/common/types";
+import { Employee } from "../../state/ducks/company/types";
+import { DocumentType } from "../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, Reference } from "../../state/ducks/documentRevisions/types";
 import { getAuditDefaultValue } from "../common/utils/audit";
 import Text from "../components/Text";
 import { Translation } from "../translations/types";
@@ -24,9 +25,9 @@ interface OwnProps {
   dataCy?: string;
 }
 
-export type Props = OwnProps;
+type Props = OwnProps;
 
-export const AuditFactory: React.FunctionComponent<Props> = ({
+const AuditFactory: React.FunctionComponent<Props> = ({
   audit, dataCy,
 }) => {
   let returnValue;
@@ -122,7 +123,11 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       case "justifications.description":
       case "tasks.description":
       case "description":
-        returnValue = <DialogOpener id={audit.id} text={audit.nextValue as string} dataCy={dataCy} />;
+        returnValue = <DialogOpener
+          id={audit.id}
+          text={convertHtmlEntities(audit.nextValue as string)}
+          dataCy={dataCy}
+        />;
         break;
       case "referenceTo":
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Reference).docId}</div>);

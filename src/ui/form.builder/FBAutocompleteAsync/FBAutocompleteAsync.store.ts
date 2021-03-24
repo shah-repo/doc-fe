@@ -1,13 +1,13 @@
 import { isEmpty, map } from "lodash";
 import { action, observable } from "mobx";
 
-export class FBAutocompleteAsyncStore {
+class FBAutocompleteAsyncStore {
   @observable public data = new Map<string, any>();
   @observable public loading = new Map<string, boolean>();
 
   @action public setOptionData = (optionId: string, data: any) => {
     this.data.set(optionId, observable.map(
-      (data as any[]).map((show: any) => [show.id, show]),
+      (data as any[]).map((show: any) => [show.id || show.value, show]),
       { deep: false }
     ));
   };

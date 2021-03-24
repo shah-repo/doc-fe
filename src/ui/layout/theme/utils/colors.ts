@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
-export enum Colors {
+enum Colors {
   white = "#FFF",
   black = "#000",
   // gray
@@ -27,6 +27,7 @@ export enum Colors {
   // "#3572e2"
   // "#C9DFFF"
   light_blue = "#edf4ff",
+  medium_light_blue = "#d4e4ff",
   blue = "#0066FF",
   medium_blue= "#5C9DFC",
   default_blue="#5C9DFF",

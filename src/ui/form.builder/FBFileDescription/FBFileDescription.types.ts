@@ -1,5 +1,4 @@
-import { FBFilePresenterModeProps } from "..";
-import { FBProviderProps } from "../FBProvider";
+import { FBFilePresenterModeProps, FBProviderProps } from "..";
 
 export type FBFileDescriptionProps =
 & FBFilePresenterModeProps

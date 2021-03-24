@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { getFormattedStartOfDayDateString } from "../../../common/utils/date";
-import { TrainingRecord } from "../../../state/ducks/training";
+import { TrainingRecord } from "../../../state/ducks/training/types";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
 import DashboardActionTypeBase from "./DashboardActionTypeBase";
 
@@ -13,7 +13,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export const TrainingRequest: React.FunctionComponent<Props> = ({
+const TrainingRequest: React.FunctionComponent<Props> = ({
   index,
   trainingRecord,
 }) => {

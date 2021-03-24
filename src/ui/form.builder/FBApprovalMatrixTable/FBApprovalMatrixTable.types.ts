@@ -1,5 +1,4 @@
-import { FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixFieldProps } from "..";
-import { FBProviderProps } from "../FBProvider";
+import { FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixFieldProps, FBProviderProps } from "..";
 
 export type FBApprovalMatrixTableProps =
 & Pick<FBApprovalMatrixFieldProps, "name">
@@ -31,7 +30,7 @@ export enum FBApprovalMatrixTableInfoHead {
 export enum FBDocTypeGroup {
   FORM = "FORM",
   OTHER = "OTHER",
-  MPI = "MPI",
+  PI = "PI",
   RECORD = "RECORD",
   DYNAMIC_FORM = "DYNAMIC FORM",
   POAM = "POAM",

@@ -1,5 +1,5 @@
 import { indexOf } from "lodash";
-import { NavigationMenu, NavigationMenuItem } from "../../state/ducks/company";
+import { NavigationMenu, NavigationMenuItem } from "../../state/ducks/company/types";
 
 let navigationMenu: NavigationMenu[];
 

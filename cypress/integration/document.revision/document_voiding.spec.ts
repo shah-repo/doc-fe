@@ -3,7 +3,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -22,9 +22,16 @@ context("Document voiding Flow", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
-            documentTypes: [],
+            documentTypes: [
+              {
+                documentTypeName: "Test Document Type",
+                documentTypeAcronym: "TDT-",
+                group: "OTHER",
+                isQms: true,
+              },
+            ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
@@ -77,9 +84,9 @@ context("Document voiding Flow", () => {
       cy.drEnterDocumentDescription({ description: "New Document Revision description" });
     });
 
-    it("Selects 'Component Specification' document type from dropdown", () => {
+    it("Selects 'Test Document Type' document type from dropdown", () => {
       // SystemRequirement("REQ-0490");
-      cy.drSelectDocumentType({ documentType: "Component Specification" });
+      cy.drSelectDocumentType({ documentType: "Test Document Type" });
     });
 
     it("Select 'Numeric' revision stage", () => {

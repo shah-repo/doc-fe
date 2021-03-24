@@ -11,6 +11,7 @@ type ICyRoutes = {[key in keyof typeof CyRoutes]: {
 }};
 
 export enum CyRoutes {
+  GetAttachments = "GetAttachments",
   EmployeesGet = "EmployeesGet",
   EmployeesPost = "EmployeesPost",
   GroupsGet = "GroupsGet",
@@ -74,6 +75,7 @@ export enum CyRoutes {
   SessionDetails = "SessionDetails",
   PatchDocRevOwner = "PatchDocRevOwner",
   PreventIdleLogout = "PreventIdleLogout",
+  EmployeesGetActive = "EmployeesGetActive",
 }
 
 export const routes: ICyRoutes =   {
@@ -81,6 +83,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/employees*",
+    },
+    callConfig: {
+      responseTimeout: 50 * 1000,
+      requestTimeout: 40 * 1000,
+    },
+  },
+  EmployeesGetActive: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/employees?active*",
     },
     callConfig: {
       responseTimeout: 50 * 1000,
@@ -335,6 +347,16 @@ export const routes: ICyRoutes =   {
       requestTimeout: 20 * 1000,
     },
   },
+  GetAttachments: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/attachments*",
+    },
+    callConfig: {
+      responseTimeout: 25 * 1000,
+      requestTimeout: 20 * 1000,
+    },
+  },
   UploadAttachmentMediaUpload: {
     requestConfig: {
       method: "POST",
@@ -357,7 +379,7 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_type",
     },
     callConfig: {
-      responseTimeout: 10 * 1000,
+      responseTimeout: 30 * 1000,
     },
   },
   GetDocumentType: {

@@ -3,7 +3,7 @@
 
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
@@ -33,7 +33,7 @@ context("Document Operators Access Test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -58,7 +58,7 @@ context("Document Operators Access Test", () => {
                   },
               },
               {
-                documentTypeName: "Part",
+                documentTypeName: "Part Operators",
                 documentTypeAcronym: "PRT-",
                 group: "PART",
                 isQms: true,
@@ -76,7 +76,7 @@ context("Document Operators Access Test", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
@@ -89,7 +89,7 @@ context("Document Operators Access Test", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
@@ -99,13 +99,56 @@ context("Document Operators Access Test", () => {
     });
   });
 
-  context("Start Part creation flow", () => {
+  // TODO: Create form for Parts with API, not through document list creation!
+  context("Create Form Part document to create Part", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
     });
 
     it("Clicks on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enters title 'New Part Form'", () => {
+      cy.drEnterDocumentTitle({ name: "New Part Form" });
+    });
+
+    it("Enters description 'New Part Form description'", () => {
+      cy.drEnterDocumentDescription({ description: "New Part Form description" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Selects 'Form' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Selects 'Parts' document type from dropdown", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Part Operators" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Start Part creation flow", () => {
+    it("Navigates to parts list", () => {
+      cy.navigToParts();
+    });
+
+    it("Click on 'Add new part' button", () => {
+      cy.ptClickCreateNewPart();
+    });
+
+    it("Clicks on 'Part Operators' Form", () => {
+      cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Part Operators" });
     });
 
     it("Enter title 'Test Part'", () => {
@@ -116,16 +159,12 @@ context("Document Operators Access Test", () => {
       cy.drEnterDocumentDescription({ description: "Test Part description" });
     });
 
-    it("Select 'Part' document type from dropdown", () => {
-      cy.drSelectDocumentType({ documentType: "Part" });
-    });
-
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click Create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -173,7 +212,12 @@ context("Document Operators Access Test", () => {
 
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostDocRev,
+        CyRoutes.EmployeesGet,
+        CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.drCreateNewDocumentFromForm();
+      });
     });
 
     it("Enters title 'New Document'", () => {
@@ -182,16 +226,13 @@ context("Document Operators Access Test", () => {
 
     it("Enters description 'New Document description'", () => {
       cy.drEnterDocumentDescription({ description: "New Document description" });
+      cy.wait(5000);
     });
 
     it("Choose an existing part from the list of available parts", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.get("[data-cy=\"childrenParts\"]").type("Test Part{downarrow}{enter}");
       });
-    });
-
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Click on 'Add a field'", () => {
@@ -207,7 +248,9 @@ context("Document Operators Access Test", () => {
     });
 
     it("Add 'Text Field' field", () => {
-      cy.fbAddNewFieldButton();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.fbAddNewFieldButton();
+      });
     });
 
     it("Click on 'Add a field'", () => {
@@ -228,6 +271,10 @@ context("Document Operators Access Test", () => {
 
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("reload page", () => {
+      cy.reload();
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
@@ -350,7 +397,7 @@ context("Document Operators Access Test", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
         password: "Tester1!",
       });
     });
@@ -370,7 +417,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Add Owner as Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Add first colaborator as Approver on document", () => {
