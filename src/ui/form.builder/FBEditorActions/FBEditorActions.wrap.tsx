@@ -20,7 +20,6 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
     const { dialogState, workspaceState, formState } = FB.useStores();
     const { isOutput } = workspaceState || {};
-    // const { submitForm } = useFormContext();
 
     if (workspaceState?.getSchemaItemAt(index)?.deleted) {
       index = size(workspaceState?.getSchema());
@@ -93,7 +92,6 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         applicableValidationSchema: true,
         validationAttribute: (label as string) || placeholder,
       }, index);
-      // submitForm();
       dialogState?.closeDialog();
     };
 
