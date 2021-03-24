@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import React from "react";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
@@ -15,7 +15,8 @@ interface Props {
 
 const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentDisabled }) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const  { documentRevision, isDisabled, asyncState, type } = React.useContext(FormHeaderContext)!;
+  const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
+
   return (
     <Header>
       {documentRevision &&
@@ -35,6 +36,14 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentD
       />}
       <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12}>
         <Grid container={true} alignItems="flex-end" justify="flex-end">
+          <Box alignSelf="center">
+            {lastSavedTimestamp &&
+            <Box>
+              Last saved: &nbsp;
+              {lastSavedTimestamp}
+            </Box>
+            }
+          </Box>
           <DocRevActions {...{ isCreateDocumentDisabled }}/>
         </Grid>
       </Grid>

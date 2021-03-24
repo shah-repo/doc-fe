@@ -85,6 +85,16 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
   // sendNoResponseHeader: true,
 });
 
+const saveWithNoResponse = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
+ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
+  method: "patch",
+  data: body,
+  handlers,
+  cancelToken: axios.CancelToken.source(),
+  sendNoResponseHeader: true,
+});
+
 const ownerChange = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
 ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/owner_change`,
@@ -386,4 +396,5 @@ export default {
   createFaiInspection,
   removePreviousBuild,
   ownerChange,
+  saveWithNoResponse,
 };
