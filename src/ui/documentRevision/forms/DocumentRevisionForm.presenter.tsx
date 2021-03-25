@@ -124,7 +124,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const [forceNewRender, setNewRender] = React.useState();
   const [lastSavedTimestamp, setLastSavedTimestamp] = React.useState<string>();
   const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
-  const { schema = {} } =  workspaceState || {};
+  const { schema = [] } =  workspaceState || {};
   const { submitForm } = useFormContext();
   const hasOutput = useMemo(() =>
     checkIsTypeHaveOutput(documentTypeById?.groupOptions)
@@ -195,7 +195,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
     submitForm();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schema]);
+  }, [schema.length]);
 
   useEffect(() => {
     if (!redlineActive) {
