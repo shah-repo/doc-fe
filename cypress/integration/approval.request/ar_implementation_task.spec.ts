@@ -208,10 +208,6 @@ context("Approval request implementation tasks", () => {
     it("Add approvers to approval request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].email });
     });
-
-    it("Save changes", () => {
-      cy.arSaveApiCall();
-    });
   });
 
   context("Add implementation task and continue AR creation flow", () => {

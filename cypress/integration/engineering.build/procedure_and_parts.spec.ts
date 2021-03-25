@@ -531,10 +531,6 @@ context("Procedure and parts flow test", () => {
           cy.arAddApproverOnApproverList({ approver: USERS[1].email });
         });
 
-        it("Save changes", () => {
-          cy.arSaveApiCall();
-        });
-
         it("Click 'Send To Review'", () => {
           cy.arClickSendToReview();
         });
@@ -652,7 +648,9 @@ context("Procedure and parts flow test", () => {
 
   context("Create EB from created FORM document", () => {
     it("Click create new document from FORM", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
+        cy.drCreateNewDocumentFromForm();
+      });
     });
     context("Fill EB document attributes", () => {
       it("Enters title 'Form document for procedure'", () => {
@@ -732,7 +730,9 @@ context("Procedure and parts flow test", () => {
 
   context("Clone EB and verify materials and equipment tracking", () => {
     it("Click Clone EB", () => {
-      cy.ebClickClone();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.ebClickClone();
+      });
     });
 
     context("Add materials and equipments", () => {

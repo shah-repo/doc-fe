@@ -232,7 +232,7 @@ Cypress.Commands.add("poAMSelectApprover", (...list: string[]) => {
 });
 
 Cypress.Commands.add("poSaveDocument", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.get("[id=\"DocumentRevisionForm-submit\"]").click();
   });
   cy.checkToastMessage({ exists: false });

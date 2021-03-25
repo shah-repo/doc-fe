@@ -205,7 +205,7 @@ context("Dynamic Form Test", () => {
 
     it("Click create document after filling document", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        [CyRoutes.PatchDocRev], () => {
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
         });
       cy.wait(500);

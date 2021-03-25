@@ -100,10 +100,6 @@ context("Autocomplete 'Approval requests' test", () => {
       it("Add first approver to approval request on approver list", () => {
         cy.arAddApproverOnApproverList({ approver: USERS[2].email });
       });
-
-      it("Save changes", () => {
-        cy.arSaveApiCall();
-      });
     });
 
     context("Add Autocomplete 'Approval requests'", () => {

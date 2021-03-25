@@ -313,7 +313,9 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
+      });
     });
 
     it("Check if Title input field is disabled", () => {

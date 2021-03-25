@@ -435,7 +435,6 @@ context("Document Approval Matrix Flow", () => {
         cy.drClickTrainingRequired();
       });
       cy.drIsTrainingRequired({ shouldBe: false });
-      cy.wait(3000);
     });
 
     it("Reload DAM document", () => {
@@ -445,7 +444,6 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
-      cy.wait(8000);
       cy.drReleaseDocAfterRoleExistsAndChecked({ group: 0, role: roleOne });
     });
   });
@@ -684,7 +682,6 @@ context("Document Approval Matrix Flow", () => {
   context("Save document, Check Group Role is enforced and Release Document", () => {
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(3000);
     });
 
     it("Reload DAM document", () => {
@@ -694,7 +691,6 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
-      cy.wait(8000);
       cy.drReleaseDocAfterRoleExistsAndChecked({ group: 0, role: roleOne });
     });
   });
