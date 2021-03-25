@@ -25,6 +25,7 @@ declare global {
       navigToEquipment(): Chainable<Subject>;
       navigToParts(): Chainable<Subject>;
       navigToLots(): Chainable<Subject>;
+      navigToDocumentListWithUnsavedChanges(params: { confirmPopup: boolean }): Chainable<Subject>;
     }
   }
 }
@@ -119,6 +120,21 @@ Cypress.Commands.add("navigToDocumentList", () => {
     });
   });
 });
+
+Cypress.Commands.add("navigToDocumentListWithUnsavedChanges", (params: { confirmPopup: boolean }) => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.DOCUMENT_CONTROL,
+      NavigationItems.DOCUMENT_LIST,
+    ],
+  });
+  cy.on("window:confirm", (txt) => {
+    expect(txt).to.equal("Are you sure you want to leave? You have unsaved changes.");
+  });
+  cy.on("window:confirm", () => params.confirmPopup);
+});
+
 
 Cypress.Commands.add("navigToApprovalRequestList", () => {
   cy.wrapWithWaitOnApiCalls([

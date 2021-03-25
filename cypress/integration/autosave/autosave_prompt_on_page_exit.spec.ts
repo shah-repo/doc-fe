@@ -3,7 +3,6 @@
 
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { NavigationItems } from "../../utils/constants/navigationItems";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -127,36 +126,16 @@ context("Autosave on leaving page while data is still not saved", () => {
     });
 
 
-    it("Navigate to document list and wait for pop-up to prompt for unsaved changes then click 'Cancel'", function() {
-      cy.navigToNestedItem({
-        navigItems: [
-          NavigationItems.DASHBOARD,
-          NavigationItems.DOCUMENT_CONTROL,
-          NavigationItems.DOCUMENT_LIST,
-        ],
-      });
-      cy.on("window:confirm", (txt) => {
-        expect(txt).to.equal("Are you sure you want to leave? You have unsaved changes.");
-      });
-      cy.on("window:confirm", () => false);
+    it("Navigate to document list and wait for pop-up to prompt for unsaved changes then click 'Cancel'", () => {
+      cy.navigToDocumentListWithUnsavedChanges({ confirmPopup: false });
     });
 
     it("Type 'Test description' inside title field", () => {
       cy.drEnterDocumentDescription({ description: "Test description" });
     });
 
-    it("Navigate to document list and wait for pop-up to prompt for unsaved changes then click 'Cancel'", function() {
-      cy.navigToNestedItem({
-        navigItems: [
-          NavigationItems.DASHBOARD,
-          NavigationItems.DOCUMENT_CONTROL,
-          NavigationItems.DOCUMENT_LIST,
-        ],
-      });
-      cy.on("window:confirm", (txt) => {
-        expect(txt).to.equal("Are you sure you want to leave? You have unsaved changes.");
-      });
-      cy.on("window:confirm", () => false);
+    it("Navigate to document list and wait for pop-up to prompt for unsaved changes then click 'Cancel'", () => {
+      cy.navigToDocumentListWithUnsavedChanges({ confirmPopup: false });
     });
 
     it("Save document", () => {
