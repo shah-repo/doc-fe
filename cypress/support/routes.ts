@@ -272,7 +272,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 25 * 1000,
-      requestTimeout: 20 * 1000,
+      requestTimeout: 25 * 1000,
     },
   },
   ReleaseDocRevWithoutAr: {
