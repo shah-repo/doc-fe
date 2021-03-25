@@ -139,7 +139,7 @@ context("Autosave on leaving page while data is still not saved", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drSaveDocumentWithoutaudit();
     });
 
     it("Navigate to document list and check if pop-up for unsaved data is not prompted", () => {
