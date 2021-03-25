@@ -3,8 +3,8 @@ import { setNavigation } from "../../../ui/app/NavigationLocalStorageHelpers";
 import { ThemeEnv } from "../../../ui/layout/theme/utils/types";
 import { LOGOUT_USER } from "../auth/constants";
 import { LogoutUserAction } from "../auth/types";
-import { AUTOSAVE_CONFIG, DEFAULT_NAVIGATION_ITEMS, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM, WHITE_LABEL_DEFAULT } from "./constants";
-import { AutosaveAction, AutosaveState, CompanyMineAction, SelectCompanyAction, SelectCompanyState, UpdateNavigationMenuItem } from "./types";
+import { AUTOSAVE_CONFIG, DEFAULT_NAVIGATION_ITEMS, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM, WHITE_LABEL_DEFAULT } from "./constants";
+import { AutosaveAction, AutosaveState, CompanyMineAction, RedlineAction, RedlineState, SelectCompanyAction, SelectCompanyState, UpdateNavigationMenuItem } from "./types";
 
 export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   id: "",
@@ -29,6 +29,10 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
 
 const AUTOSAVE_DEFAULT_STATE = {
   autosaveEnabled: true,
+};
+
+const REDLINE_DEFAULT_STATE = {
+  redlineActive: false,
 };
 
 type CompanyActions = SelectCompanyAction | LogoutUserAction;
@@ -114,8 +118,25 @@ const autosaveConfig = (
   }
 };
 
+const redlineConfig = (
+  state: RedlineState = REDLINE_DEFAULT_STATE,
+  action: RedlineAction | LogoutUserAction,
+): RedlineState => {
+  switch (action.type) {
+    case REDLINE_CONFIG:
+      return {
+        redlineActive: !state.redlineActive,
+      };
+    case LOGOUT_USER:
+      return REDLINE_DEFAULT_STATE;
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   selectedCompany,
   companyMine,
   autosaveConfig,
+  redlineConfig,
 });

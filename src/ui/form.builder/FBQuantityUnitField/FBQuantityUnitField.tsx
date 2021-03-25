@@ -6,16 +6,16 @@ const FBQuantityUnitField: React.FunctionComponent<FBInputProps> = ({
   name,
   ...props
 }) => (
-  <FBInput {...props} type="quantityunit">
+  <FBInput {...props} {...{ name }} type="quantityunit">
     <Box display="flex">
       <FBQuantityField
         label="form.builder.quantity"
-        name={`${name}quantity`}
+        name={`quantity`}
         boxProps={{ mr: 1, flexGrow: 1 }}
       />
       <FBAutocomplete
         label="form.builder.unit"
-        name={`${name}unit`}
+        name={`unit`}
         boxProps={{ ml: 1, flexGrow: 1 }}
         options={FBData.unitsOptions}
         optionValueKey="value"
