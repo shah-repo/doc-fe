@@ -234,8 +234,11 @@ Cypress.Commands.add("drSelectOutputDocumentType", (params: { documentType: stri
 });
 
 Cypress.Commands.add("drEnterHtmlText", (params: { htmlText: string }) => {
-  cy.get("[data-cy=\"field-renderHTML\"]").click();
-  cy.get("[data-cy=\"field-renderHTML\"]").type(`${params.htmlText}{enter}`).wait(500);
+  cy.get("[name=\"renderHTML\"]")
+    .type(`${params.htmlText}{enter}`, { timeout: 30000 });
+  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+    cy.unClick();
+  });
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params: { toastifyExists: boolean }) => {

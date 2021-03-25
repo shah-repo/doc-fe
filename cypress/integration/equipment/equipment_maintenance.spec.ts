@@ -391,7 +391,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.get("input[name=fb-default-eq-status][value=Active]").check();
+      });
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
