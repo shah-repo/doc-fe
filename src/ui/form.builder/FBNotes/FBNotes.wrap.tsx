@@ -1,3 +1,4 @@
+import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBDialogState, FBNotesForm, FBNotesProps } from "..";
 import FBNotesState from "./FBNotes.state";
@@ -10,14 +11,20 @@ export const withFBNotes = <T extends FBNotesProps>(
     dialogState,
     name,
     notesState,
+    notesNumber,
     ...props
   }: T) => {
 
     // MARK: @config
     const { workspaceState } = FB.useStores();
-    const { id = "" } = workspaceState?.document || {};
+    const {
+      document: {
+        notes = [],
+      } = {},
+    } = workspaceState || {};
     dialogState = FB.useRef(FBDialogState);
-    notesState = FB.useRef(FBNotesState, {});
+    notesNumber = notes.filter((note) => note.formBuilderFieldName === name).length;
+    notesState = FB.useRef(FBNotesState, notesNumber);
 
     // MARK: Reactions
 
@@ -25,21 +32,23 @@ export const withFBNotes = <T extends FBNotesProps>(
 
     // MARK: @methods
     onClick = () => {
-      notesState?.fetchNotes(id);
       dialogState?.config({
         open: true,
         title: "form.builder.add.note",
-        content: <FBNotesForm {...{ name }} notes={notesState?.notes}/>,
+        content: <FBNotesForm {...{ name, notesState }} />,
       });
     };
 
     // MARK: @observer
+    useObserver(() => {
+      notesNumber = notesState?.noteNumber;
+    });
 
     return  Component({
       ...(props as T),
       onClick,
       dialogState,
-      notesState,
+      notesNumber,
     });
   };
 

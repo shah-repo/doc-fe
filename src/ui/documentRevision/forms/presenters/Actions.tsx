@@ -191,6 +191,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
               {
                 ...{
                   revisionChangeType,
+                  currentDocumentType,
                 }
               }
             />

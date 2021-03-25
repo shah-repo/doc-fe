@@ -73,6 +73,7 @@ export enum DOC_TYPE_GROUP_OPTION {
   MPI_OUTPUT = "MPI_OUTPUT",
   LHR = "LHR",
   REDLINE = "REDLINE",
+  FB_DEFAULT_NOTES = "FB_DEFAULT_NOTES",
 }
 export type DocumentGroupOptionsType = keyof typeof DOC_TYPE_GROUP_OPTION;
 

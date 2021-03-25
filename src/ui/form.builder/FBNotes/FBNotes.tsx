@@ -1,13 +1,24 @@
-import { Box, IconButton } from "@material-ui/core";
+import { Badge, Box, IconButton, withStyles } from "@material-ui/core";
 import React from "react";
 import { FBDialog, FBNotesProps, FBProvider } from "..";
 import { ReactComponent as NoteIcon } from "../../../assets/images/note.svg";
 import styles from "./FBNotes.styles";
 import { withFBNotes } from "./FBNotes.wrap";
 
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+    right: -1,
+    border: `2px solid ${theme.palette.background.paper}`,
+    color: theme.palette.common.white,
+    padding: "0 4px",
+    backgroundColor: theme.palette.error.main,
+  },
+}))(Badge);
+
 const FBNotes: React.FunctionComponent<FBNotesProps> = ({
   onClick,
   dialogState,
+  notesNumber,
 }) => {
   const classes = styles();
   return (
@@ -24,7 +35,11 @@ const FBNotes: React.FunctionComponent<FBNotesProps> = ({
           onClick={onClick}
           className={classes.iconButton}
         >
-          <NoteIcon />
+          <StyledBadge
+            badgeContent={notesNumber}
+          >
+            <NoteIcon />
+          </StyledBadge>
         </IconButton>
       </Box>
     </FBProvider>

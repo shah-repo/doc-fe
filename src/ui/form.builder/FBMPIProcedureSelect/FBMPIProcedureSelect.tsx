@@ -12,7 +12,7 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
   children,
   initialValues,
 }) => (
-  <FBForm {...{ formState, initialValues }} >
+  <FBForm {...{ formState }} >
     <FBTextField name="title" label="form.builder.title" className={FBClasses.inputPreview}  />
     <Box fontWeight="fontWeightMedium" borderBottom={1} pb={0.5} mb={5}>
       Lot

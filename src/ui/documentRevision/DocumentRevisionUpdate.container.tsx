@@ -9,6 +9,7 @@ import { ApplicationState } from "../../state/reducers";
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
+import { shouldHaveNoResponse } from "../document.revision/utils/helpers";
 import { FBEndpoint } from "../form.builder/defaults/FBEndpoint";
 import FBStore from "../form.builder/FBStore/FBStore";
 import useAsync from "../hooks/useAsync";
@@ -25,6 +26,7 @@ interface StateProps {
 
 interface DispatchProps {
   save: typeof documentRevisionsActions.save;
+  saveWithNoResponse: typeof documentRevisionsActions.saveWithNoResponse;
 }
 
 interface OwnProps {
@@ -49,6 +51,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<
 DocumentRevisionUpdateContainerProps
 > = ({
   save,
+  saveWithNoResponse,
   documentRevision,
   currentUserEmail,
   onDirtyFlagChange,
@@ -88,6 +91,7 @@ DocumentRevisionUpdateContainerProps
       />
     );
   }
+
   const handleSave = (data: DocumentRevisionEditRequestBody, helpers) => {
     async.reset();
 
@@ -111,11 +115,24 @@ DocumentRevisionUpdateContainerProps
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
     const redlineDateToSubmit = pick(values, "schema", "formInput");
+
     if (redlineActive) {
       return handleSave( redlineDateToSubmit as DocumentRevisionEditRequestBody, helpers);
     }
 
     if (isEmpty(dataToSubmit)) {
+      return;
+    }
+
+    if (shouldHaveNoResponse(dataToSubmit, documentRevision)) {
+      async.reset();
+      async.start(
+        saveWithNoResponse,
+        documentRevision.id,
+        dataToSubmit as DocumentRevisionEditRequestBody,
+        async,
+      );
+      helpers.resetForm();
       return;
     }
 
@@ -145,5 +162,6 @@ export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   mapStateToProps,
   {
     save: documentRevisionsActions.save,
+    saveWithNoResponse: documentRevisionsActions.saveWithNoResponse,
   },
 )(DocumentRevisionUpdateContainer);
