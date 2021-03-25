@@ -10,7 +10,7 @@ const generateDocRevUrl: (params: {docRevId: string; documentId: string; label: 
   ({ docRevId, documentId, label }) => (
     <a
       href={`/document_revision/${documentId}/version/${docRevId}`}
-      target={"_blank"}
+      target={"_self"}
       rel="noopener noreferrer">
       {label.length < LABEL_LENGTH ? label : `${label.substr(0, LABEL_LENGTH - 3)}...`}
     </a>);
