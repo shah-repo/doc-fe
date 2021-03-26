@@ -1262,11 +1262,13 @@ context("Inspection flow", () => {
       it("Submit for approval", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
           cy.pmSubmitForApproval();
+          cy.wait(5000);
         });
       });
 
       it("Approve inspection document", () => {
         cy.ebApprove();
+        cy.wait(5000);
       });
 
       it("Check status is 'Released'", () => {
