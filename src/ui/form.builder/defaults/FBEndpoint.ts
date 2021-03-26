@@ -44,7 +44,7 @@ export enum FBEndpoint {
   StartMpi = "/lhr/start_mpi",
   FecthAvailableMaintenanceForms = "/documents/available_maintenance_forms",
   FetchAutocompleteValue = "/autocomplete_options/${id}/${optionId}",
-  UseLot = "/lhr/lhrs/${id}/use_lot",
-  RemoveLot = "/lhr/lhrs/${id}/remove_lot/${refId}",
+  UseOverride = "/lhr/lhrs/${id}/use_override",
+  RemoveOverride = "/lhr/lhrs/${id}/remove_override/${refId}",
   Notes = "/notes",
 }

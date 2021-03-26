@@ -5,7 +5,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -30,7 +30,7 @@ context("PO test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -387,11 +387,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.poAddPOButtonClick();
-        });
-      cy.checkToastMessage({ exists: false });
+      cy.poAddPOButtonClick();
     });
 
     it("Click on 'Add item' button to add item without Part Number", () => {
@@ -508,7 +504,7 @@ context("PO test", () => {
       it("Save PO document", () => {
         // SystemRequirement("REQ-1290");
         cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+          [CyRoutes.PatchDocRev], () => {
             cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
           });
         cy.checkToastMessage({ exists: false });
@@ -589,11 +585,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.poAddPOButtonClick();
-        });
-      cy.checkToastMessage({ exists: false });
+      cy.poAddPOButtonClick();
     });
 
     it("Click on 'Add item' button", () => {

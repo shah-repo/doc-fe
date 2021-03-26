@@ -7,7 +7,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -51,7 +51,7 @@ context("Parts from EB flow test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -174,6 +174,7 @@ context("Parts from EB flow test", () => {
 
       it("Enter description 'Engineering Build Form description'", () => {
         cy.drEnterDocumentDescription({ description: "Engineering Build Form description" });
+        cy.wait(5000);
       });
 
       it("Select 'Form' document type from dropdown", () => {
@@ -260,6 +261,7 @@ context("Parts from EB flow test", () => {
 
       it("Enter description 'Test Engineering Build description'", () => {
         cy.drEnterDocumentDescription({ description: "Test Engineering Build description" });
+        cy.wait(5000);
       });
 
       it("Add an Approval'", () => {

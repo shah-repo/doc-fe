@@ -12,6 +12,7 @@ import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/doc
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { useFormContext } from "../../components/forms/FormContext";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
@@ -66,6 +67,7 @@ interface Props extends FormikProps<DocumentRevisionFormValues> {
   pmFormId?: string;
   releasedDocRev?: DocumentRevision;
   redlineActive: boolean;
+  isOutput: boolean;
 }
 
 export interface FormHeaderContext {
@@ -110,6 +112,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   pmFormId,
   releasedDocRev,
   redlineActive,
+  isOutput,
 }) => {
   useScrollIntoView();
   const classes = styles();
@@ -121,7 +124,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const [forceNewRender, setNewRender] = React.useState();
   const [lastSavedTimestamp, setLastSavedTimestamp] = React.useState<string>();
   const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
-  const { schema = {} } =  workspaceState || {};
+  const { schema = [] } =  workspaceState || {};
+  const { submitForm } = useFormContext();
   const hasOutput = useMemo(() =>
     checkIsTypeHaveOutput(documentTypeById?.groupOptions)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -184,6 +188,15 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     lastSavedTimestamp,
   });
 
+  // Autosave for adding FB fields
+  useEffect(() => {
+    if (!schema) {
+      return;
+    }
+    submitForm();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schema.length]);
+
   useEffect(() => {
     if (!redlineActive) {
       return;
@@ -202,7 +215,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     if (proposedDocId) {
       setFieldValue("document.docId", proposedDocId);
     }
-    if (!isEmpty(documentTypeById?.defaultRevStage) && isDocRevFirstDraft) {
+
+    if (!isEmpty(documentTypeById?.defaultRevStage) && values.version === undefined && !isOutput) {
       const value = getRevisionStageNumber(intl, documentTypeById?.defaultRevStage as string);
       setNewRender(value);
       setFieldValue("revisionStage", value);

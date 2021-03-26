@@ -215,7 +215,7 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
     ], () => {
       cy.get("#root").contains(params.name).click();
     });
-    cy.wait(500);
+    cy.wait(1500);
   }
 });
 

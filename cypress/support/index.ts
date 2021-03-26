@@ -104,7 +104,8 @@ Cypress.on("test:after:run", (test, runnable: any ) => {
 });
 
 before(() => {
-  if (CONFIG.RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE) {
+  if (CONFIG.RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE ||
+      CONFIG.RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.SCHEDULEDPIPELINE) {
     cy.task("deleteScreenshotsFolder", { CONFIG, specFileName: Cypress.spec.name });
     cy.task("deleteExistingReports", { CONFIG, specFileName: Cypress.spec.name } );
   }

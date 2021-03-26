@@ -1,3 +1,7 @@
+export const IMPORTER_USER = {
+  name: "Importer Admin",
+  email: "enlil.testmail+cyimporter@gmail.com",
+};
 
 export const USERS = [
   {
@@ -21,7 +25,7 @@ export const USERS = [
     email: "enlil.testmail+cy4@gmail.com",
   },
   {
-    name: "Paul Murazik",
+    name: "Importer Admin",
     email: "enlil.testmail+cy5@gmail.com",
   },
   {

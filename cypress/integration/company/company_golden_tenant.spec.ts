@@ -3,7 +3,7 @@
 
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
@@ -38,7 +38,7 @@ context("Create company with golden tenant", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -566,7 +566,10 @@ context("Create company with golden tenant", () => {
 
   context("Create first document from Seed Form - form with output", () => {
     it("Create new document from form", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+          cy.drCreateNewDocumentFromForm();
+        });
     });
 
     it("Enters title 'New Seed'", () => {
@@ -594,12 +597,8 @@ context("Create company with golden tenant", () => {
     });
 
     it("Enters document description 'First document description'", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
-            .click({ force: true }).type("First document description", { force: true });
-          cy.get("[data-cy^=document-title-]").click();
-        });
+      cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
+        .click({ force: true }).type("First document description", { force: true });
     });
 
     it("Selects document type as 'Form'", () => {
@@ -614,6 +613,13 @@ context("Create company with golden tenant", () => {
 
     it("Selects 'No' training required option", () => {
       cy.get("[name^=training-required-]").eq(1).click();
+    });
+
+    it("Save document", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.drClickCreateDocumentWithoutApiCall();
+        });
     });
 
     it("'Approve and Release' the document", () => {
@@ -631,7 +637,10 @@ context("Create company with golden tenant", () => {
     });
 
     it("Create new document from form", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+          cy.drCreateNewDocumentFromForm();
+        });
     });
 
     it("Enters title 'New Seed 2'", () => {
@@ -655,12 +664,9 @@ context("Create company with golden tenant", () => {
     });
 
     it("Enters document description 'Second document description'", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
-            .click({ force: true }).type("Second document description", { force: true });
-          cy.get("[data-cy^=document-title-]").click();
-        });
+      cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
+        .click({ force: true }).type("Second document description", { force: true });
+      cy.get("[data-cy^=document-title-]").click();
     });
 
     it("Selects document type as 'Clinical Protocol'", () => {
@@ -670,6 +676,13 @@ context("Create company with golden tenant", () => {
 
     it("Selects 'No' training required option", () => {
       cy.get("[name^=training-required-]").eq(1).click();
+    });
+
+    it("Save document", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.drClickCreateDocumentWithoutApiCall();
+        });
     });
 
     it("'Approve and Release' the document", () => {
@@ -687,7 +700,10 @@ context("Create company with golden tenant", () => {
     });
 
     it("Create new document from form", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+          cy.drCreateNewDocumentFromForm();
+        });
     });
 
     it("Enters title 'New Company'", () => {
@@ -711,23 +727,39 @@ context("Create company with golden tenant", () => {
     });
 
     it("Upload DOM JSON", () => {
-      cy.atchUploadDOMJSONForNCO({ fileName: "dam.json", queue: 0 });
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.atchUploadDOMJSONForNCO({ fileName: "dam.json", queue: 0 });
+        });
     });
 
     it("Upload Page Details JSON", () => {
-      cy.atchUploadPageDetailsJSONForNCO({ fileName: "PageDetails.json", queue: 0 });
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.atchUploadPageDetailsJSONForNCO({ fileName: "PageDetails.json", queue: 0 });
+        });
     });
 
     it("Upload Navigation JSON", () => {
-      cy.atchUploadNavigationJSONForNCO({ fileName: "navigation.json", queue: 0 });
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.atchUploadNavigationJSONForNCO({ fileName: "navigation.json", queue: 0 });
+        });
     });
 
     it("Upload Users List JSON", () => {
-      cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
+        });
     });
 
     it("Include Seed documents", () => {
-      cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").click();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.DocRevGet], () => {
+          cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").click();
+        });
+      cy.wait(1500);
       cy.get("[name^=seed-documents-to-be-included-]").type("SEED-00001{downarrow}{enter}");
       cy.get("[name^=seed-documents-to-be-included-]").type("SEED-00002{downarrow}{enter}");
     });
@@ -738,7 +770,10 @@ context("Create company with golden tenant", () => {
     });
 
     it("Approve and release document - create company", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
+        CyRoutes.EmployeesGet, CyRoutes.GetAttachments], () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
     });
 
     it("Log out user", () => {

@@ -7,13 +7,12 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
 const SECOND_USER = USERS[3];
 const THIRD_USER = USERS[4];
-const IMPORTER_USER = USERS[6];
 const CAL_DUE_DATE = moment().tz("America/Los_Angeles")
   .add(5, "days")
   .format("l");
@@ -392,7 +391,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.get("input[name=fb-default-eq-status][value=Active]").check();
       });
     });
@@ -470,10 +469,6 @@ context("Equipment maintenance test", () => {
 
       it("Add first approver to approval request on approver list", () => {
         cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email });
-      });
-
-      it("Save changes", () => {
-        cy.arSaveApiCall();
       });
 
       it("Click 'Send To Review'", () => {
