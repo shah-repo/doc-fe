@@ -131,8 +131,8 @@ Cypress.Commands.add("navigToDocumentListWithUnsavedChanges", (params: { confirm
   });
   cy.on("window:confirm", (txt) => {
     expect(txt).to.equal("Are you sure you want to leave? You have unsaved changes.");
+    return params.confirmPopup;
   });
-  cy.on("window:confirm", () => params.confirmPopup);
 });
 
 
