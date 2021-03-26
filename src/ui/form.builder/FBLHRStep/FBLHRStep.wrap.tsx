@@ -1,9 +1,10 @@
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBLHRStepProps, FBLHRStepState } from "..";
+import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from "..";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
+import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBLHRStep = <T extends FBLHRStepProps>(
   Component: React.FunctionComponent<T>,
@@ -43,7 +44,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
       (value) => {
-        if (typeof value === "string") { // don't trigger if it is LHR/MPI hover toggle
+        if (!stepLHRs) { // don't trigger if it is LHR/MPI hover toggle
           workspaceState?.setSchemaItem({
             ...schemaItem,
             editorConfig: {
@@ -102,10 +103,14 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const setDisplayToLHRs = () => {
       lhrStepState.setIsHovering(false);
       if (!lhrStepState.stepLHRs) { return; }
-      formState?.setFieldValue(name, lhrStepState.stepLHRs);
+      FBAutocompleteAsyncStore.add(
+        FBAutocompleteAsyncOption.mpiDocuments,
+        lhrStepState.stepLHRs.id,
+        lhrStepState.stepLHRs
+      );
+      formState?.setFieldValue(name, lhrStepState.stepLHRs.id);
       formState?.getInputState(name)?.setRender();
     };
-
 
     // MARK: @observer
     useObserver(() => {
