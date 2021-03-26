@@ -149,6 +149,7 @@ context("Records flow", () => {
 
       it("Enters description 'Approval Record description'", () => {
         cy.drEnterDocumentDescription({ description: "Approval Record description" });
+        cy.wait(5000);
       });
 
       it("Selects 'Form' document type from dropdown", () => {
@@ -220,6 +221,7 @@ context("Records flow", () => {
 
     it("Enters description 'Approval Record description'", () => {
       cy.drEnterDocumentDescription({ description: "Approval Record description" });
+      cy.wait(5000);
     });
 
     it("Select approver'", () => {
