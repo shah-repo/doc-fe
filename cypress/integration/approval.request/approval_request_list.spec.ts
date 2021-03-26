@@ -225,10 +225,6 @@ context("Approval request landing page test", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].email });
     });
 
-    it("Save changes", () => {
-      cy.arSaveApiCall();
-    });
-
     it("Send to review", () => {
       cy.arClickSendToReview();
     });

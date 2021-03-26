@@ -182,7 +182,7 @@ context("Record inline Flow", () => {
       });
 
       it("Select approver for first inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit],
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.PatchDocRev],
           () => {
             cy.get("[name*=\"fb-ia-inline-field\"] input")
               .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });

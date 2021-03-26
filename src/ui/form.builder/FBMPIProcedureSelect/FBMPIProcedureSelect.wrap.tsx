@@ -1,3 +1,4 @@
+import { concat, uniqBy } from "lodash";
 import { reaction } from "mobx";
 import React from "react";
 import { FB, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions } from "..";
@@ -34,8 +35,12 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         () => mpiProcedureSelectState?.useOverrideApi.data,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          const partsSelected = data.smartReferencesTo?.reduce((selected, ref) => {
-            if (ref.metadata?.fieldId === name
+          const refs = uniqBy(concat(
+            data.smartReferencesTo,
+            data.document.smartReferencesTo
+          ), "id");
+          const partsSelected = refs.reduce((selected, ref) => {
+            if (ref?.metadata?.fieldId === name
                 && (ref.type === SmartReferenceType.EquipmentReplacement || ref.type === SmartReferenceType.LotUsage)) {
               selected.push({
                 ...ref.metadata,

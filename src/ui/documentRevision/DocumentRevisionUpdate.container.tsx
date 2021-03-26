@@ -74,7 +74,7 @@ DocumentRevisionUpdateContainerProps
       if (redlineActive) {
         dispatch(companyActions.redlineConfig());
       }
-      setDoNotPrompt(false);
+      setDoNotPrompt(true);
     },
   });
 
@@ -132,7 +132,6 @@ DocumentRevisionUpdateContainerProps
         dataToSubmit as DocumentRevisionEditRequestBody,
         async,
       );
-      helpers.resetForm();
       return;
     }
 

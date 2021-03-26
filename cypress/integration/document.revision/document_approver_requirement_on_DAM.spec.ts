@@ -476,10 +476,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.arAddApproverOnApproverList({ approver: THIRD_USER.email });
     });
 
-    it("Save changes", () => {
-      cy.arSaveApiCall();
-    });
-
     it("Click 'Send To Review'", () => {
       cy.arClickSendToReview();
     });

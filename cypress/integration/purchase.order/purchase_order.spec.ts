@@ -387,11 +387,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.poAddPOButtonClick();
-        });
-      cy.checkToastMessage({ exists: false });
+      cy.poAddPOButtonClick();
     });
 
     it("Click on 'Add item' button to add item without Part Number", () => {
@@ -508,7 +504,7 @@ context("PO test", () => {
       it("Save PO document", () => {
         // SystemRequirement("REQ-1290");
         cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+          [CyRoutes.PatchDocRev], () => {
             cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
           });
         cy.checkToastMessage({ exists: false });
@@ -589,11 +585,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.poAddPOButtonClick();
-        });
-      cy.checkToastMessage({ exists: false });
+      cy.poAddPOButtonClick();
     });
 
     it("Click on 'Add item' button", () => {

@@ -1,4 +1,5 @@
 import { FBProcedureItemConfig, FBProcedureItemProps, FBProviderProps } from "..";
+import { UsedDocumentsInLHRS } from "../../../state/ducks/documentRevisions/types";
 
 export type FBMPIProcedureItemProps =
 & FBProcedureItemProps
@@ -10,4 +11,5 @@ export type FBMPIProcedureItemProps =
   isOutput?: boolean;
   isSelectVisible?: boolean;
   redlineActive?: boolean;
+  usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
 };

@@ -76,6 +76,7 @@ export enum CyRoutes {
   PatchDocRevOwner = "PatchDocRevOwner",
   PreventIdleLogout = "PreventIdleLogout",
   EmployeesGetActive = "EmployeesGetActive",
+  ArAudit = "ArAudit",
 }
 
 export const routes: ICyRoutes =   {
@@ -103,6 +104,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/employees",
+    },
+  },
+  ArAudit: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/change_requests/*/audit",
     },
   },
   SessionDetails: {
@@ -265,7 +272,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 25 * 1000,
-      requestTimeout: 20 * 1000,
+      requestTimeout: 25 * 1000,
     },
   },
   ReleaseDocRevWithoutAr: {

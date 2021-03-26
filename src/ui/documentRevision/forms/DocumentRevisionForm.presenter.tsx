@@ -12,6 +12,7 @@ import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/doc
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { useFormContext } from "../../components/forms/FormContext";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
@@ -123,7 +124,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const [forceNewRender, setNewRender] = React.useState();
   const [lastSavedTimestamp, setLastSavedTimestamp] = React.useState<string>();
   const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
-  const { schema = {} } =  workspaceState || {};
+  const { schema = [] } =  workspaceState || {};
+  const { submitForm } = useFormContext();
   const hasOutput = useMemo(() =>
     checkIsTypeHaveOutput(documentTypeById?.groupOptions)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -185,6 +187,15 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     type,
     lastSavedTimestamp,
   });
+
+  // Autosave for adding FB fields
+  useEffect(() => {
+    if (!schema) {
+      return;
+    }
+    submitForm();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schema.length]);
 
   useEffect(() => {
     if (!redlineActive) {

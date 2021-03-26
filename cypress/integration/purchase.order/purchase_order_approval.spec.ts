@@ -281,7 +281,7 @@ context("PO approval test", () => {
 
     it("Click 'Save' document", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        [CyRoutes.PatchDocRev], () => {
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
         });
       cy.wait(500);
