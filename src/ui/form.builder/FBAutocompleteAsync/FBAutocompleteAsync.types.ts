@@ -14,6 +14,7 @@ export type FBAutocompleteAsyncProps =
    * @cfg {Record} Additional url params.
    */
   urlValues?: Record<string, any>;
+  withoutPrefixRoot?: boolean;
 };
 
 export interface FBAutocompleteAsyncConfig  {

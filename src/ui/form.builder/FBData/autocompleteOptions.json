@@ -290,6 +290,7 @@
     "path": "/document_revisions?docTypeGroupOptions%5B%5D=MPI&status%5B%5D=RELEASED&status%5B%5D=DRAFT",
     "label": "MPI documents",
     "valueKey": "id",
+    "labelPrefixRoot": "document.docId",
     "labelKey": "name",
     "root": "",
     "hidden": false
