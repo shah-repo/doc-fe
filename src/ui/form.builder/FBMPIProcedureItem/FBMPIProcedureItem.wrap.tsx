@@ -40,6 +40,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       workspaceState?.document?.smartReferencesTo,
       workspaceState?.document?.document.smartReferencesTo
     ), "id");
+    const usedDocumentsInLHRS = workspaceState?.document?.usedDocumentsInLHRS;
     dialogState = FB.useRef(FBDialogState);
     multiplier = toNumber(formState?.getFieldValue("lhr_initial_quantity")) || 1;
     isPreview = isPreview && workspaceState?.mode !== "formPreview";
@@ -163,6 +164,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       type,
       value,
       isSelectVisible,
+      usedDocumentsInLHRS,
     });
   };
 
