@@ -1,7 +1,8 @@
 import { Box } from "@material-ui/core";
-import { PlayCircleFilled } from "@material-ui/icons";
+import { CheckCircle, PlayCircleFilled } from "@material-ui/icons";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText, FBTextField } from "..";
+import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
@@ -23,9 +24,19 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
     {stepLHRs && (
       <Box display="flex" alignItems="center" mb={1}>
         <Box mr={1} display="flex" alignItems="center">
-          <PlayCircleFilled />
+          {
+            isDocumentRevisionReleased(stepLHRs.status)
+              ? <CheckCircle />
+              : <PlayCircleFilled />
+          }
         </Box>
-        <FBText locale="form.builder.step.started" />
+        <FBText
+          locale={
+            isDocumentRevisionReleased(stepLHRs.status)
+              ? "form.builder.step.completed"
+              : "form.builder.step.started"
+          }
+        />
       </Box>
     )}
     <Box
@@ -48,16 +59,14 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           optionId={FBAutocompleteAsyncOption.mpiDocuments}
           autosave
           withState
+          withoutPrefixRoot={(stepLHRs && !isHovering) as boolean}
           disabled={isOutput || !isDraft}
           {...{ name }}
-          getOptionLabel={(option) => stepLHRs && !isHovering
-            ? option.name
-            : `${option.document?.docId } - ${option.name}`}
         />
       </Box>
       <FBButton
         label="form.builder.start.mpi"
-        disabled={!isOutput || loading || Boolean(stepLHRs)}
+        disabled={!isOutput || loading || Boolean(stepLHRs) || disabled}
         onClick={startMpi}
         {...{ loading }}
       />

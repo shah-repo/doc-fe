@@ -194,10 +194,6 @@ context("Approval request form scenario", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[22].email });
     });
 
-    it("Save changes", () => {
-      cy.arSaveApiCall();
-    });
-
     it("Click send to review", () => {
       cy.arClickSendToReview();
     });

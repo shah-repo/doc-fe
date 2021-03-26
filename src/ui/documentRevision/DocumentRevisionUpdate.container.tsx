@@ -132,7 +132,6 @@ DocumentRevisionUpdateContainerProps
         dataToSubmit as DocumentRevisionEditRequestBody,
         async,
       );
-      helpers.resetForm();
       return;
     }
 

@@ -4,7 +4,7 @@
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { NavigationItems } from "../../utils/constants/navigationItems";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 Cypress.Screenshot.defaults({
@@ -26,7 +26,6 @@ const FIRST_USER = USERS[11];
 const SECOND_USER = USERS[12];
 const THIRD_USER = USERS[13];
 const INDIVIDUAL_USER = USERS[14];
-const IMPORTER_USER = USERS[15];
 
 const FormTitle = "New Form";
 const DAMTitle = "My DAM";
@@ -264,7 +263,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Add New Role: Role One", () => {
     it("Open 'Add Role' dialog", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GroupsGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGetActive, CyRoutes.GroupsGet], () => {
         cy.drAddAnotherRoleBtn();
       });
     });
@@ -436,7 +435,6 @@ context("Document Approval Matrix Flow", () => {
         cy.drClickTrainingRequired();
       });
       cy.drIsTrainingRequired({ shouldBe: false });
-      cy.wait(3000);
     });
 
     it("Reload DAM document", () => {
@@ -446,7 +444,6 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
-      cy.wait(8000);
       cy.drReleaseDocAfterRoleExistsAndChecked({ group: 0, role: roleOne });
     });
   });
@@ -685,7 +682,6 @@ context("Document Approval Matrix Flow", () => {
   context("Save document, Check Group Role is enforced and Release Document", () => {
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(3000);
     });
 
     it("Reload DAM document", () => {
@@ -695,7 +691,6 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
-      cy.wait(8000);
       cy.drReleaseDocAfterRoleExistsAndChecked({ group: 0, role: roleOne });
     });
   });

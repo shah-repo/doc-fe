@@ -1,7 +1,6 @@
 import { compact, filter, isString, kebabCase, size, union } from "lodash";
 import React from "react";
 import { FB, FBData, FBEditorActionsProps, FBSchemaProps } from "..";
-import { useFormContext } from "../../components/forms/FormContext";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";
 
@@ -21,7 +20,6 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
     const { dialogState, workspaceState, formState } = FB.useStores();
     const { isOutput } = workspaceState || {};
-    const { submitForm } = useFormContext();
 
     if (workspaceState?.getSchemaItemAt(index)?.deleted) {
       index = size(workspaceState?.getSchema());
@@ -94,7 +92,6 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         applicableValidationSchema: true,
         validationAttribute: (label as string) || placeholder,
       }, index);
-      submitForm();
       dialogState?.closeDialog();
     };
 

@@ -14,6 +14,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
   disabled,
   types = [],
   name,
+  redlineActive,
   ...props
 }) => (
   <FBInput {...props } {...{ name }} type="mpiprocedure">
@@ -86,7 +87,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
                   />
                 )}
                 <Box flexGrow={1}>
-                  <FBMPIProcedureItem {...{ type, name, disabled, isPreview }} />
+                  <FBMPIProcedureItem {...{ type, name, disabled, isPreview, isOutput, redlineActive }} />
                 </Box>
               </Box>
             )}
@@ -106,7 +107,9 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
             />
           )}
           <Box flexGrow={1}>
-            <FBMPIProcedureItem type={types.pop() as FBProcedureItemType} {...{ name, disabled, isPreview }} />
+            <FBMPIProcedureItem
+              type={types.pop() as FBProcedureItemType}
+              {...{ name, disabled, isPreview, isOutput, redlineActive }} />
           </Box>
         </Box>
       </FBProvider>
