@@ -16,7 +16,6 @@ export const useFormContext = () => {
   const formik = useFormikContext();
   const { workspaceState, formState, schemaState } = FB.useStores();
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
-
   function isOutputSchema(): boolean {
     const values = formik.values as any;
     const { schema: documentSchema = [] } = values?.formDocument?.formTemplate || {};

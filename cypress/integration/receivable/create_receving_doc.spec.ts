@@ -5,14 +5,12 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { PurchaseOrderItem } from "../../support/commands/purchase.order/commands";
 import { CONFIG } from "../../support/config";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
 const SECOND_USER = USERS[3];
 const THIRD_USER = USERS[4];
-const INDIVIDUAL_USER = USERS[5];
-const IMPORTER_USER = USERS[6];
 
 let createdCompany;
 let loginResponse;
@@ -42,7 +40,7 @@ context("Create receivable test", () => {
           payload: {
             companyAdminEmail: ADMIN_USER.email,
             importerEmail: IMPORTER_USER.email,
-            users: [FIRST_USER, SECOND_USER, THIRD_USER, INDIVIDUAL_USER],
+            users: [FIRST_USER, SECOND_USER, THIRD_USER],
             documentTypes: [],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {

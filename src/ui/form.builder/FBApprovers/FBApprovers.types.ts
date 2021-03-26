@@ -5,6 +5,7 @@ export type FBApproversProps =
 & FBAutocompleteAsyncProps
 & {
   isIncluded?: (group: FBRequiredApprover) => void;
+  onBlur?: () => any;
   groups?: Record<string, FBRequiredApprover>;
   checkedGroups?: FBRequiredApprover[];
   value?: string[];

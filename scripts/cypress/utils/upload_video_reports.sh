@@ -96,35 +96,40 @@ done
 #CREATE DOCUMENT WITH ATTACHMENT
 DATE_FOR_DOC_ID=$(date "+%Y-%m-%d")
 DOC_ID="CTR-${DATE_FOR_DOC_ID}-${BITBUCKET_BUILD_NUMBER}"
+
+cat <<EOF > ./request.json
+  { 
+    "description": "<p>Cypress test report test</p>",
+    "name": "Cypress test report",
+    "attachments": [ ${ATTACHMENTS_FOR_DOCUMENT%?} ],
+    "referenceTo": [],
+    "revisionStage": 1,
+    "revisionChangeType": "NEXT_REVISION",
+    "retrain": false,
+    "document": { 
+      "docId": "$DOC_ID",
+      "securityList": 
+      { 
+        "securityEmployees": [],
+        "securityGroups": [ 
+          { 
+          "id": "$CY_REPORT_ID_OF_GROUP_EVERYONE"
+          } ], 
+          "operators": [] 
+      }, 
+      "documentType": 
+      { 
+        "id": "$CY_REPORT_ID_OF_CYPRESS_TEST_REPORT_DOCTYPE"
+      } 
+    }
+  }
+EOF
+
 curl \
   -X POST "https://api.dev.enlil.io/api/v1/document_revisions/external" \
   -H "accept: application/json" \
   -H "Authorization: $CY_REPORT_USER_API_TOKEN" \
   -H "Content-Type: application/json" \
-  -d \
-    "{ 
-      \"description\": \"<p>Cypress test report test</p>\",
-      \"name\": \"Cypress test report\",
-      \"attachments\": [ ${ATTACHMENTS_FOR_DOCUMENT%?} ],
-      \"referenceTo\": [],
-      \"revisionStage\": 1,
-      \"revisionChangeType\": \"NEXT_REVISION\",
-      \"retrain\": false,
-      \"document\": { 
-        \"docId\": \"$DOC_ID\",
-        \"securityList\": 
-        { 
-          \"securityEmployees\": [],
-          \"securityGroups\": [ 
-            { 
-            \"id\": \"$CY_REPORT_ID_OF_GROUP_EVERYONE\"
-            } ], 
-            \"operators\": [] 
-        }, 
-        \"documentType\": 
-        { 
-          \"id\": \"$CY_REPORT_ID_OF_CYPRESS_TEST_REPORT_DOCTYPE\"
-        } 
-      }
-    }"
+  -d @request.json
+    
 echo "Done"

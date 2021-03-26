@@ -3,7 +3,7 @@
 
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
@@ -35,7 +35,7 @@ context("Document Field Owners Test", () => {
             companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
@@ -218,7 +218,7 @@ context("Document Field Owners Test", () => {
   });
 
   context(`Open created document and check for operators restrictions`, () => {
-    it("Navigates to document list", () => {
+    it("Navigate to records list", () => {
       cy.navigToRecords();
     });
 
@@ -275,7 +275,7 @@ context("Document Field Owners Test", () => {
 
 
   context(`Add new textbox field for operator '${USERS[4].name}'`, () => {
-    it("Navigates to document list", () => {
+    it("Navigate to records list", () => {
       cy.navigToRecords();
     });
 
@@ -314,7 +314,7 @@ context("Document Field Owners Test", () => {
   });
 
   context("Check fields are disabled for user that is not field owner, and change owner of document", () => {
-    it("Navigates to document list", () => {
+    it("Navigate to records list", () => {
       cy.navigToRecords();
     });
 
@@ -351,7 +351,7 @@ context("Document Field Owners Test", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Navigates to document list", () => {
+    it("Navigate to records list", () => {
       cy.navigToRecords();
     });
 
@@ -370,11 +370,11 @@ context("Document Field Owners Test", () => {
 
   context("Check all colaborators must be on approvals list", () => {
     it("Add first colaborator as Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
     });
 
     it("Add second colaborator as Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[4].name });
     });
 
     it("Submit for Approval", () => {
@@ -385,7 +385,9 @@ context("Document Field Owners Test", () => {
     });
 
     it("Add third colaborator as Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[4].name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[7].name });
+      });
     });
 
     it("Submit for Approval", () => {
@@ -400,7 +402,7 @@ context("Document Field Owners Test", () => {
 
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[7].email,
         password: "Tester1!",
       });
     });
@@ -409,7 +411,7 @@ context("Document Field Owners Test", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Navigates to document list", () => {
+    it("Navigate to records list", () => {
       cy.navigToRecords();
     });
 
@@ -446,7 +448,7 @@ context("Document Field Owners Test", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Navigates to document list", () => {
+    it("Navigate to records list", () => {
       cy.navigToRecords();
     });
 
@@ -483,7 +485,7 @@ context("Document Field Owners Test", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Navigates to document list", () => {
+    it("Navigate to records list", () => {
       cy.navigToRecords();
     });
 

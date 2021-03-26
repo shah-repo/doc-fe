@@ -1,3 +1,4 @@
+import { concat, uniqBy } from "lodash";
 import React from "react";
 import { DocumentRevision, SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
 import { checkIsTypeLhr, checkIsTypeMpiOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
@@ -10,20 +11,22 @@ const generateDocRevUrl: (params: {docRevId: string; documentId: string; label: 
   ({ docRevId, documentId, label }) => (
     <a
       href={`/document_revision/${documentId}/version/${docRevId}`}
-      target={"_blank"}
+      target={"_self"}
       rel="noopener noreferrer">
       {label.length < LABEL_LENGTH ? label : `${label.substr(0, LABEL_LENGTH - 3)}...`}
     </a>);
 
 const generateLHRSubtitle = (documentRevision: DocumentRevision) => <React.Fragment>
-  {`${documentRevision.document?.lot?.lotId}${documentRevision.precalc?.[LHR_BUILD_TYPE] === "R&D" ? "RD" : ""}`}
+  {`${documentRevision.document?.lot?.lotId}${documentRevision.formInput?.[LHR_BUILD_TYPE] === "R&D" ? "RD" : ""}`}
 </React.Fragment>;
 
 const generateLHRsSubtitle = (documentRevision: DocumentRevision) => {
   const subtitle =
-    documentRevision
-    ?.smartReferencesTo
-    ?.find((ref) => ref.type === SmartReferenceType.HiddenPiInstance)
+    uniqBy(
+      concat(documentRevision?.smartReferencesTo, documentRevision?.document.smartReferencesTo),
+      "id"
+    )
+    ?.find((ref) => ref?.type === SmartReferenceType.HiddenPiInstance)
     ?.toDocRev
     ?.precalc
     ?.[LHR_SUBTITLE_PRECALC_KEY];

@@ -7,4 +7,7 @@ export type FBMPIProcedureItemProps =
   handleSelect?: (item: FBProcedureItemConfig) => void;
   handleSelectionDelete?: (refId?: string) => void;
   multiplier?: number;
+  isOutput?: boolean;
+  isSelectVisible?: boolean;
+  redlineActive?: boolean;
 };

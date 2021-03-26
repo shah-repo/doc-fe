@@ -3,7 +3,7 @@
 
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -25,7 +25,7 @@ context("Copyable Checkbox test", () => {
             companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
@@ -197,7 +197,7 @@ context("Copyable Checkbox test", () => {
 
       it("Add Select Field with checkboxes", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
+        cy.fbSelectItemFromNewFieldList({ field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "sf-wi-ch" });
         cy.fbGroupOptions("option1", "option2");
         cy.fbSelectCheckboxValue("includeNone", "includeContext", "reviseDisabled",
@@ -208,7 +208,7 @@ context("Copyable Checkbox test", () => {
 
       it("Add Select Field without checkboxes", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
+        cy.fbSelectItemFromNewFieldList({ field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "sf-wo-ch" });
         cy.fbGroupOptions("option1", "option2");
         cy.fbAddNewFieldButton();
@@ -367,11 +367,15 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Click 'Create a Record' button", () => {
-      cy.get("#DocumentByTypeListPresenter-openDocRev").click();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+        cy.get("#DocumentByTypeListPresenter-openDocRev").click();
+      });
     });
 
     it("Select Record Type: 'Engineering Build'", () => {
-      cy.get("#MultipleFormTemplate-selectDocForm").type("Engineering Build{downarrow}{enter}");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+        cy.get("#MultipleFormTemplate-selectDocForm").type("Engineering Build{downarrow}{enter}");
+      });
     });
 
     it("Add TextFields value", () => {
@@ -487,7 +491,8 @@ context("Copyable Checkbox test", () => {
 
     it("Click 'Save' button", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        [CyRoutes.PatchDocRev], () => {
+          cy.unClick();
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
         });
       cy.wait(500);

@@ -5,7 +5,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let docId;
 let loginResponse;
@@ -54,7 +54,7 @@ context("Validators tests", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
@@ -570,14 +570,14 @@ field is empty: Add text field`, () => {
     });
 
     it("Type a description", () => {
-      cy.get("[data-cy=\"RichTextEditor.description\"]", { timeout: 10000 }).type("Doc Desription").wait(1000);
+      cy.drEnterDocumentDescription({ description: "Doc Desription" });
     });
   });
 
   context("Validation errors on custom fields should not prevent from saving document", () => {
     it("saving the document", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        [CyRoutes.PatchDocRev], () => {
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
         });
       cy.wait(3000);
@@ -613,7 +613,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Check 'Third' checkbox", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get(`[value='Third']`).check();
       });
     });
@@ -629,7 +629,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Check 'First' checkbox", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get(`[value='First']`).check();
       });
     });
@@ -640,7 +640,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Uncheck 'First' checkbox", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get(`[value='First']`).uncheck();
       });
     });
@@ -651,7 +651,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Select 'Required doctypes", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get(`[data-cy^="required-doctypes"]`).click();
         cy.get("ul[role=listbox]>li").contains("Equipment").click();
       });
@@ -664,7 +664,7 @@ field is empty: Add text field`, () => {
     });
 
     it(`Type '${requiredIfFieldValue}' in '${requiredFieldLabel}' field`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get(`[data-cy^='${requiredFieldSelector}']`).type(requiredIfFieldValue);
         cy.unClick();
       });
@@ -682,7 +682,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Fill in 'required' custom text field", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get(`[data-cy^='${requiredIfFieldSelector}']`).type("added");
         cy.unClick();
       });
@@ -696,7 +696,7 @@ field is empty: Add text field`, () => {
     });
 
     it(`Remove type from ${requiredIfInFieldLabel}`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get("div[name^=\"required-doctypes\"] svg").first().click();
       });
     });
@@ -707,7 +707,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Select 'Required doctypes", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get(`[data-cy^="required-doctypes"]`).click();
         cy.get("ul[role=listbox]>li").contains("Equipment").click();
       });
@@ -725,7 +725,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Fill in 'required with' custom text field", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get(`[data-cy^='${requiredWithFieldSelector}']`).type("California");
         cy.unClick();
       });
@@ -759,7 +759,7 @@ field is empty: Add text field`, () => {
 
   context(`Test ${requiredDocStatusFieldLabel} (required document status) Field`, () => {
     it("Add incorrect document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type("AR Form{downarrow}{enter}");
       });
     });
@@ -777,8 +777,7 @@ field is empty: Add text field`, () => {
       cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).clear();
       cy.wrapWithWaitOnApiCalls(
         [
-          CyRoutes.PostRemoteValidatorsHelper,
-          CyRoutes.GetDocAggregatedAudit], () => {
+          CyRoutes.PostRemoteValidatorsHelper], () => {
           cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type(`${documentRevisionName}{downarrow}{enter}`);
         });
     });
@@ -786,7 +785,7 @@ field is empty: Add text field`, () => {
 
   context(`Test ${requiredDocTypeFieldLabel} (required document type) Field`, () => {
     it("Add incorrect document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type("AR Form{downarrow}{enter}");
       });
     });
@@ -804,8 +803,7 @@ field is empty: Add text field`, () => {
       cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).clear();
       cy.wrapWithWaitOnApiCalls(
         [
-          CyRoutes.PostRemoteValidatorsHelper,
-          CyRoutes.GetDocAggregatedAudit], () => {
+          CyRoutes.PostRemoteValidatorsHelper], () => {
           cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type(`${csDocTitle}{downarrow}{enter}`);
         });
     });

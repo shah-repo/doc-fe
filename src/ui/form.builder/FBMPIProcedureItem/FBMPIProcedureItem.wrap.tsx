@@ -1,7 +1,9 @@
-import { cloneDeep, get, toNumber } from "lodash";
+import { cloneDeep, concat, get, toNumber, uniqBy } from "lodash";
+import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
+import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
@@ -21,33 +23,63 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     name,
     type,
     value,
+    isOutput,
+    isSelectVisible,
+    redlineActive,
     ...props
   }: T) => {
 
     // MARK: @config
     const { mpiProcedureState, workspaceState, formState } = FB.useStores();
-    const { smartReferencesTo = [] } = workspaceState?.document || {};
+    const smartReferencesTo = uniqBy(concat(
+      workspaceState?.document?.smartReferencesTo,
+      workspaceState?.document?.document.smartReferencesTo
+    ), "id");
     dialogState = FB.useRef(FBDialogState);
     multiplier = toNumber(formState?.getFieldValue("lhr_initial_quantity")) || 1;
     isPreview = isPreview && workspaceState?.mode !== "formPreview";
 
+    isSelectVisible = (isOutput && workspaceState?.mode !== "preview" && workspaceState?.mode !== "formPreview") ||
+      redlineActive;
+
     useEffect(() => {
       if (!mpiProcedureState) { return; }
-      mpiProcedureState.partsSelected = smartReferencesTo.reduce((selected, ref) => {
-        if (ref.metadata?.fieldId === name) {
-          selected.push({
-            ...ref.metadata,
-            refId: ref.id,
-          });
-        }
-        return selected;
-      }, [] as Partial<FBMPIProcedureSelectValue>[]);
+      setFilteredParts(smartReferencesTo);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // MARK: @reactions
+    React.useEffect(() => {
+      reaction(
+        () => mpiProcedureState?.deleteLotApi.data,
+        (data?: DocumentRevision) => {
+          if (!data) { return; }
+          const refs = uniqBy(concat(
+            data.smartReferencesTo,
+            data.document.smartReferencesTo
+          ), "id");
+          setFilteredParts(refs);
+        }
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
 
     // MARK: @helpers
+    const setFilteredParts = (data) => {
+      const partsSelected = data.reduce((selected, ref) => {
+        if (ref.metadata?.fieldId === name
+            && (ref.type === SmartReferenceType.EquipmentReplacement || ref.type === SmartReferenceType.LotUsage)) {
+          selected.push({
+            ...ref.metadata,
+            refId: ref.id,
+            overrideDocId: ref.toDocRev?.document.docId,
+          });
+        }
+        return selected;
+      }, [] as Partial<FBMPIProcedureSelectValue>[]);
+      mpiProcedureState?.setPartsSelected(partsSelected);
+    };
 
     // MARK: @methods
     onClick = (part?: FBProcedureItemConfig) => {
@@ -74,7 +106,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       dialogState?.config({
         open: true,
         title: "form.builder.select",
-        content: <FBMPIProcedureSelect {...{ name }} initialValues={item} />,
+        content: <FBMPIProcedureSelect {...{ name, type }} initialValues={item} />,
       });
     };
 
@@ -122,6 +154,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       name,
       type,
       value,
+      isSelectVisible,
     });
   };
 
