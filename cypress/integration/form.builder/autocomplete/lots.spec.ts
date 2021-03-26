@@ -150,7 +150,9 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Add an Approval'", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        });
       });
 
       it("Submit for approval", () => {

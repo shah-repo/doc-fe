@@ -1260,7 +1260,9 @@ context("Inspection flow", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
+          cy.pmSubmitForApproval();
+        });
       });
 
       it("Approve inspection document", () => {

@@ -550,7 +550,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Add an Approval'", () => {
-      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+        cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      });
     });
 
     it("Submit for approval", () => {
@@ -644,7 +646,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+        cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      });
     });
 
     it("Submit for approval", () => {
