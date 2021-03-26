@@ -4,6 +4,7 @@ import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
@@ -31,6 +32,10 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     // MARK: @config
     const { mpiProcedureState, workspaceState, formState } = FB.useStores();
+    const { document } = workspaceState || {};
+    const { documentType } = document?.document || {};
+    const isDocumentForm = checkIsDocumentForm(documentType?.groupOptions);
+
     const smartReferencesTo = uniqBy(concat(
       workspaceState?.document?.smartReferencesTo,
       workspaceState?.document?.document.smartReferencesTo
@@ -38,8 +43,11 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     dialogState = FB.useRef(FBDialogState);
     multiplier = toNumber(formState?.getFieldValue("lhr_initial_quantity")) || 1;
     isPreview = isPreview && workspaceState?.mode !== "formPreview";
-
-    isSelectVisible = (isOutput && workspaceState?.mode !== "preview" && workspaceState?.mode !== "formPreview") ||
+    // Have to use isDocumentForm instead of isOutput because od MPI
+    // ENC-7319
+    isSelectVisible = (!isDocumentForm &&
+      workspaceState?.mode !== "preview" &&
+      workspaceState?.mode !== "formPreview") ||
       redlineActive;
 
     useEffect(() => {
