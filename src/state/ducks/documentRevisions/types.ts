@@ -43,6 +43,8 @@ export interface DocumentRevisionDocument {
   lot?: {
     lotId: string;
   };
+  smartReferencesTo?: SmartReference[];
+  smartReferencesFrom?: SmartReference[];
 }
 
 export interface SecurityList {

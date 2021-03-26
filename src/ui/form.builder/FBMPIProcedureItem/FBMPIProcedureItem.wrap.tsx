@@ -1,4 +1,4 @@
-import { cloneDeep, get, toNumber } from "lodash";
+import { cloneDeep, concat, get, toNumber, uniqBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -31,13 +31,17 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     // MARK: @config
     const { mpiProcedureState, workspaceState, formState } = FB.useStores();
-    const { smartReferencesTo = [] } = workspaceState?.document || {};
+    const smartReferencesTo = uniqBy(concat(
+      workspaceState?.document?.smartReferencesTo,
+      workspaceState?.document?.document.smartReferencesTo
+    ), "id");
     dialogState = FB.useRef(FBDialogState);
     multiplier = toNumber(formState?.getFieldValue("lhr_initial_quantity")) || 1;
     isPreview = isPreview && workspaceState?.mode !== "formPreview";
 
     isSelectVisible = (isOutput && workspaceState?.mode !== "preview" && workspaceState?.mode !== "formPreview") ||
       redlineActive;
+
     useEffect(() => {
       if (!mpiProcedureState) { return; }
       setFilteredParts(smartReferencesTo);
@@ -50,7 +54,11 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
         () => mpiProcedureState?.deleteLotApi.data,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          setFilteredParts(data.smartReferencesTo);
+          const refs = uniqBy(concat(
+            data.smartReferencesTo,
+            data.document.smartReferencesTo
+          ), "id");
+          setFilteredParts(refs);
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
