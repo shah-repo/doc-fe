@@ -59,11 +59,9 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           optionId={FBAutocompleteAsyncOption.mpiDocuments}
           autosave
           withState
+          withoutPrefixRoot={(stepLHRs && !isHovering) as boolean}
           disabled={isOutput || !isDraft}
           {...{ name }}
-          getOptionLabel={(option) => stepLHRs && !isHovering
-            ? option.name
-            : `${option.document?.docId } - ${option.name}`}
         />
       </Box>
       <FBButton

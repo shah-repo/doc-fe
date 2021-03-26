@@ -28,6 +28,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     loading,
     multiple,
     name,
+    withoutPrefixRoot,
     value,
     ...props
   }: T) => {
@@ -139,6 +140,9 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       }
       const { labelPrefixRoot, includeRevision } = autocompleteAsyncState?.optionConfig || {};
       let optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
+      if (withoutPrefixRoot) {
+        optionLabel = "";
+      }
       if (includeRevision) {
         const revision = get(option, includeRevision);
         optionLabel = labelPrefixRoot ?
