@@ -77,12 +77,12 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     // MARK: @helpers
     const setFilteredParts = (data) => {
       const partsSelected = data.reduce((selected, ref) => {
-        if (ref.metadata?.fieldId === name
-            && (ref.type === SmartReferenceType.EquipmentReplacement || ref.type === SmartReferenceType.LotUsage)) {
+        if (ref?.metadata?.fieldId === name
+            && (ref?.type === SmartReferenceType.EquipmentReplacement || ref?.type === SmartReferenceType.LotUsage)) {
           selected.push({
-            ...ref.metadata,
-            refId: ref.id,
-            overrideDocId: ref.toDocRev?.document.docId,
+            ...ref?.metadata,
+            refId: ref?.id,
+            overrideDocId: ref?.toDocRev?.document.docId,
           });
         }
         return selected;
