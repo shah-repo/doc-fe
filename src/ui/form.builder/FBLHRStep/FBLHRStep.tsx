@@ -61,7 +61,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           withState
           withoutPrefixRoot={(stepLHRs && !isHovering) as boolean}
           disabled={isOutput || !isDraft}
-          {...{ name }}
+          {...{ name, loading }}
         />
       </Box>
       <FBButton

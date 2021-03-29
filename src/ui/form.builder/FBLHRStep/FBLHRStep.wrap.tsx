@@ -3,6 +3,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from "..";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { getHighestRevision } from "../../documentRevision/forms/transform";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
@@ -70,6 +71,20 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    // on get document by id
+    React.useEffect(() => reaction(
+      () => lhrStepState.getDocumentApi.data,
+      (document) => {
+        if (!document) { return; }
+        const highestRev = getHighestRevision(document.documentRevisions);
+        if (!highestRev) { return; }
+        window.open(
+          `/document_revision/${highestRev.documentId}/version/${highestRev.id}`,
+          "_self"
+        );
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     // MARK: @methods
     startMpi = () => {
@@ -88,10 +103,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const openLHRs = (docRev?: DocumentRevision) => {
       const documentRevision = docRev || stepLHRs;
       if (!documentRevision) { return; }
-      window.open(
-        `/document_revision/${documentRevision.documentId}/version/${documentRevision.id}`,
-        "_self"
-      );
+      lhrStepState.getLHRsDocument(documentRevision.documentId);
     };
 
     const setDisplayToMPI = () => {
@@ -114,7 +126,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     // MARK: @observer
     useObserver(() => {
-      loading = lhrStepState?.startMpiApi.loading;
+      loading = lhrStepState?.startMpiApi.loading || lhrStepState?.getDocumentApi.loading;
       stepLHRs = lhrStepState.stepLHRs;
       isHovering = lhrStepState.isHovering;
     });
@@ -133,6 +145,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       openLHRs,
       isDraft,
       disabled,
+      loading,
     }); };
 
   Comp.displayName = "withFBLHRStep";
