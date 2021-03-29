@@ -72,7 +72,8 @@ export type FBInputType =
   | "lhrstep"
   | "unitMeasures"
   | "quantityunit"
-  | "partsselection";
+  | "partsselection"
+  | "mediaalbum";
 
 export type FBInputProps =
   & FBLabelProps
@@ -202,6 +203,9 @@ export const OmitInputClones: FBInputType[] = [
   "passpercentage",
   "poreceive",
   "quantityunit",
+  "instructionsmediaupload",
+  "evidencemediaupload",
+  "mediaalbum",
 ];
 
 export const OmitIncludeNotes: FBInputType[] = [

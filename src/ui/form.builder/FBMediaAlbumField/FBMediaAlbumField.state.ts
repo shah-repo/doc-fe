@@ -1,198 +1,116 @@
-import axios from "axios";
-import { filter, find, get, isEmpty, isUndefined, pick, size, sortBy, union, uniqBy } from "lodash";
+import { filter, isUndefined, map, union } from "lodash";
 import { action, computed, observable, set } from "mobx";
-import { apiClient, FBMediaAlbumFieldConstructor, FBMediaAlbumFieldMode, FBMediaAlbumFieldStore, FBMediaFile, FBMediaProps, FBMediaUrlProps, FBWorkspaceState } from "..";
-import { toastError } from "../../components/notifications";
+import { FBAttachment, FBFile, FBMediaAlbumFieldMode } from "..";
+import { ATTACHMENT_ROOT_URL } from "../../../state/ducks/attachments/constants";
+import { Attachment, AttachmentDownloadResponse, AttachmentType } from "../../../state/ducks/attachments/types";
+import { Id } from "../../../state/ducks/common/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
+import FBRequest from "../FBApi/FBApi.request";
 
 class FBMediaAlbumFieldState {
-  @observable public loading = false;
   @observable public mode: FBMediaAlbumFieldMode = "qr";
-  public filesUploaded: FBMediaProps[] = [];
+  public filesUploaded: Id[] = [];
   public fieldName: string | undefined;
-  public isTemplate = false;
-  private workspaceState?: FBWorkspaceState;
 
-  public constructor({
-    name,
-    isTemplate = false,
-    workspaceState,
-  }: FBMediaAlbumFieldConstructor) {
+  @observable public attachmentApi = new FBRequest<Attachment, FBFile>();
+  @observable public attachmentsApi: FBRequest<FBAttachment[], null> = new FBRequest();
+  @observable public collection: FBAttachment[] = [];
+  @observable public attachmentDownloadApi = new FBRequest<AttachmentDownloadResponse, FBAttachment>();
+  @observable public files: Id[] = [];
+  public fromUpload = false;
+  public filesApi: FBRequest<FBAttachment[], null> = new FBRequest();
 
-    this.workspaceState = workspaceState;
-    this.fieldName = name;
-    this.isTemplate = isTemplate;
-    this.isPreview && this.setMode("media");
-    this.downloadCandidates();
+  @computed public get loading(): boolean {
+    return (
+      this.attachmentApi.loading ||
+      this.attachmentsApi.loading ||
+      this.filesApi.loading
+    );
   }
 
-  public get documentId(): string | undefined {
-    return this.workspaceState?.documentId;
-  }
-
-  @computed public get isPreview() {
-    if (this.isTemplate) {
-      return this.workspaceState?.mode !== "design";
+  public getFiles = (ids: string[]) => this.filesApi.set({
+    url: FBEndpoint.AttachmentsByIds,
+    urlValues: { ids },
+    method: "get",
+  }, (data, error) => {
+    if (data) {
+      map(data, (d) => {
+        const collectionIds = map(this.collection, "id");
+        if (!collectionIds.includes(d.id)) {
+          this.download(d);
+        }
+      });
+      this.filesApi.onSuccess();
     }
-    return this.workspaceState?.mode === "preview" && this.workspaceState?.isOutput;
-  }
-
-  @computed public get collection(): FBMediaProps[] {
-    const fieldImgs = FBMediaAlbumFieldStore.data.get(this.fieldName || "");
-    if (fieldImgs) {
-      return sortBy(uniqBy(Array.from(fieldImgs.values()), "name"), "order");
+    if (error) {
+      this.filesApi.onError(error);
     }
-    return [];
-  }
+  });
 
-  @action public setMode = (mode: FBMediaAlbumFieldMode) => set(this, "mode", mode);
+  @action public removeFile = (id: string) => {
+    set(this, "files", filter(this.files, (f) => f.id !== id));
+    set(this, "collection", filter(this.collection, (f) => f.id !== id));
+  };
 
-  @action public upload = (files: FBMediaFile[] | undefined) => {
-    if (isUndefined(files) || size(files) === 0) {
+  @action public addFile = (file: FBAttachment) => {
+    const files = union(this.collection, [file]);
+    set(this, "collection", files);
+  };
+
+  public upload = (files: File[] | undefined) => {
+    if (isUndefined(files) || files.length === 0) {
       return;
     }
 
-    files = Array.from(files);
     const file = files.pop();
     if (!file) {
       return;
     }
 
-    this.presignedUrl(file);
+    this.attachmentApi.set({
+      url: FBEndpoint.AttachmentUpload,
+      body: { file } as FBFile,
+      method: "post",
+    });
     this.upload(files);
   };
 
-  @action public presignedUrl = (file: FBMediaFile) => {
-    this.setLoading(true);
-    const filename = file.name;
-    const { promise } = apiClient().get(FBEndpoint.PrivateUpload, { filename });
-    promise
-      .then((data: FBMediaUrlProps) => {
-        const presignedUrl = get(data, "url");
-        if (isUndefined(presignedUrl)) {
-          return;
-        }
-        this.uploadS3(presignedUrl, file);
-      })
-      .catch((_error) => this.error(_error));
+  public download = (file: FBAttachment) => {
+    if (isUndefined(file)) { return; }
+    const queryParams = `?type=${this.attachmentType(file)}`;
+    this.attachmentDownloadApi.set({
+      url: `${ATTACHMENT_ROOT_URL}/${file.id}/download${queryParams}`,
+      method: "get",
+    }, (data, error) => {
+      if (data) {
+        this.addFile({
+          ...file,
+          url: data.url,
+        });
+        this.addFileId(file.id);
+        this.filesApi.onSuccess();
+      }
+      if (error) {
+        this.attachmentDownloadApi.onError(error);
+      }
+    });
   };
 
-  @action public uploadS3 = (url: string, file: FBMediaFile) => {
-    axios.put(url, file, {
-      headers: {
-        "Content-Type": file.type,
-      },
-    })
-      .then(() => this.createCandidate(url, file))
-      .catch((_error) => this.error(_error));
-  };
-
-  @action public createCandidate = (url: string, file: FBMediaFile) => {
-    if (!this.documentId) {
+  @action public addFileId = (id: string | undefined) => {
+    if (isUndefined(id)) {
       return;
     }
-    const { promise } = apiClient().post(FBEndpoint.FileUploadCandidates, {
-      ...pick(file, ["name", "type"]),
-      preSignedUrl: url,
-      fieldNameFromSchema: this.fieldName,
-      order: file.order,
-      document: {
-        id: this.documentId,
-      },
-    });
-
-    promise
-      .then(() => this.setLoading(false))
-      .catch((_error) => this.error(_error));
+    set(this, "files", union(this.files, [{ id }]));
   };
 
-  @action public downloadCandidates = () => {
-    if (!this.documentId) {
-      return;
-    }
-    this.setLoading(true);
-    const { promise } = apiClient().get(FBEndpoint.FileUploadCandidates, {
-      documentId: this.documentId,
-      status: "AVAILABLE",
-    });
-
-    promise
-      .then((data: FBMediaProps[]) => {
-        const fieldNameFromSchema = this.fieldName || "";
-        const filesByName = filter(data, { fieldNameFromSchema });
-        if (isEmpty(filesByName)) {
-          FBMediaAlbumFieldStore.setData(this.fieldName || "", []);
-          return this.setLoading(false);
-        }
-        this.setMode("media");
-        this.download(filesByName);
-      })
-      .catch((_error) => this.error(_error));
+  private attachmentType = (file: Attachment): AttachmentType | undefined => {
+    if (isUndefined(file)) { return; }
+    return !file.s3linkCleanCopy
+      ? AttachmentType.Attached
+      : AttachmentType.CleanCopy;
   };
 
-  @action public download = (filesUploaded: FBMediaProps[]) => {
-    if (isUndefined(filesUploaded) || size(filesUploaded) === 0) {
-      return this.setLoading(false);
-    }
-
-    const img = filesUploaded.pop();
-    if (!img) {
-      return this.setLoading(false);
-    }
-
-    const id = img.id;
-    const fieldImgs = FBMediaAlbumFieldStore.data.get(this.fieldName || "");
-    if (fieldImgs && fieldImgs.get(id)) {
-      return this.download(filesUploaded);
-    }
-
-    if (!isUndefined(find(this.collection, { id }))) {
-      return this.download(filesUploaded);
-    }
-
-    this.downloadImage(img);
-    this.download(filesUploaded);
-  };
-
-  @action public downloadImage = (img: FBMediaProps) => {
-    let s3link = img.s3link;
-    const { promise } = apiClient().get(FBEndpoint.AssetUrl, {
-      s3link,
-    });
-
-    promise
-      .then((data: FBMediaUrlProps) => {
-        s3link = data.url;
-        const collection = union(this.collection, [{ ...img, s3link }]);
-        this.fieldName && FBMediaAlbumFieldStore.setData(this.fieldName, collection);
-        this.setLoading(false);
-      })
-      .catch((_error) => this.error(_error));
-  };
-
-  @action public removeCandidate = (mediaId: string) => {
-    this.setLoading(true);
-    const { promise } = apiClient().patch(`${FBEndpoint.FileUploadCandidates}/${mediaId}`, {
-      status: "OBSOLETED",
-    });
-
-    promise
-      .then((data: FBMediaProps) => {
-        const collection = filter(this.collection, (media) => media.id !== data.id);
-        this.fieldName && FBMediaAlbumFieldStore.setData(this.fieldName, collection);
-        this.setLoading(false);
-      })
-      .catch((_error) => this.error(_error));
-  };
-
-  // TODO: format error msg & error dialog comp
-  @action private error = (_error) => {
-    this.setLoading(false);
-    const { message } = _error;
-    toastError(message);
-  };
-
-  @action private setLoading = (state: boolean) => set(this, "loading", state);
+  @action public setMode = (mode: FBMediaAlbumFieldMode) => set(this, "mode", mode);
 }
 
 export default FBMediaAlbumFieldState;

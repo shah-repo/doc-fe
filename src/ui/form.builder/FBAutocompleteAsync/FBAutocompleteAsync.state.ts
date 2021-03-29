@@ -111,7 +111,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     }
   };
 
-  protected onSuccess() {
+  public onSuccess() {
     super.onSuccess();
     if (!this.optionId) {
       return;

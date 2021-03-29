@@ -46,6 +46,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   name,
   isSelectVisible,
   usedDocumentsInLHRS,
+  defaultValue,
 }) => (
   <FBProvider {...{ dialogState, mpiProcedureState }}>
     <FBDialog />
@@ -91,6 +92,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           isTemplate={true}
           editorProperties={["copyableValue"]}
           gutter={false}
+          editorConfig={defaultValue}
+          autosave
         />
       </Box>
     )}
