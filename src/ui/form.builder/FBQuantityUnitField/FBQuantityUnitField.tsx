@@ -1,9 +1,11 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBAutocomplete, FBData, FBInput, FBInputProps, FBQuantityField } from "..";
+import { FBAutocomplete, FBData, FBInput, FBQuantityField, FBQuantityUnitFieldProps } from "..";
 
-const FBQuantityUnitField: React.FunctionComponent<FBInputProps> = ({
+const FBQuantityUnitField: React.FunctionComponent<FBQuantityUnitFieldProps> = ({
   name,
+  initialValues,
+  unitDisabled = false,
   ...props
 }) => (
   <FBInput {...props} {...{ name }} type="quantityunit">
@@ -20,6 +22,8 @@ const FBQuantityUnitField: React.FunctionComponent<FBInputProps> = ({
         options={FBData.unitsOptions}
         optionValueKey="value"
         optionLabelKey="text"
+        defaultValue={initialValues?.unit}
+        disabled={unitDisabled}
       />
     </Box>
   </ FBInput>
