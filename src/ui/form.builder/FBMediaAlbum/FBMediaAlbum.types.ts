@@ -12,14 +12,6 @@ export interface FBMediaProps {
   order?: number;
 }
 
-export interface FBMediaUrlProps {
-  url: string;
-}
-
-export type FBMediaFile = File & {
-  order: number;
-};
-
 export type FBMediaAlbumProps =
   & Pick<BoxProps, "height" | "width">
   & Pick<FBMediaAlbumFieldProps,
