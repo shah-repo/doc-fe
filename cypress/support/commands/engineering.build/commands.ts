@@ -48,8 +48,7 @@ Cypress.Commands.add("ebVerifyNewRevisionCreated", () => {
 Cypress.Commands.add("ebClickClone", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
     CyRoutes.EmployeesGet,
-    CyRoutes.GetRequiredApproversDocRev,
-    CyRoutes.GetDocAggregatedAudit], () => {
+    CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy=\"CloneEBButton\"]").click();
   });
 });
