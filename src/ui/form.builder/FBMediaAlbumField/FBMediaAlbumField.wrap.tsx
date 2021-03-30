@@ -2,7 +2,9 @@ import { filter, get, isEmpty, join, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { FB, FBMediaAlbumFieldProps, FBMediaAlbumFieldState } from "..";
+import { companySelectors } from "../../../state/ducks/company";
 import { toastError } from "../../components/notifications";
 
 export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
@@ -29,6 +31,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     const { workspaceState, formState } = FB.useStores();
     const formValue = formState?.getFieldValue(name) || editorConfig;
     const ids = map(formValue, "id");
+    const redlineActive = useSelector(companySelectors.getRedlineActive);
     mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(FBMediaAlbumFieldState);
 
     // Handle mode
@@ -85,7 +88,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
               };
             }
           }
-          formState?.setFieldValue(name, files, true);
+          formState?.setFieldValue(name, files, true, isTemplate);
           if (mediaAlbumFieldState?.fromUpload) {
             formState?.setFieldAutosave(name);
             mediaAlbumFieldState.fromUpload = false;
@@ -110,7 +113,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     if (isPreview() || !isEmpty(collection) || !isEmpty(ids)) {
       mediaAlbumFieldState?.setMode("media");
     }
-    actionsDisabled = (reviseDisabled && workspaceState?.isRevised) || isPreview();
+    actionsDisabled = (reviseDisabled && workspaceState?.isRevised) || isPreview() && !redlineActive;
 
     return Component({
       ...(props as T),
