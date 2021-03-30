@@ -21,4 +21,5 @@ export interface FBMPIProcedureSelectValue {
   equipmentId?: string;
   quantity?: number;
   unit?: string;
+  lotPart?: string;
 }
