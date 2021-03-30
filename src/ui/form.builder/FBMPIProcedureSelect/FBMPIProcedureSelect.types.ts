@@ -7,6 +7,7 @@ export type FBMPIProcedureSelectProps =
 & Pick<FBProviderProps, "formState" | "mpiProcedureSelectState">
 & {
   type: FBProcedureItemType;
+  unitDisabled?: boolean;
 };
 
 export interface FBMPIProcedureSelectValue {
@@ -20,4 +21,5 @@ export interface FBMPIProcedureSelectValue {
   equipmentId?: string;
   quantity?: number;
   unit?: string;
+  lotPart?: string;
 }

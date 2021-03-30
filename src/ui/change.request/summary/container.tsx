@@ -100,6 +100,7 @@ const Container: React.FunctionComponent<Props> = ({
   ) => (
     <FBWorkspace
       portalContainer={FBContainer}
+      isPortal={true}
       initialValues={dataProp.formInput}
       changeRequest={dataProp}
       autosave={autosaveEnabled}

@@ -1,8 +1,8 @@
-import { FBFilePreviewType, FBMediaAlbumProps, FBMediaProps } from "..";
+import { FBAttachment, FBFilePreviewType, FBMediaAlbumProps } from "..";
 
 export type FBMediaGalleryProps =
 & Pick<FBMediaAlbumProps, "collection" | "removeMedia" | "actionsDisabled">
 & {
   handleDelete?: (id: string) => any;
-  previewType?: (media: FBMediaProps) => FBFilePreviewType | undefined;
+  previewType?: (media: FBAttachment) => FBFilePreviewType | undefined;
 };
