@@ -1263,10 +1263,8 @@ context("Inspection flow", () => {
       });
 
       it("Submit for approval", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
-          cy.pmSubmitForApproval();
-          cy.wait(5000);
-        });
+        cy.pmSubmitForApproval();
+        cy.wait(5000);
       });
 
       it("Approve inspection document", () => {
