@@ -27,7 +27,7 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
                 optionLabelKey="document.docId"
                 optionValueType="object"
                 renderOption={(option) =>
-                  `${option.document.docId} | ${option.precalc?.lot_part || ""} ${option.precalc?.revision || ""}`
+                  `${option.document.docId} | ${option.precalc?.lot_part || ""}`
                 }
               />
               <FBQuantityUnitField gutter={false} {...{ initialValues, unitDisabled }} />
