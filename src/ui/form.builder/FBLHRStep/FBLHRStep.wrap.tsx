@@ -126,7 +126,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     // MARK: @observer
     useObserver(() => {
-      loading = lhrStepState?.startMpiApi.loading || lhrStepState?.getDocumentApi.loading;
+      loading = lhrStepState?.startMpiApi?.loading || lhrStepState?.getDocumentApi?.loading;
       stepLHRs = lhrStepState.stepLHRs;
       isHovering = lhrStepState.isHovering;
     });
