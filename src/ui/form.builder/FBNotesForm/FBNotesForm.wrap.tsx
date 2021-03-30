@@ -64,8 +64,11 @@ export const withFBNotesForm = <T extends FBNotesFormProps>(
       if (!values) {
         return;
       }
+      if (!values?.noteText && !values?.noteFile) {
+        return;
+      }
       const note = {
-        description: values?.noteText,
+        description: values?.noteText || "",
         formBuilderFieldName: name as string,
         documentRevision: {
           id,
