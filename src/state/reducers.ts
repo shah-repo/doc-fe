@@ -42,6 +42,12 @@ const tableSearchPersistConfig = {
   whitelist: ["criteria"],
 };
 
+const pageDetailsPersistConfig = {
+  key: "pageDetails",
+  storage,
+  whitelist: ["byCategory"],
+};
+
 const appReducer = combineReducers({
   attachments,
   auth: persistReducer(authPersistConfig, auth),
@@ -54,7 +60,7 @@ const appReducer = combineReducers({
   tableSearch: persistReducer(tableSearchPersistConfig, tableSearch),
   supplierSurvey,
   userManagement,
-  pageDetails,
+  pageDetails: persistReducer(pageDetailsPersistConfig, pageDetails),
 });
 
 const rootReducer = (state: any, action: any) => {
