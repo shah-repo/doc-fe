@@ -696,7 +696,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Check Calibration document existance", () => {
-      cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
+      cy.get("div[data-cy=\"form.builder.maintenance.history\"]")
+        .parent()
+        .parent()
         .eq(1)
         .contains("MR-00002 - Calibration document");
     });

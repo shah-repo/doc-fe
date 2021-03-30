@@ -730,9 +730,7 @@ context("Procedure and parts flow test", () => {
 
   context("Clone EB and verify materials and equipment tracking", () => {
     it("Click Clone EB", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.ebClickClone();
-      });
+      cy.ebClickClone();
     });
 
     context("Add materials and equipments", () => {

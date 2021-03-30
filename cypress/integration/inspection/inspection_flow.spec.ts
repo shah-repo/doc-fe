@@ -1256,11 +1256,14 @@ context("Inspection flow", () => {
       });
 
       it("Add approvals", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+          cy.unClick();
+        });
       });
 
       it("Submit for approval", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
           cy.pmSubmitForApproval();
           cy.wait(5000);
         });
