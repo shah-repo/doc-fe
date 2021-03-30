@@ -426,10 +426,6 @@ context("Parts from EB flow test", () => {
     });
 
     context("Submit for Approval", () => {
-      it("Save the EB", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
       it("Add an Approval", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
           cy.get("[data-cy*=fb-approvals-]").type(USERS[1].name + "{downarrow}{enter}");

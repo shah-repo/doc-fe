@@ -117,9 +117,9 @@ Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {
   });
 });
 
-Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string }) => {
+Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").click();
-  cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
     cy.get("ul[role=\"listbox\"]>li").contains(params.approver).click();
   });
 });
@@ -138,7 +138,7 @@ Cypress.Commands.add("ptSelectPartFormFromMultiSelect", (params: {partForm: stri
 });
 
 Cypress.Commands.add("pmSubmitForApproval", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   });
 });
