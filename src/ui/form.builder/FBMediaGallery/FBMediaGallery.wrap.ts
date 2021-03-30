@@ -1,5 +1,5 @@
 import React from "react";
-import { FB, FBFilePreviewType, FBMediaGalleryProps, FBMediaProps } from "..";
+import { FB, FBAttachment, FBFilePreviewType, FBMediaGalleryProps } from "..";
 
 export const withFBMediaGallery = <T extends FBMediaGalleryProps>(
   Component: React.FunctionComponent<T>
@@ -18,7 +18,7 @@ export const withFBMediaGallery = <T extends FBMediaGalleryProps>(
       mediaAlbumState?.setActiveMedia(0);
     };
 
-    previewType = (media: FBMediaProps): FBFilePreviewType | undefined =>
+    previewType = (media: FBAttachment): FBFilePreviewType | undefined =>
       mediaAlbumState?.previewType(media);
 
     return Component({

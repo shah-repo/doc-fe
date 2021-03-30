@@ -1,7 +1,7 @@
 import { isEmpty, isEqual, isUndefined, size } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { FB, FBMediaCarouselProps, FBMediaCarouselState, FBMediaProps } from "..";
+import { FB, FBAttachment, FBMediaCarouselProps, FBMediaCarouselState } from "..";
 
 export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
   Component: React.FunctionComponent<T>
@@ -59,7 +59,7 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
       if (isUndefined(activeMedia)) {
         return;
       }
-      const media: FBMediaProps | undefined = collection[activeMedia];
+      const media: FBAttachment | undefined = collection[activeMedia];
       if (isUndefined(media)) {
         return;
       }
@@ -72,7 +72,7 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
 
     useObserver(() => {
       activeStep = mediaAlbumState?.activeMedia || 0;
-      activeMediaPath = collection[activeStep]?.s3link;
+      activeMediaPath = collection[activeStep]?.url || "";
       toolsVisibility = mediaCarouselState?.toolsVisibility || "hidden";
       setPreviewType();
     });

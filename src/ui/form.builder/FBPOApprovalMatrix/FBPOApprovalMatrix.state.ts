@@ -109,7 +109,7 @@ class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
     // this.formState?.setFieldValue(`${this.name}-formValues`, undefined);
   };
 
-  protected onSuccess() {
+  public onSuccess() {
     if (!this.data) { return; }
     this.setItems(this.data.approvalLevels);
   }

@@ -58,6 +58,24 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    React.useEffect(() => {
+      reaction(
+        () => formState?.inputState.get(`${name}.attachments`)?.value,
+        (data) => {
+          if (workspaceState && workspaceState?.getSchemaItemAt(index)) {
+            workspaceState.schema![index] = {
+              ...schemeItem,
+              editorConfig: {
+                ...schemeItem?.editorConfig,
+                attachments: data,
+              },
+            };
+          }
+        }
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     React.useEffect(() => reaction(
       () => formState?.inputState.get(`${name}.description`)?.value,
       (description) => {
