@@ -258,6 +258,7 @@ export { default as FBPurchaseOrderTableSum } from "./FBPurchaseOrderTable/FBPur
 export { default as FBPurchaseOrderTableTotal } from "./FBPurchaseOrderTable/FBPurchaseOrderTable.total";
 export { default as FBQuantityField } from "./FBQuantityField/FBQuantityField";
 export { default as FBQuantityUnitField } from "./FBQuantityUnitField/FBQuantityUnitField";
+export * from "./FBQuantityUnitField/FBQuantityUnitField.types";
 // export { default as FBRadio } from "./FBRadio/FBRadio";
 export { default as FBRadioGroup } from "./FBRadioGroup/FBRadioGroup";
 export * from "./FBRadioGroup/FBRadioGroup.types";

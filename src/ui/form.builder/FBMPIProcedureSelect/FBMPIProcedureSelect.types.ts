@@ -7,6 +7,7 @@ export type FBMPIProcedureSelectProps =
 & Pick<FBProviderProps, "formState" | "mpiProcedureSelectState">
 & {
   type: FBProcedureItemType;
+  unitDisabled?: boolean;
 };
 
 export interface FBMPIProcedureSelectValue {
