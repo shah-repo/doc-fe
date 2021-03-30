@@ -39,9 +39,12 @@ const FBNotesForm: React.FunctionComponent<FBNotesFormProps> = ({
                 </Box>
               </Box>
               <Box borderBottom={lastNote ? 0 : "1px solid lightgrey"} >
-                <Typography variant="subtitle1" style={{ marginBottom: 16, marginLeft: 64, overflowWrap: "anywhere" }}>
-                  <Text message={note?.description} />
-                </Typography>
+                {note?.description &&
+                  <Typography
+                    variant="subtitle1"
+                    style={{ marginBottom: 16, marginLeft: 64, overflowWrap: "anywhere" }}>
+                    <Text message={note?.description} />
+                  </Typography>}
                 <Box marginLeft={8}>
                   <FBFilesPresenter files={note?.attachments} mode="raw" />
                 </Box>
