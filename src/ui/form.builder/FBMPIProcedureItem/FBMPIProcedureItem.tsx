@@ -157,6 +157,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                       locale={`form.builder.mpi.part.selection.${type}`}
                                       values={{
                                         docId: selection.overrideDocId || "",
+                                        lotPart: selection.lotPart || "",
                                         quantity: selection.quantity || 0,
                                         unit: selection.unit || "",
                                       }}
