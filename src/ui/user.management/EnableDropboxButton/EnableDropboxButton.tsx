@@ -1,38 +1,39 @@
 import { Button } from "@material-ui/core";
 import React from "react";
-import { useSelector } from "react-redux";
-import { getHasPermission } from "../../../common/utils/selectors";
-import { Permission } from "../../../state/ducks/auth/types";
-import { companyActions, companySelectors } from "../../../state/ducks/company";
+import { ActionCreator } from "redux";
+import { ApiAction } from "../../../state/types";
 import Text from "../../components/Text";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import styles from "./styles";
 
-const EnableDropboxButton: React.FunctionComponent = () => {
-  const classes = styles();
-  const hasDropboxPermission = useSelector(getHasPermission(Permission.COMPANY_DROPBOX_INTEGRATION));
-  const isDropboxEnabled = useSelector(companySelectors.isDropboxEnabled);
-  const enableDropboxAction = useActionCreator(companyActions.enableDropbox);
+interface Props {
+  shouldDisplayButton: boolean;
+  dropboxAsync: any;
+  enableDropboxAction: ActionCreator<ApiAction<any, any>>;
+  disabled: boolean;
+}
 
-  const dropboxAsync = useAsync();
+const EnableDropboxButton: React.FunctionComponent<Props> = ({
+  shouldDisplayButton,
+  dropboxAsync,
+  enableDropboxAction,
+  disabled,
+}) => {
 
   const enableDropbox = () => {
     dropboxAsync.start(enableDropboxAction, dropboxAsync);
   };
 
-  if (!hasDropboxPermission) {
+  if (!shouldDisplayButton) {
     return null;
   }
 
   return (
     <Button
       variant="outlined"
-      className={classes.button}
+      color="primary"
       onClick={enableDropbox}
-      disabled={isDropboxEnabled}
+      {...{ disabled }}
     >
-      <Text translation="dropbox.enable.company" />
+      <Text translation="dropbox.enable" />
     </Button>
   );
 };

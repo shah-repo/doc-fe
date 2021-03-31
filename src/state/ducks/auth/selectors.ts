@@ -92,6 +92,9 @@ const getHasPermission = createSelector(
   (permissions, selectedPermission) => permissions.includes(selectedPermission),
 );
 
+const isDropboxEnabled = (state: ApplicationState): boolean =>
+  Boolean(state.auth.user.employee.dropboxEnabled);
+
 export default {
   isAuthenticated,
   currentUserEmail,
@@ -116,4 +119,5 @@ export default {
   getExpirationOfCredentials,
   getCredentials,
   isCustomLabelsOn,
+  isDropboxEnabled,
 };
