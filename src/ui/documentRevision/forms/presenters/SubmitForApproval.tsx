@@ -10,7 +10,7 @@ import { FB, FBFormState, FBProvider, FBSubmitButton, FBTextField } from "../../
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import { checkIsTypeMpiOutput } from "../../helpers/checkDocumentGroup";
+import { checkIsDocumentMPIOutput } from "../../helpers/checkDocumentGroup";
 import { styles } from "./FinalizeAndRelease.styles";
 
 interface Props {
@@ -34,7 +34,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const voidRecordDialog = useDialog();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
   const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
-  const isTypeMpiOutput = checkIsTypeMpiOutput(currentDocumentType?.groupOptions);
+  const isTypeMpiOutput = checkIsDocumentMPIOutput(currentDocumentType?.groupOptions);
   const label = isTypeMpiOutput ? "record.complete.step" : "record.submit.for.approval";
   const releaseAsync = useAsync({
     onError: (error) => {
