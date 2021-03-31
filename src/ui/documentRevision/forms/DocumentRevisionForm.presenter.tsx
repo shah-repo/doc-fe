@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { flatten, isEmpty } from "lodash";
+import { flatten, isEmpty, isEqual } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
@@ -169,6 +169,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const documentTypeId = values.document?.documentType?.id;
   const showOutputInfo = workspaceState?.mode === "form" || workspaceState?.mode === "formDesign";
+  const canAddFBFields = workspaceState?.mode === "design" || workspaceState?.mode === "formDesign";
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord && !isDocumentEquipment;
   const outputDocumentTypes = pmFormId ?
     initialValues.outputDocumentTypes :
@@ -190,7 +191,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   // Autosave for adding FB fields
   useEffect(() => {
-    if (!schema) {
+    if (!schema || isEqual(initialValues.schema, schema) || !canAddFBFields) {
       return;
     }
     submitForm();

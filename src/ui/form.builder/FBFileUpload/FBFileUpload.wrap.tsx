@@ -31,6 +31,17 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
 
     React.useEffect(() => {
       reaction(
+        () => formState?.inputState.get(name)?.value.length,
+        (files) => {
+          if (!fileUploadState) { return; }
+          fileUploadState.files = formState?.inputState.get(name)?.value;
+        }
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    React.useEffect(() => {
+      reaction(
         () => fileUploadState?.files,
         (files) => {
           formState?.setFieldValue(name, files, withState);

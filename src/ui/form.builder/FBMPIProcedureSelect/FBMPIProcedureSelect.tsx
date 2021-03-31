@@ -8,6 +8,7 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
   mpiProcedureSelectState,
   formState,
   children,
+  unitDisabled = false,
   initialValues,
   type,
 }) => (
@@ -25,8 +26,14 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
                 optionValueKey="id"
                 optionLabelKey="document.docId"
                 optionValueType="object"
+                renderOption={(option) =>
+                  `${option.document.docId} | ${option.precalc?.lot_part || ""}`
+                }
+                getOptionLabel={(option) =>
+                  `${option.document.docId} | ${option.precalc?.lot_part || ""}`
+                }
               />
-              <FBQuantityUnitField gutter={false} />
+              <FBQuantityUnitField gutter={false} {...{ initialValues, unitDisabled }} />
             </>
           )}
         </Observer>

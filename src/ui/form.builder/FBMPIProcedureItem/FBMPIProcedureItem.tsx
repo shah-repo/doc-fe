@@ -3,7 +3,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import EditIcon from "@material-ui/icons/Edit";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
-import { isEmpty } from "lodash";
+import { find, isEmpty } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -26,6 +26,7 @@ import {
   FBText,
 } from "..";
 import Colors from "../../layout/theme/utils/colors";
+import { FBClasses } from "../defaults/layout";
 import { withFBMPIProcedureItem } from "./FBMPIProcedureItem.wrap";
 
 const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
@@ -45,6 +46,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   value = [],
   name,
   isSelectVisible,
+  usedDocumentsInLHRS,
+  defaultValue,
 }) => (
   <FBProvider {...{ dialogState, mpiProcedureState }}>
     <FBDialog />
@@ -90,6 +93,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           isTemplate={true}
           editorProperties={["copyableValue"]}
           gutter={false}
+          editorConfig={defaultValue}
+          autosave
         />
       </Box>
     )}
@@ -103,8 +108,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             borderTop={0}
             borderColor={Colors.hint_gray}
             key={`fb-procedure-item-${type}-${index}`}
-            onMouseEnter={() => mpiProcedureState?.setSelectState(index, type)}
-            onMouseLeave={() => mpiProcedureState?.setSelectState(index, type)}
+            className={FBClasses.hoverVisibility}
           >
             <Box
               display="flex"
@@ -118,6 +122,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   locale={`form.builder.mpi.procedure.${type}.title`}
                   values={{
                     title: getItem?.(item.title),
+                    revision: find(usedDocumentsInLHRS, item.title)?.[item.title]?.displayRevision,
                     quantity: item.quantity ? (item.quantity * multiplier) : "form.builder.none",
                     unit: item.unit,
                   }}
@@ -152,6 +157,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                       locale={`form.builder.mpi.part.selection.${type}`}
                                       values={{
                                         docId: selection.overrideDocId || "",
+                                        lotPart: selection.lotPart || "",
                                         quantity: selection.quantity || 0,
                                         unit: selection.unit || "",
                                       }}
@@ -183,7 +189,6 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   {() => (
                     <FBButton
                       label="form.builder.select"
-                      hidden={!mpiProcedureState?.selectState.get(`${type}-${index}`)}
                       style={{ margin: 0, padding: "4px" }}
                       onClick={() => handleSelect?.({
                         ...item,

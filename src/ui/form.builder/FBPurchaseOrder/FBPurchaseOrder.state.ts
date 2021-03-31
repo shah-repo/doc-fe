@@ -136,7 +136,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.calculateCost();
   };
 
-  protected onSuccess() {
+  public onSuccess() {
     super.onSuccess();
     const items = reduce(this.items, (reduced: FBPurchaseOrderItem[], item) => {
       reduced.push({

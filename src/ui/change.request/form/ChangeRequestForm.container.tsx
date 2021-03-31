@@ -61,6 +61,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
     <FBWorkspace
       portalContainer={FBContainer}
+      isPortal={true}
       initialValues={cloneDeep(changeRequest?.formInput)}
       changeRequest={cloneDeep(changeRequest)}
       autosave={autosaveEnabled}

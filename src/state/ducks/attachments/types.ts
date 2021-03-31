@@ -15,6 +15,7 @@ export interface Attachment {
   fileSizeS3Link: number;
   fileSizeS3LinkCleanCopy: number;
   hasWatermarks: boolean;
+  url?: string;
 }
 
 export interface AttachmentDownloadResponse {

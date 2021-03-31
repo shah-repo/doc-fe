@@ -4,7 +4,7 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import React from "react";
 import Img from "react-image";
 import LazyLoad from "react-lazy-load";
-import { FBMapWrapper, FBMediaGalleryProps, FBMediaProps } from "..";
+import { FBAttachment, FBMapWrapper, FBMediaGalleryProps } from "..";
 import Text from "../../components/Text";
 import { withFBMediaGallery } from "./FBMediaGallery.wrap";
 
@@ -39,10 +39,10 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
         cols={2}
         style={{ width: "100%", height: "350px" }}
       >
-        <FBMapWrapper<FBMediaProps[]> {...{ collection }}>
-          {(media: FBMediaProps, index, props) => {
+        <FBMapWrapper<FBAttachment[]> {...{ collection }}>
+          {(media: FBAttachment, index, props) => {
             const type = previewType?.(media);
-            const { s3link: src, name, id } = media;
+            const { url: src, name, id } = media;
             if (!type) { return; }
             return (
               <GridListTile {...props} key={`fb-album-item-${index}`}>

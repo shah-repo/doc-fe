@@ -43,6 +43,7 @@ Cypress.Commands.add("recFilterRecordListByNameAndStatus", (params: { title: str
   });
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
     cy.get("#name").type(params.title).wait(500);
+    cy.unClick();
   });
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
     cy.get("[id=\"mui-component-select-displayStatus\"]").click().wait(300);

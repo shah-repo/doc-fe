@@ -83,6 +83,19 @@ interface Precalc {
   revision: number;
 }
 
+interface DocumentsInLHRS {
+  displayRevision: string;
+  displayStatus: DocumentRevisionStatus;
+  docId?: string;
+  docRevId?: string;
+  docRevTitle?: string;
+  documentId?: string;
+}
+
+export interface UsedDocumentsInLHRS {
+  [key: string]: DocumentsInLHRS;
+}
+
 export interface DocumentRevision extends FBDocumentRevisionProps {
   displayStatus: DocumentRevisionStatus;
   children?: DocumentRevision[];
@@ -132,6 +145,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   documentId?: string;
   smartReferencesFrom?: SmartReference[];
   smartReferencesTo?: SmartReference[];
+  usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
 }
 
 interface SmartReference {
