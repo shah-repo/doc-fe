@@ -448,7 +448,9 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Add an Approval'", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      });
     });
 
     it("Submit for approval", () => {
@@ -662,11 +664,9 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-      });
-
-      it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        });
       });
 
       it("Add material document", () => {
@@ -730,9 +730,7 @@ context("Procedure and parts flow test", () => {
 
   context("Clone EB and verify materials and equipment tracking", () => {
     it("Click Clone EB", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.ebClickClone();
-      });
+      cy.ebClickClone();
     });
 
     context("Add materials and equipments", () => {
@@ -761,11 +759,9 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-      });
-
-      it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        });
       });
     });
 

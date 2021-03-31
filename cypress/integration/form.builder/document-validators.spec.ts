@@ -762,6 +762,7 @@ field is empty: Add text field`, () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type("AR Form{downarrow}{enter}");
       });
+      cy.wait(5000);
     });
 
     it("Should show error for 'Incorrect document status' field", () => {
@@ -785,9 +786,10 @@ field is empty: Add text field`, () => {
 
   context(`Test ${requiredDocTypeFieldLabel} (required document type) Field`, () => {
     it("Add incorrect document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.PostRemoteValidatorsHelper], () => {
         cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type("AR Form{downarrow}{enter}");
       });
+      cy.wait(5000);
     });
 
     it("Should show error for 'Incorrect document type' field", () => {

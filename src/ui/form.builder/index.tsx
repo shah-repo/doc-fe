@@ -187,7 +187,6 @@ export { default as FBMediaAlbum } from "./FBMediaAlbum/FBMediaAlbum";
 export { default as FBMediaAlbumState } from "./FBMediaAlbum/FBMediaAlbum.state";
 export * from "./FBMediaAlbum/FBMediaAlbum.types";
 export { default as FBMediaAlbumField } from "./FBMediaAlbumField/FBMediaAlbumField";
-export { default as FBMediaAlbumFieldSocket } from "./FBMediaAlbumField/FBMediaAlbumField.socket";
 export { default as FBMediaAlbumFieldState } from "./FBMediaAlbumField/FBMediaAlbumField.state";
 export { default as FBMediaAlbumFieldStore } from "./FBMediaAlbumField/FBMediaAlbumField.store";
 export * from "./FBMediaAlbumField/FBMediaAlbumField.types";
@@ -258,6 +257,7 @@ export { default as FBPurchaseOrderTableSum } from "./FBPurchaseOrderTable/FBPur
 export { default as FBPurchaseOrderTableTotal } from "./FBPurchaseOrderTable/FBPurchaseOrderTable.total";
 export { default as FBQuantityField } from "./FBQuantityField/FBQuantityField";
 export { default as FBQuantityUnitField } from "./FBQuantityUnitField/FBQuantityUnitField";
+export * from "./FBQuantityUnitField/FBQuantityUnitField.types";
 // export { default as FBRadio } from "./FBRadio/FBRadio";
 export { default as FBRadioGroup } from "./FBRadioGroup/FBRadioGroup";
 export * from "./FBRadioGroup/FBRadioGroup.types";

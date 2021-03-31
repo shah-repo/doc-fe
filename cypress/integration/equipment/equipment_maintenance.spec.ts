@@ -550,7 +550,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Add an Approval'", () => {
-      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+        cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      });
     });
 
     it("Submit for approval", () => {
@@ -644,7 +646,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+        cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      });
     });
 
     it("Submit for approval", () => {
@@ -692,7 +696,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Check Calibration document existance", () => {
-      cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
+      cy.get("div[data-cy=\"form.builder.maintenance.history\"]")
+        .parent()
+        .parent()
         .eq(1)
         .contains("MR-00002 - Calibration document");
     });

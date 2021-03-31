@@ -1,4 +1,4 @@
-import { FBInputProps, FBMediaAlbumFieldState, FBMediaProps, FBWorkspaceState } from "..";
+import { FBAttachment, FBInputProps, FBMediaAlbumFieldState } from "..";
 
 export type FBMediaAlbumFieldMode = "media" | "qr";
 
@@ -10,6 +10,10 @@ export type FBMediaAlbumFieldProps =
 | "gutter"
 | "reviseDisabled"
 | "editorProperties"
+| "autosave"
+| "type"
+| "index"
+| "editorConfig"
 > & {
   onFileUploadChange?: (event: React.FormEvent<HTMLInputElement>) => any;
   removeMedia?: (mediaId: string) => any;
@@ -18,12 +22,6 @@ export type FBMediaAlbumFieldProps =
   actionsDisabled?: boolean;
   mode?: FBMediaAlbumFieldMode;
   qrValue?: string;
-  collection?: FBMediaProps[];
+  collection?: FBAttachment[];
   loading?: boolean;
-};
-
-export type FBMediaAlbumFieldConstructor =
-& Pick<FBMediaAlbumFieldProps, "name" | "isTemplate">
-& {
-  workspaceState?: FBWorkspaceState;
 };
