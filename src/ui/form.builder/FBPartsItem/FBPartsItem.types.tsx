@@ -5,13 +5,13 @@ export type FBPartItemStatus = "removed" | "added" | "updated" | "none";
 
 export const FBPartItemStatusBorder: Record<FBPartItemStatus, string> = {
   removed: Colors.opal_red,
-  added: Colors.opal_green,
+  added: Colors.light_green,
   updated: Colors.gray,
-  none: Colors.default_blue,
+  none: Colors.medium_blue,
 };
 
 export const FBPartItemStatusBg: Record<FBPartItemStatus, string> = {
-  removed: Colors.pale_red,
+  removed: Colors.medium_red,
   added: Colors.pale_green,
   updated: Colors.platinum_gray,
   none: Colors.light_blue,

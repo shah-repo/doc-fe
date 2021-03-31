@@ -6,7 +6,7 @@ export default makeStyles((theme: Theme) =>
     iconButton: {
       "padding": theme.spacing(1),
       "&:hover": {
-        "background": Colors.medium_light_blue,
+        "background": Colors.background_blue,
         "borderRadius": theme.spacing(0.5),
         "& svg": {
           stroke: Colors.medium_blue,
