@@ -183,6 +183,7 @@ DocumentRevisionFormContainerProps
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
     <FBWorkspace
       portalContainer={FBContainer}
+      isPortal={true}
       document={{
         ...props.values as unknown as DocumentRevision,
         ...documentRevision as unknown as DocumentRevision,

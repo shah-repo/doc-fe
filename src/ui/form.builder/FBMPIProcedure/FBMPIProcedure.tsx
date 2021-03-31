@@ -87,7 +87,17 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
                   />
                 )}
                 <Box flexGrow={1}>
-                  <FBMPIProcedureItem {...{ type, name, disabled, isPreview, isOutput, redlineActive }} />
+                  <FBMPIProcedureItem
+                    defaultValue={props.editorConfig?.attachments}
+                    {...{
+                      type,
+                      name,
+                      disabled,
+                      isPreview,
+                      isOutput,
+                      redlineActive,
+                    }}
+                  />
                 </Box>
               </Box>
             )}

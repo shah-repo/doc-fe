@@ -76,7 +76,7 @@ definitions:
             aws:
               access-key: $AWS_ACCESS_KEY_ID
               secret-key: $AWS_SECRET_ACCESS_KEY
-          max-time: 30
+          max-time: 50
           size: 2x
           services:
             - sorry-cypress-director
@@ -469,7 +469,7 @@ pipelines:
           - step: *BUILD_SANDBOX
       - step: *DEPLOY_SANDBOX
 
-    release/21.4.1:
+    release/21.4.2:
       - parallel:
           - step: *RUN_TESTS
           - step: *RUN_LINTER

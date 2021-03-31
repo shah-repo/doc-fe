@@ -1,7 +1,6 @@
-import { Box } from "@material-ui/core";
 import { Provider } from "mobx-react";
 import React from "react";
-import { FBLabel, FBMediaAlbum, FBMediaAlbumFieldProps, FBMediaAlbumFieldSocket, FBMediaQR } from "..";
+import { FBInput, FBMediaAlbum, FBMediaAlbumFieldProps, FBMediaQR } from "..";
 import { withFBMediaAlbumField } from "./FBMediaAlbumField.wrap";
 
 const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
@@ -15,14 +14,15 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
   collection,
   name = "",
   loading,
+  editorConfig,
+  autosave,
   mode,
   label,
-  gutter = true,
+  index,
+  gutter,
 }) => (
-  <Provider {...{ [`mediaAlbumFieldState_${name}`]: mediaAlbumFieldState }} >
-    <Box mb={gutter ? 5 : 0} data-cy="media.upload">
-      {label && <FBLabel {...{ label }} />}
-      <FBMediaAlbumFieldSocket fieldNameFromSchema={name} />
+  <Provider {...{ mediaAlbumFieldState }} >
+    <FBInput {...{ name, label, gutter, index, editorConfig, autosave }} type="mediaalbum">
       {mode !== "qr" && (
         <FBMediaAlbum {...{
           collection,
@@ -39,7 +39,7 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
         <FBMediaQR
           {...{ qrValue, isTemplate, setMediaFieldMode, loading }}
         />)}
-    </Box>
+    </FBInput>
   </ Provider>
 );
 

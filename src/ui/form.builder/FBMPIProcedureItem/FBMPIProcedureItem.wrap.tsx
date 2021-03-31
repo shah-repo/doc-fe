@@ -4,6 +4,7 @@ import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
@@ -31,15 +32,23 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     // MARK: @config
     const { mpiProcedureState, workspaceState, formState } = FB.useStores();
+    const { document } = workspaceState || {};
+    const { documentType } = document?.document || {};
+    const isDocumentForm = checkIsDocumentForm(documentType?.groupOptions);
+
     const smartReferencesTo = uniqBy(concat(
       workspaceState?.document?.smartReferencesTo,
       workspaceState?.document?.document.smartReferencesTo
     ), "id");
+    const usedDocumentsInLHRS = workspaceState?.document?.usedDocumentsInLHRS;
     dialogState = FB.useRef(FBDialogState);
     multiplier = toNumber(formState?.getFieldValue("lhr_initial_quantity")) || 1;
     isPreview = isPreview && workspaceState?.mode !== "formPreview";
-
-    isSelectVisible = (isOutput && workspaceState?.mode !== "preview" && workspaceState?.mode !== "formPreview") ||
+    // Have to use isDocumentForm instead of isOutput because od MPI
+    // ENC-7319
+    isSelectVisible = (!isDocumentForm &&
+      workspaceState?.mode !== "preview" &&
+      workspaceState?.mode !== "formPreview") ||
       redlineActive;
 
     useEffect(() => {
@@ -68,12 +77,12 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     // MARK: @helpers
     const setFilteredParts = (data) => {
       const partsSelected = data.reduce((selected, ref) => {
-        if (ref.metadata?.fieldId === name
-            && (ref.type === SmartReferenceType.EquipmentReplacement || ref.type === SmartReferenceType.LotUsage)) {
+        if (ref?.metadata?.fieldId === name
+            && (ref?.type === SmartReferenceType.EquipmentReplacement || ref?.type === SmartReferenceType.LotUsage)) {
           selected.push({
-            ...ref.metadata,
-            refId: ref.id,
-            overrideDocId: ref.toDocRev?.document.docId,
+            ...ref?.metadata,
+            refId: ref?.id,
+            overrideDocId: ref?.toDocRev?.document.docId,
           });
         }
         return selected;
@@ -106,7 +115,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       dialogState?.config({
         open: true,
         title: "form.builder.select",
-        content: <FBMPIProcedureSelect {...{ name, type }} initialValues={item} />,
+        content: <FBMPIProcedureSelect {...{ name, type }} initialValues={item} unitDisabled={!!item.unit} />,
       });
     };
 
@@ -155,6 +164,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       type,
       value,
       isSelectVisible,
+      usedDocumentsInLHRS,
     });
   };
 

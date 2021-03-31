@@ -65,7 +65,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         fieldId: name,
         forPreselected: { id: initialValues?.id },
         quantity,
-        unit,
+        unit: unit || initialValues?.unit,
         usedOverride: { id: (usedOverride as DocumentRevision).id },
         type: type.toUpperCase() as "MATERIAL" | "EQUIPMENT",
       };
