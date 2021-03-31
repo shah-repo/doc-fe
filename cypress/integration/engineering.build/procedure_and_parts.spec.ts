@@ -696,7 +696,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Upload attachment 'image.jpg'", () => {
-        cy.get("[data-cy=\"media.upload\"]>div>div>button").click();
+        cy.get("[data-cy=\"mediaUploadField\"]>div >div>div>div>button").click();
         cy.pmUploadAttachment({ fileName: "image.jpg" });
       });
 

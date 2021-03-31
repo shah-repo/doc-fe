@@ -490,12 +490,9 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.unClick();
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
-        });
-      cy.wait(500);
+      cy.unClick();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+      cy.wait(5000);
     });
 
     it("Click 'Clone EB' button", () => {
