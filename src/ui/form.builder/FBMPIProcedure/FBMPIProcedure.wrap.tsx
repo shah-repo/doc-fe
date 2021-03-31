@@ -35,6 +35,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     types = keys(FBProcedureItemType);
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = (!isInputOwner || isPreview) && !redlineActive;
+    formState?.setFieldValue(`${name}.description`, props.editorConfig?.description);
 
     // MARK: @reactions
     React.useEffect(() => reaction(
