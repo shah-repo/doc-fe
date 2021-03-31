@@ -8,6 +8,7 @@ export const SET_COMPANY_MINE = "company/SET_COMPANY_MINE";
 export const UPDATE_NAVIGATION_ITEM = "company/UPDATE_NAVIGATION_ITEM";
 export const AUTOSAVE_CONFIG = "company/AUTOSAVE_CONFIG";
 export const ENABLE_COMPANY_DROPBOX = "/company/dropbox_enable/mine";
+export const REDLINE_CONFIG = "company/REDLINE_CONFIG";
 
 export const WHITE_LABEL_DEFAULT = {
   logo: "",

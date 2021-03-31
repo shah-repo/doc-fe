@@ -1,4 +1,5 @@
-import { get, isEmpty, isObject, isString, map } from "lodash";
+import { get, isArray, isEmpty, isObject, isString, map } from "lodash";
+import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBOptionValueType } from "..";
@@ -20,17 +21,22 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     additionalData,
     omitFormValue,
     forceNewRender,
+    urlValues,
     freeSolo,
     optionId,
     options,
     loading,
     multiple,
     name,
+    withoutPrefixRoot,
     value,
     ...props
   }: T) => {
     const { formState } = FB.useStores();
-    autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, optionId);
+    autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, {
+      optionId,
+      urlValues,
+    });
     const {
       valueKey: optionValueKey = "value",
       labelKey: optionLabelKey = "text",
@@ -38,6 +44,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       valueKey: props.optionValueKey,
       labelKey: props.optionLabelKey,
     };
+
     // TODO: handle autocomplete default value from input wrap
     // and discard value prop
     const formValue = formState?.getFieldValue(name, defaultValue, omitFormValue) || value;
@@ -62,14 +69,29 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
         return;
       }
       const slicedOptions = autocompleteAsyncState?.sliceData;
-      loading = loading || FBAutocompleteAsyncStore.loading.get(optionId);
+      loading = (
+        loading ||
+        FBAutocompleteAsyncStore.loading.get(optionId) ||
+        autocompleteAsyncState?.autocompleteValueApi.loading
+      );
       if (slicedOptions) {
         options = selectedOptions
           ? autocompleteAsyncState?.sliceValue(selectedOptions)
           : slicedOptions;
       }
-      forceNewRender = formState?.getInputState(name || "")?.forceRender;
+      // forceNewRender = formState?.getInputState(name || "")?.forceRender;
     });
+
+    // set missing selected autocomplete value
+    React.useEffect(() => reaction(
+      () => autocompleteAsyncState?.autocompleteValueApi.data,
+      (data) => {
+        const { id } = data || {};
+        FBAutocompleteAsyncStore.add(optionId as string, id, data);
+        formState?.getInputState(name || "")?.setRender();
+      },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     // Add some static additional data to dynamic store list
     useEffect(() => autocompleteAsyncState?.setAdditionalData(additionalData),
@@ -94,8 +116,33 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (!freeSolo && !isObject(option)) {
         option = defaultValue;
       }
+      if (!get(option, optionValueKey) && !autocompleteAsyncState?.autocompleteValueApi.loading) {
+        if (isArray(option)) {
+          const undefinedOptions = option.filter((e) => isString(e));
+          undefinedOptions.map((opt) => {
+            if (!opt || !isString(opt) || opt === "Void") {
+              // eslint-disable-next-line array-callback-return
+              return;
+            }
+            return autocompleteAsyncState?.fetchAutocompleteOption(opt, optionId);
+          }
+          );
+          return "";
+        }
+        if (!option || !isString(option) || option === "Void") {
+          return;
+        }
+        autocompleteAsyncState?.fetchAutocompleteOption(option, optionId);
+        return "";
+      }
+      if (!get(option, optionValueKey)) {
+        return "";
+      }
       const { labelPrefixRoot, includeRevision } = autocompleteAsyncState?.optionConfig || {};
       let optionLabel = labelPrefixRoot ? `${get(option, labelPrefixRoot)} - ` : "";
+      if (withoutPrefixRoot) {
+        optionLabel = "";
+      }
       if (includeRevision) {
         const revision = get(option, includeRevision);
         optionLabel = labelPrefixRoot ?
@@ -103,11 +150,6 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       }
       return `${optionLabel}${get(option, optionLabelKey, "")}`;
     });
-
-    // Stupid hack that works just until autocomplete refactoring is done
-    if (!isEmpty(options) && isString(defaultValue) && FB.isUUID(defaultValue)) {
-      formState?.getInputState(name || "")?.setRender();
-    }
 
     return Component({
       ...(props as T),
@@ -126,6 +168,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       forceNewRender,
       freeSolo,
       multiple,
+      urlValues,
       name,
       value,
     });

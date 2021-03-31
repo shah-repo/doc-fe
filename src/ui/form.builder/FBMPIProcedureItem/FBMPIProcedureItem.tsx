@@ -1,28 +1,52 @@
 import { Box, IconButton } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import EditIcon from "@material-ui/icons/Edit";
+import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { isEmpty } from "lodash";
+import { Observer } from "mobx-react";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBButton, FBDialog, FBFilesPresenter, FBFormMode, FBMapWrapper, FBMediaAlbumField, FBMPIProcedureItemProps, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemType, FBProvider, FBText } from "..";
+import {
+  FB,
+  FBButton,
+  FBDialog,
+  FBFilesPresenter,
+  FBFormMode,
+  FBMapWrapper,
+  FBMediaAlbumField,
+  FBMPIProcedureItemProps,
+  FBMPIProcedureSelectValue,
+  FBPartItemStatusBg,
+  FBProcedureItemConfig,
+  FBProcedureItemLocale,
+  FBProcedureItemOmitAction,
+  FBProcedureItemType,
+  FBProvider,
+  FBText,
+} from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBMPIProcedureItem } from "./FBMPIProcedureItem.wrap";
 
 const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   onClick,
   handleRemove,
+  handleSelect,
+  handleSelectionDelete,
   getItem,
   getLot,
+  mpiProcedureState,
   dialogState,
   isPreview,
   disabled,
   loading,
+  multiplier = 1,
   type,
   value = [],
   name,
+  isSelectVisible,
 }) => (
-  <FBProvider {...{ dialogState }}>
+  <FBProvider {...{ dialogState, mpiProcedureState }}>
     <FBDialog />
     <Box
       bgcolor={Colors.gray}
@@ -79,25 +103,97 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             borderTop={0}
             borderColor={Colors.hint_gray}
             key={`fb-procedure-item-${type}-${index}`}
+            onMouseEnter={() => mpiProcedureState?.setSelectState(index, type)}
+            onMouseLeave={() => mpiProcedureState?.setSelectState(index, type)}
           >
             <Box
               display="flex"
               bgcolor={(item.status || "none") === "none" ? "white" : FBPartItemStatusBg[item.status || ""]}
+              alignItems="center"
               p={1.5}
+              minHeight={55}
             >
-              <FBText
-                locale={`form.builder.procedure.${type}.title`}
-                values={{
-                  title: getItem?.(item.title),
-                  lot: getLot?.(item.partLot),
-                  quantity: item.quantity || "form.builder.none",
-                  unit: item.unit,
-                }}
-                boxProps={{
-                  color: Colors.black,
-                  flexGrow: 1,
-                }}
-              />
+              <Box flexGrow={1}>
+                <FBText
+                  locale={`form.builder.mpi.procedure.${type}.title`}
+                  values={{
+                    title: getItem?.(item.title),
+                    quantity: item.quantity ? (item.quantity * multiplier) : "form.builder.none",
+                    unit: item.unit,
+                  }}
+                  boxProps={{
+                    color: Colors.black,
+                    flexGrow: 1,
+                  }}
+                />
+                <Observer>
+                  {() => (
+                    <>
+                      {!isEmpty(mpiProcedureState?.partsSelected) && (
+                        <Box mt={1} display="flex" flexWrap="wrap">
+                          <FBMapWrapper<Partial<FBMPIProcedureSelectValue>[]>
+                            collection={mpiProcedureState?.partsSelected || []}
+                          >
+                            {(selection: FBMPIProcedureSelectValue, index) => (
+                              <Box key={`fb-mpi-procedure-selection-${index}`}>
+                                {(selection.materialId === item.title || selection.equipmentId === item.title) && (
+                                  <Box
+                                    display="flex"
+                                    flexDirection="row"
+                                    bgcolor={Colors.light_blue}
+                                    borderColor={Colors.light_blue}
+                                    borderRadius={2}
+                                    border={0.5}
+                                    mr={1}
+                                    mb={1}
+                                    p={0.5}
+                                  >
+                                    <FBText
+                                      locale={`form.builder.mpi.part.selection.${type}`}
+                                      values={{
+                                        docId: selection.overrideDocId || "",
+                                        quantity: selection.quantity || 0,
+                                        unit: selection.unit || "",
+                                      }}
+                                      boxProps={{
+                                        color: Colors.black,
+                                        pr: 1,
+                                      }}
+                                    />
+                                    <IconButton
+                                      size="small"
+                                      style={{ fontSize: 11 }}
+                                      onClick={() => handleSelectionDelete?.(selection.refId)}
+                                    >
+                                      <HighlightOffIcon fontSize="inherit" />
+                                    </IconButton>
+                                  </Box>
+                                )}
+                              </Box>
+                            )}
+                          </FBMapWrapper>
+                        </Box>
+                      )}
+                    </>
+                  )}
+                </Observer>
+              </Box>
+              {isSelectVisible && FB.isUUID(item.title) && (
+                <Observer>
+                  {() => (
+                    <FBButton
+                      label="form.builder.select"
+                      hidden={!mpiProcedureState?.selectState.get(`${type}-${index}`)}
+                      style={{ margin: 0, padding: "4px" }}
+                      onClick={() => handleSelect?.({
+                        ...item,
+                        id: item.title,
+                        title: getItem?.(item.title) || "",
+                      })}
+                    />
+                  )}
+                </Observer>
+              )}
               {!isPreview && (
                 <>
                   <Box>

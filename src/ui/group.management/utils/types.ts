@@ -20,6 +20,7 @@ export const DEFAULT_ACTIVE_EMPLOYEES: GetEmployeeResponse[] = [{
   active: true,
   groups: [],
   user: {
+    avatar: null,
     id: "",
     email: "",
     name: "",

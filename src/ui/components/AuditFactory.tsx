@@ -3,6 +3,7 @@ import { get, has } from "lodash";
 import React, { Fragment } from "react";
 import { useIntl } from "react-intl";
 import { getFormattedDateString, MomentFormats } from "../../common/utils/date";
+import { convertHtmlEntities } from "../../common/utils/helpers";
 import { Attachment } from "../../state/ducks/attachments/types";
 import { Audit } from "../../state/ducks/audit/types";
 import { Group } from "../../state/ducks/auth/types";
@@ -122,7 +123,11 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case "justifications.description":
       case "tasks.description":
       case "description":
-        returnValue = <DialogOpener id={audit.id} text={audit.nextValue as string} dataCy={dataCy} />;
+        returnValue = <DialogOpener
+          id={audit.id}
+          text={convertHtmlEntities(audit.nextValue as string)}
+          dataCy={dataCy}
+        />;
         break;
       case "referenceTo":
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Reference).docId}</div>);

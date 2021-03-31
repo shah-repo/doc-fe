@@ -16,6 +16,7 @@ export interface Owner {
 }
 
 export interface User {
+  avatar: string | null;
   id: string;
   email: string;
   name: string;

@@ -1,4 +1,13 @@
-import { FBProcedureItemProps } from "..";
+import { FBProcedureItemConfig, FBProcedureItemProps, FBProviderProps } from "..";
 
 export type FBMPIProcedureItemProps =
-& FBProcedureItemProps;
+& FBProcedureItemProps
+& Pick<FBProviderProps, "mpiProcedureState">
+& {
+  handleSelect?: (item: FBProcedureItemConfig) => void;
+  handleSelectionDelete?: (refId?: string) => void;
+  multiplier?: number;
+  isOutput?: boolean;
+  isSelectVisible?: boolean;
+  redlineActive?: boolean;
+};

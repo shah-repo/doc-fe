@@ -4,7 +4,7 @@
 
 import "moment-timezone";
 import { CONFIG } from "../../support/config";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
@@ -35,7 +35,7 @@ context.skip("Document form upgrade", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then(() => {

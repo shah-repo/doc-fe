@@ -8,7 +8,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
@@ -57,7 +57,7 @@ context("Procedure and parts flow test", () => {
             companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
@@ -531,10 +531,6 @@ context("Procedure and parts flow test", () => {
           cy.arAddApproverOnApproverList({ approver: USERS[1].email });
         });
 
-        it("Save changes", () => {
-          cy.arSaveApiCall();
-        });
-
         it("Click 'Send To Review'", () => {
           cy.arClickSendToReview();
         });
@@ -652,7 +648,9 @@ context("Procedure and parts flow test", () => {
 
   context("Create EB from created FORM document", () => {
     it("Click create new document from FORM", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
+        cy.drCreateNewDocumentFromForm();
+      });
     });
     context("Fill EB document attributes", () => {
       it("Enters title 'Form document for procedure'", () => {
@@ -732,7 +730,9 @@ context("Procedure and parts flow test", () => {
 
   context("Clone EB and verify materials and equipment tracking", () => {
     it("Click Clone EB", () => {
-      cy.ebClickClone();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.ebClickClone();
+      });
     });
 
     context("Add materials and equipments", () => {

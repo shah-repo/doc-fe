@@ -69,7 +69,7 @@ Cypress.Commands.overwrite("click", (originalFn, subject, options) => {
   const currentCommand = cy.state("current").attributes.name;
 
   if (currentCommand === "click") {
-    cy.wrap(subject).arrow({ duration: 40, blocking: true }).then(() => originalFn(subject, options));
+    cy.wrap(subject).arrow({ duration: CONFIG.ARROW_DURATION, blocking: true }).then(() => originalFn(subject, options));
   } else {
     return originalFn(subject, options);
   }
@@ -81,7 +81,7 @@ Cypress.Commands.overwrite("type", (originalFn, subject, options) => {
   const args = cy.state("current").attributes.args;
 
   if (currentCommand === "type" && args.length == 1) {
-    cy.wrap(subject).arrow({ duration: 40, blocking: true }).then(() => originalFn(subject, options));
+    cy.wrap(subject).arrow({ duration: CONFIG.ARROW_DURATION, blocking: true }).then(() => originalFn(subject, options));
   } else {
     return originalFn(subject, options, { force: true });
   }
@@ -104,7 +104,8 @@ Cypress.on("test:after:run", (test, runnable: any ) => {
 });
 
 before(() => {
-  if (CONFIG.RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE) {
+  if (CONFIG.RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE ||
+      CONFIG.RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.SCHEDULEDPIPELINE) {
     cy.task("deleteScreenshotsFolder", { CONFIG, specFileName: Cypress.spec.name });
     cy.task("deleteExistingReports", { CONFIG, specFileName: Cypress.spec.name } );
   }

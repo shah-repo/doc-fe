@@ -2,7 +2,7 @@ import { isEmpty } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { FB, FBEQMaintenanceProps, FBEQMaintenanceState } from "..";
+import { AvailableMaintenanceForm, FB, FBEQMaintenanceProps, FBEQMaintenanceState } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 
@@ -17,6 +17,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     name = "",
     editorConfig,
     availableMaintenanceForms,
+    preventativeFormOptions,
+    getOptionLabel,
     ...props
   }: T) => {
 
@@ -73,6 +75,26 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       window.open(`/document_revision/${pmFormId}/create_maintenance/${docRevId}/${name}`);
     };
 
+    function handleFilter(
+      data: AvailableMaintenanceForm[],
+    ) {
+      const typeValue = formState?.getFieldValue(`${name}.preventativeForm`);
+      const options = data?.filter((form) =>
+        form.documentRevisions.some((doc) => doc.status === DocumentRevisionStatus.Released && form.id !== typeValue));
+      return options;
+    }
+
+    preventativeFormOptions = (options) =>
+      handleFilter(options);
+
+    getOptionLabel = (option) => {
+      if (!option?.documentRevisions?.find((doc) => doc.status === DocumentRevisionStatus.Released)) {
+        const title = option?.documentRevisions.find((doc) => doc.status === DocumentRevisionStatus.Obsolete)?.name;
+        return `${option.docId} - OBS - ${title}`;
+      }
+      return `${option.docId} - rev ${option.displayRevision} - ${option.name}`;
+    };
+
     // MARK: @observer
     useObserver(() => {
       isNewPMDisabled = (
@@ -91,6 +113,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       name,
       editorConfig,
       isTypePM,
+      preventativeFormOptions,
+      getOptionLabel,
     });
   };
 

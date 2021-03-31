@@ -14,8 +14,8 @@ class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
   @observable public name = "";
   @observable public poam = DEFAULT_POAM;
   @observable public approvalLevels: POApprovalMatrixLevel[] = [];
-  public groupsApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.officialGroups);
-  public employeesApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.employees);
+  public groupsApi = new FBAutocompleteAsyncState({ optionId: FBAutocompleteAsyncOption.officialGroups });
+  public employeesApi = new FBAutocompleteAsyncState({ optionId: FBAutocompleteAsyncOption.employees });
   public url = FBEndpoint.POApprovalMatrix;
   private formState?: FBFormState;
 

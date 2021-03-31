@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
 import { plainToClass } from "class-transformer";
-import { IsBoolean, IsDefined, IsEmail, IsEnum, IsOptional, IsString, ValidateIf, validateSync } from "class-validator";
+import { IsBoolean, IsDefined, IsEmail, IsEnum, IsNumber, IsOptional, IsString, ValidateIf, validateSync } from "class-validator";
 
 export enum RUN_ENVIRONMENT_OPTIONS {
   LOCALDEV = "LOCALDEV",
   LOCALPARALLEL = "LOCALPARALLEL",
-  PIPELINE = "PIPELINE"
+  PIPELINE = "PIPELINE",
+  SCHEDULEDPIPELINE = "SCHEDULEDPIPELINE"
 }
 
 export class ConfigEnv {
@@ -35,6 +36,8 @@ export class ConfigEnv {
       COMMIT_BE: Cypress.env("COMMIT_BE"),
       COMMIT_REMOTEJS: Cypress.env("COMMIT_REMOTEJS"),
       JSON_REPORTS_FOLDER: Cypress.env("JSON_REPORTS_FOLDER"),
+      ARROW_DURATION: Cypress.env("ARROW_DURATION"),
+      TEST_EMAIL: Cypress.env("TEST_EMAIL"),
     });
 
     const errors = validateSync(configEnv, {
@@ -57,6 +60,14 @@ export class ConfigEnv {
   @IsDefined()
   @IsString()
   FE_URL!: string;
+
+  @IsDefined()
+  @IsString()
+  TEST_EMAIL!: string;
+
+  @IsDefined()
+  @IsNumber()
+  ARROW_DURATION!: number;
 
   @IsDefined()
   @IsString()
@@ -86,7 +97,8 @@ export class ConfigEnv {
   @IsEnum(RUN_ENVIRONMENT_OPTIONS)
   RUN_ENVIRONMENT!: RUN_ENVIRONMENT_OPTIONS;
 
-  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE)
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE ||
+                                        RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.SCHEDULEDPIPELINE)
   @IsDefined()
   @IsString()
   SCREENSHOTS_DIR!: string;
@@ -110,7 +122,8 @@ export class ConfigEnv {
   @IsString()
   COMMIT_REMOTEJS!: string;
 
-  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE)
+  @ValidateIf(({ RUN_ENVIRONMENT }) => RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE ||
+                                        RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.SCHEDULEDPIPELINE)
   @IsDefined()
   @IsString()
   JSON_REPORTS_FOLDER!: string;

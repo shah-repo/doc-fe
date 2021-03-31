@@ -2,7 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -22,7 +22,7 @@ context("FORM Field test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -160,7 +160,7 @@ context("FORM Field test", () => {
 
       it("Add Select Field", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Select Field" });
+        cy.fbSelectItemFromNewFieldList({ field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
         cy.fbEnterPlaceholder({ placeholder: "fb-select-field placeholder" });
         cy.fbGroupOptions("option1", "option2");

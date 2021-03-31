@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/camelcase */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
+import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
@@ -9,9 +12,16 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 let createdCompany;
 let sessionId;
 let multipleCompanies;
+let companyId: string;
+let emailsFromInbox: IMAPEmail[];
+
 const approvalRequestFormName = "Approval request form template";
 const approvalRequestDocumentTitle = "Approval request from newly created form";
 const sampleDocOneTitle = "Sample Document One";
+
+const dateOffset = (5 * 1000);
+const dateAfterEmailShouldArrive = new Date();
+dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 
 context("Approval request form scenario", () => {
   context("[API]Prepare company", () => {
@@ -35,6 +45,7 @@ context("Approval request form scenario", () => {
           }, sessionId,
         }).then((response) => {
           createdCompany = response;
+          companyId = createdCompany.id;
           done();
         });
       });
@@ -183,28 +194,13 @@ context("Approval request form scenario", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[22].email });
     });
 
-    it("Save changes", () => {
-      cy.arSaveApiCall();
-    });
-
     it("Click send to review", () => {
       cy.arClickSendToReview();
-      cy.wait(10000);
     });
 
     it("Verify AR status", () => {
       SystemRequirement("REQ-0020");
       cy.arVerifyStatus({ status: "In Review" });
-    });
-
-    it("Verify notification email is received on user '" + USERS[20].email + "'", () => {
-      SystemRequirement("REQ-2140");
-      cy.imapVerifyInReviewAREmailNotification({ userEmail: USERS[20].email, arId: "ARID: AR00002" });
-    });
-
-    it("Verify notification email is received on user '" + USERS[22].email + "'", () => {
-      SystemRequirement("REQ-2140");
-      cy.imapVerifyInReviewAREmailNotification({ userEmail: USERS[22].email, arId: "ARID: AR00002" });
     });
   });
 
@@ -349,14 +345,6 @@ context("Approval request form scenario", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostRejectCR, CyRoutes.ARPreview, CyRoutes.GetPendingActions], () => {
           cy.poRejectAR({ password: "Tester1!" });
         });
-        cy.wait(10000);
-      });
-    });
-
-    context("Verify email notifications for rejected AR", () => {
-      it("Verify email notification for rejected AR is sent to owner '" + USERS[21].email + "'", () => {
-        SystemRequirement("REQ-2190");
-        cy.imapVerifyRejectedAREmailNotification({ userEmail: USERS[21].email, arId: "ARID: AR00002" });
       });
     });
 
@@ -439,13 +427,6 @@ context("Approval request form scenario", () => {
       it("Accept Approval Request with password prompt", () => {
         SystemRequirement("REQ-0920");
         cy.arApproveAR();
-        cy.wait(10000);
-      });
-    });
-
-    context("Verify email notification", () => {
-      it("Verify email notification for approved AR is sent to owner'" + USERS[21].email + "'", () => {
-        cy.imapVerifyApprovedAREmailNotification({ userEmail: USERS[21].email, arId: "ARID: AR00002" });
       });
     });
   });
@@ -491,6 +472,75 @@ context("Approval request form scenario", () => {
     });
   });
 
+  context("Verify emails", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        wait_time_sec: 5,
+        max_wait_time_sec: 50,
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+      };
+      cy.wait(20000);
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify 'in review' emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[20].email,
+          contains: ["Your approval request <b>ARID: AR00002</b> is in review.", companyId],
+        },
+        {
+          sentToUser: USERS[22].email,
+          contains: ["Your approval request <b>ARID: AR00002</b> is in review.", companyId],
+        },
+      ];
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 3,
+      });
+    });
+
+    it("Verify 'approved' emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[21].email,
+          contains: ["Your approval request <b>ARID: AR00002</b> is approved.", companyId],
+        },
+      ];
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+
+    it("Verify 'rejected' emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[21].email,
+          contains: ["Your approval request <b>ARID: AR00002</b> is rejected.", companyId],
+        },
+      ];
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
 });
 
 export { };

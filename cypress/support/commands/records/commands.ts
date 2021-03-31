@@ -118,8 +118,8 @@ Cypress.Commands.add("equipReloadDocument", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.DocPreview,
     CyRoutes.EmployeesGet,
-    CyRoutes.DocPreview,
-    CyRoutes.EmployeesGet], () => {
+    CyRoutes.EmployeesGetActive,
+    CyRoutes.DocPreview], () => {
     cy.reload();
   });
 });

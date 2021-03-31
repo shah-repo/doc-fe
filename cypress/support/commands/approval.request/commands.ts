@@ -28,6 +28,7 @@ declare global {
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
+      arClearFilters(): Chainable<Subject>;
       arCheckTitleInEditableAndMatches(params: { name: string }): Chainable<Subject>;
       arWithdrawSubmission(): Chainable<Subject>;
       arIsProposedDocumentEmpty(): Chainable<Subject>;
@@ -241,6 +242,12 @@ Cypress.Commands.add("arCheckImplementationTaskStatus", (params: {status: string
   cy.get("[data-cy=\"form.builder.status\"]").contains(params.status);
 });
 
+Cypress.Commands.add("arClearFilters", () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
+    cy.get("[data-cy=\"clearFilter\"]").click();
+  });
+});
+
 Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description: string }) => {
   cy.get("[data-cy=\"field-description\"]").type(params.description).unClick();
 });
@@ -285,8 +292,12 @@ Cypress.Commands.add("arClickAddBtnOnAddDocumentsDialog", () => {
 });
 
 Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string }) => {
-  cy.get("[data-cy=\"fb-approvers-approvers\"]").click();
-  cy.get("ul[role=\"listbox\"]>li").contains(params.approver).click();
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PatchAR, CyRoutes.ArAudit], () => {
+      cy.get("[data-cy=\"fb-approvers-approvers\"]").click();
+      cy.get("ul[role=\"listbox\"]>li").contains(params.approver).click();
+      cy.unClick();
+    });
 });
 
 Cypress.Commands.add("arClickCreateApprovalRequestAfterCompletingForm", () => {

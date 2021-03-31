@@ -47,7 +47,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
       setInputValue("");
     }
     setFieldValue(name, (value as any)?.value);
-    submitForm();
+    // submitForm();
   };
   const onInputChange = (value) => {
     if (!touched[name]) {
@@ -66,8 +66,8 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   const onBlur = () => {
     if (formikValue !== inputValue) {
       setFieldValue(name, inputValue);
-      submitForm();
     }
+    submitForm();
   };
 
   const stringify = (option: OptionType) => option.label;
