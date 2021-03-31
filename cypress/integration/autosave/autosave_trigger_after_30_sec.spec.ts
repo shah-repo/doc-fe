@@ -113,6 +113,10 @@ context("Autosave trigger after 30 sec", () => {
         cy.wait(30000);
       });
     });
+
+    it("Last save should be present", () => {
+      cy.contains("Last saved:").should("be.exist");
+    });
   });
 
   context("Edit Revision Stage after reload page and Autosave should trigger", () => {
@@ -125,6 +129,10 @@ context("Autosave trigger after 30 sec", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Alpha" });
       });
+    });
+
+    it("Last save should be present", () => {
+      cy.contains("Last saved:").should("be.exist");
     });
   });
 
