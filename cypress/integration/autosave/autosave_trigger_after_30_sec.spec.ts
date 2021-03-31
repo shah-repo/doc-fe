@@ -1,8 +1,6 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import moment from "moment";
-import "moment-timezone";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
@@ -11,8 +9,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
-let BEFORE_SAVE_TIME;
-let AFTER_SAVE_TIME;
 
 context("Autosave trigger after 30 sec", () => {
   context("[API]Prepare company", () => {
@@ -107,27 +103,15 @@ context("Autosave trigger after 30 sec", () => {
   });
 
   context("Edit description and after 30 sec trigger Autosave", () => {
-    it("Last save should not be present", () => {
-      cy.contains("Last saved:").should("not.be.exist");
-    });
-
     it("Edit description 'New Document Revision description 1'", () => {
-      BEFORE_SAVE_TIME = moment().tz("America/Los_Angeles");
       cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
         .type("1");
     });
 
-    it("Wait for 30 sec", () => {
-      cy.wait(30000);
-    });
-
-    it("Last save should be present", () => {
-      AFTER_SAVE_TIME = moment().tz("America/Los_Angeles");
-      cy.contains("Last saved:").should("be.exist");
-      const DIFF = AFTER_SAVE_TIME.diff(BEFORE_SAVE_TIME, "seconds");
-      cy.wrap(DIFF)
-        .should("be.gte", 30)
-        .should("be.lt", 33);
+    it("Wait for 30 sec to trigger Autosave", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.wait(30000);
+      });
     });
   });
 
@@ -137,17 +121,9 @@ context("Autosave trigger after 30 sec", () => {
       cy.drFilterDocListByNameAndStatus({ title: "New Document Revision", status: "Draft" });
     });
 
-    it("Last save should not be present", () => {
-      cy.contains("Last saved:").should("not.be.exist");
-    });
-
-    it("Select 'Alpha' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Alpha" });
-    });
-
-    it("Last save should be present", () => {
+    it("Autosave should trigger after changing Revision Stage", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
-        cy.contains("Last saved:").should("be.exist");
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Alpha" });
       });
     });
   });
