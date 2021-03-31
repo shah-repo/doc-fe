@@ -307,7 +307,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.LotQuantity], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
         cy.poClickCreatePO();
       });
     });
@@ -523,7 +523,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.LotQuantity], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
         cy.poClickCreatePO();
       });
     });

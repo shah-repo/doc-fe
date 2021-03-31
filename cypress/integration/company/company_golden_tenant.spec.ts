@@ -765,7 +765,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Upload logo picture 'image.jpg'", () => {
-      cy.get("[data-cy=\"media.upload\"]>div>div>button").click();
+      cy.xpath("//div[@data-cy=\"Client's Logo\"]/../../../div/div/button").click();
       cy.pmUploadAttachment({ fileName: "image.jpg" });
     });
 

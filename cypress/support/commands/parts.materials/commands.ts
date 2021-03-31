@@ -106,7 +106,7 @@ Cypress.Commands.add("pmAddFreeTextEquipment", (params: {equipment: string}) => 
 
 Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {
   cy.fixture(params.fileName).then((fileContent) => {
-    cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachmentMediaUpload, () => {
+    cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
       cy.get("[id^=\"fb-mediaalbum-upload\"]").attachFile({
         fileContent: fileContent.toString(),
         fileName: params.fileName,
