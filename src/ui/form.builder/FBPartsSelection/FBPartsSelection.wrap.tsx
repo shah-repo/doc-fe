@@ -15,7 +15,7 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     defaultValue,
     editorConfig,
     index,
-    name,
+    name = "",
     ...props
   }: T) => {
 
@@ -44,10 +44,12 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.docRevByDoc),
       (docRevs: DocumentRevision[]) => {
-        const released = find(Array.from(docRevs.values()), (rev) => rev.status === "RELEASED");
-        if (!released) { return; }
-        formState?.setFieldValue(name, (released).id);
-        formState?.getInputState(name || "")?.setRender();
+        if (!workspaceState?.document?.formInput?.[name]) {
+          const released = find(Array.from(docRevs.values()), (rev) => rev.status === "RELEASED");
+          if (!released) { return; }
+          formState?.setFieldValue(name, (released).id);
+          formState?.getInputState(name || "")?.setRender();
+        }
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
