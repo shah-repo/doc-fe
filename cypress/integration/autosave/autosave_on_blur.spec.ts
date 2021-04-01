@@ -60,7 +60,7 @@ context("Autosave on blur", () => {
       });
     });
 
-    it("[API]Login admin with autosave tigger shown", (done: any) => {
+    it("[API]Login admin with autosave trigger shown", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
         password: "Tester1!",
@@ -361,7 +361,6 @@ context("Autosave on blur", () => {
 
   context("Start document creation flow", () => {
     it("Navigates to document list", () => {
-      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
@@ -380,12 +379,10 @@ context("Autosave on blur", () => {
     });
 
     it("Selects 'Form' document type from dropdown", () => {
-      // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
     it("Selects 'Test Document Type' output document type from dropdown", () => {
-      // SystemRequirement("REQ-0490");
       cy.drSelectOutputDocumentType({ documentType: "Test Document Type" });
     });
 
