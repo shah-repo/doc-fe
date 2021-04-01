@@ -3,7 +3,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import EditIcon from "@material-ui/icons/Edit";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
-import { find, isEmpty } from "lodash";
+import { isEmpty } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -122,7 +122,6 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   locale={`form.builder.mpi.procedure.${type}.title`}
                   values={{
                     title: getItem?.(item.title),
-                    revision: find(usedDocumentsInLHRS, item.title)?.[item.title]?.displayRevision,
                     quantity: item.quantity ? (item.quantity * multiplier) : "form.builder.none",
                     unit: item.unit,
                   }}
