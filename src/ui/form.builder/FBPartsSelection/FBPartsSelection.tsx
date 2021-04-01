@@ -11,6 +11,7 @@ const FBPartsSelection: React.FunctionComponent<FBPartsSelectionProps> = ({
   <FBAutocompleteAsync
     {...props}
     type="partsselection"
+    shouldReloadOnInit={true}
     optionId={isOutput ? FBAutocompleteAsyncOption.docRevByDoc : FBAutocompleteAsyncOption.availablePartDocuments}
     urlValues={{ documentId: editorConfig?.id }}
     {...{ defaultValue }}
