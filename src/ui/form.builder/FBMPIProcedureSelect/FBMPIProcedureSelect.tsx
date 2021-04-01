@@ -23,7 +23,7 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
                 label="form.builder.lot.number"
                 name="usedOverride"
                 options={mpiProcedureSelectState?.lotsApi.data
-                  ?.filter((option) => !isDocumentRevisionInDraft(option.document.documentType.groupOptions))
+                  ?.filter((option) => !isDocumentRevisionInDraft(option.document?.documentType?.groupOptions))
                 }
                 loading={mpiProcedureSelectState?.lotsApi.loading}
                 optionValueKey="id"
