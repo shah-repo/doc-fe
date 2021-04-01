@@ -2,7 +2,7 @@ import { find } from "lodash";
 import { reaction } from "mobx";
 import React, { useEffect } from "react";
 import { FB, FBAutocompleteAsyncOption, FBPartsSelectionProps } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 
@@ -15,6 +15,7 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     defaultValue,
     editorConfig,
     index,
+    filteredOptions,
     name = "",
     ...props
   }: T) => {
@@ -55,6 +56,16 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     ), []);
 
     // MARK: @helpers
+    function handleFilter(
+      data: DocumentRevision[],
+    ) {
+      const filteredData = data.filter((e) => e.status === DocumentRevisionStatus.Released);
+      return filteredData;
+    }
+
+    // MARK: @methods
+    filteredOptions = (options) =>
+      handleFilter(options);
 
     // MARK: @methods
 
@@ -68,6 +79,7 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
       editorConfig,
       index,
       name,
+      filteredOptions,
     });
   };
 
