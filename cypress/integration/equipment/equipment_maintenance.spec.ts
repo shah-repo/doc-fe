@@ -542,11 +542,15 @@ context("Equipment maintenance test", () => {
       const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
       cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").click();
       cy.wait(500);
-      cy.get("button.MuiPickersDay-day").contains(dayOfTheMonth).each(($el) => {
-        if ($el.not(".MuiPickersDay-hidden")) {
-          cy.wrap($el).click();
-        }
-      });
+      cy.get("button.MuiPickersDay-day")
+        .not(".MuiPickersDay-hidden")
+        .each(($el) => {
+          const dayNumber = $el.text();
+          cy.log(dayNumber);
+          if (dayOfTheMonth.toString() === dayNumber) {
+            cy.wrap($el).click();
+          }
+        });
       cy.wait(500);
     });
 
@@ -643,11 +647,15 @@ context("Equipment maintenance test", () => {
       const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
       cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").click();
       cy.wait(500);
-      cy.get("button.MuiPickersDay-day").contains(dayOfTheMonth).each(($el) => {
-        if ($el.not(".MuiPickersDay-hidden")) {
-          cy.wrap($el).click();
-        }
-      });
+      cy.get("button.MuiPickersDay-day")
+        .not(".MuiPickersDay-hidden")
+        .each(($el) => {
+          const dayNumber = $el.text();
+          cy.log(dayNumber);
+          if (dayOfTheMonth.toString() === dayNumber) {
+            cy.wrap($el).click();
+          }
+        });
       cy.wait(500);
     });
 
