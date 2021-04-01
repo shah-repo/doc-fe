@@ -36,6 +36,7 @@ export const checkIsDocumentPOAM = checkDocumentGroupOptions.bind(this, DOC_TYPE
 export const checkIsDocumentEquipment = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EQUIPMENT);
 export const checkIsDynamicForm = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DYNAMIC_FORM);
 export const checkIsDocumentMPIOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MPI_OUTPUT);
+export const checkIsDocumentMPI = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MPI);
 export const checkIsDocumentLHR = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.LHR);
 
 export const checkIsTypeHaveOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.HAVE_OUTPUT);
