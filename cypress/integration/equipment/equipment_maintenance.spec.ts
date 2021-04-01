@@ -539,9 +539,18 @@ context("Equipment maintenance test", () => {
     });
 
     it("Fill 'Completion Date'", () => {
+      const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
       cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").click();
       cy.wait(500);
-      cy.get("button.MuiPickersDay-current").click();
+      cy.get("button.MuiPickersDay-day")
+        .not(".MuiPickersDay-hidden")
+        .each(($el) => {
+          const dayNumber = $el.text();
+          cy.log(dayNumber);
+          if (dayOfTheMonth.toString() === dayNumber) {
+            cy.wrap($el).click();
+          }
+        });
       cy.wait(500);
     });
 
@@ -635,9 +644,18 @@ context("Equipment maintenance test", () => {
     });
 
     it("Fill 'Completion Date'", () => {
+      const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
       cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").click();
       cy.wait(500);
-      cy.get("button.MuiPickersDay-current").click();
+      cy.get("button.MuiPickersDay-day")
+        .not(".MuiPickersDay-hidden")
+        .each(($el) => {
+          const dayNumber = $el.text();
+          cy.log(dayNumber);
+          if (dayOfTheMonth.toString() === dayNumber) {
+            cy.wrap($el).click();
+          }
+        });
       cy.wait(500);
     });
 
