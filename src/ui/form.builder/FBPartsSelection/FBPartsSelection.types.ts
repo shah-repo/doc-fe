@@ -6,4 +6,5 @@ export type FBPartsSelectionProps =
   isOutput?: boolean;
   editorConfig?: FBId;
   filteredOptions?: FBAutocompleteProps["filterOptions"];
+  isDocumentLHR?: boolean;
 };
