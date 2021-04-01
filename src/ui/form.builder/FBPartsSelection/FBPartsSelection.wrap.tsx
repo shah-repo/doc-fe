@@ -3,6 +3,7 @@ import { reaction } from "mobx";
 import React, { useEffect } from "react";
 import { FB, FBAutocompleteAsyncOption, FBPartsSelectionProps } from "..";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { checkIsDocumentLHR } from "../../documentRevision/helpers/checkDocumentGroup";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 
@@ -16,6 +17,7 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     editorConfig,
     index,
     filteredOptions,
+    isDocumentLHR,
     name = "",
     ...props
   }: T) => {
@@ -23,7 +25,9 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     isOutput = workspaceState?.isOutput;
-    disabled = workspaceState?.mode === "preview" || workspaceState?.mode === "formPreview";
+    const { documentType } = workspaceState?.document?.document || {};
+    isDocumentLHR = checkIsDocumentLHR(documentType?.groupOptions);
+    disabled = workspaceState?.mode === "preview" || workspaceState?.mode === "formPreview" || isDocumentLHR;
 
     if (!isOutput) {
       defaultValue = editorConfig?.id;
@@ -80,6 +84,7 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
       index,
       name,
       filteredOptions,
+      isDocumentLHR,
     });
   };
 

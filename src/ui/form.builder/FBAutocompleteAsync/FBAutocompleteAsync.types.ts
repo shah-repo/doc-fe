@@ -15,6 +15,7 @@ export type FBAutocompleteAsyncProps =
    */
   urlValues?: Record<string, any>;
   withoutPrefixRoot?: boolean;
+  withoutLabelKey?: boolean;
 };
 
 export interface FBAutocompleteAsyncConfig  {
