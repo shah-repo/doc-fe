@@ -1,7 +1,7 @@
 import { concat, uniqBy } from "lodash";
 import React from "react";
 import { DocumentRevision, SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
-import { checkIsTypeLhr, checkIsTypeMpiOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
 
 const LHR_BUILD_TYPE = "lhr-build-type";
 const LHR_SUBTITLE_PRECALC_KEY = "lshs_subtitle";
@@ -45,10 +45,10 @@ const generateLHRsSubtitle = (documentRevision: DocumentRevision) => {
 };
 
 export const generateSubtitle = (documentRevision: DocumentRevision) => {
-  if (checkIsTypeMpiOutput(documentRevision.document.documentType.groupOptions)) {
+  if (checkIsDocumentMPIOutput(documentRevision.document.documentType.groupOptions)) {
     return generateLHRsSubtitle(documentRevision);
   }
-  if (checkIsTypeLhr(documentRevision.document.documentType.groupOptions)) {
+  if (checkIsDocumentLHR(documentRevision.document.documentType.groupOptions)) {
     return generateLHRSubtitle(documentRevision);
   }
   return null;
