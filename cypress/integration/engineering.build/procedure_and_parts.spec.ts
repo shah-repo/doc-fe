@@ -450,6 +450,7 @@ context("Procedure and parts flow test", () => {
     it("Add an Approval'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.unClick();
       });
     });
 
@@ -696,7 +697,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Upload attachment 'image.jpg'", () => {
-        cy.get("[data-cy=\"media.upload\"]>div>div>button").click();
+        cy.get("[data-cy=\"albumMediaButton\"]").click();
         cy.pmUploadAttachment({ fileName: "image.jpg" });
       });
 

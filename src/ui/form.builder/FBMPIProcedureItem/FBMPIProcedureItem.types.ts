@@ -13,4 +13,5 @@ export type FBMPIProcedureItemProps =
   isSelectVisible?: boolean;
   redlineActive?: boolean;
   usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
+  isDocumentMPI?: boolean;
 };
