@@ -456,14 +456,18 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/*/aggregated_audit",
     },
     callConfig: {
-      requestTimeout: 25 * 1000,
-      responseTimeout: 30 * 1000,
+      requestTimeout: 35 * 1000,
+      responseTimeout: 40 * 1000,
     },
   },
   GetDocAudit: {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revisions/*/audit",
+    },
+    callConfig: {
+      requestTimeout: 35 * 1000,
+      responseTimeout: 40 * 1000,
     },
   },
   GetProposedDocId: {
