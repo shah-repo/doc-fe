@@ -1,44 +1,27 @@
 import React from "react";
-import { connect } from "react-redux";
-import { RouteComponentProps } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { dashboardActions, dashboardSelectors } from "../../state/ducks/dashboard";
-import { PendingAction } from "../../state/ducks/dashboard/types";
-import { ApplicationState } from "../../state/reducers";
-import { AsyncState } from "../../state/types";
+import useActionCreator from "../hooks/useActionCreator";
 import DashboardPresenter from "./Dashboard.presenter";
 import DashboardSockets from "./DashboardSockets";
 
-export interface StateProps {
-  loadPendingActionsListAsyncState: AsyncState;
-  pendingActions: PendingAction[];
-}
+const DashboardContainer: React.FunctionComponent<{}> = () => {
+  const loadPendingActions = useActionCreator(dashboardActions.loadPendingActionsList);
+  const loadPendingActionsListAsyncState = useSelector(dashboardSelectors.getLoadPendingActionsListAsyncInfo);
+  const pendingActions = useSelector(dashboardSelectors.pendingActions);
 
-export interface DispatchProps {
-  loadPendingActions: typeof dashboardActions.loadPendingActionsList;
-}
+  return (
+    <>
+      <DashboardSockets />
+      <DashboardPresenter
+        {...{
+          loadPendingActions,
+          loadPendingActionsListAsyncState,
+          pendingActions,
+        }}
 
-type OwnProps = RouteComponentProps;
+      />
+    </>
+  ); };
 
-type DashboardContainerProps = OwnProps & DispatchProps & StateProps;
-
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-  loadPendingActionsListAsyncState: dashboardSelectors.getLoadPendingActionsListAsyncInfo(state),
-  pendingActions: dashboardSelectors.pendingActions(state),
-});
-
-const DashboardContainer: React.FunctionComponent<DashboardContainerProps> = ({
-  loadPendingActions, loadPendingActionsListAsyncState, pendingActions,
-}) => (
-  <>
-    <DashboardSockets />
-    <DashboardPresenter
-      loadPendingActions={loadPendingActions}
-      loadPendingActionsListAsyncState={loadPendingActionsListAsyncState}
-      pendingActions={pendingActions}
-    />
-  </>
-);
-
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
-  loadPendingActions: dashboardActions.loadPendingActionsList,
-})(DashboardContainer);
+export default DashboardContainer;

@@ -1,23 +1,19 @@
 import queryString from "query-string";
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import { authActions } from "../../state/ducks/auth";
-import { ApplicationState } from "../../state/reducers";
 import AsyncGate from "../components/AsyncGate";
 import { LOGIN_URL } from "../constants/urls";
+import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 
-interface DispatchProps {
-  loginWithCode: typeof authActions.loginWithCode;
-}
-
-export type LoginWithCodeContainerProps = DispatchProps & RouteComponentProps;
-
-export const LoginWithCodeContainer: React.FunctionComponent<LoginWithCodeContainerProps> = ({
-  loginWithCode, location, history,
+export const LoginWithCodeContainer: React.FunctionComponent<RouteComponentProps> = ({
+  location,
+  history,
 }) => {
   const code = queryString.parse(location.search).code as string;
+  const loginWithCodeAction = useActionCreator(authActions.loginWithCode);
+
   const async = useAsync({
     onSuccess: () => {
       // the user will be redirected to company select or dashboard screen
@@ -30,7 +26,7 @@ export const LoginWithCodeContainer: React.FunctionComponent<LoginWithCodeContai
   // NOTE: not sure if this is what the old code with useState tried to achieve
   useEffect(() => {
     if (code) {
-      async.start(loginWithCode, { code }, async);
+      async.start(loginWithCodeAction, { code }, async);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
@@ -45,6 +41,4 @@ export const LoginWithCodeContainer: React.FunctionComponent<LoginWithCodeContai
   );
 };
 
-export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
-  loginWithCode: authActions.loginWithCode,
-})(LoginWithCodeContainer);
+export default LoginWithCodeContainer;

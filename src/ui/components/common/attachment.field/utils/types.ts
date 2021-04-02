@@ -18,4 +18,4 @@ export interface AttachmentStyleProps {
   isField: boolean;
 }
 
-export type AttachmentContainerProps = AttachmentFieldProps & AttachmentFieldDispatchProps;
+export type AttachmentContainerProps = AttachmentFieldProps;
