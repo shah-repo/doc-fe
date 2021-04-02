@@ -588,17 +588,20 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
       });
-      cy.wait(5000);
     });
 
     it("Reload 'Equipment maintenance document'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.DocPreview,
+        CyRoutes.DocPreview,
+        CyRoutes.EmployeesGet,
+        CyRoutes.SessionDetails], () => {
         cy.reload();
       });
     });
 
     it("Check preventative maintenance document existance", () => {
-      cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
+      cy.get("div[data-cy=\"maintenanceHistory\"]")
         .eq(0)
         .contains("MR-00001 - Preventative maintenance document");
     });
@@ -674,7 +677,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetAvailableApprovers], () => {
+        cy.ebApprove();
+      });
     });
 
     it("Verify status is 'Released'", () => {
@@ -704,19 +709,20 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.DocRevPreview], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
       });
-      cy.wait(5000);
     });
 
     it("Reload 'Equipment calibration document'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.DocPreview,
+        CyRoutes.DocPreview,
+        CyRoutes.EmployeesGet,
+        CyRoutes.SessionDetails], () => {
         cy.reload();
       });
     });
 
     it("Check Calibration document existance", () => {
-      cy.get("div[data-cy=\"form.builder.maintenance.history\"]")
-        .parent()
-        .parent()
+      cy.get("div[data-cy=\"maintenanceHistory\"]")
         .eq(1)
         .contains("MR-00002 - Calibration document");
     });
