@@ -1,17 +1,17 @@
 import { debounce, isEmpty, pick } from "lodash";
 import React, { useEffect, useMemo } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { companyActions, companySelectors } from "../../state/ducks/company";
 import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
-import { ApplicationState } from "../../state/reducers";
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import { shouldHaveNoResponse } from "../document.revision/utils/helpers";
 import { FBEndpoint } from "../form.builder/defaults/FBEndpoint";
 import FBStore from "../form.builder/FBStore/FBStore";
+import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 import { isOperator } from "./DocumentRevisionDisplay.container";
@@ -20,40 +20,18 @@ import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from 
 import { DocumentRevisionFormValues } from "./forms/types";
 import { canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
 
-interface StateProps {
-  currentUserEmail: string;
-}
-
-interface DispatchProps {
-  save: typeof documentRevisionsActions.save;
-  saveWithNoResponse: typeof documentRevisionsActions.saveWithNoResponse;
-}
-
-interface OwnProps {
+interface Props {
   documentId?: string;
   documentRevision: DocumentRevision;
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip?: boolean;
   isNewVersion?: boolean;
 }
-
-type DocumentRevisionUpdateContainerProps = OwnProps &
-DispatchProps &
-StateProps;
-
 // TO-DO Move To Context Folder
-export let documentRevisionStatusContextFromCR = React.createContext< undefined | DocumentRevisionStatus >(undefined);
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-  currentUserEmail: authSelectors.currentUserEmail(state),
-});
+export let documentRevisionStatusContextFromCR = React.createContext<DocumentRevisionStatus | undefined>(undefined);
 
-const DocumentRevisionUpdateContainer: React.FunctionComponent<
-DocumentRevisionUpdateContainerProps
-> = ({
-  save,
-  saveWithNoResponse,
+const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   documentRevision,
-  currentUserEmail,
   onDirtyFlagChange,
   documentId,
   canChangeOwnerShip,
@@ -61,12 +39,15 @@ DocumentRevisionUpdateContainerProps
 }) => {
   const dispatch = useDispatch();
   const redlineActive = useSelector(companySelectors.getRedlineActive);
+  const currentUserEmail = useSelector(authSelectors.currentUserEmail);
   const initialValues = useMemo(() => toDocumentRevisionFormValues(documentRevision), [documentRevision]);
   const isCurrentUserOperator = React.useContext(isOperator);
   const { docId } = documentRevision.document;
   useDocumentTitle(docId);
   const status = documentRevision ? documentRevision.status : undefined;
   documentRevisionStatusContextFromCR = React.createContext(status);
+  const saveAction = useActionCreator(documentRevisionsActions.save);
+  const saveWithNoResponseAction = useActionCreator(documentRevisionsActions.saveWithNoResponse);
 
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const async = useAsync<DocumentRevision>({
@@ -96,7 +77,7 @@ DocumentRevisionUpdateContainerProps
     async.reset();
 
     const promise = async.start(
-      save,
+      saveAction,
       documentRevision.id,
       data,
       async,
@@ -127,7 +108,7 @@ DocumentRevisionUpdateContainerProps
     if (shouldHaveNoResponse(dataToSubmit, documentRevision)) {
       async.reset();
       async.start(
-        saveWithNoResponse,
+        saveWithNoResponseAction,
         documentRevision.id,
         dataToSubmit as DocumentRevisionEditRequestBody,
         async,
@@ -157,10 +138,4 @@ DocumentRevisionUpdateContainerProps
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
-  mapStateToProps,
-  {
-    save: documentRevisionsActions.save,
-    saveWithNoResponse: documentRevisionsActions.saveWithNoResponse,
-  },
-)(DocumentRevisionUpdateContainer);
+export default DocumentRevisionUpdateContainer;

@@ -1,16 +1,15 @@
 import { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
-import { connect } from "react-redux";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../state/ducks/changeRequest/types";
-import { ApplicationState } from "../../../state/reducers";
 import { toastError } from "../../components/notifications";
 import TransitionDialog from "../../components/transitionDialog/TransitionDialog";
+import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import { EffectiveDateFormValues, PasswordFormValues } from "../form/types";
 
-interface OwnProps {
+interface Props {
   changeRequestId: string;
   transition: ChangeRequestTransition;
   buttonProps?: ButtonProps;
@@ -18,15 +17,8 @@ interface OwnProps {
   onSuccess?: () => void;
 }
 
-interface DispatchProps {
-  applyTransition: typeof changeRequestsActions.applyTransition;
-}
-
-type TransitionDialogContainerProps = OwnProps & DispatchProps;
-
-const TransitionDialogContainer: React.FunctionComponent<TransitionDialogContainerProps> = ({
+const TransitionDialogContainer: React.FunctionComponent<Props> = ({
   changeRequestId,
-  applyTransition,
   transition,
   buttonProps,
   label,
@@ -34,6 +26,8 @@ const TransitionDialogContainer: React.FunctionComponent<TransitionDialogContain
 }) => {
   const transitionDialog = useDialog();
   const effectiveDateDialog = useDialog();
+  const applyTransitionAction = useActionCreator(changeRequestsActions.applyTransition);
+
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {
       onSuccess && onSuccess();
@@ -56,7 +50,7 @@ const TransitionDialogContainer: React.FunctionComponent<TransitionDialogContain
 
   const onSubmit = (values: PasswordFormValues | EffectiveDateFormValues) => {
     async.start(
-      applyTransition,
+      applyTransitionAction,
       changeRequestId, values, transition, async,
     );
   };
@@ -77,6 +71,4 @@ const TransitionDialogContainer: React.FunctionComponent<TransitionDialogContain
   );
 };
 
-export default connect<{}, DispatchProps, OwnProps, ApplicationState>(null, {
-  applyTransition: changeRequestsActions.applyTransition,
-})(TransitionDialogContainer);
+export default TransitionDialogContainer;

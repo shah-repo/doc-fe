@@ -2,21 +2,18 @@ import { Box, CircularProgress } from "@material-ui/core";
 import { map, pick } from "lodash";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
-import { connect } from "react-redux";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 import { Attachment } from "../../../../state/ducks/attachments/types";
-import { ApplicationState } from "../../../../state/reducers";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
+import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import { useFormContext } from "../../forms/FormContext";
 import { withFormik } from "../../hoc/formik";
 import { toastError } from "../../notifications";
 import Presenter from "./presenter";
-import { AttachmentContainerProps, AttachmentFieldDispatchProps } from "./utils/types";
-
-type DispatchProps = AttachmentFieldDispatchProps;
+import { AttachmentContainerProps } from "./utils/types";
 
 const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps> = ({
   name = "",
@@ -30,6 +27,8 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
   const { submitForm } = useFormContext();
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const intl = useIntl();
+
+  const uploadAction = useActionCreator(attachmentsActions.upload);
 
   const async = useAsync<Attachment>({
     onSuccess: (attachment?: Attachment) => {
@@ -83,7 +82,7 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
       return;
     }
     setIsUploading(true);
-    async.start(upload, file, lineType, async, cleanCopyRequired);
+    async.start(uploadAction, file, lineType, async, cleanCopyRequired);
     handleUpload(files, lineType, cleanCopyRequired);
   };
 
@@ -147,6 +146,4 @@ const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps
   );
 };
 
-export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
-  upload: attachmentsActions.upload,
-})(withFormik(AttachmentFieldContainer));
+export default withFormik(AttachmentFieldContainer);
