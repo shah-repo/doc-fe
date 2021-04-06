@@ -10,8 +10,7 @@ import useGetHasTag from "../../../hooks/useGetHasTag";
 import { toNavigationBodyValues, toNavigationIntialValues } from "../../utils/transform";
 import NavigationManagementPresenter from "./NavigationManagement.presenter";
 
-const NavigationManagementContainer: React.FunctionComponent<{}> = ({
-}) => {
+const NavigationManagementContainer: React.FunctionComponent<{}> = () => {
   const dispatch = useDispatch();
 
   const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
