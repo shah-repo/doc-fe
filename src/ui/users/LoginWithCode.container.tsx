@@ -7,7 +7,7 @@ import { LOGIN_URL } from "../constants/urls";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 
-export const LoginWithCodeContainer: React.FunctionComponent<RouteComponentProps> = ({
+const LoginWithCodeContainer: React.FunctionComponent<RouteComponentProps> = ({
   location,
   history,
 }) => {
