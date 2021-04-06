@@ -26,7 +26,7 @@ import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
-import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
+import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord } from "../helpers/records";
 import { getRevisionStageNumber, isDocumentAlphaReleased } from "../helpers/revisionStage";
@@ -148,6 +148,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
   const isPart = checkIsDocumentPart(documentRevision?.document.documentType.groupOptions);
   const isDocumentEquipment = checkIsDocumentEquipment(documentRevision?.document.documentType.groupOptions);
+  const isMPIOutput = checkIsDocumentMPIOutput(documentRevision?.document.documentType.groupOptions);
+  const isLHR = checkIsDocumentLHR(documentRevision?.document.documentType.groupOptions);
   const shouldShowUpgradeForDocs = useShouldUpgradeToLatest(
     documentRevision?.status,
     documentRevision?.formDocument?.status,
@@ -155,7 +157,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const shouldShowUpgrade =
-    (!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs);
+    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
+    && !isMPIOutput && !isLHR;
 
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;

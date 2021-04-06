@@ -60,7 +60,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
       )}
     </Box>
     {type === FBProcedureItemType.attachments && (
-      <Box mt={2}>
+      <Box data-cy="mediaUploadField" mt={2}>
         <FBMediaAlbumField
           name={`${name}.attachments`}
           isTemplate={false}

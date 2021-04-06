@@ -3,7 +3,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormFilterType, FBProcedureFormProps, FBProcedureFormState, FBProcedureItemConfig, FBProcedureItemType } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 
 export const withFBProcedureForm = <T extends FBProcedureFormProps>(
   Component: React.FunctionComponent<T>,
@@ -111,6 +111,8 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       inputValue: string,
     ) {
       const typeValue = formState?.getFieldValue(type);
+      data = type === FBProcedureFormFilterType.lots ?
+        data.filter((e) => e.status === DocumentRevisionStatus.Released) : data;
       let filtered = typeValue ? [] : data;
       const relation = type === FBProcedureFormFilterType.parts
         ? procedureFormState?.lots

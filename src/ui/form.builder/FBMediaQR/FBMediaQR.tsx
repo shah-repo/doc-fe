@@ -16,7 +16,7 @@ const FBMediaQR: React.FunctionComponent<FBMediaQRProps> = ({
     {mode === "qr" && (
       <>
         <Box display="flex" flexDirection="row-reverse" py={0.8}>
-          <IconButton size="small" onClick={setMediaFieldMode}>
+          <IconButton data-cy="albumMediaButton" size="small" onClick={setMediaFieldMode}>
             <Tooltip title={<Text message="form.builder.album" />}>
               <AlbumIcon />
             </Tooltip>

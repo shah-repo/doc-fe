@@ -347,7 +347,6 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
   });
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetRequiredApproversDocRev,
-    CyRoutes.GetRequiredApproversDocRev,
     CyRoutes.DocRevGet,
   ], () => {
     cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
@@ -376,7 +375,6 @@ Cypress.Commands.add("arWithdrawSubmission", () => {
     CyRoutes.PostWithdrawChangeRequests,
     CyRoutes.EmployeesGet,
     CyRoutes.ARPreview,
-    CyRoutes.DocRevPreview,
     CyRoutes.DocRevPreview], () => {
     cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
   });

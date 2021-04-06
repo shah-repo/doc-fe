@@ -4,7 +4,7 @@ import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
-import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentForm, checkIsDocumentMPI } from "../../documentRevision/helpers/checkDocumentGroup";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
@@ -27,6 +27,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     isOutput,
     isSelectVisible,
     redlineActive,
+    isDocumentMPI,
     ...props
   }: T) => {
 
@@ -35,6 +36,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     const { document } = workspaceState || {};
     const { documentType } = document?.document || {};
     const isDocumentForm = checkIsDocumentForm(documentType?.groupOptions);
+    isDocumentMPI = checkIsDocumentMPI(documentType?.groupOptions);
 
     const smartReferencesTo = uniqBy(concat(
       workspaceState?.document?.smartReferencesTo,
@@ -165,6 +167,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       value,
       isSelectVisible,
       usedDocumentsInLHRS,
+      isDocumentMPI,
     });
   };
 

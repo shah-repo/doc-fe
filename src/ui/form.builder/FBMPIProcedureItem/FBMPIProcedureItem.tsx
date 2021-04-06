@@ -47,6 +47,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   name,
   isSelectVisible,
   usedDocumentsInLHRS,
+  isDocumentMPI,
   defaultValue,
 }) => (
   <FBProvider {...{ dialogState, mpiProcedureState }}>
@@ -87,7 +88,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
       )}
     </Box>
     {type === FBProcedureItemType.attachments && (
-      <Box mt={2}>
+      <Box data-cy="mediaUploadField" mt={2}>
         <FBMediaAlbumField
           name={`${name}.attachments`}
           isTemplate={true}
@@ -119,13 +120,20 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             >
               <Box flexGrow={1}>
                 <FBText
-                  locale={`form.builder.mpi.procedure.${type}.title`}
-                  values={{
-                    title: getItem?.(item.title),
-                    revision: find(usedDocumentsInLHRS, item.title)?.[item.title]?.displayRevision,
-                    quantity: item.quantity ? (item.quantity * multiplier) : "form.builder.none",
-                    unit: item.unit,
-                  }}
+                  locale={isDocumentMPI ? `form.builder.mpi.procedure.${type}.title` :
+                    `form.builder.lhrs.procedure.${type}.title`}
+                  values={
+                    isDocumentMPI ? {
+                      title: getItem?.(item.title),
+                      quantity: item.quantity ? (item.quantity * multiplier) : "form.builder.none",
+                      unit: item.unit,
+                    } :
+                      {
+                        title: getItem?.(item.title),
+                        revision: find(usedDocumentsInLHRS, item.title)?.[item.title]?.displayRevision,
+                        quantity: item.quantity ? (item.quantity * multiplier) : "form.builder.none",
+                        unit: item.unit,
+                      }}
                   boxProps={{
                     color: Colors.black,
                     flexGrow: 1,
