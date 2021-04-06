@@ -19,7 +19,7 @@ let initialArDocument;
 let createdDocumentRevResponse;
 let createdDocumentRevResponse2;
 const documentRevisionName = "New document for testing approval request list";
-const documentRevisionName2 = "New document for testing approval request list 2";
+const documentRevisionName2 = "New document for testing approval request list two";
 const approvalRequestName = "Approval request for testing 1";
 const approvalRequestName2 = "Approval request for testing 2";
 

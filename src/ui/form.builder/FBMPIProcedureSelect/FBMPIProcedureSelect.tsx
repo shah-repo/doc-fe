@@ -2,6 +2,7 @@ import { Observer } from "mobx-react";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBMPIProcedureSelectProps, FBProcedureItemType, FBQuantityUnitField } from "..";
+import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 import { withFBMPIProcedureSelect } from "./FBMPIProcedureSelect.wrap";
 
 const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> = ({
@@ -21,7 +22,9 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
               <FBAutocomplete
                 label="form.builder.lot.number"
                 name="usedOverride"
-                options={mpiProcedureSelectState?.lotsApi.data}
+                options={mpiProcedureSelectState?.lotsApi.data
+                  ?.filter((option) => !isDocumentRevisionInDraft(option.status))
+                }
                 loading={mpiProcedureSelectState?.lotsApi.loading}
                 optionValueKey="id"
                 optionLabelKey="document.docId"
