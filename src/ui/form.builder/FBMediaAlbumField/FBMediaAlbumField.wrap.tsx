@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { filter, get, isEmpty, join, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
@@ -113,7 +115,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     if (isPreview() || !isEmpty(collection) || !isEmpty(ids)) {
       mediaAlbumFieldState?.setMode("media");
     }
-    actionsDisabled = (reviseDisabled && workspaceState?.isRevised) || isPreview() && !redlineActive;
+    actionsDisabled = ((reviseDisabled && workspaceState?.isRevised) || isPreview()) && !redlineActive;
 
     return Component({
       ...(props as T),

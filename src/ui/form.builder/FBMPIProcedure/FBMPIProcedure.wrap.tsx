@@ -64,6 +64,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
         () => formState?.inputState.get(`${name}.attachments`)?.value,
         (data) => {
           if (workspaceState && workspaceState?.getSchemaItemAt(index)) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             workspaceState.schema![index] = {
               ...schemeItem,
               editorConfig: {
