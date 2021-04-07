@@ -4,7 +4,7 @@
 /* eslint-disable max-len */
 import moment from "moment";
 import "moment-timezone";
-import { ChangeRequestEditRequestBody } from "../../../../src/state/ducks/changeRequest/types";
+import { ChangeRequestEditRequestBody } from "../../../../src/state/ducks/changeRequest";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 export { };
@@ -28,6 +28,7 @@ declare global {
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
+      arClearFilters(): Chainable<Subject>;
       arCheckTitleInEditableAndMatches(params: { name: string }): Chainable<Subject>;
       arWithdrawSubmission(): Chainable<Subject>;
       arIsProposedDocumentEmpty(): Chainable<Subject>;
@@ -241,6 +242,12 @@ Cypress.Commands.add("arCheckImplementationTaskStatus", (params: {status: string
   cy.get("[data-cy=\"form.builder.status\"]").contains(params.status);
 });
 
+Cypress.Commands.add("arClearFilters", () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
+    cy.get("[data-cy=\"clearFilter\"]").click();
+  });
+});
+
 Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description: string }) => {
   cy.get("[data-cy=\"field-description\"]").type(params.description).unClick();
 });
@@ -285,8 +292,12 @@ Cypress.Commands.add("arClickAddBtnOnAddDocumentsDialog", () => {
 });
 
 Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string }) => {
-  cy.get("[data-cy=\"fb-approvers-approvers\"]").click();
-  cy.get("ul[role=\"listbox\"]>li").contains(params.approver).click();
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PatchAR, CyRoutes.ArAudit], () => {
+      cy.get("[data-cy=\"fb-approvers-approvers\"]").click();
+      cy.get("ul[role=\"listbox\"]>li").contains(params.approver).click();
+      cy.unClick();
+    });
 });
 
 Cypress.Commands.add("arClickCreateApprovalRequestAfterCompletingForm", () => {
@@ -336,7 +347,6 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
   });
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetRequiredApproversDocRev,
-    CyRoutes.GetRequiredApproversDocRev,
     CyRoutes.DocRevGet,
   ], () => {
     cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
@@ -365,7 +375,6 @@ Cypress.Commands.add("arWithdrawSubmission", () => {
     CyRoutes.PostWithdrawChangeRequests,
     CyRoutes.EmployeesGet,
     CyRoutes.ARPreview,
-    CyRoutes.DocRevPreview,
     CyRoutes.DocRevPreview], () => {
     cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
   });

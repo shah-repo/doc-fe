@@ -1,10 +1,10 @@
 import faker from "faker";
 import { Audit } from "../../audit/types";
 import { getOwner } from "../../common/tests/factories";
-import { DocumentType } from "../documentType";
-import { Document, DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../types";
+import { DocumentType } from "../documentType/types";
+import { Document, DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../types";
 
-export const generateDocumentType = (docType: Partial<DocumentType> = {}): DocumentType => ({
+const generateDocumentType = (docType: Partial<DocumentType> = {}): DocumentType => ({
   id: faker.random.uuid(),
   documentTypeAcronym: faker.random.word(),
   documentTypeName: faker.random.words(),
@@ -49,6 +49,7 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
           id: faker.random.uuid(),
           email: faker.random.word(),
           name: faker.random.word(),
+          avatar: faker.random.uuid(),
         },
       ],
       operators: [
@@ -56,6 +57,7 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
           id: faker.random.uuid(),
           email: faker.random.word(),
           name: faker.random.word(),
+          avatar: faker.random.uuid(),
         },
       ],
       securityGroups: [
@@ -81,19 +83,6 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
   inputOwners: [],
 });
 
-export const getDocumentRevisionEditRequestBody = (
-  body: Partial<DocumentRevisionEditRequestBody> = {},
-): DocumentRevisionEditRequestBody => ({
-  name: faker.lorem.sentence(),
-  description: faker.lorem.sentence(),
-  attachments: [],
-  type: faker.lorem.word(),
-  referenceTo: [],
-  revisionChangeType: RevisionChangeType.NextRevision,
-  status: DocumentRevisionStatus.Deprecated,
-  ...body,
-});
-
 export const getDocument = (document: Partial<Document> = {}): Document => ({
   id: faker.random.uuid(),
   docId: faker.random.word(),
@@ -105,6 +94,7 @@ export const getDocument = (document: Partial<Document> = {}): Document => ({
         id: faker.random.uuid(),
         email: faker.random.word(),
         name: faker.random.word(),
+        avatar: faker.random.uuid(),
       },
     ],
     operators: [
@@ -112,6 +102,7 @@ export const getDocument = (document: Partial<Document> = {}): Document => ({
         id: faker.random.uuid(),
         email: faker.random.word(),
         name: faker.random.word(),
+        avatar: faker.random.uuid(),
       },
     ],
     securityGroups: [

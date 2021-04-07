@@ -46,7 +46,9 @@ Cypress.Commands.add("ebVerifyNewRevisionCreated", () => {
 });
 
 Cypress.Commands.add("ebClickClone", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
+    CyRoutes.EmployeesGet,
+    CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy=\"CloneEBButton\"]").click();
   });
 });
@@ -56,7 +58,7 @@ Cypress.Commands.add("ebApprove", () => {
   cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
   cy.get("input[name=\"password\"]").type("Tester1!");
   cy.wait(500);
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
     cy.get("[data-cy=\"common.confirm\"]").click();
   });
   cy.checkToastMessage({ exists: false });

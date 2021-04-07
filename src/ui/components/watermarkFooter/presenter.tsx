@@ -12,7 +12,7 @@ interface Props {
   download: () => void;
 }
 
-export const WatermarkFooterPresenter: React.FunctionComponent<Props> = ({
+const WatermarkFooterPresenter: React.FunctionComponent<Props> = ({
   result,
   close,
   download,

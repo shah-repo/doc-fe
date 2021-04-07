@@ -1,6 +1,6 @@
 import { FBDialogState, FBInputProps, FBPurchaseOrderState } from "..";
 
-export type FBPurchaseOrderMode = "preview" | "form";
+type FBPurchaseOrderMode = "preview" | "form";
 export type FBPurchaseOrderProps =
 & Pick<FBInputProps, "name" | "label" | "disabled" | "gutter" | "defaultValue" | "autosave">
 & {
@@ -10,7 +10,7 @@ export type FBPurchaseOrderProps =
   mode?: FBPurchaseOrderMode;
 };
 
-export type FBPurchaseOrderItemType = "product" | "service";
+type FBPurchaseOrderItemType = "product" | "service";
 
 export interface FBPurchaseOrderItem {
   id: string;

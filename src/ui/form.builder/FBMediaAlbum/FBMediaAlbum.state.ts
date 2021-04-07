@@ -1,10 +1,14 @@
 import { action, observable, set } from "mobx";
-import { FBFilePreviewType, FBMediaAlbumMode, FBMediaProps } from "..";
+import { FBAttachment, FBFile, FBFilePreviewType, FBMediaAlbumMode } from "..";
+import { Attachment } from "../../../state/ducks/attachments/types";
 import { SUPPORTED_VIDEO_FILES } from "../../components/common/view.file/utils/constants";
+import { FBEndpoint } from "../defaults/FBEndpoint";
+import FBRequest from "../FBApi/FBApi.request";
 
-export class FBMediaAlbumState {
+class FBMediaAlbumState {
   @observable public activeMedia: number | undefined;
   @observable public mode: FBMediaAlbumMode = "carousel";
+  @observable public attachmentApi = new FBRequest<Attachment, FBFile>(FBEndpoint.AttachmentUpload);
 
   @action public setActiveMedia = (index: number) => {
     set(this, "activeMedia", index);
@@ -15,7 +19,7 @@ export class FBMediaAlbumState {
   };
 
   // Helpers
-  public previewType = (media: FBMediaProps): FBFilePreviewType | undefined => {
+  public previewType = (media: FBAttachment): FBFilePreviewType | undefined => {
     let { type } = media || {};
     if (!type) { return; }
     type = type.split("/")[1];

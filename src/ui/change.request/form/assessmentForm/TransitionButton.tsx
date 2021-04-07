@@ -1,6 +1,7 @@
 import Button, { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
-import { changeRequestsActions, ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../../state/ducks/changeRequest";
+import { changeRequestsActions } from "../../../../state/ducks/changeRequest";
+import { ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../../state/ducks/changeRequest/types";
 import { AsyncStatus } from "../../../../state/types";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";

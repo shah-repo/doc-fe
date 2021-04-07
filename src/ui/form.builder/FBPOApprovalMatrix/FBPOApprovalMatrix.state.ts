@@ -9,13 +9,13 @@ const DEFAULT_POAM: POApprovalMatrix = {
   approvalLevels: [] as POApprovalMatrixLevel[],
 };
 
-export class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
+class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
   public static stages = [1, 2, 3];
   @observable public name = "";
   @observable public poam = DEFAULT_POAM;
   @observable public approvalLevels: POApprovalMatrixLevel[] = [];
-  public groupsApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.officialGroups);
-  public employeesApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.employees);
+  public groupsApi = new FBAutocompleteAsyncState({ optionId: FBAutocompleteAsyncOption.officialGroups });
+  public employeesApi = new FBAutocompleteAsyncState({ optionId: FBAutocompleteAsyncOption.employees });
   public url = FBEndpoint.POApprovalMatrix;
   private formState?: FBFormState;
 
@@ -109,7 +109,7 @@ export class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
     // this.formState?.setFieldValue(`${this.name}-formValues`, undefined);
   };
 
-  protected onSuccess() {
+  public onSuccess() {
     if (!this.data) { return; }
     this.setItems(this.data.approvalLevels);
   }

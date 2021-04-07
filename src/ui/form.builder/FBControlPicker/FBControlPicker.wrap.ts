@@ -1,6 +1,5 @@
 import React from "react";
-import { FBControlPickerProps, FBControlPickerState } from ".";
-import { FB } from "..";
+import { FB, FBControlPickerProps, FBControlPickerState } from "..";
 import { withFBEditorHelper } from "../FBEditor/FBEditor.helper";
 
 export const withFBControlPicker = <T extends FBControlPickerProps>(

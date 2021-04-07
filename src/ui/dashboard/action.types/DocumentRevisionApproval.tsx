@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import { approvalsActions } from "../../../state/ducks/approvals";
-import { Approval } from "../../../state/ducks/common";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { Approval } from "../../../state/ducks/common/types";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../components/notifications";
 import Text from "../../components/Text";
 import { documentVersionPath } from "../../document.revision/utils/paths";
@@ -21,7 +21,7 @@ interface Props {
   approval: Approval;
 }
 
-export const DocumentRevisionApproval: React.FunctionComponent<Props> = ({
+const DocumentRevisionApproval: React.FunctionComponent<Props> = ({
   index,
   documentRevision,
   approval,

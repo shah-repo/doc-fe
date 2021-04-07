@@ -4,11 +4,11 @@
 
 import moment from "moment";
 import "moment-timezone";
-import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions";
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
@@ -57,7 +57,7 @@ context("Procedure and parts flow test", () => {
             companyAdminEmail: USERS[1].email,
             helloSignIntegrationEnabled: false,
             helloSignTestMode: false,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             numOfRevStages: 3,
             numOfDocDigits: 5,
             remoteValidatorBundleName: "default",
@@ -448,7 +448,10 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Add an Approval'", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.unClick();
+      });
     });
 
     it("Submit for approval", () => {
@@ -531,10 +534,6 @@ context("Procedure and parts flow test", () => {
           cy.arAddApproverOnApproverList({ approver: USERS[1].email });
         });
 
-        it("Save changes", () => {
-          cy.arSaveApiCall();
-        });
-
         it("Click 'Send To Review'", () => {
           cy.arClickSendToReview();
         });
@@ -614,7 +613,7 @@ context("Procedure and parts flow test", () => {
         cy.drEnterDocumentTitle({ name: "Form document for EB" });
       });
 
-      it("Enters description 'Procedure description'", () => {
+      it("Enters description 'EB form description'", () => {
         cy.drEnterDocumentDescription({ description: "EB form description" });
       });
 
@@ -652,23 +651,23 @@ context("Procedure and parts flow test", () => {
 
   context("Create EB from created FORM document", () => {
     it("Click create new document from FORM", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
+        cy.drCreateNewDocumentFromForm();
+      });
     });
     context("Fill EB document attributes", () => {
       it("Enters title 'Form document for procedure'", () => {
         cy.drEnterDocumentTitle({ name: "EB document" });
       });
 
-      it("Enters description 'Procedure description'", () => {
+      it("Enters description 'EB description'", () => {
         cy.drEnterDocumentDescription({ description: "EB description" });
       });
 
       it("Add approver to approvals", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-      });
-
-      it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        });
       });
 
       it("Add material document", () => {
@@ -698,7 +697,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Upload attachment 'image.jpg'", () => {
-        cy.get("[data-cy=\"media.upload\"]>div>div>button").click();
+        cy.get("[data-cy=\"albumMediaButton\"]").click();
         cy.pmUploadAttachment({ fileName: "image.jpg" });
       });
 
@@ -761,11 +760,9 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-      });
-
-      it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        });
       });
     });
 

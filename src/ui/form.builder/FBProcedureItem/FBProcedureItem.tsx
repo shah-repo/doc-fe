@@ -5,10 +5,8 @@ import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { isEmpty } from "lodash";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBButton, FBDialog, FBFilesPresenter, FBMapWrapper, FBMediaAlbumField, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemProps, FBProvider, FBText } from "..";
+import { FBButton, FBDialog, FBFilesPresenter, FBFormMode, FBMapWrapper, FBMediaAlbumField, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemProps, FBProcedureItemType, FBProvider, FBText } from "..";
 import Colors from "../../layout/theme/utils/colors";
-import { FBFormMode } from "../FBForm";
-import { FBProcedureItemType } from "./FBProcedureItem.types";
 import { withFBProcedureItem } from "./FBProcedureItem.wrap";
 
 const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
@@ -62,7 +60,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
       )}
     </Box>
     {type === FBProcedureItemType.attachments && (
-      <Box mt={2}>
+      <Box data-cy="mediaUploadField" mt={2}>
         <FBMediaAlbumField
           name={`${name}.attachments`}
           isTemplate={false}

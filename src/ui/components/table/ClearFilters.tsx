@@ -15,7 +15,7 @@ const styles = makeStyles((theme: Theme) =>
   },
   ));
 
-export const ClearFilters: React.FunctionComponent<Props> = ({
+const ClearFilters: React.FunctionComponent<Props> = ({
   clearFilter,
 }) => {
   const classes = styles();

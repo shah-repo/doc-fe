@@ -2,10 +2,12 @@ import { Formik, FormikProps } from "formik";
 import { cloneDeep } from "lodash";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
+import { useSelector } from "react-redux";
 import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
 import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
-import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { companySelectors } from "../../../state/ducks/company";
+import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/types";
 import { AsyncState } from "../../../state/types";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
@@ -31,7 +33,7 @@ export let changeRequestFormOnScreenContext = React.createContext<boolean>(false
 
 type ChangeRequestFormContainerProps = OwnProps;
 
-export const ChangeRequestFormContainer: React.FunctionComponent<
+const ChangeRequestFormContainer: React.FunctionComponent<
   ChangeRequestFormContainerProps
 > = ({
   onSubmit,
@@ -43,6 +45,7 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
 }) => {
   const FBContainer = React.useRef(null);
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
+  const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
 
   useEffect(() => () => {
     changeRequestFormOnScreenContext = React.createContext<boolean>(false);
@@ -58,9 +61,10 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
     <FBWorkspace
       portalContainer={FBContainer}
+      isPortal={true}
       initialValues={cloneDeep(changeRequest?.formInput)}
       changeRequest={cloneDeep(changeRequest)}
-      autosave={true}
+      autosave={autosaveEnabled}
       schema={schemaData}
       mode="form"
     >

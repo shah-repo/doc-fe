@@ -1,5 +1,4 @@
-import { FBInputProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from "..";
-import { FBCurrency, FBPurchaseOrderProps } from "../FBPurchaseOrder/FBPurchaseOrder.types";
+import { FBCurrency, FBInputProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem, FBPurchaseOrderProps } from "..";
 
 export type FBPurchaseOrderTableProps =
 & Pick<FBInputProps, "name" | "disabled">

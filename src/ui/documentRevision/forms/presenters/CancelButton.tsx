@@ -1,7 +1,8 @@
 import { Button } from "@material-ui/core";
 import * as React from "react";
 import { useEffect } from "react";
-import { DocumentRevision, documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
+import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";

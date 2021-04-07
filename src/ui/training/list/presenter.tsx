@@ -24,7 +24,7 @@ interface Props {
   tableCriteria: TablePanelStateProps;
 }
 
-export const TrainingListPresenter: React.FunctionComponent<Props> = ({
+const TrainingListPresenter: React.FunctionComponent<Props> = ({
   tableName,
   data,
   clearFilter,

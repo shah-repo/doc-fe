@@ -17,9 +17,9 @@ interface OwnProps {
   documentTypeId: string;
 }
 
-export type AccessPermissionsContainerProps = OwnProps;
+type AccessPermissionsContainerProps = OwnProps;
 
-export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissionsContainerProps> = ({
+const AccessPermissionsContainer: React.FunctionComponent<AccessPermissionsContainerProps> = ({
   withoutCurrentUser = false,
   documentId,
   documentRevisionId,
@@ -39,7 +39,7 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
   const securityEmployees = get(selectedDocument, "document.securityEmployees", []);
   const operators = get(selectedDocument, "document.operators", []);
 
-  const { isVisible } = useAssignOperatorsToDocument(documentTypeId);
+  const { isVisible, label } = useAssignOperatorsToDocument(documentTypeId);
 
   return (
     <AccessPermissionsPresenter
@@ -52,6 +52,7 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
         operators,
         documentId,
         documentRevisionId,
+        label,
       }}
     />
   );

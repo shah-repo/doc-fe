@@ -1,7 +1,5 @@
 import { GroupTag, Permission } from "../auth/types";
-import { Id } from "../common";
-import { SET_JOINED_DATA } from "../userManagement/constants";
-import { LoadCompanyGroups } from "../userManagement/types";
+import { Id } from "../common/types";
 
 export interface GroupRequestBody {
   id?: string;
@@ -13,9 +11,3 @@ export interface GroupRequestBody {
   employees: Id[];
   parents: Id[];
 }
-
-export interface LoadJoinedDataAction {
-  type: typeof SET_JOINED_DATA;
-  payload: LoadCompanyGroups;
-}
-

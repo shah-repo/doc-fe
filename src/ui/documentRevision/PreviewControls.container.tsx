@@ -5,8 +5,8 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { authSelectors } from "../../state/ducks/auth";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
-import { DocumentRevisionTransitionResponse, FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import AlertDialog from "../app/alert.dialog/AlertDialog";
@@ -22,7 +22,7 @@ import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
-import { checkCanBeCopied, checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
 import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
@@ -37,14 +37,14 @@ interface StateProps {
   disableCreateNewVersion: boolean;
 }
 
-export type PreviewControlsContainerProps = OwnProps & StateProps & RouteComponentProps;
+type PreviewControlsContainerProps = OwnProps & StateProps & RouteComponentProps;
 
 const getDisableCreateNewVersion = documentRevisionsSelectors.makeGetDisableCreateNewVersion();
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
   disableCreateNewVersion: getDisableCreateNewVersion(state, props.documentRevision.document.id),
 });
 
-export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
+const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
   documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();
@@ -57,19 +57,21 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const dispatch = useDispatch();
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
   const formDocumentId = documentRevision.formDocument?.document?.id || "";
+  const groupOptions = documentRevision.document?.documentType?.groupOptions;
   const formDocuments: Document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, formDocumentId)
   );
   const email = useSelector(authSelectors.currentUserEmail);
   const isUserDocumentOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
-  const isRecord = checkIsDocumentRecord(documentRevision.document?.documentType?.groupOptions);
+  const isRecord = checkIsDocumentRecord(groupOptions);
   const isStatusInReview = isDocumentRevisionInReview(documentRevision.status);
   const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
-  const canCopy = checkCanBeCopied(documentRevision.document?.documentType?.groupOptions);
+  const canCopy = checkCanBeCopied(groupOptions);
+  const hasOutput = checkIsTypeHaveOutput(groupOptions);
 
   const isLastVersionObsolete = () => {
-    if (selectedDocument.document.documentType.group === "RECORD") {
+    if (checkIsDocumentRecord(selectedDocument.document.documentType.groupOptions)) {
       return;
     }
     return formDocuments && getIsLastVersionObsolete(formDocuments);
@@ -142,7 +144,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
       && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
         .find((type) => type.documentTypeName === "Approval Request");
 
-    if (hasAccess && canCreateOutput(documentRevision) && !isAR) {
+    if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
       return (
         <Button
           color="secondary"

@@ -1,8 +1,8 @@
-import { FBTaskItem } from "../../../ui/form.builder/FBTask";
-import { Attachment } from "../attachments";
+import { FBTaskItem } from "../../../ui/form.builder";
+import { Attachment } from "../attachments/types";
 import { AuditActionPayload } from "../audit/types";
-import { Approval, Id, Owner, User } from "../common";
-import { FBDocumentRevisionProps } from "../documentRevisions";
+import { Approval, Id, Owner, User } from "../common/types";
+import { FBDocumentRevisionProps } from "../documentRevisions/types";
 import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from "./constants";
 
 export enum ChangeRequestStatus {
@@ -14,36 +14,25 @@ export enum ChangeRequestStatus {
   Voided = "VOIDED",
 }
 
-export enum ImplementationPlanTaskStatus {
-  Pending = "PENDING",
-  Done = "DONE",
-}
-
-export interface Justifications {
+interface Justifications {
   id?: string;
   description?: string;
   attachments: Attachment[];
 }
 
-export enum AssessmentType {
-  design = "design",
-  process = "process",
-  regulatory = "regulatory",
-}
-
-export interface Assessment {
+interface Assessment {
   design: AssessmentItem;
   process: AssessmentItem;
   regulatory: AssessmentItem;
 }
 
-export interface AssessmentItem {
+interface AssessmentItem {
   id?: string;
   reasoning?: string | null;
   attachments?: Attachment[] | null;
 }
 
-export interface ImplementationPlanTask {
+interface ImplementationPlanTask {
   id: string;
   title: string;
   description: string;
@@ -56,11 +45,12 @@ export interface ImplementationPlanTask {
   closingNote: string | null;
 }
 
-export interface ImplementationPlan {
+interface ImplementationPlan {
   id: string;
   tasks: ImplementationPlanTask[];
   attachments: Attachment[];
 }
+
 // This needs to be properly cleaned up
 export interface ChangeRequest {
   createdAt: string;
@@ -81,37 +71,6 @@ export interface ChangeRequest {
   formInput?: Record<string, any>;
   formDocument?: FBDocumentRevisionProps;
   tasks?: FBTaskItem[];
-}
-
-export interface Approver {
-  id: string;
-}
-
-export interface DocumentRevisionRequestBody {
-  id: string;
-}
-
-export interface EditRequestBodyAttachment {
-  id: string;
-}
-
-export interface EditRequestBodyNestedObject {
-  description?: string;
-  attachments: EditRequestBodyAttachment[];
-}
-
-export interface ImplementationPlanTaskRequest {
-  id?: string;
-  title: string;
-  description: string;
-  dueDate?: string;
-  assigned?: Id;
-  status: string;
-}
-
-export interface ImplementationPlanRequest {
-  tasks: ImplementationPlanTaskRequest[];
-  attachments: EditRequestBodyAttachment[];
 }
 
 export interface ChangeRequestEditRequestBody {

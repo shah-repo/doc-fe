@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
-import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { documentPreviewPath } from "../../../document.revision/utils/paths";
 import { generateRevisionNumber } from "../../../documentRevision/helpers/generateRevisionNumber";
 import DashboardActionTypeBase from "../DashboardActionTypeBase";
@@ -13,7 +13,7 @@ interface Props {
 
 export let IndexContetxt = React.createContext(-1);
 
-export const PurchaseOrderApproval: React.FunctionComponent<Props> = ({
+const PurchaseOrderApproval: React.FunctionComponent<Props> = ({
   index,
   documentRevision,
 }) => {

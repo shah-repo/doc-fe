@@ -5,7 +5,7 @@ import WatermarkFooterPresenter from "./presenter";
 import WatermarkFooterRequest from "./request";
 import { WatermarkResponse } from "./types";
 
-export const WatermarkFooterContainer: React.FunctionComponent = () => {
+const WatermarkFooterContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const [requestResults, setRequestResult] = useState<WatermarkResponse[]>([]);
   const removeWatermark = (id: string) => dispatch(attachmentsActions.removeWatermark(id));

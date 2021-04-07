@@ -2,9 +2,9 @@
 /// <reference types="Cypress" />
 
 import faker from "faker";
-import { NavigationItems } from "../../../src/state/ducks/auth/types";
 import { CONFIG } from "../../support/config";
-import { USERS } from "../../utils/constants/users";
+import { NavigationItems } from "../../utils/constants/navigationItems";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
@@ -25,7 +25,7 @@ context("Sign up user flow", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [],
           }, sessionId: loginResponse.sessionId as unknown as string,

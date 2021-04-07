@@ -1,6 +1,6 @@
 import { TableDataProps, TablePanelStateProps } from "../../../ui/components/table/types";
 import { User } from "../auth/types";
-import { GetEmployeeResponse } from "../userManagement";
+import { GetEmployeeResponse } from "../userManagement/types";
 import {
   EDIT_EMPLOYEE_ACTIVE_STATUS,
   EDIT_EMPLOYEE_GROUPS,

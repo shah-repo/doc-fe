@@ -6,7 +6,7 @@ import FBStore from "../../stores/ui/FBStore";
 import { FBInputProps } from "../../types/common";
 import FBInput from "../common/FBInput";
 
-export type FBTextFieldProps =
+type FBTextFieldProps =
   & FBInputProps
   & Partial<Omit<RenderInputParams, "InputProps">>
   & Pick<TextFieldProps, "InputProps">;

@@ -1,21 +1,22 @@
 import { Box } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import React from "react";
-import { FBApproversProps, FBInput, FBMapWrapper, FBRequiredApprover, FBText } from "..";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption } from "../FBAutocompleteAsync";
+import { FBApproversProps, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBInput, FBMapWrapper, FBRequiredApprover, FBText } from "..";
 import { withFBApprovers } from "./FBApprovers.wrap";
 
 const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
   renderOption,
   isIncluded,
+  onBlur,
   name,
   gutter,
   disabled,
   loading,
   defaultValue,
   groups = {},
+  autosave,
 }) => (
-  <FBInput {...{ name, gutter, disabled }} type="approvers">
+  <FBInput {...{ name, gutter, disabled, autosave }} type="approvers">
     <FBAutocompleteAsync
       label="form.builder.approvers"
       placeholder="form.builder.start.typing.list"
@@ -26,7 +27,7 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
       gutter={false}
       omitFormValue={true}
       name={`fb-approvers-${name}`}
-      {...{ loading, renderOption, defaultValue, disabled }}
+      {...{ loading, renderOption, defaultValue, disabled, autosave, onBlur  }}
     />
     <Box display="flex" flexWrap="wrap">
       <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>

@@ -5,7 +5,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -32,7 +32,7 @@ context("Approval request implementation tasks", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
@@ -208,10 +208,6 @@ context("Approval request implementation tasks", () => {
     it("Add approvers to approval request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].email });
     });
-
-    it("Save changes", () => {
-      cy.arSaveApiCall();
-    });
   });
 
   context("Add implementation task and continue AR creation flow", () => {
@@ -275,12 +271,12 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Closed" });
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Approved" });
     });
 
-    it("Check approval request status is 'Closed'", () => {
+    it("Check approval request status is 'Approved'", () => {
       SystemRequirement("REQ-0020", "REQ-0730");
-      cy.arVerifyStatus({ status: "Closed" });
+      cy.arVerifyStatus({ status: "Approved" });
     });
   });
 });

@@ -1,9 +1,8 @@
 import { BoxProps, MenuProps } from "@material-ui/core";
-import { FBContextMenuState } from ".";
+import { FBContextMenuState, FBFormProps } from "..";
 import { TextProps } from "../../components/Text";
-import { FBFormProps } from "../FBForm";
 
-export interface FBContextMenuItemProps {
+interface FBContextMenuItemProps {
   text: string;
   textValues?: TextProps["values"];
   hidden?: boolean;
@@ -17,6 +16,7 @@ export type FBContextMenuProps =
 & {
   onClose?: () => any;
   onBlur?: () => any;
+  menuId?: string;
   contextMenuState?: FBContextMenuState;
   menuItems?: FBContextMenuItemProps[];
   menuEls?: FBFormProps["children"];

@@ -7,13 +7,12 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
 const SECOND_USER = USERS[3];
 const THIRD_USER = USERS[4];
-const IMPORTER_USER = USERS[6];
 const CAL_DUE_DATE = moment().tz("America/Los_Angeles")
   .add(5, "days")
   .format("l");
@@ -392,7 +391,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.get("input[name=fb-default-eq-status][value=Active]").check();
       });
     });
@@ -472,10 +471,6 @@ context("Equipment maintenance test", () => {
         cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email });
       });
 
-      it("Save changes", () => {
-        cy.arSaveApiCall();
-      });
-
       it("Click 'Send To Review'", () => {
         cy.arClickSendToReview();
       });
@@ -544,9 +539,18 @@ context("Equipment maintenance test", () => {
     });
 
     it("Fill 'Completion Date'", () => {
+      const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
       cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").click();
       cy.wait(500);
-      cy.get("button.MuiPickersDay-current").click();
+      cy.get("button.MuiPickersDay-day")
+        .not(".MuiPickersDay-hidden")
+        .each(($el) => {
+          const dayNumber = $el.text();
+          cy.log(dayNumber);
+          if (dayOfTheMonth.toString() === dayNumber) {
+            cy.wrap($el).click();
+          }
+        });
       cy.wait(500);
     });
 
@@ -555,7 +559,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Add an Approval'", () => {
-      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+        cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      });
     });
 
     it("Submit for approval", () => {
@@ -582,17 +588,20 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
       });
-      cy.wait(5000);
     });
 
     it("Reload 'Equipment maintenance document'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.DocPreview,
+        CyRoutes.DocPreview,
+        CyRoutes.EmployeesGet,
+        CyRoutes.SessionDetails], () => {
         cy.reload();
       });
     });
 
     it("Check preventative maintenance document existance", () => {
-      cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
+      cy.get("div[data-cy=\"maintenanceHistory\"]")
         .eq(0)
         .contains("MR-00001 - Preventative maintenance document");
     });
@@ -638,9 +647,18 @@ context("Equipment maintenance test", () => {
     });
 
     it("Fill 'Completion Date'", () => {
+      const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
       cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").click();
       cy.wait(500);
-      cy.get("button.MuiPickersDay-current").click();
+      cy.get("button.MuiPickersDay-day")
+        .not(".MuiPickersDay-hidden")
+        .each(($el) => {
+          const dayNumber = $el.text();
+          cy.log(dayNumber);
+          if (dayOfTheMonth.toString() === dayNumber) {
+            cy.wrap($el).click();
+          }
+        });
       cy.wait(500);
     });
 
@@ -649,7 +667,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+        cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      });
     });
 
     it("Submit for approval", () => {
@@ -657,7 +677,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetAvailableApprovers], () => {
+        cy.ebApprove();
+      });
     });
 
     it("Verify status is 'Released'", () => {
@@ -687,17 +709,20 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.DocRevPreview], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
       });
-      cy.wait(5000);
     });
 
     it("Reload 'Equipment calibration document'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.DocPreview,
+        CyRoutes.DocPreview,
+        CyRoutes.EmployeesGet,
+        CyRoutes.SessionDetails], () => {
         cy.reload();
       });
     });
 
     it("Check Calibration document existance", () => {
-      cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
+      cy.get("div[data-cy=\"maintenanceHistory\"]")
         .eq(1)
         .contains("MR-00002 - Calibration document");
     });

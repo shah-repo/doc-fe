@@ -1,16 +1,18 @@
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { flatten, isEmpty } from "lodash";
+import { flatten, isEmpty, isEqual } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
+import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { useFormContext } from "../../components/forms/FormContext";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
@@ -24,7 +26,7 @@ import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
-import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
+import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord } from "../helpers/records";
 import { getRevisionStageNumber, isDocumentAlphaReleased } from "../helpers/revisionStage";
@@ -36,6 +38,7 @@ import DocumentSecurity from "./presenters/DocumentSecurity";
 import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
 import FBActiveNoOutput from "./presenters/FBActiveNoOutput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
+import RedlineBanner from "./presenters/redline/Redline.banner";
 import References from "./presenters/References";
 import RetrainField from "./presenters/RetrainField";
 import RevisionStage from "./presenters/RevisionStage";
@@ -43,7 +46,7 @@ import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import UpgradeToLatestContainer from "./presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { DocumentRevisionFormValues } from "./types";
 
-export interface Props extends FormikProps<DocumentRevisionFormValues> {
+interface Props extends FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
@@ -63,6 +66,8 @@ export interface Props extends FormikProps<DocumentRevisionFormValues> {
   showAdministrativeAndVoidChange: boolean;
   pmFormId?: string;
   releasedDocRev?: DocumentRevision;
+  redlineActive: boolean;
+  isOutput: boolean;
 }
 
 export interface FormHeaderContext {
@@ -73,13 +78,14 @@ export interface FormHeaderContext {
   isDisabled: boolean;
   asyncState: AsyncState;
   type?: DocumentCloneType;
+  lastSavedTimestamp?: string;
 }
 
 export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
 export let isOwnerContext = React.createContext<boolean>(false);
 export let documentTypeContext = React.createContext<string | undefined>(undefined);
 
-export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
+const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState,
   initialValues,
   availableReferences,
@@ -105,6 +111,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   showAdministrativeAndVoidChange,
   pmFormId,
   releasedDocRev,
+  redlineActive,
+  isOutput,
 }) => {
   useScrollIntoView();
   const classes = styles();
@@ -114,8 +122,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
   const [forceNewRender, setNewRender] = React.useState();
+  const [lastSavedTimestamp, setLastSavedTimestamp] = React.useState<string>();
   const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
-
+  const { schema = [] } =  workspaceState || {};
+  const { submitForm } = useFormContext();
   const hasOutput = useMemo(() =>
     checkIsTypeHaveOutput(documentTypeById?.groupOptions)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -138,6 +148,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
   const isPart = checkIsDocumentPart(documentRevision?.document.documentType.groupOptions);
   const isDocumentEquipment = checkIsDocumentEquipment(documentRevision?.document.documentType.groupOptions);
+  const isMPIOutput = checkIsDocumentMPIOutput(documentRevision?.document.documentType.groupOptions);
+  const isLHR = checkIsDocumentLHR(documentRevision?.document.documentType.groupOptions);
   const shouldShowUpgradeForDocs = useShouldUpgradeToLatest(
     documentRevision?.status,
     documentRevision?.formDocument?.status,
@@ -145,7 +157,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const shouldShowUpgrade =
-    (!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs);
+    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
+    && !isMPIOutput && !isLHR;
 
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
@@ -156,9 +169,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabled: boolean = initialValues.id !== undefined;
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
   const docRevId = documentRevision?.id;
-  const isAttachmentEmpty = !(documentRevision?.attachments.length > 1);
+  const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const documentTypeId = values.document?.documentType?.id;
   const showOutputInfo = workspaceState?.mode === "form" || workspaceState?.mode === "formDesign";
+  const canAddFBFields = workspaceState?.mode === "design" || workspaceState?.mode === "formDesign";
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord && !isDocumentEquipment;
   const outputDocumentTypes = pmFormId ?
     initialValues.outputDocumentTypes :
@@ -175,7 +189,25 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     isDisabled,
     asyncState,
     type,
+    lastSavedTimestamp,
   });
+
+  // Autosave for adding FB fields
+  useEffect(() => {
+    if (!schema || isEqual(initialValues.schema, schema) || !canAddFBFields) {
+      return;
+    }
+    submitForm();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schema.length]);
+
+  useEffect(() => {
+    if (!redlineActive) {
+      return;
+    }
+    setFieldValue("schema", schema);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [redlineActive, schema]);
 
   useEffect(() => {
     if (!values.id && !values.document?.documentType?.id && setDocId) {
@@ -187,7 +219,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     if (proposedDocId) {
       setFieldValue("document.docId", proposedDocId);
     }
-    if (!isEmpty(documentTypeById?.defaultRevStage) && isDocRevFirstDraft) {
+
+    if (!isEmpty(documentTypeById?.defaultRevStage) && values.version === undefined && !isOutput) {
       const value = getRevisionStageNumber(intl, documentTypeById?.defaultRevStage as string);
       setNewRender(value);
       setFieldValue("revisionStage", value);
@@ -210,6 +243,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   }, [isDocRevStatusDraft, values.document, values.name]);
 
+  useEffect(() => {
+    if (!isSubmitting) {
+      return;
+    }
+    setLastSavedTimestamp(getFormattedDateString(Date.now(), MomentFormats.Time));
+  }, [isSubmitting]);
   return (
     <Grid
       item={true}
@@ -218,6 +257,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       sm={type !== "newOutput" && isDisabled ? 12 : 10}
       xs={12}
     >
+      <RedlineBanner {...{ bannerPortal }}/>
       <UpgradeToLatestContainer
         type="banner"
         docRevId={documentRevision?.id}

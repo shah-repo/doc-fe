@@ -6,7 +6,8 @@ import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import React from "react";
 import { FormattedNumber } from "react-intl";
-import { FBMapWrapper, FBPurchaseOrderItem, FBPurchaseOrderTableSumProps, FBTableCell } from "..";
+import { FBMapWrapper, FBPurchaseOrderItem, FBTableCell } from "..";
+import { FBPurchaseOrderTableSumProps } from "./FBPurchaseOrderTable.types";
 
 
 const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumProps> = ({

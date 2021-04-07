@@ -1,4 +1,4 @@
-import { FBOptionProps } from ".";
+import { FBOptionProps } from "..";
 
 export const withFBOption = <T extends FBOptionProps>(
   Component: React.FunctionComponent<T>,

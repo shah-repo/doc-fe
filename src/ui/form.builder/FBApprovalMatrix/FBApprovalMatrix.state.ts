@@ -9,7 +9,7 @@ const DEFAULT_AM: ApprovalMatrix = {
 
 type SubmitForm = () => void;
 
-export class FBApprovalMatrixState {
+class FBApprovalMatrixState {
   @observable public name = "";
   @observable public am = DEFAULT_AM;
   public submitForm;

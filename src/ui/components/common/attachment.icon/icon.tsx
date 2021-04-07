@@ -6,7 +6,7 @@ import { renderCOADefaultAttachment, renderCOAPrimaryAttachment, renderDefaultAt
 import { styles } from "./utils/styles";
 import { AttachmentIconProps } from "./utils/types";
 
-export const AttachmentIcon: React.FunctionComponent<AttachmentIconProps> = ({
+const AttachmentIcon: React.FunctionComponent<AttachmentIconProps> = ({
   extension,
   size,
   isUploading,

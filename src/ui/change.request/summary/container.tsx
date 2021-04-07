@@ -7,8 +7,10 @@ import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.
 import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
-import { DataProps } from "../../../state/ducks/common";
+import { changeRequestsActions } from "../../../state/ducks/changeRequest";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { DataProps } from "../../../state/ducks/common/types";
+import { companySelectors } from "../../../state/ducks/company";
 import { FormContext } from "../../components/forms/FormContext";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
 import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
@@ -27,13 +29,12 @@ import Presenter from "./presenter";
 import ChangeRequestSummarySockets from "./sockets";
 import styles from "./styles";
 
-
 interface OwnProps extends DataProps<ChangeRequest> {
   currentUserEmail: string;
 }
-export type Props = OwnProps;
+type Props = OwnProps;
 
-export const Container: React.FunctionComponent<Props> = ({
+const Container: React.FunctionComponent<Props> = ({
   dataProp,
   currentUserEmail,
 }) => {
@@ -47,6 +48,7 @@ export const Container: React.FunctionComponent<Props> = ({
   useDocumentTitle(dataProp.crId);
   const intl = useIntl();
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+  const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
   const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const hasOwnershipTag = useGetHasTag(GroupTag.OWNERSHIP_CHANGE);
 
@@ -98,9 +100,10 @@ export const Container: React.FunctionComponent<Props> = ({
   ) => (
     <FBWorkspace
       portalContainer={FBContainer}
+      isPortal={true}
       initialValues={dataProp.formInput}
       changeRequest={dataProp}
-      autosave={true}
+      autosave={autosaveEnabled}
       schema={schema}
       mode={"preview"}
     >

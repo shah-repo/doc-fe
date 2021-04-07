@@ -2,9 +2,9 @@ import { Button, Grid } from "@material-ui/core";
 import classNames from "classnames";
 import React, { useState } from "react";
 import { ReactComponent as TriangleDown } from "../../../assets/images/triangle-down.svg";
-import { Employee } from "../../../state/ducks/company";
-import { LoadCompanyGroup } from "../../../state/ducks/userManagement";
+import { Employee } from "../../../state/ducks/company/types";
 import { GROUPS_URL } from "../../../state/ducks/userManagement/constants";
+import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import DocumentInfo from "../../components/table/DocumentInfo";
@@ -12,7 +12,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import AddGroupContainer from "../add.group/AddGroup.container";
 import AddGroup from "../add.group/Group";
-import { GroupsDisplay } from "../display.groups/GroupsDisplay";
+import GroupsDisplay from "../display.groups/GroupsDisplay";
 import { styles } from "./styles";
 
 interface Props {
@@ -27,7 +27,7 @@ interface Props {
   canCreateGroups: boolean;
 }
 
-export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
+const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
   tableName,
   tableData,
   clearFilter,

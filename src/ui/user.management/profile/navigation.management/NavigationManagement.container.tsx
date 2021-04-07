@@ -2,14 +2,16 @@ import { Formik, FormikProps } from "formik";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GroupTag } from "../../../../state/ducks/auth/types";
-import { Company, companyActions, companySelectors } from "../../../../state/ducks/company";
+import { companyActions, companySelectors } from "../../../../state/ducks/company";
+import { Company } from "../../../../state/ducks/company/types";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useGetHasTag from "../../../hooks/useGetHasTag";
 import { toNavigationBodyValues, toNavigationIntialValues } from "../../utils/transform";
 import NavigationManagementPresenter from "./NavigationManagement.presenter";
 
-export const NavigationManagementContainer: React.FunctionComponent<{}> = () => {
+const NavigationManagementContainer: React.FunctionComponent<{}> = ({
+}) => {
   const dispatch = useDispatch();
 
   const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);

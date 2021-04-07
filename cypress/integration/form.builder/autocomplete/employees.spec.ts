@@ -2,7 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../../support/config";
-import { USERS } from "../../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -12,7 +12,7 @@ let secondEmployee;
 const approverEmail = USERS[10].email;
 const approverName = USERS[10].name;
 
-context("FORM Field test", () => {
+context("Autocomplete 'Employees' test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -25,7 +25,7 @@ context("FORM Field test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -215,7 +215,7 @@ context("FORM Field test", () => {
           cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[2].name);
           cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[3].name);
           cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[4].name);
-          cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[5].name);
+          cy.get(".MuiAutocomplete-popper ul li").should("contain.text", "Importer Admin");
         });
       });
     });

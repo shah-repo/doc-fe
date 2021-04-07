@@ -6,7 +6,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Link } from "react-router-dom";
 import { FBEQMaintenanceHistoryProps, FBMapWrapper, FBText } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBEQMaintenanceHistory } from "./FBEQMaintenanceHistory.wrap";
@@ -26,7 +26,7 @@ const FBEQMaintenanceHistory: React.FunctionComponent<FBEQMaintenanceHistoryProp
       {(item: DocumentRevision, index) => {
         const dueDate = get(item.formInput, "fb-equipment_due_date");
         return (
-          <Box display="flex" flexDirection="row" key={`fb-eq-${index}`}>
+          <Box data-cy="maintenanceHistory" display="flex" flexDirection="row" key={`fb-eq-${index}`}>
             <Box color={Colors.medium_blue} mr={0.5}>
               <Link
                 to={documentVersionPath(item.id, item.document?.id )}

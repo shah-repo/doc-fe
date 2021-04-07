@@ -1,8 +1,8 @@
 import { Box, Typography } from "@material-ui/core";
 import { FormikProps } from "formik";
 import * as React from "react";
-import { FBDocumentRevisionProps } from "../../../../state/ducks/documentRevisions";
-import { SupplierSurveyForm } from "../../../../state/ducks/supplierSurvey";
+import { FBDocumentRevisionProps } from "../../../../state/ducks/documentRevisions/types";
+import { SupplierSurveyForm } from "../../../../state/ducks/supplierSurvey/types";
 import { AsyncState } from "../../../../state/types";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";

@@ -1,6 +1,6 @@
-import { ChangeRequest } from "../changeRequest";
-import { Employee } from "../company";
-import { DocumentRevision } from "../documentRevisions";
+import { ChangeRequest } from "../changeRequest/types";
+import { Employee } from "../company/types";
+import { DocumentRevision } from "../documentRevisions/types";
 
 export enum ApprovalStatus {
   Draft = "DRAFT",
@@ -16,6 +16,7 @@ export interface Owner {
 }
 
 export interface User {
+  avatar: string | null;
   id: string;
   email: string;
   name: string;

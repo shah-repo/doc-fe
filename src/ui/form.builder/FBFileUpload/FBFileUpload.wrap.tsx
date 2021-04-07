@@ -14,19 +14,31 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
     withState,
     files,
     isInputOwner,
+    mode,
+    gutter,
     ...props
   }: T) => {
 
     const { formState, workspaceState } = FB.useStores();
     const formValue = formState?.getFieldValue(name) || defaultValue;
     fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState, formValue);
-
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
 
     useObserver(() => {
       files = fileUploadState?.files;
     });
+
+    React.useEffect(() => {
+      reaction(
+        () => formState?.inputState.get(name)?.value.length,
+        (files) => {
+          if (!fileUploadState) { return; }
+          fileUploadState.files = formState?.inputState.get(name)?.value;
+        }
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     React.useEffect(() => {
       reaction(
@@ -45,7 +57,9 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
       files,
       disabled,
       withState,
+      mode,
       name,
+      gutter,
     });
   };
 

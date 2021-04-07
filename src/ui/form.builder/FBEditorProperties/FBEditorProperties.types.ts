@@ -1,7 +1,5 @@
-import { FBInputProps } from "..";
-import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
-import { FBInputType } from "../FBInput";
-import { FBOption } from "../FBOption";
+import { FBInputProps, FBOption } from "..";
+import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 
 export type FBEditorPropertiesType =
 | "multiple"
@@ -14,14 +12,12 @@ export type FBEditorPropertiesType =
 | "copyableValue"
 | "includeInInspection"
 | "includeInFaiInspection"
-| "deleteDisabled";
+| "deleteDisabled"
+| "includeNotes";
 
 export type FBEditorPropertiesProps = Pick<FBInputProps, "type" | "options" | "onChange"> & {
-  inputProps?: Partial<FBInputProps>;};
-
-export const FBEditorPropertiesDefaultValue: Partial<Record<FBInputType, FBEditorPropertiesType[]>> = {
-  procedure: ["copyableValue"],
-  eqmaintenance: ["deleteDisabled"],
+  inputProps?: Partial<FBInputProps>;
+  docGroupOptions?: DocumentGroupOptionsType[];
 };
 
 export const FBEditorPropertiesOmitByGroup = {

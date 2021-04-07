@@ -2,7 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../../support/config";
-import { USERS } from "../../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -11,7 +11,7 @@ let multipleCompanies;
 let secondEmployee;
 const documentRevisionTitle = `DocumentRevision${Cypress.moment().format("X")}`;
 
-context("FORM Field test", () => {
+context("Autocomplete 'Document Revisions In Draft without Records' test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -24,7 +24,7 @@ context("FORM Field test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -129,7 +129,7 @@ context("FORM Field test", () => {
           cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
         });
 
-        it("Select 'Component Protocol' output document type", () => {
+        it("Select 'Clinical Protocol' output document type", () => {
           cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
         });
 
@@ -165,7 +165,7 @@ context("FORM Field test", () => {
         it("Verify autocomplete 'Document Revisions In Draft without Records'", () => {
           cy.request({
             method: "GET",
-            url: `${CONFIG.BE_URL}/api/v1/document_revisions?docTypeGroups%5B%5D=FORM&docTypeGroups%5B%5D=SUPPLIER&docTypeGroups%5B%5D=OTHER&docTypeGroups%5B%5D=MPI&docTypeGroups%5B%5D=DYNAMIC_FORM&docTypeGroups%5B%5D=POAM&docTypeGroups%5B%5D=PO&docTypeGroups%5B%5D=WORK_ORDER&docTypeGroups%5B%5D=PART&docTypeGroups%5B%5D=DAM&docTypeGroups%5B%5D=EQUIPMENT&docTypeGroups%5B%5D=MATERIAL&status%5B%5D=DRAFT`,
+            url: `${CONFIG.BE_URL}/api/v1/document_revisions?docTypeGroups%5B%5D=FORM&docTypeGroups%5B%5D=SUPPLIER&docTypeGroups%5B%5D=OTHER&docTypeGroups%5B%5D=PI&docTypeGroups%5B%5D=DYNAMIC_FORM&docTypeGroups%5B%5D=POAM&docTypeGroups%5B%5D=PO&docTypeGroups%5B%5D=WORK_ORDER&docTypeGroups%5B%5D=PART&docTypeGroups%5B%5D=DAM&docTypeGroups%5B%5D=EQUIPMENT&docTypeGroups%5B%5D=MATERIAL&status%5B%5D=DRAFT`,
             headers: {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },

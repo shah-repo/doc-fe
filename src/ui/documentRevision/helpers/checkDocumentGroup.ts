@@ -26,7 +26,6 @@ export const checkIfDocumentHasOptions = (
 };
 
 export const checkIsDocumentEditableSchema = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
-export const checkIsDocumentDocument = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DOCUMENT);
 export const checkIsDocumentRecord = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.RECORD);
 export const checkIsDocumentPart =  checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.PART);
 export const checkIsDocumentEB = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.ENGINEERING_BUILD);
@@ -35,17 +34,19 @@ export const checkIsDocumentForm = checkDocumentGroupOptions.bind(this, DOC_TYPE
 export const checkIsDocumentDAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DAM);
 export const checkIsDocumentPOAM = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.POAM);
 export const checkIsDocumentEquipment = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EQUIPMENT);
-export const checkIsDocumentReceivable = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.RECEIVABLE);
 export const checkIsDynamicForm = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.DYNAMIC_FORM);
-export const checkIsDocumentSupplier = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.SUPPLIER);
+export const checkIsDocumentMPIOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MPI_OUTPUT);
+export const checkIsDocumentMPI = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MPI);
+export const checkIsDocumentLHR = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.LHR);
 
 export const checkIsTypeHaveOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.HAVE_OUTPUT);
 export const checkIsTypeMustBeOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT);
 export const checkIsTypeCanBeOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_BE_OUTPUT);
-export const checkIsTypeInspection = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.INSPECTION);
 export const checkIsTypeFaiInspection = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.FAI_INSPECTION);
 
 export const hasSerializedCSV = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.SERIALIZED_CSV);
+export const hasOperatorRelease = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.OPERATOR_RELEASE);
+export const hasRedline = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.REDLINE);
 
 export const checkCanTypeCreateInspection = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_CREATE_INSPECTION);
 export const checkCanBeCopied = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_BE_COPIED);

@@ -1,11 +1,10 @@
 import { filter, find, findIndex, omit } from "lodash";
 import { action, observable, set } from "mobx";
-import { FBClosingNoteProps, FBTaskItemStatus } from ".";
-import { FBTaskItem } from "..";
+import { FBClosingNoteProps, FBTaskItem, FBTaskItemStatus } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBTaskState extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNoteProps> {
+class FBTaskState extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNoteProps> {
   @observable public canAddTask = true;
 
   @action public handleAddTask = (canAdd: boolean) => {

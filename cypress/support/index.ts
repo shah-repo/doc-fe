@@ -18,6 +18,7 @@ import "cypress-file-upload";
 import "cypress-localstorage-commands";
 import "cypress-promise/register";
 import "cypress-xpath";
+import "../../node_modules/cypress-movie/src/arrow";
 import { addScreenshotToContext } from "../utils/context/screenshotsToContext";
 import "./commands";
 import "./commands/approval.request/commands";
@@ -63,6 +64,29 @@ Cypress.on("uncaught:exception", (err, runnable) => {
   return true;
 });
 
+Cypress.Commands.overwrite("click", (originalFn, subject, options) => {
+
+  const currentCommand = cy.state("current").attributes.name;
+
+  if (currentCommand === "click") {
+    cy.wrap(subject).arrow({ duration: CONFIG.ARROW_DURATION, blocking: true }).then(() => originalFn(subject, options));
+  } else {
+    return originalFn(subject, options);
+  }
+});
+
+Cypress.Commands.overwrite("type", (originalFn, subject, options) => {
+
+  const currentCommand = cy.state("current").attributes.name;
+  const args = cy.state("current").attributes.args;
+
+  if (currentCommand === "type" && args.length == 1) {
+    cy.wrap(subject).arrow({ duration: CONFIG.ARROW_DURATION, blocking: true }).then(() => originalFn(subject, options));
+  } else {
+    return originalFn(subject, options, { force: true });
+  }
+});
+
 Cypress.Screenshot.defaults({
   capture: "viewport",
   scale: false,
@@ -80,7 +104,8 @@ Cypress.on("test:after:run", (test, runnable: any ) => {
 });
 
 before(() => {
-  if (CONFIG.RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE) {
+  if (CONFIG.RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE ||
+      CONFIG.RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.SCHEDULEDPIPELINE) {
     cy.task("deleteScreenshotsFolder", { CONFIG, specFileName: Cypress.spec.name });
     cy.task("deleteExistingReports", { CONFIG, specFileName: Cypress.spec.name } );
   }

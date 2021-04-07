@@ -1,4 +1,4 @@
-import { PageDetails } from "../../state/ducks/documentRevisions/documentType";
+import { PageDetails } from "../../state/ducks/documentRevisions/documentType/types";
 import { parseJSON, stringifyJSON } from "../document.type.management/transform";
 
 export const toPageDetailsInitialValues = (pageDetails: PageDetails) => ({

@@ -1,7 +1,7 @@
 import { Box, Link } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
-import { Nullable } from "../../../../state/ducks/common";
+import { Nullable } from "../../../../state/ducks/common/types";
 import Text from "../../Text";
 import styles from "./utils/styles";
 

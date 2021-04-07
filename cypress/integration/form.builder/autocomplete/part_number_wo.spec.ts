@@ -3,7 +3,7 @@
 
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
-import { USERS } from "../../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -12,7 +12,7 @@ let multipleCompanies;
 let secondEmployee;
 const partsName = `Parts ${Cypress.moment().format("X")}`;
 
-context("FORM Field test", () => {
+context("Autocomplete 'Part Number in WO' test", () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -25,7 +25,7 @@ context("FORM Field test", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
@@ -69,14 +69,58 @@ context("FORM Field test", () => {
     });
   });
 
+  // TODO: Create form for Parts with API, not through document list creation!
+  context("Create Form Part document to create Part", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enters title 'New Part Form'", () => {
+      cy.drEnterDocumentTitle({ name: "New Part Form" });
+    });
+
+    it("Enters description 'New Part Form description'", () => {
+      cy.drEnterDocumentDescription({ description: "New Part Form description" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Selects 'Form' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Selects 'Parts' document type from dropdown", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Parts" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
   context("Autocomplete 'Part Number in WO' test", () => {
     context("Create 'Parts'", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
+      it("Navigates to parts list", () => {
+        cy.navigToParts();
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
+      it("Clicks on 'Add new part' button", () => {
+        cy.wrapWithWaitOnApiCalls([
+          CyRoutes.GetRequiredApprovers,
+          CyRoutes.EmployeesGet,
+          CyRoutes.DocPreview], () => {
+          cy.ptClickCreateNewPart();
+        });
       });
 
       it("Enter document title " + partsName, () => {
@@ -87,16 +131,12 @@ context("FORM Field test", () => {
         cy.drEnterDocumentDescription({ description: "document description" });
       });
 
-      it("Select 'Parts' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Parts" });
-      });
-
       it("Select 'Numeric' revision stage", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release FORM document", () => {

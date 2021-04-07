@@ -1,9 +1,6 @@
 import { Portal } from "@material-ui/core";
-import { isUndefined } from "lodash";
 import React from "react";
-import { FBWorkspaceMemo, FBWorkspaceProps } from ".";
-import { FBConditionalWrapper, FBDialog, FBFieldName, FBForm, FBProvider, FBSnackbar } from "..";
-import { FBProcedureDiff } from "../FBProcedureDiff";
+import { FBDialog, FBFieldName, FBForm, FBProcedureDiff, FBProvider, FBSnackbar, FBWorkspaceMemo, FBWorkspaceProps } from "..";
 import { withFBWorkspace } from "./FBWorkspace.wrap";
 
 const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
@@ -19,6 +16,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   initialValues,
   includeTransport,
   includeProcedureDiff,
+  isPortal,
 }) => (
   <FBProvider {...{ workspaceState, dialogState, snackbarState }}>
     <FBSnackbar autoHideDuration={6000}/>
@@ -27,19 +25,22 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
       {children}
       {active && (
         <>
-          <FBConditionalWrapper
-            condition={!isUndefined(portalContainer)}
-            wrapper={(wrapperChildren) => (
-              <Portal container={portalContainer?.current}>
-                {wrapperChildren}
-              </Portal>
-            )}
-          >
-            {includeProcedureDiff && (
-              <FBProcedureDiff name={FBFieldName.ProcedureDiff} />
-            )}
-            <FBWorkspaceMemo {...{ isStarter, schema, mode, includeTransport, workspaceState }} />
-          </FBConditionalWrapper>
+          {isPortal && portalContainer?.current && (
+            <Portal container={portalContainer?.current}>
+              {includeProcedureDiff && (
+                <FBProcedureDiff name={FBFieldName.ProcedureDiff} />
+              )}
+              <FBWorkspaceMemo {...{ isStarter, schema, mode, includeTransport, workspaceState }} />
+            </Portal>
+          )}
+          {!isPortal && (
+            <>
+              {includeProcedureDiff && (
+                <FBProcedureDiff name={FBFieldName.ProcedureDiff} />
+              )}
+              <FBWorkspaceMemo {...{ isStarter, schema, mode, includeTransport, workspaceState }} />
+            </>
+          )}
         </>
       )}
     </FBForm>

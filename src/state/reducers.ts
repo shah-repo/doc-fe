@@ -10,7 +10,6 @@ import dashboard from "./ducks/dashboard";
 import documentRevisions from "./ducks/documentRevisions";
 import documentType from "./ducks/documentRevisions/documentType";
 import documents from "./ducks/documents";
-import formBuilderState from "./ducks/formBuilder";
 import pageDetails from "./ducks/pageDetails";
 import supplierSurvey from "./ducks/supplierSurvey";
 import tableSearch from "./ducks/tableSearch";
@@ -43,6 +42,12 @@ const tableSearchPersistConfig = {
   whitelist: ["criteria"],
 };
 
+const pageDetailsPersistConfig = {
+  key: "pageDetails",
+  storage,
+  whitelist: ["byCategory"],
+};
+
 const appReducer = combineReducers({
   attachments,
   auth: persistReducer(authPersistConfig, auth),
@@ -50,13 +55,12 @@ const appReducer = combineReducers({
   changeRequests,
   documentRevisions,
   dashboard,
-  formBuilderState,
   documentType: persistReducer(documentTypePersistConfig, documentType),
   company: persistReducer(companyPersistConfig, company),
   tableSearch: persistReducer(tableSearchPersistConfig, tableSearch),
   supplierSurvey,
   userManagement,
-  pageDetails,
+  pageDetails: persistReducer(pageDetailsPersistConfig, pageDetails),
 });
 
 const rootReducer = (state: any, action: any) => {

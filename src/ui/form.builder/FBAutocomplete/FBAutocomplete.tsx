@@ -4,7 +4,7 @@ import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { get } from "lodash";
 import React from "react";
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
-import { ApprovalStatus } from "../../../state/ducks/documents";
+import { ApprovalStatus } from "../../../state/ducks/documents/types";
 import Text from "../../components/Text";
 import { withFBAutocomplete } from "./FBAutocomplete.wrap";
 

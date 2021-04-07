@@ -5,7 +5,7 @@ import classNames from "classnames";
 import { camelCase } from "lodash";
 import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
-import { NavigationItem, NavigationItemType } from "../../state/ducks/company";
+import { NavigationItem, NavigationItemType } from "../../state/ducks/company/types";
 import Text from "../components/Text";
 import { DOCUMENT_BY_CATEGORY_ROOT_URL } from "../constants/urls";
 import styles from "./NavigationLink.styles";

@@ -24,7 +24,9 @@ declare global {
       pmUploadAttachment(params: {fileName: string }): Chainable<Subject>;
       pmAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       pmSubmitForApproval(): Chainable<Subject>;
+      ptClickCreateNewPart(): Chainable<Subject>;
       pmToggleChangesFromPrevBuild(): Chainable<Subject>;
+      ptSelectPartFormFromMultiSelect(params: {partForm: string}): Chainable<Subject>;
       pmVerifyAddedMaterial(params: {
         materialDocName: string;
         quantity: integerType;
@@ -59,7 +61,7 @@ Cypress.Commands.add("pmAddMaterialDocumentToProcedure", (params: {
   cy.get("[name=\"quantity\"]").type(params.numberOfMaterial.toString());
   cy.get("[data-cy=\"unit\"]").click();
   cy.get("ul[role=\"listbox\"]>li").contains(params.typeOfMaterial).click();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.get("[data-cy=\"form.builder.save\"]").click();
   });
 });
@@ -80,7 +82,7 @@ Cypress.Commands.add("pmAddFreeTextMaterial", (params: {
   cy.get("[name=\"quantity\"]").type(params.numberOfMaterial.toString());
   cy.get("[data-cy=\"unit\"]").click();
   cy.get("ul[role=\"listbox\"]>li").contains(params.typeOfMaterial).click();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.get("[data-cy=\"form.builder.save\"]").click();
   });
 });
@@ -89,7 +91,7 @@ Cypress.Commands.add("pmAddEquipmentDocument", (params: {equipmentDoc: string}) 
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").click();
   cy.get("[data-cy=\"title\"]").click();
   cy.get("ul[role=\"listbox\"]>li").contains(params.equipmentDoc).click();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.get("[data-cy=\"form.builder.save\"]").click();
   });
 });
@@ -97,14 +99,14 @@ Cypress.Commands.add("pmAddEquipmentDocument", (params: {equipmentDoc: string}) 
 Cypress.Commands.add("pmAddFreeTextEquipment", (params: {equipment: string}) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").click();
   cy.get("[data-cy=\"title\"]").type(params.equipment);
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.get("[data-cy=\"form.builder.save\"]").click();
   });
 });
 
 Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {
   cy.fixture(params.fileName).then((fileContent) => {
-    cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachmentMediaUpload, () => {
+    cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
       cy.get("[id^=\"fb-mediaalbum-upload\"]").attachFile({
         fileContent: fileContent.toString(),
         fileName: params.fileName,
@@ -115,15 +117,28 @@ Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {
   });
 });
 
-Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string }) => {
+Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").click();
-  cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
     cy.get("ul[role=\"listbox\"]>li").contains(params.approver).click();
   });
 });
 
+Cypress.Commands.add("ptClickCreateNewPart", () => {
+  cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("ptSelectPartFormFromMultiSelect", (params: {partForm: string}) => {
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.EmployeesGet,
+    CyRoutes.DocPreview], () => {
+    cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").type(params.partForm + "{downarrow}{enter}");
+  });
+});
+
 Cypress.Commands.add("pmSubmitForApproval", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   });
 });

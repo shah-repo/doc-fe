@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
-import { documentTypeSelectors, InputFieldType } from "../../../state/ducks/documentRevisions/documentType";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { InputFieldType } from "../../../state/ducks/documentRevisions/documentType/types";
 import { required, validator } from "../../components/forms/fields/validators";
 import { UIConfig } from "./types";
 

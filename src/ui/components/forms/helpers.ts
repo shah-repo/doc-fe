@@ -1,7 +1,5 @@
-import { get, isEmpty, isEqual, omit } from "lodash";
+import { every, get, includes, isArray, isEmpty, isEqual, omit } from "lodash";
 import { toJS } from "mobx";
-import React from "react";
-import { AsyncStatus } from "../../../state/types";
 
 const clearMobxObject = (value) => typeof value === "object" ?
   toJS(value) :
@@ -46,8 +44,9 @@ const getFormInputDiff = (transformedValues, transformedInitialValues) => {
   for (const [key, value] of Object.entries(transformedValues.formInput || {})) {
     const initialValueToCompare = clearMobxObject(transformedInitialValues.formInput?.[key]);
     const valueToCompare = clearMobxObject(value);
-
-    if (!isEqual(valueToCompare, initialValueToCompare)) {
+    if (
+      (!isEqual(valueToCompare, initialValueToCompare) && !isArray(valueToCompare))
+      || (isArray(valueToCompare) && !every(valueToCompare, (value) => includes(initialValueToCompare, value)))) {
       formInputDiff[key] = valueToCompare;
     }
   }
@@ -84,50 +83,4 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
     // formInput: transformedValues.formInput,
     formInput: omit(transformedValues.formInput, ["partType", "childForRevise"]),
   };
-};
-
-// NOTE: this hook will be used in case onSubmit debounce is not enough to prevent double autosave
-export const useFindDiff = () => {
-  const [diffBeingSubmitted, setDiffBeingSubmitted] = React.useState({});
-  const [diffToSubmit, setDiffToSubmit] = React.useState({});
-
-  return React.useMemo(() => (
-    initialValues,
-    values,
-    transformMethod,
-    async
-  ) => {
-    let dataToSubmit = compareValuesToSubmit(initialValues, values, transformMethod);
-
-    if (async.asyncState.status === AsyncStatus.Active) {
-      setDiffToSubmit(dataToSubmit);
-      return [false];
-    }
-
-    dataToSubmit = {
-      ...dataToSubmit,
-      ...diffToSubmit,
-    };
-
-    const compare = (a, b) => {
-      const diff = {};
-      for (const [key, value] of Object.entries(a)) {
-        if (!isEqual(value, b[key])) {
-          diff[key] = value;
-        }
-      }
-      return diff;
-    };
-
-    dataToSubmit = compare({ ...dataToSubmit }, diffBeingSubmitted);
-
-    if (isEmpty(dataToSubmit)) {
-      setDiffBeingSubmitted({});
-      return [false];
-    }
-    setDiffToSubmit({});
-    setDiffBeingSubmitted(dataToSubmit);
-    return [true, dataToSubmit];
-  }, [diffBeingSubmitted, diffToSubmit]);
-
 };

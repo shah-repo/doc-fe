@@ -1,4 +1,4 @@
-export class FBTextFieldWithRangeState {
+class FBTextFieldWithRangeState {
   // MARK: @observables
 
   // MARK: @config

@@ -1,7 +1,5 @@
 import { BoxProps, MobileStepperProps } from "@material-ui/core";
-import { FBFilePreviewType, FBVisibilityType } from "..";
-import { FBMediaAlbumProps } from "../FBMediaAlbum";
-import FBMediaCarouselState from "./FBMediaCarousel.state";
+import { FBFilePreviewType, FBMediaAlbumProps, FBMediaCarouselState, FBVisibilityType } from "..";
 
 export type FBMediaCarouselProps =
 & Pick<MobileStepperProps, "activeStep">

@@ -10,6 +10,12 @@ export type FBAutocompleteAsyncProps =
   shouldReloadOnInit?: boolean;
   additionalData?: any[]; // TODO: make autocomplete async generic type by data
   forceNewRender?: boolean;
+  /**
+   * @cfg {Record} Additional url params.
+   */
+  urlValues?: Record<string, any>;
+  withoutPrefixRoot?: boolean;
+  withoutLabelKey?: boolean;
 };
 
 export interface FBAutocompleteAsyncConfig  {
@@ -21,6 +27,11 @@ export interface FBAutocompleteAsyncConfig  {
   root?: string;
   labelPrefixRoot?: string;
   includeRevision?: string;
+  publicApi?: boolean;
+  /**
+   * @cfg {Bool} If true show the option in editor config.
+   */
+  hidden?: boolean;
 }
 
 export enum FBAutocompleteAsyncOption {
@@ -52,4 +63,14 @@ export enum FBAutocompleteAsyncOption {
   supplierDocumentTypes = "26",
   ebLots = "27",
   seed = "28",
+  mpiDocuments = "29",
+  unitMeasures = "30",
+  docRevByDoc = "31",
+  docParts = "32",
+  releasedEquipment = "33",
+}
+
+export interface FBAutocompleteAsyncConstructor {
+  optionId?: string;
+  urlValues?: Record<string, any>;
 }

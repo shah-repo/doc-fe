@@ -2,10 +2,9 @@
 import { differenceBy, filter, map } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBWorkspaceProps, FBWorkspaceState } from ".";
-import { FB, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState } from "..";
+import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState, FBWorkspaceProps, FBWorkspaceState } from "..";
 import { store } from "../../../state/store";
-import { FBDialogState } from "../FBDialog";
+import { checkIsDocumentEB } from "../../documentRevision/helpers/checkDocumentGroup";
 
 // Disable missing translation message for the non translation cases.
 
@@ -34,7 +33,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     active,
     document,
     changeRequest,
-    autosave,
+    autosave = false,
     schema,
     includeProcedureDiff,
     ...props
@@ -47,15 +46,16 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       mode,
       autosave,
     });
+
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
     workspaceState && (workspaceState.document = document);
-    const { group: formGroup } = document?.document?.documentType || {};
+    const { groupOptions: formGroupOptions } = document?.document?.documentType || {};
     // We should include document type in FB
     // We can't ignore that FB is not standalone package anymore
     const { parent } = document || {};
     includeProcedureDiff = (
-      formGroup === "ENGINEERING_BUILD" &&
+      checkIsDocumentEB(formGroupOptions) &&
       Boolean(parent)
     );
 
@@ -73,6 +73,12 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       workspaceState.approvals = document?.approvals as FBInlineApprovalBody[];
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [document?.approvals]);
+
+    React.useEffect(() => {
+      if (!workspaceState) { return; }
+      workspaceState.setAutosave(autosave);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [autosave]);
 
     // *TODO: find a way to reset constructor props
     React.useEffect(() => {

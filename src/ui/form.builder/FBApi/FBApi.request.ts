@@ -1,6 +1,7 @@
 import { first, get, has, isArray, isEmpty, isString, isUndefined, join, template } from "lodash";
 import { action, observable, set } from "mobx";
-import apiClient, { FBRequestSet, FBRequestTemplateUrl } from ".";
+import { apiClient, FBRequestSet, FBRequestTemplateUrl } from "..";
+import apiXClient from "../../../state/apiXClient";
 import { store } from "../../../state/store";
 import { ApiActionMethod } from "../../../state/types";
 import { toastError } from "../../components/notifications";
@@ -12,6 +13,8 @@ export default class FBRequest<Data, Body> {
   public method?: ApiActionMethod;
   public url = "";
   public root = "";
+  public includeAuthorization = true;
+  public publicApi = false;
 
   public constructor(url = "") {
     this.url = url;
@@ -52,6 +55,10 @@ export default class FBRequest<Data, Body> {
     set(this, "root", root);
   };
 
+  @action public setPublicApi = (publicApi: boolean) => {
+    set(this, "publicApi", publicApi);
+  };
+
   @action public fetch = () => this.start("get");
   @action public post = () => this.start("post");
   @action public patch = () => this.start("patch");
@@ -59,19 +66,19 @@ export default class FBRequest<Data, Body> {
 
   @action public prepareData = (data: Data): Data | undefined => data;
 
-  public set = (set: FBRequestSet<Body>) => {
+  public set = (set: FBRequestSet<Body>, callback?: (data?: Data, error?: any) => any) => {
     const { url, urlValues, body, method } = set;
     url && this.setUrl(url);
     urlValues && this.setUrl(urlValues);
     body && this.setBody(body);
-    method && this.start(method);
+    method && this.start(method, callback);
   };
 
-  protected onSuccess() {
+  public onSuccess() {
     this.setLoading(false);
   }
 
-  protected onError(error) {
+  public onError(error) {
     let { message } = error;
     if (isArray(message) && has(first(message), "message")) {
       message = join(get(first(message), "message"), "\n");
@@ -81,7 +88,7 @@ export default class FBRequest<Data, Body> {
     toastError(message);
   }
 
-  @action private start = (method: ApiActionMethod) => {
+  @action private start = (method: ApiActionMethod, callback?: (data?: Data, error?: any) => any) => {
     this.setLoading(true);
     let promise: Promise<any> | undefined;
 
@@ -90,6 +97,10 @@ export default class FBRequest<Data, Body> {
         store.getState().auth.user.employeeId
       }:${store.getState().auth.user.sessionId}:${this.body?.password}`,
     } : undefined;
+
+    if (this.publicApi) {
+      apiXClient("", this.publicApi);
+    }
 
     switch (method) {
       case "get":
@@ -120,10 +131,16 @@ export default class FBRequest<Data, Body> {
       .then((data) => {
         !isEmpty(this.root) && (data = get(data as Data, this.root));
         data = this.prepareData(data);
+        if (callback) {
+          return callback?.(data as Data, undefined);
+        }
         this.setData(data as Data);
         this.onSuccess();
       })
       .catch((_error) => {
+        if (callback) {
+          return callback?.(undefined, _error);
+        }
         this.onError(_error);
         this.setLoading(false);
       });

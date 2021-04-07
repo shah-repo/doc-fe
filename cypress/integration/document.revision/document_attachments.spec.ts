@@ -2,7 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { USERS } from "../../utils/constants/users";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
@@ -27,12 +27,18 @@ context("Document Attachment Flow", () => {
           specFilePath: __filename,
           payload: {
             companyAdminEmail: USERS[1].email,
-            importerEmail: USERS[5].email,
+            importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
                 documentTypeName: "Clinical Protocol",
                 documentTypeAcronym: "CP-",
+                group: "OTHER",
+                isQms: true,
+              },
+              {
+                documentTypeName: "Test Document Type",
+                documentTypeAcronym: "TDT-",
                 group: "OTHER",
                 isQms: true,
               },
@@ -90,14 +96,14 @@ context("Document Attachment Flow", () => {
       cy.drEnterDocumentDescription({ description: "New Document Revision description" });
     });
 
-    it("Selects 'Component Specification' document type from dropdown", () => {
+    it("Selects 'Test Document Type' document type from dropdown", () => {
       // SystemRequirement("REQ-0490");
-      cy.drSelectDocumentType({ documentType: "Component Specification" });
+      cy.drSelectDocumentType({ documentType: "Test Document Type" });
     });
 
-    it("Checks if document type id is 'CS-00002'", () => {
+    it("Checks if document type id is 'TDT-00002'", () => {
       SystemRequirement("REQ-0320");
-      cy.drCheckIfDocumentIdMatches({ docId: "CS-00002" });
+      cy.drCheckIfDocumentIdMatches({ docId: "TDT-00002" });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -230,7 +236,7 @@ context("Document Attachment Flow", () => {
       cy.drEnterDocumentDescription({ description: "New Document for AR description" });
     });
 
-    it("Selects 'Component Specification' document type from dropdown", () => {
+    it("Selects 'Clinical Protocol' document type from dropdown", () => {
       // SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
     });
@@ -308,10 +314,6 @@ context("Document Attachment Flow", () => {
 
     it("Add first approver to approval request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].email });
-    });
-
-    it("Save changes", () => {
-      cy.arSaveApiCall();
     });
 
     it("Click 'Send To Review'", () => {

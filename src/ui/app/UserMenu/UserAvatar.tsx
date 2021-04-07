@@ -1,7 +1,7 @@
 import { Box, createStyles, makeStyles, Theme } from "@material-ui/core";
 import React from "react";
 
-export const styles = makeStyles((theme: Theme) =>
+const styles = makeStyles((theme: Theme) =>
   createStyles({
     avatar: {
       width: "24px",

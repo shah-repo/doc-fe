@@ -1,7 +1,6 @@
 import { compact, filter, isString, kebabCase, size, union } from "lodash";
 import React from "react";
-import { FBEditorActionsProps } from ".";
-import { FB, FBData, FBSchemaProps } from "..";
+import { FB, FBData, FBEditorActionsProps, FBSchemaProps } from "..";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";
 
@@ -21,6 +20,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
     const { dialogState, workspaceState, formState } = FB.useStores();
     const { isOutput } = workspaceState || {};
+
     if (workspaceState?.getSchemaItemAt(index)?.deleted) {
       index = size(workspaceState?.getSchema());
     }

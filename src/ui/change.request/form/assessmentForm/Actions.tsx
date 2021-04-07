@@ -2,7 +2,7 @@ import { Grid } from "@material-ui/core";
 import { useFormikContext } from "formik";
 import * as React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { ChangeRequest } from "../../../../state/ducks/changeRequest";
+import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
 import { AsyncState } from "../../../../state/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";

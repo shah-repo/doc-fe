@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { Group, Permission } from "../../../state/ducks/auth/types";
 import { groupManagementActions } from "../../../state/ducks/groupManagement";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
-import { GetEmployeeResponse, LoadCompanyGroup } from "../../../state/ducks/userManagement";
+import { GetEmployeeResponse, LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useAsync from "../../hooks/useAsync";
 import { toEditRequestBody, toGroupOptions, toMembersOptions, toParentOptions, toRequestBody } from "../utils/transform";
@@ -21,7 +21,7 @@ interface Props {
   hasOfficialPermission: boolean;
 }
 
-export const GroupContentContainer: React.FunctionComponent<Props> = ({
+const GroupContentContainer: React.FunctionComponent<Props> = ({
   selectedGroup,
   isCreateMode,
   employees,

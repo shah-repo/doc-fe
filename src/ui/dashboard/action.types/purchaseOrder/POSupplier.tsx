@@ -7,7 +7,7 @@ interface Props {
   supplierId: string;
 }
 
-export const POSupplier: React.FunctionComponent<Props> = ({
+const POSupplier: React.FunctionComponent<Props> = ({
   supplierId,
 }) => {
   const dispatch = useDispatch();

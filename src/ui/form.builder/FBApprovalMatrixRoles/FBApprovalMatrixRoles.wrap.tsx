@@ -1,7 +1,6 @@
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBApprovalMatrixRolesProps } from ".";
-import { FB, FBApprovalMatrixRolesActions, FBData, FBDialogState, FBForm } from "..";
+import { FB, FBApprovalMatrixRolesActions, FBApprovalMatrixRolesProps, FBData, FBDialogState, FBForm } from "..";
 
 export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
   Component: React.FunctionComponent<T>

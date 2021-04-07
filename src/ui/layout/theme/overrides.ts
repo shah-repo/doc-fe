@@ -1,6 +1,6 @@
 import { Theme } from "@material-ui/core";
 import { Overrides } from "@material-ui/core/styles/overrides";
-import { WhiteLabelingColors } from "../../../state/ducks/company";
+import { WhiteLabelingColors } from "../../../state/ducks/company/types";
 import { FBClasses } from "../../form.builder/defaults/layout";
 import Colors from "./utils/colors";
 
@@ -179,6 +179,16 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiFormControl: {
     root: {
       fontFamily: "Open Sans, sans-serif;",
+      [`& .${FBClasses.hoverVisibility}`]: {
+        "&:hover": {
+          "& .MuiButton-root": {
+            visibility: "visible",
+          },
+        },
+        "& .MuiButton-root": {
+          visibility: "hidden",
+        },
+      },
       [`& .${FBClasses.nonOwner}`]: {
         [`& .Mui-disabled`]: {
           backgroundColor: Colors.light_gray,
@@ -195,6 +205,9 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
         },
         "& fieldset": {
           borderWidth: "0px!important",
+        },
+        "& input": {
+          padding: "0px!important",
         },
         "&[data-cy='password'] fieldset": {
           borderWidth: "1px!important",

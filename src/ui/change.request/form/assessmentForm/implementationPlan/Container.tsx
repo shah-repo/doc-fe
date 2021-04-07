@@ -9,7 +9,7 @@ import Tasks from "./Tasks.container";
 
 export type Props = FieldProps<ChangeRequestFormValues>;
 
-export const styles = makeStyles(() =>
+const styles = makeStyles(() =>
   createStyles({
     error: {
       color: "red",

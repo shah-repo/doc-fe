@@ -1,6 +1,7 @@
-import { Attachment, attachmentsActions, AttachmentType } from "../../../../../state/ducks/attachments";
-import { RenderSize } from "../../../../../state/ducks/common";
-import { DocumentRevision } from "../../../../../state/ducks/documentRevisions";
+import { attachmentsActions } from "../../../../../state/ducks/attachments";
+import { Attachment, AttachmentType } from "../../../../../state/ducks/attachments/types";
+import { RenderSize } from "../../../../../state/ducks/common/types";
+import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
 import { FormikHybridFieldProps } from "../../../hoc/utils/types";
 
 export enum PasswordSubmitActionType {

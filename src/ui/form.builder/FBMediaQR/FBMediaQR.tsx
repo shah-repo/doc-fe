@@ -2,7 +2,7 @@ import { Box, CircularProgress, IconButton, Tooltip } from "@material-ui/core";
 import AlbumIcon from "@material-ui/icons/Album";
 import QRCode from "qrcode.react";
 import React from "react";
-import { FBMediaQRProps } from ".";
+import { FBMediaQRProps } from "..";
 import Text from "../../components/Text";
 import { withFBMediaQR } from "./FBMediaQR.wrap";
 
@@ -16,7 +16,7 @@ const FBMediaQR: React.FunctionComponent<FBMediaQRProps> = ({
     {mode === "qr" && (
       <>
         <Box display="flex" flexDirection="row-reverse" py={0.8}>
-          <IconButton size="small" onClick={setMediaFieldMode}>
+          <IconButton data-cy="albumMediaButton" size="small" onClick={setMediaFieldMode}>
             <Tooltip title={<Text message="form.builder.album" />}>
               <AlbumIcon />
             </Tooltip>

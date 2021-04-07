@@ -1,6 +1,6 @@
 import { isEmpty } from "lodash";
 import { IntlShape } from "react-intl";
-import { DocumentRevision, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, RevisionStageOptions } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentRecord } from "./checkDocumentGroup";
 
 export const getIsAdministrativeDefault = (documentRevision: DocumentRevision) => {
