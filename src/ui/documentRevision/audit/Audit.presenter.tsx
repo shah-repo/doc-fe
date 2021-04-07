@@ -108,6 +108,19 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
         fbLabel = `${stepLabel} ${keyLabel}`;
       }
+      if (fbType === "lhrstep") {
+        const valueKey = change.field.split(".")[1].split("-");
+        const dataToExclude = change.field.split(".")[1].split("--").length === 1;
+        let label = "";
+        const stepLabel = intl.formatMessage({ id: "form.builder.step.number" }, { number });
+        if (dataToExclude) {
+          return;
+        }
+        if (valueKey.includes("quantity")) {
+          label = intl.formatMessage({ id: `form.builder.${valueKey[2]}.quantity` });
+        }
+        fbLabel = `${label} for ${stepLabel}`;
+      }
 
       if (!isFBField && change.field.includes("attachments")) {
         attachments.push(change);
