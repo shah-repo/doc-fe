@@ -2,6 +2,7 @@
 /* eslint-disable no-template-curly-in-string */
 
 export enum FBEndpoint {
+  AutocompleteByOptionId = "/autocomplete_options/${optionId}",
   PrivateUpload = "/attachments/private_upload_url",
   FileUploadCandidates = "/documents/file_upload_candidates",
   AssetUrl = "/attachments/assetUrl",

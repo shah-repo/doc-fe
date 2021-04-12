@@ -20,7 +20,6 @@ export type FBAutocompleteAsyncProps =
 
 export interface FBAutocompleteAsyncConfig  {
   id: string;
-  path: string;
   label: string;
   labelKey: string;
   valueKey?: string;
