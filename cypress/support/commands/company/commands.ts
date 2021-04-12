@@ -83,6 +83,8 @@ declare global {
       cmpVerifySecondaryContrastText(params: { color: string}): Chainable<Subject>;
       cmpVerifyPrimaryContrastText(params: { color: string}): Chainable<Subject>;
       cmpVerifyPrimaryColor(params: { color: string}): Chainable<Subject>;
+      cmpTurnOffAutosave(): Chainable<Subject>;
+      cmpTurnOnAutosave(): Chainable<Subject>;
     }
   }
 }
@@ -187,6 +189,14 @@ Cypress.Commands.add("cmpUpdateCompany", (
       Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
     },
   }).then((response) => response.body);
+});
+
+Cypress.Commands.add("cmpTurnOffAutosave", () => {
+  cy.get("[name=\"toggleAutosave\"]").uncheck();
+});
+
+Cypress.Commands.add("cmpTurnOnAutosave", () => {
+  cy.get("[name=\"toggleAutosave\"]").check();
 });
 
 Cypress.Commands.add("cmpAdminUpdateCompany", (
