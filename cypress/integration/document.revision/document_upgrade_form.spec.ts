@@ -284,9 +284,7 @@ context("Document form upgrade", () => {
     it("Turn off autosave", () => {
       cy.cmpTurnOffAutosave();
     });
-  });
 
-  context("Create a record from form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
