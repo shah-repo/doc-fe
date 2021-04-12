@@ -146,6 +146,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   smartReferencesFrom?: SmartReference[];
   smartReferencesTo?: SmartReference[];
   usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
+  redline?: boolean;
 }
 
 interface SmartReference {
