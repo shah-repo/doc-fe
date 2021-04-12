@@ -26,6 +26,7 @@ declare global {
       drClickCreateSupplierWithApiCall(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForForms(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForFormsExpectingToastError(): Chainable<Subject>;
+      drClickCreateSupplierWithApiCallAudit(): Chainable<Subject>;
       drSaveDocumentWithoutaudit(): Chainable<Subject>;
       drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
@@ -333,6 +334,15 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExi
 Cypress.Commands.add("drClickCreateSupplierWithApiCall", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PatchDocRev], () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    });
+  cy.checkToastMessage({ exists: false });
+  cy.wait(500);
+});
+
+Cypress.Commands.add("drClickCreateSupplierWithApiCallAudit", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
   cy.checkToastMessage({ exists: false });
