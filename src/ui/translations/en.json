@@ -671,7 +671,7 @@
   "form.builder.evidencemediaupload": "Evidence Media upload",
   "form.builder.stepsection": "Step",
   "form.builder.step.started": "Step started",
-  "form.builder.step.completed": "Step completed",
+  "form.builder.step.completed": "Step completed at {date}",
   "form.builder.teststep": "Test Step",
   "form.builder.step.number": "Step #{number}",
   "form.builder.save": "Save",
