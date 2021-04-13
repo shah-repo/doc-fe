@@ -51,6 +51,7 @@ declare global {
       drCheckApprovalsEnforcment(): Chainable<Subject>;
       drVerifyFirstDocumentRevisionList(params: { revision: string }): Chainable<Subject>;
       drApproveAndReleaseDocumentWithSelectingApprover(users: string[], params?: { toastifyExists: boolean }): Chainable<Subject>;
+      drClickUpgradeForm(): Chainable<Subject>;
 
       /* Document Approval Matrix */
 
@@ -412,6 +413,13 @@ Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string;
 Cypress.Commands.add("drChangeOwnerFromMenu", (params: { employee: string }) => {
   cy.get("#HeaderMenuButton").click();
   cy.drChangeOwner({ employee: params.employee });
+});
+
+Cypress.Commands.add("drClickUpgradeForm", () => {
+  cy.get("[data-cy=\"formUpgradeButton\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.UpgradeToReleasedForm, () => {
+    cy.get("[id=\"UpgradeToLatest-proceed\"]").click();
+  });
 });
 
 Cypress.Commands.add("drChangeOwnerByAdmin", (params: { employee: string }) => {

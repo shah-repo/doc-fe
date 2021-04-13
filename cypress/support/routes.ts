@@ -77,6 +77,7 @@ export enum CyRoutes {
   PreventIdleLogout = "PreventIdleLogout",
   EmployeesGetActive = "EmployeesGetActive",
   ArAudit = "ArAudit",
+  UpgradeToReleasedForm = "UpgradeToReleasedForm",
 }
 
 export const routes: ICyRoutes =   {
@@ -120,6 +121,16 @@ export const routes: ICyRoutes =   {
     callConfig: {
       responseTimeout: 50 * 1000,
       requestTimeout: 40 * 1000,
+    },
+  },
+  UpgradeToReleasedForm: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/document_revisions/upgradeToReleasedForm/*",
+    },
+    callConfig: {
+      responseTimeout: 20 * 1000,
+      requestTimeout: 20 * 1000,
     },
   },
   LotQuantity: {
