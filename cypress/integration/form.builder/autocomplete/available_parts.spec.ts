@@ -136,7 +136,7 @@ context("Autocomplete 'Available Parts' test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Approve and release FORM document", () => {
