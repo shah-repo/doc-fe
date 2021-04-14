@@ -26,6 +26,7 @@ declare global {
       drClickCreateSupplierWithApiCall(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForForms(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForFormsExpectingToastError(): Chainable<Subject>;
+      drClickCreateSupplierWithApiCallAudit(): Chainable<Subject>;
       drSaveDocumentWithoutaudit(): Chainable<Subject>;
       drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
@@ -247,7 +248,7 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params:
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   });
-  cy.wait(2000);
+  cy.wait(500);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {
@@ -340,13 +341,22 @@ Cypress.Commands.add("drClickCreateSupplierWithApiCall", () => {
   cy.wait(500);
 });
 
+Cypress.Commands.add("drClickCreateSupplierWithApiCallAudit", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    });
+  cy.checkToastMessage({ exists: false });
+  cy.wait(500);
+});
+
 Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PatchDocRev], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
     });
   cy.checkToastMessage({ exists: false });
-  cy.wait(2000);
+  cy.wait(500);
 });
 
 Cypress.Commands.add("drSaveDocumentWithoutaudit", () => {
@@ -541,7 +551,6 @@ Cypress.Commands.add("drUpgradeRevisionLevel", () => cy.get(`[data-cy="upgradeNe
 
 Cypress.Commands.add("drReleaseDocAfterRoleExistsAndChecked", (params: { group: number; role: string }) => {
   cy.drApproveAndReleaseDialog();
-  cy.wait(5000);
   cy.get(`[data-cy="group-${params.group}"]`).contains(params.role);
   cy.get(`[data-cy="checked-${params.group}"]`).should("be.visible");
   cy.wrapWithWaitOnApiCall(

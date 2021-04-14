@@ -145,7 +145,6 @@ context("Document Access Rights", () => {
   context("Save document And Approve & Release Document", () => {
     it("Clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(3000);
     });
 
     it("'Approve and Release' the document", () => {
@@ -194,7 +193,6 @@ context("Document Access Rights", () => {
   context("Save document And Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(3000);
     });
 
     it("'Approve and Release' the document", () => {
@@ -243,7 +241,6 @@ context("Document Access Rights", () => {
   context("Save document And Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(3000);
     });
 
     it("'Approve and Release' the document", () => {

@@ -487,6 +487,10 @@ context("Create company with golden tenant", () => {
   });
 
   context("Create form for NCO document", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigates to document list", () => {
       // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
@@ -727,38 +731,23 @@ context("Create company with golden tenant", () => {
     });
 
     it("Upload DOM JSON", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.atchUploadDOMJSONForNCO({ fileName: "dam.json", queue: 0 });
-        });
+      cy.atchUploadDOMJSONForNCO({ fileName: "dam.json", queue: 0 });
     });
 
     it("Upload Page Details JSON", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.atchUploadPageDetailsJSONForNCO({ fileName: "PageDetails.json", queue: 0 });
-        });
+      cy.atchUploadPageDetailsJSONForNCO({ fileName: "PageDetails.json", queue: 0 });
     });
 
     it("Upload Navigation JSON", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.atchUploadNavigationJSONForNCO({ fileName: "navigation.json", queue: 0 });
-        });
+      cy.atchUploadNavigationJSONForNCO({ fileName: "navigation.json", queue: 0 });
     });
 
     it("Upload Users List JSON", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
-        });
+      cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
     });
 
     it("Include Seed documents", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.DocRevGet], () => {
-          cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").click();
-        });
+      cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").click();
       cy.wait(1500);
       cy.get("[name^=seed-documents-to-be-included-]").type("SEED-00001{downarrow}{enter}");
       cy.get("[name^=seed-documents-to-be-included-]").type("SEED-00002{downarrow}{enter}");
@@ -767,6 +756,10 @@ context("Create company with golden tenant", () => {
     it("Upload logo picture 'image.jpg'", () => {
       cy.xpath("//div[@data-cy=\"Client's Logo\"]/../../../div/div/button").click();
       cy.pmUploadAttachment({ fileName: "image.jpg" });
+    });
+
+    it("Save document'", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Approve and release document - create company", () => {

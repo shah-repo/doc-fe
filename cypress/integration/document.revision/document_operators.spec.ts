@@ -220,19 +220,20 @@ context("Document Operators Access Test", () => {
       });
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Enters title 'New Document'", () => {
       cy.drEnterDocumentTitle({ name: "New Document" });
     });
 
     it("Enters description 'New Document description'", () => {
       cy.drEnterDocumentDescription({ description: "New Document description" });
-      cy.wait(5000);
     });
 
     it("Choose an existing part from the list of available parts", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"childrenParts\"]").type("Test Part{downarrow}{enter}");
-      });
+      cy.get("[data-cy=\"childrenParts\"]").type("Test Part{downarrow}{enter}");
     });
 
     it("Click on 'Add a field'", () => {
@@ -248,9 +249,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Add 'Text Field' field", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.fbAddNewFieldButton();
-      });
+      cy.fbAddNewFieldButton();
     });
 
     it("Click on 'Add a field'", () => {

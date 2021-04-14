@@ -51,14 +51,14 @@ Cypress.Commands.add("filterPO", (params: {docId: string; version: string; poSta
 
 Cypress.Commands.add("filterCheckIfPOFilterPersists", (params: {docId: string; version: string; poStatus: string;
   supplier: string; partNumber: string; amount: string; owner: string; issueDate: string; }) => {
-  cy.get("[id=\"docId\"]").contains(params.docId);
-  cy.get("[id=\"dynamicParams.precalc.version\"]").contains(params.version).should("exist");
-  cy.get("[id=\"dynamicParams.precalc.po_status\"]").contains(params.poStatus).should("exist");
-  cy.get("[id=\"dynamicParams.precalc.supplier\"]").contains(params.supplier).should("exist");
-  cy.get("[id=\"dynamicParams.precalc.po_partNumber\"]").contains(params.partNumber).should("exist");
-  cy.get("[id=\"dynamicParams.precalc.po_amount\"]").contains(params.amount).should("exist");
-  cy.get("[id=\"owner\"]").contains(params.owner).should("exist");
-  cy.get("[id=\"dynamicParams.precalc.issueDate\"]").contains(params.issueDate).should("exist");
+  cy.get("[id=\"docId\"]").should("have.value", params.docId);
+  cy.get("[id=\"dynamicParams.precalc.version\"]").should("have.value", params.version);
+  cy.get("[id=\"dynamicParams.precalc.po_status\"]").should("have.value", params.poStatus);
+  cy.get("[id=\"dynamicParams.precalc.supplier\"]").should("have.value", params.supplier);
+  cy.get("[id=\"dynamicParams.precalc.po_partNumber\"]").should("have.value", params.partNumber);
+  cy.get("[id=\"dynamicParams.precalc.po_amount\"]").should("have.value", params.amount);
+  cy.get("[id=\"owner\"]").should("have.value", params.owner);
+  cy.get("[id=\"dynamicParams.precalc.issueDate\"]").should("have.value", params.issueDate);
 });
 
 Cypress.Commands.add("filterPOVersion", (params: { version: string }) => {
