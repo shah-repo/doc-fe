@@ -4,6 +4,7 @@ import { AuditGroupType } from "../../../state/ducks/audit/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../state/reducers";
+import { FBSchemaProps } from "../../form.builder";
 import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus } from "../../hooks/docCustomization/useCustomization";
 import AuditPresenter from "./Audit.presenter";
@@ -54,7 +55,11 @@ const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
   const versionNumber = selectedDocument?.displayRevision;
 
   return  <CustomLabelTooltip {...{ tooltipConfig }}>
-    <AuditPresenter {...{ audit, versionNumber, isStatusVisible }} statusLabel={statusLabel as string}/>
+    <AuditPresenter
+      {...{ audit, versionNumber, isStatusVisible }}
+      statusLabel={statusLabel as string}
+      schema={selectedDocument.formDocument?.formTemplate?.schema as FBSchemaProps[]}
+    />
   </CustomLabelTooltip>;
 };
 
