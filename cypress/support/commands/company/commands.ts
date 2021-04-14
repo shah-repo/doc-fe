@@ -218,10 +218,9 @@ Cypress.Commands.add("cmpAdminUpdateCompany", (
 Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: boolean }) => {
   if (params.multiple) {
     cy.wrapWithWaitOnApiCalls([
-      CyRoutes.IOTCredentials,
       CyRoutes.CompanyMine,
-      CyRoutes.IOTCredentials,
       CyRoutes.SessionDetails,
+      CyRoutes.IOTCredentials,
     ], () => {
       cy.get("#root").contains(params.name).click();
     });
