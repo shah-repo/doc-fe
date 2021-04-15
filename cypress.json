@@ -1,7 +1,7 @@
 {
   "baseUrl": "http://localhost:5602",
-  "videoCompression": 16,
   "videoUploadOnPasses": false,
+  "videoCompression": 16,
   "viewportWidth": 1400,
   "viewportHeight": 900,
   "video": false,
