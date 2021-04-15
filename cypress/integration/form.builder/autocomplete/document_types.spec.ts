@@ -1,15 +1,21 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { CONFIG } from "../../../support/config";
+import { CyRoutes } from "../../../support/routes";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
-let secondEmployee;
-const documentTypeTitle = `DocumentType${Cypress.moment().format("X")}`;
+const documentTypeTitle = `DocumentType${moment().tz("America/Los_Angeles").format("X")}`;
+let developersGroup;
+let adminSessionId;
+let adminEmployee;
+let adminLoginResponse;
 
 context("Autocomplete 'Document types' test", () => {
   context("[API]Prepare company", () => {
@@ -37,7 +43,7 @@ context("Autocomplete 'Document types' test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -51,6 +57,41 @@ context("Autocomplete 'Document types' test", () => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
+      });
+    });
+
+    context("[API]Add employee to developers group", () => {
+      it("[API]Login admin tester", (done: any) => {
+        cy.authApiLogin({
+          email: USERS[1].email,
+          password: "Tester1!",
+        }).then((response) => {
+          adminLoginResponse = response;
+          adminSessionId = adminLoginResponse.sessionId;
+          done();
+        });
+      });
+
+      it("[API]Get group", (done: any) => {
+        cy.grpGetGroupByName({
+          groupName: "Developers",
+          sessionId: adminSessionId,
+          employeeId: adminEmployee.id,
+        }).then((response) => {
+          developersGroup = response;
+          done();
+        });
+      });
+
+      it("[API]Patch group", () => {
+        cy.grpPatchGroup({
+          groupId: developersGroup.body[0].id,
+          sessionId: adminSessionId,
+          employeeId: adminEmployee.id,
+          payload: {
+            employees: [{ id: adminEmployee.id }],
+          },
+        });
       });
     });
   });
@@ -99,8 +140,9 @@ context("Autocomplete 'Document types' test", () => {
       });
 
       it("Click Save button", () => {
-        cy.get("button[type=\"submit\"]").click();
-        cy.wait(8000);
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+          cy.get("button[type=\"submit\"]").click();
+        });
       });
     });
 
@@ -168,10 +210,9 @@ context("Autocomplete 'Document types' test", () => {
             method: "GET",
             url: `${CONFIG.BE_URL}/api/v1/document_type`,
             headers: {
-              Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
+              Authorization: `bearer ${adminEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
               .find("[data-cy^=\"test-label-\"]").click();
 

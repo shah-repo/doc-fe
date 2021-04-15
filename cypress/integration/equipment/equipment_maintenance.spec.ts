@@ -546,7 +546,6 @@ context("Equipment maintenance test", () => {
         .not(".MuiPickersDay-hidden")
         .each(($el) => {
           const dayNumber = $el.text();
-          cy.log(dayNumber);
           if (dayOfTheMonth.toString() === dayNumber) {
             cy.wrap($el).click();
           }
@@ -718,6 +717,7 @@ context("Equipment maintenance test", () => {
         CyRoutes.EmployeesGet,
         CyRoutes.SessionDetails], () => {
         cy.reload();
+        cy.wait(5000);
       });
     });
 
