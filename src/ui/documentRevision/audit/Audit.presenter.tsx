@@ -118,6 +118,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       } else if (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned) {
         return;
       } else {
+        // HACK for ENC-7509
+        const regex = new RegExp(`^formInput\\.(?:${change.fbSchemaItem?.name})\\[[a-zA-Z0-z\-]+\\]\\.id$`);
+        if (change.fbSchemaItem?.type === "fileupload" && !regex.test(change.field)) { return; }
+
         singleFields.push((
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
