@@ -3,6 +3,7 @@ import { CheckCircle, PlayCircleFilled } from "@material-ui/icons";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText, FBTextField } from "..";
 import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
+import Colors from "../../layout/theme/utils/colors";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
@@ -62,6 +63,11 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           withoutPrefixRoot={(stepLHRs && !isHovering) as boolean}
           disabled={isOutput || !isDraft}
           {...{ name, loading }}
+          inputStyle={stepLHRs?.redline ? {
+            background: Colors.light_red,
+            border: `1px solid ${Colors.error_red}`,
+            paddingLeft: "5px",
+          } : {}}
         />
       </Box>
       <FBButton
