@@ -35,8 +35,10 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     types = keys(FBProcedureItemType);
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = (!isInputOwner || isPreview) && !redlineActive;
-    formState?.setFieldValue(`${name}.description`, props.editorConfig?.description);
-
+    const formValue = formState?.getFieldValue(`${name}.description`);
+    if (!formValue) {
+      formState?.setFieldValue(`${name}.description`, props.editorConfig?.description);
+    }
     // MARK: @reactions
     React.useEffect(() => reaction(
       () => mpiProcedureState?.value,
@@ -51,6 +53,9 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     React.useEffect(() => reaction(
       () => mpiProcedureState?.value,
       (data) => {
+        if (!formValue) {
+          formState?.setFieldValue(`${name}.description`, data?.description, false);
+        }
         workspaceState?.setSchemaItem({
           ...schemeItem,
           editorConfig: data,
@@ -81,13 +86,15 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get(`${name}.description`)?.value,
       (description) => {
-        workspaceState?.setSchemaItem({
+        if (!workspaceState) { return; }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        workspaceState.schema![index] = {
           ...schemeItem,
           editorConfig: {
             ...schemeItem?.editorConfig,
             description,
           },
-        });
+        };
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);

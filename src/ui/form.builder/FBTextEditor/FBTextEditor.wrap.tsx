@@ -4,10 +4,9 @@ import htmlToDraft from "html-to-draftjs";
 import { isEmpty } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React, { useState } from "react";
+import React from "react";
 import { useIntl } from "react-intl";
 import { FB, FBTextEditorProps, FBTextEditorState } from "..";
-import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBTextEditor = <T extends FBTextEditorProps>(
   Component: React.FunctionComponent<T>,
@@ -35,13 +34,13 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
 
     // MARK: @config
     const intl = useIntl();
-    let timeout;
-    const [timeoutID, setTimeoutID] = useState<number>();
+    // let timeout;
+    // const [timeoutID, setTimeoutID] = useState<number>();
     const { formState, workspaceState } = FB.useStores();
     const emptyHtmlContent = "<p></p>";
     formValue = formState?.getFieldValue(name);
     textEditorState = FB.useRef(FBTextEditorState, htmlToEditorState(formValue));
-    const { submitForm } = useFormContext();
+    // const { submitForm } = useFormContext();
     // form preview mode just disables the text editor
     // preview mode pulls a new style
     isPreview = formState?.workspaceMode === "preview";
@@ -81,7 +80,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
           (htmlContent === emptyHtmlContent) && (htmlContent = "");
           const oldValue = formState?.getFieldValue(name);
           if (oldValue === htmlContent) { return; }
-          formState?.setFieldValue(name, htmlContent, false, omitFormValue);
+          formState?.setFieldValue(name, htmlContent, withState, omitFormValue);
           formState?.validate();
         }
       );
@@ -110,14 +109,14 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       !masked && !textEditorState?.preserveFocus && textEditorState.editorReference.focus();
       textEditorState?.setMasked(masked);
 
-      if (!masked) {
-        timeout = setInterval(() => {
-          submitForm();
-        }, 30000);
-        setTimeoutID(timeout);
-      } else {
-        clearInterval(timeoutID);
-      }
+      // if (!masked) {
+      //   timeout = setInterval(() => {
+      //     submitForm();
+      //   }, 30000);
+      //   setTimeoutID(timeout);
+      // } else {
+      //   clearInterval(timeoutID);
+      // }
     };
 
     onOptionsChange = (value: string) => {
