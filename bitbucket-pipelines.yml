@@ -201,58 +201,46 @@ definitions:
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_DEV
         - step: 
             <<:  *SCHEDULED_CYPRESS_DEV
-            name: Cypress specs 1/4
+            name: Cypress specs 1/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_DEV
-            name: Cypress specs 2/4
+            name: Cypress specs 2/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_DEV
-            name: Cypress specs 3/4
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_DEV
-            name: Cypress specs 4/4
+            name: Cypress specs 3/3
 
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_DEMO
         - step: 
             <<:  *SCHEDULED_CYPRESS_DEMO
-            name: Cypress specs 1/4
+            name: Cypress specs 1/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_DEMO
-            name: Cypress specs 2/4
+            name: Cypress specs 2/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_DEMO
-            name: Cypress specs 3/4
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_DEMO
-            name: Cypress specs 4/4
+            name: Cypress specs 3/3
 
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_SANDBOX
         - step: 
             <<:  *SCHEDULED_CYPRESS_SANDBOX
-            name: Cypress specs 1/4
+            name: Cypress specs 1/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_SANDBOX
-            name: Cypress specs 2/4
+            name: Cypress specs 2/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_SANDBOX
-            name: Cypress specs 3/4
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_SANDBOX
-            name: Cypress specs 4/4
+            name: Cypress specs 3/3
 
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_PROD
         - step: 
             <<:  *SCHEDULED_CYPRESS_PROD
-            name: Cypress specs 1/4
+            name: Cypress specs 1/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_PROD
-            name: Cypress specs 2/4
+            name: Cypress specs 2/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_PROD
-            name: Cypress specs 3/4
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_PROD
-            name: Cypress specs 4/4
+            name: Cypress specs 3/3
 
     - parallel: &RUN_CYPRESS_IN_PARALLEL_VIDEO
         - step: 
