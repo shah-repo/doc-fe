@@ -6,7 +6,7 @@ import { checkIsDocumentRecord } from "./checkDocumentGroup";
 
 const getInlineApprovalFields = (schema?: FBSchemaProps[]) => {
   if (!schema) { return []; }
-  return schema.filter((field) => (field.type === "inlineapproval" as string));
+  return schema.filter((field) => (!field.deleted && field.type === "inlineapproval" as string));
 };
 
 export const isFormWithInlineApproval = (schema?: FBSchemaProps[]) => {
