@@ -37,6 +37,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
         {...{ disabledOptions }}
         freeSolo
         withState
+        shouldReloadOnInit
       />
       {mode !== "mpi" && (
         <FBAutocompleteAsync

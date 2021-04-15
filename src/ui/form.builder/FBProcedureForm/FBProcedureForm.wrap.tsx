@@ -1,9 +1,11 @@
-import { filter, first, isEmpty, lowerCase, map } from "lodash";
+import { filter, find, first, isEmpty, lowerCase, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormFilterType, FBProcedureFormProps, FBProcedureFormState, FBProcedureItemConfig, FBProcedureItemType } from "..";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
+import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBProcedureForm = <T extends FBProcedureFormProps>(
   Component: React.FunctionComponent<T>,
@@ -21,6 +23,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     partOptions,
     partLoading,
     lotLoading,
+    mode,
     ...props
   }: T) => {
     // MARK: @config
@@ -48,6 +51,24 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => reaction(
+      () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.materials),
+      (data: DocumentRevision[]) => {
+        if (mode === "mpi") {
+          const materials = Array.from(data.values());
+          const matDocId = find(materials, (rev) => rev.id === formState?.inputState.get("title")?.value)?.documentId;
+          const releasedRev = find(
+            materials,
+            (rev) => rev.documentId === matDocId && isDocumentRevisionReleased(rev.status)
+          );
+          if (!releasedRev) { return; }
+          formState?.setFieldValue("title", releasedRev?.id);
+          formState?.getInputState("title")?.setRender();
+        }
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     // MARK: @reactions
     // Fetch lots on part selection
@@ -156,6 +177,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       partOptions,
       partLoading,
       lotLoading,
+      mode,
     });
   };
 
