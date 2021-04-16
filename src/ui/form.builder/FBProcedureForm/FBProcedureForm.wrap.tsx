@@ -23,6 +23,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     partOptions,
     partLoading,
     lotLoading,
+    disabled,
     mode,
     ...props
   }: T) => {
@@ -162,6 +163,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     useObserver(() => {
       partLoading = procedureFormState?.partsApi.loading;
       lotLoading = procedureFormState?.lotsApi.loading;
+      disabled = formState?.inputState.get("LHRTparameter")?.value;
     });
 
     return Component({
@@ -177,6 +179,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       partOptions,
       partLoading,
       lotLoading,
+      disabled,
       mode,
     });
   };
