@@ -86,7 +86,7 @@ class FBFormState extends FBSchemaState {
       // validatorjs doesn't validate boolean values
       value = `${value}`;
     }
-    lodashSet(this.validationValues, fieldName, value);
+    lodashSet(this.validationValues, fieldName, cloneDeep(value));
   };
 
   @action public setFieldValue = (
