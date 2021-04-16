@@ -677,6 +677,7 @@
   "form.builder.save": "Save",
   "form.builder.add.step": "Add Step",
   "form.builder.clone.step": "Clone Step",
+  "form.builder.step.description": "Step Description",
   "form.builder.buttons": "Buttons",
   "form.builder.checkpoint": "Checkpoint",
   "form.builder.approval": "Approval",

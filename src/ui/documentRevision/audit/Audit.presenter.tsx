@@ -1,10 +1,13 @@
 import { Box, List, Typography } from "@material-ui/core";
-import { has, last, orderBy } from "lodash";
+import { has, isEmpty, last, orderBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
+import { useSelector } from "react-redux";
+import striptags from "striptags";
 import { MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { ApprovalStatus } from "../../../state/ducks/common/types";
+import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -29,6 +32,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 }) => {
   const classes = styles();
   const intl = useIntl();
+  const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
 
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
@@ -63,7 +67,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     orderBy(audits, ["field"]).forEach((change: Audit, index) => {
       change.groupKey = groupKey;
       const isFBField = has(change, "fbSchemaItem");
-      const { label, placeholder = "", type: fbType, stepIndex: number = 1 } = change.fbSchemaItem || {};
+      const { label, placeholder = "", type: fbType, stepIndex: number = 1, editorConfig } = change.fbSchemaItem || {};
       let fbLabel = label || placeholder;
       const isOmittedFB = (
         isFBField &&
@@ -107,6 +111,53 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           keyLabel += intl.formatMessage({ id: `form.builder.${valueKey}` });
         }
         fbLabel = `${stepLabel} ${keyLabel}`;
+      }
+
+      if (fbType === "mpiprocedure") {
+        if (!change.field.split(".").includes("editorConfig")) {
+          return;
+        }
+        const valueKey = change.field.split(".");
+        const regex = /materials/g;
+        const isMaterial = !isEmpty(change.field.match(regex));
+        if (last(valueKey) === "description") {
+          fbLabel = "form.builder.step.description";
+          const value = change.nextValue as string;
+          const formattedValue = striptags(value);
+          change = {
+            ...change,
+            nextValue: formattedValue,
+          };
+        }
+        if (last(valueKey) === "title" || last(valueKey) === "unit" || last(valueKey) === "quantity") {
+          return;
+        }
+        // if (!isMaterial && last(valueKey) === "title") {
+        //   const equipment = documentRevisions.find((e) => e.id === change.nextValue);
+        //   fbLabel = "form.builder.equipment|s";
+        //   change = {
+        //     ...change,
+        //     nextValue: `${equipment?.document.docId} - ${equipment?.name} - rev ${equipment?.displayRevision}`,
+        //   };
+        // }
+        if (!isMaterial && last(valueKey) === "id") {
+          const object = editorConfig.equipment.find((i) => i.id === change.nextValue);
+          const equipment = documentRevisions.find((e) => e.id === object.title);
+          fbLabel = "form.builder.equipment|s";
+          change = {
+            ...change,
+            nextValue: `${equipment?.document.docId} - ${equipment?.name} - rev ${equipment?.displayRevision}`,
+          };
+        }
+        if (isMaterial && last(valueKey) === "id") {
+          const object = editorConfig.materials.find((i) => i.id === change.nextValue);
+          const material = documentRevisions.find((e) => e.id === object.title);
+          fbLabel = "form.builder.materials|s";
+          change = {
+            ...change,
+            nextValue: `${material?.document.docId} - ${material?.name} - rev ${material?.displayRevision} | Qty: ${object.quantity} ${object.unit}`,
+          };
+        }
       }
 
       if (!isFBField && change.field.includes("attachments")) {
