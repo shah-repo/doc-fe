@@ -761,11 +761,9 @@ context("Autosave on blur", () => {
       cy.get("[name$=\".requirements\"]").eq(1).click();
       cy.get("[data-cy$=\".justification\"]>div>div>div>div>div[contenteditable]>div")
         .click({ force: true }).type("Justification description", { force: true });
-      // //TODO: Uncomment when this is done ENC-7361
-
-      // cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-      //   cy.unClick();
-      // });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.unClick();
+      });
     });
 
     it("Enter FB range and check for autosave", () => {
