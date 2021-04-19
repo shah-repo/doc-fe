@@ -25,15 +25,16 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     lotLoading,
     disabled,
     mode,
+    lhrStepIndex,
     ...props
   }: T) => {
     // MARK: @config
-    const { procedureState, mpiProcedureState, dialogState } = FB.useStores();
+    const { procedureState, mpiProcedureState, dialogState, lhrStepState } = FB.useStores();
     formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
     procedureFormState = FB.useRef<FBProcedureFormState>(FBProcedureFormState, {
       initialValues,
     });
-
+    /* const schemaItem = workspaceState?.getSchemaItemAt(lhrStepIndex); */
     const config: Partial<Record<keyof typeof FBProcedureItemType, (() => void)>> = {
       materials: () => {
         optionId = FBAutocompleteAsyncOption.materials;
@@ -118,6 +119,19 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     // MARK: @helpers
     function handleAdd() {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
+      if (mode === "lhr") {
+        lhrStepState?.editItem(formValue, type);
+        /* workspaceState?.setSchemaItem({
+          ...schemaItem,
+          editorConfig: {
+            ...schemaItem?.editorConfig,
+            parameters: {
+              ...lhrStepState?.materials,
+            },
+          },
+        }); */
+        return handleCancel?.();
+      }
       procedureState?.addItem(formValue, type);
       mpiProcedureState?.addItem(formValue, type);
       handleCancel?.();

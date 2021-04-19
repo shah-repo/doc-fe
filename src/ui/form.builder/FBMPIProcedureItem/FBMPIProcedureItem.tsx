@@ -120,7 +120,11 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             >
               <Box flexGrow={1}>
                 <FBText
-                  locale={isDocumentMPI ? item.type ? `form.builder.mpi.procedure.${type}.title.id` : `form.builder.mpi.procedure.${type}.title` : `form.builder.lhrs.procedure.${type}.title`}
+                  locale={isDocumentMPI ?
+                    item.type ?
+                      `form.builder.mpi.procedure.${type}.title.id` :
+                      `form.builder.mpi.procedure.${type}.title` :
+                    `form.builder.lhrs.procedure.${type}.title`}
                   values={
                     isDocumentMPI ? item.type ? {
                       id: item.id,

@@ -18,6 +18,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     stepLHRs,
     isHovering,
     disabled,
+    materials,
+    equipment,
     ...props
   }: T) => {
 
@@ -29,6 +31,48 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
     const isDraft = isDocumentRevisionInDraft(workspaceState?.document?.status);
+    const editorconfig =  {
+      equipment: [
+        {
+          id: "knftnpok",
+          title: "12eb3808-3aa2-403d-8da7-44491eb65322",
+        },
+        {
+          id: "C",
+          type: "params",
+          title: "12eb3808-3aa2-403d-8da7-44491eb65322",
+        },
+        {
+          id: "D",
+          type: "params",
+          title: "546c63fb-0824-4b18-aa85-7e723eed2982",
+        },
+      ],
+      materials: [
+        {
+          id: "B",
+          type: "params",
+          title: "a5bb8d44-6622-4c0b-beca-1284bd23ae40",
+        },
+        {
+          id: "knftn2za",
+          unit: "cases",
+          title: "6c40896d-ddcf-497a-8650-332d2d61555b",
+          quantity: 1,
+        },
+        {
+          id: "A",
+          type: "params",
+          title: "a5bb8d44-6622-4c0b-beca-1284bd23ae40",
+        },
+        {
+          id: "E",
+          type: "params",
+          title: "Test materials part",
+        },
+      ],
+      description: "<ul>\n<li>btbtrbrgtrgrtrttest abc 12345666</li>\n</ul>",
+    };
 
     // MARK: @helpers
     React.useEffect(() => {
@@ -86,6 +130,18 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    React.useEffect(() => reaction(
+      () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.mpiDocuments),
+      (data) => {
+        console.log(Array.from(data.values()));
+        const materilasWithParams = editorconfig.materials.filter((item) => item.type === "params");
+        const equipmentWithParams = editorconfig.equipment.filter((item) => item.type === "params");
+        lhrStepState.setMaterials(materilasWithParams);
+        lhrStepState.setEquipment(equipmentWithParams);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
     // MARK: @methods
     startMpi = () => {
       let startQuantity = formState?.getFieldValue(`fb-lhrs-start-quantity-${name}`);
@@ -129,6 +185,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       loading = lhrStepState?.startMpiApi?.loading || lhrStepState?.getDocumentApi?.loading;
       stepLHRs = lhrStepState.stepLHRs;
       isHovering = lhrStepState.isHovering;
+      materials = lhrStepState?.materials;
+      equipment = lhrStepState?.equipment;
     });
 
 
@@ -146,6 +204,9 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       isDraft,
       disabled,
       loading,
+      materials,
+      index,
+      equipment,
     }); };
 
   Comp.displayName = "withFBLHRStep";

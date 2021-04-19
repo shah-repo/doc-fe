@@ -40,7 +40,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
         withState
         shouldReloadOnInit
       />
-      {mode !== "mpi" && (
+      {mode !== "mpi" && mode !== "lhr" && (
         <FBAutocompleteAsync
           name="partLot"
           label="form.builder.part.lot"
@@ -64,12 +64,12 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       freeSolo
     />
     }
-    <FBCheckbox
+    {mode === "mpi" && <FBCheckbox
       name="LHRTparameter"
       label="form.builder.lhrt.parameter"
       defaultChecked={false}
       withState
-    />
+    />}
     {type === FBProcedureItemType.materials && (
       <>
         <Box display="flex">
@@ -91,7 +91,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
             />
           </Box>
         </Box>
-        {mode !== "mpi" && (
+        {mode !== "mpi" && mode !== "lhr" && (
           <FBFileUpload label="form.builder.attachments" name="attachments" />
         )}
       </>
