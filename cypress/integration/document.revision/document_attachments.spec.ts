@@ -14,8 +14,21 @@ const saveFileNameOne = (Math.round(Math.random() * 100000)) % 100000;
 const saveFileNameTwo = (Math.round(Math.random() * 100000)) % 100000;
 const saveFileNameThree = (Math.round(Math.random() * 100000)) % 100000;
 const saveFileNameFour = (Math.round(Math.random() * 100000)) % 100000;
+const saveFileRedlineDOCX = (Math.round(Math.random() * 100000)) % 100000;
+const saveFileCleanCopyDOCX = (Math.round(Math.random() * 100000)) % 100000;
 
 context("Document Attachment Flow", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
@@ -111,109 +124,142 @@ context("Document Attachment Flow", () => {
     });
 
     context("Test download of uploaded attachments", () => {
-      it("Uploads text.docx", () => {
-        cy.atchUploadAttachment({ fileName: "test.docx" });
+      context("Test redline", () => {
+        it("Upload redline and verify cleanCopyStatus is created", () => {
+          cy.atchUploadRedlineVerifyCleanCopyStatus({ fileName: "redline.docx" });
+        });
+
+        it("Download uploaded redline document", () => {
+          SystemRequirement("REQ-0390");
+          cy.atchDownloadFile({ fileName: "redline.docx", saveFileName: saveFileRedlineDOCX + "redline.docx" });
+        });
+
+        it("Check size of downloaded redline document", () => {
+          cy.readFile(`cypress/downloads/${saveFileRedlineDOCX}redline.docx`).should("have.length", "15874");
+        });
+
+        it("Download clean copy of redline document", () => {
+          SystemRequirement("REQ-0390");
+          cy.atchDownloadCleanCopyFile({
+            fileName: "redline.docx",
+            saveFileName: saveFileCleanCopyDOCX + "redline_CC.docx",
+          });
+        });
+
+        it("Check size of downloaded clean copydocument", () => {
+          cy.readFile(`cypress/downloads/${saveFileCleanCopyDOCX}redline_CC.docx`).should("not.have.length", "15874");
+        });
+
+        it("Remove redline attachment", () => {
+          cy.atchRemoveAttachment({ fileName: "redline.docx" });
+        });
       });
 
-      it("Uploads redline attachment 'image.jpg'", () => {
-        cy.atchUploadRedlineAttachment({ fileName: "image.jpg" });
-      });
+      context("Test normal attachments", () => {
+        it("Uploads text.docx", () => {
+          cy.atchUploadAttachment({ fileName: "test.docx" });
+        });
 
-      it("Fail upload text.docx", () => {
-        cy.atchUploadAttachmentFail({ fileName: "test.docx" });
-      });
+        it("Uploads redline attachment 'image.jpg'", () => {
+          cy.atchUploadRedlineAttachment({ fileName: "image.jpg" });
+        });
 
-      it("Verify upload error message is shown", () => {
-        SystemRequirement("REQ-0230");
-        cy.checkToastMessage({ exists: true });
-        cy.checkToastMessageIsEqual({ message: "Upload failed" });
-        cy.closeAllAlertMessages();
-      });
+        it("Fail upload text.docx", () => {
+          cy.atchUploadAttachmentFail({ fileName: "test.docx" });
+        });
 
-      it("Check if Selected Groups are set to 'Everyone' by default", () => {
-        SystemRequirement("REQ-0300");
-        cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
-          .should("have.text", "Enter the name of users to access the document");
-        cy.get("[data-cy=\"field-securityGroups\"]").contains("Everyone");
-      });
+        it("Verify upload error message is shown", () => {
+          SystemRequirement("REQ-0230");
+          cy.checkToastMessage({ exists: true });
+          cy.checkToastMessageIsEqual({ message: "Upload failed" });
+          cy.closeAllAlertMessages();
+        });
 
-      it("Clicks Save button", () => {
-        cy.drClickCreateDocumentWithApiCall();
-      });
+        it("Check if Selected Groups are set to 'Everyone' by default", () => {
+          SystemRequirement("REQ-0300");
+          cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
+            .should("have.text", "Enter the name of users to access the document");
+          cy.get("[data-cy=\"field-securityGroups\"]").contains("Everyone");
+        });
 
-      it("Approves and releases document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        cy.wait(2000);
-      });
+        it("Clicks Save button", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
 
-      it("Download all attachments with redline document", () => {
-        SystemRequirement("REQ-0390");
-        cy.atchDownloadAll();
-      });
+        it("Approves and releases document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.wait(2000);
+        });
 
-      it("Revise document", () => {
-        cy.drClickReviseDocument();
-      });
+        it("Download all attachments with redline document", () => {
+          SystemRequirement("REQ-0390");
+          cy.atchDownloadAll();
+        });
 
-      it("Uploads image.jpg", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
-      });
+        it("Revise document", () => {
+          cy.drClickReviseDocument();
+        });
 
-      it("Clicks Save button", () => {
-        cy.drClickCreateDocumentWithApiCall();
-      });
+        it("Uploads image.jpg", () => {
+          cy.atchUploadAttachment({ fileName: "image.jpg" });
+        });
 
-      it("Approves and releases document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        cy.wait(2000);
-      });
+        it("Clicks Save button", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
 
-      it("Revise document", () => {
-        cy.drClickReviseDocument();
-      });
+        it("Approves and releases document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.wait(2000);
+        });
 
-      it("Clicks Save button", () => {
-        cy.drClickCreateDocumentWithApiCall();
-      });
+        it("Revise document", () => {
+          cy.drClickReviseDocument();
+        });
 
-      it("Approves and releases document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        cy.wait(2000);
-      });
+        it("Clicks Save button", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
 
-      it("Select Superseded version of document without redline attachments", () => {
-        cy.drSelectReleasedVersionOfDocument({ docVersion: 1 });
-      });
+        it("Approves and releases document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.wait(2000);
+        });
 
-      it("Download all attachments without redline document on Superseded version", () => {
-        SystemRequirement("REQ-0380");
-        cy.atchDownloadAll();
-      });
+        it("Select Superseded version of document without redline attachments", () => {
+          cy.drSelectReleasedVersionOfDocument({ docVersion: 1 });
+        });
 
-      it("Select Superseded version of document without redline attachments", () => {
-        cy.drSelectReleasedVersionOfDocument({ docVersion: 0 });
-      });
+        it("Download all attachments without redline document on Superseded version", () => {
+          SystemRequirement("REQ-0380");
+          cy.atchDownloadAll();
+        });
 
-      it("Revise document", () => {
-        cy.drClickReviseDocument();
-      });
+        it("Select Superseded version of document without redline attachments", () => {
+          cy.drSelectReleasedVersionOfDocument({ docVersion: 0 });
+        });
 
-      it("Select Obsolete revision option", () => {
-        cy.get("[id=\"RevisionTypeChange-obsolete\"]").click();
-      });
+        it("Revise document", () => {
+          cy.drClickReviseDocument();
+        });
 
-      it("Clicks Save button", () => {
-        cy.drClickCreateDocumentWithApiCall();
-      });
+        it("Select Obsolete revision option", () => {
+          cy.get("[id=\"RevisionTypeChange-obsolete\"]").click();
+        });
 
-      it("Approves and releases document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        cy.wait(2000);
-      });
+        it("Clicks Save button", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
 
-      it("Download all attachments without redline document on Obsolete version", () => {
-        SystemRequirement("REQ-0380");
-        cy.atchDownloadAll().wait(2000);
+        it("Approves and releases document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.wait(2000);
+        });
+
+        it("Download all attachments without redline document on Obsolete version", () => {
+          SystemRequirement("REQ-0380");
+          cy.atchDownloadAll().wait(2000);
+        });
       });
     });
   });
