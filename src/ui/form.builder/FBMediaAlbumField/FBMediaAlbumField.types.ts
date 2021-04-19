@@ -28,6 +28,6 @@ export type FBMediaAlbumFieldProps =
 
 export interface FBMediaAlbumFieldQR {
   companyId: string;
-  documentId: string;
+  documentRevisionId: string;
   fieldName: string;
 }
