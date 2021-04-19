@@ -4,8 +4,7 @@ type FBMediaQRMode = "qr" | "placeholder" | "preupload";
 
 export type FBMediaQRProps =
 & Pick<FBInputProps, "isTemplate">
-& Pick<FBMediaAlbumFieldProps, "setMediaFieldMode" | "loading">
+& Pick<FBMediaAlbumFieldProps, "setMediaFieldMode" | "loading" | "qrValue">
 & {
-  qrValue: string;
   mode?: FBMediaQRMode;
 };
