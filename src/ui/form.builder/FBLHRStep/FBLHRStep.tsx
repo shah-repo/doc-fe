@@ -2,6 +2,7 @@ import { Box } from "@material-ui/core";
 import { CheckCircle, PlayCircleFilled } from "@material-ui/icons";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText, FBTextField } from "..";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
 import FBLHRStepProcedureItem from "../FBLHRStepProcedureItem/FBLHRStepProcedureItem";
@@ -42,6 +43,9 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               ? "form.builder.step.completed"
               : "form.builder.step.started"
           }
+          values={{
+            date: getFormattedDateString(stepLHRs?.releasedAt, MomentFormats.DateTime),
+          }}
         />
       </Box>
     )}
@@ -60,7 +64,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         }}
       >
         <FBAutocompleteAsync
-          boxProps={{ flexGrow: 1 }}
+          boxProps={{ flexGrow: 1, mb: 2.5 }}
           type="lhrstep"
           optionId={FBAutocompleteAsyncOption.mpiDocuments}
           autosave
@@ -92,6 +96,17 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
       type={FBProcedureItemType.equipment}
       lhrStepIndex={index}
     />
+    <Box
+      display="flex"
+      mb={4}
+    >
+      <b>{stepLHRs?.owner?.user.name}</b>
+      {stepLHRs?.createdAt && (
+        <Box color={Colors.gray}>
+              &nbsp;| {getFormattedDateString(stepLHRs?.createdAt, MomentFormats.DateTime)}
+        </Box>
+      )}
+    </Box>
     {isOutput && (
       <>
         <FBTextField

@@ -8,7 +8,7 @@ import { ApprovalStatus } from "../../../state/ducks/common/types";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
-import { FBApprovalAuditState, FBText } from "../../form.builder";
+import { FBApprovalAuditState, FBSchemaProps, FBText } from "../../form.builder";
 import { isTranslation } from "../../translations/types";
 import { styles } from "./Audit.presenter.styles";
 
@@ -17,6 +17,7 @@ interface OwnProps {
   statusLabel: string;
   versionNumber: string;
   isStatusVisible: boolean;
+  schema: FBSchemaProps[];
 }
 
 type AuditPresenterProps = OwnProps;
@@ -26,6 +27,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   statusLabel,
   versionNumber,
   isStatusVisible,
+  schema,
 }) => {
   const classes = styles();
   const intl = useIntl();
@@ -63,7 +65,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     orderBy(audits, ["field"]).forEach((change: Audit, index) => {
       change.groupKey = groupKey;
       const isFBField = has(change, "fbSchemaItem");
-      const { label, placeholder = "", type: fbType, stepIndex: number = 1 } = change.fbSchemaItem || {};
+      const { label, placeholder = "", type: fbType, stepIndex: number = 1, name } = change.fbSchemaItem || {};
       let fbLabel = label || placeholder;
       const isOmittedFB = (
         isFBField &&
@@ -107,6 +109,30 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           keyLabel += intl.formatMessage({ id: `form.builder.${valueKey}` });
         }
         fbLabel = `${stepLabel} ${keyLabel}`;
+      }
+      if (fbType === "lhrstep") {
+        const LHRschemaGroupedInSections: any[] = [];
+        schema.forEach((element) => {
+          if (element.type === "stepsection") {
+            LHRschemaGroupedInSections.push([]);
+          }
+          if (element.type === "lhrstep" || element.type === "stepsection") {
+            LHRschemaGroupedInSections[LHRschemaGroupedInSections.length - 1]?.push(element);
+          }
+        });
+        const valueKey = change.field.split(".")[1].split("-");
+        const hasDataToExclude = change.field.split(".")[1].split("--").length === 1;
+        const stepLHRNumber = LHRschemaGroupedInSections.filter((e) =>
+          e.find((i) => i.name === name)).flat().find((e) => e.type === "stepsection");
+        let label = "";
+        const stepLabel = intl.formatMessage({ id: "form.builder.step.number" }, { number: stepLHRNumber.stepIndex });
+        if (hasDataToExclude) {
+          return;
+        }
+        if (valueKey.includes("quantity")) {
+          label = intl.formatMessage({ id: `form.builder.${valueKey[2]}.quantity` });
+        }
+        fbLabel = `${label} for ${stepLabel}`;
       }
 
       if (!isFBField && change.field.includes("attachments")) {
