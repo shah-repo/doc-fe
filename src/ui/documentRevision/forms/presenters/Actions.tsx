@@ -131,6 +131,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
   const onFormClick = () => {
     if (redlineActive) {
+      formik.setFieldValue("redline", true);
       workspaceState?.setMode("form");
       dispatch(companyActions.autosaveConfig());
     }
