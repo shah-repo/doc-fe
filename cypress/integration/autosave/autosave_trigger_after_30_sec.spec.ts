@@ -11,6 +11,18 @@ let loginResponse;
 let multipleCompanies;
 
 context("Autosave trigger after 30 sec", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -103,15 +115,18 @@ context("Autosave trigger after 30 sec", () => {
   });
 
   context("Edit description and after 30 sec trigger Autosave", () => {
-    it("Edit description 'New Document Revision description 1'", () => {
-      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
-        .type("1");
+    it("Edit description with one second delay on typing", () => {
+      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").clear()
+        .type("Type something long to test if autosave works", { delay: 1000 });
     });
 
-    it("Wait for 30 sec to trigger Autosave", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.wait(30000);
-      });
+    it("Reload document", () => {
+      cy.reload();
+    });
+
+    it("Check description if correct value was saved after 30 seconds", () => {
+      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
+        .should("have.text", "Type something long to test if");
     });
 
     it("Last save should be present", () => {
