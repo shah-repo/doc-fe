@@ -13,6 +13,7 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
   handleMask,
   editorRef,
   onBlur,
+  onKeyDown,
   textEditorState,
   editorState,
   editorReference,
@@ -39,6 +40,7 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
           borderRadius={4}
           style={{ display: "grid" }}
           minHeight={isPreview ? "auto" : 140}
+          onKeyDown={(e) => onKeyDown?.(e as unknown as KeyboardEvent)}
         >
           <Box
             display="flex"
