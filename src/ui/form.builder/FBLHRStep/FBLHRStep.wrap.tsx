@@ -24,7 +24,9 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     stepLHRs = workspaceState?.document?.smartReferencesFrom
-      ?.find((ref) => ref.type === SmartReferenceType.HiddenPiInstance && ref.metadata.fieldId === name)?.fromDocRev;
+      ?.find((ref) => ref.active
+      && ref.type === SmartReferenceType.HiddenPiInstance
+      && ref.metadata.fieldId === name)?.fromDocRev;
     const lhrStepState = FB.useRef(FBLHRStepState, stepLHRs);
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);

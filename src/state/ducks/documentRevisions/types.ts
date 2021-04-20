@@ -161,6 +161,7 @@ interface SmartReference {
   toDocRev?: Nullable<DocumentRevision>;
   toDocumentId?: Nullable<string>;
   type: SmartReferenceType;
+  active?: boolean;
 }
 
 export enum SmartReferenceType {
