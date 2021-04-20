@@ -120,6 +120,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         const valueKey = change.field.split(".");
         const regex = /materials/g;
         const isMaterial = !isEmpty(change.field.match(regex));
+        const isAttachment = !isEmpty(change.field.match(/attachments/g));
         if (last(valueKey) === "description") {
           fbLabel = "form.builder.step.description";
           const value = change.nextValue as string;
@@ -129,18 +130,67 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             nextValue: formattedValue,
           };
         }
-        if (last(valueKey) === "title" || last(valueKey) === "unit" || last(valueKey) === "quantity") {
+        if (
+          (last(valueKey) === "title" ||
+          last(valueKey) === "unit" ||
+          last(valueKey) === "quantity" ||
+          last(valueKey) === "attachments") && (change.type === "STRING_NEW" || change.type === "NUMBER_NEW")) {
           return;
         }
-        // if (!isMaterial && last(valueKey) === "title") {
-        //   const equipment = documentRevisions.find((e) => e.id === change.nextValue);
-        //   fbLabel = "form.builder.equipment|s";
-        //   change = {
-        //     ...change,
-        //     nextValue: `${equipment?.document.docId} - ${equipment?.name} - rev ${equipment?.displayRevision}`,
-        //   };
-        // }
-        if (!isMaterial && last(valueKey) === "id") {
+        if (isMaterial && (change.type === "STRING_EDITED" || change.type === "NUMBER_EDITED")) {
+          let nextMaterial;
+          let previousMaterial;
+          if (last(valueKey) === "title") {
+            nextMaterial = documentRevisions.find((e) => e.id === change.nextValue);
+            previousMaterial = documentRevisions.find((e) => e.id === change.previousValue);
+            change = {
+              ...change,
+              nextValue: `${nextMaterial?.document.docId} - ${nextMaterial?.name} - rev ${nextMaterial?.displayRevision}`,
+            };
+            fbLabel = `Material ${previousMaterial?.document.docId} - ${previousMaterial?.name} - rev ${previousMaterial?.displayRevision}`;
+          }
+          if (last(valueKey) === "quantity") {
+            const materialId = change.field.split(".")[2].split("[")[1].split("]")[0];
+            const materialInEditorConfig = editorConfig.materials.find((i) => i.id === materialId);
+            const material = documentRevisions.find((e) => e.id === materialInEditorConfig.title);
+            nextMaterial = change.nextValue;
+            previousMaterial = change.previousValue;
+            fbLabel = `Material ${material?.document.docId} - ${material?.name} - rev ${material?.displayRevision} quantity ${previousMaterial}`;
+            change = {
+              ...change,
+              nextValue: nextMaterial,
+            };
+          }
+          if (last(valueKey) === "unit") {
+            const materialId = change.field.split(".")[2].split("[")[1].split("]")[0];
+            const materialInEditorConfig = editorConfig.materials.find((i) => i.id === materialId);
+            const material = documentRevisions.find((e) => e.id === materialInEditorConfig.title);
+            nextMaterial = change.nextValue;
+            previousMaterial = change.previousValue;
+            fbLabel = `Material ${material?.document.docId} - ${material?.name} - rev ${material?.displayRevision} unit ${previousMaterial}`;
+            change = {
+              ...change,
+              nextValue: nextMaterial,
+            };
+          }
+        }
+        if (!isMaterial && !isAttachment && (change.type === "STRING_EDITED" || change.type === "NUMBER_EDITED")) {
+          let nextMaterial;
+          let previousMaterial;
+          if (last(valueKey) === "title") {
+            nextMaterial = documentRevisions.find((e) => e.id === change.nextValue);
+            previousMaterial = documentRevisions.find((e) => e.id === change.previousValue);
+            change = {
+              ...change,
+              nextValue: `${nextMaterial?.document.docId} - ${nextMaterial?.name} - rev ${nextMaterial?.displayRevision}`,
+            };
+            fbLabel = `Equipment ${previousMaterial?.document.docId} - ${previousMaterial?.name} - rev ${previousMaterial?.displayRevision}`;
+          }
+        }
+        if (isAttachment && last(valueKey) === "id") {
+          fbLabel = "common.attachment";
+        }
+        if (!isMaterial && last(valueKey) === "id" && !isAttachment) {
           const object = editorConfig.equipment.find((i) => i.id === change.nextValue);
           const equipment = documentRevisions.find((e) => e.id === object.title);
           fbLabel = "form.builder.equipment|s";
