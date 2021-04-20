@@ -26,7 +26,7 @@ export type FBMediaAlbumFieldProps =
   loading?: boolean;
 };
 
-export interface FBMediaAlbumFieldQR {
+interface FBMediaAlbumFieldQR {
   companyId: string;
   documentRevisionId: string;
   fieldName: string;
