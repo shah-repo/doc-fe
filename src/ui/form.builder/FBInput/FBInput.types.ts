@@ -206,6 +206,7 @@ export const OmitInputClones: FBInputType[] = [
   "instructionsmediaupload",
   "evidencemediaupload",
   "mediaalbum",
+  "lhrstep",
 ];
 
 export const OmitIncludeNotes: FBInputType[] = [
