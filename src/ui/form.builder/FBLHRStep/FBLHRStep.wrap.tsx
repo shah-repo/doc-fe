@@ -1,3 +1,4 @@
+import { find } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -31,48 +32,6 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
     const isDraft = isDocumentRevisionInDraft(workspaceState?.document?.status);
-    const editorconfig =  {
-      equipment: [
-        {
-          id: "knftnpok",
-          title: "12eb3808-3aa2-403d-8da7-44491eb65322",
-        },
-        {
-          id: "C",
-          type: "params",
-          title: "12eb3808-3aa2-403d-8da7-44491eb65322",
-        },
-        {
-          id: "D",
-          type: "params",
-          title: "546c63fb-0824-4b18-aa85-7e723eed2982",
-        },
-      ],
-      materials: [
-        {
-          id: "B",
-          type: "params",
-          title: "a5bb8d44-6622-4c0b-beca-1284bd23ae40",
-        },
-        {
-          id: "knftn2za",
-          unit: "cases",
-          title: "6c40896d-ddcf-497a-8650-332d2d61555b",
-          quantity: 1,
-        },
-        {
-          id: "A",
-          type: "params",
-          title: "a5bb8d44-6622-4c0b-beca-1284bd23ae40",
-        },
-        {
-          id: "E",
-          type: "params",
-          title: "Test materials part",
-        },
-      ],
-      description: "<ul>\n<li>btbtrbrgtrgrtrttest abc 12345666</li>\n</ul>",
-    };
 
     // MARK: @helpers
     React.useEffect(() => {
@@ -133,10 +92,26 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     React.useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.mpiDocuments),
       (data) => {
-        console.log(Array.from(data.values()));
-        const materilasWithParams = editorconfig.materials.filter((item) => item.type === "params");
-        const equipmentWithParams = editorconfig.equipment.filter((item) => item.type === "params");
-        lhrStepState.setMaterials(materilasWithParams);
+        const parameters = schemaItem?.editorConfig.parameters;
+        const mpiDocument: any = Array.from(data.values()).find((item: any) => item?.id === schemaItem?.editorConfig.value);
+        const editorConfig = mpiDocument?.formTemplate.schema.find((item) => item.type === "mpiprocedure").editorConfig;
+        const materialsWithParams = editorConfig.materials.filter((item) => item.type === "params");
+        const equipmentWithParams = editorConfig.equipment.filter((item) => item.type === "params");
+        if (parameters) {
+          const newMaterials = materialsWithParams.map((material) => {
+            const editedMaterial = find(parameters, (parameter) => parameter.id === material.id);
+            return editedMaterial || material;
+          });
+          const newEquipments = equipmentWithParams.map((equipment) => {
+            const editedEquipment = find(parameters, (parameter) => parameter.id === equipment.id);
+            return editedEquipment || equipment;
+          });
+          lhrStepState.setMaterials(newMaterials);
+          lhrStepState.setEquipment(newEquipments);
+          return;
+        }
+
+        lhrStepState.setMaterials(materialsWithParams);
         lhrStepState.setEquipment(equipmentWithParams);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps

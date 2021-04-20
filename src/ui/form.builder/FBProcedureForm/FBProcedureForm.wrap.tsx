@@ -1,4 +1,4 @@
-import { filter, find, first, isEmpty, lowerCase, map } from "lodash";
+import { concat, filter, find, first, isEmpty, keyBy, lowerCase, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -121,15 +121,18 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       const formValue = formState?.getValues() as FBProcedureItemConfig;
       if (mode === "lhr") {
         lhrStepState?.editItem(formValue, type);
-        workspaceState?.setSchemaItem({
-          ...schemaItem,
-          editorConfig: {
-            ...schemaItem?.editorConfig,
-            parameters: {
-              ...lhrStepState?.materials,
+        if (schemaItem) {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          workspaceState!.schema![lhrStepIndex!] = {
+            ...schemaItem,
+            editorConfig: {
+              ...schemaItem?.editorConfig,
+              parameters: {
+                ...keyBy(concat(lhrStepState?.materials, lhrStepState?.equipment), "id"),
+              },
             },
-          },
-        });
+          };
+        }
         return handleCancel?.();
       }
       procedureState?.addItem(formValue, type);

@@ -1,6 +1,6 @@
 import { omit, unionBy } from "lodash";
 import { action, get, observable, set } from "mobx";
-import { FBAutocompleteAsyncOption, FBProcedureItemConfig, FBProcedureItemType, StartMpiBody } from "..";
+import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, StartMpiBody } from "..";
 import { Document, DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
@@ -10,7 +10,8 @@ class FBLHRStepState {
   // MARK: @api
   public startMpiApi = new FBRequest<DocumentRevision, StartMpiBody>(FBEndpoint.StartMpi);
   public getDocumentApi = new FBRequest<Document, null>(FBEndpoint.Document);
-
+  public materialsApi = new FBAutocompleteAsyncState({ optionId: this.materialsId });
+  public equipmentApi = new FBAutocompleteAsyncState({ optionId: this.equipmentId });
   // MARK @config
   @observable public stepLHRs?: DocumentRevision;
   @observable public isHovering = false;
