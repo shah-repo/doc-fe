@@ -110,6 +110,22 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       }
 
       if (!isFBField && change.field.includes("attachments")) {
+        if (change.field.endsWith("s3link") && change.type === "STRING_EDITED") {
+          singleFields.push(
+            <Box mb={1} key={`${change.groupId}-${index}`}>
+              <Box>
+                <Text
+                  dataCy={`change-key-${groupKey}-${key}`}
+                  message="documentRevision.audit.s3link.change"
+                />
+              </Box>
+              <div className={classes.auditValue}>
+                <AuditFactory audit={change} dataCy={`change-value-${groupKey}-${key}`} />
+              </div>
+            </Box>
+          );
+          return;
+        }
         attachments.push(change);
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_NEW") {
         newReferences.push(change);
