@@ -312,7 +312,7 @@ Cypress.Commands.add("arClickSendToReview", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.ARtoReview,
     CyRoutes.ARPreview,
-    CyRoutes.DocRevGet,
+    CyRoutes.ArAudit,
   ],
   () => {
     cy.get("[data-cy=\"transitionButton\"]").click();
@@ -347,7 +347,7 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
   });
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetRequiredApproversDocRev,
-    CyRoutes.DocRevGet,
+    CyRoutes.ArAudit,
   ], () => {
     cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
   });
