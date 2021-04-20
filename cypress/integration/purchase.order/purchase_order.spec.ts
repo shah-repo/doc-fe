@@ -343,7 +343,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.CompanyMine], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.poAddNewFieldItem();
       });
     });
