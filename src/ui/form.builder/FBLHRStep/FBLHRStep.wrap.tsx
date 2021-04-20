@@ -21,6 +21,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     disabled,
     materials,
     equipment,
+    isDocumentLHRT,
     ...props
   }: T) => {
 
@@ -32,6 +33,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
     const isDraft = isDocumentRevisionInDraft(workspaceState?.document?.status);
+    // TO DO: Find another way with BE to chechk if doc is LHRT
+    isDocumentLHRT = workspaceState?.document?.document.documentType.documentTypeAcronym === "LHRT-";
 
     // MARK: @helpers
     React.useEffect(() => {
@@ -183,6 +186,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       materials,
       index,
       equipment,
+      isDocumentLHRT,
     }); };
 
   Comp.displayName = "withFBLHRStep";

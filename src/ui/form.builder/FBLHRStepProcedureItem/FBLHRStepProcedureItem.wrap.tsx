@@ -1,6 +1,7 @@
 import { cloneDeep } from "lodash";
 import React from "react";
 import { FB, FBDialogState, FBFormMode, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale } from "..";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { FBLHRStepProcedureItemProps } from "./FBLHRStepProcedureItem.types";
 
 export const withFBLHRStepProcedureItem = <T extends FBLHRStepProcedureItemProps>(
@@ -12,11 +13,12 @@ export const withFBLHRStepProcedureItem = <T extends FBLHRStepProcedureItemProps
     lhrStepIndex,
     type,
     getItem,
+    isPreview,
     ...props
   }: T) => {
-    const { lhrStepState } = FB.useStores();
+    const { lhrStepState, workspaceState } = FB.useStores();
     dialogState = FB.useRef(FBDialogState);
-
+    isPreview = workspaceState?.document?.status !== DocumentRevisionStatus.Draft;
     getItem = (id: string): string => lhrStepState?.getItem(id, type) || "";
 
     onClick = (part?: FBProcedureItemConfig) => {
@@ -45,6 +47,7 @@ export const withFBLHRStepProcedureItem = <T extends FBLHRStepProcedureItemProps
       getItem,
       dialogState,
       type,
+      isPreview,
     });
   };
 

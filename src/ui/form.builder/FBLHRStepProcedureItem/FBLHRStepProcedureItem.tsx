@@ -7,7 +7,7 @@ import {
   FBMapWrapper,
   FBPartItemStatusBg,
   FBProcedureItemConfig,
-  FBProcedureItemLocale,
+
   FBText,
 } from "..";
 import Colors from "../../layout/theme/utils/colors";
@@ -27,9 +27,9 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
   value = [],
 }) => (
   <FBProvider {...{ dialogState }}>
-    <Box mt={3}>
+    <Box>
       <FBDialog />
-      <Box
+      {/*       <Box
         bgcolor={Colors.gray}
         color="white"
         style={{ borderTopLeftRadius: "4px", borderTopRightRadius: "4px" }}
@@ -46,7 +46,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
           }}
           locale={FBProcedureItemLocale[type]}
         />
-      </Box>
+      </Box> */}
       {!loading && (
         <FBMapWrapper<FBProcedureItemConfig[]> collection={value}>
           {(item: FBProcedureItemConfig, index) => (

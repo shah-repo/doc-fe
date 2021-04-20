@@ -25,6 +25,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   materials,
   equipment,
   index,
+  isDocumentLHRT,
   ...props
 }) => (
   <FBProvider {...{ lhrStepState }}>
@@ -87,16 +88,16 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         {...{ loading }}
       />
     </Box>
-    <FBLHRStepProcedureItem
+    {isDocumentLHRT && <FBLHRStepProcedureItem
       value={materials}
       type={FBProcedureItemType.materials}
       lhrStepIndex={index}
-    />
-    <FBLHRStepProcedureItem
+    />}
+    {isDocumentLHRT && <FBLHRStepProcedureItem
       value={equipment}
       type={FBProcedureItemType.equipment}
       lhrStepIndex={index}
-    />
+    />}
     <Box
       display="flex"
       mb={4}
