@@ -93,7 +93,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.mpiDocuments),
       (data) => {
         const parameters = schemaItem?.editorConfig.parameters;
-        const mpiDocument: any = Array.from(data.values()).find((item: any) => item?.id === schemaItem?.editorConfig.value);
+        const dataValues = Array.from(data.values());
+        const mpiDocument: any = dataValues.find((item: any) => item?.id === schemaItem?.editorConfig.value);
         const editorConfig = mpiDocument?.formTemplate.schema.find((item) => item.type === "mpiprocedure").editorConfig;
         const materialsWithParams = editorConfig.materials.filter((item) => item.type === "params");
         const equipmentWithParams = editorConfig.equipment.filter((item) => item.type === "params");
