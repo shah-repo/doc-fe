@@ -41,7 +41,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     const smartReferencesTo = uniqBy(concat(
       workspaceState?.document?.smartReferencesTo,
       workspaceState?.document?.document.smartReferencesTo
-    ), "id");
+    ), "id").filter((ref) => ref?.active);
     const usedDocumentsInLHRS = workspaceState?.document?.usedDocumentsInLHRS;
     dialogState = FB.useRef(FBDialogState);
     multiplier = toNumber(formState?.getFieldValue("lhr_initial_quantity")) || 1;
@@ -80,6 +80,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     const setFilteredParts = (data) => {
       const partsSelected = data.reduce((selected, ref) => {
         if (ref?.metadata?.fieldId === name
+            && ref.active
             && (ref?.type === SmartReferenceType.EquipmentReplacement || ref?.type === SmartReferenceType.LotUsage)) {
           selected.push({
             ...ref?.metadata,

@@ -161,6 +161,7 @@ interface SmartReference {
   toDocRev?: Nullable<DocumentRevision>;
   toDocumentId?: Nullable<string>;
   type: SmartReferenceType;
+  active?: boolean;
 }
 
 export enum SmartReferenceType {
@@ -213,6 +214,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
   status?: DocumentRevisionStatus;
   parentEquipment?: Id;
   equipmentSection?: string;
+  redline?: boolean;
 }
 
 export interface DocumentRevisionSetAction {
