@@ -38,6 +38,29 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
       if (!workspaceState?.documentId) {
         return;
       }
+      if (!poReceiveFormState.item?.partNumber) {
+        const values = formState?.getValues();
+        const currentPOName = poReceiveState?.data?.formDocument?.formTemplate?.schema.find((e) =>
+          e.type === "purchaseorder")?.name as string;
+        const overridenItem = poReceiveState?.data?.formInput?.[currentPOName].items.map((e, index) => {
+          if (index === poReceiveFormState.item?.index) {
+            return {
+              ...e,
+              received: values?.received,
+            };
+          }
+          return { ...e };
+        });
+        const overridenPO = {
+          ...poReceiveState?.data?.formInput,
+          [currentPOName]: {
+            ...poReceiveState?.data?.formInput?.[currentPOName],
+            items: [...overridenItem],
+          },
+        };
+        poReceiveFormState.addReceiveQuantity(poReceiveState?.data?.id, { formInput: overridenPO });
+        return;
+      }
       try {
         await poReceiveFormState?.submit(
           formState?.getValues(),

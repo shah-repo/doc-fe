@@ -17,3 +17,7 @@ export interface FBPOReceiveFormConstructor {
   item: FBPurchaseOrderItem;
   documentId?: string;
 }
+
+export interface ReceiveQuantityBody {
+  formInput?: Record<string, any>;
+}
