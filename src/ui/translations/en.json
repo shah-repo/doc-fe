@@ -426,6 +426,7 @@
   "documentRevision.audit.attachments.ARRAY_NEW": "Attachment added",
   "documentRevision.audit.attachments.ARRAY_DELETED": "Attachments removed",
   "documentRevision.audit.attachments.OBJECT_DELETED": "Attachment removed",
+  "documentRevision.audit.s3link.change": "s3Link changed",
   "documentRevision.audit.description.STRING_NEW": "New description",
   "documentRevision.audit.name.STRING_NEW": "New name",
   "documentRevision.audit.status.STRING_NEW": "New status",
