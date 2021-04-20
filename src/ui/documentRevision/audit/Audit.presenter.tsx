@@ -121,12 +121,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           }
         });
         const valueKey = change.field.split(".")[1].split("-");
-        const hasDataToExclude = change.field.split(".")[1].split("--").length === 1;
         const stepLHRNumber = LHRschemaGroupedInSections.filter((e) =>
           e.find((i) => i.name === name)).flat().find((e) => e.type === "stepsection");
         let label = "";
         const stepLabel = intl.formatMessage({ id: "form.builder.step.number" }, { number: stepLHRNumber.stepIndex });
-        if (hasDataToExclude) {
+        if (!valueKey.includes("quantity")) {
           return;
         }
         if (valueKey.includes("quantity")) {
