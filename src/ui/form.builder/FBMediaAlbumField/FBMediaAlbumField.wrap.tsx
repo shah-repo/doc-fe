@@ -36,7 +36,10 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     const redlineActive = useSelector(companySelectors.getRedlineActive);
     mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(FBMediaAlbumFieldState);
 
-    const { id: documentRevisionId, company: { companyMine: { id: companyId = undefined } = {} } = {} } = workspaceState || {};
+    const {
+      id: documentRevisionId,
+      company: { companyMine: { id: companyId = undefined } = {} } = {},
+    } = workspaceState || {};
     if (documentRevisionId && companyId) {
       qrValue = {
         companyId,
