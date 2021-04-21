@@ -47,6 +47,7 @@ interface OwnProps {
   isNewVersion?: boolean;
   pmFormId?: string;
   pmForm?: DocumentRevision;
+  lastSavedTimestamp?: string;
 }
 
 type DocumentRevisionFormContainerProps = OwnProps;
@@ -69,6 +70,7 @@ DocumentRevisionFormContainerProps
   isNewVersion,
   pmFormId,
   pmForm,
+  lastSavedTimestamp,
 }) => {
   const bannerPortal = React.useRef(null);
   const loadAction =  useActionCreator(documentRevisionsActions.loadList);
@@ -216,6 +218,7 @@ DocumentRevisionFormContainerProps
           releasedDocRev,
           redlineActive,
           isOutput,
+          lastSavedTimestamp,
         }}
       />
     </FBWorkspace>

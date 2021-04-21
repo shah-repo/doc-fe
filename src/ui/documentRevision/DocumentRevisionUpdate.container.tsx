@@ -1,6 +1,7 @@
 import { debounce, isEmpty, pick } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getFormattedDateString, MomentFormats } from "../../common/utils/date";
 import { authSelectors } from "../../state/ducks/auth";
 import { companyActions, companySelectors } from "../../state/ducks/company";
 import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
@@ -49,9 +50,13 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   const saveAction = useActionCreator(documentRevisionsActions.save);
   const saveWithNoResponseAction = useActionCreator(documentRevisionsActions.saveWithNoResponse);
 
+
+  const [lastSavedTimestamp, setLastSavedTimestamp] = React.useState<string>();
+
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
+      setLastSavedTimestamp(getFormattedDateString(Date.now(), MomentFormats.Time));
       if (redlineActive) {
         dispatch(companyActions.redlineConfig());
       }
@@ -133,6 +138,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         canChangeOwnerShip={canChangeOwnerShip}
         showRevisionTypeChange
         isNewVersion={isNewVersion}
+        {...{ lastSavedTimestamp }}
       />
     </FormContext.Provider>
   );
