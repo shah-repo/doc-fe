@@ -4,7 +4,7 @@ export type FBProcedureProps =
 & Pick<FBInputProps, "name" | "gutter" | "stepIndex" | "index" | "disabled" | "loading" | "autosave" | "isInputOwner">
 & Pick<FBProviderProps, "procedureState">
 & {
-  handleAdd?: (isClone?: boolean) => void;
+  handleAdd?: (isClone?: boolean, isFromKeys?: boolean) => void;
   isOutput?: boolean;
   isPreview?: boolean;
   types?: string[];

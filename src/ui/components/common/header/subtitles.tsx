@@ -26,7 +26,7 @@ const generateLHRsSubtitle = (documentRevision: DocumentRevision) => {
       concat(documentRevision?.smartReferencesTo, documentRevision?.document.smartReferencesTo),
       "id"
     )
-    ?.find((ref) => ref?.type === SmartReferenceType.HiddenPiInstance)
+    ?.find((ref) => ref?.active && ref?.type === SmartReferenceType.HiddenPiInstance)
     ?.toDocRev
     ?.precalc
     ?.[LHR_SUBTITLE_PRECALC_KEY];
