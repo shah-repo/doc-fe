@@ -11,7 +11,7 @@ import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisio
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
-import { FBApprovalAuditState, FBText } from "../../form.builder";
+import { FBApprovalAuditState, FBSchemaProps, FBText } from "../../form.builder";
 import { isTranslation } from "../../translations/types";
 import { styles } from "./Audit.presenter.styles";
 
@@ -20,6 +20,7 @@ interface OwnProps {
   statusLabel: string;
   versionNumber: string;
   isStatusVisible: boolean;
+  schema: FBSchemaProps[];
 }
 
 type AuditPresenterProps = OwnProps;
@@ -29,6 +30,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   statusLabel,
   versionNumber,
   isStatusVisible,
+  schema,
 }) => {
   const classes = styles();
   const intl = useIntl();
@@ -67,7 +69,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     orderBy(audits, ["field"]).forEach((change: Audit, index) => {
       change.groupKey = groupKey;
       const isFBField = has(change, "fbSchemaItem");
-      const { label, placeholder = "", type: fbType, stepIndex: number = 1, editorConfig } = change.fbSchemaItem || {};
+      const { label, placeholder = "", type: fbType, stepIndex: number = 1, name, editorConfig } = change.fbSchemaItem || {};
       let fbLabel = label || placeholder;
       const isOmittedFB = (
         isFBField &&
@@ -111,6 +113,30 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           keyLabel += intl.formatMessage({ id: `form.builder.${valueKey}` });
         }
         fbLabel = `${stepLabel} ${keyLabel}`;
+      }
+      if (fbType === "lhrstep") {
+        const LHRschemaGroupedInSections: any[] = [];
+        schema.forEach((element) => {
+          if (element.type === "stepsection") {
+            LHRschemaGroupedInSections.push([]);
+          }
+          if (element.type === "lhrstep" || element.type === "stepsection") {
+            LHRschemaGroupedInSections[LHRschemaGroupedInSections.length - 1]?.push(element);
+          }
+        });
+        const valueKey = change.field.split(".")[1].split("-");
+        const hasDataToExclude = change.field.split(".")[1].split("--").length === 1;
+        const stepLHRNumber = LHRschemaGroupedInSections.filter((e) =>
+          e.find((i) => i.name === name)).flat().find((e) => e.type === "stepsection");
+        let label = "";
+        const stepLabel = intl.formatMessage({ id: "form.builder.step.number" }, { number: stepLHRNumber.stepIndex });
+        if (hasDataToExclude) {
+          return;
+        }
+        if (valueKey.includes("quantity")) {
+          label = intl.formatMessage({ id: `form.builder.${valueKey[2]}.quantity` });
+        }
+        fbLabel = `${label} for ${stepLabel}`;
       }
 
       if (fbType === "mpiprocedure") {
@@ -211,6 +237,22 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       }
 
       if (!isFBField && change.field.includes("attachments")) {
+        if (change.field.endsWith("s3link") && change.type === "STRING_EDITED") {
+          singleFields.push(
+            <Box mb={1} key={`${change.groupId}-${index}`}>
+              <Box>
+                <Text
+                  dataCy={`change-key-${groupKey}-${key}`}
+                  message="documentRevision.audit.s3link.change"
+                />
+              </Box>
+              <div className={classes.auditValue}>
+                <AuditFactory audit={change} dataCy={`change-value-${groupKey}-${key}`} />
+              </div>
+            </Box>
+          );
+          return;
+        }
         attachments.push(change);
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_NEW") {
         newReferences.push(change);
@@ -219,6 +261,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       } else if (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned) {
         return;
       } else {
+        // HACK for ENC-7509
+        const regex = new RegExp(`^formInput\\.(?:${change.fbSchemaItem?.name})\\[[a-zA-Z0-z\-]+\\]\\.id$`);
+        if (change.fbSchemaItem?.type === "fileupload" && !regex.test(change.field)) { return; }
+
         singleFields.push((
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>

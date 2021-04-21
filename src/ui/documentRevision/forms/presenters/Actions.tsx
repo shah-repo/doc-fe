@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
-import { isEqual, keys, omit } from "lodash";
+import { isEqual, isUndefined, keys, omit } from "lodash";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
@@ -64,8 +64,24 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     documentRevision?.formDocument?.status,
     documentRevision?.formDocument?.document?.id
   );
+
+  const [isInlineApproval, setInlineApproval] = React.useState(false);
+  const [isApproved, setIsApproved] = React.useState(false);
+
+  React.useEffect(() => {
+    formState?.validate((_valid) => {
+      const validSchema = schema?.filter((schemaItem) => {
+        if (schemaItem.validationMode === "visibility" || schemaItem.validationMode === "disabled") {
+          return !isUndefined(formState.errors.get(schemaItem.name ?? ""));
+        }
+        return true;
+      });
+      setInlineApproval(isFormWithInlineApproval(validSchema));
+      setIsApproved(isInlineFormApproved( documentRevision, formState, validSchema));
+    });
+  }, []);
+
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
-  const isInlineApproval = isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
   const isMPIOutput = checkIsDocumentMPIOutput(values.document?.documentType?.groupOptions);
   const isLHR = checkIsDocumentLHR(values.document?.documentType?.groupOptions);
@@ -73,7 +89,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
   const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
-  const isApproved = isInlineFormApproved( documentRevision, formState, schema);
   const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
 
@@ -131,6 +146,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
   const onFormClick = () => {
     if (redlineActive) {
+      formik.setFieldValue("redline", true);
       workspaceState?.setMode("form");
       dispatch(companyActions.autosaveConfig());
     }

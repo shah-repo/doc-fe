@@ -273,7 +273,9 @@ context("Document Operators Access Test", () => {
     });
 
     it("reload page", () => {
-      cy.reload();
+      cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
+        cy.reload();
+      });
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
@@ -434,7 +436,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
     });
@@ -442,13 +444,9 @@ context("Document Operators Access Test", () => {
     it("Approve record button click", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
       cy.get("input[name=\"password\"]").type("Tester1!");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
-    });
-
-    it("Reload document", () => {
-      cy.reload();
     });
 
     it(`Logout as current user`, () => {
@@ -481,13 +479,9 @@ context("Document Operators Access Test", () => {
     it("Approve record button click", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
       cy.get("input[name=\"password\"]").type("Tester1!");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
-    });
-
-    it("Reload document", () => {
-      cy.reload();
     });
 
     it(`Logout as current user`, () => {
@@ -520,13 +514,9 @@ context("Document Operators Access Test", () => {
     it("Approve record button click", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
       cy.get("input[name=\"password\"]").type("Tester1!");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
-    });
-
-    it("Reload document", () => {
-      cy.reload();
     });
 
     it("Verify status is released", () => {

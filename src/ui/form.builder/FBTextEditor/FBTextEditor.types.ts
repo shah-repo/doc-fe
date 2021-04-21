@@ -9,9 +9,14 @@ export type FBTextEditorProps =
   handleMask?: (masked: boolean) => void;
   onOptionsChange?: (value: string) => void;
   onBlur?: () => void;
+  onKeyDown?: (e: KeyboardEvent) => void;
   textEditorState?: FBTextEditorState;
   editorReference?: HTMLInputElement;
   formValue?: string;
   masked?: boolean;
   isPreview?: boolean;
+  /**
+   * @cfg {Bool} If true focus the texteditor on render.
+   */
+  autoFocus?: boolean;
 };

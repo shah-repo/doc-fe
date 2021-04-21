@@ -786,7 +786,9 @@ field is empty: Add text field`, () => {
 
   context(`Test ${requiredDocStatusFieldLabel} (required document status) Field`, () => {
     it("Add incorrect document", () => {
-      cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type("AR Form{downarrow}{enter}");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
+        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type("AR Form{downarrow}{enter}");
+      });
     });
 
     it("Should show error for 'Incorrect document status' field", () => {
@@ -800,11 +802,9 @@ field is empty: Add text field`, () => {
 
     it(`Fill in '${requiredDocStatusFieldLabel}' with draft CS Document`, () => {
       cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).clear();
-      cy.wrapWithWaitOnApiCalls(
-        [
-          CyRoutes.PostRemoteValidatorsHelper], () => {
-          cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type(`${documentRevisionName}{downarrow}{enter}`);
-        });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
+        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type(`${documentRevisionName}{downarrow}{enter}`);
+      });
     });
   });
 
@@ -826,11 +826,9 @@ field is empty: Add text field`, () => {
 
     it(`Fill in '${requiredDocTypeFieldLabel}' with our CS Document`, () => {
       cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).clear();
-      cy.wrapWithWaitOnApiCalls(
-        [
-          CyRoutes.PostRemoteValidatorsHelper], () => {
-          cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type(`${csDocTitle}{downarrow}{enter}`);
-        });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
+        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type(`${csDocTitle}{downarrow}{enter}`);
+      });
     });
   });
 
