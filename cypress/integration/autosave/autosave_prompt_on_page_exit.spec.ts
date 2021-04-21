@@ -182,6 +182,63 @@ context("Autosave on leaving page while data is still not saved", () => {
       cy.wait("@response");
     });
   });
+
+  // Uncomment when ENC-7499 is done
+  // context("Turn off autosave, edit feild and check if pop up is prompted", () => {
+  //   it("Turn off autosave", () => {
+  //     cy.cmpTurnOffAutosave();
+  //   });
+
+  //   it("Select created document", () => {
+  //     cy.drFilterDocListByNameAndStatus({ title: "Test", status: "Draft" });
+  //   });
+
+  //   it("Enter value for custom text field", () => {
+  //     cy.get("[name^=fb-textfield-]").type("Test disabled autosave");
+  //   });
+
+  //   it("Navigate to document list and check if pop-up for unsaved data is prompted", () => {
+  //     cy.navigToDocumentList();
+  //     let called = false;
+
+  //     cy.on("window:confirm", (message) => {
+  //       expect(message).to.equal("Are you sure you want to leave? You have unsaved changes.");
+  //       called = true;
+  //     });
+
+  //     cy.wrap(null).should(() => {
+  //       expect(called).to.be.true;
+  //     });
+  //   });
+  // });
+
+  context("Edit custom feild, manually save and check if pop up is not prompted", () => {
+    it("Select created document", () => {
+      cy.drFilterDocListByNameAndStatus({ title: "Test", status: "Draft" });
+    });
+
+    it("Enter value for custom text field", () => {
+      cy.get("[name^=fb-textfield-]").type("Test edit field second time");
+    });
+
+    it("Save document", () => {
+      cy.drSaveDocumentWithoutaudit();
+    });
+
+    it("Navigate to document list and check if pop-up for unsaved data is not prompted", () => {
+      cy.navigToDocumentList();
+      let called = false;
+
+      cy.on("window:confirm", (message) => {
+        expect(message).to.equal("Are you sure you want to leave? You have unsaved changes.");
+        called = true;
+      });
+
+      cy.wrap(null).should(() => {
+        expect(called).to.be.false;
+      });
+    });
+  });
 });
 
 

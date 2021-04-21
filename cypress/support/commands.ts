@@ -187,12 +187,11 @@ Cypress.Commands.overwrite("type", (originalFn, subject, options) => {
   const currentCommand = cy.state("current").attributes.name;
   const args = cy.state("current").attributes.args;
 
-  // eslint-disable-next-line eqeqeq
   if (currentCommand === "type" && args.length == 1) {
     cy.wrap(subject).arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
       .then(() => originalFn(subject, options));
   } else {
-    return originalFn(subject, options, { force: true });
+    return originalFn(subject, options, args[1]);
   }
 });
 

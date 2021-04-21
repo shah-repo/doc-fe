@@ -41,6 +41,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
           ), "id");
           const partsSelected = refs.reduce((selected, ref) => {
             if (ref?.metadata?.fieldId === name
+                && ref.active
                 && (ref.type === SmartReferenceType.EquipmentReplacement || ref.type === SmartReferenceType.LotUsage)) {
               selected.push({
                 ...ref.metadata,

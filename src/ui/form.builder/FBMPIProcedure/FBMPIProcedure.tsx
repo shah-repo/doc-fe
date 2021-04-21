@@ -7,6 +7,7 @@ import { withFBMPIProcedure } from "./FBMPIProcedure.wrap";
 
 const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
   handleAdd,
+  onKeyDown,
   mpiProcedureState,
   isPreview,
   isOutput = true,
@@ -54,6 +55,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
           }}
           boxProps={{ style: { color: Colors.black } }}
           withState
+          onKeyDown={onKeyDown}
         />
         <Box
           display="flex"

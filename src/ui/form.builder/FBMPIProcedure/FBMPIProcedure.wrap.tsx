@@ -11,6 +11,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
 ) => {
   const Comp = ({
     handleAdd,
+    onKeyDown,
     mpiProcedureState,
     name = "",
     isInputOwner,
@@ -114,11 +115,18 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
       submitForm();
     };
 
+    onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter" && e.ctrlKey) {
+        handleAdd?.(false);
+      }
+    };
+
     // MARK: @observer
 
     return Component({
       ...(props as T),
       handleAdd,
+      onKeyDown,
       mpiProcedureState,
       isPreview,
       name,

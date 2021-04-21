@@ -21,7 +21,13 @@ export type FBMediaAlbumFieldProps =
   mediaAlbumFieldState?: FBMediaAlbumFieldState;
   actionsDisabled?: boolean;
   mode?: FBMediaAlbumFieldMode;
-  qrValue?: string;
+  qrValue?: FBMediaAlbumFieldQR;
   collection?: FBAttachment[];
   loading?: boolean;
 };
+
+interface FBMediaAlbumFieldQR {
+  companyId: string;
+  documentRevisionId: string;
+  fieldName: string;
+}

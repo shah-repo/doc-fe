@@ -95,10 +95,10 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
 
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
-    const redlineDateToSubmit = pick(values, "schema", "formInput");
+    const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
 
     if (redlineActive) {
-      return handleSave( redlineDateToSubmit as DocumentRevisionEditRequestBody, helpers);
+      return handleSave( redlineDataToSubmit as DocumentRevisionEditRequestBody, helpers);
     }
 
     if (isEmpty(dataToSubmit)) {
