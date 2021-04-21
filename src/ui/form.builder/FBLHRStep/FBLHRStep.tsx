@@ -1,5 +1,6 @@
 import { Box } from "@material-ui/core";
 import { CheckCircle, PlayCircleFilled } from "@material-ui/icons";
+import { isEmpty } from "lodash";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText, FBTextField } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
@@ -88,12 +89,12 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         {...{ loading }}
       />
     </Box>
-    {isDocumentLHRT && <FBLHRStepProcedureItem
+    {isDocumentLHRT && !isEmpty(materials) && <FBLHRStepProcedureItem
       value={materials}
       type={FBProcedureItemType.materials}
       lhrStepIndex={index}
     />}
-    {isDocumentLHRT && <FBLHRStepProcedureItem
+    {isDocumentLHRT && !isEmpty(equipment) && <FBLHRStepProcedureItem
       value={equipment}
       type={FBProcedureItemType.equipment}
       lhrStepIndex={index}
