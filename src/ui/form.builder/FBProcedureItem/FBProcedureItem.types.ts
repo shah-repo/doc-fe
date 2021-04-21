@@ -39,4 +39,5 @@ export interface FBProcedureItemConfig {
   attachments?: Id[];
   LHRTparameter?: boolean;
   type?: string;
+  paramsId?: string;
 }

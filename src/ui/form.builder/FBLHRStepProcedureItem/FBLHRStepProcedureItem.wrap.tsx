@@ -1,4 +1,3 @@
-import { cloneDeep } from "lodash";
 import React from "react";
 import { FB, FBDialogState, FBFormMode, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale } from "..";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
@@ -33,7 +32,7 @@ export const withFBLHRStepProcedureItem = <T extends FBLHRStepProcedureItemProps
         },
         content: (
           <FBProcedureForm
-            initialValues={cloneDeep(part)}
+            initialValues={{ paramsId: part?.id }}
             mode="lhr"
             {...{ type, lhrStepIndex }}
           />

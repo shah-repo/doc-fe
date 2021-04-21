@@ -5,7 +5,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {
   FBDialog,
   FBMapWrapper,
-  FBPartItemStatusBg,
+
   FBProcedureItemConfig,
 
   FBProcedureItemLocale,
@@ -57,13 +57,13 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
               borderLeft={0}
               borderRight={0}
               borderTop={0}
-              borderColor={Colors.hint_gray}
+              borderColor={item.type ? Colors.medium_red : Colors.hint_gray}
               key={`fb-procedure-item-${type}-${index}`}
               className={FBClasses.hoverVisibility}
             >
               <Box
                 display="flex"
-                bgcolor={(item.status || "none") === "none" ? "white" : FBPartItemStatusBg[item.status || ""]}
+                bgcolor={item.type ? Colors.light_red : Colors.white}
                 alignItems="center"
                 p={1.5}
                 minHeight={55}

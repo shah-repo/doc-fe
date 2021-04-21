@@ -1,4 +1,4 @@
-import { concat, filter, find, first, isEmpty, keyBy, lowerCase, map } from "lodash";
+import { filter, find, first, isEmpty, keyBy, lowerCase, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -30,6 +30,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
   }: T) => {
     // MARK: @config
     const { procedureState, mpiProcedureState, dialogState, lhrStepState, workspaceState } = FB.useStores();
+
     formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
     procedureFormState = FB.useRef<FBProcedureFormState>(FBProcedureFormState, {
       initialValues,
@@ -128,7 +129,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
             editorConfig: {
               ...schemaItem?.editorConfig,
               parameters: {
-                ...keyBy(concat(lhrStepState?.materials, lhrStepState?.equipment), "id"),
+                ...keyBy(lhrStepState?.editedParameters, "paramsId"),
               },
             },
           };

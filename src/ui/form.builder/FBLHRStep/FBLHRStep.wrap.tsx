@@ -1,4 +1,4 @@
-import { find } from "lodash";
+import { find, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -54,10 +54,11 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       () => formState?.inputState.get(name)?.value,
       (value) => {
         if (!stepLHRs) { // don't trigger if it is LHR/MPI hover toggle
+          const editorConfig = !value ? omit(schemaItem?.editorConfig, "parameters") : schemaItem?.editorConfig;
           workspaceState?.setSchemaItem({
             ...schemaItem,
             editorConfig: {
-              ...schemaItem?.editorConfig,
+              ...editorConfig,
               value,
             },
           });
@@ -102,18 +103,20 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         const mpiDocument: any = dataValues.find((item: any) => item?.id === schemaItem?.editorConfig.value);
         const editorConfig = mpiDocument?.formTemplate.schema.find((item) => item.type === "mpiprocedure").editorConfig;
         const { materials, equipment } = editorConfig;
-
         if (parameters) {
           const newMaterials = materials.map((material) => {
-            const editedMaterial = find(parameters, (parameter) => parameter.id === material.id);
+            const editedMaterial = find(parameters, (parameter) => parameter.paramsId === material.id);
             return editedMaterial || material;
           });
           const newEquipments = equipment.map((equipment) => {
-            const editedEquipment = find(parameters, (parameter) => parameter.id === equipment.id);
+            const editedEquipment = find(parameters, (parameter) => parameter.paramsId === equipment.id);
             return editedEquipment || equipment;
           });
           lhrStepState.setMaterials(newMaterials);
           lhrStepState.setEquipment(newEquipments);
+          console.log(lhrStepState.editedParameters, { parameters });
+
+          lhrStepState.setEditedParameters(parameters);
           return;
         }
 

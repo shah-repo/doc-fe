@@ -1,5 +1,5 @@
-import { omit, unionBy } from "lodash";
-import { action, get, observable, set } from "mobx";
+import { get, keyBy } from "lodash";
+import { action, observable, set } from "mobx";
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, StartMpiBody } from "..";
 import { Document, DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
@@ -17,14 +17,22 @@ class FBLHRStepState {
   @observable public isHovering = false;
   @observable public materials: any;
   @observable public equipment: any;
+  @observable public editedParameters: any;
 
   public constructor(lhrs?: DocumentRevision) {
     this.stepLHRs = lhrs;
   }
 
   @action public editItem = (item: FBProcedureItemConfig, type: FBProcedureItemType) => {
-    const items = unionBy([omit(item, "LHRTparameter")], get(this, `${type}`), "id");
-    set(this, type, items.reverse());
+    const items = get(this, `${type}`).map((value) => {
+      if (value.id === item.paramsId) {
+        return item;
+      }
+      return value;
+    });
+    const parameters = keyBy({ ...this.editedParameters, item }, "paramsId");
+    set(this, "editedParameters", parameters );
+    set(this, type, items);
   };
 
   // MARK: @helpers
@@ -49,6 +57,7 @@ class FBLHRStepState {
 
   public setMaterials = (materials) => set(this, "materials", materials);
   public setEquipment = (equipment) => set(this, "equipment", equipment);
+  public setEditedParameters = (editedParameters) => set(this, "editedParameters", editedParameters);
 
   public setIsHovering = (isHovering: boolean) => set(this, "isHovering", isHovering);
 
