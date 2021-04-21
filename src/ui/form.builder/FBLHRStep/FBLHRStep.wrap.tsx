@@ -18,15 +18,21 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     stepLHRs,
     isHovering,
     disabled,
+    ownerOfStartMPIAction,
     ...props
   }: T) => {
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
-    stepLHRs = workspaceState?.document?.smartReferencesFrom
+    const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom;
+
+    stepLHRs = smartReferencesFrom
       ?.find((ref) => ref.active
       && ref.type === SmartReferenceType.HiddenPiInstance
       && ref.metadata.fieldId === name)?.fromDocRev;
+    const employees = workspaceState?.externalState?.company?.companyMine.employees;
+    ownerOfStartMPIAction = employees?.find((e) =>
+      e.id === smartReferencesFrom?.[0]?.metadata.startedBy)?.user?.name;
     const lhrStepState = FB.useRef(FBLHRStepState, stepLHRs);
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
@@ -148,6 +154,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       isDraft,
       disabled,
       loading,
+      ownerOfStartMPIAction,
     }); };
 
   Comp.displayName = "withFBLHRStep";
