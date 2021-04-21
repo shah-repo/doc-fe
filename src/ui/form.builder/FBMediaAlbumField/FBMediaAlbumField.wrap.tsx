@@ -45,6 +45,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
         companyId,
         documentRevisionId,
         fieldName: name,
+        isTemplate,
       });
     }
 
