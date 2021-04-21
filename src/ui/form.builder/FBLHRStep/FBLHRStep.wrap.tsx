@@ -101,14 +101,14 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         const dataValues = Array.from(data.values());
         const mpiDocument: any = dataValues.find((item: any) => item?.id === schemaItem?.editorConfig.value);
         const editorConfig = mpiDocument?.formTemplate.schema.find((item) => item.type === "mpiprocedure").editorConfig;
-        const materialsWithParams = editorConfig.materials.filter((item) => item.type === "params");
-        const equipmentWithParams = editorConfig.equipment.filter((item) => item.type === "params");
+        const { materials, equipment } = editorConfig;
+
         if (parameters) {
-          const newMaterials = materialsWithParams.map((material) => {
+          const newMaterials = materials.map((material) => {
             const editedMaterial = find(parameters, (parameter) => parameter.id === material.id);
             return editedMaterial || material;
           });
-          const newEquipments = equipmentWithParams.map((equipment) => {
+          const newEquipments = equipment.map((equipment) => {
             const editedEquipment = find(parameters, (parameter) => parameter.id === equipment.id);
             return editedEquipment || equipment;
           });
@@ -117,8 +117,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
           return;
         }
 
-        lhrStepState.setMaterials(materialsWithParams);
-        lhrStepState.setEquipment(equipmentWithParams);
+        lhrStepState.setMaterials(materials);
+        lhrStepState.setEquipment(equipment);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
