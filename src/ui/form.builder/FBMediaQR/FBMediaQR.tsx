@@ -34,7 +34,7 @@ const FBMediaQR: React.FunctionComponent<FBMediaQRProps> = ({
               <CircularProgress />
             </Box>
           )}
-          {!loading && <QRCode value={qrValue} />}
+          {!loading && <QRCode size={200} value={qrValue} />}
         </Box>
       </>
     )}
