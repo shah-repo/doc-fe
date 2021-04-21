@@ -1,8 +1,8 @@
 import { keys } from "lodash";
 import { reaction } from "mobx";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { FB, FBMPIProcedureProps, FBMPIProcedureState, FBProcedureItemType } from "..";
+import { FB, FBFieldName, FBMPIProcedureProps, FBMPIProcedureState, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
 import { useFormContext } from "../../components/forms/FormContext";
 
@@ -20,6 +20,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     disabled,
     types,
     index = 0,
+    autoScrollTo,
     ...props
   }: T) => {
 
@@ -40,6 +41,15 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     if (!formValue) {
       formState?.setFieldValue(`${name}.description`, props.editorConfig?.description);
     }
+
+    useEffect(() => {
+      if (!autoScrollTo) { return; }
+      const selector = `[id="${FBFieldName.MPIProcedureId}-${name}"]`;
+      const el = document.querySelector(selector) as HTMLElement;
+      el?.scrollIntoView({ behavior: "smooth", block: "center" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     // MARK: @reactions
     React.useEffect(() => reaction(
       () => mpiProcedureState?.value,
@@ -104,11 +114,13 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
 
 
     // MARK: @methods
-    handleAdd = (isClone?: boolean) => {
+    handleAdd = (isClone?: boolean, isFromKeys?: boolean) => {
       const newName = FB.uniqid;
       const newItem = {
         ...workspaceState?.getSchemaItemAt(index),
         ...!isClone && { editorConfig: undefined },
+        autoScrollTo: isFromKeys,
+        autoFocus: isFromKeys,
         name: newName,
       };
       workspaceState?.setSchemaItemAt(newItem, index + 1);
@@ -117,7 +129,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
 
     onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter" && e.ctrlKey) {
-        handleAdd?.(false);
+        handleAdd?.(false, true);
       }
     };
 
