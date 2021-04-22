@@ -70,7 +70,7 @@
     "label": "Company addresses",
     "valueKey": "id",
     "labelKey": "name",
-    "root": "addresses",
+    "root": "_addresses",
     "hidden": false
   },
   {
@@ -78,7 +78,7 @@
     "label": "GL codes",
     "valueKey": "id",
     "labelKey": "name",
-    "root": "acctCodes",
+    "root": "_acctCodes",
     "hidden": false
   },
   {
@@ -273,7 +273,7 @@
     "valueKey": "value",
     "labelKey": "text",
     "root": "",
-    "publicApi": true,
+    "publicApi": false,
     "hidden": false
   },
   {
