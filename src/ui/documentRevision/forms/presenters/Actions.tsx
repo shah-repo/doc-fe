@@ -109,11 +109,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
 
   function setFBValue() {
-    const schema = workspaceState?.schema?.map((schemaItem) => ({
-      ...schemaItem,
-      ...schemaItem.autoFocus && { autoFocus: false },
-      ...schemaItem.autoScrollTo && { autoScrollTo: false },
-    }));
+    const schema = workspaceState?.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     switch (workspaceState?.getMode()) {
       case "design":
         formik.setFieldValue("formTemplate", {

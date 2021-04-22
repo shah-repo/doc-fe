@@ -1,6 +1,6 @@
 import { keys } from "lodash";
 import { reaction } from "mobx";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { FB, FBMPIProcedureProps, FBMPIProcedureState, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
@@ -40,6 +40,12 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     if (!formValue) {
       formState?.setFieldValue(`${name}.description`, props.editorConfig?.description);
     }
+
+    useEffect(() => {
+      if (!workspaceState) { return; }
+      workspaceState.omitAutosave = false;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // MARK: @reactions
     React.useEffect(() => reaction(
@@ -106,14 +112,16 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
 
     // MARK: @methods
     handleAdd = (isClone?: boolean, isFromKeys?: boolean) => {
+      if (!workspaceState) { return; }
       const newName = FB.uniqid;
       const newItem = {
-        ...workspaceState?.getSchemaItemAt(index),
+        ...workspaceState.getSchemaItemAt(index),
         ...!isClone && { editorConfig: undefined },
         autoScrollTo: isFromKeys,
         autoFocus: isFromKeys,
         name: newName,
       };
+      workspaceState.omitAutosave = true;
       workspaceState?.setSchemaItemAt(newItem, index + 1);
       if (isFromKeys) { return; }
       submitForm();
