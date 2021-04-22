@@ -14,7 +14,8 @@ type AuditTypes =
     | "NUMBER_EDITED"
     | "NUMBER_NEW"
     | "OBJECT_DELETED"
-    | "STRING_DELETED";
+    | "STRING_DELETED"
+    | "NUMBER_DELETED";
 export interface Audit {
   groupKey?: number | undefined;
   index?: number | undefined;

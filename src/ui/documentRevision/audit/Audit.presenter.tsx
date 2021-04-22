@@ -276,7 +276,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               ${equipment?.displayRevision}`,
           };
         }
-        if (isMaterial && last(valueKey) === "id") {
+        if (isMaterial && last(valueKey) === "id" && change.type !== "STRING_DELETED") {
           const object = editorConfig.materials.find((i) => i.id === change.nextValue);
           const material = documentRevisions.find((e) => e.id === object.title);
           fbLabel = intl.formatMessage({ id: "form.builder.audit.field.step" },
@@ -290,11 +290,30 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               ${material?.displayRevision} | Qty: ${object.quantity} ${object.unit}`,
           };
         }
+        if (isMaterial && !isAttachment) {
+          if (change.type === "STRING_DELETED") {
+            if (last(valueKey) !== "title") {
+              return;
+            }
+            fbLabel = intl.formatMessage({ id: "form.builder.audit.field.step" },
+              {
+                fieldType: intl.formatMessage({ id: "form.builder.materials|s" }),
+                stepLabel,
+              });
+          }
+          if (change.type === "NUMBER_DELETED") {
+            return;
+          }
+        }
         if (!isMaterial && !isAttachment && change.type === "STRING_DELETED") {
           if (last(valueKey) !== "title") {
             return;
           }
-          fbLabel = "form.builder.equipment|s";
+          fbLabel = intl.formatMessage({ id: "form.builder.audit.field.step" },
+            {
+              fieldType: intl.formatMessage({ id: "form.builder.equipment|s" }),
+              stepLabel,
+            });
         }
       }
 
