@@ -1,16 +1,12 @@
-import { FBProcedureProps, FBProcedureValue, FBProviderProps, FBTextEditorProps } from "..";
+import { FBInputProps, FBProcedureProps, FBProcedureValue, FBProviderProps } from "..";
 
 export type FBMPIProcedureProps =
 & Omit<FBProcedureProps, "procedureState">
 & Pick<FBProviderProps, "mpiProcedureState">
-& Pick<FBTextEditorProps, "autoFocus">
+& Pick<FBInputProps, "autoFocus" | "autoScrollTo">
 & {
   onKeyDown?: (e: KeyboardEvent) => void;
   editorConfig?: FBProcedureValue;
   redlineActive?: boolean;
-  /**
-   * @cfg {Bool} If true scroll to el on render.
-   */
-  autoScrollTo?: boolean;
 };
 

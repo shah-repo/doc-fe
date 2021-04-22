@@ -181,6 +181,14 @@ export type FBInputProps =
     // validateDefaultValue?: boolean;
     includeNotes?: boolean;
     isOutput?: boolean;
+    /**
+     * @cfg {Bool} If true focus the texteditor on render.
+     */
+    autoFocus?: boolean;
+    /**
+     * @cfg {Bool} If true scroll to el on render.
+     */
+    autoScrollTo?: boolean;
   };
 
 export const OmitInputClones: FBInputType[] = [

@@ -3,7 +3,6 @@ import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { FBButton, FBInput, FBMapWrapper, FBMPIProcedureItem, FBMPIProcedureProps, FBProcedureItemType, FBProvider, FBTextEditor } from "..";
 import Colors from "../../layout/theme/utils/colors";
-import { FBFieldName } from "../helpers/FBFieldName";
 import { withFBMPIProcedure } from "./FBMPIProcedure.wrap";
 
 const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
@@ -18,9 +17,9 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
   name,
   redlineActive,
   autoFocus,
+  autoScrollTo,
   ...props
 }) => (
-  <div id={`${FBFieldName.MPIProcedureId}-${name}`}>
     <FBInput {...props } {...{ name }} type="mpiprocedure">
       <Box
         pb={3}
@@ -48,7 +47,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
             </Box>
           )}
           <FBTextEditor
-            {...{ disabled, autoFocus }}
+            {...{ disabled, autoFocus, autoScrollTo }}
             name={`${name}.description`}
             gutter={false}
             autosave
@@ -131,7 +130,6 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
         </FBProvider>
       </Box>
     </FBInput>
-  </div>
 );
 
 export default withFBMPIProcedure(FBMPIProcedure);

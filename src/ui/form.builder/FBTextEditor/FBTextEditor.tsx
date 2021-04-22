@@ -3,7 +3,7 @@ import { isEmpty, isUndefined } from "lodash";
 import React from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBConditionalWrapper, FBInput, FBProvider, FBTextEditorOptions, FBTextEditorProps } from "..";
+import { FBConditionalWrapper, FBFieldName, FBInput, FBProvider, FBTextEditorOptions, FBTextEditorProps } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBTextEditor } from "./FBTextEditor.wrap";
 
@@ -31,6 +31,7 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
   // eslint-disable-next-line no-useless-escape
   const formattedFormValue = formValue.replace(/<[^\/>]*>([\s]?)*<\/[^>]*>/g, "<p><br></p>" );
   return (
+    <div id={`${FBFieldName.MPIProcedureId}-${name}`}>
     <FBProvider {...{ textEditorState }}>
       <FBInput {...props} {...{ name, disabled }} type="texteditor">
         <Box
@@ -102,6 +103,7 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
         </Box>
       </FBInput>
     </FBProvider>
+    </div>
   ); };
 
 export default withFBTextEditor(FBTextEditor);

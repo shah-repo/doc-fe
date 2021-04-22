@@ -1,8 +1,8 @@
 import { keys } from "lodash";
 import { reaction } from "mobx";
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import { FB, FBFieldName, FBMPIProcedureProps, FBMPIProcedureState, FBProcedureItemType } from "..";
+import { FB, FBMPIProcedureProps, FBMPIProcedureState, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
 import { useFormContext } from "../../components/forms/FormContext";
 
@@ -20,7 +20,6 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     disabled,
     types,
     index = 0,
-    autoScrollTo,
     ...props
   }: T) => {
 
@@ -41,14 +40,6 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     if (!formValue) {
       formState?.setFieldValue(`${name}.description`, props.editorConfig?.description);
     }
-
-    useEffect(() => {
-      if (!autoScrollTo) { return; }
-      const selector = `[id="${FBFieldName.MPIProcedureId}-${name}"]`;
-      const el = document.querySelector(selector) as HTMLElement;
-      el?.scrollIntoView({ behavior: "smooth", block: "center" });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     // MARK: @reactions
     React.useEffect(() => reaction(
@@ -124,6 +115,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
         name: newName,
       };
       workspaceState?.setSchemaItemAt(newItem, index + 1);
+      if (isFromKeys) { return; }
       submitForm();
     };
 
