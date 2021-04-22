@@ -122,6 +122,14 @@ class Config {
     return this.get("ENV_NAME") === "SANDBOX";
   }
 
+  public static get isProduction(): boolean {
+    return this.get("ENV_NAME") === "PRODUCTION";
+  }
+
+  public static get isDemo(): boolean {
+    return this.get("ENV_NAME") === "DEMO";
+  }
+
   public static get consoleToastsEnabled(): boolean {
     return this.get("CONSOLE_TOAST") === "true";
   }

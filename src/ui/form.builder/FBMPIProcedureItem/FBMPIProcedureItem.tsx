@@ -96,6 +96,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           gutter={false}
           editorConfig={defaultValue}
           autosave
+          fieldType="mpiprocedure"
         />
       </Box>
     )}

@@ -1,6 +1,7 @@
 import { Formik, FormikProps } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
+import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 import { toastError } from "../../components/notifications";
@@ -26,6 +27,7 @@ const DocumentTypeFormContainer: React.FunctionComponent<Props> = ({
   const { id } = documentType;
   const initialValues = toDocumentTypeIntialValues(documentType);
   const transitionLabel =  "common.delete";
+  const disabled = Config.isDemo || Config.isProduction;
 
   const updateDocumentTypeAction = useActionCreator(documentTypeActions.updateDocumentType);
 
@@ -43,7 +45,7 @@ const DocumentTypeFormContainer: React.FunctionComponent<Props> = ({
 
   const render = (props: FormikProps<any>) => (
     <DocumentTypeFormPresenter
-      {...{ handleTransition, transitionLabel }}
+      {...{ handleTransition, transitionLabel, disabled }}
       {...props}
     />
   );

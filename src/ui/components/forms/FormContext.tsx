@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik";
-import { filter, isEmpty, isEqual, map } from "lodash";
+import { filter, isEmpty, isEqual, map, omit } from "lodash";
 import React, { useContext } from "react";
 import { useSelector } from "react-redux";
 import { companySelectors } from "../../../state/ducks/company";
@@ -27,12 +27,13 @@ export const useFormContext = () => {
 
   function setFBValue() {
     const values = formik.values as any;
+    const schema = workspaceState?.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     switch (workspaceState?.getMode()) {
       case "design":
         formik.setFieldValue("formTemplate", {
           outputDocumentTypes: (values.outputDocumentTypes || [])
             .map((outputDoc) => ({ id: outputDoc.value }) ),
-          schema: workspaceState?.getSchema(),
+          schema,
         });
         break;
       case "form":
@@ -42,7 +43,7 @@ export const useFormContext = () => {
         });
         formik.setFieldValue("formInput", formState?.getValues());
         if (workspaceState.mode === "formDesign" && isOutputSchema()) {
-          formik.setFieldValue("schema", workspaceState.schema);
+          formik.setFieldValue("schema", schema);
         }
         break;
       default:
