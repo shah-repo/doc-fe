@@ -16,6 +16,7 @@ import styles from "./styles";
 interface Props extends FormikProps<DocumentType> {
   handleTransition: () => void;
   transitionLabel: Translation;
+  disabled: boolean;
 }
 
 const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
@@ -24,6 +25,7 @@ const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
   initialValues,
   handleTransition,
   transitionLabel,
+  disabled,
   ...props
 }) => {
   const classes = styles();
@@ -35,10 +37,11 @@ const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
         field,
       }) => (
         <>
-          <InputLabel className={classes.label}>
+          <InputLabel className={classes.label} disabled={props.disabled}>
             {intl.formatMessage({ id: props.label })}</InputLabel>
           <TextareaAutosize
             rows={5}
+            disabled={props.disabled}
             className={classes.textautosizer}
             {...field}
           />
@@ -56,70 +59,78 @@ const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
         <InputField
           name="documentTypeName"
           label="common.document.type.name"
-          inputProps={{ id: "documentTypeName" }}
+          inputProps={{ id: "documentTypeName", disabled }}
         />
         <InputField
           name="documentTypeAcronym"
           label="common.document.type.acronym"
-          inputProps={{ id: "documentTypeAcronym" }}
+          inputProps={{ id: "documentTypeAcronym", disabled }}
         />
         <Grid item xs={12} className={classes.gridWrapper}>
           <CheckboxField
             name="privateNumberPool"
             label="common.private.number.pool"
+            checkboxProps={{ disabled }}
           />
           <CheckboxField
             name="canRedLine"
             label="common.redline"
+            checkboxProps={{ disabled }}
           />
           <CheckboxField
             name="isQms"
             label="common.qms"
+            checkboxProps={{ disabled }}
           />
           <CheckboxField
             name="needsSignature"
             label="form.builder.needsSignature"
+            checkboxProps={{ disabled }}
           />
           <CheckboxField
             name="defaultTraining"
             label="common.default.training"
+            checkboxProps={{ disabled }}
           />
         </Grid>
         <InputField
           name="startingNumber"
           label="common.starting.number"
-          inputProps={{ id: "startingNumber", type: "number" }}
+          inputProps={{ id: "startingNumber", type: "number", disabled }}
         />
         <AutocompleteField
           name="defaultRevStage"
           label="common.default.rev.stage"
           autocompleteProps={{ id: "defaultRevStage" }}
           options={translatedOptions(intl, REVISION_STAGE_OPTIONS)}
+          isDisabled={disabled}
         />
         <AutocompleteField
           name="hiddenForCreationForUsersWithoutTags"
           label= "common.hidden.message"
           autocompleteProps={{ id: "hiddenForCreationForUsersWithoutTags", isMulti: true }}
           options={enumToOptions(GroupTag)}
+          isDisabled={disabled}
         />
         <AutocompleteField
           name="group"
           label="common.group"
           autocompleteProps={{ id: "group" }}
           options={enumToOptions(DOC_TYPE_GROUP)}
+          isDisabled={disabled}
         />
         <InputField
           name="category"
           label="form.builder.category"
-          inputProps={{ id: "category" }}
+          inputProps={{ id: "category", disabled }}
         />
-        {autoSizerRenderer({ label: "common.schema", name: "schema" })}
-        {autoSizerRenderer({ label: "common.fields.config", name: "fieldsConfig" })}
+        {autoSizerRenderer({ label: "common.schema", name: "schema", disabled })}
+        {autoSizerRenderer({ label: "common.fields.config", name: "fieldsConfig", disabled })}
         <Box display="flex" justifyContent="flex-end" mt={6}>
-          <Button type="submit" variant="outlined">
-            <Text translation={"common.save"} />
+          <Button type="submit" variant="outlined" {...{ disabled }} >
+            <Text translation="common.save" />
           </Button>
-          <Button onClick={handleTransition} variant="outlined">
+          <Button onClick={handleTransition} variant="outlined" {...{ disabled }}>
             <Text translation={transitionLabel} />
           </Button>
         </Box>
