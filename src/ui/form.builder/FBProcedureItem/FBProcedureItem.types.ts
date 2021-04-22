@@ -37,4 +37,7 @@ export interface FBProcedureItemConfig {
   unit?: string;
   status?: FBPartItemStatus;
   attachments?: Id[];
+  LHRTparameter?: boolean;
+  type?: string;
+  paramsId?: string;
 }

@@ -8,4 +8,5 @@ export enum FBFieldName {
   MaterialSection = "fb-material-section-",
   EquipmentSection = "fb-equipment-section-",
   ProcedureDiff = "fb-procedure-diff",
+  MPIProcedureId = "fb-mpiprocedure-ref",
 }

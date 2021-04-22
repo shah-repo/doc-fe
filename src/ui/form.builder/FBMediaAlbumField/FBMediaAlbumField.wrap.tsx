@@ -41,11 +41,12 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       company: { companyMine: { id: companyId = undefined } = {} } = {},
     } = workspaceState || {};
     if (documentRevisionId && companyId) {
-      qrValue = {
+      qrValue = JSON.stringify({
         companyId,
         documentRevisionId,
         fieldName: name,
-      };
+        isTemplate,
+      });
     }
 
     // Handle mode
