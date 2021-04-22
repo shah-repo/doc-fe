@@ -163,7 +163,7 @@ RUN chmod 755 /root
 WORKDIR /opt/app
 
 ENV CYPRESS_CACHE_FOLDER=/opt/app/cypress/cache/cypressLib
-RUN npm install -g "cypress@6.2.0"
+RUN npm install -g "cypress@6.4.0"
 RUN cypress verify
 RUN sed -i -e "s|api_url:.*$|api_url: \"http://localhost:1234\"|g" /opt/app/cypress/cache/cypressLib/*/Cypress/resources/app/packages/server/config/app.yml
 

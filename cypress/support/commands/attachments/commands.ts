@@ -31,6 +31,8 @@ declare global {
       atchUploadUserListJSONForNCO(params: {fileName: string; queue: number }): Chainable<Subject>;
       elUploadAttachment(params: {fileName: string; el: string }): Chainable<Subject>;
       elDownloadFile(params: {fileName: string; saveFileName: string }): Chainable<Subject>;
+      atchUploadRedlineVerifyCleanCopyStatus(params: {fileName: string}): Chainable<Subject>;
+      atchDownloadCleanCopyFile(params: {fileName: string; saveFileName: string}): Chainable<Subject>;
     }
   }
 }
@@ -172,6 +174,28 @@ Cypress.Commands.add("atchUploadRedlineAttachment", (params: {fileName: string }
   });
 });
 
+Cypress.Commands.add("atchUploadRedlineVerifyCleanCopyStatus", (params: {fileName: string }) => {
+  cy.intercept({ method: "POST", pathname: "/api/v1/attachments/upload" }).as("response");
+  cy.fixture(params.fileName, "binary")
+    .then(Cypress.Blob.binaryStringToBlob)
+    .then((fileContent) => {
+      cy.get("body").then(($body) => {
+        const inputField = $body.find("#UploadFile-content");
+        if (inputField.length === 0) {
+          cy.get("#AttachmentFieldPresenter-linkButton").click();
+        }
+      });
+      cy.get("#attachments-button-file-red-line").attachFile({
+        fileContent,
+        filePath: params.fileName,
+        encoding: "utf-8",
+        lastModified: new Date().getTime(),
+      });
+    });
+  cy.wait("@response")
+    .its("response.body.cleanCopyStatus").should("eq", "CREATED");
+});
+
 Cypress.Commands.add("atchSetPrimaryAttachment", (params: {fileName: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.SetPrimaryAttachment, () => {
     cy.get(`button[title="${params.fileName}"]`).rightclick();
@@ -235,6 +259,34 @@ Cypress.Commands.add("atchDownloadFile", (params: {fileName: string; saveFileNam
   }).as("attach");
   cy.get("div[data-cy=\"attachment\"]").contains(params.fileName).rightclick();
   cy.get("div[id=\"simple-menu\"]>div>ul[role=\"menu\"]>li:nth-child(1)").click();
+  cy.get("body").then(($body) => {
+    if ($body.find("[data-cy=\"download.warning\"]").length > 0) {
+      cy.get("[id=\"passwordConfirm\"]").click();
+      cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
+      cy.get("[data-cy=\"passwordConfirm\"]").click();
+    }
+  });
+  cy.wait("@attach").then((res) => {
+    const fileUrl = res.response?.body.toString();
+    cy.downloadFile({
+      url: fileUrl,
+      directory: "cypress/downloads",
+      fileName: params.saveFileName,
+    });
+  });
+});
+
+Cypress.Commands.add("atchDownloadCleanCopyFile", (params: {fileName: string; saveFileName: string }) => {
+  cy.intercept({ pathname: "/api/v1/attachments/*/download*" }, (req) => {
+    req.reply((res) => {
+      if (res.body !== "") {
+        const response = res.body;
+        res.send(response.url);
+      }
+    });
+  }).as("attach");
+  cy.get("div[data-cy=\"attachment\"]").contains(params.fileName).rightclick();
+  cy.get("div[id=\"simple-menu\"]>div>ul[role=\"menu\"]>li:nth-child(2)").click();
   cy.get("body").then(($body) => {
     if ($body.find("[data-cy=\"download.warning\"]").length > 0) {
       cy.get("[id=\"passwordConfirm\"]").click();
