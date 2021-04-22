@@ -10,7 +10,7 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
   mediaAlbumFieldState,
   actionsDisabled,
   isTemplate,
-  qrValue = "",
+  qrValue,
   collection,
   name = "",
   loading,
