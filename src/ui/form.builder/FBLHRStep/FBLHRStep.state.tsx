@@ -35,7 +35,6 @@ class FBLHRStepState {
     });
     // need this if material/eq is edited more than once
     if (findItem) {
-      // const params = remove(this.editedParameters, (param: any) => param.paramsId === item.paramsId);
       const params = map(this.editedParameters, (param) => {
         if (param.paramsId === item.paramsId) {
           return item;
