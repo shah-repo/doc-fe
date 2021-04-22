@@ -109,12 +109,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
 
   function setFBValue() {
+    const schema = workspaceState?.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     switch (workspaceState?.getMode()) {
       case "design":
         formik.setFieldValue("formTemplate", {
           outputDocumentTypes: (values.outputDocumentTypes || [])
             .map((outputDoc) => ({ id: outputDoc.value })),
-          schema: workspaceState?.getSchema(),
+          schema,
         });
         break;
       case "form":
@@ -137,7 +138,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           formik.setFieldValue("formInput", omit(formState?.getValues(), ["partType", "childForRevise"]));
         }
         if (isOutputSchema()) {
-          formik.setFieldValue("schema", workspaceState.schema);
+          formik.setFieldValue("schema", schema);
         }
         break;
       default:

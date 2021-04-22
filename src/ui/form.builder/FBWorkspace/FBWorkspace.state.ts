@@ -18,6 +18,7 @@ class FBWorkspaceState extends FBSchemaState {
   // and we need to know the values from both FB and AvailableReferences to create
   // new merged value
   public referenceValue: Id[] = [];
+  public omitAutosave = false;
 
   public constructor({ schema, mode, autosave }: FBWorkspaceConstructor) {
     super(schema);
