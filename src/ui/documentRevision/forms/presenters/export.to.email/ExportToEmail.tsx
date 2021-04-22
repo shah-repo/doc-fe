@@ -1,5 +1,6 @@
 import { Button } from "@material-ui/core";
 import * as React from "react";
+import { useIntl } from "react-intl";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
 import { toastError, toastSuccess } from "../../../../components/notifications";
 import Text from "../../../../components/Text";
@@ -12,12 +13,13 @@ interface Props {
 }
 
 const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId }) => {
+  const intl = useIntl();
   const async = useAsync({
     onSuccess: () => {
-      toastSuccess("File will be sent to your email shortly.");
+      toastSuccess(intl.formatMessage({ id: "common.send.to.email.success" }));
     },
     onError: () => {
-      toastError("Action is not available at the moment, please try again later.");
+      toastError(intl.formatMessage({ id: "common.send.to.email.error" }));
     },
   });
 
