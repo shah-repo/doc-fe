@@ -25,7 +25,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     editorConfig,
     index,
     name = "",
-    qrValue,
+    qrValue = "",
     mode,
     type,
     fieldType,
