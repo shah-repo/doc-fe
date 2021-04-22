@@ -1,4 +1,4 @@
-import { find, get, keyBy, remove } from "lodash";
+import { find, get, keyBy, map } from "lodash";
 import { action, observable, set } from "mobx";
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, StartMpiBody } from "..";
 import { Document, DocumentRevision } from "../../../state/ducks/documentRevisions/types";
@@ -25,7 +25,7 @@ class FBLHRStepState {
 
   @action public editItem = (item: FBProcedureItemConfig, type: FBProcedureItemType) => {
     const findItem = find(this.editedParameters, (parameter) => parameter.paramsId === item.paramsId);
-    let parameters;
+
     const items = get(this, `${type}`).map((value) => {
       // need this condition if material/eq is edited more than once
       if (value.id === item.paramsId || value.paramsId === item.paramsId) {
@@ -35,11 +35,18 @@ class FBLHRStepState {
     });
     // need this if material/eq is edited more than once
     if (findItem) {
-      parameters = remove(this.editedParameters, (param: any) => param.paramsId === item.paramsId);
-      set(this, "editedParameters", keyBy( parameters, "paramsId") );
+      // const params = remove(this.editedParameters, (param: any) => param.paramsId === item.paramsId);
+      const params = map(this.editedParameters, (param) => {
+        if (param.paramsId === item.paramsId) {
+          return item;
+        }
+        return param;
+      });
+      set(this, "editedParameters", keyBy( params, "paramsId"));
+      set(this, type, items);
+      return;
     }
-    parameters = keyBy({ ...this.editedParameters, item }, "paramsId");
-    set(this, "editedParameters", parameters );
+    set(this, "editedParameters", keyBy({ ...this.editedParameters, item }, "paramsId") );
     set(this, type, items);
   };
 
