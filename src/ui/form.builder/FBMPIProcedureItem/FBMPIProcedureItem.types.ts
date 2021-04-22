@@ -1,4 +1,4 @@
-import { FBInputProps, FBProcedureItemConfig, FBProcedureItemProps, FBProviderProps } from "..";
+import { FBInputProps, FBInputType, FBProcedureItemConfig, FBProcedureItemProps, FBProviderProps } from "..";
 import { UsedDocumentsInLHRS } from "../../../state/ducks/documentRevisions/types";
 
 export type FBMPIProcedureItemProps =
@@ -14,4 +14,5 @@ export type FBMPIProcedureItemProps =
   redlineActive?: boolean;
   usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
   isDocumentMPI?: boolean;
+  fieldType?: FBInputType;
 };
