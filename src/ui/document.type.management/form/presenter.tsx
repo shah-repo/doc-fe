@@ -116,8 +116,9 @@ const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
         {autoSizerRenderer({ label: "common.schema", name: "schema" })}
         {autoSizerRenderer({ label: "common.fields.config", name: "fieldsConfig" })}
         <Box display="flex" justifyContent="flex-end" mt={6}>
-          <Button type="submit" variant="outlined">
-            <Text translation={"common.save"} />
+          {/* Temporarily disabled as per the comment on https://shifamed.atlassian.net/browse/ENC-7606 */}
+          <Button type="submit" variant="outlined" disabled>
+            <Text translation="common.save" />
           </Button>
           <Button onClick={handleTransition} variant="outlined">
             <Text translation={transitionLabel} />
