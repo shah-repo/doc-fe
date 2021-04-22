@@ -1,10 +1,13 @@
 import { Box } from "@material-ui/core";
 import { CheckCircle, PlayCircleFilled } from "@material-ui/icons";
+import { isEmpty } from "lodash";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText, FBTextField } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
+import FBLHRStepProcedureItem from "../FBLHRStepProcedureItem/FBLHRStepProcedureItem";
+import { FBProcedureItemType } from "../FBProcedureItem/FBProcedureItem.types";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
@@ -21,6 +24,10 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   isDraft,
   disabled,
   ownerOfStartMPIAction,
+  materials,
+  equipment,
+  index,
+  isDocumentLHRT,
   ...props
 }) => (
   <FBProvider {...{ lhrStepState }}>
@@ -65,6 +72,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           optionId={FBAutocompleteAsyncOption.mpiDocuments}
           autosave
           withState
+          shouldReloadOnInit
           withoutPrefixRoot={(stepLHRs && !isHovering) as boolean}
           disabled={isOutput || !isDraft}
           {...{ name, loading }}
@@ -82,6 +90,16 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         {...{ loading }}
       />
     </Box>
+    {isDocumentLHRT && !isEmpty(materials) && <FBLHRStepProcedureItem
+      value={materials}
+      type={FBProcedureItemType.materials}
+      lhrStepIndex={index}
+    />}
+    {isDocumentLHRT && !isEmpty(equipment) && <FBLHRStepProcedureItem
+      value={equipment}
+      type={FBProcedureItemType.equipment}
+      lhrStepIndex={index}
+    />}
     <Box
       display="flex"
       mb={4}

@@ -4,7 +4,7 @@ import htmlToDraft from "html-to-draftjs";
 import { isEmpty } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { FB, FBTextEditorProps, FBTextEditorState } from "..";
 
@@ -29,6 +29,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     isInputOwner,
     withState,
     omitFormValue,
+    autoFocus,
     ...props
   }: T) => {
 
@@ -68,6 +69,12 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       ],
       inline: { options: ["bold", "italic", "underline", "monospace"] },
     });
+
+    useEffect(() => {
+      if (!autoFocus) { return; }
+      handleMask?.(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // MARK: Reactions
     // On editor value change. This will sync changed value and form value.

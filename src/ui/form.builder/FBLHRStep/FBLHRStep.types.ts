@@ -1,9 +1,10 @@
-import { FBInputProps, FBProviderProps } from "..";
+import { FBInputProps, FBProcedureItemProps, FBProviderProps } from "..";
 import { Nullable } from "../../../state/ducks/common/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 
 export type FBLHRStepProps =
 & Pick<FBProviderProps, "lhrStepState">
+& Pick<FBProcedureItemProps, "onClick" | "dialogState">
 & Pick<FBInputProps, "name" | "label" | "disabled" | "index" | "loading">
 & {
   startMpi(): void;
@@ -18,6 +19,9 @@ export type FBLHRStepProps =
   isHovering: boolean;
   isDraft: boolean;
   ownerOfStartMPIAction?: string;
+  materials: any;
+  equipment: any;
+  isDocumentLHRT: boolean;
 };
 
 export interface StartMpiBody {
