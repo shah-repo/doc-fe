@@ -6,7 +6,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
-import { FB, FBTextEditorProps, FBTextEditorState } from "..";
+import { FB, FBFieldName, FBTextEditorProps, FBTextEditorState } from "..";
 
 export const withFBTextEditor = <T extends FBTextEditorProps>(
   Component: React.FunctionComponent<T>,
@@ -30,6 +30,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     withState,
     omitFormValue,
     autoFocus,
+    autoScrollTo,
     ...props
   }: T) => {
 
@@ -73,6 +74,14 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     useEffect(() => {
       if (!autoFocus) { return; }
       handleMask?.(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+      if (!autoScrollTo) { return; }
+      const selector = `[id="${FBFieldName.MPIProcedureId}-${name}"]`;
+      const el = document.querySelector(selector) as HTMLElement;
+      el?.scrollIntoView({ behavior: "smooth", block: "center" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -138,6 +147,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       if (withState) {
         formState?.setFieldValue(name, formState.getFieldValue(name), true, omitFormValue);
       }
+      if (autoFocus || autoScrollTo) { return; }
       formState?.setFieldAutosave(name);
     };
 
