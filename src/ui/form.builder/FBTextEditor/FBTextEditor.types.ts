@@ -15,8 +15,4 @@ export type FBTextEditorProps =
   formValue?: string;
   masked?: boolean;
   isPreview?: boolean;
-  /**
-   * @cfg {Bool} If true focus the texteditor on render.
-   */
-  autoFocus?: boolean;
 };

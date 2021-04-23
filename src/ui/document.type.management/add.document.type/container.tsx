@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogTitle } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import React from "react";
+import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { toastError } from "../../components/notifications";
 import Text from "../../components/Text";
@@ -34,6 +35,7 @@ const AddDocumentTypeFormContainer: React.FunctionComponent<Props> = ({
   };
 
   const addDocumentTypeAction = useActionCreator(documentTypeActions.addDocumentType);
+  const disabled = Config.isProduction || Config.isDemo;
   const async = useAsync({
     onSuccess: () => {
       dialog.close();
@@ -54,6 +56,7 @@ const AddDocumentTypeFormContainer: React.FunctionComponent<Props> = ({
     <DocumentTypeFormPresenter
       handleTransition={dialog.close}
       transitionLabel={"common.close"}
+      disabled={disabled}
       {...props}
     />
   );

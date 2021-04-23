@@ -13,6 +13,7 @@ import { sortBy } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
+import Config from "../../../config";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
@@ -84,6 +85,8 @@ export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeList);
   const canManageDocumentType = useGetHasTag(GroupTag.DOCUMENT_TYPE_MANAGEMENT);
 
+  const disabled = Config.isDemo || Config.isProduction;
+
   if (!canManageDocumentType) {
     return <Redirect to={HOME_URL} />;
   }
@@ -91,7 +94,7 @@ export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
   return (
     <Box className={classes.root}>
       <Box display="flex" justifyContent="flex-end">
-        <Button onClick={dialog.open} variant="outlined">
+        <Button onClick={dialog.open} variant="outlined" {...{ disabled }}>
           <Text translation={"common.add.document.type"} />
         </Button>
         <Button onClick={exportDAMDialog.open} variant="outlined">

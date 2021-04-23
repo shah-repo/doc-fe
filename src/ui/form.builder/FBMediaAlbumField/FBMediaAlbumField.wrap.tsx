@@ -25,8 +25,10 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     editorConfig,
     index,
     name = "",
-    qrValue,
+    qrValue = "",
     mode,
+    type,
+    fieldType,
     ...props
   }: T) => {
 
@@ -45,7 +47,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
         companyId,
         documentRevisionId,
         fieldName: name,
-        isTemplate,
+        fieldType: fieldType || type,
       });
     }
 

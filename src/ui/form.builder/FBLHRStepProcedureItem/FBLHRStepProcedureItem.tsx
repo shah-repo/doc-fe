@@ -5,11 +5,8 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {
   FBDialog,
   FBMapWrapper,
-
   FBProcedureItemConfig,
-
   FBProcedureItemLocale,
-
   FBText,
 } from "..";
 import Colors from "../../layout/theme/utils/colors";
@@ -93,7 +90,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
                     }}
                   />
                 </Box>
-                {!isPreview && item.type && (
+                {!isPreview && (item.type || item.paramsId) && (
                   <>
                     <Box>
                       <IconButton

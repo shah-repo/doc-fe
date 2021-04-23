@@ -31,7 +31,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
 
     React.useEffect(() => {
       reaction(
-        () => formState?.inputState.get(name)?.value.length,
+        () => formState?.inputState.get(name)?.value?.length,
         (files) => {
           if (!fileUploadState) { return; }
           fileUploadState.files = formState?.inputState.get(name)?.value;

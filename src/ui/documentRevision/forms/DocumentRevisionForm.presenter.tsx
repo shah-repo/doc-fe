@@ -194,6 +194,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   // Autosave for adding FB fields
   useEffect(() => {
+    if (workspaceState?.omitAutosave) { return; }
     if (!schema || isEqual(initialValues.schema, schema) || !canAddFBFields) {
       return;
     }

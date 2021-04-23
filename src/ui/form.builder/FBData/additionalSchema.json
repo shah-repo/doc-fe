@@ -25,13 +25,6 @@
       "label": "form.builder.procedure"
     }
   ],
-  "lhrstep": [
-    {
-      "type": "stepsection",
-      "name": "fb-lhrstep-section-${id}",
-      "label": "form.builder.step"
-    }
-  ],
   "mpiprocedure": [
     {
       "type": "section",
