@@ -156,6 +156,7 @@ interface SmartReference {
   id: string;
   metadata: {
     fieldId: string;
+    startedBy: string;
   };
   toDocRevId?: Nullable<string>;
   toDocRev?: Nullable<DocumentRevision>;
