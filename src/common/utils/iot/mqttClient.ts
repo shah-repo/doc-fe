@@ -76,6 +76,7 @@ export class IotService {
       (id) => id === fullTopic,
     );
     if (topicSubscribed) {
+      console.log({ actin: "unsubscribe", topic: fullTopic });
       await this.mqttClientInstance.unsubscribe(fullTopic);
       delete this.emitter[fullTopic];
     }
@@ -91,6 +92,8 @@ export class IotService {
     const hasSubscriptions = !isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
     if (hasSubscriptions) {
       const topics = Object.keys(this.mqttClientInstance._resubscribeTopics);
+      console.log({ actin: "unsubscribeAll", topics });
+
       await this.mqttClientInstance.unsubscribe(topics);
       this.emitter = {};
     }
@@ -117,6 +120,7 @@ export class IotService {
     );
 
     if (noSubscriptions || !alreadySubscribed) {
+      console.log({ action: "subscribe", topic: fullTopic });
       await this.mqttClientInstance.subscribe(
         MQTTPattern.clean(fullTopic),
       );
@@ -166,7 +170,7 @@ export class IotService {
       }
 
       const params = MQTTPattern.extract(emitterKey, topic);
-
+      console.log({ action: "messageReceived", params, topic, decodedMessage: new TextDecoder("utf-8").decode(message) });
       this.emitter[emitterKey] && this.emitter[emitterKey](new TextDecoder("utf-8").decode(message), params);
     });
   }
