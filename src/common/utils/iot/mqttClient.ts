@@ -170,7 +170,12 @@ export class IotService {
       }
 
       const params = MQTTPattern.extract(emitterKey, topic);
-      console.log({ action: "messageReceived", params, topic, decodedMessage: new TextDecoder("utf-8").decode(message) });
+      console.log({
+        action: "messageReceived",
+        params,
+        topic,
+        decodedMessage: new TextDecoder("utf-8").decode(message),
+      });
       this.emitter[emitterKey] && this.emitter[emitterKey](new TextDecoder("utf-8").decode(message), params);
     });
   }
