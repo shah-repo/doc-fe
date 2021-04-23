@@ -1015,5 +1015,6 @@
   "tooltip.overridden.label": "Overridden Label: {overriddenLabel}",
   "tooltip.default.label": "Default Label: {defaultLabel}",
   "tooltip.required.flag": "Required Flag Status: {requiredFlag}",
-  "tooltip.visibility.flag": "Visibility Flag Status: {visibilityFlag}"
+  "tooltip.visibility.flag": "Visibility Flag Status: {visibilityFlag}",
+  "dropbox.enable": "Enable Dropbox"
 }
