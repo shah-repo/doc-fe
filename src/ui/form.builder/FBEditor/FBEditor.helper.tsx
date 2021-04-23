@@ -16,7 +16,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       const { type, stepIndex } = props;
       if (includes(FBEditorState.pickStepIndex, type)) {
         const stepSections = filter(workspaceState?.getSchema(), (schemaItem) =>
-          includes(FBEditorState.pickStepIndex, schemaItem.type));
+          !schemaItem.deleted && includes(FBEditorState.pickStepIndex, schemaItem.type));
         props = {
           ...props,
           stepIndex: stepIndex || (size(stepSections) + 1),
