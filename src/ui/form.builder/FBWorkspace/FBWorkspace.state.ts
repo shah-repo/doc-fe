@@ -1,10 +1,14 @@
-import { includes, isArray, isEmpty, size } from "lodash";
+import { includes, isArray, isEmpty, omit, size } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBInlineApprovalBody, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
+import { appGlobals } from "../../../appGlobals";
 import { GroupTag, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { Id } from "../../../state/ducks/common/types";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { FBEndpoint } from "../defaults/FBEndpoint";
+import FBRequest from "../FBApi/FBApi.request";
 
 class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
@@ -13,6 +17,7 @@ class FBWorkspaceState extends FBSchemaState {
   public document?: DocumentRevision;
   public changeRequest?: ChangeRequest;
   @observable public autosave?: boolean;
+  public documentRevApi = new FBRequest<null, Partial<DocumentRevisionEditRequestBody>>();
 
   // Hack because formik context from autosave & reference comp are not the same ref
   // and we need to know the values from both FB and AvailableReferences to create
@@ -68,6 +73,16 @@ class FBWorkspaceState extends FBSchemaState {
     return Boolean(docId && !isEmpty(docId));
   }
 
+  public get isOutputSchema(): boolean {
+    const { documentType: { groupOptions = [] } = {} } = this.document?.document ?? {};
+    // const { formDocument: { formTemplate: { schema: documentSchema = [] } = {} } = {} } = this.document ?? {};
+
+    return (
+      (groupOptions.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA))
+      // !isEqual(JSON.stringify(this.schema), JSON.stringify(documentSchema))
+    );
+  }
+
   public get isRevised(): boolean | undefined {
     const { version = 0, revision = 0, outputRevision = false } = this.document || {};
     return ((version > 1) && (revision > 1)) || outputRevision;
@@ -116,6 +131,44 @@ class FBWorkspaceState extends FBSchemaState {
     const inputOwner = document?.inputOwners?.[name];
 
     return inputOwner === undefined || inputOwner === employeeId;
+  };
+
+  public saveDocRev = (values?: Record<string, any>) => {
+    const { id, mode } = this;
+    const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
+    if (!id) { return; }
+    let body = {};
+    switch (mode) {
+      case "design":
+        body = {
+          formTemplate: { schema },
+        };
+        break;
+      case "form":
+      case "formDesign":
+        body = {
+          formInput: values,
+          ...mode === "formDesign" && this.isOutputSchema && { schema },
+        };
+        break;
+      default:
+        break;
+    }
+    this.omitAutosave = true;
+    appGlobals.omitReloadNotification = true;
+    this.documentRevApi.set({
+      url: FBEndpoint.DocumentRevisionPatch,
+      urlValues: { id },
+      body,
+      method: "patch",
+    }, (data, error) => {
+      this.omitAutosave = false;
+      if (error) {
+        this.documentRevApi.onError(error);
+      } else {
+        this.documentRevApi.onSuccess();
+      }
+    });
   };
 }
 

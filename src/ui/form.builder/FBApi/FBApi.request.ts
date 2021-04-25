@@ -79,6 +79,7 @@ export default class FBRequest<Data, Body> {
   }
 
   public onError(error) {
+    this.setLoading(false);
     let { message } = error;
     if (isArray(message) && has(first(message), "message")) {
       message = join(get(first(message), "message"), "\n");
@@ -142,7 +143,6 @@ export default class FBRequest<Data, Body> {
           return callback?.(undefined, _error);
         }
         this.onError(_error);
-        this.setLoading(false);
       });
 
     return promise;
