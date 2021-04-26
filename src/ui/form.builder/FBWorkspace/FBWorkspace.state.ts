@@ -1,4 +1,4 @@
-import { includes, isArray, isEmpty, omit, size } from "lodash";
+import { filter, includes, isArray, isEmpty, omit, size } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import odiff from "odiff";
 import { FBDifference, FBInlineApprovalBody, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
@@ -190,13 +190,18 @@ class FBWorkspaceState extends FBSchemaState {
       } else {
         this.documentRevApi.onSuccess();
         if (!callback) { return; }
-        let { schema } = data ?? {};
-        if (!schema) {
-          schema = data?.formTemplate?.schema ?? data?.formDocument?.formTemplate?.schema;
-        }
+        // const currSchema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
+        // let { schema } = data ?? {};
+        // if (!schema) {
+        //   schema = data?.formTemplate?.schema ?? data?.formDocument?.formTemplate?.schema;
+        // }
+        // const schemaDifff = odiff(currSchema, schema);
+        // const finSchemaDiff = filter(schemaDifff, (sdiff) => !isEmpty(sdiff.path));
         const { formInput = {} } = data ?? {};
-        const detailedDifff = odiff(values ?? {}, formInput);
-        callback(undefined, detailedDifff as FBDifference[]);
+        const formInputDifff = odiff(values ?? {}, formInput);
+        const finFormInputDiff = filter(formInputDifff, (fdiff) => !isEmpty(fdiff.path));
+        if (isEmpty(finFormInputDiff)) { return; }
+        callback(undefined, finFormInputDiff as FBDifference[]);
       }
     });
   };

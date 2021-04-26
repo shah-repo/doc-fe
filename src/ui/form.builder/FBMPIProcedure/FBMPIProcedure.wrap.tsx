@@ -1,4 +1,4 @@
-import { keys } from "lodash";
+import { keys, omit } from "lodash";
 import { reaction } from "mobx";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -112,9 +112,12 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     handleAdd = (isClone?: boolean, isFromKeys?: boolean) => {
       if (!workspaceState) { return; }
       const newName = FB.uniqid;
+      let schemaItem = workspaceState.getSchemaItemAt(index);
+      if (!isClone) {
+        schemaItem = omit(schemaItem, "editorConfig");
+      }
       const newItem = {
-        ...workspaceState.getSchemaItemAt(index),
-        ...!isClone && { editorConfig: undefined },
+        ...schemaItem,
         autoScrollTo: isFromKeys,
         autoFocus: isFromKeys,
         name: newName,
