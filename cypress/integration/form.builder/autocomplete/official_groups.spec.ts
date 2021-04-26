@@ -171,10 +171,11 @@ context("Autocomplete 'Official Groups' test", () => {
               .find("[data-cy^=\"test-label-\"]").click();
 
             if (response.body.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  expect($li).to.have.text(response.body[index].name);
-                })
+              const groups = response.body;
+              groups.forEach((group) => {
+                cy.get("ul[role=listbox]>li").should("contain.text", group.name);
+              });
+              cy.get("ul[role=listbox]>li")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });
