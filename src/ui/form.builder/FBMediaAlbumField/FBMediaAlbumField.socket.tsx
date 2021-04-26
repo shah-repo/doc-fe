@@ -36,11 +36,12 @@ const FBMediaAlbumFieldSocket: React.FunctionComponent<FBMediaAlbumFieldSocketPr
           }
           return result;
         }, [] as string[]);
+        if (attachDiff.length === 0) { return; }
         const currentValue = formState.getFieldValue(fieldName) as string[];
         if (type === "add") {
           mediaAlbumFieldState.getFiles(attachDiff);
           formState.setFieldValue(fieldName, union(currentValue, attachDiff));
-        } else {
+        } else if (type === "rm") {
           map(attachDiff, (id) => mediaAlbumFieldState.removeFile(id));
         }
       }

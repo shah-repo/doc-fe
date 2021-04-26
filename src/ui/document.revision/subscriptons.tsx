@@ -19,7 +19,7 @@ const DocumentRevisionUpdatedSubscriptions: React.FunctionComponent<Props> = ({
   const iotService = IotService.getInstance();
   const subscribe = () => {
     iotService.subscribeToTopic(`+/hellosign_all_signed/${id}`, loadData);
-    iotService.subscribeToTopic(`+/document_revisions/${id}/updated`, loadData);
+    // iotService.subscribeToTopic(`+/document_revisions/${id}/updated`, loadData);
     iotService.subscribeToTopic(`+/hellosign_template_created/${id}`, loadData);
     iotService.subscribeToTopic(`+/hellosign_signature_canceled/${id}`, loadData);
   };

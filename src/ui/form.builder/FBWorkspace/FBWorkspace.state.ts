@@ -19,6 +19,7 @@ class FBWorkspaceState extends FBSchemaState {
   public changeRequest?: ChangeRequest;
   @observable public autosave?: boolean;
   public documentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
+  public loadDocumentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
 
   // Hack because formik context from autosave & reference comp are not the same ref
   // and we need to know the values from both FB and AvailableReferences to create
@@ -179,7 +180,7 @@ class FBWorkspaceState extends FBSchemaState {
     const { id } = this;
     if (!id) { return; }
 
-    this.documentRevApi.set({
+    this.loadDocumentRevApi.set({
       url: FBEndpoint.DocumentRevisionPatch,
       urlValues: { id },
       method: "get",
