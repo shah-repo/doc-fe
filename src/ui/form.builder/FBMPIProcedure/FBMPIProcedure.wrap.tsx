@@ -39,12 +39,6 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
       formState?.setFieldValue(`${name}.description`, props.editorConfig?.description);
     }
 
-    useEffect(() => {
-      if (!workspaceState) { return; }
-      // workspaceState.omitAutosave = false;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     // MARK: @reactions
     React.useEffect(() => reaction(
       () => mpiProcedureState?.value,
@@ -119,7 +113,6 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
         autoFocus: isFromKeys,
         name: newName,
       };
-      // workspaceState.omitAutosave = true;
       workspaceState?.setSchemaItemAt(newItem, index + 1);
       workspaceState.saveDocRev(formState?.getValues());
     };

@@ -36,12 +36,6 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
 
-    useEffect(() => {
-      if (!workspaceState) { return; }
-      // workspaceState.omitAutosave = false;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     // MARK: @reactions
     // Form sync
     useEffect(() => reaction(
@@ -133,7 +127,6 @@ export const withFBProcedure = <T extends FBProcedureProps>(
       if (isClone) {
         formState?.setFieldValue(newName, formState.getFieldValue(name));
       }
-      // workspaceState.omitAutosave = true;
       workspaceState?.setSchemaItemAt(newItem, index + 1);
       workspaceState.saveDocRev(formState?.getValues());
     };

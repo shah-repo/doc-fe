@@ -75,12 +75,7 @@ class FBWorkspaceState extends FBSchemaState {
 
   public get isOutputSchema(): boolean {
     const { documentType: { groupOptions = [] } = {} } = this.document?.document ?? {};
-    // const { formDocument: { formTemplate: { schema: documentSchema = [] } = {} } = {} } = this.document ?? {};
-
-    return (
-      (groupOptions.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA))
-      // !isEqual(JSON.stringify(this.schema), JSON.stringify(documentSchema))
-    );
+    return groupOptions.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
   }
 
   public get isRevised(): boolean | undefined {
