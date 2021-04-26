@@ -338,7 +338,7 @@ export const routes: ICyRoutes =   {
   GetFileUploadCandidates: {
     requestConfig: {
       method: "GET",
-      url: "api/v1/documents/file_upload_candidates*",
+      url: "api/v1/document/file_upload_candidates*",
     },
     callConfig: {
       responseTimeout: 25 * 1000,
@@ -379,7 +379,7 @@ export const routes: ICyRoutes =   {
   UploadAttachmentMediaUpload: {
     requestConfig: {
       method: "POST",
-      url: "/api/v1/documents/file_upload_candidates",
+      url: "/api/v1/document/file_upload_candidates",
     },
     callConfig: {
       responseTimeout: 15 * 1000,

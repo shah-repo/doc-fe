@@ -23,6 +23,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   isHovering,
   isDraft,
   disabled,
+  ownerOfStartMPIAction,
   materials,
   equipment,
   index,
@@ -107,7 +108,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
       />}
       <Box
         display="flex">
-        <b>{stepLHRs?.owner?.user.name}</b>
+        <b>{ownerOfStartMPIAction}</b>
         {stepLHRs?.createdAt && (
           <Box color={Colors.gray}>
               &nbsp;| {getFormattedDateString(stepLHRs?.createdAt, MomentFormats.DateTime)}

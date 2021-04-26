@@ -10,7 +10,7 @@ interface Props {
   documentRevision: DocumentRevision;
 }
 
-const HelloSignAllSignedRefreshSockets: React.FunctionComponent<Props> = ({
+const DocumentRevisionUpdatedSubscriptions: React.FunctionComponent<Props> = ({
   documentRevision: {
     id,
   },
@@ -18,11 +18,13 @@ const HelloSignAllSignedRefreshSockets: React.FunctionComponent<Props> = ({
   const iotService = IotService.getInstance();
   const subscribe = () => {
     iotService.subscribeToTopic(`+/hellosign_all_signed/${id}`, loadData);
+    iotService.subscribeToTopic(`+/document_revisions/${id}/updated`, loadData);
     iotService.subscribeToTopic(`+/hellosign_template_created/${id}`, loadData);
     iotService.subscribeToTopic(`+/hellosign_signature_canceled/${id}`, loadData);
   };
   const unsubscribe = () => {
     iotService.unsubscribeFromTopic(`+/hellosign_all_signed/${id}`);
+    iotService.unsubscribeFromTopic(`+/document_revisions/${id}/updated`);
     iotService.unsubscribeFromTopic(`+/hellosign_template_created/${id}`);
     iotService.unsubscribeFromTopic(`+/hellosign_signature_canceled/${id}`);
   };
@@ -36,4 +38,4 @@ const HelloSignAllSignedRefreshSockets: React.FunctionComponent<Props> = ({
   return null;
 };
 
-export default HelloSignAllSignedRefreshSockets;
+export default DocumentRevisionUpdatedSubscriptions;

@@ -70,7 +70,7 @@
     "label": "Company addresses",
     "valueKey": "id",
     "labelKey": "name",
-    "root": "_addresses",
+    "root": "addresses",
     "hidden": false
   },
   {
@@ -78,7 +78,7 @@
     "label": "GL codes",
     "valueKey": "id",
     "labelKey": "name",
-    "root": "_acctCodes",
+    "root": "acctCodes",
     "hidden": false
   },
   {

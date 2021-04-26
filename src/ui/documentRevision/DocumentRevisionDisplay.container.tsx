@@ -9,7 +9,7 @@ import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
-import HelloSignAllSignedRefreshSockets from "../document.revision/HelloSignAllSignedRefreshSockets";
+import DocumentRevisionUpdatedSubscriptions from "../document.revision/subscriptons";
 import SummaryPresenter from "../document.revision/summary/presenter";
 import CloneContainer from "./Clone.container";
 import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
@@ -114,7 +114,7 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
     documentRevision && !(canEdit || isNewVersion || isNewOutput);
 
   const subscribeToSocket = documentRevision &&
-    <HelloSignAllSignedRefreshSockets documentRevision={documentRevision} />;
+    <DocumentRevisionUpdatedSubscriptions documentRevision={documentRevision} />;
 
   return (
     <AsyncGate
