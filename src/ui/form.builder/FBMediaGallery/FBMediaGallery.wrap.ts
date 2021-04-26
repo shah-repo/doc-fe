@@ -11,11 +11,12 @@ export const withFBMediaGallery = <T extends FBMediaGalleryProps>(
     ...props
   }: T) => {
 
-    const { mediaAlbumState } = FB.useStores();
+    const { mediaAlbumState, workspaceState, formState } = FB.useStores();
 
     handleDelete = (id: string) => {
       removeMedia && removeMedia(id);
       mediaAlbumState?.setActiveMedia(0);
+      workspaceState?.saveDocRev(formState?.getValues());
     };
 
     previewType = (media: FBAttachment): FBFilePreviewType | undefined =>
