@@ -453,6 +453,13 @@ pipelines:
       - step: *DEPLOY_PROD
 
     deploy-to-prod2:
+      - parallel:
+          - step: *RUN_TESTS
+          - step: *RUN_LINTER
+          - step: *BUILD_PROD2
+      - step: *DEPLOY_PROD2
+
+    deploy-to-prod2-without-tests:
       - step: *BUILD_PROD2
       - step: *DEPLOY_PROD2
 
@@ -497,7 +504,3 @@ pipelines:
           - step: *RUN_LINTER
           - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO
-
-    ENC-7647:
-      - step: *BUILD_PROD2
-      - step: *DEPLOY_PROD2
