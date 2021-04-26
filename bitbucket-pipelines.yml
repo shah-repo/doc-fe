@@ -361,6 +361,24 @@ definitions:
         script:
           - ./aws/bash_scripts/publish.sh "sandbox"
         trigger: manual
+    #
+    # PROD 2
+    #
+    - step: &BUILD_PROD2
+        <<: *COMMON_BUILD
+        name: Building for Prod2
+        script:
+          - ./aws/bash_scripts/build.sh "prod2"
+        artifacts:
+          - compiled.tar.gz
+
+    - step: &DEPLOY_PROD2
+        <<: *COMMON_DEPLOY
+        name: Deploy to Prod2
+        deployment: Demo
+        script:
+          - ./aws/bash_scripts/publish.sh "prod2"
+        trigger: manual
 #
 # Pipelines
 #
@@ -433,6 +451,17 @@ pipelines:
           - step: *RUN_LINTER
           - step: *BUILD_PROD
       - step: *DEPLOY_PROD
+
+    deploy-to-prod2:
+      - parallel:
+          - step: *RUN_TESTS
+          - step: *RUN_LINTER
+          - step: *BUILD_PROD2
+      - step: *DEPLOY_PROD2
+
+    deploy-to-prod2-without-tests:
+      - step: *BUILD_PROD2
+      - step: *DEPLOY_PROD2
 
     deploy-to-sandbox:
       - parallel:
