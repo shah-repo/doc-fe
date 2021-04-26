@@ -1,4 +1,4 @@
-import { keys } from "lodash";
+import { keys, omit } from "lodash";
 import { reaction } from "mobx";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -66,7 +66,11 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
         }
         workspaceState?.setSchemaItem({
           ...schemeItem,
-          editorConfig: data,
+          editorConfig: {
+            ...data,
+            materials: data?.materials?.map((material) => omit(material, "LHRTparameter")),
+            equipment: data?.equipment?.map((eq) => omit(eq, "LHRTparameter")),
+          },
         });
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
