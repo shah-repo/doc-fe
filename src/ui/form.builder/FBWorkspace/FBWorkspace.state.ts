@@ -1,6 +1,7 @@
 import { includes, isArray, isEmpty, omit, size } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import { FBInlineApprovalBody, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
+import odiff from "odiff";
+import { FBDifference, FBInlineApprovalBody, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
 import { appGlobals } from "../../../appGlobals";
 import { GroupTag, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
@@ -17,7 +18,7 @@ class FBWorkspaceState extends FBSchemaState {
   public document?: DocumentRevision;
   public changeRequest?: ChangeRequest;
   @observable public autosave?: boolean;
-  public documentRevApi = new FBRequest<null, Partial<DocumentRevisionEditRequestBody>>();
+  public documentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
 
   // Hack because formik context from autosave & reference comp are not the same ref
   // and we need to know the values from both FB and AvailableReferences to create
@@ -162,6 +163,34 @@ class FBWorkspaceState extends FBSchemaState {
         this.documentRevApi.onError(error);
       } else {
         this.documentRevApi.onSuccess();
+      }
+    });
+  };
+
+  public loadDocRev = (
+    values?: Record<string, any>,
+    callback?: (diffSchema?: any, diffInput?: FBDifference[]) => any
+  ) => {
+    const { id } = this;
+    if (!id) { return; }
+
+    this.documentRevApi.set({
+      url: FBEndpoint.DocumentRevisionPatch,
+      urlValues: { id },
+      method: "get",
+    }, (data, error) => {
+      if (error) {
+        this.documentRevApi.onError(error);
+      } else {
+        this.documentRevApi.onSuccess();
+        if (!callback) { return; }
+        let { schema } = data ?? {};
+        if (!schema) {
+          schema = data?.formTemplate?.schema ?? data?.formDocument?.formTemplate?.schema;
+        }
+        const { formInput = {} } = data ?? {};
+        const detailedDifff = odiff(values ?? {}, formInput);
+        callback(undefined, detailedDifff as FBDifference[]);
       }
     });
   };

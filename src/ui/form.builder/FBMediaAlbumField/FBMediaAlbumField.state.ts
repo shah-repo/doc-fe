@@ -57,6 +57,10 @@ class FBMediaAlbumFieldState {
     set(this, "collection", files);
   };
 
+  @action public setFiles = (files: Id[]) => {
+    set(this, "files", files);
+  };
+
   public upload = (files: File[] | undefined) => {
     if (isUndefined(files) || files.length === 0) {
       return;
