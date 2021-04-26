@@ -42,6 +42,7 @@
     "moment-timezone": "0.5.27",
     "mqtt-pattern": "1.2.0",
     "normalizr": "^3.6.1",
+    "odiff": "^1.4.3",
     "patch-package": "^6.2.2",
     "qrcode.react": "1.0.0",
     "query-string": "6.9.0",

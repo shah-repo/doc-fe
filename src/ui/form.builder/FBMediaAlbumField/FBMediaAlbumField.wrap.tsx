@@ -37,6 +37,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     const ids = map(formValue, "id");
     const redlineActive = useSelector(companySelectors.getRedlineActive);
     mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(FBMediaAlbumFieldState);
+    const { id } = workspaceState ?? {};
 
     const {
       id: documentRevisionId,
@@ -148,6 +149,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       loading,
       mode,
       name,
+      id,
     });
   };
 
