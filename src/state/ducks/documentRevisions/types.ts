@@ -149,13 +149,16 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   redline?: boolean;
 }
 
-interface SmartReference {
+export interface SmartReference {
   fromDocRev?: Nullable<DocumentRevision>;
   fromDocRevId?: Nullable<string>;
   fromDocumentId?: Nullable<string>;
   id: string;
   metadata: {
     fieldId: string;
+    startedBy: string;
+    materialId?: string;
+    equipmentId?: string;
   };
   toDocRevId?: Nullable<string>;
   toDocRev?: Nullable<DocumentRevision>;
