@@ -25,4 +25,10 @@ export type FBMediaAlbumFieldProps =
   collection?: FBAttachment[];
   loading?: boolean;
   fieldType?: FBInputType;
+  id?: string;
 };
+
+export interface FBMediaAlbumFieldSocketProps {
+  fieldName?: string;
+  id?: string;
+}

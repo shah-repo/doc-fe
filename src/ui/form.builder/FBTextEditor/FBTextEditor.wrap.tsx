@@ -127,7 +127,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
 
       // if (!masked) {
       //   timeout = setInterval(() => {
-      //     submitForm();
+      //     workspaceState?.saveDocRev(formState?.getValues());
       //   }, 30000);
       //   setTimeoutID(timeout);
       // } else {
@@ -148,7 +148,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
         formState?.setFieldValue(name, formState.getFieldValue(name), true, omitFormValue);
       }
       if (autoFocus || autoScrollTo) { return; }
-      formState?.setFieldAutosave(name);
+      workspaceState?.saveDocRev(formState?.getValues());
     };
 
     // MARK: @observer

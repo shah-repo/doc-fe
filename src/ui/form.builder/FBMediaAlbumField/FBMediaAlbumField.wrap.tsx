@@ -37,6 +37,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     const ids = map(formValue, "id");
     const redlineActive = useSelector(companySelectors.getRedlineActive);
     mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(FBMediaAlbumFieldState);
+    const { id } = workspaceState ?? {};
 
     const {
       id: documentRevisionId,
@@ -107,7 +108,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           }
           formState?.setFieldValue(name, files, true, isTemplate);
           if (mediaAlbumFieldState?.fromUpload) {
-            formState?.setFieldAutosave(name);
+            workspaceState?.saveDocRev(formState?.getValues());
             mediaAlbumFieldState.fromUpload = false;
           }
         }
@@ -148,6 +149,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       loading,
       mode,
       name,
+      id,
     });
   };
 

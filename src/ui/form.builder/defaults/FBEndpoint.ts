@@ -48,4 +48,7 @@ export enum FBEndpoint {
   UseOverride = "/lhr/lhrs/${id}/use_override",
   RemoveOverride = "/lhr/lhrs/${id}/remove_override/${refId}",
   Notes = "/notes",
+  DocumentRevisionPatch = "/document_revisions/${id}",
 }
+
+

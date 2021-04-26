@@ -1,4 +1,5 @@
 import React from "react";
+import { appGlobals } from "../../appGlobals";
 import { IotService } from "../../common/utils/iot/mqttClient";
 import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
@@ -18,7 +19,7 @@ const DocumentRevisionUpdatedSubscriptions: React.FunctionComponent<Props> = ({
   const iotService = IotService.getInstance();
   const subscribe = () => {
     iotService.subscribeToTopic(`+/hellosign_all_signed/${id}`, loadData);
-    iotService.subscribeToTopic(`+/document_revisions/${id}/updated`, loadData);
+    // iotService.subscribeToTopic(`+/document_revisions/${id}/updated`, loadData);
     iotService.subscribeToTopic(`+/hellosign_template_created/${id}`, loadData);
     iotService.subscribeToTopic(`+/hellosign_signature_canceled/${id}`, loadData);
   };
@@ -31,6 +32,10 @@ const DocumentRevisionUpdatedSubscriptions: React.FunctionComponent<Props> = ({
   const loadAction = useActionCreator(documentRevisionsActions.load);
   const async = useAsync();
   const loadData = (msg: string) => {
+    if (appGlobals.omitReloadNotification) {
+      appGlobals.omitReloadNotification = false;
+      return;
+    }
     async.start(loadAction, id, async);
   };
   useMqttSubscription(subscribe, unsubscribe);

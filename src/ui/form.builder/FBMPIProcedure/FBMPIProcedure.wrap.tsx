@@ -1,10 +1,9 @@
-import { keys } from "lodash";
+import { keys, omit } from "lodash";
 import { reaction } from "mobx";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { FB, FBMPIProcedureProps, FBMPIProcedureState, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
-import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
   Component: React.FunctionComponent<T>,
@@ -25,7 +24,6 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
-    const { submitForm } = useFormContext();
     const schemeItem = workspaceState?.getSchemaItemAt(index);
     mpiProcedureState = FB.useRef(FBMPIProcedureState, schemeItem?.editorConfig);
     const redlineActive = useSelector(companySelectors.getRedlineActive);
@@ -40,12 +38,6 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     if (!formValue) {
       formState?.setFieldValue(`${name}.description`, props.editorConfig?.description);
     }
-
-    useEffect(() => {
-      if (!workspaceState) { return; }
-      workspaceState.omitAutosave = false;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     // MARK: @reactions
     React.useEffect(() => reaction(
@@ -72,7 +64,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    React.useEffect(() => {
+    useEffect(() => {
       reaction(
         () => formState?.inputState.get(`${name}.attachments`)?.value,
         (data) => {
@@ -114,17 +106,18 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     handleAdd = (isClone?: boolean, isFromKeys?: boolean) => {
       if (!workspaceState) { return; }
       const newName = FB.uniqid;
+      let schemaItem = workspaceState.getSchemaItemAt(index);
+      if (!isClone) {
+        schemaItem = omit(schemaItem, "editorConfig");
+      }
       const newItem = {
-        ...workspaceState.getSchemaItemAt(index),
-        ...!isClone && { editorConfig: undefined },
+        ...schemaItem,
         autoScrollTo: isFromKeys,
         autoFocus: isFromKeys,
         name: newName,
       };
-      workspaceState.omitAutosave = true;
       workspaceState?.setSchemaItemAt(newItem, index + 1);
-      if (isFromKeys) { return; }
-      submitForm();
+      workspaceState.saveDocRev(formState?.getValues());
     };
 
     onKeyDown = (e: KeyboardEvent) => {
