@@ -8,6 +8,7 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { ApprovalStatus } from "../../../state/ducks/common/types";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, SmartReference } from "../../../state/ducks/documentRevisions/types";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -21,6 +22,7 @@ interface OwnProps {
   versionNumber: string;
   isStatusVisible: boolean;
   schema: FBSchemaProps[];
+  smartReferencesTo: SmartReference[];
 }
 
 type AuditPresenterProps = OwnProps;
@@ -31,6 +33,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   versionNumber,
   isStatusVisible,
   schema,
+  smartReferencesTo,
 }) => {
   const classes = styles();
   const intl = useIntl();
@@ -69,6 +72,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     orderBy(audits, ["field"]).forEach((change: Audit, index) => {
       change.groupKey = groupKey;
       const isFBField = has(change, "fbSchemaItem");
+      const isSmartRef = change.field.split(".").includes("smartRefs");
       const {
         label,
         placeholder = "",
@@ -351,16 +355,48 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             nextValue: `${getFormattedDateString(change.timestamp, MomentFormats.DateTime)} - ${change.owner.user.name}`,
           };
         }
+        if (change.field.split(".").includes("smartRefs")) {
+          if (change.type === "STRING_NEW" || change.type === "BOOLEAN_NEW") {
+            return;
+          }
+          if (change.type === "OBJECT_NEW") {
+            const smartId = change.field.split(".")[1];
+            const smartReference = smartReferencesTo?.find((e) => e.id === smartId);
+            const stepIndex = schema?.find((e) => e.name === smartReference?.metadata.fieldId)?.stepIndex;
+            const nextValue = change.nextValue as DocumentRevision;
+            const value = documentRevisions.find((e) => {
+              if (smartReference?.metadata.materialId) {
+                return e.id === smartReference?.metadata?.materialId;
+              }
+              return e.id === smartReference?.metadata?.equipmentId;
+            }
+            );
+            change = {
+              ...change,
+              field: "smartRefs",
+              type: smartReference?.type as unknown as Audit["type"],
+              nextValue: `${nextValue?.document.docId} - ${nextValue?.name} - rev ${nextValue?.displayRevision}`,
+            };
+            fbLabel = intl.formatMessage({ id: "form.builder.audit.replacement" },
+              {
+                type: change.type === "LOT_USAGE" as unknown as Audit["type"]  ?
+                  intl.formatMessage({ id: "form.builder.materials|s" }) :
+                  intl.formatMessage({ id: "form.builder.equipment|s" }),
+                value: value?.document.docId,
+                step: stepIndex,
+              });
+          }
+        }
         singleFields.push((
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
-              {!isFBField && (
+              {!isFBField && !isSmartRef && (
                 <Text
                   dataCy={`change-key-${groupKey}-${key}`}
                   message={`documentRevision.audit.${change.field}.${change.type}`}
                 />
               )}
-              {isFBField && (
+              {(isFBField || isSmartRef) && (
                 <FBText
                   locale={`form.builder.audit.${change.type}`}
                   values={{ label: fbLabel }}
