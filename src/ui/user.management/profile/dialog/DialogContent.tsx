@@ -256,7 +256,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
           <Text translation="common.edit" />
         </Button>
       </Box>
-      <Box alignSelf="center" mt={7}>
+      <Box alignSelf="center" mt={7} width="700px">
         <UserGroups
           canManageUsers={canManageUsers}
           employeeGroups={employeeGroups}
