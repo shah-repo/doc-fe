@@ -58,7 +58,11 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
         }
         workspaceState?.setSchemaItem({
           ...schemeItem,
-          editorConfig: data,
+          editorConfig: {
+            ...data,
+            materials: data?.materials?.map((material) => omit(material, "LHRTparameter")),
+            equipment: data?.equipment?.map((eq) => omit(eq, "LHRTparameter")),
+          },
         });
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps

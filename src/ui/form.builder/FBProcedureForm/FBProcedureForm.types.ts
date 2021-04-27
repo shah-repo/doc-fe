@@ -26,6 +26,7 @@ export type FBProcedureFormProps =
   lotLoading?: boolean;
   mode?: FBProcedureFormMode;
   lhrStepIndex?: number;
+  isDocumentMPI?: boolean;
 };
 
 export interface FBProcedureFormActionsProps {
