@@ -114,7 +114,7 @@ context("Record inline Flow", () => {
 
       it("Add inline approval", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetGroupsApprovalRoles, () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.fbSelectInlineApproval();
         });
         cy.get("[name=\"label\"]").type("Inline field");

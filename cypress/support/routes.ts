@@ -78,6 +78,7 @@ export enum CyRoutes {
   EmployeesGetActive = "EmployeesGetActive",
   ArAudit = "ArAudit",
   UpgradeToReleasedForm = "UpgradeToReleasedForm",
+  GetAutocompleteOptions = "GetAutocompleteOptions",
 }
 
 export const routes: ICyRoutes =   {
@@ -616,6 +617,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/remoteValidators/helper",
+    },
+  },
+  GetAutocompleteOptions: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/autocomplete_options/*",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
 };

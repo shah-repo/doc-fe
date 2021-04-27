@@ -348,7 +348,7 @@ context("Parts from EB flow test", () => {
 
     context("Add a new part via EB", () => {
       it("Open Create a New Part dialog", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.get("[data-cy=\"form.builder.create.new.part\"]").click();
         });
       });

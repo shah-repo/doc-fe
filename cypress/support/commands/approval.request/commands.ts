@@ -261,7 +261,7 @@ Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
 });
 
 Cypress.Commands.add("arClickAddDocument", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
     cy.get("[data-cy=\"fb.add.document\"]").click();
   });
 });
@@ -312,7 +312,7 @@ Cypress.Commands.add("arClickSendToReview", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.ARtoReview,
     CyRoutes.ARPreview,
-    CyRoutes.DocRevGet,
+    CyRoutes.ArAudit,
   ],
   () => {
     cy.get("[data-cy=\"transitionButton\"]").click();
@@ -347,7 +347,7 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
   });
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetRequiredApproversDocRev,
-    CyRoutes.DocRevGet,
+    CyRoutes.ArAudit,
   ], () => {
     cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
   });
@@ -406,7 +406,7 @@ Cypress.Commands.add("arSelectFirstDocument", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.ARPreview,
     CyRoutes.GetRequiredApproversDocRev,
-    CyRoutes.DocRevGet], () => {
+    CyRoutes.GetAutocompleteOptions], () => {
     cy.get(".MuiTableCell-root a:nth-child(1)").first().click();
   });
   cy.wait(3000);
