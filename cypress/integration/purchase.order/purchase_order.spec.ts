@@ -465,7 +465,7 @@ context("PO test", () => {
 
     context("Add Supplier to PO", () => {
       it("Click 'Create A New Supplier'", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.get("[data-cy=\"form.builder.create.new.supplier\"]").click();
         });
       });
@@ -476,6 +476,7 @@ context("PO test", () => {
 
       it("Enter Supplier Description 'Supplier Description'", () => {
         cy.ebEnterPartDescription({ description: "Supplier Description" });
+        cy.checkToastMessage({ exists: false });
       });
 
       it("Select Document Type 'Supplier'", () => {
