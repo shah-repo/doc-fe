@@ -36,13 +36,27 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
 
+    // MARK: @reactions
+
+    // Form input sync
     useEffect(() => {
-      if (!workspaceState) { return; }
-      // workspaceState.omitAutosave = false;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      reaction(
+        () => workspaceState?.formInputSync?.get(name),
+        (value) => {
+          if (!procedureState) { return; }
+          const formValue = value as FBProcedureValue;
+          if (JSON.stringify(procedureState.value) === JSON.stringify(formValue)) { return; }
+          workspaceState?.formInputSync.set(`${name}.description`, formValue.description);
+          workspaceState?.formInputSync.set(`${name}.attachments`, map(formValue.attachments, "id"));
+          procedureState.setValue({
+            ...procedureState.value,
+            ...formValue,
+          });
+        }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      );
     }, []);
 
-    // MARK: @reactions
     // Form sync
     useEffect(() => reaction(
       () => procedureState?.value,
