@@ -18,6 +18,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
   mode = "eb",
   type,
   disabled,
+  isDocumentMPI,
 }) => (
   <FBForm {...{ formState, initialValues }} >
     <FBTextField
@@ -64,10 +65,9 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       freeSolo={mode !== "lhr"}
     />
     }
-    {mode === "mpi" && <FBCheckbox
+    {isDocumentMPI && <FBCheckbox
       name="LHRTparameter"
       label="form.builder.lhrt.parameter"
-      defaultChecked={false}
       withState
     />}
     {type === FBProcedureItemType.materials && (
