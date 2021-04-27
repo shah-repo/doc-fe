@@ -42,12 +42,15 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
-      const { owner, ownerUser, ownerThirdParty } = change;
+      const { owner, ownerUser, ownerThirdParty, type, field } = change;
       const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
 
       if (audit[groupId].filter((change) =>
         change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
       ).length === 0) {
+        return null;
+      }
+      if (type === "BOOLEAN_EDITED" && field.split(".").includes("smartRefs")) {
         return null;
       }
 
@@ -273,7 +276,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           };
         }
         if (change.field.split(".").includes("smartRefs")) {
-          if (change.type === "STRING_NEW" || change.type === "BOOLEAN_NEW") {
+          if (change.type === "STRING_NEW" || change.type === "BOOLEAN_NEW" || change.type === "BOOLEAN_EDITED") {
             return;
           }
           if (change.type === "OBJECT_NEW") {
