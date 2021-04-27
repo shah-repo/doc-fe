@@ -154,7 +154,44 @@ export class IotService {
 
     creatingClient = true;
     this.mqttClientInstance = await new AWSMqttClient(clientConfig);
-    this.mqttClientInstance.on("connect", () => {
+
+    this.mqttClientInstance.on("error", (error) => {
+      console.log({
+        action: "error",
+        error,
+      });
+    });
+
+    this.mqttClientInstance.on("offline", () => {
+      console.log({
+        action: "offline",
+      });
+    });
+
+    this.mqttClientInstance.on("disconnect", (packet) => {
+      console.log({
+        action: "disconnect",
+        packet,
+      });
+    });
+
+    this.mqttClientInstance.on("reconnect", () => {
+      console.log({
+        action: "reconnect",
+      });
+    });
+
+    this.mqttClientInstance.on("end", () => {
+      console.log({
+        action: "end",
+      });
+    });
+
+    this.mqttClientInstance.on("connect", (connack) => {
+      console.log({
+        action: "connect",
+        connack,
+      });
       const retry = { ...retrySubscriptions };
       retrySubscriptions = {};
       Object.keys(retry).forEach((topic) => this.subscribeToTopic(topic, retry[topic]));
