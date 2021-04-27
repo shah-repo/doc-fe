@@ -142,7 +142,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click on 'Approval request' outputdocument type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
         cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
       });
     });

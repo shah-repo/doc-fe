@@ -1,4 +1,4 @@
-import { filter, get, omit, unionBy } from "lodash";
+import { filter, get, unionBy } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
@@ -39,9 +39,10 @@ class FBProcedureState {
       [];
       const highestId = ids.sort().pop();
       const nextId = highestId ? highestId?.charCodeAt(0) + 1 : 65;
-      item = { title: item.title, id: String.fromCharCode(nextId),  type: "params" };
+      item = { title: item.title, id: String.fromCharCode(nextId),  type: "params", LHRTparameter: item.LHRTparameter };
     }
-    const items = unionBy([omit(item, "LHRTparameter")], get(this, `value.${type}`), "id");
+
+    const items = unionBy([item], get(this, `value.${type}`), "id");
     const value = {
       ...this.value,
       [type]: items.reverse(),

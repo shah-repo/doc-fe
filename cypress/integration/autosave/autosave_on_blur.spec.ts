@@ -751,7 +751,7 @@ context("Autosave on blur", () => {
 
     it("Add Procedure step description and check for autosave", () => {
       cy.get("[data-cy$=\".description\"]>div>div>div>div>div[contenteditable]").eq(1)
-        .clear().type("Step One description");
+        .click({ force: true }).type("Step One description", { force: true });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.unClick();
       });
