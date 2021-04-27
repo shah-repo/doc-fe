@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -18,6 +20,7 @@ let group;
 let initialArDocument;
 let subassemblyDocumentForm;
 let approvalRequestDocumentType;
+const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
 
 const subassemblySchema = [
   {
@@ -1270,11 +1273,11 @@ context("Inspection flow", () => {
 
       it("Check referenced by parts", () => {
         cy.get("[data-cy=\"common.referenced.by\"]")
-          .should("contain.text", "SAL-00004 - A - Inspection Document - 3 Restricted Use");
+          .should("contain.text", `LOT #${lotDateSuffix}04 - A - Inspection Document - 3 Restricted Use`);
         cy.get("[data-cy=\"common.referenced.by\"]")
-          .should("contain.text", "SAL-00003 - A - Inspection Document - 2 Use as Is");
+          .should("contain.text", `LOT #${lotDateSuffix}03 - A - Inspection Document - 2 Use as Is`);
         cy.get("[data-cy=\"common.referenced.by\"]")
-          .should("contain.text", "SAL-00002 - A - Inspection Document - 4 Rework");
+          .should("contain.text", `LOT #${lotDateSuffix}02 - A - Inspection Document - 4 Rework`);
       });
     });
 
@@ -1289,7 +1292,7 @@ context("Inspection flow", () => {
         });
 
         it("Open 'Restricted Use' record", () => {
-          cy.dlFilterByDocId({ docId: "SAL-00004" });
+          cy.dlFilterByDocId({ docId: `LOT #${lotDateSuffix}04` });
           cy.dlSelectFirstDocument();
         });
 
@@ -1307,8 +1310,8 @@ context("Inspection flow", () => {
           cy.dlClearFilters();
         });
 
-        it("Open 'Restricted Use' record", () => {
-          cy.dlFilterByDocId({ docId: "SAL-00003" });
+        it("Open 'Use as is' record", () => {
+          cy.dlFilterByDocId({ docId: `LOT #${lotDateSuffix}03` });
           cy.dlSelectFirstDocument();
         });
 
@@ -1326,8 +1329,8 @@ context("Inspection flow", () => {
           cy.dlClearFilters();
         });
 
-        it("Open 'Restricted Use' record", () => {
-          cy.dlFilterByDocId({ docId: "SAL-00002" });
+        it("Open 'Rework' record", () => {
+          cy.dlFilterByDocId({ docId: `LOT #${lotDateSuffix}02` });
           cy.dlSelectFirstDocument();
         });
 

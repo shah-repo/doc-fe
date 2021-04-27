@@ -99,7 +99,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Click on 'Approval request' outputdocument type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
         cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
       });
     });
