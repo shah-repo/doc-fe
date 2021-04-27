@@ -376,7 +376,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       </Box>
     );
   };
-  console.log(audit);
+
   return (
     <div className={classes.container}>
       {audit && <Box className={classes.revisionContainer}>
