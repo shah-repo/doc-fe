@@ -273,7 +273,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           };
         }
         if (change.field.split(".").includes("smartRefs")) {
-          if (change.type === "STRING_NEW" || change.type === "BOOLEAN_NEW") {
+          if (change.type === "STRING_NEW" || change.type === "BOOLEAN_NEW" || change.type === "BOOLEAN_EDITED") {
             return;
           }
           if (change.type === "OBJECT_NEW") {
