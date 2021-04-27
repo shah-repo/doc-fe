@@ -25,8 +25,10 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     editorConfig,
     index,
     name = "",
-    qrValue,
+    qrValue = "",
     mode,
+    type,
+    fieldType,
     ...props
   }: T) => {
 
@@ -35,17 +37,19 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     const ids = map(formValue, "id");
     const redlineActive = useSelector(companySelectors.getRedlineActive);
     mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(FBMediaAlbumFieldState);
+    const { id } = workspaceState ?? {};
 
     const {
       id: documentRevisionId,
       company: { companyMine: { id: companyId = undefined } = {} } = {},
     } = workspaceState || {};
     if (documentRevisionId && companyId) {
-      qrValue = {
+      qrValue = JSON.stringify({
         companyId,
         documentRevisionId,
         fieldName: name,
-      };
+        fieldType: fieldType || type,
+      });
     }
 
     // Handle mode
@@ -104,7 +108,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           }
           formState?.setFieldValue(name, files, true, isTemplate);
           if (mediaAlbumFieldState?.fromUpload) {
-            formState?.setFieldAutosave(name);
+            workspaceState?.saveDocRev(formState?.getValues());
             mediaAlbumFieldState.fromUpload = false;
           }
         }
@@ -145,6 +149,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       loading,
       mode,
       name,
+      id,
     });
   };
 

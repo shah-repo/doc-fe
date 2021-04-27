@@ -48,6 +48,8 @@ export type FBSchemaProps = Pick<FBInputProps,
   | "deleted"
   | "deleteInFormDisabled"
   | "isInputOwner"
+  | "autoScrollTo"
+  | "autoFocus"
 > & {
   validators?: Dictionary<any>;
 };

@@ -273,7 +273,7 @@
     "valueKey": "value",
     "labelKey": "text",
     "root": "",
-    "publicApi": true,
+    "publicApi": false,
     "hidden": false
   },
   {

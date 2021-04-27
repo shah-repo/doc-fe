@@ -46,4 +46,12 @@ export interface FBWorkspaceExternalState {
   };
 }
 
+export interface FBDifference {
+  index: number;
+  num: number;
+  path: string[];
+  type: "rm" | "add";
+  vals: any;
+}
+
 export type FBWorkspaceConstructor = Pick<FBWorkspaceProps, "schema" | "mode" | "autosave">;

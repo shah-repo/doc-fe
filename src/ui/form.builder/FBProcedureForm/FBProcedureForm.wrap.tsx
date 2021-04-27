@@ -1,9 +1,10 @@
-import { filter, find, first, isEmpty, lowerCase, map } from "lodash";
+import { filter, find, first, isEmpty, keyBy, lowerCase, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormFilterType, FBProcedureFormProps, FBProcedureFormState, FBProcedureItemConfig, FBProcedureItemType } from "..";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { checkIsDocumentMPI } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
@@ -23,16 +24,21 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     partOptions,
     partLoading,
     lotLoading,
+    disabled,
     mode,
+    lhrStepIndex,
     ...props
   }: T) => {
     // MARK: @config
-    const { procedureState, mpiProcedureState, dialogState } = FB.useStores();
+    const { procedureState, mpiProcedureState, dialogState, lhrStepState, workspaceState } = FB.useStores();
+
     formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
     procedureFormState = FB.useRef<FBProcedureFormState>(FBProcedureFormState, {
       initialValues,
     });
+    const isDocumentMPI = checkIsDocumentMPI(workspaceState?.document?.document.documentType.groupOptions);
 
+    const schemaItem = workspaceState?.getSchemaItemAt(lhrStepIndex);
     const config: Partial<Record<keyof typeof FBProcedureItemType, (() => void)>> = {
       materials: () => {
         optionId = FBAutocompleteAsyncOption.materials;
@@ -117,6 +123,22 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     // MARK: @helpers
     function handleAdd() {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
+      if (mode === "lhr") {
+        lhrStepState?.editItem(formValue, type);
+        if (schemaItem) {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          workspaceState!.schema![lhrStepIndex!] = {
+            ...schemaItem,
+            editorConfig: {
+              ...schemaItem?.editorConfig,
+              parameters: {
+                ...keyBy(lhrStepState?.editedParameters, "paramsId"),
+              },
+            },
+          };
+        }
+        return handleCancel?.();
+      }
       procedureState?.addItem(formValue, type);
       mpiProcedureState?.addItem(formValue, type);
       handleCancel?.();
@@ -162,6 +184,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     useObserver(() => {
       partLoading = procedureFormState?.partsApi.loading;
       lotLoading = procedureFormState?.lotsApi.loading;
+      disabled = formState?.inputState.get("LHRTparameter")?.value;
     });
 
     return Component({
@@ -177,7 +200,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       partOptions,
       partLoading,
       lotLoading,
+      disabled,
       mode,
+      isDocumentMPI,
     });
   };
 

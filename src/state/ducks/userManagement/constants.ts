@@ -20,3 +20,4 @@ export const API_TOKEN = "/api_tokens";
 export const API_TOKEN_URL = `${API_TOKEN}/generate`;
 export const API_TOKEN_REVOKE_URL = `${API_TOKEN}/revoke`;
 
+export const ENABLE_EMPLOYEE_DROPBOX = "/employees/dropbox_enable/me";

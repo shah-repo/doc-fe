@@ -16,6 +16,8 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
   types = [],
   name,
   redlineActive,
+  autoFocus,
+  autoScrollTo,
   ...props
 }) => (
   <FBInput {...props } {...{ name }} type="mpiprocedure">
@@ -45,7 +47,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
           </Box>
         )}
         <FBTextEditor
-          {...{ disabled }}
+          {...{ disabled, autoFocus, autoScrollTo, onKeyDown }}
           name={`${name}.description`}
           gutter={false}
           autosave
@@ -55,7 +57,6 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
           }}
           boxProps={{ style: { color: Colors.black } }}
           withState
-          onKeyDown={onKeyDown}
         />
         <Box
           display="flex"

@@ -96,6 +96,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           gutter={false}
           editorConfig={defaultValue}
           autosave
+          fieldType="mpiprocedure"
         />
       </Box>
     )}
@@ -120,10 +121,18 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             >
               <Box flexGrow={1}>
                 <FBText
-                  locale={isDocumentMPI ? `form.builder.mpi.procedure.${type}.title` :
+                  locale={isDocumentMPI ?
+                    item.type ?
+                      `form.builder.mpi.procedure.${type}.title.id` :
+                      `form.builder.mpi.procedure.${type}.title` :
                     `form.builder.lhrs.procedure.${type}.title`}
                   values={
-                    isDocumentMPI ? {
+                    isDocumentMPI ? item.type ? {
+                      id: item.id,
+                      title: getItem?.(item.title),
+                      quantity: item.quantity ? (item.quantity * multiplier) : "form.builder.none",
+                      unit: item.unit,
+                    } : {
                       title: getItem?.(item.title),
                       quantity: item.quantity ? (item.quantity * multiplier) : "form.builder.none",
                       unit: item.unit,

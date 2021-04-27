@@ -31,6 +31,17 @@ class FBProcedureState {
 
   // MARK: @actions
   @action public addItem = (item: FBProcedureItemConfig, type: FBProcedureItemType) => {
+    if (item.LHRTparameter) {
+      const materialsValues: FBProcedureItemConfig[] = get(this, `value.${FBProcedureItemType.materials}`) || [];
+      const equipmentValues: FBProcedureItemConfig[] = get(this, `value.${FBProcedureItemType.equipment}`) || [];
+      const ids: string[] = materialsValues.concat(equipmentValues).filter((item) =>
+        item.id.length === 1).map((item) => item.id) ||
+      [];
+      const highestId = ids.sort().pop();
+      const nextId = highestId ? highestId?.charCodeAt(0) + 1 : 65;
+      item = { title: item.title, id: String.fromCharCode(nextId),  type: "params", LHRTparameter: item.LHRTparameter };
+    }
+
     const items = unionBy([item], get(this, `value.${type}`), "id");
     const value = {
       ...this.value,

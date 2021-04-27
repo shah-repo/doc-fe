@@ -1,4 +1,4 @@
-import { FBAttachment, FBInputProps, FBMediaAlbumFieldState } from "..";
+import { FBAttachment, FBInputProps, FBInputType, FBMediaAlbumFieldState } from "..";
 
 export type FBMediaAlbumFieldMode = "media" | "qr";
 
@@ -21,13 +21,14 @@ export type FBMediaAlbumFieldProps =
   mediaAlbumFieldState?: FBMediaAlbumFieldState;
   actionsDisabled?: boolean;
   mode?: FBMediaAlbumFieldMode;
-  qrValue?: FBMediaAlbumFieldQR;
+  qrValue?: string;
   collection?: FBAttachment[];
   loading?: boolean;
+  fieldType?: FBInputType;
+  id?: string;
 };
 
-interface FBMediaAlbumFieldQR {
-  companyId: string;
-  documentRevisionId: string;
-  fieldName: string;
+export interface FBMediaAlbumFieldSocketProps {
+  fieldName?: string;
+  id?: string;
 }

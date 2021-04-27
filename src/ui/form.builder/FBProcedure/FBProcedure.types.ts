@@ -1,10 +1,21 @@
 import { FBInputProps, FBMediaProps, FBProcedureItemConfig, FBProviderProps } from "..";
 
 export type FBProcedureProps =
-& Pick<FBInputProps, "name" | "gutter" | "stepIndex" | "index" | "disabled" | "loading" | "autosave" | "isInputOwner">
-& Pick<FBProviderProps, "procedureState">
+& Pick<FBInputProps,
+| "name"
+| "gutter"
+| "stepIndex"
+| "index"
+| "disabled"
+| "loading"
+| "autosave"
+| "isInputOwner"
+| "autoFocus"
+| "autoScrollTo">
+& Pick<FBProviderProps, "procedureState" | "workspaceState">
 & {
-  handleAdd?: (isClone?: boolean) => void;
+  onKeyDown?: (e: KeyboardEvent) => void;
+  handleAdd?: (isClone?: boolean, isFromKeys?: boolean) => void;
   isOutput?: boolean;
   isPreview?: boolean;
   types?: string[];

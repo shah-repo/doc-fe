@@ -1,4 +1,4 @@
-import { Box, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import React from "react";
 import { companyActions } from "../../../state/ducks/company";
 import Text from "../../components/Text";
@@ -22,19 +22,16 @@ const HelloSignAccess: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Box mt={2}>
-      <Button
-        variant="outlined"
-        color="primary"
-        style={{ margin: "0px" }}
-        onClick={() => handleHelloSignAccess(!helloSignStatus)}
-        id="DialogContent-helloSignAccess"
-      >
-        <Text
-          translation={!helloSignStatus ? "common.hello.sign.enable" : "common.hello.sign.disable"}
-        />
-      </Button>
-    </Box>
+    <Button
+      variant="outlined"
+      color="primary"
+      onClick={() => handleHelloSignAccess(!helloSignStatus)}
+      id="DialogContent-helloSignAccess"
+    >
+      <Text
+        translation={!helloSignStatus ? "common.hello.sign.enable" : "common.hello.sign.disable"}
+      />
+    </Button>
   );
 };
 
