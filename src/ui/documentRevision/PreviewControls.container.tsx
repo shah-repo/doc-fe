@@ -23,7 +23,7 @@ import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
-import { checkCanBeCopied, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
 import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
@@ -76,6 +76,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       return;
     }
     return formDocuments && getIsLastVersionObsolete(formDocuments);
+  };
+
+  const isExportable = () => {
+    if (documentRevision.renderHTML) { return false; }
+    return checkIsDocumentExportable(selectedDocument.document.documentType.groupOptions);
   };
 
   const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
@@ -222,7 +227,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       {isRecord && isStatusInReview && isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
       <InspectionControlsContainer {...{ documentRevision }} />
-      <ExportToEmail revisionId={documentRevision.id}/>
+      {isExportable() && <ExportToEmail revisionId={documentRevision.id}/>}
       <DownloadHTML pdf={documentRevision.pdf} />
       <PDFSocket {...{ documentRevision }}/>
     </>

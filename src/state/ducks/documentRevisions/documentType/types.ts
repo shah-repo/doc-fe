@@ -75,6 +75,7 @@ export enum DOC_TYPE_GROUP_OPTION {
   LHR = "LHR",
   REDLINE = "REDLINE",
   FB_DEFAULT_NOTES = "FB_DEFAULT_NOTES",
+  EXPORTABLE = "EXPORTABLE"
 }
 export type DocumentGroupOptionsType = keyof typeof DOC_TYPE_GROUP_OPTION;
 
