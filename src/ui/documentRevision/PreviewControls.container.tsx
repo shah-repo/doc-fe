@@ -70,17 +70,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
   const canCopy = checkCanBeCopied(groupOptions);
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
+  const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
 
   const isLastVersionObsolete = () => {
     if (checkIsDocumentRecord(selectedDocument.document.documentType.groupOptions)) {
       return;
     }
     return formDocuments && getIsLastVersionObsolete(formDocuments);
-  };
-
-  const isExportable = () => {
-    if (documentRevision.renderHTML) { return false; }
-    return checkIsDocumentExportable(selectedDocument.document.documentType.groupOptions);
   };
 
   const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
@@ -227,7 +223,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       {isRecord && isStatusInReview && isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
       <InspectionControlsContainer {...{ documentRevision }} />
-      {isExportable() && <ExportToEmail revisionId={documentRevision.id}/>}
+      {isExportable && <ExportToEmail revisionId={documentRevision.id}/>}
       <DownloadHTML pdf={documentRevision.pdf} />
       <PDFSocket {...{ documentRevision }}/>
     </>
