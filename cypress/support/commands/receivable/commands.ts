@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import { integer } from "aws-sdk/clients/cloudfront";
-import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions";
+import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 import { PurchaseOrderItem } from "../purchase.order/commands";
