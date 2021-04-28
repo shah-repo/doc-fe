@@ -4,7 +4,7 @@ import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormFilterType, FBProcedureFormProps, FBProcedureFormState, FBProcedureItemConfig, FBProcedureItemType } from "..";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { checkIsDocumentMPI } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentMPI, checkIsDocumentMPIOutput } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
@@ -37,6 +37,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       initialValues,
     });
     const isDocumentMPI = checkIsDocumentMPI(workspaceState?.document?.document.documentType.groupOptions);
+    const isDocumentMPIOutput = checkIsDocumentMPIOutput(workspaceState?.document?.document.documentType.groupOptions);
 
     const schemaItem = workspaceState?.getSchemaItemAt(lhrStepIndex);
     const config: Partial<Record<keyof typeof FBProcedureItemType, (() => void)>> = {
@@ -61,7 +62,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.materials),
       (data: DocumentRevision[]) => {
-        if (mode === "mpi") {
+        if (mode === "mpi" && isDocumentMPIOutput) {
           const materials = Array.from(data.values());
           const matDocId = find(materials, (rev) => rev.id === formState?.inputState.get("title")?.value)?.documentId;
           const releasedRev = find(
