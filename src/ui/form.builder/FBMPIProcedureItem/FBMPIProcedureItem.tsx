@@ -36,6 +36,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   handleSelectionDelete,
   getItem,
   getLot,
+  getProcedureLocale,
+  getProcedureValues,
   mpiProcedureState,
   dialogState,
   isPreview,
@@ -112,6 +114,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             key={`fb-procedure-item-${type}-${index}`}
             className={FBClasses.hoverVisibility}
           >
+            {console.log(getProcedureLocale?.(item))}
             <Box
               display="flex"
               bgcolor={(item.status || "none") === "none" ? "white" : FBPartItemStatusBg[item.status || ""]}
@@ -121,28 +124,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             >
               <Box flexGrow={1}>
                 <FBText
-                  locale={isDocumentMPI ?
-                    item.type ?
-                      `form.builder.mpi.procedure.${type}.title.id` :
-                      `form.builder.mpi.procedure.${type}.title` :
-                    `form.builder.lhrs.procedure.${type}.title`}
-                  values={
-                    isDocumentMPI ? item.type ? {
-                      id: item.id,
-                      title: getItem?.(item.title),
-                      quantity: item.quantity ? (item.quantity * multiplier) : "form.builder.none",
-                      unit: item.unit,
-                    } : {
-                      title: getItem?.(item.title),
-                      quantity: item.quantity ? (item.quantity * multiplier) : "form.builder.none",
-                      unit: item.unit,
-                    } :
-                      {
-                        title: getItem?.(usedDocumentsInLHRS?.[item.title]?.docRevId),
-                        revision: usedDocumentsInLHRS?.[item.title]?.displayRevision,
-                        quantity: item.quantity ? (item.quantity * multiplier) : "form.builder.none",
-                        unit: item.unit,
-                      }}
+                  locale={getProcedureLocale?.(item)}
+                  values={getProcedureValues?.(item)}
                   boxProps={{
                     color: Colors.black,
                     flexGrow: 1,
