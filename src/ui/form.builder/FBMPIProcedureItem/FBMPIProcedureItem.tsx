@@ -114,7 +114,6 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
             key={`fb-procedure-item-${type}-${index}`}
             className={FBClasses.hoverVisibility}
           >
-            {console.log(getProcedureLocale?.(item))}
             <Box
               display="flex"
               bgcolor={(item.status || "none") === "none" ? "white" : FBPartItemStatusBg[item.status || ""]}
