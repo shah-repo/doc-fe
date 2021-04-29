@@ -187,10 +187,11 @@ context("Autocomplete 'Approval requests' test", () => {
               .find("[data-cy^=\"test-label-\"]").click();
 
             if (response.body.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  expect($li).to.contain.text(response.body[index].crId);
-                })
+              const approvalRequests = response.body;
+              approvalRequests.forEach((ar) => {
+                cy.get("ul[role=listbox]>li").should("contain.text", ar.crId);
+              });
+              cy.get("ul[role=listbox]>li")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

@@ -167,10 +167,12 @@ context("Autocomplete 'GL code' test", () => {
               .find("[data-cy^=\"test-label-\"]").click();
 
             if (response.body.acctCodes.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  expect($li).to.have.text(response.body.acctCodes[index]);
-                })
+              const acctCodes = response.body.acctCodes;
+              acctCodes.forEach((acctCode) => {
+                cy.get("ul[role=listbox]>li")
+                  .should("contain.text", acctCode);
+              });
+              cy.get("ul[role=listbox]>li")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.acctCodes.length);
                 });
