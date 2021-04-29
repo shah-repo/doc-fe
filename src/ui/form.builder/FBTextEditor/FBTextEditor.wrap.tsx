@@ -52,17 +52,17 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       formValue = intl.formatMessage({ id: "form.builder.none" });
     }
 
-    useEffect(() => {
-      // if (!workspaceState) { return; }
-      // workspaceState.formInputSync.set(name, "");
-      reaction(
-        () => workspaceState?.formInputSync?.get(name),
-        (value) => {
-          onEditorStateChange?.(htmlToEditorState(value));
-        }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      );
-    }, []);
+    // useEffect(() => {
+    //   // if (!workspaceState) { return; }
+    //   // workspaceState.formInputSync.set(name, "");
+    //   reaction(
+    //     () => workspaceState?.formInputSync?.get(name),
+    //     (value) => {
+    //       onEditorStateChange?.(htmlToEditorState(value));
+    //     }
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+    //   );
+    // }, []);
 
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
