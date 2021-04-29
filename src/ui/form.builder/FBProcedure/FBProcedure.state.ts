@@ -35,13 +35,13 @@ class FBProcedureState {
       const materialsValues: FBProcedureItemConfig[] = get(this, `value.${FBProcedureItemType.materials}`) || [];
       const equipmentValues: FBProcedureItemConfig[] = get(this, `value.${FBProcedureItemType.equipment}`) || [];
       // if item has LHRTparameter checked, generate the letter id
-      const ids: string[] = materialsValues.concat(equipmentValues).filter((item) =>
+      const ids = materialsValues.concat(equipmentValues).filter((item) =>
         item.id.length === 1).map((item) => item.id) ||
       [];
+      const isExistingItem = find(ids, (id) => id === item.id);
       const highestId = ids.sort().pop();
       const nextId = highestId ? highestId?.charCodeAt(0) + 1 : 65;
       // if an edited item has letter id, replace it, dont add new item to the list
-      const isExistingItem = find(ids, (id) => id === item.id);
       item = isExistingItem ?
         item :
         { title: item.title, id: String.fromCharCode(nextId),  type: "params", LHRTparameter: item.LHRTparameter };
