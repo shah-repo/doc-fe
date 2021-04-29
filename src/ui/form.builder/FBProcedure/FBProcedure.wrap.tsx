@@ -46,7 +46,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
           if (!procedureState) { return; }
           const formValue = value as FBProcedureValue;
           if (isEqual(formState?.getFieldValue(name), formValue)) { return; }
-          workspaceState?.formInputSync.set(`${name}.description`, formValue.description);
+          // workspaceState?.formInputSync.set(`${name}.description`, formValue.description);
           workspaceState?.formInputSync.set(`${name}.attachments`, map(formValue.attachments, "id"));
           procedureState.setValue({
             ...procedureState.value,
@@ -134,6 +134,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     handleAdd = (isClone?: boolean, isFromKeys?: boolean) => {
       if (!workspaceState) { return; }
       const newName = FB.uniqid;
+      workspaceState?.removeAutoState();
       const newItem = {
         ...workspaceState.getSchemaItemAt(index),
         autoScrollTo: isFromKeys,

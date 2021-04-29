@@ -132,6 +132,10 @@ class FBWorkspaceState extends FBSchemaState {
     return inputOwner === undefined || inputOwner === employeeId;
   };
 
+  public removeAutoState = () => {
+    this.schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
+  };
+
   public saveDocRev = (values?: Record<string, any>) => {
     const { id, mode } = this;
     // const diff = odiff(values, this.formInput);
