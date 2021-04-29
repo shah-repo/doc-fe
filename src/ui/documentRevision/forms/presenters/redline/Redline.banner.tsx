@@ -14,7 +14,6 @@ const RedlineBanner: React.FunctionComponent<Props> = ({
 }) => {
   const redlineActive = useSelector(companySelectors.getRedlineActive);
 
-
   if (!redlineActive) {
     return null;
   }
@@ -30,6 +29,9 @@ const RedlineBanner: React.FunctionComponent<Props> = ({
             padding="10px"
             display="flex"
             justifyContent="center"
+            position="fixed"
+            width="70%"
+            zIndex="9999"
           >
             <Text translation="common.redline.message" />
           </Box>
