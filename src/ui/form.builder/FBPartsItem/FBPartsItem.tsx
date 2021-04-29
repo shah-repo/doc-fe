@@ -1,3 +1,4 @@
+import { Box } from "@material-ui/core";
 import { isEmpty, size } from "lodash";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -34,43 +35,46 @@ const FBParts: React.FunctionComponent<FBPartsItemProps> = ({
     {!loading && (
       <FBMapWrapper<FBProcedureItemConfig[]> {...{ collection }}>
         {(item: FBProcedureItemConfig, index) => (
-          <FBConditionalWrapper
-            condition={Boolean(getItemUrl?.(item.title))}
-            wrapper={(child) => (
-              <Link
-                key={`fb-part-${type}-${index}`}
-                to={getItemUrl?.(item.title) as string}
-                target="_blank"
-                style={{
-                  textDecoration: "none",
-                  color: "initial",
-                  fontWeight: "bold",
+          <Box key={`fb-part-${type}-${index}`}>
+            <FBConditionalWrapper
+              condition={Boolean(getItemUrl?.(item.title))}
+              wrapper={(child) => (
+                <Link
+                  key={`fb-part-${type}-${index}`}
+                  to={getItemUrl?.(item.title) as string}
+                  target="_blank"
+                  style={{
+                    textDecoration: "none",
+                    color: "initial",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {child}
+                </Link>
+              )}
+
+            >
+              <FBText
+                key={`fb-part-${type}-${item.title}-${index}`}
+                locale={`form.builder.procedure.${type}.title`}
+                values={{
+                  title: getItem?.(item.title),
+                  lot: getLot?.(item.partLot),
+                  quantity: item.quantity || "form.builder.none",
+                  unit: item.unit,
                 }}
-              >
-                {child}
-              </Link>
-            )}
-          >
-            <FBText
-              key={`fb-part-${type}-${item.title}-${index}`}
-              locale={`form.builder.procedure.${type}.title`}
-              values={{
-                title: getItem?.(item.title),
-                lot: getLot?.(item.partLot),
-                quantity: item.quantity || "form.builder.none",
-                unit: item.unit,
-              }}
-              boxProps={{
-                bgcolor: FBPartItemStatusBg[(item.status || "none")],
-                borderColor: FBPartItemStatusBorder[(item.status || "none")],
-                border: 1,
-                borderRadius: 4,
-                padding: 1,
-                fontWeight: "bold",
-                mb: (gutter && index === (size(collection) - 1)) ? 5 : 2,
-              }}
-            />
-          </FBConditionalWrapper>
+                boxProps={{
+                  bgcolor: FBPartItemStatusBg[(item.status || "none")],
+                  borderColor: FBPartItemStatusBorder[(item.status || "none")],
+                  border: 1,
+                  borderRadius: 4,
+                  padding: 1,
+                  fontWeight: "bold",
+                  mb: (gutter && index === (size(collection) - 1)) ? 5 : 2,
+                }}
+              />
+            </FBConditionalWrapper>
+          </Box>
         )}
       </FBMapWrapper>
     )}

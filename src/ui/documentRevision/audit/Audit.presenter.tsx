@@ -42,12 +42,15 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
-      const { owner, ownerUser, ownerThirdParty } = change;
+      const { owner, ownerUser, ownerThirdParty, type, field } = change;
       const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
 
       if (audit[groupId].filter((change) =>
         change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
       ).length === 0) {
+        return null;
+      }
+      if (type === "BOOLEAN_EDITED" && field.split(".").includes("smartRefs")) {
         return null;
       }
 
@@ -150,19 +153,33 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         fbLabel = `${label} for ${stepLabel}`;
       }
       // MPIPROCEDURE
+      const valueKey = change.field.split(".");
       if (fbType === "mpiprocedure") {
-        if (!change.field.split(".").includes("editorConfig")) {
+        if (!change.field.split(".").includes("editorConfig") && last(valueKey) !== "description") {
           return;
         }
-        const valueKey = change.field.split(".");
         const stepLabel = intl.formatMessage({ id: "form.builder.step.number" }, { number });
         const regex = /materials/g;
         const isMaterial = !isEmpty(change.field.match(regex));
         const isAttachment = !isEmpty(change.field.match(/attachments/g));
         const fieldType = isMaterial ? intl.formatMessage({ id: "form.builder.materials|s" }) :
           intl.formatMessage({ id: "form.builder.equipment|s" });
+        // skip audit values
+        if (
+          (last(valueKey) === "id" ||
+          last(valueKey) === "unit" ||
+          last(valueKey) === "quantity" ||
+          last(valueKey) === "attachments") && (
+            (change.type === "STRING_NEW" && !isAttachment && last(valueKey) !== "description") ||
+            change.type === "NUMBER_NEW" ||
+            change.type === "NUMBER_DELETED")) {
+          return;
+        }
         // changes on description step field
         if (last(valueKey) === "description") {
+          if (!change.field.split(".").includes("mpi-procedure-built-in")) {
+            return;
+          }
           fbLabel = `${intl.formatMessage({ id: "form.builder.step.description" })} for ${stepLabel}`;
           const value = change.nextValue as string;
           const formattedValue = striptags(value);
@@ -170,17 +187,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             ...change,
             nextValue: formattedValue,
           };
-        }
-        // skip audit values
-        if (
-          (last(valueKey) === "id" ||
-          last(valueKey) === "unit" ||
-          last(valueKey) === "quantity" ||
-          last(valueKey) === "attachments") && (
-            (change.type === "STRING_NEW" && !isAttachment) ||
-            change.type === "NUMBER_NEW" ||
-            change.type === "NUMBER_DELETED")) {
-          return;
         }
         // adding more equipment or material to the list
         if (last(valueKey) === "title" && !isAttachment && change.type === "STRING_NEW") {
@@ -270,7 +276,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           };
         }
         if (change.field.split(".").includes("smartRefs")) {
-          if (change.type === "STRING_NEW" || change.type === "BOOLEAN_NEW") {
+          if (change.type === "STRING_NEW" || change.type === "BOOLEAN_NEW" || change.type === "BOOLEAN_EDITED") {
             return;
           }
           if (change.type === "OBJECT_NEW") {

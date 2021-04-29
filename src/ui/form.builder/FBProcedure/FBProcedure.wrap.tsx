@@ -37,22 +37,38 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     disabled = !isInputOwner || disabled;
 
     // MARK: @reactions
+
+    // Form input sync
+    useEffect(() => {
+      reaction(
+        () => workspaceState?.formInputSync?.get(name),
+        (value) => {
+          if (!procedureState) { return; }
+          const formValue = value as FBProcedureValue;
+          if (isEqual(formState?.getFieldValue(name), formValue)) { return; }
+          // workspaceState?.formInputSync.set(`${name}.description`, formValue.description);
+          workspaceState?.formInputSync.set(`${name}.attachments`, map(formValue.attachments, "id"));
+          procedureState.setValue({
+            ...procedureState.value,
+            ...formValue,
+          });
+        }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      );
+    }, []);
+
     // Form sync
     useEffect(() => reaction(
       () => procedureState?.value,
-      (data) => formState?.setFieldValue(name, {
-        ...formState.getFieldValue(name),
-        ...cloneDeep(data),
-      }, true), {
+      (data) => {
+        formState?.setFieldValue(name, {
+          ...formState.getFieldValue(name),
+          ...cloneDeep(data),
+        }, true);
+        workspaceState?.saveDocRev(formState?.getValues());
+      }, {
         fireImmediately: true,
       }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
-    // Autosave trigger
-    useEffect(() => reaction(
-      () => procedureState?.value,
-      () => workspaceState?.saveDocRev(formState?.getValues())
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -118,6 +134,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     handleAdd = (isClone?: boolean, isFromKeys?: boolean) => {
       if (!workspaceState) { return; }
       const newName = FB.uniqid;
+      workspaceState?.removeAutoState();
       const newItem = {
         ...workspaceState.getSchemaItemAt(index),
         autoScrollTo: isFromKeys,

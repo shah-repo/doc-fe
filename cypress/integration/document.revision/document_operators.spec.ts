@@ -314,7 +314,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
         cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
       });
     });
@@ -373,7 +373,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
         cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
       });
     });
@@ -418,7 +418,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
         cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
       });
     });
@@ -471,7 +471,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
         cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "In Review" });
       });
     });
@@ -506,7 +506,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
         cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "In Review" });
       });
     });

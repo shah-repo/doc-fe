@@ -52,6 +52,18 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       formValue = intl.formatMessage({ id: "form.builder.none" });
     }
 
+    // useEffect(() => {
+    //   // if (!workspaceState) { return; }
+    //   // workspaceState.formInputSync.set(name, "");
+    //   reaction(
+    //     () => workspaceState?.formInputSync?.get(name),
+    //     (value) => {
+    //       onEditorStateChange?.(htmlToEditorState(value));
+    //     }
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+    //   );
+    // }, []);
+
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
 
@@ -92,10 +104,14 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
         () => textEditorState?.editorState,
         (data) => {
           if (!data) { return; }
+          if (!textEditorState) { return; }
           let htmlContent = draftToHtml(convertToRaw(data.getCurrentContent())).trim();
           (htmlContent === emptyHtmlContent) && (htmlContent = "");
           const oldValue = formState?.getFieldValue(name);
-          if (oldValue === htmlContent) { return; }
+          if (oldValue === htmlContent) {
+            return;
+          }
+
           formState?.setFieldValue(name, htmlContent, withState, omitFormValue);
           formState?.validate();
         }
@@ -145,7 +161,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       if (textEditorState?.preserveFocus) { return; }
       handleMask?.(true);
       if (withState) {
-        formState?.setFieldValue(name, formState.getFieldValue(name), true, omitFormValue);
+        formState?.setFieldValue(name, formState?.getFieldValue(name), true, omitFormValue);
       }
       if (autoFocus || autoScrollTo) { return; }
       workspaceState?.saveDocRev(formState?.getValues());

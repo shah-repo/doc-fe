@@ -29,6 +29,7 @@ let createdPartDocument;
 
 const NOT_RELEASED_TOAST_ERROR_MESSAGE = "Last docRev for Part linked to EB after copying is not in RELEASED status.";
 const currentDate = moment().tz("America/Los_Angeles").format("MMMM D, YYYY");
+const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
 const PART_DOCUMENT_TYPE_NAME = "Part";
 
 context("Procedure and parts flow test", () => {
@@ -886,7 +887,8 @@ context("Procedure and parts flow test", () => {
 
       it("Verify 'Materials document' is removed from materials", () => {
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").eq(2)
-          .should("contain.text", "PRT-00005 - Part document | CSL-00001 | Qty: 2 gram");
+          .should("contain.text", "PRT-00005 - Part document | LOT #"
+          + lotDateSuffix + "01 | Qty: 2 gram");
       });
 
       it("Verify 'Free text material' is removed from materials", () => {

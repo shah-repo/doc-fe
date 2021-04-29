@@ -1,5 +1,5 @@
 import React from "react";
-import { FBInput, FBMediaAlbum, FBMediaAlbumFieldProps, FBMediaAlbumFieldSocket, FBMediaQR, FBProvider } from "..";
+import { FBInput, FBMediaAlbum, FBMediaAlbumFieldProps, FBMediaQR, FBProvider } from "..";
 import { withFBMediaAlbumField } from "./FBMediaAlbumField.wrap";
 
 const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
@@ -19,10 +19,8 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
   label,
   index,
   gutter,
-  id = "",
 }) => (
   <FBProvider {...{ [`mediaAlbumFieldState_${name}`]: mediaAlbumFieldState }} >
-    <FBMediaAlbumFieldSocket fieldName={name} {...{ id }} />
     <FBInput {...{ name, label, gutter, index, editorConfig, autosave }} type="mediaalbum">
       {mode !== "qr" && (
         <FBMediaAlbum {...{
