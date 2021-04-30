@@ -6,7 +6,7 @@ import { fetchRemoteValidatorsStatus } from "./../remoteValidators/RemoteValidat
 const API = Config.ApiEndpoint;
 const WORKER_API = Config.WorkerApiEndpoint;
 const STATUS_QUERY = "/status";
-const MICRO_STATUS_QUERY = "/micro/healthcheck";
+const MICRO_STATUS_QUERY = "/micro/status";
 
 interface StatusState {
   backend: object;
@@ -113,8 +113,8 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
       <div style={{ padding: "10px", backgroundColor: "white", lineHeight: 1.2 }}>
         { this.renderTable("Frontend", feStatusJson)}
         { this.renderTable("Backend", this.state.backend)}
-        { this.renderTable("Remote JS Validators", this.state.remoteJS)}
         { this.renderTable("Background Worker Service", this.state.bgWorker)}
+        { this.renderTable("Remote JS Validators", this.state.remoteJS)}
       </div>
     );
   }

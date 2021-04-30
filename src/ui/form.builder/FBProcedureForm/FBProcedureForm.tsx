@@ -65,7 +65,8 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       freeSolo={mode !== "lhr"}
     />
     }
-    {isDocumentMPI && <FBCheckbox
+    {/* Do not show cb when user is editing item */}
+    {isDocumentMPI && !initialValues && <FBCheckbox
       name="LHRTparameter"
       label="form.builder.lhrt.parameter"
       withState
