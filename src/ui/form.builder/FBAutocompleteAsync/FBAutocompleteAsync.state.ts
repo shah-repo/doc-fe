@@ -104,6 +104,11 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
           ...doc,
           documentRevisions: get(doc, "documentRevisions[0]"),
         }));
+      case FBAutocompleteAsyncOption.docRevByDoc:
+        return data.documentRevisions.map((e) => ({
+          ...e,
+          docId: data.docId,
+        }));
       case FBAutocompleteAsyncOption.preventativeMaintenaceForms:
         return data.map((option) => {
           const releasedForm = option?.documentRevisions.find((e) => e.status === DocumentRevisionStatus.Released);
