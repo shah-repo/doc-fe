@@ -93,7 +93,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
       case FBAutocompleteAsyncOption.officialGroups:
         return filter(union(data, this.additionalData), { isOfficial: true });
       case FBAutocompleteAsyncOption.availablePartDocuments:
-        return map(data, (doc) => ({
+        return map([data].flat(), (doc) => ({
           ...doc,
           documentRevisions: get(doc, "documentRevisions[0]"),
         }));
