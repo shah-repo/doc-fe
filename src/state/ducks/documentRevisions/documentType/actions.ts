@@ -35,7 +35,7 @@ const getDocTypeIds = (id: string, handlers: Handlers): ApiAction<DocumentTypeBy
 });
 
 const getDocTypesByCategory = (
-  params: { category: string},
+  params: { category: string },
   handlers: Handlers,
 ): ApiAction<DocumentType[]> =>
   apiActionWithCallbacks({
@@ -121,6 +121,14 @@ const getApprovalMatrixNco = (
   handlers,
 });
 
+const getGroupWithGroupOptions = (
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `${DOCUMENT_TYPE_ROOT_URL}/group_with_group_options`,
+  method: "get",
+  handlers,
+});
+
 export default {
   loadList,
   getDocTypeIds,
@@ -132,4 +140,5 @@ export default {
   deleteDocumentType,
   addDocumentType,
   getApprovalMatrixNco,
+  getGroupWithGroupOptions
 };
