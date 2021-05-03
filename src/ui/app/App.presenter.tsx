@@ -10,10 +10,10 @@ import { AsyncStatus } from "../../state/types";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import Routes from "./Routes";
-import _ from 'lodash';
+import _ from "lodash";
 import { toastError } from "../components/notifications";
-import Config from '../../config'
-import { useIntl } from 'react-intl';
+import Config from "../../config";
+import { useIntl } from "react-intl";
 
 const AppPresenter: React.FunctionComponent = () => {
   const dispatch = useDispatch();
@@ -40,13 +40,14 @@ const AppPresenter: React.FunctionComponent = () => {
   const async = useAsync({
     onSuccess: (response) => {
       if (!_.isEqual(response, GroupWithGroupOptions)) {
+        // eslint-disable-next-line no-console
         console.log(intl.formatMessage({ id: "common.document.type.mismatch" }));
-        if (!Config.isProduction) toastError(intl.formatMessage({ id: "common.document.type.mismatch" }))
+        if (!Config.isProduction) { toastError(intl.formatMessage({ id: "common.document.type.mismatch" })); }
       }
     },
   });
 
-  const getGroupWithGroupOptions = useActionCreator(documentTypeActions.getGroupWithGroupOptions)
+  const getGroupWithGroupOptions = useActionCreator(documentTypeActions.getGroupWithGroupOptions);
   useEffect(() => {
     async.start(getGroupWithGroupOptions, async);
   }, []);

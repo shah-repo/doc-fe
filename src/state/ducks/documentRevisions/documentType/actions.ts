@@ -140,5 +140,5 @@ export default {
   deleteDocumentType,
   addDocumentType,
   getApprovalMatrixNco,
-  getGroupWithGroupOptions
+  getGroupWithGroupOptions,
 };
