@@ -1,4 +1,5 @@
 import { FBFormProps, FBPOReceiveProps, FBPurchaseOrderItem } from "..";
+import { Id } from "../../../state/ducks/common/types";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 
 export type FBPOReceiveFormProps =
@@ -20,4 +21,5 @@ export interface FBPOReceiveFormConstructor {
 
 export interface ReceiveQuantityBody {
   formInput?: Record<string, any>;
+  referenceTo?: Id[];
 }

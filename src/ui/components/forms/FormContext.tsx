@@ -54,9 +54,9 @@ export const useFormContext = () => {
     if (!workspaceState) { return; }
     const { type, name, prevValue, nextValue } = relation;
     const prevDocument: DocumentRevision | undefined =
-      FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, prevValue);
+      FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, prevValue.id);
     const nextDocument: DocumentRevision | undefined =
-      FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, nextValue);
+      FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, nextValue.id);
     const prevValueId = prevDocument?.document.id;
     const nextValueId = nextDocument?.document.id;
     let refValues = workspaceState.referenceValue;
