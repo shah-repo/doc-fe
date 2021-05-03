@@ -126,6 +126,10 @@ class Config {
     return this.get("ENV_NAME") === "PRODUCTION";
   }
 
+  public static get isProduction2(): boolean {
+    return this.get("ENV_NAME") === "PRODUCTION2";
+  }
+
   public static get isDemo(): boolean {
     return this.get("ENV_NAME") === "DEMO";
   }
