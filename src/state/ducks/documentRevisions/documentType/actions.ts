@@ -35,7 +35,7 @@ const getDocTypeIds = (id: string, handlers: Handlers): ApiAction<DocumentTypeBy
 });
 
 const getDocTypesByCategory = (
-  params: { category: string },
+  params: { category: string},
   handlers: Handlers,
 ): ApiAction<DocumentType[]> =>
   apiActionWithCallbacks({

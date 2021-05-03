@@ -283,7 +283,7 @@ export interface TooltipLabelConfig {
 
 
 // Copied from BE repo: src/modules/documentTypes/interfaces/fieldConfig.interface.ts
-export enum InputFieldType {
+export enum InputFieldType{
   TITLE = "C",
   DESCRIPTION = "D",
   DOC_TYPE = "E",
@@ -299,7 +299,7 @@ export enum InputFieldType {
 }
 
 // Copied from BE repo: src/modules/documentTypes/interfaces/fieldConfig.interface.ts
-export enum DisplayFieldType {
+export enum DisplayFieldType{
   STATUS = "A",
   STATUS_DRAFT = "A1",
   STATUS_OBSOLETE = "A2",
