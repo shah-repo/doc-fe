@@ -8,7 +8,7 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { ApprovalStatus } from "../../../state/ducks/common/types";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { DocumentRevision, SmartReference } from "../../../state/ducks/documentRevisions/types";
+import { SmartReference } from "../../../state/ducks/documentRevisions/types";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -42,15 +42,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
-      const { owner, ownerUser, ownerThirdParty, type, field } = change;
+      const { owner, ownerUser, ownerThirdParty } = change;
       const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
 
       if (audit[groupId].filter((change) =>
         change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
       ).length === 0) {
-        return null;
-      }
-      if (type === "BOOLEAN_EDITED" && field.split(".").includes("smartRefs")) {
         return null;
       }
 
@@ -276,30 +273,31 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           };
         }
         if (change.field.split(".").includes("smartRefs")) {
-          if (change.type === "STRING_NEW" || change.type === "BOOLEAN_NEW" || change.type === "BOOLEAN_EDITED") {
+          if (change.type === "STRING_NEW" || change.type === "NUMBER_NEW") {
             return;
           }
-          if (change.type === "OBJECT_NEW") {
-            const smartId = change.field.split(".")[1];
-            const smartReference = smartReferencesTo?.find((e) => e.id === smartId);
-            const stepIndex = schema?.find((e) => e.name === smartReference?.metadata.fieldId)?.stepIndex;
-            const nextValue = change.nextValue as DocumentRevision;
+          if (change.type === "BOOLEAN_NEW" || change.type === "BOOLEAN_EDITED") {
+            const stepIndex = schema?.find((e) => e.name === change.reference?.metadata.fieldId)?.stepIndex;
+            const { quantity, unit, lotPart, lotDocId, materialId } = change.reference?.metadata || {};
             const value = documentRevisions.find((e) => {
-              if (smartReference?.metadata.materialId) {
-                return e.id === smartReference?.metadata?.materialId;
+              if (change.reference?.metadata.materialId) {
+                return e.id === change.reference?.metadata?.materialId;
               }
-              return e.id === smartReference?.metadata?.equipmentId;
+              return e.id === change.reference?.metadata?.equipmentId;
             }
             );
+            const nextValue = materialId ? `${lotDocId} | ${lotPart} | ${quantity} ${unit}` :
+              `${change.reference?.toDocRev?.document.docId}`;
             change = {
               ...change,
               field: "smartRefs",
-              type: smartReference?.type as unknown as Audit["type"],
-              nextValue: `${nextValue?.document.docId} - ${nextValue?.name} - rev ${nextValue?.displayRevision}`,
+              type: `${change.reference?.type}.${change.type}` as unknown as Audit["type"],
+              nextValue,
             };
             fbLabel = intl.formatMessage({ id: "form.builder.audit.replacement" },
               {
-                type: change.type === "LOT_USAGE" as unknown as Audit["type"]  ?
+                type: (change.type === "LOT_USAGE.BOOLEAN_NEW" as unknown as Audit["type"] ||
+                change.type === "LOT_USAGE.BOOLEAN_EDITED" as unknown as Audit["type"])  ?
                   intl.formatMessage({ id: "form.builder.materials|s" }) :
                   intl.formatMessage({ id: "form.builder.equipment|s" }),
                 value: value?.document.docId,

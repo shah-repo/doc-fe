@@ -4,7 +4,7 @@ import { Group, User } from "../auth/types";
 import { ChangeRequest } from "../changeRequest/types";
 import { Approval, Owner } from "../common/types";
 import { DocumentType } from "../documentRevisions/documentType/types";
-import { DocumentRevision, Reference } from "../documentRevisions/types";
+import { DocumentRevision, Reference, SmartReference } from "../documentRevisions/types";
 
 type AuditTypes =
     "ARRAY_NEW"
@@ -38,6 +38,7 @@ export interface Audit {
   | DocumentType
   | Group;
   previousValue?: Audit["nextValue"];
+  reference?: SmartReference;
   timestamp: string;
   groupId: string;
   owner: Owner;
