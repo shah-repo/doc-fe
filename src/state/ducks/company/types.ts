@@ -119,4 +119,5 @@ export interface RedlineState {
 
 export interface RedlineAction {
   type: typeof REDLINE_CONFIG;
+  payload: RedlineState;
 }
