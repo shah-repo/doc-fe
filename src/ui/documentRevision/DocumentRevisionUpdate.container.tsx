@@ -118,6 +118,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         dataToSubmit as DocumentRevisionEditRequestBody,
         async,
       );
+      helpers.resetForm();
       return;
     }
 
