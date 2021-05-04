@@ -248,7 +248,7 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params:
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   });
-  cy.wait(500);
+  cy.wait(1000);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {
