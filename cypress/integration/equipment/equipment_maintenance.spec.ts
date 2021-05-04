@@ -590,6 +590,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Reload 'Equipment maintenance document'", () => {
+      cy.wait(5000);
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.DocPreview,
         CyRoutes.DocPreview,
@@ -711,6 +712,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Reload 'Equipment calibration document'", () => {
+      cy.wait(5000);
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.DocPreview,
         CyRoutes.DocPreview,

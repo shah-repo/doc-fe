@@ -10,6 +10,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[25];
@@ -405,15 +406,20 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Enter preventative maintenance frequency", () => {
-        cy.get("[name*=\"frequency\"]").eq(0).type("16");
+        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+          cy.get("[name*=\"frequency\"]").eq(0).type("16");
+        });
       });
 
       it("Type preventative maintenance instruction", () => {
-        cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]")
-          .type("Instructions for preventative maintenance");
+        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+          cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]")
+            .type("Instructions for preventative maintenance");
+        });
       });
 
       it("Save document", () => {
+        cy.unClick();
         cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
