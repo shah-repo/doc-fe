@@ -374,6 +374,10 @@ context("Equipment maintenance test", () => {
   });
 
   context("Create equipment maintenace document", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigate to equipment list", () => {
       cy.navigToEquipment();
     });
@@ -391,9 +395,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("input[name=fb-default-eq-status][value=Active]").check();
-      });
+      cy.get("input[name=fb-default-eq-status][value=Active]").check();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -410,8 +412,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Type preventative maintenance instruction", () => {
-      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]")
-        .type("Instructions for preventative maintenance");
+      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]");
     });
 
     it("Select document 'Yes' for calibration required", () => {
@@ -468,7 +469,11 @@ context("Equipment maintenance test", () => {
       });
 
       it("Add first approver to approval request on approver list", () => {
-        cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email });
+        cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email, noWait: true });
+      });
+
+      it("Save AR", () => {
+        cy.arSaveApiCall();
       });
 
       it("Click 'Send To Review'", () => {
@@ -719,8 +724,8 @@ context("Equipment maintenance test", () => {
         CyRoutes.EmployeesGet,
         CyRoutes.SessionDetails], () => {
         cy.reload();
-        cy.wait(5000);
       });
+      cy.wait(5000);
     });
 
     it("Check Calibration document existance", () => {
