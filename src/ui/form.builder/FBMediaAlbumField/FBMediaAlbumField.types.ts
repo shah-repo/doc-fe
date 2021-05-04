@@ -27,8 +27,3 @@ export type FBMediaAlbumFieldProps =
   fieldType?: FBInputType;
   id?: string;
 };
-
-export interface FBMediaAlbumFieldSocketProps {
-  fieldName?: string;
-  id?: string;
-}
