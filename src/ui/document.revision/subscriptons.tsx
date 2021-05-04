@@ -25,7 +25,7 @@ const DocumentRevisionUpdatedSubscriptions: React.FunctionComponent<Props> = ({
   };
   const unsubscribe = () => {
     iotService.unsubscribeFromTopic(`+/hellosign_all_signed/${id}`);
-    iotService.unsubscribeFromTopic(`+/document_revisions/${id}/updated`);
+    // iotService.unsubscribeFromTopic(`+/document_revisions/${id}/updated`);
     iotService.unsubscribeFromTopic(`+/hellosign_template_created/${id}`);
     iotService.unsubscribeFromTopic(`+/hellosign_signature_canceled/${id}`);
   };
