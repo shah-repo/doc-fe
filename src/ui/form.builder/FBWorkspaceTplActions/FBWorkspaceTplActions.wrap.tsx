@@ -1,3 +1,4 @@
+import { map } from "lodash";
 import React from "react";
 import { FB, FBFieldName, FBWorkspaceTplActionsProps } from "..";
 
@@ -18,8 +19,16 @@ export const withFBWorkspaceTplActions = <T extends FBWorkspaceTplActionsProps>(
     };
 
     const exportTemplate = (name = "template") => {
-      const schema = JSON.stringify(workspaceState?.getSchema());
+      const items = map(workspaceState?.getSchema(), (schemaItem) => {
+        const { type } = schemaItem;
+        if (type === "inlineapproval") {
+          schemaItem.editorConfig = {};
+        }
+        return schemaItem;
+      });
+      const schema = JSON.stringify(items);
       const dataStr = `data:text/json;charset=utf-8, ${encodeURIComponent(schema)}`;
+
       const anchor = document.createElement("a");
       anchor.style.display = "none";
       document.body.appendChild(anchor);

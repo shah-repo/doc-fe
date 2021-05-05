@@ -125,7 +125,7 @@ const redlineConfig = (
   switch (action.type) {
     case REDLINE_CONFIG:
       return {
-        redlineActive: !state.redlineActive,
+        redlineActive: action.payload.redlineActive,
       };
     case LOGOUT_USER:
       return REDLINE_DEFAULT_STATE;
