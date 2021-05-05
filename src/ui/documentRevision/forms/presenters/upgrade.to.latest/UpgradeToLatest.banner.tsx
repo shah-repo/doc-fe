@@ -35,8 +35,8 @@ const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
             display="flex"
             alignItems="center"
             position="fixed"
-            width="70%"
-            zIndex="9999"
+            width="calc(100% - 539px)"
+            zIndex="1001"
           >
             <WarningOutlinedIcon color="disabled" />
             <Box component="span" marginLeft="10px" color={Colors.white}>
