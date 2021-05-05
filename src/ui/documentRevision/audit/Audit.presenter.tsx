@@ -8,7 +8,6 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { ApprovalStatus } from "../../../state/ducks/common/types";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { SmartReference } from "../../../state/ducks/documentRevisions/types";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -22,7 +21,6 @@ interface OwnProps {
   versionNumber: string;
   isStatusVisible: boolean;
   schema: FBSchemaProps[];
-  smartReferencesTo: SmartReference[];
 }
 
 type AuditPresenterProps = OwnProps;
@@ -33,7 +31,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   versionNumber,
   isStatusVisible,
   schema,
-  smartReferencesTo,
 }) => {
   const classes = styles();
   const intl = useIntl();
@@ -275,6 +272,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_DELETED") {
         deletedReferences.push(change);
       } else if (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned) {
+        return;
+      } else if (change.field === "schema" && change.type === "ARRAY_NEW") {
         return;
       } else {
         // HACK for ENC-7509
