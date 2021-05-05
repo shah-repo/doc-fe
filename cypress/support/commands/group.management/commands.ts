@@ -126,7 +126,9 @@ Cypress.Commands.add("grpDeleteGroup", (params: {
 });
 
 Cypress.Commands.add("grpNavigateToGroupManagement", () => {
-  cy.get("[data-cy=\"navigation.groupManagement\"]").click();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GroupsGet], () => {
+    cy.get("[data-cy=\"navigation.groupManagement\"]").click();
+  });
 });
 
 Cypress.Commands.add("grpAddTag", (params: {tag: string}) => {

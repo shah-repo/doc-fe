@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../../support/config";
+import { CyRoutes } from "../../../support/routes";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
@@ -161,7 +162,9 @@ context("Autocomplete 'Employees' test", () => {
           });
 
           it("Click 'Add' button", () => {
-            cy.fbAddNewFieldButton();
+            cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+              cy.fbAddNewFieldButton();
+            });
           });
         });
 
