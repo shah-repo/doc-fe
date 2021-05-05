@@ -504,3 +504,11 @@ pipelines:
           - step: *RUN_LINTER
           - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO
+
+    release/21.4.11:
+      - parallel:
+          - step: *RUN_TESTS
+          - step: *RUN_LINTER
+          - step: *BUILD_DEV2
+      - step: *DEPLOY_DEV2
+
