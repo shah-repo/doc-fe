@@ -603,6 +603,7 @@ context("Equipment maintenance test", () => {
         CyRoutes.SessionDetails], () => {
         cy.reload();
       });
+      cy.wait(5000);
     });
 
     it("Check preventative maintenance document existance", () => {
