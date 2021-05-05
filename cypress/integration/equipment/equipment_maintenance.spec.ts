@@ -412,7 +412,8 @@ context("Equipment maintenance test", () => {
     });
 
     it("Type preventative maintenance instruction", () => {
-      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]");
+      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]")
+        .type("Instructions for preventative maintenance");
     });
 
     it("Select document 'Yes' for calibration required", () => {
