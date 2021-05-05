@@ -76,7 +76,6 @@ export class IotService {
       (id) => id === fullTopic,
     );
     if (topicSubscribed) {
-      console.log({ actin: "unsubscribe", topic: fullTopic });
       await this.mqttClientInstance.unsubscribe(fullTopic);
       delete this.emitter[fullTopic];
     }
@@ -120,7 +119,6 @@ export class IotService {
     );
 
     if (noSubscriptions || !alreadySubscribed) {
-      console.log({ action: "subscribe", topic: fullTopic });
       await this.mqttClientInstance.subscribe(
         MQTTPattern.clean(fullTopic),
       );
@@ -188,10 +186,6 @@ export class IotService {
     });
 
     this.mqttClientInstance.on("connect", (connack) => {
-      console.log({
-        action: "connect",
-        connack,
-      });
       const retry = { ...retrySubscriptions };
       retrySubscriptions = {};
       Object.keys(retry).forEach((topic) => this.subscribeToTopic(topic, retry[topic]));

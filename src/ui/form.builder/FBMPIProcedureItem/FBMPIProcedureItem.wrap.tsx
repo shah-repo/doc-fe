@@ -17,6 +17,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     handleSelectionDelete,
     getItem,
     getLot,
+    getProcedureLocale,
+    getProcedureValues,
     loading,
     dialogState,
     multiplier = 1,
@@ -129,6 +131,36 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       mpiProcedureState?.selectionDelete(id, refId);
     };
 
+    getProcedureLocale = (item: FBProcedureItemConfig) => {
+      if (isDocumentMPI) {
+        return item.type ?
+          `form.builder.mpi.procedure.${type}.title.id` :
+          `form.builder.mpi.procedure.${type}.title`;
+      }
+      const usedItem = usedDocumentsInLHRS?.[item.title];
+      return usedItem ?
+        `form.builder.lhrs.procedure.${type}.title` :
+        `form.builder.mpi.procedure.${type}.title`;
+    };
+
+    getProcedureValues = (item: FBProcedureItemConfig) => {
+      const id = item.id;
+      const quantity = item.quantity ? (item.quantity * multiplier) : "form.builder.none";
+      const unit = item.unit;
+      const usedItem = usedDocumentsInLHRS?.[item.title];
+      const revision = usedItem?.displayRevision;
+
+      if (isDocumentMPI) {
+        return item.type ?
+          { id, title: getItem?.(item.title), quantity, unit } :
+          { title: getItem?.(item.title), quantity, unit };
+      }
+
+      return usedItem ?
+        { title: getItem?.(usedItem?.docRevId), revision, quantity, unit } :
+        { title: getItem?.(item.title), quantity, unit };
+    };
+
     handleRemove = (id: string) => mpiProcedureState?.removeItem(id, type);
     getItem = (id: string): string => mpiProcedureState?.getItem(id, type) || "";
     getLot = (id?: string): string => mpiProcedureState?.getLot(id) || "";
@@ -158,6 +190,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       handleSelectionDelete,
       getItem,
       getLot,
+      getProcedureLocale,
+      getProcedureValues,
       mpiProcedureState,
       isPreview,
       dialogState,

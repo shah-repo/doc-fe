@@ -28,7 +28,6 @@ const AppPresenter: React.FunctionComponent = () => {
     }
   }, [pingServer, pingServerAsyncInfo]);
 
-
   if (showSpinner) {
     return (
       <Box top="50%" right="50%" position="fixed" >

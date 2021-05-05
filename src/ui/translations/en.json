@@ -347,6 +347,7 @@
   "common.numeric.release": "N/A (Numeric Release)",
   "common.document.type.name": "Document Type Name",
   "common.document.type.acronym": "Document Type Acronym",
+  "common.document.type.mismatch": "Document type group or groupOptions don't match BE config.",
   "common.private.number.pool": "Private Number Pool",
   "common.redline": "RedLine",
   "common.redline.message": "You are in redline mode",

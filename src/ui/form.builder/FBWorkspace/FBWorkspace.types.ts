@@ -44,6 +44,9 @@ export interface FBWorkspaceExternalState {
   documentType?: {
     byId: any;
   };
+  documentRevisions?: {
+    byId: any;
+  };
 }
 
 export type FBWorkspaceConstructor = Pick<FBWorkspaceProps, "schema" | "mode" | "autosave">;
