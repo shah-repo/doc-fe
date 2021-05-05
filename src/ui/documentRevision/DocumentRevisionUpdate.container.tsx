@@ -58,7 +58,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     onSuccess: () => {
       setLastSavedTimestamp(getFormattedDateString(Date.now(), MomentFormats.Time));
       if (redlineActive) {
-        dispatch(companyActions.redlineConfig());
+        dispatch(companyActions.redlineConfig(false));
       }
       setDoNotPrompt(true);
     },

@@ -60,8 +60,9 @@ const enableDropbox = (handlers: Handlers): ApiAction => apiActionWithCallbacks(
   handlers,
 });
 
-const redlineConfig = () => ({
+const redlineConfig = (redlineActive: boolean) => ({
   type: REDLINE_CONFIG,
+  payload: { redlineActive },
 });
 
 export default {

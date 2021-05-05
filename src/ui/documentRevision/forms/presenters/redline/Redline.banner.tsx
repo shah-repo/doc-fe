@@ -17,8 +17,7 @@ const RedlineBanner: React.FunctionComponent<Props> = ({
 
   // remove banner on unmount
   useEffect(() => () => {
-    dispatch(companyActions.redlineConfig());
-
+    dispatch(companyActions.redlineConfig(false));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
