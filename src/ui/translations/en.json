@@ -890,6 +890,7 @@
   "form.builder.audit.value.quantity": "{field} {docId} - {name} - rev {displayRevision} quantity {quantity} for {stepLabel}",
   "form.builder.audit.value.unit": "{field} {docId} - {name} - rev {displayRevision} unit {unit} for {stepLabel}",
   "form.builder.audit.field.step": "{fieldType} for {stepLabel}",
+  "form.builder.audit.relations": "{fieldType} {previousValue} for {relation}",
   "form.builder.audit.EQUIPMENT_REPLACEMENT.BOOLEAN_NEW": "{label} Added",
   "form.builder.audit.EQUIPMENT_REPLACEMENT.BOOLEAN_EDITED": "{label} Deleted",
   "form.builder.audit.LOT_USAGE.BOOLEAN_NEW": "{label} Added",

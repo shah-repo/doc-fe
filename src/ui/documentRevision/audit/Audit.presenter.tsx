@@ -164,11 +164,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         // skip audit values
         if (
           (last(valueKey) === "id" ||
-          last(valueKey) === "unit" ||
-          last(valueKey) === "quantity" ||
           last(valueKey) === "attachments") && (
             (change.type === "STRING_NEW" && !isAttachment && last(valueKey) !== "description") ||
-            change.type === "NUMBER_NEW" ||
             change.type === "NUMBER_DELETED")) {
           return;
         }
@@ -186,21 +183,31 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           };
         }
         // adding more equipment or material to the list
-        if (last(valueKey) === "title" && !isAttachment && change.type === "STRING_NEW") {
-          const value = documentRevisions.find((e) => e.id === change.nextValue);
-          fbLabel = intl.formatMessage({ id: "form.builder.audit.field.step" },
-            {
-              fieldType,
-              stepLabel,
-            });
-          change = {
-            ...change,
-            nextValue: `${value?.document.docId} - ${value?.name} - rev
+        if (change.type === "STRING_NEW" || change.type === "NUMBER_NEW") {
+          if (last(valueKey) === "title") {
+            const value = documentRevisions.find((e) => e.id === change.nextValue);
+            fbLabel = intl.formatMessage({ id: "form.builder.audit.field.step" },
+              {
+                fieldType,
+                stepLabel,
+              });
+            change = {
+              ...change,
+              nextValue: `${value?.document.docId} - ${value?.name} - rev
                       ${value?.displayRevision}`,
-          };
+            };
+          }
+          if (last(valueKey) === "unit" || last(valueKey) === "quantity") {
+            const { document, name, displayRevision } = change.relatedEntity || {};
+            const material = `${document?.docId} - ${name} - rev ${displayRevision}`;
+            fbLabel = intl.formatMessage({ id: "form.builder.audit.field.step" },
+              {
+                fieldType: intl.formatMessage({ id: `form.builder.${last(valueKey)}` }),
+                stepLabel: material,
+              });
+          }
         }
         // editing material or equipment
-        // for now we are going to turn off the changes for quantity and units on material
         if (change.type === "STRING_EDITED" || change.type === "NUMBER_EDITED") {
           let nextMaterial;
           let previousMaterial;
@@ -222,7 +229,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               });
           }
           if (last(valueKey) === "unit" || last(valueKey) === "quantity") {
-            return;
+            const { document, name, displayRevision } = change.relatedEntity || {};
+            const material = `${document?.docId} - ${name} - rev ${displayRevision}`;
+            fbLabel = intl.formatMessage({ id: "form.builder.audit.relations" },
+              {
+                fieldType: intl.formatMessage({ id: `form.builder.${last(valueKey)}` }),
+                previousValue: change.previousValue as string,
+                relation: material,
+              });
           }
         }
         // delete equipment or material or add/delete attachments
