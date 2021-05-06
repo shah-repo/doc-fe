@@ -1,3 +1,4 @@
+import { isNull } from "lodash";
 import { IntlShape } from "react-intl";
 import { toArray } from "../group.management/utils/transform";
 
@@ -37,7 +38,7 @@ export const parseJSON = (value) => {
 
 export const toDocumentTypeBody = (values) => ({
   ...values,
-  defaultRevStage: values.defaultRevStage.value,
+  defaultRevStage: isNull(values.defaultRevStage) ? null : values.defaultRevStage.value,
   group: values.group.value,
   hiddenForCreationForUsersWithoutTags: toArray(values.hiddenForCreationForUsersWithoutTags),
   schema: parseJSON(values.schema),
