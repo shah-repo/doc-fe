@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -10,6 +9,10 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 let documentUploadFailureCaught = false;
+let developersGroup;
+let adminSessionId;
+let adminEmployee;
+let employeeToDevs;
 
 context("Document Creation Flow", () => {
   context("[API]Prepare company", () => {
@@ -43,8 +46,22 @@ context("Document Creation Flow", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          employeeToDevs = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           done();
         });
+      });
+    });
+
+    it("[API]Login admin tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[1].email,
+        password: "Tester1!",
+      }).then((response) => {
+        loginResponse = response;
+        adminSessionId = loginResponse.sessionId;
+        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
+        done();
       });
     });
 
@@ -56,6 +73,30 @@ context("Document Creation Flow", () => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
+      });
+    });
+  });
+
+  context("[API]Add employee to developers group", () => {
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Developers",
+        sessionId: adminSessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        developersGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: developersGroup.body[0].id,
+        sessionId: adminSessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: employeeToDevs.id }],
+        },
       });
     });
   });
@@ -236,10 +277,12 @@ context("Document Creation Flow", () => {
     });
 
     context("Uploads attachments", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Uploads test_image.jpg", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.atchUploadAttachment({ fileName: "test_image.jpg" });
-        });
+        cy.atchUploadAttachment({ fileName: "test_image.jpg" });
       });
 
       it("Check test_image.jpg attachment atributes", () => {
@@ -251,9 +294,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Uploads image.jpg", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.atchUploadAttachment({ fileName: "image.jpg" });
-        });
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
       it("Check test.docx attachment atributes", () => {
@@ -267,6 +308,10 @@ context("Document Creation Flow", () => {
     });
 
     context("Check primary attachment function", () => {
+      it("Save document", () => {
+        cy.drClickCreateSupplierWithApiCallAudit();
+      });
+
       it("Set attachment as primary", () => {
         cy.atchSetPrimaryAttachment({ fileName: "test_image.jpg" });
       });
@@ -279,9 +324,7 @@ context("Document Creation Flow", () => {
 
       it("Remove attachment test_image.jpg", () => {
         SystemRequirement("REQ-0240");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
-        });
+        cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
       });
 
       it("Check two attachments are displayed: test.docx, image.jpg", () => {
@@ -290,6 +333,10 @@ context("Document Creation Flow", () => {
     });
 
     context("Check training for next revision", () => {
+      it("Save document", () => {
+        cy.drClickCreateSupplierWithApiCallAudit();
+      });
+
       it("Approve and Release document", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });

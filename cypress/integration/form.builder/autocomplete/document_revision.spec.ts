@@ -198,10 +198,11 @@ context("Autocomplete 'Document Revision' test", () => {
               .find("[data-cy^=\"test-label-\"]").click();
 
             if (response.body.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  expect($li).to.contain.text(response.body[index].document.docId);
-                })
+              const docRevs = response.body;
+              docRevs.forEach((docRev) => {
+                cy.get("ul[role=listbox]>li").should("contain.text", docRev.document.docId);
+              });
+              cy.get("ul[role=listbox]>li")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

@@ -220,19 +220,20 @@ context("Document Operators Access Test", () => {
       });
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Enters title 'New Document'", () => {
       cy.drEnterDocumentTitle({ name: "New Document" });
     });
 
     it("Enters description 'New Document description'", () => {
       cy.drEnterDocumentDescription({ description: "New Document description" });
-      cy.wait(5000);
     });
 
     it("Choose an existing part from the list of available parts", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"childrenParts\"]").type("Test Part{downarrow}{enter}");
-      });
+      cy.get("[data-cy=\"childrenParts\"]").type("Test Part{downarrow}{enter}");
     });
 
     it("Click on 'Add a field'", () => {
@@ -248,9 +249,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Add 'Text Field' field", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.fbAddNewFieldButton();
-      });
+      cy.fbAddNewFieldButton();
     });
 
     it("Click on 'Add a field'", () => {
@@ -274,7 +273,9 @@ context("Document Operators Access Test", () => {
     });
 
     it("reload page", () => {
-      cy.reload();
+      cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
+        cy.reload();
+      });
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
@@ -313,7 +314,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
         cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
       });
     });
@@ -372,7 +373,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
         cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
       });
     });
@@ -417,7 +418,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
         cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
       });
     });
@@ -435,7 +436,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
     });
@@ -443,13 +444,9 @@ context("Document Operators Access Test", () => {
     it("Approve record button click", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
       cy.get("input[name=\"password\"]").type("Tester1!");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
-    });
-
-    it("Reload document", () => {
-      cy.reload();
     });
 
     it(`Logout as current user`, () => {
@@ -474,7 +471,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
         cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "In Review" });
       });
     });
@@ -482,13 +479,9 @@ context("Document Operators Access Test", () => {
     it("Approve record button click", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
       cy.get("input[name=\"password\"]").type("Tester1!");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
-    });
-
-    it("Reload document", () => {
-      cy.reload();
     });
 
     it(`Logout as current user`, () => {
@@ -513,7 +506,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
         cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "In Review" });
       });
     });
@@ -521,13 +514,9 @@ context("Document Operators Access Test", () => {
     it("Approve record button click", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
       cy.get("input[name=\"password\"]").type("Tester1!");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
-    });
-
-    it("Reload document", () => {
-      cy.reload();
     });
 
     it("Verify status is released", () => {

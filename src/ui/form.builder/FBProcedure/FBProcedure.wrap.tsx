@@ -1,15 +1,15 @@
 import { cloneDeep, differenceBy, filter, find, isEqual, keys, map, union, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { FB, FBFieldName, FBInputState, FBMediaAlbumFieldStore, FBProcedureItemConfig, FBProcedureItemType, FBProcedureOmitDiffKey, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
-import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBProcedure = <T extends FBProcedureProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     handleAdd,
+    onKeyDown,
     procedureState,
     isPreview,
     isOutput,
@@ -24,7 +24,6 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const { mode } = workspaceState || {};
-    const { submitForm } = useFormContext();
     const formValue = formState?.getFieldValue(name) as FBProcedureValue;
     procedureState = FB.useRef(FBProcedureState, formValue);
     isOutput = isOutput || Boolean(workspaceState?.isOutput && workspaceState?.id);
@@ -39,7 +38,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
 
     // MARK: @reactions
     // Form sync
-    React.useEffect(() => reaction(
+    useEffect(() => reaction(
       () => procedureState?.value,
       (data) => formState?.setFieldValue(name, {
         ...formState.getFieldValue(name),
@@ -51,14 +50,14 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     ), []);
 
     // Autosave trigger
-    React.useEffect(() => reaction(
+    useEffect(() => reaction(
       () => procedureState?.value,
-      () => formState?.setFieldAutosave(name)
+      () => workspaceState?.saveDocRev(formState?.getValues())
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     // Diff switch
-    React.useEffect(() => reaction(
+    useEffect(() => reaction(
       () => formState?.inputState.get(FBFieldName.ProcedureDiff)?.value,
       (checked) => {
         const diffInput = `${FBFieldName.ProcedureDiff}${name}`;
@@ -116,17 +115,27 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     }
 
     // MARK: @methods
-    handleAdd = (isClone?: boolean) => {
+    handleAdd = (isClone?: boolean, isFromKeys?: boolean) => {
+      if (!workspaceState) { return; }
       const newName = FB.uniqid;
       const newItem = {
-        ...workspaceState?.getSchemaItemAt(index),
+        ...workspaceState.getSchemaItemAt(index),
+        autoScrollTo: isFromKeys,
+        autoFocus: isFromKeys,
         name: newName,
       };
       if (isClone) {
         formState?.setFieldValue(newName, formState.getFieldValue(name));
       }
       workspaceState?.setSchemaItemAt(newItem, index + 1);
-      submitForm();
+      workspaceState.saveDocRev(formState?.getValues());
+    };
+
+    onKeyDown = (e: KeyboardEvent) => {
+      if (!workspaceState?.isOutputSchema) { return; }
+      if (e.key === "Enter" && e.ctrlKey) {
+        handleAdd?.(false, true);
+      }
     };
 
     // MARK: @observer
@@ -139,8 +148,10 @@ export const withFBProcedure = <T extends FBProcedureProps>(
 
     return Component({
       ...(props as T),
+      onKeyDown,
       handleAdd,
       procedureState,
+      workspaceState,
       isPreview,
       isOutput,
       types,

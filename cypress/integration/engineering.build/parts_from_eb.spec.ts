@@ -283,7 +283,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.EmployeesGet], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
       });
@@ -348,7 +348,7 @@ context("Parts from EB flow test", () => {
 
     context("Add a new part via EB", () => {
       it("Open Create a New Part dialog", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.get("[data-cy=\"form.builder.create.new.part\"]").click();
         });
       });
@@ -387,7 +387,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.EmployeesGet], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
       });
@@ -433,7 +433,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.EmployeesGet], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
       });

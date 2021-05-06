@@ -21,7 +21,11 @@ const FBInlineApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = (
       const { documentRevisions } = data || {};
       const documentRevision = maxBy(documentRevisions, "version");
       if (!documentRevision) { return; }
-      window.location.href = documentVersionPath(documentRevision.id, documentId);
+      const { version: lastVersion = 0 } = documentRevision;
+      const { version = 0 } = workspaceState?.document || {};
+      if (lastVersion > version) {
+        window.location.href = documentVersionPath(documentRevision.id, documentId);
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);

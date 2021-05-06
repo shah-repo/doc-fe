@@ -1,10 +1,9 @@
 import { Formik, FormikProps } from "formik";
 import * as React from "react";
-import { connect } from "react-redux";
 import { logo } from "../../../common/utils/helpers";
 import { authActions } from "../../../state/ducks/auth";
-import { ApplicationState } from "../../../state/reducers";
 import { FormContext } from "../../components/forms/FormContext";
+import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { Translation } from "../../translations/types";
 import ForgotPasswordPage from "../SignUp/ForgotPasswordPage";
@@ -12,10 +11,6 @@ import VerificationEmailPage from "../SignUp/VerificationEmailPage";
 import { LoginFormValues, PasswordEmail } from "../types";
 import LoginFormPresenter from "./LoginForm.presenter";
 
-interface DispatchProps {
-  login: typeof authActions.login;
-  forgotPassword: typeof authActions.forgotPassword;
-}
 interface Props {
   signMessage: Translation;
   signLabel: Translation;
@@ -23,17 +18,15 @@ interface Props {
   title: Translation;
 }
 
-type LoginFormContainerProps = DispatchProps & Props;
-
-const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
-  login,
-  forgotPassword,
+const LoginFormContainer: React.FunctionComponent<Props> = ({
   signMessage,
   route,
   signLabel,
   title,
 }) => {
   const async = useAsync();
+  const loginAction = useActionCreator(authActions.login);
+  const forgotPasswordAction = useActionCreator(authActions.forgotPassword);
 
   const forgotPassAsync = useAsync({
     onSuccess: () => {
@@ -42,11 +35,11 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
   });
 
   const onSubmit = (values: LoginFormValues): void => {
-    async.start(login, values, async);
+    async.start(loginAction, values, async);
   };
 
   const onForgotPassword = (email: PasswordEmail): void => {
-    forgotPassAsync.start(forgotPassword, email, forgotPassAsync);
+    forgotPassAsync.start(forgotPasswordAction, email, forgotPassAsync);
   };
 
   const [verificationState, showVerificationState] = React.useState(false);
@@ -61,7 +54,7 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
     saveResetEmail(values.email);
     saveMessage(message);
     forgotPassAsync.start(
-      forgotPassword,
+      forgotPasswordAction,
       { email: values.email },
       forgotPassAsync,
     );
@@ -134,7 +127,4 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
   );
 };
 
-export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
-  login: authActions.login,
-  forgotPassword: authActions.forgotPassword,
-})(LoginFormContainer);
+export default LoginFormContainer;

@@ -1,14 +1,18 @@
 import { Box, List, Typography } from "@material-ui/core";
-import { has, last, orderBy } from "lodash";
+import { has, isEmpty, last, orderBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { MomentFormats } from "../../../common/utils/date";
+import { useSelector } from "react-redux";
+import striptags from "striptags";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { ApprovalStatus } from "../../../state/ducks/common/types";
+import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, SmartReference } from "../../../state/ducks/documentRevisions/types";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
-import { FBApprovalAuditState, FBText } from "../../form.builder";
+import { FBApprovalAuditState, FBSchemaProps, FBText } from "../../form.builder";
 import { isTranslation } from "../../translations/types";
 import { styles } from "./Audit.presenter.styles";
 
@@ -17,6 +21,8 @@ interface OwnProps {
   statusLabel: string;
   versionNumber: string;
   isStatusVisible: boolean;
+  schema: FBSchemaProps[];
+  smartReferencesTo: SmartReference[];
 }
 
 type AuditPresenterProps = OwnProps;
@@ -26,19 +32,25 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   statusLabel,
   versionNumber,
   isStatusVisible,
+  schema,
+  smartReferencesTo,
 }) => {
   const classes = styles();
   const intl = useIntl();
+  const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
 
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
-      const { owner, ownerUser, ownerThirdParty } = change;
+      const { owner, ownerUser, ownerThirdParty, type, field } = change;
       const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
 
       if (audit[groupId].filter((change) =>
         change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
       ).length === 0) {
+        return null;
+      }
+      if (type === "BOOLEAN_EDITED" && field.split(".").includes("smartRefs")) {
         return null;
       }
 
@@ -63,7 +75,15 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     orderBy(audits, ["field"]).forEach((change: Audit, index) => {
       change.groupKey = groupKey;
       const isFBField = has(change, "fbSchemaItem");
-      const { label, placeholder = "", type: fbType, stepIndex: number = 1 } = change.fbSchemaItem || {};
+      const isSmartRef = change.field.split(".").includes("smartRefs");
+      const {
+        label,
+        placeholder = "",
+        type: fbType,
+        stepIndex:
+        number = 1,
+        name,
+      } = change.fbSchemaItem || {};
       let fbLabel = label || placeholder;
       const isOmittedFB = (
         isFBField &&
@@ -82,7 +102,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           return;
         }
       }
-
+      // PROCEDURE
       if (fbType === "procedure") {
         let valueKey = last(change.field.split("."));
         let valueKeyType = "";
@@ -108,8 +128,136 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         }
         fbLabel = `${stepLabel} ${keyLabel}`;
       }
+      // LHRSTEP
+      if (fbType === "lhrstep") {
+        const LHRschemaGroupedInSections: any[] = [];
+        schema.forEach((element) => {
+          if (element.type === "stepsection") {
+            LHRschemaGroupedInSections.push([]);
+          }
+          if (element.type === "lhrstep" || element.type === "stepsection") {
+            LHRschemaGroupedInSections[LHRschemaGroupedInSections.length - 1]?.push(element);
+          }
+        });
+        const valueKey = change.field.split(".")[1].split("-");
+        const stepLHRNumber = LHRschemaGroupedInSections.filter((e) =>
+          e.find((i) => i.name === name)).flat().find((e) => e.type === "stepsection");
+        let label = "";
+        const stepLabel = intl.formatMessage({ id: "form.builder.step.number" }, { number: stepLHRNumber.stepIndex });
+        if (!valueKey.includes("quantity")) {
+          return;
+        }
+        if (valueKey.includes("quantity")) {
+          label = intl.formatMessage({ id: `form.builder.${valueKey[2]}.quantity` });
+        }
+        fbLabel = `${label} for ${stepLabel}`;
+      }
+      // MPIPROCEDURE
+      const valueKey = change.field.split(".");
+      if (fbType === "mpiprocedure") {
+        if (!change.field.split(".").includes("editorConfig") && last(valueKey) !== "description") {
+          return;
+        }
+        const stepLabel = intl.formatMessage({ id: "form.builder.step.number" }, { number });
+        const regex = /materials/g;
+        const isMaterial = !isEmpty(change.field.match(regex));
+        const isAttachment = !isEmpty(change.field.match(/attachments/g));
+        const fieldType = isMaterial ? intl.formatMessage({ id: "form.builder.materials|s" }) :
+          intl.formatMessage({ id: "form.builder.equipment|s" });
+        // skip audit values
+        if (
+          (last(valueKey) === "id" ||
+          last(valueKey) === "unit" ||
+          last(valueKey) === "quantity" ||
+          last(valueKey) === "attachments") && (
+            (change.type === "STRING_NEW" && !isAttachment && last(valueKey) !== "description") ||
+            change.type === "NUMBER_NEW" ||
+            change.type === "NUMBER_DELETED")) {
+          return;
+        }
+        // changes on description step field
+        if (last(valueKey) === "description") {
+          if (!change.field.split(".").includes("mpi-procedure-built-in")) {
+            return;
+          }
+          fbLabel = `${intl.formatMessage({ id: "form.builder.step.description" })} for ${stepLabel}`;
+          const value = change.nextValue as string;
+          const formattedValue = striptags(value);
+          change = {
+            ...change,
+            nextValue: formattedValue,
+          };
+        }
+        // adding more equipment or material to the list
+        if (last(valueKey) === "title" && !isAttachment && change.type === "STRING_NEW") {
+          const value = documentRevisions.find((e) => e.id === change.nextValue);
+          fbLabel = intl.formatMessage({ id: "form.builder.audit.field.step" },
+            {
+              fieldType,
+              stepLabel,
+            });
+          change = {
+            ...change,
+            nextValue: `${value?.document.docId} - ${value?.name} - rev
+                      ${value?.displayRevision}`,
+          };
+        }
+        // editing material or equipment
+        // for now we are going to turn off the changes for quantity and units on material
+        if (change.type === "STRING_EDITED" || change.type === "NUMBER_EDITED") {
+          let nextMaterial;
+          let previousMaterial;
+
+          if (last(valueKey) === "title") {
+            nextMaterial = documentRevisions.find((e) => e.id === change.nextValue);
+            previousMaterial = documentRevisions.find((e) => e.id === change.previousValue);
+            change = {
+              ...change,
+              nextValue: `${nextMaterial?.document.docId} - ${nextMaterial?.name} - rev ${nextMaterial?.displayRevision}`,
+            };
+            fbLabel = intl.formatMessage({ id: "form.builder.audit.value" },
+              {
+                field: fieldType,
+                docId: previousMaterial?.document.docId,
+                name: previousMaterial?.name,
+                displayRevision: previousMaterial?.displayRevision,
+                stepLabel,
+              });
+          }
+          if (last(valueKey) === "unit" || last(valueKey) === "quantity") {
+            return;
+          }
+        }
+        // delete equipment or material or add/delete attachments
+        if (change.type === "STRING_DELETED" || (change.type === "STRING_NEW" && isAttachment)) {
+          if (last(valueKey) !== "title" && !isAttachment) {
+            return;
+          }
+          fbLabel = intl.formatMessage({ id: "form.builder.audit.field.step" },
+            {
+              fieldType: isAttachment ? intl.formatMessage({ id: "common.attachment" }) : fieldType,
+              stepLabel,
+            });
+        }
+      }
 
       if (!isFBField && change.field.includes("attachments")) {
+        if (change.field.endsWith("s3link") && change.type === "STRING_EDITED") {
+          singleFields.push(
+            <Box mb={1} key={`${change.groupId}-${index}`}>
+              <Box>
+                <Text
+                  dataCy={`change-key-${groupKey}-${key}`}
+                  message="documentRevision.audit.s3link.change"
+                />
+              </Box>
+              <div className={classes.auditValue}>
+                <AuditFactory audit={change} dataCy={`change-value-${groupKey}-${key}`} />
+              </div>
+            </Box>
+          );
+          return;
+        }
         attachments.push(change);
       } else if (change.field.includes("referenceTo") && change.type === "ARRAY_NEW") {
         newReferences.push(change);
@@ -121,17 +269,54 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         // HACK for ENC-7509
         const regex = new RegExp(`^formInput\\.(?:${change.fbSchemaItem?.name})\\[[a-zA-Z0-z\-]+\\]\\.id$`);
         if (change.fbSchemaItem?.type === "fileupload" && !regex.test(change.field)) { return; }
-
+        if (change.field === "redline") {
+          change = {
+            ...change,
+            nextValue: `${getFormattedDateString(change.timestamp, MomentFormats.DateTime)} - ${change.owner.user.name}`,
+          };
+        }
+        if (change.field.split(".").includes("smartRefs")) {
+          if (change.type === "STRING_NEW" || change.type === "BOOLEAN_NEW" || change.type === "BOOLEAN_EDITED") {
+            return;
+          }
+          if (change.type === "OBJECT_NEW") {
+            const smartId = change.field.split(".")[1];
+            const smartReference = smartReferencesTo?.find((e) => e.id === smartId);
+            const stepIndex = schema?.find((e) => e.name === smartReference?.metadata.fieldId)?.stepIndex;
+            const nextValue = change.nextValue as DocumentRevision;
+            const value = documentRevisions.find((e) => {
+              if (smartReference?.metadata.materialId) {
+                return e.id === smartReference?.metadata?.materialId;
+              }
+              return e.id === smartReference?.metadata?.equipmentId;
+            }
+            );
+            change = {
+              ...change,
+              field: "smartRefs",
+              type: smartReference?.type as unknown as Audit["type"],
+              nextValue: `${nextValue?.document.docId} - ${nextValue?.name} - rev ${nextValue?.displayRevision}`,
+            };
+            fbLabel = intl.formatMessage({ id: "form.builder.audit.replacement" },
+              {
+                type: change.type === "LOT_USAGE" as unknown as Audit["type"]  ?
+                  intl.formatMessage({ id: "form.builder.materials|s" }) :
+                  intl.formatMessage({ id: "form.builder.equipment|s" }),
+                value: value?.document.docId,
+                step: stepIndex,
+              });
+          }
+        }
         singleFields.push((
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
-              {!isFBField && (
+              {!isFBField && !isSmartRef && (
                 <Text
                   dataCy={`change-key-${groupKey}-${key}`}
                   message={`documentRevision.audit.${change.field}.${change.type}`}
                 />
               )}
-              {isFBField && (
+              {(isFBField || isSmartRef) && (
                 <FBText
                   locale={`form.builder.audit.${change.type}`}
                   values={{ label: fbLabel }}

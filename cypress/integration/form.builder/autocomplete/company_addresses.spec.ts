@@ -167,16 +167,19 @@ context("Autocomplete 'Company addresses' test", () => {
               .find("[data-cy^=\"test-label-\"]").click();
 
             if (response.body.addresses.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  expect($li).to.have.text(response.body.addresses[index]);
-                })
+              const addresses = response.body.addresses;
+              addresses.forEach((address) => {
+                cy.get("ul[role=listbox]>li")
+                  .should("contain.text", address);
+              });
+              cy.get("ul[role=listbox]>li")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.addresses.length);
                 });
             } else {
               cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
             }
+
           });
         });
 

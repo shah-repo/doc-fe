@@ -2,8 +2,9 @@
 /* eslint-disable no-template-curly-in-string */
 
 export enum FBEndpoint {
+  AutocompleteByOptionId = "/autocomplete_options/${optionId}",
   PrivateUpload = "/attachments/private_upload_url",
-  FileUploadCandidates = "/documents/file_upload_candidates",
+  FileUploadCandidates = "/document/file_upload_candidates",
   AssetUrl = "/attachments/assetUrl",
   AttachmentUpload = "/attachments/upload",
   AttachmentPatch = "/attachments/${id}",
@@ -47,4 +48,7 @@ export enum FBEndpoint {
   UseOverride = "/lhr/lhrs/${id}/use_override",
   RemoveOverride = "/lhr/lhrs/${id}/remove_override/${refId}",
   Notes = "/notes",
+  DocumentRevisionPatch = "/document_revisions/${id}",
 }
+
+

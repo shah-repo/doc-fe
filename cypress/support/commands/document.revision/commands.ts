@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable max-len */
 import { int } from "aws-sdk/clients/datapipeline";
-import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions";
+import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
@@ -26,6 +26,8 @@ declare global {
       drClickCreateSupplierWithApiCall(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForForms(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForFormsExpectingToastError(): Chainable<Subject>;
+      drClickCreateSupplierWithApiCallAudit(): Chainable<Subject>;
+      drSaveDocumentWithoutaudit(): Chainable<Subject>;
       drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
@@ -49,6 +51,7 @@ declare global {
       drCheckApprovalsEnforcment(): Chainable<Subject>;
       drVerifyFirstDocumentRevisionList(params: { revision: string }): Chainable<Subject>;
       drApproveAndReleaseDocumentWithSelectingApprover(users: string[], params?: { toastifyExists: boolean }): Chainable<Subject>;
+      drClickUpgradeForm(): Chainable<Subject>;
 
       /* Document Approval Matrix */
 
@@ -245,7 +248,7 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params:
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   });
-  cy.wait(2000);
+  cy.wait(1000);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {
@@ -338,7 +341,25 @@ Cypress.Commands.add("drClickCreateSupplierWithApiCall", () => {
   cy.wait(500);
 });
 
+Cypress.Commands.add("drClickCreateSupplierWithApiCallAudit", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    });
+  cy.checkToastMessage({ exists: false });
+  cy.wait(500);
+});
+
 Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PatchDocRev], () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+    });
+  cy.checkToastMessage({ exists: false });
+  cy.wait(500);
+});
+
+Cypress.Commands.add("drSaveDocumentWithoutaudit", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PatchDocRev], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
@@ -392,6 +413,13 @@ Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string;
 Cypress.Commands.add("drChangeOwnerFromMenu", (params: { employee: string }) => {
   cy.get("#HeaderMenuButton").click();
   cy.drChangeOwner({ employee: params.employee });
+});
+
+Cypress.Commands.add("drClickUpgradeForm", () => {
+  cy.get("[data-cy=\"formUpgradeButton\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.UpgradeToReleasedForm, () => {
+    cy.get("[id=\"UpgradeToLatest-proceed\"]").click();
+  });
 });
 
 Cypress.Commands.add("drChangeOwnerByAdmin", (params: { employee: string }) => {
@@ -523,7 +551,7 @@ Cypress.Commands.add("drUpgradeRevisionLevel", () => cy.get(`[data-cy="upgradeNe
 
 Cypress.Commands.add("drReleaseDocAfterRoleExistsAndChecked", (params: { group: number; role: string }) => {
   cy.drApproveAndReleaseDialog();
-  cy.wait(5000);
+  cy.wait(1000);
   cy.get(`[data-cy="group-${params.group}"]`).contains(params.role);
   cy.get(`[data-cy="checked-${params.group}"]`).should("be.visible");
   cy.wrapWithWaitOnApiCall(

@@ -1090,8 +1090,13 @@ context("Checkboxes test", () => {
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocPreview], () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+
+    it("Click on revise", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocPreview], () => {
         cy.fbClickButton({ el: "updateRecord" });
       });
     });

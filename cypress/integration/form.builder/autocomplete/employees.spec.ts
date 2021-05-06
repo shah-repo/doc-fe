@@ -2,13 +2,13 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../../support/config";
+import { CyRoutes } from "../../../support/routes";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
-let secondEmployee;
 const approverEmail = USERS[10].email;
 const approverName = USERS[10].name;
 
@@ -38,7 +38,6 @@ context("Autocomplete 'Employees' test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -163,45 +162,24 @@ context("Autocomplete 'Employees' test", () => {
           });
 
           it("Click 'Add' button", () => {
-            cy.fbAddNewFieldButton();
+            cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+              cy.fbAddNewFieldButton();
+            });
           });
         });
 
         context("Preview FORM document", () => {
           it("Click Form Review", () => {
             cy.fbClickButton({ el: "FBWorkspace-clickView" });
+            cy.wait(3000);
           });
         });
       });
 
       context("Verify Autocomplete 'Employees'", () => {
-        it("Verify autocomplete 'Employees'", () => {
-          cy.request({
-            method: "GET",
-            url: `${CONFIG.BE_URL}/api/v1/employees?active=true`,
-            headers: {
-              Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
-            },
-          }).then((response) => {
-            cy.wait(3000);
-            cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
-
-            if (response.body.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  expect($li).to.have.text(response.body[index].user.name);
-                })
-                .then(($lis) => {
-                  expect($lis).to.have.length(response.body.length);
-                });
-            } else {
-              cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
-            }
-          });
-        });
-
         it("Verify created 'Employees' in the list", () => {
+          cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+            .find("[data-cy^=\"test-label-\"]").click();
           cy.get(".MuiAutocomplete-popper ul li").should("contain", `${approverName}`);
         });
 
@@ -209,7 +187,7 @@ context("Autocomplete 'Employees' test", () => {
           cy.get(".MuiAutocomplete-popper ul li").should("have.length", 6);
         });
 
-        it("Verify Users name in the list", () => {
+        it("Verify Users names in the list", () => {
           cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[10].name);
           cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[1].name);
           cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[2].name);

@@ -91,6 +91,8 @@ export class IotService {
     const hasSubscriptions = !isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
     if (hasSubscriptions) {
       const topics = Object.keys(this.mqttClientInstance._resubscribeTopics);
+      console.log({ actin: "unsubscribeAll", topics });
+
       await this.mqttClientInstance.unsubscribe(topics);
       this.emitter = {};
     }
@@ -150,7 +152,40 @@ export class IotService {
 
     creatingClient = true;
     this.mqttClientInstance = await new AWSMqttClient(clientConfig);
-    this.mqttClientInstance.on("connect", () => {
+
+    this.mqttClientInstance.on("error", (error) => {
+      console.log({
+        action: "error",
+        error,
+      });
+    });
+
+    this.mqttClientInstance.on("offline", () => {
+      console.log({
+        action: "offline",
+      });
+    });
+
+    this.mqttClientInstance.on("disconnect", (packet) => {
+      console.log({
+        action: "disconnect",
+        packet,
+      });
+    });
+
+    this.mqttClientInstance.on("reconnect", () => {
+      console.log({
+        action: "reconnect",
+      });
+    });
+
+    this.mqttClientInstance.on("end", () => {
+      console.log({
+        action: "end",
+      });
+    });
+
+    this.mqttClientInstance.on("connect", (connack) => {
       const retry = { ...retrySubscriptions };
       retrySubscriptions = {};
       Object.keys(retry).forEach((topic) => this.subscribeToTopic(topic, retry[topic]));
@@ -166,7 +201,12 @@ export class IotService {
       }
 
       const params = MQTTPattern.extract(emitterKey, topic);
-
+      console.log({
+        action: "messageReceived",
+        params,
+        topic,
+        decodedMessage: new TextDecoder("utf-8").decode(message),
+      });
       this.emitter[emitterKey] && this.emitter[emitterKey](new TextDecoder("utf-8").decode(message), params);
     });
   }

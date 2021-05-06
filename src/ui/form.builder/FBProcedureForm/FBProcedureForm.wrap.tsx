@@ -1,9 +1,14 @@
-import { filter, first, isEmpty, lowerCase, map } from "lodash";
+import { filter, find, first, isEmpty, keyBy, lowerCase, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormFilterType, FBProcedureFormProps, FBProcedureFormState, FBProcedureItemConfig, FBProcedureItemType } from "..";
+import { companySelectors } from "../../../state/ducks/company";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { checkIsDocumentMPI, checkIsDocumentMPIOutput } from "../../documentRevision/helpers/checkDocumentGroup";
+import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
+import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBProcedureForm = <T extends FBProcedureFormProps>(
   Component: React.FunctionComponent<T>,
@@ -21,15 +26,23 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     partOptions,
     partLoading,
     lotLoading,
+    disabled,
+    mode,
+    lhrStepIndex,
     ...props
   }: T) => {
     // MARK: @config
-    const { procedureState, mpiProcedureState, dialogState } = FB.useStores();
+    const { procedureState, mpiProcedureState, dialogState, lhrStepState, workspaceState } = FB.useStores();
+
     formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
     procedureFormState = FB.useRef<FBProcedureFormState>(FBProcedureFormState, {
       initialValues,
     });
+    const isDocumentMPI = checkIsDocumentMPI(workspaceState?.document?.document.documentType.groupOptions);
+    const isDocumentMPIOutput = checkIsDocumentMPIOutput(workspaceState?.document?.document.documentType.groupOptions);
+    const isRedlineActive = useSelector(companySelectors.getRedlineActive);
 
+    const schemaItem = workspaceState?.getSchemaItemAt(lhrStepIndex);
     const config: Partial<Record<keyof typeof FBProcedureItemType, (() => void)>> = {
       materials: () => {
         optionId = FBAutocompleteAsyncOption.materials;
@@ -48,6 +61,24 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => reaction(
+      () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.materials),
+      (data: DocumentRevision[]) => {
+        if (mode === "mpi" && isDocumentMPIOutput && !isRedlineActive) {
+          const materials = Array.from(data.values());
+          const matDocId = find(materials, (rev) => rev.id === formState?.inputState.get("title")?.value)?.documentId;
+          const releasedRev = find(
+            materials,
+            (rev) => rev.documentId === matDocId && isDocumentRevisionReleased(rev.status)
+          );
+          if (!releasedRev) { return; }
+          formState?.setFieldValue("title", releasedRev?.id);
+          formState?.getInputState("title")?.setRender();
+        }
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     // MARK: @reactions
     // Fetch lots on part selection
@@ -96,6 +127,22 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     // MARK: @helpers
     function handleAdd() {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
+      if (mode === "lhr") {
+        lhrStepState?.editItem(formValue, type);
+        if (schemaItem) {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          workspaceState!.schema![lhrStepIndex!] = {
+            ...schemaItem,
+            editorConfig: {
+              ...schemaItem?.editorConfig,
+              parameters: {
+                ...keyBy(lhrStepState?.editedParameters, "paramsId"),
+              },
+            },
+          };
+        }
+        return handleCancel?.();
+      }
       procedureState?.addItem(formValue, type);
       mpiProcedureState?.addItem(formValue, type);
       handleCancel?.();
@@ -141,6 +188,8 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     useObserver(() => {
       partLoading = procedureFormState?.partsApi.loading;
       lotLoading = procedureFormState?.lotsApi.loading;
+      // disabled while adding or editing material/eq
+      disabled = formState?.inputState.get("LHRTparameter")?.value || initialValues?.LHRTparameter;
     });
 
     return Component({
@@ -156,6 +205,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       partOptions,
       partLoading,
       lotLoading,
+      disabled,
+      mode,
+      isDocumentMPI,
     });
   };
 

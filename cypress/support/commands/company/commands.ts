@@ -83,6 +83,8 @@ declare global {
       cmpVerifySecondaryContrastText(params: { color: string}): Chainable<Subject>;
       cmpVerifyPrimaryContrastText(params: { color: string}): Chainable<Subject>;
       cmpVerifyPrimaryColor(params: { color: string}): Chainable<Subject>;
+      cmpTurnOffAutosave(): Chainable<Subject>;
+      cmpTurnOnAutosave(): Chainable<Subject>;
     }
   }
 }
@@ -189,6 +191,14 @@ Cypress.Commands.add("cmpUpdateCompany", (
   }).then((response) => response.body);
 });
 
+Cypress.Commands.add("cmpTurnOffAutosave", () => {
+  cy.get("[name=\"toggleAutosave\"]").uncheck();
+});
+
+Cypress.Commands.add("cmpTurnOnAutosave", () => {
+  cy.get("[name=\"toggleAutosave\"]").check();
+});
+
 Cypress.Commands.add("cmpAdminUpdateCompany", (
   params: {
     companyId: string;
@@ -208,10 +218,9 @@ Cypress.Commands.add("cmpAdminUpdateCompany", (
 Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: boolean }) => {
   if (params.multiple) {
     cy.wrapWithWaitOnApiCalls([
-      CyRoutes.IOTCredentials,
       CyRoutes.CompanyMine,
-      CyRoutes.IOTCredentials,
       CyRoutes.SessionDetails,
+      CyRoutes.IOTCredentials,
     ], () => {
       cy.get("#root").contains(params.name).click();
     });

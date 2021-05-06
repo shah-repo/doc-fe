@@ -374,6 +374,10 @@ context("Equipment maintenance test", () => {
   });
 
   context("Create equipment maintenace document", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigate to equipment list", () => {
       cy.navigToEquipment();
     });
@@ -391,9 +395,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("input[name=fb-default-eq-status][value=Active]").check();
-      });
+      cy.get("input[name=fb-default-eq-status][value=Active]").check();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -468,7 +470,11 @@ context("Equipment maintenance test", () => {
       });
 
       it("Add first approver to approval request on approver list", () => {
-        cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email });
+        cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email, noWait: true });
+      });
+
+      it("Save AR", () => {
+        cy.arSaveApiCall();
       });
 
       it("Click 'Send To Review'", () => {
@@ -546,7 +552,6 @@ context("Equipment maintenance test", () => {
         .not(".MuiPickersDay-hidden")
         .each(($el) => {
           const dayNumber = $el.text();
-          cy.log(dayNumber);
           if (dayOfTheMonth.toString() === dayNumber) {
             cy.wrap($el).click();
           }
@@ -591,6 +596,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Reload 'Equipment maintenance document'", () => {
+      cy.wait(5000);
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.DocPreview,
         CyRoutes.DocPreview,
@@ -598,6 +604,7 @@ context("Equipment maintenance test", () => {
         CyRoutes.SessionDetails], () => {
         cy.reload();
       });
+      cy.wait(5000);
     });
 
     it("Check preventative maintenance document existance", () => {
@@ -712,6 +719,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Reload 'Equipment calibration document'", () => {
+      cy.wait(5000);
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.DocPreview,
         CyRoutes.DocPreview,
@@ -719,6 +727,7 @@ context("Equipment maintenance test", () => {
         CyRoutes.SessionDetails], () => {
         cy.reload();
       });
+      cy.wait(5000);
     });
 
     it("Check Calibration document existance", () => {

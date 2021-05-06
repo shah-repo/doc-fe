@@ -9,6 +9,10 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
+let developersGroup;
+let adminSessionId;
+let adminEmployee;
+let adminLoginResponse;
 
 context("Group Permissions Flow", () => {
   context("[API]Prepare company", () => {
@@ -28,6 +32,7 @@ context("Group Permissions Flow", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -41,6 +46,41 @@ context("Group Permissions Flow", () => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1;
         done();
+      });
+    });
+
+    context("[API]Add employee to developers group", () => {
+      it("[API]Login admin tester", (done: any) => {
+        cy.authApiLogin({
+          email: USERS[1].email,
+          password: "Tester1!",
+        }).then((response) => {
+          adminLoginResponse = response;
+          adminSessionId = adminLoginResponse.sessionId;
+          done();
+        });
+      });
+
+      it("[API]Get group", (done: any) => {
+        cy.grpGetGroupByName({
+          groupName: "Developers",
+          sessionId: adminSessionId,
+          employeeId: adminEmployee.id,
+        }).then((response) => {
+          developersGroup = response;
+          done();
+        });
+      });
+
+      it("[API]Patch group", () => {
+        cy.grpPatchGroup({
+          groupId: developersGroup.body[0].id,
+          sessionId: adminSessionId,
+          employeeId: adminEmployee.id,
+          payload: {
+            employees: [{ id: adminEmployee.id }],
+          },
+        });
       });
     });
   });
@@ -144,10 +184,6 @@ context("Group Permissions Flow", () => {
   });
 
   context("Start adding user without permission to groups and users management", () => {
-    it("Navigates to Group management", () => {
-      cy.grpNavigateToGroupManagement();
-    });
-
     it("Filters groups by name and selects 'Groups Management'", function() {
       PreventSkipOnFailure.call(this);
       // SystemRequirement("REQ-2550");
@@ -161,10 +197,6 @@ context("Group Permissions Flow", () => {
 
     it("Saves the group", () => {
       cy.grpSaveGroupPatch();
-    });
-
-    it("Navigates to 'Group management'", () => {
-      cy.grpNavigateToGroupManagement();
     });
 
     it("Filters groups by name and selects 'User Management'", function() {
@@ -184,10 +216,6 @@ context("Group Permissions Flow", () => {
   });
 
   context(`Remove and add permissions for ${USERS[3].name}`, () => {
-    it("Navigates to Group management", () => {
-      cy.grpNavigateToGroupManagement();
-    });
-
     it("Filters groups by name and selects 'Everyone'", () => {
       cy.grpSelectGroupWithoutClosingDialog({ name: "Everyone" });
     });
@@ -215,10 +243,6 @@ context("Group Permissions Flow", () => {
   });
 
   context(`Add permissions for ${USERS[3].name} to change document ownership`, () => {
-    it("Navigates to Group management", () => {
-      cy.grpNavigateToGroupManagement();
-    });
-
     it("Clicks on 'Add Group'", () => {
       cy.grpClickAddGroup();
     });

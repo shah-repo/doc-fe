@@ -1,21 +1,17 @@
 import { Formik, FormikProps } from "formik";
 import * as React from "react";
-import { connect } from "react-redux";
 import * as Yup from "yup";
 import { logo } from "../../../common/utils/helpers";
 import { authActions } from "../../../state/ducks/auth";
-import { ApplicationState } from "../../../state/reducers";
 import { emailSchema, passwordSchema } from "../../components/forms/fields/validators";
 import { FormContext } from "../../components/forms/FormContext";
+import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { Translation } from "../../translations/types";
 import LoginFormPresenter from "../forms/LoginForm.presenter";
 import { LoginFormValues } from "../types";
 import VerificationEmailPage from "./VerificationEmailPage";
 
-interface DispatchProps {
-  signup: typeof authActions.signup;
-}
 interface Props {
   signMessage: Translation;
   signLabel: Translation;
@@ -23,10 +19,7 @@ interface Props {
   title: Translation;
 }
 
-type SignupFormContainerProps = DispatchProps & Props;
-
-const SignupFormContainer: React.FunctionComponent<SignupFormContainerProps> = ({
-  signup,
+const SignupFormContainer: React.FunctionComponent<Props> = ({
   signMessage,
   route,
   signLabel,
@@ -41,11 +34,12 @@ const SignupFormContainer: React.FunctionComponent<SignupFormContainerProps> = (
   const [signupEmail, saveSignupEmail] = React.useState("");
   const [message, saveMessage] = React.useState("");
   const [signupSuccess, toggleSignupSuccess] = React.useState(false);
+  const signupAction = useActionCreator(authActions.signup);
 
   const handleVerificationState = (values: LoginFormValues): void => {
     saveSignupEmail(values.email);
     saveMessage(message);
-    async.start(signup, values, async);
+    async.start(signupAction, values, async);
   };
 
   const initialValues: LoginFormValues = {
@@ -96,6 +90,4 @@ const SignupFormContainer: React.FunctionComponent<SignupFormContainerProps> = (
   );
 };
 
-export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
-  signup: authActions.signup,
-})(SignupFormContainer);
+export default SignupFormContainer;

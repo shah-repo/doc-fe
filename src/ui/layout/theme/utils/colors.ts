@@ -9,28 +9,10 @@ enum Colors {
   gray = "#8A9DAD",
   dark_gray = "#474747",
   platinum_gray = "#e3e3e3",
-  // "#b4c0ca",
-  // "#e8e9ed", Need this grey for scroll on company switch
-  // "#ADB6D8"
-  // "#f2f2f2"
-  // "#eee"
-  // "#888"
-  // "#333"
-  // "#444"
-  // "#a3a3a3"
-  // "#aaa"
-  // "#ddd"
-  // "#E2E2E2"
   // blue
-  // "#4a90e2"
-  // "#1592e6"
-  // "#3572e2"
-  // "#C9DFFF"
   light_blue = "#edf4ff",
-  medium_light_blue = "#d4e4ff",
   blue = "#0066FF",
   medium_blue= "#5C9DFC",
-  default_blue="#5C9DFF",
   background_blue="#DBE9FF",
   // red
   red = "#c40000",
@@ -38,9 +20,7 @@ enum Colors {
   light_red = "#FCDEDE",
   error_red = "#F44336",
   medium_red = "#FF8183",
-  pale_red = "#ffdedf",
   opal_red = "#f05a5c",
-  // "#d31b1b"
   // purple
   deep_purple = "#29064C",
   purple = "#99c",
@@ -48,7 +28,6 @@ enum Colors {
   light_green = "#BED948",
   green = "#16bd23",
   pale_green = "#f0f7d2",
-  opal_green = "#B7D146",
 }
 
 export default Colors;

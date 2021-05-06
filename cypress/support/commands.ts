@@ -1,4 +1,5 @@
-import "cypress-downloadfile/lib/downloadFileCommand";
+/* eslint-disable @typescript-eslint/camelcase */
+// import "../../node_modules/cypress-movie/src/arrow
 import { CONFIG } from "./config";
 import { CyRoutes, CyWaitOptions, routes } from "./routes";
 
@@ -32,10 +33,10 @@ declare global {
         callback: () => void,
         options?: Partial<CyWaitOptions>
       ): Chainable<Subject>;
+      arrow(options: any): Chainable<Subject>;
     }
   }
 }
-
 interface IUser {
   email: string;
   name: string;
@@ -170,4 +171,30 @@ Cypress.Commands.add(
   (name: CyRoutes, callback: () => void, options?: Partial<CyWaitOptions>) => {
     cy.wrapWithWaitOnApiCalls([name], callback, options);
   });
+
+Cypress.Commands.overwrite("click", (originalFn, element, options) => {
+  const state = cy.state("current").attributes.name;
+
+  if (state === "click") {
+    cy.wrap(element)
+      .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
+      .then(() => originalFn(element, options));
+  }
+  else {
+    return originalFn(element, options);
+  }
+});
+
+Cypress.Commands.overwrite("type", (originalFn, element,  text, options) => {
+  const state = cy.state("current").attributes.name;
+
+  if (state === "type") {
+    cy.wrap(element)
+      .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
+      .then(() => originalFn(element, text, options));
+  }
+  else {
+    return originalFn(element, text, options);
+  }
+});
 

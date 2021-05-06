@@ -1,3 +1,4 @@
+import { find, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -18,17 +19,30 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     stepLHRs,
     isHovering,
     disabled,
+    ownerOfStartMPIAction,
+    materials,
+    equipment,
+    isDocumentLHRT,
     ...props
   }: T) => {
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
-    stepLHRs = workspaceState?.document?.smartReferencesFrom
-      ?.find((ref) => ref.type === SmartReferenceType.HiddenPiInstance && ref.metadata.fieldId === name)?.fromDocRev;
+    const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom;
+
+    stepLHRs = smartReferencesFrom
+      ?.find((ref) => ref.active
+      && ref.type === SmartReferenceType.HiddenPiInstance
+      && ref.metadata.fieldId === name)?.fromDocRev;
+    const employees = workspaceState?.externalState?.company?.companyMine.employees;
+    ownerOfStartMPIAction = employees?.find((e) =>
+      e.id === smartReferencesFrom?.[0]?.metadata.startedBy)?.user?.name;
     const lhrStepState = FB.useRef(FBLHRStepState, stepLHRs);
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
     const isDraft = isDocumentRevisionInDraft(workspaceState?.document?.status);
+    // TO DO: Find another way with BE to chechk if doc is LHRT
+    isDocumentLHRT = workspaceState?.document?.document.documentType.documentTypeAcronym === "LHRT-";
 
     // MARK: @helpers
     React.useEffect(() => {
@@ -46,10 +60,11 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       () => formState?.inputState.get(name)?.value,
       (value) => {
         if (!stepLHRs) { // don't trigger if it is LHR/MPI hover toggle
+          const editorConfig = !value ? omit(schemaItem?.editorConfig, "parameters") : schemaItem?.editorConfig;
           workspaceState?.setSchemaItem({
             ...schemaItem,
             editorConfig: {
-              ...schemaItem?.editorConfig,
+              ...editorConfig,
               value,
             },
           });
@@ -82,6 +97,35 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
           `/document_revision/${highestRev.documentId}/version/${highestRev.id}`,
           "_self"
         );
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    React.useEffect(() => reaction(
+      () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.mpiDocuments),
+      (data) => {
+        const parameters = schemaItem?.editorConfig.parameters;
+        const dataValues = Array.from(data.values());
+        const mpiDocument: any = dataValues.find((item: any) => item?.id === schemaItem?.editorConfig.value);
+        const editorConfig = mpiDocument?.formTemplate.schema.find((item) => item.type === "mpiprocedure").editorConfig;
+        const { materials, equipment } = editorConfig;
+        if (parameters) {
+          const newMaterials = materials.map((material) => {
+            const editedMaterial = find(parameters, (parameter) => parameter.paramsId === material.id);
+            return editedMaterial || material;
+          });
+          const newEquipments = equipment.map((equipment) => {
+            const editedEquipment = find(parameters, (parameter) => parameter.paramsId === equipment.id);
+            return editedEquipment || equipment;
+          });
+          lhrStepState.setMaterials(newMaterials);
+          lhrStepState.setEquipment(newEquipments);
+          lhrStepState.setEditedParameters(parameters);
+          return;
+        }
+
+        lhrStepState.setMaterials(materials);
+        lhrStepState.setEquipment(equipment);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -129,6 +173,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       loading = lhrStepState?.startMpiApi?.loading || lhrStepState?.getDocumentApi?.loading;
       stepLHRs = lhrStepState.stepLHRs;
       isHovering = lhrStepState.isHovering;
+      materials = lhrStepState?.materials;
+      equipment = lhrStepState?.equipment;
     });
 
 
@@ -146,6 +192,11 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       isDraft,
       disabled,
       loading,
+      ownerOfStartMPIAction,
+      materials,
+      index,
+      equipment,
+      isDocumentLHRT,
     }); };
 
   Comp.displayName = "withFBLHRStep";

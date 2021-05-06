@@ -6,7 +6,19 @@ import { Approval, Owner } from "../common/types";
 import { DocumentType } from "../documentRevisions/documentType/types";
 import { DocumentRevision, Reference } from "../documentRevisions/types";
 
-type AuditTypes = "ARRAY_NEW" | "ARRAY_DELETED";
+type AuditTypes =
+    "ARRAY_NEW"
+    |"ARRAY_DELETED"
+    | "STRING_NEW"
+    | "STRING_EDITED"
+    | "NUMBER_EDITED"
+    | "NUMBER_NEW"
+    | "OBJECT_DELETED"
+    | "STRING_DELETED"
+    | "NUMBER_DELETED"
+    | "OBJECT_NEW"
+    | "BOOLEAN_NEW"
+    | "BOOLEAN_EDITED";
 export interface Audit {
   groupKey?: number | undefined;
   index?: number | undefined;

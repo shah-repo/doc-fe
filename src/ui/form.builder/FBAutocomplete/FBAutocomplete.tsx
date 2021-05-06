@@ -27,6 +27,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   disabled,
   loading,
   value,
+  inputStyle = {},
   ...props
 }) => {
 
@@ -76,7 +77,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   }}
                   inputProps={{
                     ...params.inputProps,
-                    "style": { padding: "10.5px 0" },
+                    "style": { padding: "10.5px 0", ...inputStyle },
                     "data-cy": props.name,
                   }}
                 />

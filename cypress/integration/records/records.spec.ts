@@ -12,6 +12,10 @@ const currentDate = moment().tz("America/Los_Angeles").format("MMMM D, YYYY");
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
+let developersGroup;
+let adminSessionId;
+let adminEmployee;
+let employeeToDevs;
 
 context("Records flow", () => {
   before(() => {
@@ -52,6 +56,8 @@ context("Records flow", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          employeeToDevs = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           done();
         });
       });
@@ -65,6 +71,42 @@ context("Records flow", () => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
+      });
+    });
+
+    it("[API]Login admin tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[1].email,
+        password: "Tester1!",
+      }).then((response) => {
+        loginResponse = response;
+        adminSessionId = loginResponse.sessionId;
+        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
+        done();
+      });
+    });
+  });
+
+  context("[API]Add employee to developers group", () => {
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Developers",
+        sessionId: adminSessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        developersGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: developersGroup.body[0].id,
+        sessionId: adminSessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: employeeToDevs.id }],
+        },
       });
     });
   });
@@ -90,6 +132,10 @@ context("Records flow", () => {
 
       it("Clicks on 'create a document' button", () => {
         cy.cmpClickCreateNewDocument();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
     });
 
@@ -149,7 +195,6 @@ context("Records flow", () => {
 
       it("Enters description 'Approval Record description'", () => {
         cy.drEnterDocumentDescription({ description: "Approval Record description" });
-        cy.wait(5000);
       });
 
       it("Selects 'Form' document type from dropdown", () => {
@@ -221,7 +266,6 @@ context("Records flow", () => {
 
     it("Enters description 'Approval Record description'", () => {
       cy.drEnterDocumentDescription({ description: "Approval Record description" });
-      cy.wait(5000);
     });
 
     it("Select approver'", () => {
@@ -245,10 +289,6 @@ context("Records flow", () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
       cy.checkToastMessage({ exists: false });
-    });
-
-    it("Reload document", () => {
-      cy.reload();
     });
 
     it("Check if approved date exists", () => {

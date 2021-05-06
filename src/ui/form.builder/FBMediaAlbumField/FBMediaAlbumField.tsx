@@ -1,6 +1,5 @@
-import { Provider } from "mobx-react";
 import React from "react";
-import { FBInput, FBMediaAlbum, FBMediaAlbumFieldProps, FBMediaQR } from "..";
+import { FBInput, FBMediaAlbum, FBMediaAlbumFieldProps, FBMediaQR, FBProvider } from "..";
 import { withFBMediaAlbumField } from "./FBMediaAlbumField.wrap";
 
 const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
@@ -20,8 +19,9 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
   label,
   index,
   gutter,
+  id = "",
 }) => (
-  <Provider {...{ mediaAlbumFieldState }} >
+  <FBProvider {...{ [`mediaAlbumFieldState_${name}`]: mediaAlbumFieldState }} >
     <FBInput {...{ name, label, gutter, index, editorConfig, autosave }} type="mediaalbum">
       {mode !== "qr" && (
         <FBMediaAlbum {...{
@@ -40,7 +40,7 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
           {...{ qrValue, isTemplate, setMediaFieldMode, loading }}
         />)}
     </FBInput>
-  </ Provider>
+  </FBProvider>
 );
 
 export default withFBMediaAlbumField(FBMediaAlbumField);

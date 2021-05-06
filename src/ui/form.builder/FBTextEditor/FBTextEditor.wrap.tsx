@@ -4,9 +4,9 @@ import htmlToDraft from "html-to-draftjs";
 import { isEmpty } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
-import { FB, FBTextEditorProps, FBTextEditorState } from "..";
+import { FB, FBFieldName, FBTextEditorProps, FBTextEditorState } from "..";
 
 export const withFBTextEditor = <T extends FBTextEditorProps>(
   Component: React.FunctionComponent<T>,
@@ -29,6 +29,9 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     isInputOwner,
     withState,
     omitFormValue,
+    autoFocus,
+    autoScrollTo,
+    shouldNotAutosaveOnBlur = false,
     ...props
   }: T) => {
 
@@ -68,6 +71,20 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       ],
       inline: { options: ["bold", "italic", "underline", "monospace"] },
     });
+
+    useEffect(() => {
+      if (!autoFocus) { return; }
+      handleMask?.(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+      if (!autoScrollTo) { return; }
+      const selector = `[id="${FBFieldName.MPIProcedureId}-${name}"]`;
+      const el = document.querySelector(selector) as HTMLElement;
+      el?.scrollIntoView({ behavior: "smooth", block: "center" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // MARK: Reactions
     // On editor value change. This will sync changed value and form value.
@@ -111,7 +128,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
 
       // if (!masked) {
       //   timeout = setInterval(() => {
-      //     submitForm();
+      //     workspaceState?.saveDocRev(formState?.getValues());
       //   }, 30000);
       //   setTimeoutID(timeout);
       // } else {
@@ -131,7 +148,8 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       if (withState) {
         formState?.setFieldValue(name, formState.getFieldValue(name), true, omitFormValue);
       }
-      formState?.setFieldAutosave(name);
+      if (autoFocus || autoScrollTo || shouldNotAutosaveOnBlur) { return; }
+      workspaceState?.saveDocRev(formState?.getValues());
     };
 
     // MARK: @observer

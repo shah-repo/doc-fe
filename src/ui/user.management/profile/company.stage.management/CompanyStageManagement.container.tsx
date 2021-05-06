@@ -10,8 +10,7 @@ import useGetHasTag from "../../../hooks/useGetHasTag";
 import { toNumRevisionStageBodyValues, toNumRevisionStageInitialValues } from "../../utils/transform";
 import CompanyStageManagementPresenter from "./CompanyStageManagement.presenter";
 
-const CompanyStageManagementContainer: React.FunctionComponent<{}> = ({
-}) => {
+const CompanyStageManagementContainer: React.FunctionComponent<{}> = () => {
   const async = useAsync();
 
   const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);

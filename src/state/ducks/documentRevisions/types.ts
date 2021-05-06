@@ -146,20 +146,25 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   smartReferencesFrom?: SmartReference[];
   smartReferencesTo?: SmartReference[];
   usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
+  redline?: boolean;
 }
 
-interface SmartReference {
+export interface SmartReference {
   fromDocRev?: Nullable<DocumentRevision>;
   fromDocRevId?: Nullable<string>;
   fromDocumentId?: Nullable<string>;
   id: string;
   metadata: {
     fieldId: string;
+    startedBy: string;
+    materialId?: string;
+    equipmentId?: string;
   };
   toDocRevId?: Nullable<string>;
   toDocRev?: Nullable<DocumentRevision>;
   toDocumentId?: Nullable<string>;
   type: SmartReferenceType;
+  active?: boolean;
 }
 
 export enum SmartReferenceType {
@@ -212,6 +217,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
   status?: DocumentRevisionStatus;
   parentEquipment?: Id;
   equipmentSection?: string;
+  redline?: boolean;
 }
 
 export interface DocumentRevisionSetAction {

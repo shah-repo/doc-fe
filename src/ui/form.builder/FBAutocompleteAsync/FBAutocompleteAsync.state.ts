@@ -93,7 +93,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
       case FBAutocompleteAsyncOption.officialGroups:
         return filter(union(data, this.additionalData), { isOfficial: true });
       case FBAutocompleteAsyncOption.availablePartDocuments:
-        return map(data, (doc) => ({
+        return map([data].flat(), (doc) => ({
           ...doc,
           documentRevisions: get(doc, "documentRevisions[0]"),
         }));
@@ -134,13 +134,21 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     }
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     FBAutocompleteAsyncStore.loading.set(this.optionId!, true);
-    const { path: url, root = "", publicApi } = this.optionConfig;
+    const { id, root = "", publicApi } = this.optionConfig;
 
     this.setRoot(root);
     this.setPublicApi(publicApi as boolean);
+    if (this.urlValues) {
+      this.set({
+        url: FBEndpoint.FetchAutocompleteValue,
+        urlValues: { id: this.urlValues, optionId: id },
+        method: "get",
+      });
+      return;
+    }
     this.set({
-      url,
-      urlValues: this.urlValues,
+      url: FBEndpoint.AutocompleteByOptionId,
+      urlValues: { optionId: id },
       method: "get",
     });
   }

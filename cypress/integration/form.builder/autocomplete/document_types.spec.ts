@@ -8,8 +8,10 @@ import { SystemRequirement } from "../../../utils/context/systemRequirement";
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
-let secondEmployee;
-const documentTypeTitle = `DocumentType${Cypress.moment().format("X")}`;
+let developersGroup;
+let adminSessionId;
+let adminEmployee;
+let adminLoginResponse;
 
 context("Autocomplete 'Document types' test", () => {
   context("[API]Prepare company", () => {
@@ -37,7 +39,7 @@ context("Autocomplete 'Document types' test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -51,6 +53,41 @@ context("Autocomplete 'Document types' test", () => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
+      });
+    });
+
+    context("[API]Add employee to developers group", () => {
+      it("[API]Login admin tester", (done: any) => {
+        cy.authApiLogin({
+          email: USERS[1].email,
+          password: "Tester1!",
+        }).then((response) => {
+          adminLoginResponse = response;
+          adminSessionId = adminLoginResponse.sessionId;
+          done();
+        });
+      });
+
+      it("[API]Get group", (done: any) => {
+        cy.grpGetGroupByName({
+          groupName: "Developers",
+          sessionId: adminSessionId,
+          employeeId: adminEmployee.id,
+        }).then((response) => {
+          developersGroup = response;
+          done();
+        });
+      });
+
+      it("[API]Patch group", () => {
+        cy.grpPatchGroup({
+          groupId: developersGroup.body[0].id,
+          sessionId: adminSessionId,
+          employeeId: adminEmployee.id,
+          payload: {
+            employees: [{ id: adminEmployee.id }],
+          },
+        });
       });
     });
   });
@@ -69,41 +106,6 @@ context("Autocomplete 'Document types' test", () => {
   });
 
   context("Autocomplete 'Document types' test", () => {
-    context("Create 'Document types'", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocTypeManagement();
-      });
-
-      it("Click 'Add Document Type'", () => {
-        cy.contains("Add Document Type").click();
-      });
-
-      it("Enter document type name " + documentTypeTitle, () => {
-        cy.fbEnterNameData({ name: "documentTypeName", data: documentTypeTitle });
-      });
-
-      it("Enter document type acronym 'TEST'", () => {
-        cy.fbEnterNameData({ name: "documentTypeAcronym", data: "TEST" });
-      });
-
-      it("Enter document type Starting Number '1'", () => {
-        cy.fbEnterNameData({ name: "startingNumber", data: "1" });
-      });
-
-      it("Select 'Numeric' Default Revision stage", () => {
-        cy.dtSelectDefaultRevisionStage({ defaultRevisionStage: "Numeric" });
-      });
-
-      it("Enter document type Group 'Form'", () => {
-        cy.get("[data-cy=\"field-group\"]").type("FORM{downarrow}{enter}");
-      });
-
-      it("Click Save button", () => {
-        cy.get("button[type=\"submit\"]").click();
-        cy.wait(8000);
-      });
-    });
-
     context("Add Autocomplete 'Document types'", () => {
       context("Create FORM document", () => {
         it("Navigate to document list", () => {
@@ -168,18 +170,18 @@ context("Autocomplete 'Document types' test", () => {
             method: "GET",
             url: `${CONFIG.BE_URL}/api/v1/document_type`,
             headers: {
-              Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
+              Authorization: `bearer ${adminEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
               .find("[data-cy^=\"test-label-\"]").click();
 
             if (response.body.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  expect($li).to.have.text(response.body[index].documentTypeName);
-                })
+              const docTypes = response.body;
+              docTypes.forEach((docType) => {
+                cy.get("ul[role=listbox]>li").should("contain.text", docType.documentTypeName);
+              });
+              cy.get("ul[role=listbox]>li")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });
@@ -189,12 +191,8 @@ context("Autocomplete 'Document types' test", () => {
           });
         });
 
-        it("Verify created 'Document types' in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").should("contain", documentTypeTitle);
-        });
-
         it("Verify count in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 26);
+          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 25);
         });
       });
     });

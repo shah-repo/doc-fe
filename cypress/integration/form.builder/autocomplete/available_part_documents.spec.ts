@@ -136,7 +136,7 @@ context("Autocomplete 'Available Part Documents' test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Approve and release FORM document", () => {
@@ -219,11 +219,11 @@ context("Autocomplete 'Available Part Documents' test", () => {
               .find("[data-cy^=\"test-label-\"]").click();
 
             if (response.body.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  const res = response.body[index];
-                  expect($li).to.have.text(`${res.docId} - ${res.documentRevisions[0].name}`);
-                })
+              const parts = response.body;
+              parts.forEach((part) => {
+                cy.get("ul[role=listbox]>li").should("contain.text", part.documentRevisions[0].name);
+              });
+              cy.get("ul[role=listbox]>li")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });
