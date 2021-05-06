@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { find, get, unionBy, uniqWith } from "lodash";
+import { find, get, map, unionBy, uniqWith } from "lodash";
 import React from "react";
 import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceTplActions } from "..";
 import { toastError } from "../../components/notifications";
@@ -37,8 +37,16 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
         return toastError("Not a valid template.");
       }
 
+      const items = map(schema, (schemaItem) => {
+        const { type } = schemaItem;
+        if (type === "inlineapproval") {
+          schemaItem.editorConfig = {};
+        }
+        return schemaItem;
+      });
+
       const mergedSchema = uniqWith(
-        unionBy(workspaceState?.schema, schema, "name"),
+        unionBy(items, workspaceState?.schema || [], "name"),
         (x, y) => x.type === y.type && x.uniqueSchemaItem === true,
       );
 
