@@ -70,6 +70,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           DOC_TYPE_GROUP_OPTION.ENGINEERING_BUILD,
           DOC_TYPE_GROUP_OPTION.PART,
           DOC_TYPE_GROUP_OPTION.SUPPLIER,
+          DOC_TYPE_GROUP_OPTION.PO,
         ],
         docRev.document.documentType.groupOptions
       )) {
