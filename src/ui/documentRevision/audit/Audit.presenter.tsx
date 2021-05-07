@@ -139,7 +139,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       // MPIPROCEDURE
       const valueKey = change.field.split(".");
       if (fbType === "mpiprocedure") {
-        if (!change.field.split(".").includes("editorConfig") && last(valueKey) !== "description") {
+        if (!change.field.split(".").includes("editorConfig")) {
           return;
         }
         const stepLabel = intl.formatMessage({ id: "form.builder.step.number" }, { number });
@@ -152,15 +152,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (
           (last(valueKey) === "id" ||
           last(valueKey) === "attachments") && (
-            (change.type === "STRING_NEW" && !isAttachment && last(valueKey) !== "description") ||
+            (change.type === "STRING_NEW" && !isAttachment) ||
             change.type === "NUMBER_DELETED")) {
           return;
         }
         // changes on description step field
         if (last(valueKey) === "description") {
-          if (!change.field.split(".").includes("mpi-procedure-built-in")) {
-            return;
-          }
           fbLabel = `${intl.formatMessage({ id: "form.builder.step.description" })} for ${stepLabel}`;
           const value = change.nextValue as string;
           const formattedValue = striptags(value);
