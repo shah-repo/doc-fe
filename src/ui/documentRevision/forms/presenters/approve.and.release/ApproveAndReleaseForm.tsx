@@ -26,6 +26,7 @@ interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   asyncState: AsyncState;
   cancel: () => void;
   isQms: boolean;
+  needsSignature: boolean;
   documentTypeGroups: Group[];
   owner: Owner;
   templateOptions: TemplateOption[];
@@ -46,6 +47,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   cancel,
   asyncState,
   isQms,
+  needsSignature,
   values,
   documentTypeGroups,
   owner,
@@ -78,6 +80,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   // MARK: @effects
 
   // MARK: @helpers
+  const showApprovers = !isQms ? needsSignature : isQms;
 
   // MARK: @methods
   const validateSelectedForm = (option: any) => {
@@ -146,7 +149,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
-      {isQms && (
+      {showApprovers && (
         <Approvers
           withoutCurrentUser
           shouldShowDAMCheck={!isInlineApproval || !isRecord}

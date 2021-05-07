@@ -119,7 +119,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const intl = useIntl();
 
   const { workspaceState } = FB.useStores();
-  const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
+  const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true, needsSignature: true });
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
   const [forceNewRender, setNewRender] = React.useState();
   const [lastSavedTimestamp, setLastSavedTimestamp] = React.useState<string>();
@@ -239,6 +239,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       savedocInfo({
         name: values.name,
         isQms: values.document?.documentType?.isQms || false,
+        needsSignature: values.document?.documentType?.needsSignature || false,
       });
     }
   }, [isDocRevStatusDraft, values.document, values.name]);
