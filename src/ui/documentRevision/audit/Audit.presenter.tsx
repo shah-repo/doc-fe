@@ -41,13 +41,15 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       const change = audit[groupId][0];
       const { owner, ownerUser, ownerThirdParty } = change;
       const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
-
       if (audit[groupId].filter((change) =>
         change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
       ).length === 0) {
         return null;
       }
 
+      if (renderChanges(audit[groupId], key).props.children[0].length === 0) {
+        return null;
+      }
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer}>
@@ -76,7 +78,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         type: fbType,
         stepIndex:
         number = 1,
-        name,
       } = change.fbSchemaItem || {};
       let fbLabel = label || placeholder;
       const isOmittedFB = (
@@ -124,20 +125,9 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       }
       // LHRSTEP
       if (fbType === "lhrstep") {
-        const LHRschemaGroupedInSections: any[] = [];
-        schema.forEach((element) => {
-          if (element.type === "stepsection") {
-            LHRschemaGroupedInSections.push([]);
-          }
-          if (element.type === "lhrstep" || element.type === "stepsection") {
-            LHRschemaGroupedInSections[LHRschemaGroupedInSections.length - 1]?.push(element);
-          }
-        });
         const valueKey = change.field.split(".")[1].split("-");
-        const stepLHRNumber = LHRschemaGroupedInSections.filter((e) =>
-          e.find((i) => i.name === name)).flat().find((e) => e.type === "stepsection");
         let label = "";
-        const stepLabel = intl.formatMessage({ id: "form.builder.step.number" }, { number: stepLHRNumber.stepIndex });
+        const stepLabel = intl.formatMessage({ id: "form.builder.step.number" }, { number });
         if (!valueKey.includes("quantity")) {
           return;
         }
