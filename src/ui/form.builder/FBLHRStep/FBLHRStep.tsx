@@ -24,6 +24,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   isDraft,
   disabled,
   ownerOfStartMPIAction,
+  ownerOfCompleteMPIAction,
   materials,
   equipment,
   index,
@@ -36,27 +37,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   <FBProvider {...{ lhrStepState }}>
     <FBInput {...{ name, gutter }} type="lhrstep">
       <FBSection {...{ stepIndex, label }} />
-      {stepLHRs && (
-        <Box display="flex" alignItems="center" mb={1}>
-          <Box mr={1} display="flex" alignItems="center">
-            {
-              isDocumentRevisionReleased(stepLHRs.status)
-                ? <CheckCircle />
-                : <PlayCircleFilled />
-            }
-          </Box>
-          <FBText
-            locale={
-              isDocumentRevisionReleased(stepLHRs.status)
-                ? "form.builder.step.completed"
-                : "form.builder.step.started"
-            }
-            values={{
-              date: getFormattedDateString(stepLHRs?.releasedAt, MomentFormats.DateTime),
-            }}
-          />
-        </Box>
-      )}
       <Box
         display="flex"
         alignItems="flex-start"
@@ -106,15 +86,32 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         type={FBProcedureItemType.equipment}
         lhrStepIndex={index}
       />}
-      <Box
-        display="flex">
-        <b>{ownerOfStartMPIAction}</b>
-        {stepLHRs?.createdAt && (
-          <Box color={Colors.gray}>
-              &nbsp;| {getFormattedDateString(stepLHRs?.createdAt, MomentFormats.DateTime)}
+      {stepLHRs && (
+        <Box display="flex" alignItems="center" mt={1} mb={4}>
+          <Box mr={1} display="flex" alignItems="center">
+            {
+              isDocumentRevisionReleased(stepLHRs.status)
+                ? <CheckCircle />
+                : <PlayCircleFilled />
+            }
           </Box>
-        )}
-      </Box>
+          <FBText
+            locale={
+              isDocumentRevisionReleased(stepLHRs.status)
+                ? "form.builder.step.completed"
+                : "form.builder.step.started"
+            }
+            values={{
+              date: isDocumentRevisionReleased(stepLHRs.status)
+                ? getFormattedDateString(stepLHRs?.releasedAt, MomentFormats.DateTime)
+                : getFormattedDateString(stepLHRs?.createdAt, MomentFormats.DateTime),
+              owner: isDocumentRevisionReleased(stepLHRs.status)
+                ? ownerOfCompleteMPIAction
+                : ownerOfStartMPIAction,
+            }}
+          />
+        </Box>
+      )}
       {isOutput && (
         <>
           <FBTextField
