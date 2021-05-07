@@ -51,6 +51,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   usedDocumentsInLHRS,
   isDocumentMPI,
   defaultValue,
+  redlineActive,
 }) => (
   <FBProvider {...{ dialogState, mpiProcedureState }}>
     <FBDialog />
@@ -183,7 +184,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   )}
                 </Observer>
               </Box>
-              {isSelectVisible && FB.isUUID(item.title) && (
+
+              {isSelectVisible && FB.isUUID(item.title) && !redlineActive && (
                 <Observer>
                   {() => (
                     <FBButton
