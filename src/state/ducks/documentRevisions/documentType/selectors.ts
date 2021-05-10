@@ -64,6 +64,7 @@ const getDocumentTypeOptionsForDocumentList = createSelector(
             DOC_TYPE_GROUP_OPTION.PART,
             DOC_TYPE_GROUP_OPTION.SUPPLIER,
             DOC_TYPE_GROUP_OPTION.PO,
+            DOC_TYPE_GROUP_OPTION.RECEIVABLE,
           ],
           documentTypes[id].groupOptions
         )
