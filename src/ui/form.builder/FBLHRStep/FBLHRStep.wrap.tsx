@@ -20,6 +20,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     isHovering,
     disabled,
     ownerOfStartMPIAction,
+    ownerOfCompleteMPIAction,
     materials,
     equipment,
     isDocumentLHRT,
@@ -37,6 +38,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const employees = workspaceState?.externalState?.company?.companyMine.employees;
     ownerOfStartMPIAction = employees?.find((e) =>
       e.id === smartReferencesFrom?.[0]?.metadata.startedBy)?.user?.name;
+    ownerOfCompleteMPIAction = employees?.find((e) =>
+      e.id === smartReferencesFrom?.[0]?.metadata.completedBy)?.user?.name || "Sara";
     const lhrStepState = FB.useRef(FBLHRStepState, stepLHRs);
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
@@ -193,6 +196,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       disabled,
       loading,
       ownerOfStartMPIAction,
+      ownerOfCompleteMPIAction,
       materials,
       index,
       equipment,
