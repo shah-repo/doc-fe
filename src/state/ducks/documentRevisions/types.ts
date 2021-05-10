@@ -156,9 +156,13 @@ export interface SmartReference {
   id: string;
   metadata: {
     fieldId: string;
+    lotDocId?: string;
     startedBy: string;
     materialId?: string;
     equipmentId?: string;
+    quantity?: number;
+    unit?: string;
+    lotPart?: string;
   };
   toDocRevId?: Nullable<string>;
   toDocRev?: Nullable<DocumentRevision>;

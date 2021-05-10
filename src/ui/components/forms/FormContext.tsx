@@ -54,10 +54,16 @@ export const useFormContext = () => {
   function setReferences(relation: SubmitFormRelation) {
     if (!workspaceState) { return; }
     const { type, name, prevValue, nextValue } = relation;
-    const prevDocument: DocumentRevision | undefined =
-      FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, prevValue.id);
-    const nextDocument: DocumentRevision | undefined =
-      FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, nextValue.id);
+    let prevDocument: DocumentRevision | undefined;
+    let nextDocument: DocumentRevision | undefined;
+    if (relation.type === "poreceive") {
+      prevDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, prevValue.id);
+      nextDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, nextValue.id);
+    }
+    if (relation.type === "autocomplete" && relation.name === "lot_part") {
+      prevDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.availableParts, prevValue);
+      nextDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.availableParts, nextValue);
+    }
     const prevValueId = prevDocument?.document.id;
     const nextValueId = nextDocument?.document.id;
     let refValues = workspaceState.referenceValue;
@@ -114,7 +120,7 @@ export const useFormContext = () => {
         setFBValue();
       }
       if (relation) {
-        if (relation.type === "poreceive") {
+        if (relation.type === "poreceive" || (relation.type === "autocomplete" && relation.name === "lot_part")) {
           setReferences(relation);
         }
       }

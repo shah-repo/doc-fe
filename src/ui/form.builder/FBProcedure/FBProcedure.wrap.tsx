@@ -82,7 +82,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
         }
         const diffCollection = getDiffValue();
         procedureState?.setDiffValue(diffCollection);
-        formState?.setFieldValue(diffInput, diffCollection, true);
+        formState?.setFieldValue(diffInput, diffCollection, true, true);
       }, {
         fireImmediately: true,
       }
