@@ -162,6 +162,7 @@ DocumentRevisionFormContainerProps
   const isOutput =  Boolean(outputGroup && !isEmpty(outputGroup));
   const pmFormSchema = pmForm?.formTemplate?.schema || [];
   const showAdministrativeAndVoidChange = isOutput && isAlphaReleased && isRecord;
+  const SIDEBAR_WIDTH = "539";
   let mode: Partial<FBWorkspaceMode> = "none";
 
   let { schema: originScheme = [] } = (
@@ -230,7 +231,7 @@ DocumentRevisionFormContainerProps
       asyncAction={loadAction}
       startActionOnMount={true}
     >
-      <div ref={bannerPortal} />
+      <div ref={bannerPortal} style={{ position: "fixed", width: `calc(100% - ${SIDEBAR_WIDTH}px)`, zIndex: 1001 }} />
       <Grid style={{ background: Colors.light_gray }} >
         {
           type !== "newOutput" &&

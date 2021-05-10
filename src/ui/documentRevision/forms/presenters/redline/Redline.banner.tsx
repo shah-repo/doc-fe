@@ -36,9 +36,6 @@ const RedlineBanner: React.FunctionComponent<Props> = ({
             padding="10px"
             display="flex"
             justifyContent="center"
-            position="fixed"
-            width="calc(100% - 539px)"
-            zIndex="1001"
           >
             <Text translation="common.redline.message" />
           </Box>
