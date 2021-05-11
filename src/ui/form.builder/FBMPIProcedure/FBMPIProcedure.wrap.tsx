@@ -1,8 +1,8 @@
-import { keys, omit } from "lodash";
+import { isEqual, keys, omit } from "lodash";
 import { reaction } from "mobx";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { FB, FBMPIProcedureProps, FBMPIProcedureState, FBProcedureItemType } from "..";
+import { FB, FBMediaProps, FBMPIProcedureProps, FBMPIProcedureState, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
 
 export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
@@ -34,36 +34,22 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     types = keys(FBProcedureItemType);
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = (!isInputOwner || isPreview) && !redlineActive;
-    const formValue = formState?.getFieldValue(`${name}.description`);
-    if (!formValue) {
+    const descFormValue = formState?.getFieldValue(`${name}.description`);
+    if (!descFormValue) {
       formState?.setFieldValue(`${name}.description`, props.editorConfig?.description);
     }
-
     // MARK: @reactions
     React.useEffect(() => reaction(
       () => mpiProcedureState?.value,
       (data) => {
-        formState?.setFieldValue(`${name}.description`, data?.description, false);
-      }, {
-        fireImmediately: true,
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
-    React.useEffect(() => reaction(
-      () => mpiProcedureState?.value,
-      (data) => {
-        if (!formValue) {
-          formState?.setFieldValue(`${name}.description`, data?.description, false);
+        const schemeItem = workspaceState?.getSchemaItemAt(index);
+        if (workspaceState && schemeItem) {
+          workspaceState.schema![index] = {
+            ...schemeItem,
+            editorConfig: data,
+          };
+          workspaceState.saveDocRev(formState?.getValues());
         }
-        workspaceState?.setSchemaItem({
-          ...schemeItem,
-          editorConfig: {
-            ...data,
-            materials: data?.materials?.map((material) => omit(material, "LHRTparameter")),
-            equipment: data?.equipment?.map((eq) => omit(eq, "LHRTparameter")),
-          },
-        });
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -71,17 +57,14 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     useEffect(() => {
       reaction(
         () => formState?.inputState.get(`${name}.attachments`)?.value,
-        (data) => {
-          if (workspaceState && workspaceState?.getSchemaItemAt(index)) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            workspaceState.schema![index] = {
-              ...schemeItem,
-              editorConfig: {
-                ...schemeItem?.editorConfig,
-                attachments: data,
-              },
-            };
-          }
+        (attachments) => {
+          if (!mpiProcedureState) { return; }
+          const { attachments: stateAttachments } = mpiProcedureState.value || {};
+          if (isEqual((attachments as FBMediaProps[]).sort(), (stateAttachments || []).sort())) { return; }
+          mpiProcedureState.value = {
+            ...mpiProcedureState.value,
+            attachments,
+          };
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -90,14 +73,10 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get(`${name}.description`)?.value,
       (description) => {
-        if (!workspaceState) { return; }
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        workspaceState.schema![index] = {
-          ...schemeItem,
-          editorConfig: {
-            ...schemeItem?.editorConfig,
-            description,
-          },
+        if (!mpiProcedureState) { return; }
+        mpiProcedureState.value = {
+          ...mpiProcedureState.value,
+          description,
         };
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
