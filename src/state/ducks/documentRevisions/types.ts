@@ -158,6 +158,7 @@ export interface SmartReference {
     fieldId: string;
     lotDocId?: string;
     startedBy: string;
+    completedBy: string;
     materialId?: string;
     equipmentId?: string;
     quantity?: number;

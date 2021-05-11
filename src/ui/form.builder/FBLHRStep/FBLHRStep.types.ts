@@ -19,6 +19,7 @@ export type FBLHRStepProps =
   isHovering: boolean;
   isDraft: boolean;
   ownerOfStartMPIAction?: string;
+  ownerOfCompleteMPIAction?: string;
   materials: any;
   equipment: any;
   isDocumentLHRT: boolean;

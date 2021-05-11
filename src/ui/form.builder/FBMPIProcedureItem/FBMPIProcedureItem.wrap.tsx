@@ -2,7 +2,9 @@ import { cloneDeep, concat, get, toNumber, uniqBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
+import { companySelectors } from "../../../state/ducks/company";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentForm, checkIsDocumentMPI } from "../../documentRevision/helpers/checkDocumentGroup";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
@@ -54,7 +56,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       workspaceState?.mode !== "preview" &&
       workspaceState?.mode !== "formPreview") ||
       redlineActive;
-
+    redlineActive = useSelector(companySelectors.getRedlineActive);
     useEffect(() => {
       if (!mpiProcedureState) { return; }
       setFilteredParts(smartReferencesTo);
@@ -203,6 +205,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       isSelectVisible,
       usedDocumentsInLHRS,
       isDocumentMPI,
+      redlineActive,
     });
   };
 
