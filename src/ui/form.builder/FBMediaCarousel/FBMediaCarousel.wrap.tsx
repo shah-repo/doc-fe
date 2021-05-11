@@ -19,6 +19,7 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
     toolsVisibility,
     activeStep,
     previewType,
+    autosave,
     ...props
   }: T) => {
     mediaCarouselState = FB.useRef<FBMediaCarouselState>(FBMediaCarouselState);
@@ -65,6 +66,7 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
       }
       removeMedia && removeMedia(media.id);
       mediaAlbumState?.setActiveMedia(0);
+      if (!autosave) { return; }
       workspaceState?.saveDocRev(formState?.getValues());
     };
 
@@ -90,6 +92,7 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
       collection,
       activeStep,
       previewType,
+      autosave,
     });
   };
 

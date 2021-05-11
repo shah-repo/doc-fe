@@ -31,6 +31,7 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
           name,
           onFileUploadChange,
           actionsDisabled,
+          autosave,
         }}
         />
       )}

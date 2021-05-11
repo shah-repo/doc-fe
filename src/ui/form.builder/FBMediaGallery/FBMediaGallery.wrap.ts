@@ -8,6 +8,7 @@ export const withFBMediaGallery = <T extends FBMediaGalleryProps>(
     handleDelete,
     removeMedia,
     previewType,
+    autosave,
     ...props
   }: T) => {
 
@@ -16,6 +17,7 @@ export const withFBMediaGallery = <T extends FBMediaGalleryProps>(
     handleDelete = (id: string) => {
       removeMedia && removeMedia(id);
       mediaAlbumState?.setActiveMedia(0);
+      if (!autosave) { return; }
       workspaceState?.saveDocRev(formState?.getValues());
     };
 
@@ -26,6 +28,7 @@ export const withFBMediaGallery = <T extends FBMediaGalleryProps>(
       ...(props as T),
       handleDelete,
       previewType,
+      autosave,
     });
   };
 
