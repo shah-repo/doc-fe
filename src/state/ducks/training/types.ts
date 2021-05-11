@@ -1,3 +1,4 @@
+import { Id } from "../common/types";
 import { Employee } from "../company/types";
 import { DocumentRevision, DocumentRevisionDocument } from "../documentRevisions/types";
 
@@ -51,4 +52,8 @@ interface TrainingPlan {
 
 export interface TrainingTransitionRequestBody {
   password: string;
+}
+
+export interface TrainingRequestBody {
+  docRev: Id;
 }
