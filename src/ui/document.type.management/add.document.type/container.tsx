@@ -35,7 +35,7 @@ const AddDocumentTypeFormContainer: React.FunctionComponent<Props> = ({
   };
 
   const addDocumentTypeAction = useActionCreator(documentTypeActions.addDocumentType);
-  const disabled = Config.isProduction || Config.isDemo;
+  const disabled = Config.docTypeManagementEditDisabled;
   const async = useAsync({
     onSuccess: () => {
       dialog.close();

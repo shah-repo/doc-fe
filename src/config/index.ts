@@ -20,6 +20,7 @@ const DEFAULTS = {
   DATADOG_APPLICATION_ID: "",
   DATADOG_CLIENT_TOKEN: "",
   CONSOLE_TOAST: false,
+  PREVENT_DOC_TYPE_MANAGEMENT_EDIT: false,
 };
 
 
@@ -132,6 +133,10 @@ class Config {
 
   public static get consoleToastsEnabled(): boolean {
     return this.get("CONSOLE_TOAST") === "true";
+  }
+
+  public static get docTypeManagementEditDisabled(): boolean {
+    return this.get("PREVENT_DOC_TYPE_MANAGEMENT_EDIT") === "true";
   }
 }
 

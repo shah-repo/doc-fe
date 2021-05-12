@@ -29,7 +29,7 @@ const CompleteTraining: React.FunctionComponent<Props> = ({
   const doc: Document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, document?.id)
   );
-  const docHasRetrain = doc.documentRevisions.filter((item) => item.retrain);
+  const docHasRetrain = doc?.documentRevisions.filter((item) => item.retrain);
 
   const openDialog = () => {
     async.reset();
