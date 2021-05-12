@@ -21,8 +21,8 @@ interface AutocompleteOwnProps extends FieldOwnProps {
 }
 
 type CreatablePropsWithFormik = AutocompleteOwnProps &
-FormikFieldProps &
-Partial<TypographyProps>;
+  FormikFieldProps &
+  Partial<TypographyProps>;
 
 const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   creatableProps,
@@ -35,7 +35,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   React.useEffect(() => {
     setInputValue(formikValue);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formikValue]);
+  }, []);
   const [inputValue, setInputValue] = useState(formikValue);
   const { submitForm } = useFormContext();
   const {
@@ -60,9 +60,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
       setInputValue(value);
     }
   };
-  const onFocus = () => {
-    setInputValue(formikValue || "");
-  };
+
   const onBlur = () => {
     if (formikValue !== inputValue) {
       setFieldValue(name, inputValue);
@@ -106,7 +104,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
         isValidNewOption={() => true}
         blurInputOnSelect={false}
         controlShouldRenderValue={false}
-        {...{ isDisabled, filterOption, onChange, onInputChange, onFocus, onBlur }}
+        {...{ isDisabled, filterOption, onChange, onInputChange, onBlur }}
         {...creatableProps}
         options={options}
       />
@@ -115,8 +113,8 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
 };
 
 type AutocompleteFieldProps = AutocompleteOwnProps &
-FieldConfig &
-Partial<TypographyProps>;
+  FieldConfig &
+  Partial<TypographyProps>;
 
 const CreatableField: React.FunctionComponent<
   AutocompleteFieldProps
