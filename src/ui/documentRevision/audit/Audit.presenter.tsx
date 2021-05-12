@@ -151,7 +151,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         // skip audit values
         if (
           (last(valueKey) === "id" ||
-          last(valueKey) === "attachments") && (
+          last(valueKey) === "attachments" || last(valueKey) === "quantity") && (
             (change.type === "STRING_NEW" && !isAttachment) ||
             change.type === "NUMBER_DELETED")) {
           return;
