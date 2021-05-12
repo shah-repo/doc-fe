@@ -21,8 +21,8 @@ interface AutocompleteOwnProps extends FieldOwnProps {
 }
 
 type CreatablePropsWithFormik = AutocompleteOwnProps &
-  FormikFieldProps &
-  Partial<TypographyProps>;
+FormikFieldProps &
+Partial<TypographyProps>;
 
 const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   creatableProps,
@@ -113,8 +113,8 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
 };
 
 type AutocompleteFieldProps = AutocompleteOwnProps &
-  FieldConfig &
-  Partial<TypographyProps>;
+FieldConfig &
+Partial<TypographyProps>;
 
 const CreatableField: React.FunctionComponent<
   AutocompleteFieldProps
