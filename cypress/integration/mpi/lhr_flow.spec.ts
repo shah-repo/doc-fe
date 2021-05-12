@@ -4,6 +4,7 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -253,7 +254,7 @@ context("LHR flow", () => {
     });
 
 
-    it("[API]Create equipment document", () => {
+    it("[API]Create equipment one", () => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
@@ -269,7 +270,7 @@ context("LHR flow", () => {
           cy.drCreateDocumentRevision({
             payload: {
               attachments: [],
-              description: "<p>Equipment document</p>",
+              description: "<p>Equipment one</p>",
               document: {
                 docId: "ET-00003",
                 documentType: {
@@ -285,7 +286,7 @@ context("LHR flow", () => {
                   ],
                 },
               },
-              name: "Equipment document",
+              name: "Equipment one",
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
@@ -311,7 +312,7 @@ context("LHR flow", () => {
       });
     });
 
-    it("[API]Create materials document", () => {
+    it("[API]Create material one", () => {
       cy.drCreateDocumentRevision({
         payload: {
           attachments: [],
@@ -331,7 +332,7 @@ context("LHR flow", () => {
               ],
             },
           },
-          name: "Materials document",
+          name: "Material one",
           referenceTo: [],
           retrain: false,
           revisionChangeType: RevisionChangeType.NextRevision,
@@ -400,6 +401,94 @@ context("LHR flow", () => {
         });
       });
     });
+
+    it("[API]Create material two", () => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Materials document</p>",
+          document: {
+            docId: "MT-00006",
+            documentType: {
+              id: materialsDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Material two",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        materialsDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: materialsDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        });
+      });
+    });
+
+    it("[API]Create equipment two", () => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Equipment document</p>",
+          document: {
+            docId: "ET-00007",
+            documentType: {
+              id: equipmentDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Equipment two",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        materialsDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: materialsDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        });
+      });
+    });
   });
 
   context("Login user", () => {
@@ -412,6 +501,160 @@ context("LHR flow", () => {
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+  });
+
+  context("Create MPI document", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to Document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+
+    context("Fill in the MPI attributes", () => {
+      it("Enter title 'MPI document", () => {
+        cy.drEnterDocumentTitle({ name: "MPI document" });
+      });
+
+      it("Enter description 'MPI document description'", () => {
+        cy.drEnterDocumentDescription({ description: "MPI document description" });
+      });
+
+      it("Select 'Form' document type from dropdown", () => {
+        cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions Test" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      context("Fill step #1", () => {
+        it("Fill step one description", () => {
+          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+        });
+
+        it("Add material one to step #1", () => {
+          cy.mpiAddMaterialToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
+        });
+
+        it("Add 'Equipment one' to step #1", () => {
+          cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+        });
+      });
+
+      context("Fill step #2", () => {
+        it("Add step #2", () => {
+          cy.mpiAddStep();
+        });
+
+        it("Fill step #2 description", () => {
+          cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of step two" });
+        });
+
+        it("Add material two to step #2", () => {
+          cy.mpiAddMaterialToStep({ numbOfStep: 2, material: "Material two", quntity: "5", unit: "Days" });
+        });
+
+        it("Add 'Equipment two' to step #2", () => {
+          cy.mpiAddEquipmentToStep({ numbOfStep: 2, equipment: "Equipment two" });
+        });
+      });
+
+      context("Release MPI", () => {
+        it("Click save document", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+          });
+        });
+
+        it("Approve and release MPI document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
+    });
+  });
+
+  context("Create LHRt document", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to Document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOnAutosave();
+      });
+
+      it("Click on 'Create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+
+    context("Fill LHRt document attributes", () => {
+      it("Enter document title 'LHRt document'", () => {
+        cy.drEnterDocumentTitle({ name: "LHRt document" });
+      });
+
+      it("Enter document description 'FORM document description'", () => {
+        cy.drEnterDocumentDescription({ description: "LHRt document description" });
+      });
+
+      it("Select 'LHRt' document type", () => {
+        cy.drSelectDocumentType({ documentType: "LHR template" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Component Protocol' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Lot History Record Test" });
+      });
+
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Select 'Part document' for Part to be Manufactured", () => {
+        cy.get("[data-cy=\"lhr-selected-part\"]").click();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetAutocompleteOptions], () => {
+          cy.get("ul[role=listbox]>li").contains("Part document").click();
+        });
+      });
+
+      context("Select created MPI in LHR form", () => {
+        it("Select MPI document for step one in LHR", () => {
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").type("MPI document", { force: true });
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").click({ force: true });
+          cy.get("[name=\"lhrstep-built-in\"] [title=\"Open popup\"] ").click({ force: true });
+          cy.get("ul[role=\"listbox\"]>li").contains("MPI document").click();
+          cy.get("[name=\"lhrstep-built-in\"] [title=\"Open popup\"] ").click({ force: true });
+          cy.get("ul[role=\"listbox\"]>li").contains("MPI document").click();
+        });
+      });
+
+      context("Release LHRt", () => {
+        it("Click save document", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+          });
+        });
+
+        it("Approve and release MPI document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
     });
   });
 });
