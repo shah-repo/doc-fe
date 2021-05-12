@@ -1,6 +1,6 @@
 import { Portal } from "@material-ui/core";
 import React from "react";
-import { FBDialog, FBFieldName, FBForm, FBProcedureDiff, FBProvider, FBSnackbar, FBWorkspaceMemo, FBWorkspaceProps } from "..";
+import { FBDialog, FBFieldName, FBForm, FBProcedureDiff, FBProvider, FBSnackbar, FBWorkspaceMemo, FBWorkspaceProps, FBWorkspaceSocket } from "..";
 import { withFBWorkspace } from "./FBWorkspace.wrap";
 
 const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
@@ -22,6 +22,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
     <FBSnackbar autoHideDuration={6000}/>
     <FBDialog />
     <FBForm {...{ initialValues }} workspaceMode={mode} initialValidation={true}>
+      <FBWorkspaceSocket id={workspaceState?.id} />
       {children}
       {active && (
         <>

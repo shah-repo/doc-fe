@@ -173,7 +173,7 @@ export const withFBInput = <T extends FBInputProps>(
             return;
           }
           if (autosave && !isEqual(inputState?.autosavePrevValue, value)) {
-            if (type === "poreceive") {
+            if (type === "poreceive" || (type === "autocomplete" && name === "lot_part")) {
               submitForm({
                 type: type as FBInputType,
                 name,

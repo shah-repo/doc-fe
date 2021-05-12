@@ -23,6 +23,7 @@ const FBSupplierForm: React.FunctionComponent<FBSupplierFormProps> = ({
       name="description"
       label="form.builder.field.description"
       {...{ disabled }}
+      shouldNotAutosaveOnBlur
     />
     <FBAutocompleteAsync
       rules="required"

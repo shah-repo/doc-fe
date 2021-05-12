@@ -47,7 +47,7 @@ class FBProcedureState {
       ...this.value,
       [type]: items.reverse(),
     };
-    set(this, "value", value);
+    this.setValue(value);
   };
 
   @action public removeItem = (id: string, type: FBProcedureItemType) => {
@@ -56,6 +56,10 @@ class FBProcedureState {
       ...this.value,
       [type]: items,
     };
+    this.setValue(value);
+  };
+
+  @action public setValue = (value?: FBProcedureValue) => {
     set(this, "value", value);
   };
 

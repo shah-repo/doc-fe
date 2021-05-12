@@ -31,6 +31,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     omitFormValue,
     autoFocus,
     autoScrollTo,
+    shouldNotAutosaveOnBlur = false,
     ...props
   }: T) => {
 
@@ -96,7 +97,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
           (htmlContent === emptyHtmlContent) && (htmlContent = "");
           const oldValue = formState?.getFieldValue(name);
           if (oldValue === htmlContent) { return; }
-          formState?.setFieldValue(name, htmlContent, withState, omitFormValue);
+          formState?.setFieldValue(name, htmlContent, false, omitFormValue);
           formState?.validate();
         }
       );
@@ -147,7 +148,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       if (withState) {
         formState?.setFieldValue(name, formState.getFieldValue(name), true, omitFormValue);
       }
-      if (autoFocus || autoScrollTo) { return; }
+      if (autoFocus || autoScrollTo || shouldNotAutosaveOnBlur) { return; }
       workspaceState?.saveDocRev(formState?.getValues());
     };
 

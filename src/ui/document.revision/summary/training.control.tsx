@@ -51,7 +51,7 @@ const TrainingControl: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <span>
+    <span style={{ margin: "50px 0 0 15px" }}>
       <Typography display="inline" className={classes.trainingText}>
         <Text translation="training.certify.completion" />
       </Typography>

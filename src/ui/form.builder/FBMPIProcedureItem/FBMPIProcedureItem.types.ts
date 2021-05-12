@@ -8,6 +8,8 @@ export type FBMPIProcedureItemProps =
 & {
   handleSelect?: (item: FBProcedureItemConfig) => void;
   handleSelectionDelete?: (refId?: string) => void;
+  getProcedureLocale?: (item: FBProcedureItemConfig) => string;
+  getProcedureValues?: (item: FBProcedureItemConfig) => any;
   multiplier?: number;
   isOutput?: boolean;
   isSelectVisible?: boolean;

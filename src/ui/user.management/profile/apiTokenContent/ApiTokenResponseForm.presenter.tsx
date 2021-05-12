@@ -1,5 +1,4 @@
 import { Box, Button } from "@material-ui/core";
-import copy from "copy-to-clipboard";
 import React from "react";
 import { ReactComponent as CopyIcon } from "../../../../assets/images/copy.svg";
 import InputField from "../../../components/forms/fields/Input";
@@ -28,7 +27,7 @@ const ApiTokenResponseFormPresenter: React.FunctionComponent<Props> = ({
           className={classes.copyKeyButton}
           color="primary"
           id="ApiTokenDialog-copyKey"
-          onClick={() => copy(apiTokenKey)}>
+          onClick={() => navigator.clipboard?.writeText(apiTokenKey)}>
           <CopyIcon className={classes.icon} />
           <Text translation="api.token.copy.key" />
         </Button>
@@ -43,7 +42,7 @@ const ApiTokenResponseFormPresenter: React.FunctionComponent<Props> = ({
           className={classes.copySecretButton}
           color="primary"
           id="ApiTokenDialog-copySecret"
-          onClick={() => copy(apiTokenSecret)}>
+          onClick={() => navigator.clipboard?.writeText(apiTokenSecret)}>
           <CopyIcon className={classes.icon} />
           <Text translation="api.token.copy.secret" />
         </Button>

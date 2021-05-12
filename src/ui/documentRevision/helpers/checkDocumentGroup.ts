@@ -39,6 +39,7 @@ export const checkIsDocumentMPIOutput = checkDocumentGroupOptions.bind(this, DOC
 export const checkIsDocumentMPI = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MPI);
 export const checkIsDocumentLHR = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.LHR);
 export const checkIsDocumentExportable = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EXPORTABLE);
+export const checkIsDocumentReceivable = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.RECEIVABLE);
 
 export const checkIsTypeHaveOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.HAVE_OUTPUT);
 export const checkIsTypeMustBeOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT);

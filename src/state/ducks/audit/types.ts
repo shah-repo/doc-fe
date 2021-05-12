@@ -4,7 +4,7 @@ import { Group, User } from "../auth/types";
 import { ChangeRequest } from "../changeRequest/types";
 import { Approval, Owner } from "../common/types";
 import { DocumentType } from "../documentRevisions/documentType/types";
-import { DocumentRevision, Reference } from "../documentRevisions/types";
+import { DocumentRevision, Reference, SmartReference } from "../documentRevisions/types";
 
 type AuditTypes =
     "ARRAY_NEW"
@@ -17,7 +17,8 @@ type AuditTypes =
     | "STRING_DELETED"
     | "NUMBER_DELETED"
     | "OBJECT_NEW"
-    | "BOOLEAN_NEW";
+    | "BOOLEAN_NEW"
+    | "BOOLEAN_EDITED";
 export interface Audit {
   groupKey?: number | undefined;
   index?: number | undefined;
@@ -37,12 +38,14 @@ export interface Audit {
   | DocumentType
   | Group;
   previousValue?: Audit["nextValue"];
+  reference?: SmartReference;
   timestamp: string;
   groupId: string;
   owner: Owner;
   ownerUser?: Owner;
   ownerThirdParty?: Owner;
   fbSchemaItem?: FBSchemaProps;
+  relatedEntity?: DocumentRevision;
 }
 
 export interface AuditActionPayload {

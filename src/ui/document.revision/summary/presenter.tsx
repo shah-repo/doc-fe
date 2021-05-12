@@ -33,6 +33,7 @@ import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
 import BuildsContainer from "./builds.container";
 import ChangeRequestLink from "./changeRequestLink";
+import CompleteTraining from "./complete.training";
 import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
@@ -88,7 +89,10 @@ const Presenter: React.FunctionComponent<Props> = ({
   const isEB = checkIsDocumentEB(document.documentType.groupOptions);
   const isPart = checkIsDocumentPart(document?.documentType?.groupOptions);
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
-
+  const shouldRenderTrainingButton = isDocumentRevisionInStatus(
+    [DocumentRevisionStatus.Released,
+      DocumentRevisionStatus.Approved],
+    status);
   const isInlineApproval = isFormWithInlineApproval(formDocument?.formTemplate?.schema);
   const isFirstAlphaReleased = isDocumentAlphaReleased(dataProp?.revisionStage) && dataProp?.subRevision === 0;
 
@@ -96,12 +100,17 @@ const Presenter: React.FunctionComponent<Props> = ({
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
       documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
 
-  const renderTrainingControl =
-  isDocumentRevisionInStatus([DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved], status) && (
+  const renderTrainingControl = shouldRenderTrainingButton && (
     <TrainingControl
       dataProp={trainingRecords}
       classes={classes}
       documentRevisionId={id}
+    />
+  );
+
+  const renderSelfTaughtTraining = shouldRenderTrainingButton && (
+    <CompleteTraining
+      {...{ trainingRecords, id, document }}
     />
   );
   const containsRedline = (): boolean => {
@@ -215,6 +224,7 @@ const Presenter: React.FunctionComponent<Props> = ({
           containsRedline = {containsRedline()}
           docRevStatus={status}/>}{/* Need to put actual check here*/}
         {renderTrainingControl}
+        {renderSelfTaughtTraining}
       </Grid>
 
       {FBIsActive && (

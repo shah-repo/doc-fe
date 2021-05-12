@@ -128,10 +128,6 @@ context("Autosave trigger after 30 sec", () => {
       cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
         .should("have.text", "Type something long to test if");
     });
-
-    it("Last save should be present", () => {
-      cy.contains("Last saved:").should("be.exist");
-    });
   });
 
   context("Edit Revision Stage after reload page and Autosave should trigger", () => {
