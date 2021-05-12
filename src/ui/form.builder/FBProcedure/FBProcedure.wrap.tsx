@@ -1,8 +1,8 @@
-import { cloneDeep, differenceBy, filter, find, isEqual, keys, map, union, unionBy } from "lodash";
+import { differenceBy, filter, find, isEqual, keys, map, union, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { FB, FBFieldName, FBInputState, FBMediaAlbumFieldStore, FBProcedureItemConfig, FBProcedureItemType, FBProcedureOmitDiffKey, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
+import { FB, FBFieldName, FBInputState, FBMediaAlbumFieldStore, FBMediaProps, FBProcedureItemConfig, FBProcedureItemType, FBProcedureOmitDiffKey, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
 
 export const withFBProcedure = <T extends FBProcedureProps>(
   Component: React.FunctionComponent<T>,
@@ -39,35 +39,39 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     // MARK: @reactions
 
     // Form input sync
-    useEffect(() => {
-      reaction(
-        () => workspaceState?.formInputSync?.get(name),
-        (value) => {
-          if (!procedureState) { return; }
-          const formValue = value as FBProcedureValue;
-          if (isEqual(formState?.getFieldValue(name), formValue)) { return; }
-          // workspaceState?.formInputSync.set(`${name}.description`, formValue.description);
-          workspaceState?.formInputSync.set(`${name}.attachments`, map(formValue.attachments, "id"));
-          procedureState.setValue({
-            ...procedureState.value,
-            ...formValue,
-          });
-        }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      );
-    }, []);
-
-    // Form sync
-    useEffect(() => reaction(
+    React.useEffect(() => reaction(
       () => procedureState?.value,
       (data) => {
-        formState?.setFieldValue(name, {
-          ...formState.getFieldValue(name),
-          ...cloneDeep(data),
-        }, true);
+        formState?.setFieldValue(name, data);
         workspaceState?.saveDocRev(formState?.getValues());
-      }, {
-        fireImmediately: true,
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    useEffect(() => {
+      reaction(
+        () => formState?.inputState.get(`${name}.attachments`)?.value,
+        (attachments) => {
+          if (!procedureState) { return; }
+          const { attachments: stateAttachments } = procedureState.value || {};
+          if (isEqual((attachments as FBMediaProps[]).sort(), (stateAttachments || []).sort())) { return; }
+          procedureState.value = {
+            ...procedureState.value,
+            attachments,
+          };
+        }
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    React.useEffect(() => reaction(
+      () => formState?.inputState.get(`${name}.description`)?.value,
+      (description) => {
+        if (!procedureState) { return; }
+        procedureState.value = {
+          ...procedureState.value,
+          description,
+        };
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);

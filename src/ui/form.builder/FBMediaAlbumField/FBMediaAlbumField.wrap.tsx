@@ -29,6 +29,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     mode,
     type,
     fieldType,
+    autosave = true,
     ...props
   }: T) => {
 
@@ -129,8 +130,10 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           }
           formState?.setFieldValue(name, files, true, isTemplate);
           if (mediaAlbumFieldState?.fromUpload) {
-            workspaceState?.saveDocRev(formState?.getValues());
             mediaAlbumFieldState.fromUpload = false;
+            if (autosave) {
+              workspaceState?.saveDocRev(formState?.getValues());
+            }
           }
         }
       );
@@ -170,6 +173,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       loading,
       mode,
       name,
+      autosave,
     });
   };
 

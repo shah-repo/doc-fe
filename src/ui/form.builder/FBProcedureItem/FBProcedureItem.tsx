@@ -67,6 +67,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
           editorProperties={["copyableValue"]}
           gutter={false}
           fieldType="procedure"
+          autosave={false}
         />
       </Box>
     )}
