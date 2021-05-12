@@ -23,7 +23,7 @@ export enum FBApprovalMatrixTableInfoHead {
   internalType = "form.builder.internalType",
   documentType = "form.builder.documentType",
   trainingReq = "form.builder.trainingReq",
-  needsSignature = "form.builder.qms.document",
+  needsSignature = "form.builder.needsSignature",
   category = "form.builder.category"
 }
 

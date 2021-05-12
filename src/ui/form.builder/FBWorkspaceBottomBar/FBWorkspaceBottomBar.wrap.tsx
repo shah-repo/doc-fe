@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { find, get, unionBy, uniqWith } from "lodash";
+import { find, get, map, unionBy } from "lodash";
 import React from "react";
 import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceTplActions } from "..";
 import { toastError } from "../../components/notifications";
@@ -32,16 +32,32 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
         return toastError("Not a valid template.");
       }
 
+      let { schema: workspaceSchema = [] } = workspaceState ?? {};
       const schema: FBSchemaProps[] = JSON.parse(result as string);
       if (!find(schema, "type") && !find(schema, "index")) {
         return toastError("Not a valid template.");
       }
 
-      const mergedSchema = uniqWith(
-        unionBy(workspaceState?.schema, schema, "name"),
-        (x, y) => x.type === y.type && x.uniqueSchemaItem === true,
-      );
-
+      const items = map(schema, (schemaItem) => {
+        const { type, uniqueSchemaItem } = schemaItem;
+        if (type === "inlineapproval") {
+          schemaItem.editorConfig = {};
+        }
+        const itemsByType = map(workspaceState?.getItemsByType(type) ?? [], "name");
+        if (uniqueSchemaItem && (itemsByType.length > 0)) {
+          workspaceSchema = map(workspaceSchema, (workspaceItem) => {
+            if (itemsByType.includes(workspaceItem.name)) {
+              return {
+                ...workspaceItem,
+                deleted: true,
+              };
+            }
+            return workspaceItem;
+          });
+        }
+        return schemaItem;
+      });
+      const mergedSchema = unionBy(items, workspaceSchema, "name");
       workspaceState?.setSchema(mergedSchema);
     };
 

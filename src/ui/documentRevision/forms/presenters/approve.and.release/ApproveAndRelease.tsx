@@ -37,6 +37,7 @@ interface Props {
   id?: string;
   status?: DocumentRevisionStatus;
   isQms: boolean;
+  needsSignature: boolean;
   documentName: string;
   docRevId: string;
   owner?: Owner;
@@ -61,6 +62,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   id,
   status,
   isQms,
+  needsSignature,
   documentName,
   docRevId,
   owner,
@@ -209,6 +211,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       owner={owner as Owner}
       {...{
         isQms,
+        needsSignature,
         templateOptions,
         setFormDocument,
         setDocumentType,
