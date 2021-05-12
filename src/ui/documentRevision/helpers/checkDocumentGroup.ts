@@ -38,6 +38,7 @@ export const checkIsDynamicForm = checkDocumentGroupOptions.bind(this, DOC_TYPE_
 export const checkIsDocumentMPIOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MPI_OUTPUT);
 export const checkIsDocumentMPI = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MPI);
 export const checkIsDocumentLHR = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.LHR);
+export const checkIsDocumentExportable = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.EXPORTABLE);
 export const checkIsDocumentReceivable = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.RECEIVABLE);
 
 export const checkIsTypeHaveOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.HAVE_OUTPUT);
