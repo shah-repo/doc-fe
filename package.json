@@ -139,7 +139,7 @@
     "class-transformer": "^0.2.3",
     "class-validator": "^0.12.2",
     "csvtojson": "^2.0.10",
-    "cypress": "^6.4.0",
+    "cypress": "7.3.0",
     "cypress-downloadfile": "^1.2.0",
     "cypress-file-upload": "^5.0.6",
     "cypress-localstorage-commands": "^1.2.1",
