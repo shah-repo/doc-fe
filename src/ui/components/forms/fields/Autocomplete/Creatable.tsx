@@ -46,6 +46,9 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     if (action.action === "clear") {
       setInputValue("");
     }
+    else {
+      setInputValue((value as any)?.value);
+    }
     setFieldValue(name, (value as any)?.value);
     // submitForm();
   };
