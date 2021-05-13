@@ -143,8 +143,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         }
         return handleCancel?.();
       }
-      procedureState?.addItem(formValue, type);
-      mpiProcedureState?.addItem(formValue, type);
+      const allSteps = workspaceState?.schema?.filter((item) => item.type === "mpiprocedure");
+      procedureState?.addItem(formValue, type, allSteps);
+      mpiProcedureState?.addItem(formValue, type, allSteps);
       handleCancel?.();
     }
 
