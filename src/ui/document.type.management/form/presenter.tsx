@@ -7,6 +7,7 @@ import { DocumentType, DOC_TYPE_GROUP, REVISION_STAGE_OPTIONS } from "../../../s
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import InputField from "../../components/forms/fields/Input";
+import { required, validator } from "../../components/forms/fields/validators";
 import FormWrapper from "../../components/forms/FormWrapper";
 import Text from "../../components/Text";
 import { Translation } from "../../translations/types";
@@ -60,11 +61,13 @@ const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
           name="documentTypeName"
           label="common.document.type.name"
           inputProps={{ id: "documentTypeName", disabled }}
+          validate={validator(required)}
         />
         <InputField
           name="documentTypeAcronym"
           label="common.document.type.acronym"
           inputProps={{ id: "documentTypeAcronym", disabled }}
+          validate={validator(required)}
         />
         <Grid item xs={12} className={classes.gridWrapper}>
           <CheckboxField
@@ -118,6 +121,7 @@ const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
           autocompleteProps={{ id: "group" }}
           options={enumToOptions(DOC_TYPE_GROUP)}
           isDisabled={disabled}
+          validate={validator(required)}
         />
         <InputField
           name="category"

@@ -652,7 +652,7 @@
   "form.builder.field.service.id": "Service ID",
   "form.builder.prefix": "Prefix",
   "form.builder.internalType": "Internal type",
-  "form.builder.needsSignature": "Needs signature",
+  "form.builder.needsSignature": "Needs Signature",
   "form.builder.qms.document": "QMS Document",
   "form.builder.category": "Category",
   "form.builder.documentType": "Document type",

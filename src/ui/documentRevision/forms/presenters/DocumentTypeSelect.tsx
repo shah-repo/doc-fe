@@ -27,6 +27,7 @@ interface Props extends RouteComponentProps {
   savedocInfo: React.Dispatch<React.SetStateAction<{
     name: string;
     isQms: boolean;
+    needsSignature: boolean;
   }>>;
   isDisabled: boolean;
   documentTypeId?: string;
@@ -99,7 +100,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
-    savedocInfo({ name: event.target.name || "", isQms: type.isQms });
+    savedocInfo({ name: event.target.name || "", isQms: type.isQms, needsSignature: type.needsSignature as boolean });
     formik.setFieldValue("securityGroups", []);
 
     if (loadDocumentProposedId) {
