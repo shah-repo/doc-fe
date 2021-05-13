@@ -166,8 +166,8 @@ context("Autosave on leaving page while data is still not saved", () => {
     it("Click on navigation while document is being saved", () => {
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
-          res.delay(100);
-          res.throttle(1);
+          res.setDelay(100);
+          res.setThrottle(1);
         });
       }).as("response");
 
