@@ -157,7 +157,7 @@ class FBWorkspaceState extends FBSchemaState {
         };
         break;
       default:
-        break;
+        return;
     }
     this.omitAutosave = true;
     appGlobals.omitReloadNotification = true;

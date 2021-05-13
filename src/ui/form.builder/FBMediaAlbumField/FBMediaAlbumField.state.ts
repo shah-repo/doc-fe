@@ -1,4 +1,4 @@
-import { filter, isUndefined, map, union } from "lodash";
+import { filter, find, isUndefined, map, union } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { FBAttachment, FBFile, FBMediaAlbumFieldMode } from "..";
 import { ATTACHMENT_ROOT_URL } from "../../../state/ducks/attachments/constants";
@@ -19,6 +19,10 @@ class FBMediaAlbumFieldState {
   @observable public files: Id[] = [];
   public fromUpload = false;
   public filesApi: FBRequest<FBAttachment[], null> = new FBRequest();
+
+  constructor(files: Id[] | undefined = []) {
+    this.files = files;
+  }
 
   @computed public get loading(): boolean {
     return (
@@ -104,6 +108,7 @@ class FBMediaAlbumFieldState {
     if (isUndefined(id)) {
       return;
     }
+    if (find(this.files, { id })) { return; }
     set(this, "files", union(this.files, [{ id }]));
   };
 
