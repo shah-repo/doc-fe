@@ -662,7 +662,7 @@ context("LHR flow", () => {
         cy.drEnterDocumentDescription({ description: "MPI document description" });
       });
 
-      it("Select 'Form' document type from dropdown", () => {
+      it("Select 'Manufacturing Process Instructions Test' document type from dropdown", () => {
         cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions Test" });
       });
 
@@ -675,11 +675,11 @@ context("LHR flow", () => {
       });
 
       context("Fill step #1", () => {
-        it("Fill step one description", () => {
+        it("Fill step #1 description", () => {
           cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
         });
 
-        it("Add material one to step #1", () => {
+        it("Add 'Material one' to step #1", () => {
           cy.mpiAddMaterialToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
         });
 
@@ -697,7 +697,7 @@ context("LHR flow", () => {
           cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of step two" });
         });
 
-        it("Add material two to step #2", () => {
+        it("Add 'Material two' to step #2", () => {
           cy.mpiAddMaterialToStep({ numbOfStep: 2, material: "Material two", quntity: "5", unit: "Days" });
         });
 
@@ -736,7 +736,7 @@ context("LHR flow", () => {
         cy.drEnterDocumentTitle({ name: "LHRt document" });
       });
 
-      it("Enter document description 'FORM document description'", () => {
+      it("Fill LHRt document description", () => {
         cy.drEnterDocumentDescription({ description: "LHRt document description" });
       });
 
@@ -748,7 +748,7 @@ context("LHR flow", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
-      it("Select 'Component Protocol' output document type", () => {
+      it("Select 'Lot History Record Test' output document type", () => {
         cy.drSelectOutputDocumentType({ documentType: "Lot History Record Test" });
       });
 
@@ -764,7 +764,7 @@ context("LHR flow", () => {
       });
 
       context("Select created MPI in LHR template", () => {
-        it("Select MPI document for step one in LHR", () => {
+        it("Select MPI document for step #1 in LHRt", () => {
           cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
             $el.trigger("click");
           });
@@ -783,7 +783,7 @@ context("LHR flow", () => {
           });
         });
 
-        it("Select MPI document for step two in LHR", () => {
+        it("Select MPI document created with API for step #2 in LHRt", () => {
           cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
             $el.trigger("click");
           });
@@ -800,7 +800,7 @@ context("LHR flow", () => {
           });
         });
 
-        it("Approve and release MPI document", () => {
+        it("Approve and release LHRt document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
@@ -808,7 +808,7 @@ context("LHR flow", () => {
   });
 
   context("Create LHR", () => {
-    it("Click create new from LHRt", () => {
+    it("Click create new document from LHRt", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.EmployeesGet,
         CyRoutes.GetRequiredApproversDocRev,
@@ -833,7 +833,6 @@ context("LHR flow", () => {
       cy.poAddDateRequired();
     });
 
-
     it("Click save document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
         cy.drClickCreateDocumentWithApiCallForForms();
@@ -848,7 +847,7 @@ context("LHR flow", () => {
     });
 
     context("Complete first step in LHR", () => {
-      context("Start LHRs 1", () => {
+      context("Start LHRs #1", () => {
         it("Click 'START MPI'", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
             cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).click();
@@ -856,7 +855,7 @@ context("LHR flow", () => {
           cy.wait(500);
         });
 
-        it("Add an Approval'", () => {
+        it("Add an Approval", () => {
           cy.get("[data-cy^=\"fb-approvals-approvals\"]").click();
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
             cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
@@ -879,10 +878,10 @@ context("LHR flow", () => {
         });
 
         context("Check equipment and materials from MPI are present", () => {
-          // it("Check description step #1", () => {
-          //   cy.xpath("//div[@data-cy=\"mpi-procedure-built-in.description\"]/../div[2]")
-          //     .should("have.text", "Description of step one");
-          // });
+          it("Check description step #1", () => {
+            cy.xpath("//div[@data-cy=\"mpi-procedure-built-in.description\"]/../div[2]")
+              .should("have.text", "Description of step one");
+          });
 
           it("Check materials step #1", () => {
             cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
@@ -896,11 +895,11 @@ context("LHR flow", () => {
               .should("have.text", "ET-00003 - Equipment one");
           });
 
-          // it("Check description step #2", () => {
-          //   cy.xpath("//div[contains(@data-cy, 'description')]/../div[2]")
-          //     .eq(1)
-          //     .should("have.text", "Description of step two");
-          // });
+          it("Check description step #2", () => {
+            cy.xpath("//div[contains(@data-cy, 'description')]/../div[2]")
+              .eq(1)
+              .should("have.text", "Description of step two");
+          });
 
           it("Check materials step #2", () => {
             cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
@@ -921,7 +920,7 @@ context("LHR flow", () => {
       });
     });
 
-    context("Navigate back to LHR to work on second step", () => {
+    context("Navigate back to LHR to start second LHRs", () => {
       it("Navigate to LHR", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
           cy.visit(lhrDocUrl);
@@ -929,7 +928,7 @@ context("LHR flow", () => {
         cy.wait(500);
       });
 
-      it("Verify date of completion step#1", () => {
+      it("Verify date of completion LHRs #1", () => {
         cy.get("[data-cy=\"form.builder.step.completed\"]")
           .should("have.text", "Step completed | " + dateOfStep1Completion);
       });
@@ -974,13 +973,13 @@ context("LHR flow", () => {
           .should("exist");
       });
 
-      it("Try submitting for approval with uncompleted step 2", () => {
+      it("Try submitting for approval with uncompleted LHRs #2", () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         cy.checkToastMessageContains({ message: "Every LHR step needs to be completed" });
       });
     });
 
-    context("Complete second step in LHR", () => {
+    context("Complete LHRs #2 in LHR", () => {
       it("Click 'START MPI'", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(1).click();
@@ -988,7 +987,7 @@ context("LHR flow", () => {
         cy.wait(500);
       });
 
-      it("Add an Approval'", () => {
+      it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-approvals-approvals\"]").click();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
@@ -1010,13 +1009,13 @@ context("LHR flow", () => {
         cy.ebApprove();
       });
 
-      context("Check equipment and materials from MPI are present", () => {
+      context("Check equipment and materials from MPI created with API are present", () => {
         it("Check description of step #1 in LHRs", () => {
           cy.xpath("//div[@data-cy=\"mpi-procedure-built-in.description\"]/../div[2]")
             .should("have.text", "Description of MPI step created with API");
         });
 
-        it("Check materials of step #1 in LHRs", () => {
+        it("Check materials of step #1 in LHRs #2", () => {
           cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
             .eq(0)
             .should("have.text", "MT-00004 - Material one - rev 1 | Qty: 1 sets");
@@ -1025,7 +1024,7 @@ context("LHR flow", () => {
             .should("have.text", "MT-00006 - Material two - rev 1 | Qty: 2 boxes");
         });
 
-        it("Check equipment of step #2 in LHRs", () => {
+        it("Check equipment of step #1 in LHRs #2", () => {
           cy.get("[data-cy$=\"equipment.title\"]")
             .eq(0)
             .should("have.text", "ET-00003 - Equipment one - rev 1");
@@ -1038,57 +1037,57 @@ context("LHR flow", () => {
           cy.drCheckDocumentStatus({ status: "Completed" });
         });
       });
+    });
 
-      context("Navigate to LHR to release it", () => {
-        it("Navigate to LHR", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
-            cy.visit(lhrDocUrl);
-          });
+    context("Navigate to LHR to release it", () => {
+      it("Navigate to LHR", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.visit(lhrDocUrl);
         });
+      });
 
-        it("Verify date of completion step#1 in LHR", () => {
-          cy.get("[data-cy=\"form.builder.step.completed\"]")
-            .eq(0)
-            .should("have.text", "Step completed | " + dateOfStep1Completion);
+      it("Verify completion date of LHRs #1 in LHR", () => {
+        cy.get("[data-cy=\"form.builder.step.completed\"]")
+          .eq(0)
+          .should("have.text", "Step completed | " + dateOfStep1Completion);
+      });
+
+      it("Verify completion date of LHRs #2 in LHR", () => {
+        cy.get("[data-cy=\"form.builder.step.completed\"]")
+          .eq(1)
+          .should("have.text", "Step completed | " + dateOfStep2Completion);
+      });
+
+      it("Enter 'Start quntity' for LHRs #2", () => {
+        cy.get("[name^=\"fb-lhrs-start-quantity-lhr-step\"]").type("8");
+      });
+
+      it("Enter 'Accepted quntity' for LHRs #2", () => {
+        cy.get("[name^=\"fb-lhrs-accepted-quantity-lhr-step\"]").type("5");
+      });
+
+      it("Enter 'Rejected quntity' for LHRs #2", () => {
+        cy.get("[name^=\"fb-lhrs-rejected-quantity-lhr-step\"]").type("3");
+      });
+
+      it("Click save document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
+      });
+    });
 
-        it("Verify date of completion step#2 in LHR", () => {
-          cy.get("[data-cy=\"form.builder.step.completed\"]")
-            .eq(1)
-            .should("have.text", "Step completed | " + dateOfStep2Completion);
-        });
+    context("Release LHR", () => {
+      it("Submit LHR for approval", () => {
+        cy.pmSubmitForApproval();
+      });
 
-        it("Enter 'Start quntity' for LHRs #2", () => {
-          cy.get("[name^=\"fb-lhrs-start-quantity-lhr-step\"]").type("8");
-        });
+      it("Approve LHR", () => {
+        cy.ebApprove();
+      });
 
-        it("Enter 'Accepted quntity' for LHRs #2", () => {
-          cy.get("[name^=\"fb-lhrs-accepted-quantity-lhr-step\"]").type("5");
-        });
-
-        it("Enter 'Rejected quntity' for LHRs #2", () => {
-          cy.get("[name^=\"fb-lhrs-rejected-quantity-lhr-step\"]").type("3");
-        });
-
-        it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
-        });
-
-        context("Release LHR", () => {
-          it("Submit LHR for approval", () => {
-            cy.pmSubmitForApproval();
-          });
-
-          it("Approve LHR", () => {
-            cy.ebApprove();
-          });
-
-          it("Verify status is 'Released'", () => {
-            cy.drCheckDocumentStatus({ status: "Released" });
-          });
-        });
+      it("Verify status is 'Released'", () => {
+        cy.drCheckDocumentStatus({ status: "Released" });
       });
     });
   });
