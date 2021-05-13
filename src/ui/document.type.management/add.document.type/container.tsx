@@ -1,8 +1,10 @@
 import { Dialog, DialogContent, DialogTitle } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import React from "react";
+import * as Yup from "yup";
 import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import { requiredSchema } from "../../components/forms/fields/validators";
 import { toastError } from "../../components/notifications";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -26,12 +28,13 @@ const AddDocumentTypeFormContainer: React.FunctionComponent<Props> = ({
     isQms: false,
     needsSignature: false,
     defaultTraining: false,
-    startingNumber: "",
+    startingNumber: 1,
     hiddenForCreationForUsersWithoutTags: null,
     group: "",
     category: null,
     schema: null,
     fieldsConfig: null,
+    defaultRevStage: null,
   };
 
   const addDocumentTypeAction = useActionCreator(documentTypeActions.addDocumentType);
@@ -51,6 +54,12 @@ const AddDocumentTypeFormContainer: React.FunctionComponent<Props> = ({
       async,
     );
   };
+
+  const AddDocumentTypeSchema = Yup.object().shape({
+    documentTypeName: requiredSchema,
+    documentTypeAcronym: requiredSchema,
+    group: requiredSchema,
+  });
 
   const render = (props: FormikProps<any>) => (
     <DocumentTypeFormPresenter
@@ -75,6 +84,7 @@ const AddDocumentTypeFormContainer: React.FunctionComponent<Props> = ({
           initialValues={initialValues}
           onSubmit={onSubmit}
           enableReinitialize={true}
+          validationSchema={AddDocumentTypeSchema}
         >
           {render}
         </Formik>

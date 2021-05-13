@@ -43,6 +43,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       document,
       changeRequest,
       id,
+      isOutput,
       externalState: { company: { companyMine: { employees = [] } = {} } = {} } = {},
     } = workspaceState || {};
     const {
@@ -71,10 +72,10 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     const authUser = store.getState().auth.user;
     const isOwner = authUser.id === userId;
     currentUser = authUser.id;
-
+    const outputId = isOutput ? id : null;
     const approvalsState = FB.useRef(
       FBApprovalsState,
-      { id, approvals: document?.approvals || changeRequest?.approvals, isOwner },
+      { id: outputId, approvals: document?.approvals || changeRequest?.approvals, isOwner },
     );
     dialogState = FB.useRef(FBDialogState);
 
@@ -181,7 +182,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     // MARK: @observer
     useObserver(() => {
       inlineApprovalExists = Boolean(document?.formDocument?.formTemplate?.schema
-      .some((e) => (e.type === "inlineapproval" as string)));
+      .some((e) => (!e.deleted && e.type === "inlineapproval" as string)));
 
       groups = approvalsState?.groups;
       approvals = approvalsState?.getApprovals;

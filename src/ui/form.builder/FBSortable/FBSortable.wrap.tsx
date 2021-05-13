@@ -35,7 +35,7 @@ export const withFBSortable = <T extends FBSortableProps>(
     ));
 
     const items = useObserver(() => map(workspaceState?.getSchema(), (schemaItem, index: number) => {
-      if (schemaItem.deleted) { return; }
+      if (schemaItem.deleted || schemaItem.hidden) { return; }
       return (
         <SortableItem
           key={`fb-sortable-item-${index}`}
