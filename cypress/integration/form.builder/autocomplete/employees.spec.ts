@@ -2,13 +2,13 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../../support/config";
+import { CyRoutes } from "../../../support/routes";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
-let secondEmployee;
 const approverEmail = USERS[10].email;
 const approverName = USERS[10].name;
 
@@ -38,7 +38,6 @@ context("Autocomplete 'Employees' test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -163,13 +162,16 @@ context("Autocomplete 'Employees' test", () => {
           });
 
           it("Click 'Add' button", () => {
-            cy.fbAddNewFieldButton();
+            cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+              cy.fbAddNewFieldButton();
+            });
           });
         });
 
         context("Preview FORM document", () => {
           it("Click Form Review", () => {
             cy.fbClickButton({ el: "FBWorkspace-clickView" });
+            cy.wait(3000);
           });
         });
       });

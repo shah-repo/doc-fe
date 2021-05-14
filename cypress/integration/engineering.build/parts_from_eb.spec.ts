@@ -283,7 +283,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.EmployeesGet], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
       });
@@ -387,7 +387,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.EmployeesGet], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
       });
@@ -433,7 +433,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.EmployeesGet], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
       });

@@ -117,7 +117,7 @@ context("Autosave trigger after 30 sec", () => {
   context("Edit description and after 30 sec trigger Autosave", () => {
     it("Edit description with one second delay on typing", () => {
       cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").clear()
-        .type("Type something long to test if autosave works", { delay: 1000 });
+        .type("Type something", { delay: 3000, timeout: 45000 });
     });
 
     it("Reload document", () => {
@@ -126,7 +126,7 @@ context("Autosave trigger after 30 sec", () => {
 
     it("Check description if correct value was saved after 30 seconds", () => {
       cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
-        .should("have.text", "Type something long to test if");
+        .should("have.text", "Type somet");
     });
   });
 
