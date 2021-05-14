@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
@@ -10,7 +12,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 let secondEmployee;
-const supplierTitle = `Supplier${Cypress.moment().format("X")}`;
+const supplierTitle = `Supplier${moment().format("X")}`;
 
 context("Autocomplete 'Supplier list' test", () => {
   context("[API]Prepare company", () => {

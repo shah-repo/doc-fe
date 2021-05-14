@@ -23,6 +23,7 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
   name,
   title,
   mode,
+  autosave,
   ...props
 }) => (
   <FBProvider {...{ mediaAlbumState }}>
@@ -86,8 +87,8 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
     </Box>
     {!hiddenContainer && (
       <>
-        {mode === "carousel" && <FBMediaCarousel {...{ collection, removeMedia, actionsDisabled }} />}
-        {mode === "gallery" && <FBMediaGallery {...{ collection, removeMedia, actionsDisabled }} />}
+        {mode === "carousel" && <FBMediaCarousel {...{ collection, removeMedia, actionsDisabled, autosave }} />}
+        {mode === "gallery" && <FBMediaGallery {...{ collection, removeMedia, actionsDisabled, autosave }} />}
       </>
     )}
   </FBProvider>

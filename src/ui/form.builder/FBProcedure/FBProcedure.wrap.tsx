@@ -1,8 +1,8 @@
-import { cloneDeep, differenceBy, filter, find, isEqual, keys, map, union, unionBy } from "lodash";
+import { differenceBy, filter, find, isEqual, keys, map, union, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { FB, FBFieldName, FBInputState, FBMediaAlbumFieldStore, FBProcedureItemConfig, FBProcedureItemType, FBProcedureOmitDiffKey, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
+import { FB, FBFieldName, FBInputState, FBMediaAlbumFieldStore, FBMediaProps, FBProcedureItemConfig, FBProcedureItemType, FBProcedureOmitDiffKey, FBProcedureProps, FBProcedureState, FBProcedureValue } from "..";
 
 export const withFBProcedure = <T extends FBProcedureProps>(
   Component: React.FunctionComponent<T>,
@@ -37,22 +37,42 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     disabled = !isInputOwner || disabled;
 
     // MARK: @reactions
-    // Form sync
-    useEffect(() => reaction(
+
+    // Form input sync
+    React.useEffect(() => reaction(
       () => procedureState?.value,
-      (data) => formState?.setFieldValue(name, {
-        ...formState.getFieldValue(name),
-        ...cloneDeep(data),
-      }, true), {
-        fireImmediately: true,
+      (data) => {
+        formState?.setFieldValue(name, data);
+        workspaceState?.saveDocRev(formState?.getValues());
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    // Autosave trigger
-    useEffect(() => reaction(
-      () => procedureState?.value,
-      () => workspaceState?.saveDocRev(formState?.getValues())
+    useEffect(() => {
+      reaction(
+        () => formState?.inputState.get(`${name}.attachments`)?.value,
+        (attachments) => {
+          if (!procedureState) { return; }
+          const { attachments: stateAttachments } = procedureState.value || {};
+          if (isEqual((attachments as FBMediaProps[]).sort(), (stateAttachments || []).sort())) { return; }
+          procedureState.value = {
+            ...procedureState.value,
+            attachments,
+          };
+        }
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    React.useEffect(() => reaction(
+      () => formState?.inputState.get(`${name}.description`)?.value,
+      (description) => {
+        if (!procedureState) { return; }
+        procedureState.value = {
+          ...procedureState.value,
+          description,
+        };
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -66,7 +86,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
         }
         const diffCollection = getDiffValue();
         procedureState?.setDiffValue(diffCollection);
-        formState?.setFieldValue(diffInput, diffCollection, true);
+        formState?.setFieldValue(diffInput, diffCollection, true, true);
       }, {
         fireImmediately: true,
       }
@@ -118,6 +138,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     handleAdd = (isClone?: boolean, isFromKeys?: boolean) => {
       if (!workspaceState) { return; }
       const newName = FB.uniqid;
+      workspaceState?.removeAutoState();
       const newItem = {
         ...workspaceState.getSchemaItemAt(index),
         autoScrollTo: isFromKeys,

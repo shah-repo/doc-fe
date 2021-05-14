@@ -139,6 +139,13 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   public onSuccess() {
     super.onSuccess();
     const items = reduce(this.items, (reduced: FBPurchaseOrderItem[], item) => {
+      if (!item.partNumber) {
+        reduced.push({
+          ...item,
+          received: this.data[item.id] ?? 0,
+        });
+        return reduced;
+      }
       reduced.push({
         ...item,
         received: this.data[item.partNumber] ?? 0,

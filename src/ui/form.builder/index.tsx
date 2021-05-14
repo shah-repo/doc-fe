@@ -327,6 +327,7 @@ export * from "./FBUnitMeasures/FBUnitMeasures.types";
 export * from "./FBValidation/FBValidation.types";
 export { default as FBWorkspace } from "./FBWorkspace/FBWorkspace";
 export { default as FBWorkspaceMemo } from "./FBWorkspace/FBWorkspace.memo";
+export { default as FBWorkspaceSocket } from "./FBWorkspace/FBWorkspace.socket";
 export { default as FBWorkspaceState } from "./FBWorkspace/FBWorkspace.state";
 export * from "./FBWorkspace/FBWorkspace.types";
 export { default as FBWorkspaceBottomBar } from "./FBWorkspaceBottomBar/FBWorkspaceBottomBar";

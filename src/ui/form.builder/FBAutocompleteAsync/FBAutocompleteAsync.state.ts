@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { filter, find, get, groupBy, isArray, last, map, sortBy, union } from "lodash";
 import { action, computed, set } from "mobx";
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncConstructor, FBAutocompleteAsyncOption, FBData } from "..";
@@ -75,7 +76,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     }
   };
 
-  @action public prepareData = (data: any[]): any[] | undefined => {
+  @action public prepareData = (data: any): any[] | undefined => {
     if (!this.optionId) {
       return;
     }
@@ -96,6 +97,11 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
         return map([data].flat(), (doc) => ({
           ...doc,
           documentRevisions: get(doc, "documentRevisions[0]"),
+        }));
+      case FBAutocompleteAsyncOption.docRevByDoc:
+        return data.documentRevisions.map((e) => ({
+          ...e,
+          docId: data.docId,
         }));
       case FBAutocompleteAsyncOption.preventativeMaintenaceForms:
         return data.map((option) => {

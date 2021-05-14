@@ -1,4 +1,4 @@
-import { find, omit } from "lodash";
+import { find, flattenDeep, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -20,6 +20,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     isHovering,
     disabled,
     ownerOfStartMPIAction,
+    ownerOfCompleteMPIAction,
     materials,
     equipment,
     isDocumentLHRT,
@@ -37,6 +38,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const employees = workspaceState?.externalState?.company?.companyMine.employees;
     ownerOfStartMPIAction = employees?.find((e) =>
       e.id === smartReferencesFrom?.[0]?.metadata.startedBy)?.user?.name;
+    ownerOfCompleteMPIAction = employees?.find((e) =>
+      e.id === smartReferencesFrom?.[0]?.metadata.completedBy)?.user?.name || "Sara";
     const lhrStepState = FB.useRef(FBLHRStepState, stepLHRs);
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
@@ -107,14 +110,19 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         const parameters = schemaItem?.editorConfig.parameters;
         const dataValues = Array.from(data.values());
         const mpiDocument: any = dataValues.find((item: any) => item?.id === schemaItem?.editorConfig.value);
-        const editorConfig = mpiDocument?.formTemplate.schema.find((item) => item.type === "mpiprocedure").editorConfig;
-        const { materials, equipment } = editorConfig;
+
+        const editorCfg = mpiDocument?.formTemplate.schema.filter((item) => item.type === "mpiprocedure");
+        const editorMaterials = editorCfg.filter((item) => item.editorConfig.materials).map(
+          (item) => item.editorConfig.materials);
+        const editorEquipment = editorCfg.filter((item) => item.editorConfig.equipment).map(
+          (item) => item.editorConfig.equipment );
+
         if (parameters) {
-          const newMaterials = materials.map((material) => {
+          const newMaterials = flattenDeep([editorMaterials]).map((material) => {
             const editedMaterial = find(parameters, (parameter) => parameter.paramsId === material.id);
             return editedMaterial || material;
           });
-          const newEquipments = equipment.map((equipment) => {
+          const newEquipments = flattenDeep([editorEquipment]).map((equipment) => {
             const editedEquipment = find(parameters, (parameter) => parameter.paramsId === equipment.id);
             return editedEquipment || equipment;
           });
@@ -124,8 +132,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
           return;
         }
 
-        lhrStepState.setMaterials(materials);
-        lhrStepState.setEquipment(equipment);
+        lhrStepState.setMaterials(flattenDeep([editorMaterials]));
+        lhrStepState.setEquipment(flattenDeep([editorEquipment]));
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -193,6 +201,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       disabled,
       loading,
       ownerOfStartMPIAction,
+      ownerOfCompleteMPIAction,
       materials,
       index,
       equipment,

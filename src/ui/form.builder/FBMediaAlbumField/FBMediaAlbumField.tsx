@@ -19,7 +19,6 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
   label,
   index,
   gutter,
-  id = "",
 }) => (
   <FBProvider {...{ [`mediaAlbumFieldState_${name}`]: mediaAlbumFieldState }} >
     <FBInput {...{ name, label, gutter, index, editorConfig, autosave }} type="mediaalbum">
@@ -32,6 +31,7 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
           name,
           onFileUploadChange,
           actionsDisabled,
+          autosave,
         }}
         />
       )}

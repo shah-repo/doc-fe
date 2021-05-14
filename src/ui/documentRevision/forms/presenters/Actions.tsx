@@ -222,6 +222,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
             <ApproveAndRelease
               id={values.id}
               status={values.status}
+              needsSignature={docInfo.needsSignature}
               isQms={docInfo.isQms}
               documentName={docInfo.name}
               docRevId={values.id as string}

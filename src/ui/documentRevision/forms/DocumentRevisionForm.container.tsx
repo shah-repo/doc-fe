@@ -12,6 +12,7 @@ import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
+import { DRAWER_WIDTH } from "../../app/Navigation.styles";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
@@ -24,6 +25,7 @@ import { DocumentCloneType } from "../Clone.container";
 import { checkIsDocumentEditableSchema, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
 import { isDocumentAlphaReleased } from "../helpers/revisionStage";
+import { SIDEBAR_WIDTH } from "../Sidebar/styles";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -230,7 +232,8 @@ DocumentRevisionFormContainerProps
       asyncAction={loadAction}
       startActionOnMount={true}
     >
-      <div ref={bannerPortal} />
+      <div ref={bannerPortal}
+        style={{ position: "fixed", width: `calc(100% - ${DRAWER_WIDTH + SIDEBAR_WIDTH}px)`, zIndex: 1001 }} />
       <Grid style={{ background: Colors.light_gray }} >
         {
           type !== "newOutput" &&
