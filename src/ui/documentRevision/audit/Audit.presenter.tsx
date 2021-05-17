@@ -39,7 +39,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
-      const { owner, ownerUser, ownerThirdParty } = change;
+      const { owner, ownerUser, ownerThirdParty, index } = change;
       const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
       if (audit[groupId].filter((change) =>
         change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
@@ -47,7 +47,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         return null;
       }
 
-      if (renderChanges(audit[groupId], key).props.children[0].length === 0) {
+      if (index && renderChanges(audit[groupId], key).props.children[index].length === 0) {
         return null;
       }
       return (
