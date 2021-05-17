@@ -136,7 +136,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       if (isNewOutput) {
         return;
       }
-      const s = scheme?.map((e) => {
+      const predefinedSchema = scheme?.map((e) => {
         if (
           e.type === "approvals" ||
           e.type === "section" ||
@@ -161,8 +161,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
           includeNotes: true,
         };
       });
-      console.log(s);
-      workspaceState?.setSchema(s); }
+      workspaceState?.setSchema(predefinedSchema); }
   };
 
   if (!isVisible && type !== "newOutput") {
