@@ -26,7 +26,9 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   <>
     {!hidden && (
       <Box mb={gutter ? 5 : 0} {...boxProps}>
-        {includeNotes && isOutput && <FBNotes {...{ name }} />}
+        {/* blankTemplateForm has notes on attachment already,
+        still we need input inside blnkTemplateForm according to ENC-5908 */}
+        {includeNotes && isOutput && type !== "blanktplform" && <FBNotes {...{ name }} />}
         <FormControl fullWidth {...{ error }}>
           {!includes(FBInputState.omitLabel, type) && label && (
             <FBLabel {...{ error, label, loading }} />
