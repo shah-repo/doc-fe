@@ -588,7 +588,7 @@ context("LHR flow", () => {
           attachments: [],
           referenceTo: [],
           revisionStage: 1,
-          revisionChangeType: "NEXT_REVISION",
+          revisionChangeType: RevisionChangeType.NextRevision,
           retrain: false,
           document: {
             docId: "PI-00008",
@@ -758,7 +758,7 @@ context("LHR flow", () => {
 
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").click();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetAutocompleteOptions], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
           cy.get("ul[role=listbox]>li").contains("Part document").click();
         });
       });
@@ -768,7 +768,7 @@ context("LHR flow", () => {
           cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
             $el.trigger("click");
           });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetAutocompleteOptions], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
             cy.get("input[data-cy=\"lhrstep-built-in\"]").type("MPI document{downarrow}{enter}", { force: true });
           });
         });
@@ -778,7 +778,7 @@ context("LHR flow", () => {
         it("Add LHR step", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).click({ force: true });
           cy.fbSelectItemFromNewFieldList({ field: "LHR Step" });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetAutocompleteOptions], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
             cy.fbAddNewFieldButton();
           });
         });
@@ -787,7 +787,7 @@ context("LHR flow", () => {
           cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
             $el.trigger("click");
           });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetAutocompleteOptions], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
             cy.get("input[data-cy^=\"lhr-step\"]").type("MPI created with API{downarrow}{enter}", { force: true });
           });
         });
