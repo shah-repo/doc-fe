@@ -177,11 +177,13 @@ context("Autocomplete 'Document Revisions In Draft without Records' test", () =>
               .find("[data-cy^=\"test-label-\"]").click();
 
             if (response.body.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  const res = response.body[index];
-                  expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
-                })
+              const draftDocRevs = response.body;
+              draftDocRevs.forEach((draftDocRev) => {
+                cy.get("ul[role=listbox]>li")
+                  .should("contain.text",
+                    `${draftDocRev.document.docId} - rev ${draftDocRev.displayRevision} - ${draftDocRev.name}`);
+              });
+              cy.get("ul[role=listbox]>li")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

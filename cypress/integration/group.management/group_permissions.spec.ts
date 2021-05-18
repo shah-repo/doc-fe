@@ -184,10 +184,6 @@ context("Group Permissions Flow", () => {
   });
 
   context("Start adding user without permission to groups and users management", () => {
-    it("Navigates to Group management", () => {
-      cy.grpNavigateToGroupManagement();
-    });
-
     it("Filters groups by name and selects 'Groups Management'", function() {
       PreventSkipOnFailure.call(this);
       // SystemRequirement("REQ-2550");
@@ -201,10 +197,6 @@ context("Group Permissions Flow", () => {
 
     it("Saves the group", () => {
       cy.grpSaveGroupPatch();
-    });
-
-    it("Navigates to 'Group management'", () => {
-      cy.grpNavigateToGroupManagement();
     });
 
     it("Filters groups by name and selects 'User Management'", function() {
@@ -224,10 +216,6 @@ context("Group Permissions Flow", () => {
   });
 
   context(`Remove and add permissions for ${USERS[3].name}`, () => {
-    it("Navigates to Group management", () => {
-      cy.grpNavigateToGroupManagement();
-    });
-
     it("Filters groups by name and selects 'Everyone'", () => {
       cy.grpSelectGroupWithoutClosingDialog({ name: "Everyone" });
     });
@@ -255,10 +243,6 @@ context("Group Permissions Flow", () => {
   });
 
   context(`Add permissions for ${USERS[3].name} to change document ownership`, () => {
-    it("Navigates to Group management", () => {
-      cy.grpNavigateToGroupManagement();
-    });
-
     it("Clicks on 'Add Group'", () => {
       cy.grpClickAddGroup();
     });

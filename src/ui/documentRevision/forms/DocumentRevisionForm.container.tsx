@@ -172,6 +172,7 @@ DocumentRevisionFormContainerProps
     {}
   );
   originScheme = pmForm ? pmFormSchema : cleanInitialValues?.schema || originScheme;
+  cleanInitialValues.schema = originScheme;
   const formInput = useMemo(() =>
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
   , [cleanInitialValues]);

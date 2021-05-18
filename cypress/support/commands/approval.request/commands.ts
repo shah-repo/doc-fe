@@ -2,9 +2,10 @@
 
 
 /* eslint-disable max-len */
+import { bool } from "aws-sdk/clients/signer";
 import moment from "moment";
 import "moment-timezone";
-import { ChangeRequestEditRequestBody } from "../../../../src/state/ducks/changeRequest";
+import { ChangeRequestEditRequestBody } from "../../../../src/state/ducks/changeRequest/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 export { };
@@ -20,7 +21,7 @@ declare global {
       arEnterDescriptionAddDocumentsDialog(params: { description: string }): Chainable<Subject>;
       arEnterJustificationAddDocumentsDialog(params: { justification: string }): Chainable<Subject>;
       arClickAddBtnOnAddDocumentsDialog(): Chainable<Subject>;
-      arAddApproverOnApproverList(params: { approver: string }): Chainable<Subject>;
+      arAddApproverOnApproverList(params: { approver: string; noWait?: bool }): Chainable<Subject>;
       arClickCreateApprovalRequestAfterCompletingForm(): Chainable<Subject>;
       arClickSendToReview(): Chainable<Subject>;
       arVerifyStatus(params: { status: string }): Chainable<Subject>;
@@ -291,9 +292,11 @@ Cypress.Commands.add("arClickAddBtnOnAddDocumentsDialog", () => {
   cy.get("[data-cy=\"arAddDocumentDialogAddBtn\"]").click();
 });
 
-Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string }) => {
+Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string; noWait?: bool }) => {
+  const routesToWait = params.noWait ? [] : [CyRoutes.PatchAR, CyRoutes.ArAudit];
+
   cy.wrapWithWaitOnApiCalls(
-    [CyRoutes.PatchAR, CyRoutes.ArAudit], () => {
+    routesToWait, () => {
       cy.get("[data-cy=\"fb-approvers-approvers\"]").click();
       cy.get("ul[role=\"listbox\"]>li").contains(params.approver).click();
       cy.unClick();
