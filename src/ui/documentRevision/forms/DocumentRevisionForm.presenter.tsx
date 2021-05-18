@@ -25,7 +25,7 @@ import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
-import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentEquipment, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
+import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord } from "../helpers/records";
 import { getRevisionStageNumber, isDocumentAlphaReleased } from "../helpers/revisionStage";
@@ -147,7 +147,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
   const isPart = checkIsDocumentPart(documentRevision?.document.documentType.groupOptions);
-  const isDocumentEquipment = checkIsDocumentEquipment(documentRevision?.document.documentType.groupOptions);
   const isMPIOutput = checkIsDocumentMPIOutput(documentRevision?.document.documentType.groupOptions);
   const isLHR = checkIsDocumentLHR(documentRevision?.document.documentType.groupOptions);
   const shouldShowUpgradeForDocs = useShouldUpgradeToLatest(
@@ -173,7 +172,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const documentTypeId = values.document?.documentType?.id;
   const showOutputInfo = workspaceState?.mode === "form" || workspaceState?.mode === "formDesign";
   const canAddFBFields = workspaceState?.mode === "design" || workspaceState?.mode === "formDesign";
-  const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord && !isDocumentEquipment;
+  const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;
   const outputDocumentTypes = pmFormId ?
     initialValues.outputDocumentTypes :
     initialValues.formDocument?.formTemplate?.outputDocumentTypes;
