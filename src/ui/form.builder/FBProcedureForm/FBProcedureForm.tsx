@@ -37,7 +37,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
         loading={partLoading}
         disabled={partLoading}
         {...{ disabledOptions }}
-        freeSolo={mode !== "lhr" && disabled}
+        freeSolo={mode === "mpi" ? disabled : true}
         withState
         shouldReloadOnInit
       />
@@ -62,7 +62,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       label="form.builder.title"
       rules="required"
       {...{ optionId, disabledOptions }}
-      freeSolo={mode !== "lhr" && disabled}
+      freeSolo={mode === "mpi" ? disabled : true}
     />
     }
     {isDocumentMPI && <FBCheckbox
