@@ -491,6 +491,7 @@ Cypress.Commands.add("checkToastMessageIsNotEmpty", (params: { exists: boolean }
 
 Cypress.Commands.add("checkToastMessageIsEqual", (params: { message: string }) => {
   cy.get(".Toastify").should("have.text", params.message);
+  cy.closeAllAlertMessages();
 });
 
 Cypress.Commands.add("checkToastMessageContains", (params: { message: string }) => {

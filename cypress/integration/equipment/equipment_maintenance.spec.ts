@@ -577,6 +577,7 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetAvailableApprovers], () => {
         cy.ebApprove();
       });
+      cy.wait(8000);
     });
 
     it("Verify status is 'Released'", () => {
@@ -593,18 +594,6 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
       });
-    });
-
-    it("Reload 'Equipment maintenance document'", () => {
-      cy.wait(5000);
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocPreview,
-        CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet,
-        CyRoutes.SessionDetails], () => {
-        cy.reload();
-      });
-      cy.wait(5000);
     });
 
     it("Check preventative maintenance document existance", () => {
@@ -687,6 +676,7 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetAvailableApprovers], () => {
         cy.ebApprove();
       });
+      cy.wait(8000);
     });
 
     it("Verify status is 'Released'", () => {
@@ -716,18 +706,6 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.DocRevPreview], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
       });
-    });
-
-    it("Reload 'Equipment calibration document'", () => {
-      cy.wait(5000);
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocPreview,
-        CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet,
-        CyRoutes.SessionDetails], () => {
-        cy.reload();
-      });
-      cy.wait(5000);
     });
 
     it("Check Calibration document existance", () => {
