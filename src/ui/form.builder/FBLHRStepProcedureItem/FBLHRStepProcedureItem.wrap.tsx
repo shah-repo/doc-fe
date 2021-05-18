@@ -45,13 +45,8 @@ export const withFBLHRStepProcedureItem = <T extends FBLHRStepProcedureItemProps
     };
 
     useObserver(() => {
-      if (type === FBProcedureItemType.materials) {
-        loading = (
-          !FBAutocompleteAsyncStore.data.get(lhrStepState?.materialsId || "")
-        );
-      } else {
-        loading = !FBAutocompleteAsyncStore.data.get(lhrStepState?.equipmentId || "");
-      }
+      const id = type === FBProcedureItemType.materials ? lhrStepState?.materialsId : lhrStepState?.equipmentId;
+      loading = (!FBAutocompleteAsyncStore.data.get(id || ""));
     });
 
     return Component({
