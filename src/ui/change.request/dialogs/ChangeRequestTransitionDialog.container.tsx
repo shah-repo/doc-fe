@@ -31,7 +31,11 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {
       onSuccess && onSuccess();
-      transitionDialog.close();
+      if (transition === "closed") {
+        effectiveDateDialog.close();
+      } else {
+        transitionDialog.close();
+      }
     },
     onError: (error) => {
       toastError(error as string);
