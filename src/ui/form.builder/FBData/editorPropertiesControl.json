@@ -305,5 +305,8 @@
     "deleteDisabled",
     "copyableValue",
     "includeNotes"
+  ],
+  "blanktplform": [
+    "includeNotes"
   ]
 }
