@@ -16,18 +16,21 @@ interface Props {
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     containerWrap: {
-      paddingLeft: "42px",
-      marginTop: "15px",
-      marginBottom: "15px",
+      paddingLeft: theme.spacing(5.25),
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
     },
-
     itemWrap: {
       display: "flex",
       justifyContent: "flex-end",
     },
+    link: {
+      textDecoration: "none",
+      color: "inherit",
+    },
   }));
 
-const CloseRequest: React.FunctionComponent<Props> = ({
+const CloseApprovalRequest: React.FunctionComponent<Props> = ({
   index,
   changeRequest,
 }) => {
@@ -38,7 +41,7 @@ const CloseRequest: React.FunctionComponent<Props> = ({
   ));
   const classes = styles();
   const linkRenderer = () => (
-    <Link to={changeRequestEditPath(changeRequest.id)} style={{ textDecoration: "none", color: "inherit" }}>
+    <Link to={changeRequestEditPath(changeRequest.id)} className={classes.link}>
       <Box data-cy="pendingActionsAR">
         <Box
           color="primary.main"
@@ -86,4 +89,4 @@ const CloseRequest: React.FunctionComponent<Props> = ({
   );
 };
 
-export default CloseRequest;
+export default CloseApprovalRequest;
