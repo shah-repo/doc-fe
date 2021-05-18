@@ -21,5 +21,6 @@ csv()
       JSON.stringify(result, null, 2),
       { encoding: "UTF-8" }
     );
-    console.log("DONE!!!!!!", resolve(__dirname, "..", OUTPUT))
+    // eslint-disable-next-line no-console
+    console.log("DONE!!!!!!", resolve(__dirname, "..", OUTPUT));
   });
