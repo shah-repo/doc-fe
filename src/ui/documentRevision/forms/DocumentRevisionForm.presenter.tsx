@@ -1,7 +1,8 @@
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { flatten, isEmpty, isEqual } from "lodash";
-import { observer, useObserver } from "mobx-react";
+import { observer } from "mobx-react";
+import { reaction } from "mobx";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
@@ -252,9 +253,13 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   }, [isSubmitting]);
 
-  useObserver(() => {
-    dirty = workspaceState?.isDirty || false;
-  });
+  React.useEffect(() => reaction(
+    () => workspaceState?.isDirty,
+    (data) => {
+      dirty = data || false;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  ), []);
 
   return (
     <Grid
