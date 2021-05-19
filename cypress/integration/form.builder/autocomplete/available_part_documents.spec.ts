@@ -73,6 +73,10 @@ context("Autocomplete 'Available Part Documents' test", () => {
 
   // TODO: Create form for Parts with API, not through document list creation!
   context("Create Form Part document to create Part", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
     });
