@@ -1,7 +1,7 @@
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { flatten, isEmpty, isEqual } from "lodash";
-import { observer } from "mobx-react";
+import { observer, useObserver } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
@@ -251,6 +251,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       return;
     }
   }, [isSubmitting]);
+
+  useObserver(() => {
+    dirty = workspaceState?.isDirty || false;
+  });
+
   return (
     <Grid
       item={true}
