@@ -873,8 +873,8 @@ context("LHR flow", () => {
         });
 
         it("Approve step", () => {
-          dateOfStep1Completion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
           cy.ebApprove();
+          dateOfStep1Completion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         });
 
         context("Check equipment and materials from MPI are present", () => {
@@ -1005,8 +1005,8 @@ context("LHR flow", () => {
       });
 
       it("Approve step", () => {
-        dateOfStep2Completion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         cy.ebApprove();
+        dateOfStep2Completion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
       });
 
       context("Check equipment and materials from MPI created with API are present", () => {
