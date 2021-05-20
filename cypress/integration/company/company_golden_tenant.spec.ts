@@ -821,9 +821,9 @@ context("Create company with golden tenant", () => {
     it("Check third document values", () => {
       cy.navigToDocumentList();
       cy.dlClearFilters();
-      cy.drFilterDocListByNameAndStatus({ title: "Document Approval Matrix", status: "Released" });
-      cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(0).contains("Document Approval Matrix");
-      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Initial DAM Description");
+      cy.drFilterDocListByNameAndStatus({ title: "Document Approval Matrix", status: "Draft" });
+      cy.get("#Title-field").eq(0).contains("Document Approval Matrix");
+      cy.get("[data-cy=\"RichTextEditor.description\"]").contains("Initial DAM Description");
     });
 
     it("Check forth document values", () => {
@@ -854,16 +854,6 @@ context("Create company with golden tenant", () => {
       cy.get("[data-cy=\"documentRevisions.0.proposedDocumentRevision.id\"]")
         .should("have.value", "FM-00001 - rev 1 - AR Form");
       cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Approval Request Form");
-    });
-
-    it("Check second AR", () => {
-      cy.navigToApprovalRequestList();
-      cy.arClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: "Releasing DAM-00003, Document Approval Matrix", status: "Closed" });
-      cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(0).contains("Releasing DAM-00003, Document Approval Matrix");
-      cy.get("[data-cy=\"documentRevisions.0.proposedDocumentRevision.id\"]")
-        .should("have.value", "DAM-00003 - rev 1 - Document Approval Matrix");
-      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Releasing DAM-00003, Document Approval Matrix");
     });
 
     it("Log out user", () => {
