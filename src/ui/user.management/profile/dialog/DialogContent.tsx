@@ -14,6 +14,7 @@ import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/type
 import { AsyncState } from "../../../../state/types";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
+import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -60,7 +61,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-interface DropboxResponse {
+export interface DropboxResponse {
   code: number;
   status: string;
   data: {
@@ -112,6 +113,9 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const dropboxAsync = useAsync<DropboxResponse>({
     onSuccess: (data?: DropboxResponse) => {
       window.open(data?.data[0].url);
+    },
+    onError: (error) => {
+      toastError(error as string);
     },
   });
   const enableDropboxAction = useActionCreator(userManagementActions.enableDropbox);
