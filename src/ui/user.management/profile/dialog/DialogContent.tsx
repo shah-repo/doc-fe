@@ -66,7 +66,7 @@ export interface DropboxResponse {
   status: string;
   data: {
     url: string;
-  }[];
+  };
 }
 
 const DialogContent: React.FunctionComponent<Props> = ({
@@ -112,7 +112,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const isEmployeeDropboxEnabled = useSelector(authSelectors.isDropboxEnabled);
   const dropboxAsync = useAsync<DropboxResponse>({
     onSuccess: (data?: DropboxResponse) => {
-      window.open(data?.data[0].url);
+      window.open(data?.data.url);
     },
     onError: (error) => {
       toastError(error as string);

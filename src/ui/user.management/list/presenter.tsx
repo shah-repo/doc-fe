@@ -49,7 +49,7 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   const hasDropboxPermission = useSelector(getHasPermission(Permission.COMPANY_DROPBOX_INTEGRATION));
   const dropboxAsync = useAsync<DropboxResponse>({
     onSuccess: (data?: DropboxResponse) => {
-      window.open(data?.data[0].url);
+      window.open(data?.data.url);
     },
     onError: (error) => {
       toastError(error as string);
