@@ -23,6 +23,8 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public formInputSync = new Map<string, any>();
   public formInput?: Record<string, any>;
 
+  @observable public isDirty = false;
+
   // Hack because formik context from autosave & reference comp are not the same ref
   // and we need to know the values from both FB and AvailableReferences to create
   // new merged value
@@ -132,12 +134,17 @@ class FBWorkspaceState extends FBSchemaState {
     return inputOwner === undefined || inputOwner === employeeId;
   };
 
+  @action public setDirty = (isDirty: boolean) => {
+    set(this, "isDirty", isDirty);
+  };
+
   public removeAutoState = () => {
     this.schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
   };
 
   public saveDocRev = (values?: Record<string, any>) => {
     const { id, mode, autosave } = this;
+    this.setDirty(true);
     if (!autosave) { return; }
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     if (!id) { return; }
@@ -170,6 +177,7 @@ class FBWorkspaceState extends FBSchemaState {
       if (error) {
         this.documentRevApi.onError(error);
       } else {
+        this.setDirty(false);
         this.documentRevApi.onSuccess();
       }
     });

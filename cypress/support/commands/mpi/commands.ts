@@ -25,15 +25,11 @@ Cypress.Commands.add("mpiEnterDescriptionToStep", (params: {numbOfStep: integer;
     .eq(params.numbOfStep)
     .type(params.description)
     .wait(300);
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-    cy.unClick();
-  });
+  cy.unClick();
 });
 
 Cypress.Commands.add("mpiAddStep", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-    cy.get("[data-cy=\"form.builder.add.step\"]").last().click();
-  });
+  cy.get("[data-cy=\"form.builder.add.step\"]").last().click();
 });
 
 Cypress.Commands.add("mpiAddMaterialToStep", (params: {
