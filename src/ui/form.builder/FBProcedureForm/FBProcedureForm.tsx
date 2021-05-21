@@ -37,7 +37,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
         loading={partLoading}
         disabled={partLoading}
         {...{ disabledOptions }}
-        freeSolo={mode !== "lhr" && disabled}
+        freeSolo={mode !== "eb" ? disabled : true}
         withState
         shouldReloadOnInit
       />
@@ -62,7 +62,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       label="form.builder.title"
       rules="required"
       {...{ optionId, disabledOptions }}
-      freeSolo={mode !== "lhr" && disabled}
+      freeSolo={mode !== "eb" ? disabled : true}
     />
     }
     {/* Do not show cb when user is editing item */}
