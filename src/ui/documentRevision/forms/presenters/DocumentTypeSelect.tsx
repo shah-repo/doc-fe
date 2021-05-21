@@ -16,7 +16,7 @@ import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustom
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import { DocumentCloneType } from "../../Clone.container";
-import { checkIsDocumentForm, checkIsDocumentPart, checkIsDynamicForm, checkIsTypeMustBeOutput, hasDefaultNote } from "../../helpers/checkDocumentGroup";
+import { checkIsDocumentForm, checkIsDocumentPart, checkIsDynamicForm, checkIsTypeMustBeOutput, checkIsTypeOnlyOnOutputs, hasDefaultNote } from "../../helpers/checkDocumentGroup";
 import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
 
@@ -80,7 +80,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
 
     return documentTypes
       .filter((docType) => {
-        if (checkIsTypeMustBeOutput(docType.groupOptions)) {
+        if (checkIsTypeMustBeOutput(docType.groupOptions) || checkIsTypeOnlyOnOutputs(docType.groupOptions)) {
           return false;
         }
         // omit parts (ENC-6788) unless it is already selected as doc type via Parts module (ENC-7022 fix)
