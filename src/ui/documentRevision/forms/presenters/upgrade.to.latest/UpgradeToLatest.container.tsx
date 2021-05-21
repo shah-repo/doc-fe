@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
@@ -28,7 +29,7 @@ const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (formDocumentId) {
+    if (formDocumentId && !isEmpty(formDocumentId)) {
       dispatch(documentRevisionsActions.loadDocument(formDocumentId));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
