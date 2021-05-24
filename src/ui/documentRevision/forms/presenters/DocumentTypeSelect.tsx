@@ -80,7 +80,8 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
 
     return documentTypes
       .filter((docType) => {
-        if (checkIsTypeMustBeOutput(docType.groupOptions) || checkIsTypeOnlyOnOutputs(docType.groupOptions)) {
+        if (checkIsTypeMustBeOutput(docType.groupOptions) ||
+           (!isDocTypeDisabled && checkIsTypeOnlyOnOutputs(docType.groupOptions))) {
           return false;
         }
         // omit parts (ENC-6788) unless it is already selected as doc type via Parts module (ENC-7022 fix)
