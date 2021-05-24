@@ -1,4 +1,4 @@
-import { find, get, keyBy, map } from "lodash";
+import { find, get, isUndefined, keyBy, map } from "lodash";
 import { action, observable, set } from "mobx";
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, StartMpiBody } from "..";
 import { Document, DocumentRevision } from "../../../state/ducks/documentRevisions/types";
@@ -75,8 +75,8 @@ class FBLHRStepState {
 
   public setIsHovering = (isHovering: boolean) => set(this, "isHovering", isHovering);
 
-  public startMpi = (fieldId: string, startQuantity: number, woId?: string, mpiId?: string ) => {
-    if (!woId || !mpiId) { return; }
+  public startMpi = (fieldId: string, startQuantity: number, woId?: string, mpiId?: string, stepNumber?: number) => {
+    if (!woId || !mpiId || isUndefined(stepNumber)) { return; }
     this.startMpiApi.set({
       url: FBEndpoint.StartMpi,
       method: "post",
@@ -89,6 +89,7 @@ class FBLHRStepState {
         },
         fieldId,
         startQuantity,
+        stepNumber,
       },
     });
   };

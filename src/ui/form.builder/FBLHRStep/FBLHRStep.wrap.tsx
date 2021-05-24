@@ -24,6 +24,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     materials,
     equipment,
     isDocumentLHRT,
+    stepIndex,
     ...props
   }: T) => {
 
@@ -149,6 +150,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         startQuantity,
         workspaceState?.document?.id,
         schemaItem?.editorConfig?.value,
+        stepIndex,
       );
     };
 
@@ -206,6 +208,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       index,
       equipment,
       isDocumentLHRT,
+      stepIndex,
     }); };
 
   Comp.displayName = "withFBLHRStep";

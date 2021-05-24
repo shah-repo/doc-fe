@@ -57,6 +57,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
 
   const customQuerySet = (queryDict: TableSearchQueryType) => {
     queryDict.description = queryDict.name;
+    queryDict.documentTypeWithoutCategory = true;
 
     return queryDict;
   };
