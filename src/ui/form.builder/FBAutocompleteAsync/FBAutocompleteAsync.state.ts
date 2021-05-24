@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { filter, find, get, groupBy, isArray, last, map, sortBy, union } from "lodash";
 import { action, computed, set } from "mobx";
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncConstructor, FBAutocompleteAsyncOption, FBData } from "..";
@@ -75,7 +76,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     }
   };
 
-  @action public prepareData = (data: any[]): any[] | undefined => {
+  @action public prepareData = (data: any): any[] | undefined => {
     if (!this.optionId) {
       return;
     }
@@ -93,9 +94,14 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
       case FBAutocompleteAsyncOption.officialGroups:
         return filter(union(data, this.additionalData), { isOfficial: true });
       case FBAutocompleteAsyncOption.availablePartDocuments:
-        return map(data, (doc) => ({
+        return map([data].flat(), (doc) => ({
           ...doc,
           documentRevisions: get(doc, "documentRevisions[0]"),
+        }));
+      case FBAutocompleteAsyncOption.docRevByDoc:
+        return data.documentRevisions.map((e) => ({
+          ...e,
+          docId: data.docId,
         }));
       case FBAutocompleteAsyncOption.preventativeMaintenaceForms:
         return data.map((option) => {
@@ -134,13 +140,21 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     }
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     FBAutocompleteAsyncStore.loading.set(this.optionId!, true);
-    const { path: url, root = "", publicApi } = this.optionConfig;
+    const { id, root = "", publicApi } = this.optionConfig;
 
     this.setRoot(root);
     this.setPublicApi(publicApi as boolean);
+    if (this.urlValues) {
+      this.set({
+        url: FBEndpoint.FetchAutocompleteValue,
+        urlValues: { id: this.urlValues, optionId: id },
+        method: "get",
+      });
+      return;
+    }
     this.set({
-      url,
-      urlValues: this.urlValues,
+      url: FBEndpoint.AutocompleteByOptionId,
+      urlValues: { optionId: id },
       method: "get",
     });
   }

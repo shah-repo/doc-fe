@@ -2,7 +2,9 @@ import { cloneDeep, concat, get, toNumber, uniqBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
+import { companySelectors } from "../../../state/ducks/company";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentForm, checkIsDocumentMPI } from "../../documentRevision/helpers/checkDocumentGroup";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
@@ -17,6 +19,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     handleSelectionDelete,
     getItem,
     getLot,
+    getProcedureLocale,
+    getProcedureValues,
     loading,
     dialogState,
     multiplier = 1,
@@ -41,7 +45,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     const smartReferencesTo = uniqBy(concat(
       workspaceState?.document?.smartReferencesTo,
       workspaceState?.document?.document.smartReferencesTo
-    ), "id");
+    ), "id").filter((ref) => ref?.active);
     const usedDocumentsInLHRS = workspaceState?.document?.usedDocumentsInLHRS;
     dialogState = FB.useRef(FBDialogState);
     multiplier = toNumber(formState?.getFieldValue("lhr_initial_quantity")) || 1;
@@ -52,7 +56,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       workspaceState?.mode !== "preview" &&
       workspaceState?.mode !== "formPreview") ||
       redlineActive;
-
+    redlineActive = useSelector(companySelectors.getRedlineActive);
     useEffect(() => {
       if (!mpiProcedureState) { return; }
       setFilteredParts(smartReferencesTo);
@@ -80,6 +84,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     const setFilteredParts = (data) => {
       const partsSelected = data.reduce((selected, ref) => {
         if (ref?.metadata?.fieldId === name
+            && ref.active
             && (ref?.type === SmartReferenceType.EquipmentReplacement || ref?.type === SmartReferenceType.LotUsage)) {
           selected.push({
             ...ref?.metadata,
@@ -128,6 +133,36 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       mpiProcedureState?.selectionDelete(id, refId);
     };
 
+    getProcedureLocale = (item: FBProcedureItemConfig) => {
+      if (isDocumentMPI) {
+        return item.type ?
+          `form.builder.mpi.procedure.${type}.title.id` :
+          `form.builder.mpi.procedure.${type}.title`;
+      }
+      const usedItem = usedDocumentsInLHRS?.[item.title];
+      return usedItem ?
+        `form.builder.lhrs.procedure.${type}.title` :
+        `form.builder.mpi.procedure.${type}.title`;
+    };
+
+    getProcedureValues = (item: FBProcedureItemConfig) => {
+      const id = item.id;
+      const quantity = item.quantity ? (item.quantity * multiplier) : "form.builder.none";
+      const unit = item.unit;
+      const usedItem = usedDocumentsInLHRS?.[item.title];
+      const revision = usedItem?.displayRevision;
+
+      if (isDocumentMPI) {
+        return item.type ?
+          { id, title: getItem?.(item.title), quantity, unit } :
+          { title: getItem?.(item.title), quantity, unit };
+      }
+
+      return usedItem ?
+        { title: getItem?.(usedItem?.docRevId), revision, quantity, unit } :
+        { title: getItem?.(item.title), quantity, unit };
+    };
+
     handleRemove = (id: string) => mpiProcedureState?.removeItem(id, type);
     getItem = (id: string): string => mpiProcedureState?.getItem(id, type) || "";
     getLot = (id?: string): string => mpiProcedureState?.getLot(id) || "";
@@ -157,6 +192,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       handleSelectionDelete,
       getItem,
       getLot,
+      getProcedureLocale,
+      getProcedureValues,
       mpiProcedureState,
       isPreview,
       dialogState,
@@ -168,6 +205,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       isSelectVisible,
       usedDocumentsInLHRS,
       isDocumentMPI,
+      redlineActive,
     });
   };
 

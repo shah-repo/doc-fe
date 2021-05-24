@@ -21,7 +21,9 @@ export type FBMediaAlbumProps =
   | "loading"
   | "name"
   | "onFileUploadChange"
-  | "actionsDisabled">
+  | "actionsDisabled"
+  | "autosave"
+  >
   & {
     setMediaMode?: () => any;
     mediaAlbumState?: FBMediaAlbumState;

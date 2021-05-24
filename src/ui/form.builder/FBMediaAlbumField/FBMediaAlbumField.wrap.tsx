@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { filter, get, isEmpty, join, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
@@ -23,8 +25,11 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     editorConfig,
     index,
     name = "",
-    qrValue,
+    qrValue = "",
     mode,
+    type,
+    fieldType,
+    autosave = true,
     ...props
   }: T) => {
 
@@ -32,7 +37,20 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     const formValue = formState?.getFieldValue(name) || editorConfig;
     const ids = map(formValue, "id");
     const redlineActive = useSelector(companySelectors.getRedlineActive);
-    mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(FBMediaAlbumFieldState);
+    mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(FBMediaAlbumFieldState, formValue);
+
+    const {
+      id: documentRevisionId,
+      company: { companyMine: { id: companyId = undefined } = {} } = {},
+    } = workspaceState || {};
+    if (documentRevisionId && companyId) {
+      qrValue = JSON.stringify({
+        companyId,
+        documentRevisionId,
+        fieldName: name,
+        fieldType: fieldType || type,
+      });
+    }
 
     // Handle mode
     setMediaFieldMode = () => {
@@ -65,6 +83,28 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       mediaAlbumFieldState?.upload(validFiles);
     };
 
+    // useEffect(() => {
+    //   reaction(
+    //     () => workspaceState?.formInputSync?.get(name),
+    //     (value) => {
+    //       const syncValue = value as string[];
+    //       const filesIds = map(mediaAlbumFieldState?.files, "id");
+    //       const addedFiles: string[] = [];
+    //       map(union(filesIds, syncValue), (fileId) => {
+    //         mediaAlbumFieldState!.fromUpload = false;
+    //         if (!syncValue.includes(fileId)) {
+    //           mediaAlbumFieldState?.removeFile(fileId);
+    //         } else {
+    //           addedFiles.push(fileId);
+    //         }
+    //       });
+    //       if (addedFiles.length === 0) { return; }
+    //       mediaAlbumFieldState?.getFiles(addedFiles);
+    //     }
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+    //   );
+    // }, []);
+
     React.useEffect(() => reaction(
       () => mediaAlbumFieldState?.attachmentApi.data,
       (data) => {
@@ -90,8 +130,10 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           }
           formState?.setFieldValue(name, files, true, isTemplate);
           if (mediaAlbumFieldState?.fromUpload) {
-            formState?.setFieldAutosave(name);
             mediaAlbumFieldState.fromUpload = false;
+            if (autosave) {
+              workspaceState?.saveDocRev(formState?.getValues());
+            }
           }
         }
       );
@@ -113,7 +155,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     if (isPreview() || !isEmpty(collection) || !isEmpty(ids)) {
       mediaAlbumFieldState?.setMode("media");
     }
-    actionsDisabled = (reviseDisabled && workspaceState?.isRevised) || isPreview() && !redlineActive;
+    actionsDisabled = ((reviseDisabled && workspaceState?.isRevised) || isPreview()) && !redlineActive;
 
     return Component({
       ...(props as T),
@@ -131,6 +173,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       loading,
       mode,
       name,
+      autosave,
     });
   };
 

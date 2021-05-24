@@ -5,7 +5,7 @@ definitions:
   services:
     sorry-cypress-director:
       image:
-        name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:sorry-cypress-director-3-retries
+        name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:sorry-cypress-director-3-retries-v1.0.0-rc.10
       variables:
         EXECUTION_DRIVER: "../execution/in-memory"
         SCREENSHOTS_DRIVER: "../screenshots/dummy.driver"
@@ -72,7 +72,7 @@ definitions:
     - step: &COMMON_RUN_CYPRESS
           name: Cypress specs
           image:
-            name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_88_cy_6_2_0_aws
+            name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_90_cy_7_3_0_aws
             aws:
               access-key: $AWS_ACCESS_KEY_ID
               secret-key: $AWS_SECRET_ACCESS_KEY
@@ -201,58 +201,46 @@ definitions:
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_DEV
         - step: 
             <<:  *SCHEDULED_CYPRESS_DEV
-            name: Cypress specs 1/4
+            name: Cypress specs 1/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_DEV
-            name: Cypress specs 2/4
+            name: Cypress specs 2/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_DEV
-            name: Cypress specs 3/4
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_DEV
-            name: Cypress specs 4/4
+            name: Cypress specs 3/3
 
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_DEMO
         - step: 
             <<:  *SCHEDULED_CYPRESS_DEMO
-            name: Cypress specs 1/4
+            name: Cypress specs 1/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_DEMO
-            name: Cypress specs 2/4
+            name: Cypress specs 2/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_DEMO
-            name: Cypress specs 3/4
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_DEMO
-            name: Cypress specs 4/4
+            name: Cypress specs 3/3
 
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_SANDBOX
         - step: 
             <<:  *SCHEDULED_CYPRESS_SANDBOX
-            name: Cypress specs 1/4
+            name: Cypress specs 1/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_SANDBOX
-            name: Cypress specs 2/4
+            name: Cypress specs 2/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_SANDBOX
-            name: Cypress specs 3/4
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_SANDBOX
-            name: Cypress specs 4/4
+            name: Cypress specs 3/3
 
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_PROD
         - step: 
             <<:  *SCHEDULED_CYPRESS_PROD
-            name: Cypress specs 1/4
+            name: Cypress specs 1/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_PROD
-            name: Cypress specs 2/4
+            name: Cypress specs 2/3
         - step: 
             <<:  *SCHEDULED_CYPRESS_PROD
-            name: Cypress specs 3/4
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_PROD
-            name: Cypress specs 4/4
+            name: Cypress specs 3/3
 
     - parallel: &RUN_CYPRESS_IN_PARALLEL_VIDEO
         - step: 
@@ -498,10 +486,13 @@ pipelines:
           - step: *BUILD_SANDBOX
       - step: *DEPLOY_SANDBOX
 
-    release/21.4.11:
+    release/21.5.1:
       - parallel:
           - step: *RUN_TESTS
           - step: *RUN_LINTER
           - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO
 
+    ENC-7137-dropbox-company-button:
+      - step: *BUILD_DEV2
+      - step: *DEPLOY_DEV2

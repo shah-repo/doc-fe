@@ -1,6 +1,7 @@
 import { Grid, Typography } from "@material-ui/core";
 import React from "react";
-import { PendingActionType } from "../../state/ducks/dashboard/types";
+import { PendingAction, PendingActionType } from "../../state/ducks/dashboard/types";
+import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
 import Text from "../components/Text";
 import ChangeRequestApproval from "./action.types/ChangeRequestApproval";
@@ -9,11 +10,14 @@ import PurchaseOrderApproval from "./action.types/purchaseOrder/PurchaseOrderApp
 import TaskApproval from "./action.types/TaskApproval";
 import TrainingRequest from "./action.types/TrainingRequest";
 import { styles } from "./Dashboard.styles";
-import { DashboardPresenterParentProps } from "./types";
 
-type DashboardPresenterProps = DashboardPresenterParentProps;
+interface Props {
+  loadPendingActions: any;
+  loadPendingActionsListAsyncState: AsyncState ;
+  pendingActions: PendingAction[];
+}
 
-const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
+const DashboardPresenter: React.FunctionComponent<Props> = ({
   loadPendingActions, loadPendingActionsListAsyncState, pendingActions,
 }) => {
   const classes = styles();

@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik";
-import { filter, isEmpty, isEqual, map } from "lodash";
+import { filter, isEmpty, isEqual, map, omit } from "lodash";
 import React, { useContext } from "react";
 import { useSelector } from "react-redux";
 import { companySelectors } from "../../../state/ducks/company";
@@ -27,12 +27,13 @@ export const useFormContext = () => {
 
   function setFBValue() {
     const values = formik.values as any;
+    const schema = workspaceState?.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     switch (workspaceState?.getMode()) {
       case "design":
         formik.setFieldValue("formTemplate", {
           outputDocumentTypes: (values.outputDocumentTypes || [])
             .map((outputDoc) => ({ id: outputDoc.value }) ),
-          schema: workspaceState?.getSchema(),
+          schema,
         });
         break;
       case "form":
@@ -42,7 +43,7 @@ export const useFormContext = () => {
         });
         formik.setFieldValue("formInput", formState?.getValues());
         if (workspaceState.mode === "formDesign" && isOutputSchema()) {
-          formik.setFieldValue("schema", workspaceState.schema);
+          formik.setFieldValue("schema", schema);
         }
         break;
       default:
@@ -53,10 +54,16 @@ export const useFormContext = () => {
   function setReferences(relation: SubmitFormRelation) {
     if (!workspaceState) { return; }
     const { type, name, prevValue, nextValue } = relation;
-    const prevDocument: DocumentRevision | undefined =
-      FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, prevValue);
-    const nextDocument: DocumentRevision | undefined =
-      FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, nextValue);
+    let prevDocument: DocumentRevision | undefined;
+    let nextDocument: DocumentRevision | undefined;
+    if (relation.type === "poreceive") {
+      prevDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, prevValue.id);
+      nextDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, nextValue.id);
+    }
+    if (relation.type === "autocomplete" && relation.name === "lot_part") {
+      prevDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.availableParts, prevValue);
+      nextDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.availableParts, nextValue);
+    }
     const prevValueId = prevDocument?.document.id;
     const nextValueId = nextDocument?.document.id;
     let refValues = workspaceState.referenceValue;
@@ -113,7 +120,7 @@ export const useFormContext = () => {
         setFBValue();
       }
       if (relation) {
-        if (relation.type === "poreceive") {
+        if (relation.type === "poreceive" || (relation.type === "autocomplete" && relation.name === "lot_part")) {
           setReferences(relation);
         }
       }

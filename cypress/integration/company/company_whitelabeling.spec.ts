@@ -6,6 +6,10 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
+let adminLoginResponse;
+let developersGroup;
+let adminSessionId;
+let adminEmployee;
 
 const defaultLogo = "/ta_assets_company_logo.png";
 const defaultAvatar = "/ta_assets_company_avatar.png";
@@ -42,7 +46,43 @@ context("Whitelabeling test", () => {
           sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
+        });
+      });
+    });
+
+    context("[API]Add employee to developers group", () => {
+      it("[API]Login admin tester", (done: any) => {
+        cy.authApiLogin({
+          email: USERS[1].email,
+          password: "Tester1!",
+        }).then((response) => {
+          adminLoginResponse = response;
+          adminSessionId = adminLoginResponse.sessionId;
+          done();
+        });
+      });
+
+      it("[API]Get group", (done: any) => {
+        cy.grpGetGroupByName({
+          groupName: "Developers",
+          sessionId: adminSessionId,
+          employeeId: adminEmployee.id,
+        }).then((response) => {
+          developersGroup = response;
+          done();
+        });
+      });
+
+      it("[API]Patch group", () => {
+        cy.grpPatchGroup({
+          groupId: developersGroup.body[0].id,
+          sessionId: adminSessionId,
+          employeeId: adminEmployee.id,
+          payload: {
+            employees: [{ id: adminEmployee.id }],
+          },
         });
       });
     });

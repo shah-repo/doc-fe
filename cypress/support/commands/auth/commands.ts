@@ -49,10 +49,10 @@ Cypress.Commands.add("authLogin", (params: { email: string; password: string }) 
   cy.wait(500);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.Login, () => {
-      cy.get("[data-cy=\"LoginFormPresenter-email\"]").type(params.email)
-        .get("[data-cy=\"LoginFormPresenter-password\"]").type(params.password)
-        .wait(300)
-        .get("[data-cy=\"LoginFormPresenter-submit\"]").click();
+      cy.log(params.email);
+      cy.get("[data-cy=\"LoginFormPresenter-email\"]").type(params.email);
+      cy.get("[data-cy=\"LoginFormPresenter-password\"]").type(params.password).wait(300);
+      cy.get("[data-cy=\"LoginFormPresenter-submit\"]").click();
     });
   cy.checkToastMessage({ exists: false });
 });

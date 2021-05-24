@@ -2,9 +2,10 @@
 
 
 /* eslint-disable max-len */
+import { bool } from "aws-sdk/clients/signer";
 import moment from "moment";
 import "moment-timezone";
-import { ChangeRequestEditRequestBody } from "../../../../src/state/ducks/changeRequest";
+import { ChangeRequestEditRequestBody } from "../../../../src/state/ducks/changeRequest/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 export { };
@@ -20,7 +21,7 @@ declare global {
       arEnterDescriptionAddDocumentsDialog(params: { description: string }): Chainable<Subject>;
       arEnterJustificationAddDocumentsDialog(params: { justification: string }): Chainable<Subject>;
       arClickAddBtnOnAddDocumentsDialog(): Chainable<Subject>;
-      arAddApproverOnApproverList(params: { approver: string }): Chainable<Subject>;
+      arAddApproverOnApproverList(params: { approver: string; noWait?: bool }): Chainable<Subject>;
       arClickCreateApprovalRequestAfterCompletingForm(): Chainable<Subject>;
       arClickSendToReview(): Chainable<Subject>;
       arVerifyStatus(params: { status: string }): Chainable<Subject>;
@@ -261,7 +262,7 @@ Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
 });
 
 Cypress.Commands.add("arClickAddDocument", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
     cy.get("[data-cy=\"fb.add.document\"]").click();
   });
 });
@@ -291,9 +292,11 @@ Cypress.Commands.add("arClickAddBtnOnAddDocumentsDialog", () => {
   cy.get("[data-cy=\"arAddDocumentDialogAddBtn\"]").click();
 });
 
-Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string }) => {
+Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string; noWait?: bool }) => {
+  const routesToWait = params.noWait ? [] : [CyRoutes.PatchAR, CyRoutes.ArAudit];
+
   cy.wrapWithWaitOnApiCalls(
-    [CyRoutes.PatchAR, CyRoutes.ArAudit], () => {
+    routesToWait, () => {
       cy.get("[data-cy=\"fb-approvers-approvers\"]").click();
       cy.get("ul[role=\"listbox\"]>li").contains(params.approver).click();
       cy.unClick();
@@ -312,7 +315,7 @@ Cypress.Commands.add("arClickSendToReview", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.ARtoReview,
     CyRoutes.ARPreview,
-    CyRoutes.DocRevGet,
+    CyRoutes.ArAudit,
   ],
   () => {
     cy.get("[data-cy=\"transitionButton\"]").click();
@@ -347,7 +350,7 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
   });
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetRequiredApproversDocRev,
-    CyRoutes.DocRevGet,
+    CyRoutes.ArAudit,
   ], () => {
     cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
   });
@@ -406,7 +409,7 @@ Cypress.Commands.add("arSelectFirstDocument", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.ARPreview,
     CyRoutes.GetRequiredApproversDocRev,
-    CyRoutes.DocRevGet], () => {
+    CyRoutes.GetAutocompleteOptions], () => {
     cy.get(".MuiTableCell-root a:nth-child(1)").first().click();
   });
   cy.wait(3000);

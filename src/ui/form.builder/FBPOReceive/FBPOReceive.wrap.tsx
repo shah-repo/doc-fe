@@ -30,9 +30,9 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     const formValue = formState?.getFieldValue(name);
     const intl = useIntl();
 
-    poReceiveState = FB.useRef<FBPOReceiveState>(FBPOReceiveState, formValue);
+    poReceiveState = FB.useRef<FBPOReceiveState>(FBPOReceiveState, formValue?.id);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
-    defaultValue = formState?.getFieldValue(name);
+    defaultValue = formValue?.id;
 
     const handleItem = (item?: FBPurchaseOrderItem) => {
       if (workspaceState?.isReleased || workspaceState?.isRevised) {
@@ -90,7 +90,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get(`porec-${name}`)?.value,
       (value) => {
-        formState?.setFieldValue(name, value);
+        formState?.setFieldValue(name, { id: value });
         formState?.setFieldAutosave(name);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -18,6 +20,7 @@ let group;
 let initialArDocument;
 let subassemblyDocumentForm;
 let approvalRequestDocumentType;
+const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
 
 const subassemblySchema = [
   {
@@ -943,6 +946,10 @@ context("Inspection flow", () => {
     });
 
     context("Revise subassembly for Part", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Navigate to documents", () => {
         cy.navigToDocumentList();
       });
@@ -1043,50 +1050,40 @@ context("Inspection flow", () => {
       });
 
       it("Select make vs buy", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[id$=\"make-vs-buy\"]").click();
-          cy.get("ul[role=listbox]>li").contains("Make").click();
-        });
+        cy.get("[id$=\"make-vs-buy\"]").click();
+        cy.get("ul[role=listbox]>li").contains("Make").click();
       });
 
       it("Select unit of measure", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[id$=\"unit-of-measure\"]").click();
-          cy.get("ul[role=listbox]>li").contains("Batch").click();
-        });
+        cy.get("[id$=\"unit-of-measure\"]").click();
+        cy.get("ul[role=listbox]>li").contains("Batch").click();
       });
 
       it("Select traceability required", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[value=\"Traceability required\"]").check();
-        });
+        cy.get("[value=\"Traceability required\"]").check();
       });
 
       it("Select 'No' for Serialized option", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[name=\"serialized\"][value=\"No\"]").check();
-        });
+        cy.get("[name=\"serialized\"][value=\"No\"]").check();
       });
 
       it("Select 'IQC Required'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[value=\"IQC Required\"]").check();
-        });
+        cy.get("[value=\"IQC Required\"]").check();
       });
 
       it("Select 'Limited Shelf Life'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[value=\"Limited Shelf Life\"]").check();
-        });
+        cy.get("[value=\"Limited Shelf Life\"]").check();
       });
 
       it("Select 'FAI Required'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[value=\"FAI Required\"]").check();
-        });
+        cy.get("[value=\"FAI Required\"]").check();
       });
 
       context("Release part document", () => {
+        it("Save part document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+
         it("Approve and Release document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
@@ -1256,20 +1253,18 @@ context("Inspection flow", () => {
       });
 
       it("Add approvals", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-          cy.unClick();
-        });
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.unClick();
       });
 
       it("Submit for approval", () => {
         cy.pmSubmitForApproval();
-        cy.wait(5000);
       });
 
       it("Approve inspection document", () => {
-        cy.ebApprove();
-        cy.wait(5000);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet], () => {
+          cy.ebApprove();
+        });
       });
 
       it("Check status is 'Released'", () => {
@@ -1278,11 +1273,11 @@ context("Inspection flow", () => {
 
       it("Check referenced by parts", () => {
         cy.get("[data-cy=\"common.referenced.by\"]")
-          .should("contain.text", "SAL-00004 - A - Inspection Document - 3 Restricted Use");
+          .should("contain.text", `LOT #${lotDateSuffix}04 - A - Inspection Document - 3 Restricted Use`);
         cy.get("[data-cy=\"common.referenced.by\"]")
-          .should("contain.text", "SAL-00003 - A - Inspection Document - 2 Use as Is");
+          .should("contain.text", `LOT #${lotDateSuffix}03 - A - Inspection Document - 2 Use as Is`);
         cy.get("[data-cy=\"common.referenced.by\"]")
-          .should("contain.text", "SAL-00002 - A - Inspection Document - 4 Rework");
+          .should("contain.text", `LOT #${lotDateSuffix}02 - A - Inspection Document - 4 Rework`);
       });
     });
 
@@ -1297,7 +1292,7 @@ context("Inspection flow", () => {
         });
 
         it("Open 'Restricted Use' record", () => {
-          cy.dlFilterByDocId({ docId: "SAL-00004" });
+          cy.dlFilterByDocId({ docId: `LOT #${lotDateSuffix}04` });
           cy.dlSelectFirstDocument();
         });
 
@@ -1315,8 +1310,8 @@ context("Inspection flow", () => {
           cy.dlClearFilters();
         });
 
-        it("Open 'Restricted Use' record", () => {
-          cy.dlFilterByDocId({ docId: "SAL-00003" });
+        it("Open 'Use as is' record", () => {
+          cy.dlFilterByDocId({ docId: `LOT #${lotDateSuffix}03` });
           cy.dlSelectFirstDocument();
         });
 
@@ -1334,8 +1329,8 @@ context("Inspection flow", () => {
           cy.dlClearFilters();
         });
 
-        it("Open 'Restricted Use' record", () => {
-          cy.dlFilterByDocId({ docId: "SAL-00002" });
+        it("Open 'Rework' record", () => {
+          cy.dlFilterByDocId({ docId: `LOT #${lotDateSuffix}02` });
           cy.dlSelectFirstDocument();
         });
 

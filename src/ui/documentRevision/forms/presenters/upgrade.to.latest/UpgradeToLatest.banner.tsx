@@ -43,6 +43,7 @@ const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
                   clickHere: (
                     <Link
                       onClick={dialog.open}
+                      data-cy="formUpgradeButton"
                       component="button"
                       color="inherit"
                       style={{

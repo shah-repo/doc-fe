@@ -1,6 +1,6 @@
 import * as CRC32 from "crc-32";
 import faker from "faker";
-import { Company } from "../../../../src/state/ducks/company";
+import { Company } from "../../../../src/state/ducks/company/types";
 import { HEX2RGB } from "../../../utils/context/converers";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
@@ -16,6 +16,13 @@ interface IUser {
   name: string;
 }
 //
+interface IfieldsConfig{
+  [key: string]: {
+    visible: boolean;
+    required?: boolean;
+    label?: string;};
+}
+
 interface IdocumentTypeDto {
   documentTypeName: string;
   documentTypeAcronym: string;
@@ -26,14 +33,7 @@ interface IdocumentTypeDto {
   needsSignature?: boolean;
   category?: string;
   schema?: any;
-  fieldsConfig?:
-  {
-    U: {
-      visible: boolean;
-      required: boolean;
-      label: string;
-    };
-  };
+  fieldsConfig?: IfieldsConfig;
 }
 
 export interface ICreateCompanyBootstrap {
@@ -83,6 +83,8 @@ declare global {
       cmpVerifySecondaryContrastText(params: { color: string}): Chainable<Subject>;
       cmpVerifyPrimaryContrastText(params: { color: string}): Chainable<Subject>;
       cmpVerifyPrimaryColor(params: { color: string}): Chainable<Subject>;
+      cmpTurnOffAutosave(): Chainable<Subject>;
+      cmpTurnOnAutosave(): Chainable<Subject>;
     }
   }
 }
@@ -189,6 +191,14 @@ Cypress.Commands.add("cmpUpdateCompany", (
   }).then((response) => response.body);
 });
 
+Cypress.Commands.add("cmpTurnOffAutosave", () => {
+  cy.get("[name=\"toggleAutosave\"]").uncheck();
+});
+
+Cypress.Commands.add("cmpTurnOnAutosave", () => {
+  cy.get("[name=\"toggleAutosave\"]").check();
+});
+
 Cypress.Commands.add("cmpAdminUpdateCompany", (
   params: {
     companyId: string;
@@ -208,10 +218,9 @@ Cypress.Commands.add("cmpAdminUpdateCompany", (
 Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: boolean }) => {
   if (params.multiple) {
     cy.wrapWithWaitOnApiCalls([
-      CyRoutes.IOTCredentials,
       CyRoutes.CompanyMine,
-      CyRoutes.IOTCredentials,
       CyRoutes.SessionDetails,
+      CyRoutes.IOTCredentials,
     ], () => {
       cy.get("#root").contains(params.name).click();
     });

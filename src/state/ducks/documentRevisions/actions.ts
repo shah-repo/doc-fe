@@ -365,6 +365,16 @@ const removePreviousBuild = (
     handlers,
   });
 
+const exportToEmail = (
+  revisionId: string,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `/export/revision/${revisionId}/email`,
+    method: "post",
+    handlers,
+  });
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -397,4 +407,5 @@ export default {
   removePreviousBuild,
   ownerChange,
   saveWithNoResponse,
+  exportToEmail,
 };

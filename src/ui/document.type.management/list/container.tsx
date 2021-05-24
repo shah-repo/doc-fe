@@ -85,7 +85,7 @@ export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeList);
   const canManageDocumentType = useGetHasTag(GroupTag.DOCUMENT_TYPE_MANAGEMENT);
 
-  const disabled = Config.isProduction;
+  const disabled = Config.docTypeManagementEditDisabled;
 
   if (!canManageDocumentType) {
     return <Redirect to={HOME_URL} />;

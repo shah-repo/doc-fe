@@ -6,14 +6,18 @@ import Colors from "../../layout/theme/utils/colors";
 import { withFBProcedure } from "./FBProcedure.wrap";
 
 const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
+  onKeyDown,
   handleAdd,
   procedureState,
+  workspaceState,
   isPreview,
   isOutput,
   stepIndex,
   disabled,
   types = [],
   name,
+  autoFocus,
+  autoScrollTo,
   ...props
 }) => (
   <FBInput {...props } {...{ name }} type="procedure">
@@ -51,14 +55,16 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
             </Box>
           )}
           <FBTextEditor
-            {...{ disabled }}
+            {...{ disabled, autoFocus, autoScrollTo, onKeyDown }}
             name={`${name}.description`}
             gutter={false}
             label={{
               locale: "form.builder.step.number",
               values: { number: stepIndex },
             }}
-            autosave
+            autosave={false}
+            shouldNotAutosaveOnBlur={true}
+            withState
             boxProps={{ style: { color: Colors.black } }}
           />
           <Box

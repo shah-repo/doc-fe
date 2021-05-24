@@ -9,14 +9,14 @@ import { documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
 import { filterSecurityGroupsForQms } from "../../../documentType/list/helpers";
-import { FB, FBSchemaProps } from "../../../form.builder";
+import { FB, FBEditorPropertiesType, FBSchemaProps } from "../../../form.builder";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import { DocumentCloneType } from "../../Clone.container";
-import { checkIsDocumentForm, checkIsDocumentPart, checkIsDynamicForm, checkIsTypeMustBeOutput } from "../../helpers/checkDocumentGroup";
+import { checkIsDocumentForm, checkIsDocumentPart, checkIsDynamicForm, checkIsTypeMustBeOutput, checkIsTypeOnlyOnOutputs, hasDefaultNote } from "../../helpers/checkDocumentGroup";
 import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
 
@@ -80,7 +80,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
 
     return documentTypes
       .filter((docType) => {
-        if (checkIsTypeMustBeOutput(docType.groupOptions)) {
+        if (checkIsTypeMustBeOutput(docType.groupOptions) || checkIsTypeOnlyOnOutputs(docType.groupOptions)) {
           return false;
         }
         // omit parts (ENC-6788) unless it is already selected as doc type via Parts module (ENC-7022 fix)
@@ -100,6 +100,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
+    const docTypeHasDefaultNote = hasDefaultNote(type.groupOptions);
     savedocInfo({ name: event.target.name || "", isQms: type.isQms, needsSignature: type.needsSignature as boolean });
     formik.setFieldValue("securityGroups", []);
 
@@ -135,7 +136,32 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       if (isNewOutput) {
         return;
       }
-      workspaceState?.setSchema(scheme); }
+      const predefinedSchema = scheme?.map((e) => {
+        if (
+          e.type === "approvals" ||
+          e.type === "section" ||
+          e.type === "subsection" ||
+          e.type === "stepsection" ||
+          e.type === "teststep" || !docTypeHasDefaultNote ||
+          (docTypeHasDefaultNote && e.editorProperties?.includes("includeNotes") && e.includeNotes)) {
+          return e;
+        }
+        if (docTypeHasDefaultNote && e.editorProperties?.includes("includeNotes") && !e.includeNotes) {
+          return {
+            ...e,
+            includeNotes: true,
+          };
+        }
+        return {
+          ...e,
+          editorProperties: [
+            ...e.editorProperties || [],
+            "includeNotes" as FBEditorPropertiesType,
+          ],
+          includeNotes: true,
+        };
+      });
+      workspaceState?.setSchema(predefinedSchema); }
   };
 
   if (!isVisible && type !== "newOutput") {

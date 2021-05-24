@@ -215,11 +215,13 @@ context("Autocomplete 'Purchase Order' test", () => {
               .find("[data-cy^=\"test-label-\"]").click();
 
             if (response.body.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  const res = response.body[index];
-                  expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
-                })
+              const purchaseOrders = response.body;
+              purchaseOrders.forEach((purchaseOrder) => {
+                cy.get("ul[role=listbox]>li")
+                  .should("contain.text",
+                    `${purchaseOrder.document.docId} - rev ${purchaseOrder.displayRevision} - ${purchaseOrder.name}`);
+              });
+              cy.get("ul[role=listbox]>li")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

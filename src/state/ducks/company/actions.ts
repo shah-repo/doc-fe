@@ -2,7 +2,7 @@ import { getEmployeeNavigation } from "../../../ui/app/NavigationLocalStorageHel
 import { COMPANY_MINE_URL } from "../../../ui/constants/urls";
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
-import { AUTOSAVE_CONFIG, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from "./constants";
+import { AUTOSAVE_CONFIG, ENABLE_COMPANY_DROPBOX, REDLINE_CONFIG, SELECT_COMPANY, SET_COMPANY_MINE, UPDATE_NAVIGATION_ITEM } from "./constants";
 import { Company, CompanyMineAction, CompanyMineRequest, NavigationMenu, SelectCompanyAction, UpdateNavigationMenuItem } from "./types";
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
@@ -51,8 +51,18 @@ const autosaveConfig = () => ({
   type: AUTOSAVE_CONFIG,
 });
 
-const redlineConfig = () => ({
+const enableDropbox = (handlers: Handlers): ApiAction => apiActionWithCallbacks({
+  url: ENABLE_COMPANY_DROPBOX,
+  method: "patch",
+  onSuccess: (data, dispatch) => {
+    dispatch(setCompanyMine(data));
+  },
+  handlers,
+});
+
+const redlineConfig = (redlineActive: boolean) => ({
   type: REDLINE_CONFIG,
+  payload: { redlineActive },
 });
 
 export default {
@@ -61,5 +71,6 @@ export default {
   updateCompanyMine,
   updateNavigationMenuItem,
   autosaveConfig,
+  enableDropbox,
   redlineConfig,
 };

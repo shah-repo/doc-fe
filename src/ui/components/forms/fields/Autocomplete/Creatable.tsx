@@ -35,7 +35,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   React.useEffect(() => {
     setInputValue(formikValue);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formikValue]);
+  }, []);
   const [inputValue, setInputValue] = useState(formikValue);
   const { submitForm } = useFormContext();
   const {
@@ -45,6 +45,9 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   const onChange = (value: ValueType<OptionType>, action: ActionMeta) => {
     if (action.action === "clear") {
       setInputValue("");
+    }
+    else {
+      setInputValue((value as any)?.value);
     }
     setFieldValue(name, (value as any)?.value);
     // submitForm();
@@ -60,9 +63,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
       setInputValue(value);
     }
   };
-  const onFocus = () => {
-    setInputValue(formikValue || "");
-  };
+
   const onBlur = () => {
     if (formikValue !== inputValue) {
       setFieldValue(name, inputValue);
@@ -106,7 +107,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
         isValidNewOption={() => true}
         blurInputOnSelect={false}
         controlShouldRenderValue={false}
-        {...{ isDisabled, filterOption, onChange, onInputChange, onFocus, onBlur }}
+        {...{ isDisabled, filterOption, onChange, onInputChange, onBlur }}
         {...creatableProps}
         options={options}
       />

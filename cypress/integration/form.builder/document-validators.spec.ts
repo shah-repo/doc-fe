@@ -14,6 +14,10 @@ let createdCompany;
 let secondEmployee;
 let clinicalProtocolType;
 let group;
+let developersGroup;
+let adminSessionId;
+let adminEmployee;
+let employeeToDevs;
 
 const documentRevisionName = "New document for testing validators";
 
@@ -71,6 +75,8 @@ context("Validators tests", () => {
           createdCompany = response;
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           clinicalProtocolType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          employeeToDevs = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           done();
         });
       });
@@ -128,6 +134,42 @@ context("Validators tests", () => {
     });
   });
 
+  context("[API]Add employee to developers group", () => {
+    it("[API]Login admin tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[1].email,
+        password: "Tester1!",
+      }).then((response) => {
+        loginResponse = response;
+        adminSessionId = loginResponse.sessionId;
+        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
+        done();
+      });
+    });
+
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Developers",
+        sessionId: adminSessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        developersGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: developersGroup.body[0].id,
+        sessionId: adminSessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: employeeToDevs.id }],
+        },
+      });
+    });
+  });
+
   context("Log in user, select company and open 'Create Document'", () => {
     it("Logs user in", () => {
       cy.authLogin({
@@ -141,6 +183,10 @@ context("Validators tests", () => {
     });
 
     context("Open 'Create Document'", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
       });
@@ -580,7 +626,6 @@ field is empty: Add text field`, () => {
         [CyRoutes.PatchDocRev], () => {
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
         });
-      cy.wait(3000);
     });
   });
 
@@ -613,9 +658,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Check 'Third' checkbox", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value='Third']`).check();
-      });
+      cy.get(`[value='Third']`).check();
     });
 
     it("Order should not have required message", () => {
@@ -629,9 +672,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Check 'First' checkbox", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value='First']`).check();
-      });
+      cy.get(`[value='First']`).check();
     });
 
     it("Required doctypes should be required", () => {
@@ -640,9 +681,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Uncheck 'First' checkbox", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value='First']`).uncheck();
-      });
+      cy.get(`[value='First']`).uncheck();
     });
 
     it("Required doctypes should not be required", () => {
@@ -651,10 +690,8 @@ field is empty: Add text field`, () => {
     });
 
     it("Select 'Required doctypes", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[data-cy^="required-doctypes"]`).click();
-        cy.get("ul[role=listbox]>li").contains("Equipment").click();
-      });
+      cy.get(`[data-cy^="required-doctypes"]`).click();
+      cy.get("ul[role=listbox]>li").contains("Equipment").click();
     });
   });
 
@@ -664,10 +701,8 @@ field is empty: Add text field`, () => {
     });
 
     it(`Type '${requiredIfFieldValue}' in '${requiredFieldLabel}' field`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[data-cy^='${requiredFieldSelector}']`).type(requiredIfFieldValue);
-        cy.unClick();
-      });
+      cy.get(`[data-cy^='${requiredFieldSelector}']`).type(requiredIfFieldValue);
+      cy.unClick();
     });
 
     it("Should show error for 'required if' field", () => {
@@ -682,10 +717,8 @@ field is empty: Add text field`, () => {
     });
 
     it("Fill in 'required' custom text field", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[data-cy^='${requiredIfFieldSelector}']`).type("added");
-        cy.unClick();
-      });
+      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).type("added");
+      cy.unClick();
     });
   });
 
@@ -696,9 +729,7 @@ field is empty: Add text field`, () => {
     });
 
     it(`Remove type from ${requiredIfInFieldLabel}`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("div[name^=\"required-doctypes\"] svg").first().click();
-      });
+      cy.get("div[name^=\"required-doctypes\"] svg").first().click();
     });
 
     it(`${requiredWithFieldLabel} field should not show error when 'Required types' don't value`, () => {
@@ -707,10 +738,8 @@ field is empty: Add text field`, () => {
     });
 
     it("Select 'Required doctypes", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[data-cy^="required-doctypes"]`).click();
-        cy.get("ul[role=listbox]>li").contains("Equipment").click();
-      });
+      cy.get(`[data-cy^="required-doctypes"]`).click();
+      cy.get("ul[role=listbox]>li").contains("Equipment").click();
     });
 
     it("Should show error for 'required with' field", () => {
@@ -725,10 +754,8 @@ field is empty: Add text field`, () => {
     });
 
     it("Fill in 'required with' custom text field", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[data-cy^='${requiredWithFieldSelector}']`).type("California");
-        cy.unClick();
-      });
+      cy.get(`[data-cy^='${requiredWithFieldSelector}']`).type("California");
+      cy.unClick();
     });
 
     it(`${requiredWithFieldLabel} field should show error when 'Required types' have value`, () => {
@@ -759,10 +786,9 @@ field is empty: Add text field`, () => {
 
   context(`Test ${requiredDocStatusFieldLabel} (required document status) Field`, () => {
     it("Add incorrect document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
         cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type("AR Form{downarrow}{enter}");
       });
-      cy.wait(5000);
     });
 
     it("Should show error for 'Incorrect document status' field", () => {
@@ -776,20 +802,17 @@ field is empty: Add text field`, () => {
 
     it(`Fill in '${requiredDocStatusFieldLabel}' with draft CS Document`, () => {
       cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).clear();
-      cy.wrapWithWaitOnApiCalls(
-        [
-          CyRoutes.PostRemoteValidatorsHelper], () => {
-          cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type(`${documentRevisionName}{downarrow}{enter}`);
-        });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
+        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type(`${documentRevisionName}{downarrow}{enter}`);
+      });
     });
   });
 
   context(`Test ${requiredDocTypeFieldLabel} (required document type) Field`, () => {
     it("Add incorrect document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.PostRemoteValidatorsHelper], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
         cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type("AR Form{downarrow}{enter}");
       });
-      cy.wait(5000);
     });
 
     it("Should show error for 'Incorrect document type' field", () => {
@@ -803,15 +826,17 @@ field is empty: Add text field`, () => {
 
     it(`Fill in '${requiredDocTypeFieldLabel}' with our CS Document`, () => {
       cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).clear();
-      cy.wrapWithWaitOnApiCalls(
-        [
-          CyRoutes.PostRemoteValidatorsHelper], () => {
-          cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type(`${csDocTitle}{downarrow}{enter}`);
-        });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
+        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type(`${csDocTitle}{downarrow}{enter}`);
+      });
     });
   });
 
   context("Release document", () => {
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
     it("'Approve and Release' the document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.DocPreview], () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();

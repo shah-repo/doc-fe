@@ -1,7 +1,6 @@
 [
   {
     "id": "1",
-    "path": "/document_revisions",
     "label": "Document revisions",
     "valueKey": "id",
     "labelKey": "name",
@@ -12,7 +11,6 @@
   },
   {
     "id": "2",
-    "path": "/change_requests",
     "label": "Approval requests",
     "valueKey": "id",
     "labelKey": "title",
@@ -22,7 +20,6 @@
   },
   {
     "id": "3",
-    "path": "/change_requests/available_approvers",
     "label": "Approvers",
     "valueKey": "id",
     "labelKey": "user.email",
@@ -32,7 +29,6 @@
   },
   {
     "id": "4",
-    "path": "/document_type",
     "label": "Document types",
     "valueKey": "id",
     "labelKey": "documentTypeName",
@@ -41,7 +37,6 @@
   },
   {
     "id": "5",
-    "path": "/document_revisions?docTypeGroups%5B%5D=SUPPLIER",
     "label": "Supplier list",
     "valueKey": "id",
     "labelKey": "name",
@@ -52,7 +47,6 @@
   },
   {
     "id": "6",
-    "path": "/document_revisions?documentTypeAcronym=TL",
     "label": "TL numbers list",
     "valueKey": "id",
     "labelKey": "name",
@@ -63,7 +57,6 @@
   },
   {
     "id": "7",
-    "path": "/document_revisions?documentTypeAcronym=CSL",
     "label": "CSL numbers list",
     "valueKey": "id",
     "labelKey": "name",
@@ -74,7 +67,6 @@
   },
   {
     "id": "8",
-    "path": "/company/mine",
     "label": "Company addresses",
     "valueKey": "id",
     "labelKey": "name",
@@ -83,7 +75,6 @@
   },
   {
     "id": "9",
-    "path": "/company/mine",
     "label": "GL codes",
     "valueKey": "id",
     "labelKey": "name",
@@ -92,7 +83,6 @@
   },
   {
     "id": "10",
-    "path": "/groups",
     "label": "Groups",
     "valueKey": "id",
     "labelKey": "name",
@@ -100,7 +90,6 @@
   },
   {
     "id": "11",
-    "path": "/document_revisions?docTypeGroups%5B%5D=PART",
     "label": "Parts",
     "valueKey": "id",
     "labelKey": "document.docId",
@@ -111,7 +100,6 @@
   },
   {
     "id": "12",
-    "path": "/document_revisions?docTypeGroups%5B%5D=PO&status%5B%5D=RELEASED",
     "label": "Purchase Order list",
     "valueKey": "id",
     "labelKey": "description",
@@ -122,7 +110,6 @@
   },
   {
     "id": "13",
-    "path": "/employees?active=true",
     "label": "Employees",
     "valueKey": "id",
     "labelKey": "user.name",
@@ -131,7 +118,6 @@
   },
   {
     "id": "14",
-    "path": "/groups",
     "label": "Official Groups",
     "valueKey": "id",
     "labelKey": "name",
@@ -139,7 +125,6 @@
   },
   {
     "id": "15",
-    "path": "/document_revisions?docTypeGroups%5B%5D=PART",
     "label": "Part Number in WO",
     "valueKey": "id",
     "labelKey": "name",
@@ -150,7 +135,6 @@
   },
   {
     "id": "16",
-    "path": "/document_revisions?docTypeGroups%5B%5D=FORM&docTypeGroups%5B%5D=SUPPLIER&docTypeGroups%5B%5D=OTHER&docTypeGroups%5B%5D=PI&docTypeGroups%5B%5D=DYNAMIC_FORM&docTypeGroups%5B%5D=POAM&docTypeGroups%5B%5D=PO&docTypeGroups%5B%5D=WORK_ORDER&docTypeGroups%5B%5D=PART&docTypeGroups%5B%5D=DAM&docTypeGroups%5B%5D=EQUIPMENT&docTypeGroups%5B%5D=MATERIAL&docTypeGroups%5B%5D=SEED_DOCUMENT&docTypeGroups%5B%5D=NEW_COMPANY&status%5B%5D=DRAFT",
     "label": "Document Revisions In Draft without Records",
     "valueKey": "id",
     "labelKey": "name",
@@ -161,7 +145,6 @@
   },
   {
     "id": "17",
-    "path": "/groups/approval_roles",
     "label": "Approval Roles",
     "valueKey": "id",
     "labelKey": "name",
@@ -171,7 +154,6 @@
   },
   {
     "id": "18",
-    "path": "/document_revisions",
     "label": "Document revisions (all versions)",
     "valueKey": "id",
     "labelKey": "name",
@@ -182,7 +164,6 @@
   },
   {
     "id": "19",
-    "path": "/document_revisions?docTypeGroupOptions%5B%5D=MATERIAL&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED&status%5B%5D=DEPRECATED",
     "label": "Materials",
     "valueKey": "id",
     "labelKey": "name",
@@ -204,7 +185,6 @@
   },
   {
     "id": "21",
-    "path": "/document_revisions/available_parts",
     "label": "Available Parts",
     "valueKey": "id",
     "labelKey": "name",
@@ -215,7 +195,6 @@
   },
   {
     "id": "22",
-    "path": "/document_type?docTypeGroupOption=PART",
     "label": "Document types",
     "valueKey": "id",
     "labelKey": "documentTypeName",
@@ -224,7 +203,6 @@
   },
   {
     "id": "23",
-    "path": "/documents/available_maintenance_forms",
     "label": "Preventative Maintenance Forms",
     "valueKey": "id",
     "labelKey": "name",
@@ -235,7 +213,6 @@
   },
   {
     "id": "24",
-    "path": "/document_revisions?docTypeGroupOptions%5B%5D=CAN_CREATE_INSPECTION&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED",
     "label": "Lots",
     "valueKey": "id",
     "labelKey": "name",
@@ -246,7 +223,6 @@
   },
   {
     "id": "25",
-    "path": "/documents/available_parts",
     "label": "Available Part Documents",
     "valueKey": "id",
     "labelKey": "documentRevisions.name",
@@ -256,7 +232,6 @@
   },
   {
     "id": "26",
-    "path": "/document_type?docTypeGroupOption=SUPPLIER",
     "label": "Supplier Document Types",
     "valueKey": "id",
     "labelKey": "documentTypeName",
@@ -265,7 +240,6 @@
   },
   {
     "id": "27",
-    "path": "/document_revisions?docTypeGroupOptions%5B%5D=CAN_CREATE_INSPECTION&docTypeGroupOptions%5B%5D=ENGINEERING_BUILD&status%5B%5D=DRAFT&status%5B%5D=PENDING_CHANGE&status%5B%5D=SUBMITTED&status%5B%5D=IN_REVIEW&status%5B%5D=APPROVED&status%5B%5D=RELEASED",
     "label": "EB Lots",
     "valueKey": "id",
     "labelKey": "name",
@@ -276,7 +250,6 @@
   },
   {
     "id": "28",
-    "path": "/document_revisions?docTypeGroupOptions%5B%5D=SEED&status%5B%5D=RELEASED",
     "label": "Seed Documents",
     "valueKey": "id",
     "labelKey": "name",
@@ -287,7 +260,6 @@
   },
   {
     "id": "29",
-    "path": "/document_revisions?docTypeGroupOptions%5B%5D=MPI&status%5B%5D=RELEASED&status%5B%5D=DRAFT",
     "label": "MPI documents",
     "valueKey": "id",
     "labelPrefixRoot": "document.docId",
@@ -297,29 +269,26 @@
   },
   {
     "id": "30",
-    "path": "/public/configs/parts_units.json",
     "label": "Unit Measures",
     "valueKey": "value",
     "labelKey": "text",
     "root": "",
-    "publicApi": true,
+    "publicApi": false,
     "hidden": false
   },
   {
     "id": "31",
-    "path": "/documents/${documentId}",
     "label": "",
     "valueKey": "id",
-    "labelKey": "displayStatus",
-    "root": "documentRevisions",
+    "labelKey": "name",
+    "root": "",
     "includeRevision": "displayRevision",
-    "labelPrefixRoot": "name",
+    "labelPrefixRoot": "docId",
     "publicApi": false,
     "hidden": true
   },
   {
     "id": "33",
-    "path": "/document_revisions?documentTypeCategory=Equipment&status%5B%5D=RELEASED",
     "label": "Released Equipment",
     "valueKey": "id",
     "labelKey": "name",

@@ -1,52 +1,39 @@
 import React, { useEffect, useState } from "react";
-import { connect, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getHasPermission } from "../../../common/utils/selectors";
 import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
 import { EmployeeEditRequestBody, GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { companySelectors } from "../../../state/ducks/company";
-import { Employee } from "../../../state/ducks/company/types";
 import { userManagementActions } from "../../../state/ducks/userManagement";
 import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
-import { ApplicationState } from "../../../state/reducers";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useGetHasTag from "../../hooks/useGetHasTag";
 import UserProfilePresenter from "./UserProfile.presenter";
 
-interface OwnProps {
+interface Props {
   closeUserProfile: () => void;
   showUserProfile: boolean;
   selectedEmployee: GetEmployeeResponse;
 }
 
-interface DispatchProps {
-  editSelectedEmployee: typeof authActions.editSelectedEmployee;
-  getSlackUrl: typeof userManagementActions.getSlackUrl;
-}
-
-interface StateProps {
-  isSlackIntegrationEnabled: boolean;
-  slackTeamId: string;
-  employees: Employee[];
-}
-
-type Props = OwnProps & DispatchProps & StateProps;
-
 const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
   showUserProfile,
   closeUserProfile,
   selectedEmployee,
-  editSelectedEmployee,
-  getSlackUrl,
-  isSlackIntegrationEnabled,
-  slackTeamId,
 }) => {
   const userSlackId = useSelector(authSelectors.currentSlackUserId);
   const isDeveloper = useSelector(getHasPermission(Permission.DEVELOPERS));
+  const isSlackIntegrationEnabled = useSelector(companySelectors.isSlackIntegrationEnabled);
+  const slackTeamId = useSelector(companySelectors.slackTeamId);
   const canUpdateCompany = useSelector(getHasPermission(Permission.COMPANY_UPDATE_CURRENT));
   const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
+
+  const editSelectedEmployeeAction = useActionCreator(authActions.editSelectedEmployee);
+  const getSlackUrlAction = useActionCreator(userManagementActions.getSlackUrl);
 
   const [realUser, setRealUser] = useState<any>({ user: {}, groups: [] });
   const [showEditUser, setEditUser] = useState(false);
@@ -107,7 +94,7 @@ const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
 
   const submitChanges = (values: EmployeeEditRequestBody) => {
     async.start(
-      editSelectedEmployee,
+      editSelectedEmployeeAction,
       realUser.user.id,
       values,
       async,
@@ -121,7 +108,12 @@ const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
   });
 
   const onAdd = () => {
-    asyncSlack.start(getSlackUrl, Config.SlackUserUri, USER_SLACK_URL, asyncSlack);
+    asyncSlack.start(
+      getSlackUrlAction,
+      Config.SlackUserUri,
+      USER_SLACK_URL,
+      asyncSlack
+    );
   };
 
   return (
@@ -156,13 +148,4 @@ const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-  isSlackIntegrationEnabled: companySelectors.isSlackIntegrationEnabled(state),
-  slackTeamId: companySelectors.slackTeamId(state),
-  employees: authSelectors.employees(state),
-});
-
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
-  editSelectedEmployee: authActions.editSelectedEmployee,
-  getSlackUrl: userManagementActions.getSlackUrl,
-})(UserProfileAdminContainer);
+export default UserProfileAdminContainer;

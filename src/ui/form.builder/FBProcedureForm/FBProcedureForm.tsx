@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FB, FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBData, FBFileUpload, FBForm, FBProcedureFormProps, FBProcedureItemType, FBQuantityField, FBTextField } from "..";
+import { FB, FBAutocomplete, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBCheckbox, FBData, FBFileUpload, FBForm, FBProcedureFormProps, FBProcedureItemType, FBQuantityField, FBTextField } from "..";
 import { withFBProcedureForm } from "./FBProcedureForm.wrap";
 
 
@@ -17,6 +17,8 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
   optionId,
   mode = "eb",
   type,
+  disabled,
+  isDocumentMPI,
 }) => (
   <FBForm {...{ formState, initialValues }} >
     <FBTextField
@@ -35,10 +37,11 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
         loading={partLoading}
         disabled={partLoading}
         {...{ disabledOptions }}
-        freeSolo
+        freeSolo={mode !== "eb" ? disabled : true}
         withState
+        shouldReloadOnInit
       />
-      {mode !== "mpi" && (
+      {mode !== "mpi" && mode !== "lhr" && (
         <FBAutocompleteAsync
           name="partLot"
           label="form.builder.part.lot"
@@ -59,9 +62,15 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
       label="form.builder.title"
       rules="required"
       {...{ optionId, disabledOptions }}
-      freeSolo
+      freeSolo={mode !== "eb" ? disabled : true}
     />
     }
+    {/* Do not show cb when user is editing item */}
+    {isDocumentMPI && !initialValues && <FBCheckbox
+      name="LHRTparameter"
+      label="form.builder.lhrt.parameter"
+      withState
+    />}
     {type === FBProcedureItemType.materials && (
       <>
         <Box display="flex">
@@ -69,6 +78,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
             <FBQuantityField
               name="quantity"
               label="form.builder.quantity"
+              {...{ disabled }}
             />
           </Box>
           <Box width="50%" ml={1}>
@@ -78,10 +88,11 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
               options={FBData.unitsOptions}
               optionValueKey="value"
               optionLabelKey="text"
+              {...{ disabled }}
             />
           </Box>
         </Box>
-        {mode !== "mpi" && (
+        {mode !== "mpi" && mode !== "lhr" && (
           <FBFileUpload label="form.builder.attachments" name="attachments" />
         )}
       </>

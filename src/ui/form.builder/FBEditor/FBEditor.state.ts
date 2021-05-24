@@ -82,9 +82,10 @@ class FBEditorState {
     "requestapproval",
     "blanktplform",
     "approvals",
+    "lhrstep",
   ];
 
-  public static pickStepIndex: FBInputType[] = ["stepsection", "teststep", "procedure", "mpiprocedure"];
+  public static pickStepIndex: FBInputType[] = ["stepsection", "teststep", "procedure", "mpiprocedure", "lhrstep"];
 
   public static pickCustomHandler: FBInputType[] = ["teststep"];
 
@@ -134,7 +135,7 @@ class FBEditorState {
     eqmaintenance: FBEditorEQMaintenance,
     textfieldwithrange: FBEditorTextFieldWithRange,
     supplier: FBEditorLabel,
-    lhrstep: FBEditorEmpty,
+    lhrstep: FBEditorLabel,
     unitMeasures: FBEditorLabel,
   };
 

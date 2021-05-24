@@ -158,6 +158,10 @@ context("Parts from EB flow test", () => {
 
   context("Create EB form", () => {
     context("Start document creation flow", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Navigate to Document list", () => {
         cy.navigToDocumentList();
       });
@@ -174,7 +178,6 @@ context("Parts from EB flow test", () => {
 
       it("Enter description 'Engineering Build Form description'", () => {
         cy.drEnterDocumentDescription({ description: "Engineering Build Form description" });
-        cy.wait(5000);
       });
 
       it("Select 'Form' document type from dropdown", () => {
@@ -209,6 +212,10 @@ context("Parts from EB flow test", () => {
   context("Create an EB with an existing part", () => {
     context("Create a part", () => {
       context("Start document creation flow", () => {
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
+
         it("Navigate to parts", () => {
           cy.navigToParts();
         });
@@ -261,13 +268,10 @@ context("Parts from EB flow test", () => {
 
       it("Enter description 'Test Engineering Build description'", () => {
         cy.drEnterDocumentDescription({ description: "Test Engineering Build description" });
-        cy.wait(5000);
       });
 
       it("Add an Approval'", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-          cy.get("[data-cy*=fb-approvals-]").type(USERS[1].name + "{downarrow}{enter}");
-        });
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Save the EB", () => {
@@ -283,7 +287,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.EmployeesGet], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
       });
@@ -311,6 +315,10 @@ context("Parts from EB flow test", () => {
 
   context("Create an EB with a new part", () => {
     context("Create an EB", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Navigate to Records", () => {
         cy.navigToRecords();
       });
@@ -336,9 +344,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Add an Approval", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-          cy.get("[data-cy*=fb-approvals-]").type(USERS[1].name + "{downarrow}{enter}");
-        });
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Save the EB", () => {
@@ -348,7 +354,7 @@ context("Parts from EB flow test", () => {
 
     context("Add a new part via EB", () => {
       it("Open Create a New Part dialog", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.get("[data-cy=\"form.builder.create.new.part\"]").click();
         });
       });
@@ -374,7 +380,6 @@ context("Parts from EB flow test", () => {
           });
         });
       });
-
     });
 
     context("Submit for Approval", () =>  {
@@ -387,7 +392,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.EmployeesGet], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
       });
@@ -427,13 +432,11 @@ context("Parts from EB flow test", () => {
 
     context("Submit for Approval", () => {
       it("Add an Approval", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-          cy.get("[data-cy*=fb-approvals-]").type(USERS[1].name + "{downarrow}{enter}");
-        });
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.EmployeesGet], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
       });

@@ -126,6 +126,10 @@ context("PO test", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -335,13 +339,11 @@ context("PO test", () => {
 
     it("Uploads text.docx", () => {
       // SystemRequirement("REQ-1350");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
-        cy.atchUploadAttachment({ fileName: "test.docx" });
-      });
+      cy.atchUploadAttachment({ fileName: "test.docx" });
     });
 
     it("Click on 'Add item' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.CompanyMine], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.poAddNewFieldItem();
       });
     });
@@ -430,11 +432,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.poAddPOButtonClick();
-        });
-      cy.checkToastMessage({ exists: false });
+      cy.poAddPOButtonClick();
     });
 
     it("Check currency options dropdown", () => {
@@ -447,9 +445,7 @@ context("PO test", () => {
     });
 
     it("Enter Shipping Cost", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.poShippingCost({ number: "2" });
-      });
+      cy.poShippingCost({ number: "2" });
     });
 
     it("Check Subtotal value", () => {
@@ -469,7 +465,7 @@ context("PO test", () => {
 
     context("Add Supplier to PO", () => {
       it("Click 'Create A New Supplier'", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.get("[data-cy=\"form.builder.create.new.supplier\"]").click();
         });
       });
@@ -480,6 +476,7 @@ context("PO test", () => {
 
       it("Enter Supplier Description 'Supplier Description'", () => {
         cy.ebEnterPartDescription({ description: "Supplier Description" });
+        cy.checkToastMessage({ exists: false });
       });
 
       it("Select Document Type 'Supplier'", () => {
@@ -489,7 +486,7 @@ context("PO test", () => {
       });
 
       it("Create new supplier", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
       });
@@ -599,11 +596,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.poAddPOButtonClick();
-        });
-      cy.checkToastMessage({ exists: false });
+      cy.poAddPOButtonClick();
     });
 
     it("Select Supplier", () => {
@@ -616,9 +609,7 @@ context("PO test", () => {
     });
 
     it("Select Currency 'EUR'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.poSelectCurrency({ currencyValue: "EUR" });
-      });
+      cy.poSelectCurrency({ currencyValue: "EUR" });
     });
 
     it("Check for conversion message", () => {
@@ -627,9 +618,7 @@ context("PO test", () => {
     });
 
     it("Enter Shipping Cost", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.poShippingCost({ number: "2" });
-      });
+      cy.poShippingCost({ number: "2" });
     });
 
     it("Check Subtotal value", () => {
@@ -653,6 +642,10 @@ context("PO test", () => {
     it("Enter description 'New Purchase Order with Service item'", () => {
       // SystemRequirement("REQ-1290");
       cy.drEnterDocumentDescription({ description: "New Purchase Order with Service item" });
+    });
+
+    it("Save PO", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Approve and release document", () => {
@@ -752,7 +745,9 @@ context("PO test", () => {
 
   context("Test the filter inside PO", () => {
     it("Enter version number '1' inside filter", () => {
-      cy.filterPOVersion({ version: "1" });
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
+        cy.filterPOVersion({ version: "1" });
+      });
     });
 
     it("Check if item with right version is displayed", () => {
@@ -766,7 +761,9 @@ context("PO test", () => {
 
     it("Clear filter", () => {
       // SystemRequirement("REQ-1190");
-      cy.filterClear();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
+        cy.filterClear();
+      });
     });
 
     it("Enter all fields to check if all filter fields are working", () => {
@@ -785,13 +782,13 @@ context("PO test", () => {
       cy.navigToPurchaseOrder();
     });
 
-    // it.skip("Check if all filter values persist after changing landing page", () => {
-    //   // SystemRequirement("REQ-1170");
-    //   cy.filterCheckIfPOFilterPersists({
-    //     docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
-    //     partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
-    //   });
-    // });
+    it("Check if all filter values persist after changing landing page", () => {
+      // SystemRequirement("REQ-1170");
+      cy.filterCheckIfPOFilterPersists({
+        docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
+        partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
+      });
+    });
 
     it("Clear filter", () => {
       // SystemRequirement("REQ-1190");

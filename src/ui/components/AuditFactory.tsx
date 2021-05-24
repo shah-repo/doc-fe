@@ -86,6 +86,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         }
         return <AuditProcedure {...{ audit, dataCy, auditValue }} />;
       },
+      mpiprocedure() {
+        return <AuditProcedure {...{ audit, dataCy, auditValue }} />;
+      },
       default() { return (<div data-cy={dataCy}>{getAuditDefaultValue(auditValue)}</div>); },
     };
     returnValue = (fbValue[type] || fbValue.default)();

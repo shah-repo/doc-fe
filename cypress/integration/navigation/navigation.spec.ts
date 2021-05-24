@@ -109,7 +109,6 @@ context(`Test: ${path.basename(__filename)}`, () => {
         NavigationItems.GROUP_MANAGEMENT,
         NavigationItems.PURCHASE_ORDERS,
         NavigationItems.INSPECTION,
-        NavigationItems.DOCUMENT_TYPE_MANAGEMENT,
         NavigationItems.RECEIVING,
       );
 

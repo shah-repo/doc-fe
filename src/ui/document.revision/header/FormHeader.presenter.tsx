@@ -1,4 +1,5 @@
-import { Box, Grid } from "@material-ui/core";
+import { Box, Grid, LinearProgress } from "@material-ui/core";
+import { Observer } from "mobx-react";
 import React from "react";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
@@ -8,6 +9,7 @@ import FormProgress from "../../components/forms/FormProgress";
 import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.presenter";
 import DocRevActions from "../../documentRevision/forms/presenters/Actions";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
+import { FB } from "../../form.builder";
 
 interface Props {
   isCreateDocumentDisabled: boolean;
@@ -16,7 +18,7 @@ interface Props {
 const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentDisabled }) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
-
+  const { workspaceState } = FB.useStores();
   return (
     <Header>
       {documentRevision &&
@@ -49,6 +51,17 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentD
       </Grid>
       <FormMessage asyncState={asyncState} />
       <FormProgress asyncState={asyncState} fullWidth />
+      <Observer>
+        {() => (
+          <>
+            {workspaceState?.documentRevApi.loading && (
+              <Box width="100%" pt={1}>
+                <LinearProgress style={{ width: "100%" }} />
+              </Box>
+            )}
+          </>
+        )}
+      </Observer>
     </Header>
   );
 };

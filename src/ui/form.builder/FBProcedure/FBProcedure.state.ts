@@ -1,4 +1,4 @@
-import { filter, get, unionBy } from "lodash";
+import { filter, flattenDeep, get, unionBy } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
@@ -30,13 +30,26 @@ class FBProcedureState {
   }
 
   // MARK: @actions
-  @action public addItem = (item: FBProcedureItemConfig, type: FBProcedureItemType) => {
+  @action public addItem = (item: FBProcedureItemConfig, type: FBProcedureItemType, allSteps?: any) => {
+
+    if (item.LHRTparameter) {
+      const materials = allSteps?.filter((item) => item.editorConfig?.materials).map(
+        (item) => item.editorConfig.materials);
+      const equipment = allSteps?.filter((item) => item.editorConfig?.equipment).map(
+        (item) => item.editorConfig.equipment);
+      const ids: string[] = flattenDeep([materials]).concat(flattenDeep([equipment])).filter((item) =>
+        item.id.length === 1).map((item) => item.id) || [];
+      const highestId = ids.sort().pop();
+      const nextId = highestId ? highestId?.charCodeAt(0) + 1 : 65;
+      item = { title: item.title, id: String.fromCharCode(nextId),  type: "params", LHRTparameter: item.LHRTparameter };
+    }
+
     const items = unionBy([item], get(this, `value.${type}`), "id");
     const value = {
       ...this.value,
       [type]: items.reverse(),
     };
-    set(this, "value", value);
+    this.setValue(value);
   };
 
   @action public removeItem = (id: string, type: FBProcedureItemType) => {
@@ -45,6 +58,10 @@ class FBProcedureState {
       ...this.value,
       [type]: items,
     };
+    this.setValue(value);
+  };
+
+  @action public setValue = (value?: FBProcedureValue) => {
     set(this, "value", value);
   };
 

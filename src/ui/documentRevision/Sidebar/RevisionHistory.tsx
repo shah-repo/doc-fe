@@ -36,7 +36,7 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ chang
                     to={changeRequestEditPath(changeRequest.id)}
                     target="_blank"
                     id="ChangeRequestLink-docRev-linkButton"
-                    style={{ textDecoration: "none", color: Colors.default_blue }}
+                    style={{ textDecoration: "none", color: Colors.medium_blue }}
                   >
                     <span>{changeRequest.crId}</span>
                   </Link>

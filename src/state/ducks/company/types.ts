@@ -31,6 +31,7 @@ export interface Employee {
   company: Company;
   slackUserId: string;
   user?: User;
+  dropboxEnabled?: boolean;
 }
 
 export interface Company {
@@ -48,6 +49,7 @@ export interface Company {
   acctCodes: string[];
   navigation: NavigationItem[];
   employees?: Employee[];
+  dropboxEnabled?: boolean;
 }
 
 export interface SelectCompanyAction {
@@ -117,4 +119,5 @@ export interface RedlineState {
 
 export interface RedlineAction {
   type: typeof REDLINE_CONFIG;
+  payload: RedlineState;
 }

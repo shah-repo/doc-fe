@@ -8,7 +8,7 @@ export default makeStyles((theme: Theme) =>
       "margin": theme.spacing(1),
       "height": "inherit",
       "&:hover": {
-        "background": Colors.medium_light_blue,
+        "background": Colors.background_blue,
         "borderRadius": theme.spacing(0.5),
         "& svg": {
           stroke: Colors.medium_blue,

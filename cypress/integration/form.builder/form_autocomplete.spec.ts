@@ -822,7 +822,7 @@ context("Autocomplete test", () => {
     });
 
     it("Click on 'Create Document' button", () => {
-      cy.get("[id=\"DocumentRevisionForm-submit\"]").wait(3000).click();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Click 'Add Approver' & 'confirm' button", () => {

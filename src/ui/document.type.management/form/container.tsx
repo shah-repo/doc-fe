@@ -27,7 +27,7 @@ const DocumentTypeFormContainer: React.FunctionComponent<Props> = ({
   const { id } = documentType;
   const initialValues = toDocumentTypeIntialValues(documentType);
   const transitionLabel =  "common.delete";
-  const disabled = Config.isProduction;
+  const disabled = Config.docTypeManagementEditDisabled;
 
   const updateDocumentTypeAction = useActionCreator(documentTypeActions.updateDocumentType);
 

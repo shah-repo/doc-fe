@@ -1,3 +1,4 @@
+import { find, flattenDeep, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -18,17 +19,34 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     stepLHRs,
     isHovering,
     disabled,
+    ownerOfStartMPIAction,
+    ownerOfCompleteMPIAction,
+    materials,
+    equipment,
+    isDocumentLHRT,
+    stepIndex,
     ...props
   }: T) => {
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
-    stepLHRs = workspaceState?.document?.smartReferencesFrom
-      ?.find((ref) => ref.type === SmartReferenceType.HiddenPiInstance && ref.metadata.fieldId === name)?.fromDocRev;
+    const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom;
+
+    stepLHRs = smartReferencesFrom
+      ?.find((ref) => ref.active
+      && ref.type === SmartReferenceType.HiddenPiInstance
+      && ref.metadata.fieldId === name)?.fromDocRev;
+    const employees = workspaceState?.externalState?.company?.companyMine.employees;
+    ownerOfStartMPIAction = employees?.find((e) =>
+      e.id === smartReferencesFrom?.[0]?.metadata.startedBy)?.user?.name;
+    ownerOfCompleteMPIAction = employees?.find((e) =>
+      e.id === smartReferencesFrom?.[0]?.metadata.completedBy)?.user?.name || "Sara";
     const lhrStepState = FB.useRef(FBLHRStepState, stepLHRs);
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
     const isDraft = isDocumentRevisionInDraft(workspaceState?.document?.status);
+    // TO DO: Find another way with BE to chechk if doc is LHRT
+    isDocumentLHRT = workspaceState?.document?.document.documentType.documentTypeAcronym === "LHRT-";
 
     // MARK: @helpers
     React.useEffect(() => {
@@ -46,10 +64,11 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       () => formState?.inputState.get(name)?.value,
       (value) => {
         if (!stepLHRs) { // don't trigger if it is LHR/MPI hover toggle
+          const editorConfig = !value ? omit(schemaItem?.editorConfig, "parameters") : schemaItem?.editorConfig;
           workspaceState?.setSchemaItem({
             ...schemaItem,
             editorConfig: {
-              ...schemaItem?.editorConfig,
+              ...editorConfig,
               value,
             },
           });
@@ -86,6 +105,40 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    React.useEffect(() => reaction(
+      () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.mpiDocuments),
+      (data) => {
+        const parameters = schemaItem?.editorConfig.parameters;
+        const dataValues = Array.from(data.values());
+        const mpiDocument: any = dataValues.find((item: any) => item?.id === schemaItem?.editorConfig.value);
+
+        const editorCfg = mpiDocument?.formTemplate.schema.filter((item) => item.type === "mpiprocedure");
+        const editorMaterials = editorCfg.filter((item) => item.editorConfig.materials).map(
+          (item) => item.editorConfig.materials);
+        const editorEquipment = editorCfg.filter((item) => item.editorConfig.equipment).map(
+          (item) => item.editorConfig.equipment );
+
+        if (parameters) {
+          const newMaterials = flattenDeep([editorMaterials]).map((material) => {
+            const editedMaterial = find(parameters, (parameter) => parameter.paramsId === material.id);
+            return editedMaterial || material;
+          });
+          const newEquipments = flattenDeep([editorEquipment]).map((equipment) => {
+            const editedEquipment = find(parameters, (parameter) => parameter.paramsId === equipment.id);
+            return editedEquipment || equipment;
+          });
+          lhrStepState.setMaterials(newMaterials);
+          lhrStepState.setEquipment(newEquipments);
+          lhrStepState.setEditedParameters(parameters);
+          return;
+        }
+
+        lhrStepState.setMaterials(flattenDeep([editorMaterials]));
+        lhrStepState.setEquipment(flattenDeep([editorEquipment]));
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
     // MARK: @methods
     startMpi = () => {
       let startQuantity = formState?.getFieldValue(`fb-lhrs-start-quantity-${name}`);
@@ -97,6 +150,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         startQuantity,
         workspaceState?.document?.id,
         schemaItem?.editorConfig?.value,
+        stepIndex,
       );
     };
 
@@ -129,6 +183,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       loading = lhrStepState?.startMpiApi?.loading || lhrStepState?.getDocumentApi?.loading;
       stepLHRs = lhrStepState.stepLHRs;
       isHovering = lhrStepState.isHovering;
+      materials = lhrStepState?.materials;
+      equipment = lhrStepState?.equipment;
     });
 
 
@@ -146,6 +202,13 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       isDraft,
       disabled,
       loading,
+      ownerOfStartMPIAction,
+      ownerOfCompleteMPIAction,
+      materials,
+      index,
+      equipment,
+      isDocumentLHRT,
+      stepIndex,
     }); };
 
   Comp.displayName = "withFBLHRStep";

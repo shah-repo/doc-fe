@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
@@ -10,7 +12,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 let secondEmployee;
-const documentRevisionTitle = `DocumentRevision${Cypress.moment().format("X")}`;
+const documentRevisionTitle = `DocumentRevision${moment().format("X")}`;
 let arDocCount = 0;
 let initialArDocument;
 
@@ -198,17 +200,19 @@ context("Autocomplete 'Document revisions (all versions)' test", () => {
               .find("[data-cy^=\"test-label-\"]").click();
 
             if (response.body.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  const res = response.body[index];
-                  expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
-                })
+              const allDocRevs = response.body;
+              allDocRevs.forEach((docRev) => {
+                cy.get("ul[role=listbox]>li")
+                  .should("contain.text", `${docRev.document.docId} - rev ${docRev.displayRevision} - ${docRev.name}`);
+              });
+              cy.get("ul[role=listbox]>li")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });
             } else {
               cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
             }
+
           });
         });
 

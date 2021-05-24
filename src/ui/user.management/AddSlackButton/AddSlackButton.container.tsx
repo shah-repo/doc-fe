@@ -1,33 +1,22 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { connect, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getHasSlack } from "../../../common/utils/selectors";
 import Config from "../../../config";
 import { Permission } from "../../../state/ducks/auth/types";
 import { companySelectors } from "../../../state/ducks/company";
 import { userManagementActions } from "../../../state/ducks/userManagement";
 import { COMPANY_SLACK_URL } from "../../../state/ducks/userManagement/constants";
-import { ApplicationState } from "../../../state/reducers";
+import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import AddSlackButtonPresenter from "./AddSlackButton.presenter";
 
-interface DispatchProps {
-  getSlackUrl: typeof userManagementActions.getSlackUrl;
-}
-
-interface StateProps {
-  isSlackIntegrationEnabled: boolean;
-  slackTeamId: string;
-}
-
-type Props = DispatchProps & StateProps;
-
-const AddSlackButtonContainer: React.FunctionComponent<Props> = ({
-  isSlackIntegrationEnabled,
-  getSlackUrl,
-  slackTeamId,
-}) => {
+const AddSlackButtonContainer: React.FunctionComponent<{}> = () => {
   const hasSlackPermission = useSelector(getHasSlack(Permission.SLACK_APP_INSTALL));
+  const isSlackIntegrationEnabled = useSelector(companySelectors.isSlackIntegrationEnabled);
+  const slackTeamId = useSelector(companySelectors.slackTeamId);
+
+  const getSlackUrlAction = useActionCreator(userManagementActions.getSlackUrl);
 
   const asyncSlack = useAsync<string>({
     onSuccess: (slackUrl) => {
@@ -36,7 +25,12 @@ const AddSlackButtonContainer: React.FunctionComponent<Props> = ({
   });
 
   const onAdd = () => {
-    asyncSlack.start(getSlackUrl, Config.SlackCompanyUri, COMPANY_SLACK_URL, asyncSlack);
+    asyncSlack.start(
+      getSlackUrlAction,
+      Config.SlackCompanyUri,
+      COMPANY_SLACK_URL,
+      asyncSlack
+    );
   };
 
   return (
@@ -50,11 +44,4 @@ const AddSlackButtonContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-  isSlackIntegrationEnabled: companySelectors.isSlackIntegrationEnabled(state),
-  slackTeamId: companySelectors.slackTeamId(state),
-});
-
-export default connect<StateProps, DispatchProps, {}, ApplicationState>(mapStateToProps, {
-  getSlackUrl: userManagementActions.getSlackUrl,
-})(AddSlackButtonContainer);
+export default AddSlackButtonContainer;

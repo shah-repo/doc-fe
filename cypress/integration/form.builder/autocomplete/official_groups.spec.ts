@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { CONFIG } from "../../../support/config";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -9,7 +11,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 let secondEmployee;
-const groupName = `Group ${Cypress.moment().format("X")}`;
+const groupName = `Group ${moment().format("X")}`;
 
 context("Autocomplete 'Official Groups' test", () => {
   context("[API]Prepare company", () => {
@@ -171,10 +173,11 @@ context("Autocomplete 'Official Groups' test", () => {
               .find("[data-cy^=\"test-label-\"]").click();
 
             if (response.body.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  expect($li).to.have.text(response.body[index].name);
-                })
+              const groups = response.body;
+              groups.forEach((group) => {
+                cy.get("ul[role=listbox]>li").should("contain.text", group.name);
+              });
+              cy.get("ul[role=listbox]>li")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

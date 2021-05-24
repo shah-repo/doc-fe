@@ -1,16 +1,16 @@
-import { keys } from "lodash";
+import { isEqual, keys, omit } from "lodash";
 import { reaction } from "mobx";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { FB, FBMPIProcedureProps, FBMPIProcedureState, FBProcedureItemType } from "..";
+import { FB, FBMediaProps, FBMPIProcedureProps, FBMPIProcedureState, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
-import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     handleAdd,
+    onKeyDown,
     mpiProcedureState,
     name = "",
     isInputOwner,
@@ -25,7 +25,6 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const schemeItem = workspaceState?.getSchemaItemAt(index);
-    const { submitForm } = useFormContext();
     mpiProcedureState = FB.useRef(FBMPIProcedureState, schemeItem?.editorConfig);
     const redlineActive = useSelector(companySelectors.getRedlineActive);
 
@@ -35,49 +34,37 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     types = keys(FBProcedureItemType);
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = (!isInputOwner || isPreview) && !redlineActive;
-    const formValue = formState?.getFieldValue(`${name}.description`);
-    if (!formValue) {
+    const descFormValue = formState?.getFieldValue(`${name}.description`);
+    if (!descFormValue) {
       formState?.setFieldValue(`${name}.description`, props.editorConfig?.description);
     }
     // MARK: @reactions
     React.useEffect(() => reaction(
       () => mpiProcedureState?.value,
       (data) => {
-        formState?.setFieldValue(`${name}.description`, data?.description, false);
-      }, {
-        fireImmediately: true,
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
-    React.useEffect(() => reaction(
-      () => mpiProcedureState?.value,
-      (data) => {
-        if (!formValue) {
-          formState?.setFieldValue(`${name}.description`, data?.description, false);
+        const schemeItem = workspaceState?.getSchemaItemAt(index);
+        if (workspaceState && schemeItem) {
+          workspaceState.schema![index] = {
+            ...schemeItem,
+            editorConfig: data,
+          };
+          workspaceState.saveDocRev(formState?.getValues());
         }
-        workspaceState?.setSchemaItem({
-          ...schemeItem,
-          editorConfig: data,
-        });
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    React.useEffect(() => {
+    useEffect(() => {
       reaction(
         () => formState?.inputState.get(`${name}.attachments`)?.value,
-        (data) => {
-          if (workspaceState && workspaceState?.getSchemaItemAt(index)) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            workspaceState.schema![index] = {
-              ...schemeItem,
-              editorConfig: {
-                ...schemeItem?.editorConfig,
-                attachments: data,
-              },
-            };
-          }
+        (attachments) => {
+          if (!mpiProcedureState) { return; }
+          const { attachments: stateAttachments } = mpiProcedureState.value || {};
+          if (isEqual((attachments as FBMediaProps[]).sort(), (stateAttachments || []).sort())) { return; }
+          mpiProcedureState.value = {
+            ...mpiProcedureState.value,
+            attachments,
+          };
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -86,14 +73,10 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get(`${name}.description`)?.value,
       (description) => {
-        if (!workspaceState) { return; }
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        workspaceState.schema![index] = {
-          ...schemeItem,
-          editorConfig: {
-            ...schemeItem?.editorConfig,
-            description,
-          },
+        if (!mpiProcedureState) { return; }
+        mpiProcedureState.value = {
+          ...mpiProcedureState.value,
+          description,
         };
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -103,15 +86,27 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
 
 
     // MARK: @methods
-    handleAdd = (isClone?: boolean) => {
+    handleAdd = (isClone?: boolean, isFromKeys?: boolean) => {
+      if (!workspaceState) { return; }
       const newName = FB.uniqid;
+      let schemaItem = workspaceState.getSchemaItemAt(index);
+      if (!isClone) {
+        schemaItem = omit(schemaItem, "editorConfig");
+      }
       const newItem = {
-        ...workspaceState?.getSchemaItemAt(index),
-        ...!isClone && { editorConfig: undefined },
+        ...schemaItem,
+        autoScrollTo: isFromKeys,
+        autoFocus: isFromKeys,
         name: newName,
       };
       workspaceState?.setSchemaItemAt(newItem, index + 1);
-      submitForm();
+      workspaceState.saveDocRev(formState?.getValues());
+    };
+
+    onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter" && e.ctrlKey) {
+        handleAdd?.(false, true);
+      }
     };
 
     // MARK: @observer
@@ -119,6 +114,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
     return Component({
       ...(props as T),
       handleAdd,
+      onKeyDown,
       mpiProcedureState,
       isPreview,
       name,

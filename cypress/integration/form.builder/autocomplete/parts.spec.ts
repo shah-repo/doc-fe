@@ -71,6 +71,10 @@ context("Autocomplete 'Parts' test", () => {
 
   // TODO: Create form for Parts with API, not through document list creation!
   context("Create Form Part document to create Part", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
     });
@@ -136,7 +140,7 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Approve and release FORM document", () => {
@@ -223,10 +227,12 @@ context("Autocomplete 'Parts' test", () => {
               .find("[data-cy^=\"test-label-\"]").click();
 
             if (response.body.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  expect($li).to.have.text(response.body[index].document.docId);
-                })
+              const parts = response.body;
+              parts.forEach((part) => {
+                cy.get("ul[role=listbox]>li")
+                  .should("contain.text", part.document.docId);
+              });
+              cy.get("ul[role=listbox]>li")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
@@ -10,7 +12,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 let secondEmployee;
-const maintenanceTitle = `Maintenance ${Cypress.moment().format("X")}`;
+const maintenanceTitle = `Maintenance ${moment().format("X")}`;
 
 context("Autocomplete 'Preventative Maintenance Forms' test", () => {
   context("[API]Prepare company", () => {

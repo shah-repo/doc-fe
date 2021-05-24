@@ -154,9 +154,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context(`Add New Role: ${roleOne}`, () => {
     it("Open 'Add Role' dialog", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGetActive, CyRoutes.GroupsGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.drAddAnotherRoleBtn();
       });
+      cy.wait(500);
     });
 
     it(`Fill role name: ${roleOne}`, () => {

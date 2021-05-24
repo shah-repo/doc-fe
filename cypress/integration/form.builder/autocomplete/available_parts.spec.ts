@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
@@ -10,7 +12,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 let secondEmployee;
-const partsName = `Parts ${Cypress.moment().format("X")}`;
+const partsName = `Parts ${moment().format("X")}`;
 
 context("Autocomplete 'Available Parts' test", () => {
   context("[API]Prepare company", () => {
@@ -71,6 +73,10 @@ context("Autocomplete 'Available Parts' test", () => {
 
   // TODO: Create form for Parts with API, not through document list creation!
   context("Create Form Part document to create Part", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
     });
@@ -136,7 +142,7 @@ context("Autocomplete 'Available Parts' test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Approve and release FORM document", () => {
@@ -219,11 +225,12 @@ context("Autocomplete 'Available Parts' test", () => {
               .find("[data-cy^=\"test-label-\"]").click();
 
             if (response.body.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  const res = response.body[index];
-                  expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
-                })
+              const parts = response.body;
+              parts.forEach((part) => {
+                cy.get("ul[role=listbox]>li")
+                  .should("contain.text", `${part.document.docId} - rev ${part.displayRevision} - ${part.name}`);
+              });
+              cy.get("ul[role=listbox]>li")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

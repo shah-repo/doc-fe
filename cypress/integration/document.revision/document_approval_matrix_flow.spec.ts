@@ -227,7 +227,9 @@ context("Document Approval Matrix Flow", () => {
 
   context("Create New Document out of the Form", () => {
     it("open new document", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.EmployeesGet], () => {
+        cy.drCreateNewDocumentFromForm();
+      });
     });
   });
 
@@ -263,9 +265,10 @@ context("Document Approval Matrix Flow", () => {
 
   context("Add New Role: Role One", () => {
     it("Open 'Add Role' dialog", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGetActive, CyRoutes.GroupsGet], () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
         cy.drAddAnotherRoleBtn();
       });
+      cy.wait(500);
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -435,12 +438,6 @@ context("Document Approval Matrix Flow", () => {
         cy.drClickTrainingRequired();
       });
       cy.drIsTrainingRequired({ shouldBe: false });
-    });
-
-    it("Reload DAM document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApprovers, CyRoutes.EmployeesGet], () => {
-        cy.reload();
-      });
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
@@ -682,12 +679,6 @@ context("Document Approval Matrix Flow", () => {
   context("Save document, Check Group Role is enforced and Release Document", () => {
     it("clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-    });
-
-    it("Reload DAM document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApprovers, CyRoutes.EmployeesGet], () => {
-        cy.reload();
-      });
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {

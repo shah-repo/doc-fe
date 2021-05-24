@@ -77,6 +77,8 @@ export enum CyRoutes {
   PreventIdleLogout = "PreventIdleLogout",
   EmployeesGetActive = "EmployeesGetActive",
   ArAudit = "ArAudit",
+  UpgradeToReleasedForm = "UpgradeToReleasedForm",
+  GetAutocompleteOptions = "GetAutocompleteOptions",
 }
 
 export const routes: ICyRoutes =   {
@@ -120,6 +122,16 @@ export const routes: ICyRoutes =   {
     callConfig: {
       responseTimeout: 50 * 1000,
       requestTimeout: 40 * 1000,
+    },
+  },
+  UpgradeToReleasedForm: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/document_revisions/upgradeToReleasedForm/*",
+    },
+    callConfig: {
+      responseTimeout: 20 * 1000,
+      requestTimeout: 20 * 1000,
     },
   },
   LotQuantity: {
@@ -326,7 +338,7 @@ export const routes: ICyRoutes =   {
   GetFileUploadCandidates: {
     requestConfig: {
       method: "GET",
-      url: "api/v1/documents/file_upload_candidates*",
+      url: "api/v1/document/file_upload_candidates*",
     },
     callConfig: {
       responseTimeout: 25 * 1000,
@@ -367,7 +379,7 @@ export const routes: ICyRoutes =   {
   UploadAttachmentMediaUpload: {
     requestConfig: {
       method: "POST",
-      url: "/api/v1/documents/file_upload_candidates",
+      url: "/api/v1/document/file_upload_candidates",
     },
     callConfig: {
       responseTimeout: 15 * 1000,
@@ -605,6 +617,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/remoteValidators/helper",
+    },
+  },
+  GetAutocompleteOptions: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/autocomplete_options/*",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+      requestTimeout: 10 * 1000,
     },
   },
 };

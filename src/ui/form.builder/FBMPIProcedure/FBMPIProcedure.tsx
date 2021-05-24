@@ -7,6 +7,7 @@ import { withFBMPIProcedure } from "./FBMPIProcedure.wrap";
 
 const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
   handleAdd,
+  onKeyDown,
   mpiProcedureState,
   isPreview,
   isOutput = true,
@@ -15,6 +16,8 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
   types = [],
   name,
   redlineActive,
+  autoFocus,
+  autoScrollTo,
   ...props
 }) => (
   <FBInput {...props } {...{ name }} type="mpiprocedure">
@@ -44,10 +47,11 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
           </Box>
         )}
         <FBTextEditor
-          {...{ disabled }}
+          {...{ disabled, autoFocus, autoScrollTo, onKeyDown }}
           name={`${name}.description`}
           gutter={false}
-          autosave
+          autosave={false}
+          shouldNotAutosaveOnBlur={true}
           label={{
             locale: "form.builder.step.number",
             values: { number: stepIndex },

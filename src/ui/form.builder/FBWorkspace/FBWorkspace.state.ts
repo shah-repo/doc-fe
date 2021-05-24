@@ -1,10 +1,14 @@
-import { includes, isArray, isEmpty, size } from "lodash";
+import { includes, isArray, isEmpty, map, omit, size } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBInlineApprovalBody, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
+import { appGlobals } from "../../../appGlobals";
 import { GroupTag, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { Id } from "../../../state/ducks/common/types";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { FBEndpoint } from "../defaults/FBEndpoint";
+import FBRequest from "../FBApi/FBApi.request";
 
 class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
@@ -13,11 +17,19 @@ class FBWorkspaceState extends FBSchemaState {
   public document?: DocumentRevision;
   public changeRequest?: ChangeRequest;
   @observable public autosave?: boolean;
+  public documentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
+  public loadDocumentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
+
+  @observable public formInputSync = new Map<string, any>();
+  public formInput?: Record<string, any>;
+
+  @observable public isDirty = false;
 
   // Hack because formik context from autosave & reference comp are not the same ref
   // and we need to know the values from both FB and AvailableReferences to create
   // new merged value
   public referenceValue: Id[] = [];
+  public omitAutosave = false;
 
   public constructor({ schema, mode, autosave }: FBWorkspaceConstructor) {
     super(schema);
@@ -65,6 +77,11 @@ class FBWorkspaceState extends FBSchemaState {
   public get isOutput(): boolean {
     const { docId } = this.document?.formDocument?.document || {};
     return Boolean(docId && !isEmpty(docId));
+  }
+
+  public get isOutputSchema(): boolean {
+    const { documentType: { groupOptions = [] } = {} } = this.document?.document ?? {};
+    return groupOptions.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
   }
 
   public get isRevised(): boolean | undefined {
@@ -116,6 +133,78 @@ class FBWorkspaceState extends FBSchemaState {
 
     return inputOwner === undefined || inputOwner === employeeId;
   };
+
+  @action public setDirty = (isDirty: boolean) => {
+    set(this, "isDirty", isDirty);
+  };
+
+  public removeAutoState = () => {
+    this.schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
+  };
+
+  public saveDocRev = (values?: Record<string, any>) => {
+    const { id, mode, autosave } = this;
+    this.setDirty(true);
+    if (!autosave) { return; }
+    const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
+    if (!id) { return; }
+    let body = {};
+    switch (mode) {
+      case "design":
+        body = {
+          formTemplate: { schema },
+        };
+        break;
+      case "form":
+      case "formDesign":
+        body = {
+          formInput: values,
+          ...mode === "formDesign" && this.isOutputSchema && { schema },
+        };
+        break;
+      default:
+        return;
+    }
+    this.omitAutosave = true;
+    appGlobals.omitReloadNotification = true;
+    this.documentRevApi.set({
+      url: FBEndpoint.DocumentRevisionPatch,
+      urlValues: { id },
+      body,
+      method: "patch",
+    }, (data, error) => {
+      this.omitAutosave = false;
+      if (error) {
+        this.documentRevApi.onError(error);
+      } else {
+        this.setDirty(false);
+        this.documentRevApi.onSuccess();
+      }
+    });
+  };
+
+  public loadDocRev = (values?: Record<string, any>) => {
+    const { id } = this;
+    if (!id) { return; }
+
+    this.loadDocumentRevApi.set({
+      url: FBEndpoint.DocumentRevisionPatch,
+      urlValues: { id },
+      method: "get",
+    }, (data, error) => {
+      if (error) {
+        this.documentRevApi.onError(error);
+      } else {
+        this.documentRevApi.onSuccess();
+        const { formInput = {} } = data ?? {};
+        this.formInput = formInput;
+        map(formInput, (value, key) => {
+          set(this.formInputSync, key, value);
+        });
+      }
+    });
+  };
 }
 
 export default FBWorkspaceState;
+

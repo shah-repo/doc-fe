@@ -2,8 +2,9 @@
 /* eslint-disable no-template-curly-in-string */
 
 export enum FBEndpoint {
+  AutocompleteByOptionId = "/autocomplete_options/${optionId}",
   PrivateUpload = "/attachments/private_upload_url",
-  FileUploadCandidates = "/documents/file_upload_candidates",
+  FileUploadCandidates = "/document/file_upload_candidates",
   AssetUrl = "/attachments/assetUrl",
   AttachmentUpload = "/attachments/upload",
   AttachmentPatch = "/attachments/${id}",
@@ -16,7 +17,7 @@ export enum FBEndpoint {
   DocumentRevisionsUrl = "/document_revisions",
   FetchDocumentRevisionByAcronym =
   "/document_revisions?documentTypeAcronym=${documentTypeAcronym}&status%5B%5D=RELEASED",
-  ReceivedItemsQuantity = "/documents/lot_quantity/${documentId}",
+  ReceivedItemsQuantity = "/documents/receivable_quantity/${documentId}",
   CreateTemplateUrl = "/hello_sign/template",
   SendSignatureUrl = "/hello_sign/send_signature_request",
   CancelSignatureUrl = "/hello_sign/cancel_signature_request",
@@ -47,4 +48,7 @@ export enum FBEndpoint {
   UseOverride = "/lhr/lhrs/${id}/use_override",
   RemoveOverride = "/lhr/lhrs/${id}/remove_override/${refId}",
   Notes = "/notes",
+  DocumentRevisionPatch = "/document_revisions/${id}",
 }
+
+
