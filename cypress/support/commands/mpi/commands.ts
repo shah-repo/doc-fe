@@ -10,12 +10,12 @@ declare global {
       mpiEnterDescriptionToStep(params: {numbOfStep: integer; description: string}): Chainable;
       mpiAddStep(): Chainable;
       mpiAddMaterialToStep(params:
-      {checkParameter: boolean;
+      {checkParameter?: boolean;
         numbOfStep: integer;
         material: string;
         quntity: string;
         unit: string;}): Chainable;
-      mpiAddEquipmentToStep(params: {checkParameter: boolean; numbOfStep: integer; equipment: string}): Chainable;
+      mpiAddEquipmentToStep(params: {checkParameter?: boolean; numbOfStep: integer; equipment: string}): Chainable;
     }
   }
 }

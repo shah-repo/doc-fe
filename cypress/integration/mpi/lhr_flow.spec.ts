@@ -772,10 +772,7 @@ context("LHR flow", () => {
         });
 
         it("Add 'Material one' to step #1", () => {
-          cy.mpiAddMaterialToStep({
-            checkParameter: false, numbOfStep: 1,
-            material: "Material one", quntity: "3", unit: "Each",
-          });
+          cy.mpiAddMaterialToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
         });
 
         it("Add 'Material three' to step #1", () => {
@@ -787,7 +784,7 @@ context("LHR flow", () => {
 
 
         it("Add 'Equipment one' to step #1", () => {
-          cy.mpiAddEquipmentToStep({ checkParameter: false, numbOfStep: 1, equipment: "Equipment one" });
+          cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
         });
 
         it("Add 'Equipment three' to step #1", () => {
@@ -805,14 +802,11 @@ context("LHR flow", () => {
         });
 
         it("Add 'Material two' to step #2", () => {
-          cy.mpiAddMaterialToStep({
-            checkParameter: false, numbOfStep: 2,
-            material: "Material two", quntity: "5", unit: "Days",
-          });
+          cy.mpiAddMaterialToStep({ numbOfStep: 2, material: "Material two", quntity: "5", unit: "Days" });
         });
 
         it("Add 'Equipment two' to step #2", () => {
-          cy.mpiAddEquipmentToStep({ checkParameter: false, numbOfStep: 2, equipment: "Equipment two" });
+          cy.mpiAddEquipmentToStep({ numbOfStep: 2, equipment: "Equipment two" });
         });
       });
 
@@ -1083,8 +1077,13 @@ context("LHR flow", () => {
 
       it("Verify date of completion LHRs #1", () => {
         cy.get("[data-cy=\"form.builder.step.completed\"]")
-          .should("have.text", "Step completed | " + dateOfStep1Completion ||
-          "Step completed | " + dateOfStep1CompletionOneMinuteLater);
+          .invoke("text")
+          .then((text) => {
+            if (!(text === "Step completed | " + dateOfStep1Completion ||
+                  text === "Step completed | " + dateOfStep1CompletionOneMinuteLater)) {
+              assert.fail();
+            }
+          });
       });
 
       it("Verify Owner is required approver on LHR", () => {
@@ -1203,17 +1202,25 @@ context("LHR flow", () => {
       });
 
       it("Verify completion date of LHRs #1 in LHR", () => {
-        cy.get("[data-cy=\"form.builder.step.completed\"]")
-          .eq(0)
-          .should("have.text", "Step completed | " + dateOfStep1Completion ||
-          "Step completed | " + dateOfStep1CompletionOneMinuteLater);
+        cy.get("[data-cy=\"form.builder.step.completed\"]").eq(0)
+          .invoke("text")
+          .then((text) => {
+            if (!(text === "Step completed | " + dateOfStep2Completion ||
+                  text === "Step completed | " + dateOfStep2CompletionOneMinuteLater)) {
+              assert.fail();
+            }
+          });
       });
 
       it("Verify completion date of LHRs #2 in LHR", () => {
-        cy.get("[data-cy=\"form.builder.step.completed\"]")
-          .eq(1)
-          .should("have.text", "Step completed | " + dateOfStep2Completion ||
-          "Step completed | " + dateOfStep2CompletionOneMinuteLater);
+        cy.get("[data-cy=\"form.builder.step.completed\"]").eq(1)
+          .invoke("text")
+          .then((text) => {
+            if (!(text === "Step completed | " + dateOfStep2Completion ||
+                text === "Step completed | " + dateOfStep2CompletionOneMinuteLater)) {
+              assert.fail();
+            }
+          });
       });
 
       it("Enter 'Start quntity' for LHRs #2", () => {
