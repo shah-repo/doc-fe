@@ -149,7 +149,7 @@ definitions:
 
     - step: &RUN_CYPRESS_VIDEO
         <<: *COMMON_RUN_CYPRESS
-        max-time: 60
+        max-time: 90
         name: Cypress specs with video
         artifacts:
             - test-results/**
