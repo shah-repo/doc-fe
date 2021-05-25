@@ -26,11 +26,13 @@ let formDocumentType;
 let CSLDocumentType;
 let createdLotsFormDocument;
 let createdPartDocument;
+let createdEquipmentFormDocument;
 
 const NOT_RELEASED_TOAST_ERROR_MESSAGE = "Last docRev for Part linked to EB after copying is not in RELEASED status.";
 const currentDate = moment().tz("America/Los_Angeles").format("MMMM D, YYYY");
 const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
 const PART_DOCUMENT_TYPE_NAME = "Part";
+const EquipmentFormTitle = "Equipment form";
 
 context("Procedure and parts flow test", () => {
   before(() => {
@@ -162,6 +164,60 @@ context("Procedure and parts flow test", () => {
               sessionId: loginResponse.sessionId,
             });
           });
+        });
+      });
+    });
+
+    it("[API]Create Equipment form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Equipment Form document</p>",
+          document: {
+            docId: "FM-00009",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: EquipmentFormTitle,
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: equipmentDocumentType[0].id,
+            }],
+            schema: [{
+            }],
+          },
+
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdEquipmentFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdEquipmentFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
         });
       });
     });
@@ -476,8 +532,12 @@ context("Procedure and parts flow test", () => {
         cy.navigToDocumentList();
       });
 
-      it("Clicks on 'create a document' button", () => {
-        cy.cmpClickCreateNewDocument();
+      it(`Select document named '${EquipmentFormTitle}'`, () => {
+        cy.drClickOnSpecificDocFromList({ item: EquipmentFormTitle });
+      });
+
+      it("Create new Supplier document from Form", () => {
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Enters title 'New Equipment for procedure'", () => {
@@ -486,14 +546,6 @@ context("Procedure and parts flow test", () => {
 
       it("Enters description 'Equipment description'", () => {
         cy.drEnterDocumentDescription({ description: "Equipment description" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Selects 'Equipment' document type from dropdown", () => {
-        cy.drSelectDocumentType({ documentType: "Equipment" });
       });
     });
 
