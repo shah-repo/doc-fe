@@ -29,6 +29,6 @@ curl \
   -X POST "https://slack.com/api/files.upload" \
   -H "content: multipart/form-data" \
   -H "Authorization: Bearer $SLACK_TOKEN" \
-  -F channels=C022R2A0N5U \
+  -F channels=C022K3F7CAK \
   -F "initial_comment=Cypress test report from pipeline $BITBUCKET_BUILD_NUMBER. Number of failed test *$NUMBER_OF_FAILS/$NUMBER_OF_SUITES*" \
   -F file=@$ZIP_FILE_NAME_PATH

@@ -146,7 +146,7 @@ definitions:
 
     - step: &RUN_CYPRESS_VIDEO
         <<: *COMMON_RUN_CYPRESS
-        max-time: 90
+        max-time: 100
         name: Cypress specs with video
         artifacts:
             - test-results/**
@@ -163,7 +163,7 @@ definitions:
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
-    - step: &UPLOAD_CYPRESS_REPORT
+    - step: &SLACK_CYPRESS_REPORT
         <<: *COMMON_RUN_CYPRESS
         name: Cypress upload reports
         max-time: 15
@@ -391,7 +391,7 @@ pipelines:
           - name: CYPRESS_COMMIT_BE
           - name: CYPRESS_COMMIT_REMOTEJS
       - parallel: *RUN_CYPRESS_IN_PARALLEL
-      - step: *UPLOAD_CYPRESS_REPORT
+      - step: *SLACK_CYPRESS_REPORT
     run-cypress-parallel-video-enlil-report:
       - variables:
           - name: CYPRESS_FE_URL
@@ -402,19 +402,19 @@ pipelines:
           - name: CYPRESS_COMMIT_BE
           - name: CYPRESS_COMMIT_REMOTEJS
       - parallel: *RUN_CYPRESS_IN_PARALLEL_VIDEO
-      - step: *UPLOAD_CYPRESS_REPORT
+      - step: *SLACK_CYPRESS_REPORT
     scheduled-cypress-dev:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_DEV
-      - step: *UPLOAD_CYPRESS_REPORT
+      - step: *SLACK_CYPRESS_REPORT
     scheduled-cypress-demo:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_DEMO
-      - step: *UPLOAD_CYPRESS_REPORT
+      - step: *SLACK_CYPRESS_REPORT
     scheduled-cypress-sandbox:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_SANDBOX
-      - step: *UPLOAD_CYPRESS_REPORT
+      - step: *SLACK_CYPRESS_REPORT
     scheduled-cypress-prod:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_PROD
-      - step: *UPLOAD_CYPRESS_REPORT
+      - step: *SLACK_CYPRESS_REPORT
 
   pull-requests:
     "**":
