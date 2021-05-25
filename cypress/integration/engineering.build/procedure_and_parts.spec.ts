@@ -407,6 +407,10 @@ context("Procedure and parts flow test", () => {
   });
 
   context("Create lot document", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigate to Records", () => {
       cy.navigToRecords();
     });
@@ -449,10 +453,8 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Add an Approval'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-        cy.unClick();
-      });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.unClick();
     });
 
     it("Submit for approval", () => {
@@ -662,7 +664,11 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Enters description 'EB description'", () => {
-        cy.drEnterDocumentDescription({ description: "EB description" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.drEnterDocumentDescription({ description: "EB description" });
+          cy.drClickCreateDocumentWithoutApiCall();
+          cy.unClick();
+        });
       });
 
       it("Add approver to approvals", () => {

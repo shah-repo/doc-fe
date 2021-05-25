@@ -1,7 +1,9 @@
 import { concat, uniqBy } from "lodash";
 import { reaction } from "mobx";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { FB, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions } from "..";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 
 export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
@@ -17,6 +19,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
   }: T) => {
     // MARK: @config
     const { dialogState, workspaceState, mpiProcedureState } = FB.useStores();
+    const dispatch = useDispatch();
     formState = FB.useRef<FBFormState>(FBFormState, {});
     mpiProcedureSelectState = FB.useRef(FBMPIProcedureSelectState, initialValues?.id);
     const { id } = workspaceState || {};
@@ -52,6 +55,18 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
             return selected;
           }, [] as Partial<FBMPIProcedureSelectValue>[]);
           mpiProcedureState?.setPartsSelected(partsSelected);
+          id && dispatch(documentRevisionsActions.loadAudit(id));
+        }
+      );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    React.useEffect(() => {
+      reaction(
+        () => mpiProcedureState?.deleteLotApi.data,
+        (data?: DocumentRevision) => {
+          if (!data) { return; }
+          id && dispatch(documentRevisionsActions.loadAudit(id));
         }
       );
       // eslint-disable-next-line react-hooks/exhaustive-deps

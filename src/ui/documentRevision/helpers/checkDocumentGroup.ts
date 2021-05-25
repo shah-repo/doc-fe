@@ -45,6 +45,7 @@ export const checkIsTypeHaveOutput = checkDocumentGroupOptions.bind(this, DOC_TY
 export const checkIsTypeMustBeOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT);
 export const checkIsTypeCanBeOutput = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.CAN_BE_OUTPUT);
 export const checkIsTypeFaiInspection = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.FAI_INSPECTION);
+export const checkIsTypeOnlyOnOutputs = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.ONLY_ON_OUTPUTS_DROPDOWN);
 
 export const hasSerializedCSV = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.SERIALIZED_CSV);
 export const hasOperatorRelease = checkDocumentGroupOptions.bind(this, DOC_TYPE_GROUP_OPTION.OPERATOR_RELEASE);

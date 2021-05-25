@@ -2,6 +2,7 @@ import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { flatten, isEmpty, isEqual } from "lodash";
 import { observer } from "mobx-react";
+import { reaction } from "mobx";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
@@ -19,7 +20,7 @@ import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import FormHeader from "../../document.revision/header/FormHeader";
 import BuildsContainer from "../../document.revision/summary/builds.container";
-import { FB, FBEBPart } from "../../form.builder";
+import { FB, FBEBPart, FBSchemaProps } from "../../form.builder";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import { DocumentCloneType } from "../Clone.container";
@@ -68,6 +69,7 @@ interface Props extends FormikProps<DocumentRevisionFormValues> {
   redlineActive: boolean;
   isOutput: boolean;
   lastSavedTimestamp?: string;
+  originScheme?: FBSchemaProps[];
 }
 
 export interface FormHeaderContext {
@@ -114,6 +116,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   redlineActive,
   isOutput,
   lastSavedTimestamp,
+  originScheme,
 }) => {
   useScrollIntoView();
   const classes = styles();
@@ -194,7 +197,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   // Autosave for adding FB fields
   useEffect(() => {
     if (workspaceState?.omitAutosave) { return; }
-    if (!schema || isEqual(initialValues.schema, schema) || !canAddFBFields) {
+    if (!schema || isEqual(originScheme, schema) || !canAddFBFields) {
       return;
     }
     submitForm();
@@ -249,6 +252,15 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       return;
     }
   }, [isSubmitting]);
+
+  React.useEffect(() => reaction(
+    () => workspaceState?.isDirty,
+    (data) => {
+      dirty = data || false;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  ), []);
+
   return (
     <Grid
       item={true}

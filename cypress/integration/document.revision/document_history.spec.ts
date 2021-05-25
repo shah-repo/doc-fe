@@ -52,6 +52,12 @@ const history = [
   {
     owner,
     actions: [
+      { key: "s3Link added", value: "test.docx" },
+    ],
+  },
+  {
+    owner,
+    actions: [
       { key: "Attachments removed", value: "test_image.jpg" },
     ],
   },
@@ -356,7 +362,7 @@ context("Check Document History", () => {
             .parent()
             .within(() => {
               cy.get("[data-cy^=change-key]").should("have.text", typeOfChange);
-              cy.get("[data-cy^=change-value]").should("have.text", contentOfChange);
+              cy.get("[data-cy^=change-value]").should("contain.text", contentOfChange);
             });
         });
       });
