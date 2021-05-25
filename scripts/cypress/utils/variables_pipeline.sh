@@ -6,7 +6,7 @@ export NODE_ENV="development"
 export CYPRESS_KONFIG_ENV="development"
 export CYPRESS_BROWSER="chrome"
 export NUMBER_OF_WORKERS="3"
-export CYPRESS_INTEGRATION_FOLDER="cypress/integration"
+export CYPRESS_INTEGRATION_FOLDER="cypress/integration/user.management"
 export CYPRESS_SKIP_ON_RUN_FAILURE="true"
 export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH="false"
 export CYPRESS_SCREENSHOT_OF_RUN_FAILURE="true"
@@ -15,6 +15,7 @@ export PIPELINE_STEP_NUMBER=${BITBUCKET_PARALLEL_STEP:-1}
 export PIPELINE_TOTAL_NUMBER_OF_STEPS=${BITBUCKET_PARALLEL_STEP_COUNT:-1}
 export REPORT_TITLE="generated_specs${PIPELINE_STEP_NUMBER}"
 export CYPRESS_ARROW_DURATION=40
+export SLACK_TOKEN="xoxb-551215374854-2093093692502-mIMhX6lVdyCZFRweZ7XXVCcn"
 
 export DIR_JSON="test-results/$CI_BUILD_ID/json"
 export DIR_JUNIT="test-results/$CI_BUILD_ID/junit"

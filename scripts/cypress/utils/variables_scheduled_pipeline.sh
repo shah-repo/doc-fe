@@ -35,12 +35,13 @@ case "$ENV" in
   ;;
 esac
 
+export SLACK_TOKEN="xoxb-551215374854-2093093692502-mIMhX6lVdyCZFRweZ7XXVCcn"
 export CI_BUILD_ID="some_ci_build_id"
 export CYPRESS_KONFIG_ENV="development"
 export NODE_ENV="development"
 export CYPRESS_BROWSER="chrome"
 export NUMBER_OF_WORKERS="3"
-export CYPRESS_INTEGRATION_FOLDER="cypress/integration"
+export CYPRESS_INTEGRATION_FOLDER="cypress/integration/user.management"
 export CYPRESS_SKIP_ON_RUN_FAILURE="true"
 export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH="false"
 export CYPRESS_SCREENSHOT_OF_RUN_FAILURE="true"

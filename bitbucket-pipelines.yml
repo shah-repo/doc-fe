@@ -93,6 +93,7 @@ definitions:
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
+            - ./scripts/cypress/utils/slack_test_report_upload.sh
             - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &SCHEDULED_CYPRESS_DEV
@@ -106,6 +107,7 @@ definitions:
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
+            - ./scripts/cypress/utils/slack_test_report_upload.sh
             - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &SCHEDULED_CYPRESS_DEMO
@@ -119,6 +121,7 @@ definitions:
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
+            - ./scripts/cypress/utils/slack_test_report_upload.sh
             - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &SCHEDULED_CYPRESS_SANDBOX
@@ -132,6 +135,7 @@ definitions:
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
+            - ./scripts/cypress/utils/slack_test_report_upload.sh
             - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &SCHEDULED_CYPRESS_PROD
@@ -145,6 +149,7 @@ definitions:
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
+            - ./scripts/cypress/utils/slack_test_report_upload.sh
             - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &RUN_CYPRESS_VIDEO
@@ -178,7 +183,7 @@ definitions:
           - ./scripts/cypress/utils/generate_requirements_json_file.sh
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
-          - ./scripts/cypress/utils/upload_video_reports.sh
+          - ./scripts/cypress/utils/slack_test_report_upload.sh
           - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - parallel: &RUN_CYPRESS_IN_PARALLEL
