@@ -7,7 +7,7 @@ fi
 
 source ./scripts/cypress/utils/make_results_dir.sh
 
-if [[ -f $DIR_JSON/generated_specs.json ]]
+if [[ $(ls $DIR_JSON | wc -l) -gt 0 ]]
 then
   yarn --silent mochawesome-merge \"$DIR_JSON/generated*.json\" > "$DIR_JSON/merged.json" 
   # TODO parse merged.json, get report form 
