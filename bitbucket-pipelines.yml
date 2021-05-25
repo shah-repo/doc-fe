@@ -107,8 +107,6 @@ definitions:
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
-            - ./scripts/cypress/utils/slack_test_report_upload.sh
-            - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &SCHEDULED_CYPRESS_DEMO
           <<: *COMMON_RUN_CYPRESS
@@ -121,8 +119,6 @@ definitions:
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
-            - ./scripts/cypress/utils/slack_test_report_upload.sh
-            - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &SCHEDULED_CYPRESS_SANDBOX
           <<: *COMMON_RUN_CYPRESS
@@ -135,8 +131,6 @@ definitions:
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
-            - ./scripts/cypress/utils/slack_test_report_upload.sh
-            - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &SCHEDULED_CYPRESS_PROD
           <<: *COMMON_RUN_CYPRESS
@@ -149,8 +143,6 @@ definitions:
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
-            - ./scripts/cypress/utils/slack_test_report_upload.sh
-            - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &RUN_CYPRESS_VIDEO
         <<: *COMMON_RUN_CYPRESS
@@ -399,6 +391,7 @@ pipelines:
           - name: CYPRESS_COMMIT_BE
           - name: CYPRESS_COMMIT_REMOTEJS
       - parallel: *RUN_CYPRESS_IN_PARALLEL
+      - step: *UPLOAD_CYPRESS_REPORT
     run-cypress-parallel-video-enlil-report:
       - variables:
           - name: CYPRESS_FE_URL
@@ -412,12 +405,16 @@ pipelines:
       - step: *UPLOAD_CYPRESS_REPORT
     scheduled-cypress-dev:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_DEV
+      - step: *UPLOAD_CYPRESS_REPORT
     scheduled-cypress-demo:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_DEMO
+      - step: *UPLOAD_CYPRESS_REPORT
     scheduled-cypress-sandbox:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_SANDBOX
+      - step: *UPLOAD_CYPRESS_REPORT
     scheduled-cypress-prod:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_PROD
+      - step: *UPLOAD_CYPRESS_REPORT
 
   pull-requests:
     "**":
