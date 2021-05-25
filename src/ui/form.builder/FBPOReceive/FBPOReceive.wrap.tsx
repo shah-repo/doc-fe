@@ -47,7 +47,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
         open: true,
         maxWidth: "sm",
         title: "form.builder.po.items.received",
-        content: <FBPOReceiveForm />,
+        content: <FBPOReceiveForm {...{item}} />,
         actions: <FBPOReceiveFormActions {...{ item }} />,
       });
     };
