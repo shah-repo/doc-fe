@@ -49,6 +49,7 @@ export const getFBSchemeByDocType = (
     return unionBy(scheme, typeScheme, "name");
   }, [] as FBSchemaProps[]);
 
+  // TO DO: Need to add condition if PO to push poapprovals comp
   if (hasDirectApproval(outputTypesWithGroups)) {
     finalScheme.push({
       label: "form.builder.approvals",
