@@ -32,3 +32,6 @@ curl \
   -F channels=C022K3F7CAK \
   -F "initial_comment=Cypress test report from pipeline $BITBUCKET_BUILD_NUMBER. Number of failed test *$NUMBER_OF_FAILS/$NUMBER_OF_SUITES*" \
   -F file=@$ZIP_FILE_NAME_PATH
+
+START_TIMESTAMP=$(jq '.stats.suites' ./test_results/start_time.json)
+echo $START_TIMESTAMP

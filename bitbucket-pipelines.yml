@@ -82,8 +82,6 @@ definitions:
             - sorry-cypress-director
           caches:
             - node
-          variables:
-            - START_TIMESTAMP: '$(date "+%Y-%m-%dT%H-%M-%S%z")' # This line here.
           artifacts:
             - test-results/**
           script:
