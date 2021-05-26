@@ -9,8 +9,13 @@ declare global {
     interface Chainable<Subject> {
       mpiEnterDescriptionToStep(params: {numbOfStep: integer; description: string}): Chainable;
       mpiAddStep(): Chainable;
-      mpiAddMaterialToStep(params: {numbOfStep: integer; material: string; quntity: string; unit: string}): Chainable;
-      mpiAddEquipmentToStep(params: {numbOfStep: integer; equipment: string}): Chainable;
+      mpiAddMaterialToStep(params:
+      {checkParameter?: boolean;
+        numbOfStep: integer;
+        material: string;
+        quntity: string;
+        unit: string;}): Chainable;
+      mpiAddEquipmentToStep(params: {checkParameter?: boolean; numbOfStep: integer; equipment: string}): Chainable;
     }
   }
 }
@@ -33,6 +38,7 @@ Cypress.Commands.add("mpiAddStep", () => {
 });
 
 Cypress.Commands.add("mpiAddMaterialToStep", (params: {
+  checkParameter: boolean;
   numbOfStep: integer;
   material: string;
   quntity: string;
@@ -45,12 +51,17 @@ Cypress.Commands.add("mpiAddMaterialToStep", (params: {
   cy.get("[name=\"quantity\"]").type(params.quntity);
   cy.get("[data-cy=\"unit\"]").click();
   cy.get("ul[role=listbox]>li").contains(params.unit).click();
+  params.checkParameter ? cy.get("[name=\"LHRTparameter\"]").check() : "";
   cy.get("[data-cy=\"form.builder.save\"]").click();
 });
 
-Cypress.Commands.add("mpiAddEquipmentToStep", (params: {numbOfStep: integer; equipment: string}) => {
+Cypress.Commands.add("mpiAddEquipmentToStep", (params: {
+  checkParameter: boolean;
+  numbOfStep: integer;
+  equipment: string;}) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(params.numbOfStep - 1).click();
   cy.get("[data-cy=\"title\"]").click();
   cy.get("ul[role=listbox]>li").contains(params.equipment).click();
+  params.checkParameter ? cy.get("[name=\"LHRTparameter\"]").check() : "";
   cy.get("[data-cy=\"form.builder.save\"]").click();
 });
