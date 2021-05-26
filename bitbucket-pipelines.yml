@@ -82,6 +82,8 @@ definitions:
             - sorry-cypress-director
           caches:
             - node
+          variables:
+            - START_TIMESTAMP: '$(date "+%Y-%m-%dT%H-%M-%S%z")' # This line here.
           artifacts:
             - test-results/**
           script:
@@ -118,6 +120,8 @@ definitions:
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
+            - export $START_TIMESTAMP
+            - echo $START_TIMESTAMP
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
     - step: &SCHEDULED_CYPRESS_SANDBOX
@@ -175,6 +179,8 @@ definitions:
           - ./scripts/cypress/utils/generate_requirements_json_file.sh
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
+          - export $START_TIMESTAMP
+          - echo $START_TIMESTAMP
           - ./scripts/cypress/utils/slack_test_report_upload.sh
           - ./scripts/cypress/utils/exit_1_if_failures.sh
 
