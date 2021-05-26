@@ -200,17 +200,19 @@ context("Autocomplete 'Document revisions (all versions)' test", () => {
               .find("[data-cy^=\"test-label-\"]").click();
 
             if (response.body.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  const res = response.body[index];
-                  expect($li).to.have.text(`${res.document.docId} - rev ${res.displayRevision} - ${res.name}`);
-                })
+              const allDocRevs = response.body;
+              allDocRevs.forEach((docRev) => {
+                cy.get("ul[role=listbox]>li")
+                  .should("contain.text", `${docRev.document.docId} - rev ${docRev.displayRevision} - ${docRev.name}`);
+              });
+              cy.get("ul[role=listbox]>li")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });
             } else {
               cy.get(".MuiAutocomplete-popper").should("have.text", "No options");
             }
+
           });
         });
 

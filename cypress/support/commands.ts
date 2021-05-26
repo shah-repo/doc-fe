@@ -1,4 +1,5 @@
-import "cypress-downloadfile/lib/downloadFileCommand";
+/* eslint-disable @typescript-eslint/camelcase */
+// import "../../node_modules/cypress-movie/src/arrow
 import { CONFIG } from "./config";
 import { CyRoutes, CyWaitOptions, routes } from "./routes";
 
@@ -32,6 +33,7 @@ declare global {
         callback: () => void,
         options?: Partial<CyWaitOptions>
       ): Chainable<Subject>;
+      arrow(options: any): Chainable<Subject>;
     }
   }
 }
@@ -170,28 +172,29 @@ Cypress.Commands.add(
     cy.wrapWithWaitOnApiCalls([name], callback, options);
   });
 
-Cypress.Commands.overwrite("click", (originalFn, subject, options) => {
+Cypress.Commands.overwrite("click", (originalFn, element, options) => {
+  const state = cy.state("current").attributes.name;
 
-  const currentCommand = cy.state("current").attributes.name;
-
-  if (currentCommand === "click") {
-    cy.wrap(subject).arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
-      .then(() => originalFn(subject, options));
-  } else {
-    return originalFn(subject, options);
+  if (state === "click") {
+    cy.wrap(element)
+      .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
+      .then(() => originalFn(element, options));
+  }
+  else {
+    return originalFn(element, options);
   }
 });
 
-Cypress.Commands.overwrite("type", (originalFn, subject, options) => {
+Cypress.Commands.overwrite("type", (originalFn, element,  text, options) => {
+  const state = cy.state("current").attributes.name;
 
-  const currentCommand = cy.state("current").attributes.name;
-  const args = cy.state("current").attributes.args;
-
-  if (currentCommand === "type" && args.length == 1) {
-    cy.wrap(subject).arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
-      .then(() => originalFn(subject, options));
-  } else {
-    return originalFn(subject, options, args[1]);
+  if (state === "type") {
+    cy.wrap(element)
+      .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
+      .then(() => originalFn(element, text, options));
+  }
+  else {
+    return originalFn(element, text, options);
   }
 });
 

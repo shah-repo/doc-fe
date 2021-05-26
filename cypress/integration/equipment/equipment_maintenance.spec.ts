@@ -374,6 +374,10 @@ context("Equipment maintenance test", () => {
   });
 
   context("Create equipment maintenace document", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigate to equipment list", () => {
       cy.navigToEquipment();
     });
@@ -391,9 +395,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("input[name=fb-default-eq-status][value=Active]").check();
-      });
+      cy.get("input[name=fb-default-eq-status][value=Active]").check();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -468,7 +470,11 @@ context("Equipment maintenance test", () => {
       });
 
       it("Add first approver to approval request on approver list", () => {
-        cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email });
+        cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email, noWait: true });
+      });
+
+      it("Save AR", () => {
+        cy.arSaveApiCall();
       });
 
       it("Click 'Send To Review'", () => {
@@ -571,6 +577,7 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetAvailableApprovers], () => {
         cy.ebApprove();
       });
+      cy.wait(8000);
     });
 
     it("Verify status is 'Released'", () => {
@@ -586,16 +593,6 @@ context("Equipment maintenance test", () => {
     it("Select 'Equipment maintenance document'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
-      });
-    });
-
-    it("Reload 'Equipment maintenance document'", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocPreview,
-        CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet,
-        CyRoutes.SessionDetails], () => {
-        cy.reload();
       });
     });
 
@@ -679,6 +676,7 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetAvailableApprovers], () => {
         cy.ebApprove();
       });
+      cy.wait(8000);
     });
 
     it("Verify status is 'Released'", () => {
@@ -707,17 +705,6 @@ context("Equipment maintenance test", () => {
     it("Select 'Equipment calibration document'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.DocRevPreview], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
-      });
-    });
-
-    it("Reload 'Equipment calibration document'", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocPreview,
-        CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet,
-        CyRoutes.SessionDetails], () => {
-        cy.reload();
-        cy.wait(5000);
       });
     });
 

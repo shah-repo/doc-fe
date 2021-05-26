@@ -13,13 +13,14 @@ const FBPOReceive: React.FunctionComponent<FBPOReceiveProps> = ({
   schema,
   gutter,
   name,
+  disabled,
   ...props
 }) => (
   <FBProvider {...{ poReceiveState, dialogState }} >
     <FBDialog />
     <FBInput {...{ name }} {...props} type="poreceive">
       <FBAutocompleteAsync
-        {...{ onChange, defaultValue, gutter }}
+        {...{ onChange, defaultValue, gutter, disabled }}
         name={`porec-${name}`}
         optionId={FBAutocompleteAsyncOption.POList}
         omitFormValue

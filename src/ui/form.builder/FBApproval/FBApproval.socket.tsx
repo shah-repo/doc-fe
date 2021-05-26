@@ -1,5 +1,5 @@
-import { get, last } from "lodash";
-import { useObserver } from "mobx-react";
+import { get, maxBy } from "lodash";
+import { reaction } from "mobx";
 import React from "react";
 import { FB, FBApprovalSocketProps, FBApprovalState, FBFieldName } from "..";
 import { IotService } from "../../../common/utils/iot/mqttClient";
@@ -14,13 +14,21 @@ const FBApprovalSocket: React.FunctionComponent<FBApprovalSocketProps> = ({
   const approvalState: FBApprovalState = get(FB.useStores(), `${FBFieldName.ApprovalState}-${name}`);
   const iotService = IotService.getInstance();
 
-  useObserver(() => {
-    if (!documentId) { return; }
-    const { documentRevisions } = approvalState?.getDocumentApi.data || {};
-    const documentRevision = last(documentRevisions);
-    if (!documentRevision) { return; }
-    window.location.href = documentVersionPath(documentRevision.id, documentId);
-  });
+  React.useEffect(() => reaction(
+    () => approvalState?.getDocumentApi.data,
+    (data) => {
+      if (!documentId) { return; }
+      const { documentRevisions } = data || {};
+      const documentRevision = maxBy(documentRevisions, "version");
+      if (!documentRevision) { return; }
+      const { version: lastVersion = 0 } = documentRevision;
+      const { version = 0 } = workspaceState?.document || {};
+      if (lastVersion > version) {
+        window.location.href = documentVersionPath(documentRevision.id, documentId);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  ), []);
 
   const subscribe = () => {
     iotService.subscribeToTopic(

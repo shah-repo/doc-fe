@@ -9,6 +9,7 @@ import DocumentRevisionApproval from "./action.types/DocumentRevisionApproval";
 import PurchaseOrderApproval from "./action.types/purchaseOrder/PurchaseOrderApproval";
 import TaskApproval from "./action.types/TaskApproval";
 import TrainingRequest from "./action.types/TrainingRequest";
+import CloseApprovalRequest from "./action.types/CloseApprovalRequest";
 import { styles } from "./Dashboard.styles";
 
 interface Props {
@@ -47,6 +48,9 @@ const DashboardPresenter: React.FunctionComponent<Props> = ({
             case PendingActionType.PENDING_TASK:
               return pendingAction.changeReq &&
                 <TaskApproval key={index} index={index} changeRequest={pendingAction.changeReq} />;
+            case PendingActionType.APPROVED_APPROVAL_REQUESTS:
+              return pendingAction.changeReq &&
+                <CloseApprovalRequest key={index} index={index} changeRequest={pendingAction.changeReq} />;
             default:
               return <Text key={index} translation="common.undefined" />;
           }

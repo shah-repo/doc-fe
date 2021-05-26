@@ -184,7 +184,9 @@ context("Document Field Owners Test", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
@@ -372,12 +374,14 @@ context("Document Field Owners Test", () => {
     it("Add first colaborator as Approver on document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
     it("Add second colaborator as Approver on document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[4].name });
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -391,6 +395,7 @@ context("Document Field Owners Test", () => {
     it("Add third colaborator as Approver on document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[7].name });
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 

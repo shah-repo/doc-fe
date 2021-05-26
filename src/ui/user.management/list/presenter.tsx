@@ -8,6 +8,7 @@ import { companyActions, companySelectors } from "../../../state/ducks/company";
 import { EMPLOYEES_URL } from "../../../state/ducks/userManagement/constants";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { SelectOption } from "../../components/forms/fields/Select";
+import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
@@ -18,6 +19,7 @@ import useAsync from "../../hooks/useAsync";
 import AddEmployeeContainer from "../add.employee/container";
 import AddSlackButtonContainer from "../AddSlackButton/AddSlackButton.container";
 import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
+import { DropboxResponse } from "../profile/dialog/DialogContent";
 import UserProfileAdminContainer from "../profile/UserProfileAdmin.container";
 import { DEFAULT_SELECTED_EMPLOYEE } from "../utils/types";
 import { styles } from "./styles";
@@ -45,7 +47,14 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   const [selectedEmployee, setEmployee] = useState<GetEmployeeResponse>(DEFAULT_SELECTED_EMPLOYEE);
 
   const hasDropboxPermission = useSelector(getHasPermission(Permission.COMPANY_DROPBOX_INTEGRATION));
-  const dropboxAsync = useAsync();
+  const dropboxAsync = useAsync<DropboxResponse>({
+    onSuccess: (data?: DropboxResponse) => {
+      window.open(data?.data.url);
+    },
+    onError: (error) => {
+      toastError(error as string);
+    },
+  });
   const enableDropboxAction = useActionCreator(companyActions.enableDropbox);
   const isCompanyDropboxEnabled = useSelector(companySelectors.isDropboxEnabled);
 
