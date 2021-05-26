@@ -86,7 +86,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
   const isMPIOutput = checkIsDocumentMPIOutput(values.document?.documentType?.groupOptions);
   const isLHR = checkIsDocumentLHR(values.document?.documentType?.groupOptions);
-  const isExportable = !documentRevision.renderHTML &&
+  const isExportable = !documentRevision?.renderHTML &&
     checkIsDocumentExportable(documentRevision?.document?.documentType?.groupOptions);
   const serializedCSV = hasSerializedCSV(values.document?.documentType?.groupOptions);
   const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
