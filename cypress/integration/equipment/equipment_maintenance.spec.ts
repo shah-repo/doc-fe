@@ -705,6 +705,7 @@ context("Equipment maintenance test", () => {
     it("Select 'Equipment calibration document'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.DocRevPreview], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
+        cy.wait(2000);
       });
     });
 

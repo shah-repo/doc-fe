@@ -551,7 +551,7 @@ context("Procedure and parts flow test", () => {
 
     context("Create document and release it", () => {
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
       });
 
       context("Create Approval Request for equipment document", () => {
@@ -997,7 +997,10 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Approve and release the part", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet], () =>
+          {
+            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          });
         });
       });
 
