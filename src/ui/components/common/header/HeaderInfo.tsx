@@ -71,7 +71,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
 
   return (
     <Grid container xs={6} className={classes.itemWrap} >
-      <Grid item xs={2} className={classes.statusWrap}>
+      <Grid item className={classes.statusWrap}>
         {
           isStatusVisible &&
           <CustomLabelTooltip {...{ tooltipConfig }}>
@@ -85,7 +85,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
           </CustomLabelTooltip>
         }
       </Grid>
-      <Grid item xs={10}>
+      <Grid item>
         <Grid item xs={12}>
           {titleRenderer()}
           {
