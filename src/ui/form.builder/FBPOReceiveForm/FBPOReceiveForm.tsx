@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import React from "react";
 import { FBForm, FBPOReceiveFormProps, FBTextField } from "..";
 import { FormContext } from "../../components/forms/FormContext";
@@ -6,15 +6,21 @@ import { FormContext } from "../../components/forms/FormContext";
 
 const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
   children,
-  item
+  item,
 }) => (
   <FBForm>
     <FormContext.Provider value={{ submitOnChange: false }}>
       <FBTextField
         label="form.builder.field.part.number.or.service"
-        defaultValue={item?.partNumberDocId}
+        defaultValue={item?.partNumberDocId || item?.serviceId}
         disabled={true}
-        hidden={!item?.partNumberDocId}
+        hidden={!(item?.partNumberDocId || item?.serviceId)}
+      />
+      <FBTextField
+        label="form.builder.field.supplier.part.number"
+        defaultValue={item?.supplierPartNumber}
+        disabled={true}
+        hidden={!item?.supplierPartNumber}
       />
       <FBTextField
         label="form.builder.description"
@@ -26,27 +32,23 @@ const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
         defaultValue={item?.order}
         disabled={true}
       />
-      <Grid 
-        container={true}
-        spacing={3}
-        justify="space-between"
-      >
-        <Grid item={true} xs={6}>
+      <Box display="flex" justifyContent="space-between">
+        <Box width="100%" marginRight="10px">
           <FBTextField
             inputProps={{ type: "number", min: "0" }}
             label="form.builder.quantity.received"
             name="received"
             rules="required|min:1"
           />
-        </Grid>
-        <Grid item={true} xs={6}>
+        </Box>
+        <Box width="100%" marginLeft="10px">
           <FBTextField
             label="form.builder.field.units"
             defaultValue={item?.units}
             disabled={true}
           />
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
       <FBTextField
         rows="5"
         label="form.builder.comments.optional"
