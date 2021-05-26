@@ -17,7 +17,7 @@ const POActions: React.FunctionComponent<Props> = ({
     <Box display="flex">
       <GenerateHtmlPreview
         id={documentRevision.id}
-        renderHTML={documentRevision.formDocument?.renderHTML}
+        renderHTMLDefined={documentRevision.formDocument?.renderHTMLDefined}
         showDownloadButton={true}
       />
       {
