@@ -30,6 +30,7 @@ export interface FBPurchaseOrderItem {
   isTraceabilityRequired: boolean;
   capitalEquipment: boolean;
   tax: boolean;
+  serviceId?: string;
   received?: number;
   receivedList?: any[];
   type: FBPurchaseOrderItemType;

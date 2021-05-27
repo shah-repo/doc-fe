@@ -632,6 +632,7 @@
   "form.builder.field.units": "Units",
   "form.builder.field.date.required": "Date Required",
   "form.builder.field.part.number": "Part Number",
+  "form.builder.field.part.number.or.service": "Part Number/Service",
   "form.builder.part.number": "Part Number",
   "form.builder.fileUploadCandidate": "Attachments",
   "form.builder.partLot": "Part Lot",
