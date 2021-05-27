@@ -8,6 +8,6 @@ mkdir -p $DIR_VIDEOS_REPORT
 
 cat <<EOF > $DIR_REPORTS/start_time.json
 {
-  "startTime": "$(date "+%Y-%m-%dT%H-%M-%S%z")"
+  "startTime": "$(date "+%Y-%m-%dT%H:%M:%S%z")"
 }
 EOF

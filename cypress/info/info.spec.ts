@@ -6,10 +6,6 @@ import { CONFIG } from "../support/config";
 import { addTestContext } from "../utils/context/addTestContext";
 import { Screenshot } from "../utils/context/screenshot";
 
-let FE_COMMIT;
-let BE_COMMIT;
-let REMOTE_JS_COMMIT;
-
 context("Server", () => {
   it("Info", () => {
     cy.authLogin({
@@ -24,24 +20,57 @@ context("Server", () => {
     cy.get("[data-cy=\"status-remote-js-validators-branch\"]").should("exist");
     cy.get("[data-cy=\"status-frontend-commit-hash\"]>td").eq(1)
       .invoke("text")
-      .then((text) => {
-        FE_COMMIT = text;
-        cy.log(text);
-        addTestContext("feCommit", FE_COMMIT);
+      .then((feCommit) => {
+        cy.log(feCommit);
+        addTestContext("feCommit", feCommit);
       });
     cy.get("[data-cy=\"status-backend-commit-hash\"]>td").eq(1)
       .invoke("text")
-      .then((text) => {
-        BE_COMMIT = text;
-        cy.log(text);
-        addTestContext("backendCommit", BE_COMMIT);
+      .then((backendCommit) => {
+        cy.log(backendCommit);
+        addTestContext("backendCommit", backendCommit);
       });
     cy.get("[data-cy=\"status-remote-js-validators-commit-hash\"]>td").eq(1)
       .invoke("text")
-      .then((text) => {
-        REMOTE_JS_COMMIT = text;
-        cy.log(text);
-        addTestContext("remoteJSCommit", REMOTE_JS_COMMIT);
+      .then((remoteJSCommit) => {
+        cy.log(remoteJSCommit);
+        addTestContext("remoteJSCommit", remoteJSCommit);
+      });
+    cy.get("[data-cy=\"status-frontend-branch\"]>td").eq(1)
+      .invoke("text")
+      .then((feBranch) => {
+        cy.log(feBranch);
+        addTestContext("feBranch", feBranch);
+      });
+    cy.get("[data-cy=\"status-backend-branch\"]>td").eq(1)
+      .invoke("text")
+      .then((backendBranch) => {
+        cy.log(backendBranch);
+        addTestContext("backendBranch", backendBranch);
+      });
+    cy.get("[data-cy=\"status-remote-js-validators-branch\"]>td").eq(1)
+      .invoke("text")
+      .then((remoteJSBranch) => {
+        cy.log(remoteJSBranch);
+        addTestContext("remoteJSBranch", remoteJSBranch);
+      });
+    cy.get("[data-cy=\"status-frontend-date\"]>td").eq(1)
+      .invoke("text")
+      .then((feDate) => {
+        cy.log(feDate);
+        addTestContext("feDate", feDate);
+      });
+    cy.get("[data-cy=\"status-backend-date\"]>td").eq(1)
+      .invoke("text")
+      .then((backendDate) => {
+        cy.log(backendDate);
+        addTestContext("backendDate", backendDate);
+      });
+    cy.get("[data-cy=\"status-remote-js-validators-date\"]>td").eq(1)
+      .invoke("text")
+      .then((remoteJSDate) => {
+        cy.log(remoteJSDate);
+        addTestContext("remoteJSDate", remoteJSDate);
       });
     Screenshot();
   });

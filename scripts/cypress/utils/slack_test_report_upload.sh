@@ -27,22 +27,48 @@ NUMBER_OF_SUITES=$(jq '.stats.suites' ./$DIR_REPORTS/result.json)
 CONTEXT=$(jq '.results[0].suites[0].tests[0].context' ./$DIR_JSON/generated_specs0.json)
 declare -a ARRAY_OF_CONTEXT_ITEMS
 i=0
-for commit in $CONTEXT
+for value in $CONTEXT
 do
   if [[ $i == 11 ]]; then
-    FE_COMMIT=$commit
+    FE_COMMIT=$value
   fi
   if [[ $i == 17 ]]; then
-    BE_COMMIT=$commit
+    BE_COMMIT=$value
   fi
   if [[ $i == 23 ]]; then
-    REMOTE_JS_COMMIT=$commit
+    REMOTE_JS_COMMIT=$value
+  fi
+  if [[ $i == 29 ]]; then
+    FE_BRANCH=$value
+  fi
+  if [[ $i == 35 ]]; then
+    BE_BRANCH=$value
+  fi
+  if [[ $i == 41 ]]; then
+    REMOTE_JS_BRANCH=$value
+  fi
+  if [[ $i == 47 || $i == 48 || $i == 49 || $i == 50 ]]; then
+    FE_DATE+=$value
+  fi
+  if [[ $i == 56 || $i == 57 || $i == 58 || $i == 59 ]]; then
+    BE_DATE+=$value
+  fi
+  if [[ $i == 65 || $i == 66 || $i == 67 || $i == 68 ]]; then
+    REMOTE_JS_DATE+=$value
   fi
   ((i+=1))
 done
 FE_COMMIT=$(echo $FE_COMMIT | cut -c3-42)
+FE_BRANCH=$(echo $FE_BRANCH | cut -d'"' -f 2 )
+FE_DATE=$(echo $FE_DATE | cut -c3-28)
+
 BE_COMMIT=$(echo $BE_COMMIT | cut -c3-42)
+BE_BRANCH=$(echo $BE_BRANCH | cut -d'"' -f 2 )
+BE_DATE=$(echo $BE_DATE | cut -c3-28)
+
 REMOTE_JS_COMMIT=$(echo $REMOTE_JS_COMMIT | cut -c3-42)
+REMOTE_JS_BRANCH=$(echo $REMOTE_JS_BRANCH | cut -d'"' -f 2 )
+REMOTE_JS_DATE=$(echo $REMOTE_JS_DATE | cut -c3-28)
 
 #ZIP TEST REPORT
 DATE=$(date "+%Y-%m-%dT%H-%M-%S%z")
@@ -76,7 +102,7 @@ curl \
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "'"Cypress test report from pipeline *<$BITBUCKET_PIPELINE_LINK|$BITBUCKET_BUILD_NUMBER>*"'"
+				"text": "'"*CYPRESS TEST REPORT FROM PIPELINE*"'"
 			}
 		},
 		{
@@ -86,7 +112,17 @@ curl \
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "'"*ENVIRONMENT*\n• *FE_COMMIT:* $FE_COMMIT\n• *BE_COMMIT:* $BE_COMMIT\n• *REMOTE_JS_COMMIT:* $REMOTE_JS_COMMIT"'"
+				"text": "'"
+        *ENVIRONMENT*\n
+          • *FE_BRANCH:* ${FE_BRANCH%?}\n
+          • *FE_COMMIT:* $FE_COMMIT\n
+          • *FE_DATE:* $FE_DATE\n\n
+          • *BE_BRANCH:* ${BE_BRANCH%?}\n
+          • *BE_COMMIT:* $BE_COMMIT\n
+          • *BE_DATE:* $BE_DATE\n\n
+          • *REMOTE_JS_BRANCH:* ${REMOTE_JS_BRANCH%?}\n
+          • *REMOTE_JS_COMMIT:* $REMOTE_JS_COMMIT\n
+          • *REMOTE_JS_DATE:* $REMOTE_JS_DATE\n"'"
 			}
 		},
     {
@@ -96,8 +132,24 @@ curl \
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "'"*PIPELINE*\n• *START_TIMESTAMP:* $START_TIMESTAMP\n• *END_TIMESTAMP:* $(date "+%Y-%m-%dT%H-%M-%S%z")"'"
-			}
+				"text": "'"
+        *<$BITBUCKET_PIPELINE_LINK|PIPELINE>*\n
+          • *BUILD_NUMBER:* $BITBUCKET_BUILD_NUMBER\n
+          • *START_TIMESTAMP:* $START_TIMESTAMP\n
+          • *END_TIMESTAMP:* $END_TIMESTAMP"'"
+      }
+		},
+    {
+			"type": "divider",
+		},
+    {
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "'"
+        *TEST INFO*\n
+          • *TEST_STATUS:* $NUMBER_OF_FAILS/$NUMBER_OF_SUITES\n"'"
+      }
 		},
 	]
   }'
