@@ -374,6 +374,10 @@ context("Test Equipment maintenance email notifications", () => {
 
   context("Test notification with no Primary owner and coordinator", () => {
     context("Create equipment maintenace document", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Navigate to equipment list", () => {
         cy.navigToEquipment();
       });
@@ -414,6 +418,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Save document", () => {
+        cy.unClick();
         cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
@@ -590,6 +595,10 @@ context("Test Equipment maintenance email notifications", () => {
 
   context("Test notification with maintenance due date in 4 days", () => {
     context("Create equipment maintenace document", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Navigate to equipment list", () => {
         cy.navigToEquipment();
       });
@@ -808,6 +817,10 @@ context("Test Equipment maintenance email notifications", () => {
 
   context("Test notification with maintenance due date in 17 days", () => {
     context("Create equipment maintenace document", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Navigate to equipment list", () => {
         cy.navigToEquipment();
       });
@@ -1027,6 +1040,10 @@ context("Test Equipment maintenance email notifications", () => {
 
   context("Test notification with maintenance done due date", () => {
     context("Create equipment maintenace document", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Navigate to equipment list", () => {
         cy.navigToEquipment();
       });

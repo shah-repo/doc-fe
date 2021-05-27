@@ -45,7 +45,7 @@ AttachmentIconProps
   const intl = useIntl();
   const fileSize = useMemo(() => {
     const size = file.fileSizeS3Link;
-    const i = Math.floor( Math.log(size) / Math.log(1024) );
+    const i = size !== 0 ? Math.floor( Math.log(size) / Math.log(1024)) : 0.00;
     return `${(size / Math.pow(1024, i)).toFixed(2)} ${["B", "kB", "MB", "GB", "TB"][i]}`;
   }, [file.fileSizeS3Link]);
   const fileTypeDescription = useMemo(() => {

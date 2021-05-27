@@ -1,3 +1,5 @@
+import { ContentState } from "draft-js";
+import htmlToDraft from "html-to-draftjs";
 import { get, isArray, isEmpty, isObject, isString, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
@@ -152,8 +154,16 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
           return `${get(option, labelPrefixRoot)} - rev ${revision}`;
         }
       }
-      return `${optionLabel}${get(option, optionLabelKey, "")}`;
+      const description = htmlToPlainText(get(option, optionLabelKey, ""));
+      return `${optionLabel}${description}`;
     });
+
+    function htmlToPlainText(value?: string): string {
+      if (!value) { return ""; }
+      const contentBlock = htmlToDraft(value);
+      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+      return contentState.getPlainText();
+    }
 
     return Component({
       ...(props as T),

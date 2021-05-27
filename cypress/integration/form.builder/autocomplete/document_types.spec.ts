@@ -1,17 +1,13 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import moment from "moment";
-import "moment-timezone";
 import { CONFIG } from "../../../support/config";
-import { CyRoutes } from "../../../support/routes";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
-const documentTypeTitle = `DocumentType${moment().tz("America/Los_Angeles").format("X")}`;
 let developersGroup;
 let adminSessionId;
 let adminEmployee;
@@ -110,42 +106,6 @@ context("Autocomplete 'Document types' test", () => {
   });
 
   context("Autocomplete 'Document types' test", () => {
-    context("Create 'Document types'", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocTypeManagement();
-      });
-
-      it("Click 'Add Document Type'", () => {
-        cy.contains("Add Document Type").click();
-      });
-
-      it("Enter document type name " + documentTypeTitle, () => {
-        cy.fbEnterNameData({ name: "documentTypeName", data: documentTypeTitle });
-      });
-
-      it("Enter document type acronym 'TEST'", () => {
-        cy.fbEnterNameData({ name: "documentTypeAcronym", data: "TEST" });
-      });
-
-      it("Enter document type Starting Number '1'", () => {
-        cy.fbEnterNameData({ name: "startingNumber", data: "1" });
-      });
-
-      it("Select 'Numeric' Default Revision stage", () => {
-        cy.dtSelectDefaultRevisionStage({ defaultRevisionStage: "Numeric" });
-      });
-
-      it("Enter document type Group 'Form'", () => {
-        cy.get("[data-cy=\"field-group\"]").type("FORM{downarrow}{enter}");
-      });
-
-      it("Click Save button", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
-          cy.get("button[type=\"submit\"]").click();
-        });
-      });
-    });
-
     context("Add Autocomplete 'Document types'", () => {
       context("Create FORM document", () => {
         it("Navigate to document list", () => {
@@ -217,10 +177,11 @@ context("Autocomplete 'Document types' test", () => {
               .find("[data-cy^=\"test-label-\"]").click();
 
             if (response.body.length > 0 ) {
-              cy.get(".MuiAutocomplete-popper ul li")
-                .each(($li, index, $lis) => {
-                  expect($li).to.have.text(response.body[index].documentTypeName);
-                })
+              const docTypes = response.body;
+              docTypes.forEach((docType) => {
+                cy.get("ul[role=listbox]>li").should("contain.text", docType.documentTypeName);
+              });
+              cy.get("ul[role=listbox]>li")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });
@@ -230,12 +191,8 @@ context("Autocomplete 'Document types' test", () => {
           });
         });
 
-        it("Verify created 'Document types' in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").should("contain", documentTypeTitle);
-        });
-
         it("Verify count in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 26);
+          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 25);
         });
       });
     });

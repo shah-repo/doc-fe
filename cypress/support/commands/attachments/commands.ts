@@ -117,12 +117,15 @@ Cypress.Commands.add("atchUploadAttachment", (params: {fileName: string }) => {
 });
 
 Cypress.Commands.add("atchUploadAttachmentFail", (params: {fileName: string }) => {
-  cy.server({ force404: true });
-  cy.route({
-    method: "POST",
-    url: "**/attachments/upload",
-    response: "fixture:test_upload_response.json",
-    status: 400,
+  cy.intercept({ method: "POST", url: "**/attachments/upload" }, (req) => {
+    req.reply((res) => {
+      res.send(400, {
+        message: [
+          "Upload failed",
+        ],
+        error: "Unauthorized",
+      });
+    });
   }).as("upload");
   cy.fixture(params.fileName).then((fileContent) => {
     cy.get("#AttachmentFieldPresenter-linkButton").click();

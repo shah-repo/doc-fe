@@ -221,6 +221,7 @@ DocumentRevisionFormContainerProps
           redlineActive,
           isOutput,
           lastSavedTimestamp,
+          originScheme,
         }}
       />
     </FBWorkspace>

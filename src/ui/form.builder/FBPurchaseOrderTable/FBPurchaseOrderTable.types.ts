@@ -33,6 +33,7 @@ export type FBPurchaseOrderTableTotalProps =
 export enum FBPurchaseOrderDetailsProduct {
   index = "form.builder.item",
   partNumberDocId = "form.builder.field.part.number",
+  supplierPartNumber = "form.builder.field.supplier.part.number",
   description = "form.builder.field.description",
   order = "form.builder.field.ordered",
   received = "form.builder.field.received",
@@ -44,6 +45,7 @@ export enum FBPurchaseOrderDetailsProduct {
 export enum FBPurchaseOrderDetailsService {
   index = "form.builder.item",
   serviceId = "form.builder.field.service.id",
+  supplierPartNumber = "form.builder.field.supplier.part.number",
   description = "form.builder.field.description",
   order = "form.builder.field.ordered",
   received = "form.builder.field.received",
