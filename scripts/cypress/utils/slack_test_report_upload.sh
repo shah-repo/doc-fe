@@ -24,7 +24,7 @@ NUMBER_OF_FAILS=$(jq '.stats.failures' ./$DIR_REPORTS/result.json)
 NUMBER_OF_SUITES=$(jq '.stats.suites' ./$DIR_REPORTS/result.json)
 
 #COMMIT HASHES FROM TEST
-CONTEXT=$(jq '.results[0].suites[0].tests[0].context' ./$DIR_JSON/generated_specs0.json)
+CONTEXT=$(jq '.results[0].suites[0].tests[0].context' ./$DIR_JSON/generated_info.json)
 declare -a ARRAY_OF_CONTEXT_ITEMS
 i=0
 for value in $CONTEXT
