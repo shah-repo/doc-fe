@@ -12,6 +12,7 @@ let loginResponse;
 let multipleCompanies;
 let secondEmployee;
 const equipmentTitle = `Equipment ${moment().format("X")}`;
+const equipmentTitleForm = `Equipment Form ${moment().format("X")}`;
 
 context("Autocomplete 'Equipment' test", () => {
   context("[API]Prepare company", () => {
@@ -71,13 +72,47 @@ context("Autocomplete 'Equipment' test", () => {
   });
 
   context("Autocomplete 'Equipment' test", () => {
-    context("Create 'Equipment'", () => {
+    context("Create 'Equipment Form'", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
       });
 
       it("Click create document", () => {
         cy.cmpClickCreateNewDocument();
+      });
+
+      it("Enter document title " + equipmentTitleForm, () => {
+        cy.drEnterDocumentTitle({ name: equipmentTitleForm });
+      });
+
+      it("Enter document description 'Equipment document description'", () => {
+        cy.drEnterDocumentDescription({ description: "Equipment Form document description" });
+      });
+
+      it("Select 'Form' document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Equipment' document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Equipment" });
+      });
+
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Approve and release document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+
+    context("Create 'Equipment'", () => {
+      it("Click create new document from form", () => {
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Enter document title " + equipmentTitle, () => {
@@ -88,16 +123,8 @@ context("Autocomplete 'Equipment' test", () => {
         cy.drEnterDocumentDescription({ description: "Equipment document description" });
       });
 
-      it("Select 'Equipment' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Equipment" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
 
