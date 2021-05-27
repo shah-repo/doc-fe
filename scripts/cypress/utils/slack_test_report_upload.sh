@@ -136,7 +136,7 @@ curl \
         *<$BITBUCKET_PIPELINE_LINK|PIPELINE>*\n
           • *BUILD_NUMBER:* $BITBUCKET_BUILD_NUMBER\n
           • *START_TIMESTAMP:* $START_TIMESTAMP\n
-          • *END_TIMESTAMP:* $END_TIMESTAMP"'"
+          • *END_TIMESTAMP:* $(date "+%Y-%m-%dT%H:%M:%S%z")"'"
       }
 		},
     {

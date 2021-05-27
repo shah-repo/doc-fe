@@ -93,8 +93,6 @@ definitions:
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
-            - ./scripts/cypress/utils/slack_test_report_upload.sh
-            - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &SCHEDULED_CYPRESS_DEV
           <<: *COMMON_RUN_CYPRESS
@@ -120,6 +118,7 @@ definitions:
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
+            - export ENV="DEMO"
 
     - step: &SCHEDULED_CYPRESS_SANDBOX
           <<: *COMMON_RUN_CYPRESS
@@ -164,6 +163,21 @@ definitions:
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
+    - step: &SLACK_CYPRESS_REPORT_SCHEDULED
+        <<: *COMMON_RUN_CYPRESS
+        name: Cypress upload reports
+        max-time: 15
+        size: 1x
+        script:
+          - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh $ENV
+          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+          - yarn install --frozen-lockfile
+          - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
+          - ./scripts/cypress/utils/merge_reports_pipeline.sh
+          - ./scripts/cypress/utils/slack_test_report_upload.sh
+          - ./scripts/cypress/utils/exit_1_if_failures.sh
+        
     - step: &SLACK_CYPRESS_REPORT
         <<: *COMMON_RUN_CYPRESS
         name: Cypress upload reports
@@ -406,16 +420,16 @@ pipelines:
       - step: *SLACK_CYPRESS_REPORT
     scheduled-cypress-dev:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_DEV
-      - step: *SLACK_CYPRESS_REPORT
+      - step: *SLACK_CYPRESS_REPORT_SCHEDULED
     scheduled-cypress-demo:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_DEMO
-      - step: *SLACK_CYPRESS_REPORT
+      - step: *SLACK_CYPRESS_REPORT_SCHEDULED
     scheduled-cypress-sandbox:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_SANDBOX
-      - step: *SLACK_CYPRESS_REPORT
+      - step: *SLACK_CYPRESS_REPORT_SCHEDULED
     scheduled-cypress-prod:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_PROD
-      - step: *SLACK_CYPRESS_REPORT
+      - step: *SLACK_CYPRESS_REPORT_SCHEDULED
 
   pull-requests:
     "**":
