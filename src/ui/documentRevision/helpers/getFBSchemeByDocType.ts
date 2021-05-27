@@ -3,7 +3,7 @@ import { DocumentType, DocumentTypeByIdState } from "../../../state/ducks/docume
 import { DocumentRevision, FBFormTemplateProps } from "../../../state/ducks/documentRevisions/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FB, FBSchemaProps } from "../../form.builder";
-import { checkIsDocumentDirectApproved } from "./checkDocumentGroup";
+import { checkIsDocumentDirectApproved, checkIsDocumentPO } from "./checkDocumentGroup";
 
 /**
  * Checks if any of the given output types are records.
@@ -12,6 +12,9 @@ import { checkIsDocumentDirectApproved } from "./checkDocumentGroup";
  */
 const hasDirectApproval = (outputTypes: DocumentType[]) =>
   some(outputTypes, (type) => checkIsDocumentDirectApproved(type.groupOptions));
+
+const hasPO = (outputTypes: DocumentType[]) =>
+  some(outputTypes, (type) => checkIsDocumentPO(type.groupOptions));
 
 /**
    * @method
@@ -49,13 +52,21 @@ export const getFBSchemeByDocType = (
     return unionBy(scheme, typeScheme, "name");
   }, [] as FBSchemaProps[]);
 
-  // TO DO: Need to add condition if PO to push poapprovals comp
   if (hasDirectApproval(outputTypesWithGroups)) {
+    if (!hasPO(outputTypesWithGroups)) {
+      finalScheme.push({
+        label: "form.builder.approvals",
+        type: "approvals",
+        deleteDisabled: true,
+        name: `fb-approvals-${FB.uniqid}`,
+        uniqueSchemaItem: true,
+      });
+    }
     finalScheme.push({
       label: "form.builder.approvals",
-      type: "approvals",
-      deleteDisabled: true,
-      name: `fb-approvals-${FB.uniqid}`,
+      type: "poapprovals",
+      deleteDisabled: false,
+      name: `fb-po-approvals-${FB.uniqid}`,
       uniqueSchemaItem: true,
     });
   }
