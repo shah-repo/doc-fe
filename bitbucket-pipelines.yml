@@ -91,7 +91,6 @@ definitions:
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
     - step: &SCHEDULED_CYPRESS_DEV
@@ -100,10 +99,8 @@ definitions:
             - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "DEV"
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
-            - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
     - step: &SCHEDULED_CYPRESS_DEMO
@@ -112,10 +109,8 @@ definitions:
             - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "DEMO"
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
-            - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
     - step: &SCHEDULED_CYPRESS_SANDBOX
@@ -124,10 +119,8 @@ definitions:
             - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "SANDBOX"
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
-            - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
     - step: &SCHEDULED_CYPRESS_PROD
@@ -136,10 +129,8 @@ definitions:
             - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "PROD"
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
-            - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
     - step: &RUN_CYPRESS_VIDEO
@@ -155,10 +146,8 @@ definitions:
             - echo $CYPRESS_BASE_URL
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
-            - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
     - step: &SLACK_CYPRESS_REPORT_SCHEDULED_DEV
@@ -171,6 +160,7 @@ definitions:
           - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
           - yarn install --frozen-lockfile
           - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
           - ./scripts/cypress/utils/slack_test_report_upload.sh
@@ -186,6 +176,7 @@ definitions:
           - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
           - yarn install --frozen-lockfile
           - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
           - ./scripts/cypress/utils/slack_test_report_upload.sh
@@ -201,6 +192,7 @@ definitions:
           - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
           - yarn install --frozen-lockfile
           - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
           - ./scripts/cypress/utils/slack_test_report_upload.sh
@@ -216,6 +208,7 @@ definitions:
           - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
           - yarn install --frozen-lockfile
           - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
           - ./scripts/cypress/utils/slack_test_report_upload.sh
@@ -231,6 +224,7 @@ definitions:
           - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
           - yarn install --frozen-lockfile
           - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
           - ./scripts/cypress/utils/slack_test_report_upload.sh
