@@ -99,6 +99,7 @@ definitions:
             - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "DEV"
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
+            - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
@@ -109,6 +110,7 @@ definitions:
             - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "DEMO"
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
+            - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
@@ -119,6 +121,7 @@ definitions:
             - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "SANDBOX"
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
+            - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
@@ -129,6 +132,7 @@ definitions:
             - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "PROD"
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
+            - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
@@ -146,6 +150,7 @@ definitions:
             - echo $CYPRESS_BASE_URL
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
+            - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh

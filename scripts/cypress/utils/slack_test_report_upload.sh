@@ -148,7 +148,9 @@ curl \
 				"type": "mrkdwn",
 				"text": "'"
         *TEST INFO*\n
-          • *TEST_STATUS:* $NUMBER_OF_FAILS/$NUMBER_OF_SUITES\n"'"
+          • *TEST_NUMBER:* $NUMBER_OF_SUITES\n
+          • *PASSED_TEST_NUMBER:* (($NUMBER_OF_SUITES-$NUMBER_OF_FAILS))\n
+          • *FAILED_TEST_NUMBER:* $NUMBER_OF_FAILS\n"'"
       }
 		},
 	]
