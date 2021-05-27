@@ -23,12 +23,13 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
         {...{ label }}
       />
       <FBAutocompleteAsync
-        label="form.builder.approvals"
-        name={`fb-po-approvals-${name}`}
+        label="form.builder.approvers"
+        name={`${name}`}
         optionId={FBAutocompleteAsyncOption.availableApprovers}
         withState
         gutter={false}
         multiple={true}
+        omitFormValue={true}
         {...{ disabled, renderOption, loading, autosave }}
       />
       <Box display="flex" flexWrap="wrap" my={2}>

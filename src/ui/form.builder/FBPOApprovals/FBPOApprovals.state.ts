@@ -60,6 +60,12 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
     this.checkedGroups?.push(data);
   };
 
+  @action public removeCheckedGroups = (name?: string) => {
+    if (!name) { return; }
+    const filteredGroups = this.checkedGroups?.filter((group) => group.name !== name);
+    set(this, "checkedGroups", filteredGroups);
+  };
+
   @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
     set(this, "approvals", approvals);
 

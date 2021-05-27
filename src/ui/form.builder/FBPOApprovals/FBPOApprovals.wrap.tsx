@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { compact, difference, filter, find, isEmpty, map, unionBy } from "lodash";
+import { compact, difference, filter, find, isEmpty, map, minBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -31,6 +31,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       FBPOApprovalsState,
       { id: outputId, approvals: document?.approvals || changeRequest?.approvals },
     );
+
+    isIncluded = (group: FBRequiredApprover): boolean => poApprovalsState.checkedGroups?.includes(group) || false;
 
     function concatApprovals(approval?: FBInlineApprovalBody) {
       if (!approval) { return; }
@@ -71,7 +73,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     ), []);
 
     React.useEffect(() => reaction(
-      () => formState?.inputState.get("fb-po-approvals-" + name)?.value,
+      () => formState?.inputState.get(name)?.value,
       (fieldValue: string[]) => {
         const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
         addApprover(difference(fieldValue, formValue));
@@ -80,21 +82,32 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    const checkGroups = (id: string) => {
+      const approversGroups = compact(map(poApprovalsState.groups, (group) =>
+        (group.joinedEmployees as string[]).includes(id) ? group : ""));
+
+      if (isEmpty(poApprovalsState.checkedGroups)) {
+        const groupToSign = minBy(approversGroups, "documentStage");
+        poApprovalsState.setCheckedGroups(groupToSign);
+        return groupToSign?.name;
+      } else {
+        const sign = minBy(difference(approversGroups, poApprovalsState.checkedGroups || []), "documentStage");
+        poApprovalsState.setCheckedGroups(sign);
+        return sign?.name;
+
+      }
+
+    };
     function addApprover(ids?: string[]) {
       if (!id) { return; }
       if (!ids) { return; }
-      // Groups that selected approver can sign
-      const approversGroups = compact(map(poApprovalsState.groups, (group) =>
-        includesApprover(group, ids[0]) ? group : ""));
-      console.log(approversGroups);
-
-
+      const groupName = checkGroups(ids[0]);
       map(ids, (approver) => poApprovalsState?.addApproval({
         assigned: { id: approver },
         type: "MASTER",
         fieldId: name,
         partOf: { id },
-        // Needs to be added signatureGroupName
+        signatureGroupName: groupName,
       }));
     }
 
@@ -102,6 +115,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       if (!ids) { return; }
       map(ids, (approver) => {
         const approval = find(poApprovalsState?.getApprovals, (a) => a.approver?.id === approver);
+        poApprovalsState?.removeCheckedGroups(approval?.signatureGroupName);
         poApprovalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id);
       });
     }
@@ -120,7 +134,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     });
 
     const fieldValue = map(poApprovalsState?.getApprovals, "approver.id");
-    formState?.setFieldValue(`fb-po-approvals-${name}`, fieldValue);
+    formState?.setFieldValue(`${name}`, fieldValue);
 
     return Component({
       ...(props as T),
