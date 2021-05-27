@@ -17,7 +17,7 @@ import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
-import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
@@ -27,6 +27,7 @@ import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";
 import ExportToCSVButton from "./export.to.csv/ExportToCSV.button";
+import ExportToEmail from "./export.to.email/ExportToEmail";
 import RedlineButton from "./redline/Redline.button";
 import { SubmitForApproval } from "./SubmitForApproval";
 import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
@@ -86,6 +87,8 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isDirectlyApproved = checkIsDocumentDirectApproved(values.document?.documentType?.groupOptions);
   const isMPIOutput = checkIsDocumentMPIOutput(values.document?.documentType?.groupOptions);
   const isLHR = checkIsDocumentLHR(values.document?.documentType?.groupOptions);
+  const isExportable = !documentRevision?.renderHTML &&
+    checkIsDocumentExportable(documentRevision?.document?.documentType?.groupOptions);
   const serializedCSV = hasSerializedCSV(values.document?.documentType?.groupOptions);
   const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
   const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
@@ -239,6 +242,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
             />
           )
         }
+        {isExportable && <ExportToEmail revisionId={documentRevision.id}/>}
         <HeaderMenu>
           {!(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
         <CancelButton
