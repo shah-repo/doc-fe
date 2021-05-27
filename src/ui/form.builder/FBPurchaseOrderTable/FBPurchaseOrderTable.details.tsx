@@ -64,7 +64,8 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                     let tooltipTitle: string | undefined;
                     const dataCy = key;
                     if ((!label && key === "partNumberDocId") ||
-                      (!label && key === "serviceId")) {
+                      (!label && key === "serviceId") ||
+                      (!label && key === "supplierPartNumber")) {
                       label = "N/A";
                     }
                     if (key === "description" && item.type === "product") {
