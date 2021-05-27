@@ -118,8 +118,6 @@ definitions:
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
-            - export $START_TIMESTAMP
-            - echo $START_TIMESTAMP
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
     - step: &SCHEDULED_CYPRESS_SANDBOX
@@ -171,14 +169,12 @@ definitions:
         max-time: 15
         size: 1x
         script:
-          - source ./scripts/cypress/utils/variables_pipeline.sh
+          - source ./scripts/cypress/utils/variables_pipeline.sh $ENV
           - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
           - yarn install --frozen-lockfile
           - ./scripts/cypress/utils/generate_requirements_json_file.sh
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
-          - export $START_TIMESTAMP
-          - echo $START_TIMESTAMP
           - ./scripts/cypress/utils/slack_test_report_upload.sh
           - ./scripts/cypress/utils/exit_1_if_failures.sh
 
@@ -411,6 +407,8 @@ pipelines:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_DEV
       - step: *SLACK_CYPRESS_REPORT
     scheduled-cypress-demo:
+      - variables:
+        ENV: "DEMO"
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_DEMO
       - step: *SLACK_CYPRESS_REPORT
     scheduled-cypress-sandbox:
