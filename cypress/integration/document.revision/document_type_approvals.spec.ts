@@ -19,13 +19,14 @@ let formDocumentType;
 let purchaseOrderDocumentType;
 let approvalRequestDocumentType;
 let POAMDocumentType;
-
+let SupplierDocumentType;
+let createdSupplierFormDocument;
 
 const DAMTitle = "My DAM";
 const roleOne = "Role One";
 const FormTitle = "New Form";
 const POAMFormTitle = "POAM form";
-
+const SupplierFormTitle = "Supplier form";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
@@ -66,6 +67,7 @@ context("Check DAM enforcement rules for document types", () => {
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(company, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(company, "Form");
           POAMDocumentType = cmpFilterDocumentTypeIdByName(company, "PO Approval Matrix");
+          SupplierDocumentType = cmpFilterDocumentTypeIdByName(company, "Suppliers");
           done();
         });
       });
@@ -200,6 +202,60 @@ context("Check DAM enforcement rules for document types", () => {
         createdPOFormDocument = response;
         cy.drAPIApproveAndRelease({
           documentId: createdPOFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: adminEmployeeLoginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
+    it("[API]Create Supplier form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Supplier Form document</p>",
+          document: {
+            docId: "FM-00005",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: SupplierFormTitle,
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: SupplierDocumentType[0].id,
+            }],
+            schema: [{
+            }],
+          },
+
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdSupplierFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdSupplierFormDocument.id,
           payload: {
             effectiveDate: (new Date()).toISOString(),
             documentType: { id: approvalRequestDocumentType[0].id },
@@ -532,12 +588,12 @@ context("Check DAM enforcement rules for document types", () => {
         cy.navigToDocumentList();
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
+      it(`Select document named '${SupplierFormTitle}'`, () => {
+        cy.drClickOnSpecificDocFromList({ item: SupplierFormTitle });
       });
 
-      it("Select document type", () => {
-        cy.drSelectDocumentType({ documentType: "Suppliers" });
+      it("Create new Supplier document from Form", () => {
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Fill document name", () => {
@@ -548,12 +604,8 @@ context("Check DAM enforcement rules for document types", () => {
         cy.drEnterDocumentDescription({ description: "Suppliers address" });
       });
 
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+      it("Click 'Save' document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Check approvals enfocment", () => {

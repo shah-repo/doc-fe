@@ -4,7 +4,6 @@
 import moment from "moment";
 import "moment-timezone";
 import { CONFIG } from "../../../support/config";
-import { CyRoutes } from "../../../support/routes";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
@@ -13,6 +12,7 @@ let loginResponse;
 let multipleCompanies;
 let secondEmployee;
 const supplierTitle = `Supplier${moment().format("X")}`;
+const supplierFormTitle = `Supplier Form${moment().format("X")}`;
 
 context("Autocomplete 'Supplier list' test", () => {
   context("[API]Prepare company", () => {
@@ -72,7 +72,7 @@ context("Autocomplete 'Supplier list' test", () => {
   });
 
   context("Autocomplete 'Supplier list' test", () => {
-    context("Create 'Supplier list'", () => {
+    context("Create 'Supplier list' Form", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
       });
@@ -81,31 +81,50 @@ context("Autocomplete 'Supplier list' test", () => {
         cy.cmpClickCreateNewDocument();
       });
 
-      it("Enter document title " + supplierTitle, () => {
-        cy.drEnterDocumentTitle({ name: supplierTitle });
+      it("Enter document title " + supplierFormTitle, () => {
+        cy.drEnterDocumentTitle({ name: supplierFormTitle });
       });
 
-      it("Enter document description 'document description'", () => {
-        cy.drEnterDocumentDescription({ description: "document description" });
+      it("Enter document description 'Supplier Form description'", () => {
+        cy.drEnterDocumentDescription({ description: "Supplier Form description" });
       });
 
-      it("Select 'Suppliers' document type", () => {
-        cy.drSelectDocumentType({ documentType: "Suppliers" });
+      it("Select 'Form' document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
       });
 
       it("Select 'Numeric' revision stage", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
+      it("Select 'Suppliers' document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Suppliers" });
+      });
+
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
-      it("Approve and release FORM document", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.fbClickButton({ el: "updateRecord" });
-        });
+      it("Approve and release document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+
+    context("Create 'Supplier list'", () => {
+      it("Click create new document from form", () => {
+        cy.drCreateNewDocumentFromForm();
+      });
+
+      it("Enter document title " + supplierTitle, () => {
+        cy.drEnterDocumentTitle({ name: supplierTitle });
+      });
+
+      it("Enter document description 'Supplier document description'", () => {
+        cy.drEnterDocumentDescription({ description: "Supplier document description" });
+      });
+
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
 
