@@ -1,5 +1,5 @@
 import { Approval } from "aws-sdk/clients/codecommit";
-import { filter, isEmpty, map } from "lodash";
+import { compact, filter, isEmpty, map, values } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBPOApprovalsConstructor, FBRequiredApprover } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
@@ -42,6 +42,9 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
 
   public onSuccess() {
     this.setGroups(this.data);
+    const filteredCheckedGroups = map(this.approvals, (approval) => values(this.groups)?.find((group) =>
+      group.name === approval.signatureGroupName));
+    this.checkedGroups = compact(filteredCheckedGroups);
     super.onSuccess();
   }
 
