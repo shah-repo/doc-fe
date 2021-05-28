@@ -3,15 +3,18 @@ import { DocumentType, DocumentTypeByIdState } from "../../../state/ducks/docume
 import { DocumentRevision, FBFormTemplateProps } from "../../../state/ducks/documentRevisions/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FB, FBSchemaProps } from "../../form.builder";
-import { checkIsDocumentRecord } from "./checkDocumentGroup";
+import { checkIsDocumentDirectApproved, checkIsDocumentPO } from "./checkDocumentGroup";
 
 /**
  * Checks if any of the given output types are records.
  *
  * @param outputTypes Array of output types that will be checked.
  */
-const recordsAsOutputExist = (outputTypes: DocumentType[]) =>
-  some(outputTypes, (type) => checkIsDocumentRecord(type.groupOptions));
+const hasDirectApproval = (outputTypes: DocumentType[]) =>
+  some(outputTypes, (type) => checkIsDocumentDirectApproved(type.groupOptions));
+
+const hasPO = (outputTypes: DocumentType[]) =>
+  some(outputTypes, (type) => checkIsDocumentPO(type.groupOptions));
 
 /**
    * @method
@@ -49,12 +52,21 @@ export const getFBSchemeByDocType = (
     return unionBy(scheme, typeScheme, "name");
   }, [] as FBSchemaProps[]);
 
-  if (recordsAsOutputExist(outputTypesWithGroups)) {
+  if (hasDirectApproval(outputTypesWithGroups)) {
+    if (!hasPO(outputTypesWithGroups)) {
+      finalScheme.push({
+        label: "form.builder.approvals",
+        type: "approvals",
+        deleteDisabled: true,
+        name: `fb-approvals-${FB.uniqid}`,
+        uniqueSchemaItem: true,
+      });
+    }
     finalScheme.push({
       label: "form.builder.approvals",
-      type: "approvals",
-      deleteDisabled: true,
-      name: `fb-approvals-${FB.uniqid}`,
+      type: "poapprovals",
+      deleteDisabled: false,
+      name: `fb-po-approvals-${FB.uniqid}`,
       uniqueSchemaItem: true,
     });
   }
