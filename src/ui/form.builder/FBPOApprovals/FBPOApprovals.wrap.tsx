@@ -3,10 +3,9 @@ import { compact, difference, filter, find, isEmpty, map, minBy, unionBy } from 
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBApprover, FBInlineApprovalBody, FBRequiredApprover } from "..";
+import { FB, FBApprover, FBInlineApprovalBody, FBPOApprovalsProps, FBRequiredApprover } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import FBPOApprovalsState from "./FBPOApprovals.state";
-import { FBPOApprovalsProps } from "./FBPOApprovals.types";
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
   Component: React.FunctionComponent<T>,
