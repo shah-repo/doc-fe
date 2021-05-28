@@ -6,12 +6,30 @@ import { CONFIG } from "../support/config";
 import { addTestContext } from "../utils/context/addTestContext";
 import { Screenshot } from "../utils/context/screenshot";
 
+let ENV;
+
+switch (CONFIG.FE_URL) {
+  case "https://dev.enlil.io":
+    ENV = "dev";
+    break;
+  case "https://demo.enlil.io":
+    ENV = "demo";
+    break;
+  case "https://sandbox.enlil.io":
+    ENV = "sandbox";
+    break;
+  case "https://enlil.io":
+    ENV = "prod";
+    break;
+  case "https://prod2.enlil.io":
+    ENV = "prod2";
+    break;
+  default:
+    ENV = "unknown";
+}
+
 context("Server", () => {
   it("Info", () => {
-    cy.authLogin({
-      email: CONFIG.SUPERADMIN_EMAIL,
-      password: CONFIG.SUPERADMIN_PASSWORD,
-    });
     cy.intercept({ method: "GET", url: "/api/v1/remoteValidators/status" }).as("status");
     cy.visit(`${CONFIG.FE_URL}/status`);
     cy.wait("@status").its("response.statusCode").should("eq", 200);
@@ -72,6 +90,7 @@ context("Server", () => {
         cy.log(remoteJSDate);
         addTestContext("remoteJSDate", remoteJSDate);
       });
+    addTestContext("env", ENV);
     Screenshot();
   });
 

@@ -25,39 +25,44 @@ NUMBER_OF_SUITES=$(jq '.stats.suites' ./$DIR_REPORTS/result.json)
 
 #COMMIT HASHES FROM TEST
 CONTEXT=$(jq '.results[0].suites[0].tests[0].context' ./$DIR_JSON/generated_info.json)
-declare -a ARRAY_OF_CONTEXT_ITEMS
 i=0
 for value in $CONTEXT
 do
-  if [[ $i == 11 ]]; then
-    FE_COMMIT=$value
+  if [[ $i == 5 ]]; then
+    ENV=$value
   fi
   if [[ $i == 17 ]]; then
-    BE_COMMIT=$value
+    FE_COMMIT=$value
   fi
   if [[ $i == 23 ]]; then
-    REMOTE_JS_COMMIT=$value
+    BE_COMMIT=$value
   fi
   if [[ $i == 29 ]]; then
-    FE_BRANCH=$value
+    REMOTE_JS_COMMIT=$value
   fi
   if [[ $i == 35 ]]; then
-    BE_BRANCH=$value
+    FE_BRANCH=$value
   fi
   if [[ $i == 41 ]]; then
+    BE_BRANCH=$value
+  fi
+  if [[ $i == 47 ]]; then
     REMOTE_JS_BRANCH=$value
   fi
-  if [[ $i == 47 || $i == 48 || $i == 49 || $i == 50 ]]; then
+  if [[ $i == 53 || $i == 54 || $i == 55 || $i == 56 ]]; then
     FE_DATE+=$value
   fi
-  if [[ $i == 56 || $i == 57 || $i == 58 || $i == 59 ]]; then
+  if [[ $i == 62 || $i == 63 || $i == 64 || $i == 65 ]]; then
     BE_DATE+=$value
   fi
-  if [[ $i == 65 || $i == 66 || $i == 67 || $i == 68 ]]; then
+  if [[ $i == 71 || $i == 72 || $i == 73 || $i == 74 ]]; then
     REMOTE_JS_DATE+=$value
   fi
   ((i+=1))
 done
+
+ENV=$(echo $ENV | cut -d'"' -f 2 )
+
 FE_COMMIT=$(echo $FE_COMMIT | cut -c3-42)
 FE_BRANCH=$(echo $FE_BRANCH | cut -d'"' -f 2 )
 FE_DATE=$(echo $FE_DATE | cut -c3-28)
@@ -81,77 +86,35 @@ echo "--| Creating zip file $ZIP_FILE_NAME_PATH"
 zip -r $ZIP_FILE_NAME_PATH $DIR_REPORTS
 echo "Zipped"
 
-#UPLOAD REPROT TO SLACK AND GET LINK TO IT
+#UPLOAD REPROT TO SLACK AND POST IT
 UPLOADED_REPORT_LINK=$(curl \
   -X POST "https://slack.com/api/files.upload" \
   -H "content: multipart/form-data" \
   -H "Authorization: Bearer $SLACK_TOKEN" \
   -F "filename=test_report" \
-  -F file=@$ZIP_FILE_NAME_PATH | jq '.file.permalink' | tr -d '"')
+  -F 'initial_comment=
+      *CYPRESS TEST REPORT FROM PIPELINE*
+          *ENVIRONMENT* '${ENV%?}'
+            • *FE_BRANCH:* '${FE_BRANCH%?}'
+            • *FE_COMMIT:* '$FE_COMMIT'
+            • *FE_DATE:* '$FE_DATE'
 
-#POST MESSAGE TO SLACK
-curl \
-  -X POST "https://slack.com/api/chat.postMessage" \
-  -H 'Content-type: application/json' \
-  -H "Authorization: Bearer $SLACK_TOKEN" \
-  --data '{
-    "channel": "'"$CHANNEL"'",
-    "text": "'"<$UPLOADED_REPORT_LINK| >"'",
-    	"blocks": [
-		{
-			"type": "section",
-			"text": {
-				"type": "mrkdwn",
-				"text": "'"*CYPRESS TEST REPORT FROM PIPELINE*"'"
-			}
-		},
-		{
-			"type": "divider"
-		},
-		{
-			"type": "section",
-			"text": {
-				"type": "mrkdwn",
-				"text": "'"
-        *ENVIRONMENT*\n
-          • *FE_BRANCH:* ${FE_BRANCH%?}\n
-          • *FE_COMMIT:* $FE_COMMIT\n
-          • *FE_DATE:* $FE_DATE\n\n
-          • *BE_BRANCH:* ${BE_BRANCH%?}\n
-          • *BE_COMMIT:* $BE_COMMIT\n
-          • *BE_DATE:* $BE_DATE\n\n
-          • *REMOTE_JS_BRANCH:* ${REMOTE_JS_BRANCH%?}\n
-          • *REMOTE_JS_COMMIT:* $REMOTE_JS_COMMIT\n
-          • *REMOTE_JS_DATE:* $REMOTE_JS_DATE\n"'"
-			}
-		},
-    {
-			"type": "divider",
-		},
-    {
-			"type": "section",
-			"text": {
-				"type": "mrkdwn",
-				"text": "'"
-        *<$BITBUCKET_PIPELINE_LINK|PIPELINE>*\n
-          • *BUILD_NUMBER:* $BITBUCKET_BUILD_NUMBER\n
-          • *START_TIMESTAMP:* $START_TIMESTAMP\n
-          • *END_TIMESTAMP:* $(date "+%Y-%m-%dT%H:%M:%S%z")"'"
-      }
-		},
-    {
-			"type": "divider",
-		},
-    {
-			"type": "section",
-			"text": {
-				"type": "mrkdwn",
-				"text": "'"
-        *TEST INFO*\n
-          • *TEST_NUMBER:* $NUMBER_OF_SUITES\n
-          • *PASSED_TEST_NUMBER:* $(($NUMBER_OF_SUITES-$NUMBER_OF_FAILS))\n
-          • *FAILED_TEST_NUMBER:* $NUMBER_OF_FAILS\n"'"
-      }
-		},
-	]
-  }'
+            • *BE_BRANCH:* '${BE_BRANCH%?}'
+            • *BE_COMMIT:* '$BE_COMMIT'
+            • *BE_DATE:* '$BE_DATE'
+
+            • *REMOTE_JS_BRANCH:* '${REMOTE_JS_BRANCH%?}'
+            • *REMOTE_JS_COMMIT:* '$REMOTE_JS_COMMIT'
+            • *REMOTE_JS_DATE:* '$REMOTE_JS_DATE'
+            
+          *<'$BITBUCKET_PIPELINE_LINK'|PIPELINE>*
+            • *BUILD_NUMBER:* '$BITBUCKET_BUILD_NUMBER'
+            • *START_TIMESTAMP:* '$START_TIMESTAMP'
+            • *END_TIMESTAMP:* '$(date "+%Y-%m-%dT%H:%M:%S%z")'
+            
+          *TEST INFO*
+            • *TEST_NUMBER:* '$NUMBER_OF_SUITES'
+            • *PASSED_TEST_NUMBER:* '$(($NUMBER_OF_SUITES-$NUMBER_OF_FAILS))'
+            • *FAILED_TEST_NUMBER:* '$NUMBER_OF_FAILS'' \
+  -F "channels=$CHANNEL" \
+  -F file=@$ZIP_FILE_NAME_PATH | jq '.file.permalink' | tr -d '"')

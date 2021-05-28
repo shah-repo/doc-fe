@@ -1,8 +1,9 @@
-import { CONFIG } from "../../config";
-import { CyRoutes } from "../../routes";
-
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
+
+import { addTestContext } from "../../../utils/context/addTestContext";
+import { CONFIG } from "../../config";
+import { CyRoutes } from "../../routes";
 
 export { };
 
@@ -55,6 +56,7 @@ Cypress.Commands.add("authLogin", (params: { email: string; password: string }) 
       cy.get("[data-cy=\"LoginFormPresenter-submit\"]").click();
     });
   cy.checkToastMessage({ exists: false });
+  addTestContext("user", params.email);
 });
 
 Cypress.Commands.add("authEnterEmail", (params: { value: string }) => {
