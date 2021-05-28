@@ -72,6 +72,17 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     ), []);
 
     React.useEffect(() => reaction(
+      () => poApprovalsState?.transitionApi.data,
+      (data) => {
+        const filteredApprovals: FBInlineApprovalBody[] = compact(map(poApprovalsState.approvals, (approval) =>
+          approval.approverId === data?.approverId ? data : approval
+        ));
+        poApprovalsState.setApprovals(filteredApprovals);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    React.useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
       (fieldValue: string[]) => {
         const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
