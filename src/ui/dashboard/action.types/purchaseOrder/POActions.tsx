@@ -11,8 +11,7 @@ interface Props {
 const POActions: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
-  const { changeRequest: { id: changeRequestId = "" } = {} } = documentRevision;
-
+  const approvalId = documentRevision?.changeRequest?.approvals[0]?.id;
   return (
     <Box display="flex">
       <GenerateHtmlPreview
@@ -21,8 +20,8 @@ const POActions: React.FunctionComponent<Props> = ({
         showDownloadButton={true}
       />
       {
-        documentRevision.changeRequest &&
-        <POApproveOrReject changeRequestId={changeRequestId} />
+        documentRevision.changeRequest && approvalId &&
+        <POApproveOrReject approvalId={approvalId}/>
       }
     </Box>
   );
