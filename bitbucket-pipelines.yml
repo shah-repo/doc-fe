@@ -449,7 +449,7 @@ pipelines:
           - name: CYPRESS_COMMIT_REMOTEJS
       - parallel: *RUN_CYPRESS_IN_PARALLEL
       - step: *SLACK_CYPRESS_REPORT
-    run-cypress-parallel-video-enlil-report:
+    run-cypress-parallel-video-report:
       - variables:
           - name: CYPRESS_FE_URL
           - name: CYPRESS_BE_URL
