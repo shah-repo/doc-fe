@@ -23,6 +23,7 @@ import {
   FBMPIProcedureState,
   FBPartsState,
   FBPOApprovalMatrixState,
+  FBPOApprovalsState,
   FBPOReceiveState,
   FBProcedureDiffState,
   FBProcedureFormState,
@@ -80,4 +81,5 @@ export interface FBProviderProps {
   mpiProcedureState?: FBMPIProcedureState;
   lhrStepState?: FBLHRStepState;
   mpiProcedureSelectState?: FBMPIProcedureSelectState;
+  poApprovalsState?: FBPOApprovalsState;
 }
