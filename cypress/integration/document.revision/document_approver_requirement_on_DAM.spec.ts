@@ -226,10 +226,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.drAddAMItemValue({ identity: "documentType", value: docTypeOne });
     });
 
-    it("Add Category", () => {
-      cy.drAddAMItemValue({ identity: "category", value: "Test" });
-    });
-
     it(`Mark 'Approvals Numeric' for ${roleOne}`, () => {
       cy.drAMCheckRole({ stage: "stage1", index: 0 });
     });
@@ -282,10 +278,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it(`Add document type: ${docTypeTwo}`, () => {
       cy.drAddAMItemValue({ identity: "documentType", value: docTypeTwo });
-    });
-
-    it("Add Category", () => {
-      cy.drAddAMItemValue({ identity: "category", value: "Test" });
     });
 
     it(`Mark 'Approvals Numeric' for ${roleTwo}`, () => {
