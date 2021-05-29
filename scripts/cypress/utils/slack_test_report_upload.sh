@@ -23,57 +23,20 @@ echo $START_TIMESTAMP
 NUMBER_OF_FAILS=$(jq '.stats.failures' ./$DIR_REPORTS/result.json)
 NUMBER_OF_SUITES=$(jq '.stats.suites' ./$DIR_REPORTS/result.json)
 
-#COMMIT HASHES FROM TEST
-CONTEXT=$(jq '.results[0].suites[0].tests[0].context' ./$DIR_JSON/generated_info.json)
-i=0
-for value in $CONTEXT
-do
-  if [[ $i == 5 ]]; then
-    ENV=$value
-  fi
-  if [[ $i == 17 ]]; then
-    FE_COMMIT=$value
-  fi
-  if [[ $i == 23 ]]; then
-    BE_COMMIT=$value
-  fi
-  if [[ $i == 29 ]]; then
-    REMOTE_JS_COMMIT=$value
-  fi
-  if [[ $i == 35 ]]; then
-    FE_BRANCH=$value
-  fi
-  if [[ $i == 41 ]]; then
-    BE_BRANCH=$value
-  fi
-  if [[ $i == 47 ]]; then
-    REMOTE_JS_BRANCH=$value
-  fi
-  if [[ $i == 53 || $i == 54 || $i == 55 || $i == 56 ]]; then
-    FE_DATE+=$value
-  fi
-  if [[ $i == 62 || $i == 63 || $i == 64 || $i == 65 ]]; then
-    BE_DATE+=$value
-  fi
-  if [[ $i == 71 || $i == 72 || $i == 73 || $i == 74 ]]; then
-    REMOTE_JS_DATE+=$value
-  fi
-  ((i+=1))
-done
+#ENV INFO
+ENV=$(jq '.env' ./$DIR_JSON/envInfo.json)
 
-ENV=$(echo $ENV | cut -d'"' -f 2 )
+FE_COMMIT=$(jq '.feCommit' ./$DIR_JSON/envInfo.json)
+FE_BRANCH=$(jq '.feBranch' ./$DIR_JSON/envInfo.json)
+FE_DATE=$(jq '.feDate' ./$DIR_JSON/envInfo.json | tr -d '"' | tr -d ' ')
 
-FE_COMMIT=$(echo $FE_COMMIT | cut -c3-42)
-FE_BRANCH=$(echo $FE_BRANCH | cut -d'"' -f 2 )
-FE_DATE=$(echo $FE_DATE | cut -c3-28)
+BE_COMMIT=$(jq '.beCommit' ./$DIR_JSON/envInfo.json)
+BE_BRANCH=$(jq '.beBranch' ./$DIR_JSON/envInfo.json)
+BE_DATE=$(jq '.beDate' ./$DIR_JSON/envInfo.json | tr -d '"' | tr -d ' ')
 
-BE_COMMIT=$(echo $BE_COMMIT | cut -c3-42)
-BE_BRANCH=$(echo $BE_BRANCH | cut -d'"' -f 2 )
-BE_DATE=$(echo $BE_DATE | cut -c3-28)
-
-REMOTE_JS_COMMIT=$(echo $REMOTE_JS_COMMIT | cut -c3-42)
-REMOTE_JS_BRANCH=$(echo $REMOTE_JS_BRANCH | cut -d'"' -f 2 )
-REMOTE_JS_DATE=$(echo $REMOTE_JS_DATE | cut -c3-28)
+REMOTE_JS_COMMIT=$(jq '.remoteJSCommit' ./$DIR_JSON/envInfo.json)
+REMOTE_JS_BRANCH=$(jq '.remoteJSBranch' ./$DIR_JSON/envInfo.json)
+REMOTE_JS_DATE=$(jq '.remoteJSDate' ./$DIR_JSON/envInfo.json | tr -d '"' | tr -d ' ')
 
 #ZIP TEST REPORT
 DATE=$(date "+%Y-%m-%dT%H-%M-%S%z")
@@ -94,16 +57,16 @@ UPLOADED_REPORT_LINK=$(curl \
   -F "filename=test_report" \
   -F 'initial_comment=
       *CYPRESS TEST REPORT FROM PIPELINE*
-          *ENVIRONMENT* '${ENV%?}'
-            • *FE_BRANCH:* '${FE_BRANCH%?}'
+          *ENVIRONMENT* '${ENV}'
+            • *FE_BRANCH:* '${FE_BRANCH}'
             • *FE_COMMIT:* '$FE_COMMIT'
-            • *FE_DATE:* '$FE_DATE'
+            • *FE_DATE:* '${FE_DATE}'
 
-            • *BE_BRANCH:* '${BE_BRANCH%?}'
+            • *BE_BRANCH:* '${BE_BRANCH}'
             • *BE_COMMIT:* '$BE_COMMIT'
             • *BE_DATE:* '$BE_DATE'
 
-            • *REMOTE_JS_BRANCH:* '${REMOTE_JS_BRANCH%?}'
+            • *REMOTE_JS_BRANCH:* '${REMOTE_JS_BRANCH}'
             • *REMOTE_JS_COMMIT:* '$REMOTE_JS_COMMIT'
             • *REMOTE_JS_DATE:* '$REMOTE_JS_DATE'
             

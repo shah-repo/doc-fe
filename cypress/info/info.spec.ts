@@ -2,30 +2,41 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import { CONFIG } from "../support/config";
+import { CONFIG, RUN_ENVIRONMENT_OPTIONS } from "../support/config";
 import { addTestContext } from "../utils/context/addTestContext";
 import { Screenshot } from "../utils/context/screenshot";
 
-let ENV;
+let env;
+let feCommit;
+let feBranch;
+let feDate;
+
+let beCommit;
+let beBranch;
+let beDate;
+
+let remoteJSBranch;
+let remoteJSCommit;
+let remoteJSDate;
 
 switch (CONFIG.FE_URL) {
   case "https://dev.enlil.io":
-    ENV = "dev";
+    env = "dev";
     break;
   case "https://demo.enlil.io":
-    ENV = "demo";
+    env = "demo";
     break;
   case "https://sandbox.enlil.io":
-    ENV = "sandbox";
+    env = "sandbox";
     break;
   case "https://enlil.io":
-    ENV = "prod";
+    env = "prod";
     break;
   case "https://prod2.enlil.io":
-    ENV = "prod2";
+    env = "prod2";
     break;
   default:
-    ENV = "unknown";
+    env = "unknown";
 }
 
 context("Server", () => {
@@ -38,60 +49,79 @@ context("Server", () => {
     cy.get("[data-cy=\"status-remote-js-validators-branch\"]").should("exist");
     cy.get("[data-cy=\"status-frontend-commit-hash\"]>td").eq(1)
       .invoke("text")
-      .then((feCommit) => {
-        cy.log(feCommit);
+      .then((text) => {
+        feCommit = text;
         addTestContext("feCommit", feCommit);
       });
     cy.get("[data-cy=\"status-backend-commit-hash\"]>td").eq(1)
       .invoke("text")
-      .then((backendCommit) => {
-        cy.log(backendCommit);
-        addTestContext("backendCommit", backendCommit);
+      .then((text) => {
+        beCommit = text;
+        addTestContext("backendCommit", beCommit);
       });
     cy.get("[data-cy=\"status-remote-js-validators-commit-hash\"]>td").eq(1)
       .invoke("text")
-      .then((remoteJSCommit) => {
-        cy.log(remoteJSCommit);
+      .then((text) => {
+        remoteJSCommit = text;
         addTestContext("remoteJSCommit", remoteJSCommit);
       });
     cy.get("[data-cy=\"status-frontend-branch\"]>td").eq(1)
       .invoke("text")
-      .then((feBranch) => {
-        cy.log(feBranch);
+      .then((text) => {
+        feBranch = text;
         addTestContext("feBranch", feBranch);
       });
     cy.get("[data-cy=\"status-backend-branch\"]>td").eq(1)
       .invoke("text")
-      .then((backendBranch) => {
-        cy.log(backendBranch);
-        addTestContext("backendBranch", backendBranch);
+      .then((text) => {
+        beBranch = text;
+        addTestContext("backendBranch", beBranch);
       });
     cy.get("[data-cy=\"status-remote-js-validators-branch\"]>td").eq(1)
       .invoke("text")
-      .then((remoteJSBranch) => {
-        cy.log(remoteJSBranch);
+      .then((text) => {
+        remoteJSBranch = text;
         addTestContext("remoteJSBranch", remoteJSBranch);
       });
     cy.get("[data-cy=\"status-frontend-date\"]>td").eq(1)
       .invoke("text")
-      .then((feDate) => {
-        cy.log(feDate);
+      .then((text) => {
+        feDate = text;
         addTestContext("feDate", feDate);
       });
     cy.get("[data-cy=\"status-backend-date\"]>td").eq(1)
       .invoke("text")
-      .then((backendDate) => {
-        cy.log(backendDate);
-        addTestContext("backendDate", backendDate);
+      .then((text) => {
+        beDate = text;
+        addTestContext("backendDate", beDate);
       });
     cy.get("[data-cy=\"status-remote-js-validators-date\"]>td").eq(1)
       .invoke("text")
-      .then((remoteJSDate) => {
-        cy.log(remoteJSDate);
+      .then((text) => {
+        remoteJSDate = text;
         addTestContext("remoteJSDate", remoteJSDate);
       });
-    addTestContext("env", ENV);
+    addTestContext("env", env);
     Screenshot();
   });
 
+  it("Add env info", () => {
+    if (CONFIG.RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.PIPELINE ||
+      CONFIG.RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.SCHEDULEDPIPELINE ||
+      CONFIG.RUN_ENVIRONMENT === RUN_ENVIRONMENT_OPTIONS.LOCALPARALLEL) {
+      const envInfo = {
+        feBranch,
+        feCommit,
+        feDate,
+        beBranch,
+        beCommit,
+        beDate,
+        remoteJSBranch,
+        remoteJSCommit,
+        remoteJSDate,
+        env,
+      };
+      cy.task("generateEnvInfo", { CONFIG, envInfo } );
+    }
+  });
 });
