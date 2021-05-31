@@ -26,7 +26,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const { document, changeRequest, id, isOutput, formInput } = workspaceState || {};
     const outputId = isOutput ? id : null;
     const poName = workspaceState?.schema?.find((item) => item.type === "purchaseorder")?.name || "";
-    const totalAmount = formInput?.[poName].totalAmount;
+    const totalAmount = formInput?.[poName]?.totalAmount;
 
     const poApprovalsState = FB.useRef(
       FBPOApprovalsState,
