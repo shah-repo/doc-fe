@@ -23,8 +23,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
-    const { document, changeRequest, id, isOutput } = workspaceState || {};
+    const { document, changeRequest, id, isOutput, formInput } = workspaceState || {};
     const outputId = isOutput ? id : null;
+    const poName = workspaceState?.schema?.find((item) => item.type === "purchaseorder")?.name || "";
+    const totalAmount = formInput?.[poName].totalAmount;
 
     const poApprovalsState = FB.useRef(
       FBPOApprovalsState,
@@ -63,6 +65,12 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         </Box>
       );
     };
+
+
+    React.useEffect(() => {
+      outputId && poApprovalsState.fetchRequiredApprovals(outputId as unknown as string[]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [totalAmount]);
 
     // On add approver
     React.useEffect(() => reaction(
