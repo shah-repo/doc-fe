@@ -667,7 +667,7 @@
   "form.builder.field.order.received": "Order Received",
   "form.builder.sub.total": "Sub Total: ",
   "form.builder.receive": "Receive",
-  "form.builder.quantity.received": "Quantity received",
+  "form.builder.quantity.received": "Receipt Quantity",
   "form.builder.comments.optional": "Comments (optional)",
   "form.builder.tax": "Tax: ",
   "form.builder.shipping.cost": "Shipping cost: ",
