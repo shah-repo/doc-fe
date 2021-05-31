@@ -169,7 +169,6 @@ definitions:
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
           - ./scripts/cypress/utils/slack_test_report_upload.sh
-          - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &SLACK_CYPRESS_REPORT_SCHEDULED_DEMO
         <<: *COMMON_RUN_CYPRESS
@@ -184,8 +183,6 @@ definitions:
           - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
-          - ./scripts/cypress/utils/slack_test_report_upload.sh
-          - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &SLACK_CYPRESS_REPORT_SCHEDULED_SANDBOX
         <<: *COMMON_RUN_CYPRESS
@@ -201,7 +198,6 @@ definitions:
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
           - ./scripts/cypress/utils/slack_test_report_upload.sh
-          - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &SLACK_CYPRESS_REPORT_SCHEDULED_PROD
         <<: *COMMON_RUN_CYPRESS
@@ -217,7 +213,6 @@ definitions:
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
           - ./scripts/cypress/utils/slack_test_report_upload.sh
-          - ./scripts/cypress/utils/exit_1_if_failures.sh
         
     - step: &SLACK_CYPRESS_REPORT
         <<: *COMMON_RUN_CYPRESS
@@ -233,7 +228,20 @@ definitions:
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
           - ./scripts/cypress/utils/slack_test_report_upload.sh
-          - ./scripts/cypress/utils/exit_1_if_failures.sh
+
+    - step: &ENLIL_CYPRESS_REPORT
+        <<: *COMMON_RUN_CYPRESS
+        name: Cypress upload reports
+        max-time: 15
+        size: 1x
+        script:
+          - source ./scripts/cypress/utils/variables_pipeline.sh
+          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+          - yarn install --frozen-lockfile
+          - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
+          - ./scripts/cypress/utils/merge_reports_pipeline.sh
+          - ./scripts/cypress/utils/upload_video_reports.sh
 
     - parallel: &RUN_CYPRESS_IN_PARALLEL
         - step: 
@@ -449,6 +457,17 @@ pipelines:
           - name: CYPRESS_COMMIT_REMOTEJS
       - parallel: *RUN_CYPRESS_IN_PARALLEL
       - step: *SLACK_CYPRESS_REPORT
+    run-cypress-parallel-enlil:
+      - variables:
+          - name: CYPRESS_FE_URL
+          - name: CYPRESS_BE_URL
+          - name: CYPRESS_SUPERADMIN_EMAIL
+          - name: CYPRESS_SUPERADMIN_PASSWORD
+          - name: CYPRESS_COMMIT_FE
+          - name: CYPRESS_COMMIT_BE
+          - name: CYPRESS_COMMIT_REMOTEJS
+      - parallel: *RUN_CYPRESS_IN_PARALLEL_VIDEO
+      - step: *ENLIL_CYPRESS_REPORT
     run-cypress-parallel-video-report:
       - variables:
           - name: CYPRESS_FE_URL
