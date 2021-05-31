@@ -12,7 +12,7 @@ if [[ -z "${DIR_VIDEOS_REPORT}" ]]; then
 fi
 
 #SLACK_INFO
-CHANNEL=C022R2A0N5U
+CHANNEL=C022K3F7CAK
 
 #BITBUCKET_INFO
 BITBUCKET_PIPELINE_LINK="https://bitbucket.org/shifamed/doc-fe/addon/pipelines/home#!/results/$BITBUCKET_BUILD_NUMBER"
