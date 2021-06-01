@@ -103,19 +103,28 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const checkGroups = (id: string) => {
       const approversGroups = compact(map(poApprovalsState.groups, (group) =>
         (group.joinedEmployees as string[]).includes(id) ? group : ""));
+      const poamGroups = approversGroups.filter((group) => group.type === "PURCHASE_APPROVAL");
+      const damGroups = approversGroups.filter((group) => group.type === "REVISION_APPROVAL");
 
       if (isEmpty(poApprovalsState.checkedGroups)) {
-        const groupToSign = minBy(approversGroups, "documentStage");
+        const groupToSign = minBy(poamGroups, "documentStage");
         poApprovalsState.setCheckedGroups(groupToSign);
+        if (damGroups) {
+          const damsToSign = difference(damGroups, poApprovalsState.checkedGroups || []);
+          damsToSign.map((dam) => poApprovalsState.setCheckedGroups((dam)));
+        }
         return groupToSign?.name;
       } else {
-        const sign = minBy(difference(approversGroups, poApprovalsState.checkedGroups || []), "documentStage");
+        const sign = minBy(difference(poamGroups, poApprovalsState.checkedGroups || []), "documentStage");
         poApprovalsState.setCheckedGroups(sign);
+        if (damGroups) {
+          const damsToSign = difference(damGroups, poApprovalsState.checkedGroups || []);
+          damsToSign.map((dam) => poApprovalsState.setCheckedGroups((dam)));
+        }
         return sign?.name;
-
       }
-
     };
+
     function addApprover(ids?: string[]) {
       if (!id) { return; }
       if (!ids) { return; }

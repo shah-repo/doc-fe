@@ -44,6 +44,16 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
     this.setGroups(this.data);
     const filteredCheckedGroups = map(this.approvals, (approval) => values(this.groups)?.find((group) =>
       group.name === approval.signatureGroupName));
+
+    map(this.approvals, (approval) => {
+      map(this.groups, (group) => {
+        // eslint-disable-next-line max-len
+        if ((group.joinedEmployees as string[]).includes(approval.approverId || "") && group.type === "REVISION_APPROVAL") {
+          filteredCheckedGroups.push(group);
+        }
+      });
+    });
+
     this.checkedGroups = compact(filteredCheckedGroups);
     super.onSuccess();
   }
@@ -93,3 +103,5 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
 }
 
 export default FBPOApprovalsState;
+
+
