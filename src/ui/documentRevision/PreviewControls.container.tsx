@@ -23,7 +23,7 @@ import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
-import { checkCanBeCopied, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
 import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
@@ -64,7 +64,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   );
   const email = useSelector(authSelectors.currentUserEmail);
   const isUserDocumentOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
-  const isRecord = checkIsDocumentRecord(groupOptions);
   const isStatusInReview = isDocumentRevisionInReview(documentRevision.status);
   const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
@@ -220,7 +219,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         />}
       {renderOutputButton()}
       {renderNoAccessWarning()}
-      {isRecord && isStatusInReview && isUserDocumentOwner &&
+      {checkIsDocumentDirectApproved(groupOptions) && isStatusInReview && isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
       <InspectionControlsContainer {...{ documentRevision }} />
       {isExportable && <ExportToEmail revisionId={documentRevision.id}/>}
