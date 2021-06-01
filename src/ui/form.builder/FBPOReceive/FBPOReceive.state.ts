@@ -49,7 +49,7 @@ class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
   @action public getSchema = (): FBSchemaProps[] | undefined =>
     this.schema;
 
-  @action public setPOId = (id?: string) => {
+  @action public setPOId = async (id?: string) => {
     if (!id) {
       return;
     }
@@ -57,7 +57,7 @@ class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
     const urlTpl = template(FBEndpoint.FetchDocumentRevision);
     const url = urlTpl({ documentId: id });
     this.setUrl(url);
-    this.fetch();
+    await this.fetch();
   };
 }
 
