@@ -70,7 +70,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const canCopy = checkCanBeCopied(groupOptions);
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
   const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
-
+  const isDirectApproval = checkIsDocumentDirectApproved(groupOptions);
   const isLastVersionObsolete = () => {
     if (checkIsDocumentRecord(selectedDocument.document.documentType.groupOptions)) {
       return;
@@ -219,7 +219,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         />}
       {renderOutputButton()}
       {renderNoAccessWarning()}
-      {checkIsDocumentDirectApproved(groupOptions) && isStatusInReview && isUserDocumentOwner &&
+      {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
       <InspectionControlsContainer {...{ documentRevision }} />
       {isExportable && <ExportToEmail revisionId={documentRevision.id}/>}
