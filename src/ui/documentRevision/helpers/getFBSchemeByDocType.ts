@@ -53,7 +53,15 @@ export const getFBSchemeByDocType = (
   }, [] as FBSchemaProps[]);
 
   if (hasDirectApproval(outputTypesWithGroups)) {
-    if (!hasPO(outputTypesWithGroups)) {
+    if (hasPO(outputTypesWithGroups)) {
+      finalScheme.push({
+        label: "form.builder.approvals",
+        type: "poapprovals",
+        deleteDisabled: false,
+        name: `fb-po-approvals-${FB.uniqid}`,
+        uniqueSchemaItem: true,
+      });
+    } else {
       finalScheme.push({
         label: "form.builder.approvals",
         type: "approvals",
@@ -62,13 +70,6 @@ export const getFBSchemeByDocType = (
         uniqueSchemaItem: true,
       });
     }
-    finalScheme.push({
-      label: "form.builder.approvals",
-      type: "poapprovals",
-      deleteDisabled: false,
-      name: `fb-po-approvals-${FB.uniqid}`,
-      uniqueSchemaItem: true,
-    });
   }
   return finalScheme;
 };
