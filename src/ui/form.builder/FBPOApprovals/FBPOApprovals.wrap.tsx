@@ -23,8 +23,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
-    const { document, changeRequest, id, isOutput } = workspaceState || {};
+    const { document, changeRequest, id, isOutput, formInput } = workspaceState || {};
     const outputId = isOutput ? id : null;
+    const poName = workspaceState?.schema?.find((item) => item.type === "purchaseorder")?.name || "";
+    const totalAmount = formInput?.[poName]?.totalAmount;
 
     const poApprovalsState = FB.useRef(
       FBPOApprovalsState,
@@ -64,6 +66,12 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     };
 
+
+    React.useEffect(() => {
+      outputId && poApprovalsState.fetchRequiredApprovals(outputId as unknown as string[]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [totalAmount]);
+
     // On add approver
     React.useEffect(() => reaction(
       () => poApprovalsState?.approvalApi.data,
@@ -95,19 +103,28 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const checkGroups = (id: string) => {
       const approversGroups = compact(map(poApprovalsState.groups, (group) =>
         (group.joinedEmployees as string[]).includes(id) ? group : ""));
+      const poamGroups = approversGroups.filter((group) => group.type === "PURCHASE_APPROVAL");
+      const damGroups = approversGroups.filter((group) => group.type === "REVISION_APPROVAL");
 
       if (isEmpty(poApprovalsState.checkedGroups)) {
-        const groupToSign = minBy(approversGroups, "documentStage");
+        const groupToSign = minBy(poamGroups, "documentStage");
         poApprovalsState.setCheckedGroups(groupToSign);
+        if (damGroups) {
+          const damsToSign = difference(damGroups, poApprovalsState.checkedGroups || []);
+          damsToSign.map((dam) => poApprovalsState.setCheckedGroups((dam)));
+        }
         return groupToSign?.name;
       } else {
-        const sign = minBy(difference(approversGroups, poApprovalsState.checkedGroups || []), "documentStage");
+        const sign = minBy(difference(poamGroups, poApprovalsState.checkedGroups || []), "documentStage");
         poApprovalsState.setCheckedGroups(sign);
+        if (damGroups) {
+          const damsToSign = difference(damGroups, poApprovalsState.checkedGroups || []);
+          damsToSign.map((dam) => poApprovalsState.setCheckedGroups((dam)));
+        }
         return sign?.name;
-
       }
-
     };
+
     function addApprover(ids?: string[]) {
       if (!id) { return; }
       if (!ids) { return; }

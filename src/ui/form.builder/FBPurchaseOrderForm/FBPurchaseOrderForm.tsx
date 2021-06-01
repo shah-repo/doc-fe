@@ -104,21 +104,22 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       rules="min:0"
       onChange={handleTotal}
     />
-    {
-      type === "product" &&
-      <Box display="flex" justifyContent="flex-start">
-        <FBCheckbox
-          label="form.builder.field.tax"
-          name="tax"
-          gutter={false}
-        />
+    <Box display="flex" justifyContent="flex-start">
+      <FBCheckbox
+        label="form.builder.field.tax"
+        name="tax"
+        gutter={false}
+      />
+      {
+        type === "product" &&
         <FBCheckbox
           label="form.builder.field.capital.equipment"
           name="capitalEquipment"
           gutter={false}
         />
-      </Box>
-    }
+      }
+    </Box>
+
     {children}
   </ FormContext.Provider>
 );
