@@ -106,6 +106,9 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     handleAdd = () => {
       const formValue = formState?.getValues() as FBDocumentRevisionsValue;
       docRevState?.addDocumentRevision(formValue);
+      map(formValue, (value, key) => {
+        formState?.omitFieldValue(key);
+      });
       handleCancel?.();
     };
 
