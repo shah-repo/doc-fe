@@ -1,17 +1,22 @@
-import { FBAutocompleteAsyncProps, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalTransition, FBInputProps, FBPOApprovalsState, FBRequiredApprover, Owner } from "..";
+import { FBAutocompleteAsyncProps, FBDialogState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalTransition, FBInputProps, FBPOApprovalsState, FBRequiredApprover, Owner } from "..";
+import { DocumentStatus } from "../../../state/ducks/documents/types";
 
 export type FBPOApprovalsProps =
 & Pick<FBInputProps, "name" | "label" | "disabled" | "value">
 & FBAutocompleteAsyncProps
 & {
+  approvalTransition(transition: FBInlineApprovalTransition, approvalId?: string, password?: string): void;
+  isIncluded?(group: FBRequiredApprover): void;
+  onApproveClick?: (approvalId: string) => void;
   approvals?: FBInlineApprovalBody[];
   poApprovalsState?: FBPOApprovalsState;
-  approvalTransition(transition: FBInlineApprovalTransition, approvalId?: string, password?: string): void;
   docId?: string;
   groups?: Record<string, FBRequiredApprover>;
   checkedGroups?: any[];
-  isIncluded?(group: FBRequiredApprover): void;
   owners?: Owner[];
+  currentUser?: string;
+  documentStatus: DocumentStatus;
+  dialogState?: FBDialogState;
 };
 
 export type FBPOApprovalsConstructor = FBInlineApprovalConstructor & {

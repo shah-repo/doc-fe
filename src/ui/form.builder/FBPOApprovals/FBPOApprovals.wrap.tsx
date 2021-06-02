@@ -3,7 +3,8 @@ import { compact, difference, filter, find, isEmpty, map, minBy, unionBy } from 
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBApprover, FBInlineApprovalBody, FBPOApprovalsProps, FBRequiredApprover } from "..";
+import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBRequiredApprover } from "..";
+import { store } from "../../../state/store";
 import Colors from "../../layout/theme/utils/colors";
 import FBPOApprovalsState from "./FBPOApprovals.state";
 
@@ -14,12 +15,17 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
   const Comp = ({
     renderOption,
     isIncluded,
+    approvalTransition,
+    onApproveClick,
     name = "",
     loading,
     value,
     groups,
     approvals,
     checkedGroups,
+    currentUser,
+    documentStatus,
+    dialogState,
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
@@ -27,6 +33,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const outputId = isOutput ? id : null;
     const poName = workspaceState?.schema?.find((item) => item.type === "purchaseorder")?.name || "";
     const totalAmount = formInput?.[poName]?.totalAmount;
+    const authUser = store.getState().auth.user;
+    currentUser = authUser.id;
+    dialogState = FB.useRef(FBDialogState);
 
     const poApprovalsState = FB.useRef(
       FBPOApprovalsState,
@@ -147,6 +156,19 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       });
     }
 
+    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
+      if (!approvalId) { return; }
+      poApprovalsState?.applyTransition(transition, approvalId, { password });
+    };
+
+    onApproveClick = (approvalId: string) => {
+      dialogState?.config({
+        title: "form.builder.password.prompt",
+        open: true,
+        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
+      });
+    };
+
     // MARK: @observer
     useObserver(() => {
       groups = poApprovalsState?.groups;
@@ -162,17 +184,23 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
     const fieldValue = map(poApprovalsState?.getApprovals, "approver.id");
     formState?.setFieldValue(`${name}`, fieldValue);
+    documentStatus = document?.status as any;
 
     return Component({
       ...(props as T),
       renderOption,
       isIncluded,
+      approvalTransition,
+      onApproveClick,
       loading,
       name,
       value,
       groups,
       approvals,
       checkedGroups,
+      currentUser,
+      documentStatus,
+      dialogState,
     });
   };
 
