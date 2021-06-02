@@ -688,15 +688,14 @@ context("Autosave on blur", () => {
       });
     });
 
-    it("Add PO item and check for autosave", () => {
-      cy.poAddNewFieldItem();
-      // cy.wrapWithWaitOnApiCalls(
-      // [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
-      cy.poAMEnterLevelName({ name: "2" });
-      cy.poAMEnterLimit({ limit: "400" });
-      cy.poAMSelectUsers(USERS[1].name);
-      cy.poAddPOButtonClick();
-      // });
+    it("Add PO service item and check for autosave", () => {
+      cy.get("[data-cy='form.builder.add.item']").eq(3).click();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
+          cy.poSelectOption({ optionName: "service" });
+          cy.poEnterServiceID({ serviceId: "SRV123" });
+          cy.poAddPOButtonClick();
+        });
     });
 
     it("Select PO receivable and check for autosave", () => {

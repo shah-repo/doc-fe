@@ -21,5 +21,5 @@ then
   export REPORT_TITLE="generated_requirements"
 
   ./scripts/cypress/utils/delete_failed_specs.sh
-  ./scripts/cypress/utils/run_node.sh 2>/dev/null || true
+  CI_BUILD_ID="requirements_$CI_BUILD_ID" ./scripts/cypress/utils/run_node.sh 2>/dev/null || true
 fi

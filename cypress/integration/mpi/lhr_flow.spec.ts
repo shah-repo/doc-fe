@@ -33,6 +33,7 @@ let dateOfStep1Completion;
 let dateOfStep1CompletionOneMinuteLater;
 let dateOfStep2Completion;
 let dateOfStep2CompletionOneMinuteLater;
+let dateOfStep2CompletionOneMinuteBefore;
 
 const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
 
@@ -1079,10 +1080,9 @@ context("LHR flow", () => {
         cy.get("[data-cy=\"form.builder.step.completed\"]")
           .invoke("text")
           .then((text) => {
-            if (!(text === "Step completed | " + dateOfStep1Completion ||
-                  text === "Step completed | " + dateOfStep1CompletionOneMinuteLater)) {
-              assert.fail();
-            }
+            expect(text).to.be
+              .oneOf(["Step completed | " + dateOfStep1Completion,
+                "Step completed | " + dateOfStep1CompletionOneMinuteLater]);
           });
       });
 
@@ -1162,6 +1162,8 @@ context("LHR flow", () => {
         dateOfStep2Completion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         dateOfStep2CompletionOneMinuteLater = moment().add(1, "minutes")
           .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+        dateOfStep2CompletionOneMinuteBefore = moment().subtract(1, "minutes")
+          .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
       });
 
       context("Check equipment and materials from MPI created with API are present", () => {
@@ -1205,10 +1207,10 @@ context("LHR flow", () => {
         cy.get("[data-cy=\"form.builder.step.completed\"]").eq(0)
           .invoke("text")
           .then((text) => {
-            if (!(text === "Step completed | " + dateOfStep2Completion ||
-                  text === "Step completed | " + dateOfStep2CompletionOneMinuteLater)) {
-              assert.fail();
-            }
+            expect(text).to.be
+              .oneOf(["Step completed | " + dateOfStep2Completion,
+                "Step completed | " + dateOfStep2CompletionOneMinuteLater,
+                "Step completed | " + dateOfStep2CompletionOneMinuteBefore]);
           });
       });
 
@@ -1216,10 +1218,10 @@ context("LHR flow", () => {
         cy.get("[data-cy=\"form.builder.step.completed\"]").eq(1)
           .invoke("text")
           .then((text) => {
-            if (!(text === "Step completed | " + dateOfStep2Completion ||
-                text === "Step completed | " + dateOfStep2CompletionOneMinuteLater)) {
-              assert.fail();
-            }
+            expect(text).to.be
+              .oneOf(["Step completed | " + dateOfStep2Completion,
+                "Step completed | " + dateOfStep2CompletionOneMinuteLater,
+                "Step completed | " + dateOfStep2CompletionOneMinuteBefore]);
           });
       });
 
