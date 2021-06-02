@@ -542,7 +542,7 @@ context("Check DAM enforcement rules for document types", () => {
         cy.poClickCreatePO();
       });
 
-      it("Enter description 'POAM test", () => {
+      it("Enter description 'POAM test'", () => {
         // SystemRequirement("REQ-1290");
         cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
       });

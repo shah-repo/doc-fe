@@ -577,7 +577,7 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetAvailableApprovers], () => {
         cy.ebApprove();
       });
-      cy.wait(8000);
+      cy.wait(15000);
     });
 
     it("Verify status is 'Released'", () => {
@@ -676,7 +676,7 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetAvailableApprovers], () => {
         cy.ebApprove();
       });
-      cy.wait(8000);
+      cy.wait(15000);
     });
 
     it("Verify status is 'Released'", () => {
