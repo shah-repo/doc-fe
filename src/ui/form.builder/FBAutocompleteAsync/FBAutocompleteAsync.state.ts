@@ -111,7 +111,8 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
             displayRevision: releasedForm?.displayRevision || "",
           });
         });
-
+      case FBAutocompleteAsyncOption.parts:
+        return filter(union(data, this.additionalData), (item) => item.revisionChangeType !== "OBSOLETE");
       default: return union(data, this.additionalData);
     }
   };
