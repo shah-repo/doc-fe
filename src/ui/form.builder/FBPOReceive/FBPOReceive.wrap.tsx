@@ -29,6 +29,8 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     const { workspaceState, formState } = FB.useStores();
     const formValue = formState?.getFieldValue(name);
     const intl = useIntl();
+    const { formInput } = workspaceState || {};
+    const { receivedItems } = name && formInput?.[name];
 
     poReceiveState = FB.useRef<FBPOReceiveState>(FBPOReceiveState, formValue?.id);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
@@ -86,6 +88,12 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     onChange = (_ev, value: DocumentRevision) => {
       poReceiveState?.setPOId(value?.id);
     };
+
+    React.useEffect(() => {
+      if (name) {
+        formState?.setFieldValue(name, { ...formInput?.[name] });
+      }
+    }, [receivedItems]);
 
     React.useEffect(() => reaction(
       () => formState?.inputState.get(`porec-${name}`)?.value,
