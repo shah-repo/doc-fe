@@ -85,7 +85,6 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
       case FBAutocompleteAsyncOption.activeDocumentRevisions:
       case FBAutocompleteAsyncOption.TLList:
       case FBAutocompleteAsyncOption.CSLList:
-      case FBAutocompleteAsyncOption.parts:
       case FBAutocompleteAsyncOption.POList:
       case FBAutocompleteAsyncOption.suppliers:
         return map(

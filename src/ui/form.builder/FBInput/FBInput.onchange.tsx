@@ -174,6 +174,9 @@ export const withFBOnChange = <T extends FBInputProps>(
     });
 
     const onBlur = (ev) => {
+      if (props.defaultValue) {
+        ev.target.value = props.defaultValue;
+      }
       props.onBlur && props.onBlur(ev);
       if (type && FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);
