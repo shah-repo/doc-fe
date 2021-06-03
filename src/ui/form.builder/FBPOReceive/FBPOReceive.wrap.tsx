@@ -30,7 +30,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     const formValue = formState?.getFieldValue(name);
     const intl = useIntl();
     const { formInput } = workspaceState || {};
-    const { receivedItems } = name && formInput?.[name];
+    const { receivedItems } = name && formInput?.[name] || { receivedItems: "" };
 
     poReceiveState = FB.useRef<FBPOReceiveState>(FBPOReceiveState, formValue?.id);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
