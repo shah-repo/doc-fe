@@ -17,6 +17,7 @@ export CYPRESS_SCREENSHOT_OF_RUN_FAILURE="false"
 export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH="false"
 export REPORT_TITLE="generated_info"
 export CYPRESS_VIDEO="false"
+export CI_BUILD_ID="info_$CI_BUILD_ID"
 
 ./scripts/cypress/utils/delete_failed_specs.sh
-CI_BUILD_ID="info_$CI_BUILD_ID" ./scripts/cypress/utils/run_node.sh 2>/dev/null || true
+./scripts/cypress/utils/run_node.sh 2>/dev/null || true
