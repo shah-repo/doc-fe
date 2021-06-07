@@ -167,22 +167,30 @@ context("Record inline Flow", () => {
       });
 
       it("Enter description 'Record Document Revision description'", () => {
-        cy.drEnterDocumentDescription({ description: "Record Document Revision description" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+          cy.drEnterDocumentDescription({ description: "Record Document Revision description" });
+        });
       });
 
       it("Enter text 'First entry' in textfield for inline", () => {
         SystemRequirement("REQ-1080");
-        cy.get("[data-cy^=\"textfield-for-inline\"]").click().type("First entry");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type("First entry");
+          cy.unClick();
+        });
       });
 
       it("Enter text 'First entry' in second textfield for inline", () => {
         SystemRequirement("REQ-1080");
-        cy.get("[data-cy^=\"second-textfield-for-inline\"]")
-          .click().type("First entry");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[data-cy^=\"second-textfield-for-inline\"]")
+            .click().type("First entry");
+          cy.unClick();
+        });
       });
 
       it("Select approver for first inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.PatchDocRev],
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit],
           () => {
             cy.get("[name*=\"fb-ia-inline-field\"] input")
               .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
@@ -190,15 +198,11 @@ context("Record inline Flow", () => {
       });
 
       it("Select approver for second inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.GetDocAggregatedAudit],
           () => {
             cy.get("[name*=\"fb-ia-second-inline-field\"] input")
               .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
           });
-      });
-
-      it("Save record", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Check inline record creation default to numeric revision", () => {
@@ -218,8 +222,8 @@ context("Record inline Flow", () => {
         cy.get("input[name=\"password\"]").type("Tester1!");
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
-          CyRoutes.EmployeesGet,
-          CyRoutes.DocPreview], () => {
+          CyRoutes.GetAutocompleteOptions,
+          CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
         cy.checkToastMessage({ exists: false });
@@ -253,8 +257,8 @@ context("Record inline Flow", () => {
           cy.get("input[name=\"password\"]").type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.EmployeesGet,
-            CyRoutes.DocPreview], () => {
+            CyRoutes.GetAutocompleteOptions,
+            CyRoutes.GetDocAggregatedAudit], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
           cy.checkToastMessage({ exists: false });
@@ -265,8 +269,8 @@ context("Record inline Flow", () => {
           cy.get("input[name=\"password\"]").type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.EmployeesGet,
-            CyRoutes.DocPreview], () => {
+            CyRoutes.GetAutocompleteOptions,
+            CyRoutes.GetDocAggregatedAudit], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
           cy.checkToastMessage({ exists: false });
@@ -288,8 +292,8 @@ context("Record inline Flow", () => {
           cy.get("input[name=\"password\"]").type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.EmployeesGet,
-            CyRoutes.DocPreview], () => {
+            CyRoutes.GetAutocompleteOptions,
+            CyRoutes.GetDocAggregatedAudit], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });
@@ -318,7 +322,6 @@ context("Record inline Flow", () => {
 
         it("Filter record by name and status, and select it", () => {
           SystemRequirement("REQ-0120");
-          // cy.drFilterDocListByNameAndStatus({ title: "Record Document Revision", status: "Released" });
           cy.recFilterByRev({ revision: "Record Document Revision" });
           cy.recFilterByStatus({ status: "Released" });
           cy.wrapWithWaitOnApiCalls([
