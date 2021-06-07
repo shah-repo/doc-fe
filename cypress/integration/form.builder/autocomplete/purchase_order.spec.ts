@@ -132,8 +132,29 @@ context("Autocomplete 'Purchase Order' test", () => {
         cy.get("#HeaderInfo-docId").then((po) => { purchaseOrderNo = po.text(); });
       });
 
-      it("Click 'Add Approver' & 'confirm' button", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      it("Enter description 'PO test'", () => {
+        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").type("PO test");
+      });
+
+      it("Add an Approval", () => {
+        cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+        });
+      });
+
+      it("Click 'Submit for Approval' button", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        });
+      });
+
+      it("Click 'Approve' button", () => {
+        cy.get("[data-cy=\"form.builder.request.approve\"]").click();
+        cy.get("input[name=\"password\"]").type("Tester1!");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
+          cy.get("[data-cy=\"common.confirm\"]").click();
+        });
       });
 
       it("Reload company", () => {

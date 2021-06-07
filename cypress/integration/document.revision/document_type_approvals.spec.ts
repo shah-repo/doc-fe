@@ -532,26 +532,6 @@ context("Check DAM enforcement rules for document types", () => {
       });
     });
 
-    context("Test 'Purchase order' approvals for 'PO' internal type", () => {
-
-      it("Navigate to PO list", () => {
-        cy.navigToPurchaseOrder();
-      });
-
-      it("Click create new PO", () => {
-        cy.poClickCreatePO();
-      });
-
-      it("Enter description 'POAM test'", () => {
-        // SystemRequirement("REQ-1290");
-        cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
-      });
-
-      it("Check approvals enfocment", () => {
-        cy.drCheckApprovalsEnforcment();
-      });
-    });
-
     context("Test 'PO Approval Matrix' approvals for 'POAM' internal type", () => {
 
       it("Navigate to PO list", () => {
@@ -576,6 +556,26 @@ context("Check DAM enforcement rules for document types", () => {
 
       it("Click 'Save' document", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Check approvals enfocment", () => {
+        cy.drCheckApprovalsEnforcment();
+      });
+    });
+
+    context("Test 'Purchase order' approvals for 'PO' internal type", () => {
+
+      it("Navigate to PO list", () => {
+        cy.navigToPurchaseOrder();
+      });
+
+      it("Click create new PO", () => {
+        cy.poClickCreatePO();
+      });
+
+      it("Enter description 'POAM test'", () => {
+        // SystemRequirement("REQ-1290");
+        cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
       });
 
       it("Check approvals enfocment", () => {

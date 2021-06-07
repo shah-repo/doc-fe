@@ -118,7 +118,7 @@ Cypress.Commands.add("poSelectGLCode", () => {
 });
 
 Cypress.Commands.add("poEnterSupplierPartNumber", (params: {partNumber: string}) => {
-  cy.get("[name=\"description\"]").click().type(params.partNumber);
+  cy.get("[name=\"supplierPartNumber\"]").click().type(params.partNumber);
 });
 
 Cypress.Commands.add("poNumberOfUnits", (params: {number: string}) => {

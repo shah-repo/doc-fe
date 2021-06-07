@@ -508,8 +508,25 @@ context("PO test", () => {
         cy.wait(2000);
       });
 
-      it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      it("Add an Approval", () => {
+        cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+        });
+      });
+
+      it("Click 'Submit for Approval' button", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        });
+      });
+
+      it("Click 'Approve' button", () => {
+        cy.get("[data-cy=\"form.builder.request.approve\"]").click();
+        cy.get("input[name=\"password\"]").type("Tester1!");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
+          cy.get("[data-cy=\"common.confirm\"]").click();
+        });
       });
     });
   });
@@ -679,7 +696,7 @@ context("PO test", () => {
     });
 
     it("Click 'Add New Field'", () => {
-      cy.fbAddNewFieldOption();
+      cy.fbClickAddNewHiddenBtn();
     });
 
     it("Select 'Purchase Order' from list", () => {
