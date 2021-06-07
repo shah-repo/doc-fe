@@ -174,8 +174,8 @@ export const withFBOnChange = <T extends FBInputProps>(
     });
 
     const onBlur = (ev) => {
-      if (props.defaultValue) {
-        ev.target.value = props.defaultValue;
+      if (ev.target.type === "number" && ev.target.step === ".01") {
+        ev.target.value = Math.abs(ev.target.value).toFixed(2).toString();
       }
       props.onBlur && props.onBlur(ev);
       if (type && FBInputState.omitOnChange.includes(type)) {

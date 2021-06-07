@@ -258,6 +258,7 @@ const upgradeToReleasedForm = (
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_UPGRADE_URL}/${id}`,
   method: "patch",
+  asyncType: DOCUMENT_REVISION_GET_ASYNC,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
   },

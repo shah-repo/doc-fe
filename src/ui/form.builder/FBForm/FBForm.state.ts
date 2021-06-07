@@ -167,6 +167,22 @@ class FBFormState extends FBSchemaState {
     };
   };
 
+  @action public removeFieldRules = (fieldName: string) => {
+    const rules = { ...this.rules };
+    const finalValidationRulse = { ...this.finalValidationRulse };
+    if (isUndefined(rules[fieldName]) || isUndefined(finalValidationRulse[fieldName])) {
+      return;
+    }
+    delete rules[fieldName];
+    delete finalValidationRulse[fieldName];
+    this.rules = {
+      ...rules,
+    };
+    this.finalValidationRulse = {
+      ...finalValidationRulse,
+    };
+  };
+
   @action public validate = (callback?: (valid: boolean) => any, final = false) => {
     if (isUndefined(this.Validator)) {
       return;
