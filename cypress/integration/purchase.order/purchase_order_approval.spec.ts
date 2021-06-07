@@ -21,6 +21,18 @@ let thirdEmployee;
 let developersGroup;
 
 context("PO approval test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("Create company via API and create Purchase Order Form document", () => {
     it("[API] Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -146,7 +158,7 @@ context("PO approval test", () => {
     });
 
     it("Click 'Add New Field'", () => {
-      cy.fbAddNewFieldOption();
+      cy.fbAddNewFieldWhenHidden();
     });
 
     it("Select 'Purchase Order' from list", () => {
@@ -200,7 +212,7 @@ context("PO approval test", () => {
     });
 
     it("Click 'Add New Field'", () => {
-      cy.fbAddNewFieldOption();
+      cy.fbAddNewFieldWhenHidden();
     });
 
     it("Select 'PO Approval Matrix' from list", () => {
@@ -306,72 +318,100 @@ context("PO approval test", () => {
       cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
     });
 
-    it("Enter Shipping Cost '210'", () => {
-      cy.poShippingCost({ number: "21" });
+    it("Click on 'Add item' button", () => {
+      cy.poAddNewFieldItem();
+    });
+
+    it("Click on 'Service' select option", () => {
+      // SystemRequirement("REQ-1390");
+      // SystemRequirement("REQ-1420");
+      cy.poSelectOption({ optionName: "service" });
+    });
+
+    it("Enter ServiceID", () => {
+      // SystemRequirement("REQ-1420");
+      cy.poEnterServiceID({ serviceId: "SRV123" });
+    });
+
+    it("Enter Description", () => {
+      // SystemRequirement("REQ-1420");
+      cy.poEnterDescription({ description: "Description for SRV123" });
+    });
+
+    it("Enter Quantity Ordered", () => {
+      // SystemRequirement("REQ-1420");
+      cy.poEnterQuantityOrdered({ quantity: "1" });
+    });
+
+    it("Select Units", () => {
+      // SystemRequirement("REQ-1420");
+      cy.poSelectUnits();
+    });
+
+    it("Select GL code", () => {
+      // SystemRequirement("REQ-1420");
+      cy.poSelectGLCode();
+    });
+
+    it("Enter number of Units", () => {
+      // SystemRequirement("REQ-1420");
+      cy.poNumberOfUnits({ number: "190" });
+    });
+
+    it("Click on 'Add' inside PO dialog box", () => {
+      cy.poAddPOButtonClick();
     });
 
     it("Save document", () => {
       cy.poSaveDocument();
     });
 
-    it("Click on 'Add Approver'", () => {
-      cy.poAMCheckForApproval();
-    });
-
     it("Check approval icon if it's gray", () => {
       cy.poAMCheckApprovalIconIfItsGray();
     });
 
-    it("Try to approve document without approver when it contains POAM", () => {
-      cy.poAMApproveButton();
+    it("Click 'Submit for Approval' button", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+      });
     });
 
-    it("Check if error message says that approver must be added", () => {
+    it("Check if error message says that approvers are not present", () => {
       // SystemRequirement("REQ-1500");
       cy.poAMCheckForAlertMessage();
-    });
-
-    it(`Select '${USERS[3].name}' as approver`, () => {
-      cy.poAMSelectApprover(USERS[3].name);
     });
 
     it("Check if selected approver has approval signature right by his name", () => {
       // SystemRequirement("REQ-1510");
       cy.poAMCheckIfApproverHasApprovalSign();
+      cy.unClick();
     });
 
-    it("Check approval icon if it's green", () => {
-      cy.poAMCheckApprovalIconIfItsGreen();
+    it("Add an Approval", () => {
+      cy.wait(2000);
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).click();
+      });
     });
 
-    it("Create document in 'Pending for approval' state", () => {
-      cy.poAMApproveButton();
+    it("Check approval icon if it's colored", () => {
+      cy.poAMCheckApprovalIconIfItsRed();
     });
 
-    it("Navigate to Doc List", () => {
-      cy.navigToDocumentList().wait(2000);
+    it("Create document in 'Pending approval' state", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+      });
     });
 
-    it("Navigate to AR List", () => {
-      cy.navigToApprovalRequestList();
-    });
-
-    it("Select last created AR from list", () => {
-      cy.alFilterByArId({ arId: "AR00004" });
-      cy.arSelectFirstDocument();
-    });
-
-    it("Withdraw PO that's set for approval", () => {
-      // SystemRequirement("REQ-1530");
-      cy.arWithdrawSubmission();
-    });
-
-    it("Click on 'Purchase Order' on sidebar", () => {
-      cy.navigToPurchaseOrder();
-    });
-
-    it("Click on 'Create PO' button", () => {
-      cy.poClickCreatePO();
+    it("Click on 'Withdraw Submission' button", () => {
+      cy.get("[data-cy=\"document.revision.withdraw.alert\"]").click();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.EmployeesGet,
+        CyRoutes.DocRevPreview], () => {
+        cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+      });
     });
 
     it("Enter description 'POAM test", () => {
@@ -379,26 +419,66 @@ context("PO approval test", () => {
       cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
     });
 
-    it("Enter Shipping Cost '210'", () => {
-      cy.poShippingCost({ number: "21" });
+    it("Click on 'Add item' button", () => {
+      cy.poAddNewFieldItem();
+    });
+
+    it("Click on 'Service' select option", () => {
+      // SystemRequirement("REQ-1390");
+      // SystemRequirement("REQ-1420");
+      cy.poSelectOption({ optionName: "service" });
+    });
+
+    it("Enter ServiceID", () => {
+      // SystemRequirement("REQ-1420");
+      cy.poEnterServiceID({ serviceId: "SRV234" });
+    });
+
+    it("Enter Description", () => {
+      // SystemRequirement("REQ-1420");
+      cy.poEnterDescription({ description: "Description for SRV234" });
+    });
+
+    it("Enter Quantity Ordered", () => {
+      // SystemRequirement("REQ-1420");
+      cy.poEnterQuantityOrdered({ quantity: "1" });
+    });
+
+    it("Select Units", () => {
+      // SystemRequirement("REQ-1420");
+      cy.poSelectUnits();
+    });
+
+    it("Select GL code", () => {
+      // SystemRequirement("REQ-1420");
+      cy.poSelectGLCode();
+    });
+
+    it("Enter number of Units", () => {
+      // SystemRequirement("REQ-1420");
+      cy.poNumberOfUnits({ number: "190" });
+    });
+
+    it("Click on 'Add' inside PO dialog box", () => {
+      cy.poAddPOButtonClick();
     });
 
     it("Save document", () => {
       cy.poSaveDocument();
     });
 
-    it("Click on 'Add Approver'", () => {
-      // SystemRequirement("REQ-1490");
-      cy.poAMCheckForApproval();
+    it("Add an Approval", () => {
+      cy.wait(2000);
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[3].name).click();
+      });
     });
 
-    it(`Select '${USERS[3].name}' as approver`, () => {
-      cy.poAMSelectApprover(USERS[3].name);
-    });
-
-    it("Create document in 'Pending for approval' state", () => {
-      // SystemRequirement("REQ-1490");
-      cy.poAMApproveButton();
+    it("Create document in 'Pending approval' state", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+      });
     });
 
     it(`Log out with '${USERS[2].name}'`, () => {
@@ -416,14 +496,16 @@ context("PO approval test", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Check for AR notification on dashboard", () => {
+    it("Check for PO notification on dashboard", () => {
       SystemRequirement("REQ-2150");
-      cy.arCheckDashboardARNotificationExistance({ shouldExist: true });
+      cy.arCheckDashboardPONotificationExistance({ shouldExist: true });
     });
 
-    it("Click on 'Reject' AR and enter confirmation password", () => {
-      // SystemRequirement("REQ-1570");
-      cy.poRejectAR({ password: "Tester1!" });
+    it("Click on 'Reject' PO and enter confirmation password", () => {
+      cy.get("[data-cy=\"transition-reject\"]").first().click().wait(300);
+      cy.get("[data-cy=\"transition.action.password\"]").click().type("Tester1!");
+      cy.wait(300).get("[data-cy=\"passwordConfirm\"]").click();
+      cy.checkToastMessage({ exists: false });
     });
 
     it("Navigate to Doc List", () => {
@@ -439,7 +521,7 @@ context("PO approval test", () => {
     });
 
     it("Select rejected PO from list", () => {
-      cy.poClickOnSpecificPOFromList({ item: "PO-00002" });
+      cy.poClickOnSpecificPOFromList({ item: "PO-00001" });
     });
 
     it("Verify rejected PO status, should be 'Draft'", () => {
