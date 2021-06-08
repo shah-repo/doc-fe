@@ -183,6 +183,7 @@ definitions:
           - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
+          - ./scripts/cypress/utils/slack_test_report_upload.sh
 
     - step: &SLACK_CYPRESS_REPORT_SCHEDULED_SANDBOX
         <<: *COMMON_RUN_CYPRESS
