@@ -37,6 +37,7 @@ const PurchaseOrderApproval: React.FunctionComponent<Props> = ({
       title={title}
       description={description}
       url={documentPreviewPath(documentRevision.id, documentRevision.document.id)}
+      dataCy="pendingActionsPO"
     >
       <PODetailsContainer documentRevision={documentRevision} />
     </DashboardActionTypeBase>

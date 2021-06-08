@@ -45,6 +45,8 @@ const POApproveOrReject: React.FunctionComponent<Props> = ({
           <Button
             variant="outlined"
             color="secondary"
+            aria-label="reject"
+            data-cy="transition-reject"
             onClick={() => changeApprovalStatus("reject", approvalId)}
           >
             <Text translation="transition.action.reject"/>
@@ -52,6 +54,8 @@ const POApproveOrReject: React.FunctionComponent<Props> = ({
           <Button
             variant="outlined"
             color="secondary"
+            aria-label="approve"
+            data-cy="transition-approve"
             onClick={() => passwordDialog.open()}
           >
             <Text translation="transition.action.approve"/>

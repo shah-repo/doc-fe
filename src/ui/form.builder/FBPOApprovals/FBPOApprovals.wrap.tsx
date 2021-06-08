@@ -4,6 +4,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBRequiredApprover } from "..";
+import { ApprovalStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
 import Colors from "../../layout/theme/utils/colors";
 import FBPOApprovalsState from "./FBPOApprovals.state";
@@ -95,6 +96,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
           approval.approverId === data?.approverId ? data : approval
         ));
         poApprovalsState.setApprovals(filteredApprovals);
+        if (data?.status === ApprovalStatus.Approved) {
+          window.location.reload();
+        }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
