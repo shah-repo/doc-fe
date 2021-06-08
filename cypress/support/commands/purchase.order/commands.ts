@@ -53,6 +53,7 @@ declare global {
       poVerifyStatus(params: {status: string}): Chainable<Subject>;
       poAPICreatePO(params: {payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
       poSelectPoForm(params: {nameOfPoForm: string}): Chainable<Subject>;
+      poAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
     }
   }
 }
@@ -71,6 +72,13 @@ export interface PurchaseOrderItem {
 Cypress.Commands.add("poSelectPoForm", (params: {nameOfPoForm: string}) => {
   cy.get("[id=FormListDialog-selectForm]").click();
   cy.get("[id^=react-select]").contains(params.nameOfPoForm).click();
+});
+
+Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.get("[data-cy^=\"fb-po-approvals\"]").click();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+    cy.get("ul[role=\"listbox\"]>li").contains(params.approver).click();
+  });
 });
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
