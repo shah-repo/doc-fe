@@ -544,8 +544,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/required_approvers*",
     },
     callConfig: {
-      responseTimeout: 35 * 1000,
-      requestTimeout: 30 * 1000,
+      responseTimeout: 45 * 1000,
+      requestTimeout: 40 * 1000,
     },
   },
   PostApprovalsApprove: {

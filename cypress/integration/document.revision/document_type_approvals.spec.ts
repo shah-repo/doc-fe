@@ -35,20 +35,7 @@ const THIRD_USER = USERS[4];
 const INDIVIDUAL_USER = USERS[14];
 
 context("Check DAM enforcement rules for document types", () => {
-
   context("[API]Prepare company", () => {
-    before(() => {
-      cy.clearLocalStorageSnapshot();
-    });
-
-    beforeEach(() => {
-      cy.restoreLocalStorage();
-    });
-
-    afterEach(() => {
-      cy.saveLocalStorage();
-    });
-
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
@@ -423,165 +410,165 @@ context("Check DAM enforcement rules for document types", () => {
   });
 
   context("Test enforced approvals for all internal document types", () => {
-    // context("Test 'Dynamic Form' approvals for 'Dynamic Form' internal type", () => {
-    //   it("Navigate to document list", () => {
-    //     cy.navigToDocumentList();
-    //   });
+    context("Test 'Dynamic Form' approvals for 'Dynamic Form' internal type", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
 
-    //   it("Click create document", () => {
-    //     cy.cmpClickCreateNewDocument();
-    //   });
+      it("Click create document", () => {
+        cy.cmpClickCreateNewDocument();
+      });
 
-    //   it("Fill document name", () => {
-    //     cy.drEnterDocumentTitle({ name: "Dynamic Form approvals" });
-    //   });
+      it("Fill document name", () => {
+        cy.drEnterDocumentTitle({ name: "Dynamic Form approvals" });
+      });
 
-    //   it("Fill document description", () => {
-    //     cy.drEnterDocumentDescription({ description: "Test approvals" });
-    //   });
+      it("Fill document description", () => {
+        cy.drEnterDocumentDescription({ description: "Test approvals" });
+      });
 
-    //   it("Select document type", () => {
-    //     cy.drSelectDocumentType({ documentType: "Dynamic Form" });
-    //   });
+      it("Select document type", () => {
+        cy.drSelectDocumentType({ documentType: "Dynamic Form" });
+      });
 
-    //   it("Select 'Numeric' revision stage", () => {
-    //     cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    //   });
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
 
-    //   it("Create document", () => {
-    //     cy.drClickCreateDocumentWithApiCall();
-    //   });
+      it("Create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
 
-    //   it("Check approvals enfocment", () => {
-    //     cy.drCheckApprovalsEnforcment();
-    //   });
-    // });
+      it("Check approvals enfocment", () => {
+        cy.drCheckApprovalsEnforcment();
+      });
+    });
 
-    // context("Test 'Clinical Protocol' approvals for 'OTHER' internal type", () => {
-    //   it("Navigate to document list", () => {
-    //     cy.navigToDocumentList();
-    //   });
+    context("Test 'Clinical Protocol' approvals for 'OTHER' internal type", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
 
-    //   it("Click create document", () => {
-    //     cy.cmpClickCreateNewDocument();
-    //   });
+      it("Click create document", () => {
+        cy.cmpClickCreateNewDocument();
+      });
 
-    //   it("Fill document name", () => {
-    //     cy.drEnterDocumentTitle({ name: "Clinical Protocol approvals" });
-    //   });
+      it("Fill document name", () => {
+        cy.drEnterDocumentTitle({ name: "Clinical Protocol approvals" });
+      });
 
-    //   it("Fill document description", () => {
-    //     cy.drEnterDocumentDescription({ description: "Test approvals" });
-    //   });
+      it("Fill document description", () => {
+        cy.drEnterDocumentDescription({ description: "Test approvals" });
+      });
 
-    //   it("Select document type", () => {
-    //     cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
-    //   });
+      it("Select document type", () => {
+        cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
+      });
 
-    //   it("Select 'Numeric' revision stage", () => {
-    //     cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    //   });
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
 
-    //   it("Create document", () => {
-    //     cy.drClickCreateDocumentWithApiCall();
-    //   });
+      it("Create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
 
-    //   it("Check approvals enfocment", () => {
-    //     cy.drCheckApprovalsEnforcment();
-    //   });
-    // });
+      it("Check approvals enfocment", () => {
+        cy.drCheckApprovalsEnforcment();
+      });
+    });
 
-    // context("Test 'Form' approvals for 'FORM' internal type", () => {
-    //   it("Navigate to document list", () => {
-    //     cy.navigToDocumentList();
-    //   });
+    context("Test 'Form' approvals for 'FORM' internal type", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
 
-    //   it("Click create document", () => {
-    //     cy.cmpClickCreateNewDocument();
-    //   });
+      it("Click create document", () => {
+        cy.cmpClickCreateNewDocument();
+      });
 
-    //   it("Fill document name", () => {
-    //     cy.drEnterDocumentTitle({ name: "Form approvals" });
-    //     cy.get("[data-cy=field-name]").click();
-    //   });
+      it("Fill document name", () => {
+        cy.drEnterDocumentTitle({ name: "Form approvals" });
+        cy.get("[data-cy=field-name]").click();
+      });
 
-    //   it("Fill document description", () => {
-    //     cy.drEnterDocumentDescription({ description: "Test approvals" });
-    //   });
+      it("Fill document description", () => {
+        cy.drEnterDocumentDescription({ description: "Test approvals" });
+      });
 
-    //   it("Select document type", () => {
-    //     cy.drSelectDocumentType({ documentType: "Form" });
-    //   });
+      it("Select document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
 
-    //   it("Select output document type", () => {
-    //     cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
-    //   });
+      it("Select output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
+      });
 
-    //   it("Select 'Numeric' revision stage", () => {
-    //     cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    //   });
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
 
-    //   it("Create document", () => {
-    //     cy.drClickCreateDocumentWithApiCall();
-    //   });
+      it("Create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
 
-    //   it("Check approvals enfocment", () => {
-    //     cy.drCheckApprovalsEnforcment();
-    //   });
-    // });
+      it("Check approvals enfocment", () => {
+        cy.drCheckApprovalsEnforcment();
+      });
+    });
 
-    // context("Test 'Document Approval Matrix' approvals for 'DAM' internal type", () => {
-    //   it("Navigate to document list", () => {
-    //     cy.navigToDocumentList();
-    //   });
+    context("Test 'Document Approval Matrix' approvals for 'DAM' internal type", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
 
-    //   it(`Select document named '${DAMTitle}'`, () => {
-    //     cy.drClickOnSpecificDocFromList({ item: DAMTitle });
-    //   });
+      it(`Select document named '${DAMTitle}'`, () => {
+        cy.drClickOnSpecificDocFromList({ item: DAMTitle });
+      });
 
-    //   it("Click revise", () => {
-    //     cy.drClickReviseDocument();
-    //   });
+      it("Click revise", () => {
+        cy.drClickReviseDocument();
+      });
 
-    //   it("Create document", () => {
-    //     cy.drClickCreateDocumentWithApiCall();
-    //   });
+      it("Create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
 
-    //   it("Check approvals enfocment", () => {
-    //     cy.drCheckApprovalsEnforcment();
-    //   });
-    // });
+      it("Check approvals enfocment", () => {
+        cy.drCheckApprovalsEnforcment();
+      });
+    });
 
-    // context("Test 'PO Approval Matrix' approvals for 'POAM' internal type", () => {
+    context("Test 'PO Approval Matrix' approvals for 'POAM' internal type", () => {
 
-    //   it("Navigate to PO list", () => {
-    //     cy.navigToDocumentList();
-    //   });
+      it("Navigate to PO list", () => {
+        cy.navigToDocumentList();
+      });
 
-    //   it(`Select document named '${POAMFormTitle}'`, () => {
-    //     cy.drClickOnSpecificDocFromList({ item: POAMFormTitle });
-    //   });
+      it(`Select document named '${POAMFormTitle}'`, () => {
+        cy.drClickOnSpecificDocFromList({ item: POAMFormTitle });
+      });
 
-    //   it("Create new POAM document from Form", () => {
-    //     cy.drCreateNewDocumentFromForm();
-    //   });
+      it("Create new POAM document from Form", () => {
+        cy.drCreateNewDocumentFromForm();
+      });
 
-    //   it("Enter title 'New POAM'", () => {
-    //     cy.drEnterDocumentTitle({ name: "New POAM" });
-    //   });
+      it("Enter title 'New POAM'", () => {
+        cy.drEnterDocumentTitle({ name: "New POAM" });
+      });
 
-    //   it("Enter description 'New POAM description'", () => {
-    //     cy.drEnterDocumentDescription({ description: "New POAM description" });
-    //   });
+      it("Enter description 'New POAM description'", () => {
+        cy.drEnterDocumentDescription({ description: "New POAM description" });
+      });
 
-    //   it("Click 'Save' document", () => {
-    //     cy.drClickCreateDocumentWithApiCallForForms();
-    //   });
+      it("Click 'Save' document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
 
-    //   it("Check approvals enfocment", () => {
-    //     cy.drCheckApprovalsEnforcment();
-    //   });
-    // });
+      it("Check approvals enfocment", () => {
+        cy.drCheckApprovalsEnforcment();
+      });
+    });
 
     context("Test 'Purchase order' approvals for 'PO' internal type", () => {
 
@@ -610,10 +597,12 @@ context("Check DAM enforcement rules for document types", () => {
         });
       });
 
+      // it("Check approval role is present", () => {
+      //   cy.get("[data-cy=\"Role One\"]").should("exist");
+      // });
+
       it("Submit for approvals and check enfocment", () => {
-        cy.get("[data-cy=\"Role One\"]").should("exist");
-        // cy.get("[data-cy=group-0]").should("have.text", "Role One");
-        cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         cy.checkToastMessageContains({ message: "at least one approver from group Role One has to be selected" });
         cy.closeAllAlertMessages();
       });

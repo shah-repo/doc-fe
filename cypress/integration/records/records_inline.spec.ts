@@ -169,6 +169,7 @@ context("Record inline Flow", () => {
       it("Enter description 'Record Document Revision description'", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
           cy.drEnterDocumentDescription({ description: "Record Document Revision description" });
+          cy.drClickCreateDocumentWithoutApiCall();
         });
       });
 
@@ -222,7 +223,7 @@ context("Record inline Flow", () => {
         cy.get("input[name=\"password\"]").type("Tester1!");
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
-          CyRoutes.GetAutocompleteOptions,
+          CyRoutes.GetRequiredApproversDocRev,
           CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
@@ -257,7 +258,7 @@ context("Record inline Flow", () => {
           cy.get("input[name=\"password\"]").type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.GetAutocompleteOptions,
+            CyRoutes.GetRequiredApproversDocRev,
             CyRoutes.GetDocAggregatedAudit], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
@@ -269,7 +270,7 @@ context("Record inline Flow", () => {
           cy.get("input[name=\"password\"]").type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.GetAutocompleteOptions,
+            CyRoutes.GetRequiredApproversDocRev,
             CyRoutes.GetDocAggregatedAudit], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
@@ -292,7 +293,7 @@ context("Record inline Flow", () => {
           cy.get("input[name=\"password\"]").type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.GetAutocompleteOptions,
+            CyRoutes.GetRequiredApproversDocRev,
             CyRoutes.GetDocAggregatedAudit], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
