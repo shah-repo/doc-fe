@@ -503,8 +503,7 @@ context("PO approval test", () => {
 
     it("Click on 'Reject' PO and enter confirmation password", () => {
       cy.get("[data-cy=\"transition-reject\"]").first().click().wait(300);
-      cy.get("[data-cy=\"transition.action.password\"]").click().type("Tester1!");
-      cy.wait(300).get("[data-cy=\"passwordConfirm\"]").click();
+      cy.get("#AlertDialog-continueButton").click();
       cy.checkToastMessage({ exists: false });
     });
 
