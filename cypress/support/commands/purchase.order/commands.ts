@@ -43,7 +43,7 @@ declare global {
       poAMSelectUsers(...list: string[]): Chainable<Subject>;
       poAMCheckForApproval(): Chainable<Subject>;
       poSaveDocument(): Chainable<Subject>;
-      poAMCheckApprovalIconIfItsGreen(): Chainable<Subject>;
+      poAMCheckApprovalIconIfItsRed(): Chainable<Subject>;
       poAMCheckApprovalIconIfItsGray(): Chainable<Subject>;
       poAMSelectApprover(...list: string[]): Chainable<Subject>;
       poAMApproveButton(): Chainable<Subject>;
@@ -53,6 +53,7 @@ declare global {
       poVerifyStatus(params: {status: string}): Chainable<Subject>;
       poAPICreatePO(params: {payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
       poSelectPoForm(params: {nameOfPoForm: string}): Chainable<Subject>;
+      poAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
     }
   }
 }
@@ -71,6 +72,13 @@ export interface PurchaseOrderItem {
 Cypress.Commands.add("poSelectPoForm", (params: {nameOfPoForm: string}) => {
   cy.get("[id=FormListDialog-selectForm]").click();
   cy.get("[id^=react-select]").contains(params.nameOfPoForm).click();
+});
+
+Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.get("[data-cy^=\"fb-po-approvals\"]").click();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+    cy.get("ul[role=\"listbox\"]>li").contains(params.approver).click();
+  });
 });
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
@@ -118,7 +126,7 @@ Cypress.Commands.add("poSelectGLCode", () => {
 });
 
 Cypress.Commands.add("poEnterSupplierPartNumber", (params: {partNumber: string}) => {
-  cy.get("[name=\"description\"]").click().type(params.partNumber);
+  cy.get("[name=\"supplierPartNumber\"]").click().type(params.partNumber);
 });
 
 Cypress.Commands.add("poNumberOfUnits", (params: {number: string}) => {
@@ -244,12 +252,12 @@ Cypress.Commands.add("poAMCheckForApproval", () => {
   });
 });
 
-Cypress.Commands.add("poAMCheckApprovalIconIfItsGreen", () => {
-  cy.get("[fill=\"#B4DE5A\"]").should("exist");
+Cypress.Commands.add("poAMCheckApprovalIconIfItsRed", () => {
+  cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-colorPrimary\"]").should("exist");
 });
 
 Cypress.Commands.add("poAMCheckApprovalIconIfItsGray", () => {
-  cy.get("[fill=\"#D8D9D6\"]").should("exist");
+  cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-colorDisabled\"]").should("exist");
 });
 
 Cypress.Commands.add("poAMApproveButton", () => {
@@ -258,11 +266,12 @@ Cypress.Commands.add("poAMApproveButton", () => {
 });
 
 Cypress.Commands.add("poAMCheckIfApproverHasApprovalSign", () => {
-  cy.get("[id=\"approvals\"]").contains("PO Approval sig").should("exist");
+  cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+  cy.get("ul[role=\"listbox\"]>li").contains("PO Approval sig").should("exist");
 });
 
 Cypress.Commands.add("poAMCheckForAlertMessage", () => {
-  cy.get("[class=\"Toastify__toast-body\"]").contains("at least one approver from group").contains("has to be selected").should("exist");
+  cy.get("[class=\"Toastify__toast-body\"]").contains("Approvals not present").should("exist");
   cy.closeAllAlertMessages();
 });
 

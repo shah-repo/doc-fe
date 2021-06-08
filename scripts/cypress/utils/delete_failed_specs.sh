@@ -5,6 +5,10 @@ if [[ -z "${CI_BUILD_ID}" ]]; then
   exit 1
 fi
 
+if [[ -z "${CYPRESS_JSON_REPORTS_FOLDER}" ]]; then
+  echo "CYPRESS_JSON_REPORTS_FOLDER not set, exiting"
+  exit 1
+fi
 
 if [[ -z "${REPORT_TITLE}" ]]; then
   echo "REPORT_TITLE not set, exiting"
@@ -32,7 +36,7 @@ if [[ -z "${COMPOSE_PROJECT_NAME}" ]]; then
 fi
 
 SORRY_CYPRESS_DASBOARD_CONTAINER_NAME=$COMPOSE_PROJECT_NAME"_enlil_cypress_dashboard_mongo_1"
-MOCHAWESOME_FILES=($(find results/$CI_BUILD_ID/json -name "$REPORT_TITLE*"))
+MOCHAWESOME_FILES=($(find $CYPRESS_JSON_REPORTS_FOLDER -name "$REPORT_TITLE*"))
 
 for i in "${MOCHAWESOME_FILES[@]}"
 do
