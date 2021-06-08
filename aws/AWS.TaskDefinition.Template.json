@@ -45,6 +45,10 @@
         {
           "name": "REACT_APP_CONSOLE_TOAST",
           "value": ""
+        },
+        {
+          "name": "REACT_APP_PREVENT_DOC_TYPE_MANAGEMENT_EDIT",
+          "value": ""
         }
       ],
       "logConfiguration": {

@@ -129,6 +129,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   retrain?: boolean;
   grantAccess?: boolean;
   renderHTML?: string;
+  renderHTMLDefined?: boolean;
   pdf?: PDF;
   outputRevision?: boolean;
   primaryAttachment?: Attachment;
@@ -156,9 +157,14 @@ export interface SmartReference {
   id: string;
   metadata: {
     fieldId: string;
+    lotDocId?: string;
     startedBy: string;
+    completedBy: string;
     materialId?: string;
     equipmentId?: string;
+    quantity?: number;
+    unit?: string;
+    lotPart?: string;
   };
   toDocRevId?: Nullable<string>;
   toDocRev?: Nullable<DocumentRevision>;
@@ -301,6 +307,7 @@ export interface FBDocumentRevisionProps {
   revisionChangeType?: RevisionChangeType;
   releasedAt?: string;
   renderHTML?: string;
+  renderHTMLDefined?: boolean;
   status?: DocumentRevisionStatus;
   tasks?: FBTaskItem[];
   notes?: FBNoteItem[];

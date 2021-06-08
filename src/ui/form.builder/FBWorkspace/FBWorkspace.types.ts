@@ -44,14 +44,13 @@ export interface FBWorkspaceExternalState {
   documentType?: {
     byId: any;
   };
-}
-
-export interface FBDifference {
-  index: number;
-  num: number;
-  path: string[];
-  type: "rm" | "add";
-  vals: any;
+  documentRevisions?: {
+    byId: any;
+  };
 }
 
 export type FBWorkspaceConstructor = Pick<FBWorkspaceProps, "schema" | "mode" | "autosave">;
+
+export interface FBWorkspaceSocketProps {
+  id?: string;
+}

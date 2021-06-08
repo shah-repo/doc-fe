@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { CONFIG } from "../../../support/config";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -9,7 +11,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 let secondEmployee;
-const documentRevisionTitle = `DocumentRevision${Cypress.moment().format("X")}`;
+const documentRevisionTitle = `DocumentRevision${moment().format("X")}`;
 
 context("Autocomplete 'Document Revisions In Draft without Records' test", () => {
   context("[API]Prepare company", () => {

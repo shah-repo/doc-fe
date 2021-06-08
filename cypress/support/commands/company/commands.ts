@@ -1,6 +1,7 @@
 import * as CRC32 from "crc-32";
 import faker from "faker";
-import { Company } from "../../../../src/state/ducks/company";
+import { Company } from "../../../../src/state/ducks/company/types";
+import { addTestContext } from "../../../utils/context/addTestContext";
 import { HEX2RGB } from "../../../utils/context/converers";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
@@ -16,6 +17,13 @@ interface IUser {
   name: string;
 }
 //
+interface IfieldsConfig{
+  [key: string]: {
+    visible: boolean;
+    required?: boolean;
+    label?: string;};
+}
+
 interface IdocumentTypeDto {
   documentTypeName: string;
   documentTypeAcronym: string;
@@ -26,14 +34,7 @@ interface IdocumentTypeDto {
   needsSignature?: boolean;
   category?: string;
   schema?: any;
-  fieldsConfig?:
-  {
-    U: {
-      visible: boolean;
-      required: boolean;
-      label: string;
-    };
-  };
+  fieldsConfig?: IfieldsConfig;
 }
 
 export interface ICreateCompanyBootstrap {
@@ -225,6 +226,7 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
       cy.get("#root").contains(params.name).click();
     });
     cy.wait(1500);
+    addTestContext("companyName", params.name);
   }
 });
 
@@ -243,6 +245,7 @@ Cypress.Commands.add("cmpSelectCompanyAlreadyLoggedIn", (params: { name: string;
       cy.get("#root").contains(params.name).click();
     });
     cy.wait(500);
+    addTestContext("companyName", params.name);
   }
 });
 

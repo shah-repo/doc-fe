@@ -16,12 +16,12 @@ import useAsync from "../../../hooks/useAsync";
 
 interface Props {
   id?: string;
-  renderHTML?: Nullable<string>;
+  renderHTMLDefined?: Nullable<boolean>;
   showDownloadButton?: boolean;
 }
 const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
   id,
-  renderHTML,
+  renderHTMLDefined,
   showDownloadButton = false,
 }) => {
   const intl = useIntl();
@@ -70,7 +70,7 @@ const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
     },
   });
 
-  if (!renderHTML) {
+  if (!renderHTMLDefined) {
     return null;
   }
 

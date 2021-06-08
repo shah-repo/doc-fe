@@ -280,10 +280,10 @@
     "id": "31",
     "label": "",
     "valueKey": "id",
-    "labelKey": "displayStatus",
-    "root": "documentRevisions",
+    "labelKey": "name",
+    "root": "",
     "includeRevision": "displayRevision",
-    "labelPrefixRoot": "name",
+    "labelPrefixRoot": "docId",
     "publicApi": false,
     "hidden": true
   },

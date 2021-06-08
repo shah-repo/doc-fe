@@ -1,4 +1,4 @@
-import { filter, find, get, unionBy } from "lodash";
+import { filter, flattenDeep, get, unionBy } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
@@ -30,21 +30,20 @@ class FBProcedureState {
   }
 
   // MARK: @actions
-  @action public addItem = (item: FBProcedureItemConfig, type: FBProcedureItemType) => {
+  @action public addItem = (item: FBProcedureItemConfig, type: FBProcedureItemType, allSteps?: any) => {
     if (item.LHRTparameter) {
-      const materialsValues: FBProcedureItemConfig[] = get(this, `value.${FBProcedureItemType.materials}`) || [];
-      const equipmentValues: FBProcedureItemConfig[] = get(this, `value.${FBProcedureItemType.equipment}`) || [];
-      // if item has LHRTparameter checked, generate the letter id
-      const ids = materialsValues.concat(equipmentValues).filter((item) =>
-        item.id.length === 1).map((item) => item.id) ||
-      [];
-      const isExistingItem = find(ids, (id) => id === item.id);
-      const highestId = ids.sort().pop();
-      const nextId = highestId ? highestId?.charCodeAt(0) + 1 : 65;
-      // if an edited item has letter id, replace it, dont add new item to the list
-      item = isExistingItem ?
-        item :
-        { title: item.title, id: String.fromCharCode(nextId),  type: "params", LHRTparameter: item.LHRTparameter };
+      let nextId = item.id.charCodeAt(0);
+      const materials = allSteps?.filter((item) => item.editorConfig?.materials).map(
+        (item) => item.editorConfig.materials);
+      const equipment = allSteps?.filter((item) => item.editorConfig?.equipment).map(
+        (item) => item.editorConfig.equipment);
+      if (!item.type) {
+        const ids: string[] = flattenDeep([materials]).concat(flattenDeep([equipment])).filter((item) =>
+          item.id.length === 1).map((item) => item.id) || [];
+        const highestId = ids.sort().pop();
+        nextId = highestId ? highestId?.charCodeAt(0) + 1 : 65;
+      }
+      item = { title: item.title, id: String.fromCharCode(nextId),  type: "params", LHRTparameter: item.LHRTparameter };
     }
 
     const items = unionBy([item], get(this, `value.${type}`), "id");
@@ -52,7 +51,7 @@ class FBProcedureState {
       ...this.value,
       [type]: items.reverse(),
     };
-    set(this, "value", value);
+    this.setValue(value);
   };
 
   @action public removeItem = (id: string, type: FBProcedureItemType) => {
@@ -61,6 +60,10 @@ class FBProcedureState {
       ...this.value,
       [type]: items,
     };
+    this.setValue(value);
+  };
+
+  @action public setValue = (value?: FBProcedureValue) => {
     set(this, "value", value);
   };
 

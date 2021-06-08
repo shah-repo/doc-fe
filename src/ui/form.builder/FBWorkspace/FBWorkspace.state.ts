@@ -1,7 +1,6 @@
-import { filter, includes, isArray, isEmpty, omit, size } from "lodash";
+import { includes, isArray, isEmpty, map, omit, size } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import odiff from "odiff";
-import { FBDifference, FBInlineApprovalBody, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
+import { FBInlineApprovalBody, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
 import { appGlobals } from "../../../appGlobals";
 import { GroupTag, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
@@ -20,6 +19,11 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public autosave?: boolean;
   public documentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
   public loadDocumentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
+
+  @observable public formInputSync = new Map<string, any>();
+  public formInput?: Record<string, any>;
+
+  @observable public isDirty = false;
 
   // Hack because formik context from autosave & reference comp are not the same ref
   // and we need to know the values from both FB and AvailableReferences to create
@@ -130,8 +134,17 @@ class FBWorkspaceState extends FBSchemaState {
     return inputOwner === undefined || inputOwner === employeeId;
   };
 
+  @action public setDirty = (isDirty: boolean) => {
+    set(this, "isDirty", isDirty);
+  };
+
+  public removeAutoState = () => {
+    this.schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
+  };
+
   public saveDocRev = (values?: Record<string, any>) => {
     const { id, mode, autosave } = this;
+    this.setDirty(true);
     if (!autosave) { return; }
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     if (!id) { return; }
@@ -150,7 +163,7 @@ class FBWorkspaceState extends FBSchemaState {
         };
         break;
       default:
-        break;
+        return;
     }
     this.omitAutosave = true;
     appGlobals.omitReloadNotification = true;
@@ -164,15 +177,13 @@ class FBWorkspaceState extends FBSchemaState {
       if (error) {
         this.documentRevApi.onError(error);
       } else {
+        this.setDirty(false);
         this.documentRevApi.onSuccess();
       }
     });
   };
 
-  public loadDocRev = (
-    values?: Record<string, any>,
-    callback?: (diffSchema?: any, diffInput?: FBDifference[]) => any
-  ) => {
+  public loadDocRev = (values?: Record<string, any>) => {
     const { id } = this;
     if (!id) { return; }
 
@@ -185,22 +196,15 @@ class FBWorkspaceState extends FBSchemaState {
         this.documentRevApi.onError(error);
       } else {
         this.documentRevApi.onSuccess();
-        if (!callback) { return; }
-        // const currSchema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
-        // let { schema } = data ?? {};
-        // if (!schema) {
-        //   schema = data?.formTemplate?.schema ?? data?.formDocument?.formTemplate?.schema;
-        // }
-        // const schemaDifff = odiff(currSchema, schema);
-        // const finSchemaDiff = filter(schemaDifff, (sdiff) => !isEmpty(sdiff.path));
         const { formInput = {} } = data ?? {};
-        const formInputDifff = odiff(values ?? {}, formInput);
-        const finFormInputDiff = filter(formInputDifff, (fdiff) => !isEmpty(fdiff.path));
-        if (isEmpty(finFormInputDiff)) { return; }
-        callback(undefined, finFormInputDiff as FBDifference[]);
+        this.formInput = formInput;
+        map(formInput, (value, key) => {
+          set(this.formInputSync, key, value);
+        });
       }
     });
   };
 }
 
 export default FBWorkspaceState;
+

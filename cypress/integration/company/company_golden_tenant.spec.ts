@@ -4,6 +4,7 @@
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -28,6 +29,7 @@ context("Create company with golden tenant", () => {
   });
 
   context("[API]Prepare company", () => {
+    SystemRequirement("REQ-3490");
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
@@ -719,34 +721,42 @@ context("Create company with golden tenant", () => {
     });
 
     it(`Enters company name '${newCompanyName}'`, () => {
+      SystemRequirement("REQ-3500");
       cy.get("[name^=company-name-]").type(newCompanyName);
     });
 
     it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
+      SystemRequirement("REQ-3500");
       cy.get("[name^=company-abbreviation-]").type(newCompanyAbbr);
     });
 
     it(`Enters company email '${USERS[1].email}'`, () => {
+      SystemRequirement("REQ-3500");
       cy.get("[name^=company-admin-email-]").type(USERS[1].email);
     });
 
     it("Upload DOM JSON", () => {
+      SystemRequirement("REQ-3520");
       cy.atchUploadDOMJSONForNCO({ fileName: "dam.json", queue: 0 });
     });
 
     it("Upload Page Details JSON", () => {
+      SystemRequirement("REQ-3530");
       cy.atchUploadPageDetailsJSONForNCO({ fileName: "PageDetails.json", queue: 0 });
     });
 
     it("Upload Navigation JSON", () => {
+      SystemRequirement("REQ-3540");
       cy.atchUploadNavigationJSONForNCO({ fileName: "navigation.json", queue: 0 });
     });
 
     it("Upload Users List JSON", () => {
+      SystemRequirement("REQ-3550");
       cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
     });
 
     it("Include Seed documents", () => {
+      SystemRequirement("REQ-3570");
       cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").click();
       cy.wait(1500);
       cy.get("[name^=seed-documents-to-be-included-]").type("SEED-00001{downarrow}{enter}");
@@ -754,15 +764,17 @@ context("Create company with golden tenant", () => {
     });
 
     it("Upload logo picture 'image.jpg'", () => {
+      SystemRequirement("REQ-3500");
       cy.xpath("//div[@data-cy=\"Client's Logo\"]/../../../div/div/button").click();
       cy.pmUploadAttachment({ fileName: "image.jpg" });
     });
 
-    it("Save document'", () => {
+    it("Save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Approve and release document - create company", () => {
+      SystemRequirement("REQ-3600");
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
         CyRoutes.EmployeesGet, CyRoutes.GetAttachments], () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -800,6 +812,7 @@ context("Create company with golden tenant", () => {
 
   context("Check each document values", () => {
     it("Check first document values", () => {
+      SystemRequirement("REQ-3580");
       cy.drFilterDocListByNameAndStatus({ title: "First document", status: "Draft" });
       cy.get("[id=Title-field]").contains("First document");
       cy.get("[data-cy=\"RichTextEditor.description\"]>div>div:nth-child(2)>div>div>div>div>div>div>span>span")
@@ -809,6 +822,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Check second document values", () => {
+      SystemRequirement("REQ-3580");
       cy.navigToDocumentList();
       cy.dlClearFilters();
       cy.drFilterDocListByNameAndStatus({ title: "Second document", status: "Draft" });
@@ -821,9 +835,9 @@ context("Create company with golden tenant", () => {
     it("Check third document values", () => {
       cy.navigToDocumentList();
       cy.dlClearFilters();
-      cy.drFilterDocListByNameAndStatus({ title: "Document Approval Matrix", status: "Released" });
-      cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(0).contains("Document Approval Matrix");
-      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Initial DAM Description");
+      cy.drFilterDocListByNameAndStatus({ title: "Document Approval Matrix", status: "Draft" });
+      cy.get("#Title-field").eq(0).contains("Document Approval Matrix");
+      cy.get("[data-cy=\"RichTextEditor.description\"]").contains("Initial DAM Description");
     });
 
     it("Check forth document values", () => {
@@ -854,16 +868,6 @@ context("Create company with golden tenant", () => {
       cy.get("[data-cy=\"documentRevisions.0.proposedDocumentRevision.id\"]")
         .should("have.value", "FM-00001 - rev 1 - AR Form");
       cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Approval Request Form");
-    });
-
-    it("Check second AR", () => {
-      cy.navigToApprovalRequestList();
-      cy.arClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: "Releasing DAM-00003, Document Approval Matrix", status: "Closed" });
-      cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(0).contains("Releasing DAM-00003, Document Approval Matrix");
-      cy.get("[data-cy=\"documentRevisions.0.proposedDocumentRevision.id\"]")
-        .should("have.value", "DAM-00003 - rev 1 - Document Approval Matrix");
-      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Releasing DAM-00003, Document Approval Matrix");
     });
 
     it("Log out user", () => {

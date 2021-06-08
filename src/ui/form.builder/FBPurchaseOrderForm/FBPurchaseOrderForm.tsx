@@ -39,7 +39,13 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
           name="partNumber"
           optionId="11"
           onChange={handlePartTitle}
+          rules="required_without:supplierPartNumber"
           {...{ getOptionDisabled, getOptionLabel }}
+        />
+        <FBTextField
+          label="form.builder.field.supplier.part.number"
+          name="supplierPartNumber"
+          rules="required_without:partNumber"
         />
         <FBTextField
           label="form.builder.field.part.description"
@@ -91,14 +97,6 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       label="form.builder.field.date.required"
       name="date"
     />
-    {
-      type === "product" &&
-      <FBTextField
-        label="form.builder.field.supplier.part.number"
-        name="description"
-        rows="3"
-      />
-    }
     <FBTextField
       type="number"
       label="form.builder.field.unit.price"
@@ -106,21 +104,22 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       rules="min:0"
       onChange={handleTotal}
     />
-    {
-      type === "product" &&
-      <Box display="flex" justifyContent="flex-start">
-        <FBCheckbox
-          label="form.builder.field.tax"
-          name="tax"
-          gutter={false}
-        />
+    <Box display="flex" justifyContent="flex-start">
+      <FBCheckbox
+        label="form.builder.field.tax"
+        name="tax"
+        gutter={false}
+      />
+      {
+        type === "product" &&
         <FBCheckbox
           label="form.builder.field.capital.equipment"
           name="capitalEquipment"
           gutter={false}
         />
-      </Box>
-    }
+      }
+    </Box>
+
     {children}
   </ FormContext.Provider>
 );

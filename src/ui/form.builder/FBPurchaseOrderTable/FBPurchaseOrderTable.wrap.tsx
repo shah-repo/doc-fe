@@ -28,7 +28,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       const { target: { value = 0 } = {} } = ev || {};
       const abs = Math.abs(value).toFixed(2).toString();
       purchaseOrderState?.setShippingCost(abs);
-      ev.target.value = abs;
+      ev.target.value = value;
     };
 
     handleCurrencyChange = (ev, currency) =>

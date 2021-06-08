@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { filter, find, get, groupBy, isArray, last, map, sortBy, union } from "lodash";
 import { action, computed, set } from "mobx";
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncConstructor, FBAutocompleteAsyncOption, FBData } from "..";
@@ -75,7 +76,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     }
   };
 
-  @action public prepareData = (data: any[]): any[] | undefined => {
+  @action public prepareData = (data: any): any[] | undefined => {
     if (!this.optionId) {
       return;
     }
@@ -84,7 +85,6 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
       case FBAutocompleteAsyncOption.activeDocumentRevisions:
       case FBAutocompleteAsyncOption.TLList:
       case FBAutocompleteAsyncOption.CSLList:
-      case FBAutocompleteAsyncOption.parts:
       case FBAutocompleteAsyncOption.POList:
       case FBAutocompleteAsyncOption.suppliers:
         return map(
@@ -97,6 +97,11 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
           ...doc,
           documentRevisions: get(doc, "documentRevisions[0]"),
         }));
+      case FBAutocompleteAsyncOption.docRevByDoc:
+        return data.documentRevisions.map((e) => ({
+          ...e,
+          docId: data.docId,
+        }));
       case FBAutocompleteAsyncOption.preventativeMaintenaceForms:
         return data.map((option) => {
           const releasedForm = option?.documentRevisions.find((e) => e.status === DocumentRevisionStatus.Released);
@@ -106,7 +111,8 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
             displayRevision: releasedForm?.displayRevision || "",
           });
         });
-
+      case FBAutocompleteAsyncOption.parts:
+        return filter(union(data, this.additionalData), (item) => item.revisionChangeType !== "OBSOLETE");
       default: return union(data, this.additionalData);
     }
   };

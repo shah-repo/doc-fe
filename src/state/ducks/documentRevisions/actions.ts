@@ -258,6 +258,7 @@ const upgradeToReleasedForm = (
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_UPGRADE_URL}/${id}`,
   method: "patch",
+  asyncType: DOCUMENT_REVISION_GET_ASYNC,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
   },
@@ -365,6 +366,16 @@ const removePreviousBuild = (
     handlers,
   });
 
+const exportToEmail = (
+  revisionId: string,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `/export/revision/${revisionId}/email`,
+    method: "post",
+    handlers,
+  });
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -397,4 +408,5 @@ export default {
   removePreviousBuild,
   ownerChange,
   saveWithNoResponse,
+  exportToEmail,
 };

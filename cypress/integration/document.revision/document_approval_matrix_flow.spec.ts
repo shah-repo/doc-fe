@@ -310,7 +310,6 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Mark needs training", () => {
-      SystemRequirement("REQ-0470");
       cy.drNewTypeTrainingSelect();
     });
 

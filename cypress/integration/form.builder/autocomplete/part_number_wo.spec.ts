@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
@@ -10,7 +12,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 let secondEmployee;
-const partsName = `Parts ${Cypress.moment().format("X")}`;
+const partsName = `Parts ${moment().format("X")}`;
 
 context("Autocomplete 'Part Number in WO' test", () => {
   context("[API]Prepare company", () => {
@@ -71,6 +73,10 @@ context("Autocomplete 'Part Number in WO' test", () => {
 
   // TODO: Create form for Parts with API, not through document list creation!
   context("Create Form Part document to create Part", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
     });

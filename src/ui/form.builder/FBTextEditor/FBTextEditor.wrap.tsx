@@ -97,7 +97,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
           (htmlContent === emptyHtmlContent) && (htmlContent = "");
           const oldValue = formState?.getFieldValue(name);
           if (oldValue === htmlContent) { return; }
-          formState?.setFieldValue(name, htmlContent, withState, omitFormValue);
+          formState?.setFieldValue(name, htmlContent, false, omitFormValue);
           formState?.validate();
         }
       );

@@ -47,6 +47,18 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       formState?.setFieldValue("partNumber", undefined);
       formState?.setFieldValue("partNumberTitle", undefined);
       formState?.setFieldValue("description", undefined);
+      if (value === "product") {
+        formState?.setFieldRules("partNumber", "required_without:supplierPartNumber");
+        formState?.setFieldRules("supplierPartNumber", "required_without:partNumber");
+        formState?.setFieldFinalValidationRules("partNumber", "required_without:supplierPartNumber");
+        formState?.setFieldFinalValidationRules("supplierPartNumber", "required_without:partNumber");
+      }
+      else {
+        formState?.setFieldRules("partNumber", "false");
+        formState?.setFieldRules("supplierPartNumber", "false");
+        formState?.setFieldFinalValidationRules("partNumber", "false");
+        formState?.setFieldFinalValidationRules("supplierPartNumber", "false");
+      }
     };
 
     const handlePartDescription = (ev: React.ChangeEvent<any>) => {

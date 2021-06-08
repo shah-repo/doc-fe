@@ -16,8 +16,7 @@ const FBPartsSelection: React.FunctionComponent<FBPartsSelectionProps> = ({
     shouldReloadOnInit={true}
     optionId={isOutput ? FBAutocompleteAsyncOption.docRevByDoc : FBAutocompleteAsyncOption.availablePartDocuments}
     filterOptions={isOutput ? filteredOptions : undefined}
-    urlValues={editorConfig?.id}
-    withoutLabelKey={isDocumentLHR}
+    urlValues={isOutput ? editorConfig?.id : undefined}
     {...{ defaultValue }}
     withState
   />

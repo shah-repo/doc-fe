@@ -1,7 +1,6 @@
 import { Grid } from "@material-ui/core";
 import moment from "moment";
 import React from "react";
-import { useIntl } from "react-intl";
 import { docRevSch } from "../../../common/normalizrSchema";
 import { DocumentType, PageDetails } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
@@ -38,7 +37,6 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   tableCriteria,
 }) => {
   const classes = styles();
-  const intl = useIntl();
 
   const headers =
     columns.map((column) => {
@@ -52,7 +50,7 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
         };
       }
       return {
-        label: `${intl.formatMessage({ id: column.label })}: ${tableCriteria.queryDict?.[column.searchOptions?.dataKey || column.searchOptions?.defaultValue || ""] || column.searchOptions?.defaultValue || ""}`,
+        label: `${column.label}: ${tableCriteria.queryDict?.[column.searchOptions?.dataKey || column.searchOptions?.defaultValue || ""] || column.searchOptions?.defaultValue || ""}`,
         key: column.key,
       };
     });

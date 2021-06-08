@@ -32,6 +32,7 @@ import FBParagraph from "../FBParagraph/FBParagraph";
 import FBParts from "../FBParts/FBParts";
 import FBPartsSelection from "../FBPartsSelection/FBPartsSelection";
 import FBPOApprovalMatrix from "../FBPOApprovalMatrix/FBPOApprovalMatrix";
+import FBPOApprovals from "../FBPOApprovals/FBPOApprovals";
 import FBPOReceive from "../FBPOReceive/FBPOReceive";
 import FBProcedure from "../FBProcedure/FBProcedure";
 import FBProcedureDiff from "../FBProcedureDiff/FBProcedureDiff";
@@ -125,6 +126,7 @@ class FBSchemaState {
     unitMeasures: FBUnitMeasures,
     quantityunit: FBQuantityUnitField,
     partsselection: FBPartsSelection,
+    poapprovals: FBPOApprovals,
   };
 
   @observable public schema?: FBSchemaProps[];

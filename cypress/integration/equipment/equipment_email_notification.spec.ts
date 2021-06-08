@@ -10,7 +10,6 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[25];
@@ -375,6 +374,10 @@ context("Test Equipment maintenance email notifications", () => {
 
   context("Test notification with no Primary owner and coordinator", () => {
     context("Create equipment maintenace document", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Navigate to equipment list", () => {
         cy.navigToEquipment();
       });
@@ -406,16 +409,12 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Enter preventative maintenance frequency", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-          cy.get("[name*=\"frequency\"]").eq(0).type("16");
-        });
+        cy.get("[name*=\"frequency\"]").eq(0).type("16");
       });
 
       it("Type preventative maintenance instruction", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-          cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]")
-            .type("Instructions for preventative maintenance");
-        });
+        cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]")
+          .type("Instructions for preventative maintenance");
       });
 
       it("Save document", () => {
@@ -596,6 +595,10 @@ context("Test Equipment maintenance email notifications", () => {
 
   context("Test notification with maintenance due date in 4 days", () => {
     context("Create equipment maintenace document", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Navigate to equipment list", () => {
         cy.navigToEquipment();
       });
@@ -814,6 +817,10 @@ context("Test Equipment maintenance email notifications", () => {
 
   context("Test notification with maintenance due date in 17 days", () => {
     context("Create equipment maintenace document", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Navigate to equipment list", () => {
         cy.navigToEquipment();
       });
@@ -1033,6 +1040,10 @@ context("Test Equipment maintenance email notifications", () => {
 
   context("Test notification with maintenance done due date", () => {
     context("Create equipment maintenace document", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Navigate to equipment list", () => {
         cy.navigToEquipment();
       });
@@ -1254,7 +1265,7 @@ context("Test Equipment maintenance email notifications", () => {
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
         });
-        cy.wait(50000);
+        cy.wait(100000);
       });
     });
 

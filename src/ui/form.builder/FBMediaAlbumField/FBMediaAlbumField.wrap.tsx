@@ -29,6 +29,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     mode,
     type,
     fieldType,
+    autosave = true,
     ...props
   }: T) => {
 
@@ -36,8 +37,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     const formValue = formState?.getFieldValue(name) || editorConfig;
     const ids = map(formValue, "id");
     const redlineActive = useSelector(companySelectors.getRedlineActive);
-    mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(FBMediaAlbumFieldState);
-    const { id } = workspaceState ?? {};
+    mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(FBMediaAlbumFieldState, formValue);
 
     const {
       id: documentRevisionId,
@@ -83,6 +83,28 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       mediaAlbumFieldState?.upload(validFiles);
     };
 
+    // useEffect(() => {
+    //   reaction(
+    //     () => workspaceState?.formInputSync?.get(name),
+    //     (value) => {
+    //       const syncValue = value as string[];
+    //       const filesIds = map(mediaAlbumFieldState?.files, "id");
+    //       const addedFiles: string[] = [];
+    //       map(union(filesIds, syncValue), (fileId) => {
+    //         mediaAlbumFieldState!.fromUpload = false;
+    //         if (!syncValue.includes(fileId)) {
+    //           mediaAlbumFieldState?.removeFile(fileId);
+    //         } else {
+    //           addedFiles.push(fileId);
+    //         }
+    //       });
+    //       if (addedFiles.length === 0) { return; }
+    //       mediaAlbumFieldState?.getFiles(addedFiles);
+    //     }
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+    //   );
+    // }, []);
+
     React.useEffect(() => reaction(
       () => mediaAlbumFieldState?.attachmentApi.data,
       (data) => {
@@ -108,8 +130,10 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           }
           formState?.setFieldValue(name, files, true, isTemplate);
           if (mediaAlbumFieldState?.fromUpload) {
-            formState?.setFieldAutosave(name);
             mediaAlbumFieldState.fromUpload = false;
+            if (autosave) {
+              workspaceState?.saveDocRev(formState?.getValues());
+            }
           }
         }
       );
@@ -149,7 +173,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       loading,
       mode,
       name,
-      id,
+      autosave,
     });
   };
 

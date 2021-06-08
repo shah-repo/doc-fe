@@ -21,6 +21,7 @@ export interface FBPurchaseOrderItem {
   partNumber: string;
   partNumberDocId: string;
   partNumberTitle: string;
+  supplierPartNumber: string;
   date: Date;
   description: string;
   unitPrice: string;
@@ -29,6 +30,7 @@ export interface FBPurchaseOrderItem {
   isTraceabilityRequired: boolean;
   capitalEquipment: boolean;
   tax: boolean;
+  serviceId?: string;
   received?: number;
   receivedList?: any[];
   type: FBPurchaseOrderItemType;

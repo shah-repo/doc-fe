@@ -9,7 +9,6 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
-import { shouldHaveNoResponse } from "../document.revision/utils/helpers";
 import { FBEndpoint } from "../form.builder/defaults/FBEndpoint";
 import FBStore from "../form.builder/FBStore/FBStore";
 import useActionCreator from "../hooks/useActionCreator";
@@ -48,8 +47,8 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   const status = documentRevision ? documentRevision.status : undefined;
   documentRevisionStatusContextFromCR = React.createContext(status);
   const saveAction = useActionCreator(documentRevisionsActions.save);
-  const saveWithNoResponseAction = useActionCreator(documentRevisionsActions.saveWithNoResponse);
-
+  // Disabled because of ENC-7826
+  // const saveWithNoResponseAction = useActionCreator(documentRevisionsActions.saveWithNoResponse);
 
   const [lastSavedTimestamp, setLastSavedTimestamp] = React.useState<string>();
 
@@ -58,7 +57,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     onSuccess: () => {
       setLastSavedTimestamp(getFormattedDateString(Date.now(), MomentFormats.Time));
       if (redlineActive) {
-        dispatch(companyActions.redlineConfig());
+        dispatch(companyActions.redlineConfig(false));
       }
       setDoNotPrompt(true);
     },
@@ -110,7 +109,8 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       return;
     }
 
-    if (shouldHaveNoResponse(dataToSubmit, documentRevision)) {
+    // Disabled because of ENC-7826
+    /* if (shouldHaveNoResponse(dataToSubmit, documentRevision)) {
       async.reset();
       async.start(
         saveWithNoResponseAction,
@@ -118,8 +118,9 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         dataToSubmit as DocumentRevisionEditRequestBody,
         async,
       );
+      helpers.resetForm();
       return;
-    }
+    } */
 
     handleSave(dataToSubmit as DocumentRevisionEditRequestBody, helpers);
   };

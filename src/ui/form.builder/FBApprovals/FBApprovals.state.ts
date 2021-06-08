@@ -20,6 +20,9 @@ class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approva
     super();
     this.approvals = filter(approvals, (a) => a.status !== "ABANDONED");
     this.isOwner = isOwner;
+    if (!id) {
+      return;
+    }
     this.fetchRequiredApprovals(id);
   }
 

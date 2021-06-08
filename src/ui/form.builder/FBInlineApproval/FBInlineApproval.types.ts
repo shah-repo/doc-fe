@@ -52,6 +52,8 @@ export interface FBInlineApprovalBody {
   status?: FBInlineApprovalStatus;
   approver?: FBEmployee;
   canRequest?: boolean;
+  signatureGroupName?: string;
+  approverId?: string;
 }
 
 export interface FBInlineApprovalTransitionBody {

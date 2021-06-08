@@ -1,5 +1,6 @@
 import { downloadFile } from "cypress-downloadfile/lib/addPlugin";
-import { rename, rmdirSync } from "fs";
+import fs, { rename, rmdirSync } from "fs";
+import path from "path";
 import { getEmail, getEmails } from "../support/commands/imap/imap";
 import { deleteJunitTestReports, deleteMochaTestReports } from "../support/deleteReports/deleteReranReports";
 import { allowedCharacters } from "../utils/context/constants";
@@ -50,6 +51,10 @@ export default (on, config) => {
       const { CONFIG, specFileName } = params;
       deleteMochaTestReports({ CONFIG, specFileName });
       deleteJunitTestReports({ CONFIG, specFileName });
+      return null;
+    },
+    generateEnvInfo(params: {CONFIG: any; envInfo: string}) {
+      fs.writeFileSync(path.resolve(params.CONFIG.JSON_REPORTS_FOLDER, "envInfo.json"), JSON.stringify(params.envInfo));
       return null;
     },
   });

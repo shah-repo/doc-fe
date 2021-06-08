@@ -14,7 +14,7 @@ echo "CYPRESS_FE_URL $CYPRESS_FE_URL"
 echo "CYPRESS_BE_URL $CYPRESS_BE_URL"
 
 printf 'Waiting for backend .'
-until $(curl --output /dev/null --silent --head --fail $CYPRESS_BE_URL/api/v1/healthcheck); do
+until [ $(curl -o /dev/null -s -w %{http_code} $CYPRESS_BE_URL/api/v1/healthcheck/) = 200 ]; do
     printf '.'
     sleep 2
 done
