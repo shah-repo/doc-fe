@@ -57,7 +57,9 @@ export const useFormContext = () => {
     let prevDocument: DocumentRevision | undefined;
     let nextDocument: DocumentRevision | undefined;
     if (relation.type === "poreceive") {
-      prevDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, prevValue.id);
+      if (prevValue) {
+        prevDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, prevValue.id);
+      }
       nextDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, nextValue.id);
     }
     if (relation.type === "autocomplete" && relation.name === "lot_part") {
