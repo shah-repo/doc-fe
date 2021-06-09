@@ -42,6 +42,7 @@ declare global {
       arVoidAR(): Chainable<Subject>;
       arSaveApiCall(): Chainable<Subject>;
       arCheckDashboardARNotificationExistance(params: {shouldExist: boolean}): Chainable<Subject>;
+      arCheckDashboardPONotificationExistance(params: {shouldExist: boolean}): Chainable<Subject>;
       arVerifySignatureIsNotMet(): Chainable<Subject>;
       arApproverRoleStatus(params: {roleName: string; enabled: boolean}): Chainable<Subject>;
       arInReview(params: {arID: string; employeeId: string; sessionId: string}): Chainable<Subject>;
@@ -72,6 +73,10 @@ declare global {
 
 Cypress.Commands.add("arCheckDashboardARNotificationExistance", (params: {shouldExist: boolean}) => {
   cy.get("[data-cy=\"pendingActionsAR\"]").should(params.shouldExist ? "exist" : "not.exist");
+});
+
+Cypress.Commands.add("arCheckDashboardPONotificationExistance", (params: {shouldExist: boolean}) => {
+  cy.get("[data-cy=\"pendingActionsPO\"]").should(params.shouldExist ? "exist" : "not.exist");
 });
 
 Cypress.Commands.add("arPatchAR", (params: {

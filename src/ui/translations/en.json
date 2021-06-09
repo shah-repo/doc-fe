@@ -375,6 +375,7 @@
   "dashboard.title.training": "TRAINING: {docId}",
   "dashboard.noPendingActions": "No pending actions",
   "dashboard.is.due.on": " for doc id: {docId} is due on ",
+  "dashboard.po.reject.alert": "You are rejecting the Purchase Order\nAre you sure you want to continue?",
   "document.add": "Add {name}",
   "document.type": "Document Type",
   "document.output.type": "Output Document Type",
