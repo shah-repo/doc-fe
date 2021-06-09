@@ -1029,5 +1029,6 @@
   "tooltip.default.label": "Default Label: {defaultLabel}",
   "tooltip.required.flag": "Required Flag Status: {requiredFlag}",
   "tooltip.visibility.flag": "Visibility Flag Status: {visibilityFlag}",
-  "dropbox.enable": "Enable Dropbox"
+  "dropbox.enable": "Enable Dropbox",
+  "dropbox.connection.error": "There was an error connecting to Dropbox."
 }
