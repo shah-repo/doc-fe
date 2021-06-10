@@ -17,6 +17,18 @@ let group;
 const documentSupplierRevisionName = "New suplier for PO";
 
 context("PO test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("Create company via API and create Purchase Order Form document", () => {
     it("[API] Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -159,7 +171,7 @@ context("PO test", () => {
     });
 
     it("Click 'Add New Field'", () => {
-      cy.fbAddNewFieldOption();
+      cy.fbAddNewFieldWhenHidden();
     });
 
     it("Select 'Purchase Order' from list", () => {
@@ -393,7 +405,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button to add item without Part Number", () => {
-      cy.poAddNewFieldItem();
+      cy.get("[data-cy=\"fb-control-btn\"]").last().click();
     });
 
     it("Enter Quantity Ordered", () => {
@@ -508,8 +520,26 @@ context("PO test", () => {
         cy.wait(2000);
       });
 
-      it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      it("Add an Approval", () => {
+        cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+        });
+      });
+
+      it("Click 'Submit for Approval' button", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        });
+      });
+
+      it("Click 'Approve' button", () => {
+        cy.get("[data-cy=\"form.builder.request.approve\"]").click();
+        cy.get("input[name=\"password\"]").type("Tester1!");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
+          CyRoutes.EmployeesGet], () => {
+          cy.get("[data-cy=\"common.confirm\"]").click();
+        });
       });
     });
   });
@@ -586,7 +616,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button", () => {
-      cy.poAddNewFieldItem();
+      cy.get("[data-cy=\"fb-control-btn\"]").last().click();
     });
 
     it("Click on 'Service' select option", () => {
@@ -596,7 +626,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.poAddPOButtonClick();
+      cy.get("button[data-cy=\"fb-control-btn\"]").last().click({ force: true });
     });
 
     it("Select Supplier", () => {
@@ -644,12 +674,30 @@ context("PO test", () => {
       cy.drEnterDocumentDescription({ description: "New Purchase Order with Service item" });
     });
 
+    it("Add an Approval", () => {
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+      });
+    });
+
     it("Save PO", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
-    it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    it("Click 'Submit for Approval' button", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+      });
+    });
+
+    it("Click 'Approve' button", () => {
+      cy.get("[data-cy=\"form.builder.request.approve\"]").click();
+      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
+        CyRoutes.EmployeesGet], () => {
+        cy.get("[data-cy=\"common.confirm\"]").click();
+      });
     });
   });
 
@@ -679,7 +727,7 @@ context("PO test", () => {
     });
 
     it("Click 'Add New Field'", () => {
-      cy.fbAddNewFieldOption();
+      cy.fbAddNewFieldWhenHidden();
     });
 
     it("Select 'Purchase Order' from list", () => {
@@ -744,14 +792,14 @@ context("PO test", () => {
   });
 
   context("Test the filter inside PO", () => {
-    it("Enter version number '1' inside filter", () => {
+    it("Enter version number 'A' inside filter", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-        cy.filterPOVersion({ version: "1" });
+        cy.filterPOVersion({ version: "A" });
       });
     });
 
     it("Check if item with right version is displayed", () => {
-      cy.poCheckForSpecificPOItemValue({ itemValue: "1" });
+      cy.poCheckForSpecificPOItemValue({ itemValue: "A" });
     });
 
     it("Check if number of displayed filtered items is '2", () => {

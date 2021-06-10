@@ -12,6 +12,7 @@ interface Props {
   url: string;
   alert?: boolean;
   alertMessage?: string;
+  dataCy?: string;
 }
 
 const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
@@ -22,6 +23,7 @@ const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
   alert,
   alertMessage,
   children,
+  dataCy,
 }) => {
   const [isHover, setIsHover] = useState(false);
   return (
@@ -29,6 +31,7 @@ const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
       m="15px 0 15px 45px"
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
+      data-cy={dataCy}
     >
       <Box
         display="flex"

@@ -31,16 +31,18 @@ class FBProcedureState {
 
   // MARK: @actions
   @action public addItem = (item: FBProcedureItemConfig, type: FBProcedureItemType, allSteps?: any) => {
-
     if (item.LHRTparameter) {
+      let nextId = item.id.charCodeAt(0);
       const materials = allSteps?.filter((item) => item.editorConfig?.materials).map(
         (item) => item.editorConfig.materials);
       const equipment = allSteps?.filter((item) => item.editorConfig?.equipment).map(
         (item) => item.editorConfig.equipment);
-      const ids: string[] = flattenDeep([materials]).concat(flattenDeep([equipment])).filter((item) =>
-        item.id.length === 1).map((item) => item.id) || [];
-      const highestId = ids.sort().pop();
-      const nextId = highestId ? highestId?.charCodeAt(0) + 1 : 65;
+      if (!item.type) {
+        const ids: string[] = flattenDeep([materials]).concat(flattenDeep([equipment])).filter((item) =>
+          item.id.length === 1).map((item) => item.id) || [];
+        const highestId = ids.sort().pop();
+        nextId = highestId ? highestId?.charCodeAt(0) + 1 : 65;
+      }
       item = { title: item.title, id: String.fromCharCode(nextId),  type: "params", LHRTparameter: item.LHRTparameter };
     }
 

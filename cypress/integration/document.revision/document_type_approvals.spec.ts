@@ -35,7 +35,6 @@ const THIRD_USER = USERS[4];
 const INDIVIDUAL_USER = USERS[14];
 
 context("Check DAM enforcement rules for document types", () => {
-
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
@@ -131,6 +130,14 @@ context("Check DAM enforcement rules for document types", () => {
                   label: "PO",
                   name: "po-kdpqvhc7",
                   applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+                },
+                {
+                  label: "form.builder.approvals",
+                  type: "poapprovals",
+                  deleteDisabled: false,
+                  name: "fb-po-approvals-kpmd2alc",
+                  uniqueSchemaItem: true,
+                  index: 1,
                 }],
               },
 
@@ -532,26 +539,6 @@ context("Check DAM enforcement rules for document types", () => {
       });
     });
 
-    context("Test 'Purchase order' approvals for 'PO' internal type", () => {
-
-      it("Navigate to PO list", () => {
-        cy.navigToPurchaseOrder();
-      });
-
-      it("Click create new PO", () => {
-        cy.poClickCreatePO();
-      });
-
-      it("Enter description 'POAM test'", () => {
-        // SystemRequirement("REQ-1290");
-        cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
-      });
-
-      it("Check approvals enfocment", () => {
-        cy.drCheckApprovalsEnforcment();
-      });
-    });
-
     context("Test 'PO Approval Matrix' approvals for 'POAM' internal type", () => {
 
       it("Navigate to PO list", () => {
@@ -580,6 +567,44 @@ context("Check DAM enforcement rules for document types", () => {
 
       it("Check approvals enfocment", () => {
         cy.drCheckApprovalsEnforcment();
+      });
+    });
+
+    context("Test 'Purchase order' approvals for 'PO' internal type", () => {
+
+      it("Navigate to PO list", () => {
+        cy.navigToPurchaseOrder();
+      });
+
+      it("Click create new PO", () => {
+        cy.poClickCreatePO();
+      });
+
+      it("Enter description 'POAM test'", () => {
+        SystemRequirement("REQ-1290");
+        cy.drEnterDocumentDescriptionWithWait({ description: "PO enfocment test" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+        });
+      });
+
+      it("Add approver to approvals", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.poAddApproverOnApproverList({ approver: USERS[1].email });
+        });
+      });
+
+      // it("Check approval role is present", () => {
+      //   cy.get("[data-cy=\"Role One\"]").should("exist");
+      // });
+
+      it("Submit for approvals and check enfocment", () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.checkToastMessageContains({ message: "at least one approver from group Role One has to be selected" });
+        cy.closeAllAlertMessages();
       });
     });
 
