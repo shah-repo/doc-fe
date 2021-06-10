@@ -92,7 +92,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     };
 
     React.useEffect(() => {
-      if (name) {
+      if (name && !workspaceState?.isRevised) {
         formState?.setFieldValue(name, { ...formInput?.[name] });
       }
     }, [receivedItems]);
