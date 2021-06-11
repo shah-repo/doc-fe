@@ -92,9 +92,9 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     { label: `STATUS: ${tableCriteria.queryDict?.state || ""}`, key: "state" },
   ];
 
-  const customDataSet = useCallback((data: ChangeRequest[]) =>
-    data.map((cr) => stripTagsFromObject(cr)
-  ), []) 
+  const customDataSet = useCallback((data: ChangeRequest[]) => (
+    data.map((cr) => stripTagsFromObject(cr))
+  ), []);
 
   return (
     <Grid container={true} className={classes.root}>
@@ -117,4 +117,4 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default ListPresenter
+export default ListPresenter;

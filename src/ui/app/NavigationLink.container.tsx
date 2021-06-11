@@ -56,7 +56,7 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
     setIsOpenMenu(!isOpenMenu);
     updateNavigationItem(currentEmployeeId, { label, isOpen: !isOpenMenu });
     dispatch(companyActions.updateNavigationMenuItem(label, !isOpenMenu));
-  }, [isOpenMenu, currentEmployeeId, label, dispatch])
+  }, [isOpenMenu, currentEmployeeId, label, dispatch]);
 
   const actionIcon = isOpenMenu ? <ExpandLess onClick={toggleChildren} /> : <ExpandMore onClick={toggleChildren} />;
 
