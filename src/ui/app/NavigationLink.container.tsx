@@ -1,6 +1,7 @@
 import { Collapse, List } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import React, { useState } from "react";
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { authSelectors } from "../../state/ducks/auth";
@@ -49,13 +50,13 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
 
   const [isOpenMenu, setIsOpenMenu] = useState(isOpen);
 
-  const toggleChildren = (event: React.MouseEvent) => {
+  const toggleChildren = useCallback((event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
     setIsOpenMenu(!isOpenMenu);
     updateNavigationItem(currentEmployeeId, { label, isOpen: !isOpenMenu });
     dispatch(companyActions.updateNavigationMenuItem(label, !isOpenMenu));
-  };
+  }, [isOpenMenu, currentEmployeeId, label, dispatch])
 
   const actionIcon = isOpenMenu ? <ExpandLess onClick={toggleChildren} /> : <ExpandMore onClick={toggleChildren} />;
 

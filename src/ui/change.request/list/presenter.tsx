@@ -1,5 +1,5 @@
-import { Grid, WithStyles, withStyles } from "@material-ui/core";
-import React from "react";
+import { Grid } from "@material-ui/core";
+import React, { useCallback } from "react";
 import { convertHtmlEntities, stripTags, stripTagsFromObject } from "../../../common/utils/helpers";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
@@ -11,12 +11,11 @@ import FromListContainer from "../form.list/FormList.container";
 import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helpers";
 import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
 import { ChangeRequestsUserProps } from "../utils/types";
-import styles from "./styles";
+import { styles } from "./styles";
 
-type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
+type Props = ChangeRequestsUserProps;
 
 const ListPresenter: React.FunctionComponent<Props> = ({
-  classes,
   currentUserEmail,
   editChangeRequest,
   tableName,
@@ -24,6 +23,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   tableCriteria,
   tableData,
 }) => {
+  const classes = styles();
   const canEdit = (data: ChangeRequest) =>
     canEditChangeRequest({ dataProp: data, currentUserEmail });
 
@@ -92,8 +92,9 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     { label: `STATUS: ${tableCriteria.queryDict?.state || ""}`, key: "state" },
   ];
 
-  const customDataSet = (data: ChangeRequest[]) =>
-    data.map((cr) => stripTagsFromObject(cr));
+  const customDataSet = useCallback((data: ChangeRequest[]) =>
+    data.map((cr) => stripTagsFromObject(cr)
+  ), []) 
 
   return (
     <Grid container={true} className={classes.root}>
@@ -116,4 +117,4 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(ListPresenter);
+export default ListPresenter

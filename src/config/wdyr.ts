@@ -14,5 +14,6 @@ if (!Config.isProduction && !Config.isSandbox && !Config.isDemo ) {
     trackAllPureComponents: false,
     logOnDifferentValues: true,
     trackExtraHooks: [[require("react-redux/lib"), "useSelector"]],
+    collapseGroups: true,
   });
 }
