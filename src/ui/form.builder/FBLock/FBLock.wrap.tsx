@@ -2,19 +2,16 @@ import _, { assign, map, reduce } from "lodash";
 import React, { useEffect } from "react";
 import { FB } from "..";
 import { SM, SMStore, SMUrl } from "../../../App";
-import FBLockState from "./FBLock.state";
 import { FBLockBody, FBLockProps } from "./FBLock.types";
 
 export const withFBLock = <T extends FBLockProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    lockState,
     ...props
   }: T) => {
 
     // MARK: @config
-    lockState = SM.useRef(FBLockState);
     const { workspaceState, formState } = FB.useStores();
     const { id } = workspaceState || {};
     const lockedFieldsUrl: string = SMStore.templateUrl(SMUrl.lockedFields, { id });
@@ -65,7 +62,6 @@ export const withFBLock = <T extends FBLockProps>(
     return (
       <Component
         {...props as T}
-        {...{ lockState }}
       />
     );
   };

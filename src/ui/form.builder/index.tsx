@@ -182,7 +182,6 @@ export { default as FBLHRStepState } from "./FBLHRStep/FBLHRStep.state";
 // export { default as FBLHRStep } from "./FBLHRStep/FBLHRStep";
 export * from "./FBLHRStep/FBLHRStep.types";
 export { default as FBLock } from "./FBLock/FBLock";
-export { default as FBLockState } from "./FBLock/FBLock.state";
 export * from "./FBLock/FBLock.types";
 export { default as FBMapWrapper } from "./FBMapWrapper/FBMapWrapper";
 export * from "./FBMapWrapper/FBMapWrapper.types";

@@ -1,9 +1,7 @@
 import { FBFormProps } from "..";
-import { SMProviderProps } from "../../../App";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 
 export type FBLockProps =
-& Pick<SMProviderProps, "lockState">
 & Pick<FBFormProps, "children">
 & {
   fields?: Record<string, boolean>[];
