@@ -1265,7 +1265,7 @@ context("Test Equipment maintenance email notifications", () => {
           sessionId: adminEmployeeLoginResponse.sessionId,
           currentDate: moment().tz("America/Los_Angeles").toISOString(),
         });
-        cy.wait(50000);
+        cy.wait(100000);
       });
     });
 

@@ -17,7 +17,7 @@ import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
-import { checkCanBeCopied, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV, checkIsDocumentExportable } from "../../helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
@@ -84,6 +84,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
   const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
+  const isDirectlyApproved = checkIsDocumentDirectApproved(values.document?.documentType?.groupOptions);
   const isMPIOutput = checkIsDocumentMPIOutput(values.document?.documentType?.groupOptions);
   const isLHR = checkIsDocumentLHR(values.document?.documentType?.groupOptions);
   const isExportable = !documentRevision?.renderHTML &&
@@ -205,7 +206,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         <InspectionControlsContainer {...{ documentRevision }} />
         <RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline }}/>
         {
-          isRecord && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator && (
+          isDirectlyApproved && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator && (
             <SubmitForApproval
               docRevId={values.id as string}
               status={values.status}

@@ -85,7 +85,6 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
       case FBAutocompleteAsyncOption.activeDocumentRevisions:
       case FBAutocompleteAsyncOption.TLList:
       case FBAutocompleteAsyncOption.CSLList:
-      case FBAutocompleteAsyncOption.parts:
       case FBAutocompleteAsyncOption.POList:
       case FBAutocompleteAsyncOption.suppliers:
         return map(
@@ -112,7 +111,8 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
             displayRevision: releasedForm?.displayRevision || "",
           });
         });
-
+      case FBAutocompleteAsyncOption.parts:
+        return filter(union(data, this.additionalData), (item) => item.revisionChangeType !== "OBSOLETE");
       default: return union(data, this.additionalData);
     }
   };

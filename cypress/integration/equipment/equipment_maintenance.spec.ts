@@ -577,7 +577,7 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetAvailableApprovers], () => {
         cy.ebApprove();
       });
-      cy.wait(8000);
+      cy.wait(15000);
     });
 
     it("Verify status is 'Released'", () => {
@@ -676,7 +676,7 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetAvailableApprovers], () => {
         cy.ebApprove();
       });
-      cy.wait(8000);
+      cy.wait(15000);
     });
 
     it("Verify status is 'Released'", () => {
@@ -705,6 +705,7 @@ context("Equipment maintenance test", () => {
     it("Select 'Equipment calibration document'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.DocRevPreview], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
+        cy.wait(2000);
       });
     });
 

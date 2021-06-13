@@ -375,6 +375,7 @@
   "dashboard.title.training": "TRAINING: {docId}",
   "dashboard.noPendingActions": "No pending actions",
   "dashboard.is.due.on": " for doc id: {docId} is due on ",
+  "dashboard.po.reject.alert": "You are rejecting the Purchase Order\nAre you sure you want to continue?",
   "document.add": "Add {name}",
   "document.type": "Document Type",
   "document.output.type": "Output Document Type",
@@ -667,7 +668,7 @@
   "form.builder.field.order.received": "Order Received",
   "form.builder.sub.total": "Sub Total: ",
   "form.builder.receive": "Receive",
-  "form.builder.quantity.received": "Quantity received",
+  "form.builder.quantity.received": "Receipt Quantity",
   "form.builder.comments.optional": "Comments (optional)",
   "form.builder.tax": "Tax: ",
   "form.builder.shipping.cost": "Shipping cost: ",
@@ -1029,5 +1030,6 @@
   "tooltip.default.label": "Default Label: {defaultLabel}",
   "tooltip.required.flag": "Required Flag Status: {requiredFlag}",
   "tooltip.visibility.flag": "Visibility Flag Status: {visibilityFlag}",
-  "dropbox.enable": "Enable Dropbox"
+  "dropbox.enable": "Enable Dropbox",
+  "dropbox.connection.error": "There was an error connecting to Dropbox."
 }

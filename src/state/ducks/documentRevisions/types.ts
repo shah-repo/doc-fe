@@ -129,6 +129,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   retrain?: boolean;
   grantAccess?: boolean;
   renderHTML?: string;
+  renderHTMLDefined?: boolean;
   pdf?: PDF;
   outputRevision?: boolean;
   primaryAttachment?: Attachment;
@@ -306,6 +307,7 @@ export interface FBDocumentRevisionProps {
   revisionChangeType?: RevisionChangeType;
   releasedAt?: string;
   renderHTML?: string;
+  renderHTMLDefined?: boolean;
   status?: DocumentRevisionStatus;
   tasks?: FBTaskItem[];
   notes?: FBNoteItem[];

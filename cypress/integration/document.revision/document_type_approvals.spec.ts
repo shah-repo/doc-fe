@@ -19,13 +19,14 @@ let formDocumentType;
 let purchaseOrderDocumentType;
 let approvalRequestDocumentType;
 let POAMDocumentType;
-
+let SupplierDocumentType;
+let createdSupplierFormDocument;
 
 const DAMTitle = "My DAM";
 const roleOne = "Role One";
 const FormTitle = "New Form";
 const POAMFormTitle = "POAM form";
-
+const SupplierFormTitle = "Supplier form";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
@@ -34,7 +35,6 @@ const THIRD_USER = USERS[4];
 const INDIVIDUAL_USER = USERS[14];
 
 context("Check DAM enforcement rules for document types", () => {
-
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
@@ -66,6 +66,7 @@ context("Check DAM enforcement rules for document types", () => {
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(company, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(company, "Form");
           POAMDocumentType = cmpFilterDocumentTypeIdByName(company, "PO Approval Matrix");
+          SupplierDocumentType = cmpFilterDocumentTypeIdByName(company, "Suppliers");
           done();
         });
       });
@@ -129,6 +130,14 @@ context("Check DAM enforcement rules for document types", () => {
                   label: "PO",
                   name: "po-kdpqvhc7",
                   applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+                },
+                {
+                  label: "form.builder.approvals",
+                  type: "poapprovals",
+                  deleteDisabled: false,
+                  name: "fb-po-approvals-kpmd2alc",
+                  uniqueSchemaItem: true,
+                  index: 1,
                 }],
               },
 
@@ -200,6 +209,60 @@ context("Check DAM enforcement rules for document types", () => {
         createdPOFormDocument = response;
         cy.drAPIApproveAndRelease({
           documentId: createdPOFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: adminEmployeeLoginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
+    it("[API]Create Supplier form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Supplier Form document</p>",
+          document: {
+            docId: "FM-00005",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: SupplierFormTitle,
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: SupplierDocumentType[0].id,
+            }],
+            schema: [{
+            }],
+          },
+
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdSupplierFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdSupplierFormDocument.id,
           payload: {
             effectiveDate: (new Date()).toISOString(),
             documentType: { id: approvalRequestDocumentType[0].id },
@@ -476,26 +539,6 @@ context("Check DAM enforcement rules for document types", () => {
       });
     });
 
-    context("Test 'Purchase order' approvals for 'PO' internal type", () => {
-
-      it("Navigate to PO list", () => {
-        cy.navigToPurchaseOrder();
-      });
-
-      it("Click create new PO", () => {
-        cy.poClickCreatePO();
-      });
-
-      it("Enter description 'POAM test", () => {
-        // SystemRequirement("REQ-1290");
-        cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
-      });
-
-      it("Check approvals enfocment", () => {
-        cy.drCheckApprovalsEnforcment();
-      });
-    });
-
     context("Test 'PO Approval Matrix' approvals for 'POAM' internal type", () => {
 
       it("Navigate to PO list", () => {
@@ -527,17 +570,55 @@ context("Check DAM enforcement rules for document types", () => {
       });
     });
 
+    context("Test 'Purchase order' approvals for 'PO' internal type", () => {
+
+      it("Navigate to PO list", () => {
+        cy.navigToPurchaseOrder();
+      });
+
+      it("Click create new PO", () => {
+        cy.poClickCreatePO();
+      });
+
+      it("Enter description 'POAM test'", () => {
+        SystemRequirement("REQ-1290");
+        cy.drEnterDocumentDescriptionWithWait({ description: "PO enfocment test" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+        });
+      });
+
+      it("Add approver to approvals", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.poAddApproverOnApproverList({ approver: USERS[1].email });
+        });
+      });
+
+      // it("Check approval role is present", () => {
+      //   cy.get("[data-cy=\"Role One\"]").should("exist");
+      // });
+
+      it("Submit for approvals and check enfocment", () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.checkToastMessageContains({ message: "at least one approver from group Role One has to be selected" });
+        cy.closeAllAlertMessages();
+      });
+    });
+
     context("Test 'Suppliers' approvals for 'SUPPLIER' internal type", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
       });
 
-      it("Click create document", () => {
-        cy.cmpClickCreateNewDocument();
+      it(`Select document named '${SupplierFormTitle}'`, () => {
+        cy.drClickOnSpecificDocFromList({ item: SupplierFormTitle });
       });
 
-      it("Select document type", () => {
-        cy.drSelectDocumentType({ documentType: "Suppliers" });
+      it("Create new Supplier document from Form", () => {
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Fill document name", () => {
@@ -548,12 +629,8 @@ context("Check DAM enforcement rules for document types", () => {
         cy.drEnterDocumentDescription({ description: "Suppliers address" });
       });
 
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+      it("Click 'Save' document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Check approvals enfocment", () => {
