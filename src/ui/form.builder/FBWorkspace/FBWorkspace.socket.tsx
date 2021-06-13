@@ -1,28 +1,54 @@
 import React from "react";
-import { FBWorkspaceSocketProps } from "..";
+import { FB, FBLockBody } from "..";
+import { SMStore, SMUrl } from "../../../App";
+import { IotService } from "../../../common/utils/iot/mqttClient";
 import useMqttSubscription from "../../hooks/useMqttSubscription";
 
-const FBWorkspaceSocket: React.FunctionComponent<FBWorkspaceSocketProps> = ({
-  id,
-}) => {
-  // const { workspaceState } = FB.useStores();
-  // const iotService = IotService.getInstance();
+const FBWorkspaceSocket: React.FunctionComponent<{}> = () => {
+  const { workspaceState } = FB.useStores();
+  const { id } = workspaceState || {};
+  const iotService = IotService.getInstance();
   const subscribe = () => {
-    // setTimeout(() => {
-    //   iotService.subscribeToTopic(
-    //     `+/document_revisions/${id}/updated`,
-    //     notify
-    //   );
-    // }, 1000);
+    if (!id) { return; }
+    iotService.subscribeToTopic(
+      `+/document_revisions/${id}/fieldLock/created`, loadLockedFields
+    );
+    iotService.subscribeToTopic(
+      `+/document_revisions/${id}/fieldLock/refreshed`, loadLockedFields
+    );
+    iotService.subscribeToTopic(
+      `+/document_revisions/${id}/fieldLock/expired`, loadLockedFields
+    );
+    iotService.subscribeToTopic(
+      `+/document_revisions/${id}/updated`, loadDocumentRevision
+    );
   };
   const unsubscribe = () => {
-    // iotService.unsubscribeFromTopic(
-    //   `+/document_revisions/${id}/updated`,
-    // );
+    if (!id) { return; }
+    iotService.unsubscribeFromTopic(
+      `+/document_revisions/${id}/fieldLock/created`,
+    );
+    iotService.unsubscribeFromTopic(
+      `+/document_revisions/${id}/fieldLock/refreshed`,
+    );
+    iotService.unsubscribeFromTopic(
+      `+/document_revisions/${id}/fieldLock/expired`,
+    );
+    iotService.unsubscribeFromTopic(
+      `+/document_revisions/${id}/updated`,
+    );
   };
-  // const notify = (_msg: any) => {
-  //   workspaceState?.loadDocRev();
-  // };
+
+  const loadLockedFields = () => {
+    SMStore.get<FBLockBody, null>({
+      url: SMStore.templateUrl(SMUrl.lockedFields, { id }),
+    });
+  };
+
+  const loadDocumentRevision = () => {
+    workspaceState?.loadDocRev();
+  };
+
   useMqttSubscription(subscribe, unsubscribe);
 
   return null;

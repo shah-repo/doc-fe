@@ -47,6 +47,8 @@ export const withFBInput = <T extends FBInputProps>(
     showErrorMsg = true,
     deleted,
     isInputOwner,
+    locked,
+    lockOwnerName,
     ...props
   }: T) => {
 
@@ -135,12 +137,18 @@ export const withFBInput = <T extends FBInputProps>(
     const isClone = !includes(OmitInputClones, type) && !isUndefined(child) && !hidden;
     disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) && !isInputOwner) || disabled;
 
+    // Locked state
+    disabled = disabled || formState?.locked.get(name)?.locked;
+    locked = formState?.locked.get(name)?.locked;
+    lockOwnerName = formState?.locked.get(name)?.ownerName;
+
     if (isClone) {
       children = cloneElement(child as React.ReactElement, {
         name,
         disabled,
         onChange,
         onBlur,
+        locked,
         ...(withState && type !== "autocomplete" && { value }),
         ...(type === "textfield" && { error }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
@@ -225,6 +233,8 @@ export const withFBInput = <T extends FBInputProps>(
       omitFormValue,
       deleted,
       isOutput,
+      locked,
+      lockOwnerName,
     });
   };
 
