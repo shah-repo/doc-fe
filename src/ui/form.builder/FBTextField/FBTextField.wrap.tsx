@@ -1,5 +1,7 @@
 import { get, isUndefined } from "lodash";
-import React from "react";
+import { reaction } from "mobx";
+import { useObserver } from "mobx-react-lite";
+import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { FB, FBTextFieldProps } from "..";
 import { isTranslation } from "../../translations/types";
@@ -8,17 +10,20 @@ export const withFBTextField = <T extends FBTextFieldProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    onFocus,
     multiline,
     rows = 1,
     placeholder = "",
     defaultValue,
     disabled,
-    name,
+    name = "",
+    value,
     ...props
   }: T) => {
 
-    const { formState } = FB.useStores();
+    const { formState, workspaceState } = FB.useStores();
     const { workspaceMode: mode } = formState || {};
+    const { id } = workspaceState || {};
     defaultValue = defaultValue || formState?.getFieldValue(name);
     const intl = useIntl();
     disabled = (
@@ -33,8 +38,34 @@ export const withFBTextField = <T extends FBTextFieldProps>(
 
     isTranslation(placeholder) && (placeholder = intl.formatMessage({ id: placeholder }));
 
+    onFocus = () => {
+      if (!name) { return; }
+      if (!id) { return; }
+      formState?.lockFields({
+        fields: [{
+          formInput: [{
+            [name]: true,
+          }],
+        }],
+        documentRevisionId: id,
+      }, name);
+    };
+
+    useEffect(() => reaction(
+      () => workspaceState?.formInputSync.get(name),
+      (value?: string) => {
+        formState?.setFieldValue(name, value, true);
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    useObserver(() => {
+      value = workspaceState?.formInputSync.get(name);
+    });
+
     return Component({
       ...(props as T),
+      onFocus,
       multiline,
       placeholder,
       disabled,
@@ -42,6 +73,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       name,
       rows,
       mode,
+      value,
     });
   };
   return (props: T) => Comp(props);

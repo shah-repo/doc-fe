@@ -25,10 +25,12 @@ export type FBMediaAlbumProps =
   | "autosave"
   >
   & {
+    onClick?: () => void;
     setMediaMode?: () => any;
     mediaAlbumState?: FBMediaAlbumState;
     workspaceMode?: FBWorkspaceMode;
     mode?: FBMediaAlbumMode;
     title?: string;
     hiddenContainer?: boolean;
+    uploadDisabled?: boolean;
   };

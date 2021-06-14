@@ -76,6 +76,25 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    useEffect(() => {
+      reaction(
+        () => workspaceState?.formInputSync?.get(name),
+        (value) => {
+          if (!procedureState) { return; }
+          const formValue = value as FBProcedureValue;
+          if (isEqual(formState?.getFieldValue(name), formValue)) { return; }
+          formState?.setFieldValue(`${name}.description`, formValue.description);
+          workspaceState?.formInputSync.set(`${name}.description`, formValue.description);
+          workspaceState?.formInputSync.set(`${name}.attachments`, map(formValue.attachments, "id"));
+          procedureState.setValue({
+            ...procedureState.value,
+            ...formValue,
+          });
+        }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      );
+    }, []);
+
     // Diff switch
     useEffect(() => reaction(
       () => formState?.inputState.get(FBFieldName.ProcedureDiff)?.value,
