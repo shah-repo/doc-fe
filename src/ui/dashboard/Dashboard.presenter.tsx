@@ -5,11 +5,11 @@ import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
 import Text from "../components/Text";
 import ChangeRequestApproval from "./action.types/ChangeRequestApproval";
+import CloseApprovalRequest from "./action.types/CloseApprovalRequest";
 import DocumentRevisionApproval from "./action.types/DocumentRevisionApproval";
 import PurchaseOrderApproval from "./action.types/purchaseOrder/PurchaseOrderApproval";
 import TaskApproval from "./action.types/TaskApproval";
 import TrainingRequest from "./action.types/TrainingRequest";
-import CloseApprovalRequest from "./action.types/CloseApprovalRequest";
 import { styles } from "./Dashboard.styles";
 
 interface Props {
@@ -43,7 +43,11 @@ const DashboardPresenter: React.FunctionComponent<Props> = ({
                 <TrainingRequest key={index} index={index} trainingRecord={pendingAction.trainingRecord} />;
             case PendingActionType.PURCHASE_ORDERS:
               return pendingAction.documentRevision &&
-                <PurchaseOrderApproval key={index} index={index} documentRevision={pendingAction.documentRevision} />;
+                <PurchaseOrderApproval
+                  key={index}
+                  index={index}
+                  documentRevision={pendingAction.documentRevision}
+                  docRevAttachments={pendingAction.docRevAttachments || []}/>;
             case PendingActionType.PENDING_DOC_CONTROL:
             case PendingActionType.PENDING_TASK:
               return pendingAction.changeReq &&

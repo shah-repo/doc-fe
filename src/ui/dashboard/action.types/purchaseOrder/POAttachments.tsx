@@ -1,31 +1,21 @@
 import { Box } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../state/ducks/attachments/types";
-import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { Attachment } from "../../../change.request/form/types";
 import Text from "../../../components/Text";
-import { FBInputProps } from "../../../form.builder";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import POAttachment from "./POAttachment";
 
 interface Props {
-  documentRevision: DocumentRevision;
+  docRevAttachments: Attachment[];
 }
 
 const POAttachments: React.FunctionComponent<Props> = ({
-  documentRevision,
+  docRevAttachments,
 }) => {
-  const [attachments] = useState<Attachment[]>(() => {
-    const attachmentList = documentRevision.attachments || [];
-    const schema = documentRevision.formDocument?.formTemplate?.schema;
-    const fileUploadItems = ((schema || []) as FBInputProps[])
-      .filter((schemaItem) => schemaItem.type === "fileupload");
 
-    const fbAttachmentList = fileUploadItems.map((item) => documentRevision.formInput?.[item.name || ""] || []);
-    return attachmentList.concat(fbAttachmentList).flat();
-  });
   const downloadAction = useActionCreator(attachmentsActions.download);
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
@@ -37,7 +27,7 @@ const POAttachments: React.FunctionComponent<Props> = ({
     async.start(downloadAction, attachment, async);
   };
 
-  if (attachments.length === 0) {
+  if (docRevAttachments.length === 0) {
     return null;
   }
 
@@ -48,7 +38,7 @@ const POAttachments: React.FunctionComponent<Props> = ({
         {": "}
       </Box>
       {
-        attachments.map((attachment) => (
+        docRevAttachments.map((attachment) => (
           <POAttachment key={attachment.id} attachment={attachment} download={handleDownload(attachment)} />
         ))
       }

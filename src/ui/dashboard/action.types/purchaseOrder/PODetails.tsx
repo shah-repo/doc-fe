@@ -2,10 +2,11 @@ import { Box, createStyles, ExpansionPanel, ExpansionPanelDetails, ExpansionPane
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React, { useMemo, useState } from "react";
 import { useIntl } from "react-intl";
+import { stripTags } from "../../../../common/utils/helpers";
+import { Attachment } from "../../../../state/ducks/attachments/types";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import Text from "../../../components/Text";
 import { FBPurchaseOrderValue } from "../../../form.builder";
-import POAssignedDate from "./POAssignedDate";
 import POAttachments from "./POAttachments";
 import PODetailItem from "./PODetailItem";
 import POSupplier from "./POSupplier";
@@ -14,6 +15,7 @@ interface Props {
   documentRevision: DocumentRevision;
   purchaseOrder: FBPurchaseOrderValue;
   supplierId: string;
+  docRevAttachments: Attachment[];
 }
 
 
@@ -31,6 +33,7 @@ const PODetails: React.FunctionComponent<Props> = ({
   documentRevision,
   purchaseOrder,
   supplierId,
+  docRevAttachments,
 }) => {
   const intl = useIntl();
   const totalAmount = useMemo(() => {
@@ -40,11 +43,12 @@ const PODetails: React.FunctionComponent<Props> = ({
   const classes = styles();
   const [isExpanded, setIsExpanded] = useState(false);
   const handleChange = () => setIsExpanded(!isExpanded);
+
   const renderDetails = (
     <Box>
-      <PODetailItem label="common.description" value={documentRevision.name} />
+      <PODetailItem label="common.description" value={stripTags(documentRevision.description)} />
       <PODetailItem label="common.line.items" value={purchaseOrder.items?.length || 0} />
-      <POAttachments documentRevision={documentRevision} />
+      <POAttachments {...{ docRevAttachments }} />
     </Box>
   );
 
@@ -52,7 +56,8 @@ const PODetails: React.FunctionComponent<Props> = ({
     <Box>
       <POSupplier supplierId={supplierId} />
       <PODetailItem label="common.total.amount" value={`${totalAmount}`} />
-      <POAssignedDate approvals={documentRevision.changeRequest?.approvals} />
+      {/* Removed per requirements in ENC-8154 */}
+      {/* <POAssignedDate approvals={documentRevision.changeRequest?.approvals} /> */}
       <ExpansionPanel expanded={isExpanded} onChange={handleChange} className={classes.hideBorder}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon color="primary" />}
