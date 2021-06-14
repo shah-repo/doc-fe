@@ -6,7 +6,7 @@ export interface SMStoreProps {
 
 export type SMStoreRequestMethod = "get" | "post" | "patch" | "delete";
 
-export interface SMStoreResponse {
+interface SMStoreResponse {
   abort: () => void;
   promise: Promise<any>;
 }
@@ -19,34 +19,34 @@ export interface SMStoreAdapter {
   del(path: string, data?: {}, options?: {}): SMStoreResponse;
 }
 
-export interface SMStoreRequestProps<Response, Body> {
-  /**
-   * @cfg {string} Request url definition.
-   */
-  url?: string;
-  /**
-   * @cfg {string} Response data mapping.
-   */
-  mapping: string;
-  /**
-   * @cfg {bool} Omit header authorization if false.
-   * Default to true.
-   */
-  authorize?: boolean;
-  /**
-   * @cfg {object} Payload.
-   */
-  body?: Body;
-  /**
-   * @cfg {@observable any} Response type of data.
-   */
-  data?: Response;
-  /**
-   * @cfg {@observable bool} Loading state.
-   * Default to false.
-   */
-  loading?: boolean;
-}
+// interface SMStoreRequestProps<Response, Body> {
+//   /**
+//    * @cfg {string} Request url definition.
+//    */
+//   url?: string;
+//   /**
+//    * @cfg {string} Response data mapping.
+//    */
+//   mapping: string;
+//   /**
+//    * @cfg {bool} Omit header authorization if false.
+//    * Default to true.
+//    */
+//   authorize?: boolean;
+//   /**
+//    * @cfg {object} Payload.
+//    */
+//   body?: Body;
+//   /**
+//    * @cfg {@observable any} Response type of data.
+//    */
+//   data?: Response;
+//   /**
+//    * @cfg {@observable bool} Loading state.
+//    * Default to false.
+//    */
+//   loading?: boolean;
+// }
 
 export interface SMStoreRequestSet<Body> {
   url?: string;

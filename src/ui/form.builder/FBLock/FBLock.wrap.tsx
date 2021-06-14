@@ -61,7 +61,7 @@ export const withFBLock = <T extends FBLockProps>(
 
     return (
       <Component
-        {...props as T}
+        {...props}
       />
     );
   };
