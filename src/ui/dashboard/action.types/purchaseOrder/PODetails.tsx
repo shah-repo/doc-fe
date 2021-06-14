@@ -56,8 +56,7 @@ const PODetails: React.FunctionComponent<Props> = ({
     <Box>
       <POSupplier supplierId={supplierId} />
       <PODetailItem label="common.total.amount" value={`${totalAmount}`} />
-      {/* Removed per requirements in ENC-8154 */}
-      {/* <POAssignedDate approvals={documentRevision.changeRequest?.approvals} /> */}
+      {/* Assigned date removed per requirements in ENC-8154 */}
       <ExpansionPanel expanded={isExpanded} onChange={handleChange} className={classes.hideBorder}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon color="primary" />}
