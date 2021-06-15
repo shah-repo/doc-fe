@@ -60,10 +60,6 @@ class FBData {
     return unitsOptions.filter((item: {[key: string]: string}) => !notAllowedItems.includes(item.value));
   }
 
-  public static get serviceUnitsOptions(): FBOption[] {
-    return unitsOptions;
-  }
-
   public static get requirementOptions(): FBOption[] {
     return requirementOptions;
   }
