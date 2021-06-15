@@ -28,7 +28,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
 }) => (
   <FBProvider {...{ dialogState }}>
     <FBDialog />
-    <FBInput {...props} {...{ name, autosave }} type="poapprovals">
+    <FBInput {...props} {...{ name }} type="poapprovals">
       <Box>
         <FBSection
           name={`fb-po-approvals-section-${name}`}
@@ -42,7 +42,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
           gutter={false}
           multiple={true}
           omitFormValue={true}
-          {...{ disabled, renderOption, loading, autosave }}
+          {...{ disabled, renderOption, loading }}
         />
         <Box display="flex" flexWrap="wrap" my={2}>
           <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
