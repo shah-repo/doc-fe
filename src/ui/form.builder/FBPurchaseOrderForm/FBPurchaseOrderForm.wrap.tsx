@@ -54,10 +54,8 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
         formState?.setFieldFinalValidationRules("supplierPartNumber", "required_without:partNumber");
       }
       else {
-        formState?.setFieldRules("partNumber", "false");
-        formState?.setFieldRules("supplierPartNumber", "false");
-        formState?.setFieldFinalValidationRules("partNumber", "false");
-        formState?.setFieldFinalValidationRules("supplierPartNumber", "false");
+        formState?.removeFieldRules("partNumber");
+        formState?.removeFieldRules("supplierPartNumber");
       }
     };
 
