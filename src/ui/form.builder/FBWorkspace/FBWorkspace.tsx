@@ -21,7 +21,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   <FBProvider {...{ workspaceState, dialogState, snackbarState }}>
     <FBSnackbar autoHideDuration={6000}/>
     <FBDialog />
-    <FBForm {...{ initialValues }} workspaceMode={mode} initialValidation={true}>
+    <FBForm {...{ initialValues }} workspaceMode={mode} initialValidation={true} includeLocking={true}>
       <FBLock>
         {children}
         {active && (
