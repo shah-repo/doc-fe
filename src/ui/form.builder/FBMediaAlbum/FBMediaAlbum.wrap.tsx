@@ -7,6 +7,7 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
+    onClick,
     setMediaMode,
     mediaAlbumState,
     collection = [],
@@ -14,11 +15,14 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
     actionsDisabled,
     title = "",
     mode,
+    name,
+    uploadDisabled,
     ...props
   }: T) => {
 
     mediaAlbumState = FB.useRef<FBMediaAlbumState>(FBMediaAlbumState);
-    const { mode: workspaceMode } = FB.useStores().workspaceState || {};
+    const { formState, workspaceState } = FB.useStores();
+    const { mode: workspaceMode, id } = workspaceState || {};
 
     // Handle mode
     setMediaMode = () => {
@@ -28,6 +32,7 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
 
     useObserver(() => {
       mode = mediaAlbumState?.mode;
+      uploadDisabled = formState?.locked.get(name || "")?.locked;
       title = (mode === "carousel")
         ? collection[mediaAlbumState?.activeMedia || 0]?.name
         : "";
@@ -37,8 +42,43 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
       );
     });
 
+    onClick = () => {
+      if (!name) { return; }
+      if (!id) { return; }
+      formState?.lockFields({
+        fields: [{
+          formInput: [{
+            [name]: true,
+          }],
+        }],
+        documentRevisionId: id,
+      }, name);
+    };
+
+    const fileUploadEl = document.getElementById(`fb-mediaalbum-upload-${name}`);
+
+    if (fileUploadEl) {
+      fileUploadEl.onclick = registerCancel;
+    }
+
+
+    function registerCancel() {
+      document.body.onfocus = removeLock;
+    }
+
+    function removeLock() {
+      if (fileUploadEl?.nodeValue?.length) { return; }
+      const lockData = formState?.locked.get(name || "");
+      formState?.locked.set(name || "", {
+        ...lockData,
+        lockId: undefined,
+      });
+      formState?.expireLockedFields(lockData?.lockId);
+    }
+
     return Component({
       ...(props as T),
+      onClick,
       setMediaMode,
       mediaAlbumState,
       workspaceMode,
@@ -47,6 +87,8 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
       collection,
       title,
       mode,
+      name,
+      uploadDisabled,
     });
   };
 

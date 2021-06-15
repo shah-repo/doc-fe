@@ -190,6 +190,15 @@ export type FBInputProps =
      * @cfg {Bool} If true scroll to el on render.
      */
     autoScrollTo?: boolean;
+    /**
+     * @cfg {Bool} If true field is disabled.
+     */
+    locked?: boolean;
+
+    /**
+     * @cfg {string} Username that holds the lock.
+     */
+    lockOwnerName?: string;
   };
 
 export const OmitInputClones: FBInputType[] = [

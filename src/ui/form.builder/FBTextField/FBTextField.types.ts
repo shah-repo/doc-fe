@@ -16,6 +16,7 @@ export type FBTextFieldProps =
     | "onBlur"
     | "variant"
     | "className"
+    | "onFocus"
   >
   & {
     dataCy?: string;

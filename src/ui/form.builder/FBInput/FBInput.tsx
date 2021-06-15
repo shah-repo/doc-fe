@@ -1,8 +1,9 @@
 import { FormControl, FormHelperText } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
+import LockIcon from "@material-ui/icons/Lock";
 import { includes, isEmpty } from "lodash";
 import React from "react";
-import { FBFieldName, FBInputProps, FBInputState, FBLabel, FBNotes, FBTextField } from "..";
+import { FBFieldName, FBInputProps, FBInputState, FBLabel, FBNotes, FBTextField, FBTooltip } from "..";
 import Text from "../../components/Text";
 import { withFBInput } from "./FBInput.wrap";
 
@@ -22,17 +23,31 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   name,
   includeNotes,
   isOutput,
+  locked,
+  lockOwnerName,
 }) => (
   <>
     {!hidden && (
       <Box mb={gutter ? 5 : 0} {...boxProps}>
+
+
         {/* blankTemplateForm has notes on attachment already,
         still we need input inside blnkTemplateForm according to ENC-5908 */}
         {includeNotes && isOutput && type !== "blanktplform" && <FBNotes {...{ name }} />}
         <FormControl fullWidth {...{ error }}>
-          {!includes(FBInputState.omitLabel, type) && label && (
-            <FBLabel {...{ error, label, loading }} />
-          )}
+          <Box display="flex" flexDirection="row">
+            {locked && (
+              <FBTooltip title={lockOwnerName}>
+                <Box mt={-0.5} pr={0.5}>
+                  <LockIcon fontSize="small" color="error" style={{ float: "right" }} />
+                </Box>
+              </FBTooltip>
+            )}
+            {!includes(FBInputState.omitLabel, type) && label && (
+              <FBLabel {...{ error, label, loading }} />
+            )}
+          </Box>
+
           {children}
         </FormControl>
         {!isEmpty(helperText) && showErrorMsg && (
@@ -50,6 +65,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
             />
           </Box>
         )}
+
       </Box>
     )}
   </>

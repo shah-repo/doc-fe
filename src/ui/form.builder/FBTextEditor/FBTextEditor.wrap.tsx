@@ -32,6 +32,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     autoFocus,
     autoScrollTo,
     shouldNotAutosaveOnBlur = false,
+    locked,
     ...props
   }: T) => {
 
@@ -40,6 +41,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     // let timeout;
     // const [timeoutID, setTimeoutID] = useState<number>();
     const { formState, workspaceState } = FB.useStores();
+    const { id } = workspaceState || {};
     const emptyHtmlContent = "<p></p>";
     formValue = formState?.getFieldValue(name);
     textEditorState = FB.useRef(FBTextEditorState, htmlToEditorState(formValue));
@@ -104,6 +106,17 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+      reaction(
+        () => workspaceState?.formInputSync?.get(name),
+        (value) => {
+          if (!textEditorState?.masked) { return; }
+          onEditorStateChange?.(htmlToEditorState(value));
+        }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      );
+    }, []);
+
 
     // MARK: @helpers
     // Creates editor state with initial value
@@ -112,6 +125,23 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       const contentBlock = htmlToDraft(value);
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
       return EditorState.createWithContent(contentState);
+    }
+
+    function handleLockFocus() {
+      if (!name) { return; }
+      if (!id) { return; }
+      formState?.lockFields({
+        fields: [{
+          formInput: [{
+            [name]: true,
+          }],
+        }],
+        documentRevisionId: id,
+      }, name);
+    }
+    function handleLockBlur() {
+      const lockData = formState?.locked.get(name);
+      formState?.expireLockedFields(lockData?.lockId);
     }
 
     // MARK: @methods
@@ -125,6 +155,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       if (!textEditorState?.editorReference) { return; }
       !masked && !textEditorState?.preserveFocus && textEditorState.editorReference.focus();
       textEditorState?.setMasked(masked);
+      masked ? handleLockBlur() : handleLockFocus();
 
       // if (!masked) {
       //   timeout = setInterval(() => {
@@ -156,6 +187,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     useObserver(() => {
       editorState = textEditorState?.editorState;
       masked = textEditorState?.masked;
+      disabled = disabled || formState?.locked.get(name)?.locked;
     });
 
     return Component({
@@ -176,6 +208,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       disabled,
       withState,
       omitFormValue,
+      locked,
     });
   };
 
