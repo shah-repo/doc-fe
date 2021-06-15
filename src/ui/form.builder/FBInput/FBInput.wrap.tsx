@@ -57,7 +57,7 @@ export const withFBInput = <T extends FBInputProps>(
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
-    const { email: ownerName } = workspaceState?.document?.owner.user || {};
+    const { email: ownerName } = workspaceState?.document?.owner?.user || {};
 
     defaultValue = setDefaultValue();
     helperText = formState?.errors.get(name) || helperText;
