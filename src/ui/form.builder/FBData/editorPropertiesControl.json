@@ -97,7 +97,9 @@
     "includeInFaiInspection",
     "deleteDisabled",
     "copyableValue",
-    "includeNotes"
+    "includeNotes",
+    "defaultCurrentDate",
+    "disablePast"
   ],
   "hyperlink": [
     "reviseDisabled",

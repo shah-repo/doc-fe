@@ -909,6 +909,8 @@
   "form.builder.parts.manufactured": "Part to be Manufactured",
   "form.builder.add.note": "Add a Note",
   "form.builder.include.notes": "Include Notes",
+  "form.builder.disable.past.date": "Disable Past Dates",
+  "form.builder.default.current.date": "Set Current Date as Default",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.pdf": "Download PDF file",

@@ -9,6 +9,8 @@ import { getStartOfDayDateString, TIME_ZONE } from "../../../common/utils/date";
 const FBDatePicker: React.FunctionComponent<FBInputProps> = ({
   onChange = () => null,
   value,
+  disablePast,
+  defaultCurrentDate,
   ...props
 }) => (
   <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
@@ -21,7 +23,9 @@ const FBDatePicker: React.FunctionComponent<FBInputProps> = ({
         inputVariant="outlined"
         format="MM/DD/YYYY"
         autoOk={true}
+        disablePast={disablePast}
         label=""
+        defaultValue={defaultCurrentDate  ? getStartOfDayDateString(Date.now(), "L") : ""}
         value={getStartOfDayDateString(moment(value as Date).tz(TIME_ZONE).toISOString())}
         initialFocusedDate={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
         {...{ onChange }}

@@ -102,6 +102,8 @@ export type FBInputProps =
     gutter?: boolean;
     linkUrl?: string;
     defaultValue?: any;
+    disablePast?: boolean;
+    defaultCurrentDate?: boolean;
     inputState?: FBInputState;
     editorProperties?: FBEditorPropertiesType[];
     includeContext?: boolean;

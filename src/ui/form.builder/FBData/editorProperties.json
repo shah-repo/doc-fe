@@ -43,5 +43,11 @@
   },
   "includeNotes": {
     "text": "form.builder.include.notes"
+  },
+  "defaultCurrentDate": {
+    "text": "form.builder.default.current.date"
+  },
+  "disablePast": {
+    "text": "form.builder.disable.past.date"
   }
 }
