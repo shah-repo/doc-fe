@@ -5,7 +5,7 @@ import { PendingActionsListAction, PendingActionsRemoveAction, PendingActionsSta
 
 type PendingActions = PendingActionsListAction | PendingActionsRemoveAction;
 
-export const pendingActions = (
+const pendingActions = (
   state: PendingActionsState = [], action: PendingActions): PendingActionsState => {
   switch (action.type) {
     case PENDING_ACTIONS_LIST:
