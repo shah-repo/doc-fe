@@ -16,6 +16,7 @@ class FBFormState extends FBSchemaState {
   private finalValidationRulse: Dictionary<string> = {};
   public validatorRules: Record<string, FBValidationRelatedRules[]> = {};
   public validationRelatedRules: Record<string, FBValidationRelatedRules[]> = {};
+  public includeLocking = false;
 
   // TO BBE REMOVED!
   public workspaceState?: FBWorkspaceState;
@@ -24,7 +25,11 @@ class FBFormState extends FBSchemaState {
   @observable public inputState = new Map<string, FBInputState>();
   @observable public locked = new Map<string, FBLockValue>();
 
-  public constructor({ schema, initialValues = {}, workspaceMode, workspaceState }: FBFormConstructor) {
+  public constructor({
+    schema,
+    initialValues = {},
+    workspaceMode, workspaceState,
+  }: FBFormConstructor) {
     super();
     this.schema = schema;
     this.initialValues = initialValues || {};
@@ -40,6 +45,10 @@ class FBFormState extends FBSchemaState {
   @computed public get Validator(): any {
     return lodashGet(window, "EnlilRemoteValidators.validator");
   }
+
+  public setIncludeLocking = (state: boolean) => {
+    this.includeLocking = state;
+  };
 
   public reset = () => {
     this.initialValues = {};
@@ -261,6 +270,7 @@ class FBFormState extends FBSchemaState {
     body: Partial<FBLockBody>,
     fieldName: string
   ) => {
+    if (!this.includeLocking) { return; }
     SMStore.post<FBLockData, Partial<FBLockBody>>({
       url: SMUrl.lockFields,
       body,
@@ -271,7 +281,7 @@ class FBFormState extends FBSchemaState {
       }
       const {
         lock: { id = undefined } = {},
-        documentRevision: { owner: { user: { email: ownerName = "" } = {} } = {} } = {},
+        documentRevision: { owner: { user: { email: ownerName = undefined } = {} } = {} } = {},
       } = data || {};
       if (!id) { return; }
       this.locked.set(fieldName, {
@@ -279,12 +289,13 @@ class FBFormState extends FBSchemaState {
         locked: true,
         fieldName,
         lockId: id,
-        ownerName,
+        ownerName: ownerName || this.workspaceState?.currentUser?.email,
       });
     });
   };
 
   public expireLockedFields = (id?: string) => {
+    if (!this.includeLocking) { return; }
     if (!id) { return; }
     SMStore.post({
       url: SMStore.templateUrl(SMUrl.lockFieldsExpire, { id }),
