@@ -5,6 +5,7 @@ import { withFBTextField } from "./FBTextField.wrap";
 
 const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   onBlur,
+  onFocus,
   FBProps: { inputType = "textfield" } = {},
   placeholder = "",
   multiline,
@@ -18,9 +19,11 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   dataCy,
   mode,
   className,
+  locked,
+  value,
   ...props
 }) => (
-  <FBInput {...props} {...{ error, defaultValue }} type={inputType as FBInputType}>
+  <FBInput {...props} {...{ error, defaultValue, locked }} type={inputType as FBInputType}>
     {mode === "preview" && (
       <Box>{defaultValue}</Box>
     )}
@@ -35,7 +38,19 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
             onWheel: (e) => { e.currentTarget.blur(); },
           },
         }}
-        {...{ type, rows, error, multiline, InputProps, style, onBlur, placeholder, className }}
+        {...{
+          onBlur,
+          onFocus,
+          type,
+          rows,
+          error,
+          multiline,
+          InputProps,
+          style,
+          placeholder,
+          className,
+          value,
+        }}
       />
     )}
   </FBInput>

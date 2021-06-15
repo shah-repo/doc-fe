@@ -49,6 +49,9 @@ export enum FBEndpoint {
   RemoveOverride = "/lhr/lhrs/${id}/remove_override/${refId}",
   Notes = "/notes",
   DocumentRevisionPatch = "/document_revisions/${id}",
+  LockedFields = "/document_revision_field_locks/${id}",
+  LockFields = "/document_revision_field_locks",
+  LockFieldsExpire = "/document_revision_field_locks/${id}/expire",
 }
 
 

@@ -29,10 +29,18 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     disabled,
     mode,
     lhrStepIndex,
+    name,
     ...props
   }: T) => {
     // MARK: @config
-    const { procedureState, mpiProcedureState, dialogState, lhrStepState, workspaceState } = FB.useStores();
+    const {
+      procedureState,
+      mpiProcedureState,
+      dialogState,
+      lhrStepState,
+      workspaceState,
+      formState: parentFormState,
+    } = FB.useStores();
 
     formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
     procedureFormState = FB.useRef<FBProcedureFormState>(FBProcedureFormState, {
@@ -150,7 +158,17 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     }
 
     function handleCancel() {
+      handleUnlockField();
       dialogState?.closeDialog();
+    }
+
+    function handleUnlockField() {
+      const lockData = parentFormState?.locked.get(`${name}.${type}`);
+      parentFormState?.locked.set(`${name}.${type}`, {
+        ...lockData,
+        locked: false,
+      });
+      parentFormState?.expireLockedFields(lockData?.lockId);
     }
 
     function handleFilter(
@@ -209,6 +227,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       disabled,
       mode,
       isDocumentMPI,
+      name,
     });
   };
 

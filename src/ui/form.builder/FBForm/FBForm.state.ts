@@ -1,7 +1,8 @@
 import { flatten, unflatten } from "flat";
 import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, setWith, values } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import { FBFormConstructor, FBInputState, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceState } from "..";
+import { FBFormConstructor, FBInputState, FBLockBody, FBLockData, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceState } from "..";
+import { SMStore, SMUrl } from "../../../App";
 import FBSchemaState from "../FBSchema/FBSchema.state";
 
 class FBFormState extends FBSchemaState {
@@ -21,6 +22,7 @@ class FBFormState extends FBSchemaState {
   @observable public errors = new Map<string, string>();
   @observable public helpers = new Map<string, string>();
   @observable public inputState = new Map<string, FBInputState>();
+  @observable public locked = new Map<string, FBLockValue>();
 
   public constructor({ schema, initialValues = {}, workspaceMode, workspaceState }: FBFormConstructor) {
     super();
@@ -253,6 +255,40 @@ class FBFormState extends FBSchemaState {
     if (!inputState) { return; }
     const formValue = cloneDeep(this.getFieldValue(name));
     inputState.setAutosaveValue(cloneDeep(formValue));
+  };
+
+  public lockFields = (
+    body: Partial<FBLockBody>,
+    fieldName: string
+  ) => {
+    SMStore.post<FBLockData, Partial<FBLockBody>>({
+      url: SMUrl.lockFields,
+      body,
+    }, (data, error) => {
+      if (error) {
+        const { statusCode } = error || {};
+        if (!statusCode || statusCode === 500) { return; }
+      }
+      const {
+        lock: { id = undefined } = {},
+        documentRevision: { owner: { user: { email: ownerName = "" } = {} } = {} } = {},
+      } = data || {};
+      if (!id) { return; }
+      this.locked.set(fieldName, {
+        ...this.locked.get(fieldName),
+        locked: true,
+        fieldName,
+        lockId: id,
+        ownerName,
+      });
+    });
+  };
+
+  public expireLockedFields = (id?: string) => {
+    if (!id) { return; }
+    SMStore.post({
+      url: SMStore.templateUrl(SMUrl.lockFieldsExpire, { id }),
+    });
   };
 }
 
