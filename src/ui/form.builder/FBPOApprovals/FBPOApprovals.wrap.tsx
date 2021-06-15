@@ -38,9 +38,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const poName = workspaceState?.schema?.find((item) => item.type === "purchaseorder")?.name || "";
     const totalAmount = formInput?.[poName]?.totalAmount;
     const revisionChangeType = document?.revisionChangeType;
-    // Should be disabled while submitting if group levels changes while adding/editing PO items
-    disabled = loading || isSubmitting;
-
     const authUser = store.getState().auth.user;
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
@@ -195,6 +192,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const fieldValue = map(poApprovalsState?.getApprovals, "approver.id");
     formState?.setFieldValue(`${name}`, fieldValue);
     documentStatus = document?.status as any;
+    // Should be disabled while submitting if group levels changes while adding/editing PO items
+    disabled = loading || isSubmitting;
 
     return Component({
       ...(props as T),
