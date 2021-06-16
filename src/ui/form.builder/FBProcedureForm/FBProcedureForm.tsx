@@ -69,6 +69,7 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
     {isDocumentMPI && !initialValues && <FBCheckbox
       name="LHRTparameter"
       label="form.builder.lhrt.parameter"
+      defaultChecked
       withState
     />}
     {type === FBProcedureItemType.materials && (
