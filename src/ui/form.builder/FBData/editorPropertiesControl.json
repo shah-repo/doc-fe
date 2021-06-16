@@ -99,7 +99,7 @@
     "copyableValue",
     "includeNotes",
     "defaultCurrentDate",
-    "disablePast"
+    "disablePastDates"
   ],
   "hyperlink": [
     "reviseDisabled",

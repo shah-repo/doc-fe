@@ -47,7 +47,7 @@
   "defaultCurrentDate": {
     "text": "form.builder.default.current.date"
   },
-  "disablePast": {
+  "disablePastDates": {
     "text": "form.builder.disable.past.date"
   }
 }

@@ -102,8 +102,6 @@ export type FBInputProps =
     gutter?: boolean;
     linkUrl?: string;
     defaultValue?: any;
-    disablePast?: boolean;
-    defaultCurrentDate?: boolean;
     inputState?: FBInputState;
     editorProperties?: FBEditorPropertiesType[];
     includeContext?: boolean;
@@ -116,6 +114,7 @@ export type FBInputProps =
     includeQRScan?: boolean;
     isInputOwner?: boolean;
     designDisabled?: boolean;
+
     /**
      * @cfg {Bool} Whether the field can be deleted in the output document.
      */
