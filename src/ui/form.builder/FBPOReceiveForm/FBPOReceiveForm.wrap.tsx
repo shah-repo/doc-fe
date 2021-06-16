@@ -47,7 +47,7 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
         if (e.itemId === id) {
           return {
             ...e,
-            received: (e.received ?? 0) + values?.received,
+            received: values?.received ?? 0,
           };
         }
         return e;
