@@ -11,31 +11,27 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     value,
     defaultValue,
     name = "",
-    withState,
-    omitFormValue,
     ...props
   }: T) => {
     const { formState, workspaceState } = FB.useStores();
-    const { isOutput } = workspaceState || {};
+    const { isOutput, formInput } = workspaceState || {};
     const defaultCurrentDate = editorProperties?.includes("defaultCurrentDate") || false;
     const disablePastDates = editorProperties?.includes("disablePastDates") || false;
 
+    value = formInput?.[name];
+
 
     if ((isOutput || formState?.workspaceMode !== "design") && formState?.workspaceMode !== "formPreview") {
-      if (!defaultValue && !value && defaultCurrentDate) {
-        value = new Date();
-        formState?.setFieldValue(name, value, withState, omitFormValue);
+      if (!defaultValue && !value  && defaultCurrentDate) {
+        formState?.setFieldValue(name, new Date());
       }
     }
-
 
     return Component({
       ...(props as T),
       value,
       defaultValue,
       name,
-      withState,
-      omitFormValue,
       disablePastDates,
     });
   };
