@@ -247,7 +247,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                 />
               </Box>
               <div className={classes.auditValue}>
-                <AuditFactory audit={change} dataCy={`change-value-${groupKey}-${key}`} />
+                {/* Set field property to "s3link" so audit factory knows to generate downloadable link for s3links */}
+                <AuditFactory audit={{ ...change, field: "s3link" }} dataCy={`change-value-${groupKey}-${key}`} />
               </div>
             </Box>
           );

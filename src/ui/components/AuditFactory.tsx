@@ -17,6 +17,7 @@ import Text from "../components/Text";
 import { Translation } from "../translations/types";
 import AuditAttachment from "./AuditAttachment";
 import AuditAutocomplete from "./AuditAutocomplete";
+import AuditDownloadS3link from "./AuditDownloadS3link";
 import AuditProcedure from "./AuditProcedure";
 import DialogOpener from "./textDiff/DialogOpener";
 
@@ -171,6 +172,9 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           break;
         }
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as string)}</div>);
+        break;
+      case "s3link":
+        returnValue = <AuditDownloadS3link s3link={audit.nextValue as string}/>;
         break;
       default:
         returnValue = (<div data-cy={dataCy}>{getAuditDefaultValue(audit.nextValue)}</div>);
