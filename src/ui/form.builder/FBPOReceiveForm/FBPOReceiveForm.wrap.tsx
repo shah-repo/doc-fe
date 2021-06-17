@@ -1,13 +1,11 @@
-import { isEmpty, isString } from "lodash";
+import { isEmpty } from "lodash";
 import React from "react";
-import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { FB, FBPOReceiveFormProps } from "..";
 import { Id } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import { toastError } from "../../components/notifications";
-import useGetDocTypeByAcronym from "../../hooks/useGetDocTypeByAcronym";
+
 import FBPOReceiveFormState from "./FBPOReceiveForm.state";
 
 export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
@@ -21,17 +19,13 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
   }: T) => {
 
     const dispatch = useDispatch();
-    const intl = useIntl();
-    // TODO: find better solution, acronyms will be different per company
-    const lfpoDocType = useGetDocTypeByAcronym("LFPO-");
-    const lotDocType = useGetDocTypeByAcronym("LOT-");
     const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
     const { dialogState, formState, poReceiveState, workspaceState } = FB.useStores();
     const documentId = workspaceState?.documentId as string;
     const name = workspaceState?.schema?.find((e) => e.type === "poreceive")?.name as string;
     const poReceiveFormState = FB.useRef<FBPOReceiveFormState>(
       FBPOReceiveFormState,
-      { lfpoDocType, lotDocType, groupOptions, item, documentId }
+      { groupOptions, item, documentId }
     );
 
     handleReceive = async () => {
@@ -82,20 +76,6 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
               id: poReceiveState?.data?.document.id,
             }] as Id[] : undefined,
         });
-
-      if (poReceiveFormState.item?.partNumber) {
-        try {
-          await poReceiveFormState?.submit(
-            formState?.getValues(),
-            poReceiveState?.poDocumentId,
-          );
-          dialogState?.closeDialog();
-        } catch (e) {
-          if (isString(e.message)) {
-            toastError(intl.formatMessage({ id: e.message }));
-          }
-        }
-      }
 
       dialogState?.closeDialog();
       await poReceiveState?.setPOId(poReceiveState?.data?.id);
