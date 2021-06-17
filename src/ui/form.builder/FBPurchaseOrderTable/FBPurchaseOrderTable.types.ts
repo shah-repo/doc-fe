@@ -2,12 +2,11 @@ import { FBCurrency, FBInputProps, FBPurchaseOrderCalculation, FBPurchaseOrderIt
 
 export type FBPurchaseOrderTableProps =
 & Pick<FBInputProps, "name" | "disabled">
-& Pick<FBPurchaseOrderProps, "handleItem" | "disabled" | "mode">
+& Pick<FBPurchaseOrderProps, "handleItem" | "handleLot" | "disabled" | "mode">
 & {
   handleShippingCost?: (ev: React.ChangeEvent<any>) => any;
   handleCurrencyChange?: (ev, value) => void;
   handleDelete?: (index: number) => (e: any) => void;
-  handleLot?: (item?: FBPurchaseOrderItem) => any;
   classes?: Record<"root" | "table", string>;
   items?: FBPurchaseOrderItem[];
   calculation?: FBPurchaseOrderCalculation;
@@ -18,7 +17,6 @@ export type FBPurchaseOrderTableDetailsProps =
 & Pick<FBPurchaseOrderTableProps,
 | "handleDelete"
 | "handleItem"
-| "handleLot"
 | "classes"
 | "items"
 | "mode"

@@ -4,7 +4,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FB, FBDialogState, FBInputType, FBPOReceiveForm, FBPOReceiveFormActions, FBPOReceiveItemProps, FBPOReceiveProps, FBPOReceiveState, FBPurchaseOrderItem, FBSchemaProps } from "..";
+import { FB, FBDialogState, FBInputType, FBPOReceiveCreateLot, FBPOReceiveCreateLotActions, FBPOReceiveForm, FBPOReceiveFormActions, FBPOReceiveItemProps, FBPOReceiveProps, FBPOReceiveState, FBPurchaseOrderItem, FBSchemaProps } from "..";
 import { stripTags } from "../../../common/utils/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../components/notifications";
@@ -56,8 +56,15 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       });
     };
 
-    const handleLot = (item?: FBPurchaseOrderItem) => (e: any) => {
+    const handleLot = (e: React.MouseEvent<HTMLButtonElement>, item?: FBPurchaseOrderItem) => {
       e.stopPropagation();
+      dialogState?.config({
+        open: true,
+        maxWidth: "sm",
+        title: "form.builder.po.create.a.lot",
+        content: <FBPOReceiveCreateLot {...{ item }} />,
+        actions: <FBPOReceiveCreateLotActions {...{ item }} />,
+      });
     };
 
     function setSchemaItem(item: FBSchemaProps): FBPOReceiveItemProps {
@@ -89,7 +96,6 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
         reduced.push(setSchemaItem(item));
         return reduced;
       }, []);
-      console.log(schema);
       return schema;
     }
 

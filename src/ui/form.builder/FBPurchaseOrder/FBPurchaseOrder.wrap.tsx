@@ -8,6 +8,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
 ) => {
   const Comp = ({
     handleItem,
+    handleLot,
     purchaseOrderState,
     defaultValue,
     dialogState,
@@ -48,6 +49,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     return Component({
       ...(props as T),
       handleItem,
+      handleLot,
       purchaseOrderState,
       dialogState,
       disabled,

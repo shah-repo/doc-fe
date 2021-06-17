@@ -6,6 +6,7 @@ import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
 
 const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   handleItem,
+  handleLot,
   purchaseOrderState,
   dialogState,
   gutter = true,
@@ -20,7 +21,7 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
     <FBInput {...{ name, disabled, autosave }} type="purchaseorder">
       <Box mb={gutter ? 5 : 0}>
         {mode === "form" && <FBSection name={`fb-po-section-${name}`} {...{ label }}  />}
-        <FBPurchaseOrderTable {...{ name, disabled, handleItem, mode }} />
+        <FBPurchaseOrderTable {...{ name, disabled, handleItem, handleLot, mode }} />
         {!disabled && (
           <FBButton
             fullWidth={true}
