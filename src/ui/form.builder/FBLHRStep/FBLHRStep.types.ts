@@ -33,6 +33,5 @@ export interface StartMpiBody {
     id: string;
   };
   fieldId: string;
-  startQuantity: number;
   stepNumber?: number;
 }

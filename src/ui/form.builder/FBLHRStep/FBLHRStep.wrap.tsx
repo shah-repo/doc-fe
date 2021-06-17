@@ -147,7 +147,6 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       }
       lhrStepState.startMpi(
         name,
-        startQuantity,
         workspaceState?.document?.id,
         schemaItem?.editorConfig?.value,
         stepIndex,
