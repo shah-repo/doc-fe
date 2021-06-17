@@ -7,6 +7,7 @@ export type FBPurchaseOrderTableProps =
   handleShippingCost?: (ev: React.ChangeEvent<any>) => any;
   handleCurrencyChange?: (ev, value) => void;
   handleDelete?: (index: number) => (e: any) => void;
+  handleLot?: (item?: FBPurchaseOrderItem) => any;
   classes?: Record<"root" | "table", string>;
   items?: FBPurchaseOrderItem[];
   calculation?: FBPurchaseOrderCalculation;
@@ -17,6 +18,7 @@ export type FBPurchaseOrderTableDetailsProps =
 & Pick<FBPurchaseOrderTableProps,
 | "handleDelete"
 | "handleItem"
+| "handleLot"
 | "classes"
 | "items"
 | "mode"
@@ -25,7 +27,7 @@ export type FBPurchaseOrderTableDetailsProps =
 >;
 
 export type FBPurchaseOrderTableSumProps =
-& Pick<FBPurchaseOrderTableProps,  "handleItem" | "classes" | "items" | "calculation">;
+& Pick<FBPurchaseOrderTableProps,  "handleItem" | "handleLot" | "classes" | "items" | "calculation" | "mode">;
 
 export type FBPurchaseOrderTableTotalProps =
 & Pick<FBPurchaseOrderTableProps,  "handleShippingCost" | "handleCurrencyChange" | "calculation" | "disabled" | "name">;

@@ -56,6 +56,10 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       });
     };
 
+    const handleLot = (item?: FBPurchaseOrderItem) => (e: any) => {
+      e.stopPropagation();
+    };
+
     function setSchemaItem(item: FBSchemaProps): FBPOReceiveItemProps {
       return {
         ...item,
@@ -63,6 +67,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
         ...(item.type === "purchaseorder") && {
           mode: "preview",
           handleItem,
+          handleLot,
         },
       };
     }
@@ -84,6 +89,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
         reduced.push(setSchemaItem(item));
         return reduced;
       }, []);
+      console.log(schema);
       return schema;
     }
 
