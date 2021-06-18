@@ -204,14 +204,11 @@ export type FBInputProps =
 
 export const OmitInputClones: FBInputType[] = [
   "section",
-  "fileupload",
   "documentRevisions",
   "approvers",
   "approval",
   "blanktplform",
-  "inlineapproval",
   "approvals",
-  "texteditor",
   "procedure",
   "mpiprocedure",
   "procedurediff",
