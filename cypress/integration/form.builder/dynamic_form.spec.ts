@@ -151,7 +151,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Select 'New Dynamic Form' field", () => {
-      // SystemRequirement("REQ-0550");
+      SystemRequirement("REQ-0550");
       cy.fbSelectCustomControl();
     });
 
