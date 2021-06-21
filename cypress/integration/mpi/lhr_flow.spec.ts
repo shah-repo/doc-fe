@@ -8,6 +8,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -756,6 +757,7 @@ context("LHR flow", () => {
       });
 
       it("Select 'Manufacturing Process Instructions Test' document type from dropdown", () => {
+        SystemRequirement("REQ-0560");
         cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions Test" });
       });
 

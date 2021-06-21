@@ -108,11 +108,11 @@ context("Group Permissions Flow", () => {
     });
 
     it("Navigates to document list", () => {
-      // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
     });
 
     it("Clicks on 'create a document' button", () => {
+      SystemRequirement("REQ-0140");
       cy.cmpClickCreateNewDocument();
     });
 

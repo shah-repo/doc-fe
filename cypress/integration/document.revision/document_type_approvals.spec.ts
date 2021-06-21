@@ -594,6 +594,7 @@ context("Check DAM enforcement rules for document types", () => {
       it("Add approver to approvals", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.poAddApproverOnApproverList({ approver: USERS[1].email });
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
         });
       });
 
