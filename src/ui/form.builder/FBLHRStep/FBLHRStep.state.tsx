@@ -75,7 +75,7 @@ class FBLHRStepState {
 
   public setIsHovering = (isHovering: boolean) => set(this, "isHovering", isHovering);
 
-  public startMpi = (fieldId: string, startQuantity: number, woId?: string, mpiId?: string, stepNumber?: number) => {
+  public startMpi = (fieldId: string, woId?: string, mpiId?: string, stepNumber?: number) => {
     if (!woId || !mpiId || isUndefined(stepNumber)) { return; }
     this.startMpiApi.set({
       url: FBEndpoint.StartMpi,
@@ -88,7 +88,6 @@ class FBLHRStepState {
           id: mpiId,
         },
         fieldId,
-        startQuantity,
         stepNumber,
       },
     });
