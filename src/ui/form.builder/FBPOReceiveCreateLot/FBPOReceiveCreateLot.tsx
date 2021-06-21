@@ -1,53 +1,23 @@
 import { Box } from "@material-ui/core";
-import { isEmpty } from "lodash";
-import React, { useState } from "react";
+import React from "react";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { FBForm, FBPOReceiveCreateLotProps, FBTextField } from "..";
-import { documentTypeActions, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType/types";
 import { FormContext } from "../../components/forms/FormContext";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
 import FBAutocomplete from "../FBAutocomplete/FBAutocomplete";
+import { withFBPOReceiveCreateLot } from "./FBPOReceiveCreateLot.wrap";
 
 
 const FBPOReceiveCreateLot: React.FunctionComponent<FBPOReceiveCreateLotProps> = ({
   children,
   item,
+  formIds,
+  documentTypes,
+  getDocTypes,
+  handleDocTypeSelection,
 }) => {
-  const getDocTypesByCategory = useActionCreator(documentTypeActions.getDocTypesByCategory);
-  const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
-  const documentTypes = useSelector(documentTypeSelectors.getDocumentTypesByCategory);
-  const [formIds, setFormIds] = useState<any>([]);
-
-  const idAsync = useAsync<DocumentTypeById>({
-    onSuccess: (documents) => {
-      setFormIds(documents?.forms);
-      if (isEmpty(documents?.forms)) {
-        return;
-      }
-    },
-  });
-
-  const categoryAsync = useAsync<DocumentType[]>({
-    onSuccess: () => {
-      if (documentTypes.length === 1) {
-        idAsync.start(getDocRevByIds, documentTypes[0].id, idAsync);
-        return;
-      }
-    },
-  });
-
-  const handleDocTypeSelection = (e, value) => {
-    if (!value?.value) {
-      return;
-    }
-    idAsync.start(getDocRevByIds, value?.value, idAsync);
-  };
 
   useEffect(() => {
-    categoryAsync.start(getDocTypesByCategory, { category: "Lot" }, categoryAsync);
+    getDocTypes && getDocTypes();
   }, []);
 
   return (
@@ -96,17 +66,17 @@ const FBPOReceiveCreateLot: React.FunctionComponent<FBPOReceiveCreateLotProps> =
         <FBAutocomplete
           name="Lot-Type"
           placeholder="supplier.select.type"
-          options={documentTypes.map((docType) => ({
+          options={documentTypes?.map((docType) => ({
             text: docType.documentTypeName,
             value: docType.id,
           }))}
           rules="required"
           onChange={handleDocTypeSelection}
         />
-        {formIds.length > 0 && <FBAutocomplete
+        {formIds && formIds.length > 0 && <FBAutocomplete
           name="Lot-Form"
           placeholder="supplier.select.form"
-          options={formIds.map((form) => ({
+          options={formIds?.map((form) => ({
             text: form.name,
             value: form.id,
           }))}
@@ -118,4 +88,4 @@ const FBPOReceiveCreateLot: React.FunctionComponent<FBPOReceiveCreateLotProps> =
   );
 };
 
-export default FBPOReceiveCreateLot;
+export default withFBPOReceiveCreateLot(FBPOReceiveCreateLot);
