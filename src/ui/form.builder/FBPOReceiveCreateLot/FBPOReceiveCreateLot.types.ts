@@ -4,7 +4,7 @@ export type FBPOReceiveCreateLotProps =
 & Pick<FBPOReceiveProps, "name">
 & Pick<FBFormProps, "children">
 & {
-  handleCreateLot?: () => any;
-  handleCancel?: () => any;
+  handleCreateLot?: () => void;
+  handleCancel?: () => void;
   item?: FBPurchaseOrderItem;
 };
