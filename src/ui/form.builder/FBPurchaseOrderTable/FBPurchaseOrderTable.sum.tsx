@@ -24,8 +24,8 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
     <TableHead>
       <TableRow>
         {mode === "preview" && <FBTableCell />}
-        <FBTableCell label="form.builder.field.tax" align="right"  />
-        <FBTableCell label="form.builder.sum" align="right"/>
+        {mode !== "preview" && <FBTableCell label="form.builder.field.tax" align="right"  />}
+        {mode !== "preview" && <FBTableCell label="form.builder.sum" align="right"/>}
       </TableRow>
     </TableHead>
     <TableBody>
@@ -45,18 +45,22 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
                 </Button>
               </FBTableCell>
             }
-            <FBTableCell align="right">
-              {item.tax && <CheckBoxIcon className="FBIcon-root" fontSize="small" />}
-              {!item.tax && <CheckBoxOutlineBlankIcon className="FBIcon-root" fontSize="small" />}
-            </FBTableCell>
-            <FBTableCell align="right" data-cy="poSum" >
-              <FormattedNumber
-                value={Number(item.totalAmount)}
-                // eslint-disable-next-line react/style-prop-object
-                style="currency"
-                currency={calculation?.currency}
-              />
-            </FBTableCell>
+            {mode !== "preview" && 
+              <FBTableCell align="right">
+                {item.tax && <CheckBoxIcon className="FBIcon-root" fontSize="small" />}
+                {!item.tax && <CheckBoxOutlineBlankIcon className="FBIcon-root" fontSize="small" />}
+              </FBTableCell>
+            }
+            {mode !== "preview" &&
+              <FBTableCell align="right" data-cy="poSum" >
+                <FormattedNumber
+                  value={Number(item.totalAmount)}
+                  // eslint-disable-next-line react/style-prop-object
+                  style="currency"
+                  currency={calculation?.currency}
+                />
+              </FBTableCell>
+            }
           </TableRow>
         )}
       </FBMapWrapper>
