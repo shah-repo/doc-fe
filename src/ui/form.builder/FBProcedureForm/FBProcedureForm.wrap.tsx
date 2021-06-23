@@ -208,7 +208,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       partLoading = procedureFormState?.partsApi.loading;
       lotLoading = procedureFormState?.lotsApi.loading;
       // disabled while adding or editing material/eq
-      disabled = formState?.getFieldValue("LHRTparameter") || initialValues?.LHRTparameter;
+      disabled = formState?.getFieldValue("LHRTparameter") ||
+        formState?.inputState.get("LHRTparameter")?.value ||
+        initialValues?.LHRTparameter;
     });
 
     return Component({
