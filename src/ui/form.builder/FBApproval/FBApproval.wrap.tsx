@@ -42,6 +42,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       id: documentId,
       isOutput,
       isReleased,
+      isDeprecated,
       document: { released = new Date(), revisionStage = "" } = { },
     } = workspaceState || {};
 
@@ -68,7 +69,8 @@ export const withFBApproval = <T extends FBApprovalProps>(
         !isOutput ||
         (isOutput && !documentId) ||
         (reviseDisabled && workspaceState?.isRevised) ||
-        (revisionStage === 3 && isRecord)
+        (revisionStage === 3 && isRecord) ||
+        isDeprecated
       );
     }
 
