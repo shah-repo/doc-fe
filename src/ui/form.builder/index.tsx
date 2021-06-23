@@ -224,6 +224,8 @@ export { default as FBPassPercentage } from "./FBPassPercentage/FBPassPercentage
 export * from "./FBPassPercentage/FBPassPercentage.types";
 // export { default as FBPOApprovalMatrix } from "./FBPOApprovalMatrix/FBPOApprovalMatrix";
 export { default as FBPOApprovalMatrixState } from "./FBPOApprovalMatrix/FBPOApprovalMatrix.state";
+export { default as FBPOApprovalsState } from "./FBPOApprovals/FBPOApprovals.state";
+export * from "./FBPOApprovals/FBPOApprovals.types";
 // export { default as FBPOReceive } from "./FBPOReceive/FBPOReceive";
 export { default as FBPOReceiveState } from "./FBPOReceive/FBPOReceive.state";
 export * from "./FBPOReceive/FBPOReceive.types";

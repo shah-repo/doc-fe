@@ -310,7 +310,6 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Mark needs training", () => {
-      SystemRequirement("REQ-0470");
       cy.drNewTypeTrainingSelect();
     });
 
@@ -824,7 +823,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`find changed document type '${newDocTypeOne}'`, () => {
-    // SystemRequirement("REQ-0530");
+      SystemRequirement("REQ-0530");
       const exists = documentTypes.includes(newDocTypeOne);
       cy.wrap(exists).should("eq", true);
     });

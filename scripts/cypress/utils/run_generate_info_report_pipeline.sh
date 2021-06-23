@@ -1,11 +1,19 @@
 #!/bin/bash
 set -e
 
-export CYPRESS_INTEGRATION_FOLDER="cypress/info"
-export CYPRESS_VIDEOS_FOLDER=$DIR_VIDEOS_REPORT
-export CYPRESS_SCREENSHOT_OF_RUN_FAILURE="false"
-export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH="false"
-export REPORT_TITLE="generated_info"
-export CYPRESS_VIDEO="false"
+CYPRESS_INTEGRATION_FOLDER="cypress/info"
+CYPRESS_SCREENSHOT_OF_RUN_FAILURE="false"
+CYPRESS_TAKE_SCREENSHOT_AFTER_EACH="false"
+REPORT_TITLE="generated_info"
+CYPRESS_VIDEO="false"
+CI_BUILD_ID="info_$CI_BUILD_ID" 
+LIST_OF_SPECS_SERIALIZED=cypress/info/info.spec.ts 
+DEBUG=cypress:server:util:process_profiler
 
-CI_BUILD_ID="info_$CI_BUILD_ID" LIST_OF_SPECS_SERIALIZED=cypress/info/info.spec.ts ./scripts/cypress/utils/run_node_pipeline.sh 2>/dev/null || true
+$(xvfb-run -a yarn cypress run \
+  --parallel --record --key 9e6e4a3d-c43a-4e60-8984-fa2ae0a90a76 \
+  --reporter mochawesome --reporter-options "reportDir=$DIR_JSON,overwrite=false,html=false,json=true,reportFilename=$REPORT_TITLE" \
+  --browser $CYPRESS_BROWSER \
+  --headless \
+  --spec $LIST_OF_SPECS_SERIALIZED \
+  --ci-build-id "$CI_BUILD_ID") 2>/dev/null || true

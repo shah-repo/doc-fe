@@ -91,9 +91,7 @@ definitions:
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
-            - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &SCHEDULED_CYPRESS_DEV
           <<: *COMMON_RUN_CYPRESS
@@ -104,9 +102,7 @@ definitions:
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
-            - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &SCHEDULED_CYPRESS_DEMO
           <<: *COMMON_RUN_CYPRESS
@@ -117,9 +113,7 @@ definitions:
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
-            - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &SCHEDULED_CYPRESS_SANDBOX
           <<: *COMMON_RUN_CYPRESS
@@ -130,9 +124,7 @@ definitions:
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
-            - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &SCHEDULED_CYPRESS_PROD
           <<: *COMMON_RUN_CYPRESS
@@ -143,13 +135,11 @@ definitions:
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
-            - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - step: &RUN_CYPRESS_VIDEO
         <<: *COMMON_RUN_CYPRESS
-        max-time: 60
+        max-time: 100
         name: Cypress specs with video
         artifacts:
             - test-results/**
@@ -163,10 +153,84 @@ definitions:
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
             - ./scripts/cypress/utils/make_results_dir_pipeline.sh
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
-    - step: &UPLOAD_CYPRESS_REPORT
+    - step: &SLACK_CYPRESS_REPORT_SCHEDULED_DEV
+        <<: *COMMON_RUN_CYPRESS
+        name: Cypress upload reports
+        max-time: 15
+        size: 1x
+        script:
+          - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "DEV"
+          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+          - yarn install --frozen-lockfile
+          - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
+          - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
+          - ./scripts/cypress/utils/merge_reports_pipeline.sh
+          - ./scripts/cypress/utils/slack_test_report_upload.sh
+
+    - step: &SLACK_CYPRESS_REPORT_SCHEDULED_DEMO
+        <<: *COMMON_RUN_CYPRESS
+        name: Cypress upload reports
+        max-time: 15
+        size: 1x
+        script:
+          - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "DEMO"
+          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+          - yarn install --frozen-lockfile
+          - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
+          - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
+          - ./scripts/cypress/utils/merge_reports_pipeline.sh
+          - ./scripts/cypress/utils/slack_test_report_upload.sh
+
+    - step: &SLACK_CYPRESS_REPORT_SCHEDULED_SANDBOX
+        <<: *COMMON_RUN_CYPRESS
+        name: Cypress upload reports
+        max-time: 15
+        size: 1x
+        script:
+          - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "SANDBOX"
+          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+          - yarn install --frozen-lockfile
+          - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
+          - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
+          - ./scripts/cypress/utils/merge_reports_pipeline.sh
+          - ./scripts/cypress/utils/slack_test_report_upload.sh
+
+    - step: &SLACK_CYPRESS_REPORT_SCHEDULED_PROD
+        <<: *COMMON_RUN_CYPRESS
+        name: Cypress upload reports
+        max-time: 15
+        size: 1x
+        script:
+          - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "PROD"
+          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+          - yarn install --frozen-lockfile
+          - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
+          - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
+          - ./scripts/cypress/utils/merge_reports_pipeline.sh
+          - ./scripts/cypress/utils/slack_test_report_upload.sh
+        
+    - step: &SLACK_CYPRESS_REPORT
+        <<: *COMMON_RUN_CYPRESS
+        name: Cypress upload reports
+        max-time: 15
+        size: 1x
+        script:
+          - source ./scripts/cypress/utils/variables_pipeline.sh
+          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+          - yarn install --frozen-lockfile
+          - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
+          - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
+          - ./scripts/cypress/utils/merge_reports_pipeline.sh
+          - ./scripts/cypress/utils/slack_test_report_upload.sh
+
+    - step: &ENLIL_CYPRESS_REPORT
         <<: *COMMON_RUN_CYPRESS
         name: Cypress upload reports
         max-time: 15
@@ -179,7 +243,6 @@ definitions:
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
           - ./scripts/cypress/utils/upload_video_reports.sh
-          - ./scripts/cypress/utils/exit_1_if_failures.sh
 
     - parallel: &RUN_CYPRESS_IN_PARALLEL
         - step: 
@@ -394,7 +457,8 @@ pipelines:
           - name: CYPRESS_COMMIT_BE
           - name: CYPRESS_COMMIT_REMOTEJS
       - parallel: *RUN_CYPRESS_IN_PARALLEL
-    run-cypress-parallel-video-enlil-report:
+      - step: *SLACK_CYPRESS_REPORT
+    run-cypress-parallel-enlil:
       - variables:
           - name: CYPRESS_FE_URL
           - name: CYPRESS_BE_URL
@@ -404,15 +468,30 @@ pipelines:
           - name: CYPRESS_COMMIT_BE
           - name: CYPRESS_COMMIT_REMOTEJS
       - parallel: *RUN_CYPRESS_IN_PARALLEL_VIDEO
-      - step: *UPLOAD_CYPRESS_REPORT
+      - step: *ENLIL_CYPRESS_REPORT
+    run-cypress-parallel-video-report:
+      - variables:
+          - name: CYPRESS_FE_URL
+          - name: CYPRESS_BE_URL
+          - name: CYPRESS_SUPERADMIN_EMAIL
+          - name: CYPRESS_SUPERADMIN_PASSWORD
+          - name: CYPRESS_COMMIT_FE
+          - name: CYPRESS_COMMIT_BE
+          - name: CYPRESS_COMMIT_REMOTEJS
+      - parallel: *RUN_CYPRESS_IN_PARALLEL_VIDEO
+      - step: *SLACK_CYPRESS_REPORT
     scheduled-cypress-dev:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_DEV
+      - step: *SLACK_CYPRESS_REPORT_SCHEDULED_DEV
     scheduled-cypress-demo:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_DEMO
+      - step: *SLACK_CYPRESS_REPORT_SCHEDULED_DEMO
     scheduled-cypress-sandbox:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_SANDBOX
+      - step: *SLACK_CYPRESS_REPORT_SCHEDULED_SANDBOX
     scheduled-cypress-prod:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_PROD
+      - step: *SLACK_CYPRESS_REPORT_SCHEDULED_PROD
 
   pull-requests:
     "**":
@@ -486,7 +565,14 @@ pipelines:
           - step: *BUILD_SANDBOX
       - step: *DEPLOY_SANDBOX
 
-    release/21.5.1:
+    release/21.6.1:
+      - parallel:
+          - step: *RUN_TESTS
+          - step: *RUN_LINTER
+          - step: *BUILD_SANDBOX
+      - step: *DEPLOY_SANDBOX
+
+    release/21.6:
       - parallel:
           - step: *RUN_TESTS
           - step: *RUN_LINTER

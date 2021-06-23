@@ -8,6 +8,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -22,13 +23,18 @@ let partDocumentType;
 let equipmentDocument;
 let materialsDocument;
 let equipmentDocument2;
+let equipmentDocument3;
 let materialsDocument2;
+let materialsDocument3;
 let mpiDocument;
 let mpiDocumentType;
 let createdPartDocument;
 let lhrDocUrl;
 let dateOfStep1Completion;
+let dateOfStep1CompletionOneMinuteLater;
 let dateOfStep2Completion;
+let dateOfStep2CompletionOneMinuteLater;
+let dateOfStep2CompletionOneMinuteBefore;
 
 const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
 
@@ -470,6 +476,50 @@ context("LHR flow", () => {
       });
     });
 
+    it("[API]Create material three", () => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Materials document</p>",
+          document: {
+            docId: "MT-00007",
+            documentType: {
+              id: materialsDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Material three",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        materialsDocument3 = response;
+        cy.drAPIApproveAndRelease({
+          documentId: materialsDocument3.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        });
+      });
+    });
+
     it("[API]Create equipment two", () => {
       cy.drCreateDocumentRevision({
         payload: {
@@ -502,6 +552,50 @@ context("LHR flow", () => {
         equipmentDocument2 = response;
         cy.drAPIApproveAndRelease({
           documentId: equipmentDocument2.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        });
+      });
+    });
+
+    it("[API]Create equipment three", () => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Equipment document</p>",
+          document: {
+            docId: "ET-00008",
+            documentType: {
+              id: equipmentDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Equipment three",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        equipmentDocument3 = response;
+        cy.drAPIApproveAndRelease({
+          documentId: equipmentDocument3.id,
           payload: {
             effectiveDate: (new Date()).toISOString(),
             documentType: { id: approvalRequestDocumentType[0].id },
@@ -663,6 +757,7 @@ context("LHR flow", () => {
       });
 
       it("Select 'Manufacturing Process Instructions Test' document type from dropdown", () => {
+        SystemRequirement("REQ-0560");
         cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions Test" });
       });
 
@@ -683,8 +778,20 @@ context("LHR flow", () => {
           cy.mpiAddMaterialToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
         });
 
+        it("Add 'Material three' to step #1", () => {
+          cy.mpiAddMaterialToStep({
+            checkParameter: true, numbOfStep: 1,
+            material: "Material three", quntity: "3", unit: "Each",
+          });
+        });
+
+
         it("Add 'Equipment one' to step #1", () => {
           cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+        });
+
+        it("Add 'Equipment three' to step #1", () => {
+          cy.mpiAddEquipmentToStep({ checkParameter: true, numbOfStep: 1, equipment: "Equipment three" });
         });
       });
 
@@ -793,6 +900,41 @@ context("LHR flow", () => {
         });
       });
 
+      context("Try to release LHRt without parameters expecting validation error", () => {
+        it("Click save document", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+          });
+        });
+
+        it("Approve and release LHRt document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+          cy.checkToastMessageContains({ message: "Parameters from MPI are not defined" });
+          cy.get("[data-cy=ApproveAndRelease-cancelButton]").click();
+        });
+      });
+
+      context("Add parameter materials and equipment", () => {
+        it("Add material parameter", () => {
+          cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
+            .eq(0).click();
+          cy.get("[data-cy=\"title\"]").click();
+          cy.get("ul[role=listbox]>li").contains("Material three").click();
+          cy.get("[name=\"quantity\"]").type("3");
+          cy.get("[data-cy=\"unit\"]").click();
+          cy.get("ul[role=listbox]>li").contains("Days").click();
+          cy.get("[data-cy=\"form.builder.save\"]").click();
+        });
+
+        it("Add equipment parameter", () => {
+          cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
+            .eq(1).click();
+          cy.get("[data-cy=\"title\"]").click();
+          cy.get("ul[role=listbox]>li").contains("Equipment three").click();
+          cy.get("[data-cy=\"form.builder.save\"]").click();
+        });
+      });
+
       context("Release LHRt", () => {
         it("Click save document", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
@@ -875,6 +1017,8 @@ context("LHR flow", () => {
         it("Approve step", () => {
           cy.ebApprove();
           dateOfStep1Completion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+          dateOfStep1CompletionOneMinuteLater = moment().add(1, "minutes")
+            .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         });
 
         context("Check equipment and materials from MPI are present", () => {
@@ -887,12 +1031,18 @@ context("LHR flow", () => {
             cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
               .eq(0)
               .should("have.text", "MT-00004 - Material one - rev 1 | Qty: 3 each");
+            cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
+              .eq(1)
+              .should("have.text", "MT-00007 - Material three - rev 1 | Qty: 3 days");
           });
 
           it("Check equipment step #1", () => {
             cy.get("[data-cy$=\"equipment.title\"]")
               .eq(0)
               .should("have.text", "ET-00003 - Equipment one");
+            cy.get("[data-cy$=\"equipment.title\"]")
+              .eq(1)
+              .should("have.text", "ET-00008 - Equipment three");
           });
 
           it("Check description step #2", () => {
@@ -903,13 +1053,13 @@ context("LHR flow", () => {
 
           it("Check materials step #2", () => {
             cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
-              .eq(1)
+              .eq(2)
               .should("have.text", "MT-00006 - Material two - rev 1 | Qty: 5 days");
           });
 
           it("Check equipment step #2", () => {
             cy.get("[data-cy$=\"equipment.title\"]")
-              .eq(1)
+              .eq(2)
               .should("have.text", "ET-00007 - Equipment two - rev 1");
           });
 
@@ -930,7 +1080,12 @@ context("LHR flow", () => {
 
       it("Verify date of completion LHRs #1", () => {
         cy.get("[data-cy=\"form.builder.step.completed\"]")
-          .should("have.text", "Step completed | " + dateOfStep1Completion);
+          .invoke("text")
+          .then((text) => {
+            expect(text).to.be
+              .oneOf(["Step completed | " + dateOfStep1Completion,
+                "Step completed | " + dateOfStep1CompletionOneMinuteLater]);
+          });
       });
 
       it("Verify Owner is required approver on LHR", () => {
@@ -1007,6 +1162,10 @@ context("LHR flow", () => {
       it("Approve step", () => {
         cy.ebApprove();
         dateOfStep2Completion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+        dateOfStep2CompletionOneMinuteLater = moment().add(1, "minutes")
+          .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+        dateOfStep2CompletionOneMinuteBefore = moment().subtract(1, "minutes")
+          .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
       });
 
       context("Check equipment and materials from MPI created with API are present", () => {
@@ -1047,15 +1206,25 @@ context("LHR flow", () => {
       });
 
       it("Verify completion date of LHRs #1 in LHR", () => {
-        cy.get("[data-cy=\"form.builder.step.completed\"]")
-          .eq(0)
-          .should("have.text", "Step completed | " + dateOfStep1Completion);
+        cy.get("[data-cy=\"form.builder.step.completed\"]").eq(0)
+          .invoke("text")
+          .then((text) => {
+            expect(text).to.be
+              .oneOf(["Step completed | " + dateOfStep2Completion,
+                "Step completed | " + dateOfStep2CompletionOneMinuteLater,
+                "Step completed | " + dateOfStep2CompletionOneMinuteBefore]);
+          });
       });
 
       it("Verify completion date of LHRs #2 in LHR", () => {
-        cy.get("[data-cy=\"form.builder.step.completed\"]")
-          .eq(1)
-          .should("have.text", "Step completed | " + dateOfStep2Completion);
+        cy.get("[data-cy=\"form.builder.step.completed\"]").eq(1)
+          .invoke("text")
+          .then((text) => {
+            expect(text).to.be
+              .oneOf(["Step completed | " + dateOfStep2Completion,
+                "Step completed | " + dateOfStep2CompletionOneMinuteLater,
+                "Step completed | " + dateOfStep2CompletionOneMinuteBefore]);
+          });
       });
 
       it("Enter 'Start quntity' for LHRs #2", () => {

@@ -408,7 +408,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             {
               values.id &&
               <Box textAlign="right">
-                <GenerateHtmlPreview id={values.id} renderHTML={values.formDocument?.renderHTML} />
+                <GenerateHtmlPreview id={values.id} renderHTMLDefined={values.formDocument?.renderHTMLDefined} />
               </Box>
             }
             <div ref={FBContainer} />

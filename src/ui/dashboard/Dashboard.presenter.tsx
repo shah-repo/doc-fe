@@ -5,6 +5,7 @@ import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
 import Text from "../components/Text";
 import ChangeRequestApproval from "./action.types/ChangeRequestApproval";
+import CloseApprovalRequest from "./action.types/CloseApprovalRequest";
 import DocumentRevisionApproval from "./action.types/DocumentRevisionApproval";
 import PurchaseOrderApproval from "./action.types/purchaseOrder/PurchaseOrderApproval";
 import TaskApproval from "./action.types/TaskApproval";
@@ -42,11 +43,18 @@ const DashboardPresenter: React.FunctionComponent<Props> = ({
                 <TrainingRequest key={index} index={index} trainingRecord={pendingAction.trainingRecord} />;
             case PendingActionType.PURCHASE_ORDERS:
               return pendingAction.documentRevision &&
-                <PurchaseOrderApproval key={index} index={index} documentRevision={pendingAction.documentRevision} />;
+                <PurchaseOrderApproval
+                  key={index}
+                  index={index}
+                  documentRevision={pendingAction.documentRevision}
+                  docRevAttachments={pendingAction.docRevAttachments || []}/>;
             case PendingActionType.PENDING_DOC_CONTROL:
             case PendingActionType.PENDING_TASK:
               return pendingAction.changeReq &&
                 <TaskApproval key={index} index={index} changeRequest={pendingAction.changeReq} />;
+            case PendingActionType.APPROVED_APPROVAL_REQUESTS:
+              return pendingAction.changeReq &&
+                <CloseApprovalRequest key={index} index={index} changeRequest={pendingAction.changeReq} />;
             default:
               return <Text key={index} translation="common.undefined" />;
           }

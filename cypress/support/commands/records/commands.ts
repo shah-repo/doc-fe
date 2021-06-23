@@ -146,9 +146,10 @@ Cypress.Commands.add("recCheckRevisionStage", (params: {stage: string}) => {
 Cypress.Commands.add("recApproveAndReleaseInlineRecord", () => {
   cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   cy.wait(500);
-  cy.wrapWithWaitOnApiCall(
+  cy.wrapWithWaitOnApiCalls([
     CyRoutes.ReleaseDocRevWithoutAr,
-    () => {
-      cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
-    });
+    CyRoutes.GetDocAggregatedAudit],
+  () => {
+    cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+  });
 });

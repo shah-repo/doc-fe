@@ -10,7 +10,7 @@ let createdCompany;
 let loginResponse;
 let multipleCompanies;
 
-context("Autosave trigger after 30 sec", () => {
+context.skip("Autosave trigger after 30 sec", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });

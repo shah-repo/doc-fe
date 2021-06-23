@@ -1,3 +1,4 @@
+import { Attachment } from "../attachments/types";
 import { ChangeRequest } from "../changeRequest/types";
 import { Approval } from "../common/types";
 import { DocumentRevision } from "../documentRevisions/types";
@@ -10,6 +11,7 @@ export enum PendingActionType {
   PENDING_TASK = "PENDING_TASK",
   PENDING_TRAINING_RECORDS = "PENDING_TRAINING_RECORDS",
   PURCHASE_ORDERS = "PURCHASE_ORDERS",
+  APPROVED_APPROVAL_REQUESTS = "APPROVED_APPROVAL_REQUESTS",
 }
 
 export interface PendingAction {
@@ -20,6 +22,7 @@ export interface PendingAction {
   documentRevision?: DocumentRevision;
   docRev?: DocumentRevision;
   approval?: Approval;
+  docRevAttachments?: Attachment[];
 }
 
 export interface PendingActionsListAction {

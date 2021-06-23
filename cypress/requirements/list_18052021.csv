@@ -1,0 +1,141 @@
+autom,REQ #,Module,Sub-Module,Requirement,Tester Comments,JIRA #,Notes,Proposed Requirement - Enlil v1,Test Case Name,Developer Name,Comments,Test Author
+UN-0010,REQ-0010,Document Control,General,"The system shall allow a user to access, create, edit, or revise a document in Enlil",,ENC-4702,,,,,,
+UN-0010,REQ-0020,Document Control,General,The system shall clearly indicate the state of the document being viewed,,ENC-4702,,,,,,
+UN-0010,REQ-0030,Document Control,Document List,"The system shall diplay the following default columns on the landing page for the documents list: Document Id, Revision (major only), Document Title, Document Type, Document Owner, the associated AR ID, Document Status, and Effective Date (e.g. this list defines content, not column header names)",,ENC-4703,,,,,,
+UN-0010,REQ-0040,Document Control,Document List,The system should provide a mechanim to export the Document List (e.g. to a .csv format),We need ENC-4943 to be done so we can implement this,ENC-4703,,,,,,
+UN-0010,REQ-0050,Document Control,Document List,The system shall only display documents in the documents list (e.g. records can be found in their respective modules),,ENC-4703,,,,,,
+UN-0010,REQ-0060,Document Control,Document List,The system shall allow the user to filter the displayed Document List for each of the columns displayed on the landing page,,ENC-4703,,,,,,
+UN-0010,REQ-0070,Document Control,Document List,The system shall default the Document List filter to display released documents when starting a new Enlil session,,ENC-4703,,,,,,
+UN-0010,REQ-0080,Document Control,Document List,The system shall maintain Document List filter settings during an Enlil session when navigating away from and back to the Document List landing page,,ENC-4703,,,,,,
+UN-0010,REQ-0090,Document Control,Document List,The system shall default to the Document List being sorted by most recent edited first,,ENC-4703,,,,,,
+UN-0010,REQ-0100,Document Control,Document List,The system shall provide a mechanism to clear all Document List filters with a single click,,ENC-4703,,,,,,
+UN-0010,REQ-0110,Document Control,Document List,The system shall display the number of documents displayed that match the filter settings,,ENC-4703,,,,,,
+UN-0010,REQ-0120,Document Control,Document List,The system shall allow the user to open a document from within the Document List,,ENC-4703,,,,,,
+UN-0010,REQ-0150,#REF!,#REF!,The system shall allow a user to revise a document that is in the Released state,,ENC-4754,,,,,,
+UN-0010,REQ-0160,#REF!,#REF!,"The system shall provide the following editable document attributes when creating or reivsing a document: (Document Title, Document Description, Document Type, Document Revision Stage, Reference, Training Required, Attachments, Users (document access priviledges), Groups (document access privledges), Document Owner Assignment)",,ENC-4754,,,,,,
+UN-0010,REQ-0170,#REF!,#REF!,"The system shall allow the user to edit document ID, during the process of creating a document.",,,,,,,,
+UN-0010,REQ-0180,#REF!,#REF!,The system shall allow the document owner to add one or more references to a document in draft state,,,,,,,,
+UN-0010,REQ-0190,#REF!,#REF!,The system shall allow the document owner to remove references to a document in draft state,,,,,,,,
+UN-0010,REQ-0200,#REF!,#REF!,The system shall allow the document owner to upload one or more  attachments to a document in draft state.  The system shall support uploading redlined as well as clean copy of the attachments.,,ENC-4702,,,,,,
+UN-0010,REQ-0210,#REF!,#REF!,The system support attachments of multiple types.,,ENC-4702,,,,,,
+UN-0010,REQ-0220,#REF!,#REF!,The system shall allow the document owner to upload multiple attachments at once,,,Not yet implemented as worded -- for the future.,,,,,
+UN-0010,REQ-0230,#REF!,Document Creation/Revising,The system shall notify the user if a document upload failure occurs,,,Should automate (6),,,,,
+UN-0010,REQ-0240,#REF!,Document Creation/Revising,The system shall allow the document owner to remove uploaded attachments for a document in draft state,,ENC-4702,,,,,,
+UN-0010,REQ-0250,#REF!,Document Creation/Revising,The system shall allow the document owner to identify a single clean copy attachment as the primary attachment for a document while the document is in a draft or in pending change state.,,ENC-4702,Should automate (4),,Tomislav Cajbert,,,
+UN-0010,REQ-0270,Document Creation/Revising,Document Creation/Revising,"The system shall default the training to required, if the particular Document Type requires training in the Document Approval Matrix",,,8-17 (ZS): it is implemented,,,,,
+UN-0010,REQ-0290,#REF!,#REF!,The system shall allow the user to deselect training required,,,Not yet implemented as worded -- for the future.,,,,,
+UN-0010,REQ-0300,#REF!,#REF!,The system shall default user/group access to Everyone for new QMS documents and none for non-QMS documents.,,,,,Tomislav cajbert,,,
+UN-0010,REQ-0320,#REF!,#REF!,The system shall automatically generate and display a document number when a document is created based on the system configuration for the particular Document Type,,ENC-4702,,,,,,
+UN-0010,REQ-0330,#REF!,#REF!,The system shall automatically set the document status as Draft when creating or revising a document,,ENC-4702,,,Tomislav Cajbert,,,
+UN-0010,REQ-0340,#REF!,#REF!,The system shall allow the document owner or a company admin to change document ownership to another user,,,,,Bojan Ugrica,,,
+UN-0010,REQ-0350,#REF!,#REF!,The system shall allow the document owner to cancel the document draft. ,,,,,,,,
+UN-0010,REQ-0360,#REF!,#REF!,The system shall maintain a history of attribute changes ,"This exists, we should implement in tests",,,,,,,
+UN-0010,REQ-0370,#REF!,#REF!,"The system shall allow the user to select the type of revision stage, options include next revision, upgrade to next revision level, administrative change, and obsolete (for revision past the initial release), when revising a document.",,ENC-4754,,,,,,
+UN-0012,REQ-0380,#REF!,#REF!,The system shall require a password for a user to access attachments of documents if the document is in a superseded or obsolete state,,,Should automate (4),,,,,
+UN-0010,REQ-0390,#REF!,#REF!,"The system shall require a password for a user to access redlines of documents if the document is not in draft, in review or pending change state",This is not working for pending change and in review. We should also clarify what happens when document is in approved state.,,Should automate (4),,,,,
+UN-0010,REQ-0400,#REF!,Document Type Management,The system shall allow the user to create a Document Type,,,,,,,,
+UN-0010,REQ-0410,#REF!,Document Type Management,The system shall support multiple Document Types as needed by the customer,,,Should automate (4),,,,,
+UN-0010,REQ-0420,#REF!,Document Type Management,The system shall allow the user to define a Document Type as QMS or non-QMS,,,Should automate (4),,,,,
+UN-0010,REQ-0440,#REF!,Document Type Management,The system shall allow the user to assign a document prefix to a Document Type at the time of creation of the Document Type,,,,,,,,
+UN-0010,REQ-0450,#REF!,Document Type Management,The system shall support a sequential numbering by company or by prefix for each Document Type,,,,,,,,
+UN-0010,REQ-0460,#REF!,Document Type Management,The system shall support multiple Document Types to share the same prefix. All documents sharing the same prefix shall share sequential numbering system,,,Should automate (4),,,,,
+UN-0070,REQ-0470,#REF!,Document Type Management,The system should allow the user to define whether training is required by default for a Document Type,,,"
+8-17 (ZS): isn't this implemented in DAM?",,,,,
+UN-0010,REQ-0480,#REF!,Document Type Management,The system shall maintain a descriptive name for every Document Type,,,,,,,,
+,REQ-0520,#REF!,,The Approval Matrix shall be enforced for managing approvals to all Enlil Documents and Records with the exception of Purchase Orders.,"This exists, we should implement in tests",,,,,,,
+UN-0010,REQ-0580,#REF!,General,Documents shall be revised either with substantial changes (Major Revision) or administrative changes (Minor Revision).  Only major revisions will be listed on the documents list.  The most recent minor revision of the document always represents the major revision when necessary.,,,,,,,,
+UN-0011,REQ-0590,Change Control,Document Approval Matrix,"The system shall support the creation of roles (e.g.: QA, R&D, RA…etc)",,"ENC-4812 
+ENC-4783",,,,,,
+UN-0011,REQ-0600,Change Control,Document Approval Matrix,The system shall allow the assignment of user groups to roles and users to roles,,"ENC-4812 
+ENC-4783",,,Tomislav Cajbert,,,
+UN-0011,REQ-0620,Change Control,Document Approval Matrix,The system shall support 3-level document system for all the system.,,,,,,,,
+UN-0011,REQ-0630,Change Control,Document Approval Matrix,The system shall allow the user to assign approval requirements per role for each Document Type,,"ENC-4812 
+ENC-4783",,,,,,
+UN-0011,REQ-0650,Document Approval Matrix,Document Approval Matrix,"The system shall allow separate assignment of approval requirements for a 3-level document system with revision types: Numeric, Numeric-Alpha and Alpha ",,ENC-4812,Should Automate (4),,,,,
+UN-0011,REQ-0660,Document Approval Matrix,Document Approval Matrix,The system shall allow the assignment of approval requirements for an Administrative change,"This exists, we should implement in tests",,Should Automate (4),,,,,
+UN-0011,REQ-0670,Document Approval Matrix,Document Approval Matrix,The system shall allow the assignment of approval requirements for admin changes in a document and record correction.,,,,,,,,
+UN-0011,REQ-0680,Document Approval Matrix,Approval Request Creation ,The system shall allow users to create and submit approval requests for approval/obsolescence of documents.,,,,,Tomislav Cajbert,,,
+UN-0011,REQ-0690,Document Approval Matrix,Approval Request Creation ,The system shall automatically issue a unique approval request ID when a new change request is initiated,,,,,,,,
+UN-0011,REQ-0700,Document Approval Matrix,Approval Request Creation ,The system shall support the customer to define one or more custom forms to be used for approval requests,,,Should Automate (3),,,,,
+UN-0003,REQ-0710,Document Approval Matrix,Approval Request Form,"The system shall support addition of one or more implemenation tasks to the AR form, including a task title, task description, task assignement to user, due data, and status tracking.",,,,,Tomislav Cajbert,,,
+UN-0011,REQ-0730,Change Control,Approval Request Creation ,"The system shall automatically maintain the status of a change request:
+Draft - the default state when created
+In Review - the state where the change request is in review by the approvers
+Approved - the state where the change request has been approved by all reviewers
+Implementation - the state where the change request has been approved but being implemented and tasks are getting completed
+Closed - the state when an approved change request has been fully implemented by doc control
+Voided - the state where the change request is voided and have no impact on the quality system.",,,,,,,,
+UN-0011,REQ-0740,Change Control,Approval Request Status,"The system shall automatically update the status attribute of all documents/parts on the approval request when the state of the approval request changes:
+
+Pending Change when the AR is in Draft State
+In Review when the AR is in In Review State
+Approved when the AR is in Approved State
+Pending Change when the AR is in Rejected State
+Released when the AR is in Closed State",,,,,,,,
+UN-0011,REQ-0750,Change Control,Landing Page,"The system shall diplay the following default columns on the landing page for the approvals list: AR Id, AR Title, AR Owner, and AR State (e.g. this list defines content, not column header names)",,ENC-4703,,,Tomislav Cajbert,,,
+UN-0011,REQ-0760,Change Control,Landing Page,"The system shall only display document approval requests in the approval requests list (e.g. approvals for other items like PO's can be found in their respective modules, AR for records will not be included in this list)",,ENC-4704,,,,,,
+UN-0011,REQ-0770,Change Control,Landing Page,The system shall allow the user to filter the displayed approval request list for each of the columns displayed on the landing page,,ENC-4705,,,,,,
+UN-0011,REQ-0790,#REF!,#REF!,The system shall maintain approval request list filter settings during an Enlil session when navigating away from and back to the approval request list landing page,,ENC-4707,,,,,,
+UN-0011,REQ-0800,#REF!,#REF!,The system shall default to the approval request list being sorted by most recent edited first,,ENC-4708,,,,,,
+UN-0011,REQ-0810,#REF!,#REF!,The system shall provide a mechanism to clear all approval request list filters with a single click,,ENC-4709,,,,,,
+UN-0011,REQ-0820,#REF!,#REF!,The system shall display the number of approval requests displayed that match the filter settings,,ENC-4710,,,,,,
+UN-0011,REQ-0830,#REF!,#REF!,The system shall allow the user to open an AR from the AR list with a single click,,ENC-4711,,,,,,
+UN-0011,REQ-0840,#REF!,#REF!,The system should display the AR description when the mouse hovers over the AR title in the approval request list,,ENC-4712,,,,,,
+UN-0011,REQ-0850,#REF!,Approval Request Rules,The system shall allow the owner to edit the approval request and any documents associated with the approval request only while it is in draft.,,ENC-4701,Should automate (4),,,,,
+UN-0011,REQ-0860,#REF!,Approval Request,The system shall prevent the addition of documents that are already included on another approval request,,ENC-4701,Should automate (4),,,,,
+UN-0011,REQ-0870,#REF!,Approval Request,The system shall determine the approver requirements based on the document approval matrix for all documents contained on an AR.,"This exists, we should implement in tests",,Should automate (4),,,,,
+UN-0011,REQ-0880,#REF!,Approval Request,"The system shall enforce approval requirements prior to document release if the Document Type requires e-signature. If not met, an exception shall be visible","This exists, we should implement in tests",,Should automate (4),,,,,
+UN-0011,REQ-0890,#REF!,Approval Request,The system shall allow the owner of an AR to withdraw an AR that is in In Review State,,ENC-4701,Should automate (4),,,,,
+UN-0011,REQ-0900,Approval Request,Approval Request,"Case: The document has No e-Signature required
+- Nobody including the owner is required to provide a Password.",,,require some clarification,,,,,
+UN-0011,REQ-0910,Approval Request,Approval Request Approvals,"The system shall provide a mechanism for electronic approvals (e.g. PO's, change requests, training forms, NCMR, CAPA, user profiles)",What should we do with this?,ENC-4701,"see REQ-2640 (redundant)
+8-17 (ZS): doesn't seem like related to REQ-2640
+No implemented yet",,,,,
+UN-0011,REQ-0920,Approval Request,Approval Request Approvals," The document has e-Signature required
+
+- Owner does not fulfill the roles required the approval matrix then no need for password
+- Owner fulfils one of the roles required by the Approval Matrix then MUST obtain password.
+- Approvers will always provide password
+- In Engineering if there is no approval role defined then the owner MUST provide password.",This needs to be updated with check for all cases mentioned,ENC-4701,,,,,,
+UN-0011,REQ-0940,Approval Request Approvals,Approval Request Approvals,"The system shall allow the owner of an AR to change an approver on the AR to another user, provided that user meets the criteria of the approval matrix","This exists, we should implement in tests",,,,,,,
+UN-0011,REQ-0960,Approval Request Approvals,Approval Request Audit ,The system shall record (audit trail) the date and timestamp for approval and rejections by a user,,ENC-4701,Should automate (4),,,,,
+UN-0020,REQ-0970,Record Control,Record Forms,"The system shall allow the user to create custom forms, for the purpose of creating quality system records.  (e.g. forms for lot history, equipment calibration and maintenance, supplier management, etc)",We should implement in tests,,,,,,,
+UN-0020,REQ-0980,Record Control,Record Forms,The system shall provide the ability to add approvals fields within the Form,We should implement in tests,,,,,,,
+UN-0020,REQ-0990,Record Control,Record Forms,The system shall allow the user to define wheter form approvals (Inline Approvals) are blocking (required before performing subsequent sections),We should implement in tests,,Should automate (4),,,,,
+UN-0020,REQ-1000,Record Control,Record audit,"The system shall maintain an audit trail of changes to records, including the user making the change, the date and time of the change, and identification of the content that was changed.",We should implement in tests,,,,,,,
+UN-0020,REQ-1010,Record Control,Record audit,The system shall record (audit trail) the date and timestamp for approval and rejections (if applicable) of a record by a user,,,"
+8-17 (ZS): I think this req is for Records and req 960 is for the AR",,,,,
+UN-0020,REQ-1020,Record Control,Record creation,The system shall create new records at the numeric revision stage for forms that include Inline Approval,We should implement in tests,,Should automate (4),,,,,
+,REQ-1030,,Record creation,exsisting,,,Not implemeted yet,,,,,
+UN-0020,REQ-1040,Record Control,Record approval,The system shall create a new major numeric revision every time an inline approval is approved AND there are more section(s) in the Record that require Inline Approval,,,Not implemeted yet - Should be discussed ,,,,,
+UN-0020,REQ-1050,Record Control,Record approval,"The system shall indicate that a section of the form has been modified after approval, for forms that include Inline Approval",We should implement in tests,,Should automate (4),,,,,
+UN-0020,REQ-1060,Record Control,Record approval,The system shall upgrade the revision stage to Alpha when all approvals for a form have been recorded - the record is closed and released.,We should implement in tests,,Should automate (4),,,,,
+UN-0020,REQ-1080,Record approval,Record approval,The owner of a record should be able to correct an existing approved section at any time before closing the record.,We should implement in tests,,"Should automate (4), red text should be reviewed",,,,,
+UN-0020,REQ-1100,Record approval,The owner of a record should be able to correct an existing approved section at any time before closing the record.,All updates to an approved section of a record have to stay visible until the section is re-approved.,,,,,,,,
+UN-0020,REQ-1110,Record approval,General,The system shall only display the latest signed revision of the record or released revision of the record or the work in progress revision of the record in the records landing page.,,,UI requirement and not system requirements,,,,,
+UN-0080,REQ-2140,Notifications,General,The system shall notify the user by email when an item that requires an electronic approvals is assigned to them,We should implement emails in tests,,-,,,,,
+UN-0080,REQ-2150,Notifications,Approval Requests,An approver should have a notification on his Dashboard to review the contents of the assigned approval request.,We should implement emails in tests,,"Not implemented and we need a system wide notification strategy
+",,,,,
+UN-0080,REQ-2160,Notifications,Approval Requests,"The system shall display the following in the approval notification (AR ID, name of the submitter, date of approval request).  ",We should implement in tests,,UI Requirements,,,,,
+UN-0080,REQ-2180,Approval Requests,An approver should have a notification on his Dashboard to review the contents of the assigned approval request.,exsisting,Not implemented (only document title is shown) should we open ticket?,,UI Requirements,,,,,
+UN-0080,REQ-2190,Notifications,Approval Request,The system shall remove the approval request (and notify approvers) from the to do list of all users who have not yet approved an approval request upon rejection by another approver or withdrawal by the AR owner,,,except for notification,,,,,
+UN-0080,REQ-2200,Notifications,Approval Request,The system shall remove the approval request from the to do list of all approvers upon approving the AR being fully approved,We should implement in tests,,,,,,,
+UN-0070,REQ-2410,Training,Training matrix spreadsheet,The system shall maintain a training requirements matrix for every user and the training frequency required per document,,,Design Details,,,,,
+UN-0070,REQ-2450,#REF!,Training matrix spreadsheet,The system shall assign training to the user within 24 hours of assigning a user to train to a document on the training matrix spreadsheet.,,,is this necessary to be that fast?,,,,,
+UN-0080,REQ-2460,Notifications,Training,The system shall display a notification in the dashboard for when the user is assigned training,,,Not implemented and we need a system wide notification strategy,,,,,
+UN-0080,REQ-2470,Notifications,Training,"The system shall display the following in the training notification (document number, training due date).  ",,,Should automate (4),,,,,
+UN-0080,REQ-2480,Notifications,Training,The system shall display the training notification as overdue if the training is not complete by the due date.,,,Should automate (4),,,,,
+UN-0090,REQ-2490,User/Group Management,Create Users/Groups,The system shall allow the company administrator to create users in the system,,ENC-4706,,,,,,
+UN-0090,REQ-2500,User/Group Management,Create Users/Groups,The system shall allow the company administrator to create groups in the system,,ENC-4705,,,,,,
+UN-0090,REQ-2510,User/Group Management,Create Users/Groups,The system shall allow the company administrator to assign users to groups,,ENC-4705,,,,,,
+UN-0090,REQ-2520,User/Group Management,Create Users/Groups,The system shall allow the company administrator to assign permissions to users and groups as needed.,,ENC-4705,Only for PO,,,,,
+UN-0090,REQ-2570,User/Group Management,Group landing page,The system shall provide a list of groups that have been created,,ENC-4705,,,,,,
+UN-0090,REQ-2580,User/Group Management,Group landing page,"The system shall provide the following default columns for the group landing page (group name, members)",,ENC-4705,,,,,,
+UN-0090,REQ-2600,User/Group Management,Group landing page,The system shall allow the user to filter the displayed groups for each of the columns displayed on the group landing page,,ENC-4705,Filtered only by a group name,,,,,
+UN-0090,REQ-2610,User/Group Management,Group landing page,The system shall default to all groups displayed when starting a new Enlil session,,ENC-4705,,,,,,
+UN-0090,REQ-2640,Part 11 Compliance,Documents/Records,"The system shall allow the generation of accurate and complete copies of documents and records in both human readable and electronic form suitable for inspection, review, and copying. This includes the complete record and all change history. This is applicable to released and previous revisions of documents and records.",How to test this?,,,,,,,
+UN-0090,REQ-2650,Part 11 Compliance,Documents/Records,The system shall allow only authorized individuals with appropriate access rights to access documentation stored in Enlil.,We should implement in tests,,Should automate (4),,,,,
+UN-0090,REQ-2660,Part 11 Compliance,System Access,The system shall allow only authorized individuals who have a valid Enlil login to access the system,We should implement Login test with all cases,,,,,,,
+UN-0090,REQ-2670,Part 11 Compliance,Audit trail,"The system shall use of secure, computer-generated, time-stamped audit trails to independently record the date and time of operator entries and actions that create, modify, or delete electronic records.",How to test this?,,,,,,,
+UN-0090,REQ-2680,Part 11 Compliance,Audit trail,The audit trail shall ensure that previously recorded information are not deleted or obscured and available for review through revision history,How to test this?,,,,,,,
+UN-0090,REQ-2690,Part 11 Compliance,Retention of records,The audit trail documentation shall be retained for a period at least as long as that required for the subject electronic records.,How to test this?,,,,,,,
