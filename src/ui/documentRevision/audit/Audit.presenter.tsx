@@ -47,7 +47,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         return null;
       }
 
-      if (index && renderChanges(audit[groupId], key).props.children[index].length === 0) {
+      if (index && renderChanges(audit[groupId], key).props.children[index]?.length === 0) {
         return null;
       }
       return (
