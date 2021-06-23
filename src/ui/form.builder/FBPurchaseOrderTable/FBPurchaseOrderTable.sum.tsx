@@ -24,7 +24,7 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
     <TableHead>
       <TableRow>
         {mode === "preview" && <FBTableCell />}
-        {mode !== "preview" && <FBTableCell label="form.builder.field.tax" align="right"  />}
+        {mode !== "preview" && <FBTableCell label="form.builder.field.tax" align="right"/>}
         {mode !== "preview" && <FBTableCell label="form.builder.sum" align="right"/>}
       </TableRow>
     </TableHead>
@@ -45,7 +45,7 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
                 </Button>
               </FBTableCell>
             }
-            {mode !== "preview" && 
+            {mode !== "preview" &&
               <FBTableCell align="right">
                 {item.tax && <CheckBoxIcon className="FBIcon-root" fontSize="small" />}
                 {!item.tax && <CheckBoxOutlineBlankIcon className="FBIcon-root" fontSize="small" />}

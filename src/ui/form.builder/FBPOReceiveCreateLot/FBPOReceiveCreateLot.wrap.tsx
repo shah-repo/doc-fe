@@ -6,6 +6,8 @@ import { documentTypeActions, documentTypeSelectors } from "../../../state/ducks
 import { DocumentTypeById, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
 import { useSelector } from "react-redux";
 import { isEmpty } from "lodash";
+import FBPOReceiveCreateLotState from "./FBPOReceiveCreateLot.state";
+import { useEffect } from "react";
 
 export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
   Component: React.FunctionComponent<T>,
@@ -17,9 +19,16 @@ export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
     ...props
   }: T) => {
 
-    const { dialogState } = FB.useStores();
+    const { dialogState, formState, workspaceState } = FB.useStores();
+    const receivableId = workspaceState?.document?.id as string;
+    const createLotState = FB.useRef<FBPOReceiveCreateLotState>(
+      FBPOReceiveCreateLotState,
+      { receivableId, item }
+    );
 
-    handleCreateLot = () => {
+    handleCreateLot = async ()  => {
+      const values = formState?.getValues();
+      await createLotState.submit(values);
       dialogState?.closeDialog();
     };
 
@@ -58,12 +67,15 @@ export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
       idAsync.start(getDocRevByIds, value?.value, idAsync);
     };
 
+    useEffect(() => {
+      getDocTypes();
+    }, []);
+
     return Component({
       ...(props as T),
       handleCancel: dialogState?.closeDialog,
       handleCreateLot,
       handleDocTypeSelection,
-      getDocTypes,
       formIds,
       documentTypes,
       item,

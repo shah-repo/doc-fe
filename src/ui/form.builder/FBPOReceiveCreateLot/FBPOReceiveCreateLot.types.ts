@@ -10,6 +10,20 @@ export type FBPOReceiveCreateLotProps =
   item?: FBPurchaseOrderItem;
   formIds?: DocumentTypeByIdForm[];
   documentTypes?: DocumentTypeByCategoryState;
-  getDocTypes?: () => void;
   handleDocTypeSelection?: (e, value) => void;
 };
+
+export interface FBPOReceiveCreateLotConstructor {
+  item: FBPurchaseOrderItem;
+  receivableId: string;
+}
+
+export interface CreateLotBody {
+  receivedQuantity: number;
+  lotDocumentType: { id: string };
+  lotForm: { id: string };
+  partDescription?: string;
+  fieldId?: string;
+  supplierPartNumber?: string;
+  part?: { id: string };
+}
