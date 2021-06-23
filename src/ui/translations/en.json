@@ -779,6 +779,8 @@
   "form.builder.units.ounce": "ounce",
   "form.builder.currency": "Currency: ",
   "form.builder.EUR.to.USD": "1 Euro = {rate} USD",
+  "form.builder.CAD.to.USD": "1 CAD = {rate} USD",
+  "form.builder.AUD.to.USD": "1 AUD = {rate} USD",
   "form.builder.GBP.to.USD": "1 GBP = {rate} USD",
   "form.builder.total.in.USD": "Total in US dollars: {total} USD",
   "form.builder.date.of.exchange": "Exchange rate according to {fixerLink} as of {dateOfExchangeRate}",
