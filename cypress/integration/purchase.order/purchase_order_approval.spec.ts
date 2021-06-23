@@ -153,7 +153,7 @@ context("PO approval test", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Purchase Order' outputdocument type", () => {
+    it("Click on 'Purchase Order' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
     });
 
@@ -524,8 +524,7 @@ context("PO approval test", () => {
     });
 
     it("Verify rejected PO status, should be 'Draft'", () => {
-      SystemRequirement("REQ-0020");
-      // SystemRequirement("REQ-0570", "REQ-1570");
+      SystemRequirement("REQ-0020", "REQ-0570", "REQ-1570");
       cy.poVerifyStatus({ status: "Draft" });
     });
   });
