@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
+import { Attachment } from "../../../../state/ducks/attachments/types";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { documentPreviewPath } from "../../../document.revision/utils/paths";
 import { generateRevisionNumber } from "../../../documentRevision/helpers/generateRevisionNumber";
@@ -9,11 +10,13 @@ import PODetailsContainer from "./PODetailsContainer";
 interface Props {
   index: number;
   documentRevision: DocumentRevision;
+  docRevAttachments: Attachment[];
 }
 
 const PurchaseOrderApproval: React.FunctionComponent<Props> = ({
   index,
   documentRevision,
+  docRevAttachments,
 }) => {
   const intl = useIntl();
   const [version] = useState(generateRevisionNumber(
@@ -39,7 +42,7 @@ const PurchaseOrderApproval: React.FunctionComponent<Props> = ({
       url={documentPreviewPath(documentRevision.id, documentRevision.document.id)}
       dataCy="pendingActionsPO"
     >
-      <PODetailsContainer documentRevision={documentRevision} />
+      <PODetailsContainer {...{ documentRevision, docRevAttachments }} />
     </DashboardActionTypeBase>
   );
 };
