@@ -1,0 +1,58 @@
+{
+  "REQ-0860": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0860",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request",
+    "Requirement": "The system shall prevent the addition of documents that are already included on another approval request",
+    "Comments": ""
+  },
+  "REQ-0870": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0870",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request",
+    "Requirement": "The system shall determine the approver requirements based on the document approval matrix for all documents contained on an AR.",
+    "Comments": ""
+  },
+  "REQ-0880": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0880",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request",
+    "Requirement": "The system shall enforce approval requirements prior to document release if the Document Type requires e-signature. If not met, an exception shall be visible",
+    "Comments": ""
+  },
+  "REQ-0890": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0890",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request",
+    "Requirement": "The system shall allow the owner of an AR to withdraw an AR that is in In Review State",
+    "Comments": ""
+  },
+  "REQ-0900": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0900",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request",
+    "Requirement": "For \"no e-signature required\" documents, approvals shall be enforced based on the users invited to approve the document by the document owner.",
+    "Comments": ""
+  },
+  "REQ-2190": {
+    "field1": "UN-0080",
+    "REQ #": "REQ-2190",
+    "Module": "Notifications",
+    "Sub-Module": "Approval Request",
+    "Requirement": "The system shall remove the approval request from the to do list of all users who have not yet approved an approval request upon rejection by another approver or withdrawal by the AR owner",
+    "Comments": ""
+  },
+  "REQ-2200": {
+    "field1": "UN-0080",
+    "REQ #": "REQ-2200",
+    "Module": "Notifications",
+    "Sub-Module": "Approval Request",
+    "Requirement": "The system shall remove the approval request from the to do list of all approvers upon approving the AR being fully approved",
+    "Comments": ""
+  }
+}

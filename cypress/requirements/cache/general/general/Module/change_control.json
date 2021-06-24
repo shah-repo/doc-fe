@@ -1,0 +1,306 @@
+{
+  "REQ-0590": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0590",
+    "Module": "Change Control",
+    "Sub-Module": "Document Approval Matrix",
+    "Requirement": "The system shall support the creation of roles (e.g.: QA, R&D, RA…etc.)",
+    "Comments": ""
+  },
+  "REQ-0600": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0600",
+    "Module": "Change Control",
+    "Sub-Module": "Document Approval Matrix",
+    "Requirement": "The system shall allow the assignment of user groups to roles and users to roles",
+    "Comments": ""
+  },
+  "REQ-0610": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0610",
+    "Module": "Change Control",
+    "Sub-Module": "Document Approval Matrix",
+    "Requirement": "The system shall support a 2-level or 3-level document system. This is setup as a configuration and applies to all documents in the Document Approval Matrix",
+    "Comments": ""
+  },
+  "REQ-0630": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0630",
+    "Module": "Change Control",
+    "Sub-Module": "Document Approval Matrix",
+    "Requirement": "The system shall allow the user to assign approval requirements per role for each Document Type",
+    "Comments": ""
+  },
+  "REQ-0640": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0640",
+    "Module": "Change Control",
+    "Sub-Module": "Document Approval Matrix",
+    "Requirement": "The system shall allow separate assignment of approval requirements for a 2-level document system with revision types: Numeric and Alpha",
+    "Comments": ""
+  },
+  "REQ-0650": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0650",
+    "Module": "Change Control",
+    "Sub-Module": "Document Approval Matrix",
+    "Requirement": "The system shall allow separate assignment of approval requirements for a 3-level document system with revision types: Numeric, Numeric-Alpha and Alpha",
+    "Comments": ""
+  },
+  "REQ-0660": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0660",
+    "Module": "Change Control",
+    "Sub-Module": "Document Approval Matrix",
+    "Requirement": "The system shall allow the assignment of approval requirements for an Administrative change",
+    "Comments": ""
+  },
+  "REQ-0670": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0670",
+    "Module": "Change Control",
+    "Sub-Module": "Document Approval Matrix",
+    "Requirement": "The system shall allow the assignment of approval requirements for a Admin Revision change",
+    "Comments": ""
+  },
+  "REQ-0680": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0680",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request Creation",
+    "Requirement": "The system shall allow users to create and submit approval requests for approval/obsolescence of documents.",
+    "Comments": ""
+  },
+  "REQ-0690": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0690",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request Creation",
+    "Requirement": "The system shall automatically issue a unique approval request ID when a new change request is initiated",
+    "Comments": ""
+  },
+  "REQ-0700": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0700",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request Creation",
+    "Requirement": "The system shall support the customer to define one or more custom forms to be used for approval requests",
+    "Comments": ""
+  },
+  "REQ-0710": {
+    "field1": "UN-0003",
+    "REQ #": "REQ-0710",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request Form",
+    "Requirement": "The system shall support addition of one or more implementation tasks to the AR form, including a task title, task description, task assignment to user, due data, and status tracking, that are required to complete before an AR is closed",
+    "Comments": ""
+  },
+  "REQ-0730": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0730",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request Status",
+    "Requirement": "The system shall automatically maintain the status of a change request:\nDraft - the default state when created\nIn Review - the state where the change request is in review by the approvers\nApproved - the state where the change request has been approved by all reviewers\nImplementation - the state where the change request has pending Implementation Task(s)\nClosed - the state when an approved change request has been fully implemented by doc control",
+    "Comments": ""
+  },
+  "REQ-0740": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0740",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request Status",
+    "Requirement": "The system shall automatically update the status attribute of all documents/parts on the approval request when the state of the approval request changes:\nPending Change when the AR is in Draft State\nIn Review when the AR is in In Review State\nApproved when the AR is in Approved State \nApproved when the AR is in Implementation State\nReleased when the AR is in Closed State",
+    "Comments": ""
+  },
+  "REQ-0750": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0750",
+    "Module": "Change Control",
+    "Sub-Module": "Landing Page",
+    "Requirement": "The system shall display the following default columns on the landing page for the approvals list: \nAR ID, \nAR Title, \nAR Owner, and \nAR  State (e.g. this list defines content, not column header names)",
+    "Comments": ""
+  },
+  "REQ-0760": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0760",
+    "Module": "Change Control",
+    "Sub-Module": "Landing Page",
+    "Requirement": "The system shall only display document approval requests in the approval requests list (e.g. approvals for other items like PO's can be found in their respective modules)",
+    "Comments": ""
+  },
+  "REQ-0770": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0770",
+    "Module": "Change Control",
+    "Sub-Module": "Landing Page",
+    "Requirement": "The system shall allow the user to filter the displayed approval request list for each of the columns displayed on the landing page",
+    "Comments": ""
+  },
+  "REQ-0780": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0780",
+    "Module": "Change Control",
+    "Sub-Module": "Landing Page",
+    "Requirement": "The system shall default the approval request list filter to display AR's with latest edited displaying on top when starting a new Enlil session",
+    "Comments": ""
+  },
+  "REQ-0790": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0790",
+    "Module": "Change Control",
+    "Sub-Module": "Landing Page",
+    "Requirement": "The system shall maintain approval request list filter settings during an Enlil session when navigating away from and back to the approval request list landing page",
+    "Comments": ""
+  },
+  "REQ-0800": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0800",
+    "Module": "Change Control",
+    "Sub-Module": "Landing Page",
+    "Requirement": "The system shall default to the approval request list being sorted by most recent edited first",
+    "Comments": ""
+  },
+  "REQ-0810": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0810",
+    "Module": "Change Control",
+    "Sub-Module": "Landing Page",
+    "Requirement": "The system shall provide a mechanism to clear all approval request list filters",
+    "Comments": ""
+  },
+  "REQ-0820": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0820",
+    "Module": "Change Control",
+    "Sub-Module": "Landing Page",
+    "Requirement": "The system shall display the number of approval requests displayed that match the filter settings",
+    "Comments": ""
+  },
+  "REQ-0830": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0830",
+    "Module": "Change Control",
+    "Sub-Module": "Landing Page",
+    "Requirement": "The system shall allow the user to open an AR from the AR list",
+    "Comments": ""
+  },
+  "REQ-0840": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0840",
+    "Module": "Change Control",
+    "Sub-Module": "Landing Page",
+    "Requirement": "The system should display the AR description when the mouse hovers over the AR title in the approval request list",
+    "Comments": ""
+  },
+  "REQ-0850": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0850",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request Rules",
+    "Requirement": "The system shall allow the originator to edit the approval request and any documents associated with the approval request only while it is in draft or rejected states",
+    "Comments": ""
+  },
+  "REQ-0860": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0860",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request",
+    "Requirement": "The system shall prevent the addition of documents that are already included on another approval request",
+    "Comments": ""
+  },
+  "REQ-0870": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0870",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request",
+    "Requirement": "The system shall determine the approver requirements based on the document approval matrix for all documents contained on an AR.",
+    "Comments": ""
+  },
+  "REQ-0880": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0880",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request",
+    "Requirement": "The system shall enforce approval requirements prior to document release if the Document Type requires e-signature. If not met, an exception shall be visible",
+    "Comments": ""
+  },
+  "REQ-0890": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0890",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request",
+    "Requirement": "The system shall allow the owner of an AR to withdraw an AR that is in In Review State",
+    "Comments": ""
+  },
+  "REQ-0900": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0900",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request",
+    "Requirement": "For \"no e-signature required\" documents, approvals shall be enforced based on the users invited to approve the document by the document owner.",
+    "Comments": ""
+  },
+  "REQ-0910": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0910",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request Approvals",
+    "Requirement": "The system shall provide a mechanism for electronic approvals (e.g. PO's, change requests, training forms, NCMR, CAPA, user profiles)",
+    "Comments": ""
+  },
+  "REQ-0920": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0920",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request Approvals",
+    "Requirement": "The system shall require the user to enter their user password when approving or rejecting an approval request that is assigned to them",
+    "Comments": ""
+  },
+  "REQ-0940": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0940",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request Approvals",
+    "Requirement": "The system shall allow the owner of an AR to change an approver on the AR to another user, provided that user meets the criteria of the approval matrix",
+    "Comments": ""
+  },
+  "REQ-2700": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-2700",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request Approvals",
+    "Requirement": "The system shall automatically change the status of a document to \"Released\" when the AR is approved and the effective date is met ",
+    "Comments": ""
+  },
+  "REQ-2710": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-2710",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request Approvals",
+    "Requirement": "The system shall automatically change the status of an AR to \"Closed\", when all document(s) have been Released (once the effective date is met) and all implementation task(s) have been closed",
+    "Comments": ""
+  },
+  "REQ-2720": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-2720",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request Approvals",
+    "Requirement": "The system shall provide the  user the ability to set the Effective Date on an Express AR if there are no pending actions",
+    "Comments": ""
+  },
+  "REQ-0960": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0960",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request Audit",
+    "Requirement": "The system shall record (audit trail) the date and timestamp for approval and rejections by a user",
+    "Comments": ""
+  },
+  "REQ-2730": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-2730",
+    "Module": "Change Control",
+    "Sub-Module": "Approval Request Audit",
+    "Requirement": "The system shall record (audit trail) the date and timestamp for AR closure (only when the system verifies that the AR is Closed)",
+    "Comments": ""
+  }
+}
