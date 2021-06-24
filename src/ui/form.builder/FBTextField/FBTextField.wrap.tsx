@@ -1,6 +1,5 @@
 import { get, isUndefined } from "lodash";
 import { reaction } from "mobx";
-import { useObserver } from "mobx-react-lite";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { FB, FBTextFieldProps } from "..";
@@ -58,10 +57,6 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
-
-    useObserver(() => {
-      value = workspaceState?.formInputSync.get(name);
-    });
 
     return Component({
       ...(props as T),

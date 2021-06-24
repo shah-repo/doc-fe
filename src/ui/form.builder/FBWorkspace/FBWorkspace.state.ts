@@ -74,6 +74,10 @@ class FBWorkspaceState extends FBSchemaState {
     return this.document?.status === DocumentRevisionStatus.Released;
   }
 
+  public get isDeprecated(): boolean {
+    return this.document?.status === DocumentRevisionStatus.Deprecated;
+  }
+
   public get isOutput(): boolean {
     const { docId } = this.document?.formDocument?.document || {};
     return Boolean(docId && !isEmpty(docId));

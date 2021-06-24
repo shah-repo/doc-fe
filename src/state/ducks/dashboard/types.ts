@@ -1,3 +1,4 @@
+import { Attachment } from "../attachments/types";
 import { ChangeRequest } from "../changeRequest/types";
 import { Approval } from "../common/types";
 import { DocumentRevision } from "../documentRevisions/types";
@@ -21,6 +22,7 @@ export interface PendingAction {
   documentRevision?: DocumentRevision;
   docRev?: DocumentRevision;
   approval?: Approval;
+  docRevAttachments?: Attachment[];
 }
 
 export interface PendingActionsListAction {
