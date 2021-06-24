@@ -168,7 +168,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         ...lockData,
         locked: false,
       });
-      parentFormState?.expireLockedFields(lockData?.lockId);
+      parentFormState?.expireLockedFields(lockData);
     }
 
     function handleFilter(

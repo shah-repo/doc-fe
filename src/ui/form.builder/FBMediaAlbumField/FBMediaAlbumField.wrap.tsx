@@ -112,7 +112,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
         mediaAlbumFieldState?.download(data);
         mediaAlbumFieldState!.fromUpload = true;
         const lockData = formState?.locked.get(name);
-        formState?.expireLockedFields(lockData?.lockId);
+        formState?.expireLockedFields(lockData);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
