@@ -47,9 +47,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         return null;
       }
 
+      if (change.field.includes("-built-in")) {
+        return null;
+      }
+
       if (index && renderChanges(audit[groupId], key).props.children[index]?.length === 0) {
         return null;
       }
+
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer}>
