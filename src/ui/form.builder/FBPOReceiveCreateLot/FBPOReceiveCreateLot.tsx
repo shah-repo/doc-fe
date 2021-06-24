@@ -3,6 +3,7 @@ import React from "react";
 import { FBForm, FBPOReceiveCreateLotProps, FBTextField } from "..";
 import { FormContext } from "../../components/forms/FormContext";
 import FBAutocomplete from "../FBAutocomplete/FBAutocomplete";
+import FBDatePicker from "../FBDatePicker/FBDatePicker";
 import { withFBPOReceiveCreateLot } from "./FBPOReceiveCreateLot.wrap";
 
 
@@ -55,8 +56,13 @@ const FBPOReceiveCreateLot: React.FunctionComponent<FBPOReceiveCreateLotProps> =
           />
         </Box>
       </Box>
+      <FBDatePicker
+        label="form.builder.field.expiration.date"
+        name="expirationDate"
+      />
       <FBAutocomplete
-        name="Lot-Type"
+        name="lotType"
+        label="supplier.select.type"
         placeholder="supplier.select.type"
         options={documentTypes?.map((docType) => ({
           text: docType.documentTypeName,
@@ -65,15 +71,16 @@ const FBPOReceiveCreateLot: React.FunctionComponent<FBPOReceiveCreateLotProps> =
         rules="required"
         onChange={handleDocTypeSelection}
       />
-      {formIds && formIds.length > 0 && <FBAutocomplete
-        name="Lot-Form"
+      <FBAutocomplete
+        name="lotForm"
+        label="supplier.select.form"
         placeholder="supplier.select.form"
         options={formIds?.map((form) => ({
           text: form.name,
           value: form.id,
         }))}
         rules="required"
-      />}
+      />
       {children}
     </FormContext.Provider>
   </FBForm>

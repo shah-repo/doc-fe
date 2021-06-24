@@ -26,4 +26,5 @@ export interface CreateLotBody {
   fieldId?: string;
   supplierPartNumber?: string;
   part?: { id: string };
+  expirationDate?: Date;
 }

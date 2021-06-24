@@ -648,6 +648,7 @@
   "form.builder.field.is.traceability.required": "Is Traceability Required",
   "form.builder.field.item": "Item",
   "form.builder.field.ext.amount": "Ext. Amount",
+  "form.builder.field.expiration.date": "Expiration Date",
   "form.builder.item": "Item",
   "form.builder.sum": "Sum",
   "form.builder.field.capital.equipment": "Capital Equipment",

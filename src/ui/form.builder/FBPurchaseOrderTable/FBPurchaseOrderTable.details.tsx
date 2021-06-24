@@ -33,7 +33,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                 <FBTableCell
                   label={head}
                   key={`fb-po-head-${head}-${index}`}
-                  align={(index > 2) ? "right" : "left"}
+                  align={(index > 2 && head !== "form.builder.field.lots") ? "right" : "left"}
                 />
               )}
             </FBMapWrapper>
@@ -82,7 +82,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                         {index > 0 && (
                           <FBTableCell
                             data-cy = {dataCy}
-                            align={(index > 2) ? "right" : "left"}
+                            align={(index > 2 && key !== "lots") ? "right" : "left"}
                             loading={key === "received" ? loading : false}
                             {...{ label, tooltipTitle }}
                           />

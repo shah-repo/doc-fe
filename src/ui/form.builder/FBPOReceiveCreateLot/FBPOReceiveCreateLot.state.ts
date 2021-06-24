@@ -23,8 +23,8 @@ class FBPOReceiveCreateLotState  {
 
   public async createLot(receivableId: string, values: any) {
     const partId = this.item?.partNumber;
-    const lotTypeId = values?.["Lot-Type"];
-    const lotFormId = values?.["Lot-Form"];
+    const lotTypeId = values?.lotType;
+    const lotFormId = values?.lotForm;
 
     const body = {
       receivedQuantity: values?.received,
@@ -34,6 +34,7 @@ class FBPOReceiveCreateLotState  {
       fieldId: this.item?.id,
       supplierPartNumber: this.item?.supplierPartNumber,
       part: partId ? { id: partId } : undefined,
+      expirationDate: values?.expirationDate,
     };
 
     this.createLotAPI.set({
@@ -41,7 +42,11 @@ class FBPOReceiveCreateLotState  {
       urlValues: { receivableId },
       body,
     });
-    await this.createLotAPI.post();
+    try {
+      await this.createLotAPI.post();
+    }
+    catch {
+    }
   }
 }
 

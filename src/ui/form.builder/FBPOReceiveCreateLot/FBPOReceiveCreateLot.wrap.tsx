@@ -50,14 +50,7 @@ export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
       },
     });
 
-    const categoryAsync = useAsync<DocumentType[]>({
-      onSuccess: () => {
-        if (documentTypes.length === 1) {
-          idAsync.start(getDocRevByIds, documentTypes[0].id, idAsync);
-          return;
-        }
-      },
-    });
+    const categoryAsync = useAsync<DocumentType[]>();
 
     const getDocTypes = () => {
       categoryAsync.start(getDocTypesByCategory, { category: "Lot" }, categoryAsync);
