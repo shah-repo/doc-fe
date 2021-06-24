@@ -1,7 +1,7 @@
 import { cloneDeep, concat, get, uniqBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
@@ -42,11 +42,17 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     const { documentType } = document?.document || {};
     const isDocumentForm = checkIsDocumentForm(documentType?.groupOptions);
     isDocumentMPI = checkIsDocumentMPI(documentType?.groupOptions);
+    const docRevSmartRef = document?.smartReferencesTo;
+    const docSmartRef = document?.document.smartReferencesTo;
 
-    const smartReferencesTo = uniqBy(concat(
-      document?.document.smartReferencesTo,
-      document?.smartReferencesTo
-    ), "id").filter((ref) => ref?.active && ((ref.fromDocRev?.version || 1 ) <= (version || 1)));
+    const smartReferencesTo = useMemo(() =>
+      uniqBy(concat(
+        docSmartRef,
+        docRevSmartRef
+      ), "id").filter((ref) =>
+      ref?.active &&
+      ((ref.fromDocRev?.version || 1 ) <= (version || 1))),
+    [docRevSmartRef, docSmartRef, version]);
 
     const usedDocumentsInLHRS = workspaceState?.document?.usedDocumentsInLHRS;
     dialogState = FB.useRef(FBDialogState);
