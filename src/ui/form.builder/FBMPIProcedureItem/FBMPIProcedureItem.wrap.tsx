@@ -1,4 +1,4 @@
-import { cloneDeep, concat, get, toNumber, uniqBy } from "lodash";
+import { cloneDeep, concat, get, uniqBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -48,7 +48,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     ), "id").filter((ref) => ref?.active);
     const usedDocumentsInLHRS = workspaceState?.document?.usedDocumentsInLHRS;
     dialogState = FB.useRef(FBDialogState);
-    multiplier = toNumber(formState?.getFieldValue("lhr_initial_quantity")) || 1;
+    multiplier = formState?.getFieldValue("lhrs-start-quantity") || 1;
     isPreview = isPreview && workspaceState?.mode !== "formPreview";
     // Have to use isDocumentForm instead of isOutput because od MPI
     // ENC-7319

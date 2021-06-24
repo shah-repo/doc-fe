@@ -73,7 +73,7 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
         ...lockData,
         lockId: undefined,
       });
-      formState?.expireLockedFields(lockData?.lockId);
+      formState?.expireLockedFields(lockData);
     }
 
     return Component({

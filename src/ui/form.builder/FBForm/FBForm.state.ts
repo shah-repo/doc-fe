@@ -1,5 +1,5 @@
 import { flatten, unflatten } from "flat";
-import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, setWith, values } from "lodash";
+import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, last, map, omit, omitBy, set as lodashSet, setWith, values } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBFormConstructor, FBInputState, FBLockBody, FBLockData, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceState } from "..";
 import { SMStore, SMUrl } from "../../../App";
@@ -17,6 +17,7 @@ class FBFormState extends FBSchemaState {
   public validatorRules: Record<string, FBValidationRelatedRules[]> = {};
   public validationRelatedRules: Record<string, FBValidationRelatedRules[]> = {};
   public includeLocking = false;
+  public unlockQueue: string[] = [];
 
   // TO BBE REMOVED!
   public workspaceState?: FBWorkspaceState;
@@ -271,6 +272,10 @@ class FBFormState extends FBSchemaState {
     fieldName: string
   ) => {
     if (!this.includeLocking) { return; }
+    this.locked.set(fieldName, {
+      ...this.locked.get(fieldName),
+      fieldName,
+    });
     SMStore.post<FBLockData, Partial<FBLockBody>>({
       url: SMUrl.lockFields,
       body,
@@ -291,14 +296,36 @@ class FBFormState extends FBSchemaState {
         lockId: id,
         ownerName: ownerName || this.workspaceState?.currentUser?.email,
       });
+      this.unlockFields();
     });
   };
 
-  public expireLockedFields = (id?: string) => {
+  public expireLockedFields = (lockData?: FBLockValue) => {
     if (!this.includeLocking) { return; }
-    if (!id) { return; }
+    const { fieldName } = lockData || {};
+    if (!fieldName) { return; }
+    this.unlockQueue.push(fieldName);
+    this.unlockFields();
+  };
+
+  public unlockFields = () => {
+    const name = last(this.unlockQueue);
+    if (!name) { return; }
+    const lockedData = this.locked.get(name);
+    const { lockId: id } = lockedData || {};
+    if (!id || isEmpty(id)) { return; }
+
     SMStore.post({
       url: SMStore.templateUrl(SMUrl.lockFieldsExpire, { id }),
+    }, (_data, error) => {
+      if (error) { return; }
+      this.unlockQueue.pop();
+      this.unlockFields();
+      this.locked.set(name, {
+        ...lockedData,
+        locked: false,
+        lockId: undefined,
+      });
     });
   };
 }
