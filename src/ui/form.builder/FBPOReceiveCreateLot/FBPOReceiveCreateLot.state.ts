@@ -45,8 +45,7 @@ class FBPOReceiveCreateLotState  {
     try {
       await this.createLotAPI.post();
     }
-    catch {
-    }
+    catch (error) {}
   }
 }
 

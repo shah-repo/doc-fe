@@ -5,7 +5,6 @@ import useAsync from "../../hooks/useAsync";
 import { documentTypeActions, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentTypeById, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
 import { useDispatch, useSelector } from "react-redux";
-import { isEmpty } from "lodash";
 import FBPOReceiveCreateLotState from "./FBPOReceiveCreateLot.state";
 import { useEffect } from "react";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
@@ -44,9 +43,6 @@ export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
     const idAsync = useAsync<DocumentTypeById>({
       onSuccess: (documents) => {
         setFormIds(documents?.forms);
-        if (isEmpty(documents?.forms)) {
-          return;
-        }
       },
     });
 
