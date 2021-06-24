@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik";
-import { get, last } from "lodash";
+import { get, last, remove } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -80,6 +80,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     }
 
     function setSchemaProps(schema?: FBSchemaProps[]): FBSchemaProps[] | undefined {
+      remove(schema || [], (item) => item?.type === "poapprovals");
       if (!schema) { return; }
       const prior: Partial<Record<FBInputType | "other", number>> = {
         purchaseorder: 1,
