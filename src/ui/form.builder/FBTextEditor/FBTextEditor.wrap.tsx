@@ -141,7 +141,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     }
     function handleLockBlur() {
       const lockData = formState?.locked.get(name);
-      formState?.expireLockedFields(lockData?.lockId);
+      formState?.expireLockedFields(lockData);
     }
 
     // MARK: @methods
