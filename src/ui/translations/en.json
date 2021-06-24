@@ -642,6 +642,7 @@
   "form.builder.field.part.description": "Part Description",
   "form.builder.field.supplier.part.number": "Supplier Part Number",
   "form.builder.field.price": "Price",
+  "form.builder.field.lots": "Lots",
   "form.builder.field.unit.price": "Unit Price",
   "form.builder.field.tax": "Tax",
   "form.builder.field.is.traceability.required": "Is Traceability Required",

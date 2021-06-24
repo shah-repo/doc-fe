@@ -28,6 +28,7 @@ export interface FBPurchaseOrderItem {
   unitPrice: string;
   formattedDate: string;
   totalAmount: string;
+  lots?: string;
   isTraceabilityRequired: boolean;
   capitalEquipment: boolean;
   tax: boolean;

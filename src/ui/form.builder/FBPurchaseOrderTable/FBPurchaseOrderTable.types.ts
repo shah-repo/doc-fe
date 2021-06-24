@@ -39,7 +39,8 @@ export enum FBPurchaseOrderDetailsProduct {
   received = "form.builder.field.received",
   units = "form.builder.field.units",
   formattedDate = "form.builder.field.date.required",
-  unitPrice = "form.builder.field.unit.price"
+  unitPrice = "form.builder.field.unit.price",
+  lots = "form.builder.field.lots",
 }
 
 export enum FBPurchaseOrderDetailsService {
@@ -51,7 +52,8 @@ export enum FBPurchaseOrderDetailsService {
   received = "form.builder.field.received",
   units = "form.builder.field.units",
   formattedDate = "form.builder.field.date.required",
-  unitPrice = "form.builder.field.unit.price"
+  unitPrice = "form.builder.field.unit.price",
+  lots = "form.builder.field.lots",
 }
 
 export interface FBCurrencyOption {
