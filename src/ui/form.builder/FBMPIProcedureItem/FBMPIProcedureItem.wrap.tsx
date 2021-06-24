@@ -38,14 +38,16 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     // MARK: @config
     const { mpiProcedureState, workspaceState, formState } = FB.useStores();
     const { document } = workspaceState || {};
+    const { version } = document || {};
     const { documentType } = document?.document || {};
     const isDocumentForm = checkIsDocumentForm(documentType?.groupOptions);
     isDocumentMPI = checkIsDocumentMPI(documentType?.groupOptions);
 
     const smartReferencesTo = uniqBy(concat(
-      workspaceState?.document?.smartReferencesTo,
-      workspaceState?.document?.document.smartReferencesTo
-    ), "id").filter((ref) => ref?.active);
+      document?.document.smartReferencesTo,
+      document?.smartReferencesTo
+    ), "id").filter((ref) => ref?.active && ((ref.fromDocRev?.version || 1 ) <= (version || 1)));
+
     const usedDocumentsInLHRS = workspaceState?.document?.usedDocumentsInLHRS;
     dialogState = FB.useRef(FBDialogState);
     multiplier = toNumber(formState?.getFieldValue("lhr_initial_quantity")) || 1;
@@ -57,6 +59,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       workspaceState?.mode !== "formPreview") ||
       redlineActive;
     redlineActive = useSelector(companySelectors.getRedlineActive);
+
     useEffect(() => {
       if (!mpiProcedureState) { return; }
       setFilteredParts(smartReferencesTo);
