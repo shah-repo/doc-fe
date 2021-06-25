@@ -193,7 +193,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     formState?.setFieldValue(`${name}`, fieldValue);
     documentStatus = document?.status as any;
     // Should be disabled while submitting if group levels changes while adding/editing PO items
-    disabled = loading || isSubmitting;
+    disabled = disabled || loading || isSubmitting;
 
     return Component({
       ...(props as T),
