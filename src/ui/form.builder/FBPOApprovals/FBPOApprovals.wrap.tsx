@@ -100,11 +100,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
           approval.approverId === data?.approverId ? data : approval
         ));
         poApprovalsState.setApprovals(filteredApprovals);
-        if (data?.status === ApprovalStatus.Approved) {
-          window.location.reload();
-        }
-
-        if (data?.status === DocumentStatus.Draft) {
+        if (data?.status === ApprovalStatus.Approved || data?.status === DocumentStatus.Draft) {
           window.location.reload();
         }
       }
