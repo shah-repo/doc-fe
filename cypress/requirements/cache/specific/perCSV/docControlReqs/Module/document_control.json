@@ -1,0 +1,186 @@
+{
+  "REQ-0010": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0010",
+    "Module": "Document Control",
+    "Sub-Module": "General",
+    "Requirement": "The system shall allow a user to access, create, edit, or revise a document in Enlil",
+    "Comments": ""
+  },
+  "REQ-0020": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0020",
+    "Module": "Document Control",
+    "Sub-Module": "General",
+    "Requirement": "The system shall clearly indicate the state of the document being viewed",
+    "Comments": ""
+  },
+  "REQ-0030": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0030",
+    "Module": "Document Control",
+    "Sub-Module": "Document List",
+    "Requirement": "The system shall display the following default columns on the landing page for the documents list: Document ID, \nRevision (major only), \nDocument Title, \nDocument Type, \nDocument Owner, \nthe associated AR ID, \nDocument Status, and \nEffective Date \n(this list defines content, not column header names)",
+    "Comments": ""
+  },
+  "REQ-0040": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0040",
+    "Module": "Document Control",
+    "Sub-Module": "Document List",
+    "Requirement": "The system should provide a mechanism to export the Document List (e.g. to a .csv format)",
+    "Comments": ""
+  },
+  "REQ-0050": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0050",
+    "Module": "Document Control",
+    "Sub-Module": "Document List",
+    "Requirement": "The system shall only display documents in the documents list (e.g. records can be found in their respective modules or in the records list)",
+    "Comments": ""
+  },
+  "REQ-0060": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0060",
+    "Module": "Document Control",
+    "Sub-Module": "Document List",
+    "Requirement": "The system shall allow the user to filter the displayed Document List for each of the columns displayed on the landing page",
+    "Comments": ""
+  },
+  "REQ-0070": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0070",
+    "Module": "Document Control",
+    "Sub-Module": "Document List",
+    "Requirement": "The system shall default the Document List filter to display released documents when starting a new Enlil session",
+    "Comments": ""
+  },
+  "REQ-0080": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0080",
+    "Module": "Document Control",
+    "Sub-Module": "Document List",
+    "Requirement": "The system shall maintain Document List filter settings during an Enlil session when navigating away from and back to the Document List landing page",
+    "Comments": ""
+  },
+  "REQ-0090": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0090",
+    "Module": "Document Control",
+    "Sub-Module": "Document List",
+    "Requirement": "The system shall default to the Document List being sorted by most recent edited first",
+    "Comments": ""
+  },
+  "REQ-0100": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0100",
+    "Module": "Document Control",
+    "Sub-Module": "Document List",
+    "Requirement": "The system shall provide a mechanism to clear all Document List filters",
+    "Comments": ""
+  },
+  "REQ-0110": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0110",
+    "Module": "Document Control",
+    "Sub-Module": "Document List",
+    "Requirement": "The system shall display the number of documents displayed that match the filter settings",
+    "Comments": ""
+  },
+  "REQ-0120": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0120",
+    "Module": "Document Control",
+    "Sub-Module": "Document List",
+    "Requirement": "The system shall allow the user to open a document from within the Document List",
+    "Comments": ""
+  },
+  "REQ-0130": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0130",
+    "Module": "Document Control",
+    "Sub-Module": "Document List",
+    "Requirement": "The system should display the description of the document when the mouse hovers over the document title in the Document List",
+    "Comments": ""
+  },
+  "REQ-0140": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0140",
+    "Module": "Document Control",
+    "Sub-Module": "Document Creation/Revising",
+    "Requirement": "The system shall provide a mechanism for the user to create a document from the Document List landing page",
+    "Comments": ""
+  },
+  "REQ-0150": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0150",
+    "Module": "Document Control",
+    "Sub-Module": "Document Creation/Revising",
+    "Requirement": "The system shall allow a user to revise a document that is in the Released state",
+    "Comments": ""
+  },
+  "REQ-0160": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0160",
+    "Module": "Document Control",
+    "Sub-Module": "Document Creation/Revising",
+    "Requirement": "The system shall provide the following editable document attributes when creating or revising a document: (Document Title, Document Description, Document Type, Document Revision Stage, Reference, Training Required, Attachments, Users (document access privileges), Groups (document access privileges), Document Owner Assignment)",
+    "Comments": ""
+  },
+  "REQ-0170": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0170",
+    "Module": "Document Control",
+    "Sub-Module": "Document Creation/Revising",
+    "Requirement": "The system shall allow the user to edit document ID, when creating a document.",
+    "Comments": ""
+  },
+  "REQ-0180": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0180",
+    "Module": "Document Control",
+    "Sub-Module": "Document Creation/Revising",
+    "Requirement": "The system shall allow the document owner to add one or more references to a document in draft state",
+    "Comments": ""
+  },
+  "REQ-0190": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0190",
+    "Module": "Document Control",
+    "Sub-Module": "Document Creation/Revising",
+    "Requirement": "The system shall allow the document owner to remove references to a document in draft state",
+    "Comments": ""
+  },
+  "REQ-0200": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0200",
+    "Module": "Document Control",
+    "Sub-Module": "Document Creation/Revising",
+    "Requirement": "The system shall allow the document owner to upload one or more  attachments to a document in draft state",
+    "Comments": ""
+  },
+  "REQ-0210": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0210",
+    "Module": "Document Control",
+    "Sub-Module": "Document Creation/Revising",
+    "Requirement": "The system support attachments of multiple types.",
+    "Comments": ""
+  },
+  "REQ-0220": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0220",
+    "Module": "Document Control",
+    "Sub-Module": "Document Creation/Revising",
+    "Requirement": "The system shall allow the document owner to upload multiple documents at once",
+    "Comments": ""
+  },
+  "REQ-0230": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-0230",
+    "Module": "Document Control",
+    "Sub-Module": "Document Creation/Revising",
+    "Requirement": "The system shall notify the user if a document upload failure occurs",
+    "Comments": ""
+  }
+}

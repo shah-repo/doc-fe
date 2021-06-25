@@ -8,8 +8,11 @@ interface ConfigRequirements {
 }
 
 export interface RequirementsReadWriteConfig {
+  extract: boolean;
   sourcePath: string;
   outputPath: string;
+  outputFolderName: string;
+  outputFileName: string;
   extractModules?: boolean;
   extractSubModules?: boolean;
 }
@@ -21,16 +24,22 @@ export const REQUIREMENTS_CONFIG_RUN: ConfigRequirements = {
   extractSpecificCSV: true,
   generalRequirements: [
     {
+      extract: true,
       sourcePath: "generalCSV/list.csv",
-      outputPath: "requirements/cache/general/general.json",
+      outputPath: "requirements/cache/general",
+      outputFolderName: "general",
+      outputFileName: "general.json",
       extractModules: true,
       extractSubModules: true,
     },
   ],
   specificRequirements: [
     {
+      extract: true,
       sourcePath: "specificCSV/docControlReqs.csv",
-      outputPath: "requirements/cache/specific/perCSV/docControlReqs.json",
+      outputPath: "requirements/cache/specific/perCSV",
+      outputFolderName: "docControlReqs",
+      outputFileName: "docControlReqs.json",
       extractModules: true,
       extractSubModules: true,
     },

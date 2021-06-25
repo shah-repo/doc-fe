@@ -16,11 +16,13 @@ if (REQUIREMENTS_CONFIG_RUN.extractSpecificCSV) {
 }
 
 REQUIREMENTS_LISTS.forEach((reqsList) => {
-  generateJsonFromCSVList(reqsList);
+  if (reqsList.extract) {
+    generateJsonFromCSVList(reqsList);
+  }
 });
 
 
-function generateJsonFromCSVList(reqsList) {
+function generateJsonFromCSVList(reqsList: RequirementsReadWriteConfig) {
   csv()
     .fromFile([__dirname, reqsList.sourcePath].join("/"))
     .then((jsonObj) => {
@@ -34,31 +36,36 @@ function generateJsonFromCSVList(reqsList) {
       const jsonObject = JSON.stringify(result, null, 2);
 
       fs.writeFileSync(
-        resolve(__dirname, "..", reqsList.outputPath),
+        resolve(__dirname, "..", `${reqsList.outputPath}/${reqsList.outputFileName}`),
         jsonObject, { encoding: "UTF-8" }
       );
 
       if (REQUIREMENTS_CONFIG_RUN.extractPerModules && reqsList.extractModules) {
         generateModulesOrSubModulesFromJson(
-          JSON.parse(jsonObject), reqsList.outputPath, "Module");
+          JSON.parse(jsonObject),
+          reqsList.outputPath,
+          reqsList.outputFolderName,
+          "Module");
       }
 
       if (REQUIREMENTS_CONFIG_RUN.extractPerSubModules && reqsList.extractSubModules) {
         generateModulesOrSubModulesFromJson(
-          JSON.parse(jsonObject), reqsList.outputPath, "Sub-Module");
+          JSON.parse(jsonObject),
+          reqsList.outputPath,
+          reqsList.outputFolderName,
+          "Sub-Module");
       }
       // eslint-disable-next-line no-console
-      console.log("DONE!!!!!!", resolve(__dirname, "..", reqsList.outputPath));
+      console.log("DONE!!!!!!", resolve(__dirname, "..", `${reqsList.outputPath}/${reqsList.outputFileName}`));
     });
 }
 
 function generateModulesOrSubModulesFromJson(
   object: any,
   outputPath: string,
+  outputFolderName: string,
   modulesOrSubModules: ModuleOrSubModule,
 ) {
-  const pathToFolder = (outputPath.split("/").slice(0, -1).join("/"));
-  const folderName = (outputPath.split("/").pop())?.split(".").shift();
 
   const objectKeys = Object.keys(object);
   const groupedObjectsByModules = objectKeys
@@ -81,18 +88,18 @@ function generateModulesOrSubModulesFromJson(
 
 
       if (!fs.existsSync(
-        resolve(__dirname, "..", `${pathToFolder}/${folderName}`))) {
-        fs.mkdirSync(resolve(__dirname, "..", `${pathToFolder}/${folderName}`));
+        resolve(__dirname, "..", `${outputPath}/${outputFolderName}`))) {
+        fs.mkdirSync(resolve(__dirname, "..", `${outputPath}/${outputFolderName}`));
       }
 
       if (!fs.existsSync(
-        resolve(__dirname, "..", `${pathToFolder}/${folderName}/${modulesOrSubModules}`))) {
-        fs.mkdirSync(resolve(__dirname, "..", `${pathToFolder}/${folderName}/${modulesOrSubModules}`));
+        resolve(__dirname, "..", `${outputPath}/${outputFolderName}/${modulesOrSubModules}`))) {
+        fs.mkdirSync(resolve(__dirname, "..", `${outputPath}/${outputFolderName}/${modulesOrSubModules}`));
       }
 
       fs.writeFileSync(
         resolve(__dirname, "..",
-          `${pathToFolder}/${folderName}/${modulesOrSubModules}/${key.toLowerCase().replace(/[" "/]/g, "_")}.json`),
+          `${outputPath}/${outputFolderName}/${modulesOrSubModules}/${key.toLowerCase().replace(/[" "/]/g, "_")}.json`),
         JSON.stringify(filteredObjectRequirements, null, 2), { encoding: "UTF-8" }
       );
     });
