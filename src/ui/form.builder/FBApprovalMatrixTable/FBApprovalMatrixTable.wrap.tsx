@@ -41,9 +41,10 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
     // MARK: @observer
     useObserver(() => {
       approvalData = approvalMatrixFieldState?.data as FBApprovalMatrixFieldData;
-      if (approvalData) {
-        approvalData.approvalMatrix = sortBy(approvalData.approvalMatrix, (x) => x.docType.acronym);
+      if (!approvalData) {
+        return;
       }
+      approvalData.approvalMatrix = sortBy(approvalData.approvalMatrix, (x) => x.docType.acronym);
     });
 
     return Component({
