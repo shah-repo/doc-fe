@@ -79,7 +79,7 @@ function processModuleOrSubModuleRequirementsJson(
 
   filesList.forEach((fileName) =>   {
     const fileContent = fs.readFileSync(resolve(__dirname, "../../",
-      `${reqsList.outputPath}/${reqsList.outputFileName}`)).toString();
+      `${reqsList.outputPath}/${reqsList.outputFolderName}/${moduleOrSubModule}/${fileName}`)).toString();
     const filePaths = compareRequirementsAndSelectGeneratedSpecJsons(reqsList, fileContent, filesWithData);
 
     if (!fs.existsSync(
