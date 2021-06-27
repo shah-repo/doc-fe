@@ -21,7 +21,7 @@ case "$ENV" in
   export CYPRESS_BE_URL="https://api.sandbox.enlil.io"
   export CYPRESS_FE_URL="https://sandbox.enlil.io"
   export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
-  export CYPRESS_SUPERADMIN_PASSWORD=$CY_SUPERADMIN_PASSWORD_SANDBOX
+  export CYPRESS_SUPERADMIN_PASSWORD="Tester123!sandbox"
   ;;
 "PROD") 
   export CYPRESS_BE_URL="https://api.enlil.io"
