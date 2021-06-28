@@ -2,7 +2,7 @@
 
 source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "CODEBUILD"
 ./scripts/cypress/wait.sh
-yarn install --frozen-lockfile
+#yarn install --frozen-lockfile
 ENLIL_DIRECTOR_HOST="director" ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
 ./scripts/cypress/utils/generate_requirements_json_file.sh
 ./scripts/cypress/utils/make_results_dir_pipeline.sh
