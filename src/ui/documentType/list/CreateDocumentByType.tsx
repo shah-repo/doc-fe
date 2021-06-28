@@ -152,7 +152,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     setErrorMessage(undefined);
-  }, [documentTypeId]);
+  }, [categoryName, documentTypeId]);
 
   const idAsync = useAsync<DocumentTypeById>({
     onSuccess: () => {
