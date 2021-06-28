@@ -157,6 +157,7 @@ context("Record inline Flow", () => {
     });
 
     it("Click on create new and chose 'Legal Record'", () => {
+      SystemRequirement("REQ-2760");
       cy.recCreateRecordFromLandingPage();
       cy.recSelectRecordFormFromMultiSelect({ recordType: "Legal Record" });
     });
@@ -247,7 +248,7 @@ context("Record inline Flow", () => {
         });
 
         it("Verify system asks for another approval afer changing section", () => {
-          SystemRequirement("REQ-1050", "REQ-0990", "REQ-1100");
+          SystemRequirement("REQ-1050", "REQ-0990", "REQ-1100", "REQ-1090");
           cy.get("[data-cy^=\"form.builder.approval.pending\"]")
             .first()
             .should("have.text", "Inline approval pending");
@@ -317,7 +318,7 @@ context("Record inline Flow", () => {
         });
 
         it("Check if there is only one record in list", () => {
-          SystemRequirement("REQ-1110");
+          SystemRequirement("REQ-1110", "REQ-2790");
           cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         });
 

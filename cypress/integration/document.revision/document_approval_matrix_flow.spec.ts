@@ -599,6 +599,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`Mark 'Approvals Administrative' for ${individualRole}`, () => {
+      SystemRequirement("REQ-0660");
       cy.drAMCheckRole({ stage: "admStage", index: 2 });
     });
 
