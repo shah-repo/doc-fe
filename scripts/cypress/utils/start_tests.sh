@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "CODEBUILD"
+CYPRESS_INTEGRATION_FOLDER="cypress/integration/document.revision" source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "CODEBUILD"
 ./scripts/cypress/wait.sh
 #yarn install --frozen-lockfile
 ENLIL_DIRECTOR_HOST="director" ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh

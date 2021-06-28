@@ -49,7 +49,8 @@ phases:
   post_build:
     commands:
       # - ls
-      # - docker-compose down
+      - docker logs doc-fe_enlil_cypress_server_1 &> ./test-results/some_ci_build_id/server_logs.txt
+      - docker logs doc-fe_enlil_cypress_worker_1 &> ./test-results/some_ci_build_id/worker_logs.txt
       # - command
 reports:
   report-name-or-arn:
