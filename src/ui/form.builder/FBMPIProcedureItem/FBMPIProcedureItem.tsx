@@ -43,15 +43,13 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   isPreview,
   disabled,
   loading,
-  multiplier = 1,
   type,
   value = [],
   name,
   isSelectVisible,
-  usedDocumentsInLHRS,
-  isDocumentMPI,
   defaultValue,
   redlineActive,
+  isReleased,
 }) => (
   <FBProvider {...{ dialogState, mpiProcedureState }}>
     <FBDialog />
@@ -170,6 +168,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                       size="small"
                                       style={{ fontSize: 11 }}
                                       onClick={() => handleSelectionDelete?.(selection.refId)}
+                                      disabled={isReleased}
                                     >
                                       <HighlightOffIcon fontSize="inherit" />
                                     </IconButton>
