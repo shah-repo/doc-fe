@@ -519,7 +519,7 @@ pipelines:
       - step: *SLACK_CYPRESS_REPORT_SCHEDULED_PROD
     scheduled-cypress-prod2:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_PROD2
-      - step: *SCHEDULED_CYPRESS_PROD2
+      - step: *SLACK_CYPRESS_REPORT_SCHEDULED_PROD2
 
   pull-requests:
     "**":
