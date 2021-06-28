@@ -16,8 +16,6 @@ services:
       - "./:/opt/app/tests"
     networks:
       cypress_network:
-    depends_on:
-      - enlil_fe_server
       
 networks:
   cypress_network:
