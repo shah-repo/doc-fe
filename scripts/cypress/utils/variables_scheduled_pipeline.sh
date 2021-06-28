@@ -21,7 +21,7 @@ case "$ENV" in
   export CYPRESS_BE_URL="https://api.sandbox.enlil.io"
   export CYPRESS_FE_URL="https://sandbox.enlil.io"
   export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
-  export CYPRESS_SUPERADMIN_PASSWORD="Tester123!sandbox"
+  export CYPRESS_SUPERADMIN_PASSWORD=$CY_SUPERADMIN_PASSWORD_SANDBOX
   ;;
 "PROD") 
   export CYPRESS_BE_URL="https://api.enlil.io"
@@ -52,7 +52,7 @@ export CYPRESS_KONFIG_ENV="development"
 export NODE_ENV="development"
 export CYPRESS_BROWSER="chrome"
 export NUMBER_OF_WORKERS="3"
-export CYPRESS_INTEGRATION_FOLDER="cypress/integration"
+export CYPRESS_INTEGRATION_FOLDER="cypress/integration/test"
 export CYPRESS_SKIP_ON_RUN_FAILURE="true"
 export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH="false"
 export CYPRESS_SCREENSHOT_OF_RUN_FAILURE="true"

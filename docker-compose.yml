@@ -16,6 +16,127 @@ services:
       - "./:/opt/app/tests"
     networks:
       cypress_network:
+    depends_on:
+      - enlil_fe_server
+
+  enlil_fe_server:
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_90_cy_7_3_0_aws
+    command: ./scripts/cypress/run_webpack_server.sh
+    working_dir: /opt/app/fe
+    ports:
+      - 5602:5602
+    volumes:
+      - "./:/opt/app/fe"
+    networks:
+      cypress_network:
+        aliases: 
+          - frontend
+
+  enlil_cypress_postgres:
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:enlil_cypress_postgres
+    command: postgres -c logging_collector=off
+    ports:
+      - 5604:5432
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGDATA=/var/volume/db-files
+    volumes:
+      - enlil_cypress_postgres_tmpfs_volume:/var/volume
+    networks:
+      cypress_network:
+        aliases: 
+          - postgres
+          
+  enlil_cypress_validators:
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:enlil_cypress_validators_978ca628
+    ports:
+      - 5603:4215
+    expose:
+      - 4215
+    networks:
+      cypress_network:
+        aliases: 
+          - validators
+    environment:
+      - PORT=4215
+
+  enlil_cypress_migration:
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:enlil_cypress_migration_21.6.2
+    networks:
+      - cypress_network
+    depends_on:
+      - enlil_cypress_postgres
+      - enlil_cypress_redis
+    expose:
+      - 8080
+    environment:
+      *BE_ENV_VARS
+    env_file:
+      - be_env.env
+
+  enlil_cypress_worker:
+    <<: *ENLIL_CYPRESS_WORKER_CONFIG
+    ports:
+      - 5609:4219
+    networks:
+      cypress_network:
+        aliases: 
+          - worker
+
+  enlil_cypress_worker_replicas:
+    <<: *ENLIL_CYPRESS_WORKER_CONFIG
+
+  enlil_cypress_redis:
+    image: redis:4.0.14-alpine
+    ports:
+      - 5605:6379
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
+    volumes:
+      - enlil_cypress_redis_volume:/data
+    networks:
+      cypress_network:
+        aliases: 
+          - enlil_cypress_redis
+
+  enlil_cypress_server:
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:enlil_cypress_server_21.6.2
+    networks:
+      - cypress_network
+    depends_on:
+      - enlil_cypress_postgres
+      - enlil_cypress_redis
+    expose:
+      - 4211
+    environment:
+      *BE_ENV_VARS
+    env_file:
+      - be_env.env
+
+  enlil_cypress_haproxy:
+    image: dockercloud/haproxy
+    networks:
+      cypress_network:
+        aliases: 
+          - backend
+    ports:
+      - 5601:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment: 
+      - BALANCE=leastconn
+    links:
+      - enlil_cypress_server
+
+volumes:
+  enlil_cypress_postgres_tmpfs_volume:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+  enlil_cypress_redis_volume:
       
 networks:
   cypress_network:
