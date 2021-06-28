@@ -76,7 +76,7 @@ definitions:
             aws:
               access-key: $AWS_ACCESS_KEY_ID
               secret-key: $AWS_SECRET_ACCESS_KEY
-          max-time: 200
+          max-time: 120
           size: 2x
           services:
             - sorry-cypress-director
