@@ -21,13 +21,19 @@ case "$ENV" in
   export CYPRESS_BE_URL="https://api.sandbox.enlil.io"
   export CYPRESS_FE_URL="https://sandbox.enlil.io"
   export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
-  export CYPRESS_SUPERADMIN_PASSWORD="Tester123!sandbox"
+  export CYPRESS_SUPERADMIN_PASSWORD=$CY_SUPERADMIN_PASSWORD_SANDBOX
   ;;
 "PROD") 
   export CYPRESS_BE_URL="https://api.enlil.io"
   export CYPRESS_FE_URL="https://enlil.io"
   export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
   export CYPRESS_SUPERADMIN_PASSWORD=$CY_SUPERADMIN_PASSWORD_PROD
+  ;;
+"CODEBUILD")  
+  export CYPRESS_BE_URL="http://backend:80"
+  export CYPRESS_FE_URL="http://frontend:5602"
+  export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
+  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!"
   ;;
 *) 
   echo "unknwon environment, exiting"
