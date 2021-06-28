@@ -31,7 +31,7 @@ phases:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   pre_build:
     commands:
-      - docker-compose up -d #--force-recreate because local test run
+      - docker-compose up #--force-recreate because local test run
   build:
     commands:
       - docker ps
