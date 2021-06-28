@@ -337,7 +337,7 @@ context("Check Document History", () => {
 
   context("Check document history", () => {
     it("Open history drawer", () => {
-      SystemRequirement("REQ-0360");
+      SystemRequirement("REQ-0360", "REQ-2670");
       cy.drSelectHistoryTab();
     });
 
