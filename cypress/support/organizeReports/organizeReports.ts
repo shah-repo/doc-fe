@@ -12,26 +12,11 @@ interface FilesWithData {
 
 type ModuleOrSubModule = "Module" | "Sub-Module";
 // const REQ_HEADER_TEXT = "REQ #";
-const REQUIREMENTS_LISTS: RequirementsReadWriteConfig[] = [];
-const RESULTS_FOLDER = "results";
 const REGEX_TO_FIND_REQS = /([R])([E])([Q])([-])([0-9]+)/g;
 
-if (REQUIREMENTS_CONFIG_RUN.extractGeneralCSV) {
-  REQUIREMENTS_LISTS.push(...REQUIREMENTS_CONFIG_RUN.generalRequirements);
-}
+const REQUIREMENTS_LISTS = selectRequirementsToProcess();
 
-if (REQUIREMENTS_CONFIG_RUN.extractSpecificCSV) {
-  REQUIREMENTS_LISTS.push(...REQUIREMENTS_CONFIG_RUN.specificRequirements);
-}
-
-const subFolders = fs.readdirSync(resolve(__dirname, "../../..", RESULTS_FOLDER));
-const lastFolder = subFolders.reduce((a, b) => new Date(a) > new Date(b) ? a : b);
-
-if (!lastFolder) {
-  throw new Error("Spec Reports folder not found!");
-}
-
-const jsonFolderPath = `${RESULTS_FOLDER}/${lastFolder}/json`;
+const jsonFolderPath =  findLastGeneratedReportsJsonFolder();
 const jsonFilesInLastFolder = fs.readdirSync((resolve(__dirname, "../../..", jsonFolderPath)));
 const generatedSpecsFiles = jsonFilesInLastFolder.filter((file) => file.startsWith("generated_specs"));
 
@@ -117,4 +102,30 @@ function generateReport(filesToJoin, output) {
   merge(options).then((report) => {
     fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), { encoding: "UTF-8" });
   });
+}
+
+
+export function findLastGeneratedReportsJsonFolder() {
+  const RESULTS_FOLDER = "results";
+  const subFolders = fs.readdirSync(resolve(__dirname, "../../..", RESULTS_FOLDER));
+  const lastFolder = subFolders.reduce((a, b) => new Date(a) > new Date(b) ? a : b);
+
+  if (!lastFolder) {
+    throw new Error("Spec Reports folder not found!");
+  }
+
+  return `${RESULTS_FOLDER}/${lastFolder}/json`;
+}
+
+export function selectRequirementsToProcess() {
+  const REQUIREMENTS_LISTS: RequirementsReadWriteConfig[] = [];
+
+  if (REQUIREMENTS_CONFIG_RUN.extractGeneralCSV) {
+    REQUIREMENTS_LISTS.push(...REQUIREMENTS_CONFIG_RUN.generalRequirements);
+  }
+  if (REQUIREMENTS_CONFIG_RUN.extractSpecificCSV) {
+    REQUIREMENTS_LISTS.push(...REQUIREMENTS_CONFIG_RUN.specificRequirements);
+  }
+
+  return REQUIREMENTS_LISTS;
 }
