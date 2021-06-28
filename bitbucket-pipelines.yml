@@ -137,6 +137,17 @@ definitions:
             - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
             - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
+    - step: &SCHEDULED_CYPRESS_PROD2
+          <<: *COMMON_RUN_CYPRESS
+          script:
+            - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "PROD2"
+            - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+            - yarn install --frozen-lockfile
+            - ./scripts/cypress/utils/generate_requirements_json_file.sh
+            - ./scripts/cypress/utils/make_results_dir_pipeline.sh
+            - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
+            - ./scripts/cypress/utils/merge_reports_pipeline.sh
+
     - step: &RUN_CYPRESS_VIDEO
         <<: *COMMON_RUN_CYPRESS
         max-time: 100
@@ -508,7 +519,7 @@ pipelines:
       - step: *SLACK_CYPRESS_REPORT_SCHEDULED_PROD
     scheduled-cypress-prod2:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_PROD2
-      - step: *SLACK_CYPRESS_REPORT_SCHEDULED_SANDBOX
+      - step: *SCHEDULED_CYPRESS_PROD2
 
   pull-requests:
     "**":
