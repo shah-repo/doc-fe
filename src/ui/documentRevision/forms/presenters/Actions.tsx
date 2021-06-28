@@ -184,7 +184,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       <SubmitButton
         asyncState={asyncState}
         label={isDisabled ?
-          `common.save.${values.document?.documentType?.documentTypeAcronym}` :
+          "common.save" :
           "navigation.createDocument"
         }
         onClick={onFormClick}
