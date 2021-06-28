@@ -532,6 +532,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Confirm password", () => {
+      SystemRequirement("REQ-0910");
       cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
       cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove, () => {
         cy.get(`[data-cy="passwordConfirm"]`).click();
@@ -639,7 +640,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify Document status is 'Released'", () => {
-      SystemRequirement("REQ-0870");
+      SystemRequirement("REQ-0870", "REQ-2700");
       cy.arVerifyStatus({ status: "Released" });
     });
   });

@@ -305,12 +305,13 @@ context("Approval request form", () => {
       cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Approved" });
     });
 
-    it("Close AR", () => {
+    it("Close AR and confirm pop-up for effective date", () => {
+      SystemRequirement("REQ-2720");
       cy.arCloseAR();
     });
 
     it("Check approval request status is 'Closed'", () => {
-      SystemRequirement("REQ-0020", "REQ-0730");
+      SystemRequirement("REQ-0020", "REQ-0730", "REQ-2710");
       cy.arVerifyStatus({ status: "Closed" });
     });
 

@@ -12,8 +12,8 @@ let multipleCompanies;
 
 context("Document sequential numbering test", () => {
   context("[API]Prepare company", () => {
-    it("[API]Creates company", (done: any) => {
-      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440", "REQ-0460");
+    it("[API]Creates company - document types, start number, prefix of document", (done: any) => {
+      SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440", "REQ-0460", "REQ-3610");
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
