@@ -5,7 +5,7 @@ import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
-import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentForm, checkIsDocumentMPI } from "../../documentRevision/helpers/checkDocumentGroup";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
@@ -32,13 +32,14 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     isSelectVisible,
     redlineActive,
     isDocumentMPI,
+    isReleased,
     ...props
   }: T) => {
 
     // MARK: @config
     const { mpiProcedureState, workspaceState, formState } = FB.useStores();
     const { document } = workspaceState || {};
-    const { version } = document || {};
+    const { version, status } = document || {};
     const { documentType } = document?.document || {};
     const isDocumentForm = checkIsDocumentForm(documentType?.groupOptions);
     isDocumentMPI = checkIsDocumentMPI(documentType?.groupOptions);
@@ -58,6 +59,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     dialogState = FB.useRef(FBDialogState);
     multiplier = formState?.getFieldValue("lhrs-start-quantity") || 1;
     isPreview = isPreview && workspaceState?.mode !== "formPreview";
+    isReleased = status === DocumentRevisionStatus.Released || status === DocumentRevisionStatus.Deprecated;
     // Have to use isDocumentForm instead of isOutput because od MPI
     // ENC-7319
     isSelectVisible = (!isDocumentForm &&
@@ -215,6 +217,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       usedDocumentsInLHRS,
       isDocumentMPI,
       redlineActive,
+      isReleased,
     });
   };
 
