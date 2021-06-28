@@ -29,6 +29,12 @@ case "$ENV" in
   export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
   export CYPRESS_SUPERADMIN_PASSWORD=$CY_SUPERADMIN_PASSWORD_PROD
   ;;
+"PROD2")  
+  export CYPRESS_BE_URL="https://api.prod2.enlil.io"
+  export CYPRESS_FE_URL="https://prod2.enlil.io"
+  export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
+  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!"
+  ;;
 "CODEBUILD")  
   export CYPRESS_BE_URL="http://backend:80"
   export CYPRESS_FE_URL="http://frontend:5602"

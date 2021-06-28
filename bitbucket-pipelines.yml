@@ -200,6 +200,21 @@ definitions:
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
           - ./scripts/cypress/utils/slack_test_report_upload.sh
 
+    - step: &SLACK_CYPRESS_REPORT_SCHEDULED_PROD2
+        <<: *COMMON_RUN_CYPRESS
+        name: Cypress upload reports
+        max-time: 15
+        size: 1x
+        script:
+          - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "PROD2"
+          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+          - yarn install --frozen-lockfile
+          - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
+          - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
+          - ./scripts/cypress/utils/merge_reports_pipeline.sh
+          - ./scripts/cypress/utils/slack_test_report_upload.sh
+
     - step: &SLACK_CYPRESS_REPORT_SCHEDULED_PROD
         <<: *COMMON_RUN_CYPRESS
         name: Cypress upload reports
@@ -287,6 +302,12 @@ definitions:
         - step: 
             <<:  *SCHEDULED_CYPRESS_SANDBOX
             name: Cypress specs 1/1
+
+    - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_PROD2
+        - step: 
+            <<:  *SCHEDULED_CYPRESS_PROD2
+            name: Cypress specs 1/1
+
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_PROD
         - step: 
             <<:  *SCHEDULED_CYPRESS_PROD
@@ -485,6 +506,9 @@ pipelines:
     scheduled-cypress-prod:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_PROD
       - step: *SLACK_CYPRESS_REPORT_SCHEDULED_PROD
+    scheduled-cypress-prod2:
+      - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_PROD2
+      - step: *SLACK_CYPRESS_REPORT_SCHEDULED_SANDBOX
 
   pull-requests:
     "**":
