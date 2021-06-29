@@ -1,6 +1,5 @@
 import fs from "fs";
 import { merge } from "mochawesome-merge";
-import marge from "mochawesome-report-generator";
 import { resolve } from "path";
 import { RequirementsReadWriteConfig, REQUIREMENTS_CONFIG_RUN } from "../../requirements/configRequirementsRun";
 
@@ -110,20 +109,20 @@ function compareRequirementsAndSelectGeneratedSpecJsons(
 
 async function generateReport(filesToJoin, output, outputFolderPath, fileName) {
   const options = { files: filesToJoin };
-  merge(options).then((report) => {
-    fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), { encoding: "UTF-8" });
-  });
+  // merge(options).then((report) => {
+  //   fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), { encoding: "UTF-8" });
+  // });
 
   const report = await merge(options);
   fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), { encoding: "UTF-8" });
 
-  await marge.create(report, {
-    reportFilename: `${fileName.replace("json", "html")}`,
-    assetsDir: `${outputFolderPath}/assets`,
-    reportDir: `${outputFolderPath}`,
-    cdn: true,
-    overwrite: true,
-  });
+  // await marge.create(report, {
+  //   reportFilename: `${fileName.replace("json", "html")}`,
+  //   assetsDir: `${outputFolderPath}/assets`,
+  //   reportDir: `${outputFolderPath}`,
+  //   cdn: true,
+  //   overwrite: true,
+  // });
 }
 
 

@@ -87,6 +87,7 @@ function collectTests(suite: CyReportSuite) {
 
 
 function addRequirementsToReports(mergedJson: any, requirementsJson: any, fileName: string) {
+  console.log({ fileName });
   const tests: CyReportTest[] = [];
   mergedJson.results.forEach((suite) => {
     tests.push(...collectTests(suite as unknown as CyReportSuite));
@@ -112,11 +113,8 @@ function addRequirementsToReports(mergedJson: any, requirementsJson: any, fileNa
       }
 
       (context.value.match(/REQ-[0-9]+/gm) || []).forEach((req) => {
-        if (!requirementsJson[req]) {
-          return;
-        }
         requirementsJson[req].testCases =
-        requirementsJson[req]?.testCases || [];
+        requirementsJson[req].testCases || [];
         requirementsJson[req].testCases.push({
           fullTitle: testCase.fullTitle,
           passes: testCase.pass,
