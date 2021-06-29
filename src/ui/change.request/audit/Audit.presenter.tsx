@@ -1,7 +1,6 @@
 import { Box, List } from "@material-ui/core";
-import { isEmpty, orderBy } from "lodash";
+import { orderBy } from "lodash";
 import React from "react";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { Approval, ApprovalStatus } from "../../../state/ducks/common/types";
 import AuditFactory from "../../components/AuditFactory";
@@ -55,15 +54,13 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         const isRemovingApproverAction = change.field === "approvals.status" &&
         change.nextValue === ApprovalStatus.Abandoned;
         if (isRemovingApproverAction) {
-          const removedApproverByDate = approvals.filter((e) =>
-            getFormattedDateString(e.updatedAt, MomentFormats.DateTimeSeconds) ===
-            getFormattedDateString(change.timestamp, MomentFormats.DateTimeSeconds));
-          if (!isEmpty(removedApproverByDate)) {
+          const removedApproverById = approvals.find(({ id }) => id === change.relatedEntity?.id );
+          if (removedApproverById) {
             change = {
               ...change,
               approvalStatus: change.nextValue as string,
               nextValue: {
-                ...removedApproverByDate[0].approver,
+                ...removedApproverById.approver,
               },
             };
           }
