@@ -8,7 +8,8 @@ import {
   FBCheckboxGroup,
   FBEditorState,
   FBInputProps,
-  FBInputType, FBSchemaProps
+  FBInputType,
+  FBSchemaProps,
 } from "..";
 import FBApprovalMatrixField from "../FBApprovalMatrixField/FBApprovalMatrixField";
 import FBApprovals from "../FBApprovals/FBApprovals";
