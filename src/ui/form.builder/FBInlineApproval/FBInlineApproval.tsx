@@ -6,7 +6,7 @@ import { FBApprovalAudit, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInl
 import Colors from "../../layout/theme/utils/colors";
 import { withFBInlineApproval } from "./FBInlineApproval.wrap";
 
-const FBInlinApprovalComponent: React.FunctionComponent<FBInlineApprovalProps> = ({
+const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
   onApproveClick,
   requestAllApprovals,
   label = "form.builder.approvers",
@@ -109,8 +109,6 @@ const FBInlinApprovalComponent: React.FunctionComponent<FBInlineApprovalProps> =
     )}</>;
 
 
-const FBInlineApprovalChild = withFBInlineApproval(FBInlinApprovalComponent);
-
 const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   dialogState,
   name,
@@ -128,4 +126,4 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   </FBProvider>
 );
 
-export default FBInlineApproval;
+export default withFBInlineApproval(FBInlineApproval);

@@ -24,8 +24,11 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   <Table className={classes?.root}>
     <TableHead>
       <TableRow>
-        <FBTableCell colSpan={8} label="form.builder.details" />
-        <FBTableCell colSpan={3} label="form.builder.field.ext.amount" align="right" />
+        <FBTableCell
+          colSpan={8}
+          label={mode === "form" ? "form.builder.details" : "form.builder.select.line.to.receive.against"}
+        />
+        <FBTableCell colSpan={3} label={mode === "form" ? "form.builder.field.ext.amount" : ""} align="right" />
       </TableRow>
     </TableHead>
     <TableBody>
