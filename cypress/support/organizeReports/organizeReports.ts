@@ -1,5 +1,6 @@
 import fs from "fs";
 import { merge } from "mochawesome-merge";
+import marge from "mochawesome-report-generator";
 import { resolve } from "path";
 import { RequirementsReadWriteConfig, REQUIREMENTS_CONFIG_RUN } from "../../requirements/configRequirementsRun";
 
@@ -37,32 +38,37 @@ REQUIREMENTS_LISTS.forEach((reqsList) => {
   }
 });
 
-function processReportsSeparation(
+async function processReportsSeparation(
   reqsList: RequirementsReadWriteConfig,
   filesWithData: FilesWithData,
   jsonFolderPath: string) {
 
-  processCSVRequirementsJson(reqsList, filesWithData, jsonFolderPath);
-  processModuleOrSubModuleRequirementsJson(reqsList, filesWithData, "Module");
-  processModuleOrSubModuleRequirementsJson(reqsList, filesWithData, "Sub-Module");
+  await processCSVRequirementsJson(reqsList, filesWithData, jsonFolderPath);
+  await processModuleOrSubModuleRequirementsJson(reqsList, filesWithData, "Module");
+  await processModuleOrSubModuleRequirementsJson(reqsList, filesWithData, "Sub-Module");
 }
 
-function processCSVRequirementsJson(
+async function processCSVRequirementsJson(
   reqsList: RequirementsReadWriteConfig, filesWithData: FilesWithData, jsonFolderPath: string) {
   const fileContent = fs.readFileSync(resolve(__dirname, "../../",
     `${reqsList.outputPath}/${reqsList.outputFileName}`)).toString();
   const filePaths = compareRequirementsAndSelectGeneratedSpecJsons(reqsList, fileContent, filesWithData);
-  generateReport(filePaths, `${jsonFolderPath}/${reqsList.outputFolderName}/${reqsList.outputFileName}`);
+  await generateReport(
+    filePaths,
+    `${jsonFolderPath}/${reqsList.outputFolderName}/${reqsList.outputFileName}`,
+    `${jsonFolderPath}/${reqsList.outputFolderName}`,
+    reqsList.outputFileName,
+  );
 }
 
-function processModuleOrSubModuleRequirementsJson(
+async function processModuleOrSubModuleRequirementsJson(
   reqsList: RequirementsReadWriteConfig,
   filesWithData: FilesWithData,
   moduleOrSubModule: ModuleOrSubModule) {
   const filesList = fs.readdirSync(resolve(__dirname, "../../",
     `${reqsList.outputPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`));
 
-  filesList.forEach((fileName) =>   {
+  await Promise.all(filesList.map((fileName) =>   {
     const fileContent = fs.readFileSync(resolve(__dirname, "../../",
       `${reqsList.outputPath}/${reqsList.outputFolderName}/${moduleOrSubModule}/${fileName}`)).toString();
     const filePaths = compareRequirementsAndSelectGeneratedSpecJsons(reqsList, fileContent, filesWithData);
@@ -72,8 +78,13 @@ function processModuleOrSubModuleRequirementsJson(
       fs.mkdirSync(
         resolve(__dirname, "../../..", `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`));
     }
-    generateReport(filePaths, `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}/${fileName}`);
-  });
+    generateReport(
+      filePaths,
+      `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}/${fileName}`,
+      `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`,
+      fileName,
+    );
+  }));
 }
 
 function compareRequirementsAndSelectGeneratedSpecJsons(
@@ -97,10 +108,21 @@ function compareRequirementsAndSelectGeneratedSpecJsons(
     `./${jsonFolderPath}/${fileName}`);
 }
 
-function generateReport(filesToJoin, output) {
+async function generateReport(filesToJoin, output, outputFolderPath, fileName) {
   const options = { files: filesToJoin };
   merge(options).then((report) => {
     fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), { encoding: "UTF-8" });
+  });
+
+  const report = await merge(options);
+  fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), { encoding: "UTF-8" });
+
+  await marge.create(report, {
+    reportFilename: `${fileName.replace("json", "html")}`,
+    assetsDir: `${outputFolderPath}/assets`,
+    reportDir: `${outputFolderPath}`,
+    cdn: true,
+    overwrite: true,
   });
 }
 
