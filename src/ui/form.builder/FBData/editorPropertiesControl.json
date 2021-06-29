@@ -165,14 +165,6 @@
     "copyableValue",
     "includeNotes"
   ],
-  "testRequirement": [
-    "reviseDisabled",
-    "includeInInspection",
-    "includeInFaiInspection",
-    "deleteDisabled",
-    "copyableValue",
-    "includeNotes"
-  ],
   "requestapproval": [
     "reviseDisabled",
     "includeInInspection",
@@ -190,14 +182,6 @@
     "includeNotes"
   ],
   "createlabel": [
-    "reviseDisabled",
-    "includeInInspection",
-    "includeInFaiInspection",
-    "deleteDisabled",
-    "copyableValue",
-    "includeNotes"
-  ],
-  "selectrequirement": [
     "reviseDisabled",
     "includeInInspection",
     "includeInFaiInspection",
