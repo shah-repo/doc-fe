@@ -303,6 +303,7 @@ context("Document Access Rights", () => {
     });
 
     it("User is restricted.", () => {
+      SystemRequirement("REQ-2650");
       cy.drRequestAccessVisibility({ isVisible: true });
     });
   });
