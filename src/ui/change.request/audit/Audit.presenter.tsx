@@ -54,13 +54,13 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         const isRemovingApproverAction = change.field === "approvals.status" &&
         change.nextValue === ApprovalStatus.Abandoned;
         if (isRemovingApproverAction) {
-          const removedApproverByDate = approvals.find(({ id }) => id === change.relatedEntity?.id );
-          if (removedApproverByDate) {
+          const removedApproverById = approvals.find(({ id }) => id === change.relatedEntity?.id );
+          if (removedApproverById) {
             change = {
               ...change,
               approvalStatus: change.nextValue as string,
               nextValue: {
-                ...removedApproverByDate.approver,
+                ...removedApproverById.approver,
               },
             };
           }
