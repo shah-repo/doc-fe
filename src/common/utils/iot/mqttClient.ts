@@ -151,7 +151,7 @@ export class IotService {
 
     creatingClient = true;
     this.mqttClientInstance = await new AWSMqttClient(clientConfig);
-
+    /*
     this.mqttClientInstance.on("error", (error) => {
     });
 
@@ -165,7 +165,7 @@ export class IotService {
     });
 
     this.mqttClientInstance.on("end", () => {
-    });
+    }); */
 
     this.mqttClientInstance.on("connect", (connack) => {
       const retry = { ...retrySubscriptions };
