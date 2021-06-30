@@ -132,7 +132,14 @@ function connectRequirementsWithCypressGeneratedJson(
     .flat(3)
     .filter((it) => it);
 
-  jsonGeneratedReqs.results[0].suites[0].tests = jsonResults;
+  jsonGeneratedReqs.results[0].suites[0] = {
+    ...jsonGeneratedReqs.results[0].suites[0],
+    tests: jsonResults,
+    passes: jsonResults.filter((test) => test.pass).map((test) => test.uuid),
+    pending: jsonResults.filter((test) => test.pending).map((test) => test.uuid),
+    failures: jsonResults.filter((test) => test.fail).map((test) => test.uuid),
+    skipped: jsonResults.filter((test) => test.skipped).map((test) => test.uuid),
+  };
 
   fs.writeFileSync(resolve(__dirname, "../../..", pathToFile),
     JSON.stringify(jsonGeneratedReqs, null, 2), fileWriteEncoding);
