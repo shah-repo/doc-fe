@@ -108,9 +108,15 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       mpiProcedureState?.setPartsSelected(partsSelected);
     };
 
+    function onClose() {
+      const lockData = formState?.locked.get(`${name}.${type}`);
+      formState?.expireLockedFields(lockData);
+    }
+
     // MARK: @methods
     onClick = (part?: FBProcedureItemConfig) => {
       dialogState?.config({
+        onClose,
         open: true,
         title: {
           locale: "form.builder.action.mode",
