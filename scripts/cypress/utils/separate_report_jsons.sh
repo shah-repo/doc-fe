@@ -1,1 +1,1 @@
-yarn ts-node -O '{"module": "commonjs"}' cypress/support/organizeReports/organizeReports.ts
+# yarn ts-node -O '{"module": "commonjs"}' cypress/support/organizeReports/organizeReports.ts

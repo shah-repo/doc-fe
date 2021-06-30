@@ -81,8 +81,7 @@ async function processModuleOrSubModuleRequirementsJson(
       filePaths,
       `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}/${fileName}`,
       `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`,
-      fileName,
-    );
+      fileName);
   }));
 }
 
@@ -109,10 +108,6 @@ function compareRequirementsAndSelectGeneratedSpecJsons(
 
 async function generateReport(filesToJoin, output, outputFolderPath, fileName) {
   const options = { files: filesToJoin };
-  // merge(options).then((report) => {
-  //   fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), { encoding: "UTF-8" });
-  // });
-
   const report = await merge(options);
   fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), { encoding: "UTF-8" });
 
@@ -126,7 +121,7 @@ async function generateReport(filesToJoin, output, outputFolderPath, fileName) {
 }
 
 
-export function findLastGeneratedReportsJsonFolder() {
+function findLastGeneratedReportsJsonFolder() {
   const RESULTS_FOLDER = "results";
   const subFolders = fs.readdirSync(resolve(__dirname, "../../..", RESULTS_FOLDER));
   const lastFolder = subFolders.reduce((a, b) => new Date(a) > new Date(b) ? a : b);
@@ -138,7 +133,7 @@ export function findLastGeneratedReportsJsonFolder() {
   return `${RESULTS_FOLDER}/${lastFolder}/json`;
 }
 
-export function selectRequirementsToProcess() {
+function selectRequirementsToProcess() {
   const REQUIREMENTS_LISTS: RequirementsReadWriteConfig[] = [];
 
   if (REQUIREMENTS_CONFIG_RUN.extractGeneralCSV) {

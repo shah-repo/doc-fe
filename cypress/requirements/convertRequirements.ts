@@ -1,7 +1,6 @@
 import csv from "csvtojson";
 import fs from "fs";
 import { resolve } from "path";
-import { selectRequirementsToProcess } from "../support/organizeReports/organizeReports";
 import { RequirementsReadWriteConfig, REQUIREMENTS_CONFIG_RUN } from "./configRequirementsRun";
 type ModuleOrSubModule = "Module" | "Sub-Module";
 
@@ -99,3 +98,15 @@ function generateModulesOrSubModulesFromJson(
   }
 }
 
+function selectRequirementsToProcess() {
+  const REQUIREMENTS_LISTS: RequirementsReadWriteConfig[] = [];
+
+  if (REQUIREMENTS_CONFIG_RUN.extractGeneralCSV) {
+    REQUIREMENTS_LISTS.push(...REQUIREMENTS_CONFIG_RUN.generalRequirements);
+  }
+  if (REQUIREMENTS_CONFIG_RUN.extractSpecificCSV) {
+    REQUIREMENTS_LISTS.push(...REQUIREMENTS_CONFIG_RUN.specificRequirements);
+  }
+
+  return REQUIREMENTS_LISTS;
+}
