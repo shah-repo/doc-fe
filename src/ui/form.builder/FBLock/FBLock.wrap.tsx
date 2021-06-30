@@ -21,6 +21,7 @@ export const withFBLock = <T extends FBLockProps>(
       SMStore.get<FBLockBody, null>({
         url: lockedFieldsUrl,
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // MARK: @reactions

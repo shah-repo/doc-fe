@@ -38,6 +38,7 @@ export default class SM {
     if (!expression) { return; }
     useEffect(() => {
       xReaction<T>(expression, effect, opts);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
   }
 }

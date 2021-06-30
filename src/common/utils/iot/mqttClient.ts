@@ -91,7 +91,6 @@ export class IotService {
     const hasSubscriptions = !isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
     if (hasSubscriptions) {
       const topics = Object.keys(this.mqttClientInstance._resubscribeTopics);
-      console.log({ actin: "unsubscribeAll", topics });
 
       await this.mqttClientInstance.unsubscribe(topics);
       this.emitter = {};
@@ -154,35 +153,18 @@ export class IotService {
     this.mqttClientInstance = await new AWSMqttClient(clientConfig);
 
     this.mqttClientInstance.on("error", (error) => {
-      console.log({
-        action: "error",
-        error,
-      });
     });
 
     this.mqttClientInstance.on("offline", () => {
-      console.log({
-        action: "offline",
-      });
     });
 
     this.mqttClientInstance.on("disconnect", (packet) => {
-      console.log({
-        action: "disconnect",
-        packet,
-      });
     });
 
     this.mqttClientInstance.on("reconnect", () => {
-      console.log({
-        action: "reconnect",
-      });
     });
 
     this.mqttClientInstance.on("end", () => {
-      console.log({
-        action: "end",
-      });
     });
 
     this.mqttClientInstance.on("connect", (connack) => {
