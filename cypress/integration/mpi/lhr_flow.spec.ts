@@ -775,14 +775,11 @@ context("LHR flow", () => {
         });
 
         it("Add 'Material one' to step #1", () => {
-          cy.mpiAddMaterialToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
+          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
         });
 
         it("Add 'Material three' to step #1", () => {
-          cy.mpiAddMaterialToStep({
-            checkParameter: true, numbOfStep: 1,
-            material: "Material three", quntity: "3", unit: "Each",
-          });
+          cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material three" });
         });
 
 
@@ -805,7 +802,7 @@ context("LHR flow", () => {
         });
 
         it("Add 'Material two' to step #2", () => {
-          cy.mpiAddMaterialToStep({ numbOfStep: 2, material: "Material two", quntity: "5", unit: "Days" });
+          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 2, material: "Material two", quntity: "5", unit: "Day(s)" });
         });
 
         it("Add 'Equipment two' to step #2", () => {
@@ -864,7 +861,7 @@ context("LHR flow", () => {
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get("[data-cy=\"lhr-selected-part\"]").click();
+        cy.get("[data-cy=\"lhr-selected-part\"]").type("Part document");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
           cy.get("ul[role=listbox]>li").contains("Part document").click();
         });
