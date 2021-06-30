@@ -66,9 +66,11 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
     />
     }
     {/* Do not show cb when user is editing item */}
+    {/* Enforce parametrization only for materials */}
     {isDocumentMPI && !initialValues && <FBCheckbox
       name="LHRTparameter"
       label="form.builder.lhrt.parameter"
+      defaultChecked={type === FBProcedureItemType.materials}
       withState
     />}
     {type === FBProcedureItemType.materials && (

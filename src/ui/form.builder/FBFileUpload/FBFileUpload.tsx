@@ -4,30 +4,32 @@ import { FBFileField, FBFilesPresenter, FBFileUploadProps, FBInput, FBProvider }
 import FBFileFieldIcon from "../FBFileField/FBFileField.icon";
 import { withFBFileUpload } from "./FBFileUpload.wrap";
 
+const FileUploadChild: React.FunctionComponent<FBFileUploadProps> = ({
+  name, disabled, files, mode = "fileUpload", readonly = false,
+}) =>
+  <>
+    {!readonly && mode === "fileUpload" && (
+      <FBFileField key={`fb-attachment-field-${name}`} {...{ name, disabled }} />
+    )}
+    {mode === "fileUploadIcon" && <FBFileFieldIcon key={`fb-attachment-field-${name}`} {...{ name, disabled }} /> }
+    {mode === "fileUpload" && !isEmpty(files) && (
+      <FBFilesPresenter
+        boxProps={{ mt: 2 }}
+        {...{ files, disabled }}
+      />
+    )}
+  </>;
+
+
 const FBFileUpload: React.FunctionComponent<FBFileUploadProps> = ({
-  disabled,
-  name,
   fileUploadState,
-  readonly = false,
-  files,
-  mode = "fileUpload",
-  gutter,
   ...props
 }) =>  (
-  <FBInput {...props} {...{ name, gutter }} type="fileupload">
-    <FBProvider {...{ fileUploadState }}>
-      {!readonly && mode === "fileUpload" && (
-        <FBFileField key={`fb-attachment-field-${name}`} {...{ name, disabled }} />
-      )}
-      {mode === "fileUploadIcon" && <FBFileFieldIcon key={`fb-attachment-field-${name}`} {...{ name, disabled }} /> }
-      {mode === "fileUpload" && !isEmpty(files) && (
-        <FBFilesPresenter
-          boxProps={{ mt: 2 }}
-          {...{ files, disabled }}
-        />
-      )}
-    </FBProvider>
-  </FBInput>
+  <FBProvider {...{ fileUploadState }}>
+    <FBInput {...props} type="fileupload">
+      <FileUploadChild  {...props}  />
+    </FBInput>
+  </FBProvider>
 );
 
 export default withFBFileUpload(FBFileUpload);

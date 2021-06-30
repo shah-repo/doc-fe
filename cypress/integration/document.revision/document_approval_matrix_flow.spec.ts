@@ -599,6 +599,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`Mark 'Approvals Administrative' for ${individualRole}`, () => {
+      SystemRequirement("REQ-0660");
       cy.drAMCheckRole({ stage: "admStage", index: 2 });
     });
 
@@ -823,7 +824,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`find changed document type '${newDocTypeOne}'`, () => {
-    // SystemRequirement("REQ-0530");
+      SystemRequirement("REQ-0530");
       const exists = documentTypes.includes(newDocTypeOne);
       cy.wrap(exists).should("eq", true);
     });

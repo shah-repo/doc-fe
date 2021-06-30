@@ -114,6 +114,7 @@ export type FBInputProps =
     includeQRScan?: boolean;
     isInputOwner?: boolean;
     designDisabled?: boolean;
+
     /**
      * @cfg {Bool} Whether the field can be deleted in the output document.
      */
@@ -203,14 +204,11 @@ export type FBInputProps =
 
 export const OmitInputClones: FBInputType[] = [
   "section",
-  "fileupload",
   "documentRevisions",
   "approvers",
   "approval",
   "blanktplform",
-  "inlineapproval",
   "approvals",
-  "texteditor",
   "procedure",
   "mpiprocedure",
   "procedurediff",

@@ -87,7 +87,7 @@ context("Autosave on add and remove FB fields", () => {
     });
 
     it("Selects 'Form' document type from dropdown", () => {
-      // SystemRequirement("REQ-0490");
+      SystemRequirement("REQ-0490");
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 

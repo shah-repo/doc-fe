@@ -11,11 +11,15 @@ declare global {
     interface Chainable<Subject> {
       filterPO(params: {docId: string; version: string; poStatus: string;
         supplier: string; partNumber: string; amount: string; owner: string; issueDate: string; }): Chainable<Subject>;
+      filterRecords(params: {docId: string; revision: string; state: string;
+        title: string; owner: string; releasedDate: string; formId: string; }): Chainable<Subject>;
       filterCheckHeaderValues(...list: string[]): Chainable<Subject>;
       filterPOVersion(params: { version: string }): Chainable<Subject>;
       filterClear(): Chainable<Subject>;
       filterCheckIfPOFilterPersists(params: {docId: string; version: string; poStatus: string;
         supplier: string; partNumber: string; amount: string; owner: string; issueDate: string; }): Chainable<Subject>;
+      filterCheckIfRecordsFilterPersists(params: {docId: string; revision: string; state: string;
+        title: string; owner: string; releasedDate: string; formId: string; }): Chainable<Subject>;
       filterCheckNumberOfDisplayedRecords(params: { numberOfRecords: string }): Chainable<Subject>;
       filterGetFirstValueFromList(params: { value: string }): Chainable<Subject>;
       filterSupplierTitle(params: {name: string}): Chainable<Subject>;
@@ -59,6 +63,45 @@ Cypress.Commands.add("filterCheckIfPOFilterPersists", (params: {docId: string; v
   cy.get("[id=\"dynamicParams.precalc.po_amount\"]").should("have.value", params.amount);
   cy.get("[id=\"owner\"]").should("have.value", params.owner);
   cy.get("[id=\"dynamicParams.precalc.issueDate\"]").should("have.value", params.issueDate);
+});
+
+
+Cypress.Commands.add("filterRecords", (params: {docId: string; revision: string; state: string;
+  title: string; owner: string; releasedDate: string; formId: string; }) => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"docId\"]").type(params.docId);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"dynamicParams.precalc.revision\"]").type(params.revision);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"mui-component-select-displayStatus\"]").click();
+    cy.get("ul[role=listbox] > li").contains(params.state).click();
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"name\"]").type(params.title);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"owner\"]").type(params.owner);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"mui-component-select-releasedAfter\"]").click();
+    cy.get("ul[role=listbox] > li").contains(params.releasedDate).click();
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"dynamicParams.precalc.formDocId\"]").type(params.formId);
+  });
+});
+
+Cypress.Commands.add("filterCheckIfRecordsFilterPersists", (params: {docId: string; revision: string; state: string;
+  title: string; owner: string; releasedDate: string; formId: string; }) => {
+  cy.get("[id=\"docId\"]").should("have.value", params.docId);
+  cy.get("[id=\"dynamicParams.precalc.revision\"]").should("have.value", params.revision);
+  cy.get("[id=\"mui-component-select-displayStatus\"]").should("have.text", params.state);
+  cy.get("[id=\"name\"]").should("have.value", params.title);
+  cy.get("[id=\"owner\"]").should("have.value", params.owner);
+  cy.get("[id=\"mui-component-select-releasedAfter\"]").should("have.text", params.releasedDate);
+  cy.get("[id=\"dynamicParams.precalc.formDocId\"]").should("have.value", params.formId);
 });
 
 Cypress.Commands.add("filterPOVersion", (params: { version: string }) => {

@@ -178,6 +178,9 @@ export const withFBOnChange = <T extends FBInputProps>(
         ev.target.value = Math.abs(ev.target.value).toFixed(2).toString();
       }
       props.onBlur && props.onBlur(ev);
+      if (!name) { return; }
+      const lockData = formState?.locked.get(name);
+      formState?.expireLockedFields(lockData);
       if (type && FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);
       }

@@ -2,6 +2,7 @@ import { filter, find, first, isEmpty, keyBy, lowerCase, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormFilterType, FBProcedureFormProps, FBProcedureFormState, FBProcedureItemConfig, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
@@ -49,6 +50,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     const isDocumentMPI = checkIsDocumentMPI(workspaceState?.document?.document.documentType.groupOptions);
     const isDocumentMPIOutput = checkIsDocumentMPIOutput(workspaceState?.document?.document.documentType.groupOptions);
     const isRedlineActive = useSelector(companySelectors.getRedlineActive);
+    const [isDisabled, setisDisabled] = useState(true);
 
     const schemaItem = workspaceState?.getSchemaItemAt(lhrStepIndex);
     const config: Partial<Record<keyof typeof FBProcedureItemType, (() => void)>> = {
@@ -132,6 +134,17 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    useEffect(() => reaction(
+      () => formState?.inputState.get("LHRTparameter")?.value,
+      () => {
+        disabled = Boolean(formState?.getFieldValue("LHRTparameter") ||
+          formState?.inputState.get("LHRTparameter")?.value ||
+          initialValues?.LHRTparameter);
+        setisDisabled(disabled);
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
     // MARK: @helpers
     function handleAdd() {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
@@ -168,7 +181,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         ...lockData,
         locked: false,
       });
-      parentFormState?.expireLockedFields(lockData?.lockId);
+      parentFormState?.expireLockedFields(lockData);
     }
 
     function handleFilter(
@@ -208,7 +221,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       partLoading = procedureFormState?.partsApi.loading;
       lotLoading = procedureFormState?.lotsApi.loading;
       // disabled while adding or editing material/eq
-      disabled = formState?.inputState.get("LHRTparameter")?.value || initialValues?.LHRTparameter;
+      disabled = Boolean(formState?.getFieldValue("LHRTparameter") ||
+        formState?.inputState.get("LHRTparameter")?.value ||
+        initialValues?.LHRTparameter);
     });
 
     return Component({
@@ -224,7 +239,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       partOptions,
       partLoading,
       lotLoading,
-      disabled,
+      disabled: isDisabled,
       mode,
       isDocumentMPI,
       name,

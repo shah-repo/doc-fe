@@ -5,6 +5,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBRequiredApprover } from "..";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
+import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
@@ -112,7 +113,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     function concatApprovals(approval?: FBInlineApprovalBody) {
       if (!approval) { return; }
-      if (approval.status === "REJECTED" || approval.status === "APPROVED") {
+      if (approval.status === "REJECTED" || approval.status === "APPROVED" || approval.status === "DRAFT") {
         window.location.reload();
       } else {
         const stateApprovals = filter(approvalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
@@ -200,6 +201,13 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
         approvalsState?.transitionApi.loading
       );
     });
+
+    if (document?.document.documentType.group === DOC_TYPE_GROUP.LHR) {
+      owners = [{
+        name: `${document.owner?.user?.name} (${document.owner?.user?.email})`,
+        id: document.owner.id,
+      }];
+    }
 
     const fieldValue = map(approvalsState?.getApprovals, "approver.id");
     formState?.setFieldValue(`fb-approvals-${name}`, fieldValue);

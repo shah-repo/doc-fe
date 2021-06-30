@@ -337,7 +337,7 @@ context("Check Document History", () => {
 
   context("Check document history", () => {
     it("Open history drawer", () => {
-      SystemRequirement("REQ-0360");
+      SystemRequirement("REQ-0360", "REQ-2670");
       cy.drSelectHistoryTab();
     });
 
@@ -355,15 +355,21 @@ context("Check Document History", () => {
             contentOfChange = "\n" + action.value + "\n";
           }
 
+          if (typeOfChange === "s3Link added") {
+            cy.get(`[data-cy^=\"change-key-${groupIndex}-\"]`).should("have.text", typeOfChange);
+            cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
+          }
+          else {
 
-          cy.get(`[data-cy^=\"change-value-${groupIndex}-\"]`)
-            .contains(action.key === "New owner" ? new RegExp("^" + action.value + "$", "g") : action.value)
-            .parent()
-            .parent()
-            .within(() => {
-              cy.get("[data-cy^=change-key]").should("have.text", typeOfChange);
-              cy.get("[data-cy^=change-value]").should("contain.text", contentOfChange);
-            });
+            cy.get(`[data-cy^=\"change-value-${groupIndex}-\"]`)
+              .contains(action.key === "New owner" ? new RegExp("^" + action.value + "$", "g") : action.value)
+              .parent()
+              .parent()
+              .within(() => {
+                cy.get("[data-cy^=change-key]").should("have.text", typeOfChange);
+                cy.get("[data-cy^=change-value]").should("contain.text", contentOfChange);
+              });
+          }
         });
       });
     });

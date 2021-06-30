@@ -40,7 +40,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     ownerOfStartMPIAction = employees?.find((e) =>
       e.id === smartReferencesFrom?.[0]?.metadata.startedBy)?.user?.name;
     ownerOfCompleteMPIAction = employees?.find((e) =>
-      e.id === smartReferencesFrom?.[0]?.metadata.completedBy)?.user?.name || "Sara";
+      e.id === smartReferencesFrom?.[0]?.metadata.completedBy)?.user?.name;
     const lhrStepState = FB.useRef(FBLHRStepState, stepLHRs);
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
@@ -141,13 +141,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     // MARK: @methods
     startMpi = () => {
-      let startQuantity = formState?.getFieldValue(`fb-lhrs-start-quantity-${name}`);
-      if (!startQuantity || startQuantity === "") {
-        startQuantity = 1;
-      }
       lhrStepState.startMpi(
         name,
-        startQuantity,
         workspaceState?.document?.id,
         schemaItem?.editorConfig?.value,
         stepIndex,

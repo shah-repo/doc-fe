@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { filter, get, isEmpty, join, map, union } from "lodash";
-import { reaction } from "mobx";
+import { reaction, toJS } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -87,7 +87,8 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       reaction(
         () => workspaceState?.formInputSync?.get(name),
         (value) => {
-          const syncValue = value as string[];
+          const syncIds = value;
+          const syncValue = map(syncIds, (syncFile) => toJS(syncFile.id));
           const filesIds = map(mediaAlbumFieldState?.files, "id");
           const addedFiles: string[] = [];
           map(union(filesIds, syncValue), (fileId) => {
@@ -112,7 +113,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
         mediaAlbumFieldState?.download(data);
         mediaAlbumFieldState!.fromUpload = true;
         const lockData = formState?.locked.get(name);
-        formState?.expireLockedFields(lockData?.lockId);
+        formState?.expireLockedFields(lockData);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);

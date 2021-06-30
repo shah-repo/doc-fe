@@ -57,6 +57,7 @@ export const withFBInput = <T extends FBInputProps>(
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
+    const { email: ownerName } = workspaceState?.document?.owner?.user || {};
 
     defaultValue = setDefaultValue();
     helperText = formState?.errors.get(name) || helperText;
@@ -138,9 +139,11 @@ export const withFBInput = <T extends FBInputProps>(
     disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) && !isInputOwner) || disabled;
 
     // Locked state
-    disabled = disabled || formState?.locked.get(name)?.locked;
     locked = formState?.locked.get(name)?.locked;
     lockOwnerName = formState?.locked.get(name)?.ownerName;
+    if (ownerName !== lockOwnerName) {
+      disabled = disabled || locked;
+    }
 
     if (isClone) {
       children = cloneElement(child as React.ReactElement, {

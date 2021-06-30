@@ -1,5 +1,5 @@
 import { flatten, unflatten } from "flat";
-import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, setWith, values } from "lodash";
+import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, last, map, omit, omitBy, set as lodashSet, setWith, values } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBFormConstructor, FBInputState, FBLockBody, FBLockData, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceState } from "..";
 import { SMStore, SMUrl } from "../../../App";
@@ -16,6 +16,8 @@ class FBFormState extends FBSchemaState {
   private finalValidationRulse: Dictionary<string> = {};
   public validatorRules: Record<string, FBValidationRelatedRules[]> = {};
   public validationRelatedRules: Record<string, FBValidationRelatedRules[]> = {};
+  public includeLocking = false;
+  public unlockQueue: string[] = [];
 
   // TO BBE REMOVED!
   public workspaceState?: FBWorkspaceState;
@@ -24,7 +26,11 @@ class FBFormState extends FBSchemaState {
   @observable public inputState = new Map<string, FBInputState>();
   @observable public locked = new Map<string, FBLockValue>();
 
-  public constructor({ schema, initialValues = {}, workspaceMode, workspaceState }: FBFormConstructor) {
+  public constructor({
+    schema,
+    initialValues = {},
+    workspaceMode, workspaceState,
+  }: FBFormConstructor) {
     super();
     this.schema = schema;
     this.initialValues = initialValues || {};
@@ -40,6 +46,10 @@ class FBFormState extends FBSchemaState {
   @computed public get Validator(): any {
     return lodashGet(window, "EnlilRemoteValidators.validator");
   }
+
+  public setIncludeLocking = (state: boolean) => {
+    this.includeLocking = state;
+  };
 
   public reset = () => {
     this.initialValues = {};
@@ -261,6 +271,11 @@ class FBFormState extends FBSchemaState {
     body: Partial<FBLockBody>,
     fieldName: string
   ) => {
+    if (!this.includeLocking) { return; }
+    this.locked.set(fieldName, {
+      ...this.locked.get(fieldName),
+      fieldName,
+    });
     SMStore.post<FBLockData, Partial<FBLockBody>>({
       url: SMUrl.lockFields,
       body,
@@ -271,7 +286,7 @@ class FBFormState extends FBSchemaState {
       }
       const {
         lock: { id = undefined } = {},
-        documentRevision: { owner: { user: { email: ownerName = "" } = {} } = {} } = {},
+        documentRevision: { owner: { user: { email: ownerName = undefined } = {} } = {} } = {},
       } = data || {};
       if (!id) { return; }
       this.locked.set(fieldName, {
@@ -279,15 +294,38 @@ class FBFormState extends FBSchemaState {
         locked: true,
         fieldName,
         lockId: id,
-        ownerName,
+        ownerName: ownerName || this.workspaceState?.currentUser?.email,
       });
+      this.unlockFields();
     });
   };
 
-  public expireLockedFields = (id?: string) => {
-    if (!id) { return; }
+  public expireLockedFields = (lockData?: FBLockValue) => {
+    if (!this.includeLocking) { return; }
+    const { fieldName } = lockData || {};
+    if (!fieldName) { return; }
+    this.unlockQueue.push(fieldName);
+    this.unlockFields();
+  };
+
+  public unlockFields = () => {
+    const name = last(this.unlockQueue);
+    if (!name) { return; }
+    const lockedData = this.locked.get(name);
+    const { lockId: id } = lockedData || {};
+    if (!id || isEmpty(id)) { return; }
+
     SMStore.post({
       url: SMStore.templateUrl(SMUrl.lockFieldsExpire, { id }),
+    }, (_data, error) => {
+      if (error) { return; }
+      this.unlockQueue.pop();
+      this.unlockFields();
+      this.locked.set(name, {
+        ...lockedData,
+        locked: false,
+        lockId: undefined,
+      });
     });
   };
 }
