@@ -1,18 +1,12 @@
 import csv from "csvtojson";
 import fs from "fs";
 import { resolve } from "path";
+import { findRequirementsListToProcess } from "../support/organizeReports/helpers/findRequirementsListToProcess";
+import { fileWriteEncoding, ModuleOrSubModule, REQ_HEADER_TEXT } from "../support/organizeReports/helpers/typing.constants";
 import { RequirementsReadWriteConfig, REQUIREMENTS_CONFIG_RUN } from "./configRequirementsRun";
-type ModuleOrSubModule = "Module" | "Sub-Module";
 
-const REQ_HEADER_TEXT = "REQ #";
-
-const REQUIREMENTS_LISTS = selectRequirementsToProcess();
-REQUIREMENTS_LISTS.forEach((reqsList) => {
-  if (reqsList.extract) {
-    generateJsonFromCSVList(reqsList);
-  }
-});
-
+const REQUIREMENTS_LIST = findRequirementsListToProcess();
+generateJsonFromCSVList(REQUIREMENTS_LIST);
 
 function generateJsonFromCSVList(reqsList: RequirementsReadWriteConfig) {
   csv()
@@ -29,7 +23,7 @@ function generateJsonFromCSVList(reqsList: RequirementsReadWriteConfig) {
 
       fs.writeFileSync(
         resolve(__dirname, "..", `${reqsList.outputPath}/${reqsList.outputFileName}`),
-        jsonObject, { encoding: "UTF-8" }
+        jsonObject, fileWriteEncoding
       );
 
       if (REQUIREMENTS_CONFIG_RUN.extractPerModules && reqsList.extractModules) {
@@ -70,7 +64,7 @@ function generateModulesOrSubModulesFromJson(
   const moduleKeys = Object.keys(groupedObjectsByModules);
   if (moduleKeys.length) {
     moduleKeys.forEach((key) => {
-      const selectedReqs = groupedObjectsByModules[key].map((item) => item["REQ #"]);
+      const selectedReqs = groupedObjectsByModules[key].map((item) => item[REQ_HEADER_TEXT]);
       const filteredObjectRequirements = objectKeys
         .filter((key) => selectedReqs.includes(key))
         .reduce((obj, key) => {
@@ -92,21 +86,9 @@ function generateModulesOrSubModulesFromJson(
       fs.writeFileSync(
         resolve(__dirname, "..",
           `${outputPath}/${outputFolderName}/${modulesOrSubModules}/${key.toLowerCase().replace(/[" "/]/g, "_")}.json`),
-        JSON.stringify(filteredObjectRequirements, null, 2), { encoding: "UTF-8" }
+        JSON.stringify(filteredObjectRequirements, null, 2), fileWriteEncoding
       );
     });
   }
 }
 
-function selectRequirementsToProcess() {
-  const REQUIREMENTS_LISTS: RequirementsReadWriteConfig[] = [];
-
-  if (REQUIREMENTS_CONFIG_RUN.extractGeneralCSV) {
-    REQUIREMENTS_LISTS.push(...REQUIREMENTS_CONFIG_RUN.generalRequirements);
-  }
-  if (REQUIREMENTS_CONFIG_RUN.extractSpecificCSV) {
-    REQUIREMENTS_LISTS.push(...REQUIREMENTS_CONFIG_RUN.specificRequirements);
-  }
-
-  return REQUIREMENTS_LISTS;
-}

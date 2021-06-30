@@ -1,41 +1,18 @@
 import fs from "fs";
 import { merge } from "mochawesome-merge";
 import { resolve } from "path";
-import { RequirementsReadWriteConfig, REQUIREMENTS_CONFIG_RUN } from "../../requirements/configRequirementsRun";
+import { RequirementsReadWriteConfig } from "../../requirements/configRequirementsRun";
+import { findGeneratedSpecFiles } from "./helpers/findGeneratedSpecFiles";
+import { findLastGeneratedResultsJsonFolder } from "./helpers/findLastGeneratedResults";
+import { findRequirementsListToProcess } from "./helpers/findRequirementsListToProcess";
+import { FilesWithData, fileWriteEncoding, ModuleOrSubModule } from "./helpers/typing.constants";
 
-interface FilesWithData {
-  [key: string]: {
-    fileContent: object;
-    reqsList: string[];
-  };
-}
 
-type ModuleOrSubModule = "Module" | "Sub-Module";
-// const REQ_HEADER_TEXT = "REQ #";
-const REGEX_TO_FIND_REQS = /([R])([E])([Q])([-])([0-9]+)/g;
+const REQUIREMENTS_LIST = findRequirementsListToProcess();
+const jsonFolderPath =  findLastGeneratedResultsJsonFolder();
+const filesWithData = findGeneratedSpecFiles(jsonFolderPath);
 
-const REQUIREMENTS_LISTS = selectRequirementsToProcess();
-
-const jsonFolderPath =  findLastGeneratedReportsJsonFolder();
-const jsonFilesInLastFolder = fs.readdirSync((resolve(__dirname, "../../..", jsonFolderPath)));
-const generatedSpecsFiles = jsonFilesInLastFolder.filter((file) => file.startsWith("generated_specs"));
-
-const filesWithData: FilesWithData  = {};
-generatedSpecsFiles.forEach((fileName) => {
-  const fileContent = fs.readFileSync(resolve(__dirname, "../../..", `${jsonFolderPath}/${fileName}`)).toString();
-  Object.assign(filesWithData, {
-    [fileName]: {
-      fileContent: JSON.parse(fileContent),
-      reqsList: fileContent.match(REGEX_TO_FIND_REQS),
-    },
-  });
-});
-
-REQUIREMENTS_LISTS.forEach((reqsList) => {
-  if (reqsList.extract) {
-    processReportsSeparation(reqsList, filesWithData, jsonFolderPath);
-  }
-});
+processReportsSeparation(REQUIREMENTS_LIST, filesWithData, jsonFolderPath);
 
 async function processReportsSeparation(
   reqsList: RequirementsReadWriteConfig,
@@ -109,39 +86,5 @@ function compareRequirementsAndSelectGeneratedSpecJsons(
 async function generateReport(filesToJoin, output, outputFolderPath, fileName) {
   const options = { files: filesToJoin };
   const report = await merge(options);
-  fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), { encoding: "UTF-8" });
-
-  // await marge.create(report, {
-  //   reportFilename: `${fileName.replace("json", "html")}`,
-  //   assetsDir: `${outputFolderPath}/assets`,
-  //   reportDir: `${outputFolderPath}`,
-  //   cdn: true,
-  //   overwrite: true,
-  // });
-}
-
-
-function findLastGeneratedReportsJsonFolder() {
-  const RESULTS_FOLDER = "results";
-  const subFolders = fs.readdirSync(resolve(__dirname, "../../..", RESULTS_FOLDER));
-  const lastFolder = subFolders.reduce((a, b) => new Date(a) > new Date(b) ? a : b);
-
-  if (!lastFolder) {
-    throw new Error("Spec Reports folder not found!");
-  }
-
-  return `${RESULTS_FOLDER}/${lastFolder}/json`;
-}
-
-function selectRequirementsToProcess() {
-  const REQUIREMENTS_LISTS: RequirementsReadWriteConfig[] = [];
-
-  if (REQUIREMENTS_CONFIG_RUN.extractGeneralCSV) {
-    REQUIREMENTS_LISTS.push(...REQUIREMENTS_CONFIG_RUN.generalRequirements);
-  }
-  if (REQUIREMENTS_CONFIG_RUN.extractSpecificCSV) {
-    REQUIREMENTS_LISTS.push(...REQUIREMENTS_CONFIG_RUN.specificRequirements);
-  }
-
-  return REQUIREMENTS_LISTS;
+  fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), fileWriteEncoding);
 }
