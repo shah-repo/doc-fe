@@ -1,4 +1,5 @@
 import fs from "fs";
+import { cloneDeep } from "lodash";
 import { merge } from "mochawesome-merge";
 import marge from "mochawesome-report-generator";
 import { resolve } from "path";
@@ -114,7 +115,7 @@ function connectRequirementsWithCypressGeneratedJson(
   jsonGeneratedRequirements: any,
   pathToFile: string,
 ) {
-
+  const jsonGeneratedReqs = cloneDeep(jsonGeneratedRequirements);
   const jsonResults = (jsonGeneratedRequirements.results || [])
     .map((result) => result.suites
       .map((suite) => suite.tests
@@ -131,10 +132,10 @@ function connectRequirementsWithCypressGeneratedJson(
     .flat(3)
     .filter((it) => it);
 
-  jsonGeneratedRequirements.results[0].suites[0].tests = jsonResults;
+  jsonGeneratedReqs.results[0].suites[0].tests = jsonResults;
 
   fs.writeFileSync(resolve(__dirname, "../../..", pathToFile),
-    JSON.stringify(jsonGeneratedRequirements, null, 2), fileWriteEncoding);
+    JSON.stringify(jsonGeneratedReqs, null, 2), fileWriteEncoding);
 
   return pathToFile;
 }
