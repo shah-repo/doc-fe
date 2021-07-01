@@ -58,7 +58,6 @@ class FBControlPickerState {
         "poApprovalMatrix",
         "instructionsmediaupload",
         "evidencemediaupload",
-        "testRequirement",
         "procedure",
         "mpiprocedure",
         "eqmaintenance",
@@ -73,7 +72,7 @@ class FBControlPickerState {
         ...this.hasRequestApproval ? ["requestapproval"] as FBInputType[] : [],
       ],
       customcontrols: ["customcontrol"],
-      instructions: ["instructionsdocument", "selectdocument", "selectrequirement"],
+      instructions: ["instructionsdocument", "selectdocument"],
       buttons: ["checkpoint", "createlabel", "task"],
       actions: ["action"],
     };
