@@ -11,7 +11,6 @@ source ./scripts/cypress/utils/make_results_dir.sh
 if [[ $(ls $DIR_JSON | wc -l) -gt 0 ]]
 then
   yarn --silent mochawesome-merge \"$DIR_JSON/generated_specs*.json\" > "$DIR_JSON/merged_specs.json" 
-  cp "$DIR_JSON/merged_specs.json" cypress/cache/merged_specs.json
   
   yarn ts-node -O '{"module": "commonjs"}' cypress/support/organizeReports/organizeReports.ts
   yarn ts-node -O '{"module": "commonjs"}' cypress/support/organizeReports/copyToMergedAndGeneratedJsons.ts
@@ -24,6 +23,6 @@ then
   export REPORT_TITLE="generated_requirements"
   export CI_BUILD_ID="requirements_$CI_BUILD_ID"
 
-  # ./scripts/cypress/utils/delete_failed_specs.sh
+  ./scripts/cypress/utils/delete_failed_specs.sh
    ./scripts/cypress/utils/run_node.sh 2>/dev/null || true
 fi
