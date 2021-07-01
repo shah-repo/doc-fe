@@ -41,7 +41,8 @@ async function processCSVRequirementsJson(
     fileContent,
     filesWithData,
     jsonGeneratedRequirements,
-    `${jsonFolderPath}/${reqsList.outputFolderName}/generated_reqs_${reqsList.outputFileName}`);
+    `${jsonFolderPath}/${reqsList.outputFolderName}/generated_reqs_${reqsList.outputFileName}`,
+    reqsList.outputFileName);
 
   await generateReport(
     filePaths,
@@ -66,7 +67,8 @@ async function processModuleOrSubModuleRequirementsJson(
       fileContent,
       filesWithData,
       jsonGeneratedRequirements,
-      `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}/generated_reqs_${fileName}`);
+      `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}/generated_reqs_${fileName}`,
+      fileName);
 
     if (!fs.existsSync(
       resolve(__dirname, "../../..", `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`))) {
@@ -86,7 +88,8 @@ function compareRequirementsAndSelectGeneratedSpecJsons(
   fileContent: string,
   filesWithData: FilesWithData,
   jsonGeneratedRequirements: any,
-  pathToFile: string) {
+  pathToFile: string,
+  fileName: string) {
   const usedRequirements = Object.keys(JSON.parse(fileContent));
   const filesSatisfiedRequirements = Object.keys(filesWithData).filter((fileName) =>
     ((filesWithData[fileName].reqsList || []).some((fileReq) => usedRequirements.includes(fileReq))));
@@ -99,6 +102,7 @@ function compareRequirementsAndSelectGeneratedSpecJsons(
     usedRequirements,
     jsonGeneratedRequirements,
     pathToFile,
+    fileName,
   );
 
   if (!fs.existsSync(
@@ -114,6 +118,7 @@ function connectRequirementsWithCypressGeneratedJson(
   usedRequirements: string[],
   jsonGeneratedRequirements: any,
   pathToFile: string,
+  fileName: string,
 ) {
   const jsonGeneratedReqs = cloneDeep(jsonGeneratedRequirements);
   const jsonResults = (jsonGeneratedRequirements.results || [])
@@ -134,6 +139,7 @@ function connectRequirementsWithCypressGeneratedJson(
 
   jsonGeneratedReqs.results[0].suites[0] = {
     ...jsonGeneratedReqs.results[0].suites[0],
+    title: `${jsonGeneratedReqs.results[0].suites[0].title} - ${fileName.replace(".json", "")}`,
     tests: jsonResults,
     passes: jsonResults.filter((test) => test.pass).map((test) => test.uuid),
     pending: jsonResults.filter((test) => test.pending).map((test) => test.uuid),
