@@ -1,8 +1,7 @@
 import { filter, find, first, isEmpty, keyBy, lowerCase, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormFilterType, FBProcedureFormProps, FBProcedureFormState, FBProcedureItemConfig, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
@@ -177,10 +176,6 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
 
     function handleUnlockField() {
       const lockData = parentFormState?.locked.get(`${name}.${type}`);
-      parentFormState?.locked.set(`${name}.${type}`, {
-        ...lockData,
-        locked: false,
-      });
       parentFormState?.expireLockedFields(lockData);
     }
 
