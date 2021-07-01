@@ -38,6 +38,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const poName = workspaceState?.schema?.find((item) => item.type === "purchaseorder")?.name || "";
     const totalAmount = formInput?.[poName]?.totalAmount;
     const revisionChangeType = document?.revisionChangeType;
+    const revisionStage = document?.revisionStage;
     const authUser = store.getState().auth.user;
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
@@ -47,7 +48,12 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       { id: outputId, approvals: document?.approvals || changeRequest?.approvals },
     );
 
-    isIncluded = (group: FBRequiredApprover): boolean => poApprovalsState.checkedGroups?.includes(group) || false;
+    isIncluded = (group: FBRequiredApprover): boolean => {
+      let included = false;
+
+      map(poApprovalsState?.getApprovals, (x) => includesApprover(group, (x.approverId as string)) ? included = true : "");
+      return included;
+    };
 
     function concatApprovals(approval?: FBInlineApprovalBody) {
       if (!approval) { return; }
@@ -84,7 +90,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     React.useEffect(() => {
       outputId && poApprovalsState.fetchRequiredApprovals(outputId as unknown as string[]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [totalAmount, revisionChangeType]);
+    }, [totalAmount, revisionChangeType, revisionStage]);
 
     // On add approver
     React.useEffect(() => reaction(
