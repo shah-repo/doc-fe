@@ -51,7 +51,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     isIncluded = (group: FBRequiredApprover): boolean => {
       let included = false;
 
-      map(poApprovalsState?.getApprovals, (x) => includesApprover(group, (x.approverId as string)) ? included = true : "");
+      map(poApprovalsState?.getApprovals, (x) =>
+        includesApprover(group, (x.approverId as string)) ? included = true : "");
       return included;
     };
 
