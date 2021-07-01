@@ -353,6 +353,7 @@
   "common.document.type.mismatch": "Document type group or groupOptions don't match BE config.",
   "common.private.number.pool": "Private Number Pool",
   "common.redline": "RedLine",
+  "common.change.document.form": "Change Document Form",
   "common.redline.message": "You are in redline mode",
   "common.qms": "Qms",
   "common.default.training": "Default Training",
