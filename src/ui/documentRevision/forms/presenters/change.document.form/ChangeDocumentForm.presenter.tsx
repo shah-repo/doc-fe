@@ -6,10 +6,12 @@ import ChangeDocumentFormDialog from "./dialog/ChangeDocumentFormDialog";
 
 interface Props {
   dialog: DialogHandler;
+  documentTypeId: string;
 }
 
 const ChangeDocumentFormPresenter: React.FunctionComponent<Props> = ({
   dialog,
+  documentTypeId,
 }) => (
   <>
     <Button
@@ -20,7 +22,7 @@ const ChangeDocumentFormPresenter: React.FunctionComponent<Props> = ({
     >
       <Text translation="common.change.document.form"/>
     </Button>
-    <ChangeDocumentFormDialog {...{ dialog }}/>
+    <ChangeDocumentFormDialog {...{ dialog, documentTypeId }}/>
   </>
 );
 

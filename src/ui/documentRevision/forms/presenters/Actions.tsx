@@ -51,7 +51,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   } = React.useContext(FormHeaderContext)!;
   const redlineActive = useSelector(companySelectors.getRedlineActive);
   const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
-  const documentTypeId = documentRevision?.document?.documentType?.id;
+  const documentTypeId = documentRevision?.document?.documentType?.id || "";
   const schema = documentRevision?.formDocument?.formTemplate?.schema;
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const isNewVersion = type === "newVersion";
@@ -196,7 +196,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       {
         !redlineActive &&
       <span>
-        <ChangeDocumentFormContainer/>
+        <ChangeDocumentFormContainer {...{ documentRevision }} />
         {(isStatusReleased || isStatusInDraft) && serializedCSV &&
           <ExportToCSVButton
             {...{ documentRevision }}
