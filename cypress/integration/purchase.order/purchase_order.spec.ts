@@ -353,6 +353,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button", () => {
+      SystemRequirement("REQ-1360");
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.poAddNewFieldItem();
       });
@@ -403,6 +404,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button to add item without Part Number", () => {
+      SystemRequirement("REQ-1360");
       cy.get("[data-cy=\"fb-control-btn\"]").last().click();
     });
 
@@ -526,6 +528,7 @@ context("PO test", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
+        SystemRequirement("REQ-1490");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
@@ -564,6 +567,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button", () => {
+      SystemRequirement("REQ-1360");
       cy.poAddNewFieldItem();
     });
 
@@ -797,7 +801,7 @@ context("PO test", () => {
       cy.poCheckForSpecificPOItemValue({ itemValue: "A" });
     });
 
-    it("Check if number of displayed filtered items is '2", () => {
+    it("Check if number of displayed filtered items is '2'", () => {
       SystemRequirement("REQ-1200");
       cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "2" });
     });

@@ -63,12 +63,14 @@ context("User Creation Flow", () => {
     });
 
     it("Clicks on 'Add Employee'", () => {
+      SystemRequirement("REQ-4110");
       cy.usrClickAddEmployee();
     });
   });
 
   context("Fill in user attributes", () => {
     it("Enters e-mail", () => {
+      SystemRequirement("REQ-4110");
       cy.usrEnterEmail({ email: USERS[10].email });
     });
 
@@ -88,7 +90,7 @@ context("User Creation Flow", () => {
       cy.usrClickCloseDialogButton();
     });
     it("Checks if user is in the table", () => {
-      SystemRequirement("REQ-2490");
+      SystemRequirement("REQ-2490", "REQ-4110");
       cy.usrCheckIfUserIsCreated({ email: USERS[10].email });
     });
   });
