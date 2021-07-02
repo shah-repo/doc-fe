@@ -214,6 +214,7 @@ context("Record inline history Flow", () => {
       });
 
       it("Select approver for first inline", () => {
+        SystemRequirement("REQ-4340");
         cy.get("[name*=\"fb-ia-inline-field\"] input").click();
         cy.get("ul[role=listbox]>li").contains(USERS[2].email).click();
       });
@@ -321,6 +322,7 @@ context("Record inline history Flow", () => {
 
       context("Check inline approval history on released document", () => {
         it("Approve first Inline Approval", () => {
+          SystemRequirement("REQ-4350");
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
           cy.get("input[name=\"password\"]").clear().type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
@@ -341,8 +343,8 @@ context("Record inline history Flow", () => {
           cy.get("[data-cy*=\"fb-approval-history\"]").should("have.length", 7);
         });
 
-        it("Check Inline approval history values", () => {
-          SystemRequirement("REQ-1000");
+        it("Check Inline approval history values for current revision", () => {
+          SystemRequirement("REQ-1000", "REQ-2680", "REQ-4370");
           cy.fbInlineApprovalHisotryCheck(
             "Approved",
             "Checked in CheckboxGroup for inline: Blue",
@@ -370,8 +372,8 @@ context("Record inline history Flow", () => {
           cy.get("[data-cy*=\"fb-approval-history\"]").should("have.length", 3);
         });
 
-        it("Check Inline approval history values", () => {
-          SystemRequirement("REQ-1000");
+        it("Check Inline approval history values for current revision", () => {
+          SystemRequirement("REQ-1000", "REQ-2680");
           cy.fbInlineApprovalHisotryCheck(
             "Approved",
             "Changed Textfield for inline from First entry to First entry, Second entry",

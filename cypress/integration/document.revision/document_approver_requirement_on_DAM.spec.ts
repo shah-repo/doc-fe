@@ -458,14 +458,17 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Add first approver to approval request on approver list", () => {
+      SystemRequirement("REQ-4270");
       cy.arAddApproverOnApproverList({ approver: FIRST_USER.email });
     });
 
     it("Add second approver to approval request on approver list", () => {
+      SystemRequirement("REQ-4270");
       cy.arAddApproverOnApproverList({ approver: SECOND_USER.email });
     });
 
     it("Add third approver to approval request on approver list", () => {
+      SystemRequirement("REQ-4270");
       cy.arAddApproverOnApproverList({ approver: THIRD_USER.email });
     });
 
