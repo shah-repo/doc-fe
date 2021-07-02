@@ -126,6 +126,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true, needsSignature: true });
   const [isCreateDocumentDisabled, setDisableCreateButton] = React.useState(false);
   const [forceNewRender, setNewRender] = React.useState();
+  const { revisionChangeType } = values || {};
   const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
   const { schema = [] } =  workspaceState || {};
   const { submitForm } = useFormContext();
@@ -182,6 +183,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     initialValues.outputDocumentTypes :
     initialValues.formDocument?.formTemplate?.outputDocumentTypes;
   const documentReferences = documentRevision?.referenceTo;
+
 
   isOwnerContext = React.createContext(isOwner);
   documentTypeContext = React.createContext(documentType);
@@ -254,6 +256,13 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       return;
     }
   }, [isSubmitting]);
+
+  useEffect(() => {
+    if (revisionChangeType) {
+      workspaceState?.setDocumentRevisionChangeType(revisionChangeType);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [revisionChangeType]);
 
   React.useEffect(() => reaction(
     () => workspaceState?.isDirty,
