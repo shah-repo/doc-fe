@@ -26,6 +26,18 @@ let createdRecivableFormDocument;
 let createdReceivable1;
 
 context("Receivable list test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -237,6 +249,14 @@ context("Receivable list test", () => {
                           label: "Receivable",
                           name: "receivable-kdptzei2",
                           applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+                        },
+                        {
+                          label: "form.builder.approvals",
+                          type: "approvals",
+                          deleteDisabled: true,
+                          name: "fb-approvals-kn7fbu5l",
+                          uniqueSchemaItem: true,
+                          index: 0,
                         }],
                       },
                     },
@@ -377,6 +397,10 @@ context("Receivable list test", () => {
           sessionId: loginResponse.sessionId,
         });
       });
+
+      it("Logout user", () => {
+        cy.authLogout();
+      });
     });
 
     context("Login user when he does have privileges", () => {
@@ -456,8 +480,20 @@ context("Receivable list test", () => {
       cy.recClickSaveBtn();
     });
 
-    it("Approve and release", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    it("Add approval", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve receivable", () => {
+      cy.ebApprove();
+    });
+
+    it("Verify status", () => {
+      cy.drCheckDocumentStatus({ status: "Current" });
     });
   });
 
@@ -522,26 +558,6 @@ context("Receivable list test", () => {
       it("Verify filter by state", () => {
         // SystemRequirement("REQ-1710");
         cy.recVerifyFilterByState({ state: "DRAFT" });
-      });
-
-      it("Verify receivable counter on document list", () => {
-        // SystemRequirement("REQ-1760");
-        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
-      });
-    });
-
-    context("Verify filter by approval id", () => {
-      it("Clear filter", () => {
-        cy.dlClearFilters();
-      });
-
-      it("Filter list by approval id 'AR00005'", () => {
-        cy.recFilterByARId({ arId: "AR00005" });
-      });
-
-      it("Verify filter by approval id", () => {
-        // SystemRequirement("REQ-1710");
-        cy.recVerifyFilterByARId({ arId: "AR00005" });
       });
 
       it("Verify receivable counter on document list", () => {

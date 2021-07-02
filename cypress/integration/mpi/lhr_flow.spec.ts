@@ -818,7 +818,9 @@ context("LHR flow", () => {
         });
 
         it("Approve and release MPI document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
+            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          });
         });
       });
     });
@@ -919,7 +921,7 @@ context("LHR flow", () => {
           cy.get("ul[role=listbox]>li").contains("Material three").click();
           cy.get("[name=\"quantity\"]").type("3");
           cy.get("[data-cy=\"unit\"]").click();
-          cy.get("ul[role=listbox]>li").contains("Days").click();
+          cy.get("ul[role=listbox]>li").contains("Day(s)").click();
           cy.get("[data-cy=\"form.builder.save\"]").click();
         });
 

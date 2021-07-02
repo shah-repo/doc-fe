@@ -79,6 +79,7 @@ export enum CyRoutes {
   ArAudit = "ArAudit",
   UpgradeToReleasedForm = "UpgradeToReleasedForm",
   GetAutocompleteOptions = "GetAutocompleteOptions",
+  GetFieldLocks = "GetFieldLocks",
 }
 
 export const routes: ICyRoutes =   {
@@ -160,6 +161,16 @@ export const routes: ICyRoutes =   {
     callConfig: {
       responseTimeout: 50 * 1000,
       requestTimeout: 40 * 1000,
+    },
+  },
+  GetFieldLocks: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revision_field_locks/*",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
     },
   },
   GroupsGet: {
