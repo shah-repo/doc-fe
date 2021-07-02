@@ -7,6 +7,7 @@ import ChangeDocumentFormContent from "./ChangeDocumentFormDialog.content";
 interface Props {
   dialog: DialogHandler;
   documentTypeId: string;
+  docRevId: string;
 }
 
 const styles = makeStyles(() =>
@@ -20,6 +21,7 @@ const styles = makeStyles(() =>
 const ChangeDocumentFormDialog: React.FunctionComponent<Props> = ({
   dialog,
   documentTypeId,
+  docRevId,
 }) => {
   const classes = styles();
 
@@ -38,7 +40,7 @@ const ChangeDocumentFormDialog: React.FunctionComponent<Props> = ({
           <DialogTitle>
             <Text translation="common.change.document.form" />
           </DialogTitle>
-          <ChangeDocumentFormContent {...{ documentTypeId, dialog }}/>
+          <ChangeDocumentFormContent {...{ documentTypeId, dialog, docRevId }}/>
         </Dialog>
       }
     </>
