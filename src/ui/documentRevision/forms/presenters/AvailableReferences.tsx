@@ -85,7 +85,6 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
       canReferenceCreateInspection,
     } = getReferenceValues(ref.documentRevisions, docRevsById);
 
-
     return {
       label: `${ref.docId} - ${highestRev?.displayRevision} - ${highestRev?.name}`,
       value: ref.id,
