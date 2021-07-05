@@ -5,6 +5,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { PurchaseOrderItem } from "../../support/commands/purchase.order/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[1];
@@ -28,6 +29,18 @@ let createdRecivableFormDocument;
 let receivableDocumentType;
 
 context("Create receivable test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
@@ -566,6 +579,14 @@ context("Create receivable test", () => {
                               applicableOn: [
                                 "ON_STATE_TO_IN_REVIEW",
                               ],
+                            },
+                            {
+                              label: "form.builder.approvals",
+                              type: "poapprovals",
+                              deleteDisabled: false,
+                              name: "fb-po-approvals-kqqix31p",
+                              uniqueSchemaItem: true,
+                              index: 2,
                             }],
                           },
                         },
@@ -651,7 +672,6 @@ context("Create receivable test", () => {
             units: "hours",
             dateRequired: "",
             unitPrice: "$40.00",
-            totalPrice: "$200.00",
           },
           {
             index: 2,
@@ -662,7 +682,6 @@ context("Create receivable test", () => {
             units: "hours",
             dateRequired: "",
             unitPrice: "$30.00",
-            totalPrice: "$180.00",
           }];
           cy.recVerifyPOIsDisplayed({ loadedPoItems: poItems });
         });
@@ -704,9 +723,35 @@ context("Create receivable test", () => {
           cy.recCreateNew();
         });
 
-        it("Click 'Create document' on empty receivable form", () => {
-          // SystemRequirement("REQ-1860");
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        it("Add an Approval", () => {
+          cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+            cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+          });
+        });
+
+        it("Save PO", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+
+        it("Click 'Submit for Approval' button", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+            cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+          });
+        });
+
+        it("Click 'Approve' button", () => {
+          cy.get("[data-cy=\"form.builder.request.approve\"]").click();
+          cy.get("input[name=\"password\"]").type("Tester1!");
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
+            CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+            cy.get("[data-cy=\"common.confirm\"]").click();
+          });
+        });
+
+        it("Verify receivable status is 'Current'", () => {
+          // SystemRequirement("REQ-1870");
+          cy.drCheckDocumentStatus({ status: "Current" });
         });
       });
     });
