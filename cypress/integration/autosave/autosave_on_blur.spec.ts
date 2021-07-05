@@ -45,13 +45,188 @@ context("Autosave on blur", () => {
                 group: "OTHER",
                 isQms: true,
               },
+              {
+                documentTypeName: "Purchase Order test",
+                documentTypeAcronym: "POT-",
+                group: "PO",
+                category: "Purchase Order",
+                isQms: true,
+                privateNumberPool: true,
+                needsSignature: true,
+                fieldsConfig: {
+                  C: {
+                    visible: false,
+                    required: false,
+                  },
+                  D: {
+                    label: "Description",
+                    visible: true,
+                    required: false,
+                  },
+                  E: {
+                    visible: false,
+                    required: true,
+                  },
+                  F: {
+                    visible: false,
+                    required: true,
+                  },
+                  G: {
+                    visible: false,
+                    required: false,
+                  },
+                  I: {
+                    label: "Revise PO",
+                    visible: true,
+                  },
+                  J: {
+                    visible: false,
+                  },
+                  K: {
+                    label: "Cancel PO",
+                    visible: true,
+                  },
+                  L: {
+                    label: "Correct PO",
+                    visible: true,
+                  },
+                  M: {
+                    label: "Type of Change",
+                    visible: true,
+                    required: true,
+                  },
+                  N: {
+                    label: "Add Approvers",
+                    visible: false,
+                    required: false,
+                  },
+                  O: {
+                    label: "PO History",
+                    visible: true,
+                  },
+                  R: {
+                    visible: false,
+                  },
+                  S: {
+                    label: "Revise PO",
+                    visible: true,
+                  },
+                  V: {
+                    label: "Create PO",
+                    visible: true,
+                  },
+                  A1: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                  A2: {
+                    label: "Void",
+                    visible: true,
+                  },
+                  A3: {
+                    label: "History",
+                    visible: true,
+                  },
+                  A4: {
+                    visible: false,
+                  },
+                  A5: {
+                    label: "Pending Approval",
+                    visible: true,
+                  },
+                  A6: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                  P1: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                  P2: {
+                    label: "Void",
+                    visible: true,
+                  },
+                  P3: {
+                    label: "History",
+                    visible: true,
+                  },
+                  P4: {
+                    visible: false,
+                  },
+                  P5: {
+                    label: "Pending Approval",
+                    visible: true,
+                  },
+                  P6: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                },
+                schema: [
+                  {
+                    name: "po-status-built-in",
+                    type: "select",
+                    index: 0,
+                    label: "PO Status",
+                    options: [
+                      {
+                        text: "Open",
+                        value: "Open",
+                      },
+                      {
+                        text: "Closed",
+                        value: "Closed",
+                      },
+                      {
+                        text: "Cancelled",
+                        value: "Cancelled",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "PO Status",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-supplier-built-in",
+                    type: "supplier",
+                    index: 1,
+                    label: "Supplier ",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "Supplier",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-items-built-in",
+                    type: "purchaseorder",
+                    index: 2,
+                    label: "Purchase Order",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Purchase Order",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                ],
+              },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
+          purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order test");
           receivableDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
@@ -113,15 +288,70 @@ context("Autosave on blur", () => {
                 outputDocumentTypes: [{
                   id: purchaseOrderDocumentType[0].id,
                 }],
-                schema: [{
-                  index: 0,
-                  type: "purchaseorder",
-                  label: "PO",
-                  name: "po-kdpqvhc7",
-                  applicableOn: ["ON_STATE_TO_IN_REVIEW"],
-                }],
+                schema: [
+                  {
+                    name: "po-status-built-in",
+                    type: "select",
+                    index: 0,
+                    label: "PO Status",
+                    options: [
+                      {
+                        text: "Open",
+                        value: "Open",
+                      },
+                      {
+                        text: "Closed",
+                        value: "Closed",
+                      },
+                      {
+                        text: "Cancelled",
+                        value: "Cancelled",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "PO Status",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-supplier-built-in",
+                    type: "supplier",
+                    index: 1,
+                    label: "Supplier ",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Supplier",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-items-built-in",
+                    type: "purchaseorder",
+                    index: 2,
+                    label: "Purchase Order",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Purchase Order",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    label: "form.builder.approvals",
+                    type: "poapprovals",
+                    deleteDisabled: false,
+                    name: "fb-po-approvals-kqqix31p",
+                    uniqueSchemaItem: true,
+                    index: 3,
+                  },
+                ],
               },
-
             },
             employeeId: adminEmployee.id as unknown as string,
             sessionId: loginResponse.sessionId as unknown as string,
@@ -147,7 +377,7 @@ context("Autosave on blur", () => {
                   description: "API PO document",
                   revisionChangeType: RevisionChangeType.NextRevision,
                   document: {
-                    docId: "PO-00001",
+                    docId: "POT-00001",
                     documentType: {
                       id: purchaseOrderDocumentType[0].id,
                     },
@@ -162,9 +392,9 @@ context("Autosave on blur", () => {
                     },
                   },
                   formInput: {
-                    "po-kdpqvhc7": {
+                    "po-items-built-in": {
                       items: [{
-                        id: "kdpr51z9",
+                        id: "kqqj708c",
                         type: "service",
                         date: (new Date()).toISOString(),
                         tax: false,
@@ -190,6 +420,7 @@ context("Autosave on blur", () => {
                       totalInUSD: "150.00",
                       dateOfExchangeRate: "",
                     },
+                    "po-status-built-in": "Open",
                   },
                 },
                 employeeId: adminEmployee.id,
@@ -699,7 +930,7 @@ context("Autosave on blur", () => {
     });
 
     it("Select PO receivable and check for autosave", () => {
-      cy.get("[data-cy^=\"porec-fb-receive-purchase-order-\"]").type("PO-0000{downarrow}{enter}");
+      cy.get("[data-cy^=\"porec-fb-receive-purchase-order-\"]").type("POT-0000{downarrow}{enter}");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.unClick();
       });
