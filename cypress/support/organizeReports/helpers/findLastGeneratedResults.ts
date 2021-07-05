@@ -1,14 +1,9 @@
-import fs from "fs";
-import { resolve } from "path";
+import { CI_BUILD_ID, RESULTS_FOLDER } from "./typing.constants";
 
 export function findLastGeneratedResultsJsonFolder() {
-  const RESULTS_FOLDER = "results";
-  const subFolders = fs.readdirSync(resolve(__dirname, "../../../..", RESULTS_FOLDER));
-  const lastFolder = subFolders.reduce((a, b) => new Date(a) > new Date(b) ? a : b);
-
-  if (!lastFolder) {
+  if (!CI_BUILD_ID) {
     throw new Error("Spec Reports folder not found!");
   }
 
-  return `${RESULTS_FOLDER}/${lastFolder}/json`;
+  return `${RESULTS_FOLDER}/${CI_BUILD_ID}/json`;
 }

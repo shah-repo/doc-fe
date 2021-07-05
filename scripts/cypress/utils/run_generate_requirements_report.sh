@@ -13,7 +13,7 @@ then
   yarn --silent mochawesome-merge \"$DIR_JSON/generated_specs*.json\" > "$DIR_JSON/merged_specs.json" 
   
   yarn ts-node -O '{"module": "commonjs"}' cypress/support/organizeReports/organizeReports.ts
-  yarn ts-node -O '{"module": "commonjs"}' cypress/support/organizeReports/copyToMergedAndGeneratedJsons.ts
+  yarn ts-node -O '{"module": "commonjs"}' cypress/support/organizeReports/copyToMergedJson.ts
 
   export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START:-5600}
   export ENLIL_COMPOSE_EXPOSE_DIRECTOR_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+6))"

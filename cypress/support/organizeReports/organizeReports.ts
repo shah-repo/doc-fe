@@ -5,7 +5,7 @@ import { RequirementsReadWriteConfig } from "../../requirements/configRequiremen
 import { findGeneratedSpecFiles } from "./helpers/findGeneratedSpecFiles";
 import { findLastGeneratedResultsJsonFolder } from "./helpers/findLastGeneratedResults";
 import { findRequirementsListToProcess } from "./helpers/findRequirementsListToProcess";
-import { FilesWithData, fileWriteEncoding, ModuleOrSubModule } from "./helpers/typing.constants";
+import { FilesWithData, ModuleOrSubModule, utf8Encoding } from "./helpers/typing.constants";
 
 
 const REQUIREMENTS_LIST = findRequirementsListToProcess();
@@ -86,5 +86,5 @@ function compareRequirementsAndSelectGeneratedSpecJsons(
 async function generateReport(filesToJoin, output, outputFolderPath, fileName) {
   const options = { files: filesToJoin };
   const report = await merge(options);
-  fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), fileWriteEncoding);
+  fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), utf8Encoding);
 }

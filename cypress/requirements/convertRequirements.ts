@@ -2,7 +2,7 @@ import csv from "csvtojson";
 import fs from "fs";
 import { resolve } from "path";
 import { findRequirementsListToProcess } from "../support/organizeReports/helpers/findRequirementsListToProcess";
-import { fileWriteEncoding, ModuleOrSubModule, REQ_HEADER_TEXT } from "../support/organizeReports/helpers/typing.constants";
+import { ModuleOrSubModule, REQ_HEADER_TEXT, utf8Encoding } from "../support/organizeReports/helpers/typing.constants";
 import { RequirementsReadWriteConfig, REQUIREMENTS_CONFIG_RUN } from "./configRequirementsRun";
 
 const REQUIREMENTS_LIST = findRequirementsListToProcess();
@@ -21,14 +21,19 @@ function generateJsonFromCSVList(reqsList: RequirementsReadWriteConfig) {
       });
       const jsonObject = JSON.stringify(result, null, 2);
 
+      if (!fs.existsSync(
+        resolve(__dirname, "..", `${reqsList.outputPath}`))) {
+        fs.mkdirSync(resolve(__dirname, "..", `${reqsList.outputPath}`));
+      }
+
       fs.writeFileSync(
         resolve(__dirname, "..", `${reqsList.outputPath}/${reqsList.outputFileName}`),
-        jsonObject, fileWriteEncoding
+        jsonObject, utf8Encoding
       );
 
       if (REQUIREMENTS_CONFIG_RUN.extractPerModules && reqsList.extractModules) {
         generateModulesOrSubModulesFromJson(
-          JSON.parse(jsonObject),
+          result,
           reqsList.outputPath,
           reqsList.outputFolderName,
           "Module");
@@ -36,7 +41,7 @@ function generateJsonFromCSVList(reqsList: RequirementsReadWriteConfig) {
 
       if (REQUIREMENTS_CONFIG_RUN.extractPerSubModules && reqsList.extractSubModules) {
         generateModulesOrSubModulesFromJson(
-          JSON.parse(jsonObject),
+          result,
           reqsList.outputPath,
           reqsList.outputFolderName,
           "Sub-Module");
@@ -86,7 +91,7 @@ function generateModulesOrSubModulesFromJson(
       fs.writeFileSync(
         resolve(__dirname, "..",
           `${outputPath}/${outputFolderName}/${modulesOrSubModules}/${key.toLowerCase().replace(/[" "/]/g, "_")}.json`),
-        JSON.stringify(filteredObjectRequirements, null, 2), fileWriteEncoding
+        JSON.stringify(filteredObjectRequirements, null, 2), utf8Encoding
       );
     });
   }

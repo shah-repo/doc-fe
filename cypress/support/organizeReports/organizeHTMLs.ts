@@ -7,7 +7,7 @@ import { RequirementsReadWriteConfig } from "../../requirements/configRequiremen
 import { findGeneratedSpecFiles, findMainGeneratedRequirementsJsonFile } from "./helpers/findGeneratedSpecFiles";
 import { findLastGeneratedResultsJsonFolder } from "./helpers/findLastGeneratedResults";
 import { findRequirementsListToProcess } from "./helpers/findRequirementsListToProcess";
-import { FilesWithData, fileWriteEncoding, ModuleOrSubModule } from "./helpers/typing.constants";
+import { FilesWithData, ModuleOrSubModule, utf8Encoding } from "./helpers/typing.constants";
 
 const REGEX_TO_FIND_REQS = /([R])([E])([Q])([-])([0-9]+)/g;
 const REQUIREMENTS_LIST = findRequirementsListToProcess();
@@ -148,7 +148,7 @@ function connectRequirementsWithCypressGeneratedJson(
   };
 
   fs.writeFileSync(resolve(__dirname, "../../..", pathToFile),
-    JSON.stringify(jsonGeneratedReqs, null, 2), fileWriteEncoding);
+    JSON.stringify(jsonGeneratedReqs, null, 2), utf8Encoding);
 
   return pathToFile;
 }
@@ -161,7 +161,7 @@ async function generateReport(
   if (filesToJoin && filesToJoin.length > 1) {
     const options = { files: filesToJoin };
     const report = await merge(options);
-    fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), fileWriteEncoding);
+    fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), utf8Encoding);
 
     await marge.create(report, {
       reportFilename: `${fileName.replace("json", "html")}`,
