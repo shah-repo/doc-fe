@@ -37,10 +37,7 @@ const materialNo = "MT-00004";
 const materialTitle = "Material document";
 const partNo = "PRT-00005";
 const partTitle = "Part document";
-const poNo = "FM-00003";
-const poTitle = "PO document";
 const poApiNo = "PO-00001";
-const poApiTitle = "API PO document";
 const supplierNo = "SUP-00005";
 const supplierTitle = "Supplier document";
 const maintenanceNo = "FM-00004";
@@ -96,6 +93,181 @@ context("Autocomplete test", () => {
                 needsSignature: true,
                 category: "Suppliers",
               },
+              {
+                documentTypeName: "Purchase Order test",
+                documentTypeAcronym: "POT-",
+                group: "PO",
+                category: "Purchase Order",
+                isQms: true,
+                privateNumberPool: true,
+                needsSignature: true,
+                fieldsConfig: {
+                  C: {
+                    visible: false,
+                    required: false,
+                  },
+                  D: {
+                    label: "Description",
+                    visible: true,
+                    required: false,
+                  },
+                  E: {
+                    visible: false,
+                    required: true,
+                  },
+                  F: {
+                    visible: false,
+                    required: true,
+                  },
+                  G: {
+                    visible: false,
+                    required: false,
+                  },
+                  I: {
+                    label: "Revise PO",
+                    visible: true,
+                  },
+                  J: {
+                    visible: false,
+                  },
+                  K: {
+                    label: "Cancel PO",
+                    visible: true,
+                  },
+                  L: {
+                    label: "Correct PO",
+                    visible: true,
+                  },
+                  M: {
+                    label: "Type of Change",
+                    visible: true,
+                    required: true,
+                  },
+                  N: {
+                    label: "Add Approvers",
+                    visible: false,
+                    required: false,
+                  },
+                  O: {
+                    label: "PO History",
+                    visible: true,
+                  },
+                  R: {
+                    visible: false,
+                  },
+                  S: {
+                    label: "Revise PO",
+                    visible: true,
+                  },
+                  V: {
+                    label: "Create PO",
+                    visible: true,
+                  },
+                  A1: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                  A2: {
+                    label: "Void",
+                    visible: true,
+                  },
+                  A3: {
+                    label: "History",
+                    visible: true,
+                  },
+                  A4: {
+                    visible: false,
+                  },
+                  A5: {
+                    label: "Pending Approval",
+                    visible: true,
+                  },
+                  A6: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                  P1: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                  P2: {
+                    label: "Void",
+                    visible: true,
+                  },
+                  P3: {
+                    label: "History",
+                    visible: true,
+                  },
+                  P4: {
+                    visible: false,
+                  },
+                  P5: {
+                    label: "Pending Approval",
+                    visible: true,
+                  },
+                  P6: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                },
+                schema: [
+                  {
+                    name: "po-status-built-in",
+                    type: "select",
+                    index: 0,
+                    label: "PO Status",
+                    options: [
+                      {
+                        text: "Open",
+                        value: "Open",
+                      },
+                      {
+                        text: "Closed",
+                        value: "Closed",
+                      },
+                      {
+                        text: "Cancelled",
+                        value: "Cancelled",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "PO Status",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-supplier-built-in",
+                    type: "supplier",
+                    index: 1,
+                    label: "Supplier ",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "Supplier",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-items-built-in",
+                    type: "purchaseorder",
+                    index: 2,
+                    label: "Purchase Order",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Purchase Order",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                ],
+              },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -106,7 +278,7 @@ context("Autocomplete test", () => {
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Material");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Part");
-          purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
+          purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order test");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Supplier");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
@@ -278,7 +450,7 @@ context("Autocomplete test", () => {
               attachments: [],
               description: "<p>PO Form document</p>",
               document: {
-                docId: poNo,
+                docId: "FM-00003",
                 documentType: {
                   id: formDocumentType[0].id,
                 },
@@ -292,7 +464,7 @@ context("Autocomplete test", () => {
                   ],
                 },
               },
-              name: poTitle,
+              name: "PO Form document",
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
@@ -301,15 +473,70 @@ context("Autocomplete test", () => {
                 outputDocumentTypes: [{
                   id: purchaseOrderDocumentType[0].id,
                 }],
-                schema: [{
-                  index: 0,
-                  type: "purchaseorder",
-                  label: "PO",
-                  name: "po-kdpqvhc7",
-                  applicableOn: ["ON_STATE_TO_IN_REVIEW"],
-                }],
+                schema: [
+                  {
+                    name: "po-status-built-in",
+                    type: "select",
+                    index: 0,
+                    label: "PO Status",
+                    options: [
+                      {
+                        text: "Open",
+                        value: "Open",
+                      },
+                      {
+                        text: "Closed",
+                        value: "Closed",
+                      },
+                      {
+                        text: "Cancelled",
+                        value: "Cancelled",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "PO Status",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-supplier-built-in",
+                    type: "supplier",
+                    index: 1,
+                    label: "Supplier ",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Supplier",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-items-built-in",
+                    type: "purchaseorder",
+                    index: 2,
+                    label: "Purchase Order",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Purchase Order",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    label: "form.builder.approvals",
+                    type: "poapprovals",
+                    deleteDisabled: false,
+                    name: "fb-po-approvals-kqqix31p",
+                    uniqueSchemaItem: true,
+                    index: 3,
+                  },
+                ],
               },
-
             },
             employeeId: adminEmployee.id as unknown as string,
             sessionId: loginResponse.sessionId as unknown as string,
@@ -332,10 +559,10 @@ context("Autocomplete test", () => {
                   attachments: [],
                   referenceTo: [],
                   formDocument: { id: createdPOFormDocument.id },
-                  description: poApiTitle,
+                  description: "API PO document",
                   revisionChangeType: RevisionChangeType.NextRevision,
                   document: {
-                    docId: poApiNo,
+                    docId: "PO-00001",
                     documentType: {
                       id: purchaseOrderDocumentType[0].id,
                     },
@@ -350,9 +577,9 @@ context("Autocomplete test", () => {
                     },
                   },
                   formInput: {
-                    "po-kdpqvhc7": {
+                    "po-items-built-in": {
                       items: [{
-                        id: "kdpr51z9",
+                        id: "kqqj708c",
                         type: "service",
                         date: (new Date()).toISOString(),
                         tax: false,
@@ -378,6 +605,7 @@ context("Autocomplete test", () => {
                       totalInUSD: "150.00",
                       dateOfExchangeRate: "",
                     },
+                    "po-status-built-in": "Open",
                   },
                 },
                 employeeId: adminEmployee.id,
@@ -850,6 +1078,7 @@ context("Autocomplete test", () => {
     });
 
     it("Enter document description 'FORM document description'", () => {
+      cy.unClick();
       cy.drEnterDocumentDescription({ description: "FORM document description" });
     });
 
@@ -1005,7 +1234,7 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Document types' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "doc-types", length: 28 });
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-types", length: 29 });
     });
 
     it("Verify count of 'Supplier list' in the list", () => {

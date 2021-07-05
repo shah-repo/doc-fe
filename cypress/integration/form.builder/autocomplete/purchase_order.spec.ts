@@ -47,10 +47,179 @@ context("Autocomplete 'Purchase Order' test", () => {
                 isQms: true,
               },
               {
-                documentTypeName: "purchaseorder",
-                documentTypeAcronym: "PO-",
-                group: "OTHER",
+                documentTypeName: "Purchase Order test",
+                documentTypeAcronym: "POT-",
+                group: "PO",
+                category: "Purchase Order",
                 isQms: true,
+                privateNumberPool: true,
+                needsSignature: true,
+                fieldsConfig: {
+                  C: {
+                    visible: false,
+                    required: false,
+                  },
+                  D: {
+                    label: "Description",
+                    visible: true,
+                    required: false,
+                  },
+                  E: {
+                    visible: false,
+                    required: true,
+                  },
+                  F: {
+                    visible: false,
+                    required: true,
+                  },
+                  G: {
+                    visible: false,
+                    required: false,
+                  },
+                  I: {
+                    label: "Revise PO",
+                    visible: true,
+                  },
+                  J: {
+                    visible: false,
+                  },
+                  K: {
+                    label: "Cancel PO",
+                    visible: true,
+                  },
+                  L: {
+                    label: "Correct PO",
+                    visible: true,
+                  },
+                  M: {
+                    label: "Type of Change",
+                    visible: true,
+                    required: true,
+                  },
+                  N: {
+                    label: "Add Approvers",
+                    visible: false,
+                    required: false,
+                  },
+                  O: {
+                    label: "PO History",
+                    visible: true,
+                  },
+                  R: {
+                    visible: false,
+                  },
+                  S: {
+                    label: "Revise PO",
+                    visible: true,
+                  },
+                  V: {
+                    label: "Create PO",
+                    visible: true,
+                  },
+                  A1: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                  A2: {
+                    label: "Void",
+                    visible: true,
+                  },
+                  A3: {
+                    label: "History",
+                    visible: true,
+                  },
+                  A4: {
+                    visible: false,
+                  },
+                  A5: {
+                    label: "Pending Approval",
+                    visible: true,
+                  },
+                  A6: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                  P1: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                  P2: {
+                    label: "Void",
+                    visible: true,
+                  },
+                  P3: {
+                    label: "History",
+                    visible: true,
+                  },
+                  P4: {
+                    visible: false,
+                  },
+                  P5: {
+                    label: "Pending Approval",
+                    visible: true,
+                  },
+                  P6: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                },
+                schema: [
+                  {
+                    name: "po-status-built-in",
+                    type: "select",
+                    index: 0,
+                    label: "PO Status",
+                    options: [
+                      {
+                        text: "Open",
+                        value: "Open",
+                      },
+                      {
+                        text: "Closed",
+                        value: "Closed",
+                      },
+                      {
+                        text: "Cancelled",
+                        value: "Cancelled",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "PO Status",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-supplier-built-in",
+                    type: "supplier",
+                    index: 1,
+                    label: "Supplier ",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "Supplier",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-items-built-in",
+                    type: "purchaseorder",
+                    index: 2,
+                    label: "Purchase Order",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Purchase Order",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                ],
               },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -89,6 +258,10 @@ context("Autocomplete 'Purchase Order' test", () => {
 
   context("Autocomplete 'Purchase Order' test", () => {
     context("Create 'Purchase Order' document", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
       });
@@ -113,8 +286,8 @@ context("Autocomplete 'Purchase Order' test", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
-      it("Select 'Purchase Order' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
+      it("Select 'Purchase Order test' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Purchase Order test" });
       });
 
       it("Click create document", () => {
@@ -136,7 +309,7 @@ context("Autocomplete 'Purchase Order' test", () => {
 
       it("Click on 'Create PO' button", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.poClickCreatePO();
+          cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
         });
       });
 
@@ -144,8 +317,12 @@ context("Autocomplete 'Purchase Order' test", () => {
         cy.get("#HeaderInfo-docId").then((po) => { purchaseOrderNo = po.text(); });
       });
 
+      it("Select 'Open' for PO status", () => {
+        cy.poSelectPOStatus({ status: "Open" });
+      });
+
       it("Enter description 'PO test'", () => {
-        cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").type("PO test");
+        cy.drEnterDocumentDescription({ description: "PO test" });
       });
 
       it("Add an Approval", () => {
@@ -153,6 +330,10 @@ context("Autocomplete 'Purchase Order' test", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
         });
+      });
+
+      it("Save PO", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Click 'Submit for Approval' button", () => {
@@ -164,15 +345,10 @@ context("Autocomplete 'Purchase Order' test", () => {
       it("Click 'Approve' button", () => {
         cy.get("[data-cy=\"form.builder.request.approve\"]").click();
         cy.get("input[name=\"password\"]").type("Tester1!");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
+          CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
-      });
-
-      it("Reload company", () => {
-        cy.fbClickButton({ el: "UserMenuButton" });
-        cy.get("#switchCompanyButton").click();
-        cy.cmpSelectCompanyAlreadyLoggedIn({ name: createdCompany.name, multiple: multipleCompanies });
       });
     });
 

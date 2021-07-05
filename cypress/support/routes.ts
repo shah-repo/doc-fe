@@ -636,7 +636,7 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/autocomplete_options/*",
     },
     callConfig: {
-      responseTimeout: 15 * 1000,
+      responseTimeout: 25 * 1000,
       requestTimeout: 10 * 1000,
     },
   },
