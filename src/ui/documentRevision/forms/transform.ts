@@ -20,7 +20,7 @@ export const getHighestRevision = (revisions: DocumentRevision[]) => {
   return maxBy(revs, "revision");
 };
 
-const getHighestReleasedRevision = (revisions: DocumentRevision[]) => {
+export const getHighestReleasedRevision = (revisions: DocumentRevision[]) => {
   const revs = getRevisionsInHighestStage(revisions).filter((rev) => isDocumentRevisionReleased(rev.status));
   return maxBy(revs, "revision");
 };
