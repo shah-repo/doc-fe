@@ -9,6 +9,7 @@ class FBDialogState {
   @observable public content?: React.ReactElement;
   @observable public title?: React.ReactNode | string;
   @observable public actions?: React.ReactNode;
+  public props?: FBDialogProps;
 
   @action public setDialog = (open: boolean) => {
     set(this, "open", open);
@@ -25,6 +26,7 @@ class FBDialogState {
 
   @action public config = (config: FBDialogProps) => {
     this.reset();
+    this.props = config;
     const { maxWidth, title, content, actions, open } = config;
     !isUndefined(open) && this.setDialog(open);
     this.setMaxWidth(maxWidth || this.maxWidth);

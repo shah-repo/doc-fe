@@ -148,6 +148,7 @@ context("Approval request form", () => {
   });
   context("Login user", () => {
     it("Logs user in", () => {
+      SystemRequirement("REQ-4140");
       cy.authLogin({
         email: USERS[2].email,
         password: "Tester1!",
@@ -273,12 +274,12 @@ context("Approval request form", () => {
     });
 
     it("Approve AR", () => {
-      SystemRequirement("REQ-0920");
+      SystemRequirement("REQ-0920", "REQ-4150", "REQ-4140", "REQ-4170");
       cy.arApproveAR();
     });
 
     it("Check approval request status is 'Approved'", () => {
-      SystemRequirement("REQ-0020", "REQ-0730");
+      SystemRequirement("REQ-0020", "REQ-0730", "REQ-4050");
       cy.arVerifyStatus({ status: "Approved" });
     });
   });
@@ -293,6 +294,7 @@ context("Approval request form", () => {
     });
 
     it("Check document revision status is 'Approved'", () => {
+      SystemRequirement("REQ-4070");
       cy.drCheckDocumentStatus({ status: "Approved" });
     });
 
@@ -306,12 +308,12 @@ context("Approval request form", () => {
     });
 
     it("Close AR and confirm pop-up for effective date", () => {
-      SystemRequirement("REQ-2720");
+      SystemRequirement("REQ-2720", "REQ-4310", "REQ-4300");
       cy.arCloseAR();
     });
 
     it("Check approval request status is 'Closed'", () => {
-      SystemRequirement("REQ-0020", "REQ-0730", "REQ-2710");
+      SystemRequirement("REQ-0020", "REQ-0730", "REQ-2710", "REQ-4050", "REQ-4310", "REQ-4300");
       cy.arVerifyStatus({ status: "Closed" });
     });
 
@@ -348,7 +350,8 @@ context("Approval request form", () => {
       cy.arEnterApprovalRequestDescription({ description: "CR from New form template for voided approval request" });
     });
 
-    it("Add created document revision", () => {
+    it("Add created document revision with description", () => {
+      SystemRequirement("REQ-4290", "REQ-4280");
       cy.arClickAddDocument().wait(500);
       cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });

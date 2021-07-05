@@ -44,10 +44,16 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
       }, namePart);
     }
 
+    function onClose() {
+      const lockData = formState?.locked.get(`${name}.${type}`);
+      formState?.expireLockedFields(lockData);
+    }
+
     // MARK: @methods
     onClick = (part?: FBProcedureItemConfig) => {
       handleLockField();
       dialogState?.config({
+        onClose,
         open: true,
         title: {
           locale: "form.builder.action.mode",
@@ -56,7 +62,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
             title: `${FBProcedureItemLocale[type]}|s`,
           },
         },
-        content: <FBProcedureForm {...{ type, name }} initialValues={cloneDeep(part)} />,
+        content: <FBProcedureForm {...{ type, name, onClose }} initialValues={cloneDeep(part)} />,
       });
     };
 
