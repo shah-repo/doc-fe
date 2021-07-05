@@ -380,6 +380,7 @@ context("Copyable Checkbox test", () => {
 
     it("Add TextFields value", () => {
       cy.get("[name^=\"textfield-wi-ch-\"]").type("textfield-wi-ch-value");
+      cy.unClick();
       cy.get("[name^=\"textfield-wo-ch-\"]").type("textfield-wo-ch-value");
     });
 
@@ -415,6 +416,7 @@ context("Copyable Checkbox test", () => {
 
     it("Add Timers value", () => {
       cy.get("[name^=\"t-wi-ch-\"]").type("t-wi-ch-value");
+      cy.unClick();
       cy.get("[name^=\"t-wo-ch-\"]").type("t-wo-ch-value");
     });
 
