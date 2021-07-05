@@ -14,11 +14,7 @@ import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
 import { FB } from "../../../form.builder";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
-import { getHighestRevision } from "../transform";
-<<<<<<< Updated upstream
-=======
 import { getHighestReleasedRevision, getHighestRevision } from "../transform";
->>>>>>> Stashed changes
 
 interface AvailableReferencesProps extends FieldOwnProps {
   disabled?: boolean;
