@@ -31,7 +31,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     const formValue = formState?.getFieldValue(name);
     const intl = useIntl();
     const { formInput } = workspaceState || {};
-    const { receivedItems } = name && formInput?.[name] || { receivedItems: "" };
+    const { receivedItems } = name && (formInput?.[name] || { receivedItems: "" });
     const { submitForm } = useFormikContext();
 
     poReceiveState = FB.useRef<FBPOReceiveState>(FBPOReceiveState, formValue?.id);
@@ -108,6 +108,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       if (name && !workspaceState?.isRevised) {
         formState?.setFieldValue(name, { ...formInput?.[name] });
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [receivedItems]);
 
     React.useEffect(() => reaction(

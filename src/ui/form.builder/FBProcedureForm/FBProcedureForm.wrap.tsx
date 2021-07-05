@@ -1,8 +1,7 @@
 import { filter, find, first, isEmpty, keyBy, lowerCase, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormFilterType, FBProcedureFormProps, FBProcedureFormState, FBProcedureItemConfig, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
@@ -137,6 +136,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     useEffect(() => reaction(
       () => formState?.inputState.get("LHRTparameter")?.value,
       () => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         disabled = Boolean(formState?.getFieldValue("LHRTparameter") ||
           formState?.inputState.get("LHRTparameter")?.value ||
           initialValues?.LHRTparameter);
