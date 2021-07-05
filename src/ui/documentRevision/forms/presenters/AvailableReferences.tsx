@@ -29,9 +29,8 @@ Partial<TypographyProps>;
 
 const getReferenceValues = (
   documentRevisions: DocumentRevision[],
-  docRevsById: DocumentRevisionsByIdState,
-  isDefault: boolean) => {
-  const highestRev = isDefault ? getHighestRevision(documentRevisions) : getHighestReleasedRevision(documentRevisions);
+  docRevsById: DocumentRevisionsByIdState) => {
+  const highestRev = getHighestReleasedRevision(documentRevisions) || getHighestRevision(documentRevisions);
   const docType = docRevsById[highestRev?.id || ""]?.document?.documentType;
   const isReferencePart = checkIsDocumentPart(docType?.groupOptions);
   const canReferenceCreateInspection = checkCanTypeCreateInspection(docType?.groupOptions);
@@ -72,8 +71,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
 
   const options = some(documentReferences, (ref) => {
     if (!ref.documentRevisions) { return false; }
-    const { isReferencePart, canReferenceCreateInspection } = getReferenceValues(ref.documentRevisions,
-      docRevsById, false);
+    const { isReferencePart, canReferenceCreateInspection } = getReferenceValues(ref.documentRevisions, docRevsById);
 
     return (isReferencePart && canDocumentCreateInspection) ||
         (canReferenceCreateInspection && isDocumentFai);
@@ -87,7 +85,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
       highestRev,
       isReferencePart,
       canReferenceCreateInspection,
-    } = getReferenceValues(ref.documentRevisions, docRevsById, true);
+    } = getReferenceValues(ref.documentRevisions, docRevsById);
 
     return {
       label: `${ref.docId} - ${highestRev?.displayRevision} - ${highestRev?.name}`,
