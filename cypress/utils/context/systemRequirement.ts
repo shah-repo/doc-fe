@@ -16,7 +16,6 @@ export function SystemRequirement(value: string, ...values: string[]) {
       return v;
     }
   }).filter((x) => x);
-
   if (filteredValues.length) {
     addTestContext(SYSTEM_REQUREMENT_TITLE, filteredValues.map(formatValue).join("\n"));
   }

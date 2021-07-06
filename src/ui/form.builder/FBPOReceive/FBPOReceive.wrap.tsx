@@ -1,10 +1,10 @@
 import { useFormikContext } from "formik";
-import { get, last } from "lodash";
+import { get, last, remove } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FB, FBDialogState, FBInputType, FBPOReceiveForm, FBPOReceiveFormActions, FBPOReceiveItemProps, FBPOReceiveProps, FBPOReceiveState, FBPurchaseOrderItem, FBSchemaProps } from "..";
+import { FB, FBDialogState, FBInputType, FBPOReceiveCreateLot, FBPOReceiveCreateLotActions, FBPOReceiveForm, FBPOReceiveFormActions, FBPOReceiveItemProps, FBPOReceiveProps, FBPOReceiveState, FBPurchaseOrderItem, FBSchemaProps } from "..";
 import { stripTags } from "../../../common/utils/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../components/notifications";
@@ -31,7 +31,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     const formValue = formState?.getFieldValue(name);
     const intl = useIntl();
     const { formInput } = workspaceState || {};
-    const { receivedItems } = name && formInput?.[name] || { receivedItems: "" };
+    const { receivedItems } = name && (formInput?.[name] || { receivedItems: "" });
     const { submitForm } = useFormikContext();
 
     poReceiveState = FB.useRef<FBPOReceiveState>(FBPOReceiveState, formValue?.id);
@@ -56,6 +56,17 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       });
     };
 
+    const handleLot = (e: React.MouseEvent<HTMLButtonElement>, item?: FBPurchaseOrderItem) => {
+      e.stopPropagation();
+      dialogState?.config({
+        open: true,
+        maxWidth: "sm",
+        title: "form.builder.po.create.a.lot",
+        content: <FBPOReceiveCreateLot {...{ item }} />,
+        actions: <FBPOReceiveCreateLotActions {...{ item }} />,
+      });
+    };
+
     function setSchemaItem(item: FBSchemaProps): FBPOReceiveItemProps {
       return {
         ...item,
@@ -63,11 +74,13 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
         ...(item.type === "purchaseorder") && {
           mode: "preview",
           handleItem,
+          handleLot,
         },
       };
     }
 
     function setSchemaProps(schema?: FBSchemaProps[]): FBSchemaProps[] | undefined {
+      remove(schema || [], (item) => item?.type === "poapprovals");
       if (!schema) { return; }
       const prior: Partial<Record<FBInputType | "other", number>> = {
         purchaseorder: 1,
@@ -95,6 +108,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       if (name && !workspaceState?.isRevised) {
         formState?.setFieldValue(name, { ...formInput?.[name] });
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [receivedItems]);
 
     React.useEffect(() => reaction(

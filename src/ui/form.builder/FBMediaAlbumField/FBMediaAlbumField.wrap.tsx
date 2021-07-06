@@ -62,6 +62,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       if (!ids || isEmpty(ids)) { return; }
       mediaAlbumFieldState?.getFiles(ids);
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Handle image upload
@@ -102,8 +103,8 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           if (addedFiles.length === 0) { return; }
           mediaAlbumFieldState?.getFiles(addedFiles);
         }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     React.useEffect(() => reaction(
@@ -112,8 +113,6 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
         if (!data) { return; }
         mediaAlbumFieldState?.download(data);
         mediaAlbumFieldState!.fromUpload = true;
-        const lockData = formState?.locked.get(name);
-        formState?.expireLockedFields(lockData?.lockId);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);

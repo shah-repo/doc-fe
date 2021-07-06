@@ -47,9 +47,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         return null;
       }
 
+      if (change.field.includes("-built-in")) {
+        return null;
+      }
+
       if (index && renderChanges(audit[groupId], key).props.children[index]?.length === 0) {
         return null;
       }
+
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer}>
@@ -265,7 +270,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         return;
       } else {
         // HACK for ENC-7509
-        const regex = new RegExp(`^formInput\\.(?:${change.fbSchemaItem?.name})\\[[a-zA-Z0-z\-]+\\]\\.id$`);
+        const regex = new RegExp(`^formInput\\.(?:${change.fbSchemaItem?.name})\\[[a-zA-Z0-z-]+\\]\\.id$`);
         if (change.fbSchemaItem?.type === "fileupload" && !regex.test(change.field)) { return; }
         if (change.field === "redline") {
           change = {

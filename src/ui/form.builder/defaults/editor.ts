@@ -37,8 +37,6 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   // inlineapproval: FBEditorRequestApproval,
   // instructionsdocument: FBEditorInstructionsDocument,
   // selectdocument: FBEditorSelectDocument,
-  // selectrequirement: FBEditorSelectRequirement,
-  // testRequirement: FBEditorTestRequirement,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBInputType[]> = {
@@ -65,11 +63,10 @@ export const FBEditorSectionConfig: Dictionary<FBInputType[]> = {
     "poApprovalMatrix",
     "instructionsmediaupload",
     "evidencemediaupload",
-    "testRequirement",
   ],
   approvals: ["hellosign", "approval"],
   buttons: ["checkpoint", "createlabel"],
-  instructions: ["instructionsdocument", "selectdocument", "selectrequirement"],
+  instructions: ["instructionsdocument", "selectdocument"],
   actions: ["action"],
 };
 
@@ -131,8 +128,6 @@ export const pickDefaultLabel: FBEditorElementType[] = [
   "teststep",
   "instructionsdocument",
   "selectdocument",
-  "selectrequirement",
-  "testRequirement",
   "instructionsmediaupload",
   "evidencemediaupload",
 ];

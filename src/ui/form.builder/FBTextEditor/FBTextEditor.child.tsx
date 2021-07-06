@@ -5,7 +5,6 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { FBConditionalWrapper, FBTextEditorOptions, FBTextEditorProps } from "..";
 import Colors from "../../layout/theme/utils/colors";
-import { withFBTextEditor } from "./FBTextEditor.wrap";
 
 const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
   onEditorStateChange,
@@ -98,4 +97,4 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
 
   ); };
 
-export default withFBTextEditor(FBTextEditorChild);
+export default FBTextEditorChild;

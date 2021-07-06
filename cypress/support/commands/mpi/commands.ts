@@ -9,12 +9,13 @@ declare global {
     interface Chainable<Subject> {
       mpiEnterDescriptionToStep(params: {numbOfStep: integer; description: string}): Chainable;
       mpiAddStep(): Chainable;
-      mpiAddMaterialToStep(params:
+      mpiAddMaterialDocumentToStep(params:
       {checkParameter?: boolean;
         numbOfStep: integer;
         material: string;
         quntity: string;
         unit: string;}): Chainable;
+      mpiAddMaterialParameterToStep(params: {numbOfStep: integer; material: string}): Chainable;
       mpiAddEquipmentToStep(params: {checkParameter?: boolean; numbOfStep: integer; equipment: string}): Chainable;
     }
   }
@@ -37,8 +38,7 @@ Cypress.Commands.add("mpiAddStep", () => {
   cy.get("[data-cy=\"form.builder.add.step\"]").last().click();
 });
 
-Cypress.Commands.add("mpiAddMaterialToStep", (params: {
-  checkParameter: boolean;
+Cypress.Commands.add("mpiAddMaterialDocumentToStep", (params: {
   numbOfStep: integer;
   material: string;
   quntity: string;
@@ -46,12 +46,22 @@ Cypress.Commands.add("mpiAddMaterialToStep", (params: {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
     cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).click();
   });
+  cy.get("[name=\"LHRTparameter\"]").uncheck();
   cy.get("[data-cy=\"title\"]").click();
   cy.get("ul[role=listbox]>li").contains(params.material).click();
   cy.get("[name=\"quantity\"]").type(params.quntity);
   cy.get("[data-cy=\"unit\"]").click();
   cy.get("ul[role=listbox]>li").contains(params.unit).click();
-  params.checkParameter ? cy.get("[name=\"LHRTparameter\"]").check() : "";
+  cy.get("[data-cy=\"form.builder.save\"]").click();
+});
+
+Cypress.Commands.add("mpiAddMaterialParameterToStep", (params: {
+  numbOfStep: integer;
+  material: string;}) => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+    cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).click();
+  });
+  cy.get("[data-cy=\"title\"]").type(params.material);
   cy.get("[data-cy=\"form.builder.save\"]").click();
 });
 

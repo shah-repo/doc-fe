@@ -230,6 +230,7 @@ context("Document Access Rights", () => {
     });
 
     it(`Select one group: '${groupOne}'`, () => {
+      SystemRequirement("REQ-3980");
       cy.drSelectGroup(groupOne);
     });
 
@@ -303,6 +304,7 @@ context("Document Access Rights", () => {
     });
 
     it("User is restricted.", () => {
+      SystemRequirement("REQ-2650");
       cy.drRequestAccessVisibility({ isVisible: true });
     });
   });
@@ -313,6 +315,7 @@ context("Document Access Rights", () => {
     });
 
     it("Logs user in", () => {
+      SystemRequirement("REQ-3990", "REQ-3930");
       cy.authLogin({
         email: SECOND_USER.email,
         password: "Tester1!",
@@ -334,6 +337,7 @@ context("Document Access Rights", () => {
     });
 
     it("User is not restricted.", () => {
+      SystemRequirement("REQ-3990");
       cy.drRequestAccessVisibility({ isVisible: false });
     });
   });
@@ -348,6 +352,7 @@ context("Document Access Rights", () => {
     });
 
     it("User is restricted.", () => {
+      SystemRequirement("REQ-3990", "REQ-3930");
       cy.drRequestAccessVisibility({ isVisible: true });
     });
   });
@@ -363,6 +368,7 @@ context("Document Access Rights", () => {
     });
 
     it("User is not restricted.", () => {
+      SystemRequirement("REQ-3990", "REQ-3930");
       cy.drRequestAccessVisibility({ isVisible: false });
     });
   });

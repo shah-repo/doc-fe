@@ -172,8 +172,6 @@ Cypress.Commands.add("recVerifyPOIsDisplayed", (params: {loadedPoItems: Purchase
       .contains("[data-cy=poItemIndex]", loadedItem.index.toString())
       .siblings("[data-cy=unitPrice]")
       .should("have.text", loadedItem.unitPrice);
-    cy.get("[data-cy=poSum]").eq(loadedItem.index - 1)
-      .should("have.text", loadedItem.totalPrice);
   });
 });
 

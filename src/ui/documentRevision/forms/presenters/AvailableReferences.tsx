@@ -14,7 +14,7 @@ import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
 import { FB } from "../../../form.builder";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
-import { getHighestReleasedRevision } from "../transform";
+import { getHighestReleasedRevision, getHighestRevision } from "../transform";
 
 interface AvailableReferencesProps extends FieldOwnProps {
   disabled?: boolean;
@@ -27,8 +27,10 @@ type AvailableReferencesPropsWithFormik = AvailableReferencesProps &
 FormikFieldProps &
 Partial<TypographyProps>;
 
-const getReferenceValues = (documentRevisions: DocumentRevision[], docRevsById: DocumentRevisionsByIdState) => {
-  const highestRev = getHighestReleasedRevision(documentRevisions);
+const getReferenceValues = (
+  documentRevisions: DocumentRevision[],
+  docRevsById: DocumentRevisionsByIdState) => {
+  const highestRev = getHighestReleasedRevision(documentRevisions) || getHighestRevision(documentRevisions);
   const docType = docRevsById[highestRev?.id || ""]?.document?.documentType;
   const isReferencePart = checkIsDocumentPart(docType?.groupOptions);
   const canReferenceCreateInspection = checkCanTypeCreateInspection(docType?.groupOptions);
@@ -92,6 +94,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         (canReferenceCreateInspection && isDocumentFai),
     };
   });
+
 
   useEffect(() => {
     const value = defaultValue(documentReferences);

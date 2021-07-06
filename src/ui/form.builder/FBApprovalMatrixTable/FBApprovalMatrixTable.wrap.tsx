@@ -1,3 +1,4 @@
+import { sortBy } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { withResizeDetector } from "react-resize-detector";
@@ -40,6 +41,10 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
     // MARK: @observer
     useObserver(() => {
       approvalData = approvalMatrixFieldState?.data as FBApprovalMatrixFieldData;
+      if (!approvalData) {
+        return;
+      }
+      approvalData.approvalMatrix = sortBy(approvalData.approvalMatrix, (x) => x.docType.acronym);
     });
 
     return Component({

@@ -5,7 +5,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBRequiredApprover } from "..";
-import { ApprovalStatus } from "../../../state/ducks/documents/types";
+import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
 import Colors from "../../layout/theme/utils/colors";
 import FBPOApprovalsState from "./FBPOApprovals.state";
@@ -100,7 +100,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
           approval.approverId === data?.approverId ? data : approval
         ));
         poApprovalsState.setApprovals(filteredApprovals);
-        if (data?.status === ApprovalStatus.Approved) {
+        if (data?.status === ApprovalStatus.Approved || data?.status === DocumentStatus.Draft) {
           window.location.reload();
         }
       }
@@ -193,7 +193,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     formState?.setFieldValue(`${name}`, fieldValue);
     documentStatus = document?.status as any;
     // Should be disabled while submitting if group levels changes while adding/editing PO items
-    disabled = loading || isSubmitting;
+    disabled = disabled || loading || isSubmitting;
 
     return Component({
       ...(props as T),

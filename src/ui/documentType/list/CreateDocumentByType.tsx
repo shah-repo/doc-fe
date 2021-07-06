@@ -101,7 +101,7 @@ export const useHandleCreateDoc = () => {
       setForm(selectedForm);
       return;
     }
-    if (outputDocumentTypes.length === 1 && !(outputDocumentTypes[0] as any)?.documentTypeAcronym?.startsWith("RC")) {
+    if (outputDocumentTypes.length === 1) {
       fetchDocIdAsync.start(fetchDocIdAction, (outputDocumentTypes[0] as any)?.id, fetchDocIdAsync);
       setForm(selectedForm);
       return;
@@ -152,7 +152,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     setErrorMessage(undefined);
-  }, [documentTypeId]);
+  }, [categoryName, documentTypeId]);
 
   const idAsync = useAsync<DocumentTypeById>({
     onSuccess: () => {

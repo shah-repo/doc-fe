@@ -80,6 +80,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       setInlineApproval(isFormWithInlineApproval(validSchema));
       setIsApproved(isInlineFormApproved( documentRevision, formState, validSchema));
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
@@ -184,7 +185,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       <SubmitButton
         asyncState={asyncState}
         label={isDisabled ?
-          `common.save.${values.document?.documentType?.documentTypeAcronym}` :
+          "common.save" :
           "navigation.createDocument"
         }
         onClick={onFormClick}

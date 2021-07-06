@@ -50,6 +50,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     const isDocumentMPIOutput = checkIsDocumentMPIOutput(workspaceState?.document?.document.documentType.groupOptions);
     const isRedlineActive = useSelector(companySelectors.getRedlineActive);
 
+
     const schemaItem = workspaceState?.getSchemaItemAt(lhrStepIndex);
     const config: Partial<Record<keyof typeof FBProcedureItemType, (() => void)>> = {
       materials: () => {
@@ -69,6 +70,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
 
     useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.materials),
@@ -132,6 +134,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+
     // MARK: @helpers
     function handleAdd() {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
@@ -164,11 +167,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
 
     function handleUnlockField() {
       const lockData = parentFormState?.locked.get(`${name}.${type}`);
-      parentFormState?.locked.set(`${name}.${type}`, {
-        ...lockData,
-        locked: false,
-      });
-      parentFormState?.expireLockedFields(lockData?.lockId);
+      parentFormState?.expireLockedFields(lockData);
     }
 
     function handleFilter(
@@ -208,8 +207,8 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       partLoading = procedureFormState?.partsApi.loading;
       lotLoading = procedureFormState?.lotsApi.loading;
       // disabled while adding or editing material/eq
-      disabled = Boolean(formState?.getFieldValue("LHRTparameter") ||
-        formState?.inputState.get("LHRTparameter")?.value ||
+      disabled = formState?.inputState.get("LHRTparameter")?.value ||
+      Boolean(formState?.getFieldValue("LHRTparameter") ||
         initialValues?.LHRTparameter);
     });
 
