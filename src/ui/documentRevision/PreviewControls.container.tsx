@@ -22,7 +22,6 @@ import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
-import ChangeDocumentFormContainer from "./forms/presenters/change.document.form/ChangeDocumentForm.container";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
@@ -213,7 +212,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 
   return (
     <>
-      <ChangeDocumentFormContainer {...{ documentRevision }} />
       {!isLastVersionObsolete() && renderCloneButton()}
       {(isStatusReleased || isStatusInDraft) && canCopy &&
         <CopyEBButton

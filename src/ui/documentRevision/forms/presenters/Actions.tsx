@@ -26,7 +26,6 @@ import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.prese
 import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";
-import ChangeDocumentFormContainer from "./change.document.form/ChangeDocumentForm.container";
 import ExportToCSVButton from "./export.to.csv/ExportToCSV.button";
 import ExportToEmail from "./export.to.email/ExportToEmail";
 import RedlineButton from "./redline/Redline.button";
@@ -196,7 +195,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       {
         !redlineActive &&
       <span>
-        <ChangeDocumentFormContainer {...{ documentRevision }} />
         {(isStatusReleased || isStatusInDraft) && serializedCSV &&
           <ExportToCSVButton
             {...{ documentRevision }}
