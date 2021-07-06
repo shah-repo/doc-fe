@@ -5,7 +5,7 @@ import marge from "mochawesome-report-generator";
 import { resolve } from "path";
 import { RequirementsReadWriteConfig } from "../../requirements/configRequirementsRun";
 import { findGeneratedSpecFiles, findMainGeneratedRequirementsJsonFile } from "./helpers/findGeneratedSpecFiles";
-import { findLastGeneratedResultsJsonFolder } from "./helpers/findLastGeneratedResults";
+import { findLastGeneratedResultsJsonFolder, findLastGeneratedResultsReportsFolder } from "./helpers/findLastGeneratedResults";
 import { findRequirementsListToProcess } from "./helpers/findRequirementsListToProcess";
 import { FilesWithData, ModuleOrSubModule, utf8Encoding } from "./helpers/typing.constants";
 
@@ -47,7 +47,6 @@ async function processCSVRequirementsJson(
   await generateReport(
     filePaths,
     `${jsonFolderPath}/${reqsList.outputFolderName}/${reqsList.outputFileName}`,
-    `${jsonFolderPath}/${reqsList.outputFolderName}`,
     reqsList.outputFileName);
 }
 
@@ -78,8 +77,8 @@ async function processModuleOrSubModuleRequirementsJson(
     generateReport(
       filePaths,
       `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}/${fileName}`,
-      `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`,
-      fileName);
+      fileName,
+      moduleOrSubModule);
   }));
 }
 
@@ -156,17 +155,25 @@ function connectRequirementsWithCypressGeneratedJson(
 async function generateReport(
   filesToJoin: string[] | undefined,
   output: string,
-  outputFolderPath: string,
-  fileName: string) {
+  fileName: string,
+  moduleOrSubModule?: ModuleOrSubModule) {
   if (filesToJoin && filesToJoin.length > 1) {
     const options = { files: filesToJoin };
     const report = await merge(options);
     fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), utf8Encoding);
 
+    let filePrefix = "";
+    if (moduleOrSubModule === "Module") {
+      filePrefix = "module_";
+    }
+    else if (moduleOrSubModule === "Sub-Module") {
+      filePrefix = "submodule_";
+    }
+
     await marge.create(report, {
-      reportFilename: `${fileName.replace("json", "html")}`,
-      assetsDir: `${outputFolderPath}/assets`,
-      reportDir: `${outputFolderPath}`,
+      reportFilename: `${filePrefix}${fileName.replace("json", "html")}`,
+      assetsDir: `${findLastGeneratedResultsReportsFolder()}/assets`,
+      reportDir: `${findLastGeneratedResultsReportsFolder()}`,
       cdn: true,
       overwrite: true,
     });
