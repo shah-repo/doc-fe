@@ -42,15 +42,12 @@ export const withFBLock = <T extends FBLockProps>(
       const records = reduce(fields, (record: Record<string, any>, field) => {
         map(first(map(field, "formInput")), (t, index) => {
           setExpired(first(keys(t)), dataArray[index].expiresAt);
-          assign(record, {
-            ...t,
-            expiresAt: dataArray[index].expiresAt,
-          });
+          assign(record, t);
         });
         return record;
       }, {});
 
-      map(records, (locked, fieldName, index) => {
+      map(records, (locked, fieldName) => {
         formState?.locked.set(fieldName, {
           ...formState.locked.get(fieldName),
           fieldName,
