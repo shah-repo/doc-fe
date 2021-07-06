@@ -4,7 +4,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from "..";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
-import { getHighestRevision } from "../../documentRevision/forms/transform";
+import { getHighestRevision, getLatesReferenceVersion } from "../../documentRevision/forms/transform";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
@@ -30,13 +30,13 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
-    const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom;
-
-    stepLHRs = smartReferencesFrom
-      ?.find((ref) => ref.active
+    const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom?.filter( (ref) => ref.active
       && ref.type === SmartReferenceType.HiddenPiInstance
-      && ref.fromDocRevId === workspaceState?.document?.formInput?.[name]
-      && ref.metadata.fieldId === name)?.fromDocRev;
+      && ref.metadata.fieldId === name);
+
+    const highestReference = getLatesReferenceVersion(smartReferencesFrom);
+    stepLHRs = highestReference?.fromDocRev;
+
     const employees = workspaceState?.externalState?.company?.companyMine.employees;
     ownerOfStartMPIAction = employees?.find((e) =>
       e.id === smartReferencesFrom?.[0]?.metadata.startedBy)?.user?.name;
