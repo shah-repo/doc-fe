@@ -843,9 +843,8 @@ context("Autosave on blur", () => {
     });
 
     it("Fill TextField and check for autosave", () => {
-      cy.get("[name^=fb-textfield-]").type("Test field");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.unClick();
+        cy.get("[name^=fb-textfield-]").typeFieldLock("Test field");
       });
     });
 

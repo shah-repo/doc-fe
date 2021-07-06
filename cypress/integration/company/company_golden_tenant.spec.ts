@@ -587,7 +587,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Enters document title 'First document'", () => {
-      cy.get("[data-cy^=document-title-]").type("First document");
+      cy.get("[data-cy^=document-title-]").typeFieldLock("First document");
     });
 
     it("Select 'Form with output' value on 'Type of document to be created'", () => {
@@ -729,16 +729,12 @@ context("Create company with golden tenant", () => {
 
     it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
       SystemRequirement("REQ-3500");
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-        cy.get("[name^=company-abbreviation-]").type(newCompanyAbbr);
-      });
+      cy.get("[name^=company-abbreviation-]").typeFieldLock(newCompanyAbbr);
     });
 
     it(`Enters company email '${USERS[1].email}'`, () => {
       SystemRequirement("REQ-3500");
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-        cy.get("[name^=company-admin-email-]").type(USERS[1].email);
-      });
+      cy.get("[name^=company-admin-email-]").typeFieldLock(USERS[1].email);
     });
 
     it("Upload DOM JSON", () => {
