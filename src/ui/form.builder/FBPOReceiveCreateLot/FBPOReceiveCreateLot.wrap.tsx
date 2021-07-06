@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { FB, FBPOReceiveCreateLotProps } from "..";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { documentTypeActions, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentTypeById, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
-import { useDispatch, useSelector } from "react-redux";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import FBPOReceiveCreateLotState from "./FBPOReceiveCreateLot.state";
-import { useEffect } from "react";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 
 export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
   Component: React.FunctionComponent<T>,
@@ -62,6 +61,7 @@ export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
 
     useEffect(() => {
       getDocTypes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return Component({

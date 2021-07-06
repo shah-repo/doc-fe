@@ -84,6 +84,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Click on 'Supplier' document type", () => {
+    SystemRequirement("REQ-2400");
     cy.drSelectOutputDocumentType({ documentType: "Supplier" }).wait(500);
   });
 
@@ -100,22 +101,22 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Navigate to supplier list", () => {
-    // SystemRequirement("REQ-2230");
+    SystemRequirement("REQ-2230");
     cy.navigToSuppliers();
   });
 
   it("Create supplier from Form document", () => {
-    // SystemRequirement("REQ-2330");
+    SystemRequirement("REQ-2330");
     cy.supCreateNew();
   });
 
   it("Enter 'Supplier Address/Phone'", () => {
-    // SystemRequirement("REQ-2360");
+    SystemRequirement("REQ-2360");
     cy.drEnterDocumentDescription({ description: "Test Supplier address" });
   });
 
   it("Enter 'Supplier Name'", () => {
-    // SystemRequirement("REQ-2360");
+    SystemRequirement("REQ-2360");
     cy.supEnterSuppName({ name: "Test Supplier" });
   });
 
@@ -128,7 +129,6 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Navigate to supplier list", () => {
-    // SystemRequirement("REQ-2230");
     cy.navigToSuppliers();
   });
 
@@ -137,17 +137,17 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Check for filtered values", () => {
-    // SystemRequirement("REQ-2320");
+    SystemRequirement("REQ-2320");
     cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "1" });
   });
 
   it("Clear filter", () => {
-    // SystemRequirement("REQ-2310");
+    SystemRequirement("REQ-2310");
     cy.filterClear().wait(300);
   });
 
   it("Click on existing supplier file from list", () => {
-    // SystemRequirement("REQ-2340");
+    SystemRequirement("REQ-2340");
     cy.supClickOnSpecificSupplierFileFromList({ item: "SUP-00001" });
   });
 
@@ -188,17 +188,16 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Navigate to supplier list", () => {
-    // SystemRequirement("REQ-2230");
     cy.navigToSuppliers();
   });
 
   it("Click on create supplier to prompt option of which supplier form we should use", () => {
-    // SystemRequirement("REQ-2350");
+    SystemRequirement("REQ-2350");
     cy.supCreateNew();
   });
 
   it("Check if forms are suggested on creating new supplier", () => {
-    // SystemRequirement("REQ-2350");
+    SystemRequirement("REQ-2350");
     cy.supCheckForSuggestedForms("New Supplier Form", "New Supplier Form 2");
   });
 });

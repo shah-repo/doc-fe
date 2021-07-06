@@ -765,7 +765,7 @@ context("Create company with golden tenant", () => {
 
     it("Upload logo picture 'image.jpg'", () => {
       SystemRequirement("REQ-3500");
-      cy.xpath("//div[@data-cy=\"Client's Logo\"]/../../../div/div/button").click();
+      cy.get("[data-cy=\"albumMediaButton\"]").click();
       cy.pmUploadAttachment({ fileName: "image.jpg" });
     });
 

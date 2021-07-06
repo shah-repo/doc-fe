@@ -91,8 +91,8 @@ export const withFBProcedure = <T extends FBProcedureProps>(
             ...formValue,
           });
         }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Diff switch

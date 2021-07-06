@@ -377,12 +377,12 @@ context("PO approval test", () => {
     });
 
     it("Check if error message says that approvers are not present", () => {
-      // SystemRequirement("REQ-1500");
+      SystemRequirement("REQ-1500");
       cy.poAMCheckForAlertMessage();
     });
 
     it("Check if selected approver has approval signature right by his name", () => {
-      // SystemRequirement("REQ-1510");
+      SystemRequirement("REQ-1510");
       cy.poAMCheckIfApproverHasApprovalSign();
       cy.unClick();
     });
@@ -400,12 +400,14 @@ context("PO approval test", () => {
     });
 
     it("Create document in 'Pending approval' state", () => {
+      SystemRequirement("REQ-1520");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
     });
 
     it("Click on 'Withdraw Submission' button", () => {
+      SystemRequirement("REQ-1530");
       cy.get("[data-cy=\"document.revision.withdraw.alert\"]").click();
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.EmployeesGet,
