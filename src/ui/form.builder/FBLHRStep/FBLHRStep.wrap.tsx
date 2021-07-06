@@ -35,6 +35,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     stepLHRs = smartReferencesFrom
       ?.find((ref) => ref.active
       && ref.type === SmartReferenceType.HiddenPiInstance
+      && ref.fromDocRevId === workspaceState?.document?.formInput?.[name]
       && ref.metadata.fieldId === name)?.fromDocRev;
     const employees = workspaceState?.externalState?.company?.companyMine.employees;
     ownerOfStartMPIAction = employees?.find((e) =>
