@@ -196,11 +196,15 @@ context("Dynamic Form Test", () => {
     });
 
     it("Enters text inside 'New Text Field 1' dynamic form field", () => {
-      cy.get("[data-cy*=\"new-text-field\"]").eq(0).type("Some text for Dynamic Form field");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
+        cy.get("[data-cy*=\"new-text-field\"]").eq(0).type("Some text for Dynamic Form field");
+      });
     });
 
     it("Enters text inside 'New Text Field 2'", () => {
-      cy.get("[data-cy*=\"new-text-field-2\"]").type("Some text for Text field");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
+        cy.get("[data-cy*=\"new-text-field-2\"]").type("Some text for Text field");
+      });
     });
 
     it("Click create document after filling document", () => {
