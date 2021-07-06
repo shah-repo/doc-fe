@@ -61,6 +61,9 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
   );
 
   const onSubmit = (values) => {
+    if (!values.changeDocumentForm.value) {
+      return;
+    }
     // Omit by is used if user delets value from select because it returns null
     updateFormAsync.start(
       updateFormAction,
