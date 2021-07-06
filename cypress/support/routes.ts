@@ -80,6 +80,7 @@ export enum CyRoutes {
   UpgradeToReleasedForm = "UpgradeToReleasedForm",
   GetAutocompleteOptions = "GetAutocompleteOptions",
   GetFieldLocks = "GetFieldLocks",
+  AvailableMaintenanceForms = "AvailableMaintenanceForms",
 }
 
 export const routes: ICyRoutes =   {
@@ -129,6 +130,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "PATCH",
       url: "/api/v1/document_revisions/upgradeToReleasedForm/*",
+    },
+    callConfig: {
+      responseTimeout: 20 * 1000,
+      requestTimeout: 20 * 1000,
+    },
+  },
+  AvailableMaintenanceForms: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/documents/available_maintenance_forms",
     },
     callConfig: {
       responseTimeout: 20 * 1000,

@@ -82,7 +82,13 @@ Cypress.Commands.add("recFilterByReceivableId", (params: {id: string}) => {
 });
 
 Cypress.Commands.add("recClickUpdateRecord", (params: {id: string}) => {
-  cy.get("[data-cy=\"updateRecord\"]").click();
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.EmployeesGet,
+    CyRoutes.DocPreview,
+    CyRoutes.GetRequiredApproversDocRev,
+    CyRoutes.GetAutocompleteOptions], () => {
+    cy.get("[data-cy=\"updateRecord\"]").click();
+  });
 });
 
 Cypress.Commands.add("recClickSaveBtn", () => {

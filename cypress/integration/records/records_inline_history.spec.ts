@@ -215,8 +215,10 @@ context("Record inline history Flow", () => {
 
       it("Select approver for first inline", () => {
         SystemRequirement("REQ-4340");
-        cy.get("[name*=\"fb-ia-inline-field\"] input").click();
-        cy.get("ul[role=listbox]>li").contains(USERS[2].email).click();
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
+          cy.get("[name*=\"fb-ia-inline-field\"] input").click();
+          cy.get("ul[role=listbox]>li").contains(USERS[2].email).click();
+        });
       });
 
       it("Save record", () => {

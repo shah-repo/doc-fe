@@ -722,17 +722,23 @@ context("Create company with golden tenant", () => {
 
     it(`Enters company name '${newCompanyName}'`, () => {
       SystemRequirement("REQ-3500");
-      cy.get("[name^=company-name-]").type(newCompanyName);
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+        cy.get("[name^=company-name-]").type(newCompanyName);
+      });
     });
 
     it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
       SystemRequirement("REQ-3500");
-      cy.get("[name^=company-abbreviation-]").type(newCompanyAbbr);
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+        cy.get("[name^=company-abbreviation-]").type(newCompanyAbbr);
+      });
     });
 
     it(`Enters company email '${USERS[1].email}'`, () => {
       SystemRequirement("REQ-3500");
-      cy.get("[name^=company-admin-email-]").type(USERS[1].email);
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+        cy.get("[name^=company-admin-email-]").type(USERS[1].email);
+      });
     });
 
     it("Upload DOM JSON", () => {

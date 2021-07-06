@@ -706,7 +706,10 @@ context("Procedure and parts flow test", () => {
 
   context("Create EB from created FORM document", () => {
     it("Click create new document from FORM", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetProposedDocId,
+        CyRoutes.PostDocRev,
+        CyRoutes.GetRequiredApproversDocRev], () => {
         cy.drCreateNewDocumentFromForm();
       });
     });
@@ -910,6 +913,10 @@ context("Procedure and parts flow test", () => {
       cy.ebClickClone();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     context("Add materials and equipments", () => {
       it("Remove 'Materials document'", () => {
         cy.xpath("//div[@data-cy=\"form.builder.procedure.materials.title\"]/../div[3]/button").eq(1).click();
@@ -932,9 +939,11 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-        });
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      });
+
+      it("Save EB", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
 
