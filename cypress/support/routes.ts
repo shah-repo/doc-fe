@@ -80,6 +80,8 @@ export enum CyRoutes {
   UpgradeToReleasedForm = "UpgradeToReleasedForm",
   GetAutocompleteOptions = "GetAutocompleteOptions",
   GetFieldLocks = "GetFieldLocks",
+  PostFieldLocks = "PostFieldLocks",
+  ExpireFieldLocks = "ExpireFieldLocks",
   AvailableMaintenanceForms = "AvailableMaintenanceForms",
 }
 
@@ -178,6 +180,26 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/document_revision_field_locks/*",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
+  PostFieldLocks: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/document_revision_field_locks",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
+  ExpireFieldLocks: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/document_revision_field_locks/*/expire",
     },
     callConfig: {
       responseTimeout: 30 * 1000,

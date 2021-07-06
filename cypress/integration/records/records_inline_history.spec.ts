@@ -233,7 +233,8 @@ context("Record inline history Flow", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.EmployeesGet,
-          CyRoutes.DocPreview], () => {
+          CyRoutes.DocPreview,
+          CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
       });

@@ -722,8 +722,8 @@ context("Procedure and parts flow test", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.drEnterDocumentDescription({ description: "EB description" });
           cy.drClickCreateDocumentWithoutApiCall();
-          cy.unClick();
         });
+        cy.wait(500);
       });
 
       it("Add approver to approvals", () => {
