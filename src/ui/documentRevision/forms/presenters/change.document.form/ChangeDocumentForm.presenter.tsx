@@ -26,6 +26,7 @@ const ChangeDocumentFormPresenter: React.FunctionComponent<Props> = ({
       label={`${field.label}`}
       autocompleteProps={{
         id: "formMigrationField",
+        isClearable: true,
       }}
       options={toFieldsOptions(field, sourceSchema)}
     />

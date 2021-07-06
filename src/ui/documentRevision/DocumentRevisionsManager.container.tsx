@@ -203,6 +203,7 @@ DocumentRevisionManagerContainerProps
           docRevId={documentRevisionId || ""}
           documentTypeId={documentTypeId}
           sourceSchema={selectedDocument?.formDocument?.formTemplate?.schema || []}
+          sourceFormId={selectedDocument?.formDocument?.id || ""}
         /> : null,
       },
     },

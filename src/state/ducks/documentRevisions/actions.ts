@@ -387,6 +387,16 @@ const updateForm = (
   handlers,
 });
 
+const getFormMappingTemplate = (
+  sourceFormId: string,
+  targetFormId: string,
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `/form_mapping/${sourceFormId}/${targetFormId}`,
+  method: "get",
+  handlers,
+});
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -421,4 +431,5 @@ export default {
   saveWithNoResponse,
   exportToEmail,
   updateForm,
+  getFormMappingTemplate,
 };

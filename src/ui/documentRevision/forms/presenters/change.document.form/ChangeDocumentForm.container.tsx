@@ -1,11 +1,12 @@
 import { Box } from "@material-ui/core";
 import { Formik } from "formik";
-import { find } from "lodash";
+import { find, isEmpty, isNull, omitBy } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
 import { documentTypeActions, documentTypeSelectors } from "../../../../../state/ducks/documentRevisions/documentType";
 import { DocumentRevision, UpdateFormFieldMapping } from "../../../../../state/ducks/documentRevisions/types";
+import { OptionType } from "../../../../components/forms/fields/Autocomplete/types";
 import { FormContext } from "../../../../components/forms/FormContext";
 import { FBSchemaProps } from "../../../../form.builder";
 import useActionCreator from "../../../../hooks/useActionCreator";
@@ -17,21 +18,24 @@ interface Props {
   documentTypeId: string;
   docRevId: string;
   sourceSchema: FBSchemaProps[];
+  sourceFormId: string;
 }
 
-const mockTemplateResponse = [
-  {
-    sourceId: "first-form-1-kqqk3jz2",
-    targetId: "second-form-2-kqqk580e",
-  },
-];
 const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
   documentTypeId,
   docRevId,
   sourceSchema,
+  sourceFormId,
 }) => {
   const [template, setTemplate] = useState<UpdateFormFieldMapping[]>([]);
   const [availableFields, setFields] = useState<FBSchemaProps[]>([]);
+  const [base, setBase] = useState<OptionType>({ label: "", value: "" });
+
+  const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
+  const updateFormAction = useActionCreator(documentRevisionsActions.updateForm);
+  const getFormMappingTemplateAction = useActionCreator(documentRevisionsActions.getFormMappingTemplate);
+  const availableForms = useSelector(documentTypeSelectors.docRevTypeForms);
+
   const async = useAsync();
   const updateFormAsync = useAsync({
     onSuccess: (data?: DocumentRevision) => {
@@ -45,34 +49,57 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
     },
   }
   );
-  console.log(template);
 
-  const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
-  const updateFormAction = useActionCreator(documentRevisionsActions.updateForm);
-  const availableForms = useSelector(documentTypeSelectors.docRevTypeForms);
+  const getFormMappingTemplateAsync = useAsync({
+    onSuccess: (data?: any) => {
+      if (!data) {
+        return;
+      }
+      setTemplate(data.mapping);
+    },
+  }
+  );
 
   const onSubmit = (values) => {
+    // Omit by is used if user delets value from select because it returns null
     updateFormAsync.start(
       updateFormAction,
       docRevId,
-      toUpdateFormRequestBody(values),
+      toUpdateFormRequestBody(omitBy(values, isNull)),
       updateFormAsync);
   };
+
   const handleFormChange = (value) => {
-    const chosenFormSchema = find(availableForms, (form) => form.id === value.value)?.formTemplate?.schema || [];
-    setTemplate(mockTemplateResponse);
+    const chosenForm = find(availableForms, (form) => form.id === value.value);
+    const chosenFormSchema = chosenForm?.formTemplate?.schema || [];
+    const targetFormId = chosenForm?.id;
+
+    getFormMappingTemplateAsync.start(
+      getFormMappingTemplateAction,
+      sourceFormId,
+      targetFormId,
+      getFormMappingTemplateAsync);
+
     setFields(chosenFormSchema);
+    setBase(value);
   };
 
   const generateInitialValues = () => {
-    const base = { changeDocumentForm: { label: "", value: "" } };
-    if (!mockTemplateResponse) {
-      return base;
+    // Hack because enableReinitialize overrides chosen value
+    const changeDocumentFormInitialValue = { changeDocumentForm: base };
+
+    if (isEmpty(template)) {
+      return changeDocumentFormInitialValue;
     }
-    return { ...base, ...toFieldInitialValues(mockTemplateResponse, sourceSchema) };
+
+    return {
+      ...changeDocumentFormInitialValue,
+      ...toFieldInitialValues(template, sourceSchema),
+    };
   };
 
   useEffect(() => {
+    // Fetching available forms for migration
     async.start(getDocRevByIds, documentTypeId, async);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentTypeId]);
@@ -83,6 +110,7 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
         <Formik
           initialValues={generateInitialValues()}
           onSubmit={onSubmit}
+          enableReinitialize
         >
           <ChangeDocumentFormPresenter {...{ availableForms, handleFormChange, availableFields, sourceSchema }}/>
         </Formik>

@@ -1,4 +1,4 @@
-import { filter, find, keyBy, map } from "lodash";
+import { filter, find, keyBy, map, omit } from "lodash";
 import { DocumentTypeByIdForm } from "../../../../../../state/ducks/documentRevisions/documentType/types";
 import { UpdateFormFieldMapping, UpdateFormRequestBody } from "../../../../../../state/ducks/documentRevisions/types";
 import { OptionType } from "../../../../../components/forms/fields/Autocomplete/types";
@@ -55,14 +55,22 @@ export const toFieldsOptions = (targetField: FBSchemaProps, sourceSchema: FBSche
     return {
       label,
       value: field.name,
+      targetId: targetField.name,
     };
   });
 };
 
-export const toUpdateFormRequestBody = (values: any): UpdateFormRequestBody => ({
-  mapping: [],
-  formToBeUsed: {
-    id: values.changeDocumentForm.value,
-  },
-});
+export const toUpdateFormRequestBody = (values: any): UpdateFormRequestBody => {
+  // Map only form fields
+  const mappedFields: UpdateFormFieldMapping[] = map(omit(values, "changeDocumentForm"), (value) => ({
+    targetId: value.targetId,
+    sourceId: value.value,
+  }));
+
+  return ({
+    mapping: mappedFields,
+    formToBeUsed: {
+      id: values.changeDocumentForm.value,
+    },
+  }); };
 
