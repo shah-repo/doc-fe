@@ -54,6 +54,7 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
           if (!released) { return; }
           formState?.setFieldValue(name, (released).id);
           formState?.getInputState(name || "")?.setRender();
+          workspaceState?.saveDocRev(formState?.getValues());
         }
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps

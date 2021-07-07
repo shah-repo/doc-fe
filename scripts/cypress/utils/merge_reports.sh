@@ -16,5 +16,7 @@ then
     --assetsDir "$DIR_REPORTS/assets" \
     --reportDir "$DIR_REPORTS" \
     --cdn
+
+  yarn ts-node -O '{"module": "commonjs"}' cypress/support/organizeReports/organizeHTMLs.ts
 fi
 
