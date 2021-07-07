@@ -45,8 +45,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     }
 
     function onClose() {
-      const lockData = formState?.locked.get(`${name}.${type}`);
-      formState?.expireLockedFields(lockData);
+      formState?.unlockField(`${name}.${type}`);
     }
 
     // MARK: @methods
