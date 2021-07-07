@@ -10,6 +10,7 @@ import Text from "../../components/Text";
 import { withFBMediaAlbum } from "./FBMediaAlbum.wrap";
 
 const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
+  onClick,
   setMediaFieldMode,
   onFileUploadChange,
   setMediaMode,
@@ -24,6 +25,7 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
   title,
   mode,
   autosave,
+  uploadDisabled,
   ...props
 }) => (
   <FBProvider {...{ mediaAlbumState }}>
@@ -65,12 +67,12 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
           </IconButton>
         </Box>
         <Box pl={0.3}>
-          <IconButton size="small" disabled={actionsDisabled}>
+          <IconButton size="small" disabled={actionsDisabled || uploadDisabled}>
             {loading && <CircularProgress size={20} />}
             {!loading && (
-              <label htmlFor={`fb-mediaalbum-upload-${name}`}>
+              <label htmlFor={`fb-mediaalbum-upload-${name}`} >
                 <Tooltip title={<Text message="form.builder.upload" />}>
-                  <CloudUploadIcon />
+                  <CloudUploadIcon  onClick={onClick} />
                 </Tooltip>
               </label>
             )}

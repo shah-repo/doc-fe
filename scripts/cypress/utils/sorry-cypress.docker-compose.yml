@@ -5,6 +5,8 @@ services:
     image: mongo:4.0
     expose:
       - 27017
+  enlil_cypress_redis:
+    image: redis:6.2.4-alpine
   enlil_cypress_dashboard_director:
     image: agoldis/sorry-cypress-director:1.0.0-rc.10
     environment:
@@ -13,6 +15,7 @@ services:
       MONGODB_DATABASE: "sorry-cypress"
       EXECUTION_DRIVER: "../execution/mongo/driver"
       SCREENSHOTS_DRIVER: "../screenshots/dummy.driver"
+      REDIS_URI: 'redis://enlil_cypress_redis:6379'
     ports:
       - ${ENLIL_COMPOSE_EXPOSE_SORRY_CY_DIRECTOR_PORT}:1234
     depends_on:
@@ -30,6 +33,9 @@ services:
     image: agoldis/sorry-cypress-dashboard:1.0.0-rc.10
     environment:
       GRAPHQL_SCHEMA_URL: "http://localhost:${ENLIL_COMPOSE_EXPOSE_SORRY_CY_API_PORT}"
+      GRAPHQL_CLIENT_CREDENTIALS: ''
+      CI_URL: ''
+      PORT: 8080
     ports:
       - ${ENLIL_COMPOSE_EXPOSE_SORRY_CY_DASHBOARD_PORT}:8080
     depends_on:

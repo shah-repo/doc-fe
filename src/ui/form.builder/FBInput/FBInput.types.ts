@@ -114,6 +114,7 @@ export type FBInputProps =
     includeQRScan?: boolean;
     isInputOwner?: boolean;
     designDisabled?: boolean;
+
     /**
      * @cfg {Bool} Whether the field can be deleted in the output document.
      */
@@ -190,18 +191,24 @@ export type FBInputProps =
      * @cfg {Bool} If true scroll to el on render.
      */
     autoScrollTo?: boolean;
+    /**
+     * @cfg {Bool} If true field is disabled.
+     */
+    locked?: boolean;
+
+    /**
+     * @cfg {string} Username that holds the lock.
+     */
+    lockOwnerName?: string;
   };
 
 export const OmitInputClones: FBInputType[] = [
   "section",
-  "fileupload",
   "documentRevisions",
   "approvers",
   "approval",
   "blanktplform",
-  "inlineapproval",
   "approvals",
-  "texteditor",
   "procedure",
   "mpiprocedure",
   "procedurediff",

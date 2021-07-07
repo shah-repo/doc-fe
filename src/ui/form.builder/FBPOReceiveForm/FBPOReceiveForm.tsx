@@ -36,6 +36,7 @@ const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
         <Box width="100%" marginRight="10px">
           <FBTextField
             inputProps={{ type: "number", min: "0" }}
+            defaultValue={item?.received}
             label="form.builder.quantity.received"
             name="received"
             rules="required|min:1"
@@ -49,11 +50,6 @@ const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
           />
         </Box>
       </Box>
-      <FBTextField
-        rows="5"
-        label="form.builder.comments.optional"
-        name="comments"
-      />
       {children}
     </FormContext.Provider>
   </FBForm>

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import { filter, get, isEmpty, join, map } from "lodash";
-import { reaction } from "mobx";
+import { filter, get, isEmpty, join, map, union } from "lodash";
+import { reaction, toJS } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -83,27 +83,28 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       mediaAlbumFieldState?.upload(validFiles);
     };
 
-    // useEffect(() => {
-    //   reaction(
-    //     () => workspaceState?.formInputSync?.get(name),
-    //     (value) => {
-    //       const syncValue = value as string[];
-    //       const filesIds = map(mediaAlbumFieldState?.files, "id");
-    //       const addedFiles: string[] = [];
-    //       map(union(filesIds, syncValue), (fileId) => {
-    //         mediaAlbumFieldState!.fromUpload = false;
-    //         if (!syncValue.includes(fileId)) {
-    //           mediaAlbumFieldState?.removeFile(fileId);
-    //         } else {
-    //           addedFiles.push(fileId);
-    //         }
-    //       });
-    //       if (addedFiles.length === 0) { return; }
-    //       mediaAlbumFieldState?.getFiles(addedFiles);
-    //     }
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    //   );
-    // }, []);
+    useEffect(() => {
+      reaction(
+        () => workspaceState?.formInputSync?.get(name),
+        (value) => {
+          const syncIds = value;
+          const syncValue = map(syncIds, (syncFile) => toJS(syncFile.id));
+          const filesIds = map(mediaAlbumFieldState?.files, "id");
+          const addedFiles: string[] = [];
+          map(union(filesIds, syncValue), (fileId) => {
+            mediaAlbumFieldState!.fromUpload = false;
+            if (!syncValue.includes(fileId)) {
+              mediaAlbumFieldState?.removeFile(fileId);
+            } else {
+              addedFiles.push(fileId);
+            }
+          });
+          if (addedFiles.length === 0) { return; }
+          mediaAlbumFieldState?.getFiles(addedFiles);
+        }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      );
+    }, []);
 
     React.useEffect(() => reaction(
       () => mediaAlbumFieldState?.attachmentApi.data,

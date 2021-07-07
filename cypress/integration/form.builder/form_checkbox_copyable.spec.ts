@@ -70,6 +70,10 @@ context("Copyable Checkbox test", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create a form", () => {
@@ -363,24 +367,27 @@ context("Copyable Checkbox test", () => {
 
   context("Create 'Engineering Build' Record for copyableValue checkbox", () => {
     it("Navigate to Record on side bar", () => {
-      cy.fbClickButton({ el: "navigation.records" });
+      cy.navigToRecords();
     });
 
     it("Click 'Create a Record' button", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
-        cy.get("#DocumentByTypeListPresenter-openDocRev").click();
-      });
+      cy.poClickCreatePO();
     });
 
     it("Select Record Type: 'Engineering Build'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostDocRev,
+        CyRoutes.EmployeesGet,
+        CyRoutes.AvailableMaintenanceForms], () => {
         cy.get("#MultipleFormTemplate-selectDocForm").type("Engineering Build{downarrow}{enter}");
       });
     });
 
     it("Add TextFields value", () => {
-      cy.get("[name^=\"textfield-wi-ch-\"]").type("textfield-wi-ch-value");
-      cy.get("[name^=\"textfield-wo-ch-\"]").type("textfield-wo-ch-value");
+      cy.unClick();
+      cy.get("[name^=\"textfield-wi-ch-\"]").type("textfield-wi-ch-value", { force: true });
+      cy.unClick();
+      cy.get("[name^=\"textfield-wo-ch-\"]").type("textfield-wo-ch-value", { force: true });
     });
 
     it("Select Checkboxes group", () => {
@@ -409,13 +416,22 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Add Quantities value", () => {
-      cy.get("[name^=\"q-wi-ch-\"]").type("1");
-      cy.get("[name^=\"q-wo-ch-\"]").type("1");
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+        cy.get("[name^=\"q-wi-ch-\"]").type("1");
+      });
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+        cy.get("[name^=\"q-wo-ch-\"]").type("1");
+      });
     });
 
     it("Add Timers value", () => {
-      cy.get("[name^=\"t-wi-ch-\"]").type("t-wi-ch-value");
-      cy.get("[name^=\"t-wo-ch-\"]").type("t-wo-ch-value");
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+        cy.get("[name^=\"t-wi-ch-\"]").type("t-wi-ch-value", { force: true });
+      });
+      cy.unClick();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+        cy.get("[name^=\"t-wo-ch-\"]").type("t-wo-ch-value", { force: true });
+      });
     });
 
     it("Add 'TextField with range' value", () => {
@@ -491,8 +507,7 @@ context("Copyable Checkbox test", () => {
 
     it("Click 'Save' button", () => {
       cy.unClick();
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
-      cy.wait(5000);
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Click 'Clone EB' button", () => {

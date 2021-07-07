@@ -180,11 +180,8 @@ context("Document Field Owners Test", () => {
     });
 
     it("Enters description 'New Document description'", () => {
-      cy.drEnterDocumentDescription({ description: "New Document description" });
-    });
-
-    it("clicks on 'Save' button", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drEnterDocumentDescription({ description: "New Document description" });
         cy.drClickCreateDocumentWithoutApiCall();
       });
     });
@@ -371,11 +368,23 @@ context("Document Field Owners Test", () => {
   });
 
   context("Check all colaborators must be on approvals list", () => {
+    it("Check that first colaborator is required as approver", () => {
+      cy.get(`[data-cy="fb-approvals-${USERS[3].name} (${USERS[3].email})-check-disabled"]`).should("exist");
+    });
+
     it("Add first colaborator as Approver on document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
         cy.drClickCreateDocumentWithoutApiCall();
       });
+    });
+
+    it("Check that first colaborator is added as approver", () => {
+      cy.get(`[data-cy="fb-approvals-${USERS[3].name} (${USERS[3].email})-check-marked"]`).should("exist");
+    });
+
+    it("Check that second colaborator is required as approver", () => {
+      cy.get(`[data-cy="fb-approvals-${USERS[4].name} (${USERS[4].email})-check-disabled"]`).should("exist");
     });
 
     it("Add second colaborator as Approver on document", () => {
@@ -385,11 +394,19 @@ context("Document Field Owners Test", () => {
       });
     });
 
-    it("Submit for Approval", () => {
+    it("Check that second colaborator is added as approver", () => {
+      cy.get(`[data-cy="fb-approvals-${USERS[4].name} (${USERS[4].email})-check-marked"]`).should("exist");
+    });
+
+    it("Submit for Approval and verify owner is required too", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         cy.checkToastMessageIsEqual({ message: "All colaborators to the document must be on approvers list" });
       });
+    });
+
+    it("Check that third colaborator is required as approver", () => {
+      cy.get(`[data-cy="fb-approvals-${USERS[7].name} (${USERS[7].email})-check-disabled"]`).should("exist");
     });
 
     it("Add third colaborator as Approver on document", () => {
@@ -399,123 +416,18 @@ context("Document Field Owners Test", () => {
       });
     });
 
+    it("Check that third colaborator is added as approver", () => {
+      cy.get(`[data-cy="fb-approvals-${USERS[7].name} (${USERS[7].email})-check-marked"]`).should("exist");
+    });
+
     it("Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
     });
 
-    it(`Logout as current user`, () => {
-      cy.authLogout();
-    });
-
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[7].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Navigate to records list", () => {
-      cy.navigToRecords();
-    });
-
-    it("Filter document by name and status, and select it", () => {
-      cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "In Review" });
-    });
-
-    it("Approve record button click", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
-      cy.get("input[name=\"password\"]").type("Tester1!");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
-        cy.get("[data-cy=\"common.confirm\"]").click();
-      });
-    });
-
-    it("Reload document", () => {
-      cy.reload();
-    });
-
-    it(`Logout as current user`, () => {
-      cy.authLogout();
-    });
-  });
-
-  context(`Approve form as '${USERS[3].name}'`, () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[3].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Navigate to records list", () => {
-      cy.navigToRecords();
-    });
-
-    it("Filter document by name and status, and select it", () => {
-      cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "In Review" });
-    });
-
-    it("Approve record button click", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
-      cy.get("input[name=\"password\"]").type("Tester1!");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
-        cy.get("[data-cy=\"common.confirm\"]").click();
-      });
-    });
-
-    it("Reload document", () => {
-      cy.reload();
-    });
-
-    it(`Logout as current user`, () => {
-      cy.authLogout();
-    });
-  });
-
-  context(`Approve form as '${USERS[4].name}'`, () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[4].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Navigate to records list", () => {
-      cy.navigToRecords();
-    });
-
-    it("Filter document by name and status, and select it", () => {
-      cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "In Review" });
-    });
-
-    it("Approve record button click", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
-      cy.get("input[name=\"password\"]").type("Tester1!");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
-        cy.get("[data-cy=\"common.confirm\"]").click();
-      });
-    });
-
-    it("Reload document", () => {
-      cy.reload();
-    });
-
-    it("Verify status is released", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+    it("Verify status is 'In Review'", () => {
+      cy.drCheckDocumentStatus({ status: "In Review" });
     });
   });
 });

@@ -1,5 +1,6 @@
 import { Box, Button, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { ReactComponent as SlackLogo } from "../../../../assets/images/slack_full_logo.svg";
@@ -100,6 +101,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const classes = styles();
   const dispatch = useDispatch();
   const history = useHistory();
+  const intl = useIntl();
 
   const TABLE_NAME = "userManagement";
 
@@ -115,7 +117,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
       window.open(data?.data.url);
     },
     onError: (error) => {
-      toastError(error as string);
+      toastError(intl.formatMessage({ id: "dropbox.connection.error" }));
     },
   });
   const enableDropboxAction = useActionCreator(userManagementActions.enableDropbox);

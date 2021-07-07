@@ -6,7 +6,6 @@ export const withFBDialog = <T extends FBDialogProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    onClose,
     maxWidth = "sm",
     content,
     title,
@@ -17,7 +16,7 @@ export const withFBDialog = <T extends FBDialogProps>(
 
     const { dialogState } = FB.useStores();
     const handleClose = () => {
-      onClose && onClose();
+      dialogState?.props?.onClose?.();
       dialogState?.closeDialog();
     };
 

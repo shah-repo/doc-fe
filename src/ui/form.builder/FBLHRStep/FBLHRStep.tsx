@@ -2,7 +2,7 @@ import { Box } from "@material-ui/core";
 import { CheckCircle, PlayCircleFilled } from "@material-ui/icons";
 import { isEmpty } from "lodash";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBInput, FBLHRStepProps, FBProvider, FBSection, FBText, FBTextField } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBInput, FBLHRStepProps, FBProvider, FBSection, FBText } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
@@ -112,28 +112,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             }}
           />
         </Box>
-      )}
-      {isOutput && (
-        <>
-          <FBTextField
-            {...{ disabled }}
-            name={`fb-lhrs-start-quantity-${name}`}
-            type="number"
-            label="form.builder.start.quantity"
-          />
-          <FBTextField
-            {...{ disabled }}
-            name={`fb-lhrs-accepted-quantity-${name}`}
-            type="number"
-            label="form.builder.accepted.quantity"
-          />
-          <FBTextField
-            {...{ disabled }}
-            name={`fb-lhrs-rejected-quantity-${name}`}
-            type="number"
-            label="form.builder.rejected.quantity"
-          />
-        </>
       )}
     </FBInput>
   </FBProvider>

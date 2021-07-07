@@ -1,10 +1,11 @@
 import { Box } from "@material-ui/core";
+import { useFormikContext } from "formik";
 import { compact, difference, filter, find, isEmpty, map, minBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBRequiredApprover } from "..";
-import { ApprovalStatus } from "../../../state/ducks/documents/types";
+import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
 import Colors from "../../layout/theme/utils/colors";
 import FBPOApprovalsState from "./FBPOApprovals.state";
@@ -27,15 +28,17 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     currentUser,
     documentStatus,
     dialogState,
+    disabled,
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
+    const { isSubmitting } = useFormikContext();
     const { document, changeRequest, id, isOutput, formInput } = workspaceState || {};
     const outputId = isOutput ? id : null;
     const poName = workspaceState?.schema?.find((item) => item.type === "purchaseorder")?.name || "";
     const totalAmount = formInput?.[poName]?.totalAmount;
     const revisionChangeType = document?.revisionChangeType;
-
+    const revisionStage = document?.revisionStage;
     const authUser = store.getState().auth.user;
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
@@ -45,7 +48,13 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       { id: outputId, approvals: document?.approvals || changeRequest?.approvals },
     );
 
-    isIncluded = (group: FBRequiredApprover): boolean => poApprovalsState.checkedGroups?.includes(group) || false;
+    isIncluded = (group: FBRequiredApprover): boolean => {
+      let included = false;
+
+      map(poApprovalsState?.getApprovals, (x) =>
+        includesApprover(group, (x.approverId as string)) ? included = true : "");
+      return included;
+    };
 
     function concatApprovals(approval?: FBInlineApprovalBody) {
       if (!approval) { return; }
@@ -82,7 +91,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     React.useEffect(() => {
       outputId && poApprovalsState.fetchRequiredApprovals(outputId as unknown as string[]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [totalAmount, revisionChangeType]);
+    }, [totalAmount, revisionChangeType, revisionStage]);
 
     // On add approver
     React.useEffect(() => reaction(
@@ -98,7 +107,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
           approval.approverId === data?.approverId ? data : approval
         ));
         poApprovalsState.setApprovals(filteredApprovals);
-        if (data?.status === ApprovalStatus.Approved) {
+        if (data?.status === ApprovalStatus.Approved || data?.status === DocumentStatus.Draft) {
           window.location.reload();
         }
       }
@@ -187,10 +196,11 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         poApprovalsState?.transitionApi.loading
       );
     });
-
     const fieldValue = map(poApprovalsState?.getApprovals, "approver.id");
     formState?.setFieldValue(`${name}`, fieldValue);
     documentStatus = document?.status as any;
+    // Should be disabled while submitting if group levels changes while adding/editing PO items
+    disabled = disabled || loading || isSubmitting;
 
     return Component({
       ...(props as T),
@@ -207,6 +217,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       currentUser,
       documentStatus,
       dialogState,
+      disabled,
     });
   };
 

@@ -5,6 +5,9 @@ export const convertHtmlToDraft = (html = "") => {
   if (!html) {
     html = "";
   }
+  html = html
+    .replace(/b>/g, "strong>")
+    .replace(/u>/g, "ins>");
   const contentBlock = htmlToDraft(html);
   if (!contentBlock) {
     return {} as EditorState;

@@ -86,7 +86,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     }
 
     const html = draftToHtml(convertToRaw(value.getCurrentContent())).trim();
-    const fieldValue = html === "<p></p>" ? "" : html;
+    const fieldValue = html === "<p></p>" ? "" : html.replace(/ins>/g, "u>");
     form.setFieldValue(field.name, fieldValue);
   }, [debouncedUpdate]);
 

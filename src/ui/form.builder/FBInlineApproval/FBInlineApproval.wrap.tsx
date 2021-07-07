@@ -229,7 +229,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         inlineApprovalState?.documentApi.loading
       );
 
-      disabled = loading
+      disabled = disabled
+        || loading
         || !(isOutput && Boolean(id))
         || document?.status === "RELEASED"
         || document?.status === "VOIDED"
@@ -243,6 +244,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       Boolean(formState?.getFieldValue(name))
     ) ? some(fieldApprovals, (approval) => approval.status === "APPROVED") || !fieldApprovals.length
       : !isUndefined(find(approvals, { status: "APPROVED" }));
+
 
     return Component({
       ...(props as T),

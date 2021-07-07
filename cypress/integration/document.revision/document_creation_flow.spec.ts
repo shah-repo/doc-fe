@@ -173,7 +173,7 @@ context("Document Creation Flow", () => {
 
     context("Uploads attachments", () => {
       it("Uploads redline attachment: test.docx", () => {
-        // SystemRequirement("REQ-0260"); Removed from list.csv
+        SystemRequirement("REQ-0260");
         cy.atchUploadRedlineAttachment({ fileName: "test.docx" });
       });
 
@@ -223,7 +223,7 @@ context("Document Creation Flow", () => {
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test.docx" ] });
       });
 
-      it("Upload multiple attachments at once: image.jpg and test_image.jpg", () => {
+      it("Upload multiple attachments at once: 'image.jpg' and 'test_image.jpg'", () => {
         SystemRequirement("REQ-0220");
         cy.get("#AttachmentFieldPresenter-linkButton").click();
         cy.get("#attachments-button-file-clean-copy")
@@ -301,7 +301,7 @@ context("Document Creation Flow", () => {
         cy.atchCheckAtributes({ fileName: "image.jpg", attributes: "48.45 kB JPG File" });
       });
 
-      it("Check three attachments are displayed: test.docx, image.jpg, test_image.jpg", () => {
+      it("Check three attachments are displayed: `test.docx`, `image.jpg`, `test_image.jpg`", () => {
         SystemRequirement("REQ-0200", "REQ-0210");
         cy.atchCheckDisplayedAttachments({ fileNames: [ "test_image.jpg", "image.jpg", "test.docx" ] });
       });
@@ -322,7 +322,7 @@ context("Document Creation Flow", () => {
         cy.atchCheckForSinglePrimaryAttachment();
       });
 
-      it("Remove attachment test_image.jpg", () => {
+      it("Remove attachment 'test_image.jpg'", () => {
         SystemRequirement("REQ-0240");
         cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
       });
@@ -346,7 +346,7 @@ context("Document Creation Flow", () => {
       });
 
       it("'Training Required' should be checked as previous version was checked", () => {
-        // SystemRequirement("REQ-0280");
+        SystemRequirement("REQ-0280");
         cy.drIsTrainingRequired({ shouldBe: true });
       });
     });

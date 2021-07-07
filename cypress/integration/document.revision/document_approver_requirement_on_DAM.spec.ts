@@ -458,14 +458,17 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Add first approver to approval request on approver list", () => {
+      SystemRequirement("REQ-4270");
       cy.arAddApproverOnApproverList({ approver: FIRST_USER.email });
     });
 
     it("Add second approver to approval request on approver list", () => {
+      SystemRequirement("REQ-4270");
       cy.arAddApproverOnApproverList({ approver: SECOND_USER.email });
     });
 
     it("Add third approver to approval request on approver list", () => {
+      SystemRequirement("REQ-4270");
       cy.arAddApproverOnApproverList({ approver: THIRD_USER.email });
     });
 
@@ -532,6 +535,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Confirm password", () => {
+      SystemRequirement("REQ-0910");
       cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
       cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove, () => {
         cy.get(`[data-cy="passwordConfirm"]`).click();
@@ -639,7 +643,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify Document status is 'Released'", () => {
-      SystemRequirement("REQ-0870");
+      SystemRequirement("REQ-0870", "REQ-2700");
       cy.arVerifyStatus({ status: "Released" });
     });
   });

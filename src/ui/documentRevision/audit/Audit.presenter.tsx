@@ -47,9 +47,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         return null;
       }
 
-      if (index && renderChanges(audit[groupId], key).props.children[index].length === 0) {
+      if (change.field.includes("-built-in")) {
         return null;
       }
+
+      if (index && renderChanges(audit[groupId], key).props.children[index]?.length === 0) {
+        return null;
+      }
+
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer}>
@@ -247,7 +252,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                 />
               </Box>
               <div className={classes.auditValue}>
-                <AuditFactory audit={change} dataCy={`change-value-${groupKey}-${key}`} />
+                {/* Set field property to "s3link" so audit factory knows to generate downloadable link for s3links */}
+                <AuditFactory audit={{ ...change, field: "s3link" }} dataCy={`change-value-${groupKey}-${key}`} />
               </div>
             </Box>
           );

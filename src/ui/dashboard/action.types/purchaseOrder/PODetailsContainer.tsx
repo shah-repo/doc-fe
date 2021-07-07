@@ -1,16 +1,19 @@
 import { Box } from "@material-ui/core";
 import React, { useState } from "react";
+import { Attachment } from "../../../../state/ducks/attachments/types";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
-import { FBAutocompleteAsyncOption, FBInputProps, FBPurchaseOrderValue } from "../../../form.builder";
+import { FBInputProps, FBPurchaseOrderValue } from "../../../form.builder";
 import POActions from "./POActions";
 import PODetails from "./PODetails";
 
 interface Props {
   documentRevision: DocumentRevision;
+  docRevAttachments: Attachment[];
 }
 
 const PODetailsContainer: React.FunctionComponent<Props> = ({
   documentRevision,
+  docRevAttachments,
 }) => {
   const [purchaseOrder] = useState<FBPurchaseOrderValue>(() => {
     const schema = documentRevision.formDocument?.formTemplate?.schema;
@@ -25,7 +28,7 @@ const PODetailsContainer: React.FunctionComponent<Props> = ({
     const schema = documentRevision.formDocument?.formTemplate?.schema;
 
     const fieldName = (schema as FBInputProps[])
-      .find((schemaItem) => schemaItem.optionId === FBAutocompleteAsyncOption.suppliers)
+      .find((schemaItem) => schemaItem.type === "supplier")
       ?.name;
 
     return documentRevision.formInput?.[fieldName || ""];
@@ -39,9 +42,12 @@ const PODetailsContainer: React.FunctionComponent<Props> = ({
       marginTop="20px"
     >
       <PODetails
-        documentRevision={documentRevision}
-        purchaseOrder={purchaseOrder}
-        supplierId={supplierId}
+        {...{
+          documentRevision,
+          purchaseOrder,
+          supplierId,
+          docRevAttachments,
+        }}
       />
       <POActions documentRevision={documentRevision} />
     </Box>
