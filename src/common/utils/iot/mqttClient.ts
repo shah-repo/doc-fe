@@ -139,7 +139,7 @@ export class IotService {
           sessionToken: credentialsMqtt.credentials.SessionToken,
         },
       ),
-      clientId: `mqtt-client-${credentialsMqtt.environment}-${(Math.floor((Math.random() * 100000) + 1))}`,
+      clientId: `mqtt-client-${credentialsMqtt.environment}-${new Date().valueOf()}-${(Math.floor((Math.random() * 100000) + 1))}`,
       endpoint: credentialsMqtt.endpoint,
       will: {
         topic: "WillMsg",
