@@ -178,7 +178,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case "formDocument": {
         const { name, displayRevision, document } = audit.nextValue as DocumentRevision;
-        returnValue = (<div data-cy={dataCy}>{`${document.docId} - ${displayRevision} - ${name}`}</div>);
+        returnValue = (<div data-cy={dataCy}>{`${document.docId} - revision ${displayRevision} - ${name}`}</div>);
         break;
       }
       default:

@@ -115,7 +115,10 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
           onSubmit={onSubmit}
           enableReinitialize
         >
-          <ChangeDocumentFormPresenter {...{ availableForms, handleFormChange, availableFields, sourceSchema }}/>
+          <ChangeDocumentFormPresenter
+            updateFormAsyncState={updateFormAsync.asyncState}
+            {...{ availableForms, handleFormChange, availableFields, sourceSchema }}
+          />
         </Formik>
       </FormContext.Provider>
     </Box>

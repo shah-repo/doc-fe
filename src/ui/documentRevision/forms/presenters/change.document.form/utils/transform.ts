@@ -5,12 +5,11 @@ import { OptionType } from "../../../../../components/forms/fields/Autocomplete/
 import { FBSchemaProps } from "../../../../../form.builder";
 import { MigrationSpecialFields } from "./constants";
 
-export const toFormOptions = (forms: DocumentTypeByIdForm[]): OptionType[] =>
-  forms.map((form) => ({
-    label: form.name,
-    value: form.id,
-  })
-  );
+export const toFormOptions = (forms: DocumentTypeByIdForm[]): OptionType[] => forms.map((form) => ({
+  label: `${form.document.docId} - ${form.name}`,
+  value: form.id,
+})
+);
 
 export const toFieldInitialValues = (fields: UpdateFormFieldMapping[], sourceSchema: FBSchemaProps[] ): any => {
   const transformed = map(fields, (field) => {
