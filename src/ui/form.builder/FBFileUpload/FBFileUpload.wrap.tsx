@@ -29,6 +29,11 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
       files = fileUploadState?.files;
     });
 
+    function removeLock() {
+      const lockData = formState?.locked.get(name || "");
+      formState?.expireLockedFields(lockData);
+    }
+
     React.useEffect(() => {
       reaction(
         () => formState?.inputState.get(name)?.value?.length,
@@ -46,6 +51,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
         (files) => {
           formState?.setFieldValue(name, files, withState);
           formState?.setFieldAutosave(name);
+          removeLock();
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
