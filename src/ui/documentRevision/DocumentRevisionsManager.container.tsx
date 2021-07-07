@@ -8,6 +8,7 @@ import { ReactComponent as CRIcon } from "../../assets/images/cr.svg";
 import { ReactComponent as TimelineIcon } from "../../assets/images/history.svg";
 import { ReactComponent as MigrationIcon } from "../../assets/images/migration.svg";
 import { ReactComponent as NoteIcon } from "../../assets/images/note.svg";
+import { authSelectors } from "../../state/ducks/auth";
 import { ChangeRequest } from "../../state/ducks/changeRequest/types";
 import { documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { DocumentGroupType } from "../../state/ducks/documentRevisions/documentType/types";
@@ -21,8 +22,9 @@ import DocumentRevisionAuditContainer from "./audit/Audit.container";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
 import DocumentRevisionListContainer from "./DocumentRevisionList.container";
 import ChangeDocumentFormContainer from "./forms/presenters/change.document.form/ChangeDocumentForm.container";
-import { checkIsDocumentForm, checkIsDocumentRecord } from "./helpers/checkDocumentGroup";
-import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
+import { checkIsDocumentRecord, checkIsTypeCanBeOutput, checkIsTypeMustBeOutput } from "./helpers/checkDocumentGroup";
+import { isOwner } from "./helpers/documentRevisionPermissions";
+import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "./helpers/documentRevisionStatus";
 import { isFormWithInlineApproval } from "./helpers/records";
 import { getDocRevIdToRedirect, shouldRedirectToLatestReleased } from "./helpers/redirect";
 import Bookmarks from "./Sidebar/Bookmarks";
@@ -80,17 +82,20 @@ DocumentRevisionManagerContainerProps
   const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
   const selectedDocument = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
+  const currentUserEmail = useSelector(authSelectors.currentUserEmail);
 
+  const groupOptions = selectedDocument?.document?.documentType?.groupOptions;
   const docRevsWithoutCanceled = useMemo(() => documentRevisions.filter((docrev) =>
     docrev.status !== DocumentRevisionStatus.Canceled), [documentRevisions]);
-
   const status = selectedDocument ? selectedDocument.status : undefined;
   const canAccess = selectedDocument?.document.canAccess;
   const { documentTypeAcronym: acronym, id: documentTypeId } = document?.documentType || {};
-  const isStatusReleased = isDocumentRevisionReleased(status);
+
+  const isStatusPendingChange = isDocumentRevisionPendingChange(status);
   const isStatusInDraft = isDocumentRevisionInDraft(status);
-  const isForm = checkIsDocumentForm(selectedDocument?.document?.documentType?.groupOptions);
-  const showFormChange = (!isForm && (isStatusInDraft || isStatusReleased));
+  const isOutput = checkIsTypeMustBeOutput(groupOptions) || checkIsTypeCanBeOutput(groupOptions);
+  const isUserOwner = isOwner(selectedDocument, currentUserEmail);
+  const showFormMigration = (isOutput && isUserOwner && (isStatusInDraft || isStatusPendingChange));
 
   const isInlineApproval =
     !!docRevsWithoutCanceled.find(
@@ -194,12 +199,12 @@ DocumentRevisionManagerContainerProps
       icon: <MigrationIcon />,
       type: "formMigration",
       details: {
-        shouldShow: showFormChange,
+        shouldShow: showFormMigration,
         dataCy: "form-migration-icon",
         title: intl.formatMessage({
           id: "common.form.migration",
         }),
-        component: showFormChange ? <ChangeDocumentFormContainer
+        component: showFormMigration ? <ChangeDocumentFormContainer
           docRevId={documentRevisionId || ""}
           documentTypeId={documentTypeId}
           sourceSchema={selectedDocument?.formDocument?.formTemplate?.schema || []}
