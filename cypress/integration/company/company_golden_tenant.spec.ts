@@ -722,9 +722,7 @@ context("Create company with golden tenant", () => {
 
     it(`Enters company name '${newCompanyName}'`, () => {
       SystemRequirement("REQ-3500");
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-        cy.get("[name^=company-name-]").type(newCompanyName);
-      });
+      cy.get("[name^=company-name-]").typeFieldLock(newCompanyName);
     });
 
     it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {

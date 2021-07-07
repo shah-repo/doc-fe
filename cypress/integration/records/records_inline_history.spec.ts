@@ -198,7 +198,7 @@ context("Record inline history Flow", () => {
 
       it("Enter text 'First entry' in textfield for inline", () => {
         SystemRequirement("REQ-1080");
-        cy.get("[data-cy^=\"textfield-for-inline\"]").click().type("First entry");
+        cy.get("[data-cy^=\"textfield-for-inline\"]").typeFieldLock("First entry");
       });
 
       it("Check 'Red' and 'Green' value on checkbox", () => {
@@ -242,10 +242,8 @@ context("Record inline history Flow", () => {
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline with bold tag to check if tags shows in history", () => {
           SystemRequirement("REQ-1080");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-            cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", <b> Second entry </b>");
-            cy.unClick();
-          });
+          cy.unClick();
+          cy.get("[data-cy^=\"textfield-for-inline\"]").typeFieldLock(", <b> Second entry </b>");
         });
 
         it("Enter description 'History Test Inline Record description'", () => {
