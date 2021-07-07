@@ -839,13 +839,12 @@ context("Autosave on blur", () => {
     });
 
     it("Enters description 'New document from form description'", () => {
-      cy.drEnterDocumentDescription({ description: "New document from form description" });
+      cy.drEnterDocumentDescriptionWithWait({ description: "New document from form description" });
     });
 
     it("Fill TextField and check for autosave", () => {
-      cy.get("[name^=fb-textfield-]").type("Test field");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.unClick();
+        cy.get("[name^=fb-textfield-]").typeFieldLock("Test field");
       });
     });
 

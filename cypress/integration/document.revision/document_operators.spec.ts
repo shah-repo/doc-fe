@@ -164,7 +164,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Click Create document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
 

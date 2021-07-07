@@ -288,12 +288,14 @@ context("Check Document History", () => {
 
     it("Add another user permission", () => {
       SystemRequirement("REQ-4240");
-      cy.drAddUserFromPermissionTab(sharedUserTwo.name);
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+        cy.drAddUserFromPermissionTab(sharedUserTwo.name);
+      });
     });
 
     it("Add another group permission", () => {
       SystemRequirement("REQ-4240");
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocSecurity, () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
         cy.drAddGroupFromPermissionTab(groupTwo);
       });
     });

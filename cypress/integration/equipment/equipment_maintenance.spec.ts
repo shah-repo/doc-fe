@@ -530,6 +530,10 @@ context("Equipment maintenance test", () => {
       });
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Enter title 'Preventative maintenance document'", () => {
       cy.drEnterDocumentTitle({ name: "Preventative maintenance document" });
     });
@@ -568,9 +572,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Add an Approval'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
-      });
+      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
     });
 
     it("Submit for approval", () => {
@@ -629,6 +631,10 @@ context("Equipment maintenance test", () => {
       });
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Enter title 'Calibration document'", () => {
       cy.drEnterDocumentTitle({ name: "Calibration document" });
     });
@@ -667,9 +673,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
-      });
+      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
     });
 
     it("Submit for approval", () => {
