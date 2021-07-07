@@ -281,17 +281,6 @@ context("Autosave on add and remove FB fields", () => {
       });
     });
 
-    it("Add Test Requirement", () => {
-      cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Test Requirement" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-test-req" });
-      cy.get("[data-cy=\"testRequirement\"]")
-        .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
-        cy.fbAddNewFieldButton();
-      });
-    });
-
     it("Add Procedure", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
@@ -539,12 +528,6 @@ context("Autosave on add and remove FB fields", () => {
     });
 
     it("Remove Evidence Media upload", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
-        cy.fbRemoveLastAddedItem();
-      });
-    });
-
-    it("Remove Test Requirement", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbRemoveLastAddedItem();
       });

@@ -113,17 +113,6 @@ context.skip("Autosave on add and edit FB fields", () => {
       });
     });
 
-    it("Add Test Requirement", () => {
-      cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Test Requirement" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-test-req" });
-      cy.get("[data-cy=\"testRequirement\"]")
-        .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
-        cy.fbAddNewFieldButton();
-      });
-    });
-
     it("Add Equipment", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
@@ -275,14 +264,6 @@ context.skip("Autosave on add and edit FB fields", () => {
       });
     });
 
-    it("Edit Test Requirement", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-test-req" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-test-req1" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
-        cy.fbAddNewFieldButton();
-      });
-    });
-
     it("Edit Equipment", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "fb-equipment" });
       cy.fbEnterNameValue({ name: "label", value: "fb-equipment1" });
@@ -412,10 +393,6 @@ context.skip("Autosave on add and edit FB fields", () => {
 
     it("Verify Evidence Media upload", () => {
       cy.contains("fb-evidence1").should("exist");
-    });
-
-    it("Verify Test Requirement", () => {
-      cy.contains("fb-test-req1").should("exist");
     });
 
     it("Verify Equipment", () => {

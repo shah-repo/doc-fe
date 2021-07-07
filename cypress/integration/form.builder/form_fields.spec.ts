@@ -278,17 +278,6 @@ context("FORM Field test", () => {
         cy.fbMouseOverByLabel({ label: "fb-evidence" } );
       });
 
-      it("Add Test Requirement", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Test Requirement" });
-        cy.fbEnterNameValue({ name: "label", value: "fb-test-req" });
-        cy.get("[data-cy=\"testRequirement\"]")
-          .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "fb-test-req" } );
-      });
-
       it("Add Procedure", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
@@ -580,16 +569,6 @@ context("FORM Field test", () => {
       it("Verify Evidence Media Upload attributes", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "fb-evidence" });
         cy.fbVerifyNameValue({ name: "label", value: "fb-evidence" });
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbClickButton({ el: "dialog-close" });
-      });
-
-      it("Verify Test Requirement attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-test-req" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-test-req" });
-        cy.get("[data-cy=\"testRequirement\"]")
-          .should("have.value",
-            "Visual Alarm Indicator - The system shall use color as a visual indication of alarm type");
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbClickButton({ el: "dialog-close" });
       });

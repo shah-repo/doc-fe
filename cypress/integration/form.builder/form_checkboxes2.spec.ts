@@ -163,27 +163,6 @@ context("Checkboxes test2", () => {
         cy.fbMouseOverByLabel({ label: "emu-wo-ch" } );
       });
 
-      it("Add Test Requirement with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Test Requirement" });
-        cy.fbEnterNameValue({ name: "label", value: "tr-wi-ch" });
-        cy.get("[data-cy=\"testRequirement\"]")
-          .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "tr-wi-ch" } );
-      });
-
-      it("Add Test Requirement without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Test Requirement" });
-        cy.fbEnterNameValue({ name: "label", value: "tr-wo-ch" });
-        cy.get("[data-cy=\"testRequirement\"]")
-          .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "tr-wo-ch" } );
-      });
-
       it("Add Procedure with checkboxes", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
@@ -437,20 +416,6 @@ context("Checkboxes test2", () => {
       });
     });
 
-    it("Verify Test Requirement without 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "tr-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
-      });
-    });
-
-    it("Verify Test Requirement with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "tr-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
-      });
-    });
-
     it("Verify Procedure without 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "Step #1", el: "remove-schema-item", class:
@@ -660,18 +625,6 @@ context("Checkboxes test2", () => {
       cy.fbMouseOverByLabel({ label: "emu-wi-ch" } );
       cy.fbVerifyElementNotVisibileByLabel({ label: "emu-wi-ch", el: "edit-schema-item" });
       cy.fbVerifyElementNotVisibileByLabel({ label: "emu-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Test Requirement without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "tr-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "tr-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "tr-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Test Requirement with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "tr-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "tr-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "tr-wi-ch", el: "remove-schema-item" });
     });
 
     it("Verify Procedure without 'Revision Disabled' checkbox", () => {
