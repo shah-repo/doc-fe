@@ -5,6 +5,7 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -469,7 +470,12 @@ context("Receivable list test", () => {
 
     it("Enter first receivable on list", () => {
       // SystemRequirement("REQ-1780");
-      cy.recClickOnFirstReceivableOnList();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.EmployeesGet,
+        CyRoutes.GetAutocompleteOptions,
+        CyRoutes.GetFieldLocks], () => {
+        cy.recClickOnFirstReceivableOnList();
+      });
     });
 
     it("Click on update record", () => {
