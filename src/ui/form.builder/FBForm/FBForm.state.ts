@@ -18,6 +18,7 @@ class FBFormState extends FBSchemaState {
   public validationRelatedRules: Record<string, FBValidationRelatedRules[]> = {};
   public includeLocking = false;
   public unlockQueue: string[] = [];
+  public expireLocks: Record<string, string> = {};
 
   // TO BBE REMOVED!
   public workspaceState?: FBWorkspaceState;
