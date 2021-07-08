@@ -401,7 +401,7 @@ context("PO approval test", () => {
 
     it("Create document in 'Pending approval' state", () => {
       SystemRequirement("REQ-1520");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
     });
@@ -478,7 +478,7 @@ context("PO approval test", () => {
     });
 
     it("Create document in 'Pending approval' state", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
     });
@@ -499,7 +499,7 @@ context("PO approval test", () => {
     });
 
     it("Check for PO notification on dashboard", () => {
-      SystemRequirement("REQ-2150");
+      SystemRequirement("REQ-2150", "REQ-3860");
       cy.arCheckDashboardPONotificationExistance({ shouldExist: true });
     });
 

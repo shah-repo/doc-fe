@@ -240,7 +240,7 @@ context("Record inline Flow", () => {
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline", () => {
           SystemRequirement("REQ-1080", "REQ-1100");
-          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", Second entry");
+          cy.get("[data-cy^=\"textfield-for-inline\"]").type(", Second entry");
         });
 
         it("Save record", () => {

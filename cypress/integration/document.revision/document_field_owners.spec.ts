@@ -180,11 +180,8 @@ context("Document Field Owners Test", () => {
     });
 
     it("Enters description 'New Document description'", () => {
-      cy.drEnterDocumentDescription({ description: "New Document description" });
-    });
-
-    it("clicks on 'Save' button", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drEnterDocumentDescription({ description: "New Document description" });
         cy.drClickCreateDocumentWithoutApiCall();
       });
     });
@@ -424,7 +421,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
     });
