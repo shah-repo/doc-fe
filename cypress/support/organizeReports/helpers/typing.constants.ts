@@ -8,6 +8,7 @@ export const RESULTS_FOLDER = "results";
 export const CI_BUILD_ID = process.env.CI_BUILD_ID;
 export const MERGED_SPECS_JSON_CACHE_PATH = "cypress/cache/merged_specs.json";
 export const GENERATED_JSON_CACHE_PATH = "cypress/cache/generated.json";
+export const DEFAULT_MERGED_SPECS_JSON = "merged_specs.json";
 
 export interface FilesWithData {
   [key: string]: {

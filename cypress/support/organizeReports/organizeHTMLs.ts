@@ -73,6 +73,10 @@ async function processModuleOrSubModuleRequirementsJson(
       `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}/generated_reqs_${fileName}`,
       fileName);
 
+    if (!filePaths || !(filePaths.length > 1)) {
+      return;
+    }
+
     if (!fs.existsSync(
       resolve(__dirname, "../../..", `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`))) {
       fs.mkdirSync(
