@@ -813,17 +813,6 @@ context("Autosave on blur", () => {
       });
     });
 
-    it("Add Instructions 'Select Requirement(s)'", () => {
-      cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Select Requirement" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-select-req" });
-      cy.get("[data-cy=\"options\"]")
-        .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
-        cy.fbAddNewFieldButton();
-      });
-    });
-
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
@@ -1022,13 +1011,6 @@ context("Autosave on blur", () => {
     //     .click().wait(300);
     //   cy.get("button[data-cy=\"fb-control-btn\"]").eq(7).click({ force: true });
     // });
-
-    it("Select REQ and check for autosave", () => {
-      cy.get("[data-cy^=\"fb-select-req-\"]").type("Event Types{downarrow}{enter}");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.unClick();
-      });
-    });
 
     it("Select REQ and check for autosave", () => {
       cy.get("[data-cy^=\"fb-select-doc-\"]").type("FM-00001{downarrow}{enter}");

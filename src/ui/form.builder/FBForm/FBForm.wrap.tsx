@@ -6,7 +6,7 @@ export const withFBForm = <T extends FBFormProps>(
 ) => {
   const Comp = ({
     initialValues = {},
-    workspaceMode = "form",
+    workspaceMode,
     errorValidation = true,
     initialValidation = false,
     includeLocking = false,
@@ -20,7 +20,7 @@ export const withFBForm = <T extends FBFormProps>(
     !formState && (formState = FB.useRef<FBFormState>(FBFormState, {
       schema,
       initialValues,
-      workspaceMode,
+      workspaceMode: workspaceMode || workspaceState?.mode || "form",
       workspaceState,
     }));
     formState.setIncludeLocking(includeLocking);
@@ -30,6 +30,7 @@ export const withFBForm = <T extends FBFormProps>(
       if (!formState) { return; }
       formState.errorValidation = errorValidation;
       formState.workspaceMode = workspaceMode;
+
     }, [formState, errorValidation, workspaceMode]);
 
     useEffect(() => {
