@@ -1,6 +1,6 @@
-,REQ #,Module,Sub-Module,Requirement,Comments 
-UN-0010,REQ-0010,Document Control,General,"The system shall allow a user to access, create, edit, or revise a document in Enlil",
-UN-0010,REQ-0020,Document Control,General,The system shall clearly indicate the state of the document being viewed,
+,REQ #,Module,Sub-Module,Requirement
+UN-0010,REQ-0010,Document Control,General,"The system shall allow a user to access, create, edit, or revise a document in Enlil"
+UN-0010,REQ-0020,Document Control,General,The system shall clearly indicate the state of the document being viewed
 UN-0010,REQ-0030,Document Control,Document List,"The system shall display the following default columns on the landing page for the documents list: Document ID, 
 Revision (major only), 
 Document Title, 
@@ -9,110 +9,110 @@ Document Owner,
 the associated AR ID, 
 Document Status, and 
 Effective Date 
-(this list defines content, not column header names)",
-UN-0010,REQ-0040,Document Control,Document List,The system should provide a mechanism to export the Document List (e.g. to a .csv format),
-UN-0010,REQ-0050,Document Control,Document List,The system shall only display documents in the documents list (e.g. records can be found in their respective modules or in the records list),
-UN-0010,REQ-0060,Document Control,Document List,The system shall allow the user to filter the displayed Document List for each of the columns displayed on the landing page,
-UN-0010,REQ-0070,Document Control,Document List,The system shall default the Document List filter to display released documents when starting a new Enlil session,
-UN-0010,REQ-0080,Document Control,Document List,The system shall maintain Document List filter settings during an Enlil session when navigating away from and back to the Document List landing page,
-UN-0010,REQ-0090,Document Control,Document List,The system shall default to the Document List being sorted by most recent edited first,
-UN-0010,REQ-0100,Document Control,Document List,The system shall provide a mechanism to clear all Document List filters,
-UN-0010,REQ-0110,Document Control,Document List,The system shall display the number of documents displayed that match the filter settings,
-UN-0010,REQ-0120,Document Control,Document List,The system shall allow the user to open a document from within the Document List,
-UN-0010,REQ-0130,Document Control,Document List,The system should display the description of the document when the mouse hovers over the document title in the Document List,
-UN-0010,REQ-0140,Document Control,Document Creation/Revising,The system shall provide a mechanism for the user to create a document from the Document List landing page ,
-UN-0010,REQ-0150,Document Control,Document Creation/Revising,The system shall allow a user to revise a document that is in the Released state,
-UN-0010,REQ-0160,Document Control,Document Creation/Revising,"The system shall provide the following editable document attributes when creating or revising a document: (Document Title, Document Description, Document Type, Document Revision Stage, Reference, Training Required, Attachments, Users (document access privileges), Groups (document access privileges), Document Owner Assignment)",
-UN-0010,REQ-0170,Document Control,Document Creation/Revising,"The system shall allow the user to edit document ID, when creating a document.",
-UN-0010,REQ-0180,Document Control,Document Creation/Revising,The system shall allow the document owner to add one or more references to a document in draft state,
-UN-0010,REQ-0190,Document Control,Document Creation/Revising,The system shall allow the document owner to remove references to a document in draft state,
-UN-0010,REQ-0200,Document Control,Document Creation/Revising,The system shall allow the document owner to upload one or more  attachments to a document in draft state,
-UN-0010,REQ-0210,Document Control,Document Creation/Revising,The system support attachments of multiple types.,
-UN-0010,REQ-0220,Document Control,Document Creation/Revising,The system shall allow the document owner to upload multiple documents at once,
-UN-0010,REQ-0230,Document Control,Document Creation/Revising,The system shall notify the user if a document upload failure occurs,
-UN-0010,REQ-0240,Document Control,Document Creation/Revising,The system shall allow the document owner to remove uploaded attachments for a document in draft state,
-UN-0010,REQ-0250,Document Control,Document Creation/Revising,The system shall allow the document owner to identify a single attachment as the primary attachment for a document,
-UN-0010,REQ-0260,Document Control,Document Creation/Revising,The system shall allow the document owner to identify any attachment as a redline,
-UN-0010,REQ-0270,Document Control,Document Creation/Revising,"The system shall default the training to required, if the particular Document Type requires training in the Document Approval Matrix",
-UN-0010,REQ-0280,Document Control,Document Creation/Revising,"The system shall default the training to required, if the  previous revision of the particular document required training",
-UN-0010,REQ-0290,Document Control,Document Creation/Revising,"The system shall allow the user to deselect training required,  if the default state was training required",
-UN-0010,REQ-0300,Document Control,Document Creation/Revising,The system shall default user/group access to Everyone for new documents,
-UN-0010,REQ-0320,Document Control,Document Creation/Revising,The system shall automatically generate and display a document number when a document is created based on the system configuration for the particular Document Type,
-UN-0010,REQ-0330,Document Control,Document Creation/Revising,The system shall automatically set the document status as Draft when creating or revising a document,
-UN-0010,REQ-0340,Document Control,Document Creation/Revising,The system shall allow the document owner to change document ownership to another user,
-UN-0010,REQ-0350,Document Control,Document Creation/Revising,The system shall allow the document owner to cancel the document draft.  A confirmation dialog is required.,
-UN-0010,REQ-0360,Document Control,Document Creation/Revising,The system shall maintain a history of attribute changes ,
-UN-0010,REQ-0370,Document Control,Document Creation/Revising,"The system shall allow the user to select the type of revision change, options include next revision, upgrade revision state, administrative, or obsolete, when revising a document and if the option is applicable.",
-UN-0012,REQ-0380,Document Control,Document Creation/Revising,The system shall require a password for a user to access attachments of documents if the document is in Obsolete state,
-UN-0010,REQ-0390,Document Control,Document Creation/Revising,The system shall require a password for a user to access redlines of documents if the document is not in draft state,
-UN-0010,REQ-0400,Document Control,Document Type Management,The system shall allow the user to create a Document Type,
-UN-0010,REQ-0410,Document Control,Document Type Management,The system shall support multiple Document Types as needed by the customer,
-UN-0010,REQ-0420,Document Control,Document Type Management,The system shall allow the user to define a Document Type as QMS or non-QMS. QMS default access everyone and Non-QMS default access only owner,
-UN-0010,REQ-0440,Document Control,Document Type Management,The system shall allow the user to assign a document prefix to a Document Type at the time of creation of the Document Type,
-UN-0010,REQ-0450,Document Control,Document Type Management,The system shall support a sequential numbering by company or by prefix for each Document Type. A starting number will be set per document type.,
-UN-0010,REQ-0460,Document Control,Document Type Management,The system shall support multiple Document Types to share the same prefix. All documents sharing the same prefix shall share sequential numbering system,
-UN-0010,REQ-0480,Document Control,Document Type Management,The system shall maintain a descriptive name for every Document Type,
-UN-0010,REQ-0490,Document Control,Document Type Management,The system shall allow the user to assign a Document Type to an Enlil Document Class,
-UN-0010,REQ-0510,Document Control,Document Type Management,"When viewing the Document List, only Document Types defined as Enlil Document Class of Document shall be visible",
-UN-0011,REQ-0520,Document Control,Document Type Management,The Document Approval Matrix shall be enforced for managing approvals to all Enlil Document Classes with the exception of PO's,
-UN-0010,REQ-0530,Document Control,Document Type Management,"For Document Types assigned to an Enlil Document Class of Document, the system shall include the Document Type in the Document List, and utilizes the Document Approval Matrix to manage changes/approvals",
-UN-0010,REQ-0550,Document Control,Document Type Management,"For items with an Enlil Document Class of Dynamic Form, the system shall include these Document Types as selectable items when creating custom forms ",
-UN-0010,REQ-0560,Document Control,Document Type Management,"For items with an Enlil Document Class of PI, the system shall allow addition of these Document Types as process instructions on electronic LHR's ",
-UN-0010,REQ-0570,Document Control,Document Type Management,"For items with an Enlil Document Class of PO, the system shall display these Document Types on the PO List, and utilize PO approval matrix to manage changes/approvals",
-UN-0010,REQ-0580,Document Control,General,"The system shall only display the major revision of a document, except for in the revision history of the document",
-UN-0011,REQ-0590,Change Control,Document Approval Matrix,"The system shall support the creation of roles (e.g.: QA, R&D, RA…etc.)",
-UN-0011,REQ-0600,Change Control,Document Approval Matrix,The system shall allow the assignment of user groups to roles and users to roles,
-UN-0011,REQ-0610,Change Control,Document Approval Matrix,The system shall support a 2-level or 3-level document system. This is setup as a configuration and applies to all documents in the Document Approval Matrix,
-UN-0011,REQ-0630,Change Control,Document Approval Matrix,The system shall allow the user to assign approval requirements per role for each Document Type,
-UN-0011,REQ-0640,Change Control,Document Approval Matrix,The system shall allow separate assignment of approval requirements for a 2-level document system with revision types: Numeric and Alpha ,
-UN-0011,REQ-0650,Change Control,Document Approval Matrix,"The system shall allow separate assignment of approval requirements for a 3-level document system with revision types: Numeric, Numeric-Alpha and Alpha ",
-UN-0011,REQ-0660,Change Control,Document Approval Matrix,The system shall allow the assignment of approval requirements for an Administrative change,
-UN-0011,REQ-0670,Change Control,Document Approval Matrix,The system shall allow the assignment of approval requirements for a Admin Revision change,
-UN-0011,REQ-0680,Change Control,Approval Request Creation ,The system shall allow users to create and submit approval requests for approval/obsolescence of documents.,
-UN-0011,REQ-0690,Change Control,Approval Request Creation ,The system shall automatically issue a unique approval request ID when a new change request is initiated,
-UN-0011,REQ-0700,Change Control,Approval Request Creation ,The system shall support the customer to define one or more custom forms to be used for approval requests,
-UN-0003,REQ-0710,Change Control,Approval Request Form,"The system shall support addition of one or more implementation tasks to the AR form, including a task title, task description, task assignment to user, due data, and status tracking, that are required to complete before an AR is closed",
+(this list defines content, not column header names)"
+UN-0010,REQ-0040,Document Control,Document List,The system should provide a mechanism to export the Document List (e.g. to a .csv format)
+UN-0010,REQ-0050,Document Control,Document List,The system shall only display documents in the documents list (e.g. records can be found in their respective modules or in the records list)
+UN-0010,REQ-0060,Document Control,Document List,The system shall allow the user to filter the displayed Document List for each of the columns displayed on the landing page
+UN-0010,REQ-0070,Document Control,Document List,The system shall default the Document List filter to display released documents when starting a new Enlil session
+UN-0010,REQ-0080,Document Control,Document List,The system shall maintain Document List filter settings during an Enlil session when navigating away from and back to the Document List landing page
+UN-0010,REQ-0090,Document Control,Document List,The system shall default to the Document List being sorted by most recent edited first
+UN-0010,REQ-0100,Document Control,Document List,The system shall provide a mechanism to clear all Document List filters
+UN-0010,REQ-0110,Document Control,Document List,The system shall display the number of documents displayed that match the filter settings
+UN-0010,REQ-0120,Document Control,Document List,The system shall allow the user to open a document from within the Document List
+UN-0010,REQ-0130,Document Control,Document List,The system should display the description of the document when the mouse hovers over the document title in the Document List
+UN-0010,REQ-0140,Document Control,Document Creation/Revising,The system shall provide a mechanism for the user to create a document from the Document List landing page 
+UN-0010,REQ-0150,Document Control,Document Creation/Revising,The system shall allow a user to revise a document that is in the Released state
+UN-0010,REQ-0160,Document Control,Document Creation/Revising,"The system shall provide the following editable document attributes when creating or revising a document: (Document Title, Document Description, Document Type, Document Revision Stage, Reference, Training Required, Attachments, Users (document access privileges), Groups (document access privileges), Document Owner Assignment)"
+UN-0010,REQ-0170,Document Control,Document Creation/Revising,"The system shall allow the user to edit document ID, when creating a document."
+UN-0010,REQ-0180,Document Control,Document Creation/Revising,The system shall allow the document owner to add one or more references to a document in draft state
+UN-0010,REQ-0190,Document Control,Document Creation/Revising,The system shall allow the document owner to remove references to a document in draft state
+UN-0010,REQ-0200,Document Control,Document Creation/Revising,The system shall allow the document owner to upload one or more attachments to a document in draft state
+UN-0010,REQ-0210,Document Control,Document Creation/Revising,The system support attachments of multiple types.
+UN-0010,REQ-0220,Document Control,Document Creation/Revising,The system shall allow the document owner to upload multiple documents at once
+UN-0010,REQ-0230,Document Control,Document Creation/Revising,The system shall notify the user if a document upload failure occurs
+UN-0010,REQ-0240,Document Control,Document Creation/Revising,The system shall allow the document owner to remove uploaded attachments for a document in draft state
+UN-0010,REQ-0250,Document Control,Document Creation/Revising,The system shall allow the document owner to identify a single attachment as the primary attachment for a document
+UN-0010,REQ-0260,Document Control,Document Creation/Revising,The system shall allow the document owner to identify any attachment as a redline
+UN-0010,REQ-0270,Document Control,Document Creation/Revising,"The system shall default the training to required, if the particular Document Type requires training in the Document Approval Matrix"
+UN-0010,REQ-0280,Document Control,Document Creation/Revising,"The system shall default the training to required, if the  previous revision of the particular document required training"
+UN-0010,REQ-0290,Document Control,Document Creation/Revising,"The system shall allow the user to deselect training required,  if the default state was training required"
+UN-0010,REQ-0300,Document Control,Document Creation/Revising,The system shall default user/group access to Everyone for new documents
+UN-0010,REQ-0320,Document Control,Document Creation/Revising,The system shall automatically generate and display a document number when a document is created based on the system configuration for the particular Document Type
+UN-0010,REQ-0330,Document Control,Document Creation/Revising,The system shall automatically set the document status as Draft when creating or revising a document
+UN-0010,REQ-0340,Document Control,Document Creation/Revising,The system shall allow the document owner to change document ownership to another user
+UN-0010,REQ-0350,Document Control,Document Creation/Revising,The system shall allow the document owner to cancel the document draft.  A confirmation dialog is required.
+UN-0010,REQ-0360,Document Control,Document Creation/Revising,The system shall maintain a history of attribute changes 
+UN-0010,REQ-0370,Document Control,Document Creation/Revising,"The system shall allow the user to select the type of revision change, options include next revision, upgrade revision state, administrative, or obsolete, when revising a document and if the option is applicable."
+UN-0012,REQ-0380,Document Control,Document Creation/Revising,The system shall require a password for a user to access attachments of documents if the document is in Obsolete state
+UN-0010,REQ-0390,Document Control,Document Creation/Revising,The system shall require a password for a user to access redlines of documents if the document is not in draft state
+UN-0010,REQ-0400,Document Control,Document Type Management,The system shall allow the user to create a Document Type
+UN-0010,REQ-0410,Document Control,Document Type Management,The system shall support multiple Document Types as needed by the customer
+UN-0010,REQ-0420,Document Control,Document Type Management,The system shall allow the user to define a Document Type as QMS or non-QMS. QMS default access everyone and Non-QMS default access only owner
+UN-0010,REQ-0440,Document Control,Document Type Management,The system shall allow the user to assign a document prefix to a Document Type at the time of creation of the Document Type
+UN-0010,REQ-0450,Document Control,Document Type Management,The system shall support a sequential numbering by company or by prefix for each Document Type. A starting number will be set per document type.
+UN-0010,REQ-0460,Document Control,Document Type Management,The system shall support multiple Document Types to share the same prefix. All documents sharing the same prefix shall share sequential numbering system
+UN-0010,REQ-0480,Document Control,Document Type Management,The system shall maintain a descriptive name for every Document Type
+UN-0010,REQ-0490,Document Control,Document Type Management,The system shall allow the user to assign a Document Type to an Enlil Document Class
+UN-0010,REQ-0510,Document Control,Document Type Management,"When viewing the Document List, only Document Types defined as Enlil Document Class of Document shall be visible"
+UN-0011,REQ-0520,Document Control,Document Type Management,The Document Approval Matrix shall be enforced for managing approvals to all Enlil Document Classes and Admin changes to POs
+UN-0010,REQ-0530,Document Control,Document Type Management,"For Document Types assigned to an Enlil Document Class of Document, the system shall include the Document Type in the Document List, and utilizes the Document Approval Matrix to manage changes/approvals"
+UN-0010,REQ-0550,Document Control,Document Type Management,"For items with an Enlil Document Class of Dynamic Form, the system shall include these Document Types as selectable items when creating custom forms "
+UN-0010,REQ-0560,Document Control,Document Type Management,"For items with an Enlil Document Class of PI, the system shall allow addition of these Document Types as process instructions on electronic LHR's "
+UN-0010,REQ-0570,Document Control,Document Type Management,"For items with an Enlil Document Class of PO, the system shall display these Document Types on the PO List, and utilize PO approval matrix to manage changes/approvals"
+UN-0010,REQ-0580,Document Control,General,"The system shall only display the major revision of a document, except for in the revision history of the document"
+UN-0011,REQ-0590,Change Control,Document Approval Matrix,"The system shall support the creation of roles (e.g.: QA, R&D, RA…etc.)"
+UN-0011,REQ-0600,Change Control,Document Approval Matrix,The system shall allow the assignment of user groups to roles and users to roles
+UN-0011,REQ-0610,Change Control,Document Approval Matrix,The system shall support a 2-level or 3-level document system. This is setup as a configuration and applies to all documents in the Document Approval Matrix
+UN-0011,REQ-0630,Change Control,Document Approval Matrix,The system shall allow the user to assign approval requirements per role for each Document Type
+UN-0011,REQ-0640,Change Control,Document Approval Matrix,The system shall allow separate assignment of approval requirements for a 2-level document system with revision types: Numeric and Alpha 
+UN-0011,REQ-0650,Change Control,Document Approval Matrix,"The system shall allow separate assignment of approval requirements for a 3-level document system with revision types: Numeric, Numeric-Alpha and Alpha "
+UN-0011,REQ-0660,Change Control,Document Approval Matrix,The system shall allow the assignment of approval requirements for an Administrative change
+UN-0011,REQ-0670,Change Control,Document Approval Matrix,The system shall allow the assignment of approval requirements for a Admin Revision change
+UN-0011,REQ-0680,Change Control,Approval Request Creation ,The system shall allow users to create and submit approval requests for approval/obsolescence of documents.
+UN-0011,REQ-0690,Change Control,Approval Request Creation ,The system shall automatically issue a unique approval request ID when a new change request is initiated
+UN-0011,REQ-0700,Change Control,Approval Request Creation ,The system shall support the customer to define one or more custom forms to be used for approval requests
+UN-0003,REQ-0710,Change Control,Approval Request Form,"The system shall support addition of one or more implementation tasks to the AR form, including a task title, task description, task assignment to user, due data, and status tracking, that are required to complete before an AR is closed"
 UN-0011,REQ-0730,Change Control,Approval Request Status,"The system shall automatically maintain the status of a change request:
 Draft - the default state when created
 In Review - the state where the change request is in review by the approvers
 Approved - the state where the change request has been approved by all reviewers
 Implementation - the state where the change request has pending Implementation Task(s)
-Closed - the state when an approved change request has been fully implemented by doc control",
+Closed - the state when an approved change request has been fully implemented by doc control"
 UN-0011,REQ-0740,Change Control,Approval Request Status,"The system shall automatically update the status attribute of all documents/parts on the approval request when the state of the approval request changes:
 Pending Change when the AR is in Draft State
 In Review when the AR is in In Review State
 Approved when the AR is in Approved State 
 Approved when the AR is in Implementation State
-Released when the AR is in Closed State",
+Released when the AR is in Closed State"
 UN-0011,REQ-0750,Change Control,Landing Page,"The system shall display the following default columns on the landing page for the approvals list: 
 AR ID, 
 AR Title, 
 AR Owner, and 
-AR  State (e.g. this list defines content, not column header names)",
-UN-0011,REQ-0760,Change Control,Landing Page,The system shall only display document approval requests in the approval requests list (e.g. approvals for other items like PO's can be found in their respective modules),
-UN-0011,REQ-0770,Change Control,Landing Page,The system shall allow the user to filter the displayed approval request list for each of the columns displayed on the landing page,
-UN-0011,REQ-0780,Change Control,Landing Page,The system shall default the approval request list filter to display AR's with latest edited displaying on top when starting a new Enlil session,
-UN-0011,REQ-0790,Change Control,Landing Page,The system shall maintain approval request list filter settings during an Enlil session when navigating away from and back to the approval request list landing page,
-UN-0011,REQ-0800,Change Control,Landing Page,The system shall default to the approval request list being sorted by most recent edited first,
-UN-0011,REQ-0810,Change Control,Landing Page,The system shall provide a mechanism to clear all approval request list filters,
-UN-0011,REQ-0820,Change Control,Landing Page,The system shall display the number of approval requests displayed that match the filter settings,
-UN-0011,REQ-0830,Change Control,Landing Page,The system shall allow the user to open an AR from the AR list,
-UN-0011,REQ-0840,Change Control,Landing Page,The system should display the AR description when the mouse hovers over the AR title in the approval request list,
-UN-0011,REQ-0850,Change Control,Approval Request Rules,The system shall allow the originator to edit the approval request and any documents associated with the approval request only while it is in draft or rejected states,
-UN-0011,REQ-0860,Change Control,Approval Request,The system shall prevent the addition of documents that are already included on another approval request,
-UN-0011,REQ-0870,Change Control,Approval Request,The system shall determine the approver requirements based on the document approval matrix for all documents contained on an AR.,
-UN-0011,REQ-0880,Change Control,Approval Request,"The system shall enforce approval requirements prior to document release if the Document Type requires e-signature. If not met, an exception shall be visible",
-UN-0011,REQ-0890,Change Control,Approval Request,The system shall allow the owner of an AR to withdraw an AR that is in In Review State,
-UN-0011,REQ-0900,Change Control,Approval Request,"For ""no e-signature required"" documents, approvals shall be enforced based on the users invited to approve the document by the document owner.",
-UN-0011,REQ-0910,Change Control,Approval Request Approvals,"The system shall provide a mechanism for electronic approvals (e.g. PO's, change requests, training forms, NCMR, CAPA, user profiles)",
-UN-0011,REQ-0920,Change Control,Approval Request Approvals,The system shall require the user to enter their user password when approving or rejecting an approval request that is assigned to them,
-UN-0011,REQ-0940,Change Control,Approval Request Approvals,"The system shall allow the owner of an AR to change an approver on the AR to another user, provided that user meets the criteria of the approval matrix",
-UN-0011,REQ-2700,Change Control,Approval Request Approvals,"The system shall automatically change the status of a document to ""Released"" when the AR is approved and the effective date is met ",
-UN-0011,REQ-2710,Change Control,Approval Request Approvals,"The system shall automatically change the status of an AR to ""Closed"", when all document(s) have been Released (once the effective date is met) and all implementation task(s) have been closed",
-UN-0011,REQ-2720,Change Control,Approval Request Approvals,The system shall provide the  user the ability to set the Effective Date on an Express AR if there are no pending actions ,
-UN-0011,REQ-0960,Change Control,Approval Request Audit ,The system shall record (audit trail) the date and timestamp for approval and rejections by a user,
-UN-0011,REQ-2730,Change Control,Approval Request Audit ,The system shall record (audit trail) the date and timestamp for AR closure (only when the system verifies that the AR is Closed),
-UN-0020,REQ-0970,Record Control,Record Forms,"The system shall allow the user to create custom forms, for the purpose of creating quality system records.  (e.g. forms for lot history, equipment calibration and maintenance, supplier management, etc.)",
+AR  State (e.g. this list defines content, not column header names)"
+UN-0011,REQ-0760,Change Control,Landing Page,The system shall only display document approval requests in the approval requests list (e.g. approvals for other items like PO's can be found in their respective modules)
+UN-0011,REQ-0770,Change Control,Landing Page,The system shall allow the user to filter the displayed approval request list for each of the columns displayed on the landing page
+UN-0011,REQ-0780,Change Control,Landing Page,The system shall default the approval request list filter to display AR's with latest edited displaying on top when starting a new Enlil session
+UN-0011,REQ-0790,Change Control,Landing Page,The system shall maintain approval request list filter settings during an Enlil session when navigating away from and back to the approval request list landing page
+UN-0011,REQ-0800,Change Control,Landing Page,The system shall default to the approval request list being sorted by most recent edited first
+UN-0011,REQ-0810,Change Control,Landing Page,The system shall provide a mechanism to clear all approval request list filters
+UN-0011,REQ-0820,Change Control,Landing Page,The system shall display the number of approval requests displayed that match the filter settings
+UN-0011,REQ-0830,Change Control,Landing Page,The system shall allow the user to open an AR from the AR list
+UN-0011,REQ-0840,Change Control,Landing Page,The system should display the AR description when the mouse hovers over the AR title in the approval request list
+UN-0011,REQ-0850,Change Control,Approval Request Rules,The system shall allow the originator to edit the approval request and any documents associated with the approval request only while it is in draft or rejected states
+UN-0011,REQ-0860,Change Control,Approval Request,The system shall prevent the addition of documents that are already included on another approval request
+UN-0011,REQ-0870,Change Control,Approval Request,The system shall determine the approver requirements based on the document approval matrix for all documents contained on an AR.
+UN-0011,REQ-0880,Change Control,Approval Request,"The system shall enforce approval requirements prior to document release if the Document Type requires e-signature. If not met, an exception shall be visible"
+UN-0011,REQ-0890,Change Control,Approval Request,The system shall allow the owner of an AR to withdraw an AR that is in In Review State
+UN-0011,REQ-0900,Change Control,Approval Request,"For ""no e-signature required"" documents, approvals shall be enforced based on the users invited to approve the document by the document owner."
+UN-0011,REQ-0910,Change Control,Approval Request Approvals,"The system shall provide a mechanism for electronic approvals (e.g. PO's, change requests, training forms, NCMR, CAPA, user profiles)"
+UN-0011,REQ-0920,Change Control,Approval Request Approvals,The system shall require the user to enter their user password when approving or rejecting an approval request that is assigned to them
+UN-0011,REQ-0940,Change Control,Approval Request Approvals,"The system shall allow the owner of an AR to change an approver on the AR to another user, provided that user meets the criteria of the approval matrix"
+UN-0011,REQ-2700,Change Control,Approval Request Approvals,"The system shall automatically change the status of a document to ""Released"" when the AR is approved and the effective date is met "
+UN-0011,REQ-2710,Change Control,Approval Request Approvals,"The system shall automatically change the status of an AR to ""Closed"", when all document(s) have been Released (once the effective date is met) and all implementation task(s) have been closed"
+UN-0011,REQ-2720,Change Control,Approval Request Approvals,The system shall provide the  user the ability to set the Effective Date on an Express AR if there are no pending actions 
+UN-0011,REQ-0960,Change Control,Approval Request Audit ,The system shall record (audit trail) the date and timestamp for approval and rejections by a user
+UN-0011,REQ-2730,Change Control,Approval Request Audit ,The system shall record (audit trail) the date and timestamp for AR closure (only when the system verifies that the AR is Closed)
+UN-0020,REQ-0970,Record Control,Record Forms,"The system shall allow the user to create custom forms, for the purpose of creating quality system records.  (e.g. forms for lot history, equipment calibration and maintenance, supplier management, etc.)"
 UN-0020,REQ-2740,Record Control,Record Forms,"The system shall display the following default columns on the landing page for the records list: 
 ID, 
 Revision, 
@@ -122,288 +122,302 @@ Form ID,
 Owner, 
 Released Date and 
 Form ID 
-(this list defines content, not column header names)",
-UN-0020,REQ-2750,Record Control,Record Forms,The system shall allow the user to filter the displayed Record List for each of the columns displayed on the landing page,
-UN-0020,REQ-2760,Record Control,Record Forms,The system shall allow the user to open a record from within the Records List,
-UN-0020,REQ-2770,Record Control,Record Forms,The system shall provide a mechanism for the user to create a record from the Records List landing page,
-UN-0020,REQ-0980,Record Control,Record Forms,The system shall provide the ability to add approvals fields within the Form,
-UN-0020,REQ-0990,Record Control,Record Forms,The system shall allow the user to define whether form approvals (Inline Approvals) are blocking (required before performing subsequent sections),
-UN-0020,REQ-1000,Record Control,Record audit,"The system shall maintain an audit trail of changes to records, including the user making the change, the date and time of the change, and identification of the content that was changed.",
-UN-0020,REQ-1010,Record Control,Record audit,The system shall record (audit trail) the date and timestamp for approval and rejections (if applicable) of a record by a user,
-UN-0020,REQ-1020,Record Control,Record creation,The system shall create new records at numeric revision stage for forms that include Inline Approval,
-UN-0020,REQ-1030,Record Control,Record creation,The system shall create new records at the alpha revision stage for forms that do not include inline approval,
-UN-0020,REQ-1040,Record Control,Record approval,The system shall create a new revision for every inline approval,
-UN-0020,REQ-1050,Record Control,Record approval,"The system shall indicate that a section of the form has been modified after approval, for forms that include Inline Approval",
-UN-0020,REQ-1060,Record Control,Record approval,The system shall create and upgrade the revision stage to Alpha when all inline approvals for a form have been recorded - close and finalize is needed,
-UN-0020,REQ-1080,Record Control,Record approval,The system shall allow the owner for updates to the record in parallel with the approval process for forms that include Inline Approval,
-UN-0020,REQ-1090,Record Control,Record approval,"If a record section is edited after approval, the record has been subsequently updated during the approval process, if the record is rejected, the updates made to the record since submission are copied into the record ",
-UN-0020,REQ-1100,Record Control,Record approval,"If a record is submitted for approval of a particular section, and edits are made to another section, once the record is approved, the updates made to the record are copied into the new draft of the record, for forms that include Inline Approval",
-UN-0020,REQ-1110,Record Control,General,"The system shall only display the major revision of a record, except for in the revision history of the record",
-UN-0020,REQ-2780,Record Control,General,The system shall allow the user to update a record after alpha release  (inline or regular) and follow the  Document Approval Matrix to manage approvals,
-UN-0020,REQ-2790,Record Control,General,"For Document Types assigned to an Enlil Document Class of Record, the system shall include the Document Type in the Records List",
-UN-0020,REQ-2800,Record Control,General,The system should allow the user to Void a record.,
-UN-0030,REQ-1120,Purchasing,Purchase Order Landing Page,"The system shall display the following default columns on the landing page of the PO module: PO#, Revision (major only), PO status, Supplier, Part Number, Amount, Requestor and Issue Date",
-UN-0030,REQ-1130,Purchasing,Purchase Order Landing Page,The system should provide a mechanism to export the PO database from the landing page,
-UN-0030,REQ-1140,Purchasing,Purchase Order Landing Page,The system shall allow the customer to define PO access for creation / update and closure to a specified group of users.,
-UN-0030,REQ-1150,Purchasing,Purchase Order Landing Page,The system shall allow the user to filter the displayed PO's for each of the columns displayed on the landing page,
-UN-0030,REQ-1160,Purchasing,Purchase Order Landing Page,The system shall default to Open my PO's displayed when starting a new Enlil session,
-UN-0030,REQ-1170,Purchasing,Purchase Order Landing Page,The system shall maintain PO filter settings during an Enlil session when navigating away from and back to the landing page,
-UN-0030,REQ-1180,Purchasing,Purchase Order Landing Page,The system shall default to the PO list being sorted by most recent first,
-UN-0030,REQ-1190,Purchasing,Purchase Order Landing Page,The system shall provide a mechanism to clear Purchase Order list filters,
-UN-0030,REQ-1200,Purchasing,Purchase Order Landing Page,The system shall display the number of PO's displayed that match the filter settings,
-UN-0030,REQ-1210,Purchasing,Purchase Order Landing Page,The system shall allow the user to open a PO from the PO list with a single click,
-UN-0030,REQ-1220,Purchasing,Purchase Order Landing Page,The system should allow accessing the description of a Part number,
-UN-0030,REQ-1230,Purchasing,Clone PO,The system should allow the user to duplicate an existing PO,
-UN-0030,REQ-1240,Purchasing,Purchase Order Creation ,"The system shall allow the user to customize the content on the PO form (e.g. project name, DHF, etc.) ",
-UN-0030,REQ-1250,Purchasing,Purchase Order Creation ,"The system shall allow the user to maintain a custom list of the following:
+(this list defines content, not column header names)"
+UN-0020,REQ-2750,Record Control,Record Forms,The system shall allow the user to filter the displayed Record List for each of the columns displayed on the landing page
+UN-0020,REQ-2760,Record Control,Record Forms,The system shall allow the user to open a record from within the Records List
+UN-0020,REQ-2770,Record Control,Record Forms,The system shall provide a mechanism for the user to create a record from the Records List landing page
+UN-0020,REQ-0980,Record Control,Record Forms,The system shall provide the ability to add approvals fields within the Form
+UN-0020,REQ-0990,Record Control,Record Forms,The system shall allow the user to define whether form approvals (Inline Approvals) are blocking (required before performing subsequent sections)
+UN-0020,REQ-1000,Record Control,Record audit,"The system shall maintain an audit trail of changes to records, including the user making the change, the date and time of the change, and identification of the content that was changed."
+UN-0020,REQ-1010,Record Control,Record audit,The system shall record (audit trail) the date and timestamp for approval and rejections (if applicable) of a record by a user
+UN-0020,REQ-1020,Record Control,Record creation,The system shall create new records at numeric revision stage for forms that include Inline Approval
+UN-0020,REQ-1030,Record Control,Record creation,The system shall create new records at the alpha revision stage for forms that do not include inline approval
+UN-0020,REQ-1040,Record Control,Record approval,The system shall create a new revision for every inline approval
+UN-0020,REQ-1050,Record Control,Record approval,"The system shall indicate that a section of the form has been modified after approval, for forms that include Inline Approval"
+UN-0020,REQ-1060,Record Control,Record approval,The system shall create and upgrade the revision stage to Alpha when all inline approvals for a form have been recorded - close and finalize is needed
+UN-0020,REQ-1080,Record Control,Record approval,The system shall allow the owner for updates to the record in parallel with the approval process for forms that include Inline Approval
+UN-0020,REQ-1090,Record Control,Record approval,"If a record section is edited after approval, the record has been subsequently updated during the approval process, if the record is rejected, the updates made to the record since submission are copied into the record "
+UN-0020,REQ-1100,Record Control,Record approval,"If a record is submitted for approval of a particular section, and edits are made to another section, once the record is approved, the updates made to the record are copied into the new draft of the record, for forms that include Inline Approval"
+UN-0020,REQ-1110,Record Control,General,"The system shall only display the major revision of a record, except for in the revision history of the record"
+UN-0020,REQ-2780,Record Control,General,The system shall allow the user to update a record after alpha release  (inline or regular) and follow the  Document Approval Matrix to manage approvals
+UN-0020,REQ-2790,Record Control,General,"For Document Types assigned to an Enlil Document Class of Record, the system shall include the Document Type in the Records List"
+UN-0020,REQ-2800,Record Control,General,The system should allow the user to Void a record.
+UN-0030,REQ-1120,Purchasing,Purchase Order Landing Page,"The system shall display the following default columns on the landing page of the PO module: 
+PO#, 
+Revision (major only), 
+PO status, 
+Supplier, 
+Part Number, 
+Amount, 
+Requestor  
+Issue Date"
+UN-0030,REQ-1130,Purchasing,Purchase Order Landing Page,The system should provide a mechanism to export the PO database from the landing page
+UN-0030,REQ-1150,Purchasing,Purchase Order Landing Page,The system shall allow the user to filter the displayed PO's for each of the columns displayed on the landing page
+UN-0030,REQ-1160,Purchasing,Purchase Order Landing Page,The system shall default to most recently edited Open PO's displayed when starting a new Enlil session
+UN-0030,REQ-1170,Purchasing,Purchase Order Landing Page,The system shall maintain PO filter settings during an Enlil session when navigating away from and back to the landing page
+UN-0030,REQ-1180,Purchasing,Purchase Order Landing Page,The system shall default to the PO list being sorted by most recent first
+UN-0030,REQ-1190,Purchasing,Purchase Order Landing Page,The system shall provide a mechanism to clear Purchase Order list filters
+UN-0030,REQ-1200,Purchasing,Purchase Order Landing Page,The system shall display the number of PO's displayed that match the filter settings
+UN-0030,REQ-1210,Purchasing,Purchase Order Landing Page,The system shall allow the user to open a PO from the PO list
+UN-0030,REQ-1220,Purchasing,Purchase Order Landing Page,The system should allow the user to access the Title of a Part number on the Purchase Order Landing Page
+UN-0030,REQ-1250,Purchasing,Purchase Order Creation ,"The system shall allow the user to access a list of the following:
 company addresses
 GL codes
 shipping accounts
 Terms
-Units (See Sheet 2 of this document) ",
-UN-0030,REQ-1260,Purchasing,Purchase Order Creation ,"The system shall allow a customer to select from multiple PO forms when creating a new PO.  (If only one form is in system, no form selector window is shown)",
-UN-0030,REQ-1270,Purchasing,Purchase Order Creation ,The system shall assign a unique PO number for each PO created,
-UN-0030,REQ-1280,Purchasing,Purchase Order Creation ,The system shall set the PO status to draft when created,
-UN-0030,REQ-1290,Purchasing,Purchase Order Creation ,The system shall allow the user to enter a title or description for the PO,
+Units "
+UN-0030,REQ-1260,Purchasing,Purchase Order Creation ,"The system shall allow a customer to select from multiple PO forms when creating a new PO.  (If only one form is in system, no form selector window is shown)"
+UN-0030,REQ-1270,Purchasing,Purchase Order Creation ,The system shall assign a unique PO number for each PO created
+UN-0030,REQ-1280,Purchasing,Purchase Order Creation ,The system shall set the PO state to draft when created
+UN-0030,REQ-1290,Purchasing,Purchase Order Creation ,The system shall allow the user to enter a description for the PO
 UN-0030,REQ-1300,Purchasing,Purchase Order Creation ,"The system shall allow the selection of:
 a supplier in the system, 
 the shipping address to any of the company address(es)
 from a subset of GL Code list
 a shipping accounts
-the Requestor
-the Department of the requestor",
+the Requestor"
 UN-0030,REQ-1310,Purchasing,Purchase Order Creation ,"The system shall allow the entry of:
 a default company address
 the ""Ordered"" date
-Terms",
-UN-0030,REQ-1320,Purchasing,Purchase Order Creation ,"The system shall allow the user to specify the selected currency for the entire PO.  The following currencies are supported (USD, EURO, BRITISH POUND, Canadian Dollar and Australian Dollar)",
-UN-0030,REQ-1330,Purchasing,Purchase Order Creation ,"The system shall display a source website from where the exchange rate was extracted, the currency exchange rate and the date it was used to estimate the USD value of the PO",
-UN-0030,REQ-1340,Purchasing,Purchase Order Creation ,The system shall allow the user to enter the phone number of the company,
-UN-0030,REQ-1350,Purchasing,Purchase Order Creation ,The system shall allow the user to upload attachment(s) (e.g.: quotation and any other necessary attachments…etc.),
-UN-0030,REQ-1360,Purchasing,Purchase Order Creation ,The system shall allow the user to enter multiple line items (to purchased parts or service items).  See product line Items requirements section below,
-UN-0030,REQ-1370,Purchasing,Purchase Order Creation ,The system shall allow the user to save a PO in Draft state and complete it at a later time,
-UN-0030,REQ-1380,Purchasing,Purchase Order Creation ,The system shall allow the user to add line items to the PO. Each line item shall have a unique number identifier,
-UN-0030,REQ-1390,Purchasing,Purchase Order Creation ,The system shall allow the user to add a line item for a Product or a Service,
-UN-0030,REQ-1400,Purchasing,Purchase Order Creation ,The system shall have all the line item details as optional,
-UN-0033,REQ-1410,Purchasing,Purchase Order Creation ,"The system shall have the following entries if a ""Product"" line item was selected: Part Number with Rev (list),  Part Description (text entry), Quantity Ordered (text entry), Units (list), GL Code (list), Date Required (Datepicker), Supplier Part Number (text entry), Unit Price (text entry), Capital Equipment (checkbox), Tax (checkbox)",
-UN-0033,REQ-1420,Purchasing,Purchase Order Creation ,"The system shall have the following entries if a ""Service"" line item was selected: Service ID (text entry), Description (text entry), Quantity Ordered (text entry), Units (list/text entry), GL Code (list), Date Required (list), Unit Price (text entry)",
-UN-0030,REQ-1430,Purchasing,Purchase Order Creation ,The system shall auto calculate the subtotal amount based on the ordered quantity and the unit price,
-UN-0030,REQ-1440,Purchasing,Purchase Order Creation ,"The system shall auto calculate the total amount based on the subtotal, the tax (if applicable) and the shipping cost (if applicable)",
-UN-0030,REQ-1450,Purchasing,Purchase Order Creation ,The system shall allow the user to predefine the tax rate to be included in the calculation.  One rate shall be used for all POs per company.,
-UN-0030,REQ-1460,Purchasing,Purchase Order Creation ,The system shall display the total PO cost in dollars using the exchange rate when appropriate,
-UN-0030,REQ-1470,Purchasing,Purchase Order Status,"The system shall allow the user to identify the PO State (e.g. Open, Closed, Cancelled…etc.). ",
-UN-0030,REQ-1480,Purchasing,Purchase Order Status,The system shall allow the customer to define the names of the PO states,
-UN-0030,REQ-1490,Purchasing,Purchase Order Approval,The system shall allow the user to submit the PO for approval (see approval requirements in section below),
-UN-0031,REQ-1500,Purchasing,Purchase Order Approval,The system shall enforce the PO Approval Matrix,
-UN-0031,REQ-1510,Purchasing,Purchase Order Approval,The system shall allow the user to select users based on the PO Approval Matrix,
-UN-0030,REQ-1520,Purchasing,Purchase Order Approval,The system shall set the PO status to Submitted for Approval when submitted for approval,
-UN-0030,REQ-1530,Purchasing,Purchase Order Approval,The system shall allow the PO Owner to withdraw a PO that has been routed for approval but is not yet fully approved,
-UN-0031,REQ-1540,Purchasing,Purchase Order Approval,The system shall capture the ID of the user(s) approving a PO,
-UN-0031,REQ-1550,Purchasing,Purchase Order Approval,The system shall capture the date and time of the approval(s),
-UN-0031,REQ-1560,Purchasing,Purchase Order Approval,The system shall set the PO state to Open when all approvals are recorded,
-UN-0031,REQ-1570,Purchasing,Purchase Order Approval,The system shall set the PO state to Draft when a user rejects the PO,
-UN-0030,REQ-1580,Purchasing,Purchase Order Delivery to Supplier,The system shall create a PDF of the PO form with all the PO details and attachments (e.g. prints),
-UN-0032,REQ-1590,Purchasing,Purchase Order Delivery to Supplier,The system shall add terms and conditions requiring notification for all changes in the pdf of the PO form,
-UN-0030,REQ-1600,Purchasing,Purchase Order Revising,The system shall allow users with Revise PO permissions to revise a PO,
-UN-0030,REQ-1610,Purchasing,Purchase Order Delivery to Supplier,The system shall set the PO status to draft when a new revision is created,
-UN-0030,REQ-1620,Purchasing,Purchase Order Revising,"The system shall allow updating the PO details as needed.  However, the supplier may not be modified after the first release of the PO",
-UN-0030,REQ-1630,Purchasing,Purchase Order Revising,The system shall capture the ID of the user and the date and time of the changes,
-UN-0031,REQ-1640,Purchasing,Purchase Order Revising,The system shall require reapproval of the PO if the modified total is higher than the previous approval threshold for the approvers,
-UN-0030,REQ-1650,Purchasing,Purchase Order Revising,The system shall maintain version history of the PO when modified except for the Status field,
-UN-0030,REQ-1660,Purchasing,Purchase Order Closing,The system shall allow a user with Revise PO permissions to cancel a PO,
-UN-0030,REQ-1670,Purchasing,Purchase Order Closing,The system shall allow a user with Revise PO permissions to close a PO,
-UN-0040,REQ-1680,Receiving,Receiving Landing Page,"The system shall display the following default columns on the landing page of the Receiving module: Receiving Record ID#, Supplier Name, Owner, Record State and Approval Date",
-UN-0040,REQ-1690,Receiving,Receiving Landing Page,The system should support export the receiving list from the landing page,
-UN-0040,REQ-1700,Receiving,Receiving Landing Page,The system shall allow the customer to define access for Receiving record creation / update and closure to a specified group of users.,
-UN-0040,REQ-1710,Receiving,Receiving Landing Page,The system shall allow the user to filter the displayed receiving records for each of the columns displayed on the landing page,
-UN-0040,REQ-1720,Receiving,Receiving Landing Page,"The system shall default to Draft receiving records owned by the current user, when starting a new Enlil session",
-UN-0040,REQ-1730,Receiving,Receiving Landing Page,The system shall maintain Receiving list filter settings during an Enlil session when navigating away from and back to the landing page,
-UN-0040,REQ-1740,Receiving,Receiving Landing Page,The system shall default to the Receiving record list being sorted by most recent first (by most recent edited),
-UN-0040,REQ-1750,Receiving,Receiving Landing Page,The system shall provide a mechanism to clear Receiving list filters,
-UN-0040,REQ-1760,Receiving,Receiving Landing Page,The system shall display the number of Receiving Records displayed that match the filter settings,
-UN-0040,REQ-1770,Receiving,Receiving Landing Page,The system shall allow users with Receiving permissions to receive materials from the Receiving landing page,
-UN-0040,REQ-1780,Receiving,Receiving Landing Page,The system shall allow the user to open a receiving record from the receiving list with a single click,
-UN-0040,REQ-1790,Receiving,Receive materials associated with a PO,The system shall the user to receive items against an Open PO and generate a receiving record.,
-UN-0040,REQ-1800,Receiving,Receive materials associated with a PO,The system shall allow the user to search and select from a list of open PO's,
-UN-0040,REQ-1810,Receiving,Receive materials associated with a PO,The system shall load and display the PO selected by the user,
-UN-0040,REQ-1820,Receiving,Receive materials associated with a PO,The system shall allow the user to receive multiple lots against a line item of an open PO as part of a single receiving event,
-UN-0040,REQ-1830,Receiving,Receive materials associated with a PO,"The system shall allow for the creation of multiple receiving records against an open PO, when the quantity received is less than the remaining open quantity on the PO",
-UN-0040,REQ-1840,Receiving,Receive materials associated with a PO,The system shall update the PO to reflect the cumulative quantity received of the particular line item against that PO in the Qty Received field. ,
-UN-0040,REQ-1850,Receiving,Receive materials associated with a PO,The system should allow the user to close a PO from the Receivable Record,
-UN-0040,REQ-1860,Receiving,Creating a Receivable Record without a PO,The system shall allow the user to receive material without a PO and generate a receiving record.,
-UN-0040,REQ-1870,Receiving,Receiving record,"The system shall create a receiving record, in Draft state when receiving materials",
-UN-0040,REQ-1880,Receiving,Receiving record,"The system shall allow the user to customize the content on the Receiving record (text fields, file upload…etc.)",
-UN-0040,REQ-1890,Receiving,Receiving record,"The system shall automatically generate a unique record ID and provides fields for documenting the quantity received, the part numbers received, the PO number, and reference to lot numbers created during receiving.",
-UN-0040,REQ-1900,Receiving,Receiving record,The system shall allow the record owner to save a receiving record in Draft state and complete it at a later time,
-UN-0041,REQ-1910,Receiving,Receiving record,The system should allow the record owner to create a NCMR from the receiving form.,
-UN-0040,REQ-1920,Receiving,Receiving record,"The system shall automatically populate the Supplier (for items received against a PO), or allow the record owner enter the Supplier (for items without a PO)",
-UN-0040,REQ-1930,Receiving,Receiving record,"The system shall automatically populate the part number/description received (for items received against a PO), or allow the record owner to enter the Part number/description received ",
-UN-0040,REQ-1940,Receiving,Receiving record,The system shall automatically maintain reference to the lots created in the receiving record,
-UN-0040,REQ-1950,Receiving,Receiving record,The system shall allow the record owner to select the Quantity received,
-UN-0040,REQ-1960,Receiving,Receiving record,The system shall allow the record owner to select the unit of measure of the material ,
-UN-0040,REQ-1970,Receiving,Receiving record,The system shall allow the record owner to add Comments,
-UN-0040,REQ-1980,Receiving,Receiving record,The system shall allow the record owner to attach packing slips and other documentation to the receiving record.,
-UN-0040,REQ-1990,Receiving,Receiving record,"The system shall allow the record owner to change the owner, following confirmation with a dialog.",
-UN-0040,REQ-2000,Receiving,Receiving record,The system should allow any user with receiving permissions to update a draft receiving record,
-UN-0042,REQ-2010,Receiving,Creating a lot,The system shall allow the record owner to create a lot (by a click of a button) from the receiving form,
-UN-0042,REQ-2020,Receiving,Creating a lot,The system shall automatically create a reference to the Receiving Record when a new lot record is created.,
-UN-0042,REQ-2030,Receiving,Creating a lot,"The system should allow the record owner to set a Lot state to ""Received"" from the Receivable Record",
-UN-0040,REQ-2040,Receiving,Approving a Receivable,The system shall allow the record owner to release the record without requiring a signature for approval,
-UN-0040,REQ-2050,Receiving,Approving a Receivable,The system shall capture the ID of the user(s) approving a receiving record,
-UN-0040,REQ-2060,Receiving,Approving a Receivable,The system shall capture the date and time of the approval,
-UN-0040,REQ-2070,Receiving,Revising a Receiving record,The system shall allow users with Receiving permission to revise a Receiving record,
-UN-0040,REQ-2080,Receiving,Approving a Receivable,The system shall utilize minor revisions to capture corrections to a record,
-UN-0040,REQ-2090,Receiving,Approving a Receivable,The system shall utilize major revisions to capture material updates to a receiving record,
-UN-0040,REQ-2100,Receiving,Revising a Receiving record,The system shall capture the ID and date of the user who completed the update,
-UN-0040,REQ-2110,Receiving,Revising a Receiving record,The system shall maintain version history of the Receivable when modified,
-UN-0040,REQ-2120,Receiving,Voiding a Receivable,"The system should allow a user with Receiving permission to void a Receiving record, after confirming with a dialog.",
-UN-0080,REQ-2140,Notifications,General,The system shall notify the user by email when an item that requires an electronic approvals is assigned to them,
-UN-0080,REQ-2150,Notifications,Approval Requests,The system shall display a notification in the dashboard for users that are on an approval request that has been submitted for approval.  ,
-UN-0080,REQ-2160,Notifications,Approval Requests,"The system shall display the following in the approval notification (AR ID, name of the submitter, date of approval request).  ",
-UN-0080,REQ-2170,Notifications,Approval Requests,The system should indicate an AR notification as overdue 3 days after submission.,
-UN-0080,REQ-2180,Notifications,Approval Requests,The system should display the description of the AR in the approval notification,
-UN-0080,REQ-2190,Notifications,Approval Request,The system shall remove the approval request from the to do list of all users who have not yet approved an approval request upon rejection by another approver or withdrawal by the AR owner,
-UN-0080,REQ-2200,Notifications,Approval Request,The system shall remove the approval request from the to do list of all approvers upon approving the AR being fully approved,
-UN-0080,REQ-2210,Notifications,Purchase Orders,"The approval of a PO shall be available in the User's dashboard, including the PO number, name of submitter, PO amount",
-UN-0080,REQ-2220,Notifications,Purchase Orders,The notification of a PO shall allow for single click opening of the pdf version of the PO ,
-UN-0060,REQ-2230,Supplier,Supplier Landing Page,The system shall display the list of supplier created by the user on the Supplier Landing page,
-UN-0060,REQ-2240,Supplier,Supplier Landing Page,"The system should display the following default columns on the landing page of the Supplier module: Supplier Name, Supplier Status, Supplier Category, Supplier Type, Critical Supplier?, Approved Parts ",
-UN-0060,REQ-2250,Supplier,Supplier Landing Page,The system should provide a mechanism to export the Supplier database from the landing page (e.g. a .csv file),
-UN-0060,REQ-2260,Supplier,Supplier Landing Page,The system should allow the customer to define access for updating or approving supplier attributes.,
-UN-0060,REQ-2270,Supplier,Supplier Landing Page,The system shall allow the user to filter the displayed Suppliers for each of the columns displayed on the landing page,
-UN-0060,REQ-2280,Supplier,Supplier Landing Page,The system should default to Approved Suppliers displayed when starting a new Enlil session,
-UN-0060,REQ-2290,Supplier,Supplier Landing Page,The system shall maintain Supplier filter settings during an Enlil session when navigating away from and back to the landing page,
-UN-0060,REQ-2300,Supplier,Supplier Landing Page,The system shall default to the supplier list sorted by alphabetical order,
-UN-0060,REQ-2310,Supplier,Supplier Landing Page,The system shall provide a mechanism to clear Supplier List filters,
-UN-0060,REQ-2320,Supplier,Supplier Landing Page,The system shall display the number of suppliers displayed that match the filter settings,
-UN-0060,REQ-2330,Supplier,Supplier Landing Page,The system shall allow for creation of a new supplier from the supplier landing page ,
-UN-0060,REQ-2340,Supplier,Supplier Landing Page,The system shall allow the user to open the Supplier File from the supplier list with a single click ,
-UN-0060,REQ-2350,Supplier,Supplier Form,The system shall allow the user to define one or more forms for creation and management of suppliers.,
-UN-0060,REQ-2360,Supplier,Creating a new supplier,"The system shall allow the user to create a new supplier, including supplier name, description, address, phone number, contact information ",
+Terms"
+UN-0030,REQ-1320,Purchasing,Purchase Order Creation ,"The system shall allow the user to specify the selected currency for the entire PO.  The following currencies are supported (USD, EURO, BRITISH POUND, Canadian Dollar and Australian Dollar)"
+UN-0030,REQ-1330,Purchasing,Purchase Order Creation ,"The system shall display a source website from where the exchange rate was extracted, the currency exchange rate and the date that was used to estimate the USD value of the PO"
+UN-0030,REQ-1350,Purchasing,Purchase Order Creation ,The system shall allow the user to upload attachment(s) (e.g.: quotation and any other necessary attachments…etc.)
+UN-0030,REQ-1360,Purchasing,Purchase Order Creation ,The system shall allow the user to enter multiple line items (to purchase parts or service items).  
+UN-0030,REQ-1370,Purchasing,Purchase Order Creation ,The system shall allow the user to save a PO in Draft state and complete it at a later time
+UN-0030,REQ-1380,Purchasing,Purchase Order Creation ,Each line item added to the PO shall have a unique number identifier
+UN-0030,REQ-1400,Purchasing,Purchase Order Creation ,"The system shall have all the line item details as optional. Exceptions:  the part number identifier is required, the order date is required"
+UN-0033,REQ-1410,Purchasing,Purchase Order Creation ,"The system shall have the following entries if a ""Product"" line item was selected: Part Number with Rev (list),  Part Description (text entry), Quantity Ordered (text entry), Units (list), GL Code (list), Date Required (Datepicker), Supplier Part Number (text entry), Unit Price (text entry), Capital Equipment (checkbox), Tax (checkbox)"
+UN-0033,REQ-1420,Purchasing,Purchase Order Creation ,"The system shall have the following entries if a ""Service"" line item was selected: Service ID (text entry), Description (text entry), Quantity Ordered (text entry), Units (list/text entry), GL Code (list), Date Required (list), Unit Price (text entry),  Tax (checkbox)"
+UN-0030,REQ-1430,Purchasing,Purchase Order Creation ,The system shall auto calculate the subtotal amount based on the ordered quantity and the unit price
+UN-0030,REQ-1440,Purchasing,Purchase Order Creation ,"The system shall auto calculate the total amount based on the subtotal, the tax (if applicable) and the shipping cost (if applicable)"
+UN-0030,REQ-1450,Purchasing,Purchase Order Creation , One tax rate shall be used for all POs per company.
+UN-0030,REQ-1460,Purchasing,Purchase Order Creation ,The system shall display the total PO cost in USD using the exchange rate when appropriate
+UN-0030,REQ-1490,Purchasing,Purchase Order Approval,The system shall allow the user to submit the PO for approval 
+UN-0031,REQ-1500,Purchasing,Purchase Order Approval,The system shall enforce the PO Approval Matrix
+UN-0031,REQ-1510,Purchasing,Purchase Order Approval,The system shall allow the user to select approvers based on the PO Approval Matrix
+UN-0030,REQ-1520,Purchasing,Purchase Order Approval,The system shall set the PO state to Submitted for Approval when submitted for approval
+UN-0030,REQ-1530,Purchasing,Purchase Order Approval,The system shall allow the PO Owner to withdraw a PO that has been routed for approval but is not yet fully approved
+UN-0031,REQ-1540,Purchasing,Purchase Order Approval,The system shall capture the ID of the user(s) approving a PO
+UN-0031,REQ-1550,Purchasing,Purchase Order Approval,The system shall capture the date and time of the approval(s)
+UN-0031,REQ-1560,Purchasing,Purchase Order Approval,The system shall set blank PO state when all approvals are recorded
+UN-0031,REQ-1570,Purchasing,Purchase Order Approval,The system shall set the PO state to Draft when a user rejects the PO
+UN-0030,REQ-1580,Purchasing,Purchase Order Delivery to Supplier,The system shall create a PDF of the PO form with all the PO details and attachments (e.g. prints)
+UN-0032,REQ-1590,Purchasing,Purchase Order Delivery to Supplier,The system shall add terms and conditions requiring notification for all changes in the pdf of the PO form
+UN-0030,REQ-1600,Purchasing,Purchase Order Revising,The system shall allow users to revise a PO
+UN-0030,REQ-1610,Purchasing,Purchase Order Delivery to Supplier,The system shall set the PO status to draft when a new revision is created
+UN-0030,REQ-1620,Purchasing,Purchase Order Revising,"The system shall allow updating the PO details as needed.  However, the supplier may not be modified after the first release of the PO"
+UN-0030,REQ-1630,Purchasing,Purchase Order Revising,The system shall capture the ID of the user and the date and time of the changes
+UN-0031,REQ-1640,Purchasing,Purchase Order Revising,The system shall require reapproval of the PO if the modified total is higher than the previous approval threshold for the approvers
+UN-0030,REQ-1650,Purchasing,Purchase Order Revising,The system shall maintain version history of the PO when modified except for the Status field
+UN-0030,REQ-1660,Purchasing,Purchase Order Closing,The system shall allow a user to cancel a PO
+UN-0030,REQ-1670,Purchasing,Purchase Order Closing,The system shall allow a user to close a PO
+UN-0040,REQ-1680,Receiving,Receiving Landing Page,"The system shall display the following default columns on the landing page of the Receiving module: Receipt ID, Receipt Record State, Received By, Owner, PO number, Receipt Date, Supplier, Receipt Status, PO Status"
+UN-0040,REQ-1690,Receiving,Receiving Landing Page,The system should support export the receiving list from the landing page
+UN-0040,REQ-1710,Receiving,Receiving Landing Page,The system shall allow the user to filter the displayed receiving records for each of the columns displayed on the landing page
+UN-0040,REQ-1720,Receiving,Receiving Landing Page,"The system shall default to Draft receiving records owned by the current user, when starting a new Enlil session"
+UN-0040,REQ-1730,Receiving,Receiving Landing Page,The system shall maintain Receiving list filter settings during an Enlil session when navigating away from and back to the landing page
+UN-0040,REQ-1740,Receiving,Receiving Landing Page,The system shall default to the Receiving record list being sorted by most recent first (by most recent edited)
+UN-0040,REQ-1750,Receiving,Receiving Landing Page,The system shall provide a mechanism to clear Receiving list filters
+UN-0040,REQ-1760,Receiving,Receiving Landing Page,The system shall display the number of Receiving Records displayed that match the filter settings
+UN-0040,REQ-1770,Receiving,Receiving Landing Page,The system shall allow users to receive line items from the Receiving landing page
+UN-0040,REQ-1780,Receiving,Receiving Landing Page,The system shall allow the user to open a receiving record from the receiving landing page
+UN-0040,REQ-1790,Receiving,Receive materials associated with a PO,The system shall the user to receive items against an Open PO and generate a receiving record.
+UN-0040,REQ-1800,Receiving,Receive materials associated with a PO,The system shall allow the user to search and select from a list of open PO's
+UN-0040,REQ-1810,Receiving,Receive materials associated with a PO,The system shall load and display the PO selected by the user
+UN-0040,REQ-1820,Receiving,Receive materials associated with a PO,The system shall allow the user to receive multiple lots against a line item of an open PO as part of a single receiving event
+UN-0040,REQ-1830,Receiving,Receive materials associated with a PO,The system shall allow for the creation of multiple receiving records against an open PO
+UN-0040,REQ-1840,Receiving,Receive materials associated with a PO,The system shall update the PO to reflect the cumulative quantity received of the particular line item against that PO in the Qty Received field. 
+UN-0040,REQ-1860,Receiving,Creating a Receivable Record without a PO,The system shall allow the user to receive material without a PO and generate a receiving record.
+UN-0040,REQ-1870,Receiving,Receiving record,"The system shall create a receiving record, in Draft state when receiving materials"
+UN-0040,REQ-1890,Receiving,Receiving record,"The system shall automatically generate a unique record ID and provides fields for documenting the quantity received, the part numbers received, the PO number, "
+UN-0040,REQ-1900,Receiving,Receiving record,The system shall allow the record owner to save a receiving record in Draft state and complete it at a later time
+UN-0040,REQ-1920,Receiving,Receiving record,"The system shall automatically populate the Supplier (for items received against a PO), or allow the record owner enter the Supplier (for items without a PO)"
+UN-0040,REQ-1930,Receiving,Receiving record,The system shall automatically populate the part number/description received for items received against a PO
+UN-0040,REQ-1940,Receiving,Receiving record,The system shall automatically maintain reference to the lots created in the receiving record
+UN-0040,REQ-1950,Receiving,Receiving record,The system shall allow the user to enter the Quantity received
+UN-0040,REQ-1960,Receiving,Receiving record,The system shall allow the record owner to select the unit of measure of the material 
+UN-0040,REQ-1970,Receiving,Receiving record,The system shall allow the record owner to add Comments
+UN-0040,REQ-1980,Receiving,Receiving record,The system shall allow the record owner to attach packing slips and other documentation to the receiving record.
+UN-0040,REQ-1990,Receiving,Receiving record,"The system shall allow the record owner to change the owner, following confirmation with a dialog."
+UN-0040,REQ-2000,Receiving,Receiving record,The system should allow any user with receiving permissions to update a draft receiving record
+UN-0042,REQ-2010,Receiving,Creating a lot,The system shall allow the record owner to create a lot from the receiving form when the line item received is not a Service
+UN-0042,REQ-2020,Receiving,Creating a lot,The system shall automatically create a reference to the Receiving Record when a new lot record is created.
+UN-0040,REQ-2040,Receiving,Approving a Receivable,The system shall allow the record owner to release the record without requiring a signature for approval
+UN-0040,REQ-2050,Receiving,Approving a Receivable,The system shall capture the ID of the user(s) approving a receiving record
+UN-0040,REQ-2060,Receiving,Approving a Receivable,The system shall capture the date and time of the approval
+UN-0040,REQ-2070,Receiving,Revising a Receiving record,The system shall allow users to revise a Receiving record
+UN-0040,REQ-2080,Receiving,Approving a Receivable,The system shall utilize minor revisions to capture corrections to a record
+UN-0040,REQ-2100,Receiving,Revising a Receiving record,The system shall capture the ID and date of the user who completed the update
+UN-0040,REQ-2110,Receiving,Revising a Receiving record,The system shall maintain version history of the Receivable when modified
+UN-0080,REQ-2140,Notifications,General,The system shall notify the user by email when an item that requires an electronic approvals is assigned to them
+UN-0080,REQ-2150,Notifications,Approval Requests,The system shall display a notification in the dashboard for users that are on an approval request that has been submitted for approval.  
+UN-0080,REQ-2160,Notifications,Approval Requests,"The system shall display the following in the approval notification (AR ID, name of the submitter, date of approval request).  "
+UN-0080,REQ-2170,Notifications,Approval Requests,The system should indicate an AR notification as overdue 3 days after submission.
+UN-0080,REQ-2180,Notifications,Approval Requests,The system should display the description of the AR in the approval notification
+UN-0080,REQ-2190,Notifications,Approval Request,The system shall remove the approval request from the to do list of all users who have not yet approved an approval request upon rejection by another approver or withdrawal by the AR owner
+UN-0080,REQ-2200,Notifications,Approval Request,The system shall remove the approval request from the to do list of all approvers upon approving the AR being fully approved
+UN-0080,REQ-2210,Notifications,Purchase Orders,"The approval of a PO shall be available in the User's dashboard, including the PO number, name of submitter, PO amount"
+UN-0080,REQ-2220,Notifications,Purchase Orders,The notification of a PO shall allow for opening of the pdf version of the PO 
+UN-0060,REQ-2230,Supplier,Supplier Landing Page,The system shall display the list of supplier created by the user on the Supplier Landing page
+UN-0060,REQ-2240,Supplier,Supplier Landing Page,"The system should display the following default columns on the landing page of the Supplier module: Supplier ID, State, Supplier Name, Supplier Use, Supplier Status, Risk Classification"
+UN-0060,REQ-2250,Supplier,Supplier Landing Page,The system should provide a mechanism to export the Supplier database from the landing page (e.g. a .csv file)
+UN-0060,REQ-2260,Supplier,Supplier Landing Page,The system should allow the customer to define access for updating or approving supplier attributes.
+UN-0060,REQ-2270,Supplier,Supplier Landing Page,The system shall allow the user to filter the displayed Suppliers for each of the columns displayed on the landing page
+UN-0060,REQ-2280,Supplier,Supplier Landing Page,The system should default to Approved Suppliers displayed when starting a new Enlil session
+UN-0060,REQ-2290,Supplier,Supplier Landing Page,The system shall maintain Supplier filter settings during an Enlil session when navigating away from and back to the landing page
+UN-0060,REQ-2300,Supplier,Supplier Landing Page,The system shall default to the supplier list sorted by alphabetical order
+UN-0060,REQ-2310,Supplier,Supplier Landing Page,The system shall provide a mechanism to clear Supplier List filters
+UN-0060,REQ-2320,Supplier,Supplier Landing Page,The system shall display the number of suppliers displayed that match the filter settings
+UN-0060,REQ-2330,Supplier,Supplier Landing Page,The system shall allow for creation of a new supplier from the supplier landing page 
+UN-0060,REQ-2340,Supplier,Supplier Landing Page,The system shall allow the user to open the Supplier File from the supplier list
+UN-0060,REQ-2350,Supplier,Supplier Form,The system shall allow the user to define one or more forms for creation and management of suppliers.
+UN-0060,REQ-2360,Supplier,Creating a new supplier,"The system shall allow the user to create a new supplier, including supplier name, description, address, phone number, contact information "
 UN-0061,REQ-2370,Supplier,Supplier States,"The system should allow the user to define the supplier states, with the following default states:
 R&D only
 Conditionally Approved
 Approved
 Hold for New Business
 Disqualified
-Suspended",
-UN-0061,REQ-2380,Supplier,Supplier States,The system should set the supplier status to R&D only when a new supplier is created,
-UN-0061,REQ-2390,Supplier,Supplier Records ,The system should list supplier records …as attachments to the supplier file,
-UN-0003,REQ-2400,Supplier,Supplier Forms,The system should allow the user to designate the output of form as a supplier record ,
-UN-0070,REQ-2410,Training,Training matrix spreadsheet,"The system shall maintain a training requirements matrix using a spreadsheet stored on a network drive (the training matrix contains a list of all documents (rows) that have been defined as requiring training, as well as a list of users (columns) in the system.  Placing an ""X"" in the corresponding row/column indicates that the particular user is required to train to the document)",
-UN-0070,REQ-2420,Training,Training matrix spreadsheet,The system shall append the training matrix spreadsheet with a new row containing the document number when a document that requires training is approved.  ,
-UN-0070,REQ-2430,Training,Training matrix spreadsheet,The system shall append the training matrix spreadsheet with a new column containing the user name when a new user is created.  ,
-UN-0070,REQ-2440,Training,Training matrix spreadsheet,The system shall allow simultaneous edits of the spreadsheet by the user and by Enlil,
-UN-0070,REQ-2450,Training,Training matrix spreadsheet,The system shall assign training to the user within 24 hours of assigning a user to train to a document on the training matrix spreadsheet.,
-UN-0070,REQ-2810,Training,Training,"The system shall display the following default columns on the landing page for the Training list: Doc Id, Revision, Title, Trainee, Assigned Date, Due Date and Completed On (e.g. this list defines content, not column header names)",
-UN-0070,REQ-2820,Training,Training,The system shall allow the user to filter the displayed Training List for each of the columns displayed on the landing page,
-UN-0070,REQ-2830,Training,Training,The system should provide a mechanism to export the Training List (e.g. to a .csv format),
-UN-0080,REQ-2460,Notifications,Training,The system shall display a notification in the dashboard for when the user is assigned training,
-UN-0080,REQ-2470,Notifications,Training,"The system shall display the following in the training notification (document number, training due date).  ",
-UN-0080,REQ-2480,Notifications,Training,The system shall display the training notification as overdue if the training is not complete by the due date.,
-UN-0100,REQ-2840,Equipment,Equipment,"The system shall display the following default columns on the landing page for the Equipment list: Equipment ID, Revision, STATE, Title, Equipment Owner, Cal Due Date, PM Due Date AND EQ STATUS (e.g. this list defines content, not column header names)",
-UN-0100,REQ-2850,Equipment,Equipment,The system shall allow the user to filter the displayed Equipment List for each of the columns displayed on the landing page,
-UN-0100,REQ-2860,Equipment,Equipment,The system should provide a mechanism to export the Equipment List (e.g. to a .csv format),
-UN-0100,REQ-2870,Equipment,Equipment,The system shall allow the user to open an equipment document from within the Equipment List,
-UN-0100,REQ-2880,Equipment,Equipment,The system shall provide a mechanism for the user to create an equipment document from the Equipment List landing page,
-UN-0100,REQ-2890,Equipment,Equipment,"The system shall allow the user to create a new equipment associated record (Calibration, PM, etc.) from within the equipment page",
-UN-0100,REQ-2900,Equipment,Equipment,"The system shall display the history of the equipment associated records (Calibration, PM, etc.) in the equipment page. The history shall include the record ID, title, status, approver name and date of completion",
-UN-0100,REQ-2910,Equipment,Equipment,"The system shall indicate the current state (Completed, Pending, Past Due) of the equipment associated record (Calibration, PM, etc.) within the equipment page",
-UN-0100,REQ-2920,Equipment,Equipment,"The system shall provide a mechanism for the user to set up/define the frequency for the required equipment associated records (Calibration, PM, etc.)",
-UN-0090,REQ-2490,User/Group Management,Create Users/Groups,The system shall allow the company administrator to create users in the system,
-UN-0090,REQ-2500,User/Group Management,Create Users/Groups,The system shall allow the company administrator to create (OFFICIAL) groups in the system,
-UN-0090,REQ-2510,User/Group Management,Create Users/Groups,The system shall allow the company administrator to assign users to groups,
-UN-0090,REQ-2520,User/Group Management,Create Users/Groups,"The system shall provide the following default groups for allocating system permissions:
-Create a PO, Revise PO, Revise/Approve Supplier, Receiving",
-UN-0090,REQ-2530,User/Group Management,Create Users/Groups,The system shall provide a group called Everyone consisting of all users,
-UN-0090,REQ-2540,User/Group Management,Create Users/Groups,The system should allow for easy importing of users (e.g. from Outlook.pst or .csv files),
-UN-0090,REQ-2550,User/Group Management,Create Users/Groups,The system shall allow the user to create (UNOFFICIAL) groups in the system ,
-UN-0090,REQ-2560,User/Group Management,Create Users/Groups,The system shall allow the user to add other users to (UNOFFICIAL) groups in the system (provided they are the owner of the group),
-UN-0090,REQ-2570,User/Group Management,Group landing page,The system shall provide a list of groups that have been created,
-UN-0090,REQ-2580,User/Group Management,Group landing page,"The system shall provide the following default columns for the group landing page (group name, members, and group type)",
-UN-0090,REQ-2590,User/Group Management,Group landing page,The system shall only list the first 15 names of a group,
-UN-0090,REQ-2600,User/Group Management,Group landing page,The system shall allow the user to filter the displayed groups for each of the columns displayed on the group landing page,
-UN-0090,REQ-2610,User/Group Management,Group landing page,The system shall default to all groups displayed when starting a new Enlil session,
-UN-0090,REQ-2620,User/Group Management,Group landing page,The system shall maintain PO filter settings during an Enlil session when navigating away from and back to the group landing page,
-UN-0090,REQ-2630,User/Group Management,Group landing page,The system shall provide the following group types (Official and Unofficial),
-UN-0090,REQ-2640,Part 11 Compliance,Documents/Records,"The system shall allow the generation of accurate and complete copies of documents and records in both human readable and electronic form suitable for inspection, review, and copying. This includes the complete record and all change history. This is applicable to released and previous revisions of documents and records.",
-UN-0090,REQ-2650,Part 11 Compliance,Documents/Records,The system shall allow only authorized individuals with appropriate access rights to access documentation stored in Enlil.,
-UN-0090,REQ-2660,Part 11 Compliance,System Access,The system shall allow only authorized individuals who have a valid Enlil login to access the system,
-UN-0090,REQ-2670,Part 11 Compliance,Audit trail,"The system shall use of secure, computer-generated, time-stamped audit trails to independently record the date and time of operator entries and actions that create, modify, or delete electronic records.",
-UN-0090,REQ-2680,Part 11 Compliance,Audit trail,The audit trail shall ensure that previously recorded information are not deleted or obscured and available for review through revision history,
-UN-0090,REQ-2690,Part 11 Compliance,Retention of records,The audit trail documentation shall be retained for a period at least as long as that required for the subject electronic records.,
-UN-0110,REQ-2930,Engineering Build,Engineering Build,The system shall display the Engineering Build in the record module,
-UN-0110,REQ-2940,Engineering Build,Engineering Build,The Engineering Build must always have a part output associated with,
-UN-0110,REQ-2950,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to create a new part from within the engineering build record,
-UN-0110,REQ-2960,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to select an existing part number revision or a new part number revision for the Engineering Build,
-UN-0110,REQ-2970,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to add a new step from the Engineering Build record,
-UN-0110,REQ-2980,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to add a new FB component from within the Engineering Build record,
-UN-0110,REQ-2990,Engineering Build,Engineering Build,"The step of the engineering build should allow the user to capture the step details, any media (both static and video), material and equipment required",
-UN-0110,REQ-3000,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to clone an Engineering Build record,
-UN-0110,REQ-3010,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to clone a step from within the Engineering Build record,
-UN-0110,REQ-3020,Engineering Build,Engineering Build,"When cloning (a step or an engineering build), the system shall automatically keep/transfer any data (including attachment) on the cloned step or cloned engineering build",
-UN-0110,REQ-3030,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to compare cloned Engineering Build record,
-UN-0120,REQ-3040,Process Instructions,Creating MPI/ QPI,The system shall allow the user to create an Process Instruction (PI) which can be an MPI (Manufacturing Process Instruction) or a QPI (Quality Process Instruction),
-UN-0120,REQ-3050,Process Instructions,PI Lifecycle,The Process Instruction (PI) shall follow the document lifecycle ,
-UN-0120,REQ-3060,Process Instructions,Creating MPI/ QPI,The system shall allow the user to add a step/ multiple steps to the Process Instruction (PI),
-UN-0120,REQ-3070,Process Instructions,Creating MPI/ QPI,The system shall allow the user to clone a step in the Process Instruction (PI),
-UN-0120,REQ-3080,Process Instructions,Creating MPI/ QPI,The system shall allow the user to remove a step in the Process Instruction (PI),
-UN-0120,REQ-3090,Process Instructions,Creating MPI/ QPI,The system shall allow the user to add attachments to each step in the Process Instruction (PI),
-UN-0120,REQ-3100,Process Instructions,Creating MPI/ QPI,"The system shall allow the user to add Material to the Process Instruction (PI) specifying the Part ID, Quantity and Unit",
-UN-0120,REQ-3130,Process Instructions,Creating MPI/ QPI,The system shall allow the user to add Equipment to the Process Instruction (PI),
-UN-0120,REQ-3120,Process Instructions,Creating MPI/ QPI,"The system shall allow the user to add Form builder components (Text field, Checkbox group, Autocomplete, Text Editor, Date Picker, Hyperlink, Select Field, Radio button group, Paragraph, File Upload, Blank template form, Quantity, Instructions media upload, Evidence media upload, PI procedure, Text field with range, as required to the Process Instruction (PI) template",
-UN-0130,REQ-3131,LHR,Creating the LHRt,The system shall allow the user to select the Part (Document and not Rev) to be manufactured in the LHRt,
-UN-0130,REQ-3140,LHR,Creating the LHRt,The system shall allow the user to create an LHR template with output type LHR,
-UN-0130,REQ-3150,LHR,Creating the LHRt,The system shall provide a mechanism for the user to add LHR step component,
-UN-0130,REQ-3160,LHR,Creating the LHRt,"The system shall allow the user to add Form builder components (Text field, Checkbox group, Autocomplete, Text Editor, Date Picker, Hyperlink, Select Field, Radio button group, Paragraph, File Upload, Blank template form, Quantity, Instructions media upload, Evidence media upload, PI procedure, Text field with range), as required, to the LHR template",
-UN-0130,REQ-3170,LHR,Initiating an LHR,The system shall provide a mechanism for the user to initiate an LHR,
+Suspended"
+UN-0061,REQ-2380,Supplier,Supplier States,The system should set the supplier status to R&D only when a new supplier is created
+UN-0061,REQ-2390,Supplier,Supplier Records ,The system should list supplier records …as attachments to the supplier file
+UN-0003,REQ-2400,Supplier,Supplier Forms,The system should allow the user to designate the output of form as a supplier record 
+UN-0070,REQ-2410,Training,Training matrix spreadsheet,"The system shall maintain a training requirements matrix using a spreadsheet stored on a network drive (the training matrix contains a list of all documents (rows) that have been defined as requiring training, as well as a list of users (columns) in the system.  Placing an ""X"" in the corresponding row/column indicates that the particular user is required to train to the document)"
+UN-0070,REQ-2420,Training,Training matrix spreadsheet,The system shall append the training matrix spreadsheet with a new row containing the document number when a document that requires training is approved.  
+UN-0070,REQ-2430,Training,Training matrix spreadsheet,The system shall append the training matrix spreadsheet with a new column containing the user name when a new user is created.  
+UN-0070,REQ-2440,Training,Training matrix spreadsheet,The system shall allow simultaneous edits of the spreadsheet by the user and by Enlil
+UN-0070,REQ-2450,Training,Training matrix spreadsheet,The system shall assign training to the user within 24 hours of assigning a user to train to a document on the training matrix spreadsheet.
+UN-0070,REQ-2810,Training,Training,"The system shall display the following default columns on the landing page for the Training list: Doc Id, Revision, Title, Trainee, Assigned Date, Due Date and Completed On (e.g. this list defines content, not column header names)"
+UN-0070,REQ-2820,Training,Training,The system shall allow the user to filter the displayed Training List for each of the columns displayed on the landing page
+UN-0070,REQ-2830,Training,Training,The system should provide a mechanism to export the Training List (e.g. to a .csv format)
+UN-0080,REQ-2460,Notifications,Training,The system shall display a notification in the dashboard for when the user is assigned training
+UN-0080,REQ-2470,Notifications,Training,"The system shall display the following in the training notification (document number, training due date).  "
+UN-0080,REQ-2480,Notifications,Training,The system shall display the training notification as overdue if the training is not complete by the due date.
+UN-0100,REQ-2840,Equipment,Equipment,"The system shall display the following default columns on the landing page for the Equipment list: Equipment ID, Revision, STATE, Title, Equipment Owner, Cal Due Date, PM Due Date AND EQ STATUS (e.g. this list defines content, not column header names)"
+UN-0100,REQ-2850,Equipment,Equipment,The system shall allow the user to filter the displayed Equipment List for each of the columns displayed on the landing page
+UN-0100,REQ-2860,Equipment,Equipment,The system should provide a mechanism to export the Equipment List (e.g. to a .csv format)
+UN-0100,REQ-2870,Equipment,Equipment,The system shall allow the user to open an equipment document from within the Equipment List
+UN-0100,REQ-2880,Equipment,Equipment,The system shall provide a mechanism for the user to create an equipment document from the Equipment List landing page
+UN-0100,REQ-2890,Equipment,Equipment,"The system shall allow the user to create a new equipment associated record (Calibration, PM, etc.) from within the equipment page"
+UN-0100,REQ-2900,Equipment,Equipment,"The system shall display the history of the equipment associated records (Calibration, PM, etc.) in the equipment page. The history shall include the record ID, title, status, approver name and date of completion"
+UN-0100,REQ-2910,Equipment,Equipment,"The system shall indicate the current state (Completed, Pending, Past Due) of the equipment associated record (Calibration, PM, etc.) within the equipment page"
+UN-0100,REQ-2920,Equipment,Equipment,"The system shall provide a mechanism for the user to set up/define the frequency for the required equipment associated records (Calibration, PM, etc.)"
+UN-0090,REQ-2490,User/Group Management,Create Users/Groups,The system shall allow the company administrator to create users in the system
+UN-0090,REQ-2500,User/Group Management,Create Users/Groups,The system shall allow the company administrator to create or edit groups in the system
+UN-0090,REQ-2510,User/Group Management,Create Users/Groups,The system shall allow the company administrator to add or remove users to groups
+UN-0090,REQ-2520,User/Group Management,Create Users/Groups,The system shall provide the default groups for allocating system permissions
+UN-0090,REQ-2530,User/Group Management,Create Users/Groups,The system shall provide a group called Everyone consisting of all users
+UN-0090,REQ-2540,User/Group Management,Create Users/Groups,The system should allow for easy importing of users (e.g. from Outlook.pst or .csv files)
+UN-0090,REQ-2550,User/Group Management,Create Users/Groups,The system shall allow the user to create (UNOFFICIAL) groups in the system 
+UN-0090,REQ-2560,User/Group Management,Create Users/Groups,The system shall allow the user to add other users to (UNOFFICIAL) groups in the system (provided they are the owner of the group)
+UN-0090,REQ-2570,User/Group Management,Group landing page,The system shall provide a list of groups that have been created
+UN-0090,REQ-2580,User/Group Management,Group landing page,"The system shall provide the following default columns for the group management landing page (group name, members)"
+UN-0090,REQ-2590,User/Group Management,Group landing page,The system shall only list the first 15 names of a group
+UN-0090,REQ-2600,User/Group Management,Group landing page,The system shall allow the user to filter the displayed groups for each of the columns displayed on the group landing page
+UN-0090,REQ-2610,User/Group Management,Group landing page,The system shall default to all groups displayed when starting a new Enlil session
+UN-0090,REQ-2620,User/Group Management,Group landing page,The system shall maintain filter settings during an Enlil session when navigating away from and back to the group landing page
+UN-0090,REQ-2630,User/Group Management,Group landing page,The system shall provide the following group types (Official and Unofficial)
+UN-0090,REQ-2640,Part 11 Compliance,Documents/Records,"The system shall allow the generation of accurate and complete copies of documents and records in both human readable and electronic form suitable for inspection, review, and copying. This includes the complete record and all change history. This is applicable to released and previous revisions of documents and records."
+UN-0090,REQ-2650,Part 11 Compliance,Documents/Records,The system shall allow only authorized individuals with appropriate access rights to access documentation stored in Enlil.
+UN-0090,REQ-2660,Part 11 Compliance,System Access,The system shall allow only authorized individuals who have a valid Enlil login to access the system
+UN-0090,REQ-2670,Part 11 Compliance,Audit trail,"The system shall use of secure, computer-generated, time-stamped audit trails to independently record the date and time of operator entries and actions that create, modify, or delete electronic records."
+UN-0090,REQ-2680,Part 11 Compliance,Audit trail,The audit trail shall ensure that previously recorded information are not deleted or obscured and available for review through revision history
+UN-0090,REQ-2690,Part 11 Compliance,Retention of records,The audit trail documentation shall be retained for a period at least as long as that required for the subject electronic records.
+UN-0110,REQ-2930,Engineering Build,Engineering Build,The system shall display the Engineering Build in the record module
+UN-0110,REQ-2940,Engineering Build,Engineering Build,The Engineering Build must always have a part output associated with
+UN-0110,REQ-2950,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to create a new part from within the engineering build record
+UN-0110,REQ-2960,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to select an existing part number revision or a new part number revision for the Engineering Build
+UN-0110,REQ-2970,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to add a new step from the Engineering Build record
+UN-0110,REQ-2980,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to add a new FB component from within the Engineering Build record
+UN-0110,REQ-2990,Engineering Build,Engineering Build,"The step of the engineering build should allow the user to capture the step details, any media (both static and video), material and equipment required"
+UN-0110,REQ-3000,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to clone an Engineering Build record
+UN-0110,REQ-3010,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to clone a step from within the Engineering Build record
+UN-0110,REQ-3020,Engineering Build,Engineering Build,"When cloning (a step or an engineering build), the system shall automatically keep/transfer any data (including attachment) on the cloned step or cloned engineering build"
+UN-0110,REQ-3030,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to compare cloned Engineering Build record
+UN-0120,REQ-3040,Process Instructions,Creating MPI/ QPI,The system shall allow the user to create an Process Instruction (PI) which can be an MPI (Manufacturing Process Instruction) or a QPI (Quality Process Instruction)
+UN-0120,REQ-3050,Process Instructions,PI Lifecycle,The Process Instruction (PI) shall follow the document lifecycle 
+UN-0120,REQ-3060,Process Instructions,Creating MPI/ QPI,The system shall allow the user to add a step/ multiple steps to the Process Instruction (PI)
+UN-0120,REQ-3070,Process Instructions,Creating MPI/ QPI,The system shall allow the user to clone a step in the Process Instruction (PI)
+UN-0120,REQ-3080,Process Instructions,Creating MPI/ QPI,The system shall allow the user to remove a step in the Process Instruction (PI)
+UN-0120,REQ-3090,Process Instructions,Creating MPI/ QPI,The system shall allow the user to add attachments to each step in the Process Instruction (PI)
+UN-0120,REQ-3100,Process Instructions,Creating MPI/ QPI,"The system shall allow the user to add Material to the Process Instruction (PI) specifying the Part ID, Quantity and Unit"
+UN-0120,REQ-3130,Process Instructions,Creating MPI/ QPI,The system shall allow the user to add Equipment to the Process Instruction (PI)
+UN-0120,REQ-3120,Process Instructions,Creating MPI/ QPI,"The system shall allow the user to add Form builder components (Text field, Checkbox group, Autocomplete, Text Editor, Date Picker, Hyperlink, Select Field, Radio button group, Paragraph, File Upload, Blank template form, Quantity, Instructions media upload, Evidence media upload, PI procedure, Text field with range, as required to the Process Instruction (PI) template"
+UN-0130,REQ-3131,LHR,Creating the LHRt,The system shall allow the user to select the Part (Document and not Rev) to be manufactured in the LHRt
+UN-0130,REQ-3140,LHR,Creating the LHRt,The system shall allow the user to create an LHR template with output type LHR
+UN-0130,REQ-3150,LHR,Creating the LHRt,The system shall provide a mechanism for the user to add LHR step component
+UN-0130,REQ-3160,LHR,Creating the LHRt,"The system shall allow the user to add Form builder components (Text field, Checkbox group, Autocomplete, Text Editor, Date Picker, Hyperlink, Select Field, Radio button group, Paragraph, File Upload, Blank template form, Quantity, Instructions media upload, Evidence media upload, PI procedure, Text field with range), as required, to the LHR template"
+UN-0130,REQ-3170,LHR,Initiating an LHR,The system shall provide a mechanism for the user to initiate an LHR
 UN-0130,REQ-3180,LHR,Lot number within the LHR,"The system shall generate a LOT number for the a LOT # as YYMMDD##ab 
 where, ##- denotes sequentially changing digits (indicative of new lots, reset to 01 on a daily basis) and 
 ab=RD if it is an R&D lot 
-ab= would be an empty value if it is a production lot",
-UN-0130,REQ-3190,LHR,Lot number within the LHR,The system shall provide a mechanism for the user to differentiate between R&D and Production Builds through the Lot number,
-UN-0130,REQ-3200,LHR,Initiating an LHR,The system shall provide a mechanism for the user to add operators to the LHR,
-UN-0130,REQ-3210,LHR,Using the LHR,The system shall provide a mechanism for the user to start executing a step in the build,
-UN-0130,REQ-3220,LHR,Approvals for the LHR step,The system shall provide a mechanism to add approvers for the LHR step,
-UN-0130,REQ-3230,LHR,Using the LHR,The system shall provide a mechanism for the assigned operator/ operators to complete a step,
-UN-0130,REQ-3240,LHR,,The system shall display the e-signature of the operator/ operators that have completed a step,
-UN-0130,REQ-3250,LHR,Corrections to the LHR step,The system shall allow anyone to make corrections to the LHRS after completing the LHRS,
-UN-0130,REQ-3260,LHR,Corrections to the LHR,The system shall allow anyone to make corrections to the LHR after completing the LHR,
-UN-0130,REQ-3270,LHR,Redlines to the LHRS,The system shall provide a mechanism for the owner to make Redlines (Correction of text/ remove and add material/ remove and add attachments) to the LHRS,
-UN-0130,REQ-3280,LHR,Redlines to the LHRS,The system shall provide a mechanism to indicate if a step has been redlined in the LHR view,
-UN-0130,REQ-3290,LHR,Notes in the LHR,The system shall provide a mechanism for the user to make notes in a field,
-UN-0130,REQ-3300,LHR,Releasing the LHR,The system shall provide a mechanism to complete and release the LHR record only after all the Steps are completed and approved,
-UN-0130,REQ-3310,LHR,LHR title,"The Title for the LHR record should be “Build for <Part Number XXX>, Rev <#>, <Date> - <Build number>”",
-UN-0130,REQ-3320,LHR,LHR step title,"The Title for the LHR step should be “Build for <Part Number XXX>, Rev <#>, <Date> - <Build number>”",
-UN-0130,REQ-3330,LHR,,The Lot shall be associated with a specific Part Revision,
-UN-0130,REQ-3340,LHR,LHR step,The system shall allow the user to select any released lot associated with a component while adding Material to the LHR step,
-UN-0130,REQ-3350,LHR,LHR Menu,The LHR shall have its own menu,
-UN-0130,REQ-3360,LHR,LHR templates,The LHR templates shall be displayed in the Document List,
-UN-0130,REQ-3370,LHR,LHR Landing page,"The landing page for the LHR shall display Lot number, Part number/ Rev, Completion Date, Start Quantity, Template, and LHR ID",
+ab= would be an empty value if it is a production lot"
+UN-0130,REQ-3190,LHR,Lot number within the LHR,The system shall provide a mechanism for the user to differentiate between R&D and Production Builds through the Lot number
+UN-0130,REQ-3200,LHR,Initiating an LHR,The system shall provide a mechanism for the user to add operators to the LHR
+UN-0130,REQ-3210,LHR,Using the LHR,The system shall provide a mechanism for the user to start executing a step in the build
+UN-0130,REQ-3220,LHR,Approvals for the LHR step,The system shall provide a mechanism to add approvers for the LHR step
+UN-0130,REQ-3230,LHR,Using the LHR,The system shall provide a mechanism for the assigned operator/ operators to complete a step
+UN-0130,REQ-3240,LHR,,The system shall display the e-signature of the operator/ operators that have completed a step
+UN-0130,REQ-3250,LHR,Corrections to the LHR step,The system shall allow anyone to make corrections to the LHRS after completing the LHRS
+UN-0130,REQ-3260,LHR,Corrections to the LHR,The system shall allow anyone to make corrections to the LHR after completing the LHR
+UN-0130,REQ-3270,LHR,Redlines to the LHRS,The system shall provide a mechanism for the owner to make Redlines (Correction of text/ remove and add material/ remove and add attachments) to the LHRS
+UN-0130,REQ-3280,LHR,Redlines to the LHRS,The system shall provide a mechanism to indicate if a step has been redlined in the LHR view
+UN-0130,REQ-3290,LHR,Notes in the LHR,The system shall provide a mechanism for the user to make notes in a field
+UN-0130,REQ-3300,LHR,Releasing the LHR,The system shall provide a mechanism to complete and release the LHR record only after all the Steps are completed and approved
+UN-0130,REQ-3310,LHR,LHR title,"The Title for the LHR record should be “Build for <Part Number XXX>, Rev <#>, <Date> - <Build number>”"
+UN-0130,REQ-3320,LHR,LHR step title,"The Title for the LHR step should be “Build for <Part Number XXX>, Rev <#>, <Date> - <Build number>”"
+UN-0130,REQ-3330,LHR,,The Lot shall be associated with a specific Part Revision
+UN-0130,REQ-3340,LHR,LHR step,The system shall allow the user to select any released lot associated with a component while adding Material to the LHR step
+UN-0130,REQ-3350,LHR,LHR Menu,The LHR shall have its own menu
+UN-0130,REQ-3360,LHR,LHR templates,The LHR templates shall be displayed in the Document List
+UN-0130,REQ-3370,LHR,LHR Landing page,"The landing page for the LHR shall display Lot number, Part number/ Rev, Completion Date, Start Quantity, Template, and LHR ID"
 UN-0130,REQ-3380,LHR,LHR Landing page,"The system should provide a mechanism to export the LHR List (e.g. to a .csv format)
-",
-UN-0130,REQ-3390,LHR,LHR Landing page,The system shall allow the user to filter the displayed LHR list for each of the columns displayed on the landing page,
-UN-0130,REQ-3400,LHR,LHR Landing page,The system shall provide a mechanism to clear all LHR List filters,
-UN-0130,REQ-3410,LHR,LHR Landing page,The system shall provide a mechanism for any item with a specific category to be created and displayed in that module only and nowhere else,
-UN-0130,REQ-3450,LHR,LHR and MPI during upgrade,The LHR should not suggest upgrades for MPIs if the MPI is revised or updated after the build is complete. The LHR needs to hold the MPI used in the build,
-UN-0130,REQ-3460,LHR,LHR during upgrade,The LHR should not suggest upgrades for Parts to be Manufactured if that Part is revised or updated after the build is started. The LHR in progress needs to point to the same Part to be Manufactured that it started with. ,
-UN-0130,REQ-3470,LHR,Training,The system shall allow a user trained on an MPI to access any LHR that uses that MPI until Redlines are made to the MPI,
-UN-0130,REQ-3480,LHR,Training,The system shall automatically add users trained on an MPI to the operators list,
-UN-0140,REQ-3490,NCO,New company,The system shall allow an Enlil authorized employee to create a new company,
-UN-0140,REQ-3500,NCO,New company,"The system shall allow the user to add in a Company Name, Company abbreviation, Company Admin email, Company Avatar and Logo as part of the company details",
-UN-0140,REQ-3510,NCO,New company,The system shall allow the user to customize whitelabelling for the new company,
-UN-0140,REQ-3520,NCO,New company,The system shall require the user to add a Document Approval Matrix that will be used in the newly created Company,
-UN-0140,REQ-3530,NCO,New company,The system shall require the user to set up the Landing page for different modules in the newly created company,
-UN-0140,REQ-3540,NCO,New company,The system shall require the user to set up the navigation menu for the newly created company,
-UN-0140,REQ-3550,NCO,New company,The system shall allow the user to add a list of employees and contact information,
-UN-0140,REQ-3560,NCO,New company,The system shall allow the user to add a list of GL codes to match the financial system of the newly created company ,
-UN-0140,REQ-3570,NCO,New company,The system shall allow the user to add template documents for the forms requested to be used in the company,
-UN-0140,REQ-3580,NCO,New company,All form documents created during company creation will remain in the Draft state in the newly created company,
-UN-0140,REQ-3590,NCO,New company,The system shall maintain a data log created during company creation listing all the events that have occurred during the process ,
-UN-0140,REQ-3600,NCO,New company,The system shall allow the creation of clearly identifiable and unique test companies in preparation for the final company release,
-UN-0010,REQ-3610,Document Control,Document Numbering ,"The system shall allow the authorized user to configure Start number, Prefix for document, and labelling for Enlil items. ",
-UN-0130,REQ-3620,LHR,Parameterization,The system shall allow the user to define PI parameters by adding the description in free text to represent Equipment or Materials. These parameters will be defined later in the LHRT that uses that PI.,
-UN-0130,REQ-3630,LHR,Parameterization,The system shall indicate when a Material or Equipment is parameterized in the LHR Template,
-UN-0130,REQ-3640,LHR,Parameterization,The system shall allow the user to release the LHRT only after the required parameter selections have been made,
-UN-0130,REQ-3650,LHR,Redlines to the LHRS,The system shall allow the owner to make Redlines to the LHRS after the LHRS is Started and before the LHRS is Completed.,
-UN-0130,REQ3660,LHR,Selecting Material Lots and EQ items at the LHR ,The system shall allow the user to pick Equipment and Lots for Material at the LHR,
+"
+UN-0130,REQ-3390,LHR,LHR Landing page,The system shall allow the user to filter the displayed LHR list for each of the columns displayed on the landing page
+UN-0130,REQ-3400,LHR,LHR Landing page,The system shall provide a mechanism to clear all LHR List filters
+UN-0130,REQ-3410,General,General,The system shall provide a mechanism for any item with a specific category to be created and displayed in that module only and nowhere else
+UN-0130,REQ-3450,LHR,LHR and MPI during upgrade,The LHR should not suggest upgrades for MPIs if the MPI is revised or updated after the build is complete. The LHR needs to hold the MPI used in the build
+UN-0130,REQ-3460,LHR,LHR during upgrade,The LHR should not suggest upgrades for Parts to be Manufactured if that Part is revised or updated after the build is started. The LHR in progress needs to point to the same Part to be Manufactured that it started with. 
+UN-0130,REQ-3470,LHR,Training,The system shall allow a user trained on an MPI to access any LHR that uses that MPI until Redlines are made to the MPI
+UN-0130,REQ-3480,LHR,Training,The system shall automatically add users trained on an MPI to the operators list
+UN-0140,REQ-3490,NCO,New company,The system shall allow an Enlil authorized employee to create a new company
+UN-0140,REQ-3500,NCO,New company,"The system shall allow the user to add in a Company Name, Company abbreviation, Company Admin email, Company Avatar and Logo as part of the company details"
+UN-0140,REQ-3510,NCO,New company,The system shall allow the user to customize whitelabelling for the new company
+UN-0140,REQ-3520,NCO,New company,The system shall require the user to add a Document Approval Matrix that will be used in the newly created Company
+UN-0140,REQ-3530,NCO,New company,The system shall require the user to set up the Landing page for different modules in the newly created company
+UN-0140,REQ-3540,NCO,New company,The system shall require the user to set up the navigation menu for the newly created company
+UN-0140,REQ-3550,NCO,New company,The system shall allow the user to add a list of employees and contact information
+UN-0140,REQ-3560,NCO,New company,The system shall allow the user to add a list of GL codes to match the financial system of the newly created company 
+UN-0140,REQ-3570,NCO,New company,The system shall allow the user to add template documents for the forms requested to be used in the company
+UN-0140,REQ-3580,NCO,New company,All form documents created during company creation will remain in the Draft state in the newly created company
+UN-0140,REQ-3590,NCO,New company,The system shall maintain a data log created during company creation listing all the events that have occurred during the process 
+UN-0140,REQ-3600,NCO,New company,The system shall allow the creation of clearly identifiable and unique test companies in preparation for the final company release
+UN-0010,REQ-3610,Document Control,Document Numbering ,"The system shall allow the authorized user to configure Start number, Prefix for document, and labelling for Enlil items. "
+UN-0130,REQ-3620,LHR,Parameterization,The system shall allow the user to define PI parameters by adding the description in free text to represent Equipment or Materials. These parameters will be defined later in the LHRT that uses that PI.
+UN-0130,REQ-3630,LHR,Parameterization,The system shall indicate when a Material or Equipment is parameterized in the LHR Template
+UN-0130,REQ-3640,LHR,Parameterization,The system shall allow the user to release the LHRT only after the required parameter selections have been made
+UN-0130,REQ-3650,LHR,Redlines to the LHRS,The system shall allow the owner to make Redlines to the LHRS after the LHRS is Started and before the LHRS is Completed.
+UN-0130,REQ-3660,LHR,Selecting Material Lots and EQ items at the LHR ,The system shall allow the user to pick Equipment and Lots for Material at the LHR
+UN-0150,REQ-3670,Collaborative Cloud based Storage environment,Company cloud account,The system shall provide a mechanism for the company admin to enable a collaborative cloud based storage environment for a particular company. One account will be supported per company. 
+UN-0150,REQ-3680,Collaborative Cloud based Storage environment,Company cloud account,The system shall provide a mechanism to allow users to connect a Collaborative Cloud based Storage environment when access is granted by the company admin
+UN-0150,REQ-3690,Collaborative Cloud based Storage environment,Access to item on cloud,Enlil shall grant read/write access and save a copy of the Enlil item while they are in the unreleased (WIP/Draft/ Pending change) state on the company connected to a Collaborative Cloud based Storage environment 
+UN-0150,REQ-3700,Collaborative Cloud based Storage environment,Access to item on cloud,"The system shall grant ""read only"" access to the a Collaborative Cloud based Storage environment folder of the corresponding Enlil item when it is in the (IN_REVIEW) state. Anyone with access to the a Collaborative Cloud based Storage environment folder, and any added approvers, can view this folder while it is in the IN_REVIEW state. "
+UN-0150,REQ-3710,Collaborative Cloud based Storage environment,Access to item on cloud,"When the Enlil item is in WIP/ Draft/ Pending change state, any edits made to an existing attachment or any new additions made to that a Collaborative Cloud based Storage environment folder associated with that item, are synced back with Enlil"
+UN-0150,REQ-3720,Collaborative Cloud based Storage environment,Access to item on cloud,"When the Enlil item is in WIP/ Draft/ Pending change state, any newly added or removed attachments in the Enlil item, are synced back with the associated Collaborative Cloud based Storage environment folder "
+UN-0150,REQ-3730,Collaborative Cloud based Storage environment,Access to item on cloud,The system shall delete Collaborative Cloud based Storage environment folders associated with Enlil items once they are released on Enlil
+UN-0150,REQ-3740,Collaborative Cloud based Storage environment,Access to item on cloud,The system shall delete folders associated with voided Enlil items from a Collaborative Cloud based Storage environment
+UN-0160,REQ-3750,Export pdf,Internal types supporting the export feature,"The system shall provide a mechanism to export Enlil items (with internal type OTHER, PART_LOT, RECORD, EQUIPMENT, LOT) in a printable format"
+UN-0160,REQ-3760,Export pdf,Timestamp for printable version,The system shall maintain a timestamp on the printable format to indicate when it was exported 
+UN-0160,REQ-3770,Export pdf,Unique ID for printable version,The system shall assign a unique ID for each printable version 
+UN-0160,REQ-3780,Export pdf,Exporting per revision,The system shall allow the user to export a printable version per revision of the supported Enlil item to the requestor's email. 
+UN-0160,REQ-3790,Export pdf,Attachment size,The system shall allow files including the pdf of the Enlil item upto a total size of 10mb to be added to the printable version
+UN-0160,REQ-3800,Export pdf,Watermark ,"The system shall add a watermark to the Enlil item for Draft, Obsoleted and Superseded versions"
+UN-0160,REQ-3810,Export pdf,Send to email button,"The system shall send a printable version including all attachments, and a summary of the revision history (where applicable) of the supported Enlil item belonging to the Document group to the requestor's email. "
+UN-130,REQ-3820,LHR,Parts used in LHR ,The system shall display a list of Released parts for LHR
+UN-0110,REQ-3830,Engineering Build,Parts used in EB,The system shall display a list of all parts for EB
+UN-0040,REQ-3840,Receiving,Enlil Item Lifecycle,A Receiving record created in the system shall follow the Record lifecycle
+UN-0040,REQ-3850,Receiving,Receiving against a Service ,The system shall not generate a LOT number for items received agaist a service 
+UN-0030,REQ-3860,Purchase Order,PO Preview,The system shall allow the user to preview the PO 
+UN-0030,REQ-3870,Purchase Order,Releasing PO,The system shall release the PO in numeric stage
+UN-0160,REQ-3880,Export pdf,Exporting Record,"The system shall attach the AR as a separate PDF while exporting a printable version including all attachments, of the supported Enlil item belonging to the Record group"

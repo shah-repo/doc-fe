@@ -384,6 +384,13 @@
     "Sub-Module": "Document Approval Matrix",
     "Requirement": "The system shall allow the assignment of user groups to roles and users to roles"
   },
+  "REQ-0610": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0610",
+    "Module": "Change Control",
+    "Sub-Module": "Document Approval Matrix",
+    "Requirement": "The system shall support a 2-level or 3-level document system. This is setup as a configuration and applies to all documents in the Document Approval Matrix"
+  },
   "REQ-0630": {
     "field1": "UN-0011",
     "REQ #": "REQ-0630",
@@ -397,6 +404,20 @@
     "Module": "Change Control",
     "Sub-Module": "Document Approval Matrix",
     "Requirement": "The system shall allow separate assignment of approval requirements for a 2-level document system with revision types: Numeric and Alpha"
+  },
+  "REQ-0650": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0650",
+    "Module": "Change Control",
+    "Sub-Module": "Document Approval Matrix",
+    "Requirement": "The system shall allow separate assignment of approval requirements for a 3-level document system with revision types: Numeric, Numeric-Alpha and Alpha"
+  },
+  "REQ-0660": {
+    "field1": "UN-0011",
+    "REQ #": "REQ-0660",
+    "Module": "Change Control",
+    "Sub-Module": "Document Approval Matrix",
+    "Requirement": "The system shall allow the assignment of approval requirements for an Administrative change"
   },
   "REQ-0670": {
     "field1": "UN-0011",
@@ -762,6 +783,944 @@
     "Sub-Module": "General",
     "Requirement": "The system should allow the user to Void a record."
   },
+  "REQ-1120": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1120",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Landing Page",
+    "Requirement": "The system shall display the following default columns on the landing page of the PO module: \nPO#, \nRevision (major only), \nPO status, \nSupplier, \nPart Number, \nAmount, \nRequestor  \nIssue Date"
+  },
+  "REQ-1130": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1130",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Landing Page",
+    "Requirement": "The system should provide a mechanism to export the PO database from the landing page"
+  },
+  "REQ-1150": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1150",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Landing Page",
+    "Requirement": "The system shall allow the user to filter the displayed PO's for each of the columns displayed on the landing page"
+  },
+  "REQ-1160": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1160",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Landing Page",
+    "Requirement": "The system shall default to most recently edited Open PO's displayed when starting a new Enlil session"
+  },
+  "REQ-1170": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1170",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Landing Page",
+    "Requirement": "The system shall maintain PO filter settings during an Enlil session when navigating away from and back to the landing page"
+  },
+  "REQ-1180": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1180",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Landing Page",
+    "Requirement": "The system shall default to the PO list being sorted by most recent first"
+  },
+  "REQ-1190": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1190",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Landing Page",
+    "Requirement": "The system shall provide a mechanism to clear Purchase Order list filters"
+  },
+  "REQ-1200": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1200",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Landing Page",
+    "Requirement": "The system shall display the number of PO's displayed that match the filter settings"
+  },
+  "REQ-1210": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1210",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Landing Page",
+    "Requirement": "The system shall allow the user to open a PO from the PO list"
+  },
+  "REQ-1220": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1220",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Landing Page",
+    "Requirement": "The system should allow the user to access the Title of a Part number on the Purchase Order Landing Page"
+  },
+  "REQ-1250": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1250",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall allow the user to access a list of the following:\ncompany addresses\nGL codes\nshipping accounts\nTerms\nUnits "
+  },
+  "REQ-1260": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1260",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall allow a customer to select from multiple PO forms when creating a new PO.  (If only one form is in system, no form selector window is shown)"
+  },
+  "REQ-1270": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1270",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall assign a unique PO number for each PO created"
+  },
+  "REQ-1280": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1280",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall set the PO state to draft when created"
+  },
+  "REQ-1290": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1290",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall allow the user to enter a description for the PO"
+  },
+  "REQ-1300": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1300",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall allow the selection of:\na supplier in the system, \nthe shipping address to any of the company address(es)\nfrom a subset of GL Code list\na shipping accounts\nthe Requestor"
+  },
+  "REQ-1310": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1310",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall allow the entry of:\na default company address\nthe \"Ordered\" date\nTerms"
+  },
+  "REQ-1320": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1320",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall allow the user to specify the selected currency for the entire PO.  The following currencies are supported (USD, EURO, BRITISH POUND, Canadian Dollar and Australian Dollar)"
+  },
+  "REQ-1330": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1330",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall display a source website from where the exchange rate was extracted, the currency exchange rate and the date that was used to estimate the USD value of the PO"
+  },
+  "REQ-1350": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1350",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall allow the user to upload attachment(s) (e.g.: quotation and any other necessary attachments…etc.)"
+  },
+  "REQ-1360": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1360",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall allow the user to enter multiple line items (to purchase parts or service items)."
+  },
+  "REQ-1370": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1370",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall allow the user to save a PO in Draft state and complete it at a later time"
+  },
+  "REQ-1380": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1380",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "Each line item added to the PO shall have a unique number identifier"
+  },
+  "REQ-1400": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1400",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall have all the line item details as optional. Exceptions:  the part number identifier is required, the order date is required"
+  },
+  "REQ-1410": {
+    "field1": "UN-0033",
+    "REQ #": "REQ-1410",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall have the following entries if a \"Product\" line item was selected: Part Number with Rev (list),  Part Description (text entry), Quantity Ordered (text entry), Units (list), GL Code (list), Date Required (Datepicker), Supplier Part Number (text entry), Unit Price (text entry), Capital Equipment (checkbox), Tax (checkbox)"
+  },
+  "REQ-1420": {
+    "field1": "UN-0033",
+    "REQ #": "REQ-1420",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall have the following entries if a \"Service\" line item was selected: Service ID (text entry), Description (text entry), Quantity Ordered (text entry), Units (list/text entry), GL Code (list), Date Required (list), Unit Price (text entry),  Tax (checkbox)"
+  },
+  "REQ-1430": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1430",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall auto calculate the subtotal amount based on the ordered quantity and the unit price"
+  },
+  "REQ-1440": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1440",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall auto calculate the total amount based on the subtotal, the tax (if applicable) and the shipping cost (if applicable)"
+  },
+  "REQ-1450": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1450",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "One tax rate shall be used for all POs per company."
+  },
+  "REQ-1460": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1460",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Creation",
+    "Requirement": "The system shall display the total PO cost in USD using the exchange rate when appropriate"
+  },
+  "REQ-1490": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1490",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Approval",
+    "Requirement": "The system shall allow the user to submit the PO for approval"
+  },
+  "REQ-1500": {
+    "field1": "UN-0031",
+    "REQ #": "REQ-1500",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Approval",
+    "Requirement": "The system shall enforce the PO Approval Matrix"
+  },
+  "REQ-1510": {
+    "field1": "UN-0031",
+    "REQ #": "REQ-1510",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Approval",
+    "Requirement": "The system shall allow the user to select approvers based on the PO Approval Matrix"
+  },
+  "REQ-1520": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1520",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Approval",
+    "Requirement": "The system shall set the PO state to Submitted for Approval when submitted for approval"
+  },
+  "REQ-1530": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1530",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Approval",
+    "Requirement": "The system shall allow the PO Owner to withdraw a PO that has been routed for approval but is not yet fully approved"
+  },
+  "REQ-1540": {
+    "field1": "UN-0031",
+    "REQ #": "REQ-1540",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Approval",
+    "Requirement": "The system shall capture the ID of the user(s) approving a PO"
+  },
+  "REQ-1550": {
+    "field1": "UN-0031",
+    "REQ #": "REQ-1550",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Approval",
+    "Requirement": "The system shall capture the date and time of the approval(s)"
+  },
+  "REQ-1560": {
+    "field1": "UN-0031",
+    "REQ #": "REQ-1560",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Approval",
+    "Requirement": "The system shall set blank PO state when all approvals are recorded"
+  },
+  "REQ-1570": {
+    "field1": "UN-0031",
+    "REQ #": "REQ-1570",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Approval",
+    "Requirement": "The system shall set the PO state to Draft when a user rejects the PO"
+  },
+  "REQ-1580": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1580",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Delivery to Supplier",
+    "Requirement": "The system shall create a PDF of the PO form with all the PO details and attachments (e.g. prints)"
+  },
+  "REQ-1590": {
+    "field1": "UN-0032",
+    "REQ #": "REQ-1590",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Delivery to Supplier",
+    "Requirement": "The system shall add terms and conditions requiring notification for all changes in the pdf of the PO form"
+  },
+  "REQ-1600": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1600",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Revising",
+    "Requirement": "The system shall allow users to revise a PO"
+  },
+  "REQ-1610": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1610",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Delivery to Supplier",
+    "Requirement": "The system shall set the PO status to draft when a new revision is created"
+  },
+  "REQ-1620": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1620",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Revising",
+    "Requirement": "The system shall allow updating the PO details as needed.  However, the supplier may not be modified after the first release of the PO"
+  },
+  "REQ-1630": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1630",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Revising",
+    "Requirement": "The system shall capture the ID of the user and the date and time of the changes"
+  },
+  "REQ-1640": {
+    "field1": "UN-0031",
+    "REQ #": "REQ-1640",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Revising",
+    "Requirement": "The system shall require reapproval of the PO if the modified total is higher than the previous approval threshold for the approvers"
+  },
+  "REQ-1650": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1650",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Revising",
+    "Requirement": "The system shall maintain version history of the PO when modified except for the Status field"
+  },
+  "REQ-1660": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1660",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Closing",
+    "Requirement": "The system shall allow a user to cancel a PO"
+  },
+  "REQ-1670": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-1670",
+    "Module": "Purchasing",
+    "Sub-Module": "Purchase Order Closing",
+    "Requirement": "The system shall allow a user to close a PO"
+  },
+  "REQ-1680": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1680",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving Landing Page",
+    "Requirement": "The system shall display the following default columns on the landing page of the Receiving module: Receipt ID, Receipt Record State, Received By, Owner, PO number, Receipt Date, Supplier, Receipt Status, PO Status"
+  },
+  "REQ-1690": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1690",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving Landing Page",
+    "Requirement": "The system should support export the receiving list from the landing page"
+  },
+  "REQ-1710": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1710",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving Landing Page",
+    "Requirement": "The system shall allow the user to filter the displayed receiving records for each of the columns displayed on the landing page"
+  },
+  "REQ-1720": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1720",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving Landing Page",
+    "Requirement": "The system shall default to Draft receiving records owned by the current user, when starting a new Enlil session"
+  },
+  "REQ-1730": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1730",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving Landing Page",
+    "Requirement": "The system shall maintain Receiving list filter settings during an Enlil session when navigating away from and back to the landing page"
+  },
+  "REQ-1740": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1740",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving Landing Page",
+    "Requirement": "The system shall default to the Receiving record list being sorted by most recent first (by most recent edited)"
+  },
+  "REQ-1750": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1750",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving Landing Page",
+    "Requirement": "The system shall provide a mechanism to clear Receiving list filters"
+  },
+  "REQ-1760": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1760",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving Landing Page",
+    "Requirement": "The system shall display the number of Receiving Records displayed that match the filter settings"
+  },
+  "REQ-1770": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1770",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving Landing Page",
+    "Requirement": "The system shall allow users to receive line items from the Receiving landing page"
+  },
+  "REQ-1780": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1780",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving Landing Page",
+    "Requirement": "The system shall allow the user to open a receiving record from the receiving landing page"
+  },
+  "REQ-1790": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1790",
+    "Module": "Receiving",
+    "Sub-Module": "Receive materials associated with a PO",
+    "Requirement": "The system shall the user to receive items against an Open PO and generate a receiving record."
+  },
+  "REQ-1800": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1800",
+    "Module": "Receiving",
+    "Sub-Module": "Receive materials associated with a PO",
+    "Requirement": "The system shall allow the user to search and select from a list of open PO's"
+  },
+  "REQ-1810": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1810",
+    "Module": "Receiving",
+    "Sub-Module": "Receive materials associated with a PO",
+    "Requirement": "The system shall load and display the PO selected by the user"
+  },
+  "REQ-1820": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1820",
+    "Module": "Receiving",
+    "Sub-Module": "Receive materials associated with a PO",
+    "Requirement": "The system shall allow the user to receive multiple lots against a line item of an open PO as part of a single receiving event"
+  },
+  "REQ-1830": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1830",
+    "Module": "Receiving",
+    "Sub-Module": "Receive materials associated with a PO",
+    "Requirement": "The system shall allow for the creation of multiple receiving records against an open PO"
+  },
+  "REQ-1840": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1840",
+    "Module": "Receiving",
+    "Sub-Module": "Receive materials associated with a PO",
+    "Requirement": "The system shall update the PO to reflect the cumulative quantity received of the particular line item against that PO in the Qty Received field."
+  },
+  "REQ-1860": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1860",
+    "Module": "Receiving",
+    "Sub-Module": "Creating a Receivable Record without a PO",
+    "Requirement": "The system shall allow the user to receive material without a PO and generate a receiving record."
+  },
+  "REQ-1870": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1870",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving record",
+    "Requirement": "The system shall create a receiving record, in Draft state when receiving materials"
+  },
+  "REQ-1890": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1890",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving record",
+    "Requirement": "The system shall automatically generate a unique record ID and provides fields for documenting the quantity received, the part numbers received, the PO number,"
+  },
+  "REQ-1900": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1900",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving record",
+    "Requirement": "The system shall allow the record owner to save a receiving record in Draft state and complete it at a later time"
+  },
+  "REQ-1920": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1920",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving record",
+    "Requirement": "The system shall automatically populate the Supplier (for items received against a PO), or allow the record owner enter the Supplier (for items without a PO)"
+  },
+  "REQ-1930": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1930",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving record",
+    "Requirement": "The system shall automatically populate the part number/description received for items received against a PO"
+  },
+  "REQ-1940": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1940",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving record",
+    "Requirement": "The system shall automatically maintain reference to the lots created in the receiving record"
+  },
+  "REQ-1950": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1950",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving record",
+    "Requirement": "The system shall allow the user to enter the Quantity received"
+  },
+  "REQ-1960": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1960",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving record",
+    "Requirement": "The system shall allow the record owner to select the unit of measure of the material"
+  },
+  "REQ-1970": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1970",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving record",
+    "Requirement": "The system shall allow the record owner to add Comments"
+  },
+  "REQ-1980": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1980",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving record",
+    "Requirement": "The system shall allow the record owner to attach packing slips and other documentation to the receiving record."
+  },
+  "REQ-1990": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-1990",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving record",
+    "Requirement": "The system shall allow the record owner to change the owner, following confirmation with a dialog."
+  },
+  "REQ-2000": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-2000",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving record",
+    "Requirement": "The system should allow any user with receiving permissions to update a draft receiving record"
+  },
+  "REQ-2010": {
+    "field1": "UN-0042",
+    "REQ #": "REQ-2010",
+    "Module": "Receiving",
+    "Sub-Module": "Creating a lot",
+    "Requirement": "The system shall allow the record owner to create a lot from the receiving form when the line item received is not a Service"
+  },
+  "REQ-2020": {
+    "field1": "UN-0042",
+    "REQ #": "REQ-2020",
+    "Module": "Receiving",
+    "Sub-Module": "Creating a lot",
+    "Requirement": "The system shall automatically create a reference to the Receiving Record when a new lot record is created."
+  },
+  "REQ-2040": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-2040",
+    "Module": "Receiving",
+    "Sub-Module": "Approving a Receivable",
+    "Requirement": "The system shall allow the record owner to release the record without requiring a signature for approval"
+  },
+  "REQ-2050": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-2050",
+    "Module": "Receiving",
+    "Sub-Module": "Approving a Receivable",
+    "Requirement": "The system shall capture the ID of the user(s) approving a receiving record"
+  },
+  "REQ-2060": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-2060",
+    "Module": "Receiving",
+    "Sub-Module": "Approving a Receivable",
+    "Requirement": "The system shall capture the date and time of the approval"
+  },
+  "REQ-2070": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-2070",
+    "Module": "Receiving",
+    "Sub-Module": "Revising a Receiving record",
+    "Requirement": "The system shall allow users to revise a Receiving record"
+  },
+  "REQ-2080": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-2080",
+    "Module": "Receiving",
+    "Sub-Module": "Approving a Receivable",
+    "Requirement": "The system shall utilize minor revisions to capture corrections to a record"
+  },
+  "REQ-2100": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-2100",
+    "Module": "Receiving",
+    "Sub-Module": "Revising a Receiving record",
+    "Requirement": "The system shall capture the ID and date of the user who completed the update"
+  },
+  "REQ-2110": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-2110",
+    "Module": "Receiving",
+    "Sub-Module": "Revising a Receiving record",
+    "Requirement": "The system shall maintain version history of the Receivable when modified"
+  },
+  "REQ-2140": {
+    "field1": "UN-0080",
+    "REQ #": "REQ-2140",
+    "Module": "Notifications",
+    "Sub-Module": "General",
+    "Requirement": "The system shall notify the user by email when an item that requires an electronic approvals is assigned to them"
+  },
+  "REQ-2150": {
+    "field1": "UN-0080",
+    "REQ #": "REQ-2150",
+    "Module": "Notifications",
+    "Sub-Module": "Approval Requests",
+    "Requirement": "The system shall display a notification in the dashboard for users that are on an approval request that has been submitted for approval."
+  },
+  "REQ-2160": {
+    "field1": "UN-0080",
+    "REQ #": "REQ-2160",
+    "Module": "Notifications",
+    "Sub-Module": "Approval Requests",
+    "Requirement": "The system shall display the following in the approval notification (AR ID, name of the submitter, date of approval request)."
+  },
+  "REQ-2170": {
+    "field1": "UN-0080",
+    "REQ #": "REQ-2170",
+    "Module": "Notifications",
+    "Sub-Module": "Approval Requests",
+    "Requirement": "The system should indicate an AR notification as overdue 3 days after submission."
+  },
+  "REQ-2180": {
+    "field1": "UN-0080",
+    "REQ #": "REQ-2180",
+    "Module": "Notifications",
+    "Sub-Module": "Approval Requests",
+    "Requirement": "The system should display the description of the AR in the approval notification"
+  },
+  "REQ-2190": {
+    "field1": "UN-0080",
+    "REQ #": "REQ-2190",
+    "Module": "Notifications",
+    "Sub-Module": "Approval Request",
+    "Requirement": "The system shall remove the approval request from the to do list of all users who have not yet approved an approval request upon rejection by another approver or withdrawal by the AR owner"
+  },
+  "REQ-2200": {
+    "field1": "UN-0080",
+    "REQ #": "REQ-2200",
+    "Module": "Notifications",
+    "Sub-Module": "Approval Request",
+    "Requirement": "The system shall remove the approval request from the to do list of all approvers upon approving the AR being fully approved"
+  },
+  "REQ-2210": {
+    "field1": "UN-0080",
+    "REQ #": "REQ-2210",
+    "Module": "Notifications",
+    "Sub-Module": "Purchase Orders",
+    "Requirement": "The approval of a PO shall be available in the User's dashboard, including the PO number, name of submitter, PO amount"
+  },
+  "REQ-2220": {
+    "field1": "UN-0080",
+    "REQ #": "REQ-2220",
+    "Module": "Notifications",
+    "Sub-Module": "Purchase Orders",
+    "Requirement": "The notification of a PO shall allow for opening of the pdf version of the PO"
+  },
+  "REQ-2230": {
+    "field1": "UN-0060",
+    "REQ #": "REQ-2230",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier Landing Page",
+    "Requirement": "The system shall display the list of supplier created by the user on the Supplier Landing page"
+  },
+  "REQ-2240": {
+    "field1": "UN-0060",
+    "REQ #": "REQ-2240",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier Landing Page",
+    "Requirement": "The system should display the following default columns on the landing page of the Supplier module: Supplier ID, State, Supplier Name, Supplier Use, Supplier Status, Risk Classification"
+  },
+  "REQ-2250": {
+    "field1": "UN-0060",
+    "REQ #": "REQ-2250",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier Landing Page",
+    "Requirement": "The system should provide a mechanism to export the Supplier database from the landing page (e.g. a .csv file)"
+  },
+  "REQ-2260": {
+    "field1": "UN-0060",
+    "REQ #": "REQ-2260",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier Landing Page",
+    "Requirement": "The system should allow the customer to define access for updating or approving supplier attributes."
+  },
+  "REQ-2270": {
+    "field1": "UN-0060",
+    "REQ #": "REQ-2270",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier Landing Page",
+    "Requirement": "The system shall allow the user to filter the displayed Suppliers for each of the columns displayed on the landing page"
+  },
+  "REQ-2280": {
+    "field1": "UN-0060",
+    "REQ #": "REQ-2280",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier Landing Page",
+    "Requirement": "The system should default to Approved Suppliers displayed when starting a new Enlil session"
+  },
+  "REQ-2290": {
+    "field1": "UN-0060",
+    "REQ #": "REQ-2290",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier Landing Page",
+    "Requirement": "The system shall maintain Supplier filter settings during an Enlil session when navigating away from and back to the landing page"
+  },
+  "REQ-2300": {
+    "field1": "UN-0060",
+    "REQ #": "REQ-2300",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier Landing Page",
+    "Requirement": "The system shall default to the supplier list sorted by alphabetical order"
+  },
+  "REQ-2310": {
+    "field1": "UN-0060",
+    "REQ #": "REQ-2310",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier Landing Page",
+    "Requirement": "The system shall provide a mechanism to clear Supplier List filters"
+  },
+  "REQ-2320": {
+    "field1": "UN-0060",
+    "REQ #": "REQ-2320",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier Landing Page",
+    "Requirement": "The system shall display the number of suppliers displayed that match the filter settings"
+  },
+  "REQ-2330": {
+    "field1": "UN-0060",
+    "REQ #": "REQ-2330",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier Landing Page",
+    "Requirement": "The system shall allow for creation of a new supplier from the supplier landing page"
+  },
+  "REQ-2340": {
+    "field1": "UN-0060",
+    "REQ #": "REQ-2340",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier Landing Page",
+    "Requirement": "The system shall allow the user to open the Supplier File from the supplier list"
+  },
+  "REQ-2350": {
+    "field1": "UN-0060",
+    "REQ #": "REQ-2350",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier Form",
+    "Requirement": "The system shall allow the user to define one or more forms for creation and management of suppliers."
+  },
+  "REQ-2360": {
+    "field1": "UN-0060",
+    "REQ #": "REQ-2360",
+    "Module": "Supplier",
+    "Sub-Module": "Creating a new supplier",
+    "Requirement": "The system shall allow the user to create a new supplier, including supplier name, description, address, phone number, contact information"
+  },
+  "REQ-2370": {
+    "field1": "UN-0061",
+    "REQ #": "REQ-2370",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier States",
+    "Requirement": "The system should allow the user to define the supplier states, with the following default states:\nR&D only\nConditionally Approved\nApproved\nHold for New Business\nDisqualified\nSuspended"
+  },
+  "REQ-2380": {
+    "field1": "UN-0061",
+    "REQ #": "REQ-2380",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier States",
+    "Requirement": "The system should set the supplier status to R&D only when a new supplier is created"
+  },
+  "REQ-2390": {
+    "field1": "UN-0061",
+    "REQ #": "REQ-2390",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier Records",
+    "Requirement": "The system should list supplier records …as attachments to the supplier file"
+  },
+  "REQ-2400": {
+    "field1": "UN-0003",
+    "REQ #": "REQ-2400",
+    "Module": "Supplier",
+    "Sub-Module": "Supplier Forms",
+    "Requirement": "The system should allow the user to designate the output of form as a supplier record"
+  },
+  "REQ-2410": {
+    "field1": "UN-0070",
+    "REQ #": "REQ-2410",
+    "Module": "Training",
+    "Sub-Module": "Training matrix spreadsheet",
+    "Requirement": "The system shall maintain a training requirements matrix using a spreadsheet stored on a network drive (the training matrix contains a list of all documents (rows) that have been defined as requiring training, as well as a list of users (columns) in the system.  Placing an \"X\" in the corresponding row/column indicates that the particular user is required to train to the document)"
+  },
+  "REQ-2420": {
+    "field1": "UN-0070",
+    "REQ #": "REQ-2420",
+    "Module": "Training",
+    "Sub-Module": "Training matrix spreadsheet",
+    "Requirement": "The system shall append the training matrix spreadsheet with a new row containing the document number when a document that requires training is approved."
+  },
+  "REQ-2430": {
+    "field1": "UN-0070",
+    "REQ #": "REQ-2430",
+    "Module": "Training",
+    "Sub-Module": "Training matrix spreadsheet",
+    "Requirement": "The system shall append the training matrix spreadsheet with a new column containing the user name when a new user is created."
+  },
+  "REQ-2440": {
+    "field1": "UN-0070",
+    "REQ #": "REQ-2440",
+    "Module": "Training",
+    "Sub-Module": "Training matrix spreadsheet",
+    "Requirement": "The system shall allow simultaneous edits of the spreadsheet by the user and by Enlil"
+  },
+  "REQ-2450": {
+    "field1": "UN-0070",
+    "REQ #": "REQ-2450",
+    "Module": "Training",
+    "Sub-Module": "Training matrix spreadsheet",
+    "Requirement": "The system shall assign training to the user within 24 hours of assigning a user to train to a document on the training matrix spreadsheet."
+  },
+  "REQ-2810": {
+    "field1": "UN-0070",
+    "REQ #": "REQ-2810",
+    "Module": "Training",
+    "Sub-Module": "Training",
+    "Requirement": "The system shall display the following default columns on the landing page for the Training list: Doc Id, Revision, Title, Trainee, Assigned Date, Due Date and Completed On (e.g. this list defines content, not column header names)"
+  },
+  "REQ-2820": {
+    "field1": "UN-0070",
+    "REQ #": "REQ-2820",
+    "Module": "Training",
+    "Sub-Module": "Training",
+    "Requirement": "The system shall allow the user to filter the displayed Training List for each of the columns displayed on the landing page"
+  },
+  "REQ-2830": {
+    "field1": "UN-0070",
+    "REQ #": "REQ-2830",
+    "Module": "Training",
+    "Sub-Module": "Training",
+    "Requirement": "The system should provide a mechanism to export the Training List (e.g. to a .csv format)"
+  },
+  "REQ-2460": {
+    "field1": "UN-0080",
+    "REQ #": "REQ-2460",
+    "Module": "Notifications",
+    "Sub-Module": "Training",
+    "Requirement": "The system shall display a notification in the dashboard for when the user is assigned training"
+  },
+  "REQ-2470": {
+    "field1": "UN-0080",
+    "REQ #": "REQ-2470",
+    "Module": "Notifications",
+    "Sub-Module": "Training",
+    "Requirement": "The system shall display the following in the training notification (document number, training due date)."
+  },
+  "REQ-2480": {
+    "field1": "UN-0080",
+    "REQ #": "REQ-2480",
+    "Module": "Notifications",
+    "Sub-Module": "Training",
+    "Requirement": "The system shall display the training notification as overdue if the training is not complete by the due date."
+  },
+  "REQ-2840": {
+    "field1": "UN-0100",
+    "REQ #": "REQ-2840",
+    "Module": "Equipment",
+    "Sub-Module": "Equipment",
+    "Requirement": "The system shall display the following default columns on the landing page for the Equipment list: Equipment ID, Revision, STATE, Title, Equipment Owner, Cal Due Date, PM Due Date AND EQ STATUS (e.g. this list defines content, not column header names)"
+  },
+  "REQ-2850": {
+    "field1": "UN-0100",
+    "REQ #": "REQ-2850",
+    "Module": "Equipment",
+    "Sub-Module": "Equipment",
+    "Requirement": "The system shall allow the user to filter the displayed Equipment List for each of the columns displayed on the landing page"
+  },
+  "REQ-2860": {
+    "field1": "UN-0100",
+    "REQ #": "REQ-2860",
+    "Module": "Equipment",
+    "Sub-Module": "Equipment",
+    "Requirement": "The system should provide a mechanism to export the Equipment List (e.g. to a .csv format)"
+  },
+  "REQ-2870": {
+    "field1": "UN-0100",
+    "REQ #": "REQ-2870",
+    "Module": "Equipment",
+    "Sub-Module": "Equipment",
+    "Requirement": "The system shall allow the user to open an equipment document from within the Equipment List"
+  },
+  "REQ-2880": {
+    "field1": "UN-0100",
+    "REQ #": "REQ-2880",
+    "Module": "Equipment",
+    "Sub-Module": "Equipment",
+    "Requirement": "The system shall provide a mechanism for the user to create an equipment document from the Equipment List landing page"
+  },
+  "REQ-2890": {
+    "field1": "UN-0100",
+    "REQ #": "REQ-2890",
+    "Module": "Equipment",
+    "Sub-Module": "Equipment",
+    "Requirement": "The system shall allow the user to create a new equipment associated record (Calibration, PM, etc.) from within the equipment page"
+  },
+  "REQ-2900": {
+    "field1": "UN-0100",
+    "REQ #": "REQ-2900",
+    "Module": "Equipment",
+    "Sub-Module": "Equipment",
+    "Requirement": "The system shall display the history of the equipment associated records (Calibration, PM, etc.) in the equipment page. The history shall include the record ID, title, status, approver name and date of completion"
+  },
+  "REQ-2910": {
+    "field1": "UN-0100",
+    "REQ #": "REQ-2910",
+    "Module": "Equipment",
+    "Sub-Module": "Equipment",
+    "Requirement": "The system shall indicate the current state (Completed, Pending, Past Due) of the equipment associated record (Calibration, PM, etc.) within the equipment page"
+  },
+  "REQ-2920": {
+    "field1": "UN-0100",
+    "REQ #": "REQ-2920",
+    "Module": "Equipment",
+    "Sub-Module": "Equipment",
+    "Requirement": "The system shall provide a mechanism for the user to set up/define the frequency for the required equipment associated records (Calibration, PM, etc.)"
+  },
   "REQ-2490": {
     "field1": "UN-0090",
     "REQ #": "REQ-2490",
@@ -796,6 +1755,13 @@
     "Module": "User/Group Management",
     "Sub-Module": "Create Users/Groups",
     "Requirement": "The system shall provide a group called Everyone consisting of all users"
+  },
+  "REQ-2540": {
+    "field1": "UN-0090",
+    "REQ #": "REQ-2540",
+    "Module": "User/Group Management",
+    "Sub-Module": "Create Users/Groups",
+    "Requirement": "The system should allow for easy importing of users (e.g. from Outlook.pst or .csv files)"
   },
   "REQ-2550": {
     "field1": "UN-0090",
@@ -902,368 +1868,655 @@
     "Sub-Module": "Retention of records",
     "Requirement": "The audit trail documentation shall be retained for a period at least as long as that required for the subject electronic records."
   },
-  "REQ-3890": {
-    "field1": "UN-0040",
-    "REQ #": "REQ-3890",
-    "Module": "Receiving",
-    "Sub-Module": "Receiving against a line item",
-    "Requirement": "The system shall allow the user to only receive once against a line item in an RC"
+  "REQ-2930": {
+    "field1": "UN-0110",
+    "REQ #": "REQ-2930",
+    "Module": "Engineering Build",
+    "Sub-Module": "Engineering Build",
+    "Requirement": "The system shall display the Engineering Build in the record module"
   },
-  "REQ-3900": {
-    "field1": "UN-0040",
-    "REQ #": "REQ-3900",
-    "Module": "Receiving",
-    "Sub-Module": "Lot creation",
-    "Requirement": "The system shall not create lots for received line items automatically"
+  "REQ-2940": {
+    "field1": "UN-0110",
+    "REQ #": "REQ-2940",
+    "Module": "Engineering Build",
+    "Sub-Module": "Engineering Build",
+    "Requirement": "The Engineering Build must always have a part output associated with"
   },
-  "REQ-3910": {
-    "field1": "UN-0040",
-    "REQ #": "REQ-3910",
-    "Module": "Receiving",
-    "Sub-Module": "Receivng against a released RC",
-    "Requirement": "The system shall now allow the user to receive against a released RC"
+  "REQ-2950": {
+    "field1": "UN-0110",
+    "REQ #": "REQ-2950",
+    "Module": "Engineering Build",
+    "Sub-Module": "Engineering Build",
+    "Requirement": "The system shall provide a mechanism for the user to create a new part from within the engineering build record"
   },
-  "REQ-3920": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-3920",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "Audit trail and e-signatures",
-    "Requirement": "The System shall provide the ability to produce the entire content of the record in human-readable form, including audit trails and electronic signatures."
+  "REQ-2960": {
+    "field1": "UN-0110",
+    "REQ #": "REQ-2960",
+    "Module": "Engineering Build",
+    "Sub-Module": "Engineering Build",
+    "Requirement": "The system shall provide a mechanism for the user to select an existing part number revision or a new part number revision for the Engineering Build"
   },
-  "REQ-3930": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-3930",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "Authorised user access",
-    "Requirement": "The system shall restrict access to authorized users."
+  "REQ-2970": {
+    "field1": "UN-0110",
+    "REQ #": "REQ-2970",
+    "Module": "Engineering Build",
+    "Sub-Module": "Engineering Build",
+    "Requirement": "The system shall provide a mechanism for the user to add a new step from the Engineering Build record"
   },
-  "REQ-3940": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-3940",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "Unique ID enforcement",
-    "Requirement": "The system shall enforce unique User IDs or a similarly secure mechanism (e.g., fingerprint)."
+  "REQ-2980": {
+    "field1": "UN-0110",
+    "REQ #": "REQ-2980",
+    "Module": "Engineering Build",
+    "Sub-Module": "Engineering Build",
+    "Requirement": "The system shall provide a mechanism for the user to add a new FB component from within the Engineering Build record"
   },
-  "REQ-3950": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-3950",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "Password storage",
-    "Requirement": "The system shall store passwords in a non-human-readable form."
+  "REQ-2990": {
+    "field1": "UN-0110",
+    "REQ #": "REQ-2990",
+    "Module": "Engineering Build",
+    "Sub-Module": "Engineering Build",
+    "Requirement": "The step of the engineering build should allow the user to capture the step details, any media (both static and video), material and equipment required"
   },
-  "REQ-3960": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-3960",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "Authorised user access",
-    "Requirement": "The system shall prevent unauthorized access when system is left unattended for a predetermined length of time."
+  "REQ-3000": {
+    "field1": "UN-0110",
+    "REQ #": "REQ-3000",
+    "Module": "Engineering Build",
+    "Sub-Module": "Engineering Build",
+    "Requirement": "The system shall provide a mechanism for the user to clone an Engineering Build record"
   },
-  "REQ-3970": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-3970",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "User logins",
-    "Requirement": "The system should lock a user account when the number of consecutive failed login attempts exceeds the established limit."
+  "REQ-3010": {
+    "field1": "UN-0110",
+    "REQ #": "REQ-3010",
+    "Module": "Engineering Build",
+    "Sub-Module": "Engineering Build",
+    "Requirement": "The system shall provide a mechanism for the user to clone a step from within the Engineering Build record"
   },
-  "REQ-3980": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-3980",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "Authorised user access",
-    "Requirement": "The system shall provide functionality to set user access privileges."
+  "REQ-3020": {
+    "field1": "UN-0110",
+    "REQ #": "REQ-3020",
+    "Module": "Engineering Build",
+    "Sub-Module": "Engineering Build",
+    "Requirement": "When cloning (a step or an engineering build), the system shall automatically keep/transfer any data (including attachment) on the cloned step or cloned engineering build"
   },
-  "REQ-3990": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-3990",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "Authorised user access",
-    "Requirement": "The system shall limit user functions to their assigned privileges."
+  "REQ-3030": {
+    "field1": "UN-0110",
+    "REQ #": "REQ-3030",
+    "Module": "Engineering Build",
+    "Sub-Module": "Engineering Build",
+    "Requirement": "The system shall provide a mechanism for the user to compare cloned Engineering Build record"
   },
-  "REQ-4000": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4000",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "Audit trail",
-    "Requirement": "The system shall automatically generate an audit trail to independently record the modification of records and include the modification date, time, who, and the previous data value for each modified regulated record."
+  "REQ-3040": {
+    "field1": "UN-0120",
+    "REQ #": "REQ-3040",
+    "Module": "Process Instructions",
+    "Sub-Module": "Creating MPI/ QPI",
+    "Requirement": "The system shall allow the user to create an Process Instruction (PI) which can be an MPI (Manufacturing Process Instruction) or a QPI (Quality Process Instruction)"
   },
-  "REQ-4010": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4010",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "Audit trail",
-    "Requirement": "The system shall automatically generate an audit trail to independently record the deletion of records and include the deletion date, time, who and the data values for each deleted regulated record."
+  "REQ-3050": {
+    "field1": "UN-0120",
+    "REQ #": "REQ-3050",
+    "Module": "Process Instructions",
+    "Sub-Module": "PI Lifecycle",
+    "Requirement": "The Process Instruction (PI) shall follow the document lifecycle"
   },
-  "REQ-4020": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4020",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "Item release",
-    "Requirement": "The system shall enforce required sequencing of steps or events, i.e., a draft cannot be released without an approval step."
+  "REQ-3060": {
+    "field1": "UN-0120",
+    "REQ #": "REQ-3060",
+    "Module": "Process Instructions",
+    "Sub-Module": "Creating MPI/ QPI",
+    "Requirement": "The system shall allow the user to add a step/ multiple steps to the Process Instruction (PI)"
   },
-  "REQ-4030": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4030",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "Human readability",
-    "Requirement": "The system shall have the ability to produce in human- readable form all information associated with the signing (including full name, date, time, and meaning (such as review, approval, responsibility, or authorship) of signature)."
+  "REQ-3070": {
+    "field1": "UN-0120",
+    "REQ #": "REQ-3070",
+    "Module": "Process Instructions",
+    "Sub-Module": "Creating MPI/ QPI",
+    "Requirement": "The system shall allow the user to clone a step in the Process Instruction (PI)"
   },
-  "REQ-4040": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4040",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "e-signature",
-    "Requirement": "The system shall record the date/time when an electronic signature is executed."
+  "REQ-3080": {
+    "field1": "UN-0120",
+    "REQ #": "REQ-3080",
+    "Module": "Process Instructions",
+    "Sub-Module": "Creating MPI/ QPI",
+    "Requirement": "The system shall allow the user to remove a step in the Process Instruction (PI)"
   },
-  "REQ-4050": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4050",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "e-signature",
-    "Requirement": "The system shall include the meaning of an electronic signature when executed (e.g., verified, approved, rejected, batch release)."
+  "REQ-3090": {
+    "field1": "UN-0120",
+    "REQ #": "REQ-3090",
+    "Module": "Process Instructions",
+    "Sub-Module": "Creating MPI/ QPI",
+    "Requirement": "The system shall allow the user to add attachments to each step in the Process Instruction (PI)"
   },
-  "REQ-4060": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4060",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "e-signature",
-    "Requirement": "The system shall prevent the alteration of an electronic signature."
+  "REQ-3100": {
+    "field1": "UN-0120",
+    "REQ #": "REQ-3100",
+    "Module": "Process Instructions",
+    "Sub-Module": "Creating MPI/ QPI",
+    "Requirement": "The system shall allow the user to add Material to the Process Instruction (PI) specifying the Part ID, Quantity and Unit"
   },
-  "REQ-4070": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4070",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "e-signature",
-    "Requirement": "The system shall ensure the electronic signature is linked to the respective electronic record."
+  "REQ-3130": {
+    "field1": "UN-0120",
+    "REQ #": "REQ-3130",
+    "Module": "Process Instructions",
+    "Sub-Module": "Creating MPI/ QPI",
+    "Requirement": "The system shall allow the user to add Equipment to the Process Instruction (PI)"
   },
-  "REQ-4080": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4080",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "e-signature",
-    "Requirement": "The system shall ensure the electronic signature ID for each authorized user is unique."
+  "REQ-3120": {
+    "field1": "UN-0120",
+    "REQ #": "REQ-3120",
+    "Module": "Process Instructions",
+    "Sub-Module": "Creating MPI/ QPI",
+    "Requirement": "The system shall allow the user to add Form builder components (Text field, Checkbox group, Autocomplete, Text Editor, Date Picker, Hyperlink, Select Field, Radio button group, Paragraph, File Upload, Blank template form, Quantity, Instructions media upload, Evidence media upload, PI procedure, Text field with range, as required to the Process Instruction (PI) template"
   },
-  "REQ-4090": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4090",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "e-signature",
-    "Requirement": "The system shall prevent the electronic signature ID for an authorized user from being re-assigned."
+  "REQ-3131": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3131",
+    "Module": "LHR",
+    "Sub-Module": "Creating the LHRt",
+    "Requirement": "The system shall allow the user to select the Part (Document and not Rev) to be manufactured in the LHRt"
   },
-  "REQ-4100": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4100",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "e-signature",
-    "Requirement": "The system shall prevent the electronic signature ID from being deleted."
+  "REQ-3140": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3140",
+    "Module": "LHR",
+    "Sub-Module": "Creating the LHRt",
+    "Requirement": "The system shall allow the user to create an LHR template with output type LHR"
   },
-  "REQ-4110": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4110",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "e-signature",
-    "Requirement": "The system shall enable the electronic signature ID to be activated."
+  "REQ-3150": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3150",
+    "Module": "LHR",
+    "Sub-Module": "Creating the LHRt",
+    "Requirement": "The system shall provide a mechanism for the user to add LHR step component"
   },
-  "REQ-4120": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4120",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "unique ID",
-    "Requirement": "The system shall ensure that ID codes/passwords maintain the uniqueness of each combination such that no 2 individuals ever have the same password/code."
+  "REQ-3160": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3160",
+    "Module": "LHR",
+    "Sub-Module": "Creating the LHRt",
+    "Requirement": "The system shall allow the user to add Form builder components (Text field, Checkbox group, Autocomplete, Text Editor, Date Picker, Hyperlink, Select Field, Radio button group, Paragraph, File Upload, Blank template form, Quantity, Instructions media upload, Evidence media upload, PI procedure, Text field with range), as required, to the LHR template"
   },
-  "REQ-4130": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4130",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "e-signature",
-    "Requirement": "Documented procedures shall describe methods to prevent reassignment of signature components, i.e., any component of the electronic signature cannot be reassigned to another user."
+  "REQ-3170": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3170",
+    "Module": "LHR",
+    "Sub-Module": "Initiating an LHR",
+    "Requirement": "The system shall provide a mechanism for the user to initiate an LHR"
   },
-  "REQ-4140": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4140",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "Unique ID combinations",
-    "Requirement": "The system shall require 2 distinct identification components when applying an electronic signature (e.g., User ID & Password)."
+  "REQ-3180": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3180",
+    "Module": "LHR",
+    "Sub-Module": "Lot number within the LHR",
+    "Requirement": "The system shall generate a LOT number for the a LOT # as YYMMDD##ab \nwhere, ##- denotes sequentially changing digits (indicative of new lots, reset to 01 on a daily basis) and \nab=RD if it is an R&D lot \nab= would be an empty value if it is a production lot"
   },
-  "REQ-4150": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4150",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "e-signature",
-    "Requirement": "The system shall enforce that at least one electronic signature component is confidential and secure (e.g. password or PIN)."
+  "REQ-3190": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3190",
+    "Module": "LHR",
+    "Sub-Module": "Lot number within the LHR",
+    "Requirement": "The system shall provide a mechanism for the user to differentiate between R&D and Production Builds through the Lot number"
   },
-  "REQ-4160": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4160",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "e-signature",
-    "Requirement": "The system shall require 2 distinct identification components during the initial signing, for multiple continuous signing sessions."
+  "REQ-3200": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3200",
+    "Module": "LHR",
+    "Sub-Module": "Initiating an LHR",
+    "Requirement": "The system shall provide a mechanism for the user to add operators to the LHR"
   },
-  "REQ-4170": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4170",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "Secure unique ID",
-    "Requirement": "The system shall require a confidential and secure identification component during subsequent continuous signing sessions."
+  "REQ-3210": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3210",
+    "Module": "LHR",
+    "Sub-Module": "Using the LHR",
+    "Requirement": "The system shall provide a mechanism for the user to start executing a step in the build"
   },
-  "REQ-4180": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4180",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "password change",
-    "Requirement": "The system should force passwords to be changed at a predefined interval."
+  "REQ-3220": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3220",
+    "Module": "LHR",
+    "Sub-Module": "Approvals for the LHR step",
+    "Requirement": "The system shall provide a mechanism to add approvers for the LHR step"
   },
-  "REQ-4190": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4190",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "e-signature",
-    "Requirement": "The system shall provide the ability to deactivate the electronic signature ID."
+  "REQ-3230": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3230",
+    "Module": "LHR",
+    "Sub-Module": "Using the LHR",
+    "Requirement": "The system shall provide a mechanism for the assigned operator/ operators to complete a step"
   },
-  "REQ-4200": {
-    "field1": "UN-0001",
-    "REQ #": "REQ-4200",
-    "Module": "Part 11 Compliance",
-    "Sub-Module": "password reuse",
-    "Requirement": "The system should prevent password re-use within an established limit."
+  "REQ-3240": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3240",
+    "Module": "LHR",
+    "Sub-Module": "",
+    "Requirement": "The system shall display the e-signature of the operator/ operators that have completed a step"
   },
-  "REQ-4210": {
-    "field1": "UN-0011",
-    "REQ #": "REQ-4210",
-    "Module": "Document Control",
+  "REQ-3250": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3250",
+    "Module": "LHR",
+    "Sub-Module": "Corrections to the LHR step",
+    "Requirement": "The system shall allow anyone to make corrections to the LHRS after completing the LHRS"
+  },
+  "REQ-3260": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3260",
+    "Module": "LHR",
+    "Sub-Module": "Corrections to the LHR",
+    "Requirement": "The system shall allow anyone to make corrections to the LHR after completing the LHR"
+  },
+  "REQ-3270": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3270",
+    "Module": "LHR",
+    "Sub-Module": "Redlines to the LHRS",
+    "Requirement": "The system shall provide a mechanism for the owner to make Redlines (Correction of text/ remove and add material/ remove and add attachments) to the LHRS"
+  },
+  "REQ-3280": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3280",
+    "Module": "LHR",
+    "Sub-Module": "Redlines to the LHRS",
+    "Requirement": "The system shall provide a mechanism to indicate if a step has been redlined in the LHR view"
+  },
+  "REQ-3290": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3290",
+    "Module": "LHR",
+    "Sub-Module": "Notes in the LHR",
+    "Requirement": "The system shall provide a mechanism for the user to make notes in a field"
+  },
+  "REQ-3300": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3300",
+    "Module": "LHR",
+    "Sub-Module": "Releasing the LHR",
+    "Requirement": "The system shall provide a mechanism to complete and release the LHR record only after all the Steps are completed and approved"
+  },
+  "REQ-3310": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3310",
+    "Module": "LHR",
+    "Sub-Module": "LHR title",
+    "Requirement": "The Title for the LHR record should be “Build for <Part Number XXX>, Rev <#>, <Date> - <Build number>”"
+  },
+  "REQ-3320": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3320",
+    "Module": "LHR",
+    "Sub-Module": "LHR step title",
+    "Requirement": "The Title for the LHR step should be “Build for <Part Number XXX>, Rev <#>, <Date> - <Build number>”"
+  },
+  "REQ-3330": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3330",
+    "Module": "LHR",
+    "Sub-Module": "",
+    "Requirement": "The Lot shall be associated with a specific Part Revision"
+  },
+  "REQ-3340": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3340",
+    "Module": "LHR",
+    "Sub-Module": "LHR step",
+    "Requirement": "The system shall allow the user to select any released lot associated with a component while adding Material to the LHR step"
+  },
+  "REQ-3350": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3350",
+    "Module": "LHR",
+    "Sub-Module": "LHR Menu",
+    "Requirement": "The LHR shall have its own menu"
+  },
+  "REQ-3360": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3360",
+    "Module": "LHR",
+    "Sub-Module": "LHR templates",
+    "Requirement": "The LHR templates shall be displayed in the Document List"
+  },
+  "REQ-3370": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3370",
+    "Module": "LHR",
+    "Sub-Module": "LHR Landing page",
+    "Requirement": "The landing page for the LHR shall display Lot number, Part number/ Rev, Completion Date, Start Quantity, Template, and LHR ID"
+  },
+  "REQ-3380": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3380",
+    "Module": "LHR",
+    "Sub-Module": "LHR Landing page",
+    "Requirement": "The system should provide a mechanism to export the LHR List (e.g. to a .csv format)\n"
+  },
+  "REQ-3390": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3390",
+    "Module": "LHR",
+    "Sub-Module": "LHR Landing page",
+    "Requirement": "The system shall allow the user to filter the displayed LHR list for each of the columns displayed on the landing page"
+  },
+  "REQ-3400": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3400",
+    "Module": "LHR",
+    "Sub-Module": "LHR Landing page",
+    "Requirement": "The system shall provide a mechanism to clear all LHR List filters"
+  },
+  "REQ-3410": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3410",
+    "Module": "General",
     "Sub-Module": "General",
-    "Requirement": "The System shall all for the control of documents required by the Quality Management system (creation, approval, control, change, obsolescence)."
+    "Requirement": "The system shall provide a mechanism for any item with a specific category to be created and displayed in that module only and nowhere else"
   },
-  "REQ-4220": {
-    "field1": "UN-0011",
-    "REQ #": "REQ-4220",
+  "REQ-3450": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3450",
+    "Module": "LHR",
+    "Sub-Module": "LHR and MPI during upgrade",
+    "Requirement": "The LHR should not suggest upgrades for MPIs if the MPI is revised or updated after the build is complete. The LHR needs to hold the MPI used in the build"
+  },
+  "REQ-3460": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3460",
+    "Module": "LHR",
+    "Sub-Module": "LHR during upgrade",
+    "Requirement": "The LHR should not suggest upgrades for Parts to be Manufactured if that Part is revised or updated after the build is started. The LHR in progress needs to point to the same Part to be Manufactured that it started with."
+  },
+  "REQ-3470": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3470",
+    "Module": "LHR",
+    "Sub-Module": "Training",
+    "Requirement": "The system shall allow a user trained on an MPI to access any LHR that uses that MPI until Redlines are made to the MPI"
+  },
+  "REQ-3480": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3480",
+    "Module": "LHR",
+    "Sub-Module": "Training",
+    "Requirement": "The system shall automatically add users trained on an MPI to the operators list"
+  },
+  "REQ-3490": {
+    "field1": "UN-0140",
+    "REQ #": "REQ-3490",
+    "Module": "NCO",
+    "Sub-Module": "New company",
+    "Requirement": "The system shall allow an Enlil authorized employee to create a new company"
+  },
+  "REQ-3500": {
+    "field1": "UN-0140",
+    "REQ #": "REQ-3500",
+    "Module": "NCO",
+    "Sub-Module": "New company",
+    "Requirement": "The system shall allow the user to add in a Company Name, Company abbreviation, Company Admin email, Company Avatar and Logo as part of the company details"
+  },
+  "REQ-3510": {
+    "field1": "UN-0140",
+    "REQ #": "REQ-3510",
+    "Module": "NCO",
+    "Sub-Module": "New company",
+    "Requirement": "The system shall allow the user to customize whitelabelling for the new company"
+  },
+  "REQ-3520": {
+    "field1": "UN-0140",
+    "REQ #": "REQ-3520",
+    "Module": "NCO",
+    "Sub-Module": "New company",
+    "Requirement": "The system shall require the user to add a Document Approval Matrix that will be used in the newly created Company"
+  },
+  "REQ-3530": {
+    "field1": "UN-0140",
+    "REQ #": "REQ-3530",
+    "Module": "NCO",
+    "Sub-Module": "New company",
+    "Requirement": "The system shall require the user to set up the Landing page for different modules in the newly created company"
+  },
+  "REQ-3540": {
+    "field1": "UN-0140",
+    "REQ #": "REQ-3540",
+    "Module": "NCO",
+    "Sub-Module": "New company",
+    "Requirement": "The system shall require the user to set up the navigation menu for the newly created company"
+  },
+  "REQ-3550": {
+    "field1": "UN-0140",
+    "REQ #": "REQ-3550",
+    "Module": "NCO",
+    "Sub-Module": "New company",
+    "Requirement": "The system shall allow the user to add a list of employees and contact information"
+  },
+  "REQ-3560": {
+    "field1": "UN-0140",
+    "REQ #": "REQ-3560",
+    "Module": "NCO",
+    "Sub-Module": "New company",
+    "Requirement": "The system shall allow the user to add a list of GL codes to match the financial system of the newly created company"
+  },
+  "REQ-3570": {
+    "field1": "UN-0140",
+    "REQ #": "REQ-3570",
+    "Module": "NCO",
+    "Sub-Module": "New company",
+    "Requirement": "The system shall allow the user to add template documents for the forms requested to be used in the company"
+  },
+  "REQ-3580": {
+    "field1": "UN-0140",
+    "REQ #": "REQ-3580",
+    "Module": "NCO",
+    "Sub-Module": "New company",
+    "Requirement": "All form documents created during company creation will remain in the Draft state in the newly created company"
+  },
+  "REQ-3590": {
+    "field1": "UN-0140",
+    "REQ #": "REQ-3590",
+    "Module": "NCO",
+    "Sub-Module": "New company",
+    "Requirement": "The system shall maintain a data log created during company creation listing all the events that have occurred during the process"
+  },
+  "REQ-3600": {
+    "field1": "UN-0140",
+    "REQ #": "REQ-3600",
+    "Module": "NCO",
+    "Sub-Module": "New company",
+    "Requirement": "The system shall allow the creation of clearly identifiable and unique test companies in preparation for the final company release"
+  },
+  "REQ-3610": {
+    "field1": "UN-0010",
+    "REQ #": "REQ-3610",
     "Module": "Document Control",
-    "Sub-Module": "User designation",
-    "Requirement": "The System shall allow for the designation of individual(s) to review for adequacy and approve prior to issuance all documents. Designation may be performed through department functions, roles, user groups, etc."
+    "Sub-Module": "Document Numbering",
+    "Requirement": "The system shall allow the authorized user to configure Start number, Prefix for document, and labelling for Enlil items."
   },
-  "REQ-4230": {
-    "field1": "UN-0011",
-    "REQ #": "REQ-4230",
-    "Module": "Document Control",
-    "Sub-Module": "Approval",
-    "Requirement": "The System should record the approval of the of designation of individual(s) that review and approve documents."
+  "REQ-3620": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3620",
+    "Module": "LHR",
+    "Sub-Module": "Parameterization",
+    "Requirement": "The system shall allow the user to define PI parameters by adding the description in free text to represent Equipment or Materials. These parameters will be defined later in the LHRT that uses that PI."
   },
-  "REQ-4240": {
-    "field1": "UN-0011",
-    "REQ #": "REQ-4240",
-    "Module": "Document Control",
-    "Sub-Module": "User access",
-    "Requirement": "The System shall control the individual(s) with authority to approve or change the of designation of individual(s) to review and approve documents."
+  "REQ-3630": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3630",
+    "Module": "LHR",
+    "Sub-Module": "Parameterization",
+    "Requirement": "The system shall indicate when a Material or Equipment is parameterized in the LHR Template"
   },
-  "REQ-4250": {
-    "field1": "UN-0011",
-    "REQ #": "REQ-4250",
-    "Module": "Document Control",
-    "Sub-Module": "Audit trail",
-    "Requirement": "The System shall create an electronic record and audit trail, including the date and electronic signature of the individual(s) approving the document."
+  "REQ-3640": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3640",
+    "Module": "LHR",
+    "Sub-Module": "Parameterization",
+    "Requirement": "The system shall allow the user to release the LHRT only after the required parameter selections have been made"
   },
-  "REQ-4260": {
-    "field1": "UN-0012",
-    "REQ #": "REQ-4260",
-    "Module": "Document Control",
-    "Sub-Module": "Obsolete documents",
-    "Requirement": "The System shall ensure that obsolete documents are promptly removed from all points of use or otherwise prevented from use."
+  "REQ-3650": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3650",
+    "Module": "LHR",
+    "Sub-Module": "Redlines to the LHRS",
+    "Requirement": "The system shall allow the owner to make Redlines to the LHRS after the LHRS is Started and before the LHRS is Completed."
   },
-  "REQ-4270": {
-    "field1": "UN-0011",
-    "REQ #": "REQ-4270",
-    "Module": "Document Control",
-    "Sub-Module": "Document change review",
-    "Requirement": "The System shall ensure that changes to documents are reviewed and approved by an individual(s) in the same function or organization that performed the original review and approval, unless specifically designated otherwise."
+  "REQ-3660": {
+    "field1": "UN-0130",
+    "REQ #": "REQ-3660",
+    "Module": "LHR",
+    "Sub-Module": "Selecting Material Lots and EQ items at the LHR",
+    "Requirement": "The system shall allow the user to pick Equipment and Lots for Material at the LHR"
   },
-  "REQ-4280": {
-    "field1": "UN-0011",
-    "REQ #": "REQ-4280",
-    "Module": "Document Control",
-    "Sub-Module": "Change records",
-    "Requirement": "The System shall ensure that change records include a description of the change."
+  "REQ-3670": {
+    "field1": "UN-0150",
+    "REQ #": "REQ-3670",
+    "Module": "Collaborative Cloud based Storage environment",
+    "Sub-Module": "Company cloud account",
+    "Requirement": "The system shall provide a mechanism for the company admin to enable a collaborative cloud based storage environment for a particular company. One account will be supported per company."
   },
-  "REQ-4290": {
-    "field1": "UN-0011",
-    "REQ #": "REQ-4290",
-    "Module": "Document Control",
-    "Sub-Module": "Change records",
-    "Requirement": "The System shall ensure that change records include identification of the affected documents."
+  "REQ-3680": {
+    "field1": "UN-0150",
+    "REQ #": "REQ-3680",
+    "Module": "Collaborative Cloud based Storage environment",
+    "Sub-Module": "Company cloud account",
+    "Requirement": "The system shall provide a mechanism to allow users to connect a Collaborative Cloud based Storage environment when access is granted by the company admin"
   },
-  "REQ-4300": {
-    "field1": "UN-0011",
-    "REQ #": "REQ-4300",
-    "Module": "Document Control",
-    "Sub-Module": "Change records",
-    "Requirement": "The System shall ensure that change records include the approval date."
+  "REQ-3690": {
+    "field1": "UN-0150",
+    "REQ #": "REQ-3690",
+    "Module": "Collaborative Cloud based Storage environment",
+    "Sub-Module": "Access to item on cloud",
+    "Requirement": "Enlil shall grant read/write access and save a copy of the Enlil item while they are in the unreleased (WIP/Draft/ Pending change) state on the company connected to a Collaborative Cloud based Storage environment"
   },
-  "REQ-4310": {
-    "field1": "UN-0011",
-    "REQ #": "REQ-4310",
-    "Module": "Document Control",
-    "Sub-Module": "Change records",
-    "Requirement": "The System shall ensure that change records include the date when the change becomes effective."
+  "REQ-3700": {
+    "field1": "UN-0150",
+    "REQ #": "REQ-3700",
+    "Module": "Collaborative Cloud based Storage environment",
+    "Sub-Module": "Access to item on cloud",
+    "Requirement": "The system shall grant \"read only\" access to the a Collaborative Cloud based Storage environment folder of the corresponding Enlil item when it is in the (IN_REVIEW) state. Anyone with access to the a Collaborative Cloud based Storage environment folder, and any added approvers, can view this folder while it is in the IN_REVIEW state."
   },
-  "REQ-4320": {
-    "field1": "UN-0011",
-    "REQ #": "REQ-4320",
-    "Module": "Document Control",
-    "Sub-Module": "external documents",
-    "Requirement": "The System shall allow for the identification and control of documents of external origin -- ensure that documents of external origin, determined by the organization to be necessary for the planning and operation of the quality management system, are identified and their distribution controlled"
+  "REQ-3710": {
+    "field1": "UN-0150",
+    "REQ #": "REQ-3710",
+    "Module": "Collaborative Cloud based Storage environment",
+    "Sub-Module": "Access to item on cloud",
+    "Requirement": "When the Enlil item is in WIP/ Draft/ Pending change state, any edits made to an existing attachment or any new additions made to that a Collaborative Cloud based Storage environment folder associated with that item, are synced back with Enlil"
   },
-  "REQ-4330": {
-    "field1": "UN-0020",
-    "REQ #": "REQ-4330",
-    "Module": "Record Control",
-    "Sub-Module": "QMS records",
-    "Requirement": "The System shall allow for the control of records required by the Quality Management system"
+  "REQ-3720": {
+    "field1": "UN-0150",
+    "REQ #": "REQ-3720",
+    "Module": "Collaborative Cloud based Storage environment",
+    "Sub-Module": "Access to item on cloud",
+    "Requirement": "When the Enlil item is in WIP/ Draft/ Pending change state, any newly added or removed attachments in the Enlil item, are synced back with the associated Collaborative Cloud based Storage environment folder"
   },
-  "REQ-4340": {
-    "field1": "UN-0020",
-    "REQ #": "REQ-4340",
-    "Module": "Record Control",
-    "Sub-Module": "Approvals",
-    "Requirement": "The System shall allow for the designation of individual(s) to approve prior to issuance all records. Designation may be performed through department functions, roles, user groups, etc."
+  "REQ-3730": {
+    "field1": "UN-0150",
+    "REQ #": "REQ-3730",
+    "Module": "Collaborative Cloud based Storage environment",
+    "Sub-Module": "Access to item on cloud",
+    "Requirement": "The system shall delete Collaborative Cloud based Storage environment folders associated with Enlil items once they are released on Enlil"
   },
-  "REQ-4350": {
-    "field1": "UN-0020",
-    "REQ #": "REQ-4350",
-    "Module": "Record Control",
-    "Sub-Module": "Approvals",
-    "Requirement": "The System shall record the approval of the designation of individual(s) that review and approve records."
+  "REQ-3740": {
+    "field1": "UN-0150",
+    "REQ #": "REQ-3740",
+    "Module": "Collaborative Cloud based Storage environment",
+    "Sub-Module": "Access to item on cloud",
+    "Requirement": "The system shall delete folders associated with voided Enlil items from a Collaborative Cloud based Storage environment"
   },
-  "REQ-4360": {
-    "field1": "UN-0020",
-    "REQ #": "REQ-4360",
-    "Module": "Record Control",
-    "Sub-Module": "Approvals",
-    "Requirement": "The System shall control the individual(s) with authority to approve or change the of designation of individual(s) to review and approve records."
+  "REQ-3750": {
+    "field1": "UN-0160",
+    "REQ #": "REQ-3750",
+    "Module": "Export pdf",
+    "Sub-Module": "Internal types supporting the export feature",
+    "Requirement": "The system shall provide a mechanism to export Enlil items (with internal type OTHER, PART_LOT, RECORD, EQUIPMENT, LOT) in a printable format"
   },
-  "REQ-4370": {
-    "field1": "UN-0020",
-    "REQ #": "REQ-4370",
-    "Module": "Record Control",
-    "Sub-Module": "Audit trail",
-    "Requirement": "The System shall create an electronic record and audit trail, including the date and electronic signature of the individual(s) approving the record (including for record creation and record corrections)."
+  "REQ-3760": {
+    "field1": "UN-0160",
+    "REQ #": "REQ-3760",
+    "Module": "Export pdf",
+    "Sub-Module": "Timestamp for printable version",
+    "Requirement": "The system shall maintain a timestamp on the printable format to indicate when it was exported"
   },
-  "REQ-4380": {
-    "field1": "UN-0020",
-    "REQ #": "REQ-4380",
-    "Module": "Record Control",
-    "Sub-Module": "Obsolete records",
-    "Requirement": "The System shall ensure that records cannot be obsoleted once a record has been approved and released."
+  "REQ-3770": {
+    "field1": "UN-0160",
+    "REQ #": "REQ-3770",
+    "Module": "Export pdf",
+    "Sub-Module": "Unique ID for printable version",
+    "Requirement": "The system shall assign a unique ID for each printable version"
   },
-  "REQ-4390": {
-    "field1": "UN-0020",
-    "REQ #": "REQ-4390",
-    "Module": "Record Control",
-    "Sub-Module": "Approvals",
-    "Requirement": "The System shall ensure that changes to records are reviewed and approved by an individual(s) in the same function or organization that performed the original review and approval, unless specifically designated otherwise. --- The System shall allow correction of records to be reviewed and approved by designated individuals or roles"
+  "REQ-3780": {
+    "field1": "UN-0160",
+    "REQ #": "REQ-3780",
+    "Module": "Export pdf",
+    "Sub-Module": "Exporting per revision",
+    "Requirement": "The system shall allow the user to export a printable version per revision of the supported Enlil item to the requestor's email."
   },
-  "REQ-4400": {
-    "field1": "UN-0020",
-    "REQ #": "REQ-4400",
-    "Module": "Record Control",
-    "Sub-Module": "Change records",
-    "Requirement": "The System shall ensure that change records include the date when the change is approved and released."
+  "REQ-3790": {
+    "field1": "UN-0160",
+    "REQ #": "REQ-3790",
+    "Module": "Export pdf",
+    "Sub-Module": "Attachment size",
+    "Requirement": "The system shall allow files including the pdf of the Enlil item upto a total size of 10mb to be added to the printable version"
+  },
+  "REQ-3800": {
+    "field1": "UN-0160",
+    "REQ #": "REQ-3800",
+    "Module": "Export pdf",
+    "Sub-Module": "Watermark",
+    "Requirement": "The system shall add a watermark to the Enlil item for Draft, Obsoleted and Superseded versions"
+  },
+  "REQ-3810": {
+    "field1": "UN-0160",
+    "REQ #": "REQ-3810",
+    "Module": "Export pdf",
+    "Sub-Module": "Send to email button",
+    "Requirement": "The system shall send a printable version including all attachments, and a summary of the revision history (where applicable) of the supported Enlil item belonging to the Document group to the requestor's email."
+  },
+  "REQ-3820": {
+    "field1": "UN-130",
+    "REQ #": "REQ-3820",
+    "Module": "LHR",
+    "Sub-Module": "Parts used in LHR",
+    "Requirement": "The system shall display a list of Released parts for LHR"
+  },
+  "REQ-3830": {
+    "field1": "UN-0110",
+    "REQ #": "REQ-3830",
+    "Module": "Engineering Build",
+    "Sub-Module": "Parts used in EB",
+    "Requirement": "The system shall display a list of all parts for EB"
+  },
+  "REQ-3840": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-3840",
+    "Module": "Receiving",
+    "Sub-Module": "Enlil Item Lifecycle",
+    "Requirement": "A Receiving record created in the system shall follow the Record lifecycle"
+  },
+  "REQ-3850": {
+    "field1": "UN-0040",
+    "REQ #": "REQ-3850",
+    "Module": "Receiving",
+    "Sub-Module": "Receiving against a Service",
+    "Requirement": "The system shall not generate a LOT number for items received agaist a service"
+  },
+  "REQ-3860": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-3860",
+    "Module": "Purchase Order",
+    "Sub-Module": "PO Preview",
+    "Requirement": "The system shall allow the user to preview the PO"
+  },
+  "REQ-3870": {
+    "field1": "UN-0030",
+    "REQ #": "REQ-3870",
+    "Module": "Purchase Order",
+    "Sub-Module": "Releasing PO",
+    "Requirement": "The system shall release the PO in numeric stage"
+  },
+  "REQ-3880": {
+    "field1": "UN-0160",
+    "REQ #": "REQ-3880",
+    "Module": "Export pdf",
+    "Sub-Module": "Exporting Record",
+    "Requirement": "The system shall attach the AR as a separate PDF while exporting a printable version including all attachments, of the supported Enlil item belonging to the Record group"
   }
 }
