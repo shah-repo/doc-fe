@@ -68,8 +68,7 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
 
     function removeLock() {
       if (fileUploadEl?.nodeValue?.length) { return; }
-      const lockData = formState?.locked.get(name || "");
-      formState?.expireLockedFields(lockData);
+      formState?.unlockField(name);
     }
 
     return Component({
