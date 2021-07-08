@@ -52,6 +52,181 @@ context("PO test", () => {
                 category: "Parts",
                 isQms: true,
               },
+              {
+                documentTypeName: "Purchase Order test",
+                documentTypeAcronym: "POT-",
+                group: "PO",
+                category: "Purchase Order",
+                isQms: true,
+                privateNumberPool: true,
+                needsSignature: true,
+                fieldsConfig: {
+                  C: {
+                    visible: false,
+                    required: false,
+                  },
+                  D: {
+                    label: "Description",
+                    visible: true,
+                    required: false,
+                  },
+                  E: {
+                    visible: false,
+                    required: true,
+                  },
+                  F: {
+                    visible: false,
+                    required: true,
+                  },
+                  G: {
+                    visible: false,
+                    required: false,
+                  },
+                  I: {
+                    label: "Revise PO",
+                    visible: true,
+                  },
+                  J: {
+                    visible: false,
+                  },
+                  K: {
+                    label: "Cancel PO",
+                    visible: true,
+                  },
+                  L: {
+                    label: "Correct PO",
+                    visible: true,
+                  },
+                  M: {
+                    label: "Type of Change",
+                    visible: true,
+                    required: true,
+                  },
+                  N: {
+                    label: "Add Approvers",
+                    visible: false,
+                    required: false,
+                  },
+                  O: {
+                    label: "PO History",
+                    visible: true,
+                  },
+                  R: {
+                    visible: false,
+                  },
+                  S: {
+                    label: "Revise PO",
+                    visible: true,
+                  },
+                  V: {
+                    label: "Create PO",
+                    visible: true,
+                  },
+                  A1: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                  A2: {
+                    label: "Void",
+                    visible: true,
+                  },
+                  A3: {
+                    label: "History",
+                    visible: true,
+                  },
+                  A4: {
+                    visible: false,
+                  },
+                  A5: {
+                    label: "Pending Approval",
+                    visible: true,
+                  },
+                  A6: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                  P1: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                  P2: {
+                    label: "Void",
+                    visible: true,
+                  },
+                  P3: {
+                    label: "History",
+                    visible: true,
+                  },
+                  P4: {
+                    visible: false,
+                  },
+                  P5: {
+                    label: "Pending Approval",
+                    visible: true,
+                  },
+                  P6: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                },
+                schema: [
+                  {
+                    name: "po-status-built-in",
+                    type: "select",
+                    index: 0,
+                    label: "PO Status",
+                    options: [
+                      {
+                        text: "Open",
+                        value: "Open",
+                      },
+                      {
+                        text: "Closed",
+                        value: "Closed",
+                      },
+                      {
+                        text: "Cancelled",
+                        value: "Cancelled",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "PO Status",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-supplier-built-in",
+                    type: "supplier",
+                    index: 1,
+                    label: "Supplier ",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "Supplier",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-items-built-in",
+                    type: "purchaseorder",
+                    index: 2,
+                    label: "Purchase Order",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Purchase Order",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                ],
+              },
             ],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
@@ -163,43 +338,11 @@ context("PO test", () => {
     });
 
     it("Click on 'Purchase Order' outputdocument type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
+      cy.drSelectOutputDocumentType({ documentType: "Purchase Order test" });
     });
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Click 'Add New Field'", () => {
-      cy.fbAddNewFieldWhenHidden();
-    });
-
-    it("Select 'Purchase Order' from list", () => {
-      cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
-    });
-
-    it("Fill label field with 'New Purchase Order with Product item'", () => {
-      cy.fbEnterPOLabelName({ name: "New Purchase Order with Product item" });
-    });
-
-    it("Click 'Add' to finish adding new field", () => {
-      cy.fbAddNewFieldButton();
-    });
-
-    it("Click 'Add New Field'", () => {
-      cy.fbAddNewFieldWhenHidden();
-    });
-
-    it("Add supplier form builder field", () => {
-      cy.fbSelectCustomFieldToAdd({ name: "Supplier" });
-    });
-
-    it("Fill label field with 'Supplier'", () => {
-      cy.fbEnterLabel({ label: "Supplier" });
-    });
-
-    it("Click 'Add' to finish adding new field", () => {
-      cy.fbAddNewFieldButton();
     });
 
     it("Click create document after filling document", () => {
@@ -324,13 +467,13 @@ context("PO test", () => {
 
     it("Click on 'Create PO' button", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.poClickCreatePO();
+        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
       });
     });
 
-    it("Check for PO ID uniqueness - ID should be PO-00001", () => {
+    it("Check for PO ID uniqueness - ID should be POT-00001", () => {
       SystemRequirement("REQ-1270");
-      cy.poCheckStatus( "PO-00001" );
+      cy.poCheckStatus( "POT-00001" );
     });
 
     it("Click on 'Purchase Order' on sidebar", () => {
@@ -339,7 +482,7 @@ context("PO test", () => {
 
     it("Click on existing PO that was created before", () => {
       SystemRequirement("REQ-1370", "REQ-1210");
-      cy.poClickOnSpecificPOFromList({ item: "PO-00001" });
+      cy.poClickOnSpecificPOFromList({ item: "POT-00001" });
     });
 
     it("Check status of PO should be Draft", () => {
@@ -353,6 +496,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button", () => {
+      SystemRequirement("REQ-1360");
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.poAddNewFieldItem();
       });
@@ -403,6 +547,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button to add item without Part Number", () => {
+      SystemRequirement("REQ-1360");
       cy.get("[data-cy=\"fb-control-btn\"]").last().click();
     });
 
@@ -508,6 +653,14 @@ context("PO test", () => {
         cy.drEnterDocumentDescription({ description: "New Purchase Order" });
       });
 
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Open' for PO status", () => {
+        cy.poSelectPOStatus({ status: "Open" });
+      });
+
       it("Save PO document", () => {
         SystemRequirement("REQ-1290");
         cy.wrapWithWaitOnApiCalls(
@@ -526,6 +679,7 @@ context("PO test", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
+        SystemRequirement("REQ-1490");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
@@ -535,7 +689,7 @@ context("PO test", () => {
         cy.get("[data-cy=\"form.builder.request.approve\"]").click();
         cy.get("input[name=\"password\"]").type("Tester1!");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
-          CyRoutes.EmployeesGet], () => {
+          CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
       });
@@ -549,13 +703,13 @@ context("PO test", () => {
 
     it("Click on 'Create PO' button", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.poClickCreatePO();
+        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
       });
     });
 
-    it("Check for PO ID uniqueness - ID should be PO-00002", () => {
+    it("Check for PO ID uniqueness - ID should be POT-00002", () => {
       SystemRequirement("REQ-1270");
-      cy.poCheckStatus( "PO-00002" );
+      cy.poCheckStatus( "POT-00002" );
     });
 
     it("Check status of PO should be Draft", () => {
@@ -564,6 +718,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button", () => {
+      SystemRequirement("REQ-1360");
       cy.poAddNewFieldItem();
     });
 
@@ -625,7 +780,7 @@ context("PO test", () => {
     });
 
     it("Select Supplier", () => {
-      cy.get("[data-cy^=\"supplier-\"]").type("SUP-00004{downarrow}{enter}");
+      cy.get("[data-cy=\"po-supplier-built-in\"]").type("SUP-00004{downarrow}{enter}");
     });
 
     it("Check currency options dropdown", () => {
@@ -669,6 +824,14 @@ context("PO test", () => {
       cy.drEnterDocumentDescription({ description: "New Purchase Order with Service item" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Closed' for PO status", () => {
+      cy.poSelectPOStatus({ status: "Closed" });
+    });
+
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
@@ -690,13 +853,18 @@ context("PO test", () => {
       cy.get("[data-cy=\"form.builder.request.approve\"]").click();
       cy.get("input[name=\"password\"]").type("Tester1!");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
-        CyRoutes.EmployeesGet], () => {
+        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
     });
   });
 
   context("Creates second PO form document and checks if both documents are available when creating new PO", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -718,23 +886,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Purchase Order' outputdocument type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
-    });
-
-    it("Click 'Add New Field'", () => {
-      cy.fbAddNewFieldWhenHidden();
-    });
-
-    it("Select 'Purchase Order' from list", () => {
-      cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
-    });
-
-    it("Fill label field with 'New Purchase Order with Product item'", () => {
-      cy.fbEnterPOLabelName({ name: "New Purchase Order with Product item" });
-    });
-
-    it("Click 'Add' to finish adding new field", () => {
-      cy.fbAddNewFieldButton();
+      cy.drSelectOutputDocumentType({ documentType: "Purchase Order test" });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -761,7 +913,10 @@ context("PO test", () => {
 
     it("Check if two options are available when two forms with PO exist", () => {
       SystemRequirement("REQ-1260");
-      cy.poCheckIfFormPopUpIsActive("New Purchase Order Form", "New Purchase Order Form 2");
+      cy.poCheckIfFormPopUpIsActive({
+        type: "Purchase Order test",
+        list: ["New Purchase Order Form", "New Purchase Order Form 2"],
+      });
     });
 
     it("Close dialog box", () => {
@@ -772,7 +927,7 @@ context("PO test", () => {
   context("Check for Landing page columns and values", () => {
     it("Check if most recent added item is fist on list", () => {
       SystemRequirement("REQ-1180");
-      cy.filterGetFirstValueFromList({ value: "PO-00002" });
+      cy.filterGetFirstValueFromList({ value: "POT-00002" });
     });
 
     it("Check for Landing page default columns", () => {
@@ -787,17 +942,17 @@ context("PO test", () => {
   });
 
   context("Test the filter inside PO", () => {
-    it("Enter version number 'A' inside filter", () => {
+    it("Enter version number '1' inside filter", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-        cy.filterPOVersion({ version: "A" });
+        cy.filterPOVersion({ version: "1" });
       });
     });
 
     it("Check if item with right version is displayed", () => {
-      cy.poCheckForSpecificPOItemValue({ itemValue: "A" });
+      cy.poCheckForSpecificPOItemValue({ itemValue: "1" });
     });
 
-    it("Check if number of displayed filtered items is '2", () => {
+    it("Check if number of displayed filtered items is '2'", () => {
       SystemRequirement("REQ-1200");
       cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "2" });
     });
@@ -812,9 +967,14 @@ context("PO test", () => {
     it("Enter all fields to check if all filter fields are working", () => {
       SystemRequirement("REQ-1150");
       cy.filterPO({
-        docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
-        partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
+        docId: "POT-00001", version: "1", poStatus: "Open", supplier: "Supplier",
+        partNumber: "PRT-00004 - 1", amount: "51.95", owner: USERS[1].name, issueDate: "N/A",
       }).wait(2000);
+    });
+
+    it("Check if number of displayed filtered items is '1'", () => {
+      SystemRequirement("REQ-1200");
+      cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "1" });
     });
 
     it("Navigate to Document List", () => {
@@ -828,8 +988,8 @@ context("PO test", () => {
     it("Check if all filter values persist after changing landing page", () => {
       SystemRequirement("REQ-1170");
       cy.filterCheckIfPOFilterPersists({
-        docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
-        partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
+        docId: "POT-00001", version: "1", poStatus: "Open", supplier: "Supplier",
+        partNumber: "PRT-00004 - 1", amount: "51.95", owner: USERS[1].name, issueDate: "N/A",
       });
     });
 

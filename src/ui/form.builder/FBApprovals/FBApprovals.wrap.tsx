@@ -107,13 +107,18 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     // On transition
     React.useEffect(() => reaction(
       () => approvalsState?.transitionApi.data,
-      (data) => concatApprovals(data)
+      (data) => {
+        concatApprovals(data);
+        if (data?.status === DocumentStatus.Draft) {
+          window.location.reload();
+        }
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     function concatApprovals(approval?: FBInlineApprovalBody) {
       if (!approval) { return; }
-      if (approval.status === "REJECTED" || approval.status === "APPROVED" || approval.status === "DRAFT") {
+      if (approval.status === "REJECTED" || approval.status === "APPROVED") {
         window.location.reload();
       } else {
         const stateApprovals = filter(approvalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);

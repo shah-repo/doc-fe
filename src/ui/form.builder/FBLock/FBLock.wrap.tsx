@@ -1,4 +1,4 @@
-import _, { assign, map, reduce } from "lodash";
+import { assign, first, keys, map, reduce } from "lodash";
 import React, { useEffect } from "react";
 import { FB } from "..";
 import { SM, SMStore, SMUrl } from "../../../App";
@@ -21,6 +21,7 @@ export const withFBLock = <T extends FBLockProps>(
       SMStore.get<FBLockBody, null>({
         url: lockedFieldsUrl,
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // MARK: @reactions
@@ -40,7 +41,8 @@ export const withFBLock = <T extends FBLockProps>(
       const dataArray = Array.from(data.values());
       const fields = map(dataArray, "fields");
       const records = reduce(fields, (record: Record<string, any>, field) => {
-        map(_.first(map(field, "formInput")), (t) => {
+        map(first(map(field, "formInput")), (t, index) => {
+          setExpired(first(keys(t)), dataArray[index].expiresAt);
           assign(record, t);
         });
         return record;
@@ -53,6 +55,21 @@ export const withFBLock = <T extends FBLockProps>(
           locked,
         });
       });
+    }
+
+    function setExpired(fieldName?: string, expiresAt?: string) {
+      if (!fieldName) { return; }
+      if (!expiresAt) { return; }
+      const expireTime = new Date(expiresAt).getTime();
+      const currentTime = new Date().getTime();
+      const milliSeconds = expireTime - currentTime;
+      setTimeout(() => {
+        if (!formState?.locked.get(fieldName)) { return; }
+        formState?.locked.set(fieldName, {
+          ...formState.locked.get(fieldName),
+          locked: false,
+        });
+      }, milliSeconds);
     }
 
     // MARK: @methods

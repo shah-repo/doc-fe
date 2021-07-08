@@ -4,8 +4,8 @@ import { FBCheckboxGroupProps, FBInput } from "..";
 import { withFBCheckboxGroup } from "./FBCheckboxGroup.wrap";
 
 const FBCheckboxGroupComp: React.FunctionComponent<FBCheckboxGroupProps> = ({
-  row, controls,
-}) => <FormGroup {...{ row }}>
+  row, controls, name,
+}) => <FormGroup {...{ row, name }}>
   {controls}
 </FormGroup>;
 

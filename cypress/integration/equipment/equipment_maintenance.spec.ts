@@ -8,6 +8,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
@@ -383,6 +384,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Click 'ADD NEW EQUIPMENT'", () => {
+      SystemRequirement("REQ-2880");
       cy.equipClickCreateNew();
     });
 
@@ -507,6 +509,7 @@ context("Equipment maintenance test", () => {
         });
 
         it("Select 'Equipment maintenance document'", () => {
+          SystemRequirement("REQ-2870");
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
             cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
           });
@@ -525,6 +528,10 @@ context("Equipment maintenance test", () => {
           cy.visit(newPMUrl);
         });
       });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Enter title 'Preventative maintenance document'", () => {
@@ -560,13 +567,12 @@ context("Equipment maintenance test", () => {
     });
 
     it("Create 'Preventative maintenance document'", () => {
+      SystemRequirement("REQ-2890");
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
     });
 
     it("Add an Approval'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
-      });
+      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
     });
 
     it("Submit for approval", () => {
@@ -625,6 +631,10 @@ context("Equipment maintenance test", () => {
       });
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Enter title 'Calibration document'", () => {
       cy.drEnterDocumentTitle({ name: "Calibration document" });
     });
@@ -663,9 +673,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
-      });
+      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
     });
 
     it("Submit for approval", () => {

@@ -1,15 +1,13 @@
-[{
+[
+  {
     "type": "stepsection",
     "label": "form.builder.stepsection",
     "stepIndex": 0
-  }, {
+  },
+  {
     "type": "paragraph",
     "paragraph": "Type description here...",
     "name": "fb-teststep-paragraph-${id}"
-  }, {
-    "type": "testRequirement",
-    "label": "form.builder.testRequirement",
-    "name": "fb-teststep-testRequirement-${id}"
   },
   {
     "type": "instructionsmediaupload",

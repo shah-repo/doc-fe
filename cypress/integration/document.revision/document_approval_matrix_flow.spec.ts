@@ -322,7 +322,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Save Approval Matrix Item", () => {
-      SystemRequirement("REQ-0630", "REQ-0650");
+      SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
       });
@@ -599,12 +599,12 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`Mark 'Approvals Administrative' for ${individualRole}`, () => {
-      SystemRequirement("REQ-0660");
+      SystemRequirement("REQ-0660", "REQ-0670");
       cy.drAMCheckRole({ stage: "admStage", index: 2 });
     });
 
     it("Save Approval Matrix Item", () => {
-      SystemRequirement("REQ-0630", "REQ-0650");
+      SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
 
       cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
     });
@@ -682,6 +682,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
+      SystemRequirement("REQ-4220", "REQ-4270");
       cy.drReleaseDocAfterRoleExistsAndChecked({ group: 0, role: roleOne });
     });
   });
@@ -706,6 +707,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`Enforce user rule, Add ${INDIVIDUAL_USER.name} to approvers`, () => {
+      SystemRequirement("REQ-4270");
       cy.drAddApprover({ name: INDIVIDUAL_USER.name });
     });
 

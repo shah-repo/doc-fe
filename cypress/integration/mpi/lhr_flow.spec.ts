@@ -118,10 +118,10 @@ context("LHR flow", () => {
                   C: {
                     visible: false,
                   },
-                  E: {
+                  D: {
                     visible: false,
                   },
-                  D: {
+                  E: {
                     visible: false,
                   },
                   U: {
@@ -155,9 +155,23 @@ context("LHR flow", () => {
                     applicableValidationSchema: true,
                   },
                   {
+                    name: "lhr-end-quantity",
+                    type: "quantity",
+                    index: 2,
+                    label: "End Quantity",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    outputDisabled: true,
+                    validationAttribute: "End Quantity",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
                     name: "lhr-build-type",
                     type: "radiogroup",
-                    index: 2,
+                    index: 3,
                     label: "Build Type",
                     options: [
                       {
@@ -181,7 +195,7 @@ context("LHR flow", () => {
                   {
                     name: "lhr-due-date",
                     type: "datepicker",
-                    index: 3,
+                    index: 4,
                     label: "Due Date",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
@@ -191,18 +205,10 @@ context("LHR flow", () => {
                     applicableValidationSchema: true,
                   },
                   {
-                    name: "fb-lhrstep-section-built-in",
-                    type: "stepsection",
-                    index: 4,
-                    label: "form.builder.step",
-                    stepIndex: 1,
-                    deleteDisabled: true,
-                    deleteInFormDisabled: true,
-                  },
-                  {
                     name: "lhrstep-built-in",
                     type: "lhrstep",
                     index: 5,
+                    label: "LHR Step",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -237,9 +243,51 @@ context("LHR flow", () => {
                     applicableValidationSchema: true,
                   },
                   {
+                    name: "lhrs-start-quantity",
+                    type: "quantity",
+                    index: 2,
+                    label: "Start quantity",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    editorProperties: [],
+                    validationAttribute: "Start quantity",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "lhrs-accepted-quantity",
+                    type: "quantity",
+                    index: 3,
+                    label: "Accepted quantity",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    editorProperties: [],
+                    validationAttribute: "Accepted quantity",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "lhrs-rejected-quantity",
+                    type: "quantity",
+                    index: 4,
+                    label: "Rejected quantity",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    editorProperties: [],
+                    validationAttribute: "Rejected quantity",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
                     name: "approvals-built-in",
                     type: "approvals",
-                    index: 2,
+                    index: 5,
                     label: "Approvals",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
@@ -662,9 +710,60 @@ context("LHR flow", () => {
                 },
               },
               {
+                name: "lhrs-start-quantity",
+                type: "quantity",
+                index: 2,
+                label: "Start quantity",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                editorProperties: [
+                  "includeNotes",
+                ],
+                validationAttribute: "Start quantity",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+                includeNotes: true,
+              },
+              {
+                name: "lhrs-accepted-quantity",
+                type: "quantity",
+                index: 3,
+                label: "Accepted quantity",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                editorProperties: [
+                  "includeNotes",
+                ],
+                validationAttribute: "Accepted quantity",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+                includeNotes: true,
+              },
+              {
+                name: "lhrs-rejected-quantity",
+                type: "quantity",
+                index: 4,
+                label: "Rejected quantity",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                editorProperties: [
+                  "includeNotes",
+                ],
+                validationAttribute: "Rejected quantity",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+                includeNotes: true,
+              },
+              {
                 name: "approvals-built-in",
                 type: "approvals",
-                index: 2,
+                index: 5,
                 label: "Approvals",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -775,14 +874,11 @@ context("LHR flow", () => {
         });
 
         it("Add 'Material one' to step #1", () => {
-          cy.mpiAddMaterialToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
+          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
         });
 
         it("Add 'Material three' to step #1", () => {
-          cy.mpiAddMaterialToStep({
-            checkParameter: true, numbOfStep: 1,
-            material: "Material three", quntity: "3", unit: "Each",
-          });
+          cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material three" });
         });
 
 
@@ -805,7 +901,7 @@ context("LHR flow", () => {
         });
 
         it("Add 'Material two' to step #2", () => {
-          cy.mpiAddMaterialToStep({ numbOfStep: 2, material: "Material two", quntity: "5", unit: "Days" });
+          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 2, material: "Material two", quntity: "5", unit: "Day(s)" });
         });
 
         it("Add 'Equipment two' to step #2", () => {
@@ -821,7 +917,9 @@ context("LHR flow", () => {
         });
 
         it("Approve and release MPI document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
+            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          });
         });
       });
     });
@@ -830,6 +928,7 @@ context("LHR flow", () => {
   context("Create LHRt document", () => {
     context("Start document creation flow", () => {
       it("Navigate to Document list", () => {
+        cy.unClick();
         cy.navigToDocumentList();
       });
 
@@ -864,7 +963,7 @@ context("LHR flow", () => {
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get("[data-cy=\"lhr-selected-part\"]").click();
+        cy.get("[data-cy=\"lhr-selected-part\"]").type("Part document");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
           cy.get("ul[role=listbox]>li").contains("Part document").click();
         });
@@ -922,7 +1021,7 @@ context("LHR flow", () => {
           cy.get("ul[role=listbox]>li").contains("Material three").click();
           cy.get("[name=\"quantity\"]").type("3");
           cy.get("[data-cy=\"unit\"]").click();
-          cy.get("ul[role=listbox]>li").contains("Days").click();
+          cy.get("ul[role=listbox]>li").contains("Day(s)").click();
           cy.get("[data-cy=\"form.builder.save\"]").click();
         });
 
@@ -997,6 +1096,22 @@ context("LHR flow", () => {
           cy.wait(500);
         });
 
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
+
+        it("Enter 'Start quntity' for LHRs #1", () => {
+          cy.get("[name=\"lhrs-start-quantity\"]").type("10");
+        });
+
+        it("Enter 'Accepted quntity' for LHRs #1", () => {
+          cy.get("[name=\"lhrs-accepted-quantity\"]").type("8");
+        });
+
+        it("Enter 'Rejected quntity' for LHRs #1", () => {
+          cy.get("[name=\"lhrs-rejected-quantity\"]").type("2");
+        });
+
         it("Add an Approval", () => {
           cy.get("[data-cy^=\"fb-approvals-approvals\"]").click();
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
@@ -1030,10 +1145,10 @@ context("LHR flow", () => {
           it("Check materials step #1", () => {
             cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
               .eq(0)
-              .should("have.text", "MT-00004 - Material one - rev 1 | Qty: 3 each");
+              .should("have.text", "MT-00004 - Material one - rev 1 | Qty: 30 each");
             cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
               .eq(1)
-              .should("have.text", "MT-00007 - Material three - rev 1 | Qty: 3 days");
+              .should("have.text", "MT-00007 - Material three - rev 1 | Qty: 30 days");
           });
 
           it("Check equipment step #1", () => {
@@ -1054,7 +1169,7 @@ context("LHR flow", () => {
           it("Check materials step #2", () => {
             cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
               .eq(2)
-              .should("have.text", "MT-00006 - Material two - rev 1 | Qty: 5 days");
+              .should("have.text", "MT-00006 - Material two - rev 1 | Qty: 50 days");
           });
 
           it("Check equipment step #2", () => {
@@ -1091,18 +1206,6 @@ context("LHR flow", () => {
       it("Verify Owner is required approver on LHR", () => {
         cy.get("[data-cy=\"fb-approvals-Giovanni Reynolds (enlil.testmail+cy1@gmail.com)-check-disabled\"]")
           .should("exist");
-      });
-
-      it("Enter 'Start quntity' for LHRs #1", () => {
-        cy.get("[data-cy=\"fb-lhrs-start-quantity-lhrstep-built-in\"]").type("10");
-      });
-
-      it("Enter 'Accepted quntity' for LHRs #1", () => {
-        cy.get("[data-cy=\"fb-lhrs-accepted-quantity-lhrstep-built-in\"]").type("8");
-      });
-
-      it("Enter 'Rejected quntity' for LHRs #1", () => {
-        cy.get("[data-cy=\"fb-lhrs-rejected-quantity-lhrstep-built-in\"]").type("2");
       });
 
       it("Select 'Production' build type", () => {
@@ -1142,6 +1245,22 @@ context("LHR flow", () => {
         cy.wait(500);
       });
 
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Enter 'Start quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-start-quantity\"]").type("8");
+      });
+
+      it("Enter 'Accepted quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-accepted-quantity\"]").type("5");
+      });
+
+      it("Enter 'Rejected quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-rejected-quantity\"]").type("3");
+      });
+
       it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-approvals-approvals\"]").click();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
@@ -1177,10 +1296,10 @@ context("LHR flow", () => {
         it("Check materials of step #1 in LHRs #2", () => {
           cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
             .eq(0)
-            .should("have.text", "MT-00004 - Material one - rev 1 | Qty: 1 sets");
+            .should("have.text", "MT-00004 - Material one - rev 1 | Qty: 8 sets");
           cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
             .eq(1)
-            .should("have.text", "MT-00006 - Material two - rev 1 | Qty: 2 boxes");
+            .should("have.text", "MT-00006 - Material two - rev 1 | Qty: 16 boxes");
         });
 
         it("Check equipment of step #1 in LHRs #2", () => {
@@ -1227,16 +1346,8 @@ context("LHR flow", () => {
           });
       });
 
-      it("Enter 'Start quntity' for LHRs #2", () => {
-        cy.get("[name^=\"fb-lhrs-start-quantity-lhr-step\"]").type("8");
-      });
-
-      it("Enter 'Accepted quntity' for LHRs #2", () => {
-        cy.get("[name^=\"fb-lhrs-accepted-quantity-lhr-step\"]").type("5");
-      });
-
-      it("Enter 'Rejected quntity' for LHRs #2", () => {
-        cy.get("[name^=\"fb-lhrs-rejected-quantity-lhr-step\"]").type("3");
+      it("Verify end quantity", () => {
+        cy.get("[name=\"lhr-end-quantity\"]").should("have.attr", "value", "5");
       });
 
       it("Click save document", () => {

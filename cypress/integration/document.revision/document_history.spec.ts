@@ -282,15 +282,20 @@ context("Check Document History", () => {
 
   context("Edit permissions", () => {
     it("Open permissions tab", () => {
+      SystemRequirement("REQ-4240");
       cy.drSelectPermissionTab();
     });
 
     it("Add another user permission", () => {
-      cy.drAddUserFromPermissionTab(sharedUserTwo.name);
+      SystemRequirement("REQ-4240");
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+        cy.drAddUserFromPermissionTab(sharedUserTwo.name);
+      });
     });
 
     it("Add another group permission", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocSecurity, () => {
+      SystemRequirement("REQ-4240");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
         cy.drAddGroupFromPermissionTab(groupTwo);
       });
     });
@@ -331,13 +336,14 @@ context("Check Document History", () => {
 
   context("Approve and Release document", () => {
     it("Approves and releases document", () => {
+      SystemRequirement("REQ-4020", "REQ-4040");
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
   context("Check document history", () => {
-    it("Open history drawer", () => {
-      SystemRequirement("REQ-0360", "REQ-2670");
+    it("Open history drawer and compare history values", () => {
+      SystemRequirement("REQ-0360", "REQ-2670", "REQ-4000", "REQ-4250");
       cy.drSelectHistoryTab();
     });
 
