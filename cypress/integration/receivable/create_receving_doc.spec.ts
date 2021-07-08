@@ -7,6 +7,7 @@ import { PurchaseOrderItem } from "../../support/commands/purchase.order/command
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
@@ -655,14 +656,14 @@ context("Create receivable test", () => {
 
       context("Check for search and selecting PO", () => {
         it("Search for API PO document and select it", () => {
-          // SystemRequirement("REQ-1800");
+          SystemRequirement("REQ-1800");
           cy.recSelectPo({ poTitle: "API PO document 2" });
         });
       });
 
       context("Check selected PO is loaded and displayed in receivable", () => {
         it("Verify PO 'API PO document 2' is displayed", () => {
-          // SystemRequirement("REQ-1810");
+          SystemRequirement("REQ-1810");
           const poItems: PurchaseOrderItem[] = [{
             index: 1,
             partNumber: "",
@@ -689,7 +690,7 @@ context("Create receivable test", () => {
 
       context("Verify receivable creation", () => {
         it("Verify adding attachments", () => {
-          // SystemRequirement("REQ-1980");
+          SystemRequirement("REQ-1980");
           cy.atchUploadAttachment({ fileName: "test.docx" });
         });
 
@@ -704,12 +705,12 @@ context("Create receivable test", () => {
         });
 
         it("Verify receivable status is 'Draft'", () => {
-          // SystemRequirement("REQ-1870");
+          SystemRequirement("REQ-1870");
           cy.drCheckDocumentStatus({ status: "Draft" });
         });
 
         it("Verify owner change", () => {
-          // SystemRequirement("REQ-1990");
+          SystemRequirement("REQ-1990");
           cy.drChangeOwnerFromMenu({ employee: SECOND_USER.name });
         });
       });
@@ -741,6 +742,7 @@ context("Create receivable test", () => {
         });
 
         it("Click 'Approve' button", () => {
+          SystemRequirement("REQ-1860");
           cy.get("[data-cy=\"form.builder.request.approve\"]").click();
           cy.get("input[name=\"password\"]").type("Tester1!");
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
