@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import { Formik } from "formik";
 import { find, isEmpty, isNull, omitBy } from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
 import { documentTypeActions, documentTypeSelectors } from "../../../../../state/ducks/documentRevisions/documentType";
@@ -87,7 +87,7 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
     setBase(value);
   };
 
-  const generateInitialValues = () => {
+  const generateInitialValues = useMemo(() => {
     // Hack because enableReinitialize overrides chosen value
     const changeDocumentFormInitialValue = { changeDocumentForm: base };
 
@@ -99,9 +99,10 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
       ...changeDocumentFormInitialValue,
       ...toFieldInitialValues(template, sourceSchema),
     };
-  };
+  }, [base, sourceSchema, template]);
 
   useEffect(() => {
+    if (!documentTypeId) { return; }
     // Fetching available forms for migration
     async.start(getDocRevByIds, documentTypeId, async);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,7 +112,7 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
     <Box display="flex">
       <FormContext.Provider value={{ submitOnChange: false }}>
         <Formik
-          initialValues={generateInitialValues()}
+          initialValues={generateInitialValues}
           onSubmit={onSubmit}
           enableReinitialize
         >

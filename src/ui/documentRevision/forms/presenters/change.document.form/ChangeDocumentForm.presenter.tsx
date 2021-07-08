@@ -48,7 +48,7 @@ const ChangeDocumentFormPresenter: React.FunctionComponent<Props> = ({
             id: "changeDocumentForm",
           }}
           options={toFormOptions(availableForms)}
-          onChange={(option) => handleFormChange(option)}
+          onChange={handleFormChange}
         />
       </Box>
       {!isEmpty(availableFields) && <Divider/>}

@@ -1,10 +1,7 @@
 import { CircularProgress } from "@material-ui/core";
 import * as React from "react";
-import { AsyncState, AsyncStatus } from "../../../state/types";
-
-export interface FormProgressProps {
-  asyncState: AsyncState;
-}
+import { AsyncStatus } from "../../../state/types";
+import { FormProgressProps } from "./FormProgress";
 
 type Props = FormProgressProps;
 

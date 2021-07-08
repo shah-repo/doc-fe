@@ -83,7 +83,7 @@ DocumentRevisionManagerContainerProps
   const selectedDocument = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
   const currentUserEmail = useSelector(authSelectors.currentUserEmail);
-
+  const { formDocument } = selectedDocument || {};
   const groupOptions = selectedDocument?.document?.documentType?.groupOptions;
   const docRevsWithoutCanceled = useMemo(() => documentRevisions.filter((docrev) =>
     docrev.status !== DocumentRevisionStatus.Canceled), [documentRevisions]);
@@ -207,8 +207,8 @@ DocumentRevisionManagerContainerProps
         component: showFormMigration ? <ChangeDocumentFormContainer
           docRevId={documentRevisionId || ""}
           documentTypeId={documentTypeId}
-          sourceSchema={selectedDocument?.formDocument?.formTemplate?.schema || []}
-          sourceFormId={selectedDocument?.formDocument?.id || ""}
+          sourceSchema={formDocument?.formTemplate?.schema || []}
+          sourceFormId={formDocument?.id || ""}
         /> : null,
       },
     },
