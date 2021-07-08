@@ -1,4 +1,4 @@
-import codes from "./../../cache/generated.json";
+import codes from "../../requirements/cache/generated.json";
 import { addTestContext } from "./addTestContext";
 
 const requirementIds = Object.keys(codes);

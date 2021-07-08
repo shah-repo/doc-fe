@@ -236,17 +236,6 @@ context.skip("Autosave on add and edit FB fields", () => {
       });
     });
 
-    it("Add Instructions 'Select Requirement(s)'", () => {
-      cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Select Requirement" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-select-req" });
-      cy.get("[data-cy=\"options\"]")
-        .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
-        cy.fbAddNewFieldButton();
-      });
-    });
-
     it("Add Actions 'Action Button'", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Action Button" });
@@ -368,14 +357,6 @@ context.skip("Autosave on add and edit FB fields", () => {
       });
     });
 
-    it("Edit 'Select Requirement(s)'", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-select-req" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-select-req1" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
-        cy.fbAddNewFieldButton();
-      });
-    });
-
     it("Edit 'Action Button'", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "Send Email" });
       cy.fbSelectCheckboxValue("SendSurveyEmailWithFormToFill");
@@ -445,10 +426,6 @@ context.skip("Autosave on add and edit FB fields", () => {
 
     it("Verify Instructions 'Select Document(s)'", () => {
       cy.contains("fb-select-doc1").should("exist");
-    });
-
-    it("Verify Instructions 'Select Requirement(s)'", () => {
-      cy.contains("fb-select-req1").should("exist");
     });
 
     it("Verify Actions 'Action Button'", () => {

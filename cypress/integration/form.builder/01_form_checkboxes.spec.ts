@@ -579,27 +579,6 @@ context("Checkboxes test", () => {
         cy.fbMouseOverByLabel({ label: "sd-wo-ch" } );
       });
 
-      it("Add Instructions 'Select Requirement(s)' with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Select Requirement" });
-        cy.fbEnterNameValue({ name: "label", value: "sr-wi-ch" });
-        cy.get("[data-cy=\"options\"]")
-          .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "sr-wi-ch" } );
-      });
-
-      it("Add Instructions 'Select Requirement(s)' without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Select Requirement" });
-        cy.fbEnterNameValue({ name: "label", value: "sr-wo-ch" });
-        cy.get("[data-cy=\"options\"]")
-          .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "sr-wo-ch" } );
-      });
-
       it("Add Actions 'Action Button' with checkboxes", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Action Button" });
@@ -946,20 +925,6 @@ context("Checkboxes test", () => {
     it("Verify Select Document(s) with 'Deletion Disabled' checkbox", () => {
       cy.fbVerifyElementClassByLabel({
         label: "sd-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
-      });
-    });
-
-    it("Verify Select Requirement(s) without 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "sr-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
-      });
-    });
-
-    it("Verify Select Requirement(s) with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "sr-wi-ch", el: "remove-schema-item",
         class: "MuiSvgIcon-colorDisabled",
       });
     });
@@ -1371,18 +1336,6 @@ context("Checkboxes test", () => {
       cy.fbMouseOverByLabel({ label: "sd-wi-ch" } );
       cy.fbVerifyElementNotVisibileByLabel({ label: "sd-wi-ch", el: "edit-schema-item" });
       cy.fbVerifyElementNotVisibileByLabel({ label: "sd-wi-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Select Requirement(s) without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "sr-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "sr-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "sr-wo-ch", el: "remove-schema-item" });
-    });
-
-    it("Verify Select Requirement(s) with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "sr-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "sr-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "sr-wi-ch", el: "remove-schema-item" });
     });
   });
 });

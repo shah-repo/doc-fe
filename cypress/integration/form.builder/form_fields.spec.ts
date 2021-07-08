@@ -408,17 +408,6 @@ context("FORM Field test", () => {
         cy.fbMouseOverByLabel({ label: "fb-select-doc" } );
       });
 
-      it("Add Instructions 'Select Requirement(s)'", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Select Requirement" });
-        cy.fbEnterNameValue({ name: "label", value: "fb-select-req" });
-        cy.get("[data-cy=\"options\"]")
-          .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "fb-select-req" } );
-      });
-
       it("Add Actions 'Action Button'", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Action Button" });
@@ -671,15 +660,6 @@ context("FORM Field test", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "fb-select-doc" });
         cy.fbVerifyNameValue({ name: "label", value: "fb-select-doc" });
         cy.get("[data-cy=\"options\"]").parent().should("contain", "AR Form");
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbClickButton({ el: "dialog-close" });
-      });
-
-      it("Verify Select Requirement attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-select-req" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-select-req" });
-        cy.get("[data-cy=\"options\"]").parent().should("contain",
-          "Visual Alarm Indicator - The system shall use color as a visual indication of alarm type");
         cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbClickButton({ el: "dialog-close" });
       });
