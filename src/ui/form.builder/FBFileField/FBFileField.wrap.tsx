@@ -9,13 +9,45 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    fileFieldState,
+    onUploadClick,
     onChange,
+    fileFieldState,
     name = "",
     ...props
   }: T) => {
-    const { fileUploadState } = FB.useStores();
+    const { fileUploadState, workspaceState, formState } = FB.useStores();
+    const { id } = workspaceState || {};
     fileFieldState = FB.useRef<FBFileFieldState>(FBFileFieldState);
+
+    const fileUploadEl = document.getElementById(`fb-attachment-field-${name}`);
+
+    if (fileUploadEl) {
+      fileUploadEl.onclick = registerCancel;
+    }
+
+    function registerCancel() {
+      document.body.onfocus = removeLock;
+    }
+
+    function removeLock() {
+      if (fileUploadEl?.nodeValue?.length) { return; }
+      formState?.unlockField(name);
+    }
+
+    function handleLockField() {
+      if (!id) { return; }
+      if (!name) { return; }
+      formState?.lockFields({
+        fields: [{
+          formInput: [{
+            [name]: true,
+          }],
+        }],
+        documentRevisionId: id,
+      }, name);
+    }
+
+    onUploadClick = () => handleLockField();
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const eventFiles = get(event, "currentTarget.files", []);
@@ -45,6 +77,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
 
     return useObserver(() => Component({
       ...(props as T),
+      onUploadClick,
       onChange,
       loading: fileFieldState?.loading,
       name,
