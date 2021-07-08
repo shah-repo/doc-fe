@@ -21,11 +21,12 @@ function generateJsonFromCSVList(reqsList: RequirementsReadWriteConfig) {
       });
       const jsonObject = JSON.stringify(result, null, 2);
 
-      if (!fs.existsSync(
+      if (fs.existsSync(
         resolve(__dirname, "..", `${reqsList.outputPath}`))) {
-        fs.mkdirSync(resolve(__dirname, "..", `${reqsList.outputPath}`));
+        fs.rmdirSync((resolve(__dirname, "..", reqsList.outputPath)), { recursive: true });
       }
 
+      fs.mkdirSync(resolve(__dirname, "..", `${reqsList.outputPath}`));
       fs.writeFileSync(
         resolve(__dirname, "..", `${reqsList.outputPath}/${reqsList.outputFileName}`),
         jsonObject, utf8Encoding

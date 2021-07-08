@@ -5,17 +5,21 @@ import marge from "mochawesome-report-generator";
 import { resolve } from "path";
 import { RequirementsReadWriteConfig } from "../../requirements/configRequirementsRun";
 import { findGeneratedSpecFiles, findMainGeneratedRequirementsJsonFile } from "./helpers/findGeneratedSpecFiles";
-import { findLastGeneratedResultsJsonFolder, findLastGeneratedResultsReportsFolder } from "./helpers/findLastGeneratedResults";
+import { findInfoGeneratedJsonFile, findLastGeneratedResultsJsonFolder, findLastGeneratedResultsReportsFolder } from "./helpers/findLastGeneratedResults";
 import { findRequirementsListToProcess } from "./helpers/findRequirementsListToProcess";
 import { FilesWithData, ModuleOrSubModule, utf8Encoding } from "./helpers/typing.constants";
 
-const REGEX_TO_FIND_REQS = /([R])([E])([Q])([-])([0-9]+)/g;
+const REGEX_TO_FIND_REQS = /([R])([E])([Q])([-])([0-9]+)|([F])([B])([-])([0-9]+)/g;
 const REQUIREMENTS_LIST = findRequirementsListToProcess();
 const jsonFolderPath =  findLastGeneratedResultsJsonFolder();
 const filesWithData = findGeneratedSpecFiles(jsonFolderPath);
 const jsonGeneratedRequirements = findMainGeneratedRequirementsJsonFile(jsonFolderPath);
 
-processReportsSeparation(REQUIREMENTS_LIST, filesWithData, jsonFolderPath, jsonGeneratedRequirements);
+processReportsSeparation(
+  REQUIREMENTS_LIST,
+  filesWithData,
+  jsonFolderPath,
+  jsonGeneratedRequirements);
 
 async function processReportsSeparation(
   reqsList: RequirementsReadWriteConfig,
@@ -68,6 +72,10 @@ async function processModuleOrSubModuleRequirementsJson(
       jsonGeneratedRequirements,
       `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}/generated_reqs_${fileName}`,
       fileName);
+
+    if (!filePaths || !(filePaths.length > 1)) {
+      return;
+    }
 
     if (!fs.existsSync(
       resolve(__dirname, "../../..", `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`))) {
@@ -153,10 +161,15 @@ function connectRequirementsWithCypressGeneratedJson(
 }
 
 async function generateReport(
-  filesToJoin: string[] | undefined,
+  reqFilesToJoin: string[] | undefined,
   output: string,
   fileName: string,
   moduleOrSubModule?: ModuleOrSubModule) {
+  if (!reqFilesToJoin) {
+    return;
+  }
+  const infoFilePath = findInfoGeneratedJsonFile();
+  const filesToJoin = [infoFilePath].concat(reqFilesToJoin);
   if (filesToJoin && filesToJoin.length > 1) {
     const options = { files: filesToJoin };
     const report = await merge(options);

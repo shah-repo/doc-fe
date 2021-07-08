@@ -2,7 +2,7 @@ import fs from "fs";
 import { resolve } from "path";
 import { FilesWithData, GENERATED_REQUIREMENTS_JSON, GENERATED_SPECS_PREFIX } from "./typing.constants";
 
-const REGEX_TO_FIND_REQS = /([R])([E])([Q])([-])([0-9]+)/g;
+const REGEX_TO_FIND_REQS = /([R])([E])([Q])([-])([0-9]+)|([F])([B])([-])([0-9]+)/g;
 
 export function findGeneratedSpecFiles(jsonFolderPath) {
   const jsonFilesInLastFolder = fs.readdirSync((resolve(__dirname, "../../../..", jsonFolderPath)));
