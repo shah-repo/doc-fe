@@ -19,6 +19,21 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
     const { id } = workspaceState || {};
     fileFieldState = FB.useRef<FBFileFieldState>(FBFileFieldState);
 
+    const fileUploadEl = document.getElementById(`fb-attachment-field-${name}`);
+
+    if (fileUploadEl) {
+      fileUploadEl.onclick = registerCancel;
+    }
+
+    function registerCancel() {
+      document.body.onfocus = removeLock;
+    }
+
+    function removeLock() {
+      if (fileUploadEl?.nodeValue?.length) { return; }
+      formState?.unlockField(name);
+    }
+
     function handleLockField() {
       if (!id) { return; }
       if (!name) { return; }
