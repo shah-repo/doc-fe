@@ -965,7 +965,7 @@ context("PO test", () => {
     });
 
     it("Enter all fields to check if all filter fields are working", () => {
-      SystemRequirement("REQ-1150");
+      SystemRequirement("REQ-1150", "REQ-3870");
       cy.filterPO({
         docId: "POT-00001", version: "1", poStatus: "Open", supplier: "Supplier",
         partNumber: "PRT-00004 - 1", amount: "51.95", owner: USERS[1].name, issueDate: "N/A",
