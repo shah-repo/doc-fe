@@ -6,6 +6,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let docId;
 let loginResponse;
@@ -271,6 +272,7 @@ context("Validators tests", () => {
     });
 
     it("Fill in document type as Form", () => {
+      SystemRequirement("FB-0010");
       cy.drSelectDocumentType({ documentType: "Form" });
     });
   });
@@ -299,6 +301,7 @@ context("Validators tests", () => {
 
   context("Add 'Required' validation on 'Checkboxes'", () => {
     it("Open add field dialogue", () => {
+      SystemRequirement("FB-0020");
       cy.fbAddNewField();
     });
 
@@ -319,6 +322,7 @@ context("Validators tests", () => {
     });
 
     it(`Make 'Order' field required`, () => {
+      SystemRequirement("FB-0100");
       cy.get("[data-cy=\"fb-control-required\"]").click();
     });
 
@@ -337,6 +341,7 @@ context("Validators tests", () => {
     });
 
     it(`Give label to 'Autocomplete' as 'Required doctypes'`, () => {
+      SystemRequirement("FB-0050");
       cy.fbEnterLabel({ label: "Required doctypes" });
     });
 
@@ -349,10 +354,12 @@ context("Validators tests", () => {
     });
 
     it("Open validations", () => {
+      SystemRequirement("FB-0050");
       cy.fbOpenValidation();
     });
 
     it("Mark as 'Required If In'", () => {
+      SystemRequirement("FB-0050");
       cy.get("[data-cy=\"fb-control-required_if_in:anotherfield,[value]\"]").click();
     });
 
@@ -635,10 +642,12 @@ field is empty: Add text field`, () => {
     });
 
     it("Check returned errors are not empty", () => {
+      SystemRequirement("FB-0070");
       cy.checkToastMessageIsNotEmpty({ exists: true });
     });
 
     it("Check returned toast error message", () => {
+      SystemRequirement("FB-0070");
       cy.checkToastMessageContains({
         message: "The Order is a required field." +
         ",The Name is a required field." +
