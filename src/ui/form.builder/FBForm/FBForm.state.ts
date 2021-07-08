@@ -300,9 +300,9 @@ class FBFormState extends FBSchemaState {
     });
   };
 
-  public expireLockedFields = (lockData?: FBLockValue) => {
+  public unlockField = (fieldName?: string) => {
     if (!this.includeLocking) { return; }
-    const { fieldName } = lockData || {};
+    if (!fieldName) { return; }
     if (!fieldName) { return; }
     this.unlockQueue.push(fieldName);
     this.unlockFields();
