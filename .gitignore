@@ -28,7 +28,7 @@ jest-config/*
 .env
 *.code-workspace
 
-
+cypress/requirements/cache/*
 cypress/cache/*
 cypress/credentials/credentials.json
 cypress/credentials/gmail_token.json

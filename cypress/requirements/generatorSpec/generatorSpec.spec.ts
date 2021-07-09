@@ -53,7 +53,7 @@ tests.forEach((testCase) => {
       return;
     }
 
-    (context.value.match(/REQ-[0-9]+/gm) || []).forEach((req) => {
+    (context.value.match(/REQ-[0-9]+|FB-[0-9]+/gm) || []).forEach((req) => {
       requirementsJson[req].testCases =
         requirementsJson[req].testCases || [];
       requirementsJson[req].testCases.push({

@@ -14,7 +14,7 @@ const FBPOReceiveCreateLot: React.FunctionComponent<FBPOReceiveCreateLotProps> =
   documentTypes,
   handleDocTypeSelection,
 }) => (
-  <FBForm>
+  <FBForm workspaceMode="form">
     <FormContext.Provider value={{ submitOnChange: false }}>
       <FBTextField
         label="form.builder.field.part.number.or.service"

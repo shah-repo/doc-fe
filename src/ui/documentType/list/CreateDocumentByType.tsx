@@ -128,7 +128,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const getDocTypesByCategory = useActionCreator(documentTypeActions.getDocTypesByCategory);
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
 
-  const formIds = useSelector(documentTypeSelectors.formIds);
+  const formIds = useSelector(documentTypeSelectors.docRevTypeForms);
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypesByCategory);
   const { isVisible, label, tooltipConfig } = useCreateDocumentByTypeButton(documentTypeId);
 

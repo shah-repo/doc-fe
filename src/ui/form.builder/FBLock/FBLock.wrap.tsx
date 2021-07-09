@@ -1,4 +1,4 @@
-import { assign, first, keys, map, reduce } from "lodash";
+import { assign, first, keys, map, reduce, get } from "lodash";
 import React, { useEffect } from "react";
 import { FB } from "..";
 import { SM, SMStore, SMUrl } from "../../../App";
@@ -32,8 +32,10 @@ export const withFBLock = <T extends FBLockProps>(
 
     // MARK: @helpers
     function setLockedData(data: FBLockBody[]) {
-      formState?.locked.forEach((lockedField) => {
-        formState?.locked.set(lockedField.fieldName || "", {
+      if (!formState) { return; }
+      formState.expireLocks = {};
+      formState.locked.forEach((lockedField) => {
+        formState.locked.set(lockedField.fieldName || "", {
           ...lockedField,
           locked: false,
         });
@@ -42,7 +44,15 @@ export const withFBLock = <T extends FBLockProps>(
       const fields = map(dataArray, "fields");
       const records = reduce(fields, (record: Record<string, any>, field) => {
         map(first(map(field, "formInput")), (t, index) => {
-          setExpired(first(keys(t)), dataArray[index].expiresAt);
+          const fieldName = first(keys(t));
+          if (!fieldName) { return; }
+          const expiresAt = dataArray[index]?.expiresAt;
+          if (!expiresAt) { return; }
+          formState.expireLocks = {
+            ...formState.expireLocks,
+            [fieldName]: expiresAt,
+          };
+          setExpired(fieldName, expiresAt);
           assign(record, t);
         });
         return record;
@@ -64,7 +74,10 @@ export const withFBLock = <T extends FBLockProps>(
       const currentTime = new Date().getTime();
       const milliSeconds = expireTime - currentTime;
       setTimeout(() => {
-        if (!formState?.locked.get(fieldName)) { return; }
+        const lockedField = formState?.locked.get(fieldName);
+        const lastExpired = get(formState?.expireLocks, fieldName);
+        if (!lastExpired) { return; }
+        if (!lockedField || (new Date().getTime() < new Date(lastExpired).getTime())) { return; }
         formState?.locked.set(fieldName, {
           ...formState.locked.get(fieldName),
           locked: false,

@@ -326,4 +326,12 @@ export interface HeaderTableType {
   key: string;
 }
 
+export interface UpdateFormFieldMapping {
+  sourceId: string;
+  targetId: string;
+}
 
+export interface UpdateFormRequestBody {
+  mapping: UpdateFormFieldMapping[];
+  formToBeUsed: Id;
+}
