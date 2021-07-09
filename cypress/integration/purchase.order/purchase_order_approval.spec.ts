@@ -499,7 +499,7 @@ context("PO approval test", () => {
     });
 
     it("Check for PO notification on dashboard", () => {
-      SystemRequirement("REQ-2150");
+      SystemRequirement("REQ-2150", "REQ-3860");
       cy.arCheckDashboardPONotificationExistance({ shouldExist: true });
     });
 

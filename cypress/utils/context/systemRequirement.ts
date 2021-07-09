@@ -11,6 +11,7 @@ export const SYSTEM_REQUREMENT_TITLE = "Implements requirements";
 export function SystemRequirement(value: string, ...values: string[]) {
   const filteredValues = [value, ...values].map((v) => {
     if (!requirementIds.includes(v)) {
+      // eslint-disable-next-line no-console
       console.log({ "Not found requirement in spec": v });
     } else {
       return v;

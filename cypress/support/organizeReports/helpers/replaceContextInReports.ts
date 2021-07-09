@@ -1,4 +1,4 @@
-const REGEX_TO_FIND_REQS = /([R])([E])([Q])([-])([0-9]+)/g;
+const REGEX_TO_FIND_REQS = /([R])([E])([Q])([-])([0-9]+)|([F])([B])([-])([0-9]+)/g;
 import requirementsJson from "./../../../cache/generated.json";
 
 const REQUIREMENT_HEADER_TEXT = "Requirement";

@@ -7,7 +7,8 @@ export interface FBFile {
 export type FBFileFieldProps =
 & Pick<FBInputProps, "name" | "multiple" | "disabled" | "gutter">
 & {
-  fileFieldState?: FBFileFieldState;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => any;
+  onUploadClick?: () => void;
+  fileFieldState?: FBFileFieldState;
   loading?: boolean;
 };

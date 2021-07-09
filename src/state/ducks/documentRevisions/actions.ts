@@ -9,7 +9,7 @@ import { Group } from "../auth/types";
 import { documentsActions } from "../documents";
 import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET } from "./constants";
 import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "./documentType/types";
-import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, FinalizeAndReleaseRequest, SecurityList } from "./types";
+import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, FinalizeAndReleaseRequest, SecurityList, UpdateFormRequestBody } from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
   type: DOCUMENT_REVISION_LIST,
@@ -376,6 +376,27 @@ const exportToEmail = (
     handlers,
   });
 
+const updateForm = (
+  id: string,
+  body: UpdateFormRequestBody,
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/update_form`,
+  method: "post",
+  data: body,
+  handlers,
+});
+
+const getFormMappingTemplate = (
+  sourceFormId: string,
+  targetFormId: string,
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `/form_mapping/${sourceFormId}/${targetFormId}`,
+  method: "get",
+  handlers,
+});
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -409,4 +430,6 @@ export default {
   ownerChange,
   saveWithNoResponse,
   exportToEmail,
+  updateForm,
+  getFormMappingTemplate,
 };

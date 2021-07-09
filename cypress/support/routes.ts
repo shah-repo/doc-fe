@@ -473,7 +473,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 20 * 1000,
-      requestTimeout: 10 * 1000,
+      requestTimeout: 20 * 1000,
     },
   },
   ARPreview: {

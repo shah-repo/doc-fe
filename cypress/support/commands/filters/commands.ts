@@ -23,6 +23,8 @@ declare global {
       filterCheckNumberOfDisplayedRecords(params: { numberOfRecords: string }): Chainable<Subject>;
       filterGetFirstValueFromList(params: { value: string }): Chainable<Subject>;
       filterSupplierTitle(params: {name: string}): Chainable<Subject>;
+      filterEquip(params: {docId: string; revision: string; eqState: string;
+        title: string; owner: string; calDueDate: string; pmDueDate: string; eqStatus: string; }): Chainable<Subject>;
     }
   }
 }
@@ -65,6 +67,30 @@ Cypress.Commands.add("filterCheckIfPOFilterPersists", (params: {docId: string; v
   cy.get("[id=\"dynamicParams.precalc.issueDate\"]").should("have.value", params.issueDate);
 });
 
+Cypress.Commands.add("filterEquip", (params: {docId: string; revision: string; eqState: string;
+  title: string; owner: string; calDueDate: string; pmDueDate: string; eqStatus: string; }) => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"docId\"]").type(params.docId);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"dynamicParams.precalc.revision\"]").type(params.revision);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id$=\"select-displayStatus\"]").click();
+    cy.get("ul[role=listbox]>li").contains(params.eqState).click();
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"name\"]").type(params.title);
+  });
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"owner\"]").type(params.owner);
+  });
+  cy.get("[id=\"dynamicParams.precalc.cali_due_date\"]").type(params.calDueDate);
+  cy.get("[id=\"dynamicParams.precalc.pm_due_date\"]").type(params.pmDueDate);
+  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
+    cy.get("[id=\"dynamicParams.formInput.fb-default-eq-status\"]").type(params.eqStatus);
+  });
+});
 
 Cypress.Commands.add("filterRecords", (params: {docId: string; revision: string; state: string;
   title: string; owner: string; releasedDate: string; formId: string; }) => {

@@ -698,42 +698,89 @@ context("Equipment maintenance test", () => {
       cy.navigToEquipment();
     });
 
-    it("Verify 'EQ STATUS' is Active", () => {
-      cy.get("div.ReactVirtualized__Table__rowColumn").last().should("have.text", "Active");
-    });
+    context("Verify equipment landing page", () => {
+      it("Verify 'ID' is EQ-00001", () => {
+        SystemRequirement("REQ-2840");
+        cy.get("div[aria-rowindex=\"1\"]>div:nth-child(1)").last().should("have.text", "EQ-00001");
+      });
 
-    it("Verify 'CAL DUE DATE'", () => {
-      cy.get("div[aria-rowindex=\"1\"]>div:nth-child(6)").should("contain.text", CAL_DUE_DATE);
-    });
+      it("Verify 'REVISION' is '1'", () => {
+        SystemRequirement("REQ-2840");
+        cy.get("div[aria-rowindex=\"1\"]>div:nth-child(2)").last().should("have.text", "1");
+      });
 
-    it("Verify 'PM DUE DATE'", () => {
-      cy.get("div[aria-rowindex=\"1\"]>div:nth-child(7)").should("contain.text", PM_DUE_DATE);
-    });
+      it("Verify 'STATE' is 'Released'", () => {
+        SystemRequirement("REQ-2840");
+        cy.get("div[aria-rowindex=\"1\"]>div:nth-child(3)").last().should("have.text", "Released");
+      });
 
-    it("Select 'Equipment calibration document'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.DocRevPreview], () => {
-        cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
-        cy.wait(2000);
+      it("Verify 'TITLE' is 'Equipment maintenance document'", () => {
+        SystemRequirement("REQ-2840");
+        cy.get("div[aria-rowindex=\"1\"]>div:nth-child(4)")
+          .last()
+          .should("have.text", "Equipment maintenance document");
+      });
+
+      it(`Verify 'EFT OWNER' is '${USERS[1].name}'`, () => {
+        SystemRequirement("REQ-2840");
+        cy.get("div[aria-rowindex=\"1\"]>div:nth-child(5)").last().should("have.text", USERS[1].name);
+      });
+
+      it("Verify 'EQ STATUS' is Active", () => {
+        SystemRequirement("REQ-2840");
+        cy.get("div.ReactVirtualized__Table__rowColumn").last().should("have.text", "Active");
+      });
+
+      it("Verify 'CAL DUE DATE'", () => {
+        SystemRequirement("REQ-2840");
+        cy.get("div[aria-rowindex=\"1\"]>div:nth-child(6)").should("contain.text", CAL_DUE_DATE);
+      });
+
+      it("Verify 'PM DUE DATE'", () => {
+        SystemRequirement("REQ-2840");
+        cy.get("div[aria-rowindex=\"1\"]>div:nth-child(7)").should("contain.text", PM_DUE_DATE);
+      });
+
+      it("Verify equipment page filter", () => {
+        SystemRequirement("REQ-2850");
+        cy.filterEquip({
+          docId: "EQ-00001", revision: "1", eqState: "Released", title: "Equipment maintenance document",
+          owner: USERS[1].name, calDueDate: CAL_DUE_DATE, pmDueDate: PM_DUE_DATE, eqStatus: "Active",
+        }).wait(2000);
+      });
+
+      it("Verify equipment is shown", () => {
+        SystemRequirement("REQ-2850");
+        cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
     });
 
-    it("Check Calibration document existance", () => {
-      cy.get("div[data-cy=\"maintenanceHistory\"]")
-        .eq(1)
-        .contains("MR-00002 - Calibration document");
-    });
+    context("Verify maintenance document in equipment", () => {
+      it("Select 'Equipment calibration document'", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.DocRevPreview], () => {
+          cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
+          cy.wait(2000);
+        });
+      });
 
-    it("Check calibration status is in complience for next 5 days", () => {
-      const calibrationComplianceDate = moment().tz("America/Los_Angeles")
-        .add(5, "days")
-        .format("ddd MMMM D YYYY");
-      cy.get("[data-cy=\"maintenance.status\"]")
-        .eq(1)
-        .contains(`CAL Done - Due Date: ${calibrationComplianceDate}`);
-    });
+      it("Check Calibration document existance", () => {
+        cy.get("div[data-cy=\"maintenanceHistory\"]")
+          .eq(1)
+          .contains("MR-00002 - Calibration document");
+      });
 
-    it("Verify status is 'Released'", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      it("Check calibration status is in complience for next 5 days", () => {
+        const calibrationComplianceDate = moment().tz("America/Los_Angeles")
+          .add(5, "days")
+          .format("ddd MMMM D YYYY");
+        cy.get("[data-cy=\"maintenance.status\"]")
+          .eq(1)
+          .contains(`CAL Done - Due Date: ${calibrationComplianceDate}`);
+      });
+
+      it("Verify status is 'Released'", () => {
+        cy.drCheckDocumentStatus({ status: "Released" });
+      });
     });
   });
 });
