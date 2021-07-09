@@ -281,6 +281,7 @@ context.skip("Autosave on add and edit FB fields", () => {
     });
 
     it("Edit TextField", () => {
+      SystemRequirement("FB-0290");
       cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield1" });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {

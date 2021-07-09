@@ -384,6 +384,7 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Add TextFields value", () => {
+      SystemRequirement("FB-0350");
       cy.unClick();
       cy.get("[name^=\"textfield-wi-ch-\"]").type("textfield-wi-ch-value", { force: true });
       cy.unClick();

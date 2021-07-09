@@ -402,6 +402,11 @@ context("Validators tests", () => {
     it("Add text field", () => {
       cy.fbAddField();
     });
+
+    it("Verify you can't enter data to textfield", () => {
+      SystemRequirement("FB-0330");
+      cy.get(`[data-cy^='${requiredFieldSelector}'] input`).should("have.attr", "disabled");
+    });
   });
 
   context("Add 'Required If' validation on 'Text Field'", () => {
