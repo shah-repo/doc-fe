@@ -5,6 +5,7 @@ import { RequirementsReadWriteConfig } from "../../requirements/configRequiremen
 import { findGeneratedSpecFiles } from "./helpers/findGeneratedSpecFiles";
 import { findLastGeneratedResultsJsonFolder } from "./helpers/findLastGeneratedResults";
 import { findRequirementsListToProcess } from "./helpers/findRequirementsListToProcess";
+import { replaceContextInReports } from "./helpers/replaceContextInReports";
 import { FilesWithData, ModuleOrSubModule, utf8Encoding } from "./helpers/typing.constants";
 
 
@@ -32,8 +33,6 @@ async function processCSVRequirementsJson(
   await generateReport(
     filePaths,
     `${jsonFolderPath}/${reqsList.outputFolderName}/${reqsList.outputFileName}`,
-    `${jsonFolderPath}/${reqsList.outputFolderName}`,
-    reqsList.outputFileName,
   );
 }
 
@@ -57,8 +56,7 @@ async function processModuleOrSubModuleRequirementsJson(
     generateReport(
       filePaths,
       `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}/${fileName}`,
-      `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`,
-      fileName);
+    );
   }));
 }
 
@@ -83,8 +81,16 @@ function compareRequirementsAndSelectGeneratedSpecJsons(
     `./${jsonFolderPath}/${fileName}`);
 }
 
-async function generateReport(filesToJoin, output, outputFolderPath, fileName) {
+async function generateReport(
+  filesToJoin: string[] | undefined,
+  output: string) {
+  if (!filesToJoin) {
+    return;
+  }
+
   const options = { files: filesToJoin };
   const report = await merge(options);
-  fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), utf8Encoding);
+
+  const modifiedReport = replaceContextInReports(report);
+  fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(modifiedReport, null, 2), utf8Encoding);
 }
