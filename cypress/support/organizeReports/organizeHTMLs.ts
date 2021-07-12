@@ -94,8 +94,6 @@ function compareRequirementsAndSelectGeneratedSpecJsons(
   const usedRequirements = Object.keys(JSON.parse(fileContent));
 
   if (!fs.existsSync(resolve(__dirname, "../../..", reportJsonPath))) {
-    console.log({ reportJsonPath });
-    console.log("File should exist. For some reason it does not!");
     return;
   }
   const pathToGeneratedRequirementsFile = connectRequirementsWithCypressGeneratedJson(
@@ -188,11 +186,14 @@ async function generateReport(
 
 function removePreviouslyGeneratedHTMLReports() {
   if (GENERATE_REPORTS_SEPARATE_RUN === "true") {
+    const reportFolderPath = findLastGeneratedResultsReportsFolder();
     const filesListInReportsFolder = fs.readdirSync(
-      resolve(__dirname, "../../..", findLastGeneratedResultsReportsFolder()));
+      resolve(__dirname, "../../..", reportFolderPath));
 
-    const htmlReportFiles = filesListInReportsFolder.filter((filePath) =>
-      filePath.endsWith(".html") && !filePath.endsWith("result.html"));
-    htmlReportFiles.forEach((filePath) => fs.unlinkSync(resolve(__dirname, "../../..", filePath)));
+    const htmlReportFiles = filesListInReportsFolder.filter((fileName) =>
+      fileName.endsWith(".html") && !fileName.endsWith("result.html"));
+
+    htmlReportFiles.forEach((fileName) => fs.unlinkSync(
+      resolve(__dirname, "../../..", `${reportFolderPath}/${fileName}`)));
   }
 }

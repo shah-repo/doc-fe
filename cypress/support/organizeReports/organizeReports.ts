@@ -43,14 +43,14 @@ async function processModuleOrSubModuleRequirementsJson(
   const filesList = fs.readdirSync(resolve(__dirname, "../../",
     `${reqsList.outputPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`));
 
-  // if (fs.existsSync(
-  //   resolve(__dirname, "../../..", `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`))) {
-  //   fs.rmdirSync((resolve(__dirname, "../../..",
-  //     `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`)),
-  //   { recursive: true });
-  // }
-  // fs.mkdirSync(
-  //   resolve(__dirname, "../../..", `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`));
+  if (fs.existsSync(
+    resolve(__dirname, "../../..", `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`))) {
+    fs.rmdirSync((resolve(__dirname, "../../..",
+      `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`)),
+    { recursive: true });
+  }
+  fs.mkdirSync(
+    resolve(__dirname, "../../..", `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`));
 
   await Promise.all(filesList.map((fileName) =>   {
     const fileContent = fs.readFileSync(resolve(__dirname, "../../",
