@@ -141,17 +141,17 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
-
+  const groupOptions = documentRevision?.document.documentType.groupOptions;
   // MARK: @helpers
   const isDocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isDocRevStatusInPendingChange = isDocumentRevisionPendingChange(documentRevision?.status);
-  const isEB = checkIsDocumentEB(documentRevision?.document.documentType.groupOptions);
-  const isDocumentPOAM = checkIsDocumentPOAM(documentRevision?.document.documentType.groupOptions);
-  const isDocumentDAM = checkIsDocumentDAM(documentRevision?.document.documentType.groupOptions);
+  const isEB = checkIsDocumentEB(groupOptions);
+  const isDocumentPOAM = checkIsDocumentPOAM(groupOptions);
+  const isDocumentDAM = checkIsDocumentDAM(groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
-  const isPart = checkIsDocumentPart(documentRevision?.document.documentType.groupOptions);
-  const isMPIOutput = checkIsDocumentMPIOutput(documentRevision?.document.documentType.groupOptions);
-  const isLHR = checkIsDocumentLHR(documentRevision?.document.documentType.groupOptions);
+  const isPart = checkIsDocumentPart(groupOptions);
+  const isMPIOutput = checkIsDocumentMPIOutput(groupOptions);
+  const isLHR = checkIsDocumentLHR(groupOptions);
   const shouldShowUpgradeForDocs = useShouldUpgradeToLatest(
     documentRevision?.status,
     documentRevision?.formDocument?.status,
@@ -172,7 +172,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
-  const documentTypeId = values.document?.documentType?.id;
+  const documentTypeId = values.document?.documentType?.id || "";
+  const defaultRevisionStage = values.document?.documentType?.defaultRevStage || "";
+
   const showOutputInfo = workspaceState?.mode === "form" || workspaceState?.mode === "formDesign";
   const canAddFBFields = workspaceState?.mode === "design" || workspaceState?.mode === "formDesign";
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;
@@ -351,15 +353,29 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           />
         )}
         {/* hack for rerender revision stage */}
-        {forceNewRender && <RevisionStage {...{ isDisabled, isDocRevFirstDraft, shouldShowRevStageForDocType }}/>}
-        {!forceNewRender && <RevisionStage {...{ isDisabled, isDocRevFirstDraft, shouldShowRevStageForDocType }}/>}
+        {forceNewRender &&
+          <RevisionStage {...{
+            isDisabled,
+            isDocRevFirstDraft,
+            shouldShowRevStageForDocType,
+            documentTypeId,
+            defaultRevisionStage,
+          }}/>}
+        {!forceNewRender &&
+          <RevisionStage {...{
+            isDisabled,
+            isDocRevFirstDraft,
+            shouldShowRevStageForDocType,
+            documentTypeId,
+            defaultRevisionStage,
+          }}/>}
         <AvailableReferencesField
           availableReferences={availableReferences}
           documentReferences={documentReferences}
           name="referenceTo"
           label="documentRevision.form.references"
           disabled={isDisabledInput}
-          documentGroupOptions={documentRevision?.document.documentType.groupOptions}
+          documentGroupOptions={groupOptions}
         />
         <References document={initialValues.document} />
         <RetrainField
@@ -391,7 +407,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         }
         {
           (!values.status || type === "newOutput") &&
-          <DocumentSecurity documentTypeId={documentTypeId as string} />
+          <DocumentSecurity documentTypeId={documentTypeId} />
         }
         {
           workspaceState?.active && workspaceState.mode === "design" && hasOutput &&

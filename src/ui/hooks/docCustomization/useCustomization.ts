@@ -15,14 +15,8 @@ export const useCRLink = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType.CR_ID);
 export const useDocId = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.DOC_ID, "common.documentId");
-/** currently unused */
-// export const useDocumentHistory = (documentTypeId = ""): UIConfig =>
-//   useCustomization(documentTypeId, DisplayFieldType.VERSIONS, "document.revision.docVersion");
 export const useDocumentStatus = (documentTypeId = "", status: string): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType[`STATUS_${configureStatus(status)}`], status);
-/** currently unused */
-// export const useDocumentVersion = (documentTypeId = "", status: string): UIConfig =>
-//   useCustomization(documentTypeId, DisplayFieldType[`VERSION_${configureStatus(status)}`], status);
 export const useDocumentTypeSelect = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.DOC_TYPE, "document.type");
 export const useNextRevision = (documentTypeId = ""): UIConfig =>
@@ -34,7 +28,7 @@ export const useObsolete = (documentTypeId = ""): UIConfig =>
 export const useReviseDocument = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType.REVISE_BTN, "documentRevision.revise");
 export const useRevisionSelect = (documentTypeId = ""): UIConfig =>
-  useCustomization(documentTypeId, InputFieldType.REVISION_SELECTION, "document.revision.stage");
+  useCustomization(documentTypeId, InputFieldType.REVISION_CHANGE_SELECTION, "document.revision.stage");
 export const useTraining = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.TRAINING);
 export const useTitle = (documentTypeId = ""): UIConfig =>
@@ -43,6 +37,8 @@ export const useAssignOperatorsToDocument = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.OPERATORS, "", false);
 export const useCreateDocumentByTypeButton = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType.ADD_NEW_BTN, "document.add");
+export const useRevisionStageSelect = (documentTypeId = ""): UIConfig =>
+  useCustomization(documentTypeId, InputFieldType.REVISION_SELECTION, "document.revision.stage");
 
 const useCustomization = (
   documentTypeId = "",

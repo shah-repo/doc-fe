@@ -349,12 +349,13 @@ export enum InputFieldType{
   DOC_ID = "F",
   TRAINING = "G",
   ATTACHMENTS = "H",
-  REVISION_SELECTION = "M",
+  REVISION_CHANGE_SELECTION = "M",
   NEXT_REVISION = "I",
   NEXT_REVISION_STAGE = "J",
   OBSOLETE = "K",
   ADM_CHANGE = "L",
   OPERATORS = "U",
+  REVISION_SELECTION = "W",
 }
 
 // Copied from BE repo: src/modules/documentTypes/interfaces/fieldConfig.interface.ts
