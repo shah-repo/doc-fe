@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -207,6 +208,7 @@ context("FORM Field test", () => {
       });
 
       it("Add Quantity", () => {
+        SystemRequirement("FB-1270, FB-1280");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
         cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
@@ -668,6 +670,56 @@ context("FORM Field test", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "Send Email" });
         cy.fbVerifyCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
         cy.fbClickButton({ el: "dialog-close" });
+      });
+    });
+
+    context("Check fields in Preview Mode", () => {
+      it("Open Preview dialog", () => {
+        cy.fbClickButton({ el: "FBWorkspace-clickView" });
+      });
+
+      it("Add and check Quantity field", () => {
+        SystemRequirement("FB-1340");
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .find("input[name^=fb-quantity-]").clear().type("1");
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .find("input[name^=fb-quantity-]").should("have.value", "1");
+      });
+
+      it("Close Preview dialog", () => {
+        cy.fbClickButton({ el: "dialog-close" });
+      });
+    });
+
+    context("Edit and verify Form fields", () => {
+      it("Edit Quantity field", () => {
+        SystemRequirement("FB-1270, FB-1290");
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-quantity" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-quantity1" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Save form", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Verify updated Quantity field", () => {
+        cy.get("[data-cy=\"fb-quantity1\"]").should("exist");
+        cy.get("[data-cy=\"fb-quantity1\"]").should("have.text", "fb-quantity1");
+      });
+    });
+
+    context("Verify field disable after doc Approve", () => {
+      it("Approve and release FORM document", () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.fbClickButton({ el: "updateRecord" });
+        });
+      });
+
+      it("Verify field is disabled", () => {
+        SystemRequirement("FB-1300");
+        cy.get(`input[name^="fb-quantity-"`).should("be.disabled");
       });
     });
   });

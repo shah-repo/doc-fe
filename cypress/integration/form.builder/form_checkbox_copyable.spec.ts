@@ -416,6 +416,7 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Add Quantities value", () => {
+      SystemRequirement("FB-1260, FB-1320");
       cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
         cy.get("[name^=\"q-wi-ch-\"]").type("1");
       });
@@ -587,6 +588,23 @@ context("Copyable Checkbox test", () => {
     it("Verify Equipment Maintenance", () => {
       cy.get("[data-cy^=\"eq-wi-ch-\"]").invoke("text").should("not.be.empty");
       cy.get("input[name^=\"eq-wo-ch-\"]").eq(-1).should("not.be.checked");
+    });
+  });
+
+  context("Edit and Verify field values", () => {
+    it("Edit Quantity", () => {
+      SystemRequirement("FB-1310, FB-1330");
+      cy.get("[name^=\"q-wi-ch-\"]").clear().type("2");
+    });
+
+    it("Click 'Save' button", () => {
+      cy.unClick();
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Verify Quantity value", () => {
+      cy.unClick();
+      cy.get("[name^=\"q-wi-ch-\"]").should("have.value", "2");
     });
   });
 });
