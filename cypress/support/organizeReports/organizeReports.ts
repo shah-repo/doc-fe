@@ -6,7 +6,7 @@ import { findGeneratedSpecFiles } from "./helpers/findGeneratedSpecFiles";
 import { findLastGeneratedResultsJsonFolder } from "./helpers/findLastGeneratedResults";
 import { findRequirementsListToProcess } from "./helpers/findRequirementsListToProcess";
 import { replaceContextInReports } from "./helpers/replaceContextInReports";
-import { FilesWithData, ModuleOrSubModule, utf8Encoding } from "./helpers/typing.constants";
+import { FilesWithData, GENERATE_REPORTS_SEPARATE_RUN, ModuleOrSubModule, utf8Encoding } from "./helpers/typing.constants";
 
 
 const REQUIREMENTS_LIST = findRequirementsListToProcess();
@@ -42,6 +42,15 @@ async function processModuleOrSubModuleRequirementsJson(
   moduleOrSubModule: ModuleOrSubModule) {
   const filesList = fs.readdirSync(resolve(__dirname, "../../",
     `${reqsList.outputPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`));
+
+  // if (fs.existsSync(
+  //   resolve(__dirname, "../../..", `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`))) {
+  //   fs.rmdirSync((resolve(__dirname, "../../..",
+  //     `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`)),
+  //   { recursive: true });
+  // }
+  // fs.mkdirSync(
+  //   resolve(__dirname, "../../..", `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`));
 
   await Promise.all(filesList.map((fileName) =>   {
     const fileContent = fs.readFileSync(resolve(__dirname, "../../",
@@ -91,6 +100,11 @@ async function generateReport(
   const options = { files: filesToJoin };
   const report = await merge(options);
 
-  const modifiedReport = replaceContextInReports(report);
+  let modifiedReport = report;
+
+  if (GENERATE_REPORTS_SEPARATE_RUN === "true") {
+    modifiedReport = replaceContextInReports(report);
+  }
+
   fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(modifiedReport, null, 2), utf8Encoding);
 }

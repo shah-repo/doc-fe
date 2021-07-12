@@ -8,7 +8,7 @@ import { RequirementsReadWriteConfig } from "../../requirements/configRequiremen
 import { findMainGeneratedRequirementsJsonFile } from "./helpers/findGeneratedSpecFiles";
 import { findInfoGeneratedJsonFile, findLastGeneratedResultsJsonFolder, findLastGeneratedResultsReportsFolder } from "./helpers/findLastGeneratedResults";
 import { findRequirementsListToProcess } from "./helpers/findRequirementsListToProcess";
-import { ModuleOrSubModule, utf8Encoding } from "./helpers/typing.constants";
+import { GENERATE_REPORTS_SEPARATE_RUN, ModuleOrSubModule, utf8Encoding } from "./helpers/typing.constants";
 
 const REGEX_TO_FIND_REQS = /([R])([E])([Q])([-])([0-9]+)|([F])([B])([-])([0-9]+)/g;
 const REQUIREMENTS_LIST = findRequirementsListToProcess();
@@ -22,6 +22,7 @@ async function processReportsSeparation(
   jsonFolderPath: string,
   jsonGeneratedRequirements: any) {
 
+  removePreviouslyGeneratedHTMLReports();
   await processCSVRequirementsJson(reqsList, jsonFolderPath, jsonGeneratedRequirements);
   await processModuleOrSubModuleRequirementsJson(reqsList, "Module", jsonGeneratedRequirements);
   await processModuleOrSubModuleRequirementsJson(reqsList, "Sub-Module", jsonGeneratedRequirements);
@@ -93,6 +94,7 @@ function compareRequirementsAndSelectGeneratedSpecJsons(
   const usedRequirements = Object.keys(JSON.parse(fileContent));
 
   if (!fs.existsSync(resolve(__dirname, "../../..", reportJsonPath))) {
+    console.log({ reportJsonPath });
     console.log("File should exist. For some reason it does not!");
     return;
   }
@@ -158,6 +160,8 @@ async function generateReport(
   if (!reqFilesToJoin) {
     return;
   }
+  const lastGeneratedResultsReportsFolder = findLastGeneratedResultsReportsFolder();
+
   const infoFilePath = findInfoGeneratedJsonFile();
   const filesToJoin = [infoFilePath].concat(reqFilesToJoin);
   if (filesToJoin && filesToJoin.length > 1) {
@@ -174,10 +178,21 @@ async function generateReport(
 
     await marge.create(report, {
       reportFilename: `${filePrefix}${fileName.replace("json", "html")}`,
-      assetsDir: `${findLastGeneratedResultsReportsFolder()}/assets`,
-      reportDir: `${findLastGeneratedResultsReportsFolder()}`,
+      assetsDir: `${lastGeneratedResultsReportsFolder}/assets`,
+      reportDir: lastGeneratedResultsReportsFolder,
       cdn: true,
       overwrite: true,
     });
+  }
+}
+
+function removePreviouslyGeneratedHTMLReports() {
+  if (GENERATE_REPORTS_SEPARATE_RUN === "true") {
+    const filesListInReportsFolder = fs.readdirSync(
+      resolve(__dirname, "../../..", findLastGeneratedResultsReportsFolder()));
+
+    const htmlReportFiles = filesListInReportsFolder.filter((filePath) =>
+      filePath.endsWith(".html") && !filePath.endsWith("result.html"));
+    htmlReportFiles.forEach((filePath) => fs.unlinkSync(resolve(__dirname, "../../..", filePath)));
   }
 }
