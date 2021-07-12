@@ -304,17 +304,21 @@ class FBFormState extends FBSchemaState {
   public unlockField = (fieldName?: string) => {
     if (!this.includeLocking) { return; }
     if (!fieldName) { return; }
-    if (!fieldName) { return; }
-    this.unlockQueue.push(fieldName);
+    if (!this.unlockQueue.includes(fieldName)) {
+      this.unlockQueue.push(fieldName);
+    }
     this.unlockFields();
   };
 
-  public unlockFields = () => {
+  private unlockFields = () => {
     const name = last(this.unlockQueue);
     if (!name) { return; }
     const lockedData = this.locked.get(name);
     const { lockId: id } = lockedData || {};
-    if (!id || isEmpty(id)) { return; }
+    if (!id || isEmpty(id)) {
+      this.unlockQueue.pop();
+      return;
+    }
 
     SMStore.post({
       url: SMStore.templateUrl(SMUrl.lockFieldsExpire, { id }),
