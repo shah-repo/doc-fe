@@ -148,7 +148,13 @@ context("FORM Field test", () => {
         cy.fbMouseOverByLabel({ label: "fb-datepicker" } );
       });
 
+      it("Verify you can't add value to date picker in form edit design mode", () => {
+        SystemRequirement("FB-0680");
+        cy.get("input[name^=fb-datepicker]").should("have.attr", "disabled");
+      });
+
       it("Add Hyperlink", () => {
+        SystemRequirement("FB-0720");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Hyperlink" });
         cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink" });
@@ -170,6 +176,11 @@ context("FORM Field test", () => {
         cy.fbMouseOverByLabel({ label: "fb-select-field" } );
       });
 
+      it("Verify data can't be entered to select field in form edit design mode", () => {
+        SystemRequirement("FB-0860");
+        cy.get("input[name^=fb-select-field]").should("have.attr", "type", "hidden");
+      });
+
       it("Add Radio Button group", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
@@ -180,7 +191,16 @@ context("FORM Field test", () => {
         cy.fbMouseOverByLabel({ label: "fb-radiobutton-group" } );
       });
 
+
+      it("Verify radio buttons can't be selected", () => {
+        SystemRequirement("FB-0950");
+        cy.get("input[name^=fb-radiobutton-group]").eq(0).should("have.attr", "disabled");
+        cy.get("input[name^=fb-radiobutton-group]").eq(1).should("have.attr", "disabled");
+        cy.get("input[name^=fb-radiobutton-group]").eq(2).should("have.attr", "disabled");
+      });
+
       it("Add Paragraph", () => {
+        SystemRequirement("FB-0990");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Paragraph" });
         cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")

@@ -206,10 +206,13 @@ context("Record inline history Flow", () => {
       });
 
       it("Select 'One' value on radiobutton", () => {
+        SystemRequirement("FB-0900");
+        SystemRequirement("FB-0960");
         cy.fbSelectRadioButtonValue({ value: "One" });
       });
 
       it("Select 'SelectOne' value on select field", () => {
+        SystemRequirement("FB-0870");
         cy.fbSelectFieldValue({ value: "SelectOne" });
       });
 
