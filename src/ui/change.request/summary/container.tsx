@@ -137,6 +137,7 @@ const Container: React.FunctionComponent<Props> = ({
       icon: <TimelineIcon />,
       type: "history",
       details: {
+        shouldShow: Boolean(dataProp),
         dataCy: "timeline-icon",
         title: intl.formatMessage({
           id: "document.revision.history",
@@ -148,6 +149,7 @@ const Container: React.FunctionComponent<Props> = ({
       icon: <BookmarkIcon />,
       type: "bookmarks",
       details: {
+        shouldShow: true,
         dataCy: "bookmark-icon",
         title: intl.formatMessage({
           id: "document.revision.bookmarks",

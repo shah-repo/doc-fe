@@ -115,6 +115,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
         }
       // eslint-disable-next-line react-hooks/exhaustive-deps
       );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
@@ -140,8 +141,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       }, name);
     }
     function handleLockBlur() {
-      const lockData = formState?.locked.get(name);
-      formState?.expireLockedFields(lockData);
+      formState?.unlockField(name);
     }
 
     // MARK: @methods

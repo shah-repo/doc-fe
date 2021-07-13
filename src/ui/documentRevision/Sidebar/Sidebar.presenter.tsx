@@ -62,7 +62,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
         </IconButton>
         <Divider />
         {sidebarList.map((item, index) =>
-          <Box key={item.details.title}>
+          item.details.shouldShow && <Box key={item.details.title}>
             <IconButton
               data-cy={item.details.dataCy !== undefined ? item.details.dataCy : "sss"}
               ref={sidebarList[indexNumber].details.title === item.details.title ? inputRef : null}

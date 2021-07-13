@@ -33,7 +33,6 @@ export type FBInputType =
   | "schemaselect"
   | "paragraph"
   | "documentRevisions"
-  | "testRequirement"
   | "instructionsmediaupload"
   | "evidencemediaupload"
   | "purchaseorder"
@@ -50,8 +49,6 @@ export type FBInputType =
   | "requestapproval"
   | "instructionsdocument"
   | "selectdocument"
-  | "selectrequirement"
-  | "testRequirement"
   | "hellosign"
   | "customcontrol"
   | "poApprovalMatrix"
@@ -109,7 +106,6 @@ export type FBInputProps =
     validationMode?: FBEditorValidationMode;
     includeSelectedSchema?: boolean;
     paragraph?: string;
-    testRequirement?: string;
     isTemplate?: boolean;
     includeQRScan?: boolean;
     isInputOwner?: boolean;

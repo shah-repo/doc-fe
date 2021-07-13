@@ -101,7 +101,7 @@ export const useHandleCreateDoc = () => {
       setForm(selectedForm);
       return;
     }
-    if (outputDocumentTypes.length === 1 && !(outputDocumentTypes[0] as any)?.documentTypeAcronym?.startsWith("RC")) {
+    if (outputDocumentTypes.length === 1) {
       fetchDocIdAsync.start(fetchDocIdAction, (outputDocumentTypes[0] as any)?.id, fetchDocIdAsync);
       setForm(selectedForm);
       return;
@@ -128,7 +128,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const getDocTypesByCategory = useActionCreator(documentTypeActions.getDocTypesByCategory);
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
 
-  const formIds = useSelector(documentTypeSelectors.formIds);
+  const formIds = useSelector(documentTypeSelectors.docRevTypeForms);
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypesByCategory);
   const { isVisible, label, tooltipConfig } = useCreateDocumentByTypeButton(documentTypeId);
 

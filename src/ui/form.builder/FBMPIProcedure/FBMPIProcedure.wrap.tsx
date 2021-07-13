@@ -44,6 +44,7 @@ export const withFBMPIProcedure = <T extends FBMPIProcedureProps>(
       (data) => {
         const schemeItem = workspaceState?.getSchemaItemAt(index);
         if (workspaceState && schemeItem) {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           workspaceState.schema![index] = {
             ...schemeItem,
             editorConfig: data,

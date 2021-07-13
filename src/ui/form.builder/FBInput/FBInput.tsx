@@ -55,7 +55,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
             <Text message={helperText as string} />
           </FormHelperText>
         )}
-        {includeContext && (
+        {Boolean(includeContext) && (
           <Box mt={type === "select" ? 3 : 0.5}>
             <FBTextField
               label="form.builder.note"

@@ -50,7 +50,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   } = React.useContext(FormHeaderContext)!;
   const redlineActive = useSelector(companySelectors.getRedlineActive);
   const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
-  const documentTypeId = documentRevision?.document?.documentType?.id;
+  const documentTypeId = documentRevision?.document?.documentType?.id || "";
   const schema = documentRevision?.formDocument?.formTemplate?.schema;
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const isNewVersion = type === "newVersion";
@@ -80,6 +80,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       setInlineApproval(isFormWithInlineApproval(validSchema));
       setIsApproved(isInlineFormApproved( documentRevision, formState, validSchema));
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
