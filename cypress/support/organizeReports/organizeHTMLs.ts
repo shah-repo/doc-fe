@@ -8,7 +8,7 @@ import { RequirementsReadWriteConfig } from "../../requirements/configRequiremen
 import { findMainGeneratedRequirementsJsonFile } from "./helpers/findGeneratedSpecFiles";
 import { findInfoGeneratedJsonFile, findLastGeneratedResultsJsonFolder, findLastGeneratedResultsReportsFolder } from "./helpers/findLastGeneratedResults";
 import { findRequirementsListToProcess } from "./helpers/findRequirementsListToProcess";
-import { GENERATE_REPORTS_SEPARATE_RUN, ModuleOrSubModule, utf8Encoding } from "./helpers/typing.constants";
+import { ModuleOrSubModule, utf8Encoding } from "./helpers/typing.constants";
 
 const REGEX_TO_FIND_REQS = /([R])([E])([Q])([-])([0-9]+)|([F])([B])([-])([0-9]+)/g;
 const REQUIREMENTS_LIST = findRequirementsListToProcess();
@@ -185,15 +185,13 @@ async function generateReport(
 }
 
 function removePreviouslyGeneratedHTMLReports() {
-  if (GENERATE_REPORTS_SEPARATE_RUN === "true") {
-    const reportFolderPath = findLastGeneratedResultsReportsFolder();
-    const filesListInReportsFolder = fs.readdirSync(
-      resolve(__dirname, "../../..", reportFolderPath));
+  const reportFolderPath = findLastGeneratedResultsReportsFolder();
+  const filesListInReportsFolder = fs.readdirSync(
+    resolve(__dirname, "../../..", reportFolderPath));
 
-    const htmlReportFiles = filesListInReportsFolder.filter((fileName) =>
-      fileName.endsWith(".html") && !fileName.endsWith("result.html"));
+  const htmlReportFiles = filesListInReportsFolder.filter((fileName) =>
+    fileName.endsWith(".html") && !fileName.endsWith("result.html"));
 
-    htmlReportFiles.forEach((fileName) => fs.unlinkSync(
-      resolve(__dirname, "../../..", `${reportFolderPath}/${fileName}`)));
-  }
+  htmlReportFiles.forEach((fileName) => fs.unlinkSync(
+    resolve(__dirname, "../../..", `${reportFolderPath}/${fileName}`)));
 }
