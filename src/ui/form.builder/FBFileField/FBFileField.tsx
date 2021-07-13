@@ -28,7 +28,7 @@ const FBFileField: React.FunctionComponent<FBFileFieldProps> = ({
       {...{ onChange, multiple, disabled }}
     />
     <label htmlFor={`fb-attachment-field-${name}`}>
-      <Link component="span" variant="button" onClick={onUploadClick}>
+      <Link component="span" variant="button" onClick={() => onUploadClick?.()}>
         <Box pl={1} display="flex" flexDirection="row">
           {loading && <Box mt={0.3} mr={1}><CircularProgress size={18}/></Box>}
           {!loading && <AttachFile width={20} height={20} />}
