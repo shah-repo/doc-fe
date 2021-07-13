@@ -25,17 +25,20 @@ const ChangeDocumentFormPresenter: React.FunctionComponent<Props> = ({
   sourceSchema,
   updateFormAsyncState,
 }) => {
-  const renderFields = () => availableFields.map((field) => <Box width={"200px"} key={field.name}>
-    <AutocompleteField
-      name={`${field.name}`}
-      label={`${field.label}`}
-      autocompleteProps={{
-        id: "formMigrationField",
-        isClearable: true,
-      }}
-      options={toFieldsOptions(field, sourceSchema)}
-    />
-  </Box>);
+  const renderFields = () => availableFields.map((field) => {
+    // Hack: added default value for paragraph because it doesn't have a label
+    const label = field.type === "paragraph" ? "Paragraph" : field.label;
+    return <Box width={"200px"} key={field.name}>
+      <AutocompleteField
+        name={`${field.name}`}
+        label={`${label}`}
+        autocompleteProps={{
+          id: "formMigrationField",
+          isClearable: true,
+        }}
+        options={toFieldsOptions(field, sourceSchema)}
+      />
+    </Box>; });
 
   return (
     <Form>
