@@ -269,6 +269,7 @@ context("Record inline history Flow", () => {
         });
 
         it("Uncheck 'Red' and 'Green' value on checkbox", () => {
+          SystemRequirement("FB-0430");
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
             cy.fbUnSelectCheckboxValue( "Red", "Green" );
             cy.unClick();
@@ -276,6 +277,7 @@ context("Record inline history Flow", () => {
         });
 
         it("Check 'Blue' value on checkbox", () => {
+          SystemRequirement("FB-0430");
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
             cy.fbSelectCheckboxValue( "Blue" );
             cy.unClick();

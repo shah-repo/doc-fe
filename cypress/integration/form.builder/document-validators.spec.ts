@@ -306,6 +306,7 @@ context("Validators tests", () => {
     });
 
     it("Create 'Checkboxes'", () => {
+      SystemRequirement("FB-0370");
       cy.fbSelectCustomFieldToAdd({ name: "Checkbox group" });
     });
 
@@ -314,6 +315,7 @@ context("Validators tests", () => {
     });
 
     it("Add options to checbox group", () => {
+      SystemRequirement("FB-0370");
       cy.fbGroupOptions("First", "Second", "Third");
     });
 
