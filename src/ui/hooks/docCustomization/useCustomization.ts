@@ -39,6 +39,8 @@ export const useCreateDocumentByTypeButton = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType.ADD_NEW_BTN, "document.add");
 export const useRevisionStageSelect = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.REVISION_SELECTION, "document.revision.stage");
+export const useAttachments = (documentTypeId = ""): UIConfig =>
+  useCustomization(documentTypeId, InputFieldType.ATTACHMENTS, "common.attachments");
 
 const useCustomization = (
   documentTypeId = "",
