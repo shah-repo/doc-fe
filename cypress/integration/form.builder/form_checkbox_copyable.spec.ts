@@ -384,6 +384,7 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Add TextFields value", () => {
+      SystemRequirement("FB-0350");
       cy.unClick();
       cy.get("[name^=\"textfield-wi-ch-\"]").type("textfield-wi-ch-value", { force: true });
       cy.unClick();
@@ -396,6 +397,7 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Add TextEditors value", () => {
+      SystemRequirement("FB-0610");
       cy.get("[data-cy^=\"te-wi-ch-\"]").find("div[contenteditable]")
         .click({ force: true }).type("te-wi-ch-value");
       cy.get("[data-cy^=\"te-wo-ch-\"]").find("div[contenteditable]")
@@ -403,6 +405,8 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Select 'Select fields' value", () => {
+      SystemRequirement("FB-0810");
+      SystemRequirement("FB-0880");
       cy.get("[id^=mui-component-select-sf-wi-ch-]").click();
       cy.get("[data-value=\"option1\"]").click();
       cy.contains("sf-wi-ch").click();
@@ -441,6 +445,8 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Add Date pickers value", () => {
+      SystemRequirement("FB-0700");
+      SystemRequirement("FB-0630");
       cy.get("[name^=\"dp-wi-ch-\"]").parent().find("button").click();
       cy.get(".MuiPickersDay-daySelected").click();
       cy.get("[name^=\"dp-wo-ch-\"]").parent().find("button").click();
@@ -455,6 +461,7 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Select Autocompletes", () => {
+      SystemRequirement("FB-0520");
       cy.get("[data-cy^=\"ac-wi-ch-\"]").click().type("test title{downarrow}{enter}");
       cy.get("[data-cy^=\"ac-wo-ch-\"]").click().type("test title{downarrow}{enter}");
     });

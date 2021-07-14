@@ -6,6 +6,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -1217,6 +1218,7 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Document revisions' in the list", () => {
+      SystemRequirement("FB-0460");
       cy.fbVerifyAutocompleteElementLength({ el: "doc-revision", length: 12 });
     });
 

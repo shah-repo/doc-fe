@@ -391,6 +391,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           containsRedline = {false}
           docRevStatus = {documentRevision?.status}
           documentRevision={documentRevision}
+          documentTypeId={documentTypeId || ""}
         />
         {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
         <RevisionTypeChange

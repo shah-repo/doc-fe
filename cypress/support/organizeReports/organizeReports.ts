@@ -5,7 +5,8 @@ import { RequirementsReadWriteConfig } from "../../requirements/configRequiremen
 import { findGeneratedSpecFiles } from "./helpers/findGeneratedSpecFiles";
 import { findLastGeneratedResultsJsonFolder } from "./helpers/findLastGeneratedResults";
 import { findRequirementsListToProcess } from "./helpers/findRequirementsListToProcess";
-import { FilesWithData, ModuleOrSubModule, utf8Encoding } from "./helpers/typing.constants";
+import { replaceContextInReports } from "./helpers/replaceContextInReports";
+import { FilesWithData, GENERATE_REPORTS_SEPARATE_RUN, ModuleOrSubModule, utf8Encoding } from "./helpers/typing.constants";
 
 
 const REQUIREMENTS_LIST = findRequirementsListToProcess();
@@ -32,8 +33,6 @@ async function processCSVRequirementsJson(
   await generateReport(
     filePaths,
     `${jsonFolderPath}/${reqsList.outputFolderName}/${reqsList.outputFileName}`,
-    `${jsonFolderPath}/${reqsList.outputFolderName}`,
-    reqsList.outputFileName,
   );
 }
 
@@ -43,6 +42,15 @@ async function processModuleOrSubModuleRequirementsJson(
   moduleOrSubModule: ModuleOrSubModule) {
   const filesList = fs.readdirSync(resolve(__dirname, "../../",
     `${reqsList.outputPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`));
+
+  if (fs.existsSync(
+    resolve(__dirname, "../../..", `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`))) {
+    fs.rmdirSync((resolve(__dirname, "../../..",
+      `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`)),
+    { recursive: true });
+  }
+  fs.mkdirSync(
+    resolve(__dirname, "../../..", `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`));
 
   await Promise.all(filesList.map((fileName) =>   {
     const fileContent = fs.readFileSync(resolve(__dirname, "../../",
@@ -57,8 +65,7 @@ async function processModuleOrSubModuleRequirementsJson(
     generateReport(
       filePaths,
       `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}/${fileName}`,
-      `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}`,
-      fileName);
+    );
   }));
 }
 
@@ -83,8 +90,21 @@ function compareRequirementsAndSelectGeneratedSpecJsons(
     `./${jsonFolderPath}/${fileName}`);
 }
 
-async function generateReport(filesToJoin, output, outputFolderPath, fileName) {
+async function generateReport(
+  filesToJoin: string[] | undefined,
+  output: string) {
+  if (!filesToJoin) {
+    return;
+  }
+
   const options = { files: filesToJoin };
   const report = await merge(options);
-  fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), utf8Encoding);
+
+  let modifiedReport = report;
+
+  if (GENERATE_REPORTS_SEPARATE_RUN === "true") {
+    modifiedReport = replaceContextInReports(report);
+  }
+
+  fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(modifiedReport, null, 2), utf8Encoding);
 }

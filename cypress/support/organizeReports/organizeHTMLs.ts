@@ -1,40 +1,35 @@
+/* eslint-disable no-console */
 import fs from "fs";
 import { cloneDeep } from "lodash";
 import { merge } from "mochawesome-merge";
 import marge from "mochawesome-report-generator";
 import { resolve } from "path";
 import { RequirementsReadWriteConfig } from "../../requirements/configRequirementsRun";
-import { findGeneratedSpecFiles, findMainGeneratedRequirementsJsonFile } from "./helpers/findGeneratedSpecFiles";
+import { findMainGeneratedRequirementsJsonFile } from "./helpers/findGeneratedSpecFiles";
 import { findInfoGeneratedJsonFile, findLastGeneratedResultsJsonFolder, findLastGeneratedResultsReportsFolder } from "./helpers/findLastGeneratedResults";
 import { findRequirementsListToProcess } from "./helpers/findRequirementsListToProcess";
-import { FilesWithData, ModuleOrSubModule, utf8Encoding } from "./helpers/typing.constants";
+import { ModuleOrSubModule, utf8Encoding } from "./helpers/typing.constants";
 
 const REGEX_TO_FIND_REQS = /([R])([E])([Q])([-])([0-9]+)|([F])([B])([-])([0-9]+)/g;
 const REQUIREMENTS_LIST = findRequirementsListToProcess();
 const jsonFolderPath =  findLastGeneratedResultsJsonFolder();
-const filesWithData = findGeneratedSpecFiles(jsonFolderPath);
 const jsonGeneratedRequirements = findMainGeneratedRequirementsJsonFile(jsonFolderPath);
 
-processReportsSeparation(
-  REQUIREMENTS_LIST,
-  filesWithData,
-  jsonFolderPath,
-  jsonGeneratedRequirements);
+processReportsSeparation(REQUIREMENTS_LIST, jsonFolderPath, jsonGeneratedRequirements);
 
 async function processReportsSeparation(
   reqsList: RequirementsReadWriteConfig,
-  filesWithData: FilesWithData,
   jsonFolderPath: string,
   jsonGeneratedRequirements: any) {
 
-  await processCSVRequirementsJson(reqsList, filesWithData, jsonFolderPath, jsonGeneratedRequirements);
-  await processModuleOrSubModuleRequirementsJson(reqsList, filesWithData, "Module", jsonGeneratedRequirements);
-  await processModuleOrSubModuleRequirementsJson(reqsList, filesWithData, "Sub-Module", jsonGeneratedRequirements);
+  removePreviouslyGeneratedHTMLReports();
+  await processCSVRequirementsJson(reqsList, jsonFolderPath, jsonGeneratedRequirements);
+  await processModuleOrSubModuleRequirementsJson(reqsList, "Module", jsonGeneratedRequirements);
+  await processModuleOrSubModuleRequirementsJson(reqsList, "Sub-Module", jsonGeneratedRequirements);
 }
 
 async function processCSVRequirementsJson(
   reqsList: RequirementsReadWriteConfig,
-  filesWithData: FilesWithData,
   jsonFolderPath: string,
   jsonGeneratedRequirements: any) {
   const fileContent = fs.readFileSync(resolve(__dirname, "../../",
@@ -43,7 +38,7 @@ async function processCSVRequirementsJson(
   const filePaths = compareRequirementsAndSelectGeneratedSpecJsons(
     reqsList,
     fileContent,
-    filesWithData,
+    `${jsonFolderPath}/${reqsList.outputFolderName}/${reqsList.outputFileName}`,
     jsonGeneratedRequirements,
     `${jsonFolderPath}/${reqsList.outputFolderName}/generated_reqs_${reqsList.outputFileName}`,
     reqsList.outputFileName);
@@ -56,7 +51,6 @@ async function processCSVRequirementsJson(
 
 async function processModuleOrSubModuleRequirementsJson(
   reqsList: RequirementsReadWriteConfig,
-  filesWithData: FilesWithData,
   moduleOrSubModule: ModuleOrSubModule,
   jsonGeneratedRequirements: any) {
   const filesList = fs.readdirSync(resolve(__dirname, "../../",
@@ -68,7 +62,7 @@ async function processModuleOrSubModuleRequirementsJson(
     const filePaths = compareRequirementsAndSelectGeneratedSpecJsons(
       reqsList,
       fileContent,
-      filesWithData,
+      `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}/${fileName}`,
       jsonGeneratedRequirements,
       `${jsonFolderPath}/${reqsList.outputFolderName}/${moduleOrSubModule}/generated_reqs_${fileName}`,
       fileName);
@@ -93,18 +87,15 @@ async function processModuleOrSubModuleRequirementsJson(
 function compareRequirementsAndSelectGeneratedSpecJsons(
   reqsList: RequirementsReadWriteConfig,
   fileContent: string,
-  filesWithData: FilesWithData,
+  reportJsonPath: string,
   jsonGeneratedRequirements: any,
   pathToFile: string,
   fileName: string) {
   const usedRequirements = Object.keys(JSON.parse(fileContent));
-  const filesSatisfiedRequirements = Object.keys(filesWithData).filter((fileName) =>
-    ((filesWithData[fileName].reqsList || []).some((fileReq) => usedRequirements.includes(fileReq))));
 
-  if (!filesSatisfiedRequirements.length) {
+  if (!fs.existsSync(resolve(__dirname, "../../..", reportJsonPath))) {
     return;
   }
-
   const pathToGeneratedRequirementsFile = connectRequirementsWithCypressGeneratedJson(
     usedRequirements,
     jsonGeneratedRequirements,
@@ -117,8 +108,7 @@ function compareRequirementsAndSelectGeneratedSpecJsons(
     fs.mkdirSync(resolve(__dirname, "../../..", `${jsonFolderPath}/${reqsList.outputFolderName}`));
   }
 
-  return filesSatisfiedRequirements.map((fileName) =>
-    `./${jsonFolderPath}/${fileName}`).concat(pathToGeneratedRequirementsFile);
+  return [reportJsonPath].concat(pathToGeneratedRequirementsFile);
 }
 
 function connectRequirementsWithCypressGeneratedJson(
@@ -168,12 +158,13 @@ async function generateReport(
   if (!reqFilesToJoin) {
     return;
   }
+  const lastGeneratedResultsReportsFolder = findLastGeneratedResultsReportsFolder();
+
   const infoFilePath = findInfoGeneratedJsonFile();
   const filesToJoin = [infoFilePath].concat(reqFilesToJoin);
   if (filesToJoin && filesToJoin.length > 1) {
     const options = { files: filesToJoin };
     const report = await merge(options);
-    fs.writeFileSync(resolve(__dirname, "../../..", output), JSON.stringify(report, null, 2), utf8Encoding);
 
     let filePrefix = "";
     if (moduleOrSubModule === "Module") {
@@ -185,10 +176,22 @@ async function generateReport(
 
     await marge.create(report, {
       reportFilename: `${filePrefix}${fileName.replace("json", "html")}`,
-      assetsDir: `${findLastGeneratedResultsReportsFolder()}/assets`,
-      reportDir: `${findLastGeneratedResultsReportsFolder()}`,
+      assetsDir: `${lastGeneratedResultsReportsFolder}/assets`,
+      reportDir: lastGeneratedResultsReportsFolder,
       cdn: true,
       overwrite: true,
     });
   }
+}
+
+function removePreviouslyGeneratedHTMLReports() {
+  const reportFolderPath = findLastGeneratedResultsReportsFolder();
+  const filesListInReportsFolder = fs.readdirSync(
+    resolve(__dirname, "../../..", reportFolderPath));
+
+  const htmlReportFiles = filesListInReportsFolder.filter((fileName) =>
+    fileName.endsWith(".html") && !fileName.endsWith("result.html"));
+
+  htmlReportFiles.forEach((fileName) => fs.unlinkSync(
+    resolve(__dirname, "../../..", `${reportFolderPath}/${fileName}`)));
 }

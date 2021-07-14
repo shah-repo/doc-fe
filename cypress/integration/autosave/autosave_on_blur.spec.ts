@@ -852,6 +852,8 @@ context("Autosave on blur", () => {
     });
 
     it("Fill text editor field and check for autosave", () => {
+      SystemRequirement("FB-0540");
+      SystemRequirement("FB-0600");
       cy.get("[data-cy^=fb-text-editor-]>div>div>div>div>div[contenteditable]>div")
         .click({ force: true }).type("Test description", { force: true });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
