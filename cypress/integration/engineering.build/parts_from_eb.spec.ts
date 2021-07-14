@@ -223,7 +223,6 @@ context("Parts from EB flow test", () => {
         it("Clicks on 'Add new part' button", () => {
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.GetRequiredApprovers,
-            CyRoutes.EmployeesGet,
             CyRoutes.DocPreview], () => {
             cy.ptClickCreateNewPart();
           });
@@ -462,7 +461,7 @@ context("Parts from EB flow test", () => {
       it("Navigate to the part document", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
           const link = $el.attr("href");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApprovers], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApprovers], () => {
             cy.visit(CONFIG.FE_URL + link);
           });
         });
@@ -516,7 +515,7 @@ context("Parts from EB flow test", () => {
       it("Navigate to the part document", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
           const link = $el.attr("href");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApprovers], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApprovers], () => {
             cy.visit(CONFIG.FE_URL + link);
           });
         });

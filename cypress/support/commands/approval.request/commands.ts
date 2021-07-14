@@ -381,7 +381,6 @@ Cypress.Commands.add("arWithdrawSubmission", () => {
   cy.get("[data-cy=\"change.request.withdraw.alert\"]").click();
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.PostWithdrawChangeRequests,
-    CyRoutes.EmployeesGet,
     CyRoutes.ARPreview,
     CyRoutes.DocRevPreview], () => {
     cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();

@@ -421,7 +421,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetFieldLocks], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetFieldLocks ], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
     });

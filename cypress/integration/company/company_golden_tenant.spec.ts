@@ -573,7 +573,7 @@ context("Create company with golden tenant", () => {
   context("Create first document from Seed Form - form with output", () => {
     it("Create new document from form", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
           cy.drCreateNewDocumentFromForm();
         });
     });
@@ -644,7 +644,7 @@ context("Create company with golden tenant", () => {
 
     it("Create new document from form", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
           cy.drCreateNewDocumentFromForm();
         });
     });
@@ -707,7 +707,7 @@ context("Create company with golden tenant", () => {
 
     it("Create new document from form", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
           cy.drCreateNewDocumentFromForm();
         });
     });
@@ -775,8 +775,7 @@ context("Create company with golden tenant", () => {
 
     it("Approve and release document - create company", () => {
       SystemRequirement("REQ-3600");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet, CyRoutes.GetAttachments], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetAttachments], () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
