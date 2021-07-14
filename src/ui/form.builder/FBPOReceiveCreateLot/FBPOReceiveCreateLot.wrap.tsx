@@ -6,6 +6,7 @@ import { documentTypeActions, documentTypeSelectors } from "../../../state/ducks
 import { DocumentTypeById, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
+import { getReceivedQuantity } from "../FBPOReceive/utils";
 import FBPOReceiveCreateLotState from "./FBPOReceiveCreateLot.state";
 
 export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
@@ -21,9 +22,19 @@ export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
 
     const { dialogState, formState, workspaceState, poReceiveState } = FB.useStores();
     const receivableId = workspaceState?.document?.id as string;
+    const name = workspaceState?.schema?.find((e) => e.type === "poreceive")?.name as string;
+    const receivedItems = workspaceState?.getFieldByName(name).receivedItems ?? [];
+    const id = item?.partNumber || item?.id;
+    const lotQuantity = getReceivedQuantity(receivedItems, id);
+
+    const lotItem = {
+      ...item,
+      received: lotQuantity,
+    };
+
     const createLotState = FB.useRef<FBPOReceiveCreateLotState>(
       FBPOReceiveCreateLotState,
-      { receivableId, item }
+      { receivableId, item: lotItem }
     );
 
     handleCreateLot = async ()  => {
@@ -71,7 +82,7 @@ export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
       handleDocTypeSelection,
       formIds,
       documentTypes,
-      item,
+      item: lotItem,
     });
   };
 
