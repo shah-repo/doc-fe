@@ -60,6 +60,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         () => purchaseOrderState?.calculation,
         () => formState?.setFieldAutosave(name)
       );
+
+      purchaseOrderState?.getPartsVersion();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

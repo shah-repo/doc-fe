@@ -2,6 +2,7 @@ import { Dictionary, filter, isEmpty, isUndefined, omit, reduce, size, template,
 import { action, observable, set } from "mobx";
 import moment from "moment";
 import { FB, FBPurchaseOrderCalculation, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from "..";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { TAX_RATE } from "../helpers/constants";
@@ -20,6 +21,42 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     exchangeRate: 1,
     totalInUSD: "0.00",
     dateOfExchangeRate: "",
+  };
+
+  public partApi = new FBRequest<DocumentRevision, null>(FBEndpoint.FetchDocumentRevision);
+
+  public getPartsVersion = () => {
+    const parts = this.items.filter( (item) => item.partNumber);
+    this.fetchPartDocument(parts);
+  };
+
+  private fetchPartDocument = (parts: FBPurchaseOrderItem[]) => {
+    if (isUndefined(parts) || parts.length === 0) {
+      return;
+    }
+
+    const part = parts.pop();
+    if (!part) {
+      return;
+    }
+
+    this.partApi.set({
+      urlValues: {  documentId: part.partNumber },
+      method: "get",
+    }, (data, error) => {
+      if (error) {
+        this.partApi.onError(error);
+      } else {
+        this.items = this.items.map( (item) => {
+          if (item.partNumber === part.partNumber) {
+            item.status = data?.status;
+          }
+          return item;
+        });
+        this.partApi.onSuccess();
+      }
+    });
+    this.fetchPartDocument(parts);
   };
 
   public constructor({ documentId, ...initialValues }: FBPurchaseOrderConstructor) {
