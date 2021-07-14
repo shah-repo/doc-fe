@@ -608,11 +608,19 @@ context("Copyable Checkbox test", () => {
     });
   });
 
-  context("Edit and Verify fields", () => {
+  context("Add, Edit and Verify fields", () => {
+    it("Add new Quantity field", () => {
+      SystemRequirement("FB-1290");
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click({ force: true });
+      cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
+      cy.fbEnterNameValue({ name: "label", value: "quantity" });
+      cy.fbAddNewFieldButton();
+    });
+
     it("Edit Quantity field", () => {
       SystemRequirement("FB-1290");
-      cy.contains("q-wi-ch").parentsUntil("li").find("[data-cy=edit-schema-item]").click({ force: true });
-      cy.fbEnterNameValue({ name: "label", value: "q-wi-ch1" });
+      cy.contains("quantity").parentsUntil("li").find("[data-cy=edit-schema-item]").click({ force: true });
+      cy.fbEnterNameValue({ name: "label", value: "quantity1" });
       cy.fbAddNewFieldButton();
     });
 
@@ -622,7 +630,7 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Verify Quantity field", () => {
-      cy.get("[data-cy=q-wi-ch1]").should("have.text", "q-wi-ch1");
+      cy.get("[data-cy=quantity1]").should("have.text", "quantity1");
     });
   });
 });
