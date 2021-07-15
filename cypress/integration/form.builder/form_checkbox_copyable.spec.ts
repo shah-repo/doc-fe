@@ -238,6 +238,15 @@ context("Copyable Checkbox test", () => {
         cy.fbMouseOverByLabel({ label: "rbg-wo-ch" } );
       });
 
+      it("Add Blank Template Form", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
+        cy.fbAddNewFieldButton();
+        cy.elUploadAttachment({ fileName: "image.jpg", el: "fb-attachment-field-fb-blank-template-" });
+        cy.fbMouseOverByLabel({ label: "fb-blank-template" } );
+      });
+
       it("Add Quantity with checkboxes", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
@@ -631,6 +640,13 @@ context("Copyable Checkbox test", () => {
       cy.fbAddNewFieldButton();
     });
 
+    it("Edit Blank Template field", () => {
+      SystemRequirement("FB-1200");
+      cy.contains("fb-blank-template").parentsUntil("li").find("[data-cy=edit-schema-item]").click({ force: true });
+      cy.fbEnterNameValue({ name: "label", value: "fb-blank-template1" });
+      cy.fbAddNewFieldButton();
+    });
+
     it("Click 'Save' button", () => {
       cy.unClick();
       cy.drClickCreateDocumentWithApiCallForForms();
@@ -638,6 +654,10 @@ context("Copyable Checkbox test", () => {
 
     it("Verify Quantity field", () => {
       cy.get("[data-cy=quantity1]").should("have.text", "quantity1");
+    });
+
+    it("Verify Blank Template field", () => {
+      cy.get("[data-cy=fb-blank-template1]").should("have.text", "fb-blank-template1");
     });
   });
 });
