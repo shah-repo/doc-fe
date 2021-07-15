@@ -35,6 +35,7 @@ interface IdocumentTypeDto {
   category?: string;
   schema?: any;
   fieldsConfig?: IfieldsConfig;
+  canRedLine?: boolean;
 }
 
 export interface ICreateCompanyBootstrap {
