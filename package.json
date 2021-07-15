@@ -94,6 +94,7 @@
     "test": "react-scripts --max_old_space_size=500 --expose-gc test --logHeapUsage",
     "eject": "react-scripts eject",
     "lint": "eslint -c .eslintrc.js --ext .ts --ext .tsx  src",
+    "lint_cypress": "eslint -c cypress/.eslintrc.js --ext .ts --ext .tsx cypress/integration",
     "lint:fix": "yarn lint --fix",
     "unused-exports": "yarn ts-unused-exports tsconfig.json --excludePathsFromReport=/__mocks__/ --maxIssues=0",
     "postinstall": "patch-package"
