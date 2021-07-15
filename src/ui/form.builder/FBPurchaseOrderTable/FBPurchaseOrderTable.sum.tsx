@@ -1,14 +1,13 @@
-import { Button } from "@material-ui/core";
-import { TableBody } from "@material-ui/core";
+import { Button, TableBody } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import React from "react";
-import Text from "../../components/Text";
 import { FormattedNumber } from "react-intl";
 import { FBMapWrapper, FBPurchaseOrderItem, FBTableCell } from "..";
+import Text from "../../components/Text";
 import { FBPurchaseOrderTableSumProps } from "./FBPurchaseOrderTable.types";
 
 

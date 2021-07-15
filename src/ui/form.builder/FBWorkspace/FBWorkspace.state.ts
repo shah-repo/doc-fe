@@ -93,6 +93,7 @@ class FBWorkspaceState extends FBSchemaState {
     return ((version > 1) && (revision > 1)) || outputRevision;
   }
 
+
   @computed public get active(): boolean {
     return this.mode !== "none";
   }
@@ -120,6 +121,8 @@ class FBWorkspaceState extends FBSchemaState {
   };
 
   @action public getMode = (): FBWorkspaceMode => get(this, "mode");
+
+  @action public getFieldByName = (name: string) => this.document?.formInput?.[name];
 
   @action public isMode = (mode: FBWorkspaceMode | FBWorkspaceMode[]): boolean => {
     if (isArray(mode)) {

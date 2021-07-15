@@ -37,7 +37,7 @@ class FBControlPickerState {
       };
     }
     return {
-      section: ["section", "subsection", "stepsection", "teststep"],
+      section: ["section", "subsection", "stepsection"],
       inputs: [
         "textfield",
         "checkboxgroup",
