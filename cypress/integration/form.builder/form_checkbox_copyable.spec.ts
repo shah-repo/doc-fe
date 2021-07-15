@@ -420,6 +420,7 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Add Quantities value", () => {
+      SystemRequirement("FB-1260");
       cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
         cy.get("[name^=\"q-wi-ch-\"]").type("1");
       });
@@ -594,6 +595,49 @@ context("Copyable Checkbox test", () => {
     it("Verify Equipment Maintenance", () => {
       cy.get("[data-cy^=\"eq-wi-ch-\"]").invoke("text").should("not.be.empty");
       cy.get("input[name^=\"eq-wo-ch-\"]").eq(-1).should("not.be.checked");
+    });
+  });
+
+  context("Edit and Verify field values", () => {
+    it("Edit Quantity value", () => {
+      SystemRequirement("FB-1330");
+      cy.get("[name^=\"q-wi-ch-\"]").clear().type("2");
+    });
+
+    it("Click 'Save' button", () => {
+      cy.unClick();
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Verify Quantity value", () => {
+      cy.unClick();
+      cy.get("[name^=\"q-wi-ch-\"]").should("have.value", "2");
+    });
+  });
+
+  context("Add, Edit and Verify fields", () => {
+    it("Add new Quantity field", () => {
+      SystemRequirement("FB-1290");
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click({ force: true });
+      cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
+      cy.fbEnterNameValue({ name: "label", value: "quantity" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Edit Quantity field", () => {
+      SystemRequirement("FB-1290");
+      cy.contains("quantity").parentsUntil("li").find("[data-cy=edit-schema-item]").click({ force: true });
+      cy.fbEnterNameValue({ name: "label", value: "quantity1" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Click 'Save' button", () => {
+      cy.unClick();
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Verify Quantity field", () => {
+      cy.get("[data-cy=quantity1]").should("have.text", "quantity1");
     });
   });
 });
