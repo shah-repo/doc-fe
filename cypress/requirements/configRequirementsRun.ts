@@ -26,7 +26,7 @@ export const REQUIREMENTS_CONFIG_RUN: ConfigRequirements = {
     {
       extract: true,
       sourcePath: "generalCSV/list.csv",
-      outputPath: "cache/general",
+      outputPath: "requirements/cache/general",
       outputFolderName: "general",
       outputFileName: "general.json",
       extractModules: true,
@@ -37,7 +37,7 @@ export const REQUIREMENTS_CONFIG_RUN: ConfigRequirements = {
     {
       extract: true,
       sourcePath: "specificCSV/docControlReqs.csv",
-      outputPath: "cache/specific/perCSV",
+      outputPath: "requirements/cache/specific/perCSV",
       outputFolderName: "docControlReqs",
       outputFileName: "docControlReqs.json",
       extractModules: true,
