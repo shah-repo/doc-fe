@@ -362,12 +362,12 @@ context("Check Document History", () => {
           }
 
           if (typeOfChange === "s3Link added") {
-            cy.get(`[data-cy^=\"change-key-${groupIndex}-\"]`).should("have.text", typeOfChange);
+            cy.get(`[data-cy^="change-key-${groupIndex}-"]`).should("have.text", typeOfChange);
             cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
           }
           else {
 
-            cy.get(`[data-cy^=\"change-value-${groupIndex}-\"]`)
+            cy.get(`[data-cy^="change-value-${groupIndex}-"]`)
               .contains(action.key === "New owner" ? new RegExp("^" + action.value + "$", "g") : action.value)
               .parent()
               .parent()
